@@ -9,11 +9,13 @@ export interface ToolbarItem {
 }
 
 export interface NoteToolbarSettings {
+	name: string;
 	updated: string;
 	toolbar: Array<ToolbarItem>;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+	name: "",
 	updated: new Date().toISOString(),
 	toolbar: [{ label: "", url: "", tooltip: "", hide_on_desktop: false, hide_on_mobile: false }]
 }
@@ -247,16 +249,16 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		// new Setting(containerEl)
-		// 	.setName('Setting #1')
-		// 	.setDesc('It\'s a secret')
-		// 	.addText(text => text
-		// 		.setPlaceholder('Enter your secret')
-		// 		.setValue(this.plugin.settings.mySetting)
-		// 		.onChange(async (value) => {
-		// 			this.plugin.settings.mySetting = value;
-		// 			await this.plugin.saveSettings();
-		// 		}));
+		new Setting(this.containerEl)
+			.setName("Name")
+			.setDesc("Unique name for this toolbar")
+			.addText(text => text
+				.setPlaceholder('Name')
+				.setValue(this.plugin.settings.name)
+				.onChange(async (value) => {
+					this.plugin.settings.name = value;
+					await this.plugin.save_settings();
+				}));
 
 		this.containerEl.createEl("h2", { text: "Menu Items" });
 
