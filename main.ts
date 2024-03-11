@@ -86,12 +86,12 @@ export default class MyPlugin extends Plugin {
 		}
 
 		if (active_file != null) {
-			console.log('file-open: ' + active_file.name);
+			// console.log('file-open: ' + active_file.name);
 			let frontmatter = this.app.metadataCache.getFileCache(active_file)?.frontmatter
 			// console.log('- frontmatter: ' + frontmatter);
 			const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
 			if (notetoolbar_prop !== null) {
-				console.log('- notetoolbar: ' + notetoolbar_prop);
+				// console.log('- notetoolbar: ' + notetoolbar_prop);
 				this.render_toolbar(notetoolbar_prop);
 			}
 			else {
@@ -101,7 +101,7 @@ export default class MyPlugin extends Plugin {
 	}
 
 	metadata_cache_listener = (file: TFile, data: any, cache: CachedMetadata) => {
-		console.log("metadata-changed: " + file.name);
+		// console.log("metadata-changed: " + file.name);
 		// check if there's metadata we're interested in, then...
 		const notetoolbar_prop: string[] = cache.frontmatter?.notetoolbar ?? null;
 		if (notetoolbar_prop !== null) {
@@ -109,7 +109,7 @@ export default class MyPlugin extends Plugin {
 			let active_file = this.app.workspace.getActiveFile()?.name;
 			if (file.name === active_file) {
 				// FIXME? this also triggers if *any* metadata changes
-				console.log('- notetoolbar: ' + notetoolbar_prop);
+				// console.log('- notetoolbar: ' + notetoolbar_prop);
 				this.render_toolbar(notetoolbar_prop);
 			}
 		}
