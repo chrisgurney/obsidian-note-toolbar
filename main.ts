@@ -201,13 +201,10 @@ export default class MyPlugin extends Plugin {
 		/* since we might be on a different page now, on click, check if the url needs the date appended */
 		let clicked_element = e.currentTarget as HTMLLinkElement;
 		let url = clicked_element.getAttribute("href");
-		let file_basename = this.app.workspace.getActiveFile()?.basename;
+		let note_title = this.app.workspace.getActiveFile()?.basename;
 		if (url != null) {
-			if (file_basename != null) {
-				console.log('file_basename: ' + file_basename);
-				console.log('url: ' + url);
-				url = url.replace('{{file_basename}}', encodeURIComponent(file_basename));
-				console.log('url after replace: ' + url);
+			if (note_title != null) {
+				url = url.replace('{{note_title}}', encodeURIComponent(note_title));
 			}
 			window.open(url, '_blank');
 			e.preventDefault();
