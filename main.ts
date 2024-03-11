@@ -220,6 +220,21 @@ class SampleModal extends Modal {
 	}
 }
 
+// TODO: move to utils? (see Templater)
+// https://github.com/SilentVoid13/Templater/blob/master/src/settings/Settings.ts#L481
+export function arraymove<T>(
+    arr: T[],
+    fromIndex: number,
+    toIndex: number
+): void {
+    if (toIndex < 0 || toIndex === arr.length) {
+        return;
+    }
+    const element = arr[fromIndex];
+    arr[fromIndex] = arr[toIndex];
+    arr[toIndex] = element;
+}
+
 class SampleSettingTab extends PluginSettingTab {
 	plugin: MyPlugin;
 
@@ -300,6 +315,32 @@ class SampleSettingTab extends PluginSettingTab {
 							this.plugin.settings.toolbar[index].tooltip = value;
 							await this.plugin.save_settings();
 						}))
+					.addExtraButton((cb) => {
+						cb.setIcon("up-chevron-glyph")
+							.setTooltip("Move up")
+							.onClick(() => {
+								arraymove(
+									this.plugin.settings.toolbar,
+									index,
+									index - 1
+								);
+								this.plugin.save_settings();
+								this.display();
+							});
+					})
+					.addExtraButton((cb) => {
+						cb.setIcon("down-chevron-glyph")
+							.setTooltip("Move down")
+							.onClick(() => {
+								arraymove(
+									this.plugin.settings.toolbar,
+									index,
+									index + 1
+								);
+								this.plugin.save_settings();
+								this.display();
+							});
+					})
 					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
