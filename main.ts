@@ -1,13 +1,21 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, ButtonComponent, CachedMetadata, Editor, MarkdownView, MetadataCache, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile } from 'obsidian';
 
-// Remember to rename these classes and interfaces!
-
-interface MyPluginSettings {
-	mySetting: string;
+export interface ToolbarItem {
+	label: string;
+	url: string;
+	tooltip: string;
+	hide_on_desktop: boolean;
+	hide_on_mobile: boolean;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+export interface NoteToolbarSettings {
+	updated: string;
+	toolbar: Array<ToolbarItem>;
+}
+
+export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+	updated: new Date().toISOString(),
+	toolbar: [{ label: "", url: "", tooltip: "", hide_on_desktop: false, hide_on_mobile: false }]
 }
 
 // TODO: create configuration to get this from settings
@@ -24,204 +32,176 @@ const toolbar_items = [
 	{ index: 9, text: "→", url: "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Anext-daily-note", label: "Next daily note" },
 ];
 
-function toolbar_item_handler(e: MouseEvent) {
-	/* since we might be on a different page now, on click, check if the url needs the date appended */
-	var clicked_element = e.currentTarget as HTMLLinkElement;
-	if (clicked_element?.getAttribute("data-append-date")) {
-		var note_title = this.app.workspace.getActiveFile().basename;
-		// get the original url
-		// TODO: perhaps further optimize this to not need the array (just replace the date in the existing url)
-		var menu_index = clicked_element?.getAttribute("data-index");
-		var new_url = menu_index ? toolbar_items[parseInt(menu_index)].url : "";
-		// FIXME? do nothing(?) if index is bad?
-		// append the date (the note's title)
-		new_url += note_title;
-		clicked_element?.setAttribute("href", new_url);
-	}
-	if (clicked_element?.getAttribute("data-remove-toolbar")) {
-		remove_toolbar();
-	}
-}
-
-function remove_toolbar() {
-	let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
-	existing_toolbar?.remove();
-}
-
-function render_toolbar() {
-
-    // check if we already added the toolbar
-    let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
-    if (existing_toolbar == null) {
-
-        /* create the unordered list of menu items */
-        let note_toolbar_ul = document.createElement("ul");
-        note_toolbar_ul.setAttribute("role", "menu");
-        toolbar_items.map(function(data) {
-
-            let toolbar_item = document.createElement("a");
-            toolbar_item.className = "external-link";
-            toolbar_item.setAttribute("href", data.url);
-            toolbar_item.setAttribute("data-index", data.index.toString());
-            data.append_date ? toolbar_item.setAttribute("data-append-date", "true") : false;
-            data.remove_toolbar ? toolbar_item.setAttribute("data-remove-toolbar", "true") : false;
-            toolbar_item.setAttribute("data-tooltip-position", "top");
-            toolbar_item.setAttribute("aria-label", data.label);
-            toolbar_item.setAttribute("rel", "noopener");
-            toolbar_item.onclick = (e) => toolbar_item_handler(e);
-            toolbar_item.innerHTML = data.text;
-
-            let note_toolbar_li = document.createElement("li");
-            data.hide_on_mobile ? note_toolbar_li.className = "hide-on-mobile" : false;
-            data.hide_on_desktop ? note_toolbar_li.className += "hide-on-desktop" : false;
-            data.hide_on_desktop ? note_toolbar_li.style.display = "none" : false;
-            note_toolbar_li.append(toolbar_item);
-
-            note_toolbar_ul.appendChild(note_toolbar_li);
-
-        });
-
-        let note_toolbar_callout_content = document.createElement("div");
-        note_toolbar_callout_content.className = "callout-content";
-        note_toolbar_callout_content.append(note_toolbar_ul);
-
-        let note_toolbar_callout = document.createElement("div");
-        note_toolbar_callout.className = "callout dv-cg-note-toolbar";
-        note_toolbar_callout.setAttribute("tabindex", "0");
-        note_toolbar_callout.setAttribute("data-callout", "note-toolbar");
-        note_toolbar_callout.setAttribute("data-callout-metadata", "border-even-sticky");
-        note_toolbar_callout.append(note_toolbar_callout_content);
-
-        /* workaround to emulate callout-in-content structure, to use same sticky css */
-        let div = document.createElement("div");
-        div.append(note_toolbar_callout);
-        let embed_block = document.createElement("div");
-        embed_block.className = "cm-embed-block cm-callout";
-        embed_block.append(div);
-
-        /* inject it between the properties and content divs */
-        let properties_container = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
-        properties_container?.insertAdjacentElement("afterend", embed_block);
-
-    }
-
-}
-
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+	settings: NoteToolbarSettings;
 
 	async onload() {
-		await this.loadSettings();
+		await this.load_settings();
 
-		this.app.workspace.on('file-open', () => {
-			// console.log('file-open:');
-			var file = this.app.workspace.getActiveFile();
-			if (file != null) {
-				console.log('file-open: ' + file.name);
-				var frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter
-				// console.log('- frontmatter: ' + frontmatter);
-				const notetoolbar_prop = frontmatter?.notetoolbar ?? null;
-				if (notetoolbar_prop !== null) {
-					console.log('- notetoolbar: ' + notetoolbar_prop);
-					render_toolbar();
-				}
-				else {
-					remove_toolbar();
-				}
-			}
-		});
+		this.app.workspace.on('file-open', this.file_open_listener);
+		this.app.metadataCache.on("changed", this.metadata_cache_listener);
 
-		this.app.metadataCache.on("changed", (file, data, cache) => {
-			console.log("metadata-changed: " + file.name);
-			// check if there's metadata we're interested in, then...
-			const notetoolbar_prop = cache.frontmatter?.notetoolbar ?? null;
-			if (notetoolbar_prop !== null) {
-				// check if we're in the active file
-				var active_file = this.app.workspace.getActiveFile()?.name;
-				if (file.name === active_file) {
-					// FIXME? this also triggers if *any* metadata changes
-					console.log('- notetoolbar: ' + notetoolbar_prop);
-					render_toolbar();
-				}
-			}
-			else {
-				remove_toolbar();
-			}
-		});
-
-		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('scroll', 'Sample Plugin', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
-		});
-		// Perform additional things with the ribbon
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
-
-		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
-
-		// This adds a simple command that can be triggered anywhere
-		this.addCommand({
-			id: 'open-sample-modal-simple',
-			name: 'Open sample modal (simple)',
-			callback: () => {
-				new SampleModal(this.app).open();
-			}
-		});
-		// This adds an editor command that can perform some operation on the current editor instance
-		this.addCommand({
-			id: 'sample-editor-command',
-			name: 'Sample editor command',
-			editorCallback: (editor: Editor, view: MarkdownView) => {
-				console.log(editor.getSelection());
-				editor.replaceSelection('Sample Editor Command');
-			}
-		});
-		// This adds a complex command that can check whether the current state of the app allows execution of the command
-		this.addCommand({
-			id: 'open-sample-modal-complex',
-			name: 'Open sample modal (complex)',
-			checkCallback: (checking: boolean) => {
-				// Conditions to check
-				const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (markdownView) {
-					// If checking is true, we're simply "checking" if the command can be run.
-					// If checking is false, then we want to actually perform the operation.
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-
-					// This command will only show up in Command Palette when the check function returns true
-					return true;
-				}
-			}
-		});
-
-		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new SampleSettingTab(this.app, this));
+		console.log('LOADED');
 
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			// console.log('click', evt);
-		});
-
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		// this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
 	onunload() {
-
+		this.app.workspace.off('file-open', this.file_open_listener);
+		this.app.metadataCache.off('changed', this.metadata_cache_listener);
+		console.log('UNLOADED');
 	}
 
-	async loadSettings() {
+	async load_settings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
-	async saveSettings() {
+	async save_settings() {
+		this.settings.updated = new Date().toISOString();
 		await this.saveData(this.settings);
+		// TODO: update the toolbar instead of removing and re-adding to the DOM
+		await this.remove_toolbar();
+		await this.render_toolbar();
 	}
+
+	file_open_listener = () => {
+		// console.log('file-open:');
+		let file = this.app.workspace.getActiveFile();
+		
+		// if toolbar on current file
+		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+		if (existing_toolbar != null) {
+			let updated = existing_toolbar.getAttribute("data-updated");
+			// console.log(this.settings.updated);
+			if (updated !== this.settings.updated) {
+				// console.log("- reloading toolbar");
+				// TODO: update the toolbar instead of removing and re-adding to the DOM
+				this.remove_toolbar();
+				this.render_toolbar();
+				existing_toolbar.setAttribute("data-updated", this.settings.updated);
+			}
+		}
+
+		if (file != null) {
+			console.log('file-open: ' + file.name);
+			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter
+			// console.log('- frontmatter: ' + frontmatter);
+			const notetoolbar_prop = frontmatter?.notetoolbar ?? null;
+			if (notetoolbar_prop !== null) {
+				console.log('- notetoolbar: ' + notetoolbar_prop);
+				this.render_toolbar();
+			}
+			else {
+				this.remove_toolbar();
+			}
+		}
+	}
+
+	metadata_cache_listener = (file: TFile, data: any, cache: CachedMetadata) => {
+		console.log("metadata-changed: " + file.name);
+		// check if there's metadata we're interested in, then...
+		const notetoolbar_prop = cache.frontmatter?.notetoolbar ?? null;
+		if (notetoolbar_prop !== null) {
+			// check if we're in the active file
+			let active_file = this.app.workspace.getActiveFile()?.name;
+			if (file.name === active_file) {
+				// FIXME? this also triggers if *any* metadata changes
+				console.log('- notetoolbar: ' + notetoolbar_prop);
+				this.render_toolbar();
+			}
+		}
+		else {
+			this.remove_toolbar();
+		}
+	}
+
+	async render_toolbar() {
+
+		// check if we already added the toolbar
+		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+		if (existing_toolbar == null) {
+
+			/* create the unordered list of menu items */
+			let note_toolbar_ul = document.createElement("ul");
+			note_toolbar_ul.setAttribute("role", "menu");
+			// toolbar_items.map(function(data) {
+			this.settings.toolbar.map((item: ToolbarItem) => {
+	
+				let toolbar_item = document.createElement("a");
+				toolbar_item.className = "external-link";
+				toolbar_item.setAttribute("href", item.url);
+				// toolbar_item.setAttribute("data-index", item.index.toString());
+				// data.append_date ? toolbar_item.setAttribute("data-append-date", "true") : false;
+				// data.remove_toolbar ? toolbar_item.setAttribute("data-remove-toolbar", "true") : false;
+				toolbar_item.setAttribute("data-tooltip-position", "top");
+				toolbar_item.setAttribute("aria-label", item.tooltip);
+				toolbar_item.setAttribute("rel", "noopener");
+				toolbar_item.onclick = (e) => this.toolbar_item_handler(e);
+				toolbar_item.innerHTML = item.label;
+	
+				let note_toolbar_li = document.createElement("li");
+				item.hide_on_mobile ? note_toolbar_li.className = "hide-on-mobile" : false;
+				item.hide_on_desktop ? note_toolbar_li.className += "hide-on-desktop" : false;
+				item.hide_on_desktop ? note_toolbar_li.style.display = "none" : false;
+				note_toolbar_li.append(toolbar_item);
+	
+				note_toolbar_ul.appendChild(note_toolbar_li);
+			});
+	
+			let note_toolbar_callout_content = document.createElement("div");
+			note_toolbar_callout_content.className = "callout-content";
+			note_toolbar_callout_content.append(note_toolbar_ul);
+	
+			let note_toolbar_callout = document.createElement("div");
+			note_toolbar_callout.className = "callout dv-cg-note-toolbar";
+			note_toolbar_callout.setAttribute("tabindex", "0");
+			note_toolbar_callout.setAttribute("data-callout", "note-toolbar");
+			note_toolbar_callout.setAttribute("data-callout-metadata", "border-even-sticky");
+			note_toolbar_callout.setAttribute("data-updated", this.settings.updated);
+			note_toolbar_callout.append(note_toolbar_callout_content);
+	
+			/* workaround to emulate callout-in-content structure, to use same sticky css */
+			let div = document.createElement("div");
+			div.append(note_toolbar_callout);
+			let embed_block = document.createElement("div");
+			embed_block.className = "cm-embed-block cm-callout";
+			embed_block.append(div);
+	
+			/* inject it between the properties and content divs */
+			let properties_container = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
+			properties_container?.insertAdjacentElement("afterend", embed_block);
+	
+		}
+	
+	}
+
+	async toolbar_item_handler(e: MouseEvent) {
+
+		/* since we might be on a different page now, on click, check if the url needs the date appended */
+		let clicked_element = e.currentTarget as HTMLLinkElement;
+		if (clicked_element?.getAttribute("data-append-date")) {
+			let note_title = this.app.workspace.getActiveFile()?.basename;
+			// get the original url
+			// TODO: perhaps further optimize this to not need the array (just replace the date in the existing url)
+			let menu_index = clicked_element?.getAttribute("data-index");
+			let new_url = menu_index ? toolbar_items[parseInt(menu_index)].url : "";
+			// FIXME? do nothing(?) if index is bad?
+			// append the date (the note's title)
+			new_url += note_title;
+			clicked_element?.setAttribute("href", new_url);
+		}
+
+		if (clicked_element?.getAttribute("data-remove-toolbar")) {
+			this.remove_toolbar();
+		}
+
+	}
+	
+	async remove_toolbar() {
+		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+		existing_toolbar?.remove();
+	}
+
 }
 
 class SampleModal extends Modal {
@@ -253,15 +233,96 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+		// new Setting(containerEl)
+		// 	.setName('Setting #1')
+		// 	.setDesc('It\'s a secret')
+		// 	.addText(text => text
+		// 		.setPlaceholder('Enter your secret')
+		// 		.setValue(this.plugin.settings.mySetting)
+		// 		.onChange(async (value) => {
+		// 			this.plugin.settings.mySetting = value;
+		// 			await this.plugin.saveSettings();
+		// 		}));
+
+		this.containerEl.createEl("h2", { text: "Menu Items" });
+
+		// const descHeading = document.createDocumentFragment();
+        // descHeading.append(
+        //     "Add items to this menu."
+        // );
+		// new Setting(this.containerEl).setDesc(descHeading);
+
+        new Setting(this.containerEl)
+            .setName("Add New")
+            .setDesc("Add new menu item")
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setTooltip("Add menu item")
+                    .setButtonText("+")
+                    .setCta()
+                    .onClick(() => {
+                        this.plugin.settings.toolbar.push({
+                            label: "",
+                            url: "",
+							tooltip: "",
+							hide_on_desktop: false,
+							hide_on_mobile: false
+                        });
+                        this.plugin.save_settings();
+                        this.display();
+                    });
+            });
+
+		
+		// let div = this.containerEl.createEl("div");
+
+		this.plugin.settings.toolbar.forEach(
+			(toolbar_item, index) => {
+				const s = new Setting(this.containerEl)
+					.addText(text => text
+						.setPlaceholder('Label')
+						.setValue(this.plugin.settings.toolbar[index].label)
+						.onChange(async (value) => {
+							this.plugin.settings.toolbar[index].label = value;
+							await this.plugin.save_settings();
+						}))
+					.addText(text => text
+						.setPlaceholder('URL')
+						.setValue(this.plugin.settings.toolbar[index].url)
+						.onChange(async (value) => {
+							this.plugin.settings.toolbar[index].url = value;
+							await this.plugin.save_settings();
+						}))
+					.addText(text => text
+						.setPlaceholder('Tooltip')
+						.setValue(this.plugin.settings.toolbar[index].tooltip)
+						.onChange(async (value) => {
+							this.plugin.settings.toolbar[index].tooltip = value;
+							await this.plugin.save_settings();
+						}))
+					.addExtraButton((cb) => {
+						cb.setIcon("cross")
+							.setTooltip("Delete")
+							.onClick(() => {
+								this.plugin.settings.toolbar.splice(
+									index,
+									1
+								);
+								this.plugin.save_settings();
+								this.display();
+							});
+					});
+		});
+
+		// .addToggle((toggle) => {
+		// 	toggle
+		// 		.setValue(this.plugin.settings.toolbar[index].hide_on_mobile)
+		// 		.onChange((hide_on_mobile) => {
+		// 			this.plugin.settings.toolbar[index].hide_on_mobile =
+		// 				hide_on_mobile;
+		// 			this.plugin.save_settings();
+		// 		});
+		// })
+
 	}
 }
