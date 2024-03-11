@@ -120,7 +120,6 @@ export default class MyPlugin extends Plugin {
 
 	async render_toolbar(notetoolbar_prop: string[] | null = null) {
 
-		console.log('1: ' + notetoolbar_prop + " is type " + typeof notetoolbar_prop);
 		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
 
 		// check if name matches something in prop
@@ -130,12 +129,11 @@ export default class MyPlugin extends Plugin {
 			if (active_file != null) {
 				let frontmatter = this.app.metadataCache.getFileCache(active_file)?.frontmatter
 				notetoolbar_prop = frontmatter?.notetoolbar ?? null;
-				console.log('2: ' + notetoolbar_prop + " is type " + typeof notetoolbar_prop);
 			}
 		}
 
 		if (notetoolbar_prop && notetoolbar_prop.includes(this.settings.name)) {
-			console.log("- OK ");
+
 			// check if we already added the toolbar
 			if (existing_toolbar == null) {
 
