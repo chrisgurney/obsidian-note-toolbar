@@ -293,7 +293,7 @@ class SampleSettingTab extends PluginSettingTab {
 
 		this.plugin.settings.toolbar.forEach(
 			(toolbar_item, index) => {
-				const s = new Setting(this.containerEl)
+				const s1 = new Setting(this.containerEl)
 					.addText(text => text
 						.setPlaceholder('Label')
 						.setValue(this.plugin.settings.toolbar[index].label)
@@ -353,17 +353,28 @@ class SampleSettingTab extends PluginSettingTab {
 								this.display();
 							});
 					});
+				const s2 = new Setting(this.containerEl)
+					.addToggle((toggle) => {
+						toggle
+							.setTooltip(('Hide on mobile?'))
+							.setValue(this.plugin.settings.toolbar[index].hide_on_mobile)
+							.onChange((hide_on_mobile) => {
+								this.plugin.settings.toolbar[index].hide_on_mobile =
+									hide_on_mobile;
+								this.plugin.save_settings();
+							});
+					})
+					.addToggle((toggle) => {
+						toggle
+							.setTooltip(('Hide on desktop?'))
+							.setValue(this.plugin.settings.toolbar[index].hide_on_desktop)
+							.onChange((hide_on_desktop) => {
+								this.plugin.settings.toolbar[index].hide_on_desktop =
+									hide_on_desktop;
+								this.plugin.save_settings();
+							});
+					})
 		});
-
-		// .addToggle((toggle) => {
-		// 	toggle
-		// 		.setValue(this.plugin.settings.toolbar[index].hide_on_mobile)
-		// 		.onChange((hide_on_mobile) => {
-		// 			this.plugin.settings.toolbar[index].hide_on_mobile =
-		// 				hide_on_mobile;
-		// 			this.plugin.save_settings();
-		// 		});
-		// })
 
 	}
 }
