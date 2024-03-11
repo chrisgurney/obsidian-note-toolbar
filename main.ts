@@ -66,11 +66,12 @@ export default class MyPlugin extends Plugin {
 
 	file_open_listener = () => {
 		// console.log('file-open:');
-		let file = this.app.workspace.getActiveFile();
-		
+		let active_file = this.app.workspace.getActiveFile();
+
 		// if toolbar on current file
 		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
 		if (existing_toolbar != null) {
+			// re-render the toolbar if it's out of date with the configuration
 			let updated = existing_toolbar.getAttribute("data-updated");
 			// console.log(this.settings.updated);
 			if (updated !== this.settings.updated) {
@@ -82,9 +83,9 @@ export default class MyPlugin extends Plugin {
 			}
 		}
 
-		if (file != null) {
-			console.log('file-open: ' + file.name);
-			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter
+		if (active_file != null) {
+			console.log('file-open: ' + active_file.name);
+			let frontmatter = this.app.metadataCache.getFileCache(active_file)?.frontmatter
 			// console.log('- frontmatter: ' + frontmatter);
 			const notetoolbar_prop = frontmatter?.notetoolbar ?? null;
 			if (notetoolbar_prop !== null) {
@@ -136,7 +137,7 @@ export default class MyPlugin extends Plugin {
 				toolbar_item.setAttribute("data-tooltip-position", "top");
 				toolbar_item.setAttribute("aria-label", item.tooltip);
 				toolbar_item.setAttribute("rel", "noopener");
-				toolbar_item.onclick = (e) => this.toolbar_item_handler(e);
+				toolbar_item.onclick = (e) => this.toolbar_click_handler(e);
 				toolbar_item.innerHTML = item.label;
 	
 				let note_toolbar_li = document.createElement("li");
@@ -175,24 +176,22 @@ export default class MyPlugin extends Plugin {
 	
 	}
 
-	async toolbar_item_handler(e: MouseEvent) {
+	async toolbar_click_handler(e: MouseEvent) {
 
+		// console.log('in toolbar_click_handler');
 		/* since we might be on a different page now, on click, check if the url needs the date appended */
 		let clicked_element = e.currentTarget as HTMLLinkElement;
-		if (clicked_element?.getAttribute("data-append-date")) {
-			let note_title = this.app.workspace.getActiveFile()?.basename;
-			// get the original url
-			// TODO: perhaps further optimize this to not need the array (just replace the date in the existing url)
-			let menu_index = clicked_element?.getAttribute("data-index");
-			let new_url = menu_index ? toolbar_items[parseInt(menu_index)].url : "";
-			// FIXME? do nothing(?) if index is bad?
-			// append the date (the note's title)
-			new_url += note_title;
-			clicked_element?.setAttribute("href", new_url);
-		}
-
-		if (clicked_element?.getAttribute("data-remove-toolbar")) {
-			this.remove_toolbar();
+		let url = clicked_element.getAttribute("href");
+		let file_basename = this.app.workspace.getActiveFile()?.basename;
+		if (url != null) {
+			if (file_basename != null) {
+				console.log('file_basename: ' + file_basename);
+				console.log('url: ' + url);
+				url = url.replace('{{file_basename}}', encodeURIComponent(file_basename));
+				console.log('url after replace: ' + url);
+			}
+			window.open(url, '_blank');
+			e.preventDefault();
 		}
 
 	}
