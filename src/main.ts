@@ -1,6 +1,6 @@
 import { App, CachedMetadata, Editor, MarkdownView, MetadataCache, Modal, Notice, Plugin, TFile } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings } from './Settings/NoteToolbarSettings';
+import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings, ToolbarItemSettings } from './Settings/NoteToolbarSettings';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -25,7 +25,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	async load_settings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = Object.assign({}, DEFAULT_TOOLBAR_SETTINGS, await this.loadData());
 	}
 
 	async save_settings() {
