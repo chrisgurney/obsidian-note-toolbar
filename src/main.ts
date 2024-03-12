@@ -1,4 +1,4 @@
-import { App, CachedMetadata, Editor, MarkdownView, MetadataCache, Modal, Notice, Plugin, TFile } from 'obsidian';
+import { CachedMetadata, Editor, MarkdownView, MetadataCache, Notice, Plugin, TFile } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings, ToolbarItemSettings } from './Settings/NoteToolbarSettings';
 
@@ -25,11 +25,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	async load_settings() {
+		// TODO: use new defaults
 		this.settings = Object.assign({}, DEFAULT_TOOLBAR_SETTINGS, await this.loadData());
 	}
 
 	async save_settings() {
+		// TODO: separate update_item_settings for items?
 		this.settings.updated = new Date().toISOString();
+		// TODO: do I need to call this for each item that's updated? or just once?
 		await this.saveData(this.settings);
 		// TODO: update the toolbar instead of removing and re-adding to the DOM
 		await this.remove_toolbar();
