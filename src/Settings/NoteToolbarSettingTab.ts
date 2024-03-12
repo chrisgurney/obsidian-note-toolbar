@@ -1,5 +1,6 @@
 import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
-import NoteToolbarPlugin, { arraymove } from '../main';
+import NoteToolbarPlugin from '../main';
+import { arraymove } from 'src/Utils/Utils';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
