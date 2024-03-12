@@ -265,9 +265,16 @@ class NoteToolbarSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		const name_description = document.createDocumentFragment();
+		name_description.append(
+			"Unique name for this toolbar.",
+			name_description.createEl("br"),
+			"If a `notetoolbar` property is set to use this toolbar, it will take precedence over any folder toolbars."
+		);
+
 		new Setting(this.containerEl)
 			.setName("Name")
-			.setDesc("Unique name for this toolbar")
+			.setDesc(name_description)
 			.addText(text => text
 				.setPlaceholder('Name')
 				.setValue(this.plugin.settings.name)
@@ -276,7 +283,7 @@ class NoteToolbarSettingTab extends PluginSettingTab {
 					await this.plugin.save_settings();
 				}));
 
-		this.containerEl.createEl("h2", { text: "Menu Items" });
+		// this.containerEl.createEl("h2", { text: "Menu Items" });
 
 		// const descHeading = document.createDocumentFragment();
         // descHeading.append(
@@ -285,12 +292,12 @@ class NoteToolbarSettingTab extends PluginSettingTab {
 		// new Setting(this.containerEl).setDesc(descHeading);
 
         new Setting(this.containerEl)
-            .setName("Add New")
-            .setDesc("Add new menu item")
+            .setName("Menu items")
+            .setDesc("Items that appear in the menu, in order.")
             .addButton((button: ButtonComponent) => {
                 button
                     .setTooltip("Add menu item")
-                    .setButtonText("+")
+                    .setButtonText("+ Add menu item")
                     .setCta()
                     .onClick(() => {
                         this.plugin.settings.toolbar.push({
