@@ -21,20 +21,6 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	toolbar: [{ label: "", url: "", tooltip: "", hide_on_desktop: false, hide_on_mobile: false }]
 }
 
-// TODO: create configuration to get this from settings
-const toolbar_items = [
-	{ index: 0, text: "←", url: "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Aprev-daily-note", label: "Previous daily note" },
-	{ index: 1, text: "Today", url: "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Aopen-daily-note", label: "Today's daily note", hide_on_desktop: "true" },
-	{ index: 2, text: "TODO", url: "obsidian://shell-commands/?vault=Design&execute=zg60qq8r6h", label: "Insert tasks", hide_on_mobile: "true" },
-	{ index: 3, text: "@focus", url: "obsidian://shell-commands/?vault=Design&execute=jttqryu9sd", label: "Insert tasks to focus on", hide_on_mobile: "true" },
-	{ index: 4, text: "✪ Events", url: "obsidian://shell-commands/?vault=Design&execute=r0qcncyump&_task_date=", append_date: true, label: "Insert today's events", hide_on_mobile: "true" },
-	{ index: 5, text: "> Insert...", url: "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Ainsert-templater", label: "Choose template to insert" },
-	{ index: 6, text: "Blocked?", url: "obsidian://advanced-uri?vault=Design&filepath=Atlas%252FNotes%252FWhat%2520to%2520do%2520if%2520I'm%2520Blocked.md" , remove_toolbar: true, label: "What to do if I'm blocked" },
-	{ index: 7, text: "☑︎ Done", url: "obsidian://shell-commands/?vault=Design&execute=um5sony1zn&_task_date=", append_date: true, label: "Insert items done on this day", hide_on_mobile: "true" },
-	{ index: 8, text: "⏀ Activity", url: "obsidian://shell-commands/?vault=Design&execute=41451u5h99&_task_date=", append_date: true, label: "Insert Git activity for this day", hide_on_mobile: "true" },
-	{ index: 9, text: "→", url: "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Anext-daily-note", label: "Next daily note" },
-];
-
 export default class NoteToolbarPlugin extends Plugin {
 
 	settings: NoteToolbarSettings;
@@ -142,14 +128,12 @@ export default class NoteToolbarPlugin extends Plugin {
 				/* create the unordered list of menu items */
 				let note_toolbar_ul = document.createElement("ul");
 				note_toolbar_ul.setAttribute("role", "menu");
-				// toolbar_items.map(function(data) {
 				this.settings.toolbar.map((item: ToolbarItem) => {
 		
 					let toolbar_item = document.createElement("a");
 					toolbar_item.className = "external-link";
 					toolbar_item.setAttribute("href", item.url);
 					// toolbar_item.setAttribute("data-index", item.index.toString());
-					// data.append_date ? toolbar_item.setAttribute("data-append-date", "true") : false;
 					// data.remove_toolbar ? toolbar_item.setAttribute("data-remove-toolbar", "true") : false;
 					toolbar_item.setAttribute("data-tooltip-position", "top");
 					toolbar_item.setAttribute("aria-label", item.tooltip);
