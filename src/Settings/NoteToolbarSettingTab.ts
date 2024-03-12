@@ -13,8 +13,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
     public openSettingsModal() {
+
         const modal = new ToolbarSettingsModal(this.plugin);
         modal.open();
+		
     }
 
 	display(): void {
@@ -33,7 +35,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.onClick(() => {
 						this.openSettingsModal();
 					});
-			});
+		});
+
+		this.display_toolbar_settings();
+
+	}
+
+	display_toolbar_settings() {
 
 		const name_description = document.createDocumentFragment();
 		name_description.append(
@@ -51,7 +59,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					this.plugin.settings.name = value;
 					await this.plugin.save_settings();
-				}));
+			}));
 
 		new Setting(this.containerEl)
 			.setName("Items")
@@ -83,7 +91,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.onChange(async (value) => {
 							this.plugin.settings.toolbar[index].label = value;
 							await this.plugin.save_settings();
-						}));
+					}));
 				const s1b = new Setting(text_fields_div_right)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
@@ -92,7 +100,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.onChange(async (value) => {
 							this.plugin.settings.toolbar[index].url = value;
 							await this.plugin.save_settings();
-						}));
+					}));
 				const s1c = new Setting(text_fields_div_right)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
@@ -101,7 +109,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.onChange(async (value) => {
 							this.plugin.settings.toolbar[index].tooltip = value;
 							await this.plugin.save_settings();
-						}));
+					}));
 				const s1d = new Setting(item_controls_div)
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
@@ -200,4 +208,5 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 	}
+	
 }
