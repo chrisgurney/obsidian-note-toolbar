@@ -24,7 +24,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		);
 
 		new Setting(this.containerEl)
-			.setName("Toolbar name")
+			.setName("Name")
 			.setDesc(name_description)
 			.addText(text => text
 				.setPlaceholder('Name')
@@ -35,7 +35,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(this.containerEl)
-			.setName("Toolbar items")
+			.setName("Items")
 			.setDesc("Items that appear in the toolbar, in order.");
 
 		this.plugin.settings.toolbar.forEach(
