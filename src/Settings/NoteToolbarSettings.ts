@@ -1,12 +1,23 @@
-import { ToolbarItem } from '../main';
 
 export interface NoteToolbarSettings {
-	name: string;
-	updated: string;
-	toolbar: Array<ToolbarItem>;
+	toolbars: Array<ToolbarSettings>;
 }
 
-export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+export interface ToolbarItemSettings {
+	label: string;
+	url: string;
+	tooltip: string;
+	hide_on_desktop: boolean;
+	hide_on_mobile: boolean;
+}
+
+export interface ToolbarSettings {
+	name: string;
+	updated: string;
+	toolbar: Array<ToolbarItemSettings>;
+}
+
+export const DEFAULT_SETTINGS: ToolbarSettings = {
 	name: "",
 	updated: new Date().toISOString(),
 	toolbar: [{ label: "", url: "", tooltip: "", hide_on_desktop: false, hide_on_mobile: false }]

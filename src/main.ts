@@ -1,18 +1,10 @@
 import { App, CachedMetadata, Editor, MarkdownView, MetadataCache, Modal, Notice, Plugin, TFile } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, NoteToolbarSettings } from './Settings/NoteToolbarSettings';
-
-export interface ToolbarItem {
-	label: string;
-	url: string;
-	tooltip: string;
-	hide_on_desktop: boolean;
-	hide_on_mobile: boolean;
-}
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings } from './Settings/NoteToolbarSettings';
 
 export default class NoteToolbarPlugin extends Plugin {
 
-	settings: NoteToolbarSettings;
+	settings: ToolbarSettings;
 
 	async onload() {
 		await this.load_settings();
@@ -120,7 +112,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				/* create the unordered list of menu items */
 				let note_toolbar_ul = document.createElement("ul");
 				note_toolbar_ul.setAttribute("role", "menu");
-				this.settings.toolbar.map((item: ToolbarItem) => {
+				this.settings.toolbar.map((item: ToolbarItemSettings) => {
 		
 					let toolbar_item = document.createElement("a");
 					toolbar_item.className = "external-link";
