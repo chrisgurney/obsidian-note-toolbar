@@ -34,12 +34,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					await this.plugin.save_settings();
 				}));
 
-		// this.containerEl.createEl("h2", { text: "Menu Items" });
-		// const descHeading = document.createDocumentFragment();
-		// descHeading.append(
-		//     "Add items to this menu."
-		// );
-		// new Setting(this.containerEl).setDesc(descHeading);
 		new Setting(this.containerEl)
 			.setName("Menu items")
 			.setDesc("Items that appear in the menu, in order.")
@@ -64,18 +58,23 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.plugin.settings.toolbar.forEach(
 			(toolbar_item, index) => {
 				let item_div = this.containerEl.createEl("div");
-				item_div.style.borderRadius = "8px";
-				item_div.style.border = "1px solid var(--background-modifier-border)";
-				item_div.style.margin = "1em 0em 0em 1.5em";
-				item_div.style.padding = "1.5em 1.5em 0.5em 1.5em";
+				item_div.className = "note-toolbar-setting-item";
+				let row1_container = this.containerEl.createEl("div");
+				row1_container.style.display = "flex";
+				row1_container.style.flexFlow = "wrap-reverse";
+				row1_container.style.justifyContent = "space-between";
 				let text_fields_container = this.containerEl.createEl("div");
 				text_fields_container.style.display = "flex";
+				text_fields_container.style.flexWrap = "wrap";
 				text_fields_container.style.justifyContent = "space-between";
 				let text_fields_div_right = this.containerEl.createEl("div");
 				text_fields_div_right.style.display = "flex";
+				text_fields_div_right.style.flexWrap = "wrap";
 				text_fields_div_right.style.justifyContent = "flex-end";
+				let item_controls_div = this.containerEl.createEl("div");
+				item_controls_div.style.marginLeft = "auto";
 				const s1a = new Setting(text_fields_container)
-					.setClass("note-toolbar-setting-item-title")
+					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('Item label')
 						.setValue(this.plugin.settings.toolbar[index].label)
@@ -84,20 +83,24 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							await this.plugin.save_settings();
 						}));
 				const s1b = new Setting(text_fields_div_right)
+					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('URL')
 						.setValue(this.plugin.settings.toolbar[index].url)
 						.onChange(async (value) => {
 							this.plugin.settings.toolbar[index].url = value;
 							await this.plugin.save_settings();
-						}))
+						}));
+				const s1c = new Setting(text_fields_div_right)
+					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('Tooltip (optional)')
 						.setValue(this.plugin.settings.toolbar[index].tooltip)
 						.onChange(async (value) => {
 							this.plugin.settings.toolbar[index].tooltip = value;
 							await this.plugin.save_settings();
-						}))
+						}));
+				const s1d = new Setting(item_controls_div)
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
@@ -137,10 +140,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							});
 					});
 				text_fields_container.appendChild(text_fields_div_right);
-				item_div.appendChild(text_fields_container);
+				row1_container.appendChild(text_fields_container);
+				row1_container.appendChild(item_controls_div);
+				item_div.appendChild(row1_container);
 				let toggles_div = this.containerEl.createEl("div");
 				toggles_div.style.display = "flex";
 				toggles_div.style.justifyContent = "flex-end";
+				toggles_div.style.flexWrap = "wrap";
 				const s2 = new Setting(toggles_div)
 					.setClass("note-toolbar-setting-item-toggle")
 					.setName("Hide on mobile")
@@ -168,7 +174,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							});
 					});
 				item_div.appendChild(toggles_div);
-				// item_div.appendChild(toggle2_span);
 				this.containerEl.appendChild(item_div);
 			});
 

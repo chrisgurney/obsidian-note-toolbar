@@ -165,11 +165,24 @@
     
 }
 
-.note-toolbar-setting-item-title .setting-item-info {
+.note-toolbar-setting-item {
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin: 1em 0em 0em 1.5em;
+    padding: 1.5em 1.5em 0.5em 1.5em;
+}
+
+.note-toolbar-setting-item-field {
+    margin-right: 1em;
+    border-top: none;
+    padding-top: 0 !important;
+}
+
+.note-toolbar-setting-item-field .setting-item-info {
     margin-right: 0;
 }
 
 .note-toolbar-setting-item-toggle {
     border-top: none;
-    padding: 0.75em 0 0.75em 0.75em !important;
+    padding: 0.75em 0 0.75em 1.5em !important;
 }
