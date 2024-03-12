@@ -172,13 +172,17 @@
 .note-toolbar-setting-item {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
-    margin: 1em 0em 0em 1.5em;
+    margin: 1em 0em 0em 0em;
     padding: 1.5em 1.5em 0.5em 1.5em;
 }
 
 .note-toolbar-setting-button {
     border-top: none;
     padding-top: 1em;
+}
+
+.note-toolbar-setting-item-url {
+    width: 100%;
 }
 
 .note-toolbar-setting-item-field {
@@ -194,4 +198,10 @@
 .note-toolbar-setting-item-toggle {
     border-top: none;
     padding: 0.75em 0 0.75em 1.5em !important;
+}
+
+.vertical-tab-content.note-toolbar-setting-modal {
+    padding-top: var(--size-4-8);
+    padding-left: var(--size-4-5);
+    padding-right: var(--size-4-5);
 }
