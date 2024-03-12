@@ -21,12 +21,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.app.metadataCache.on("changed", this.metadata_cache_listener);
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
+		await this.render_toolbar();
 		// console.log('LOADED');
 	}
 
 	onunload() {
 		this.app.workspace.off('file-open', this.file_open_listener);
 		this.app.metadataCache.off('changed', this.metadata_cache_listener);
+		this.remove_toolbar_from_all();
 		// console.log('UNLOADED');
 	}
 
@@ -191,6 +193,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	async remove_toolbar() {
 		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
 		existing_toolbar?.remove();
+	}
+
+	async remove_toolbar_from_all() {
+		let existing_toolbars = document.querySelectorAll('.dv-cg-note-toolbar');
+		existing_toolbars.forEach((toolbar) => {
+			toolbar.remove();
+		});
 	}
 
 }
