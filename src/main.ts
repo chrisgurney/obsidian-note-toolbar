@@ -1,5 +1,6 @@
 import { App, CachedMetadata, Editor, MarkdownView, MetadataCache, Modal, Notice, Plugin, TFile } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
+import { DEFAULT_SETTINGS, NoteToolbarSettings } from './Settings/NoteToolbarSettings';
 
 export interface ToolbarItem {
 	label: string;
@@ -7,18 +8,6 @@ export interface ToolbarItem {
 	tooltip: string;
 	hide_on_desktop: boolean;
 	hide_on_mobile: boolean;
-}
-
-export interface NoteToolbarSettings {
-	name: string;
-	updated: string;
-	toolbar: Array<ToolbarItem>;
-}
-
-export const DEFAULT_SETTINGS: NoteToolbarSettings = {
-	name: "",
-	updated: new Date().toISOString(),
-	toolbar: [{ label: "", url: "", tooltip: "", hide_on_desktop: false, hide_on_mobile: false }]
 }
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -33,7 +22,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 		// console.log('LOADED');
-
 	}
 
 	onunload() {
