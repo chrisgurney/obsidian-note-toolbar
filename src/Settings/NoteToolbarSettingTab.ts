@@ -36,24 +36,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName("Menu items")
-			.setDesc("Items that appear in the menu, in order.")
-			.addButton((button: ButtonComponent) => {
-				button
-					.setTooltip("Add menu item")
-					.setButtonText("+ Add menu item")
-					.setCta()
-					.onClick(() => {
-						this.plugin.settings.toolbar.push({
-							label: "",
-							url: "",
-							tooltip: "",
-							hide_on_desktop: false,
-							hide_on_mobile: false
-						});
-						this.plugin.save_settings();
-						this.display();
-					});
-			});
+			.setDesc("Items that appear in the menu, in order.");
 
 		this.plugin.settings.toolbar.forEach(
 			(toolbar_item, index) => {
@@ -175,6 +158,26 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 				item_div.appendChild(toggles_div);
 				this.containerEl.appendChild(item_div);
+			});
+
+		new Setting(this.containerEl)
+			.setClass("note-toolbar-setting-button")
+			.addButton((button: ButtonComponent) => {
+				button
+					.setTooltip("Add menu item")
+					.setButtonText("+ Add menu item")
+					.setCta()
+					.onClick(() => {
+						this.plugin.settings.toolbar.push({
+							label: "",
+							url: "",
+							tooltip: "",
+							hide_on_desktop: false,
+							hide_on_mobile: false
+						});
+						this.plugin.save_settings();
+						this.display();
+					});
 			});
 
 	}
