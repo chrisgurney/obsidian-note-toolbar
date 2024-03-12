@@ -34,7 +34,8 @@ const toolbar_items = [
 	{ index: 9, text: "→", url: "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Anext-daily-note", label: "Next daily note" },
 ];
 
-export default class MyPlugin extends Plugin {
+export default class NoteToolbarPlugin extends Plugin {
+
 	settings: NoteToolbarSettings;
 
 	async onload() {
@@ -43,7 +44,7 @@ export default class MyPlugin extends Plugin {
 		this.app.workspace.on('file-open', this.file_open_listener);
 		this.app.metadataCache.on("changed", this.metadata_cache_listener);
 
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 		// console.log('LOADED');
 
 	}
@@ -250,10 +251,11 @@ export function arraymove<T>(
     arr[toIndex] = element;
 }
 
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+class NoteToolbarSettingTab extends PluginSettingTab {
 
-	constructor(app: App, plugin: MyPlugin) {
+	plugin: NoteToolbarPlugin;
+
+	constructor(app: App, plugin: NoteToolbarPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -303,19 +305,29 @@ class SampleSettingTab extends PluginSettingTab {
                     });
             });
 
-		
-		// let div = this.containerEl.createEl("div");
-
 		this.plugin.settings.toolbar.forEach(
 			(toolbar_item, index) => {
-				const s1 = new Setting(this.containerEl)
+				let item_div = this.containerEl.createEl("div");
+				item_div.style.borderRadius = "8px";
+				item_div.style.border = "1px solid var(--background-modifier-border)";
+				item_div.style.margin = "1em 0em 0em 1.5em";
+				item_div.style.padding = "1.5em 1.5em 0.5em 1.5em";
+				let text_fields_container = this.containerEl.createEl("div");
+				text_fields_container.style.display = "flex";
+				text_fields_container.style.justifyContent = "space-between";
+				let text_fields_div_right = this.containerEl.createEl("div");
+				text_fields_div_right.style.display = "flex";
+				text_fields_div_right.style.justifyContent = "flex-end";
+				const s1a = new Setting(text_fields_container)
+					.setClass("note-toolbar-setting-item-title")
 					.addText(text => text
-						.setPlaceholder('Label')
+						.setPlaceholder('Item label')
 						.setValue(this.plugin.settings.toolbar[index].label)
 						.onChange(async (value) => {
 							this.plugin.settings.toolbar[index].label = value;
 							await this.plugin.save_settings();
-						}))
+						}));
+				const s1b = new Setting(text_fields_div_right)						
 					.addText(text => text
 						.setPlaceholder('URL')
 						.setValue(this.plugin.settings.toolbar[index].url)
@@ -324,7 +336,7 @@ class SampleSettingTab extends PluginSettingTab {
 							await this.plugin.save_settings();
 						}))
 					.addText(text => text
-						.setPlaceholder('Tooltip')
+						.setPlaceholder('Tooltip (optional)')
 						.setValue(this.plugin.settings.toolbar[index].tooltip)
 						.onChange(async (value) => {
 							this.plugin.settings.toolbar[index].tooltip = value;
@@ -368,7 +380,14 @@ class SampleSettingTab extends PluginSettingTab {
 								this.display();
 							});
 					});
-				const s2 = new Setting(this.containerEl)
+				text_fields_container.appendChild(text_fields_div_right);
+				item_div.appendChild(text_fields_container);
+				let toggles_div = this.containerEl.createEl("div");
+				toggles_div.style.display = "flex";
+				toggles_div.style.justifyContent = "flex-end";
+				const s2 = new Setting(toggles_div)
+					.setClass("note-toolbar-setting-item-toggle")
+					.setName("Hide on mobile")
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('Hide on mobile?'))
@@ -378,7 +397,10 @@ class SampleSettingTab extends PluginSettingTab {
 									hide_on_mobile;
 								this.plugin.save_settings();
 							});
-					})
+					});
+				const s3 = new Setting(toggles_div)
+					.setClass("note-toolbar-setting-item-toggle")
+					.setName("Hide on desktop")
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('Hide on desktop?'))
@@ -388,7 +410,10 @@ class SampleSettingTab extends PluginSettingTab {
 									hide_on_desktop;
 								this.plugin.save_settings();
 							});
-					})
+					});
+				item_div.appendChild(toggles_div);
+				// item_div.appendChild(toggle2_span);
+				this.containerEl.appendChild(item_div);
 		});
 
 	}
