@@ -42,28 +42,29 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.render_toolbar();
 	}
 
-	file_open_listener = () => {
-		// console.log('file-open:');
-		let active_file = this.app.workspace.getActiveFile();
+	file_open_listener = (file: TFile) => {
 
-		// if toolbar on current file
-		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
-		if (existing_toolbar != null) {
-			// re-render the toolbar if it's out of date with the configuration
-			let updated = existing_toolbar.getAttribute("data-updated");
-			// console.log(this.settings.updated);
-			if (updated !== this.settings.updated) {
-				// console.log("- reloading toolbar");
-				// TODO: update the toolbar instead of removing and re-adding to the DOM
-				this.remove_toolbar();
-				this.render_toolbar();
-				existing_toolbar.setAttribute("data-updated", this.settings.updated);
+		if (file != null) {
+			// console.log('file-open:');
+			// let active_file = this.app.workspace.getActiveFile();
+
+			// if toolbar on current file
+			let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+			if (existing_toolbar != null) {
+				// re-render the toolbar if it's out of date with the configuration
+				let updated = existing_toolbar.getAttribute("data-updated");
+				// console.log(this.settings.updated);
+				if (updated !== this.settings.updated) {
+					// console.log("- reloading toolbar");
+					// TODO: update the toolbar instead of removing and re-adding to the DOM
+					this.remove_toolbar();
+					this.render_toolbar();
+					existing_toolbar.setAttribute("data-updated", this.settings.updated);
+				}
 			}
-		}
 
-		if (active_file != null) {
 			// console.log('file-open: ' + active_file.name);
-			let frontmatter = this.app.metadataCache.getFileCache(active_file)?.frontmatter
+			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter
 			// console.log('- frontmatter: ' + frontmatter);
 			const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
 			if (notetoolbar_prop !== null) {
@@ -74,6 +75,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.remove_toolbar();
 			}
 		}
+
 	}
 
 	metadata_cache_listener = (file: TFile, data: any, cache: CachedMetadata) => {
