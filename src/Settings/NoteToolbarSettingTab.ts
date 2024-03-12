@@ -18,7 +18,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const name_description = document.createDocumentFragment();
 		name_description.append(
-			"Unique name for this toolbar.",
+			"Give this toolbar a unique name.",
 			name_description.createEl("br"),
 			"If a `notetoolbar` property is set to use this toolbar, it will take precedence over any folder toolbars."
 		);
