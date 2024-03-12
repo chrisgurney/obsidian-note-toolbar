@@ -24,7 +24,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		);
 
 		new Setting(this.containerEl)
-			.setName("Name")
+			.setName("Toolbar name")
 			.setDesc(name_description)
 			.addText(text => text
 				.setPlaceholder('Name')
@@ -35,8 +35,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(this.containerEl)
-			.setName("Menu items")
-			.setDesc("Items that appear in the menu, in order.");
+			.setName("Toolbar items")
+			.setDesc("Items that appear in the toolbar, in order.");
 
 		this.plugin.settings.toolbar.forEach(
 			(toolbar_item, index) => {
@@ -135,7 +135,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setName("Hide on mobile")
 					.addToggle((toggle) => {
 						toggle
-							.setTooltip(('Hide on mobile?'))
+							.setTooltip(('If enabled, this item will not appear on mobile'))
 							.setValue(this.plugin.settings.toolbar[index].hide_on_mobile)
 							.onChange((hide_on_mobile) => {
 								this.plugin.settings.toolbar[index].hide_on_mobile =
@@ -148,7 +148,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setName("Hide on desktop")
 					.addToggle((toggle) => {
 						toggle
-							.setTooltip(('Hide on desktop?'))
+							.setTooltip(('If enabled, this item will not appear on desktop'))
 							.setValue(this.plugin.settings.toolbar[index].hide_on_desktop)
 							.onChange((hide_on_desktop) => {
 								this.plugin.settings.toolbar[index].hide_on_desktop =
@@ -164,8 +164,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
-					.setTooltip("Add menu item")
-					.setButtonText("+ Add menu item")
+					.setTooltip("Add a new item to the toolbar")
+					.setButtonText("+ Add toolbar item")
 					.setCta()
 					.onClick(() => {
 						this.plugin.settings.toolbar.push({
