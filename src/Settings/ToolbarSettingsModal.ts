@@ -95,7 +95,6 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
-
 				const s1c = new Setting(text_fields_container)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
@@ -107,12 +106,12 @@ export default class ToolbarSettingsModal extends Modal {
 							await this.plugin.save_settings();
 					}));
 
-				let text_fields_div_right = this.containerEl.createEl("div");
-				text_fields_div_right.style.display = "flex";
-				text_fields_div_right.style.flexWrap = "wrap";
-				text_fields_div_right.style.justifyContent = "flex-end";
-				const s1b = new Setting(text_fields_div_right)
-					.setClass("note-toolbar-setting-item-field")
+				let text_fields_url_div = this.containerEl.createEl("div");
+				text_fields_url_div.style.display = "flex";
+				text_fields_url_div.style.flexWrap = "wrap";
+				text_fields_url_div.style.flexGrow = "1";
+				const s1b = new Setting(text_fields_url_div)
+					.setClass("note-toolbar-setting-item-field-url")
 					.addText(text => text
 						.setPlaceholder('URL')
 						.setValue(toolbar_item.url)
@@ -167,7 +166,7 @@ export default class ToolbarSettingsModal extends Modal {
 							});
 					});
 
-				text_fields_container.appendChild(text_fields_div_right);
+				text_fields_container.appendChild(text_fields_url_div);
 				row1_container.appendChild(text_fields_container);
 				row1_container.appendChild(item_controls_div);
 

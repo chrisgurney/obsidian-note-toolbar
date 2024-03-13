@@ -207,6 +207,19 @@
     padding-top: 0 !important;
 }
 
+.note-toolbar-setting-item-field-url {
+    width: 100%;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        width: 100%;
+        & input[type="text"] {
+            width: 100%;
+        }
+    }
+}
+
 .note-toolbar-setting-item-field .setting-item-info {
     margin-right: 0;
 }
