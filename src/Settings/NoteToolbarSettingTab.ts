@@ -27,9 +27,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.createEl("h2", { text: "Toolbars" });
 
 		if (this.plugin.settings.toolbars.length == 0) {
-			new Setting(containerEl)
-			.setName("No toolbars configured")
-			.setDesc(""); // TODO: show items in list here?
+			containerEl
+				.createEl("div", { text: "No toolbars configured" })
+				.className = "setting-item-name";
 		}
 		else {
 			this.plugin.settings.toolbars.forEach(
