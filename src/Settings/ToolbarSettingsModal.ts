@@ -1,14 +1,20 @@
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
 import { arraymove } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
+import { ToolbarSettings } from './NoteToolbarSettings';
+import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 
 export default class ToolbarSettingsModal extends Modal {
 
 	private plugin: NoteToolbarPlugin;
+	private toolbar: ToolbarSettings;
+	private parent: NoteToolbarSettingTab;
 
-	constructor(plugin: NoteToolbarPlugin) {
-		super(plugin.app);
-		this.plugin = plugin;
+	constructor(parent: NoteToolbarSettingTab, toolbar: ToolbarSettings) {
+		super(parent.plugin.app);
+		this.parent = parent;
+		this.plugin = parent.plugin;
+		this.toolbar = toolbar;
 	}
 
 	onOpen() {
@@ -19,6 +25,7 @@ export default class ToolbarSettingsModal extends Modal {
 	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
+		this.parent.display();
 	}
 
 	display_toolbar_settings() {
@@ -40,9 +47,11 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(name_description)
 			.addText(text => text
 				.setPlaceholder('Name')
-				.setValue(this.plugin.settings.name)
+				.setValue(this.toolbar.name)
 				.onChange(async (value) => {
-					this.plugin.settings.name = value;
+					this.toolbar.name = value;
+					this.toolbar.updated = new Date().toISOString();
+					console.log(this.toolbar);
 					await this.plugin.save_settings();
 			}));
 
@@ -50,7 +59,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName("Items")
 			.setDesc("Items that appear in the toolbar, in order.");
 
-		this.plugin.settings.toolbar.forEach(
+		this.toolbar.items.forEach(
 			(toolbar_item, index) => {
 				let item_div = this.containerEl.createEl("div");
 				item_div.className = "note-toolbar-setting-item";
@@ -72,27 +81,30 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('Item label')
-						.setValue(this.plugin.settings.toolbar[index].label)
+						.setValue(toolbar_item.label)
 						.onChange(async (value) => {
-							this.plugin.settings.toolbar[index].label = value;
+							toolbar_item.label = value;
+							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
 				const s1b = new Setting(text_fields_div_right)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('URL')
-						.setValue(this.plugin.settings.toolbar[index].url)
+						.setValue(toolbar_item.url)
 						.onChange(async (value) => {
-							this.plugin.settings.toolbar[index].url = value;
+							toolbar_item.url = value;
+							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
 				const s1c = new Setting(text_fields_div_right)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('Tooltip (optional)')
-						.setValue(this.plugin.settings.toolbar[index].tooltip)
+						.setValue(toolbar_item.tooltip)
 						.onChange(async (value) => {
-							this.plugin.settings.toolbar[index].tooltip = value;
+							toolbar_item.tooltip = value;
+							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
 				const s1d = new Setting(item_controls_div)
@@ -101,10 +113,11 @@ export default class ToolbarSettingsModal extends Modal {
 							.setTooltip("Move up")
 							.onClick(() => {
 								arraymove(
-									this.plugin.settings.toolbar,
+									this.toolbar.items,
 									index,
 									index - 1
 								);
+								this.toolbar.updated = new Date().toISOString();
 								this.plugin.save_settings();
 								this.display_toolbar_settings();
 							});
@@ -114,10 +127,11 @@ export default class ToolbarSettingsModal extends Modal {
 							.setTooltip("Move down")
 							.onClick(() => {
 								arraymove(
-									this.plugin.settings.toolbar,
+									this.toolbar.items,
 									index,
 									index + 1
 								);
+								this.toolbar.updated = new Date().toISOString();
 								this.plugin.save_settings();
 								this.display_toolbar_settings();
 							});
@@ -126,10 +140,11 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
 							.onClick(() => {
-								this.plugin.settings.toolbar.splice(
+								this.toolbar.items.splice(
 									index,
 									1
 								);
+								this.toolbar.updated = new Date().toISOString();
 								this.plugin.save_settings();
 								this.display_toolbar_settings();
 							});
@@ -148,10 +163,10 @@ export default class ToolbarSettingsModal extends Modal {
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on mobile'))
-							.setValue(this.plugin.settings.toolbar[index].hide_on_mobile)
+							.setValue(toolbar_item.hide_on_mobile)
 							.onChange((hide_on_mobile) => {
-								this.plugin.settings.toolbar[index].hide_on_mobile =
-									hide_on_mobile;
+								toolbar_item.hide_on_mobile = hide_on_mobile;
+								this.toolbar.updated = new Date().toISOString();
 								this.plugin.save_settings();
 							});
 					});
@@ -161,10 +176,10 @@ export default class ToolbarSettingsModal extends Modal {
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on desktop'))
-							.setValue(this.plugin.settings.toolbar[index].hide_on_desktop)
+							.setValue(toolbar_item.hide_on_desktop)
 							.onChange((hide_on_desktop) => {
-								this.plugin.settings.toolbar[index].hide_on_desktop =
-									hide_on_desktop;
+								toolbar_item.hide_on_desktop = hide_on_desktop;
+								this.toolbar.updated = new Date().toISOString();
 								this.plugin.save_settings();
 							});
 					});
@@ -180,13 +195,14 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText("+ Add toolbar item")
 					.setCta()
 					.onClick(() => {
-						this.plugin.settings.toolbar.push({
+						this.toolbar.items.push({
 							label: "",
 							url: "",
 							tooltip: "",
 							hide_on_desktop: false,
 							hide_on_mobile: false
 						});
+						this.toolbar.updated = new Date().toISOString();
 						this.plugin.save_settings();
 						this.display_toolbar_settings();
 					});

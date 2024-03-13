@@ -10,13 +10,13 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 export interface ToolbarSettings {
 	name: string;
 	updated: string;
-	toolbar: Array<ToolbarItemSettings>;
+	items: Array<ToolbarItemSettings>;
 }
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	name: "",
 	updated: new Date().toISOString(),
-	toolbar: [{ label: "", url: "", tooltip: "", hide_on_desktop: false, hide_on_mobile: false }]
+	items: []
 };
 
 export interface ToolbarItemSettings {
