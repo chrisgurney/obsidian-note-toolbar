@@ -81,16 +81,11 @@ export default class ToolbarSettingsModal extends Modal {
 				row1_container.style.display = "flex";
 				row1_container.style.flexFlow = "wrap-reverse";
 				row1_container.style.justifyContent = "space-between";
+
 				let text_fields_container = this.containerEl.createEl("div");
 				text_fields_container.style.display = "flex";
 				text_fields_container.style.flexWrap = "wrap";
 				text_fields_container.style.justifyContent = "space-between";
-				let text_fields_div_right = this.containerEl.createEl("div");
-				text_fields_div_right.style.display = "flex";
-				text_fields_div_right.style.flexWrap = "wrap";
-				text_fields_div_right.style.justifyContent = "flex-end";
-				let item_controls_div = this.containerEl.createEl("div");
-				item_controls_div.style.marginLeft = "auto";
 				const s1a = new Setting(text_fields_container)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
@@ -101,6 +96,11 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
+
+				let text_fields_div_right = this.containerEl.createEl("div");
+				text_fields_div_right.style.display = "flex";
+				text_fields_div_right.style.flexWrap = "wrap";
+				text_fields_div_right.style.justifyContent = "flex-end";
 				const s1b = new Setting(text_fields_div_right)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
@@ -121,6 +121,9 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
+
+				let item_controls_div = this.containerEl.createEl("div");
+				item_controls_div.style.marginLeft = "auto";
 				const s1d = new Setting(item_controls_div)
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
@@ -163,10 +166,13 @@ export default class ToolbarSettingsModal extends Modal {
 								this.display_toolbar_settings();
 							});
 					});
+
 				text_fields_container.appendChild(text_fields_div_right);
 				row1_container.appendChild(text_fields_container);
 				row1_container.appendChild(item_controls_div);
+
 				item_div.appendChild(row1_container);
+				
 				let toggles_div = this.containerEl.createEl("div");
 				toggles_div.style.display = "flex";
 				toggles_div.style.justifyContent = "flex-end";
