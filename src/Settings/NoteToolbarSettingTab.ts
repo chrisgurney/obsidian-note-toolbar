@@ -36,11 +36,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				(toolbar_item, index) => {
 					new Setting(containerEl)
 						.setName(toolbar_item.name)
-						.setDesc("")
+						.setDesc(toolbar_item.items.length > 0 ? toolbar_item.items.map(item => item.label).join(' | ') : "No toolbar items")
 						.addButton((button: ButtonComponent) => {
 							button
-								.setTooltip("Update this toolbar")
-								.setButtonText("Update")
+								.setTooltip("Update this toolbar's items")
+								.setButtonText("Edit")
 								.setCta()
 								.onClick(() => {
 									this.openSettingsModal(toolbar_item);
