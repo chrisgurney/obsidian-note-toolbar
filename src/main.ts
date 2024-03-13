@@ -25,7 +25,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	async load_settings() {
-		// TODO: use new defaults
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
@@ -137,9 +136,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// console.log('render_toolbar: checking for matching toolbar...');
 		let matching_toolbar = this.get_props_toolbar_from_settings(notetoolbar_prop);
+
 		// console.log(matching_toolbar);
 		if (matching_toolbar) {
-
+			// FIXME: add check if existing toolbar same as matching toolbar; if not, re-render
 			// check if we already added the toolbar
 			if (existing_toolbar == null) {
 
