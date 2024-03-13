@@ -51,7 +51,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.onChange(async (value) => {
 					this.toolbar.name = value;
 					this.toolbar.updated = new Date().toISOString();
-					console.log(this.toolbar);
+					// console.log(this.toolbar);
 					await this.plugin.save_settings();
 			}));
 

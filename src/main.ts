@@ -41,7 +41,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	get_props_toolbar_from_settings(names: string[] | null): ToolbarSettings | undefined {
-		console.log('get_props_toolbar_from_settings: ' + names);
+		// console.log('get_props_toolbar_from_settings: ' + names);
 		if (!names) return undefined;
 		return this.settings.toolbars.find(tbar => names.some(name => tbar.name === name));
 	}
@@ -65,7 +65,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// if we can't find an existing toolbar in our settings that matches the one displayed...
 				if (matching_toolbar === undefined) {
 					// it shouldn't be there: remove it
-					console.log("toolbar not found: " + name);
+					// console.log("toolbar not found: " + name);
 					this.remove_toolbar();
 				}
 				else {
@@ -84,12 +84,12 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 			else {
 				// otherwise, check the frontmatter to see if we need to add a toolbar
-				console.log('file-open: ' + file.name);
+				// console.log('file-open: ' + file.name);
 				let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter
-				console.log('- frontmatter: ' + frontmatter);
+				// console.log('- frontmatter: ' + frontmatter);
 				const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
 				if (notetoolbar_prop !== null) {
-					console.log('- notetoolbar: ' + notetoolbar_prop);
+					// console.log('- notetoolbar: ' + notetoolbar_prop);
 					this.render_toolbar(notetoolbar_prop);
 				}
 				else {
@@ -135,9 +135,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
-		console.log('render_toolbar: checking for matching toolbar...');
+		// console.log('render_toolbar: checking for matching toolbar...');
 		let matching_toolbar = this.get_props_toolbar_from_settings(notetoolbar_prop);
-		console.log(matching_toolbar);
+		// console.log(matching_toolbar);
 		if (matching_toolbar) {
 
 			// check if we already added the toolbar
