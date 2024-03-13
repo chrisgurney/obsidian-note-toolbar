@@ -176,6 +176,17 @@
     padding: 1.5em 1.5em 0.5em 1.5em;
 }
 
+.note-toolbar-setting-error-message {
+    color: red;
+    padding-bottom: 1em;
+}
+
+.note-toolbar-setting-error {
+    & input[type="text"] {
+        box-shadow: 0 0 0 1px red;
+    }
+}
+
 .note-toolbar-setting-button {
     border-top: none;
     padding-top: 1em;

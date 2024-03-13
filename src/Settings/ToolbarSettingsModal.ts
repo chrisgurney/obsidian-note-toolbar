@@ -42,18 +42,32 @@ export default class ToolbarSettingsModal extends Modal {
 			"If a `notetoolbar` property is set to use this toolbar, it will take precedence over any folder toolbars."
 		);
 
-		new Setting(settings_div)
+		let toolbar_name_div = this.containerEl.createEl("div");
+		new Setting(toolbar_name_div)
 			.setName("Name")
 			.setDesc(name_description)
 			.addText(text => text
 				.setPlaceholder('Name')
 				.setValue(this.toolbar.name)
 				.onChange(async (value) => {
-					this.toolbar.name = value;
-					this.toolbar.updated = new Date().toISOString();
-					// console.log(this.toolbar);
-					await this.plugin.save_settings();
+					// check for existing toolbar with this name
+					let existing_toolbar = this.plugin.get_toolbar_from_settings(value);
+					if (existing_toolbar && existing_toolbar !== this.toolbar) {
+						toolbar_name_div.createEl("div", { 
+							text: "A toolbar already exists with this name", 
+							attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
+						toolbar_name_div.addClass("note-toolbar-setting-error");
+					}
+					else {
+						document.getElementById("note-toolbar-name-error")?.remove();
+						toolbar_name_div.removeClass("note-toolbar-setting-error");
+						this.toolbar.name = value;
+						this.toolbar.updated = new Date().toISOString();
+						// console.log(this.toolbar);
+						await this.plugin.save_settings();	
+					}
 			}));
+		settings_div.append(toolbar_name_div);
 
 		new Setting(settings_div)
 			.setName("Items")
