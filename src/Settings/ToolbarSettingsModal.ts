@@ -85,7 +85,6 @@ export default class ToolbarSettingsModal extends Modal {
 				let text_fields_container = this.containerEl.createEl("div");
 				text_fields_container.style.display = "flex";
 				text_fields_container.style.flexWrap = "wrap";
-				text_fields_container.style.justifyContent = "space-between";
 				const s1a = new Setting(text_fields_container)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
@@ -93,6 +92,17 @@ export default class ToolbarSettingsModal extends Modal {
 						.setValue(toolbar_item.label)
 						.onChange(async (value) => {
 							toolbar_item.label = value;
+							this.toolbar.updated = new Date().toISOString();
+							await this.plugin.save_settings();
+					}));
+
+				const s1c = new Setting(text_fields_container)
+					.setClass("note-toolbar-setting-item-field")
+					.addText(text => text
+						.setPlaceholder('Tooltip (optional)')
+						.setValue(toolbar_item.tooltip)
+						.onChange(async (value) => {
+							toolbar_item.tooltip = value;
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
@@ -108,16 +118,6 @@ export default class ToolbarSettingsModal extends Modal {
 						.setValue(toolbar_item.url)
 						.onChange(async (value) => {
 							toolbar_item.url = value;
-							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.save_settings();
-					}));
-				const s1c = new Setting(text_fields_div_right)
-					.setClass("note-toolbar-setting-item-field")
-					.addText(text => text
-						.setPlaceholder('Tooltip (optional)')
-						.setValue(toolbar_item.tooltip)
-						.onChange(async (value) => {
-							toolbar_item.tooltip = value;
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.save_settings();
 					}));
@@ -172,7 +172,7 @@ export default class ToolbarSettingsModal extends Modal {
 				row1_container.appendChild(item_controls_div);
 
 				item_div.appendChild(row1_container);
-				
+
 				let toggles_div = this.containerEl.createEl("div");
 				toggles_div.style.display = "flex";
 				toggles_div.style.justifyContent = "flex-end";
