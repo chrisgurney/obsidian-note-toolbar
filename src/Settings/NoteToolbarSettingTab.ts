@@ -24,9 +24,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl)
-			.setName("Toolbars")
-			.setDesc("");
+		containerEl.createEl("h2", { text: "Toolbars" });
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			new Setting(containerEl)
