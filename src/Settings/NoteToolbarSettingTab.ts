@@ -42,7 +42,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		else {
 			this.plugin.settings.toolbars.forEach(
 				(toolbar_item, index) => {
-					console.log(toolbar_item.name + " : " + toolbar_item.items.length);
 					new Setting(containerEl)
 						.setName(toolbar_item.name)
 						.setDesc(toolbar_item.items.length > 0 ? 
