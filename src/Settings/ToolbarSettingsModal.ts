@@ -208,6 +208,24 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			});
 
+		new Setting(settings_div)
+			.setName("Delete this toolbar")
+			.setDesc("This action cannot be undone")
+			.setClass("note-toolbar-setting-item-delete-button")
+			.addButton((button: ButtonComponent) => {
+				button
+					.setClass("mod-warning")
+					.setTooltip("Delete this toolbar")
+					.setButtonText("Delete...")
+					.setCta()
+					.onClick(() => {
+						// TODO: confirmation dialog?
+						this.plugin.delete_toolbar_from_settings(this.toolbar.name);
+						this.plugin.save_settings();
+						this.close();
+					});
+			});
+
 		this.contentEl.appendChild(settings_div);
 
 	}

@@ -179,6 +179,11 @@
 .note-toolbar-setting-button {
     border-top: none;
     padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.note-toolbar-setting-item-delete-button {
+    padding-top: 2em;
 }
 
 .note-toolbar-setting-item-url {

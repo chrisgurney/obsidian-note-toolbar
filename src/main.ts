@@ -46,6 +46,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		return this.settings.toolbars.find(tbar => names.some(name => tbar.name === name));
 	}
 
+	delete_toolbar_from_settings(name: string) {
+		this.settings.toolbars = this.settings.toolbars.filter(tbar => tbar.name !== name);
+	}
+ 
 	file_open_listener = (file: TFile) => {
 
 		if (file != null) {
