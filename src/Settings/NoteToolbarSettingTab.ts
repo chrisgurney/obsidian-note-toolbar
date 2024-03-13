@@ -67,7 +67,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setButtonText("+ New toolbar")
 					.setCta()
 					.onClick(() => {
-						let new_toolbar = DEFAULT_TOOLBAR_SETTINGS;
+						let new_toolbar = {
+							name: "",
+							updated: new Date().toISOString(),
+							items: []
+						};
 						this.plugin.settings.toolbars.push(new_toolbar);
 						this.plugin.save_settings();
 						this.openSettingsModal(new_toolbar);
