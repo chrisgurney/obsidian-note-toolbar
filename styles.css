@@ -49,7 +49,11 @@
  *   - Shell Commands (for executing shell scripts, Python code, etc.) 
  *****************************************************************************/
 
- .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
+.metadata-container {
+    margin-block-end: 0;
+}
+
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
     &:hover {
         box-shadow: none !important; /* hide the border on hover of the toolbar callout */
         & .edit-block-button {
