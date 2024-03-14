@@ -36,13 +36,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	get_toolbar_from_settings(name: string | null): ToolbarSettings | undefined {
-		return name ? this.settings.toolbars.find(tbar => tbar.name === name) : undefined;
+		return name ? this.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
 	}
 
 	get_props_toolbar_from_settings(names: string[] | null): ToolbarSettings | undefined {
-		// console.log('get_props_toolbar_from_settings: ' + names);
 		if (!names) return undefined;
-		return this.settings.toolbars.find(tbar => names.some(name => tbar.name === name));
+		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
 	}
 
 	delete_toolbar_from_settings(name: string) {
