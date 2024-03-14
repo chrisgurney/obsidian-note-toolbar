@@ -139,7 +139,14 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// console.log(matching_toolbar);
 		if (matching_toolbar) {
-			// FIXME: add check if existing toolbar same as matching toolbar; if not, re-render
+
+			// if existing toolbar not same as matching toolbar; re-render
+			// (addresses case where adding a prop and removing an old one does not update)
+			if (existing_toolbar?.getAttribute("data-name") !== matching_toolbar.name) {
+				this.remove_toolbar();
+				existing_toolbar = null;
+			}
+
 			// check if we already added the toolbar
 			if (existing_toolbar == null) {
 
