@@ -69,9 +69,15 @@ export default class ToolbarSettingsModal extends Modal {
 			}));
 		settings_div.append(toolbar_name_div);
 
-		new Setting(settings_div)
-			.setName("Items")
-			.setDesc("Items that appear in the toolbar, in order.");
+		let item_list_heading = createEl("div");
+		item_list_heading.className = "note-toolbar-setting-items-header";
+		let item_list_title = createEl("div", { text: "Items" });
+		item_list_title.className = "setting-item-info";
+		let item_list_description = createEl("div", { text: "Items that appear in the toolbar, in order." });
+		item_list_description.className = "setting-item-description";
+		item_list_heading.append(item_list_title);
+		item_list_heading.append(item_list_description);
+		settings_div.append(item_list_heading);
 
 		this.toolbar.items.forEach(
 			(toolbar_item, index) => {
@@ -123,6 +129,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 				let item_controls_div = this.containerEl.createEl("div");
 				item_controls_div.style.marginLeft = "auto";
+				item_controls_div.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(item_controls_div)
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
