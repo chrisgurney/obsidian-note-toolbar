@@ -3,6 +3,7 @@ import NoteToolbarPlugin from '../main';
 import { arraymove } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings } from './NoteToolbarSettings';
+import { FolderSuggest } from './Suggesters/FolderSuggester';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -124,15 +125,29 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				text_fields_container.id = "note-toolbar-setting-item-field-" + index;
 				text_fields_container.style.display = "flex";
 				text_fields_container.style.flexWrap = "wrap";
-				const s1a = new Setting(text_fields_container)
+				const fs = new Setting(text_fields_container)
 					.setClass("note-toolbar-setting-item-field")
-					.addText(text => text
-						.setPlaceholder('Folder')
-						.setValue(mapping.folder)
-						.onChange(async (value) => {
-							mapping.folder = value;
-							await this.plugin.save_settings();
-					}));
+					.addSearch((cb) => {
+						new FolderSuggest(this.app, cb.inputEl);
+						cb.setPlaceholder("Folder")
+							.setValue(mapping.folder)
+							.onChange((new_folder) => {
+                                if (
+                                    new_folder &&
+                                    this.plugin.settings.folder_mappings.some(
+                                        (e) => e.folder == new_folder
+                                    )
+                                ) {
+									new Error("This folder already has a toolbar associated with it");
+                                    return;
+                                }
+
+                                this.plugin.settings.folder_mappings[
+                                    index
+                                ].folder = new_folder;
+                                this.plugin.save_settings();
+                            });
+					});
 				const s1c = new Setting(text_fields_container)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
