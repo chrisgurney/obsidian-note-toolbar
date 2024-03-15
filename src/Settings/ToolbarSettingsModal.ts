@@ -79,8 +79,10 @@ export default class ToolbarSettingsModal extends Modal {
 		item_list_heading.append(item_list_description);
 		settings_div.append(item_list_heading);
 
+		let last_item_index = 0;
 		this.toolbar.items.forEach(
 			(toolbar_item, index) => {
+				last_item_index = index;
 				let item_div = this.containerEl.createEl("div");
 				item_div.className = "note-toolbar-setting-item";
 				let row1_container = this.containerEl.createEl("div");
@@ -89,6 +91,7 @@ export default class ToolbarSettingsModal extends Modal {
 				row1_container.style.justifyContent = "space-between";
 
 				let text_fields_container = this.containerEl.createEl("div");
+				text_fields_container.id = "note-toolbar-setting-item-field-" + index;
 				text_fields_container.style.display = "flex";
 				text_fields_container.style.flexWrap = "wrap";
 				const s1a = new Setting(text_fields_container)
@@ -253,6 +256,12 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 
 		this.contentEl.appendChild(settings_div);
+
+		// set focus on last thing in the list, if the label is empty
+		let input_to_focus = this.contentEl.querySelector('#note-toolbar-setting-item-field-' + last_item_index + ' input[type="text"]') as HTMLInputElement;
+		if (input_to_focus.value.length === 0) {
+			input_to_focus.focus();
+		}
 
 	}
 
