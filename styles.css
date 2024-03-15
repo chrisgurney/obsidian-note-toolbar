@@ -260,7 +260,6 @@
     .is-mobile & {
         /* modals opened from modals seem to have a large title for the "safe area", but are shifted down, so we'll remove it here */
         padding: var(--size-4-3);
-        border: solid 1px red;
     }
 }
 
