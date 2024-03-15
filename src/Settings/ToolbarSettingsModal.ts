@@ -3,11 +3,12 @@ import { arraymove } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
+import { DeleteModal } from './DeleteModal';
 
 export default class ToolbarSettingsModal extends Modal {
 
-	private plugin: NoteToolbarPlugin;
-	private toolbar: ToolbarSettings;
+	public plugin: NoteToolbarPlugin;
+	public toolbar: ToolbarSettings;
 	private parent: NoteToolbarSettingTab;
 
 	constructor(parent: NoteToolbarSettingTab, toolbar: ToolbarSettings) {
@@ -28,7 +29,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.parent.display();
 	}
 
-	display_toolbar_settings() {
+	public display_toolbar_settings() {
 
 		this.contentEl.empty();
 
@@ -248,10 +249,8 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText("Delete...")
 					.setCta()
 					.onClick(() => {
-						// TODO: confirmation dialog?
-						this.plugin.delete_toolbar_from_settings(this.toolbar.name);
-						this.plugin.save_settings();
-						this.close();
+						const modal = new DeleteModal(this);
+						modal.open();
 					});
 			});
 
@@ -259,7 +258,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		// set focus on last thing in the list, if the label is empty
 		let input_to_focus = this.contentEl.querySelector('#note-toolbar-setting-item-field-' + last_item_index + ' input[type="text"]') as HTMLInputElement;
-		if (input_to_focus.value.length === 0) {
+		if (input_to_focus?.value.length === 0) {
 			input_to_focus.focus();
 		}
 

@@ -252,12 +252,23 @@
     }
 }
 
+.note-toolbar-setting-confirm-dialog {
+    width: 50%;
+}
+
+.note-toolbar-setting-modal-container .modal-title {
+    .is-mobile & {
+        /* modals opened from modals seem to have a large title for the "safe area", but are shifted down, so we'll remove it here */
+        padding: var(--size-4-3);
+    }
+}
+
 .vertical-tab-content.note-toolbar-setting-modal {
     padding-top: var(--size-4-8);
     padding-left: var(--size-4-5);
     padding-right: var(--size-4-5);
     .is-mobile & {
-        padding-top: var(--size-4-4);
+        padding-top: 0 !important;
     }
     .setting-item {
         .is-mobile & {
