@@ -40,9 +40,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.className = "setting-item-name";
 		}
 		else {
+			let toolbar_list_div = containerEl.createDiv();
+			toolbar_list_div.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
 				(toolbar_item, index) => {
-					new Setting(containerEl)
+					new Setting(toolbar_list_div)
 						.setName(toolbar_item.name)
 						.setDesc(toolbar_item.items.length > 0 ? 
 							toolbar_item.items.map(item => item.label).join(' | ') : 
@@ -57,6 +59,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								});
 							});
 				});
+			containerEl.append(toolbar_list_div);
 		}
 
 		new Setting(containerEl)
