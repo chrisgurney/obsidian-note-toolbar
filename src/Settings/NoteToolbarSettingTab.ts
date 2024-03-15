@@ -29,8 +29,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	public display(): void {
 
 		const { containerEl } = this;
-
 		containerEl.empty();
+		this.display_toolbar_list(containerEl);
+
+	}
+
+	display_toolbar_list(containerEl: HTMLElement): void {
 
 		containerEl.createEl("h2", { text: "Toolbars" });
 
@@ -80,6 +84,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.openSettingsModal(new_toolbar);
 					});
 			});
+
 	}
 
 }
