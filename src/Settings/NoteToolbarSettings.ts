@@ -1,10 +1,12 @@
 
 export interface NoteToolbarSettings {
 	toolbars: Array<ToolbarSettings>;
+	folder_mappings: Array<FolderMapping>;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
-	toolbars: []
+	toolbars: [],
+	folder_mappings: []
 }
 
 export interface ToolbarSettings {
@@ -18,6 +20,11 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	updated: new Date().toISOString(),
 	items: []
 };
+
+export interface FolderMapping {
+	folder: string;
+	toolbar: string;
+}
 
 export interface ToolbarItemSettings {
 	label: string;
