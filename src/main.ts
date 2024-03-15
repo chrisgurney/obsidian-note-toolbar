@@ -191,7 +191,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let div = document.createElement("div");
 				div.append(note_toolbar_callout);
 				let embed_block = document.createElement("div");
-				embed_block.className = "cm-embed-block cm-callout";
+				embed_block.className = "cm-embed-block cm-callout cg-note-toolbar-container";
 				embed_block.append(div);
 		
 				/* inject it between the properties and content divs */
@@ -224,12 +224,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 	
 	async remove_toolbar() {
-		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .cg-note-toolbar-container');
 		existing_toolbar?.remove();
 	}
 
 	async remove_toolbar_from_all() {
-		let existing_toolbars = document.querySelectorAll('.dv-cg-note-toolbar');
+		let existing_toolbars = document.querySelectorAll('.cg-note-toolbar-container');
 		existing_toolbars.forEach((toolbar) => {
 			toolbar.remove();
 		});
