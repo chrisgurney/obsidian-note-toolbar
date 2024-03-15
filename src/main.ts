@@ -157,10 +157,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					let toolbar_item = document.createElement("a");
 					toolbar_item.className = "external-link";
 					toolbar_item.setAttribute("href", item.url);
-					// toolbar_item.setAttribute("data-index", item.index.toString());
-					// data.remove_toolbar ? toolbar_item.setAttribute("data-remove-toolbar", "true") : false;
 					toolbar_item.setAttribute("data-tooltip-position", "top");
-					toolbar_item.setAttribute("aria-label", item.tooltip);
+					toolbar_item.setAttribute("aria-label", item.tooltip ? item.tooltip : item.url);
 					toolbar_item.setAttribute("rel", "noopener");
 					toolbar_item.onclick = (e) => this.toolbar_click_handler(e);
 					toolbar_item.innerHTML = item.label;
