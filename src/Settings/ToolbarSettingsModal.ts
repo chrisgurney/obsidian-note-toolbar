@@ -31,6 +31,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 	public display_toolbar_settings() {
 
+		this.modalEl.addClass("note-toolbar-setting-modal-container");
+
 		this.contentEl.empty();
 
 		let settings_div = this.containerEl.createEl("div");
