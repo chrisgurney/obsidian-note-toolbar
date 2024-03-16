@@ -75,41 +75,34 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 			
 			//
-			// check: is there already a toolbar?
+			// check: is there already a toolbar to remove?
 			//
 
 			let existing_toolbar_el = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
 			if (existing_toolbar_el) {
 
 				let existing_toolbar_name = existing_toolbar_el?.getAttribute("data-name");
+				let existing_toolbar_updated = existing_toolbar_el.getAttribute("data-updated");
 
 				// if we don't need it, remove it
 				if (!matching_toolbar) {
 					this.DEBUG && console.log("file-open: toolbar not needed, removing existing toolbar: " + existing_toolbar_name);
 					this.remove_toolbar();
-					// return undefined
 				}
-				// if we need a toolbar...
-				else {
-
-					// the name of the existing toolbar doesn't match, remove it
-					if (matching_toolbar.name !== existing_toolbar_name) {
-						this.DEBUG && console.log("file-open: toolbar needed, removing existing toolbar (name does not match): " + existing_toolbar_name);
-						this.remove_toolbar();
-					}
-					else {
-						// does it need to be updated? If so: remove it
-						let existing_toolbar_updated = existing_toolbar_el.getAttribute("data-updated");
-						if (matching_toolbar.updated !== existing_toolbar_updated) {
-							this.DEBUG && console.log("file-open: existing toolbar out of date, removing existing toolbar");
-							this.remove_toolbar();
-						}
-					}
-
+				// we need a toolbar BUT the name of the existing toolbar doesn't match
+				else if (matching_toolbar.name !== existing_toolbar_name) {
+					this.DEBUG && console.log("file-open: toolbar needed, removing existing toolbar (name does not match): " + existing_toolbar_name);
+					this.remove_toolbar();
+				}
+				// we need a toolbar BUT it needs to be updated
+				else if (matching_toolbar.updated !== existing_toolbar_updated) {
+					this.DEBUG && console.log("file-open: existing toolbar out of date, removing existing toolbar");
+					this.remove_toolbar();
 				}
 
 			}
 
+			// render the toolbar if we have one
 			if (matching_toolbar) {
 				this.DEBUG && console.log("file-open: rendering toolbar");
 				this.render_toolbar();
