@@ -104,8 +104,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// render the toolbar if we have one
 			if (matching_toolbar) {
+
 				this.DEBUG && console.log("file-open: rendering toolbar");
 				this.render_toolbar();
+
 			}
 
 		}
@@ -114,7 +116,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	metadata_cache_listener = (file: TFile, data: any, cache: CachedMetadata) => {
 
-		// console.log("metadata-changed: " + file.name);
+		this.DEBUG && console.log("metadata-changed: " + file.name);
 		// check if there's metadata we're interested in, then...
 		const notetoolbar_prop: string[] = cache.frontmatter?.notetoolbar ?? null;
 		if (notetoolbar_prop !== null) {
@@ -122,7 +124,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let active_file = this.app.workspace.getActiveFile()?.name;
 			if (file.name === active_file) {
 				// FIXME? this also triggers if *any* metadata changes
-				// console.log('- notetoolbar: ' + notetoolbar_prop);
+				this.DEBUG && console.log('- notetoolbar: ' + notetoolbar_prop);
 				this.render_toolbar(notetoolbar_prop);
 			}
 		}
@@ -146,10 +148,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
-		// console.log('render_toolbar: checking for matching toolbar...');
 		let matching_toolbar = this.get_props_toolbar_from_settings(notetoolbar_prop);
 
-		// console.log(matching_toolbar);
 		if (matching_toolbar) {
 
 			// if existing toolbar not same as matching toolbar; re-render
@@ -219,7 +219,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	async toolbar_click_handler(e: MouseEvent) {
 
-		// console.log('in toolbar_click_handler');
+		this.DEBUG && console.log('toolbar_click_handler');
 		/* since we might be on a different page now, on click, check if the url needs the date appended */
 		let clicked_element = e.currentTarget as HTMLLinkElement;
 		let url = clicked_element.getAttribute("href");
