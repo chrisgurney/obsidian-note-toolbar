@@ -25,6 +25,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log('UNLOADED');
 	}
 
+	/*************************************************************************
+	 * SETTINGS LOADERS
+	 *************************************************************************/
+
 	async load_settings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
@@ -49,6 +53,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settings.toolbars = this.settings.toolbars.filter(tbar => tbar.name !== name);
 	}
  
+	/*************************************************************************
+	 * LISTENERS
+	 *************************************************************************/
+
 	file_open_listener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
@@ -61,6 +69,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log("metadata-changed: " + file.name);
 		this.check_and_render_toolbar(file, cache.frontmatter);
 	}
+
+	/*************************************************************************
+	 * TOOLBAR RENDERERS
+	 *************************************************************************/
 
 	async check_and_render_toolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
 
@@ -223,6 +235,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 	
+	/*************************************************************************
+	 * TOOLBAR REMOVAL
+	 *************************************************************************/
+
 	async remove_toolbar() {
 		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .cg-note-toolbar-container');
 		existing_toolbar?.remove();
