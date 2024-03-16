@@ -15,14 +15,14 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 		await this.render_toolbar();
-		// console.log('LOADED');
+		this.DEBUG && console.log('LOADED');
 	}
 
 	onunload() {
 		this.app.workspace.off('file-open', this.file_open_listener);
 		this.app.metadataCache.off('changed', this.metadata_cache_listener);
 		this.remove_toolbar_from_all();
-		// console.log('UNLOADED');
+		this.DEBUG && console.log('UNLOADED');
 	}
 
 	async load_settings() {
@@ -80,6 +80,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let existing_toolbar_el = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
 			if (existing_toolbar_el) {
+
+				this.DEBUG && console.log('file-open: existing toolbar');
 
 				let existing_toolbar_name = existing_toolbar_el?.getAttribute("data-name");
 				let existing_toolbar_updated = existing_toolbar_el.getAttribute("data-updated");
