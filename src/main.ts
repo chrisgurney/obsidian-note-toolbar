@@ -36,11 +36,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.render_toolbar();
 	}
 
-	get_toolbar_from_settings(name: string | null): ToolbarSettings | undefined {
+	get_toolbar_settings(name: string | null): ToolbarSettings | undefined {
 		return name ? this.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
 	}
 
-	get_props_toolbar_from_settings(names: string[] | null): ToolbarSettings | undefined {
+	get_toolbar_settings_from_props(names: string[] | null): ToolbarSettings | undefined {
 		if (!names) return undefined;
 		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
 	}
@@ -64,11 +64,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// do we have a property, and is it valid?
 			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
+
 			this.DEBUG && console.log('- frontmatter: ' + frontmatter);
 			const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
 			if (notetoolbar_prop !== null) {
 				// is it valid? (i.e., is there a matching toolbar?)
-				matching_toolbar = this.get_props_toolbar_from_settings(notetoolbar_prop);
+				matching_toolbar = this.get_toolbar_settings_from_props(notetoolbar_prop);
 			}
 
 			// we still don't have a matching toolbar
@@ -82,7 +83,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					if (file.path.startsWith(mapping.folder)) {
 						this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
 						// continue until we get a matching toolbar
-						matching_toolbar = this.get_toolbar_from_settings(mapping.toolbar);
+						matching_toolbar = this.get_toolbar_settings(mapping.toolbar);
 						if (matching_toolbar) {
 							this.DEBUG && console.log('  - matched toolbar: ' + matching_toolbar);
 							break;
@@ -222,7 +223,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
-		let matching_toolbar = this.get_props_toolbar_from_settings(notetoolbar_prop);
+		let matching_toolbar = this.get_toolbar_settings_from_props(notetoolbar_prop);
 
 		if (matching_toolbar) {
 
