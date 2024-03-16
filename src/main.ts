@@ -64,7 +64,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// do we have a property, and is it valid?
 			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
-			// console.log('- frontmatter: ' + frontmatter);
+			this.DEBUG && console.log('- frontmatter: ' + frontmatter);
 			const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
 			if (notetoolbar_prop !== null) {
 				// is it valid? (i.e., is there a matching toolbar?)
@@ -74,15 +74,14 @@ export default class NoteToolbarPlugin extends Plugin {
 			// we still don't have a matching toolbar
 			if (!matching_toolbar) {
 
-				// TODO: check if the note is in a folder that's mapped, and if the mapping is valid
-				// this.settings.folder_mappings.forEach((mapping, index) => {
+				// check if the note is in a folder that's mapped, and if the mapping is valid
 				let mapping;
 				for (let index = 0; index < this.settings.folder_mappings.length; index++) {
 					mapping = this.settings.folder_mappings[index];
 					this.DEBUG && console.log('file-open: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
 					if (file.path.startsWith(mapping.folder)) {
 						this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
-						// TODO: continue until we get a matching toolbar
+						// continue until we get a matching toolbar
 						matching_toolbar = this.get_toolbar_from_settings(mapping.toolbar);
 						if (matching_toolbar) {
 							this.DEBUG && console.log('  - matched toolbar: ' + matching_toolbar);
