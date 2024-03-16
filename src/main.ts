@@ -134,6 +134,57 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 
+	async render_toolbar_from_settings(toolbar: ToolbarSettings) {
+
+		/* create the unordered list of menu items */
+		let note_toolbar_ul = document.createElement("ul");
+		note_toolbar_ul.setAttribute("role", "menu");
+		toolbar.items.map((item: ToolbarItemSettings) => {
+
+			let toolbar_item = document.createElement("a");
+			toolbar_item.className = "external-link";
+			toolbar_item.setAttribute("href", item.url);
+			toolbar_item.setAttribute("data-tooltip-position", "top");
+			toolbar_item.setAttribute("aria-label", item.tooltip ? item.tooltip : item.url);
+			toolbar_item.setAttribute("rel", "noopener");
+			toolbar_item.onclick = (e) => this.toolbar_click_handler(e);
+			toolbar_item.innerHTML = item.label;
+
+			let note_toolbar_li = document.createElement("li");
+			item.hide_on_mobile ? note_toolbar_li.className = "hide-on-mobile" : false;
+			item.hide_on_desktop ? note_toolbar_li.className += "hide-on-desktop" : false;
+			item.hide_on_desktop ? note_toolbar_li.style.display = "none" : false;
+			note_toolbar_li.append(toolbar_item);
+
+			note_toolbar_ul.appendChild(note_toolbar_li);
+		});
+
+		let note_toolbar_callout_content = document.createElement("div");
+		note_toolbar_callout_content.className = "callout-content";
+		note_toolbar_callout_content.append(note_toolbar_ul);
+
+		let note_toolbar_callout = document.createElement("div");
+		note_toolbar_callout.className = "callout dv-cg-note-toolbar";
+		note_toolbar_callout.setAttribute("tabindex", "0");
+		note_toolbar_callout.setAttribute("data-callout", "note-toolbar");
+		note_toolbar_callout.setAttribute("data-callout-metadata", "border-even-sticky");
+		note_toolbar_callout.setAttribute("data-name", toolbar.name);
+		note_toolbar_callout.setAttribute("data-updated", toolbar.updated);
+		note_toolbar_callout.append(note_toolbar_callout_content);
+
+		/* workaround to emulate callout-in-content structure, to use same sticky css */
+		let div = document.createElement("div");
+		div.append(note_toolbar_callout);
+		let embed_block = document.createElement("div");
+		embed_block.className = "cm-embed-block cm-callout cg-note-toolbar-container";
+		embed_block.append(div);
+
+		/* inject it between the properties and content divs */
+		let properties_container = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
+		properties_container?.insertAdjacentElement("afterend", embed_block);
+
+	}
+
 	async render_toolbar(notetoolbar_prop: string[] | null = null) {
 
 		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
@@ -161,55 +212,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// check if we already added the toolbar
 			if (existing_toolbar == null) {
-
-				/* create the unordered list of menu items */
-				let note_toolbar_ul = document.createElement("ul");
-				note_toolbar_ul.setAttribute("role", "menu");
-				matching_toolbar.items.map((item: ToolbarItemSettings) => {
-		
-					let toolbar_item = document.createElement("a");
-					toolbar_item.className = "external-link";
-					toolbar_item.setAttribute("href", item.url);
-					toolbar_item.setAttribute("data-tooltip-position", "top");
-					toolbar_item.setAttribute("aria-label", item.tooltip ? item.tooltip : item.url);
-					toolbar_item.setAttribute("rel", "noopener");
-					toolbar_item.onclick = (e) => this.toolbar_click_handler(e);
-					toolbar_item.innerHTML = item.label;
-		
-					let note_toolbar_li = document.createElement("li");
-					item.hide_on_mobile ? note_toolbar_li.className = "hide-on-mobile" : false;
-					item.hide_on_desktop ? note_toolbar_li.className += "hide-on-desktop" : false;
-					item.hide_on_desktop ? note_toolbar_li.style.display = "none" : false;
-					note_toolbar_li.append(toolbar_item);
-		
-					note_toolbar_ul.appendChild(note_toolbar_li);
-				});
-		
-				let note_toolbar_callout_content = document.createElement("div");
-				note_toolbar_callout_content.className = "callout-content";
-				note_toolbar_callout_content.append(note_toolbar_ul);
-		
-				let note_toolbar_callout = document.createElement("div");
-				note_toolbar_callout.className = "callout dv-cg-note-toolbar";
-				note_toolbar_callout.setAttribute("tabindex", "0");
-				note_toolbar_callout.setAttribute("data-callout", "note-toolbar");
-				note_toolbar_callout.setAttribute("data-callout-metadata", "border-even-sticky");
-				note_toolbar_callout.setAttribute("data-name", matching_toolbar.name);
-				note_toolbar_callout.setAttribute("data-updated", matching_toolbar.updated);
-				note_toolbar_callout.append(note_toolbar_callout_content);
-		
-				/* workaround to emulate callout-in-content structure, to use same sticky css */
-				let div = document.createElement("div");
-				div.append(note_toolbar_callout);
-				let embed_block = document.createElement("div");
-				embed_block.className = "cm-embed-block cm-callout cg-note-toolbar-container";
-				embed_block.append(div);
-		
-				/* inject it between the properties and content divs */
-				let properties_container = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
-				properties_container?.insertAdjacentElement("afterend", embed_block);
-		
+				this.render_toolbar_from_settings(matching_toolbar);
 			}
+
 		} 
 		else {
 			this.remove_toolbar();
