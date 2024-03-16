@@ -50,40 +50,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
  
 	file_open_listener = (file: TFile) => {
-
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
-
 			this.DEBUG && console.log('file-open: ' + file.name);
-			
-			// do we have a property, and is it valid?
-			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
-
-			this.check_and_render_toolbar(file, frontmatter);
-
+			this.check_and_render_toolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 		}
-
 	}
 
 	metadata_cache_listener = (file: TFile, data: any, cache: CachedMetadata) => {
-
 		this.DEBUG && console.log("metadata-changed: " + file.name);
-		// check if there's metadata we're interested in, then...
-		const notetoolbar_prop: string[] = cache.frontmatter?.notetoolbar ?? null;
-		if (notetoolbar_prop !== null) {
-			// check if we're in the active file (otherwise, do nothing)
-			let active_file = this.app.workspace.getActiveFile()?.name;
-			if (file.name === active_file) {
-				// FIXME? this also triggers if *any* metadata changes
-				this.DEBUG && console.log('- notetoolbar: ' + notetoolbar_prop);
-				this.render_toolbar_from_props(notetoolbar_prop);
-
-			}
-		}
-		else {
-			this.remove_toolbar();
-		}
-
+		this.check_and_render_toolbar(file, cache.frontmatter);
 	}
 
 	async check_and_render_toolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
