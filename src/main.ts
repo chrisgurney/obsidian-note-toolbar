@@ -14,7 +14,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.app.metadataCache.on("changed", this.metadata_cache_listener);
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
-		await this.render_toolbar();
+		await this.render_toolbar_for_active_file();
 		this.DEBUG && console.log('LOADED');
 	}
 
@@ -33,7 +33,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.saveData(this.settings);
 		// TODO: update the toolbar instead of removing and re-adding to the DOM?
 		await this.remove_toolbar();
-		await this.render_toolbar();
+		await this.render_toolbar_for_active_file();
 	}
 
 	get_toolbar_settings(name: string | null): ToolbarSettings | undefined {
@@ -194,79 +194,17 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 
-	/* TODO: auto-detect and render toolbar */
-	async render_toolbar() {
-
-		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
-
-		let notetoolbar_prop;
-
-		// if provided prop is null, get the prop from the file
+	async render_toolbar_for_active_file() {
 		let active_file = this.app.workspace.getActiveFile();
-		if (active_file != null) {
-			let frontmatter = this.app.metadataCache.getFileCache(active_file)?.frontmatter
-			notetoolbar_prop = frontmatter?.notetoolbar ?? null;
-		}
-
-		let matching_toolbar = this.get_toolbar_settings_from_props(notetoolbar_prop);
-
-		if (matching_toolbar) {
-
-			// if existing toolbar not same as matching toolbar; re-render
-			// (addresses case where adding a prop and removing an old one does not update)
-			if (existing_toolbar?.getAttribute("data-name") !== matching_toolbar.name) {
-				this.remove_toolbar();
-				existing_toolbar = null;
-			}
-
-			// check if we already added the toolbar
-			if (existing_toolbar == null) {
-				this.render_toolbar_from_settings(matching_toolbar);
-			}
-
-		} 
-		else {
-			this.remove_toolbar();
-		}
-	
+		if (active_file) {
+			let frontmatter = active_file ? this.app.metadataCache.getFileCache(active_file)?.frontmatter : undefined;
+			this.check_and_render_toolbar(active_file, frontmatter);
+		}	
 	}
 
-	async render_toolbar_from_props(notetoolbar_prop: string[]) {
-
-		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
-
-		// make sure we have the frontmatter prop before continuing
-		if (notetoolbar_prop === null) {
-			// if provided prop is null, get the prop from the file
-			let active_file = this.app.workspace.getActiveFile();
-			if (active_file != null) {
-				let frontmatter = this.app.metadataCache.getFileCache(active_file)?.frontmatter
-				notetoolbar_prop = frontmatter?.notetoolbar ?? null;
-			}
-		}
-
-		let matching_toolbar = this.get_toolbar_settings_from_props(notetoolbar_prop);
-
-		if (matching_toolbar) {
-
-			// if existing toolbar not same as matching toolbar; re-render
-			// (addresses case where adding a prop and removing an old one does not update)
-			if (existing_toolbar?.getAttribute("data-name") !== matching_toolbar.name) {
-				this.remove_toolbar();
-				existing_toolbar = null;
-			}
-
-			// check if we already added the toolbar
-			if (existing_toolbar == null) {
-				this.render_toolbar_from_settings(matching_toolbar);
-			}
-
-		} 
-		else {
-			this.remove_toolbar();
-		}
-	
-	}
+	/*************************************************************************
+	 * HANDLERS
+	 *************************************************************************/
 
 	async toolbar_click_handler(e: MouseEvent) {
 
