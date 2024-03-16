@@ -5,6 +5,7 @@ import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSett
 export default class NoteToolbarPlugin extends Plugin {
 
 	settings: NoteToolbarSettings;
+	public DEBUG: boolean = false;
 
 	async onload() {
 		await this.load_settings();
@@ -50,49 +51,68 @@ export default class NoteToolbarPlugin extends Plugin {
  
 	file_open_listener = (file: TFile) => {
 
+		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
 
-			// console.log('file-open:');
-			// let active_file = this.app.workspace.getActiveFile();
+			this.DEBUG && console.log('file-open: ' + file.name);
 
-			let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
-			// if there's a toolbar in the current file...
-			if (existing_toolbar !== null) {
-				let name = existing_toolbar.getAttribute("data-name");
-				let matching_toolbar = this.get_toolbar_from_settings(name);
-				// if we can't find an existing toolbar in our settings that matches the one displayed...
-				if (matching_toolbar === undefined) {
-					// it shouldn't be there: remove it
-					// console.log("toolbar not found: " + name);
-					this.remove_toolbar();
-				}
-				else {
-					// otherwise, re-render the toolbar if it's out of date with the configuration
-					let updated = existing_toolbar.getAttribute("data-updated");
-					// console.log(this.settings.updated);
-					if (updated !== matching_toolbar.updated) {
-						// console.log("- reloading toolbar");
-						// we have the proper toolbar, but it's out of date: re-draw it
-						// TODO: update the toolbar instead of removing and re-adding to the DOM
-						this.remove_toolbar();
-						this.render_toolbar();
-						existing_toolbar.setAttribute("data-updated", matching_toolbar.updated);
-					}
-				}
+			//
+			// check: does this note need a toolbar?
+			//
+			
+			let matching_toolbar: ToolbarSettings | undefined = undefined;
+
+			// do we have a property, and is it valid?
+			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
+			// console.log('- frontmatter: ' + frontmatter);
+			const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
+			if (notetoolbar_prop !== null) {
+				// is it valid? (i.e., is there a matching toolbar?)
+				matching_toolbar = this.get_props_toolbar_from_settings(notetoolbar_prop);
 			}
 			else {
-				// otherwise, check the frontmatter to see if we need to add a toolbar
-				// console.log('file-open: ' + file.name);
-				let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter
-				// console.log('- frontmatter: ' + frontmatter);
-				const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
-				if (notetoolbar_prop !== null) {
-					// console.log('- notetoolbar: ' + notetoolbar_prop);
-					this.render_toolbar(notetoolbar_prop);
-				}
-				else {
+				// TODO: ...OR is the note in a folder that's mapped, and is the mapping valid?
+			}
+			
+			//
+			// check: is there already a toolbar?
+			//
+
+			let existing_toolbar_el = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+			if (existing_toolbar_el) {
+
+				let existing_toolbar_name = existing_toolbar_el?.getAttribute("data-name");
+
+				// if we don't need it, remove it
+				if (!matching_toolbar) {
+					this.DEBUG && console.log("file-open: toolbar not needed, removing existing toolbar: " + existing_toolbar_name);
 					this.remove_toolbar();
+					// return undefined
 				}
+				// if we need a toolbar...
+				else {
+
+					// the name of the existing toolbar doesn't match, remove it
+					if (matching_toolbar.name !== existing_toolbar_name) {
+						this.DEBUG && console.log("file-open: toolbar needed, removing existing toolbar (name does not match): " + existing_toolbar_name);
+						this.remove_toolbar();
+					}
+					else {
+						// does it need to be updated? If so: remove it
+						let existing_toolbar_updated = existing_toolbar_el.getAttribute("data-updated");
+						if (matching_toolbar.updated !== existing_toolbar_updated) {
+							this.DEBUG && console.log("file-open: existing toolbar out of date, removing existing toolbar");
+							this.remove_toolbar();
+						}
+					}
+
+				}
+
+			}
+
+			if (matching_toolbar) {
+				this.DEBUG && console.log("file-open: rendering toolbar");
+				this.render_toolbar();
 			}
 
 		}
