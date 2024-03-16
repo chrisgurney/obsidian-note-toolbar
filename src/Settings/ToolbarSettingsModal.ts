@@ -54,7 +54,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setValue(this.toolbar.name)
 				.onChange(async (value) => {
 					// check for existing toolbar with this name
-					let existing_toolbar = this.plugin.get_toolbar_from_settings(value);
+					let existing_toolbar = this.plugin.get_toolbar_settings(value);
 					if (existing_toolbar && existing_toolbar !== this.toolbar) {
 						toolbar_name_div.createEl("div", { 
 							text: "A toolbar already exists with this name", 
