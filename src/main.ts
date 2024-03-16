@@ -70,8 +70,27 @@ export default class NoteToolbarPlugin extends Plugin {
 				// is it valid? (i.e., is there a matching toolbar?)
 				matching_toolbar = this.get_props_toolbar_from_settings(notetoolbar_prop);
 			}
-			else {
-				// TODO: ...OR is the note in a folder that's mapped, and is the mapping valid?
+
+			// we still don't have a matching toolbar
+			if (!matching_toolbar) {
+
+				// TODO: check if the note is in a folder that's mapped, and if the mapping is valid
+				// this.settings.folder_mappings.forEach((mapping, index) => {
+				let mapping;
+				for (let index = 0; index < this.settings.folder_mappings.length; index++) {
+					mapping = this.settings.folder_mappings[index];
+					this.DEBUG && console.log('file-open: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
+					if (file.path.startsWith(mapping.folder)) {
+						this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
+						// TODO: continue until we get a matching toolbar
+						matching_toolbar = this.get_toolbar_from_settings(mapping.toolbar);
+						if (matching_toolbar) {
+							this.DEBUG && console.log('  - matched toolbar: ' + matching_toolbar);
+							break;
+						}
+					}
+				}
+
 			}
 			
 			//
@@ -90,25 +109,28 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (!matching_toolbar) {
 					this.DEBUG && console.log("file-open: toolbar not needed, removing existing toolbar: " + existing_toolbar_name);
 					this.remove_toolbar();
+					existing_toolbar_el = null;
 				}
 				// we need a toolbar BUT the name of the existing toolbar doesn't match
 				else if (matching_toolbar.name !== existing_toolbar_name) {
 					this.DEBUG && console.log("file-open: toolbar needed, removing existing toolbar (name does not match): " + existing_toolbar_name);
 					this.remove_toolbar();
+					existing_toolbar_el = null;
 				}
 				// we need a toolbar BUT it needs to be updated
 				else if (matching_toolbar.updated !== existing_toolbar_updated) {
 					this.DEBUG && console.log("file-open: existing toolbar out of date, removing existing toolbar");
 					this.remove_toolbar();
+					existing_toolbar_el = null;
 				}
 
 			}
 
-			// render the toolbar if we have one
-			if (matching_toolbar) {
+			// render the toolbar if we have one, and we don't have an existing toolbar to keep
+			if (matching_toolbar && !existing_toolbar_el) {
 
-				this.DEBUG && console.log("file-open: rendering toolbar");
-				this.render_toolbar();
+				this.DEBUG && console.log("file-open: rendering toolbar: " + matching_toolbar.name);
+				this.render_toolbar_from_settings(matching_toolbar);
 
 			}
 
