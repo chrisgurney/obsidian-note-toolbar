@@ -149,11 +149,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									textFieldsDiv.createEl("div", { 
 										text: "This folder already has a toolbar associated with it", 
 										attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
-									textFieldsDiv.addClass("note-toolbar-setting-error");
+									textFieldsDiv.children[0].addClass("note-toolbar-setting-error");
                                 }
 								else {
 									document.getElementById("note-toolbar-name-error")?.remove();
-									textFieldsDiv.removeClass("note-toolbar-setting-error");
+									textFieldsDiv.children[0].removeClass("note-toolbar-setting-error");
 									this.plugin.settings.folder_mappings[
 										index
 									].folder = newFolder;
