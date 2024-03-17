@@ -122,6 +122,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			this.plugin.settings.folder_mappings.forEach(
 				(mapping, index) => {
 
+				let toolbar_folder_list_item_div = containerEl.createDiv();
+				toolbar_folder_list_item_div.style.display = "flex";
+
 				let text_fields_container = this.containerEl.createEl("div");
 				text_fields_container.id = "note-toolbar-setting-item-field-" + index;
 				text_fields_container.style.display = "flex";
@@ -168,6 +171,32 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				item_controls_div.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(item_controls_div)
 					.addExtraButton((cb) => {
+						cb.setIcon("up-chevron-glyph")
+							.setTooltip("Move up")
+							.onClick(() => {
+								arraymove(
+									this.plugin.settings.folder_mappings,
+									index,
+									index - 1
+								);
+								this.plugin.save_settings();
+								this.display();
+							});
+					})
+					.addExtraButton((cb) => {
+						cb.setIcon("down-chevron-glyph")
+							.setTooltip("Move down")
+							.onClick(() => {
+								arraymove(
+									this.plugin.settings.folder_mappings,
+									index,
+									index + 1
+								);
+								this.plugin.save_settings();
+								this.display();
+							});
+					})
+					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
 							.onClick(() => {
@@ -179,9 +208,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								this.display();
 							});
 					});
-				text_fields_container.append(item_controls_div);
-				toolbar_folder_list_div.append(text_fields_container);
+				toolbar_folder_list_item_div.append(text_fields_container);
+				toolbar_folder_list_item_div.append(item_controls_div);
 
+				toolbar_folder_list_div.append(toolbar_folder_list_item_div);
 			});
 
 			containerEl.append(toolbar_folder_list_div);
