@@ -15,12 +15,14 @@ export interface ToolbarSettings {
 	name: string;
 	updated: string;
 	items: Array<ToolbarItemSettings>;
+	styles: string[];
 }
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	name: "",
 	updated: new Date().toISOString(),
-	items: []
+	items: [],
+	styles: ["border","even","sticky"]
 };
 
 export interface FolderMapping {

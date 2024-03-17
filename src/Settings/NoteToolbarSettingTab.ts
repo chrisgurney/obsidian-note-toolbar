@@ -76,7 +76,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						let newToolbar = {
 							name: "",
 							updated: new Date().toISOString(),
-							items: []
+							items: [],
+							styles: ["border","even","sticky"]
 						};
 						this.plugin.settings.toolbars.push(newToolbar);
 						this.plugin.saveSettings();
