@@ -87,11 +87,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	displayFolderMap(containerEl: HTMLElement): void {
 
-		containerEl
+		let folderMappingHeadingDiv = containerEl
 			.createEl("div", { text: this.headingFr(
 				"Folder mappings", 
-				"Have the toolbar appear in notes matching the provided folders. Matching is done in order of this list, from top to bottom.") })
-			.className = "setting-item-name";
+				"Have the toolbar appear in notes matching the provided folders. Matching is done in order of this list, from top to bottom.") });
+		folderMappingHeadingDiv.className = "setting-item-name";
+		folderMappingHeadingDiv.style.marginTop = "margin-top: 2em";
+		folderMappingHeadingDiv.style.padding = "0.75em 0";
+		folderMappingHeadingDiv.style.borderTop = "1px solid var(--background-modifier-border)";
+		containerEl.append(folderMappingHeadingDiv);
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
