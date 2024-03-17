@@ -99,7 +99,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			for (let index = 0; index < this.settings.folder_mappings.length; index++) {
 				mapping = this.settings.folder_mappings[index];
 				this.DEBUG && console.log('file-open: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
-				if (file.path.startsWith(mapping.folder)) {
+				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
 					// continue until we get a matching toolbar
 					matching_toolbar = this.get_toolbar_settings(mapping.toolbar);
