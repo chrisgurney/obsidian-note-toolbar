@@ -4,6 +4,7 @@ import { arraymove } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggest } from './Suggesters/FolderSuggester';
+import { ToolbarSuggest } from './Suggesters/ToolbarSuggester';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -138,7 +139,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                         (e) => e.folder == new_folder
                                     )
                                 ) {
-									new Error("This folder already has a toolbar associated with it");
+									console.log("This folder already has a toolbar associated with it");
+									// TODO: highlight the field as an error
                                     return;
                                 }
 
@@ -148,15 +150,19 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                 this.plugin.save_settings();
                             });
 					});
-				const s1c = new Setting(text_fields_container)
+				const ts = new Setting(text_fields_container)
 					.setClass("note-toolbar-setting-item-field")
-					.addText(text => text
-						.setPlaceholder('Toolbar name')
-						.setValue(mapping.toolbar)
-						.onChange(async (value) => {
-							mapping.toolbar = value;
-							await this.plugin.save_settings();
-					}));
+					.addSearch((cb) => {
+						new ToolbarSuggest(this.app, this.plugin, cb.inputEl);
+						cb.setPlaceholder("Toolbar")
+							.setValue(mapping.toolbar)
+							.onChange((new_toolbar) => {
+                                this.plugin.settings.folder_mappings[
+                                    index
+                                ].toolbar = new_toolbar;
+                                this.plugin.save_settings();
+                            });
+					});
 				let item_controls_div = this.containerEl.createEl("div");
 				item_controls_div.style.marginLeft = "auto";
 				item_controls_div.className = "note-toolbar-setting-item-controls";
