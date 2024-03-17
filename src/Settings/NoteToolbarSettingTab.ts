@@ -20,21 +20,23 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
         modal.open();
     }
 
-	heading_fragment(title: string, description: string): DocumentFragment {
-		let message_fragment = document.createDocumentFragment();
-		let heading_fragment_text = document.createElement("div")
-		heading_fragment_text.className = "setting-item-name";
-		heading_fragment_text.textContent = title;
-		message_fragment.append(heading_fragment_text);
-		let desc_fragment_text = document.createElement("div")
-		desc_fragment_text.textContent = description;
-		desc_fragment_text.className = "setting-item-description";
-		desc_fragment_text.style.paddingBottom = "1em";
-		message_fragment.append(desc_fragment_text);
-		return message_fragment;
+	headingFragment(title: string, description: string): DocumentFragment {
+		let messageFragment = document.createDocumentFragment();
+		let headingFragmentText = document.createElement("div")
+		headingFragmentText.className = "setting-item-name";
+		headingFragmentText.textContent = title;
+		messageFragment.append(headingFragmentText);
+
+		let descFragmentText = document.createElement("div")
+		descFragmentText.textContent = description;
+		descFragmentText.className = "setting-item-description";
+		descFragmentText.style.paddingBottom = "1em";
+		messageFragment.append(descFragmentText);
+
+		return messageFragment;
 	}
 
-	empty_message_fragment(text: string): DocumentFragment {
+	emptyMessageFragment(text: string): DocumentFragment {
 		let message_fragment = document.createDocumentFragment();
 		let message_fragment_text = document.createElement("i")
 		message_fragment_text.textContent = text;
@@ -43,44 +45,42 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	public display(): void {
-
 		const { containerEl } = this;
 		containerEl.empty();
-		this.display_toolbar_list(containerEl);
-		this.display_folder_list(containerEl);
-
+		this.displayToolbarList(containerEl);
+		this.displayFolderMap(containerEl);
 	}
 
-	display_toolbar_list(containerEl: HTMLElement): void {
+	displayToolbarList(containerEl: HTMLElement): void {
 
 		containerEl.createEl("h2", { text: "Toolbars" });
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
-				.createEl("div", { text: this.empty_message_fragment("Click the button to create a toolbar.") })
+				.createEl("div", { text: this.emptyMessageFragment("Click the button to create a toolbar.") })
 				.className = "setting-item-name";
 		}
 		else {
-			let toolbar_list_div = containerEl.createDiv();
-			toolbar_list_div.addClass("note-toolbar-setting-toolbar-list");
+			let toolbarListDiv = containerEl.createDiv();
+			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
-				(toolbar_item, index) => {
-					new Setting(toolbar_list_div)
-						.setName(toolbar_item.name)
-						.setDesc(toolbar_item.items.length > 0 ? 
-							toolbar_item.items.map(item => item.label).join(' | ') : 
-							this.empty_message_fragment("No toolbar items. Click Edit to update this toolbar."))
+				(toolbarItem, index) => {
+					new Setting(toolbarListDiv)
+						.setName(toolbarItem.name)
+						.setDesc(toolbarItem.items.length > 0 ? 
+							toolbarItem.items.map(item => item.label).join(' | ') : 
+							this.emptyMessageFragment("No toolbar items. Click Edit to update this toolbar."))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setTooltip("Update this toolbar's items")
 								.setButtonText("Edit")
 								.setCta()
 								.onClick(() => {
-									this.openSettingsModal(toolbar_item);
+									this.openSettingsModal(toolbarItem);
 								});
 							});
 				});
-			containerEl.append(toolbar_list_div);
+			containerEl.append(toolbarListDiv);
 		}
 
 		new Setting(containerEl)
@@ -91,55 +91,56 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setButtonText("+ New toolbar")
 					.setCta()
 					.onClick(() => {
-						let new_toolbar = {
+						let newToolbar = {
 							name: "",
 							updated: new Date().toISOString(),
 							items: []
 						};
-						this.plugin.settings.toolbars.push(new_toolbar);
+						this.plugin.settings.toolbars.push(newToolbar);
 						this.plugin.save_settings();
-						this.openSettingsModal(new_toolbar);
+						this.openSettingsModal(newToolbar);
 					});
 			});
 
 	}
 
-	display_folder_list(containerEl: HTMLElement): void {
+	displayFolderMap(containerEl: HTMLElement): void {
 
 		containerEl
-			.createEl("div", { text: this.heading_fragment("Folder mappings", "Have the toolbar appear in notes matching the provided folders.") })
+			.createEl("div", { text: this.headingFragment(
+				"Folder mappings", 
+				"Have the toolbar appear in notes matching the provided folders. Matching is done in order of this list, from top to bottom.") })
 			.className = "setting-item-name";
 
 		if (this.plugin.settings.folder_mappings.length == 0) {
 			containerEl
-				.createEl("div", { text: this.empty_message_fragment("Click the button to create a mapping.") })
+				.createEl("div", { text: this.emptyMessageFragment("Click the button to create a mapping.") })
 				.className = "setting-item-name";
 		}
 		else {
-			let toolbar_folder_list_div = containerEl.createDiv();
-			// toolbar_folder_list_div.addClass("note-toolbar-setting-toolbar-list");
+			let toolbarFolderListDiv = containerEl.createDiv();
 
 			this.plugin.settings.folder_mappings.forEach(
 				(mapping, index) => {
 
-				let toolbar_folder_list_item_div = containerEl.createDiv();
-				toolbar_folder_list_item_div.style.display = "flex";
+				let toolbarFolderListItemDiv = containerEl.createDiv();
+				toolbarFolderListItemDiv.style.display = "flex";
 
-				let text_fields_container = this.containerEl.createEl("div");
-				text_fields_container.id = "note-toolbar-setting-item-field-" + index;
-				text_fields_container.style.display = "flex";
-				text_fields_container.style.flexWrap = "wrap";
-				const fs = new Setting(text_fields_container)
+				let textFieldsDiv = this.containerEl.createEl("div");
+				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
+				textFieldsDiv.style.display = "flex";
+				textFieldsDiv.style.flexWrap = "wrap";
+				const fs = new Setting(textFieldsDiv)
 					.setClass("note-toolbar-setting-item-field")
 					.addSearch((cb) => {
 						new FolderSuggest(this.app, cb.inputEl);
 						cb.setPlaceholder("Folder")
 							.setValue(mapping.folder)
-							.onChange((new_folder) => {
+							.onChange((newFolder) => {
                                 if (
-                                    new_folder &&
+                                    newFolder &&
                                     this.plugin.settings.folder_mappings.some(
-                                        (e) => e.folder == new_folder
+                                        (e) => e.folder == newFolder
                                     )
                                 ) {
 									console.log("This folder already has a toolbar associated with it");
@@ -149,27 +150,27 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
                                 this.plugin.settings.folder_mappings[
                                     index
-                                ].folder = new_folder;
+                                ].folder = newFolder;
                                 this.plugin.save_settings();
                             });
 					});
-				const ts = new Setting(text_fields_container)
+				const ts = new Setting(textFieldsDiv)
 					.setClass("note-toolbar-setting-item-field")
 					.addSearch((cb) => {
 						new ToolbarSuggest(this.app, this.plugin, cb.inputEl);
 						cb.setPlaceholder("Toolbar")
 							.setValue(mapping.toolbar)
-							.onChange((new_toolbar) => {
+							.onChange((newToolbar) => {
                                 this.plugin.settings.folder_mappings[
                                     index
-                                ].toolbar = new_toolbar;
+                                ].toolbar = newToolbar;
                                 this.plugin.save_settings();
                             });
 					});
-				let item_controls_div = this.containerEl.createEl("div");
-				item_controls_div.style.marginLeft = "auto";
-				item_controls_div.className = "note-toolbar-setting-item-controls";
-				const s1d = new Setting(item_controls_div)
+				let itemControlsDiv = this.containerEl.createEl("div");
+				itemControlsDiv.style.marginLeft = "auto";
+				itemControlsDiv.className = "note-toolbar-setting-item-controls";
+				const s1d = new Setting(itemControlsDiv)
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
@@ -208,13 +209,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								this.display();
 							});
 					});
-				toolbar_folder_list_item_div.append(text_fields_container);
-				toolbar_folder_list_item_div.append(item_controls_div);
+				toolbarFolderListItemDiv.append(textFieldsDiv);
+				toolbarFolderListItemDiv.append(itemControlsDiv);
 
-				toolbar_folder_list_div.append(toolbar_folder_list_item_div);
+				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
 			});
 
-			containerEl.append(toolbar_folder_list_div);
+			containerEl.append(toolbarFolderListDiv);
 		}
 
 		new Setting(containerEl)
@@ -225,11 +226,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setButtonText("+ New mapping")
 					.setCta()
 					.onClick(() => {
-						let new_mapping = {
+						let newMapping = {
 							folder: "",
 							toolbar: ""
 						};
-						this.plugin.settings.folder_mappings.push(new_mapping);
+						this.plugin.settings.folder_mappings.push(newMapping);
 						this.plugin.save_settings();
 						this.display();
 					});
