@@ -143,18 +143,22 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                 if (
                                     newFolder &&
                                     this.plugin.settings.folder_mappings.some(
-                                        (e) => e.folder == newFolder
+                                        (e) => e.folder.toLowerCase() == newFolder.toLowerCase()
                                     )
                                 ) {
-									console.log("This folder already has a toolbar associated with it");
-									// TODO: highlight the field as an error
-                                    return;
+									textFieldsDiv.createEl("div", { 
+										text: "This folder already has a toolbar associated with it", 
+										attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
+									textFieldsDiv.addClass("note-toolbar-setting-error");
                                 }
-
-                                this.plugin.settings.folder_mappings[
-                                    index
-                                ].folder = newFolder;
-                                this.plugin.save_settings();
+								else {
+									document.getElementById("note-toolbar-name-error")?.remove();
+									textFieldsDiv.removeClass("note-toolbar-setting-error");
+									this.plugin.settings.folder_mappings[
+										index
+									].folder = newFolder;
+									this.plugin.save_settings();	
+								}
                             });
 					});
 				const ts = new Setting(textFieldsDiv)

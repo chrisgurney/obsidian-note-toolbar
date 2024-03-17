@@ -189,7 +189,7 @@
 }
 
 .note-toolbar-setting-error {
-    & input[type="text"] {
+    & input[type="text"], & input[type="search"] {
         box-shadow: 0 0 0 1px red;
     }
 }
