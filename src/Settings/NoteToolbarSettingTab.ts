@@ -27,7 +27,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	public display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
-		containerEl.createEl("h3", { text: "Note Toolbar" });
+		containerEl.createEl("h2", { text: "Note Toolbar" });
 		this.displayToolbarList(containerEl);
 		this.displayOtherOptions(containerEl);
 		this.displayFolderMap(containerEl);
@@ -35,7 +35,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	displayToolbarList(containerEl: HTMLElement): void {
 
-		containerEl.createEl("h2", { text: "Toolbars" });
+		containerEl.append(this.headingDiv(
+			containerEl, 
+			"Toolbars", 
+			""
+		));
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
@@ -89,15 +93,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	displayFolderMap(containerEl: HTMLElement): void {
 
-		let folderMappingHeadingDiv = containerEl
-			.createEl("div", { text: this.headingFr(
-				"Folder mappings", 
-				"Have the toolbar appear in notes matching the provided folders. Matching is done in order of this list, from top to bottom.") });
-		folderMappingHeadingDiv.className = "setting-item-name";
-		folderMappingHeadingDiv.style.marginTop = "margin-top: 2em";
-		folderMappingHeadingDiv.style.padding = "0.75em 0";
-		folderMappingHeadingDiv.style.borderTop = "1px solid var(--background-modifier-border)";
-		containerEl.append(folderMappingHeadingDiv);
+		containerEl.append(this.headingDiv(
+			containerEl, 
+			"Folder mappings", 
+			"Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom."
+		));
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
@@ -244,7 +244,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Property")
-			.setDesc("Frontmatter property to check for the name of the toolbar to use. If this property is set on a note, it takes precedence over any folder toolbars.")
+			.setDesc("If a toolbar name is found in this property, it will be displayed on the note. Takes precedence over any mapped folder.")
 			.addText(text => text
 				.setPlaceholder('Property')
 				.setValue(this.plugin.settings.toolbarProp)
@@ -261,20 +261,33 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * UTILITIES
 	 *************************************************************************/
 
-	headingFr(title: string, description: string): DocumentFragment {
+	headingDiv(containerEl: HTMLElement, title: string, description: string): HTMLElement {
+
+		let headingDiv = containerEl.createEl("div");
+		headingDiv.className = "setting-item-name";
+		// headingDiv.style.marginTop = "2em";
+		headingDiv.style.borderTop = "1px solid var(--background-modifier-border)";
+
 		let messageFr = document.createDocumentFragment();
 		let headingFrText = document.createElement("div")
 		headingFrText.className = "setting-item-name";
 		headingFrText.textContent = title;
 		messageFr.append(headingFrText);
+		headingDiv.style.padding = "0.75em 0 0 0";
 
-		let descFrText = document.createElement("div")
-		descFrText.textContent = description;
-		descFrText.className = "setting-item-description";
-		descFrText.style.paddingBottom = "1em";
-		messageFr.append(descFrText);
+		if (description) {
+			let descFrText = document.createElement("div")
+			descFrText.textContent = description;
+			descFrText.className = "setting-item-description";
+			descFrText.style.paddingBottom = "1em";
+			messageFr.append(descFrText);
+			headingDiv.style.paddingBottom = "1em";
+		}
 
-		return messageFr;
+		headingDiv.setText(messageFr);
+
+		return headingDiv;
+
 	}
 
 	emptyMessageFr(text: string): DocumentFragment {

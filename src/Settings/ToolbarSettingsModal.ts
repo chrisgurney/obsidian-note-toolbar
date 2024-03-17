@@ -200,7 +200,7 @@ export default class ToolbarSettingsModal extends Modal {
 				togglesDiv.style.flexWrap = "wrap";
 				const s2 = new Setting(togglesDiv)
 					.setClass("note-toolbar-setting-item-toggle")
-					.setName("Hide on mobile")
+					.setName("Hide on: mobile")
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on mobile'))
@@ -213,7 +213,7 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 				const s3 = new Setting(togglesDiv)
 					.setClass("note-toolbar-setting-item-toggle")
-					.setName("Hide on desktop")
+					.setName("desktop")
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on desktop'))

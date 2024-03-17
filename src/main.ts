@@ -11,7 +11,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.loadSettings();
 
 		this.app.workspace.on('file-open', this.fileOpenListener);
-		this.app.metadataCache.on("changed", this.metadataCacheListener);
+		this.app.metadataCache.on('changed', this.metadataCacheListener);
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 		await this.renderToolbarForActiveFile();
