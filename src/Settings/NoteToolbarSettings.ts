@@ -2,11 +2,13 @@
 export interface NoteToolbarSettings {
 	toolbars: Array<ToolbarSettings>;
 	folderMappings: Array<FolderMapping>;
+	toolbarProp: string;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	toolbars: [],
-	folderMappings: []
+	folderMappings: [],
+	toolbarProp: "notetoolbar"
 }
 
 export interface ToolbarSettings {

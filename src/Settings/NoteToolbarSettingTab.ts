@@ -29,6 +29,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.empty();
 		this.displayToolbarList(containerEl);
 		this.displayFolderMap(containerEl);
+		this.displayOtherOptions(containerEl);
 	}
 
 	displayToolbarList(containerEl: HTMLElement): void {
@@ -230,6 +231,23 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.display();
 					});
 			});
+
+	}
+
+	displayOtherOptions(containerEl: HTMLElement): void {
+
+		new Setting(containerEl)
+			.setName("Property")
+			.setDesc("Frontmatter property to check for the name of the toolbar to use")
+			.addText(text => text
+				.setPlaceholder('Property')
+				.setValue(this.plugin.settings.toolbarProp)
+				.onChange(async (value) => {
+					this.plugin.settings.toolbarProp = value;
+					// FIXME? set all toolbars to updated?
+					// this.plugin.settings.toolbars.updated = new Date().toISOString();
+					await this.plugin.saveSettings();	
+			}));
 
 	}
 

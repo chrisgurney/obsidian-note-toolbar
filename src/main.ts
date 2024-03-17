@@ -85,7 +85,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
 		this.DEBUG && console.log('- frontmatter: ' + frontmatter);
-		const propName = 'notetoolbar';
+		const propName = this.settings.toolbarProp;
 		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
 		if (notetoolbarProp !== null) {
 			// is it valid? (i.e., is there a matching toolbar?)
