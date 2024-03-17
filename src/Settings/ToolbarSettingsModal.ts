@@ -58,7 +58,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setValue(this.toolbar.name)
 				.onChange(async (value) => {
 					// check for existing toolbar with this name
-					let existingToolbar = this.plugin.get_toolbar_settings(value);
+					let existingToolbar = this.plugin.getToolbarSettings(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
 						toolbarNameDiv.createEl("div", { 
 							text: "A toolbar already exists with this name", 
@@ -71,7 +71,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						// console.log(this.toolbar);
-						await this.plugin.save_settings();	
+						await this.plugin.saveSettings();	
 					}
 			}));
 		settingsDiv.append(toolbarNameDiv);
@@ -114,7 +114,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.onChange(async (value) => {
 							toolbarItem.label = value;
 							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.save_settings();
+							await this.plugin.saveSettings();
 					}));
 				const s1c = new Setting(textFieldsContainer)
 					.setClass("note-toolbar-setting-item-field")
@@ -124,7 +124,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.onChange(async (value) => {
 							toolbarItem.tooltip = value;
 							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.save_settings();
+							await this.plugin.saveSettings();
 					}));
 
 				let textFieldsUrlDiv = this.containerEl.createEl("div");
@@ -139,7 +139,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.onChange(async (value) => {
 							toolbarItem.url = value;
 							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.save_settings();
+							await this.plugin.saveSettings();
 					}));
 
 				let itemControlsDiv = this.containerEl.createEl("div");
@@ -156,7 +156,7 @@ export default class ToolbarSettingsModal extends Modal {
 									index - 1
 								);
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 								this.displayToolbarSettings();
 							});
 					})
@@ -170,7 +170,7 @@ export default class ToolbarSettingsModal extends Modal {
 									index + 1
 								);
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 								this.displayToolbarSettings();
 							});
 					})
@@ -183,7 +183,7 @@ export default class ToolbarSettingsModal extends Modal {
 									1
 								);
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 								this.displayToolbarSettings();
 							});
 					});
@@ -208,7 +208,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.onChange((hideOnMobile) => {
 								toolbarItem.hideOnMobile = hideOnMobile;
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 							});
 					});
 				const s3 = new Setting(togglesDiv)
@@ -221,7 +221,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.onChange((hideOnDesktop) => {
 								toolbarItem.hideOnDesktop = hideOnDesktop;
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 							});
 					});
 				itemDiv.appendChild(togglesDiv);
@@ -244,7 +244,7 @@ export default class ToolbarSettingsModal extends Modal {
 							hideOnMobile: false
 						});
 						this.toolbar.updated = new Date().toISOString();
-						this.plugin.save_settings();
+						this.plugin.saveSettings();
 						this.displayToolbarSettings();
 					});
 			});

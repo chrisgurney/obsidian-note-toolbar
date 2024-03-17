@@ -8,20 +8,20 @@ export default class NoteToolbarPlugin extends Plugin {
 	public DEBUG: boolean = false;
 
 	async onload() {
-		await this.load_settings();
+		await this.loadSettings();
 
-		this.app.workspace.on('file-open', this.file_open_listener);
-		this.app.metadataCache.on("changed", this.metadata_cache_listener);
+		this.app.workspace.on('file-open', this.fileOpenListener);
+		this.app.metadataCache.on("changed", this.metadataCacheListener);
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
-		await this.render_toolbar_for_active_file();
+		await this.renderToolbarForActiveFile();
 		this.DEBUG && console.log('LOADED');
 	}
 
 	onunload() {
-		this.app.workspace.off('file-open', this.file_open_listener);
-		this.app.metadataCache.off('changed', this.metadata_cache_listener);
-		this.remove_toolbar_from_all();
+		this.app.workspace.off('file-open', this.fileOpenListener);
+		this.app.metadataCache.off('changed', this.metadataCacheListener);
+		this.removeAllToolbars();
 		this.DEBUG && console.log('UNLOADED');
 	}
 
@@ -29,27 +29,27 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * SETTINGS LOADERS
 	 *************************************************************************/
 
-	async load_settings() {
+	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
-	async save_settings() {
+	async saveSettings() {
 		await this.saveData(this.settings);
 		// TODO: update the toolbar instead of removing and re-adding to the DOM?
-		await this.remove_toolbar();
-		await this.render_toolbar_for_active_file();
+		await this.removeActiveToolbar();
+		await this.renderToolbarForActiveFile();
 	}
 
-	get_toolbar_settings(name: string | null): ToolbarSettings | undefined {
+	getToolbarSettings(name: string | null): ToolbarSettings | undefined {
 		return name ? this.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
 	}
 
-	get_toolbar_settings_from_props(names: string[] | null): ToolbarSettings | undefined {
+	getToolbarSettingsFromProps(names: string[] | null): ToolbarSettings | undefined {
 		if (!names) return undefined;
 		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
 	}
 
-	delete_toolbar_from_settings(name: string) {
+	deleteToolbarFromSettings(name: string) {
 		this.settings.toolbars = this.settings.toolbars.filter(tbar => tbar.name !== name);
 	}
  
@@ -57,42 +57,43 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * LISTENERS
 	 *************************************************************************/
 
-	file_open_listener = (file: TFile) => {
+	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
 			this.DEBUG && console.log('file-open: ' + file.name);
-			this.check_and_render_toolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
+			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 		}
 	}
 
-	metadata_cache_listener = (file: TFile, data: any, cache: CachedMetadata) => {
+	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
 		this.DEBUG && console.log("metadata-changed: " + file.name);
-		this.check_and_render_toolbar(file, cache.frontmatter);
+		this.checkAndRenderToolbar(file, cache.frontmatter);
 	}
 
 	/*************************************************************************
 	 * TOOLBAR RENDERERS
 	 *************************************************************************/
 
-	async check_and_render_toolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
+	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
 
-		this.DEBUG && console.log('check_and_render_toolbar()');
+		this.DEBUG && console.log('checkAndRenderToolbar()');
 
 		//
 		// check: does this note need a toolbar?
 		//
 		
-		let matching_toolbar: ToolbarSettings | undefined = undefined;
+		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
 		this.DEBUG && console.log('- frontmatter: ' + frontmatter);
-		const notetoolbar_prop: string[] = frontmatter?.notetoolbar ?? null;
-		if (notetoolbar_prop !== null) {
+		const propName = 'notetoolbar';
+		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
+		if (notetoolbarProp !== null) {
 			// is it valid? (i.e., is there a matching toolbar?)
-			matching_toolbar = this.get_toolbar_settings_from_props(notetoolbar_prop);
+			matchingToolbar = this.getToolbarSettingsFromProps(notetoolbarProp);
 		}
 
 		// we still don't have a matching toolbar
-		if (!matching_toolbar) {
+		if (!matchingToolbar) {
 
 			// check if the note is in a folder that's mapped, and if the mapping is valid
 			let mapping;
@@ -102,9 +103,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
 					// continue until we get a matching toolbar
-					matching_toolbar = this.get_toolbar_settings(mapping.toolbar);
-					if (matching_toolbar) {
-						this.DEBUG && console.log('  - matched toolbar: ' + matching_toolbar);
+					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
+					if (matchingToolbar) {
+						this.DEBUG && console.log('  - matched toolbar: ' + matchingToolbar);
 						break;
 					}
 				}
@@ -116,101 +117,101 @@ export default class NoteToolbarPlugin extends Plugin {
 		// check: is there already a toolbar to remove?
 		//
 
-		let existing_toolbar_el = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
-		if (existing_toolbar_el) {
+		let existingToolbarEl = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+		if (existingToolbarEl) {
 
 			this.DEBUG && console.log('file-open: existing toolbar');
 
-			let existing_toolbar_name = existing_toolbar_el?.getAttribute("data-name");
-			let existing_toolbar_updated = existing_toolbar_el.getAttribute("data-updated");
+			let existingToolbarName = existingToolbarEl?.getAttribute("data-name");
+			let existingToolbarUpdated = existingToolbarEl.getAttribute("data-updated");
 
 			// if we don't need it, remove it
-			if (!matching_toolbar) {
-				this.DEBUG && console.log("file-open: toolbar not needed, removing existing toolbar: " + existing_toolbar_name);
-				this.remove_toolbar();
-				existing_toolbar_el = null;
+			if (!matchingToolbar) {
+				this.DEBUG && console.log("file-open: toolbar not needed, removing existing toolbar: " + existingToolbarName);
+				this.removeActiveToolbar();
+				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT the name of the existing toolbar doesn't match
-			else if (matching_toolbar.name !== existing_toolbar_name) {
-				this.DEBUG && console.log("file-open: toolbar needed, removing existing toolbar (name does not match): " + existing_toolbar_name);
-				this.remove_toolbar();
-				existing_toolbar_el = null;
+			else if (matchingToolbar.name !== existingToolbarName) {
+				this.DEBUG && console.log("file-open: toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
+				this.removeActiveToolbar();
+				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT it needs to be updated
-			else if (matching_toolbar.updated !== existing_toolbar_updated) {
+			else if (matchingToolbar.updated !== existingToolbarUpdated) {
 				this.DEBUG && console.log("file-open: existing toolbar out of date, removing existing toolbar");
-				this.remove_toolbar();
-				existing_toolbar_el = null;
+				this.removeActiveToolbar();
+				existingToolbarEl = null;
 			}
 
 		}
 
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
-		if (matching_toolbar && !existing_toolbar_el) {
+		if (matchingToolbar && !existingToolbarEl) {
 
-			this.DEBUG && console.log("file-open: rendering toolbar: " + matching_toolbar.name);
-			this.render_toolbar_from_settings(matching_toolbar);
+			this.DEBUG && console.log("file-open: rendering toolbar: " + matchingToolbar.name);
+			this.renderToolbarFromSettings(matchingToolbar);
 
 		}
 
 	}
 
-	async render_toolbar_from_settings(toolbar: ToolbarSettings) {
+	async renderToolbarFromSettings(toolbar: ToolbarSettings) {
 
 		/* create the unordered list of menu items */
-		let note_toolbar_ul = document.createElement("ul");
-		note_toolbar_ul.setAttribute("role", "menu");
+		let noteToolbarUl = document.createElement("ul");
+		noteToolbarUl.setAttribute("role", "menu");
 		toolbar.items.map((item: ToolbarItemSettings) => {
 
-			let toolbar_item = document.createElement("a");
-			toolbar_item.className = "external-link";
-			toolbar_item.setAttribute("href", item.url);
-			toolbar_item.setAttribute("data-tooltip-position", "top");
-			toolbar_item.setAttribute("aria-label", item.tooltip ? item.tooltip : item.url);
-			toolbar_item.setAttribute("rel", "noopener");
-			toolbar_item.onclick = (e) => this.toolbar_click_handler(e);
-			toolbar_item.innerHTML = item.label;
+			let toolbarItem = document.createElement("a");
+			toolbarItem.className = "external-link";
+			toolbarItem.setAttribute("href", item.url);
+			toolbarItem.setAttribute("data-tooltip-position", "top");
+			toolbarItem.setAttribute("aria-label", item.tooltip ? item.tooltip : item.url);
+			toolbarItem.setAttribute("rel", "noopener");
+			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
+			toolbarItem.innerHTML = item.label;
 
-			let note_toolbar_li = document.createElement("li");
-			item.hideOnMobile ? note_toolbar_li.className = "hide-on-mobile" : false;
-			item.hideOnDesktop ? note_toolbar_li.className += "hide-on-desktop" : false;
-			item.hideOnDesktop ? note_toolbar_li.style.display = "none" : false;
-			note_toolbar_li.append(toolbar_item);
+			let noteToolbarLi = document.createElement("li");
+			item.hideOnMobile ? noteToolbarLi.className = "hide-on-mobile" : false;
+			item.hideOnDesktop ? noteToolbarLi.className += "hide-on-desktop" : false;
+			item.hideOnDesktop ? noteToolbarLi.style.display = "none" : false;
+			noteToolbarLi.append(toolbarItem);
 
-			note_toolbar_ul.appendChild(note_toolbar_li);
+			noteToolbarUl.appendChild(noteToolbarLi);
 		});
 
-		let note_toolbar_callout_content = document.createElement("div");
-		note_toolbar_callout_content.className = "callout-content";
-		note_toolbar_callout_content.append(note_toolbar_ul);
+		let noteToolbarCalloutContent = document.createElement("div");
+		noteToolbarCalloutContent.className = "callout-content";
+		noteToolbarCalloutContent.append(noteToolbarUl);
 
-		let note_toolbar_callout = document.createElement("div");
-		note_toolbar_callout.className = "callout dv-cg-note-toolbar";
-		note_toolbar_callout.setAttribute("tabindex", "0");
-		note_toolbar_callout.setAttribute("data-callout", "note-toolbar");
-		note_toolbar_callout.setAttribute("data-callout-metadata", "border-even-sticky");
-		note_toolbar_callout.setAttribute("data-name", toolbar.name);
-		note_toolbar_callout.setAttribute("data-updated", toolbar.updated);
-		note_toolbar_callout.append(note_toolbar_callout_content);
+		let noteToolbarCallout = document.createElement("div");
+		noteToolbarCallout.className = "callout dv-cg-note-toolbar";
+		noteToolbarCallout.setAttribute("tabindex", "0");
+		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
+		noteToolbarCallout.setAttribute("data-callout-metadata", "border-even-sticky");
+		noteToolbarCallout.setAttribute("data-name", toolbar.name);
+		noteToolbarCallout.setAttribute("data-updated", toolbar.updated);
+		noteToolbarCallout.append(noteToolbarCalloutContent);
 
 		/* workaround to emulate callout-in-content structure, to use same sticky css */
 		let div = document.createElement("div");
-		div.append(note_toolbar_callout);
-		let embed_block = document.createElement("div");
-		embed_block.className = "cm-embed-block cm-callout cg-note-toolbar-container";
-		embed_block.append(div);
+		div.append(noteToolbarCallout);
+		let embedBlock = document.createElement("div");
+		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
+		embedBlock.append(div);
 
 		/* inject it between the properties and content divs */
-		let properties_container = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
-		properties_container?.insertAdjacentElement("afterend", embed_block);
+		let propertiesContainer = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
+		propertiesContainer?.insertAdjacentElement("afterend", embedBlock);
 
 	}
 
-	async render_toolbar_for_active_file() {
-		let active_file = this.app.workspace.getActiveFile();
-		if (active_file) {
-			let frontmatter = active_file ? this.app.metadataCache.getFileCache(active_file)?.frontmatter : undefined;
-			this.check_and_render_toolbar(active_file, frontmatter);
+	async renderToolbarForActiveFile() {
+		let activeFile = this.app.workspace.getActiveFile();
+		if (activeFile) {
+			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
+			this.checkAndRenderToolbar(activeFile, frontmatter);
 		}	
 	}
 
@@ -218,16 +219,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * HANDLERS
 	 *************************************************************************/
 
-	async toolbar_click_handler(e: MouseEvent) {
+	async toolbarClickHandler(e: MouseEvent) {
 
-		this.DEBUG && console.log('toolbar_click_handler');
+		this.DEBUG && console.log('toolbarClickHandler');
 		/* since we might be on a different page now, on click, check if the url needs the date appended */
-		let clicked_element = e.currentTarget as HTMLLinkElement;
-		let url = clicked_element.getAttribute("href");
-		let note_title = this.app.workspace.getActiveFile()?.basename;
+		let clickedEl = e.currentTarget as HTMLLinkElement;
+		let url = clickedEl.getAttribute("href");
+		let noteTitle = this.app.workspace.getActiveFile()?.basename;
 		if (url != null) {
-			if (note_title != null) {
-				url = url.replace('{{note_title}}', encodeURIComponent(note_title));
+			if (noteTitle != null) {
+				url = url.replace('{{note_title}}', encodeURIComponent(noteTitle));
 			}
 			window.open(url, '_blank');
 			e.preventDefault();
@@ -239,14 +240,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * TOOLBAR REMOVAL
 	 *************************************************************************/
 
-	async remove_toolbar() {
-		let existing_toolbar = document.querySelector('.workspace-tab-container > .mod-active .cg-note-toolbar-container');
-		existing_toolbar?.remove();
+	async removeActiveToolbar() {
+		let existingToolbar = document.querySelector('.workspace-tab-container > .mod-active .cg-note-toolbar-container');
+		existingToolbar?.remove();
 	}
 
-	async remove_toolbar_from_all() {
-		let existing_toolbars = document.querySelectorAll('.cg-note-toolbar-container');
-		existing_toolbars.forEach((toolbar) => {
+	async removeAllToolbars() {
+		let existingToolbars = document.querySelectorAll('.cg-note-toolbar-container');
+		existingToolbars.forEach((toolbar) => {
 			toolbar.remove();
 		});
 	}

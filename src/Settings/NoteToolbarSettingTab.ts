@@ -97,7 +97,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							items: []
 						};
 						this.plugin.settings.toolbars.push(newToolbar);
-						this.plugin.save_settings();
+						this.plugin.saveSettings();
 						this.openSettingsModal(newToolbar);
 					});
 			});
@@ -157,7 +157,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									this.plugin.settings.folderMappings[
 										index
 									].folder = newFolder;
-									this.plugin.save_settings();	
+									this.plugin.saveSettings();	
 								}
                             });
 					});
@@ -171,7 +171,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                 this.plugin.settings.folderMappings[
                                     index
                                 ].toolbar = newToolbar;
-                                this.plugin.save_settings();
+                                this.plugin.saveSettings();
                             });
 					});
 				let itemControlsDiv = this.containerEl.createEl("div");
@@ -187,7 +187,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									index,
 									index - 1
 								);
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 								this.display();
 							});
 					})
@@ -200,7 +200,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									index,
 									index + 1
 								);
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 								this.display();
 							});
 					})
@@ -212,7 +212,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									index,
 									1
 								);
-								this.plugin.save_settings();
+								this.plugin.saveSettings();
 								this.display();
 							});
 					});
@@ -245,7 +245,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							toolbar: ""
 						};
 						this.plugin.settings.folderMappings.push(newMapping);
-						this.plugin.save_settings();
+						this.plugin.saveSettings();
 						this.display();
 					});
 			});
