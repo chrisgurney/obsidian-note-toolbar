@@ -46,7 +46,8 @@ export default class ToolbarSettingsModal extends Modal {
 		nameDescription.append(
 			"Give this toolbar a unique name.",
 			nameDescription.createEl("br"),
-			"If a `notetoolbar` property is set to use this toolbar, it will take precedence over any folder toolbars."
+			(this.plugin.settings.toolbarProp ? 
+				"If a '" + this.plugin.settings.toolbarProp + "' property is set to use this toolbar, it will take precedence over any folder toolbars." : "")
 		);
 
 		let toolbarNameDiv = this.containerEl.createEl("div");

@@ -34,6 +34,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	async saveSettings() {
+		this.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 		await this.saveData(this.settings);
 		// TODO: update the toolbar instead of removing and re-adding to the DOM?
 		await this.removeActiveToolbar();

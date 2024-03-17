@@ -27,9 +27,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	public display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
+		containerEl.createEl("h3", { text: "Note Toolbar" });
 		this.displayToolbarList(containerEl);
-		this.displayFolderMap(containerEl);
 		this.displayOtherOptions(containerEl);
+		this.displayFolderMap(containerEl);
 	}
 
 	displayToolbarList(containerEl: HTMLElement): void {
@@ -242,7 +243,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Property")
-			.setDesc("Frontmatter property to check for the name of the toolbar to use")
+			.setDesc("Frontmatter property to check for the name of the toolbar to use. If this property is set on a note, it takes precedence over any folder toolbars.")
 			.addText(text => text
 				.setPlaceholder('Property')
 				.setValue(this.plugin.settings.toolbarProp)
