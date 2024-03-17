@@ -112,7 +112,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				"Have the toolbar appear in notes matching the provided folders. Matching is done in order of this list, from top to bottom.") })
 			.className = "setting-item-name";
 
-		if (this.plugin.settings.folder_mappings.length == 0) {
+		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
 				.createEl("div", { text: this.emptyMessageFragment("Click the button to create a mapping.") })
 				.className = "setting-item-name";
@@ -121,7 +121,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			let toolbarFolderListDiv = containerEl.createDiv();
 
 			let lastItemIndex = 0;
-			this.plugin.settings.folder_mappings.forEach(
+			this.plugin.settings.folderMappings.forEach(
 				(mapping, index) => {
 
 				lastItemIndex = index;
@@ -142,7 +142,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							.onChange((newFolder) => {
                                 if (
                                     newFolder &&
-                                    this.plugin.settings.folder_mappings.some(
+                                    this.plugin.settings.folderMappings.some(
                                         (e) => e.folder.toLowerCase() == newFolder.toLowerCase()
                                     )
                                 ) {
@@ -154,7 +154,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								else {
 									document.getElementById("note-toolbar-name-error")?.remove();
 									textFieldsDiv.children[0].removeClass("note-toolbar-setting-error");
-									this.plugin.settings.folder_mappings[
+									this.plugin.settings.folderMappings[
 										index
 									].folder = newFolder;
 									this.plugin.save_settings();	
@@ -168,7 +168,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						cb.setPlaceholder("Toolbar")
 							.setValue(mapping.toolbar)
 							.onChange((newToolbar) => {
-                                this.plugin.settings.folder_mappings[
+                                this.plugin.settings.folderMappings[
                                     index
                                 ].toolbar = newToolbar;
                                 this.plugin.save_settings();
@@ -183,7 +183,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							.setTooltip("Move up")
 							.onClick(() => {
 								arraymove(
-									this.plugin.settings.folder_mappings,
+									this.plugin.settings.folderMappings,
 									index,
 									index - 1
 								);
@@ -196,7 +196,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							.setTooltip("Move down")
 							.onClick(() => {
 								arraymove(
-									this.plugin.settings.folder_mappings,
+									this.plugin.settings.folderMappings,
 									index,
 									index + 1
 								);
@@ -208,7 +208,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
 							.onClick(() => {
-								this.plugin.settings.folder_mappings.splice(
+								this.plugin.settings.folderMappings.splice(
 									index,
 									1
 								);
@@ -244,7 +244,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							folder: "",
 							toolbar: ""
 						};
-						this.plugin.settings.folder_mappings.push(newMapping);
+						this.plugin.settings.folderMappings.push(newMapping);
 						this.plugin.save_settings();
 						this.display();
 					});

@@ -204,9 +204,9 @@ export default class ToolbarSettingsModal extends Modal {
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on mobile'))
-							.setValue(toolbarItem.hide_on_mobile)
+							.setValue(toolbarItem.hideOnMobile)
 							.onChange((hideOnMobile) => {
-								toolbarItem.hide_on_mobile = hideOnMobile;
+								toolbarItem.hideOnMobile = hideOnMobile;
 								this.toolbar.updated = new Date().toISOString();
 								this.plugin.save_settings();
 							});
@@ -217,9 +217,9 @@ export default class ToolbarSettingsModal extends Modal {
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on desktop'))
-							.setValue(toolbarItem.hide_on_desktop)
+							.setValue(toolbarItem.hideOnDesktop)
 							.onChange((hideOnDesktop) => {
-								toolbarItem.hide_on_desktop = hideOnDesktop;
+								toolbarItem.hideOnDesktop = hideOnDesktop;
 								this.toolbar.updated = new Date().toISOString();
 								this.plugin.save_settings();
 							});
@@ -240,8 +240,8 @@ export default class ToolbarSettingsModal extends Modal {
 							label: "",
 							url: "",
 							tooltip: "",
-							hide_on_desktop: false,
-							hide_on_mobile: false
+							hideOnDesktop: false,
+							hideOnMobile: false
 						});
 						this.toolbar.updated = new Date().toISOString();
 						this.plugin.save_settings();

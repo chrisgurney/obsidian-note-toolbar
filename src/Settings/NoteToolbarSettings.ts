@@ -1,12 +1,12 @@
 
 export interface NoteToolbarSettings {
 	toolbars: Array<ToolbarSettings>;
-	folder_mappings: Array<FolderMapping>;
+	folderMappings: Array<FolderMapping>;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	toolbars: [],
-	folder_mappings: []
+	folderMappings: []
 }
 
 export interface ToolbarSettings {
@@ -30,6 +30,6 @@ export interface ToolbarItemSettings {
 	label: string;
 	url: string;
 	tooltip: string;
-	hide_on_desktop: boolean;
-	hide_on_mobile: boolean;
+	hideOnDesktop: boolean;
+	hideOnMobile: boolean;
 }

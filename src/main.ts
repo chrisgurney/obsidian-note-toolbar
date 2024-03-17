@@ -96,8 +96,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// check if the note is in a folder that's mapped, and if the mapping is valid
 			let mapping;
-			for (let index = 0; index < this.settings.folder_mappings.length; index++) {
-				mapping = this.settings.folder_mappings[index];
+			for (let index = 0; index < this.settings.folderMappings.length; index++) {
+				mapping = this.settings.folderMappings[index];
 				this.DEBUG && console.log('file-open: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
 				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
@@ -172,9 +172,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbar_item.innerHTML = item.label;
 
 			let note_toolbar_li = document.createElement("li");
-			item.hide_on_mobile ? note_toolbar_li.className = "hide-on-mobile" : false;
-			item.hide_on_desktop ? note_toolbar_li.className += "hide-on-desktop" : false;
-			item.hide_on_desktop ? note_toolbar_li.style.display = "none" : false;
+			item.hideOnMobile ? note_toolbar_li.className = "hide-on-mobile" : false;
+			item.hideOnDesktop ? note_toolbar_li.className += "hide-on-desktop" : false;
+			item.hideOnDesktop ? note_toolbar_li.style.display = "none" : false;
 			note_toolbar_li.append(toolbar_item);
 
 			note_toolbar_ul.appendChild(note_toolbar_li);
