@@ -222,7 +222,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	async toolbarClickHandler(e: MouseEvent) {
 
 		this.DEBUG && console.log('toolbarClickHandler');
-		/* since we might be on a different page now, on click, check if the url needs the date appended */
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let url = clickedEl.getAttribute("href");
 		let noteTitle = this.app.workspace.getActiveFile()?.basename;

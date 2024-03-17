@@ -70,7 +70,6 @@ export default class ToolbarSettingsModal extends Modal {
 						toolbarNameDiv.removeClass("note-toolbar-setting-error");
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
-						// console.log(this.toolbar);
 						await this.plugin.saveSettings();	
 					}
 			}));
@@ -80,7 +79,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// Item list
 		// 
 
-		// TODO: refactor to use variation of headingFragment()
+		// TODO: maybe refactor to use variation of headingFragment()
 		let itemListHeading = createEl("div");
 		itemListHeading.className = "note-toolbar-setting-items-header";
 		let itemListTitle = createEl("div", { text: "Items" });
