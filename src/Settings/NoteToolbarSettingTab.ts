@@ -120,8 +120,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		else {
 			let toolbarFolderListDiv = containerEl.createDiv();
 
+			let lastItemIndex = 0;
 			this.plugin.settings.folder_mappings.forEach(
 				(mapping, index) => {
+
+				lastItemIndex = index;
 
 				let toolbarFolderListItemDiv = containerEl.createDiv();
 				toolbarFolderListItemDiv.style.display = "flex";
@@ -216,6 +219,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 			containerEl.append(toolbarFolderListDiv);
+
+			// set focus on last thing in the list, if the label is empty
+			let inputToFocus = this.containerEl.querySelector('#note-toolbar-setting-item-field-' + lastItemIndex + ' input[type="search"]') as HTMLInputElement;
+			if (inputToFocus?.value.length === 0) {
+				inputToFocus.focus();
+			}
+
 		}
 
 		new Setting(containerEl)
