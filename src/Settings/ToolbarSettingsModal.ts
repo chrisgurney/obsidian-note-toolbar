@@ -80,7 +80,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// Item list
 		// 
 
-		// TODO: refactor to use variation of heading_fragment()
+		// TODO: refactor to use variation of headingFragment()
 		let itemListHeading = createEl("div");
 		itemListHeading.className = "note-toolbar-setting-items-header";
 		let itemListTitle = createEl("div", { text: "Items" });

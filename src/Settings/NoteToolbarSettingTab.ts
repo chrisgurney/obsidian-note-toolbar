@@ -20,29 +20,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
         modal.open();
     }
 
-	headingFragment(title: string, description: string): DocumentFragment {
-		let messageFragment = document.createDocumentFragment();
-		let headingFragmentText = document.createElement("div")
-		headingFragmentText.className = "setting-item-name";
-		headingFragmentText.textContent = title;
-		messageFragment.append(headingFragmentText);
-
-		let descFragmentText = document.createElement("div")
-		descFragmentText.textContent = description;
-		descFragmentText.className = "setting-item-description";
-		descFragmentText.style.paddingBottom = "1em";
-		messageFragment.append(descFragmentText);
-
-		return messageFragment;
-	}
-
-	emptyMessageFragment(text: string): DocumentFragment {
-		let message_fragment = document.createDocumentFragment();
-		let message_fragment_text = document.createElement("i")
-		message_fragment_text.textContent = text;
-		message_fragment.append(message_fragment_text);
-		return message_fragment;
-	}
+	/*************************************************************************
+	 * SETTINGS DISPLAY
+	 *************************************************************************/
 
 	public display(): void {
 		const { containerEl } = this;
@@ -57,7 +37,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
-				.createEl("div", { text: this.emptyMessageFragment("Click the button to create a toolbar.") })
+				.createEl("div", { text: this.emptyMessageFr("Click the button to create a toolbar.") })
 				.className = "setting-item-name";
 		}
 		else {
@@ -69,7 +49,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.setName(toolbarItem.name)
 						.setDesc(toolbarItem.items.length > 0 ? 
 							toolbarItem.items.map(item => item.label).join(' | ') : 
-							this.emptyMessageFragment("No toolbar items. Click Edit to update this toolbar."))
+							this.emptyMessageFr("No toolbar items. Click Edit to update this toolbar."))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setTooltip("Update this toolbar's items")
@@ -107,14 +87,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayFolderMap(containerEl: HTMLElement): void {
 
 		containerEl
-			.createEl("div", { text: this.headingFragment(
+			.createEl("div", { text: this.headingFr(
 				"Folder mappings", 
 				"Have the toolbar appear in notes matching the provided folders. Matching is done in order of this list, from top to bottom.") })
 			.className = "setting-item-name";
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
-				.createEl("div", { text: this.emptyMessageFragment("Click the button to create a mapping.") })
+				.createEl("div", { text: this.emptyMessageFr("Click the button to create a mapping.") })
 				.className = "setting-item-name";
 		}
 		else {
@@ -225,7 +205,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			containerEl.append(toolbarFolderListDiv);
 
 			// set focus on last thing in the list, if the label is empty
-			let inputToFocus = this.containerEl.querySelector('#note-toolbar-setting-item-field-' + lastItemIndex + ' input[type="search"]') as HTMLInputElement;
+			let inputToFocus = this.containerEl.querySelector(
+				'#note-toolbar-setting-item-field-' + lastItemIndex + ' input[type="search"]') as HTMLInputElement;
 			if (inputToFocus?.value.length === 0) {
 				inputToFocus.focus();
 			}
@@ -250,6 +231,34 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+	}
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+	headingFr(title: string, description: string): DocumentFragment {
+		let messageFr = document.createDocumentFragment();
+		let headingFrText = document.createElement("div")
+		headingFrText.className = "setting-item-name";
+		headingFrText.textContent = title;
+		messageFr.append(headingFrText);
+
+		let descFrText = document.createElement("div")
+		descFrText.textContent = description;
+		descFrText.className = "setting-item-description";
+		descFrText.style.paddingBottom = "1em";
+		messageFr.append(descFrText);
+
+		return messageFr;
+	}
+
+	emptyMessageFr(text: string): DocumentFragment {
+		let messageFr = document.createDocumentFragment();
+		let messageFrText = document.createElement("i")
+		messageFrText.textContent = text;
+		messageFr.append(messageFrText);
+		return messageFr;
 	}
 
 }
