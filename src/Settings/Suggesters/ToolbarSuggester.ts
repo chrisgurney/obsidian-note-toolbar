@@ -15,17 +15,17 @@ export class ToolbarSuggest extends TextInputSuggest<ToolbarSettings> {
     }
 
     getSuggestions(inputStr: string): ToolbarSettings[] {
-        const plugin_toolbars = this.plugin.settings.toolbars;
-        const toolbars: ToolbarSettings[] = [];
+        const pluginToolbars = this.plugin.settings.toolbars;
+        const toolbarSuggestions: ToolbarSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        plugin_toolbars.forEach((toolbar: ToolbarSettings) => {
+        pluginToolbars.forEach((toolbar: ToolbarSettings) => {
             if (toolbar.name.toLowerCase().contains(lowerCaseInputStr)) {
-                toolbars.push(toolbar);
+                toolbarSuggestions.push(toolbar);
             }
         });
 
-        return toolbars;
+        return toolbarSuggestions;
     }
 
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
