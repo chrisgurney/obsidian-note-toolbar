@@ -18,7 +18,7 @@ export class DeleteModal extends Modal {
     }
 
     public onOpen() {
-        this.setTitle("Delete " + this.toolbar.name);
+        this.setTitle("Delete toolbar: " + this.toolbar.name);
         this.contentEl.createEl("p", {text: "Are you sure you want to delete this toolbar?"});
         const delete_button = this.contentEl.createEl("button", {text: "Yes, delete"});
         delete_button.onclick = async () => this.delete();
