@@ -35,11 +35,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	displayToolbarList(containerEl: HTMLElement): void {
 
-		containerEl.append(this.headingDiv(
-			containerEl, 
-			"Toolbars", 
-			""
-		));
+		new Setting(containerEl)
+			.setName("Toolbars")
+			.setDesc("Define the toolbars you want to add to your notes");
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
@@ -93,11 +91,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	displayFolderMap(containerEl: HTMLElement): void {
 
-		containerEl.append(this.headingDiv(
-			containerEl, 
-			"Folder mappings", 
-			"Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom."
-		));
+		new Setting(containerEl)
+			.setName("Folder mappings")
+			.setDesc("Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.");
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
@@ -260,35 +256,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
-
-	headingDiv(containerEl: HTMLElement, title: string, description: string): HTMLElement {
-
-		let headingDiv = containerEl.createEl("div");
-		headingDiv.className = "setting-item-name";
-		// headingDiv.style.marginTop = "2em";
-		headingDiv.style.borderTop = "1px solid var(--background-modifier-border)";
-
-		let messageFr = document.createDocumentFragment();
-		let headingFrText = document.createElement("div")
-		headingFrText.className = "setting-item-name";
-		headingFrText.textContent = title;
-		messageFr.append(headingFrText);
-		headingDiv.style.padding = "0.75em 0 0 0";
-
-		if (description) {
-			let descFrText = document.createElement("div")
-			descFrText.textContent = description;
-			descFrText.className = "setting-item-description";
-			descFrText.style.paddingBottom = "1em";
-			messageFr.append(descFrText);
-			headingDiv.style.paddingBottom = "1em";
-		}
-
-		headingDiv.setText(messageFr);
-
-		return headingDiv;
-
-	}
 
 	emptyMessageFr(text: string): DocumentFragment {
 		let messageFr = document.createDocumentFragment();

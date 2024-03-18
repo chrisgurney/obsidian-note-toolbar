@@ -80,16 +80,9 @@ export default class ToolbarSettingsModal extends Modal {
 		// Item list
 		// 
 
-		// TODO: maybe refactor to use variation of headingFragment()
-		let itemListHeading = createEl("div");
-		itemListHeading.className = "note-toolbar-setting-items-header";
-		let itemListTitle = createEl("div", { text: "Items" });
-		itemListTitle.className = "setting-item-info";
-		let itemListDesc = createEl("div", { text: "Items that appear in the toolbar, in order." });
-		itemListDesc.className = "setting-item-description";
-		itemListHeading.append(itemListTitle);
-		itemListHeading.append(itemListDesc);
-		settingsDiv.append(itemListHeading);
+		new Setting(settingsDiv)
+			.setName("Items")
+			.setDesc("Items that appear in the toolbar, in order");
 
 		let lastItemIndex = 0;
 		this.toolbar.items.forEach(
