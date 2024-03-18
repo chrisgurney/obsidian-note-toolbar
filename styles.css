@@ -259,19 +259,21 @@
 }
 
 .note-toolbar-setting-item-style {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em;
     .setting-item {
         border-top: none;
         border: dashed 1px var(--pill-color-remove);
         border-radius: 100px;
         padding: 0 0.5em 0 1em !important;
-        margin-left: 0.25em;
+        flex-wrap: nowrap;
         .is-mobile & {
             flex-direction: row !important;
             align-items: center !important;
         }
         &:first-child {
             border: dashed 1px var(--pill-color-remove) !important;
-            margin-left: 0em !important;
         }
         &:last-child {
             border: none;

@@ -252,7 +252,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let styleDiv = this.containerEl.createEl("div");
 		styleDiv.className = "note-toolbar-setting-item-style";
-		styleDiv.style.display = "flex";
 		this.toolbar.styles.forEach(
 			(style, index) => {
 				new Setting(styleDiv)
