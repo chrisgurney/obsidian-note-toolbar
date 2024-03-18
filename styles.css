@@ -245,6 +245,9 @@
     & .setting-item-info {
         margin-right: 0.5em;
     }
+    & .setting-item-name {
+        color: var(--text-muted);
+    }
 }
 
 .note-toolbar-setting-item-controls {
