@@ -82,7 +82,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Items")
-			.setDesc("Items that appear in the toolbar, in order.");
+			.setDesc("Items that appear in the toolbar, in order.")
+			.setClass("note-toolbar-setting-no-controls");
 
 		let lastItemIndex = 0;
 		this.toolbar.items.forEach(
@@ -248,7 +249,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Style")
-			.setDesc("List of styles to apply to the toolbar (default: border even sticky).");
+			.setDesc("List of styles to apply to the toolbar (default: border even sticky).")
+			.setClass("note-toolbar-setting-no-controls");
 
 		let styleDiv = this.containerEl.createEl("div");
 		styleDiv.className = "note-toolbar-setting-item-style";

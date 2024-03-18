@@ -200,10 +200,10 @@
     padding-bottom: 1em;
 }
 
-.note-toolbar-setting-items-header {
-    padding: 0.5em 0 0 0;
-    border-top: 1px solid var(--background-modifier-border);
-    flex-direction: column;
+.note-toolbar-setting-no-controls {
+    & .setting-item-control {
+        display: none;
+    }
 }
 
 .note-toolbar-setting-item-delete-button {

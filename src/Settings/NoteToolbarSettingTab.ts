@@ -37,7 +37,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Toolbars")
-			.setDesc("Define the toolbars you want to add to your notes.");
+			.setDesc("Define the toolbars you want to add to your notes.")
+			.setClass("note-toolbar-setting-no-controls");
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
@@ -93,7 +94,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Folder mappings")
-			.setDesc("Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.");
+			.setDesc("Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.")
+			.setClass("note-toolbar-setting-no-controls");
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
