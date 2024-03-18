@@ -116,8 +116,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 				let textFieldsDiv = this.containerEl.createEl("div");
 				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
-				textFieldsDiv.style.display = "flex";
-				textFieldsDiv.style.flexWrap = "wrap";
+				textFieldsDiv.className = "note-toolbar-setting-item-fields";
 				const fs = new Setting(textFieldsDiv)
 					.setClass("note-toolbar-setting-item-field")
 					.addSearch((cb) => {

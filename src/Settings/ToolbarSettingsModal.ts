@@ -98,8 +98,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 				let textFieldsContainer = this.containerEl.createEl("div");
 				textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
-				textFieldsContainer.style.display = "flex";
-				textFieldsContainer.style.flexWrap = "wrap";
+				textFieldsContainer.className = "note-toolbar-setting-item-fields";
 				const s1a = new Setting(textFieldsContainer)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text

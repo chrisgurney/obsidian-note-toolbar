@@ -214,12 +214,26 @@
     width: 100%;
 }
 
+.note-toolbar-setting-item-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+}
+
 .note-toolbar-setting-item-field {
     margin-right: 1em;
     border-top: none;
     padding-top: 0 !important;
+    .is-mobile & {
+        padding-bottom: 0 !important;
+    }
     & .setting-item-info {
         margin-right: 0;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
     }
 }
 
@@ -232,6 +246,9 @@
         width: 100%;
         & input[type="text"] {
             width: 100%;
+        }
+        .is-mobile & {
+            margin-top: 0 !important;
         }
     }
 }
