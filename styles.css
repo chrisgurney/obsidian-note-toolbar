@@ -253,7 +253,7 @@
         }
     }
 
-    /* old dataview version that's injected between the properties and content containers */
+    /* TODO: remove: old dataview version code */
     &.dv-cg-note-toolbar {
         margin-bottom: 1rem;
         .is-mobile & {

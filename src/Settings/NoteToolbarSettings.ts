@@ -38,6 +38,9 @@ export interface ToolbarItemSettings {
 	hideOnMobile: boolean;
 }
 
+/**
+ * Each of these correlates to (style) metatdata that's matched in styles.css.
+ */
 export const DEFAULT_STYLE_OPTIONS = [
     { border: "border" },
 	{ noborder: "no border" },
@@ -52,6 +55,9 @@ export const DEFAULT_STYLE_OPTIONS = [
     { nosticky: "not sticky" },
 ];
 
+/**
+ * Each of these correlates to (style) metatdata that's matched in styles.css.
+ */
 export const MOBILE_STYLE_OPTIONS = [
     { mbrder: "border" },
     { mnbrder: "no border" },
