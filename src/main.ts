@@ -47,6 +47,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	getToolbarSettingsFromProps(names: string[] | null): ToolbarSettings | undefined {
 		if (!names) return undefined;
+		if (typeof names === "string") {
+			return this.getToolbarSettings(names);
+		}
 		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
 	}
 
