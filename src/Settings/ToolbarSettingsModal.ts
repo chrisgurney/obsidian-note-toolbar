@@ -272,6 +272,31 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 		});
 
+		new Setting(styleDiv)
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOptions({ 
+						border: "border", 
+						center: "center", 
+						even: "even", 
+						float: "float", 
+						right: "right", 
+						sticky: "sticky", 
+					})
+					.setValue(this.toolbar.styles.join(", ") || "")
+					.onChange((val) => {
+						if (this.toolbar.styles.includes(val)) {
+							this.toolbar.styles =
+								this.toolbar.styles.filter((i) => i !== val);
+						} 
+						else {
+							this.toolbar.styles.push(val);
+						}
+						this.plugin.saveSettings();
+						this.displayToolbarSettings();
+					})
+		);
+
 		settingsDiv.append(styleDiv);
 
 		//

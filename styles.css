@@ -261,12 +261,30 @@
 .note-toolbar-setting-item-style {
     .setting-item {
         border-top: none;
-        padding: 0em 0em 0em 0.75em !important;
+        border: dashed 1px var(--pill-color-remove);
+        border-radius: 100px;
+        padding: 0 0.5em 0 1em !important;
+        margin-left: 0.25em;
+        .is-mobile & {
+            flex-direction: row !important;
+            align-items: center !important;
+        }
         &:first-child {
+            border: dashed 1px var(--pill-color-remove) !important;
+            margin-left: 0em !important;
+        }
+        &:last-child {
+            border: none;
             padding-left: 0em !important;
         }
         & .setting-item-info {
             margin-right: 0.25em;
+            color: var(--pill-color);
+        }
+        & .setting-item-control {
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
         }
     }
 }
