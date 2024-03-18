@@ -283,6 +283,10 @@
     }
 }
 
+.note-toolbar-setting-item-styles {
+    border-top: none;
+}
+
 .note-toolbar-setting-item-style {
     display: flex;
     flex-wrap: wrap;
@@ -290,8 +294,8 @@
     .setting-item {
         border-top: none;
         border: dashed 1px var(--pill-color-remove);
-        border-radius: 100px;
-        padding: 0 0.5em 0 1em !important;
+        border-radius: var(--pill-radius);
+        padding: 0 0.25em 0 0.75em !important;
         flex-wrap: nowrap;
         .is-mobile & {
             flex-direction: row !important;
@@ -307,8 +311,13 @@
         & .setting-item-info {
             margin-right: 0.25em;
             color: var(--pill-color);
+            & .setting-item-name {
+                font-size: var(--metadata-input-font-size);
+            }
         }
         & .setting-item-control {
+            --icon-size: var(--icon-xs);
+            --icon-stroke: var(--icon-xs-stroke-width);
             .is-mobile & {
                 margin-top: 0 !important;
             }

@@ -285,7 +285,7 @@ export default class ToolbarSettingsModal extends Modal {
 		);
 
 		new Setting(settingsDiv)
-			.setName("Style")
+			.setName("Styles")
 			.setDesc(stylingDescription)
 			.setClass("note-toolbar-setting-no-controls");
 
