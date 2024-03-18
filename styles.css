@@ -297,6 +297,7 @@
         border-radius: var(--pill-radius);
         padding: 0 0.25em 0 0.75em !important;
         flex-wrap: nowrap;
+        height: var(--input-height);
         .is-mobile & {
             flex-direction: row !important;
             align-items: center !important;
@@ -320,6 +321,10 @@
             --icon-stroke: var(--icon-xs-stroke-width);
             .is-mobile & {
                 margin-top: 0 !important;
+            }
+            & select[class="dropdown"] {
+                border-radius: 2em;
+                font-size: var(--metadata-input-font-size);
             }
         }
     }
