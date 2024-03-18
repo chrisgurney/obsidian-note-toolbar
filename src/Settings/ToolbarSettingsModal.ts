@@ -19,7 +19,6 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	onOpen() {
-		// const { contentEl } = this;
 		this.displayToolbarSettings();
 	}
 
@@ -28,6 +27,10 @@ export default class ToolbarSettingsModal extends Modal {
 		contentEl.empty();
 		this.parent.display();
 	}
+
+	/*************************************************************************
+	 * SETTINGS DISPLAY
+	 *************************************************************************/
 
 	public displayToolbarSettings() {
 
@@ -38,9 +41,22 @@ export default class ToolbarSettingsModal extends Modal {
 		let settingsDiv = this.containerEl.createEl("div");
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
 
-		//
-		// Toolbar name
-		// 
+		this.displayNameSetting(settingsDiv);
+		this.displayItemList(settingsDiv);
+		this.displayStyleSetting(settingsDiv);
+		this.displayDeleteButton(settingsDiv);
+
+		this.contentEl.appendChild(settingsDiv);
+
+		// set focus on last item in the list, if the label is empty
+		let inputToFocus = this.contentEl.querySelector('#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]') as HTMLInputElement;
+		if (inputToFocus?.value.length === 0) {
+			inputToFocus.focus();
+		}
+
+	}
+
+	displayNameSetting(settingsDiv: HTMLElement) {
 
 		const nameDescription = document.createDocumentFragment();
 		nameDescription.append(
@@ -76,9 +92,9 @@ export default class ToolbarSettingsModal extends Modal {
 			}));
 		settingsDiv.append(toolbarNameDiv);
 
-		//
-		// Item list
-		// 
+	}
+
+	displayItemList(settingsDiv: HTMLElement) {
 
 		const itemsDescription = document.createDocumentFragment();
 		itemsDescription.append(
@@ -97,10 +113,8 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(itemsDescription)
 			.setClass("note-toolbar-setting-no-controls");
 
-		let lastItemIndex = 0;
 		this.toolbar.items.forEach(
 			(toolbarItem, index) => {
-				lastItemIndex = index;
 				let itemDiv = this.containerEl.createEl("div");
 				itemDiv.className = "note-toolbar-setting-item";
 				let row1Container = this.containerEl.createEl("div");
@@ -254,9 +268,9 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			});
 
-		//
-		// Styling
-		//
+	}
+
+	displayStyleSetting(settingsDiv: HTMLElement) {
 
 		const stylingDescription = document.createDocumentFragment();
 		stylingDescription.append(
@@ -323,9 +337,9 @@ export default class ToolbarSettingsModal extends Modal {
 
 		settingsDiv.append(styleDiv);
 
-		//
-		// Delete
-		// 
+	}
+
+	displayDeleteButton(settingsDiv: HTMLElement) {
 
 		new Setting(settingsDiv)
 			.setName("Delete this toolbar")
@@ -342,14 +356,6 @@ export default class ToolbarSettingsModal extends Modal {
 						modal.open();
 					});
 			});
-
-		this.contentEl.appendChild(settingsDiv);
-
-		// set focus on last thing in the list, if the label is empty
-		let inputToFocus = this.contentEl.querySelector('#note-toolbar-setting-item-field-' + lastItemIndex + ' input[type="text"]') as HTMLInputElement;
-		if (inputToFocus?.value.length === 0) {
-			inputToFocus.focus();
-		}
 
 	}
 
