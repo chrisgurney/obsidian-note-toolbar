@@ -217,18 +217,14 @@
 .note-toolbar-setting-item-fields {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
+    gap: 0 1em;
 }
 
 .note-toolbar-setting-item-field {
-    margin-right: 1em;
     border-top: none;
     padding-top: 0 !important;
-    .is-mobile & {
-        padding-bottom: 0 !important;
-    }
     & .setting-item-info {
-        margin-right: 0;
+        display: none;
     }
     & .setting-item-control {
         .is-mobile & {
@@ -269,8 +265,16 @@
 
 .note-toolbar-setting-item-controls {
     .setting-item {
+        & .setting-item-info {
+            display: none;
+        }
         .is-mobile & {
             padding-top: 0 !important;
+        }
+        & .setting-item-control {
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
         }
     }
 }
