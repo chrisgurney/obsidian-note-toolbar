@@ -3,13 +3,16 @@
  * 
  * Author: Chris Gurney https://chrisgurney.ca/ https://github.com/chrisgurney/
  * License: Feel free to use and modify. Attribution would be appreciated.
- * Version: 20240301.1
+ * Version: 20240318.0
  * 
  * Adds an unobtrusive toolbar that blends well with your Obsidian note, made 
  * up of any items you provide in a standard markdown list.
  * 
  * INSTALLATION
  * 
+ * Install the obsidian-note-toolbar plugin via Community Plugins.
+ *
+ * OR
  *   1. Add this CSS file to your .obsidian/snippets folder in your vault.
  *   2. Enable it in Obsidian Settings... > Appearance > CSS Snippets
  * 
@@ -66,8 +69,27 @@
     position: sticky;
     top: -2.5rem;
     z-index: 2;
+}
+
+.is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
+    position: sticky;
+    z-index: 2;
+}
+
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
     .is-mobile & {
-        /* top: -1rem; */ /* replace with this line to make sticky on mobile */
+        top: -1rem;
+    }
+}
+
+/* default, if not specified */
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
+    top: inherit;
+    position: relative;
+}
+
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
+    .is-mobile & {
         top: inherit;
         position: relative;
     }
@@ -138,28 +160,100 @@
         justify-content: center;
     }
     
+    &[data-callout-metadata*="mctr"] ul {
+        .is-mobile & {
+            justify-content: center;
+        }
+    }
+
     &[data-callout-metadata*="even"] ul {
         justify-content: space-evenly;
     }
     
+    &[data-callout-metadata*="mevn"] ul {
+        .is-mobile & {
+            justify-content: space-evenly;
+        }
+    }
+
+    /* default, if not specified */
+    &[data-callout-metadata*="left"] ul {
+        justify-content: left;
+    }
+    
+    &[data-callout-metadata*="mlft"] ul {
+        .is-mobile & {
+            justify-content: left;
+        }
+    }
+
     &[data-callout-metadata*="right"] ul {
         justify-content: right;
     }
     
+    &[data-callout-metadata*="mrght"] ul {
+        .is-mobile & {
+            justify-content: right;
+        }
+    }
+
     &[data-callout-metadata*="border"] {
         border-top: solid 1px var(--hr-color);
         border-bottom: solid 1px var(--hr-color);
-        border-radius: 0;    
+        border-radius: 0;
     }
 
-    &[data-callout-metadata*="float"] {
-        float: right;
+    &[data-callout-metadata*="mbrder"] {
+        .is-mobile & {
+            border-top: solid 1px var(--hr-color);
+            border-bottom: solid 1px var(--hr-color);
+            border-radius: 0;
+        }
+    }
+
+    /* default, if not specified */
+    &[data-callout-metadata*="noborder"] {
+        border: inherit;
+    }
+
+    &[data-callout-metadata*="mnbrder"] {
+        .is-mobile & {
+            border: inherit;
+        }
+    }
+
+    /* default, if not specified */
+    &[data-callout-metadata*="nofloat"] {
+        float: inherit;
+    }
+
+    &[data-callout-metadata*="mnflt"] {
         .is-mobile & {
             float: inherit;
         }
     }
 
-    /* dataview version that's injected between the properties and content containers */
+    &[data-callout-metadata*="floatr"] {
+        float: right;
+    }
+
+    &[data-callout-metadata*="mfltr"] {
+        .is-mobile & {
+            float: right;
+        }
+    }
+
+    &[data-callout-metadata*="floatl"] {
+        float: left;
+    }
+
+    &[data-callout-metadata*="mfltl"] {
+        .is-mobile & {
+            float: left;
+        }
+    }
+
+    /* old dataview version that's injected between the properties and content containers */
     &.dv-cg-note-toolbar {
         margin-bottom: 1rem;
         .is-mobile & {
@@ -170,7 +264,7 @@
 }
 
 /*****************************************************************************
-* Settings
+* Settings Styles (for Note Toolbar Plugin)
 ******************************************************************************/
 
 .note-toolbar-setting-toolbar-list, .note-toolbar-setting-item {
