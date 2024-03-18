@@ -82,7 +82,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Items")
-			.setDesc("Items that appear in the toolbar, in order");
+			.setDesc("Items that appear in the toolbar, in order.");
 
 		let lastItemIndex = 0;
 		this.toolbar.items.forEach(
@@ -248,7 +248,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Style")
-			.setDesc("List of styles to apply to the toolbar");
+			.setDesc("List of styles to apply to the toolbar (default: border even sticky).");
 
 		let styleDiv = this.containerEl.createEl("div");
 		styleDiv.className = "note-toolbar-setting-item-style";
@@ -280,7 +280,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Delete this toolbar")
-			.setDesc("This action cannot be undone")
+			.setDesc("This action cannot be undone.")
 			.setClass("note-toolbar-setting-item-delete-button")
 			.addButton((button: ButtonComponent) => {
 				button

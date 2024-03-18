@@ -37,7 +37,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Toolbars")
-			.setDesc("Define the toolbars you want to add to your notes");
+			.setDesc("Define the toolbars you want to add to your notes.");
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
@@ -130,7 +130,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                     )
                                 ) {
 									textFieldsDiv.createEl("div", { 
-										text: "This folder already has a toolbar associated with it", 
+										text: "This folder already has a toolbar associated with it.", 
 										attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
 									textFieldsDiv.children[0].addClass("note-toolbar-setting-error");
                                 }
