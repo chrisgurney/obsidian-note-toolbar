@@ -243,7 +243,39 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 
 		//
-		// Delete toolbar
+		// Styling
+		//
+
+		new Setting(settingsDiv)
+			.setName("Style")
+			.setDesc("List of styles to apply to the toolbar");
+
+		let styleDiv = this.containerEl.createEl("div");
+		styleDiv.className = "note-toolbar-setting-item-style";
+		styleDiv.style.display = "flex";
+		this.toolbar.styles.forEach(
+			(style, index) => {
+				new Setting(styleDiv)
+					.setName(style)
+					.addExtraButton((cb) => {
+						cb.setIcon("cross")
+							.setTooltip("Delete")
+							.onClick(() => {
+								this.toolbar.styles.splice(
+									index,
+									1
+								);
+								this.toolbar.updated = new Date().toISOString();
+								this.plugin.saveSettings();
+								this.displayToolbarSettings();
+							});
+					});
+		});
+
+		settingsDiv.append(styleDiv);
+
+		//
+		// Delete
 		// 
 
 		new Setting(settingsDiv)

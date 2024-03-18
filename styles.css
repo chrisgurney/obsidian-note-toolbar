@@ -258,6 +258,19 @@
     }
 }
 
+.note-toolbar-setting-item-style {
+    .setting-item {
+        border-top: none;
+        padding: 0em 0em 0em 0.75em !important;
+        &:first-child {
+            padding-left: 0em !important;
+        }
+        & .setting-item-info {
+            margin-right: 0.25em;
+        }
+    }
+}
+
 .note-toolbar-setting-confirm-dialog {
     width: 50%;
 }
