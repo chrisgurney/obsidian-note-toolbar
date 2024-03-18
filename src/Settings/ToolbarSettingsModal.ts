@@ -80,9 +80,21 @@ export default class ToolbarSettingsModal extends Modal {
 		// Item list
 		// 
 
+		const itemsDescription = document.createDocumentFragment();
+		itemsDescription.append(
+			"Items that appear in the toolbar, in order.",
+			itemsDescription.createEl("br"),
+			"See the ",
+			itemsDescription.createEl("a", {
+				href: "https://github.com/chrisgurney/obsidian-note-toolbar",
+				text: "documentation",
+			}),
+			" about variables supported in URLs."
+		);
+
 		new Setting(settingsDiv)
 			.setName("Items")
-			.setDesc("Items that appear in the toolbar, in order.")
+			.setDesc(itemsDescription)
 			.setClass("note-toolbar-setting-no-controls");
 
 		let lastItemIndex = 0;
@@ -246,9 +258,21 @@ export default class ToolbarSettingsModal extends Modal {
 		// Styling
 		//
 
+		const stylingDescription = document.createDocumentFragment();
+		stylingDescription.append(
+			"List of styles to apply to the toolbar (default: border even sticky).",
+			stylingDescription.createEl("br"),
+			"See the ",
+			stylingDescription.createEl("a", {
+				href: "https://github.com/chrisgurney/obsidian-note-toolbar",
+				text: "documentation",
+			}),
+			" about the list of supported styles."
+		);
+
 		new Setting(settingsDiv)
 			.setName("Style")
-			.setDesc("List of styles to apply to the toolbar (default: border even sticky).")
+			.setDesc(stylingDescription)
 			.setClass("note-toolbar-setting-no-controls");
 
 		let styleDiv = this.containerEl.createEl("div");
