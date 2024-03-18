@@ -251,7 +251,10 @@
 
 .note-toolbar-setting-item-toggle {
     border-top: none;
-    padding: 0.75em 0 0.75em 1em !important;
+    padding-top: 0.75em 0;
+    &:not(:first-child) {
+        padding-left: 1em !important;
+    }
     .is-mobile & {
         padding-bottom: 0em !important;
     }
@@ -260,6 +263,7 @@
     }
     & .setting-item-name {
         color: var(--text-muted);
+        font-size: var(--font-ui-smaller);
     }
 }
 
