@@ -196,8 +196,8 @@
 
 .note-toolbar-setting-button {
     border-top: none;
-    padding-top: 0;
-    padding-bottom: 1em;
+    padding-top: 0 !important;
+    padding-bottom: 1em !important;
 }
 
 .note-toolbar-setting-no-controls {
