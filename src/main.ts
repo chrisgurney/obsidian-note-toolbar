@@ -243,7 +243,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		noteToolbarCallout.className = "callout dv-cg-note-toolbar";
 		noteToolbarCallout.setAttribute("tabindex", "0");
 		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
-		noteToolbarCallout.setAttribute("data-callout-metadata", toolbar.defaultStyles.join('-'));
+		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 		noteToolbarCallout.setAttribute("data-name", toolbar.name);
 		noteToolbarCallout.setAttribute("data-updated", toolbar.updated);
 		noteToolbarCallout.append(noteToolbarCalloutContent);
