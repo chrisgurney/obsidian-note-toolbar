@@ -1,6 +1,6 @@
 import { CachedMetadata, Editor, FrontMatterCache, MarkdownView, MetadataCache, Notice, Plugin, TFile } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings } from './Settings/NoteToolbarSettings';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -29,8 +29,53 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * SETTINGS LOADERS
 	 *************************************************************************/
 
+	/**
+	 * Loads settings and migrates from old versions if needed.
+	 * 
+	 * No need to update version number in this function; just update in NoteToolbarSettings,
+	 * and don't forget to update user-facing version in manifest.json on release.
+	 * 
+	 * Credit to Fevol on Discord for the sample code to migrate.
+	 * @link https://discord.com/channels/686053708261228577/840286264964022302/1213507979782127707
+	 */
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+
+		const loaded_settings = await this.loadData();
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
+
+		const old_version = loaded_settings.version as number;
+		console.log("loadSettings: loaded settings version: " + old_version);
+
+		if (old_version !== SETTINGS_VERSION) {
+
+			// first version without update (i.e., version is `undefined`)           
+			if (!old_version) {
+				// migrate from first version to current version
+				// for each: double-check setting to migrate is there
+				console.log("- starting migration for version: " + old_version + " to " + SETTINGS_VERSION);
+				// migration: moved styles to defaultStyles (and introduced mobileStyles)
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					if (tb.styles) {
+						console.log("\t- OLD SETTING: " + tb.styles);
+						console.log("\t\t- SETTING: this.settings.toolbars[index].defaultStyles: " + this.settings.toolbars[index].defaultStyles);
+						this.settings.toolbars[index].defaultStyles = tb.styles;
+						console.log("\t\t- SET: " + this.settings.toolbars[index].defaultStyles);
+						console.log("\t\t- SETTING: this.settings.toolbars[index].mobileStyles = []");
+						this.settings.toolbars[index].mobileStyles = [];
+						delete tb.styles;
+					}
+				});
+			}
+			// other migrations can go here in elseifs
+
+			console.log("updated settings:");
+			console.log(this.settings);
+
+			// ensure that migrated settings are saved 
+			await this.saveSettings();
+
+		}
+
 	}
 
 	async saveSettings() {

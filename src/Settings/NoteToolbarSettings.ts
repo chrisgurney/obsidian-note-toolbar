@@ -1,11 +1,15 @@
 
+export const SETTINGS_VERSION = 20240318.1;
+
 export interface NoteToolbarSettings {
+	version: number;
 	toolbars: Array<ToolbarSettings>;
 	folderMappings: Array<FolderMapping>;
 	toolbarProp: string;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+	version: SETTINGS_VERSION,
 	toolbars: [],
 	folderMappings: [],
 	toolbarProp: "notetoolbar"
