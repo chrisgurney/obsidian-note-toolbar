@@ -65,6 +65,35 @@
     }
 }
 
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
+    position: sticky;
+    top: -2.5rem;
+    z-index: 2;
+}
+
+.is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
+    position: sticky;
+    z-index: 2;
+}
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
+    .is-mobile & {
+        top: -1rem;
+    }
+}
+
+/* default, if not specified */
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
+    top: inherit;
+    position: relative;
+}
+
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
+    .is-mobile & {
+        top: inherit;
+        position: relative;
+    }
+}
+
 .callout[data-callout="note-toolbar"] {
 
     background-color: var(--background-primary);
@@ -126,9 +155,9 @@
 
     }
 
-    /*
+    /*************************************************************************
      * Toolbar Styles (sticky's at top)
-     */
+     *************************************************************************/
 
     &[data-callout-metadata*="border"] {
         border-top: solid 1px var(--hr-color);
@@ -227,36 +256,7 @@
         }
     }
 
-    .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
-        position: sticky;
-        top: -2.5rem;
-        z-index: 2;
-    }
-    
-    .is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-        position: sticky;
-        z-index: 2;
-    }
-    .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-        .is-mobile & {
-            top: -1rem;
-        }
-    }
-    
-    /* default, if not specified */
-    .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
-        top: inherit;
-        position: relative;
-    }
-    
-    .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
-        .is-mobile & {
-            top: inherit;
-            position: relative;
-        }
-    }
-
-    /* TODO: remove: old dataview version code */
+    /* TODO REMOVE: old dataview version code */
     &.dv-cg-note-toolbar {
         margin-bottom: 1rem;
         .is-mobile & {
