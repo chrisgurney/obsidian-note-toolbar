@@ -19,7 +19,7 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	onOpen() {
-		this.displayToolbarSettings();
+		this.display();
 	}
 
 	onClose() {
@@ -35,7 +35,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * 
 	 */
-	public displayToolbarSettings() {
+	public display() {
 
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
@@ -187,7 +187,7 @@ export default class ToolbarSettingsModal extends Modal {
 								);
 								this.toolbar.updated = new Date().toISOString();
 								this.plugin.saveSettings();
-								this.displayToolbarSettings();
+								this.display();
 							});
 					})
 					.addExtraButton((cb) => {
@@ -201,7 +201,7 @@ export default class ToolbarSettingsModal extends Modal {
 								);
 								this.toolbar.updated = new Date().toISOString();
 								this.plugin.saveSettings();
-								this.displayToolbarSettings();
+								this.display();
 							});
 					})
 					.addExtraButton((cb) => {
@@ -214,7 +214,7 @@ export default class ToolbarSettingsModal extends Modal {
 								);
 								this.toolbar.updated = new Date().toISOString();
 								this.plugin.saveSettings();
-								this.displayToolbarSettings();
+								this.display();
 							});
 					});
 
@@ -275,7 +275,7 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 						this.toolbar.updated = new Date().toISOString();
 						this.plugin.saveSettings();
-						this.displayToolbarSettings();
+						this.display();
 					});
 			});
 
@@ -325,7 +325,7 @@ export default class ToolbarSettingsModal extends Modal {
 								);
 								this.toolbar.updated = new Date().toISOString();
 								this.plugin.saveSettings();
-								this.displayToolbarSettings();
+								this.display();
 							});
 					});
 		});
@@ -347,7 +347,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.defaultStyles.push(val);
 						}
 						this.plugin.saveSettings();
-						this.displayToolbarSettings();
+						this.display();
 					})
 		);
 
@@ -384,7 +384,7 @@ export default class ToolbarSettingsModal extends Modal {
 									);
 									this.toolbar.updated = new Date().toISOString();
 									this.plugin.saveSettings();
-									this.displayToolbarSettings();
+									this.display();
 								});
 						});
 			});
@@ -408,7 +408,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.mobileStyles.push(val);
 						}
 						this.plugin.saveSettings();
-						this.displayToolbarSettings();
+						this.display();
 					})
 		);
 
