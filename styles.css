@@ -417,6 +417,7 @@
     align-items: center;
     justify-content: end;
     gap: 0.25em;
+    width: 100%;
     .setting-item {
         border-top: none;
         border: dashed 1px var(--pill-color-remove);
@@ -449,9 +450,13 @@
             .is-mobile & {
                 margin-top: 0 !important;
             }
+            .is-phone & {
+                width: inherit !important;
+            }
             & select[class="dropdown"] {
                 border-radius: 2em;
                 font-size: var(--metadata-input-font-size);
+                max-width: 50%;
             }
         }
     }
