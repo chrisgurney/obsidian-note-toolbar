@@ -311,24 +311,35 @@ export default class ToolbarSettingsModal extends Modal {
 		let defaultStyleDiv = this.containerEl.createDiv();
 		defaultStyleDiv.className = "note-toolbar-setting-item-style";
 
-		this.toolbar.defaultStyles.forEach(
-			(style, index) => {
-				new Setting(defaultStyleDiv)
-					.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
-					.addExtraButton((cb) => {
-						cb.setIcon("cross")
-							.setTooltip("Delete")
-							.onClick(() => {
-								this.toolbar.defaultStyles.splice(
-									index,
-									1
-								);
-								this.toolbar.updated = new Date().toISOString();
-								this.plugin.saveSettings();
-								this.display();
-							});
-					});
-		});
+		if (this.toolbar.defaultStyles.length == 0) {
+			let emptyMsg = this.containerEl.createEl("div", 
+				{ text: emptyMessageFr("No default styles set.") });
+			emptyMsg.className = "note-toolbar-setting-empty-message";
+			emptyMsg.style.height = "var(--input-height)";
+			defaultStyleDiv.append(emptyMsg);
+		}
+		else {
+
+			this.toolbar.defaultStyles.forEach(
+				(style, index) => {
+					new Setting(defaultStyleDiv)
+						.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
+						.addExtraButton((cb) => {
+							cb.setIcon("cross")
+								.setTooltip("Delete")
+								.onClick(() => {
+									this.toolbar.defaultStyles.splice(
+										index,
+										1
+									);
+									this.toolbar.updated = new Date().toISOString();
+									this.plugin.saveSettings();
+									this.display();
+								});
+						});
+			});
+
+		}
 
 		new Setting(defaultStyleDiv)
 			.addDropdown((dropdown) =>
@@ -353,6 +364,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Default")
+			.setDesc("Applies to all unless overridden.")
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(defaultStyleDiv);
 
@@ -364,9 +376,11 @@ export default class ToolbarSettingsModal extends Modal {
 		mobileStyleDiv.className = "note-toolbar-setting-item-style";
 
 		if (this.toolbar.mobileStyles.length == 0) {
-			mobileStyleDiv
-				.createEl("div", { text: emptyMessageFr("No mobile styles set.") })
-				.className = "note-toolbar-setting-empty-message";
+			let emptyMsg = this.containerEl.createEl("div", 
+				{ text: emptyMessageFr("No mobile styles set.") });
+			emptyMsg.className = "note-toolbar-setting-empty-message";
+			emptyMsg.style.height = "var(--input-height)";
+			mobileStyleDiv.append(emptyMsg);
 		}
 		else {
 
@@ -414,7 +428,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Mobile")
-			.setDesc("Override default styles")
+			.setDesc("Override default styles.")
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(mobileStyleDiv);
 

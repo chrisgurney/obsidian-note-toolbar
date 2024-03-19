@@ -414,6 +414,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: end;
     gap: 0.25em;
     .setting-item {
         border-top: none;
@@ -431,7 +432,8 @@
         }
         &:last-child {
             border: none !important;
-            padding-left: 0em !important;
+            padding: 0em !important;
+            flex-basis: 100%;
         }
         & .setting-item-info {
             margin-right: 0.25em;
