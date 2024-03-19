@@ -466,20 +466,16 @@
     width: 50%;
 }
 
-.note-toolbar-setting-modal-container .modal-title {
-    .is-mobile & {
-        /* modals opened from modals seem to have a large title for the "safe area", but are shifted down, so we'll remove it here */
-        padding: var(--size-4-3);
+.note-toolbar-setting-modal-container {
+    .is-phone & {
+        /* fix for Obsidian 1.5.11: modals opened from settings have an inaccessible close button */
+        top: var(--safe-area-inset-top);
     }
 }
 
 .vertical-tab-content.note-toolbar-setting-modal {
-    padding-top: var(--size-4-8);
     padding-left: var(--size-4-5);
     padding-right: var(--size-4-5);
-    .is-mobile & {
-        padding-top: 0 !important;
-    }
     .setting-item {
         .is-mobile & {
             padding-top: var(--size-4-2);
