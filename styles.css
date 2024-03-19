@@ -463,7 +463,7 @@
 
 .note-toolbar-setting-modal-container {
     .is-phone & {
-        /* fix for Obsidian 1.5.11: modals opened from settings have an inaccessible close button */
+        /* fix/workaround for Obsidian v1.5.11 bug: modals opened from settings have an inaccessible close button */
         top: var(--safe-area-inset-top);
     }
 }
@@ -471,10 +471,4 @@
 .vertical-tab-content.note-toolbar-setting-modal {
     padding-left: var(--size-4-5);
     padding-right: var(--size-4-5);
-    .setting-item {
-        .is-mobile & {
-            padding-top: var(--size-4-2);
-            padding-bottom: var(--size-4-2);
-        }
-    }
 }
