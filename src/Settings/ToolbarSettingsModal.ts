@@ -314,7 +314,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.toolbar.defaultStyles.forEach(
 			(style, index) => {
 				new Setting(defaultStyleDiv)
-					.setName(style)
+					.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
 					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
@@ -373,7 +373,7 @@ export default class ToolbarSettingsModal extends Modal {
 			this.toolbar.mobileStyles.forEach(
 				(style, index) => {
 					new Setting(mobileStyleDiv)
-						.setName(style)
+						.setName(this.getValueForKey(MOBILE_STYLE_OPTIONS, style))
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
 								.setTooltip("Delete")
@@ -441,6 +441,15 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			});
 
+	}
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+	getValueForKey(styleDict: {[key: string]: string}[], key: string): string {
+		const option = styleDict.find(option => key in option);
+		return option ? Object.values(option)[0] : 'INVALID OPTION';
 	}
 
 }

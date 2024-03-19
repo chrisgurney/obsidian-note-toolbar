@@ -47,7 +47,7 @@ export interface ToolbarItemSettings {
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
-export const DEFAULT_STYLE_OPTIONS = [
+export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
     { border: "border" },
 	{ noborder: "no border" },
     { center: "center" },
@@ -64,7 +64,7 @@ export const DEFAULT_STYLE_OPTIONS = [
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
-export const MOBILE_STYLE_OPTIONS = [
+export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mbrder: "border" },
     { mnbrder: "no border" },
     { mctr: "center" },
