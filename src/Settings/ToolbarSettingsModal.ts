@@ -32,6 +32,9 @@ export default class ToolbarSettingsModal extends Modal {
 	 * SETTINGS DISPLAY
 	 *************************************************************************/
 
+	/**
+	 * 
+	 */
 	public displayToolbarSettings() {
 
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
@@ -56,6 +59,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 	}
 
+	/**
+	 * 
+	 * @param settingsDiv HTMLElement to add the settings to.
+	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
 		const nameDescription = document.createDocumentFragment();
@@ -94,6 +101,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 	}
 
+	/**
+	 * 
+	 * @param settingsDiv HTMLElement to add the settings to.
+	 */
 	displayItemList(settingsDiv: HTMLElement) {
 
 		const itemsDescription = document.createDocumentFragment();
@@ -270,6 +281,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 	}
 
+	/**
+	 * 
+	 * @param settingsDiv HTMLElement to add the settings to.
+	 */
 	displayStyleSetting(settingsDiv: HTMLElement) {
 
 		const stylingDescription = document.createDocumentFragment();
@@ -404,6 +419,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 	}
 
+	/**
+	 * 
+	 * @param settingsDiv HTMLElement to add the settings to.
+	 */
 	displayDeleteButton(settingsDiv: HTMLElement) {
 
 		new Setting(settingsDiv)
