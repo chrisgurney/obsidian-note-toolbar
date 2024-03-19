@@ -65,18 +65,10 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
-		const nameDescription = document.createDocumentFragment();
-		nameDescription.append(
-			"Give this toolbar a unique name.",
-			nameDescription.createEl("br"),
-			(this.plugin.settings.toolbarProp ? 
-				"If a '" + this.plugin.settings.toolbarProp + "' property is set to use this toolbar, it will take precedence over any folder toolbars." : "")
-		);
-
 		let toolbarNameDiv = this.containerEl.createEl("div");
 		new Setting(toolbarNameDiv)
 			.setName("Name")
-			.setDesc(nameDescription)
+			.setDesc("Give this toolbar a unique name.")
 			.addText(text => text
 				.setPlaceholder('Name')
 				.setValue(this.toolbar.name)

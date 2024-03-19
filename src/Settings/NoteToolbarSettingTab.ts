@@ -24,12 +24,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * SETTINGS DISPLAY
 	 *************************************************************************/
 
+	/**
+	 * Displays the main settings.
+	 */
 	public display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
 
 		this.displayToolbarList(containerEl);
-		this.displayOtherOptions(containerEl);
+
+		containerEl.createEl("h2", { text: "Display rules" });
+		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
 	}
 
@@ -103,7 +108,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Property")
-			.setDesc("If a toolbar name is found in this property, it will be displayed on the note. Takes precedence over any folder mappings.")
+			.setDesc("If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings.")
 			.addText(text => text
 				.setPlaceholder('Property')
 				.setValue(this.plugin.settings.toolbarProp)
