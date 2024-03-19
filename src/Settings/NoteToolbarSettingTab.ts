@@ -27,7 +27,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	public display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
-		containerEl.createEl("h2", { text: "Note Toolbar" });
+
 		this.displayToolbarList(containerEl);
 		this.displayOtherOptions(containerEl);
 		this.displayFolderMap(containerEl);

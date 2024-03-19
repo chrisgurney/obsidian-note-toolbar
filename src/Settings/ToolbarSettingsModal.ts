@@ -396,7 +396,7 @@ export default class ToolbarSettingsModal extends Modal {
 				dropdown
 					.addOptions(
 						MOBILE_STYLE_OPTIONS.reduce((acc, option) => {
-							return { ...acc, ...option };
+							return {...acc, ...option};
 						}, {}))
 					.setValue(this.toolbar.mobileStyles.join(", ") || "")
 					.onChange((val) => {
@@ -414,6 +414,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Mobile")
+			.setDesc("Overrides default styles")
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(mobileStyleDiv);
 
