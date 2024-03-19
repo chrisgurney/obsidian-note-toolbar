@@ -408,6 +408,9 @@
 
 .note-toolbar-setting-item-styles {
     border-top: none;
+    & > .setting-item-info {
+        align-self: flex-start;
+    }
 }
 
 .note-toolbar-setting-item-style {
