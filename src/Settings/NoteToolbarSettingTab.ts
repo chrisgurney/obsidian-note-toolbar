@@ -33,6 +33,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayFolderMap(containerEl);
 	}
 
+	/**
+	 * Displays the list of toolbars.
+	 * @param containerEl HTMLElement to add the settings to.
+	 */
 	displayToolbarList(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
@@ -91,6 +95,31 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	}
 
+	/**
+	 * Displays the property setting.
+	 * @param containerEl HTMLElement to add the settings to.
+	 */
+	displayPropertySetting(containerEl: HTMLElement): void {
+
+		new Setting(containerEl)
+			.setName("Property")
+			.setDesc("If a toolbar name is found in this property, it will be displayed on the note. Takes precedence over any folder mappings.")
+			.addText(text => text
+				.setPlaceholder('Property')
+				.setValue(this.plugin.settings.toolbarProp)
+				.onChange(async (value) => {
+					this.plugin.settings.toolbarProp = value;
+					// FIXME? set all toolbars to updated?
+					// this.plugin.settings.toolbars.updated = new Date().toISOString();
+					await this.plugin.saveSettings();	
+			}));
+
+	}
+
+	/**
+	 * Displays the folder mappings.
+	 * @param containerEl HTMLElement to add the settings to.
+	 */
 	displayFolderMap(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
@@ -235,23 +264,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.display();
 					});
 			});
-
-	}
-
-	displayOtherOptions(containerEl: HTMLElement): void {
-
-		new Setting(containerEl)
-			.setName("Property")
-			.setDesc("If a toolbar name is found in this property, it will be displayed on the note. Takes precedence over any mapped folder.")
-			.addText(text => text
-				.setPlaceholder('Property')
-				.setValue(this.plugin.settings.toolbarProp)
-				.onChange(async (value) => {
-					this.plugin.settings.toolbarProp = value;
-					// FIXME? set all toolbars to updated?
-					// this.plugin.settings.toolbars.updated = new Date().toISOString();
-					await this.plugin.saveSettings();	
-			}));
 
 	}
 
