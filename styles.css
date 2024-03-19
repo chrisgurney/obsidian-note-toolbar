@@ -286,6 +286,16 @@
     .is-mobile & {
         padding: 1em;
     }
+    &:has(:first-child) {
+        .is-phone & {
+            padding-top: 0;
+        }
+    }
+    &:has(:last-child) {
+        .is-mobile & {
+            padding-bottom: 0;
+        }
+    }
 }
 
 .note-toolbar-setting-empty-message {
