@@ -286,11 +286,6 @@
     .is-mobile & {
         padding: 1em;
     }
-    &:has(:first-child) {
-        .is-phone & {
-            padding-top: 0;
-        }
-    }
 }
 
 .note-toolbar-setting-toolbar-list {
