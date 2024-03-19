@@ -49,7 +49,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 
 		const old_version = loaded_settings.version as number;
-		console.log("loadSettings: loaded settings version: " + old_version);
+		this.DEBUG && console.log("loadSettings: loaded settings version: " + old_version);
 
 		if (old_version !== SETTINGS_VERSION) {
 
