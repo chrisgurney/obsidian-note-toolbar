@@ -80,7 +80,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							name: "",
 							updated: new Date().toISOString(),
 							items: [],
-							styles: ["border","even","sticky"]
+							defaultStyles: ["border","even","sticky"],
+							mobileStyles: [],
 						};
 						this.plugin.settings.toolbars.push(newToolbar);
 						this.plugin.saveSettings();

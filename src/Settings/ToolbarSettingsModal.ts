@@ -1,7 +1,7 @@
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
 import { arraymove, emptyMessageFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_OPTIONS, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 
@@ -289,17 +289,22 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(stylingDescription)
 			.setClass("note-toolbar-setting-no-controls");
 
-		let styleDiv = this.containerEl.createEl("div");
-		styleDiv.className = "note-toolbar-setting-item-style";
-		this.toolbar.styles.forEach(
+		//
+		// Default
+		//
+
+		let defaultStyleDiv = this.containerEl.createDiv();
+		defaultStyleDiv.className = "note-toolbar-setting-item-style";
+
+		this.toolbar.defaultStyles.forEach(
 			(style, index) => {
-				new Setting(styleDiv)
+				new Setting(defaultStyleDiv)
 					.setName(style)
 					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
 							.onClick(() => {
-								this.toolbar.styles.splice(
+								this.toolbar.defaultStyles.splice(
 									index,
 									1
 								);
@@ -310,32 +315,92 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 		});
 
-		new Setting(styleDiv)
+		new Setting(defaultStyleDiv)
 			.addDropdown((dropdown) =>
 				dropdown
-					.addOptions({ 
-						border: "border", 
-						center: "center", 
-						even: "even", 
-						float: "float", 
-						right: "right", 
-						sticky: "sticky", 
-					})
-					.setValue(this.toolbar.styles.join(", ") || "")
+					.addOptions(
+						DEFAULT_STYLE_OPTIONS.reduce((acc, option) => {
+							return { ...acc, ...option };
+						}, {}))
+					.setValue(this.toolbar.defaultStyles.join(", ") || "")
 					.onChange((val) => {
-						if (this.toolbar.styles.includes(val)) {
-							this.toolbar.styles =
-								this.toolbar.styles.filter((i) => i !== val);
+						if (this.toolbar.defaultStyles.includes(val)) {
+							this.toolbar.defaultStyles =
+								this.toolbar.defaultStyles.filter((i) => i !== val);
 						} 
 						else {
-							this.toolbar.styles.push(val);
+							this.toolbar.defaultStyles.push(val);
 						}
 						this.plugin.saveSettings();
 						this.displayToolbarSettings();
 					})
 		);
 
-		settingsDiv.append(styleDiv);
+		new Setting(settingsDiv)
+			.setName("Default")
+			.setClass("note-toolbar-setting-item-styles")
+			.settingEl.append(defaultStyleDiv);
+
+		//
+		// Mobile
+		//
+
+		let mobileStyleDiv = this.containerEl.createDiv();
+		mobileStyleDiv.className = "note-toolbar-setting-item-style";
+
+		if (this.toolbar.mobileStyles.length == 0) {
+			mobileStyleDiv
+				.createEl("div", { text: emptyMessageFr("No mobile styles set.") })
+				.className = "note-toolbar-setting-empty-message";
+		}
+		else {
+
+			this.toolbar.mobileStyles.forEach(
+				(style, index) => {
+					new Setting(mobileStyleDiv)
+						.setName(style)
+						.addExtraButton((cb) => {
+							cb.setIcon("cross")
+								.setTooltip("Delete")
+								.onClick(() => {
+									this.toolbar.mobileStyles.splice(
+										index,
+										1
+									);
+									this.toolbar.updated = new Date().toISOString();
+									this.plugin.saveSettings();
+									this.displayToolbarSettings();
+								});
+						});
+			});
+
+		}
+
+		new Setting(mobileStyleDiv)
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOptions(
+						MOBILE_STYLE_OPTIONS.reduce((acc, option) => {
+							return { ...acc, ...option };
+						}, {}))
+					.setValue(this.toolbar.mobileStyles.join(", ") || "")
+					.onChange((val) => {
+						if (this.toolbar.mobileStyles.includes(val)) {
+							this.toolbar.mobileStyles =
+								this.toolbar.mobileStyles.filter((i) => i !== val);
+						} 
+						else {
+							this.toolbar.mobileStyles.push(val);
+						}
+						this.plugin.saveSettings();
+						this.displayToolbarSettings();
+					})
+		);
+
+		new Setting(settingsDiv)
+			.setName("Mobile")
+			.setClass("note-toolbar-setting-item-styles")
+			.settingEl.append(mobileStyleDiv);
 
 	}
 
