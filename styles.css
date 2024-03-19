@@ -101,6 +101,7 @@
 
     background-color: var(--background-primary);
     padding: inherit;
+    width: 100%;
 
     & .callout-title {
         display: none;
@@ -209,21 +210,25 @@
 
     &[data-callout-metadata*="floatl"] {
         float: left;
+        width: inherit;
     }
 
     &[data-callout-metadata*="mfltl"] {
         .is-mobile & {
             float: left;
+            width: inherit;
         }
     }
 
     &[data-callout-metadata*="floatr"] {
         float: right;
+        width: inherit;
     }
 
     &[data-callout-metadata*="mfltr"] {
         .is-mobile & {
             float: right;
+            width: inherit;
         }
     }
 
