@@ -278,9 +278,11 @@
 }
 
 .note-toolbar-setting-empty-message {
-    /* TODO: not great for mobile styles list */
     padding-bottom: 1em;
     color: var(--text-muted);
+    .note-toolbar-setting-item-styles & {
+        padding-bottom: 0;    
+    }
 }
 
 .note-toolbar-setting-error-message {
@@ -390,6 +392,7 @@
 .note-toolbar-setting-item-style {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.25em;
     .setting-item {
         border-top: none;
