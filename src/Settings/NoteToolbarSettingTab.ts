@@ -1,6 +1,6 @@
 import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
 import NoteToolbarPlugin from '../main';
-import { arraymove } from 'src/Utils/Utils';
+import { arraymove, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggest } from './Suggesters/FolderSuggester';
@@ -42,8 +42,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
-				.createEl("div", { text: this.emptyMessageFr("Click the button to create a toolbar.") })
-				.className = "setting-item-name";
+				.createEl("div", { text: emptyMessageFr("Click the button to create a toolbar.") })
+				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
 			let toolbarListDiv = containerEl.createDiv();
@@ -54,7 +54,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.setName(toolbarItem.name)
 						.setDesc(toolbarItem.items.length > 0 ? 
 							toolbarItem.items.map(item => item.label).join(' | ') : 
-							this.emptyMessageFr("No toolbar items. Click Edit to update this toolbar."))
+							emptyMessageFr("No toolbar items. Click Edit to update this toolbar."))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setTooltip("Update this toolbar's items")
@@ -99,8 +99,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
-				.createEl("div", { text: this.emptyMessageFr("Click the button to create a mapping.") })
-				.className = "setting-item-name";
+				.createEl("div", { text: emptyMessageFr("Click the button to create a mapping.") })
+				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
 			let toolbarFolderListDiv = containerEl.createDiv();
@@ -252,18 +252,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();	
 			}));
 
-	}
-
-	/*************************************************************************
-	 * UTILITIES
-	 *************************************************************************/
-
-	emptyMessageFr(text: string): DocumentFragment {
-		let messageFr = document.createDocumentFragment();
-		let messageFrText = document.createElement("i")
-		messageFrText.textContent = text;
-		messageFr.append(messageFrText);
-		return messageFr;
 	}
 
 }

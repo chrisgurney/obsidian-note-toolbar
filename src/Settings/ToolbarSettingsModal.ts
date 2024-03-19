@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
-import { arraymove } from 'src/Utils/Utils';
+import { arraymove, emptyMessageFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';

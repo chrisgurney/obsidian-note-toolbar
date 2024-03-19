@@ -32,3 +32,16 @@ export function getIconHTML(icon_id: string) {
     icon_container.remove();
     return icon_html;
 }
+
+/**
+ * 
+ * @param text 
+ * @returns 
+ */
+export function emptyMessageFr(text: string): DocumentFragment {
+	let messageFr = document.createDocumentFragment();
+	let messageFrText = document.createElement("i")
+	messageFrText.textContent = text;
+	messageFr.append(messageFrText);
+	return messageFr;
+}
