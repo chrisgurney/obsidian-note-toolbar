@@ -17,6 +17,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
     public openSettingsModal(toolbar: ToolbarSettings) {
         const modal = new ToolbarSettingsModal(this, toolbar);
+		modal.setTitle("Edit Toolbar");
         modal.open();
     }
 
