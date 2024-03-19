@@ -25,6 +25,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log('UNLOADED');
 	}
 
+	onExternalSettingsChange() {
+		console.log('SETTINGS CHANGED EXTERNALLY');
+		// FIXME: call loadSettings here?
+	}
+
 	/*************************************************************************
 	 * SETTINGS LOADERS
 	 *************************************************************************/
