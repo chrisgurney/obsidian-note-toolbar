@@ -75,7 +75,6 @@
     position: sticky;
     z-index: 2;
 }
-
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
     .is-mobile & {
         top: -1rem;
@@ -156,46 +155,9 @@
 
     }
 
-    &[data-callout-metadata*="center"] ul {
-        justify-content: center;
-    }
-    
-    &[data-callout-metadata*="mctr"] ul {
-        .is-mobile & {
-            justify-content: center;
-        }
-    }
-
-    &[data-callout-metadata*="even"] ul {
-        justify-content: space-evenly;
-    }
-    
-    &[data-callout-metadata*="mevn"] ul {
-        .is-mobile & {
-            justify-content: space-evenly;
-        }
-    }
-
-    /* default, if not specified */
-    &[data-callout-metadata*="left"] ul {
-        justify-content: left;
-    }
-    
-    &[data-callout-metadata*="mlft"] ul {
-        .is-mobile & {
-            justify-content: left;
-        }
-    }
-
-    &[data-callout-metadata*="right"] ul {
-        justify-content: right;
-    }
-    
-    &[data-callout-metadata*="mrght"] ul {
-        .is-mobile & {
-            justify-content: right;
-        }
-    }
+    /*
+     * Toolbar Styles (sticky's at top)
+     */
 
     &[data-callout-metadata*="border"] {
         border-top: solid 1px var(--hr-color);
@@ -222,14 +184,33 @@
         }
     }
 
-    /* default, if not specified */
-    &[data-callout-metadata*="nofloat"] {
-        float: inherit;
+    &[data-callout-metadata*="center"] ul {
+        justify-content: center;
+    }
+    
+    &[data-callout-metadata*="mctr"] ul {
+        .is-mobile & {
+            justify-content: center;
+        }
     }
 
-    &[data-callout-metadata*="mnflt"] {
+    &[data-callout-metadata*="even"] ul {
+        justify-content: space-evenly;
+    }
+    
+    &[data-callout-metadata*="mevn"] ul {
         .is-mobile & {
-            float: inherit;
+            justify-content: space-evenly;
+        }
+    }
+
+    &[data-callout-metadata*="floatl"] {
+        float: left;
+    }
+
+    &[data-callout-metadata*="mfltl"] {
+        .is-mobile & {
+            float: left;
         }
     }
 
@@ -243,13 +224,35 @@
         }
     }
 
-    &[data-callout-metadata*="floatl"] {
-        float: left;
+    /* default, if not specified */
+    &[data-callout-metadata*="nofloat"] {
+        float: inherit;
     }
 
-    &[data-callout-metadata*="mfltl"] {
+    &[data-callout-metadata*="mnflt"] {
         .is-mobile & {
-            float: left;
+            float: inherit;
+        }
+    }
+
+    /* default, if not specified */
+    &[data-callout-metadata*="left"] ul {
+        justify-content: left;
+    }
+
+    &[data-callout-metadata*="mlft"] ul {
+        .is-mobile & {
+            justify-content: left;
+        }
+    }
+
+    &[data-callout-metadata*="right"] ul {
+        justify-content: right;
+    }
+
+    &[data-callout-metadata*="mrght"] ul {
+        .is-mobile & {
+            justify-content: right;
         }
     }
 
