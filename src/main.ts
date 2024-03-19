@@ -18,16 +18,15 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log('LOADED');
 	}
 
-	onunload() {
+	async onunload() {
 		this.app.workspace.off('file-open', this.fileOpenListener);
 		this.app.metadataCache.off('changed', this.metadataCacheListener);
 		this.removeAllToolbars();
 		this.DEBUG && console.log('UNLOADED');
 	}
 
-	onExternalSettingsChange() {
-		console.log('SETTINGS CHANGED EXTERNALLY');
-		// FIXME: call loadSettings here?
+	async onExternalSettingsChange() {
+		await this.loadSettings();
 	}
 
 	/*************************************************************************
