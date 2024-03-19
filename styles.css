@@ -291,6 +291,9 @@
             padding-top: 0;
         }
     }
+}
+
+.note-toolbar-setting-toolbar-list {
     &:has(:last-child) {
         .is-mobile & {
             padding-bottom: 0;
