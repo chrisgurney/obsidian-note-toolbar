@@ -277,14 +277,20 @@
     }
 }
 
+.note-toolbar-setting-empty-message {
+    /* TODO: not great for mobile styles list */
+    padding-bottom: 1em;
+    color: var(--text-muted);
+}
+
 .note-toolbar-setting-error-message {
-    color: red;
+    color: var(--color-red);
     padding-bottom: 1em;
 }
 
 .note-toolbar-setting-error {
     & input[type="text"], & input[type="search"] {
-        box-shadow: 0 0 0 1px red;
+        box-shadow: 0 0 0 1px var(--color-red);
     }
 }
 
@@ -400,7 +406,7 @@
             border: dashed 1px var(--pill-color-remove) !important;
         }
         &:last-child {
-            border: none;
+            border: none !important;
             padding-left: 0em !important;
         }
         & .setting-item-info {
