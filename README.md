@@ -7,34 +7,38 @@ Alternately, add Note Toolbar Callouts anywhere in your notes.
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-[ ] _Gif_: Create toolbar (daily notes, sticky), Add with metadata
+- [ ] _Gif_: Create toolbar (daily notes, sticky), Add with metadata
 
 # Installation
 
 ## Installing via Community Plugins
 
-TBD
+- [ ] TBD
 
 ## Installing via BRAT
 
-Install the BRAT plugin
-- Open Settings -> Community Plugins
-- Disable safe mode, if enabled
-- Browse, and search for "BRAT"
-- Install the latest version of Obsidian 42 - BRAT
-Open BRAT settings (Settings -> Obsidian 42 - BRAT)
-Scroll to the Beta Plugin List section
-Add Beta Plugin
-Specify this repository: chrisgurney/obsidian-note-toolbar
-Enable the Note Toolbar plugin (Settings -> Community Plugins)
+1. Install the BRAT plugin:
+  - Open Settings -> Community Plugins
+  - Disable safe mode, if enabled
+  - Browse, and search for "BRAT"
+  - Install the latest version of Obsidian 42 - BRAT
+2. Open BRAT settings (Settings -> Obsidian 42 - BRAT)
+3. Scroll to the Beta Plugin List section
+4. Add Beta Plugin
+5. Specify this repository: `chrisgurney/obsidian-note-toolbar`
+6. Enable the Note Toolbar plugin (Settings -> Community Plugins)
 
 # Getting Started
+
+- [ ] TBD: 
 
 1. In settings, create a New Toolbar
 2. Add items to your toolbar
 3. Try mapping a folder
 
 # Examples
+
+- [ ] TBD:
 
 - Next/Previous Daily Note: use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri)
 - Create new notes: Templater
@@ -50,7 +54,7 @@ Note Toolbar pairs well with these plugins:
 
 # Settings Guide
 
-Once installed, in Obsidian go to: **Settings... > Note Toolbar**.
+Once installed, in Obsidian go to: **Settings... > Note Toolbar** and click **+ New toolbar**.
 
 ## Creating Note Toolbars
 
@@ -86,21 +90,22 @@ Styles define how the toolbar will look (and behave).
 
 There's a set of default styles, but they're overridden for mobile (below) by any styles listed there.
 
-- border = adds a top and bottom border
+- border (adds a top and bottom border)
 - no border
 - center items
 - evenly space items
-- float left = floats the toolbar left of nearby content
-- float right = floats the toolbar right of nearby content
+- float left (floats the toolbar left of nearby content)
+- float right (floats the toolbar right of nearby content)
 - no float
 - left align items
 - right align items
-- sticky = sticks toolbar to top on scroll
+- sticky (sticks toolbar to top on scroll)
 - not sticky
 
-Mobile-equivalent styles allow you to override the defaults, above.
+In the **Mobile** section, you can add equivalent styles that allow you to override the defaults on mobile.
 
-_Note on precedence:_ Styles are defined alphabetically in [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) (with the exception of float being at the top).
+_Note on precedence:_
+- Styles are defined alphabetically in [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) (with the exception of float being at the top).
 
 ## Defining where Note Toolbars are applied
 
@@ -120,17 +125,15 @@ Specify the folders you want your toolbars to appear on.
 
 For example, if your daily notes are all in the same root folder, just specify that folder and map it to your "Daily Notes" toolbar, and it will appear on all existing, and new daily notes.
 
-Precedence: Notes are matched to folders starting from the top of the list.
-
-If you have a property on a given note, it will override the folder mapping.
+_Notes on precedence_:
+- Notes are matched to folders starting from the top of the list.
+- If you have a property on a given note, it will override the folder mapping.
 
 # Use Toolbar Callouts
 
-Toolbars are actually callouts!
+Toolbars are actually callouts! You can use a toolbar callout directly, to add a toolbar in the middle of your notes, for example. 
 
-You can use a toolbar callout directly, to add a toolbar in the middle of your notes. 
-
-Allows for more flexibility, using other plugins (e.g., Templater, Dataview) to generate the contents of the toolbar.
+This feature allows for more flexibility, and using other plugins (e.g., Templater, Dataview) to generate the contents of the toolbar.
 
 ## How to use Toolbar Callouts
 
