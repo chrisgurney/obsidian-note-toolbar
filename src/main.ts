@@ -36,8 +36,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
 	 */
-	async onExternalSettingsChange() {
-		await this.loadSettings();
+	async onExternalSettingsChange(): Promise<void> {
+		this.DEBUG && console.log("onExternalSettingsChange()");
+		// reload in-memory settings
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		// await this.loadSettings();
 	}
 
 	/*************************************************************************
@@ -53,7 +56,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Credit to Fevol on Discord for the sample code to migrate.
 	 * @link https://discord.com/channels/686053708261228577/840286264964022302/1213507979782127707
 	 */
-	async loadSettings() {
+	async loadSettings(): Promise<void> {
 
 		const loaded_settings = await this.loadData();
 		this.DEBUG && console.log("loadSettings: loaded settings: ", loaded_settings);
@@ -98,12 +101,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Saves settings.
 	 * Sorts the toolbar list (by name) first.
 	 */
-	async saveSettings() {
+	async saveSettings(): Promise<void> {
 		this.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 		await this.saveData(this.settings);
+
 		// TODO: update the toolbar instead of removing and re-adding to the DOM?
 		await this.removeActiveToolbar();
 		await this.renderToolbarForActiveFile();
+
+		this.DEBUG && console.log("SETTINGS SAVED: " + new Date().getTime());
 	}
 
 	/**
@@ -175,7 +181,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
 
-		this.DEBUG && console.log('checkAndRenderToolbar()');
+		// this.DEBUG && console.log('checkAndRenderToolbar()');
 
 		//
 		// check: does this note need a toolbar?
@@ -183,7 +189,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
-		this.DEBUG && console.log('- frontmatter: ', frontmatter);
+		// this.DEBUG && console.log('- frontmatter: ', frontmatter);
 		const propName = this.settings.toolbarProp;
 		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
 		if (notetoolbarProp !== null) {
@@ -198,13 +204,13 @@ export default class NoteToolbarPlugin extends Plugin {
 			let mapping;
 			for (let index = 0; index < this.settings.folderMappings.length; index++) {
 				mapping = this.settings.folderMappings[index];
-				this.DEBUG && console.log('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
+				// this.DEBUG && console.log('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
 				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-					this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
+					// this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
 					// continue until we get a matching toolbar
 					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
 					if (matchingToolbar) {
-						this.DEBUG && console.log('  - matched toolbar:', matchingToolbar);
+						// this.DEBUG && console.log('  - matched toolbar:', matchingToolbar);
 						break;
 					}
 				}
@@ -219,26 +225,26 @@ export default class NoteToolbarPlugin extends Plugin {
 		let existingToolbarEl = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
 		if (existingToolbarEl) {
 
-			this.DEBUG && console.log('checkAndRenderToolbar: existing toolbar');
+			// this.DEBUG && console.log('checkAndRenderToolbar: existing toolbar');
 
 			let existingToolbarName = existingToolbarEl?.getAttribute("data-name");
 			let existingToolbarUpdated = existingToolbarEl.getAttribute("data-updated");
 
 			// if we don't need it, remove it
 			if (!matchingToolbar) {
-				this.DEBUG && console.log("checkAndRenderToolbar: toolbar not needed, removing existing toolbar: " + existingToolbarName);
+				// this.DEBUG && console.log("checkAndRenderToolbar: toolbar not needed, removing existing toolbar: " + existingToolbarName);
 				this.removeActiveToolbar();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT the name of the existing toolbar doesn't match
 			else if (matchingToolbar.name !== existingToolbarName) {
-				this.DEBUG && console.log("checkAndRenderToolbar: toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
+				// this.DEBUG && console.log("checkAndRenderToolbar: toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
 				this.removeActiveToolbar();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT it needs to be updated
 			else if (matchingToolbar.updated !== existingToolbarUpdated) {
-				this.DEBUG && console.log("checkAndRenderToolbar: existing toolbar out of date, removing existing toolbar");
+				// this.DEBUG && console.log("checkAndRenderToolbar: existing toolbar out of date, removing existing toolbar");
 				this.removeActiveToolbar();
 				existingToolbarEl = null;
 			}
@@ -248,7 +254,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
 		if (matchingToolbar && !existingToolbarEl) {
 
-			this.DEBUG && console.log("checkAndRenderToolbar: rendering toolbar: ", matchingToolbar);
+			// this.DEBUG && console.log("checkAndRenderToolbar: rendering toolbar: ", matchingToolbar);
 			this.renderToolbarFromSettings(matchingToolbar);
 
 		}

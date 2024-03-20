@@ -98,7 +98,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip("Add a new toolbar")
 					.setButtonText("+ New toolbar")
 					.setCta()
-					.onClick(() => {
+					.onClick(async () => {
 						let newToolbar = {
 							name: "",
 							updated: new Date().toISOString(),
@@ -107,7 +107,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							mobileStyles: [],
 						};
 						this.plugin.settings.toolbars.push(newToolbar);
-						this.plugin.saveSettings();
+						await this.plugin.saveSettings();
 						this.openSettingsModal(newToolbar);
 					});
 			});
@@ -172,7 +172,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						new FolderSuggest(this.app, cb.inputEl);
 						cb.setPlaceholder("Folder")
 							.setValue(mapping.folder)
-							.onChange((newFolder) => {
+							.onChange(async (newFolder) => {
                                 if (
                                     newFolder &&
                                     this.plugin.settings.folderMappings.some(
@@ -190,7 +190,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									this.plugin.settings.folderMappings[
 										index
 									].folder = newFolder;
-									this.plugin.saveSettings();	
+									await this.plugin.saveSettings();	
 								}
                             });
 					});
@@ -200,11 +200,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						new ToolbarSuggest(this.app, this.plugin, cb.inputEl);
 						cb.setPlaceholder("Toolbar")
 							.setValue(mapping.toolbar)
-							.onChange((newToolbar) => {
+							.onChange(async (newToolbar) => {
                                 this.plugin.settings.folderMappings[
                                     index
                                 ].toolbar = newToolbar;
-                                this.plugin.saveSettings();
+                                await this.plugin.saveSettings();
                             });
 					});
 				let itemControlsDiv = this.containerEl.createEl("div");
@@ -214,38 +214,38 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
-							.onClick(() => {
+							.onClick(async () => {
 								arraymove(
 									this.plugin.settings.folderMappings,
 									index,
 									index - 1
 								);
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 								this.display();
 							});
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("down-chevron-glyph")
 							.setTooltip("Move down")
-							.onClick(() => {
+							.onClick(async () => {
 								arraymove(
 									this.plugin.settings.folderMappings,
 									index,
 									index + 1
 								);
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 								this.display();
 							});
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
-							.onClick(() => {
+							.onClick(async () => {
 								this.plugin.settings.folderMappings.splice(
 									index,
 									1
 								);
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 								this.display();
 							});
 					});
@@ -273,13 +273,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip("Add a new mapping")
 					.setButtonText("+ New mapping")
 					.setCta()
-					.onClick(() => {
+					.onClick(async () => {
 						let newMapping = {
 							folder: "",
 							toolbar: ""
 						};
 						this.plugin.settings.folderMappings.push(newMapping);
-						this.plugin.saveSettings();
+						await this.plugin.saveSettings();
 						this.display();
 					});
 			});

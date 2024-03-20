@@ -177,41 +177,41 @@ export default class ToolbarSettingsModal extends Modal {
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
-							.onClick(() => {
+							.onClick(async () => {
 								arraymove(
 									this.toolbar.items,
 									index,
 									index - 1
 								);
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 								this.display();
 							});
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("down-chevron-glyph")
 							.setTooltip("Move down")
-							.onClick(() => {
+							.onClick(async () => {
 								arraymove(
 									this.toolbar.items,
 									index,
 									index + 1
 								);
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 								this.display();
 							});
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
-							.onClick(() => {
+							.onClick(async () => {
 								this.toolbar.items.splice(
 									index,
 									1
 								);
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 								this.display();
 							});
 					});
@@ -233,10 +233,10 @@ export default class ToolbarSettingsModal extends Modal {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on mobile'))
 							.setValue(toolbarItem.hideOnMobile)
-							.onChange((hideOnMobile) => {
+							.onChange(async (hideOnMobile) => {
 								toolbarItem.hideOnMobile = hideOnMobile;
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 							});
 					});
 				const s3 = new Setting(togglesDiv)
@@ -246,10 +246,10 @@ export default class ToolbarSettingsModal extends Modal {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on desktop'))
 							.setValue(toolbarItem.hideOnDesktop)
-							.onChange((hideOnDesktop) => {
+							.onChange(async (hideOnDesktop) => {
 								toolbarItem.hideOnDesktop = hideOnDesktop;
 								this.toolbar.updated = new Date().toISOString();
-								this.plugin.saveSettings();
+								await this.plugin.saveSettings();
 							});
 					});
 				itemDiv.appendChild(togglesDiv);
@@ -263,7 +263,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setTooltip("Add a new item to the toolbar")
 					.setButtonText("+ Add toolbar item")
 					.setCta()
-					.onClick(() => {
+					.onClick(async () => {
 						this.toolbar.items.push({
 							label: "",
 							url: "",
@@ -272,7 +272,7 @@ export default class ToolbarSettingsModal extends Modal {
 							hideOnMobile: false
 						});
 						this.toolbar.updated = new Date().toISOString();
-						this.plugin.saveSettings();
+						await this.plugin.saveSettings();
 						this.display();
 					});
 			});
@@ -325,13 +325,13 @@ export default class ToolbarSettingsModal extends Modal {
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
 								.setTooltip("Delete")
-								.onClick(() => {
+								.onClick(async () => {
 									this.toolbar.defaultStyles.splice(
 										index,
 										1
 									);
 									this.toolbar.updated = new Date().toISOString();
-									this.plugin.saveSettings();
+									await this.plugin.saveSettings();
 									this.display();
 								});
 						});
@@ -347,7 +347,7 @@ export default class ToolbarSettingsModal extends Modal {
 							return { ...acc, ...option };
 						}, {}))
 					.setValue(this.toolbar.defaultStyles.join(", ") || "")
-					.onChange((val) => {
+					.onChange(async (val) => {
 						if (this.toolbar.defaultStyles.includes(val)) {
 							this.toolbar.defaultStyles =
 								this.toolbar.defaultStyles.filter((i) => i !== val);
@@ -355,7 +355,7 @@ export default class ToolbarSettingsModal extends Modal {
 						else {
 							this.toolbar.defaultStyles.push(val);
 						}
-						this.plugin.saveSettings();
+						await this.plugin.saveSettings();
 						this.display();
 					})
 		);
@@ -389,13 +389,13 @@ export default class ToolbarSettingsModal extends Modal {
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
 								.setTooltip("Delete")
-								.onClick(() => {
+								.onClick(async () => {
 									this.toolbar.mobileStyles.splice(
 										index,
 										1
 									);
 									this.toolbar.updated = new Date().toISOString();
-									this.plugin.saveSettings();
+									await this.plugin.saveSettings();
 									this.display();
 								});
 						});
@@ -411,7 +411,7 @@ export default class ToolbarSettingsModal extends Modal {
 							return {...acc, ...option};
 						}, {}))
 					.setValue(this.toolbar.mobileStyles.join(", ") || "")
-					.onChange((val) => {
+					.onChange(async (val) => {
 						if (this.toolbar.mobileStyles.includes(val)) {
 							this.toolbar.mobileStyles =
 								this.toolbar.mobileStyles.filter((i) => i !== val);
@@ -419,7 +419,7 @@ export default class ToolbarSettingsModal extends Modal {
 						else {
 							this.toolbar.mobileStyles.push(val);
 						}
-						this.plugin.saveSettings();
+						await this.plugin.saveSettings();
 						this.display();
 					})
 		);
