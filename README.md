@@ -40,6 +40,7 @@ Alternately, add Note Toolbar Callouts anywhere in your notes.
 
 - [ ] TBD:
 
+Examples of items you might put in a toolbar:
 - Next/Previous Daily Note: use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri)
 - Create new notes: Templater
 - Bookmarks: Dataview + [!toolbar] callout
