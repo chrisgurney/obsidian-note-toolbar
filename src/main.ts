@@ -7,6 +7,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	settings: NoteToolbarSettings;
 	public DEBUG: boolean = false;
 
+	/**
+	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
+	 * adds listeners, settings, and renders the toolbar for the active file.
+	 */
 	async onload() {
 		await this.loadSettings();
 
@@ -18,6 +22,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log('LOADED');
 	}
 
+	/**
+	 * When this plugin is unloaded (e.g., disabled in settings, or Obsidian is restarted):
+	 * removes listeners and all toolbars.
+	 */
 	async onunload() {
 		this.app.workspace.off('file-open', this.fileOpenListener);
 		this.app.metadataCache.off('changed', this.metadataCacheListener);
@@ -25,6 +33,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log('UNLOADED');
 	}
 
+	/**
+	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
+	 */
 	async onExternalSettingsChange() {
 		await this.loadSettings();
 	}
@@ -34,7 +45,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 *************************************************************************/
 
 	/**
-	 * Loads settings and migrates from old versions if needed.
+	 * Loads settings, and migrates from old versions if needed.
 	 * 
 	 * No need to update version number in this function; just update in NoteToolbarSettings,
 	 * and don't forget to update user-facing version in manifest.json on release.
@@ -82,6 +93,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 
+	/**
+	 * Saves settings.
+	 * Sorts the toolbar list (by name) first.
+	 */
 	async saveSettings() {
 		this.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 		await this.saveData(this.settings);
@@ -90,10 +105,20 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.renderToolbarForActiveFile();
 	}
 
+	/**
+	 * Gets toolbar from settings, using the provided name.
+	 * @param name Name of toolbar to get settings for (case-insensitive).
+	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
+	 */
 	getToolbarSettings(name: string | null): ToolbarSettings | undefined {
 		return name ? this.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
 	}
 
+	/**
+	 * Gets toolbar from settings, using the provided array of strings (which will come from note frontmatter).
+	 * @param names List of potential toolbars to get settings for (case-insensitive); only the first match is returned.
+	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
+	 */
 	getToolbarSettingsFromProps(names: string[] | null): ToolbarSettings | undefined {
 		if (!names) return undefined;
 		if (typeof names === "string") {
@@ -102,6 +127,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
 	}
 
+	/**
+	 * Removes the provided toolbar from settings; does nothing if it does not exist.
+	 * @param name Name of the toolbar to remove.
+	 */
 	deleteToolbarFromSettings(name: string) {
 		this.settings.toolbars = this.settings.toolbars.filter(tbar => tbar.name !== name);
 	}
@@ -110,6 +139,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * LISTENERS
 	 *************************************************************************/
 
+	/**
+	 * On opening of a file, trigger the checks and rendering of a toolbar if necessary.
+	 * @param file TFile that was opened.
+	 */
 	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
@@ -118,6 +151,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 	}
 
+	/**
+	 * On changes to metadata, trigger the checks and rendering of a toolbar if necessary.
+	 * @param file TFile in which metadata changed.
+	 * @param data ???
+	 * @param cache CachedMetadata, from which we look at the frontmatter.
+	 */
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
 		this.DEBUG && console.log("metadata-changed: " + file.name);
 		this.checkAndRenderToolbar(file, cache.frontmatter);
@@ -127,6 +166,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * TOOLBAR RENDERERS
 	 *************************************************************************/
 
+	/**
+	 * Checks if the provided file and frontmatter meets the criteria to render a toolbar,
+	 * or if we need to remove the toolbar if it shouldn't be there.
+	 * @param file TFile (note) to check if we need to create a toolbar.
+	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
+	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
 
 		this.DEBUG && console.log('checkAndRenderToolbar()');
@@ -152,7 +197,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let mapping;
 			for (let index = 0; index < this.settings.folderMappings.length; index++) {
 				mapping = this.settings.folderMappings[index];
-				this.DEBUG && console.log('file-open: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
+				this.DEBUG && console.log('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
 				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
 					// continue until we get a matching toolbar
@@ -173,26 +218,26 @@ export default class NoteToolbarPlugin extends Plugin {
 		let existingToolbarEl = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
 		if (existingToolbarEl) {
 
-			this.DEBUG && console.log('file-open: existing toolbar');
+			this.DEBUG && console.log('checkAndRenderToolbar: existing toolbar');
 
 			let existingToolbarName = existingToolbarEl?.getAttribute("data-name");
 			let existingToolbarUpdated = existingToolbarEl.getAttribute("data-updated");
 
 			// if we don't need it, remove it
 			if (!matchingToolbar) {
-				this.DEBUG && console.log("file-open: toolbar not needed, removing existing toolbar: " + existingToolbarName);
+				this.DEBUG && console.log("checkAndRenderToolbar: toolbar not needed, removing existing toolbar: " + existingToolbarName);
 				this.removeActiveToolbar();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT the name of the existing toolbar doesn't match
 			else if (matchingToolbar.name !== existingToolbarName) {
-				this.DEBUG && console.log("file-open: toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
+				this.DEBUG && console.log("checkAndRenderToolbar: toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
 				this.removeActiveToolbar();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT it needs to be updated
 			else if (matchingToolbar.updated !== existingToolbarUpdated) {
-				this.DEBUG && console.log("file-open: existing toolbar out of date, removing existing toolbar");
+				this.DEBUG && console.log("checkAndRenderToolbar: existing toolbar out of date, removing existing toolbar");
 				this.removeActiveToolbar();
 				existingToolbarEl = null;
 			}
@@ -202,13 +247,17 @@ export default class NoteToolbarPlugin extends Plugin {
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
 		if (matchingToolbar && !existingToolbarEl) {
 
-			this.DEBUG && console.log("file-open: rendering toolbar: " + matchingToolbar.name);
+			this.DEBUG && console.log("checkAndRenderToolbar: rendering toolbar: " + matchingToolbar.name);
 			this.renderToolbarFromSettings(matchingToolbar);
 
 		}
 
 	}
 
+	/**
+	 * Renders the toolbar for the provided toolbar settings.
+	 * @param toolbar ToolbarSettings
+	 */
 	async renderToolbarFromSettings(toolbar: ToolbarSettings) {
 
 		/* create the unordered list of menu items */
@@ -260,6 +309,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 
+	/**
+	 * Creates the toolbar in the active file (assuming it needs one).
+	 */
 	async renderToolbarForActiveFile() {
 		let activeFile = this.app.workspace.getActiveFile();
 		if (activeFile) {
@@ -272,6 +324,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * HANDLERS
 	 *************************************************************************/
 
+	/**
+	 * On click of an item in the toolbar, we replace any variables that might
+	 * be in the URL, and then open it.
+	 * @param e MouseEvent
+	 */
 	async toolbarClickHandler(e: MouseEvent) {
 
 		this.DEBUG && console.log('toolbarClickHandler');
@@ -292,11 +349,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * TOOLBAR REMOVAL
 	 *************************************************************************/
 
+	/**
+	 * Remove the toolbar on the active file.
+	 */
 	async removeActiveToolbar() {
 		let existingToolbar = document.querySelector('.workspace-tab-container > .mod-active .cg-note-toolbar-container');
 		existingToolbar?.remove();
 	}
 
+	/**
+	 * Remove any toolbars in all open files.
+	 */
 	async removeAllToolbars() {
 		let existingToolbars = document.querySelectorAll('.cg-note-toolbar-container');
 		existingToolbars.forEach((toolbar) => {
