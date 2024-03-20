@@ -1,8 +1,8 @@
 {
 	"id": "obsidian-note-toolbar",
 	"name": "Note Toolbar",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
+	"version": "1.0.1",
+	"minAppVersion": "1.5.11",
 	"description": "Add customizable toolbars to your notes",
 	"author": "Chris Gurney",
 	"authorUrl": "https://chrisgurney.ca",
