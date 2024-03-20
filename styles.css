@@ -178,7 +178,6 @@
         }
     }
 
-    /* default, if not specified */
     &[data-callout-metadata*="noborder"] {
         border: inherit;
     }
@@ -233,7 +232,6 @@
         }
     }
 
-    /* default, if not specified */
     &[data-callout-metadata*="nofloat"] {
         float: inherit;
     }
@@ -244,7 +242,6 @@
         }
     }
 
-    /* default, if not specified */
     &[data-callout-metadata*="left"] ul {
         justify-content: left;
     }
