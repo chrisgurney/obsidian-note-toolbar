@@ -28,7 +28,7 @@ Alternately, add Note Toolbar Callouts anywhere in your notes.
 5. Specify this repository: `chrisgurney/obsidian-note-toolbar`
 6. Enable the Note Toolbar plugin (Settings -> Community Plugins)
 
-# Getting Started
+# Getting Started 🚀
 
 - [ ] TBD: 
 
@@ -52,7 +52,7 @@ Note Toolbar pairs well with these plugins:
 - [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) (link to today's, and previous/next Daily Notes)
 - [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) (for executing shell scripts, Python code, etc.)
 
-# Settings Guide
+# Settings Guide 🛠️
 
 Once installed, in Obsidian go to: **Settings... > Note Toolbar** and click **+ New toolbar**.
 
@@ -166,13 +166,17 @@ If you prefer to workaround any issues in the short term, styling is handled in 
 
 Note Toolbar is licensed under Apache License Version 2.0. See the [LICENSE](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/LICENSE).
 
-# Inspiration and Thanks
+# Inspiration and Thanks 🙏
 
 - Obsidian's [Sample Plugin](https://github.com/obsidianmd/obsidian-sample-plugin), [developer docs](https://docs.obsidian.md/) and [this playlist](https://www.youtube.com/playlist?list=PLIDCb22ZUTBnMCbJa-st4PD5T3Olep078).
 - Templater - for code, especially around settings.
 - Periodic Notes - for code, and one of the reasons this plugin works well for my own needs.
 - Obsidian Discord: lemons_dev, liam.cain, dovos, joethei
 
-# Support
+# Contribute 🧑‍💻
 
-- [Log an issue or ask a question](https://github.com/chrisgurney/obsidian-note-toolbar/issues)
+Happy to discuss your ideas! If they sound good, pull requests are welcome!
+
+# Support 🛟
+
+[Log an issue or ask a question!](https://github.com/chrisgurney/obsidian-note-toolbar/issues)
