@@ -30,13 +30,35 @@
  *
  * > [!note-toolbar|border-right-sticky]
  *
- * Style options are as follows, and can be combined (per the above example):
+ * STYLES
+ * 
+ * Options are as follows, and can be combined (per the above example):
  *   border = adds a top and bottom border
+ *   noborder = turns off border (default)
  *   center = aligns items center
- *   right = aligns items right
  *   even = distributes items evenly
- *   sticky = sticks to top on scroll (on desktop)
- *   float = floats the toolbar right of nearby content
+ *   floatl = floats the toolbar left of nearby content
+ *   floatr = floats the toolbar right of nearby content
+ *   nofloat = turns off float (default)
+ *   left = aligns items left (default)
+ *   right = aligns items right
+ *   sticky = sticks toolbar to top on scroll
+ *   nosticky = turns off stickiness (default)
+ * 
+ * STYLES (MOBILE OVERRIDES)
+ * 
+ * Add these mobile-equivalent styles to override the defaults, above:
+ *   mbrder = border
+ *   mnbrder = noborder
+ *   mctr = center
+ *   mevn = even
+ *   mfltl = floatl
+ *   mfltr = floatr
+ *   mnflt = nofloat
+ *   mlft = left
+ *   mrght = right
+ *   mstcky = sticky
+ *   mnstcky = nosticky
  * 
  * USAGE TIPS
  * 
