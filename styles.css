@@ -100,6 +100,7 @@
 .callout[data-callout="note-toolbar"] {
 
     background-color: var(--background-primary);
+    border-radius: 0;
     padding: inherit;
     width: 100%;
 
