@@ -5,7 +5,7 @@ import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSett
 export default class NoteToolbarPlugin extends Plugin {
 
 	settings: NoteToolbarSettings;
-	public DEBUG: boolean = false;
+	public DEBUG: boolean = true;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -56,12 +56,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	async loadSettings() {
 
 		const loaded_settings = await this.loadData();
+		this.DEBUG && console.log("loadSettings: loaded settings: ", loaded_settings);
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
-
-		const old_version = loaded_settings.version as number;
+	
+		const old_version = loaded_settings?.version as number;
 		this.DEBUG && console.log("loadSettings: loaded settings version: " + old_version);
 
-		if (old_version !== SETTINGS_VERSION) {
+		// if we actually have existing settings for this plugin, and the old version does not match the current...
+		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 
 			// first version without update (i.e., version is `undefined`)           
 			if (!old_version) {
@@ -83,8 +85,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 			// other migrations can go here in elseifs
 
-			console.log("updated settings:");
-			console.log(this.settings);
+			console.log("updated settings:", this.settings);
 
 			// ensure that migrated settings are saved 
 			await this.saveSettings();
@@ -182,7 +183,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
-		this.DEBUG && console.log('- frontmatter: ' + frontmatter);
+		this.DEBUG && console.log('- frontmatter: ', frontmatter);
 		const propName = this.settings.toolbarProp;
 		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
 		if (notetoolbarProp !== null) {
@@ -203,7 +204,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// continue until we get a matching toolbar
 					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
 					if (matchingToolbar) {
-						this.DEBUG && console.log('  - matched toolbar: ' + matchingToolbar);
+						this.DEBUG && console.log('  - matched toolbar:', matchingToolbar);
 						break;
 					}
 				}
@@ -247,7 +248,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
 		if (matchingToolbar && !existingToolbarEl) {
 
-			this.DEBUG && console.log("checkAndRenderToolbar: rendering toolbar: " + matchingToolbar.name);
+			this.DEBUG && console.log("checkAndRenderToolbar: rendering toolbar: ", matchingToolbar);
 			this.renderToolbarFromSettings(matchingToolbar);
 
 		}
