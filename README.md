@@ -1,96 +1,175 @@
-# Obsidian Sample Plugin
+# Obsidian Note Toolbar
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+The [Obsidian](https://obsidian.md) Note Toolbar plugin provides a flexible way to create toolbars at the top of your notes.
 
-This project uses Typescript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
+Alternately, add Note Toolbar Callouts anywhere in your notes.
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
+[![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+[ ] _Gif_: Create toolbar (daily notes, sticky), Add with metadata
 
-## First time developing plugins?
+# Installation
 
-Quick starting guide for new plugin devs:
+## Installing via Community Plugins
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+TBD
 
-## Releasing new releases
+## Installing via BRAT
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+Install the BRAT plugin
+- Open Settings -> Community Plugins
+- Disable safe mode, if enabled
+- Browse, and search for "BRAT"
+- Install the latest version of Obsidian 42 - BRAT
+Open BRAT settings (Settings -> Obsidian 42 - BRAT)
+Scroll to the Beta Plugin List section
+Add Beta Plugin
+Specify this repository: chrisgurney/obsidian-note-toolbar
+Enable the Note Toolbar plugin (Settings -> Community Plugins)
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+# Getting Started
 
-## Adding your plugin to the community plugin list
+1. In settings, create a New Toolbar
+2. Add items to your toolbar
+3. Try mapping a folder
 
-- Check https://github.com/obsidianmd/obsidian-releases/blob/master/plugin-review.md
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+# Examples
 
-## How to use
+- Next/Previous Daily Note: use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri)
+- Create new notes: Templater
+- Bookmarks: Dataview + [!toolbar] callout
+- Shell Commands
+- ...let me know how you use your toolbars!
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+Note Toolbar pairs well with these plugins:
+- [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) (for linking to any Obsidian command)
+- [Dataview](https://github.com/blacksmithgu/obsidian-dataview) (e.g., generate a list of your Bookmarks)
+- [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) (link to today's, and previous/next Daily Notes)
+- [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) (for executing shell scripts, Python code, etc.)
 
-## Manually installing the plugin
+# Settings Guide
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+Once installed, in Obsidian go to: **Settings... > Note Toolbar**.
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
+## Creating Note Toolbars
 
-## Funding URL
+### Name
 
-You can include funding URLs where people who use your plugin can financially support it.
+Give your toolbar a name. This name will be used from your note properties, or when mapping folders (see below).
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+### Items
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+Add each item to your toolbar:
+
+| Setting | What it does |
+| --- | --- |
+| Item label | What's shown on the menu |
+| Tooltip | Displayed on hover of the item. Nothing is displayed if this is not set. |
+| URL | What the item links to. More on that below. |
+| Hide on mobile | Enable this to simplify your experience on mobile due to limited screen real-estate, or for items that just don't work on mobile (e.g., Shell Commands). |
+| Hide on desktop | If you have items you prefer not to see on desktop. |
+
+#### URLs
+
+URLs support the following variables, which are substituted on click:
+
+| Variable | What it is |
+| --- | --- |
+| `{{note_title}}` | The title (a.k.a. basename) of the current note. |
+
+More to come. [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/issues) what you might want to add.
+
+### Styles
+
+Styles define how the toolbar will look (and behave).
+
+There's a set of default styles, but they're overridden for mobile (below) by any styles listed there.
+
+- border = adds a top and bottom border
+- no border
+- center items
+- evenly space items
+- float left = floats the toolbar left of nearby content
+- float right = floats the toolbar right of nearby content
+- no float
+- left align items
+- right align items
+- sticky = sticks toolbar to top on scroll
+- not sticky
+
+Mobile-equivalent styles allow you to override the defaults, above.
+
+_Note on precedence:_ Styles are defined alphabetically in [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) (with the exception of float being at the top).
+
+## Defining where Note Toolbars are applied
+
+Tell the plugin which notes to display toolbars in one of two ways:
+
+### Note property
+
+Set the `notetoolbar` property on your note with the name of the toolbar you want to display.
+
+Change what property to use by looking at by changing the `Property` setting.
+
+If you prefer not to use properties, try Folder Mappings.
+
+### Folder Mappings
+
+Specify the folders you want your toolbars to appear on.
+
+For example, if your daily notes are all in the same root folder, just specify that folder and map it to your "Daily Notes" toolbar, and it will appear on all existing, and new daily notes.
+
+Precedence: Notes are matched to folders starting from the top of the list.
+
+If you have a property on a given note, it will override the folder mapping.
+
+# Use Toolbar Callouts
+
+Toolbars are actually callouts!
+
+You can use a toolbar callout directly, to add a toolbar in the middle of your notes. 
+
+Allows for more flexibility, using other plugins (e.g., Templater, Dataview) to generate the contents of the toolbar.
+
+## How to use Toolbar Callouts
+
+Create a toolbar by creating a callout containing any list, like this:
+```markdown
+> [!note-toolbar]
+> - [Link Menu Item](obsidian://...)
+> - [[Page Menu Item]]
+> - Menu Item That Won't Do Anything
 ```
 
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+To control its appearance, optionally add metadata by adding a | and listing styles, for example:
+```markdown
+> [!note-toolbar|border-right-sticky]
 ```
 
-## API Documentation
+Refer directly to the [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) for the literal style names.
 
-See https://github.com/obsidianmd/obsidian-api
+# Troubleshooting
+
+As mentioned, toolbars are a special form of callout, designed to fit naturally with Obsidian's look and feel. The plugin inserts between the metadata and content portions of the editor view, assuming certain criteria are met.
+
+If you use other plugins or themes that modify how callouts behave or look, they _may_ have an effect on this plugin. 
+
+Please log an issue if you think there’s a conflict that can be resolved in the plugin itself (e.g., missed a style that needs to be overridden). Pull requests are also welcome.
+
+If you prefer to workaround any issues in the short term, styling is handled in [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) by `.callout[data-callout="note-toolbar"]`.
+
+# License
+
+Note Toolbar is licensed under Apache License Version 2.0. See the [LICENSE](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/LICENSE).
+
+# Inspiration and Thanks
+
+- Obsidian's [Sample Plugin](https://github.com/obsidianmd/obsidian-sample-plugin), [developer docs](https://docs.obsidian.md/) and [this playlist](https://www.youtube.com/playlist?list=PLIDCb22ZUTBnMCbJa-st4PD5T3Olep078).
+- Templater - for code, especially around settings.
+- Periodic Notes - for code, and one of the reasons this plugin works well for my own needs.
+- Obsidian Discord: lemons_dev, liam.cain, dovos, joethei
+
+# Support
+
+- [Log an issue or ask a question](https://github.com/chrisgurney/obsidian-note-toolbar/issues)
