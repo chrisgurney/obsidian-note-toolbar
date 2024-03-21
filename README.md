@@ -58,6 +58,8 @@ Note Toolbar pairs well with these plugins:
 
 Once installed, in Obsidian go to: **Settings... > Note Toolbar** and click **+ New toolbar**.
 
+![Example of a settings configuration](./docs/settings.png)
+
 ## Creating Note Toolbars
 
 ### Name
