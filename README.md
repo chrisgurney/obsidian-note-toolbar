@@ -84,6 +84,8 @@ URLs support the following variables, which are substituted on click:
 | `{{note_title}}` | The title (a.k.a. basename) of the current note. |
 | `{{prop_NAME}}` | Property in the current note with the given name. Note, if the property does not exist, the variable will not be substitued. e.g., if you have a property called "date" use `{{prop_date}}` |
 
+Note that URL variable values are [encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) for safety.
+
 [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) what else you might want to add.
 
 ### Styles
