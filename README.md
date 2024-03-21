@@ -2,7 +2,7 @@
 
 The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible way to create toolbars at the top of your notes.
 
-Alternately, add [Note Toolbar Callouts](#use-toolbar-callouts) anywhere in your notes.
+With this plugin, you also get [Note Toolbar Callouts](#use-toolbar-callouts) which you can add anywhere in your notes.
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -141,6 +141,8 @@ _Notes on precedence_:
 
 Toolbars are actually callouts! You can use a toolbar callout directly, to add a toolbar in the middle of your notes, for example. 
 
+![Demo of a callout turning into a toolbar](./docs/callout_demo.gif)
+
 This feature allows for more flexibility, and using other plugins (e.g., Templater, Dataview) to generate the contents of the toolbar.
 
 ## How to use Toolbar Callouts
@@ -159,6 +161,10 @@ To control its appearance, optionally add metadata by adding a | and listing sty
 ```
 
 Refer directly to the [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) for the literal style names.
+
+Examples:
+
+![Examples of toolbars placed in notes](./docs/callout_examples.png)
 
 # Troubleshooting
 
