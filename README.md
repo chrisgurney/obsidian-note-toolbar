@@ -7,7 +7,7 @@ Alternately, add [Note Toolbar Callouts](#use-toolbar-callouts) anywhere in your
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-- [ ] _Gif_: Create toolbar (daily notes, sticky), Add with metadata
+![Demo of a sticky toolbar](./docs/note_toolbar_demo.gif)
 
 # Installation
 
@@ -58,7 +58,7 @@ Note Toolbar pairs well with these plugins:
 
 Once installed, in Obsidian go to: **Settings... > Note Toolbar** and click **+ New toolbar**.
 
-![Example of a settings configuration | width=600](./docs/settings.png)
+![Example of a settings configuration](./docs/settings.png)
 
 ## Creating Note Toolbars
 
