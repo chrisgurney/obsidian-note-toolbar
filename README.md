@@ -92,7 +92,7 @@ URL variable values are [encoded](https://developer.mozilla.org/en-US/docs/Web/J
 
 Styles define how the toolbar will look (and behave).
 
-There's a set of default styles, but they're overridden for mobile (below) by any styles listed there.
+Add them to the **Defaults** section. In the **Mobile** section, you can add equivalent styles that allow you to override these defaults, on mobile.
 
 | Style | Clarification |
 | --- | --- |
@@ -107,8 +107,6 @@ There's a set of default styles, but they're overridden for mobile (below) by an
 | right align items | |
 | sticky | sticks toolbar to top on scroll |
 | not sticky | |
-
-In the **Mobile** section, you can add equivalent styles that allow you to override the defaults on mobile.
 
 _Notes on precedence:_
 - Styles are applied in the order you add them in settings. Per how CSS works, styles later in the lists take precedence.
