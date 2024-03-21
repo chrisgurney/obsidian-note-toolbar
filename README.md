@@ -82,8 +82,9 @@ URLs support the following variables, which are substituted on click:
 | Variable | What it is |
 | --- | --- |
 | `{{note_title}}` | The title (a.k.a. basename) of the current note. |
+| `{{prop_NAME}}` | Property in the current note with the given name. Note, if the property does not exist, the variable will not be substitued. e.g., if you have a property called "date" use `{{prop_date}}` |
 
-More to come. [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/issues) what you might want to add.
+[Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) what else you might want to add.
 
 ### Styles
 
@@ -176,8 +177,8 @@ Note Toolbar is licensed under Apache License Version 2.0. See the [LICENSE](htt
 
 # Contribute 🧑‍💻
 
-Happy to discuss your ideas! If they sound good, pull requests are welcome!
+Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! If they sound good, pull requests are welcome!
 
 # Support 🛟
 
-[Log an issue or ask a question!](https://github.com/chrisgurney/obsidian-note-toolbar/issues)
+[Log an issue](https://github.com/chrisgurney/obsidian-note-toolbar/issues) or [ask a question](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)!
