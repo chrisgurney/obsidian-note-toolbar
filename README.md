@@ -178,10 +178,13 @@ Note Toolbar is licensed under Apache License Version 2.0. See the [LICENSE](htt
 
 # Inspiration and Thanks 🙏
 
+Shout out to other projects and people who helped me with questions I had while developing this plugin:
+
 - Obsidian's [Sample Plugin](https://github.com/obsidianmd/obsidian-sample-plugin), [developer docs](https://docs.obsidian.md/) and [this playlist](https://www.youtube.com/playlist?list=PLIDCb22ZUTBnMCbJa-st4PD5T3Olep078).
-- Templater - for code, especially around settings.
-- Periodic Notes - for code, and one of the reasons this plugin works well for my own needs.
-- Obsidian Discord: lemons_dev, liam.cain, dovos, joethei
+- [Templater](https://github.com/SilentVoid13/Templater) - for code, especially around settings.
+- [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes/) - for code, and one of the reasons this plugin works well for my own needs... and for liam.cain's help!
+- [BRAT](https://github.com/TfTHacker/obsidian42-brat) - for the means to beta test this plugin.
+- Everybody on the [Obsidian Discord](https://discord.gg/obsidianmd), for their time and documentation, including but not limited to: claremacrae, lemons_dev, liam.cain, dovos, and joethei.
 
 # Contribute 🧑‍💻
 
