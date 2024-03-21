@@ -18,23 +18,27 @@ With this plugin, you also get [Note Toolbar Callouts](#use-toolbar-callouts) wh
 ## Installing via BRAT
 
 1. Install the BRAT plugin:
-  - Open Settings -> Community Plugins
-  - Disable safe mode, if enabled
-  - Browse, and search for "BRAT"
-  - Install the latest version of Obsidian 42 - BRAT
-2. Open BRAT settings (Settings -> Obsidian 42 - BRAT)
-3. Scroll to the Beta Plugin List section
-4. Add Beta Plugin
+  - Open **Settings > Community Plugins**
+  - **Disable safe mode**, if enabled
+  - Browse, and **search for "BRAT"**
+  - Install the latest version of **Obsidian 42 - BRAT**
+2. Open BRAT settings (**Settings -> Obsidian 42 - BRAT**)
+3. Scroll to the **Beta Plugin List** section
+4. **Add Beta Plugin**
 5. Specify this repository: `chrisgurney/obsidian-note-toolbar`
-6. Enable the Note Toolbar plugin (Settings -> Community Plugins)
+6. **Enable the Note Toolbar plugin** (**Settings -> Community Plugins**)
 
 # Getting Started 🚀
 
-- [ ] TBD: 
+Once installed and enabled, in Note Toolbar's settings:
 
-1. In settings, create a New Toolbar
-2. Add items to your toolbar
-3. Try mapping a folder
+1. Create a **+ New toolbar**
+2. Give the toolbar a **name**.
+3. **+ Add toolbar item**
+4. Exit settings, and **open a note**.
+5. Add a `notetoolbar` property. Set it to the name of your toolbar.
+
+Try mapping a folder, like whever your Daily Notes are stored, to your new toolbar.
 
 # Examples
 
@@ -42,12 +46,12 @@ Any plugin that can generate a URL can be executed from the toolbar. Some exampl
 
 | Example | How? |
 | --- | --- |
-| Next/Previous and Today's Daily Note | Use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) to get the relevant links: Run `Advanced URI: get URI for command` > `<Don't specify a file>` > `Periodic Notes: Open next daily note` |
+| Next, Previous, and Today's Daily Note | Use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) to get the relevant links: Run `Advanced URI: get URI for command` > `<Don't specify a file>` > `Periodic Notes: Open next daily note` |
 | Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) |
 | Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri), OR use a [Note Toolbar Callout](#use-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your top bookmarks. |
 | Execute Shell Commands | Using the [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) plugin. |
 
-...and [let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars!
+[Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars!
 
 # Settings Guide 🛠️
 
