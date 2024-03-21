@@ -266,8 +266,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbarFromSettings(toolbar: ToolbarSettings) {
 
-		const urlVariableRegex = /{{.*?}}/g;
-
 		/* create the unordered list of menu items */
 		let noteToolbarUl = document.createElement("ul");
 		noteToolbarUl.setAttribute("role", "menu");
@@ -276,6 +274,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let toolbarItem = document.createElement("a");
 			toolbarItem.className = "external-link";
 			toolbarItem.setAttribute("href", item.url);
+			const urlVariableRegex = /{{.*?}}/g;
 			toolbarItem.setAttribute("data-toolbar-url-has-vars", urlVariableRegex.test(item.url).toString());
 			toolbarItem.setAttribute("data-tooltip-position", "top");
 			toolbarItem.setAttribute("aria-label", item.tooltip ? item.tooltip : "");
@@ -344,12 +343,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let url = clickedEl.getAttribute("href");
 		if (url != null) {
+			this.DEBUG && console.log('- url clicked: ', url);
 			let urlHasVars = clickedEl.getAttribute("data-toolbar-url-has-vars") ? 
 				clickedEl.getAttribute("data-toolbar-url-has-vars") === "true" : null;
 			if (urlHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
 				url = this.replaceUrlVars(url, activeFile);
 			}
+			this.DEBUG && console.log('- url resolved to: ', url);
 			window.open(url, '_blank');
 			e.preventDefault();
 		}
@@ -357,8 +358,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 	
 	replaceUrlVars(url: string, file: TFile | null): string {
-		this.DEBUG && console.log("replaceUrlVars()");
-		this.DEBUG && console.log("- original url: ", url);
 		let noteTitle = file?.basename;
 		if (noteTitle != null) {
 			url = url.replace('{{note_title}}', encodeURIComponent(noteTitle));
@@ -372,7 +371,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				return frontmatter && frontmatter[key] !== undefined ? encodeURIComponent(frontmatter[key]) : match;
 			});
 		}
-		this.DEBUG && console.log("- replaced url: ", url);
 		return url;
 	}
 
