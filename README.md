@@ -1,8 +1,8 @@
 # Obsidian Note Toolbar
 
-The [Obsidian](https://obsidian.md) Note Toolbar plugin provides a flexible way to create toolbars at the top of your notes.
+The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible way to create toolbars at the top of your notes.
 
-Alternately, add Note Toolbar Callouts anywhere in your notes.
+Alternately, add [Note Toolbar Callouts](#use-toolbar-callouts) anywhere in your notes.
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -114,7 +114,7 @@ _Notes on precedence:_
 
 ## Defining where Note Toolbars are applied
 
-Tell the plugin which notes to display toolbars in one of two ways:
+Tell the plugin which notes to display toolbars on, in one of two ways: based on a property, or based on the folder the note is in.
 
 ### Note property
 
