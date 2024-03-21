@@ -158,6 +158,12 @@ Refer directly to the [styles.css](https://github.com/chrisgurney/obsidian-note-
 
 # Troubleshooting
 
+## I want to link a toolbar item to a note...
+
+I'm investigating adding this in addition to URLs, but in the meantime you can get the URL from Obsidian itself (`Copy Obsidian URL`).
+
+## Styling of my toolbar looks weird...
+
 As mentioned, toolbars are a special form of callout, designed to fit naturally with Obsidian's look and feel. The plugin inserts between the metadata and content portions of the editor view, assuming certain criteria are met.
 
 If you use other plugins or themes that modify how callouts behave or look, they _may_ have an effect on this plugin. 
