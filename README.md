@@ -69,9 +69,9 @@ Add each item to your toolbar:
 
 | Setting | What it does |
 | --- | --- |
-| Item label | What's shown on the menu |
-| Tooltip | Displayed on hover of the item. Nothing is displayed if this is not set. |
-| URL | What the item links to. More on that below. |
+| Item label | What's shown on the toolbar |
+| Tooltip | Displayed on hovering over the item on the toolbar. Nothing is displayed if this is not set. |
+| URL | What the item links to. See the [URLs](#urls) section. |
 | Hide on mobile | Enable this to simplify your experience on mobile due to limited screen real-estate, or for items that just don't work on mobile (e.g., Shell Commands). |
 | Hide on desktop | If you have items you prefer not to see on desktop. |
 
@@ -82,9 +82,9 @@ URLs support the following variables, which are substituted on click:
 | Variable | What it is |
 | --- | --- |
 | `{{note_title}}` | The title (a.k.a. basename) of the current note. |
-| `{{prop_NAME}}` | Property in the current note with the given name. Note, if the property does not exist, the variable will not be substitued. e.g., if you have a property called "date" use `{{prop_date}}` |
+| `{{prop_NAME}}` | Property in the current note with the given name. If the property does not exist, the variable will not be substitued. e.g., if you have a property called "date" use `{{prop_date}}` |
 
-Note that URL variable values are [encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) for safety.
+URL variable values are [encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) for safety.
 
 [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) what else you might want to add.
 
