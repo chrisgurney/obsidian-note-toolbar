@@ -38,21 +38,16 @@ With this plugin, you also get [Note Toolbar Callouts](#use-toolbar-callouts) wh
 
 # Examples
 
-- [ ] TBD:
+Any plugin that can generate a URL can be executed from the toolbar. Some examples:
 
-Examples of items you might put in a toolbar:
-- Next/Previous Daily Note: use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri)
-- Create new notes: Templater
-- Bookmarks: Open the Bookmarks panel with a command (Advanced URI), OR use a [Note Toolbar Callout](#use-toolbar-callouts) + Dataview to generate a toolbar with your bookmarks.
-- Execute Shell Commands
+| Example | How? |
+| --- | --- |
+| Next/Previous and Today's Daily Note | Use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) to get the relevant links. |
+| Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) |
+| Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri), OR use a [Note Toolbar Callout](#use-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your top bookmarks. |
+| Execute Shell Commands | Using the [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) plugin. |
 
-...let me know how you use your toolbars!
-
-Note Toolbar pairs well with these plugins:
-- [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) (for linking to any Obsidian command)
-- [Dataview](https://github.com/blacksmithgu/obsidian-dataview) (e.g., generate a list of your Bookmarks)
-- [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) (link to today's, and previous/next Daily Notes)
-- [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) (for executing shell scripts, Python code, etc.)
+...and [let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars!
 
 # Settings Guide 🛠️
 
@@ -197,6 +192,14 @@ Shout out to other projects and people who helped me with questions I had while 
 - [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes/) - for code, and one of the reasons this plugin works well for my own needs... and for liam.cain's help!
 - [BRAT](https://github.com/TfTHacker/obsidian42-brat) - for the means to beta test this plugin.
 - Everybody on the [Obsidian Discord](https://discord.gg/obsidianmd), for their time and documentation, including but not limited to: claremacrae, lemons_dev, liam.cain, dovos, and joethei.
+
+Thank you to all the plugins that Note Toolbar can utilize:
+
+- [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) for linking to commands from:
+  - [Templater](https://github.com/SilentVoid13/Templater)
+  - [Dataview](https://github.com/blacksmithgu/obsidian-dataview) (e.g., generate a list of your Bookmarks)
+  - [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) (link to today's, and previous/next Daily Notes)
+- [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) (for executing shell scripts, Python code, etc.)
 
 # Contribute 🧑‍💻
 
