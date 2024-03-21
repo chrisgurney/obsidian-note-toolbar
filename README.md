@@ -1,4 +1,4 @@
-# Obsidian Note Toolbar
+# Note Toolbar
 
 The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible way to create toolbars at the top of your notes.
 
@@ -43,9 +43,10 @@ Alternately, add [Note Toolbar Callouts](#use-toolbar-callouts) anywhere in your
 Examples of items you might put in a toolbar:
 - Next/Previous Daily Note: use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri)
 - Create new notes: Templater
-- Bookmarks: Dataview + [!toolbar] callout
-- Shell Commands
-- ...let me know how you use your toolbars!
+- Bookmarks: Open the Bookmarks panel with a command (Advanced URI), OR use a [Note Toolbar Callout](#use-toolbar-callouts) + Dataview to generate a toolbar with your bookmarks.
+- Execute Shell Commands
+
+...let me know how you use your toolbars!
 
 Note Toolbar pairs well with these plugins:
 - [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) (for linking to any Obsidian command)
