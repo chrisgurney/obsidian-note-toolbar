@@ -94,17 +94,19 @@ Styles define how the toolbar will look (and behave).
 
 There's a set of default styles, but they're overridden for mobile (below) by any styles listed there.
 
-- border (adds a top and bottom border)
-- no border
-- center items
-- evenly space items
-- float left (floats the toolbar left of nearby content)
-- float right (floats the toolbar right of nearby content)
-- no float
-- left align items
-- right align items
-- sticky (sticks toolbar to top on scroll)
-- not sticky
+| Style | Clarification |
+| --- | --- |
+| border | adds a top and bottom border |
+| no border | |
+| center items | |
+| evenly space items | |
+| float left | floats the toolbar left of nearby content |
+| float right | floats the toolbar right of nearby content |
+| no float | |
+| left align items | |
+| right align items | |
+| sticky | sticks toolbar to top on scroll |
+| not sticky | |
 
 In the **Mobile** section, you can add equivalent styles that allow you to override the defaults on mobile.
 
