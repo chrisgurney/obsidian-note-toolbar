@@ -42,7 +42,7 @@ Any plugin that can generate a URL can be executed from the toolbar. Some exampl
 
 | Example | How? |
 | --- | --- |
-| Next/Previous and Today's Daily Note | Use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) to get the relevant links. |
+| Next/Previous and Today's Daily Note | Use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) to get the relevant links: Run `Advanced URI: get URI for command` > `<Don't specify a file>` > `Periodic Notes: Open next daily note` |
 | Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) |
 | Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri), OR use a [Note Toolbar Callout](#use-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your top bookmarks. |
 | Execute Shell Commands | Using the [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) plugin. |
