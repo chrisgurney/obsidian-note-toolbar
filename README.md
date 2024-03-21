@@ -108,8 +108,9 @@ There's a set of default styles, but they're overridden for mobile (below) by an
 
 In the **Mobile** section, you can add equivalent styles that allow you to override the defaults on mobile.
 
-_Note on precedence:_
-- Styles are defined alphabetically in [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) (with the exception of float being at the top).
+_Notes on precedence:_
+- Styles are applied in the order you add them in settings. Per how CSS works, styles later in the lists take precedence.
+- In case it helps, styles are defined alphabetically in [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) (with the exception of float being at the top).
 
 ## Defining where Note Toolbars are applied
 
@@ -162,13 +163,15 @@ Refer directly to the [styles.css](https://github.com/chrisgurney/obsidian-note-
 
 I'm investigating adding this in addition to URLs, but in the meantime you can get the URL from Obsidian itself (`Copy Obsidian URL`).
 
-## Styling of my toolbar looks weird...
+## The styling of my toolbar looks weird...
 
-As mentioned, toolbars are a special form of callout, designed to fit naturally with Obsidian's look and feel. The plugin inserts between the metadata and content portions of the editor view, assuming certain criteria are met.
+See the notes in the [Styles](#styles) section around precedence.
 
-If you use other plugins or themes that modify how callouts behave or look, they _may_ have an effect on this plugin. 
+However, if you use other plugins or themes that modify how callouts behave or look, they _may_ have an effect on this plugin. 
 
-Please log an issue if you think there’s a conflict that can be resolved in the plugin itself (e.g., missed a style that needs to be overridden). Pull requests are also welcome.
+As noted, toolbars are a special form of callout, designed to fit naturally with Obsidian's look and feel. The plugin inserts between the metadata and content portions of the editor view, assuming certain criteria are met.
+
+Please [log an issue](https://github.com/chrisgurney/obsidian-note-toolbar/issues) if you think there’s a conflict with a theme, for example, that can be resolved in the plugin itself (e.g., missed a style that needs to be overridden). Pull requests are also welcome.
 
 If you prefer to workaround any issues in the short term, styling is handled in [styles.css](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/styles.css) by `.callout[data-callout="note-toolbar"]`.
 
