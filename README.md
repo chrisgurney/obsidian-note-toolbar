@@ -18,24 +18,24 @@ With this plugin, you also get [Note Toolbar Callouts](#use-toolbar-callouts) wh
 ## Installing via BRAT
 
 1. Install the BRAT plugin:
-  - Open **Settings > Community Plugins**
-  - **Disable safe mode**, if enabled
-  - Browse, and **search for "BRAT"**
-  - Install the latest version of **Obsidian 42 - BRAT**
-2. Open BRAT settings (**Settings -> Obsidian 42 - BRAT**)
-3. Scroll to the **Beta Plugin List** section
-4. **Add Beta Plugin**
+  - Open _Settings > Community Plugins_
+  - _Disable safe mode_, if enabled
+  - Browse, and _search for "BRAT"_
+  - Install the latest version of _Obsidian 42 - BRAT_
+2. Open BRAT settings (_Settings -> Obsidian 42 - BRAT_)
+3. Scroll to the _Beta Plugin List_ section
+4. _Add Beta Plugin_
 5. Specify this repository: `chrisgurney/obsidian-note-toolbar`
-6. **Enable the Note Toolbar plugin** (**Settings -> Community Plugins**)
+6. _Enable the Note Toolbar plugin_ (_Settings -> Community Plugins_)
 
 # Getting Started 🚀
 
 Once installed and enabled, in Note Toolbar's settings:
 
-1. Create a **+ New toolbar**
-2. Give the toolbar a **name**.
-3. **+ Add toolbar item**
-4. Exit settings, and **open a note**.
+1. Create a _+ New toolbar_
+2. Give the toolbar a _name_.
+3. _+ Add toolbar item_
+4. Exit settings, and _open a note_.
 5. Add a `notetoolbar` property. Set it to the name of your toolbar.
 
 Try mapping a folder, like whever your Daily Notes are stored, to your new toolbar.
@@ -55,7 +55,7 @@ Any plugin that can generate a URL can be executed from the toolbar. Some exampl
 
 # Settings Guide 🛠️
 
-Once installed, in Obsidian go to: **Settings... > Note Toolbar** and click **+ New toolbar**.
+Once installed, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New toolbar_.
 
 ![Example of a settings configuration](./docs/settings.png)
 
@@ -94,7 +94,7 @@ URL variable values are [encoded](https://developer.mozilla.org/en-US/docs/Web/J
 
 Styles define how the toolbar will look (and behave).
 
-Add them to the **Defaults** section. In the **Mobile** section, you can add equivalent styles that allow you to override these defaults, on mobile.
+Add them to the _Defaults_ section. In the _Mobile_ section, you can add equivalent styles that allow you to override these defaults, on mobile.
 
 | Style | Clarification |
 | --- | --- |
