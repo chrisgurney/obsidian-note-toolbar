@@ -92,7 +92,8 @@ export default class ToolbarSettingsModal extends Modal {
 						toolbarNameDiv.removeClass("note-toolbar-setting-error");
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.saveSettings();	
+						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
+						await this.plugin.saveSettings();
 					}
 			}));
 		settingsDiv.append(toolbarNameDiv);

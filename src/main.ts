@@ -33,16 +33,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log('UNLOADED');
 	}
 
-	/**
-	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
-	 */
-	async onExternalSettingsChange(): Promise<void> {
-		this.DEBUG && console.log("onExternalSettingsChange()");
-		// reload in-memory settings
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-		// await this.loadSettings();
-	}
-
 	/*************************************************************************
 	 * SETTINGS LOADERS
 	 *************************************************************************/
@@ -102,7 +92,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Sorts the toolbar list (by name) first.
 	 */
 	async saveSettings(): Promise<void> {
-		this.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 		await this.saveData(this.settings);
 
 		// TODO: update the toolbar instead of removing and re-adding to the DOM?
@@ -110,6 +99,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.renderToolbarForActiveFile();
 
 		this.DEBUG && console.log("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+	/**
+	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
+	 */
+	async onExternalSettingsChange(): Promise<void> {
+		this.DEBUG && console.log("onExternalSettingsChange()");
+		// reload in-memory settings
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		// await this.loadSettings();
 	}
 
 	/**
