@@ -48,12 +48,12 @@ export function emptyMessageFr(text: string): DocumentFragment {
 }
 
 /**
- * Check if a string is a valid URL.
+ * Check if a string is a valid URI.
  * @link https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
  */
 // I think this is defined outside the function to reuse the object, for efficiency
 let validUrlEl: HTMLInputElement | undefined;
-export function isValidUrl(u: string): boolean {
+export function isValidUri(u: string): boolean {
 	if (u !== "") {  
 		if (!validUrlEl) {
 			validUrlEl = document.createElement('input');

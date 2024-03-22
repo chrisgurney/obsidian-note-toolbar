@@ -1,5 +1,5 @@
-
-export const SETTINGS_VERSION = 20240318.1;
+/* remember to update when settings structure changes */
+export const SETTINGS_VERSION = 20240322.1;
 
 export interface NoteToolbarSettings {
 	version: number;
@@ -39,10 +39,17 @@ export interface FolderMapping {
 export interface ToolbarItemSettings {
 	label: string;
 	url: string;
+	/* used to describe the type of url, for efficiency on toolbar render and click handling */
+	urlAttr: ToolbarItemUrlAttr;
 	tooltip: string;
 	hideOnDesktop: boolean;
 	hideOnMobile: boolean;
 }
+
+export interface ToolbarItemUrlAttr {
+	hasVars: boolean;
+	isUri: boolean;
+};
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.

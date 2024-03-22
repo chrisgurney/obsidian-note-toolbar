@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, MarkdownView, MetadataCache, Notice, Plugin, TFile } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
-import { isValidUrl } from './Utils/Utils';
+import { isValidUri } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -53,18 +53,21 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log("loadSettings: loaded settings: ", loaded_settings);
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 	
-		const old_version = loaded_settings?.version as number;
-		this.DEBUG && console.log("loadSettings: loaded settings version: " + old_version);
+		let old_version = loaded_settings?.version as number;
+		let new_version: number;
 
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 
-			// first version without update (i.e., version is `undefined`)           
+			this.DEBUG && console.log("loadSettings: versions do not match: ", old_version, " <> ", SETTINGS_VERSION);
+			this.DEBUG && console.log("running migrations...");
+
+			// first version without update (i.e., version is `undefined`)
+			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
 			if (!old_version) {
-				// migrate from first version to current version
+				new_version = 20240318.1;
+				console.log("- starting migration: " + old_version + " -> " + new_version);
 				// for each: double-check setting to migrate is there
-				console.log("- starting migration for version: " + old_version + " to " + SETTINGS_VERSION);
-				// migration: moved styles to defaultStyles (and introduced mobileStyles)
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					if (tb.styles) {
 						console.log("\t- OLD SETTING: " + tb.styles);
@@ -76,10 +79,30 @@ export default class NoteToolbarPlugin extends Plugin {
 						delete tb.styles;
 					}
 				});
+				old_version = new_version;
 			}
-			// other migrations can go here in elseifs
+
+			// MIGRATION: added urlAttr setting
+			if (old_version === 20240318.1) {
+				new_version = 20240322.1;
+				console.log("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						if (!item?.urlAttr) {
+							console.log("  - add urlAttr for: ", tb.name, item.label);
+							// assume old urls are indeed urls and have variables
+							item.urlAttr = {
+								hasVars: true,
+								isUri: true
+							};
+						}
+					});
+				});
+				old_version = new_version;
+			}
 
 			console.log("updated settings:", this.settings);
+			this.settings.version = SETTINGS_VERSION;
 
 			// ensure that migrated settings are saved 
 			await this.saveSettings();
@@ -275,7 +298,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let toolbarItem = document.createElement("a");
 			toolbarItem.className = "external-link";
 			// TODO: replace need for this with a url-attributes setting
-			if (isValidUrl(item.url)) {
+			if (isValidUri(item.url)) {
 				toolbarItem.setAttribute("href", item.url);
 			}
 			else {
