@@ -79,14 +79,16 @@ Add each item to your toolbar:
 
 #### URLs
 
-URLs support the following variables, which are substituted on click:
+Toolbar items can link to notes, or URLs (linking to internal or external locations).
+
+The following variables are supported, which are substituted on click:
 
 | Variable | What it is |
 | --- | --- |
 | `{{note_title}}` | The title (a.k.a. basename) of the current note. |
 | `{{prop_NAME}}` | Property in the current note with the given name. If the property does not exist, the variable will not be substitued. e.g., if you have a property called "date" use `{{prop_date}}` |
 
-URL variable values are [encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) for safety.
+Variable values are [encoded](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) for safety.
 
 [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) what else you might want to add.
 
