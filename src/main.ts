@@ -297,13 +297,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let toolbarItem = document.createElement("a");
 			toolbarItem.className = "external-link";
-			// TODO: replace need for this with a url-attributes setting
-			if (isValidUri(item.url)) {
-				toolbarItem.setAttribute("href", item.url);
-			}
-			else {
-				toolbarItem.setAttribute("href", this.createObsidianUrl(item.url));
-			}
+			toolbarItem.setAttribute("href", item.url);
 			Object.entries(item.urlAttr).forEach(([key, value]) => {
 				toolbarItem.setAttribute(`data-toolbar-url-attr-${key}`, value);
 			});
@@ -399,28 +393,33 @@ export default class NoteToolbarPlugin extends Plugin {
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let url = clickedEl.getAttribute("href");
 
-		// TODO: FUTURE: keeping here as working version for internal links
-		if (false) {
-			let testFile = this.app.workspace.getActiveFile()?.path ?? "";
-			console.log("openLinkText: ", testFile);
-			this.app.workspace.openLinkText("Nested Note", testFile);
-			e.preventDefault();
-		}
-
 		if (url != null) {
 			this.DEBUG && console.log('- url clicked: ', url);
+
+			// default these to true if they don't exist, treating the url as though it is a URI with vars
 			let urlHasVars = clickedEl.getAttribute("data-toolbar-url-attr-hasVars") ? 
-				clickedEl.getAttribute("data-toolbar-url-attr-hasVars") === "true" : null;
+							 clickedEl.getAttribute("data-toolbar-url-attr-hasVars") === "true" : true;
 			let urlIsUri = clickedEl.getAttribute("data-toolbar-url-attr-isUri") ? 
-				clickedEl.getAttribute("data-toolbar-url-attr-isUri") === "true" : null;
+						   clickedEl.getAttribute("data-toolbar-url-attr-isUri") === "true" : true;
 			this.DEBUG && console.log("- hasVars: ", urlHasVars, " isUri: ", urlIsUri);
+
 			if (urlHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
 				url = this.replaceUrlVars(url, activeFile);
+				this.DEBUG && console.log('- url vars replaced: ', url);
 			}
-			this.DEBUG && console.log('- url resolved to: ', url);
-			window.open(url, '_blank');
-			e.preventDefault();
+
+			if (urlIsUri) {
+				window.open(url, '_blank');
+				e.preventDefault();	
+			}
+			else {
+				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+				console.log("- openLinkText: ", url, " from: ", activeFile);
+				this.app.workspace.openLinkText(url, activeFile);
+				e.preventDefault();
+			}
+
 		}
 
 	}
