@@ -66,3 +66,12 @@ export function isValidUri(u: string): boolean {
 		return false
 	}
 }
+
+/**
+ * Check if a string has vars, defined as {{variablename}}
+ * @param s The string to check.
+ */
+export function hasVars(s: string): boolean {
+	const urlVariableRegex = /{{.*?}}/g;
+	return urlVariableRegex.test(s);
+}

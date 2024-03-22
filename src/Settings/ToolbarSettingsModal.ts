@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
-import { arraymove, emptyMessageFr, isValidUri } from 'src/Utils/Utils';
+import { arraymove, emptyMessageFr, hasVars, isValidUri } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_OPTIONS, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
@@ -168,8 +168,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.onChange(async (value) => {
 							toolbarItem.url = value;
 							toolbarItem.urlAttr.isUri = isValidUri(value);
-							const urlVariableRegex = /{{.*?}}/g;
-							toolbarItem.urlAttr.hasVars = urlVariableRegex.test(value);
+							toolbarItem.urlAttr.hasVars = hasVars(value);
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.saveSettings();
 					}));
