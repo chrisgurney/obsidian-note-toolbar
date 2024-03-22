@@ -115,7 +115,7 @@ export default class ToolbarSettingsModal extends Modal {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar#urls",
 				text: "documentation",
 			}),
-			" about variables supported in URLs."
+			" about variables supported in links."
 		);
 
 		new Setting(settingsDiv)
@@ -166,7 +166,7 @@ export default class ToolbarSettingsModal extends Modal {
 				const s1b = new Setting(textFieldsUrlDiv)
 					.setClass("note-toolbar-setting-item-field-url")
 					.addText(text => text
-						.setPlaceholder('URL')
+						.setPlaceholder('URL or note')
 						.setValue(toolbarItem.url)
 						.onChange(
 							debounce(async (value) => {
