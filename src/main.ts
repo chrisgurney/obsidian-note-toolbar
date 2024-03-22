@@ -101,8 +101,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				old_version = new_version;
 			}
 
-			console.log("updated settings:", this.settings);
 			this.settings.version = SETTINGS_VERSION;
+			console.log("updated settings:", this.settings);
 
 			// ensure that migrated settings are saved 
 			await this.saveSettings();
