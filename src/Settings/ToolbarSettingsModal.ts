@@ -142,6 +142,8 @@ export default class ToolbarSettingsModal extends Modal {
 						.setValue(toolbarItem.label)
 						.onChange(async (value) => {
 							toolbarItem.label = value;
+							// TODO: if the label contains vars, set the flag to always rerender this toolbar
+							// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.saveSettings();
 					}));

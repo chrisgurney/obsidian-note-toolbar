@@ -272,6 +272,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				existingToolbarEl = null;
 			}
 
+			// TODO: if there's a setting to rerender the matchingToolbar (e.g., the names have vars), we can removeActiveToolbar
+
 		}
 
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
@@ -305,6 +307,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbarItem.setAttribute("aria-label", item.tooltip ? item.tooltip : "");
 			toolbarItem.setAttribute("rel", "noopener");
 			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
+			// TODO: if the label has variables, replace them
 			toolbarItem.innerHTML = item.label;
 
 			let noteToolbarLi = document.createElement("li");

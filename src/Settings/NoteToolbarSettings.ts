@@ -19,6 +19,7 @@ export interface ToolbarSettings {
 	name: string;
 	updated: string;
 	items: Array<ToolbarItemSettings>;
+	// TODO: add setting to force rerender of toolbar (for label variables)
 	defaultStyles: string[];
 	mobileStyles: string[];
 }
