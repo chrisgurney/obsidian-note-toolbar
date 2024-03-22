@@ -304,8 +304,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			else {
 				toolbarItem.setAttribute("href", this.createObsidianUrl(item.url));
 			}
-			const urlVariableRegex = /{{.*?}}/g;
-			toolbarItem.setAttribute("data-toolbar-url-has-vars", urlVariableRegex.test(item.url).toString());
+			Object.entries(item.urlAttr).forEach(([key, value]) => {
+				toolbarItem.setAttribute(`data-toolbar-url-attr-${key}`, value);
+			});
 			toolbarItem.setAttribute("data-tooltip-position", "top");
 			toolbarItem.setAttribute("aria-label", item.tooltip ? item.tooltip : "");
 			toolbarItem.setAttribute("rel", "noopener");
@@ -408,8 +409,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (url != null) {
 			this.DEBUG && console.log('- url clicked: ', url);
-			let urlHasVars = clickedEl.getAttribute("data-toolbar-url-has-vars") ? 
-				clickedEl.getAttribute("data-toolbar-url-has-vars") === "true" : null;
+			let urlHasVars = clickedEl.getAttribute("data-toolbar-url-attr-hasVars") ? 
+				clickedEl.getAttribute("data-toolbar-url-attr-hasVars") === "true" : null;
+			let urlIsUri = clickedEl.getAttribute("data-toolbar-url-attr-isUri") ? 
+				clickedEl.getAttribute("data-toolbar-url-attr-isUri") === "true" : null;
+			this.DEBUG && console.log("- hasVars: ", urlHasVars, " isUri: ", urlIsUri);
 			if (urlHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
 				url = this.replaceUrlVars(url, activeFile);
