@@ -122,7 +122,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.removeActiveToolbar();
 		await this.renderToolbarForActiveFile();
 
-		this.DEBUG && console.log("SETTINGS SAVED: " + new Date().getTime());
+		// this.DEBUG && console.log("SETTINGS SAVED: " + new Date().getTime());
 	}
 
 	/**
@@ -342,32 +342,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Temporary method to link to a note from a toolbar. Will replace with method that uses openLinkText() in the clickHandler.
-	 * @param filename Name of the file relative to the base of the vault; must include the file extension (e.g., `.md`)
-	 */
-	createObsidianUrl(filename: string): string {
-
-		// TODO: replace with url-attributes setting and openLinkText() in the clickHandler
-		this.DEBUG && console.log("createObsidianUrl: ", filename);
-		let obsidianUrl = "";
-		let activeFile = this.app.workspace.getActiveFile();
-		if (activeFile) {
-			let file = this.app.vault.getFileByPath(filename);
-			this.DEBUG && console.log("-file: ", file);
-			if (file) {
-				this.DEBUG && console.log("- file: ", file);
-				let obsidianFileUrl = file.path ? file.path : "";
-				let obsidianVault = file.vault.getName();
-				obsidianUrl = "obsidian://open?vault=" + encodeURIComponent(obsidianVault) + "&file=" + encodeURIComponent(obsidianFileUrl);
-			}
-		}
-
-		this.DEBUG && console.log("- obsidianUrl: ", obsidianUrl);
-		return obsidianUrl;
-
-	}
-
-	/**
 	 * Creates the toolbar in the active file (assuming it needs one).
 	 */
 	async renderToolbarForActiveFile() {
@@ -405,7 +379,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			if (urlHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
-				url = this.replaceUrlVars(url, activeFile);
+				url = this.replaceVars(url, activeFile);
 				this.DEBUG && console.log('- url vars replaced: ', url);
 			}
 
@@ -424,21 +398,29 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 	
-	replaceUrlVars(url: string, file: TFile | null): string {
+	/**
+	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
+	 * @param s String to replace the variables in.
+	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
+	 * @returns String with the variables replaced.
+	 */
+	replaceVars(s: string, file: TFile | null): string {
+
 		let noteTitle = file?.basename;
 		if (noteTitle != null) {
-			url = url.replace('{{note_title}}', encodeURIComponent(noteTitle));
+			s = s.replace('{{note_title}}', encodeURIComponent(noteTitle));
 		}
 		// have to get this at run/click-time, as file or metadata may not have changed
 		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
 		if (frontmatter) {
 			// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-			url = url.replace(/{{prop_(.*?)}}/g, (match, p1) => {
+			s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
 				const key = p1.trim();
 				return frontmatter && frontmatter[key] !== undefined ? encodeURIComponent(frontmatter[key]) : match;
 			});
 		}
-		return url;
+		return s;
+
 	}
 
 	/*************************************************************************
