@@ -1,6 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, MarkdownView, MetadataCache, Notice, Plugin, TFile } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
+import { isValidUrl } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -273,7 +274,13 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let toolbarItem = document.createElement("a");
 			toolbarItem.className = "external-link";
-			toolbarItem.setAttribute("href", item.url);
+			// TODO: replace need for this with a url-attributes setting
+			if (isValidUrl(item.url)) {
+				toolbarItem.setAttribute("href", item.url);
+			}
+			else {
+				toolbarItem.setAttribute("href", this.createObsidianUrl(item.url));
+			}
 			const urlVariableRegex = /{{.*?}}/g;
 			toolbarItem.setAttribute("data-toolbar-url-has-vars", urlVariableRegex.test(item.url).toString());
 			toolbarItem.setAttribute("data-tooltip-position", "top");
@@ -289,8 +296,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarLi.append(toolbarItem);
 
 			noteToolbarUl.appendChild(noteToolbarLi);
-		});
-
+		});		
 		let noteToolbarCalloutContent = document.createElement("div");
 		noteToolbarCalloutContent.className = "callout-content";
 		noteToolbarCalloutContent.append(noteToolbarUl);
@@ -314,6 +320,32 @@ export default class NoteToolbarPlugin extends Plugin {
 		/* inject it between the properties and content divs */
 		let propertiesContainer = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
 		propertiesContainer?.insertAdjacentElement("afterend", embedBlock);
+
+	}
+
+	/**
+	 * Temporary method to link to a note from a toolbar. Will replace with method that uses openLinkText() in the clickHandler.
+	 * @param filename Name of the file relative to the base of the vault; must include the file extension (e.g., `.md`)
+	 */
+	createObsidianUrl(filename: string): string {
+
+		// TODO: replace with url-attributes setting and openLinkText() in the clickHandler
+		this.DEBUG && console.log("createObsidianUrl: ", filename);
+		let obsidianUrl = "";
+		let activeFile = this.app.workspace.getActiveFile();
+		if (activeFile) {
+			let file = this.app.vault.getFileByPath(filename);
+			this.DEBUG && console.log("-file: ", file);
+			if (file) {
+				this.DEBUG && console.log("- file: ", file);
+				let obsidianFileUrl = file.path ? file.path : "";
+				let obsidianVault = file.vault.getName();
+				obsidianUrl = "obsidian://open?vault=" + encodeURIComponent(obsidianVault) + "&file=" + encodeURIComponent(obsidianFileUrl);
+			}
+		}
+
+		this.DEBUG && console.log("- obsidianUrl: ", obsidianUrl);
+		return obsidianUrl;
 
 	}
 
@@ -342,6 +374,15 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.DEBUG && console.log('toolbarClickHandler');
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let url = clickedEl.getAttribute("href");
+
+		// TODO: FUTURE: keeping here as working version for internal links
+		if (false) {
+			let testFile = this.app.workspace.getActiveFile()?.path ?? "";
+			console.log("openLinkText: ", testFile);
+			this.app.workspace.openLinkText("Nested Note", testFile);
+			e.preventDefault();
+		}
+
 		if (url != null) {
 			this.DEBUG && console.log('- url clicked: ', url);
 			let urlHasVars = clickedEl.getAttribute("data-toolbar-url-has-vars") ? 
