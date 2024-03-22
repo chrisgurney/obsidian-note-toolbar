@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Modal, Setting } from 'obsidian';
+import { App, ButtonComponent, Modal, Setting, debounce } from 'obsidian';
 import { arraymove, emptyMessageFr, hasVars, isValidUri } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_OPTIONS, ToolbarSettings } from './NoteToolbarSettings';
@@ -78,7 +78,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.addText(text => text
 				.setPlaceholder('Name')
 				.setValue(this.toolbar.name)
-				.onChange(async (value) => {
+				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
 					let existingToolbar = this.plugin.getToolbarSettings(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
@@ -95,7 +95,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 						await this.plugin.saveSettings();
 					}
-			}));
+				}, 750)));
 		settingsDiv.append(toolbarNameDiv);
 
 	}
@@ -140,24 +140,25 @@ export default class ToolbarSettingsModal extends Modal {
 					.addText(text => text
 						.setPlaceholder('Item label')
 						.setValue(toolbarItem.label)
-						.onChange(async (value) => {
-							toolbarItem.label = value;
-							// TODO: if the label contains vars, set the flag to always rerender this toolbar
-							// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
-							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.saveSettings();
-					}));
+						.onChange(
+							debounce(async (value) => {
+								toolbarItem.label = value;
+								// TODO: if the label contains vars, set the flag to always rerender this toolbar
+								// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
+								this.toolbar.updated = new Date().toISOString();
+								await this.plugin.saveSettings();
+							}, 750)));
 				const s1c = new Setting(textFieldsContainer)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('Tooltip (optional)')
 						.setValue(toolbarItem.tooltip)
-						.onChange(async (value) => {
-							toolbarItem.tooltip = value;
-							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.saveSettings();
-					}));
-
+						.onChange(
+							debounce(async (value) => {
+								toolbarItem.tooltip = value;
+								this.toolbar.updated = new Date().toISOString();
+								await this.plugin.saveSettings();
+							}, 750)));
 				let textFieldsUrlDiv = this.containerEl.createEl("div");
 				textFieldsUrlDiv.style.display = "flex";
 				textFieldsUrlDiv.style.flexWrap = "wrap";
@@ -167,14 +168,14 @@ export default class ToolbarSettingsModal extends Modal {
 					.addText(text => text
 						.setPlaceholder('URL')
 						.setValue(toolbarItem.url)
-						.onChange(async (value) => {
-							toolbarItem.url = value;
-							toolbarItem.urlAttr.isUri = isValidUri(value);
-							toolbarItem.urlAttr.hasVars = hasVars(value);
-							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.saveSettings();
-					}));
-
+						.onChange(
+							debounce(async (value) => {
+								toolbarItem.url = value;
+								toolbarItem.urlAttr.isUri = isValidUri(value);
+								toolbarItem.urlAttr.hasVars = hasVars(value);
+								this.toolbar.updated = new Date().toISOString();
+								await this.plugin.saveSettings();
+							}, 750)));
 				let itemControlsDiv = this.containerEl.createEl("div");
 				itemControlsDiv.style.marginLeft = "auto";
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";

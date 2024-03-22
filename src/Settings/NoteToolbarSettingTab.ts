@@ -1,4 +1,4 @@
-import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
+import { App, ButtonComponent, PluginSettingTab, Setting, debounce } from 'obsidian';
 import NoteToolbarPlugin from '../main';
 import { arraymove, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
@@ -126,12 +126,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.addText(text => text
 				.setPlaceholder('Property')
 				.setValue(this.plugin.settings.toolbarProp)
-				.onChange(async (value) => {
+				.onChange(debounce(async (value) => {
 					this.plugin.settings.toolbarProp = value;
 					// FIXME? set all toolbars to updated?
 					// this.plugin.settings.toolbars.updated = new Date().toISOString();
 					await this.plugin.saveSettings();	
-			}));
+				}, 750)));
 
 	}
 

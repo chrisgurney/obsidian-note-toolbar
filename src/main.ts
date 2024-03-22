@@ -122,7 +122,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.removeActiveToolbar();
 		await this.renderToolbarForActiveFile();
 
-		// this.DEBUG && console.log("SETTINGS SAVED: " + new Date().getTime());
+		this.DEBUG && console.log("SETTINGS SAVED: " + new Date().getTime());
 	}
 
 	/**
