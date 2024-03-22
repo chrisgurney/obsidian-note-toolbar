@@ -122,6 +122,11 @@
 .callout[data-callout="note-toolbar"] {
 
     background-color: var(--background-primary);
+    
+    .callout & {
+        background-color: inherit;
+    }
+
     border-radius: 0;
     padding: inherit;
     width: 100%;
@@ -284,7 +289,7 @@
         }
     }
 
-    /* TODO REMOVE: old dataview version code */
+    /* TODO: confirm if this is still needed, or remove "dv" */
     &.dv-cg-note-toolbar {
         margin-bottom: 1rem;
         .is-mobile & {
