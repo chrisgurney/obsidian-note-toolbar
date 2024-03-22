@@ -171,7 +171,9 @@ Examples:
 
 ## I want to link a toolbar item to a note...
 
-I'm investigating adding this in addition to URLs, but in the meantime you can get the URL from Obsidian itself (`Copy Obsidian URL`).
+Simply enter the name of the note in the URL. If it doesn't exist on click, a new one will be created (per Obsidian's default behavior).
+
+You can also link to items within your vault by getting a URL to a note (`Copy Obsidian URL`) or from a plugin (e.g., Advanced URI).
 
 ## The styling of my toolbar looks weird...
 
