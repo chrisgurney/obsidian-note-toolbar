@@ -199,7 +199,7 @@ Shout out to other projects and people who helped me with questions I had while 
 - [Templater](https://github.com/SilentVoid13/Templater) - for code, especially around settings.
 - [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes/) - for code, and one of the reasons this plugin works well for my own needs... and for liam.cain's help!
 - [BRAT](https://github.com/TfTHacker/obsidian42-brat) - for the means to beta test this plugin.
-- Everybody on the [Obsidian Discord](https://discord.gg/obsidianmd), for their time and documentation, including but not limited to: claremacrae, lemons_dev, liam.cain, dovos, and joethei.
+- Everybody on the [Obsidian Discord](https://discord.gg/obsidianmd), for their time and documentation, including but not limited to: claremacrae, lemons_dev, liam.cain, dovos, joethei, and SkepticMystic.
 
 Thank you to all the plugins that Note Toolbar can utilize:
 
