@@ -1,7 +1,6 @@
-import { CachedMetadata, Editor, FrontMatterCache, MarkdownView, MetadataCache, Notice, Plugin, TFile } from 'obsidian';
+import { CachedMetadata, Editor, FrontMatterCache, MarkdownView, Plugin, TFile, debounce } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
-import { isValidUri } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -15,8 +14,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		this.app.workspace.on('file-open', this.fileOpenListener);
+		// this.app.workspace.on('file-open', this.fileOpenListener);
 		this.app.metadataCache.on('changed', this.metadataCacheListener);
+		this.app.workspace.on('layout-change', this.layoutChangeListener);
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 		await this.renderToolbarForActiveFile();
@@ -28,8 +28,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * removes listeners and all toolbars.
 	 */
 	async onunload() {
-		this.app.workspace.off('file-open', this.fileOpenListener);
+		// this.app.workspace.off('file-open', this.fileOpenListener);
 		this.app.metadataCache.off('changed', this.metadataCacheListener);
+		this.app.workspace.off('layout-change', this.layoutChangeListener);
 		this.removeAllToolbars();
 		this.DEBUG && console.log('UNLOADED');
 	}
@@ -170,16 +171,44 @@ export default class NoteToolbarPlugin extends Plugin {
 	 *************************************************************************/
 
 	/**
-	 * On opening of a file, trigger the checks and rendering of a toolbar if necessary.
+	 * On opening of a file, check and render toolbar if necessary.
 	 * @param file TFile that was opened.
 	 */
 	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
 			this.DEBUG && console.log('file-open: ' + file.name);
+			// TODO: remove; leave this here until rendering issues are sorted
+			// this.app.workspace.onLayoutReady(() => {
+			// 	console.log("LAYOUT READY");
+			// 	this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
+			// });
 			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 		}
-	}
+	};
+
+	/**
+	 * On layout changes, check and render toolbar if necessary. 
+	 */
+	layoutChangeListener = () => {
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		this.DEBUG && console.log('layout-change: ', currentView?.getMode());
+		switch(currentView?.getMode()) {
+			case "source":
+				// editing mode
+			case "preview":
+				// reading mode
+				this.DEBUG && console.log("layout-change: ", currentView?.getMode(), " -> re-rendering toolbar");
+				this.removeActiveToolbar();
+				this.app.workspace.onLayoutReady(debounce(() => {
+					console.log("LAYOUT READY");
+					this.renderToolbarForActiveFile();
+				}, 0));
+				break;
+			default:
+				return;
+		}
+	};
 
 	/**
 	 * On changes to metadata, trigger the checks and rendering of a toolbar if necessary.
@@ -190,7 +219,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
 		this.DEBUG && console.log("metadata-changed: " + file.name);
 		this.checkAndRenderToolbar(file, cache.frontmatter);
-	}
+	};
 
 	/*************************************************************************
 	 * TOOLBAR RENDERERS
@@ -204,7 +233,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
 
-		// this.DEBUG && console.log('checkAndRenderToolbar()');
+		this.DEBUG && console.log('checkAndRenderToolbar()');
 
 		//
 		// check: does this note need a toolbar?
@@ -244,31 +273,39 @@ export default class NoteToolbarPlugin extends Plugin {
 		//
 		// check: is there already a toolbar to remove?
 		//
-
-		let existingToolbarEl = document.querySelector('.workspace-tab-container > .mod-active .dv-cg-note-toolbar');
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
+		console.log("- view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
 		if (existingToolbarEl) {
 
 			// this.DEBUG && console.log('checkAndRenderToolbar: existing toolbar');
 
 			let existingToolbarName = existingToolbarEl?.getAttribute("data-name");
 			let existingToolbarUpdated = existingToolbarEl.getAttribute("data-updated");
+			let existingToolbarHasSibling = existingToolbarEl.nextElementSibling;
 
 			// if we don't need it, remove it
 			if (!matchingToolbar) {
-				// this.DEBUG && console.log("checkAndRenderToolbar: toolbar not needed, removing existing toolbar: " + existingToolbarName);
-				this.removeActiveToolbar();
+				this.DEBUG && console.log("- toolbar not needed, removing existing toolbar: " + existingToolbarName);
+				existingToolbarEl.remove();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT the name of the existing toolbar doesn't match
 			else if (matchingToolbar.name !== existingToolbarName) {
-				// this.DEBUG && console.log("checkAndRenderToolbar: toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
-				this.removeActiveToolbar();
+				this.DEBUG && console.log("- toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
+				existingToolbarEl.remove();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT it needs to be updated
 			else if (matchingToolbar.updated !== existingToolbarUpdated) {
-				// this.DEBUG && console.log("checkAndRenderToolbar: existing toolbar out of date, removing existing toolbar");
-				this.removeActiveToolbar();
+				this.DEBUG && console.log("- existing toolbar out of date, removing existing toolbar");
+				existingToolbarEl.remove();
+				existingToolbarEl = null;
+			}
+			// existingToolbarEl is not in the correct position: can happen when switching layouts
+			else if (existingToolbarHasSibling) {
+				this.DEBUG && console.log("- not in the correct position (has next sibling), removing existing toolbar");
+				existingToolbarEl.remove();
 				existingToolbarEl = null;
 			}
 
@@ -278,10 +315,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
 		if (matchingToolbar && !existingToolbarEl) {
-
-			// this.DEBUG && console.log("checkAndRenderToolbar: rendering toolbar: ", matchingToolbar);
+			this.DEBUG && console.log("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
 			this.renderToolbarFromSettings(matchingToolbar);
-
 		}
 
 	}
@@ -291,6 +326,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar ToolbarSettings
 	 */
 	async renderToolbarFromSettings(toolbar: ToolbarSettings) {
+
+		this.DEBUG && console.log("renderToolbarFromSettings: ", toolbar);
 
 		/* create the unordered list of menu items */
 		let noteToolbarUl = document.createElement("ul");
@@ -327,8 +364,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		noteToolbarCallout.setAttribute("tabindex", "0");
 		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
 		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
-		noteToolbarCallout.setAttribute("data-name", toolbar.name);
-		noteToolbarCallout.setAttribute("data-updated", toolbar.updated);
 		noteToolbarCallout.append(noteToolbarCalloutContent);
 
 		/* workaround to emulate callout-in-content structure, to use same sticky css */
@@ -336,10 +371,23 @@ export default class NoteToolbarPlugin extends Plugin {
 		div.append(noteToolbarCallout);
 		let embedBlock = document.createElement("div");
 		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
+		embedBlock.setAttribute("data-name", toolbar.name);
+		embedBlock.setAttribute("data-updated", toolbar.updated);
 		embedBlock.append(div);
 
 		/* inject it between the properties and content divs */
-		let propertiesContainer = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
+		// TODO: remove; leaving here until rendering issues are fully sorted
+		// let propertiesContainer = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
+		// let propertiesContainer = this.app.workspace.activeEditor?.contentEl.querySelector('.metadata-container');
+		// let propertiesContainer = currentView?.contentEl.querySelector('.metadata-container');
+		// let propertiesContainer = this.app.workspace.containerEl.querySelector('.cm-editor > .metadata-container');
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let propertiesContainer = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
+		if (!propertiesContainer) {
+			console.error("Unable to find propertiesContainer to insert toolbar");
+			console.log(document.readyState);
+			// debugger;
+		}
 		propertiesContainer?.insertAdjacentElement("afterend", embedBlock);
 
 	}
@@ -433,15 +481,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Remove the toolbar on the active file.
 	 */
-	async removeActiveToolbar() {
-		let existingToolbar = document.querySelector('.workspace-tab-container > .mod-active .cg-note-toolbar-container');
+	async removeActiveToolbar(): Promise<void> {
+		let existingToolbar = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
 		existingToolbar?.remove();
 	}
 
 	/**
 	 * Remove any toolbars in all open files.
 	 */
-	async removeAllToolbars() {
+	async removeAllToolbars(): Promise<void> {
 		let existingToolbars = document.querySelectorAll('.cg-note-toolbar-container');
 		existingToolbars.forEach((toolbar) => {
 			toolbar.remove();
