@@ -203,7 +203,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.app.workspace.onLayoutReady(debounce(() => {
 					console.log("LAYOUT READY");
 					this.renderToolbarForActiveFile();
-				}, (viewMode === "preview" ? 300 : 0)));
+				}, (viewMode === "preview" ? 200 : 0)));
 				break;
 			default:
 				return;
