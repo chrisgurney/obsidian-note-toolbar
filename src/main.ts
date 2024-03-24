@@ -192,18 +192,18 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	layoutChangeListener = () => {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		this.DEBUG && console.log('layout-change: ', currentView?.getMode());
-		switch(currentView?.getMode()) {
+		let viewMode = currentView?.getMode();
+		this.DEBUG && console.log('layout-change: ', viewMode);
+		switch(viewMode) {
 			case "source":
-				// editing mode
 			case "preview":
-				// reading mode
-				this.DEBUG && console.log("layout-change: ", currentView?.getMode(), " -> re-rendering toolbar");
+				// if we're in editing or reading mode...
+				this.DEBUG && console.log("layout-change: ", viewMode, " -> re-rendering toolbar");
 				this.removeActiveToolbar();
 				this.app.workspace.onLayoutReady(debounce(() => {
 					console.log("LAYOUT READY");
 					this.renderToolbarForActiveFile();
-				}, 0));
+				}, (viewMode === "preview" ? 300 : 0)));
 				break;
 			default:
 				return;
