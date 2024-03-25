@@ -60,13 +60,13 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ noborder: "no border" },
     { center: "center items" },
     { even: "evenly space items" },
-    { floatl: "float left" },
-    { floatr: "float right" },
-    { nofloat: "no float" },
     { left: "left align items" },
     { right: "right align items" },
     { sticky: "sticky" },
     { nosticky: "not sticky" },
+    { floatl: "float left" },
+    { floatr: "float right" },
+    { nofloat: "no float" },
 ];
 
 /**
@@ -77,11 +77,11 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mnbrder: "no border" },
     { mctr: "center items" },
     { mevn: "evenly space items" },
-    { mfltl: "float left" },
-    { mfltr: "float right" },
-    { mnflt: "no float" },
     { mlft: "left align items" },
     { mrght: "right align items" },
     { mstcky: "sticky" },
     { mnstcky: "not sticky" },
+    { mfltl: "float left" },
+    { mfltr: "float right" },
+    { mnflt: "no float" },
 ];

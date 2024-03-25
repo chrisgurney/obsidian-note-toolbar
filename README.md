@@ -106,11 +106,11 @@ Add them to the _Defaults_ section. In the _Mobile_ section, you can add equival
 | no border | |
 | center items | |
 | evenly space items | |
+| left align items | |
+| right align items | |
 | float left | floats the toolbar left of nearby content |
 | float right | floats the toolbar right of nearby content |
 | no float | |
-| left align items | |
-| right align items | |
 | sticky | sticks toolbar to top on scroll |
 | not sticky | |
 
