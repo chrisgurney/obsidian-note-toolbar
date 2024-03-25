@@ -347,7 +347,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbarItem.setAttribute("rel", "noopener");
 			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
 			// TODO: if the label has variables, replace them
-			toolbarItem.innerHTML = item.label;
+			toolbarItem.innerText = item.label;
 
 			let noteToolbarLi = document.createElement("li");
 			item.hideOnMobile ? noteToolbarLi.className = "hide-on-mobile" : false;
