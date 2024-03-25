@@ -478,10 +478,15 @@ export default class NoteToolbarPlugin extends Plugin {
 			// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
 			s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
 				const key = p1.trim();
-				const linkWrap = /\[\[|\]\]/g; // remove [[ and ]] in case an internal link was passed
-				return frontmatter && frontmatter[key] !== undefined 
-					? (encode ? encodeURIComponent(frontmatter[key].replace(linkWrap,'')) : frontmatter[key].replace(linkWrap,'')) 
-					: '';
+				if (frontmatter && frontmatter[key] !== undefined) {
+					// handle the case where the prop might be a list
+					let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
+					const linkWrap = /\[\[|\]\]/g; // remove [[ and ]] in case an internal link was passed
+					return (encode ? encodeURIComponent(fm.replace(linkWrap,'')) : fm.replace(linkWrap,''));
+				}
+				else {
+					return '';
+				}
 			});
 		}
 		return s;
