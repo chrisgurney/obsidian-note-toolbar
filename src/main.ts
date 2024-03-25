@@ -434,6 +434,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.DEBUG && console.log('- url vars replaced: ', url);
 			}
 
+			// if it's a js function that exists, call it without any parameters
 			if (url.toLowerCase().startsWith('onclick:')) {
 				let functionName = url.slice(8); // remove 'onclick:'
 				if (typeof (window as any)[functionName] === 'function') {
@@ -441,10 +442,12 @@ export default class NoteToolbarPlugin extends Plugin {
 					e.preventDefault();
 				}
 			}
+			// if it's a url, just open the url
 			else if (urlIsUri) {
 				window.open(url, '_blank');
 				e.preventDefault();	
 			}
+			// otherwise assume it's an internal link (note) and try to open it
 			else {
 				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
 				console.log("- openLinkText: ", url, " from: ", activeFile);
