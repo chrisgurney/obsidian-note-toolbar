@@ -430,7 +430,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			if (urlHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
-				url = this.replaceVars(url, activeFile);
+				url = this.replaceVars(url, activeFile, urlIsUri);
 				this.DEBUG && console.log('- url vars replaced: ', url);
 			}
 
@@ -453,13 +453,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
 	 * @param s String to replace the variables in.
 	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
+	 * @param encode True if we should encode the variables (recommended if part of external URL).
 	 * @returns String with the variables replaced.
 	 */
-	replaceVars(s: string, file: TFile | null): string {
+	replaceVars(s: string, file: TFile | null, encode: boolean): string {
 
 		let noteTitle = file?.basename;
 		if (noteTitle != null) {
-			s = s.replace('{{note_title}}', encodeURIComponent(noteTitle));
+			s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
 		}
 		// have to get this at run/click-time, as file or metadata may not have changed
 		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
@@ -467,7 +468,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
 			s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
 				const key = p1.trim();
-				return frontmatter && frontmatter[key] !== undefined ? encodeURIComponent(frontmatter[key]) : match;
+				console.log(match);
+				const linkWrap = /\[\[|\]\]/g; // remove [[ and ]] in case an internal link was passed
+				return frontmatter && frontmatter[key] !== undefined 
+					? (encode ? encodeURIComponent(frontmatter[key].replace(linkWrap,'')) : frontmatter[key].replace(linkWrap,'')) 
+					: '';
 			});
 		}
 		return s;
