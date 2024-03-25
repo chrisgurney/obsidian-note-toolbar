@@ -102,17 +102,17 @@ Add them to the _Defaults_ section. In the _Mobile_ section, you can add equival
 
 | Style | Clarification |
 | --- | --- |
-| border | adds a top and bottom border<br/><img src="./docs/style_border_even.png" width="600"/> |
-| no border | <img src="./docs/style_noborder.png" width="600"/> |
+| border | <img src="./docs/style_border_even.png" width="600"/> |
+| no border | simply remove the `border` style if you don't want a border; use `no border` if you don't want a border on mobile<br/><img src="./docs/style_noborder.png" width="600"/> |
 | center items | <img src="./docs/style_center.png" width="600"/> |
 | evenly space items | <img src="./docs/style_border_even.png" width="600"/> |
-| left align items | <img src="./docs/style_left.png" width="600"/> |
+| left align items | this is the default alignment; use this if you want left alignment on mobile<br/><img src="./docs/style_left.png" width="600"/> |
 | right align items | <img src="./docs/style_right.png" width="600"/> |
 | float left | floats the toolbar left of nearby content |
 | float right | floats the toolbar right of nearby content |
 | no float | |
 | sticky | sticks toolbar to top on scroll |
-| not sticky | |
+| not sticky | simply remove the `sticky` style if you don't it to stick; use `not sticky` if you don't want it to stick on mobile |
 
 _Notes on precedence:_
 - Styles are applied in the order you add them in settings. Per how CSS works, styles later in the lists take precedence.
