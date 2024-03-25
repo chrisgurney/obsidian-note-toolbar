@@ -102,7 +102,7 @@ Add them to the _Defaults_ section. In the _Mobile_ section, you can add equival
 
 | Style | Clarification |
 | --- | --- |
-| border | adds a top and bottom border |
+| border | adds a top and bottom border <br/><img src="./docs/style_border_even.png"/> |
 | no border | |
 | center items | |
 | evenly space items | |
