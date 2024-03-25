@@ -100,7 +100,7 @@ Styles define how the toolbar will look (and behave).
 
 Add them to the _Defaults_ section. In the _Mobile_ section, you can add equivalent styles that allow you to override these defaults, on mobile.
 
-In the example below, on mobile the toolbar will _not_ have a border, _not_ be sticky, but the items will stay as right aligned.  
+In the example below, on mobile the toolbar will _not_ have a border, and _not_ be sticky, but the items will stay as right aligned.  
 
 ![Styles settings example showing how default styles can be overridden](./docs/styles_settings.png)
 
