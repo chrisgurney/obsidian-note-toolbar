@@ -2,7 +2,7 @@
 
 The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible way to create toolbars at the top of your notes.
 
-With this plugin, you also get [Note Toolbar Callouts](#use-toolbar-callouts) which you can add anywhere in your notes.
+With this plugin, you also get [Note Toolbar Callouts](#note-toolbar-callouts) which you can add anywhere in your notes.
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -48,7 +48,7 @@ Any plugin that can generate a URL can be executed from the toolbar. Some exampl
 | --- | --- |
 | Next, Previous, and Today's Daily Note | Use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) to get the relevant links: Run `Advanced URI: get URI for command` > `<Don't specify a file>` > `Periodic Notes: Open next daily note` |
 | Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) |
-| Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri), OR use a [Note Toolbar Callout](#use-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your top bookmarks. |
+| Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri), OR use a [Note Toolbar Callout](#note-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your top bookmarks. |
 | Execute Shell Commands | Using the [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) plugin. |
 
 [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars!
@@ -138,7 +138,7 @@ _Notes on precedence_:
 - Notes are matched to folders starting from the top of the list.
 - If you have a property on a given note, it will override the folder mapping.
 
-# Use Toolbar Callouts
+# Note Toolbar Callouts
 
 Toolbars are actually callouts! You can use a toolbar callout directly, to add a toolbar in the middle of your notes, for example. 
 
