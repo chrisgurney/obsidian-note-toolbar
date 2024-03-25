@@ -39,7 +39,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// 			.setButtonText("dv test")
 		// 			.onClick(async () => {
 		// 				console.log("Trying dataview...");
-		// 				var dv = new DataviewAdapter();
+		// 				let dv = new DataviewAdapter();
 		// 				const result = await dv.evaluate("dv.current().file.mtime");
 		// 				console.log("result: " + result);
 		// 			});
