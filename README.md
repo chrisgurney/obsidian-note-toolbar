@@ -107,7 +107,7 @@ Add them to the _Defaults_ section. In the _Mobile_ section, you can add equival
 | center items | <img src="./docs/style_center.png" width="600"/> |
 | evenly space items | <img src="./docs/style_border_even.png" width="600"/> |
 | left align items | <img src="./docs/style_left.png" width="600"/> |
-| right align items | <br/><img src="./docs/style_right.png" width="600"/> |
+| right align items | <img src="./docs/style_right.png" width="600"/> |
 | float left | floats the toolbar left of nearby content |
 | float right | floats the toolbar right of nearby content |
 | no float | |
