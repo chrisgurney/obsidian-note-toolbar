@@ -49,7 +49,7 @@ export function emptyMessageFr(text: string): DocumentFragment {
 
 /**
  * Check if a string is a valid URI.
- * @link https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
+ * @link https://stackoverflow.com/a/49909903
  */
 // I think this is defined outside the function to reuse the object, for efficiency
 let validUrlEl: HTMLInputElement | undefined;
