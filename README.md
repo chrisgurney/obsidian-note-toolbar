@@ -81,7 +81,7 @@ Add each item to your toolbar:
 
 #### URLs
 
-Toolbar items can link to notes, or URLs (linking to internal or external locations).
+Toolbar items can link to notes, or URLs (linking to internal or external locations). For examples, and directions on how to generate URLs, see [the wiki](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).
 
 The following variables are supported, which are substituted on click:
 
