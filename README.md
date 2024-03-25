@@ -42,16 +42,18 @@ Try mapping a folder, like whever your Daily Notes are stored, to your new toolb
 
 # Examples
 
-Any plugin that can generate a URL can be executed from the toolbar. Some examples:
+Any plugin that can generate a URL can be executed from the toolbar. [See the wiki](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and more examples to come.
+
+Some quick examples:
 
 | Example | How? |
 | --- | --- |
-| Next, Previous, and Today's Daily Note | Use [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) to get the relevant links: Run `Advanced URI: get URI for command` > `<Don't specify a file>` > `Periodic Notes: Open next daily note` |
+| Link to Next, Previous, and Today's Daily Note | Use the Core _Daily notes_ plugin + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) |
 | Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) |
-| Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri), OR use a [Note Toolbar Callout](#note-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your top bookmarks. |
+| Show Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri), OR use a [Note Toolbar Callout](#note-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your bookmarks. |
 | Execute Shell Commands | Using the [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) plugin. |
 
-[Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars!
+[Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars, and I'll add them to [the wiki](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)!
 
 # Settings Guide 🛠️
 
