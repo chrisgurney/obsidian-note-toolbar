@@ -100,13 +100,19 @@ Styles define how the toolbar will look (and behave).
 
 Add them to the _Defaults_ section. In the _Mobile_ section, you can add equivalent styles that allow you to override these defaults, on mobile.
 
-| Style | Clarification |
+In the example below, on mobile the toolbar will _not_ have a border, _not_ be sticky, but the items will stay as right aligned.  
+
+![./docs/styles_settings.png]
+
+Here's how they're applied:
+
+| Style | Example/Clarification |
 | --- | --- |
 | border | <img src="./docs/style_border_even.png" width="600"/> |
-| no border | simply remove the `border` style if you don't want a border; use `no border` if you don't want a border on mobile<br/><img src="./docs/style_noborder.png" width="600"/> |
+| no border | <img src="./docs/style_noborder.png" width="600"/><br/>simply remove the `border` style if you don't want a border; use `no border` if you don't want a border on mobile |
 | center items | <img src="./docs/style_center.png" width="600"/> |
 | evenly space items | <img src="./docs/style_border_even.png" width="600"/> |
-| left align items | this is the default alignment; use this if you want left alignment on mobile<br/><img src="./docs/style_left.png" width="600"/> |
+| left align items | <img src="./docs/style_left.png" width="600"/><br/>this is the default alignment; use this if you want left alignment on mobile |
 | right align items | <img src="./docs/style_right.png" width="600"/> |
 | float left | floats the toolbar left of nearby content |
 | float right | floats the toolbar right of nearby content |
