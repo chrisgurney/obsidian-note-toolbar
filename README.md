@@ -102,7 +102,7 @@ Add them to the _Defaults_ section. In the _Mobile_ section, you can add equival
 
 In the example below, on mobile the toolbar will _not_ have a border, _not_ be sticky, but the items will stay as right aligned.  
 
-![./docs/styles_settings.png]
+![Styles settings example showing how default styles can be overridden](./docs/styles_settings.png)
 
 Here's how they're applied:
 
