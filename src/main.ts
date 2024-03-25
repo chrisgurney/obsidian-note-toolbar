@@ -14,9 +14,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		// this.app.workspace.on('file-open', this.fileOpenListener);
-		this.app.metadataCache.on('changed', this.metadataCacheListener);
-		this.app.workspace.on('layout-change', this.layoutChangeListener);
+		// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
+		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
+		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 		await this.renderToolbarForActiveFile();
@@ -25,12 +25,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	/**
 	 * When this plugin is unloaded (e.g., disabled in settings, or Obsidian is restarted):
-	 * removes listeners and all toolbars.
+	 * removes all toolbars.
 	 */
 	async onunload() {
-		// this.app.workspace.off('file-open', this.fileOpenListener);
-		this.app.metadataCache.off('changed', this.metadataCacheListener);
-		this.app.workspace.off('layout-change', this.layoutChangeListener);
+		// TODO: is this necessary?
 		this.removeAllToolbars();
 		this.DEBUG && console.log('UNLOADED');
 	}
