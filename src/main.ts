@@ -434,7 +434,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.DEBUG && console.log('- url vars replaced: ', url);
 			}
 
-			if (urlIsUri) {
+			if (url.toLowerCase().startsWith('onclick:')) {
+				let functionName = url.slice(8); // remove 'onclick:'
+				if (typeof (window as any)[functionName] === 'function') {
+					(window as any)[functionName]();
+					e.preventDefault();
+				}
+			}
+			else if (urlIsUri) {
 				window.open(url, '_blank');
 				e.preventDefault();	
 			}
@@ -468,7 +475,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
 			s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
 				const key = p1.trim();
-				console.log(match);
 				const linkWrap = /\[\[|\]\]/g; // remove [[ and ]] in case an internal link was passed
 				return frontmatter && frontmatter[key] !== undefined 
 					? (encode ? encodeURIComponent(frontmatter[key].replace(linkWrap,'')) : frontmatter[key].replace(linkWrap,'')) 
