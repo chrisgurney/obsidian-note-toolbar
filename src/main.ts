@@ -218,7 +218,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
 		this.DEBUG && console.log("metadata-changed: " + file.name);
-		this.checkAndRenderToolbar(file, cache.frontmatter);
+		if (this.app.workspace.getActiveFile() === file) {
+			this.checkAndRenderToolbar(file, cache.frontmatter);
+		}
 	};
 
 	/*************************************************************************
