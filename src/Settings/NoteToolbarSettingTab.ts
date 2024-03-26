@@ -58,9 +58,21 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayToolbarList(containerEl: HTMLElement): void {
 
+		const toolbarsDesc = document.createDocumentFragment();
+		toolbarsDesc.append(
+			"Define the toolbars you want to add to your notes.",
+			toolbarsDesc.createEl("br"),
+			"Check out the ",
+			toolbarsDesc.createEl("a", {
+				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
+				text: "User Guide",
+			}),
+			"."
+		);
+
 		new Setting(containerEl)
 			.setName("Toolbars")
-			.setDesc("Define the toolbars you want to add to your notes.")
+			.setDesc(toolbarsDesc)
 			.setClass("note-toolbar-setting-no-controls");
 
 		if (this.plugin.settings.toolbars.length == 0) {
