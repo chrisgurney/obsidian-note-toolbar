@@ -1,4 +1,4 @@
-import { App, ButtonComponent, PluginSettingTab, Setting, debounce } from 'obsidian';
+import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
 import NoteToolbarPlugin from '../main';
 import { arraymove, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
@@ -172,7 +172,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						new FolderSuggest(this.app, cb.inputEl);
 						cb.setPlaceholder("Folder")
 							.setValue(mapping.folder)
-							.onChange(async (newFolder) => {
+							.onChange(debounce(async (newFolder) => {
                                 if (
                                     newFolder &&
                                     this.plugin.settings.folderMappings.some(
@@ -189,10 +189,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									textFieldsDiv.children[0].removeClass("note-toolbar-setting-error");
 									this.plugin.settings.folderMappings[
 										index
-									].folder = newFolder;
+									].folder = normalizePath(newFolder);
 									await this.plugin.saveSettings();	
 								}
-                            });
+                            }, 250));
 					});
 				const ts = new Setting(textFieldsDiv)
 					.setClass("note-toolbar-setting-item-field")
@@ -200,12 +200,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						new ToolbarSuggest(this.app, this.plugin, cb.inputEl);
 						cb.setPlaceholder("Toolbar")
 							.setValue(mapping.toolbar)
-							.onChange(async (newToolbar) => {
+							.onChange(debounce(async (newToolbar) => {
                                 this.plugin.settings.folderMappings[
                                     index
                                 ].toolbar = newToolbar;
                                 await this.plugin.saveSettings();
-                            });
+                            }, 250));
 					});
 				let itemControlsDiv = this.containerEl.createEl("div");
 				itemControlsDiv.style.marginLeft = "auto";
