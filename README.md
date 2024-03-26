@@ -4,6 +4,8 @@ The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible 
 
 With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) which you can add anywhere in your notes.
 
+📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
+
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -57,13 +59,13 @@ Some quick examples:
 
 # User Guide
 
+📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
+
 Once installed, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New toolbar_.
 
-**View the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
+![Example of settings configuration](./docs/settings.png)
 
-![Example of a settings configuration](./docs/settings.png)
-
-![Example of a settings configuration](./docs/settings_edit_toolbar_full.png)
+![Example of settings for a new toolbar](./docs/settings_edit_toolbar_full.png)
 
 # License
 
@@ -92,5 +94,7 @@ Thank you to all the plugins that Note Toolbar can utilize:
 Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! If they sound good, pull requests are welcome!
 
 # Support 🛟
+
+📖 **See [Troubleshooting](https://github.com/chrisgurney/obsidian-note-toolbar/Troubleshooting) in the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
 
 [Log an issue](https://github.com/chrisgurney/obsidian-note-toolbar/issues) or [ask a question](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)!
