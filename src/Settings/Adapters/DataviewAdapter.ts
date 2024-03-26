@@ -1,3 +1,6 @@
+/**
+ * Currently experimental adapter to try to integrate Dataview.
+ */
 export default class DataviewAdapter {
 
     dv: any | undefined;
@@ -10,6 +13,7 @@ export default class DataviewAdapter {
         let result = "";
 
         try {
+            // @ts-ignore
             const { getAPI } = await import("obsidian-dataview");
             const dv = getAPI();
             if (dv) {
