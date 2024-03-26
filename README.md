@@ -13,7 +13,7 @@ With this plugin, you also get [Note Toolbar Callouts](#note-toolbar-callouts) w
 
 ## Installing via Community Plugins
 
-- [ ] TBD - This plugin is not yet released (see [Known Issues](#known-issues)). In spite of those issues, you're welcome to install it via BRAT. I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)!
+- [ ] TBD - This plugin is not yet released as I work out the details, but you're welcome to install it via BRAT. I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)!
 
 ## Installing via BRAT
 
@@ -174,16 +174,6 @@ Refer directly to the [styles.css](https://github.com/chrisgurney/obsidian-note-
 Examples:
 
 ![Examples of toolbars placed in notes](./docs/callout_examples.png)
-
-# Known Issues
-
-⚠️ Note Toolbar isn’t officially released, or added in Community Plugins yet, as I aim to work out some of these issues (if possible, given what I can do with Obsidian’s plugin API). In spite of those issues, you're welcome to install it [via BRAT](#installing-via-brat). I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)!
-
-- Toolbar disappears occasionally.
-  - I believe this is due to how layouts are rendered: the events I have access to are firing _before_ the properties and editor content is available to add the toolbar to.
-  - This is also a result of having to change rendering to handle switching between preview/reading and source/editing modes.
-- Minimal theme + sticky toolbars: Toolbar showing underneath the top navigation.
-  - I’m trying to figure out a value for `top:` style that works based on a CSS variable perhaps, but haven’t figured this out yet.
 
 # Troubleshooting
 
