@@ -109,16 +109,16 @@ Here's how they're applied:
 | Style | Example/Clarification |
 | --- | --- |
 | border | <img src="./docs/style_border_even.png" width="600"/> |
-| no border | <img src="./docs/style_noborder.png" width="600"/><br/>simply remove the `border` style if you don't want a border; use `no border` if you don't want a border on mobile |
+| no border | <img src="./docs/style_noborder.png" width="600"/><br/>Simply remove the `border` style if you don't want a border; use `no border` if you don't want a border on mobile. |
 | center items | <img src="./docs/style_center.png" width="600"/> |
 | evenly space items | <img src="./docs/style_border_even.png" width="600"/> |
-| left align items | <img src="./docs/style_left.png" width="600"/><br/>this is the default alignment; use this if you want left alignment on mobile |
+| left align items | <img src="./docs/style_left.png" width="600"/><br/>This is the default alignment; use this if you want left alignment on mobile. |
 | right align items | <img src="./docs/style_right.png" width="600"/> |
-| float left | floats the toolbar left of nearby content |
-| float right | floats the toolbar right of nearby content |
+| float left | Floats the toolbar left of nearby content. Works best with [Note Toolbar Callouts](#note-toolbar-callouts). |
+| float right | Floats the toolbar right of nearby content. Works best with [Note Toolbar Callouts](#note-toolbar-callouts). |
 | no float | |
-| sticky | sticks toolbar to top on scroll |
-| not sticky | simply remove the `sticky` style if you don't it to stick; use `not sticky` if you don't want it to stick on mobile |
+| sticky | Sticks toolbar to top on scroll. |
+| not sticky | Simply remove the `sticky` style if you don't it to stick; use `not sticky` if you don't want it to stick on mobile. |
 
 _Notes on precedence:_
 - Styles are applied in the order you add them in settings. Per how CSS works, styles later in the lists take precedence.
