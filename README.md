@@ -19,6 +19,8 @@ With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisg
 
 ## Installing via BRAT
 
+[BRAT](https://github.com/TfTHacker/obsidian42-brat) lets you beta-test plugins, to provide feedback.
+
 1. Install the BRAT plugin:
   - Open _Settings > Community Plugins_
   - _Disable safe mode_, if enabled
