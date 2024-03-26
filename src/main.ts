@@ -5,7 +5,7 @@ import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSett
 export default class NoteToolbarPlugin extends Plugin {
 
 	settings: NoteToolbarSettings;
-	public DEBUG: boolean = true;
+	public DEBUG: boolean = false;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
