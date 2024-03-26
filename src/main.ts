@@ -360,7 +360,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		noteToolbarCalloutContent.append(noteToolbarUl);
 
 		let noteToolbarCallout = document.createElement("div");
-		noteToolbarCallout.className = "callout dv-cg-note-toolbar";
+		noteToolbarCallout.className = "callout cg-note-toolbar-callout";
 		noteToolbarCallout.setAttribute("tabindex", "0");
 		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
 		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
