@@ -115,7 +115,7 @@ export default class ToolbarSettingsModal extends Modal {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
 				text: "examples",
 			}),
-			", and for details about variables ",
+			", and for details about ",
 			itemsDescription.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar#urls",
 				text: "variables",
