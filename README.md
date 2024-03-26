@@ -83,14 +83,6 @@ Shout out to other projects and people who helped me with questions I had while 
 - [BRAT](https://github.com/TfTHacker/obsidian42-brat) - for the means to beta test this plugin.
 - Everybody on the [Obsidian Discord](https://discord.gg/obsidianmd) #plugin-dev channel for their time and documentation, including but not limited to: claremacrae, dovos, lemons_dev, liam.cain, joethei, sailKite, SkepticMystic
 
-Thank you to all the plugins that Note Toolbar can utilize:
-
-- [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) for linking to commands from:
-  - [Templater](https://github.com/SilentVoid13/Templater)
-  - [Dataview](https://github.com/blacksmithgu/obsidian-dataview) (e.g., generate a list of your Bookmarks)
-  - [Periodic Notes](https://github.com/liamcain/obsidian-periodic-notes) (link to today's, and previous/next Daily Notes)
-- [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) (for executing shell scripts, Python code, etc.)
-
 # Contribute 🧑‍💻
 
 Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! If they sound good, pull requests are welcome!
