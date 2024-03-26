@@ -291,7 +291,8 @@
     }
 
     &.cg-note-toolbar-callout {
-        /* keeping for possible future use */
+        /* fix for reading mode */
+        margin-top: 0; 
     }
     
 }
