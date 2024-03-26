@@ -110,12 +110,17 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsDescription.append(
 			"Items that appear in the toolbar, in order.",
 			itemsDescription.createEl("br"),
-			"See the ",
+			"See the documentation for ",
+			itemsDescription.createEl("a", {
+				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
+				text: "examples",
+			}),
+			", and for details about variables ",
 			itemsDescription.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar#urls",
-				text: "documentation",
+				text: "variables",
 			}),
-			" about variables supported in links."
+			" supported in links."
 		);
 
 		new Setting(settingsDiv)
