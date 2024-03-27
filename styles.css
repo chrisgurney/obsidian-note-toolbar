@@ -164,6 +164,11 @@
                     display: block !important;
                 }
             }
+            &:focus-within {
+                border-radius: var(--metadata-property-radius);
+                box-shadow: 0 0 0 1px var(--background-modifier-border);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            }
         }
 
         & a {

@@ -1,4 +1,4 @@
-import { CachedMetadata, Editor, FrontMatterCache, MarkdownView, Plugin, TFile, debounce } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
 
@@ -12,15 +12,20 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * adds listeners, settings, and renders the toolbar for the active file.
 	 */
 	async onload() {
+
 		await this.loadSettings();
 
 		// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
+		this.addCommand({id: 'focus', name: 'Focus', callback: async () => this.focusCommand()});
+
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
+
 		await this.renderToolbarForActiveFile();
 		this.DEBUG && console.log('LOADED');
+
 	}
 
 	/**
@@ -355,13 +360,13 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			noteToolbarUl.appendChild(noteToolbarLi);
 		});		
+
 		let noteToolbarCalloutContent = document.createElement("div");
 		noteToolbarCalloutContent.className = "callout-content";
 		noteToolbarCalloutContent.append(noteToolbarUl);
 
 		let noteToolbarCallout = document.createElement("div");
 		noteToolbarCallout.className = "callout cg-note-toolbar-callout";
-		noteToolbarCallout.setAttribute("tabindex", "0");
 		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
 		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 		noteToolbarCallout.append(noteToolbarCalloutContent);
@@ -374,6 +379,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		embedBlock.setAttribute("data-name", toolbar.name);
 		embedBlock.setAttribute("data-updated", toolbar.updated);
 		embedBlock.append(div);
+
+		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
 
 		/* inject it between the properties and content divs */
 		// TODO: remove; leaving here until rendering issues are fully sorted
@@ -404,8 +411,52 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/*************************************************************************
+	 * COMMANDS
+	 *************************************************************************/
+
+	/**
+	 * Sets the focus on the first item in the toolbar.
+	 */
+	async focusCommand(): Promise<void> {
+
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let currentToolbar = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
+		let firstItem = currentToolbar?.querySelector('ul li a') as HTMLElement;
+		console.log("focus command: toolbar: ", currentToolbar, " item: ", firstItem);
+		firstItem?.focus();
+
+	}
+
+	/*************************************************************************
 	 * HANDLERS
 	 *************************************************************************/
+	
+	/**
+	 * Handles keyboard navigation within the toolbar.
+	 * @param e KeyboardEvent
+	 */
+	async toolbarKeyboardHandler(e: KeyboardEvent) {
+
+		this.DEBUG && console.log("toolbarKeyboardHandler: ", e);
+
+		// only use preventDefault within these cases, as we want to allow for tabbing out of the toolbar
+		let newEl: HTMLElement;
+		switch (e.key) {
+			case 'ArrowRight':
+				(document?.activeElement?.parentElement?.nextElementSibling?.firstElementChild as HTMLElement)?.focus();
+				e.preventDefault();
+				break;
+			case 'ArrowLeft':
+				(document?.activeElement?.parentElement?.previousElementSibling?.firstElementChild as HTMLElement)?.focus();
+				e.preventDefault();
+				break;
+			case ' ':
+				(document?.activeElement as HTMLElement).click();
+				e.preventDefault();
+				break;
+		}
+
+	}
 
 	/**
 	 * On click of an item in the toolbar, we replace any variables that might
