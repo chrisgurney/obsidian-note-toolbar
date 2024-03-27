@@ -45,14 +45,14 @@ export function getIconHTML(icon_id: string) {
 }
 
 /**
- * 
- * @param text 
- * @returns 
+ * Creates a text fragment with the given message, for an empty state.
+ * @param message Message to return as a fragment.
+ * @returns DocumentFragment containing the message and styling.
  */
-export function emptyMessageFr(text: string): DocumentFragment {
+export function emptyMessageFr(message: string): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	let messageFrText = document.createElement("i")
-	messageFrText.textContent = text;
+	messageFrText.textContent = message;
 	messageFr.append(messageFrText);
 	return messageFr;
 }
