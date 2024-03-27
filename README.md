@@ -4,9 +4,9 @@ The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible 
 
 With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) which you can add anywhere in your notes.
 
-**Support me:** [buy me a coffee](https://www.buymeacoffee.com/cheznine)
+☕️ **Support me:** [Buy me a coffee](https://www.buymeacoffee.com/cheznine)
 
-📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
+📖 **How to use: [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
