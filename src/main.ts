@@ -1,11 +1,11 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
+import { debugLog } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
 	settings: NoteToolbarSettings;
-	public DEBUG: boolean = false;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -24,7 +24,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
 		await this.renderToolbarForActiveFile();
-		this.DEBUG && console.log('LOADED');
+		debugLog('LOADED');
 
 	}
 
@@ -35,7 +35,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async onunload() {
 		// TODO: is this necessary?
 		this.removeAllToolbars();
-		this.DEBUG && console.log('UNLOADED');
+		debugLog('UNLOADED');
 	}
 
 	/*************************************************************************
@@ -54,7 +54,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async loadSettings(): Promise<void> {
 
 		const loaded_settings = await this.loadData();
-		this.DEBUG && console.log("loadSettings: loaded settings: ", loaded_settings);
+		debugLog("loadSettings: loaded settings: ", loaded_settings);
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 	
 		let old_version = loaded_settings?.version as number;
@@ -63,22 +63,22 @@ export default class NoteToolbarPlugin extends Plugin {
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 
-			this.DEBUG && console.log("loadSettings: versions do not match: ", old_version, " <> ", SETTINGS_VERSION);
-			this.DEBUG && console.log("running migrations...");
+			debugLog("loadSettings: versions do not match: ", old_version, " <> ", SETTINGS_VERSION);
+			debugLog("running migrations...");
 
 			// first version without update (i.e., version is `undefined`)
 			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
 			if (!old_version) {
 				new_version = 20240318.1;
-				console.log("- starting migration: " + old_version + " -> " + new_version);
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
 				// for each: double-check setting to migrate is there
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					if (tb.styles) {
-						console.log("\t- OLD SETTING: " + tb.styles);
-						console.log("\t\t- SETTING: this.settings.toolbars[index].defaultStyles: " + this.settings.toolbars[index].defaultStyles);
+						debugLog("\t- OLD SETTING: " + tb.styles);
+						debugLog("\t\t- SETTING: this.settings.toolbars[index].defaultStyles: " + this.settings.toolbars[index].defaultStyles);
 						this.settings.toolbars[index].defaultStyles = tb.styles;
-						console.log("\t\t- SET: " + this.settings.toolbars[index].defaultStyles);
-						console.log("\t\t- SETTING: this.settings.toolbars[index].mobileStyles = []");
+						debugLog("\t\t- SET: " + this.settings.toolbars[index].defaultStyles);
+						debugLog("\t\t- SETTING: this.settings.toolbars[index].mobileStyles = []");
 						this.settings.toolbars[index].mobileStyles = [];
 						delete tb.styles;
 					}
@@ -89,11 +89,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			// MIGRATION: added urlAttr setting
 			if (old_version === 20240318.1) {
 				new_version = 20240322.1;
-				console.log("- starting migration: " + old_version + " -> " + new_version);
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						if (!item?.urlAttr) {
-							console.log("  - add urlAttr for: ", tb.name, item.label);
+							debugLog("  - add urlAttr for: ", tb.name, item.label);
 							// assume old urls are indeed urls and have variables
 							item.urlAttr = {
 								hasVars: true,
@@ -106,7 +106,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 
 			this.settings.version = SETTINGS_VERSION;
-			console.log("updated settings:", this.settings);
+			debugLog("updated settings:", this.settings);
 
 			// ensure that migrated settings are saved 
 			await this.saveSettings();
@@ -126,14 +126,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.removeActiveToolbar();
 		await this.renderToolbarForActiveFile();
 
-		this.DEBUG && console.log("SETTINGS SAVED: " + new Date().getTime());
+		debugLog("SETTINGS SAVED: " + new Date().getTime());
 	}
 
 	/**
 	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
 	 */
 	async onExternalSettingsChange(): Promise<void> {
-		this.DEBUG && console.log("onExternalSettingsChange()");
+		debugLog("onExternalSettingsChange()");
 		// reload in-memory settings
 		// FIXME? removing for now due to bug with settings not being saved properly while editing
 		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -180,10 +180,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
-			this.DEBUG && console.log('file-open: ' + file.name);
+			debugLog('file-open: ' + file.name);
 			// TODO: remove; leave this here until rendering issues are sorted
 			// this.app.workspace.onLayoutReady(() => {
-			// 	console.log("LAYOUT READY");
+			// 	debugLog("LAYOUT READY");
 			// 	this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 			// });
 			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
@@ -196,15 +196,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	layoutChangeListener = () => {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let viewMode = currentView?.getMode();
-		this.DEBUG && console.log('layout-change: ', viewMode);
+		debugLog('layout-change: ', viewMode);
 		switch(viewMode) {
 			case "source":
 			case "preview":
 				// if we're in editing or reading mode...
-				this.DEBUG && console.log("layout-change: ", viewMode, " -> re-rendering toolbar");
+				debugLog("layout-change: ", viewMode, " -> re-rendering toolbar");
 				this.removeActiveToolbar();
 				this.app.workspace.onLayoutReady(debounce(() => {
-					this.DEBUG && console.log("LAYOUT READY");
+					debugLog("LAYOUT READY");
 					this.renderToolbarForActiveFile();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
@@ -220,7 +220,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
-		this.DEBUG && console.log("metadata-changed: " + file.name);
+		debugLog("metadata-changed: " + file.name);
 		if (this.app.workspace.getActiveFile() === file) {
 			this.checkAndRenderToolbar(file, cache.frontmatter);
 		}
@@ -238,7 +238,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
 
-		this.DEBUG && console.log('checkAndRenderToolbar()');
+		debugLog('checkAndRenderToolbar()');
 
 		//
 		// check: does this note need a toolbar?
@@ -246,7 +246,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
-		// this.DEBUG && console.log('- frontmatter: ', frontmatter);
+		// debugLog('- frontmatter: ', frontmatter);
 		const propName = this.settings.toolbarProp;
 		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
 		if (notetoolbarProp !== null) {
@@ -261,13 +261,13 @@ export default class NoteToolbarPlugin extends Plugin {
 			let mapping;
 			for (let index = 0; index < this.settings.folderMappings.length; index++) {
 				mapping = this.settings.folderMappings[index];
-				// this.DEBUG && console.log('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
+				// debugLog('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
 				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-					// this.DEBUG && console.log('- mapping found -> ' + mapping.toolbar);
+					// debugLog('- mapping found -> ' + mapping.toolbar);
 					// continue until we get a matching toolbar
 					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
 					if (matchingToolbar) {
-						// this.DEBUG && console.log('  - matched toolbar:', matchingToolbar);
+						// debugLog('  - matched toolbar:', matchingToolbar);
 						break;
 					}
 				}
@@ -280,10 +280,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		//
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
-		this.DEBUG && console.log("- view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
+		debugLog("- view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
 		if (existingToolbarEl) {
 
-			// this.DEBUG && console.log('checkAndRenderToolbar: existing toolbar');
+			// debugLog('checkAndRenderToolbar: existing toolbar');
 
 			let existingToolbarName = existingToolbarEl?.getAttribute("data-name");
 			let existingToolbarUpdated = existingToolbarEl.getAttribute("data-updated");
@@ -291,25 +291,25 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// if we don't need it, remove it
 			if (!matchingToolbar) {
-				this.DEBUG && console.log("- toolbar not needed, removing existing toolbar: " + existingToolbarName);
+				debugLog("- toolbar not needed, removing existing toolbar: " + existingToolbarName);
 				existingToolbarEl.remove();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT the name of the existing toolbar doesn't match
 			else if (matchingToolbar.name !== existingToolbarName) {
-				this.DEBUG && console.log("- toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
+				debugLog("- toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
 				existingToolbarEl.remove();
 				existingToolbarEl = null;
 			}
 			// we need a toolbar BUT it needs to be updated
 			else if (matchingToolbar.updated !== existingToolbarUpdated) {
-				this.DEBUG && console.log("- existing toolbar out of date, removing existing toolbar");
+				debugLog("- existing toolbar out of date, removing existing toolbar");
 				existingToolbarEl.remove();
 				existingToolbarEl = null;
 			}
 			// existingToolbarEl is not in the correct position: can happen when switching layouts
 			else if (existingToolbarHasSibling) {
-				this.DEBUG && console.log("- not in the correct position (has next sibling), removing existing toolbar");
+				debugLog("- not in the correct position (has next sibling), removing existing toolbar");
 				existingToolbarEl.remove();
 				existingToolbarEl = null;
 			}
@@ -320,7 +320,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
 		if (matchingToolbar && !existingToolbarEl) {
-			this.DEBUG && console.log("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
+			debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
 			this.renderToolbarFromSettings(matchingToolbar);
 		}
 
@@ -332,7 +332,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbarFromSettings(toolbar: ToolbarSettings) {
 
-		this.DEBUG && console.log("renderToolbarFromSettings: ", toolbar);
+		debugLog("renderToolbarFromSettings: ", toolbar);
 
 		/* create the unordered list of menu items */
 		let noteToolbarUl = document.createElement("ul");
@@ -392,7 +392,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let propertiesContainer = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
 		if (!propertiesContainer) {
 			console.error("Unable to find propertiesContainer to insert toolbar");
-			console.log(document.readyState);
+			debugLog(document.readyState);
 			// debugger;
 		}
 		propertiesContainer?.insertAdjacentElement("afterend", embedBlock);
@@ -422,7 +422,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let currentToolbar = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
 		let firstItem = currentToolbar?.querySelector('ul li a') as HTMLElement;
-		console.log("focus command: toolbar: ", currentToolbar, " item: ", firstItem);
+		debugLog("focus command: toolbar: ", currentToolbar, " item: ", firstItem);
 		firstItem?.focus();
 
 	}
@@ -437,7 +437,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarKeyboardHandler(e: KeyboardEvent) {
 
-		this.DEBUG && console.log("toolbarKeyboardHandler: ", e);
+		debugLog("toolbarKeyboardHandler: ", e);
 
 		// only use preventDefault within these cases, as we want to allow for tabbing out of the toolbar
 		let newEl: HTMLElement;
@@ -465,24 +465,24 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarClickHandler(e: MouseEvent) {
 
-		this.DEBUG && console.log('toolbarClickHandler');
+		debugLog('toolbarClickHandler');
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let url = clickedEl.getAttribute("href");
 
 		if (url != null) {
-			this.DEBUG && console.log('- url clicked: ', url);
+			debugLog('- url clicked: ', url);
 
 			// default these to true if they don't exist, treating the url as though it is a URI with vars
 			let urlHasVars = clickedEl.getAttribute("data-toolbar-url-attr-hasVars") ? 
 							 clickedEl.getAttribute("data-toolbar-url-attr-hasVars") === "true" : true;
 			let urlIsUri = clickedEl.getAttribute("data-toolbar-url-attr-isUri") ? 
 						   clickedEl.getAttribute("data-toolbar-url-attr-isUri") === "true" : true;
-			this.DEBUG && console.log("- hasVars: ", urlHasVars, " isUri: ", urlIsUri);
+			debugLog("- hasVars: ", urlHasVars, " isUri: ", urlIsUri);
 
 			if (urlHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
 				url = this.replaceVars(url, activeFile, urlIsUri);
-				this.DEBUG && console.log('- url vars replaced: ', url);
+				debugLog('- url vars replaced: ', url);
 			}
 
 			// if it's a js function that exists, call it without any parameters
@@ -501,7 +501,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// otherwise assume it's an internal link (note) and try to open it
 			else {
 				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-				console.log("- openLinkText: ", url, " from: ", activeFile);
+				debugLog("- openLinkText: ", url, " from: ", activeFile);
 				this.app.workspace.openLinkText(url, activeFile);
 				e.preventDefault();
 			}

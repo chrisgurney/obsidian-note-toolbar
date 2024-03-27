@@ -1,5 +1,7 @@
 import { setIcon } from "obsidian";
 
+const DEBUG: boolean = false;
+
 /**
  * Utility to swap item in an array, used with list controls I borrowed from Templater.
  * @author SilentVoid13 (Templater Plugin) 
@@ -16,6 +18,14 @@ export function arraymove<T>(
 	const element = arr[fromIndex];
 	arr[fromIndex] = arr[toIndex];
 	arr[toIndex] = element;
+}
+
+/**
+ * Utility for debug logging.
+ * @param message Message to output for debugging.
+ */
+export function debugLog(message?: any, ...optionalParams: any[]): void {
+	DEBUG && console.log(message, ...optionalParams);
 }
 
 /**
@@ -48,6 +58,15 @@ export function emptyMessageFr(text: string): DocumentFragment {
 }
 
 /**
+ * Check if a string has vars, defined as {{variablename}}
+ * @param s The string to check.
+ */
+export function hasVars(s: string): boolean {
+	const urlVariableRegex = /{{.*?}}/g;
+	return urlVariableRegex.test(s);
+}
+
+/**
  * Check if a string is a valid URI.
  * @link https://stackoverflow.com/a/49909903
  */
@@ -65,13 +84,4 @@ export function isValidUri(u: string): boolean {
 	else {
 		return false
 	}
-}
-
-/**
- * Check if a string has vars, defined as {{variablename}}
- * @param s The string to check.
- */
-export function hasVars(s: string): boolean {
-	const urlVariableRegex = /{{.*?}}/g;
-	return urlVariableRegex.test(s);
 }

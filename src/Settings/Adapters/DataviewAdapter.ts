@@ -1,3 +1,5 @@
+import { debugLog } from "src/Utils/Utils";
+
 /**
  * Currently experimental adapter to try to integrate Dataview.
  */
@@ -17,9 +19,9 @@ export default class DataviewAdapter {
             const { getAPI } = await import("obsidian-dataview");
             const dv = getAPI();
             if (dv) {
-                console.log("evaluate: expression: " + expression);
+                debugLog("evaluate: expression: " + expression);
                 let dvResult = await (dv as any).executeJs(expression);
-                console.log("evaluate: result: " + dvResult.value);
+                debugLog("evaluate: result: " + dvResult.value);
                 result = dvResult.value;
             }
         }
