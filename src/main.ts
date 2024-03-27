@@ -199,7 +199,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.DEBUG && console.log("layout-change: ", viewMode, " -> re-rendering toolbar");
 				this.removeActiveToolbar();
 				this.app.workspace.onLayoutReady(debounce(() => {
-					console.log("LAYOUT READY");
+					this.DEBUG && console.log("LAYOUT READY");
 					this.renderToolbarForActiveFile();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
@@ -275,7 +275,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		//
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
-		console.log("- view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
+		this.DEBUG && console.log("- view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
 		if (existingToolbarEl) {
 
 			// this.DEBUG && console.log('checkAndRenderToolbar: existing toolbar');
