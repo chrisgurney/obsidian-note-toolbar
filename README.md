@@ -44,7 +44,7 @@ Once installed and enabled, in Note Toolbar's settings:
 4. Exit settings, and _open a note_.
 5. Add a `notetoolbar` property. Set it to the name of your toolbar.
 
-Try mapping a folder, like whever your Daily Notes are stored, to your new toolbar.
+If you want your toolbar to show without using a property, try mapping a folder (like wherever your Daily Notes are stored) to your new toolbar.
 
 # Examples
 
