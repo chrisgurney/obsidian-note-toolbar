@@ -419,6 +419,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async focusCommand(): Promise<void> {
 
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		// FIXME: change to querySelectorAll, filter on style.display !== none, return the first item
 		let currentToolbar = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
 		let firstItem = currentToolbar?.querySelector('ul li a') as HTMLElement;
 		debugLog("focus command: toolbar: ", currentToolbar, " item: ", firstItem);
@@ -438,21 +439,33 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		debugLog("toolbarKeyboardHandler: ", e);
 
-		// only use preventDefault within these cases, as we want to allow for tabbing out of the toolbar
-		let newEl: HTMLElement;
-		switch (e.key) {
-			case 'ArrowRight':
-				(document?.activeElement?.parentElement?.nextElementSibling?.firstElementChild as HTMLElement)?.focus();
-				e.preventDefault();
-				break;
-			case 'ArrowLeft':
-				(document?.activeElement?.parentElement?.previousElementSibling?.firstElementChild as HTMLElement)?.focus();
-				e.preventDefault();
-				break;
-			case ' ':
-				(document?.activeElement as HTMLElement).click();
-				e.preventDefault();
-				break;
+		let itemsUl = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul');
+		if (itemsUl) {
+
+			let items = Array.from(itemsUl.children);
+			const visibleItems = items.filter(item => {
+				return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+			});
+			let currentIndex = visibleItems.indexOf(document.activeElement?.parentElement as HTMLElement);
+
+			// only use preventDefault within these cases, as we want to allow for tabbing out of the toolbar
+			switch (e.key) {
+				case 'ArrowRight':
+					const nextIndex = (currentIndex + 1) % visibleItems.length;
+					visibleItems[nextIndex].querySelector('a')?.focus();
+					e.preventDefault();
+					break;
+				case 'ArrowLeft':
+					const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+					visibleItems[prevIndex].querySelector('a')?.focus();
+					e.preventDefault();
+					break;
+				case ' ':
+					(document?.activeElement as HTMLElement).click();
+					e.preventDefault();
+					break;
+			}
+
 		}
 
 	}
