@@ -39,6 +39,7 @@ export function getIconHTML(icon_id: string) {
     }
     const icon_container = document.body.createEl("div"); // A temporary element, will be deleted soon. Not nice to create a temporary element in the body, but I don't know any better way.
     setIcon(icon_container, icon_id);
+	// TODO: look at Obsidian Commander and Obsidian Badges plugins for other ways to incorporate Lucide icons
     const icon_html = icon_container.innerHTML;
     icon_container.remove();
     return icon_html;
