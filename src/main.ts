@@ -418,7 +418,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async focusCommand(): Promise<void> {
 
-		// FIXME: change to querySelectorAll, filter on style.display !== none, return the first item
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let itemsUl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container .callout-content > ul');
 		if (itemsUl) {
