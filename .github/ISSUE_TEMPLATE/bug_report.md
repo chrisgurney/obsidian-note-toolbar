@@ -7,7 +7,7 @@ assignees: chrisgurney
 
 ---
 
-**Describe the bug**
+**Description of the bug**
 
 
 
@@ -19,19 +19,20 @@ assignees: chrisgurney
 
 
 
-**Screenshots**
-
-
-**Note Toolbar version:**
+**Screenshots (if you think it will help)**
 
 
 
-**Desktop (please complete the following information):**
+**Desktop:**
  - OS: 
+ - Obsidian version: 
+ - Note Toolbar version: 
 
-**Smartphone (please complete the following information):**
+**Mobile (if applicable to the issue):**
  - Device: 
  - OS: 
+ - Obsidian version: 
+ - Note Toolbar version: 
 
 **Additional context**
 _Add any other context about the problem here._
