@@ -217,7 +217,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                             }, 250));
 					});
 				let itemControlsDiv = this.containerEl.createEl("div");
-				itemControlsDiv.style.marginLeft = "auto";
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
 					.addExtraButton((cb) => {
