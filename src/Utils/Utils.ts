@@ -29,23 +29,6 @@ export function debugLog(message?: any, ...optionalParams: any[]): void {
 }
 
 /**
- * A wrapper for Obsidian's setIcon(), but with the difference that this one does not need a container as a parameter.
- * @author taitava, from the Shell Commands plugin.
- * @link https://github.com/Taitava/obsidian-shellcommands/blob/8d030a23540d587a85bd0dfe2e08c8e6b6b955ab/src/Icons.ts#L26 
- */
-export function getIconHTML(icon_id: string) {
-    if (!icon_id) {
-        return "";
-    }
-    const icon_container = document.body.createEl("div"); // A temporary element, will be deleted soon. Not nice to create a temporary element in the body, but I don't know any better way.
-    setIcon(icon_container, icon_id);
-	// TODO: look at Obsidian Commander and Obsidian Badges plugins for other ways to incorporate Lucide icons
-    const icon_html = icon_container.innerHTML;
-    icon_container.remove();
-    return icon_html;
-}
-
-/**
  * Creates a text fragment with the given message, for an empty state.
  * @param message Message to return as a fragment.
  * @returns DocumentFragment containing the message and styling.
