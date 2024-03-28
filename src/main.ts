@@ -355,7 +355,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			let noteToolbarLi = document.createElement("li");
 			item.hideOnMobile ? noteToolbarLi.className = "hide-on-mobile" : false;
 			item.hideOnDesktop ? noteToolbarLi.className += "hide-on-desktop" : false;
-			item.hideOnDesktop ? noteToolbarLi.style.display = "none" : false;
 			noteToolbarLi.append(toolbarItem);
 
 			noteToolbarUl.appendChild(noteToolbarLi);

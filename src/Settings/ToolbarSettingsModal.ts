@@ -132,10 +132,8 @@ export default class ToolbarSettingsModal extends Modal {
 			(toolbarItem, index) => {
 				let itemDiv = this.containerEl.createEl("div");
 				itemDiv.className = "note-toolbar-setting-item";
-				let row1Container = this.containerEl.createEl("div");
-				row1Container.style.display = "flex";
-				row1Container.style.flexFlow = "wrap-reverse";
-				row1Container.style.justifyContent = "space-between";
+				let itemTopContainer = this.containerEl.createEl("div");
+				itemTopContainer.className = "note-toolbar-setting-item-top-container";
 
 				let textFieldsContainer = this.containerEl.createEl("div");
 				textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
@@ -164,10 +162,9 @@ export default class ToolbarSettingsModal extends Modal {
 								this.toolbar.updated = new Date().toISOString();
 								await this.plugin.saveSettings();
 							}, 750)));
+
 				let textFieldsUrlDiv = this.containerEl.createEl("div");
-				textFieldsUrlDiv.style.display = "flex";
-				textFieldsUrlDiv.style.flexWrap = "wrap";
-				textFieldsUrlDiv.style.flexGrow = "1";
+				textFieldsUrlDiv.className = "note-toolbar-setting-item-url-container";
 				const s1b = new Setting(textFieldsUrlDiv)
 					.setClass("note-toolbar-setting-item-field-url")
 					.addText(text => text
@@ -182,7 +179,6 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							}, 750)));
 				let itemControlsDiv = this.containerEl.createEl("div");
-				itemControlsDiv.style.marginLeft = "auto";
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
 					.addExtraButton((cb) => {
@@ -228,16 +224,14 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 
 				textFieldsContainer.appendChild(textFieldsUrlDiv);
-				row1Container.appendChild(textFieldsContainer);
-				row1Container.appendChild(itemControlsDiv);
+				itemTopContainer.appendChild(textFieldsContainer);
+				itemTopContainer.appendChild(itemControlsDiv);
 
-				itemDiv.appendChild(row1Container);
+				itemDiv.appendChild(itemTopContainer);
 
-				let togglesDiv = this.containerEl.createEl("div");
-				togglesDiv.style.display = "flex";
-				togglesDiv.style.justifyContent = "flex-end";
-				togglesDiv.style.flexWrap = "wrap";
-				const s2 = new Setting(togglesDiv)
+				let togglesContainer = this.containerEl.createEl("div");
+				togglesContainer.className = "note-toolbar-setting-item-toggles-container";
+				const s2 = new Setting(togglesContainer)
 					.setClass("note-toolbar-setting-item-toggle")
 					.setName("Hide on: mobile")
 					.addToggle((toggle) => {
@@ -250,7 +244,7 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							});
 					});
-				const s3 = new Setting(togglesDiv)
+				const s3 = new Setting(togglesContainer)
 					.setClass("note-toolbar-setting-item-toggle")
 					.setName("desktop")
 					.addToggle((toggle) => {
@@ -263,7 +257,7 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							});
 					});
-				itemDiv.appendChild(togglesDiv);
+				itemDiv.appendChild(togglesContainer);
 				settingsDiv.appendChild(itemDiv);
 			});
 
@@ -328,7 +322,6 @@ export default class ToolbarSettingsModal extends Modal {
 			let emptyMsg = this.containerEl.createEl("div", 
 				{ text: emptyMessageFr("No default styles set.") });
 			emptyMsg.className = "note-toolbar-setting-empty-message";
-			emptyMsg.style.height = "var(--input-height)";
 			defaultStyleDiv.append(emptyMsg);
 		}
 		else {
@@ -392,7 +385,6 @@ export default class ToolbarSettingsModal extends Modal {
 			let emptyMsg = this.containerEl.createEl("div", 
 				{ text: emptyMessageFr("No mobile styles set.") });
 			emptyMsg.className = "note-toolbar-setting-empty-message";
-			emptyMsg.style.height = "var(--input-height)";
 			mobileStyleDiv.append(emptyMsg);
 		}
 		else {

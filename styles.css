@@ -160,6 +160,7 @@
                 }
             }
             &.hide-on-desktop {
+                display: none;
                 .is-mobile & {
                     display: block !important;
                 }
@@ -333,8 +334,9 @@
 }
 
 .note-toolbar-setting-empty-message {
-    padding-bottom: 1em;
     color: var(--text-muted);
+    height: var(--input-height);
+    padding-bottom: 1em;
     .note-toolbar-setting-item-styles & {
         padding-bottom: 0;    
     }
@@ -365,6 +367,28 @@
 
 .note-toolbar-setting-item-delete-button {
     margin-top: 2em !important;
+}
+
+.note-toolbar-setting-folder-list-item-container {
+    display: flex;
+}
+
+.note-toolbar-setting-item-top-container {
+    display: flex;
+    flex-flow: wrap-reverse;
+    justify-content: space-between;
+}
+
+.note-toolbar-setting-item-url-container {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+}
+
+.note-toolbar-setting-item-toggles-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .note-toolbar-setting-item-url {
@@ -425,6 +449,7 @@
 }
 
 .note-toolbar-setting-item-controls {
+    margin-left: auto;
     .setting-item {
         & .setting-item-info {
             display: none;

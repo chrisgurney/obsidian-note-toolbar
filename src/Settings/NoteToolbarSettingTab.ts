@@ -170,7 +170,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				lastItemIndex = index;
 
 				let toolbarFolderListItemDiv = containerEl.createDiv();
-				toolbarFolderListItemDiv.style.display = "flex";
+				toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
 
 				let textFieldsDiv = this.containerEl.createEl("div");
 				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
