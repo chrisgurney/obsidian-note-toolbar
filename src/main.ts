@@ -458,11 +458,13 @@ export default class NoteToolbarPlugin extends Plugin {
 			// only use preventDefault within these cases, as we want to allow for tabbing out of the toolbar
 			switch (e.key) {
 				case 'ArrowRight':
+				case 'ArrowDown':
 					const nextIndex = (currentIndex + 1) % visibleItems.length;
 					visibleItems[nextIndex].querySelector('a')?.focus();
 					e.preventDefault();
 					break;
 				case 'ArrowLeft':
+				case 'ArrowUp':
 					const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
 					visibleItems[prevIndex].querySelector('a')?.focus();
 					e.preventDefault();
