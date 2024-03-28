@@ -418,12 +418,19 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async focusCommand(): Promise<void> {
 
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		// FIXME: change to querySelectorAll, filter on style.display !== none, return the first item
-		let currentToolbar = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
-		let firstItem = currentToolbar?.querySelector('ul li a') as HTMLElement;
-		debugLog("focus command: toolbar: ", currentToolbar, " item: ", firstItem);
-		firstItem?.focus();
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let itemsUl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container .callout-content > ul');
+		if (itemsUl) {
+			debugLog("focus command: toolbar: ", itemsUl);
+			let items = Array.from(itemsUl.children);
+			const visibleItems = items.filter(item => {
+				return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+			});
+			const link = visibleItems[0] ? visibleItems[0].querySelector('a') : null;
+			debugLog("focus command: focussed item: ", link);
+			link?.focus();
+		}
 
 	}
 
@@ -439,7 +446,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		debugLog("toolbarKeyboardHandler: ", e);
 
-		let itemsUl = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul');
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let itemsUl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container .callout-content > ul');
 		if (itemsUl) {
 
 			let items = Array.from(itemsUl.children);
