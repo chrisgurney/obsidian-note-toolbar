@@ -222,40 +222,26 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
-							.onClick(async () => {
-								arraymove(
-									this.plugin.settings.folderMappings,
-									index,
-									index - 1
-								);
-								await this.plugin.saveSettings();
-								this.display();
-							});
+							.onClick(async () => this.listMoveHandler(null, index, "up"));
+						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "up"));
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("down-chevron-glyph")
 							.setTooltip("Move down")
-							.onClick(async () => {
-								arraymove(
-									this.plugin.settings.folderMappings,
-									index,
-									index + 1
-								);
-								await this.plugin.saveSettings();
-								this.display();
-							});
+							.onClick(async () => this.listMoveHandler(null, index, "down"));
+						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "down"));
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
-							.onClick(async () => {
-								this.plugin.settings.folderMappings.splice(
-									index,
-									1
-								);
-								await this.plugin.saveSettings();
-								this.display();
-							});
+							.onClick(async () => this.listMoveHandler(null, index, "delete"));
+						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
 					});
 				toolbarFolderListItemDiv.append(textFieldsDiv);
 				toolbarFolderListItemDiv.append(itemControlsDiv);
@@ -292,6 +278,47 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+	}
+
+	/*************************************************************************
+	 * SETTINGS DISPLAY HANDLERS
+	 *************************************************************************/
+
+	/**
+	 * Handles moving mappings up and down the list, and deletion, based on click or keyboard event.
+	 * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
+	 * @param index Number of the item in the list we're moving/deleting.
+	 * @param direction Direction of the move, or "delete".
+	 */
+	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, direction: "up" | "down" | "delete"): Promise<void> {
+		if (keyEvent) {
+			switch (keyEvent.key) {
+				case "ArrowUp":
+					direction = "up";
+					break;
+				case "ArrowDown":
+					direction = "down";
+					break;
+				case "Enter":
+					// FIXME? maintain focus on button
+					break;
+				default:
+					return;
+			}
+		}
+		switch (direction) {
+			case "up":
+				arraymove(this.plugin.settings.folderMappings, index, index - 1);
+				break;
+			case "down":
+				arraymove(this.plugin.settings.folderMappings, index, index + 1);
+				break;
+			case "delete":
+				this.plugin.settings.folderMappings.splice(index, 1);
+				break;
+		}
+		await this.plugin.saveSettings();
+		this.display();
 	}
 
 }

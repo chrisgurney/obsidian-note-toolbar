@@ -131,6 +131,7 @@
     border-radius: 0;
     padding: inherit;
     width: 100%;
+    /* max-width: var(--file-line-width); */
 
     & .callout-title {
         display: none;
@@ -311,6 +312,8 @@
     .is-mobile & {
         margin: 0.4em 0.4em 1em 0;
     }
+    /* width: var(--var-max-width);
+    max-width: var(--var-max-width); */
 }
 
 /*****************************************************************************
@@ -462,6 +465,11 @@
         & .setting-item-control {
             .is-mobile & {
                 margin-top: 0 !important;
+            }
+            & .clickable-icon:focus-within {
+                border-radius: var(--input-radius);
+                box-shadow: 0 0 0 1px var(--background-modifier-border);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
             }
         }
     }
