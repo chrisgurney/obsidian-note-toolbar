@@ -40,12 +40,11 @@ export class CommandSuggester extends TextInputSuggester<Command> {
 
     renderSuggestion(command: Command, el: HTMLElement): void {
         el.setText(command.name);
-        // el.setAttribute("data-command-id", command.id);
     }
 
     selectSuggestion(command: Command): void {
         this.inputEl.value = command.name;
-        // this.inputEl.setAttribute("data-command-id", command.id);
+        this.inputEl.setAttribute("data-command-id", command.id);
         this.inputEl.trigger("input");
         this.close();
     }

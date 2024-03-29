@@ -1,9 +1,10 @@
-import { App, ButtonComponent, Modal, Setting, debounce } from 'obsidian';
-import { arraymove, emptyMessageFr, hasVars, isValidUri } from 'src/Utils/Utils';
+import { ButtonComponent, Modal, Setting, debounce } from 'obsidian';
+import { arraymove, debugLog, emptyMessageFr, hasVars, isValidUri } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_OPTIONS, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
+import { CommandSuggester } from './Suggesters/CommandSuggester';
 
 export default class ToolbarSettingsModal extends Modal {
 
@@ -51,6 +52,41 @@ export default class ToolbarSettingsModal extends Modal {
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
 
 		this.displayNameSetting(settingsDiv);
+
+		if (false) {
+			const ts = new Setting(settingsDiv)
+			.setClass("note-toolbar-setting-item-field")
+			.addSearch((cb) => {
+				new CommandSuggester(this.app, this.plugin, cb.inputEl);
+				cb.setPlaceholder("Command")
+					.setValue(cb.inputEl.value)
+					.onChange(debounce(async (command) => {
+						debugLog(cb.inputEl);
+						document.getElementById("test-command-link")?.setText(command);
+						document.getElementById("test-command-link")?.setAttribute("data-command-id", cb.inputEl?.getAttribute("data-command-id") ?? "");
+						// TODO:
+						// this.toolbar.link = COMMAND_NAME;
+						// this.toolbar.command = COMMAND_ID;
+						// await this.plugin.saveSettings();
+					}, 250));
+			});
+		
+			let commandTestContainer = this.containerEl.createDiv();
+			let commandTestLink = this.containerEl.createEl("a");
+			commandTestLink.id = "test-command-link";
+			commandTestContainer.append(commandTestLink);
+			settingsDiv.append(commandTestContainer);
+
+			// TODO: incorporate into click handler
+			commandTestLink.onclick = (e) => {
+				let clickedEl = e.currentTarget as HTMLLinkElement;
+				let commandId = clickedEl.getAttribute("data-command-id");
+				if (commandId) {
+					this.app.commands.executeCommandById(commandId);
+				}
+			};
+		}
+
 		this.displayItemList(settingsDiv);
 		this.displayStyleSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
