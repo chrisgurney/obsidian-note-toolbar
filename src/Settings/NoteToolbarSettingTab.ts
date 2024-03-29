@@ -300,7 +300,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					direction = "down";
 					break;
 				case "Enter":
-					// FIXME? maintain focus on button
 					break;
 				default:
 					return;
