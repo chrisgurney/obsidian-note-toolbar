@@ -380,7 +380,7 @@
 
 .note-toolbar-setting-item-top-container {
     display: flex;
-    flex-flow: wrap-reverse;
+    flex-flow: wrap;
     justify-content: space-between;
 }
 
@@ -402,7 +402,6 @@
 
 .note-toolbar-setting-item-fields {
     display: flex;
-    flex-wrap: wrap;
     gap: 0 1em;
 }
 
@@ -413,6 +412,10 @@
         display: none;
     }
     & .setting-item-control {
+        width: 100%;
+        & input[type="text"] {
+            width: 100%;
+        }
         .is-mobile & {
             margin-top: 0 !important;
         }
@@ -473,6 +476,13 @@
             }
         }
     }
+}
+
+.note-toolbar-setting-item-fields-and-controls {
+    display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+    flex-wrap: wrap;
 }
 
 .note-toolbar-setting-item-styles {

@@ -214,6 +214,7 @@ export default class ToolbarSettingsModal extends Modal {
 								this.toolbar.updated = new Date().toISOString();
 								await this.plugin.saveSettings();
 							}, 750)));
+
 				let itemControlsDiv = this.containerEl.createEl("div");
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
@@ -259,9 +260,13 @@ export default class ToolbarSettingsModal extends Modal {
 							});
 					});
 
-				textFieldsContainer.appendChild(textFieldsUrlDiv);
-				itemTopContainer.appendChild(textFieldsContainer);
-				itemTopContainer.appendChild(itemControlsDiv);
+				let itemFieldsControlsContainer = this.containerEl.createEl("div");
+				itemFieldsControlsContainer.className = "note-toolbar-setting-item-fields-and-controls";
+				itemFieldsControlsContainer.appendChild(textFieldsContainer);
+				itemFieldsControlsContainer.appendChild(itemControlsDiv);
+
+				itemTopContainer.appendChild(itemFieldsControlsContainer);
+				itemTopContainer.appendChild(textFieldsUrlDiv);
 
 				itemDiv.appendChild(itemTopContainer);
 
