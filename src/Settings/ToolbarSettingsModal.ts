@@ -221,43 +221,26 @@ export default class ToolbarSettingsModal extends Modal {
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
-							.onClick(async () => {
-								arraymove(
-									this.toolbar.items,
-									index,
-									index - 1
-								);
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-								this.display();
-							});
+							.onClick(async () => this.listMoveHandler(null, index, "up"));
+						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "up"));
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("down-chevron-glyph")
 							.setTooltip("Move down")
-							.onClick(async () => {
-								arraymove(
-									this.toolbar.items,
-									index,
-									index + 1
-								);
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-								this.display();
-							});
+							.onClick(async () => this.listMoveHandler(null, index, "down"));
+						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "down"));
 					})
 					.addExtraButton((cb) => {
 						cb.setIcon("cross")
 							.setTooltip("Delete")
-							.onClick(async () => {
-								this.toolbar.items.splice(
-									index,
-									1
-								);
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-								this.display();
-							});
+							.onClick(async () => this.listMoveHandler(null, index, "delete"));
+						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "delete"));
 					});
 
 				let itemFieldsControlsContainer = this.containerEl.createEl("div");
@@ -502,6 +485,49 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			});
 
+	}
+
+	/*************************************************************************
+	 * SETTINGS DISPLAY HANDLERS
+	 *************************************************************************/
+
+	/**
+	 * Handles moving items up and down the list, and deletion, based on click or keyboard event.
+	 * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
+	 * @param index Number of the item in the list we're moving/deleting.
+	 * @param direction Direction of the move, or "delete".
+	 */
+	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, direction: "up" | "down" | "delete"): Promise<void> {
+		if (keyEvent) {
+			switch (keyEvent.key) {
+				case "ArrowUp":
+					direction = "up";
+					break;
+				case "ArrowDown":
+					direction = "down";
+					break;
+				case "Enter":
+					break;
+				default:
+					return;
+			}
+		}
+		switch (direction) {
+			case "up":
+				arraymove(this.toolbar.items, index, index - 1);
+				this.toolbar.updated = new Date().toISOString();				
+				break;
+			case "down":
+				arraymove(this.toolbar.items, index, index + 1);
+				this.toolbar.updated = new Date().toISOString();
+				break;
+			case "delete":
+				this.toolbar.items.splice(index, 1);
+				this.toolbar.updated = new Date().toISOString();
+				break;
+		}
+		await this.plugin.saveSettings();
+		this.display();
 	}
 
 	/*************************************************************************
