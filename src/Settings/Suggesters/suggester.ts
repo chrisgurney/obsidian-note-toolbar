@@ -1,21 +1,21 @@
 // Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
 
-import { App, ISuggestOwner, Scope } from "obsidian";
+import { App, ISuggestOwner as ISuggesterOwner, Scope } from "obsidian";
 import { createPopper, Instance as PopperInstance } from "@popperjs/core";
 
 const wrapAround = (value: number, size: number): number => {
     return ((value % size) + size) % size;
 };
 
-class Suggest<T> {
-    private owner: ISuggestOwner<T>;
+class Suggester<T> {
+    private owner: ISuggesterOwner<T>;
     private values: T[];
     private suggestions: HTMLDivElement[];
     private selectedItem: number;
     private containerEl: HTMLElement;
 
     constructor(
-        owner: ISuggestOwner<T>,
+        owner: ISuggesterOwner<T>,
         containerEl: HTMLElement,
         scope: Scope
     ) {
@@ -109,14 +109,14 @@ class Suggest<T> {
     }
 }
 
-export abstract class TextInputSuggest<T> implements ISuggestOwner<T> {
+export abstract class TextInputSuggester<T> implements ISuggesterOwner<T> {
     protected app: App;
     protected inputEl: HTMLInputElement | HTMLTextAreaElement;
 
     private popper: PopperInstance;
     private scope: Scope;
     private suggestEl: HTMLElement;
-    private suggest: Suggest<T>;
+    private suggest: Suggester<T>;
 
     constructor(app: App, inputEl: HTMLInputElement | HTMLTextAreaElement) {
         this.app = app;
@@ -125,7 +125,7 @@ export abstract class TextInputSuggest<T> implements ISuggestOwner<T> {
 
         this.suggestEl = createDiv("suggestion-container");
         const suggestion = this.suggestEl.createDiv("suggestion");
-        this.suggest = new Suggest(this, suggestion, this.scope);
+        this.suggest = new Suggester(this, suggestion, this.scope);
 
         this.scope.register([], "Escape", this.close.bind(this));
 

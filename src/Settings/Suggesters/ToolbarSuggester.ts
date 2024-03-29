@@ -1,11 +1,11 @@
 // Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
 
 import { App, TAbstractFile, TFolder } from "obsidian";
-import { TextInputSuggest } from "./suggest";
+import { TextInputSuggester } from "./suggester";
 import { ToolbarSettings } from "../NoteToolbarSettings";
 import NoteToolbarPlugin from "src/main";
 
-export class ToolbarSuggest extends TextInputSuggest<ToolbarSettings> {
+export class ToolbarSuggester extends TextInputSuggester<ToolbarSettings> {
 
     private plugin: NoteToolbarPlugin;
 

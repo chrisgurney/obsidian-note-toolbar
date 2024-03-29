@@ -3,8 +3,8 @@ import NoteToolbarPlugin from '../main';
 import { arraymove, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings } from './NoteToolbarSettings';
-import { FolderSuggest } from './Suggesters/FolderSuggester';
-import { ToolbarSuggest } from './Suggesters/ToolbarSuggester';
+import { FolderSuggester } from './Suggesters/FolderSuggester';
+import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -178,7 +178,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				const fs = new Setting(textFieldsDiv)
 					.setClass("note-toolbar-setting-item-field")
 					.addSearch((cb) => {
-						new FolderSuggest(this.app, cb.inputEl);
+						new FolderSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder("Folder")
 							.setValue(mapping.folder)
 							.onChange(debounce(async (newFolder) => {
@@ -206,7 +206,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				const ts = new Setting(textFieldsDiv)
 					.setClass("note-toolbar-setting-item-field")
 					.addSearch((cb) => {
-						new ToolbarSuggest(this.app, this.plugin, cb.inputEl);
+						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 						cb.setPlaceholder("Toolbar")
 							.setValue(mapping.toolbar)
 							.onChange(debounce(async (newToolbar) => {
