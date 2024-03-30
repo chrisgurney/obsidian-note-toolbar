@@ -51,8 +51,10 @@ export interface ToolbarItemSettings {
 export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
-	type: 'command' | 'note' | 'uri';
+	type: LinkType;
 };
+
+export type LinkType = 'command' | 'note' | 'uri';
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.

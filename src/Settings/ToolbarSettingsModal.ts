@@ -1,7 +1,7 @@
 import { ButtonComponent, Modal, Setting, debounce } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, hasVars, isValidUri } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
@@ -186,27 +186,22 @@ export default class ToolbarSettingsModal extends Modal {
 					.addDropdown((dropdown) =>
 						dropdown
 							.addOptions({command: "Command", note: "Note", uri: "URI"})
-							.setValue("uri")
+							.setValue(toolbarItem.linkAttr.type)
 							.onChange(async (value) => {
-								// TODO: set link type
-
-								// TODO? change the link field to use the appropriate suggester
+								toolbarItem.linkAttr.type = value as LinkType;
 								switch (value) {
 									case "uri":
 									case "note":
-										itemLinkFields[index].command.settingEl.style.display = "none";
-										itemLinkFields[index].uriNote.settingEl.style.display = "inherit";
+										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", "true");
 										break;
 									case "command":
-										itemLinkFields[index].uriNote.settingEl.style.display = "none";
-										itemLinkFields[index].command.settingEl.style.display = "inherit";
-										// debugger;
+										itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].command.settingEl.setAttribute("data-active", "true");
 										break;
 								}
-
-								// TODO: settings
-								// await this.plugin.saveSettings();
-								// this.display();
+								await this.plugin.saveSettings();
+								this.display();
 							})
 					);
 
@@ -217,6 +212,9 @@ export default class ToolbarSettingsModal extends Modal {
 				let linkCommandFieldDiv = this.containerEl.createDiv();
 
 				itemLinkFields.push({
+					//
+					// URI
+					//
 					uriNote: new Setting(linkUriFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
 						.addText(text => text
@@ -225,13 +223,14 @@ export default class ToolbarSettingsModal extends Modal {
 							.onChange(
 								debounce(async (value) => {
 									toolbarItem.link = value;
-									// FIXME: set based on type in setting (once we add note suggester?)
-									// toolbarItem.linkAttr.type = isValidUri(value) ? 'uri' : 'note';
 									toolbarItem.linkAttr.type = 'uri';
 									toolbarItem.linkAttr.hasVars = hasVars(value);
 									this.toolbar.updated = new Date().toISOString();
 									await this.plugin.saveSettings();
 								}, 750))),
+					//
+					// command
+					//
 					command: new Setting(linkCommandFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
 						.addSearch((cb) => {
@@ -240,12 +239,8 @@ export default class ToolbarSettingsModal extends Modal {
 								.setValue(toolbarItem.link)
 								.onChange(debounce(async (command) => {
 									toolbarItem.link = command;
-									// toolbarItem.url = cb.inputEl?.getAttribute("data-command-id") ?? "";
-									document.getElementById("test-command-link")?.setText(command);
-									document.getElementById("test-command-link")?.setAttribute("data-command-id", cb.inputEl?.getAttribute("data-command-id") ?? "");
-									// TODO:
-									// this.toolbar.link = COMMAND_NAME;
-									// this.toolbar.command = COMMAND_ID;
+									toolbarItem.linkAttr.type = 'command';
+									toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
 									await this.plugin.saveSettings();
 								}, 250));
 						})
@@ -253,9 +248,13 @@ export default class ToolbarSettingsModal extends Modal {
 
 				linkFieldDiv.append(itemLinkFields[index].uriNote.settingEl);
 				linkFieldDiv.append(itemLinkFields[index].command.settingEl);
-				itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-				itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", "true");
-				
+
+				// set visibility based on the type
+				itemLinkFields[index].command.settingEl.setAttribute("data-active", 
+					toolbarItem.linkAttr.type === "command" ? "true" : "false");
+				itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", 
+					toolbarItem.linkAttr.type === "uri" ? "true" : "false");
+
 				linkContainerDiv.append(linkTypeDiv);
 				linkContainerDiv.append(linkFieldDiv);
 
