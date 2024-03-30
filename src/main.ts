@@ -45,8 +45,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Loads settings, and migrates from old versions if needed.
 	 * 
-	 * No need to update version number in this function; just update in NoteToolbarSettings,
-	 * and don't forget to update user-facing version in manifest.json on release.
+	 * 1. Update SETTINGS_VERSION in NoteToolbarSettings.
+	 * 2. Add MIGRATION block below.
 	 * 
 	 * Credit to Fevol on Discord for the sample code to migrate.
 	 * @link https://discord.com/channels/686053708261228577/840286264964022302/1213507979782127707
@@ -63,7 +63,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 
-			debugLog("loadSettings: versions do not match: ", old_version, " <> ", SETTINGS_VERSION);
+			debugLog("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
 			debugLog("running migrations...");
 
 			// first version without update (i.e., version is `undefined`)
@@ -83,6 +83,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						delete tb.styles;
 					}
 				});
+				// for the next migration to run
 				old_version = new_version;
 			}
 
@@ -102,6 +103,30 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					});
 				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: support for generic links with types
+			if (old_version === 20240322.1) {
+				new_version = 20240330.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						this.settings.toolbars[index].items[item_index].icon = "";
+						if (item.url) {
+							this.settings.toolbars[index].items[item_index].link = item.url;
+							delete item.url;
+						}
+						if (item.urlAttr) {
+							this.settings.toolbars[index].items[item_index].linkAttr.commandId = "";
+							this.settings.toolbars[index].items[item_index].linkAttr.hasVars = item.urlAttr.hasVars;
+							this.settings.toolbars[index].items[item_index].linkAttr.type = item.urlAttr.isUri ? "uri" : "note";	
+							delete item.urlAttr;
+						}
+					});
+				});
+				// for the next migration to run
 				old_version = new_version;
 			}
 
