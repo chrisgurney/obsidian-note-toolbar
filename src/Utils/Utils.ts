@@ -7,11 +7,7 @@ const DEBUG: boolean = false;
  * @author SilentVoid13 (Templater Plugin) 
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/settings/Settings.ts#L481
 */
-export function arraymove<T>(
-	arr: T[],
-	fromIndex: number,
-	toIndex: number
-): void {
+export function arraymove<T>(arr: (T | string)[], fromIndex: number, toIndex: number): void {
 	if (toIndex < 0 || toIndex === arr.length) {
 		return;
 	}

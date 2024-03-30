@@ -537,6 +537,11 @@
             .is-phone & {
                 width: inherit !important;
             }
+            & .clickable-icon:focus-within {
+                border-radius: var(--input-radius);
+                box-shadow: 0 0 0 1px var(--background-modifier-border);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            }
             & select[class="dropdown"] {
                 border-radius: 2em;
                 font-size: var(--metadata-input-font-size);
