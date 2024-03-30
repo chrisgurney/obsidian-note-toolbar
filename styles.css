@@ -350,6 +350,9 @@
 .note-toolbar-setting-error-message {
     color: var(--color-red);
     padding-bottom: 1em;
+    .note-toolbar-setting-item-top-container & {
+        padding-top: 1em;
+    }
 }
 
 .note-toolbar-setting-error {

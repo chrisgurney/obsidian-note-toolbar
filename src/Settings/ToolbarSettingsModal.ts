@@ -1,4 +1,4 @@
-import { ButtonComponent, Modal, Setting, debounce } from 'obsidian';
+import { ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, hasVars, isValidUri } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
@@ -130,8 +130,9 @@ export default class ToolbarSettingsModal extends Modal {
 			.setClass("note-toolbar-setting-no-controls");
 
 		let itemLinkFields: {
-			uriNote: Setting;
 			command: Setting;
+			note: Setting;
+			uri: Setting;
 		}[] = [];
 
 		this.toolbar.items.forEach(
@@ -191,13 +192,19 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.linkAttr.type = value as LinkType;
 								switch (value) {
 									case "uri":
+										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].note.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "true");
+										break;
 									case "note":
 										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", "true");
+										itemLinkFields[index].note.settingEl.setAttribute("data-active", "true");
+										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "true");
 										break;
 									case "command":
-										itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", "false");
 										itemLinkFields[index].command.settingEl.setAttribute("data-active", "true");
+										itemLinkFields[index].note.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
 										break;
 								}
 								await this.plugin.saveSettings();
@@ -209,25 +216,10 @@ export default class ToolbarSettingsModal extends Modal {
 				linkFieldDiv.className = "note-toolbar-setting-item-link-container";
 
 				let linkUriFieldDiv = this.containerEl.createDiv();
+				let linkNoteFieldDiv = this.containerEl.createDiv();
 				let linkCommandFieldDiv = this.containerEl.createDiv();
 
 				itemLinkFields.push({
-					//
-					// URI
-					//
-					uriNote: new Setting(linkUriFieldDiv)
-						.setClass("note-toolbar-setting-item-field-link")
-						.addText(text => text
-							.setPlaceholder('URL or note')
-							.setValue(toolbarItem.link)
-							.onChange(
-								debounce(async (value) => {
-									toolbarItem.link = value;
-									toolbarItem.linkAttr.type = 'uri';
-									toolbarItem.linkAttr.hasVars = hasVars(value);
-									this.toolbar.updated = new Date().toISOString();
-									await this.plugin.saveSettings();
-								}, 750))),
 					//
 					// command
 					//
@@ -242,17 +234,64 @@ export default class ToolbarSettingsModal extends Modal {
 									toolbarItem.linkAttr.type = 'command';
 									toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
 									await this.plugin.saveSettings();
-								}, 250));
-						})
+								}, 250))}),
+					//
+					// note
+					//
+					note: new Setting(linkNoteFieldDiv)
+						.setClass("note-toolbar-setting-item-field-link")
+						.addText(text => text
+							.setPlaceholder('Note')
+							.setValue(toolbarItem.link)
+							.onChange(
+								debounce(async (value) => {
+									toolbarItem.linkAttr.type = 'note';
+									const file = this.app.vault.getAbstractFileByPath(value);
+									if (!(file instanceof TFile)) {
+										if (document.getElementById("note-toolbar-item-link-note-error") === null) {
+											let errorDiv = this.containerEl.createEl("div", { 
+												text: "This note does not exist.", 
+												attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
+												linkContainerDiv.insertAdjacentElement('afterend', errorDiv);
+												itemLinkFields[index].note.settingEl.children[1].addClass("note-toolbar-setting-error");
+										}
+									}
+									else {
+										toolbarItem.link = normalizePath(value);
+										document.getElementById("note-toolbar-item-link-note-error")?.remove();
+										itemLinkFields[index].note.settingEl.children[1].removeClass("note-toolbar-setting-error");	
+										await this.plugin.saveSettings();
+									}
+								}, 250))),
+					//
+					// URI
+					//
+					uri: new Setting(linkUriFieldDiv)
+						.setClass("note-toolbar-setting-item-field-link")
+						.addText(text => text
+							.setPlaceholder('URL or note')
+							.setValue(toolbarItem.link)
+							.onChange(
+								debounce(async (value) => {
+									toolbarItem.link = value;
+									toolbarItem.linkAttr.type = 'uri';
+									toolbarItem.linkAttr.hasVars = hasVars(value);
+									this.toolbar.updated = new Date().toISOString();
+									await this.plugin.saveSettings();
+								}, 750))),
+
 				});
 
-				linkFieldDiv.append(itemLinkFields[index].uriNote.settingEl);
 				linkFieldDiv.append(itemLinkFields[index].command.settingEl);
+				linkFieldDiv.append(itemLinkFields[index].note.settingEl);
+				linkFieldDiv.append(itemLinkFields[index].uri.settingEl);
 
 				// set visibility based on the type
 				itemLinkFields[index].command.settingEl.setAttribute("data-active", 
 					toolbarItem.linkAttr.type === "command" ? "true" : "false");
-				itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", 
+				itemLinkFields[index].note.settingEl.setAttribute("data-active", 
+					toolbarItem.linkAttr.type === "note" ? "true" : "false");
+				itemLinkFields[index].uri.settingEl.setAttribute("data-active", 
 					toolbarItem.linkAttr.type === "uri" ? "true" : "false");
 
 				linkContainerDiv.append(linkTypeDiv);
