@@ -355,7 +355,7 @@ export default class ToolbarSettingsModal extends Modal {
 							linkAttr: {
 								commandId: "",
 								hasVars: false,
-								type: "uri"
+								type: this.toolbar.items.last()?.linkAttr.type ?? "uri"
 							},
 							tooltip: "",
 							hideOnDesktop: false,
