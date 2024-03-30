@@ -2,34 +2,34 @@
 export const SETTINGS_VERSION = 20240322.1;
 
 export interface NoteToolbarSettings {
-	version: number;
-	toolbars: Array<ToolbarSettings>;
 	folderMappings: Array<FolderMapping>;
 	toolbarProp: string;
+	toolbars: Array<ToolbarSettings>;
+	version: number;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
-	version: SETTINGS_VERSION,
-	toolbars: [],
 	folderMappings: [],
-	toolbarProp: "notetoolbar"
+	toolbarProp: "notetoolbar",
+	toolbars: [],
+	version: SETTINGS_VERSION,
 }
 
 export interface ToolbarSettings {
+	defaultStyles: string[];
+	items: Array<ToolbarItemSettings>;
+	mobileStyles: string[];
 	name: string;
 	updated: string;
-	items: Array<ToolbarItemSettings>;
-	// TODO: add setting to force rerender of toolbar (for label variables)
-	defaultStyles: string[];
-	mobileStyles: string[];
+	// TODO: add setting to force rerender of toolbar? (for label variables)
 }
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
+	defaultStyles: ["border","even","sticky"],
+	items: [],
+	mobileStyles: [],
 	name: "",
 	updated: new Date().toISOString(),
-	items: [],
-	defaultStyles: ["border","even","sticky"],
-	mobileStyles: [],
 };
 
 export interface FolderMapping {
@@ -38,18 +38,20 @@ export interface FolderMapping {
 }
 
 export interface ToolbarItemSettings {
-	label: string;
-	url: string;
-	/* used to describe the type of url, for efficiency on toolbar render and click handling */
-	urlAttr: ToolbarItemUrlAttr;
-	tooltip: string;
 	hideOnDesktop: boolean;
 	hideOnMobile: boolean;
+	icon: string;
+	label: string;
+	link: string;
+	linkAttr: ToolbarItemLinkAttr;
+	/* used to describe the type of url, for efficiency on toolbar render and click handling */
+	tooltip: string;
 }
 
-export interface ToolbarItemUrlAttr {
+export interface ToolbarItemLinkAttr {
+	commandId?: string;
 	hasVars: boolean;
-	isUri: boolean;
+	type: 'command' | 'note' | 'uri';
 };
 
 /**

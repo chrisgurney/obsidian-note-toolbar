@@ -341,9 +341,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let toolbarItem = document.createElement("a");
 			toolbarItem.className = "external-link";
-			toolbarItem.setAttribute("href", item.url);
-			Object.entries(item.urlAttr).forEach(([key, value]) => {
-				toolbarItem.setAttribute(`data-toolbar-url-attr-${key}`, value);
+			toolbarItem.setAttribute("href", item.link);
+			Object.entries(item.linkAttr).forEach(([key, value]) => {
+				toolbarItem.setAttribute(`data-toolbar-link-attr-${key}`, value);
 			});
 			toolbarItem.setAttribute("data-tooltip-position", "top");
 			toolbarItem.setAttribute("aria-label", item.tooltip ? item.tooltip : "");
@@ -494,10 +494,10 @@ export default class NoteToolbarPlugin extends Plugin {
 			debugLog('- url clicked: ', url);
 
 			// default these to true if they don't exist, treating the url as though it is a URI with vars
-			let urlHasVars = clickedEl.getAttribute("data-toolbar-url-attr-hasVars") ? 
-							 clickedEl.getAttribute("data-toolbar-url-attr-hasVars") === "true" : true;
-			let urlIsUri = clickedEl.getAttribute("data-toolbar-url-attr-isUri") ? 
-						   clickedEl.getAttribute("data-toolbar-url-attr-isUri") === "true" : true;
+			let urlHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
+							 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
+			let urlIsUri = clickedEl.getAttribute("data-toolbar-link-attr-isUri") ? 
+						   clickedEl.getAttribute("data-toolbar-link-attr-isUri") === "true" : true;
 			debugLog("- hasVars: ", urlHasVars, " isUri: ", urlIsUri);
 
 			if (urlHasVars) {

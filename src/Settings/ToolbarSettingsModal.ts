@@ -221,13 +221,14 @@ export default class ToolbarSettingsModal extends Modal {
 						.setClass("note-toolbar-setting-item-field-link")
 						.addText(text => text
 							.setPlaceholder('URL or note')
-							.setValue(toolbarItem.url)
+							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
-									toolbarItem.url = value;
-									// TODO: don't need this flag due to type?
-									toolbarItem.urlAttr.isUri = isValidUri(value);
-									toolbarItem.urlAttr.hasVars = hasVars(value);
+									toolbarItem.link = value;
+									// FIXME: set based on type in setting (once we add note suggester?)
+									// toolbarItem.linkAttr.type = isValidUri(value) ? 'uri' : 'note';
+									toolbarItem.linkAttr.type = 'uri';
+									toolbarItem.linkAttr.hasVars = hasVars(value);
 									this.toolbar.updated = new Date().toISOString();
 									await this.plugin.saveSettings();
 								}, 750))),
@@ -236,9 +237,9 @@ export default class ToolbarSettingsModal extends Modal {
 						.addSearch((cb) => {
 							new CommandSuggester(this.app, this.plugin, cb.inputEl);
 							cb.setPlaceholder("Command")
-								.setValue(toolbarItem.url)
+								.setValue(toolbarItem.link)
 								.onChange(debounce(async (command) => {
-									toolbarItem.url = command;
+									toolbarItem.link = command;
 									// toolbarItem.url = cb.inputEl?.getAttribute("data-command-id") ?? "";
 									document.getElementById("test-command-link")?.setText(command);
 									document.getElementById("test-command-link")?.setAttribute("data-command-id", cb.inputEl?.getAttribute("data-command-id") ?? "");
@@ -350,10 +351,11 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(async () => {
 						this.toolbar.items.push({
 							label: "",
-							url: "",
-							urlAttr: {
+							icon: "",
+							link: "",
+							linkAttr: {
 								hasVars: false,
-								isUri: false
+								type: 'uri'
 							},
 							tooltip: "",
 							hideOnDesktop: false,
