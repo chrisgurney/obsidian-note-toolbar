@@ -188,11 +188,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                         (e) => e.folder.toLowerCase() == newFolder.toLowerCase()
                                     )
                                 ) {
-									let errorDiv = containerEl.createEl("div", { 
-										text: "This folder already has a toolbar associated with it.", 
-										attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
-									toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
-									toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
+									if (document.getElementById("note-toolbar-name-error") === null) {
+										let errorDiv = containerEl.createEl("div", { 
+											text: "This folder already has a toolbar associated with it.", 
+											attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
+										toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
+										toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
+									}
                                 }
 								else {
 									document.getElementById("note-toolbar-name-error")?.remove();
@@ -200,7 +202,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									this.plugin.settings.folderMappings[
 										index
 									].folder = normalizePath(newFolder);
-									await this.plugin.saveSettings();	
+									await this.plugin.saveSettings();
 								}
                             }, 250));
 					});
