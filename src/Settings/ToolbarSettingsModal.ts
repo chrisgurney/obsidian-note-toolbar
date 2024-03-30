@@ -393,7 +393,7 @@ export default class ToolbarSettingsModal extends Modal {
 						DEFAULT_STYLE_OPTIONS.reduce((acc, option) => {
 							return { ...acc, ...option };
 						}, {}))
-					.setValue(this.toolbar.defaultStyles.join(", ") || "")
+					.setValue("")
 					.onChange(async (val) => {
 						if (this.toolbar.defaultStyles.includes(val)) {
 							this.toolbar.defaultStyles =
