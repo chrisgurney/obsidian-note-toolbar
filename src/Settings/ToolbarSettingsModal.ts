@@ -171,6 +171,10 @@ export default class ToolbarSettingsModal extends Modal {
 				let itemTopContainer = this.containerEl.createEl("div");
 				itemTopContainer.className = "note-toolbar-setting-item-top-container";
 
+				//
+				// Item name and tooltip
+				//
+
 				let textFieldsContainer = this.containerEl.createEl("div");
 				textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
 				textFieldsContainer.className = "note-toolbar-setting-item-fields";
@@ -199,6 +203,10 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							}, 750)));
 
+				//
+				// Item link
+				//
+
 				let textFieldsUrlDiv = this.containerEl.createEl("div");
 				textFieldsUrlDiv.className = "note-toolbar-setting-item-url-container";
 				const s1b = new Setting(textFieldsUrlDiv)
@@ -214,6 +222,10 @@ export default class ToolbarSettingsModal extends Modal {
 								this.toolbar.updated = new Date().toISOString();
 								await this.plugin.saveSettings();
 							}, 750)));
+
+				//
+				// Item list controls
+				// 
 
 				let itemControlsDiv = this.containerEl.createEl("div");
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
@@ -253,6 +265,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 				itemDiv.appendChild(itemTopContainer);
 
+				//
+				// Toggles
+				// 
+
 				let togglesContainer = this.containerEl.createEl("div");
 				togglesContainer.className = "note-toolbar-setting-item-toggles-container";
 				const s2 = new Setting(togglesContainer)
@@ -284,6 +300,10 @@ export default class ToolbarSettingsModal extends Modal {
 				itemDiv.appendChild(togglesContainer);
 				settingsDiv.appendChild(itemDiv);
 			});
+
+		//
+		// Add new item button
+		//
 
 		new Setting(settingsDiv)
 			.setClass("note-toolbar-setting-button")
