@@ -387,20 +387,10 @@
     justify-content: space-between;
 }
 
-.note-toolbar-setting-item-url-container {
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-}
-
 .note-toolbar-setting-item-toggles-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-}
-
-.note-toolbar-setting-item-url {
-    width: 100%;
 }
 
 .note-toolbar-setting-item-fields {
@@ -410,6 +400,7 @@
 
 .note-toolbar-setting-item-field {
     border-top: none;
+    flex-grow: 1;
     padding-top: 0 !important;
     & .setting-item-info {
         display: none;
@@ -425,19 +416,44 @@
     }
 }
 
-.note-toolbar-setting-item-field-url {
-    width: 100%;
+.note-toolbar-setting-item-link-container {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    column-gap: 1em;
+    row-gap: 1em;
+    & .setting-item {
+        padding: 0;
+    }
     & .setting-item-info {
         display: none;
     }
     & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+
+.note-toolbar-setting-item-link {
+    width: 100%;
+}
+
+.note-toolbar-setting-item-field-link {
+    border-top: none;
+    padding-top: 0 !important;
+    width: 100%;
+    & .setting-item-control, .search-input-container {
         width: 100%;
         & input[type="text"] {
             width: 100%;
         }
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
+    }
+    &[data-active="true"] {
+        display: inherit;
+    }
+    &[data-active="false"] {
+        display: none;
     }
 }
 

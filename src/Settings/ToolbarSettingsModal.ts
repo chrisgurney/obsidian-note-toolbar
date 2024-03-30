@@ -52,41 +52,6 @@ export default class ToolbarSettingsModal extends Modal {
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
 
 		this.displayNameSetting(settingsDiv);
-
-		if (false) {
-			const ts = new Setting(settingsDiv)
-			.setClass("note-toolbar-setting-item-field")
-			.addSearch((cb) => {
-				new CommandSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder("Command")
-					.setValue(cb.inputEl.value)
-					.onChange(debounce(async (command) => {
-						debugLog(cb.inputEl);
-						document.getElementById("test-command-link")?.setText(command);
-						document.getElementById("test-command-link")?.setAttribute("data-command-id", cb.inputEl?.getAttribute("data-command-id") ?? "");
-						// TODO:
-						// this.toolbar.link = COMMAND_NAME;
-						// this.toolbar.command = COMMAND_ID;
-						// await this.plugin.saveSettings();
-					}, 250));
-			});
-		
-			let commandTestContainer = this.containerEl.createDiv();
-			let commandTestLink = this.containerEl.createEl("a");
-			commandTestLink.id = "test-command-link";
-			commandTestContainer.append(commandTestLink);
-			settingsDiv.append(commandTestContainer);
-
-			// TODO: incorporate into click handler
-			commandTestLink.onclick = (e) => {
-				let clickedEl = e.currentTarget as HTMLLinkElement;
-				let commandId = clickedEl.getAttribute("data-command-id");
-				if (commandId) {
-					this.app.commands.executeCommandById(commandId);
-				}
-			};
-		}
-
 		this.displayItemList(settingsDiv);
 		this.displayStyleSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
@@ -164,6 +129,11 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(itemsDescription)
 			.setClass("note-toolbar-setting-no-controls");
 
+		let itemLinkFields: {
+			uriNote: Setting;
+			command: Setting;
+		}[] = [];
+
 		this.toolbar.items.forEach(
 			(toolbarItem, index) => {
 				let itemDiv = this.containerEl.createEl("div");
@@ -207,21 +177,86 @@ export default class ToolbarSettingsModal extends Modal {
 				// Item link
 				//
 
-				let textFieldsUrlDiv = this.containerEl.createEl("div");
-				textFieldsUrlDiv.className = "note-toolbar-setting-item-url-container";
-				const s1b = new Setting(textFieldsUrlDiv)
-					.setClass("note-toolbar-setting-item-field-url")
-					.addText(text => text
-						.setPlaceholder('URL or note')
-						.setValue(toolbarItem.url)
-						.onChange(
-							debounce(async (value) => {
-								toolbarItem.url = value;
-								toolbarItem.urlAttr.isUri = isValidUri(value);
-								toolbarItem.urlAttr.hasVars = hasVars(value);
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-							}, 750)));
+				let linkContainerDiv = this.containerEl.createEl("div");
+				linkContainerDiv.className = "note-toolbar-setting-item-link-container";
+
+				let linkTypeDiv = this.containerEl.createEl("div");
+
+				const s1t = new Setting(linkTypeDiv)
+					.addDropdown((dropdown) =>
+						dropdown
+							.addOptions({command: "Command", note: "Note", uri: "URI"})
+							.setValue("uri")
+							.onChange(async (value) => {
+								// TODO: set link type
+
+								// TODO? change the link field to use the appropriate suggester
+								switch (value) {
+									case "uri":
+									case "note":
+										itemLinkFields[index].command.settingEl.style.display = "none";
+										itemLinkFields[index].uriNote.settingEl.style.display = "inherit";
+										break;
+									case "command":
+										itemLinkFields[index].uriNote.settingEl.style.display = "none";
+										itemLinkFields[index].command.settingEl.style.display = "inherit";
+										// debugger;
+										break;
+								}
+
+								// TODO: settings
+								// await this.plugin.saveSettings();
+								// this.display();
+							})
+					);
+
+				let linkFieldDiv = this.containerEl.createEl("div");
+				linkFieldDiv.className = "note-toolbar-setting-item-link-container";
+
+				let linkUriFieldDiv = this.containerEl.createDiv();
+				let linkCommandFieldDiv = this.containerEl.createDiv();
+
+				itemLinkFields.push({
+					uriNote: new Setting(linkUriFieldDiv)
+						.setClass("note-toolbar-setting-item-field-link")
+						.addText(text => text
+							.setPlaceholder('URL or note')
+							.setValue(toolbarItem.url)
+							.onChange(
+								debounce(async (value) => {
+									toolbarItem.url = value;
+									// TODO: don't need this flag due to type?
+									toolbarItem.urlAttr.isUri = isValidUri(value);
+									toolbarItem.urlAttr.hasVars = hasVars(value);
+									this.toolbar.updated = new Date().toISOString();
+									await this.plugin.saveSettings();
+								}, 750))),
+					command: new Setting(linkCommandFieldDiv)
+						.setClass("note-toolbar-setting-item-field-link")
+						.addSearch((cb) => {
+							new CommandSuggester(this.app, this.plugin, cb.inputEl);
+							cb.setPlaceholder("Command")
+								.setValue(toolbarItem.url)
+								.onChange(debounce(async (command) => {
+									toolbarItem.url = command;
+									// toolbarItem.url = cb.inputEl?.getAttribute("data-command-id") ?? "";
+									document.getElementById("test-command-link")?.setText(command);
+									document.getElementById("test-command-link")?.setAttribute("data-command-id", cb.inputEl?.getAttribute("data-command-id") ?? "");
+									// TODO:
+									// this.toolbar.link = COMMAND_NAME;
+									// this.toolbar.command = COMMAND_ID;
+									await this.plugin.saveSettings();
+								}, 250));
+						})
+				});
+
+				linkFieldDiv.append(itemLinkFields[index].uriNote.settingEl);
+				linkFieldDiv.append(itemLinkFields[index].command.settingEl);
+				itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
+				itemLinkFields[index].uriNote.settingEl.setAttribute("data-active", "true");
+				
+				linkContainerDiv.append(linkTypeDiv);
+				linkContainerDiv.append(linkFieldDiv);
 
 				//
 				// Item list controls
@@ -261,7 +296,7 @@ export default class ToolbarSettingsModal extends Modal {
 				itemFieldsControlsContainer.appendChild(itemControlsDiv);
 
 				itemTopContainer.appendChild(itemFieldsControlsContainer);
-				itemTopContainer.appendChild(textFieldsUrlDiv);
+				itemTopContainer.appendChild(linkContainerDiv);
 
 				itemDiv.appendChild(itemTopContainer);
 

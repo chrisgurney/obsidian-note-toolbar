@@ -506,6 +506,12 @@ export default class NoteToolbarPlugin extends Plugin {
 				debugLog('- url vars replaced: ', url);
 			}
 
+			// TODO: incorporate into click handler
+			// let commandId = clickedEl.getAttribute("data-command-id");
+			// if (commandId) {
+			// 	this.app.commands.executeCommandById(commandId);
+			// }
+
 			// if it's a js function that exists, call it without any parameters
 			if (url.toLowerCase().startsWith('onclick:')) {
 				let functionName = url.slice(8); // remove 'onclick:'
