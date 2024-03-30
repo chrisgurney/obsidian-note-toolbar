@@ -1,5 +1,5 @@
 /* remember to update when settings structure changes */
-export const SETTINGS_VERSION = 20240322.1;
+export const SETTINGS_VERSION = 20240330.1;
 
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
@@ -49,7 +49,7 @@ export interface ToolbarItemSettings {
 }
 
 export interface ToolbarItemLinkAttr {
-	commandId?: string;
+	commandId: string;
 	hasVars: boolean;
 	type: 'command' | 'note' | 'uri';
 };
