@@ -202,6 +202,7 @@ export default class ToolbarSettingsModal extends Modal {
 										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
 										break;
 									case "command":
+										toolbarItem.link = "";
 										itemLinkFields[index].command.settingEl.setAttribute("data-active", "true");
 										itemLinkFields[index].note.settingEl.setAttribute("data-active", "false");
 										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
