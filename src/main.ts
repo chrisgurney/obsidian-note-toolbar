@@ -516,46 +516,54 @@ export default class NoteToolbarPlugin extends Plugin {
 		let url = clickedEl.getAttribute("href");
 
 		if (url != null) {
-			debugLog('- url clicked: ', url);
+			
+			debugLog('- clicked el: ', clickedEl);
 
-			// default these to true if they don't exist, treating the url as though it is a URI with vars
-			let urlHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
+			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
+			// default to true if it doesn't exist, treating the url as though it is a URI with vars
+			let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
 							 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
-			let urlIsUri = clickedEl.getAttribute("data-toolbar-link-attr-isUri") ? 
-						   clickedEl.getAttribute("data-toolbar-link-attr-isUri") === "true" : true;
-			debugLog("- hasVars: ", urlHasVars, " isUri: ", urlIsUri);
 
-			if (urlHasVars) {
+			if (linkHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
-				url = this.replaceVars(url, activeFile, urlIsUri);
+				// only replace vars in URIs; might consider other substitution in future
+				url = this.replaceVars(url, activeFile, linkType === "uri");
 				debugLog('- url vars replaced: ', url);
 			}
 
-			// TODO: incorporate into click handler
-			// let commandId = clickedEl.getAttribute("data-command-id");
-			// if (commandId) {
-			// 	this.app.commands.executeCommandById(commandId);
-			// }
-
-			// if it's a js function that exists, call it without any parameters
-			if (url.toLowerCase().startsWith('onclick:')) {
-				let functionName = url.slice(8); // remove 'onclick:'
-				if (typeof (window as any)[functionName] === 'function') {
-					(window as any)[functionName]();
+			switch (linkType) {
+				case 'command':
+					let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
+					debugLog("- executeCommandById: ", linkCommandId);
+					linkCommandId ? this.app.commands.executeCommandById(linkCommandId) : undefined;
 					e.preventDefault();
+					break;
+				case 'note':
+					// it's an internal link (note); try to open it
+					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+					debugLog("- openLinkText: ", url, " from: ", activeFile);
+					this.app.workspace.openLinkText(url, activeFile);
+					e.preventDefault();
+					break;
+				case 'uri':
+					// if it's a url, just open the url
+					window.open(url, '_blank');
+					e.preventDefault();
+					break;
+			}
+		
+			// archiving for later
+			if (false) {
+				// if it's a js function that exists, call it without any parameters
+				// @ts-ignore
+				if (url.toLowerCase().startsWith('onclick:')) {
+					// @ts-ignore
+					let functionName = url.slice(8); // remove 'onclick:'
+					if (typeof (window as any)[functionName] === 'function') {
+						(window as any)[functionName]();
+						e.preventDefault();
+					}
 				}
-			}
-			// if it's a url, just open the url
-			else if (urlIsUri) {
-				window.open(url, '_blank');
-				e.preventDefault();	
-			}
-			// otherwise assume it's an internal link (note) and try to open it
-			else {
-				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-				debugLog("- openLinkText: ", url, " from: ", activeFile);
-				this.app.workspace.openLinkText(url, activeFile);
-				e.preventDefault();
 			}
 
 		}
