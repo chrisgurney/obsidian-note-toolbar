@@ -1,6 +1,6 @@
 import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
 import NoteToolbarPlugin from '../main';
-import { arraymove, emptyMessageFr } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
@@ -29,6 +29,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * Displays the main settings.
 	 */
 	public display(): void {
+
 		const { containerEl } = this;
 		containerEl.empty();
 
@@ -50,6 +51,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.createEl("h2", { text: "Display rules" });
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
+
+		// scroll to the position when the modal was last open
+		this.rememberLastPosition(this.containerEl);
+
 	}
 
 	/**
@@ -325,5 +330,28 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		await this.plugin.saveSettings();
 		this.display();
 	}
+
+	private lastScrollPosition: number;
+	/**
+	 * Remembers the scrolling position of the user and jumps to it on display.
+	 * @author Taitava (Shell Commands plugin)
+	 * @link https://github.com/Taitava/obsidian-shellcommands/blob/8d030a23540d587a85bd0dfe2e08c8e6b6b955ab/src/settings/SC_MainSettingsTab.ts#L701 
+	*/
+    private rememberLastPosition(containerEl: HTMLElement) {
+
+		debugLog("rememberLastPosition:", containerEl);
+
+        // go to the last position
+		containerEl.scrollTo({
+			top: this.lastScrollPosition,
+			behavior: "auto",
+		});
+
+        // listen to changes
+        this.plugin.registerDomEvent(containerEl, 'scroll', (event) => {
+            this.lastScrollPosition = containerEl.scrollTop;
+		});
+
+    }
 
 }
