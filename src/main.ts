@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
-import { debugLog } from './Utils/Utils';
+import { debugLog, isValidUri } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -546,8 +546,15 @@ export default class NoteToolbarPlugin extends Plugin {
 					e.preventDefault();
 					break;
 				case 'uri':
-					// if it's a url, just open the url
-					window.open(url, '_blank');
+					if (isValidUri(url)) {
+						// if actually a url, just open the url
+						window.open(url, '_blank');
+					}
+					else {
+						// as fallback, treat it as internal note
+						let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+						this.app.workspace.openLinkText(url, activeFile);
+					}
 					e.preventDefault();
 					break;
 			}
