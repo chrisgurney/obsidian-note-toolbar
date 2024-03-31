@@ -516,7 +516,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarClickHandler(e: MouseEvent) {
 
-		debugLog('toolbarClickHandler');
+		debugLog('toolbarClickHandler: ', e);
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let url = clickedEl.getAttribute("href");
 
@@ -534,6 +534,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				// only replace vars in URIs; might consider other substitution in future
 				url = this.replaceVars(url, activeFile, linkType === "uri");
 				debugLog('- url vars replaced: ', url);
+			}
+
+			// remove the focus effect if clicked with a mouse
+			if ((e as PointerEvent)?.pointerType === "mouse") {
+				clickedEl.blur();
 			}
 
 			switch (linkType) {
