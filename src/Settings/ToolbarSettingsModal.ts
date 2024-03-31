@@ -250,7 +250,7 @@ export default class ToolbarSettingsModal extends Modal {
 									if (!(file instanceof TFile)) {
 										if (document.getElementById("note-toolbar-item-link-note-error") === null) {
 											let errorDiv = this.containerEl.createEl("div", { 
-												text: "This note does not exist.", 
+												text: "This file does not exist. Missing a file extension?", 
 												attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
 												linkContainerDiv.insertAdjacentElement('afterend', errorDiv);
 												itemLinkFields[index].note.settingEl.children[1].addClass("note-toolbar-setting-error");
@@ -258,11 +258,12 @@ export default class ToolbarSettingsModal extends Modal {
 									}
 									else {
 										toolbarItem.link = normalizePath(value);
+										toolbarItem.linkAttr.commandId = '';
 										document.getElementById("note-toolbar-item-link-note-error")?.remove();
 										itemLinkFields[index].note.settingEl.children[1].removeClass("note-toolbar-setting-error");	
 										await this.plugin.saveSettings();
 									}
-								}, 250))),
+								}, 750))),
 					//
 					// URI
 					//
@@ -276,6 +277,7 @@ export default class ToolbarSettingsModal extends Modal {
 									toolbarItem.link = value;
 									toolbarItem.linkAttr.type = 'uri';
 									toolbarItem.linkAttr.hasVars = hasVars(value);
+									toolbarItem.linkAttr.commandId = '';
 									this.toolbar.updated = new Date().toISOString();
 									await this.plugin.saveSettings();
 								}, 750))),
