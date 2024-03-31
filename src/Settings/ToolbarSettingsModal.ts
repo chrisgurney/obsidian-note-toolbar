@@ -131,7 +131,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemLinkFields: {
 			command: Setting;
-			note: Setting;
+			file: Setting;
 			uri: Setting;
 		}[] = [];
 
@@ -186,26 +186,26 @@ export default class ToolbarSettingsModal extends Modal {
 				const s1t = new Setting(linkTypeDiv)
 					.addDropdown((dropdown) =>
 						dropdown
-							.addOptions({command: "Command", note: "Note", uri: "URI"})
+							.addOptions({command: "Command", file: "File", uri: "URI"})
 							.setValue(toolbarItem.linkAttr.type)
 							.onChange(async (value) => {
 								toolbarItem.linkAttr.type = value as LinkType;
 								switch (value) {
-									case "uri":
-										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].note.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "true");
-										break;
-									case "note":
-										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].note.settingEl.setAttribute("data-active", "true");
-										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
-										break;
 									case "command":
 										toolbarItem.link = "";
 										itemLinkFields[index].command.settingEl.setAttribute("data-active", "true");
-										itemLinkFields[index].note.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
 										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
+										break;
+									case "file":
+										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].file.settingEl.setAttribute("data-active", "true");
+										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
+										break;
+									case "uri":
+										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
+										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "true");
 										break;
 								}
 								await this.plugin.saveSettings();
@@ -216,9 +216,9 @@ export default class ToolbarSettingsModal extends Modal {
 				let linkFieldDiv = this.containerEl.createEl("div");
 				linkFieldDiv.className = "note-toolbar-setting-item-link-container";
 
-				let linkUriFieldDiv = this.containerEl.createDiv();
-				let linkNoteFieldDiv = this.containerEl.createDiv();
 				let linkCommandFieldDiv = this.containerEl.createDiv();
+				let linkFileFieldDiv = this.containerEl.createDiv();
+				let linkUriFieldDiv = this.containerEl.createDiv();
 
 				itemLinkFields.push({
 					//
@@ -237,16 +237,16 @@ export default class ToolbarSettingsModal extends Modal {
 									await this.plugin.saveSettings();
 								}, 250))}),
 					//
-					// note
+					// file
 					//
-					note: new Setting(linkNoteFieldDiv)
+					file: new Setting(linkFileFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
 						.addText(text => text
-							.setPlaceholder('Note')
+							.setPlaceholder("File with extension")
 							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
-									toolbarItem.linkAttr.type = 'note';
+									toolbarItem.linkAttr.type = 'file';
 									const file = this.app.vault.getAbstractFileByPath(value);
 									if (!(file instanceof TFile)) {
 										if (document.getElementById("note-toolbar-item-link-note-error") === null) {
@@ -254,14 +254,14 @@ export default class ToolbarSettingsModal extends Modal {
 												text: "This file does not exist. Missing a file extension?", 
 												attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
 												linkContainerDiv.insertAdjacentElement('afterend', errorDiv);
-												itemLinkFields[index].note.settingEl.children[1].addClass("note-toolbar-setting-error");
+												itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
 										}
 									}
 									else {
 										toolbarItem.link = normalizePath(value);
 										toolbarItem.linkAttr.commandId = '';
 										document.getElementById("note-toolbar-item-link-note-error")?.remove();
-										itemLinkFields[index].note.settingEl.children[1].removeClass("note-toolbar-setting-error");	
+										itemLinkFields[index].file.settingEl.children[1].removeClass("note-toolbar-setting-error");	
 										await this.plugin.saveSettings();
 									}
 								}, 750))),
@@ -271,7 +271,7 @@ export default class ToolbarSettingsModal extends Modal {
 					uri: new Setting(linkUriFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
 						.addText(text => text
-							.setPlaceholder('URL or note')
+							.setPlaceholder("Website or URI")
 							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
@@ -286,14 +286,14 @@ export default class ToolbarSettingsModal extends Modal {
 				});
 
 				linkFieldDiv.append(itemLinkFields[index].command.settingEl);
-				linkFieldDiv.append(itemLinkFields[index].note.settingEl);
+				linkFieldDiv.append(itemLinkFields[index].file.settingEl);
 				linkFieldDiv.append(itemLinkFields[index].uri.settingEl);
 
 				// set visibility based on the type
 				itemLinkFields[index].command.settingEl.setAttribute("data-active", 
 					toolbarItem.linkAttr.type === "command" ? "true" : "false");
-				itemLinkFields[index].note.settingEl.setAttribute("data-active", 
-					toolbarItem.linkAttr.type === "note" ? "true" : "false");
+				itemLinkFields[index].file.settingEl.setAttribute("data-active", 
+					toolbarItem.linkAttr.type === "file" ? "true" : "false");
 				itemLinkFields[index].uri.settingEl.setAttribute("data-active", 
 					toolbarItem.linkAttr.type === "uri" ? "true" : "false");
 

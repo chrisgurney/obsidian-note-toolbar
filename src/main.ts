@@ -121,7 +121,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						if (item.urlAttr) {
 							this.settings.toolbars[index].items[item_index].linkAttr.commandId = "";
 							this.settings.toolbars[index].items[item_index].linkAttr.hasVars = item.urlAttr.hasVars;
-							this.settings.toolbars[index].items[item_index].linkAttr.type = item.urlAttr.isUri ? "uri" : "note";	
+							this.settings.toolbars[index].items[item_index].linkAttr.type = item.urlAttr.isUri ? "uri" : "file";	
 							delete item.urlAttr;
 						}
 					});
@@ -548,7 +548,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					linkCommandId ? this.app.commands.executeCommandById(linkCommandId) : undefined;
 					e.preventDefault();
 					break;
-				case 'note':
+				case 'file':
 					// it's an internal link (note); try to open it
 					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
 					debugLog("- openLinkText: ", url, " from: ", activeFile);

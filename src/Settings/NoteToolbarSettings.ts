@@ -54,7 +54,7 @@ export interface ToolbarItemLinkAttr {
 	type: LinkType;
 };
 
-export type LinkType = 'command' | 'note' | 'uri';
+export type LinkType = 'command' | 'file' | 'uri';
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
