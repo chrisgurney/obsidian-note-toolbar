@@ -632,21 +632,6 @@ export default class ToolbarSettingsModal extends Modal {
 		this.display();
 	}
 
-	/*************************************************************************
-	 * UTILITIES
-	 *************************************************************************/
-
-	/**
-	 * Returns the value for the provided key from the provided dictionary.
-	 * @param dict key-value dictionary
-	 * @param key string key
-	 * @returns value from the dictionary
-	 */
-	getValueForKey(dict: {[key: string]: string}[], key: string): string {
-		const option = dict.find(option => key in option);
-		return option ? Object.values(option)[0] : 'INVALID OPTION';
-	}
-
 	private lastScrollPosition: number;
 	/**
 	 * Remembers the scrolling position of the user and jumps to it on display.
@@ -669,5 +654,20 @@ export default class ToolbarSettingsModal extends Modal {
 		});
 
     }
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+	/**
+	 * Returns the value for the provided key from the provided dictionary.
+	 * @param dict key-value dictionary
+	 * @param key string key
+	 * @returns value from the dictionary
+	 */
+	getValueForKey(dict: {[key: string]: string}[], key: string): string {
+		const option = dict.find(option => key in option);
+		return option ? Object.values(option)[0] : 'INVALID OPTION';
+	}
 
 }
