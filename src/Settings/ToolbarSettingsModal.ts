@@ -614,15 +614,18 @@ export default class ToolbarSettingsModal extends Modal {
 		switch (action) {
 			case "up":
 				arraymove(itemArray, index, index - 1);
-				this.toolbar.updated = new Date().toISOString();			
+				this.toolbar.updated = new Date().toISOString();
+				keyEvent?.preventDefault();		
 				break;
 			case "down":
 				arraymove(itemArray, index, index + 1);
 				this.toolbar.updated = new Date().toISOString();
+				keyEvent?.preventDefault();
 				break;
 			case "delete":
 				itemArray.splice(index, 1);
 				this.toolbar.updated = new Date().toISOString();
+				keyEvent?.preventDefault();
 				break;
 		}
 		await this.plugin.saveSettings();

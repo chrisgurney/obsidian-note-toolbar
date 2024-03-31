@@ -311,12 +311,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		switch (direction) {
 			case "up":
 				arraymove(this.plugin.settings.folderMappings, index, index - 1);
+				keyEvent?.preventDefault();
 				break;
 			case "down":
 				arraymove(this.plugin.settings.folderMappings, index, index + 1);
+				keyEvent?.preventDefault();
 				break;
 			case "delete":
 				this.plugin.settings.folderMappings.splice(index, 1);
+				keyEvent?.preventDefault();
 				break;
 		}
 		await this.plugin.saveSettings();
