@@ -362,7 +362,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		/* create the unordered list of menu items */
 		let noteToolbarUl = document.createElement("ul");
 		noteToolbarUl.setAttribute("role", "menu");
-		toolbar.items.map((item: ToolbarItemSettings) => {
+		toolbar.items.filter((item: ToolbarItemSettings) => {
+			
+			// filter out empty items on display
+			return (item.label === "" ? false : true);
+
+		}).map((item: ToolbarItemSettings) => {
 
 			let toolbarItem = document.createElement("a");
 			toolbarItem.className = "external-link";
