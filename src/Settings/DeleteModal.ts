@@ -11,7 +11,7 @@ export class DeleteModal extends Modal {
 
 	constructor(parent: ToolbarSettingsModal) {
         super(parent.plugin.app);
-        this.modalEl.addClass("note-toolbar-setting-confirm-dialog"); 
+        this.modalEl.addClass("note-toolbar-setting-mini-dialog"); 
         this.parent = parent;
         this.plugin = parent.plugin;
         this.toolbar = parent.toolbar;

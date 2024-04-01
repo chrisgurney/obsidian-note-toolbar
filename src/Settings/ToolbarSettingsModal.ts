@@ -1,10 +1,11 @@
-import { ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
+import { ButtonComponent, Modal, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, hasVars } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
+import { IconModal } from './IconModal';
 
 export default class ToolbarSettingsModal extends Modal {
 
@@ -152,7 +153,18 @@ export default class ToolbarSettingsModal extends Modal {
 				let textFieldsContainer = this.containerEl.createEl("div");
 				textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
 				textFieldsContainer.className = "note-toolbar-setting-item-fields";
+
 				const s1a = new Setting(textFieldsContainer)
+					.setClass("note-toolbar-setting-item-icon")
+					.addExtraButton((cb) => {
+						cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
+							.setTooltip("Select icon")
+							.onClick(async () => {
+								const modal = new IconModal(this, toolbarItem);
+								modal.open();
+							})});
+
+				const s1b = new Setting(textFieldsContainer)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
 						.setPlaceholder('Item label')

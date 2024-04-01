@@ -396,6 +396,28 @@
     justify-content: flex-end;
 }
 
+.note-toolbar-setting-item-icon {
+    & .setting-item-info {
+        display: none;
+    }
+}
+
+.note-toolbar-icon-suggestion {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    & svg {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.note-toolbar-icon-action-button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 0 1em;
+}
+
 .note-toolbar-setting-item-fields {
     display: flex;
     gap: 0 1em;
@@ -572,7 +594,7 @@
     }
 }
 
-.note-toolbar-setting-confirm-dialog {
+.note-toolbar-setting-mini-dialog {
     width: 50%;
 }
 
