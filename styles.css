@@ -312,6 +312,10 @@
     .is-mobile & {
         margin: 0.4em 0.4em 1em 0;
     }
+    &:hover {
+        /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
+        overflow: inherit !important;
+    }
     /* width: var(--var-max-width);
     max-width: var(--var-max-width); */
 }
