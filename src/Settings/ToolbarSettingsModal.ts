@@ -158,7 +158,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-icon")
 					.addExtraButton((cb) => {
 						cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
-							.setTooltip("Select icon")
+							.setTooltip("Select icon (optional)")
 							.onClick(async () => {
 								const modal = new IconModal(this, toolbarItem);
 								modal.open();
