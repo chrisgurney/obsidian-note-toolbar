@@ -400,6 +400,16 @@
     & .setting-item-info {
         display: none;
     }
+    & .setting-item-control {
+        & .clickable-icon {
+            border: var(--input-border-width) solid var(--background-modifier-border);
+        }    
+        & .clickable-icon:focus-within {
+            border-radius: var(--input-radius);
+            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
+    }
 }
 
 .note-toolbar-icon-suggestion {
