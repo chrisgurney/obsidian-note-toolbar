@@ -165,6 +165,16 @@ export default class ToolbarSettingsModal extends Modal {
 							});
 						cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
 						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl, 'keydown', (e) => {
+								switch (e.key) {
+									case "Enter":
+									case " ":
+										const modal = new IconModal(this, toolbarItem);
+										modal.open();
+										e.preventDefault();									
+								}
+							});
 					});
 
 				const s1b = new Setting(textFieldsContainer)

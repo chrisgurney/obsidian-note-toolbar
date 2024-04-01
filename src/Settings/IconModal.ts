@@ -33,29 +33,41 @@ export class IconModal extends Modal {
 					.setValue("")
 					.onChange(debounce(async (icon) => {
                         selectedIcon = icon;
-					}, 0))}),
+					}, 0))
+                this.plugin.registerDomEvent(
+                    cb.inputEl, 'keydown', (e) => {
+                        switch (e.key) {
+                            case "Enter":
+                                this.save(selectedIcon);
+                        }
+                    });        
+            }),
 		this.contentEl.appendChild(iconSuggesterDiv);
 
         let actionButtons = this.contentEl.createDiv();
         actionButtons.addClass("note-toolbar-icon-action-button-container");
 
         const removeButton = actionButtons.createEl("button", {text: "Remove"});
-        removeButton.onclick = async () => {
-            this.toolbarItem.icon = "";
-            await this.plugin.saveSettings();
-            this.close();
-            this.parent.display();
-        }
+        removeButton.onclick = async () => this.save("");
 
         const selectButton = actionButtons.createEl("button", {text: "Select"});
-        selectButton.onclick = async () => {
-            this.toolbarItem.icon = selectedIcon;
-            await this.plugin.saveSettings();
-            this.close();
-            this.parent.display();
-        }
+        selectButton.type = "submit";
+        selectButton.onclick = async () => this.save(selectedIcon);
 
         this.contentEl.append(actionButtons);
+
+    }
+
+    /**
+     * Saves the selected icon to settings, closes the modal, refreshes the parent.
+     * @param selectedIcon Icon to save.
+     */
+    async save(selectedIcon: string): Promise<void> {
+
+        this.toolbarItem.icon = selectedIcon;
+        await this.plugin.saveSettings();
+        this.close();
+        this.parent.display();
 
     }
 
