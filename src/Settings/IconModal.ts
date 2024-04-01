@@ -41,7 +41,7 @@ export class IconModal extends Modal {
 
         const removeButton = actionButtons.createEl("button", {text: "Remove"});
         removeButton.onclick = async () => {
-            this.toolbarItem.icon = "lucide-plus-square";
+            this.toolbarItem.icon = "";
             await this.plugin.saveSettings();
             this.close();
             this.parent.display();
