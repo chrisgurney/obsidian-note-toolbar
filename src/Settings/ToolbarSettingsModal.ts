@@ -162,7 +162,10 @@ export default class ToolbarSettingsModal extends Modal {
 							.onClick(async () => {
 								const modal = new IconModal(this, toolbarItem);
 								modal.open();
-							})});
+							});
+						cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
+						cb.extraSettingsEl.setAttribute("tabindex", "0");
+					});
 
 				const s1b = new Setting(textFieldsContainer)
 					.setClass("note-toolbar-setting-item-field")

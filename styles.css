@@ -407,6 +407,11 @@
     & .setting-item-control {
         & .clickable-icon {
             border: var(--input-border-width) solid var(--background-modifier-border);
+        }
+        & .clickable-icon[data-note-toolbar-no-icon="true"] {
+            & svg {
+                filter: brightness(0.5);
+            }
         }    
         & .clickable-icon:focus-within {
             border-radius: var(--input-radius);
