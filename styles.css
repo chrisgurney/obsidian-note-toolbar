@@ -411,13 +411,12 @@
 }
 
 .note-toolbar-setting-item-icon {
+    padding-top: 0 !important;
     & .setting-item-info {
         display: none;
     }
     & .setting-item-control {
-        & .clickable-icon {
-            border: var(--input-border-width) solid var(--background-modifier-border);
-        }
+        margin-top: 0 !important;
         & .clickable-icon[data-note-toolbar-no-icon="true"] {
             & svg {
                 filter: brightness(0.5);
