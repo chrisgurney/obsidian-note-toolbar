@@ -11,7 +11,7 @@ assignees: chrisgurney
 
 
 
-**To Reproduce**
+**Steps to reproduce**
 
 1. 
 
@@ -23,12 +23,16 @@ assignees: chrisgurney
 
 
 
-**Desktop:**
+**Plugin links (if applicable to the issue):**
+
+
+
+**Desktop environment:**
  - OS: 
  - Obsidian version: 
  - Note Toolbar version: 
 
-**Mobile (if applicable to the issue):**
+**Mobile environment (if applicable to the issue):**
  - Device: 
  - OS: 
  - Obsidian version: 
