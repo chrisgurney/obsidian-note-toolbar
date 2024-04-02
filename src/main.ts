@@ -119,9 +119,11 @@ export default class NoteToolbarPlugin extends Plugin {
 							delete item.url;
 						}
 						if (item.urlAttr) {
-							this.settings.toolbars[index].items[item_index].linkAttr.commandId = "";
-							this.settings.toolbars[index].items[item_index].linkAttr.hasVars = item.urlAttr.hasVars;
-							this.settings.toolbars[index].items[item_index].linkAttr.type = item.urlAttr.isUri ? "uri" : "file";	
+							this.settings.toolbars[index].items[item_index].linkAttr = {
+								commandId: "",
+								hasVars: item.urlAttr.hasVars,
+								type: item.urlAttr.isUri ? "uri" : "file"
+							};
 							delete item.urlAttr;
 						}
 					});
