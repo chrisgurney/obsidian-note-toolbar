@@ -180,7 +180,7 @@ export default class ToolbarSettingsModal extends Modal {
 				const s1b = new Setting(textFieldsContainer)
 					.setClass("note-toolbar-setting-item-field")
 					.addText(text => text
-						.setPlaceholder('Item label')
+						.setPlaceholder('Label (optional, if icon set)')
 						.setValue(toolbarItem.label)
 						.onChange(
 							debounce(async (value) => {
@@ -256,7 +256,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.setClass("note-toolbar-setting-item-field-link")
 						.addSearch((cb) => {
 							new CommandSuggester(this.app, this.plugin, cb.inputEl);
-							cb.setPlaceholder("Command")
+							cb.setPlaceholder("Search for command")
 								.setValue(toolbarItem.link)
 								.onChange(debounce(async (command) => {
 									toolbarItem.link = command;
@@ -270,7 +270,7 @@ export default class ToolbarSettingsModal extends Modal {
 					file: new Setting(linkFileFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
 						.addText(text => text
-							.setPlaceholder("File with extension")
+							.setPlaceholder("Path to file, with extension")
 							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
@@ -299,7 +299,7 @@ export default class ToolbarSettingsModal extends Modal {
 					uri: new Setting(linkUriFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
 						.addText(text => text
-							.setPlaceholder("Website or URI")
+							.setPlaceholder("Website, URI, or note title")
 							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
