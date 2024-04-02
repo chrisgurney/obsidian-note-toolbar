@@ -176,6 +176,7 @@
             text-decoration: none;
             font-size: var(--metadata-label-font-size);
             border-radius: var(--button-radius);
+            height: 100%;
         }
 
         & a:focus-within {
@@ -300,8 +301,17 @@
     }
 
     &.cg-note-toolbar-callout {
-        /* fix for reading mode */
+        /* margin-top: fix for reading mode */
         margin-top: 0; 
+        & a {
+            align-items: center;
+            display: flex;
+            gap: 0 0.5em;
+            & svg {
+                display: block;
+                margin: 0 auto;
+            }
+        }
     }
     
 }

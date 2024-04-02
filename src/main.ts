@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce, setIcon } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
 import { debugLog, isValidUri } from './Utils/Utils';
@@ -362,10 +362,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		/* create the unordered list of menu items */
 		let noteToolbarUl = document.createElement("ul");
 		noteToolbarUl.setAttribute("role", "menu");
+
 		toolbar.items.filter((item: ToolbarItemSettings) => {
-			
+
 			// filter out empty items on display
-			return (item.label === "" ? false : true);
+			return ((item.label === "" && item.icon === "") ? false : true);
 
 		}).map((item: ToolbarItemSettings) => {
 
@@ -379,8 +380,21 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbarItem.setAttribute("aria-label", item.tooltip ? item.tooltip : "");
 			toolbarItem.setAttribute("rel", "noopener");
 			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
-			// TODO: if the label has variables, replace them
-			toolbarItem.innerText = item.label;
+
+			if (item.label) {
+				if (item.icon) {
+					let itemIcon = toolbarItem.createSpan();
+					setIcon(itemIcon, item.icon);
+					let itemLabel = toolbarItem.createSpan();
+					itemLabel.innerText = item.label;
+				}
+				else {
+					toolbarItem.innerText = item.label;
+				}
+			}
+			else {
+				setIcon(toolbarItem, item.icon);
+			}
 
 			let noteToolbarLi = document.createElement("li");
 			item.hideOnMobile ? noteToolbarLi.className = "hide-on-mobile" : false;
