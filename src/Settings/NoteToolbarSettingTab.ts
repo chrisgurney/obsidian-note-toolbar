@@ -28,7 +28,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	/**
 	 * Displays the main settings.
 	 */
-	public display(): void {
+	public display(focusOnLastItem: boolean = false): void {
 
 		const { containerEl } = this;
 		containerEl.empty();
@@ -51,6 +51,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.createEl("h2", { text: "Display rules" });
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
+
+		if (focusOnLastItem) {
+			// set focus on last thing in the list, if the label is empty
+			let inputToFocus = this.containerEl.querySelector(
+				'#note-toolbar-setting-item-field-' + (this.plugin.settings.folderMappings.length - 1) + ' input[type="search"]') as HTMLInputElement;
+			if (inputToFocus?.value.length === 0) {
+				inputToFocus.focus();
+			}
+		}
 
 		// scroll to the position when the modal was last open
 		this.rememberLastPosition(this.containerEl);
@@ -172,11 +181,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		else {
 			let toolbarFolderListDiv = containerEl.createDiv();
 
-			let lastItemIndex = 0;
 			this.plugin.settings.folderMappings.forEach(
 				(mapping, index) => {
-
-				lastItemIndex = index;
 
 				let toolbarFolderListItemDiv = containerEl.createDiv();
 				toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
@@ -263,13 +269,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 			containerEl.append(toolbarFolderListDiv);
 
-			// set focus on last thing in the list, if the label is empty
-			let inputToFocus = this.containerEl.querySelector(
-				'#note-toolbar-setting-item-field-' + lastItemIndex + ' input[type="search"]') as HTMLInputElement;
-			if (inputToFocus?.value.length === 0) {
-				inputToFocus.focus();
-			}
-
 		}
 
 		new Setting(containerEl)
@@ -286,7 +285,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						};
 						this.plugin.settings.folderMappings.push(newMapping);
 						await this.plugin.saveSettings();
-						this.display();
+						this.display(true);
 					});
 			});
 
