@@ -1,8 +1,8 @@
-import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
+import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from '../main';
 import { arraymove, debugLog, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
-import { DEFAULT_TOOLBAR_SETTINGS, ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_TOOLBAR_SETTINGS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 
@@ -90,7 +90,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					new Setting(toolbarListDiv)
 						.setName(toolbarItem.name)
 						.setDesc(toolbarItem.items.length > 0 ? 
-							toolbarItem.items.map(item => item.label).join(' | ') : 
+							toolbarItem.items
+								.filter((item: ToolbarItemSettings) => {
+									return ((item.label === "" && item.icon === "") ? false : true);
+								})
+								.map(item => (item.icon ? '[' + (item.icon.startsWith("lucide-") ? item.icon.substring(7) : item.icon) + '] ' : '') + item.label).join(' | ') : 
 							emptyMessageFr("No toolbar items. Click Edit to update this toolbar."))
 						.addButton((button: ButtonComponent) => {
 							button
