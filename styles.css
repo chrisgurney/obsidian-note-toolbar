@@ -623,7 +623,7 @@
 }
 
 .note-toolbar-setting-mini-dialog {
-    width: 50%;
+    width: calc(var(--dialog-width) / 1.5);
 }
 
 .note-toolbar-setting-modal-container {
