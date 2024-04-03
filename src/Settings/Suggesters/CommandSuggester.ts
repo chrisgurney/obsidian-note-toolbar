@@ -1,5 +1,4 @@
 import { AbstractInputSuggest, App, Command } from "obsidian";
-import NoteToolbarPlugin from "src/main";
 
 declare module "obsidian" {
     interface App {
