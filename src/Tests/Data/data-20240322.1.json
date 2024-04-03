@@ -1,0 +1,339 @@
+{
+  "version": 20240322.1,
+  "toolbars": [
+    {
+      "name": "Daily Notes",
+      "updated": "2024-03-25T16:49:01.259Z",
+      "items": [
+        {
+          "label": "←",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-prev",
+          "tooltip": "Previous daily note",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          }
+        },
+        {
+          "label": "Today",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=daily-notes",
+          "tooltip": "Today's daily note",
+          "hideOnDesktop": true,
+          "hideOnMobile": false,
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          }
+        },
+        {
+          "label": "TODO",
+          "url": "obsidian://shell-commands/?vault=Design&execute=zg60qq8r6h",
+          "tooltip": "Insert tasks",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          }
+        },
+        {
+          "label": "@focus",
+          "url": "obsidian://shell-commands/?vault=Design&execute=jttqryu9sd",
+          "tooltip": "Insert tasks to focus on",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          }
+        },
+        {
+          "label": "✪ Events",
+          "url": "obsidian://shell-commands/?vault=Design&execute=r0qcncyump&_task_date={{note_title}}",
+          "tooltip": "Insert today's events",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          }
+        },
+        {
+          "label": "> Insert...",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Ainsert-templater",
+          "tooltip": "Choose template to insert",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          }
+        },
+        {
+          "label": "Blocked?",
+          "url": "What to do if I'm Blocked",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": false
+          },
+          "tooltip": "What to do if I'm blocked",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "☑︎ Done",
+          "url": "obsidian://shell-commands/?vault=Design&execute=um5sony1zn&_task_date={{note_title}}",
+          "tooltip": "Insert items done on this day",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          }
+        },
+        {
+          "label": "⏀ Activity",
+          "url": "obsidian://shell-commands/?vault=Design&execute=41451u5h99&_task_date={{note_title}}",
+          "tooltip": "Insert Git activity for this day",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          }
+        },
+        {
+          "label": "→",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-next",
+          "tooltip": "Next daily note",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          }
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Daily Notes Nav",
+      "updated": "2024-03-29T10:37:28.087Z",
+      "items": [
+        {
+          "label": "←",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-prev",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "📅 Today",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=daily-notes",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "🏡 Home",
+          "url": "Home 🏡",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": false
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "⭐️ Bookmarks",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=bookmarks%253Aopen",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "→",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-next",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "border",
+        "right"
+      ],
+      "mobileStyles": [
+        "mnbrder",
+        "mnstcky"
+      ]
+    },
+    {
+      "name": "Efforts Nav",
+      "updated": "2024-03-29T10:53:58.493Z",
+      "items": [
+        {
+          "label": "↖ Up",
+          "url": "{{prop_up}}",
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": false
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Project Tasks",
+          "url": "obsidian://shell-commands/?vault=Design&execute=2zjvxvte3q&_task_project={{note_title}}",
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          },
+          "tooltip": "Get tasks for this project from Things",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "+ Deliverable",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Areplace-in-file-templater",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "sticky",
+        "right"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Global Nav",
+      "updated": "2024-03-29T19:58:25.997Z",
+      "items": [
+        {
+          "label": "↖ Up ",
+          "url": "{{prop_up}}",
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": false
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "🏡 Home",
+          "url": "Home 🏡",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": false
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "📅 Today",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=daily-notes",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "sticky",
+        "right"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Home",
+      "updated": "2024-03-30T13:06:54.504Z",
+      "items": [
+        {
+          "label": "⭐️ Bookmarks",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=bookmarks%253Aopen",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "urlAttr": {
+            "hasVars": true,
+            "isUri": true
+          }
+        },
+        {
+          "label": "📅 Today",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Aopen-daily-note",
+          "urlAttr": {
+            "hasVars": false,
+            "isUri": true
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "right",
+        "sticky"
+      ],
+      "mobileStyles": []
+    }
+  ],
+  "folderMappings": [
+    {
+      "folder": "Home",
+      "toolbar": "Home"
+    },
+    {
+      "folder": "Calendar/Notes",
+      "toolbar": "Daily Notes"
+    },
+    {
+      "folder": "Atlas/Maps",
+      "toolbar": "Global Nav"
+    },
+    {
+      "folder": "Portfolio/Efforts",
+      "toolbar": "Efforts Nav"
+    }
+  ],
+  "toolbarProp": "notetoolbar"
+}

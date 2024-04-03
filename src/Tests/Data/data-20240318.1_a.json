@@ -1,0 +1,110 @@
+{
+  "version": 20240318.1,
+  "toolbars": [
+    {
+      "name": "Daily Notes",
+      "updated": "2024-03-19T14:37:43.498Z",
+      "items": [
+        {
+          "label": "Daily",
+          "url": "",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Notes",
+          "url": "",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Non-Stick",
+      "updated": "2024-03-19T20:48:15.794Z",
+      "items": [
+        {
+          "label": "Non-Sticky",
+          "url": "",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Toolbar",
+          "url": "",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "center"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Note Link",
+      "updated": "2024-03-20T01:11:04.867Z",
+      "items": [
+        {
+          "label": "Note",
+          "url": "",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Override",
+      "updated": "2024-03-19T14:45:00.081Z",
+      "items": [
+        {
+          "label": "Override",
+          "url": "",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Toolbar",
+          "url": "",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": [
+        "mnbrder"
+      ]
+    }
+  ],
+  "folderMappings": [
+    {
+      "folder": "Daily Notes",
+      "toolbar": "Daily Notes"
+    }
+  ],
+  "toolbarProp": "notetoolbar"
+}

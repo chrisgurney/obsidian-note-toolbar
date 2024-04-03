@@ -1,0 +1,123 @@
+{
+  "version": 20240318.1,
+  "toolbars": [
+    {
+      "name": "Daily Notes",
+      "updated": "2024-03-20T14:24:12.525Z",
+      "items": [
+        {
+          "label": "←",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Aprev-daily-note",
+          "tooltip": "Previous daily note",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Today",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Aopen-daily-note",
+          "tooltip": "Today's daily note",
+          "hideOnDesktop": true,
+          "hideOnMobile": false
+        },
+        {
+          "label": "TODO",
+          "url": "obsidian://shell-commands/?vault=Design&execute=zg60qq8r6h",
+          "tooltip": "Insert tasks",
+          "hideOnDesktop": false,
+          "hideOnMobile": true
+        },
+        {
+          "label": "@focus",
+          "url": "obsidian://shell-commands/?vault=Design&execute=jttqryu9sd",
+          "tooltip": "Insert tasks to focus on",
+          "hideOnDesktop": false,
+          "hideOnMobile": true
+        },
+        {
+          "label": "✪ Events",
+          "url": "obsidian://shell-commands/?vault=Design&execute=r0qcncyump&_task_date={{note_title}}",
+          "tooltip": "Insert today's events",
+          "hideOnDesktop": false,
+          "hideOnMobile": true
+        },
+        {
+          "label": "> Insert...",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Ainsert-templater",
+          "tooltip": "Choose template to insert",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Blocked?",
+          "url": "obsidian://advanced-uri?vault=Design&filepath=Atlas%252FNotes%252FWhat%2520to%2520do%2520if%2520I'm%2520Blocked.md",
+          "tooltip": "What to do if I'm blocked",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "☑︎ Done",
+          "url": "obsidian://shell-commands/?vault=Design&execute=um5sony1zn&_task_date={{note_title}}",
+          "tooltip": "Insert items done on this day",
+          "hideOnDesktop": false,
+          "hideOnMobile": true
+        },
+        {
+          "label": "⏀ Activity",
+          "url": "obsidian://shell-commands/?vault=Design&execute=41451u5h99&_task_date={{note_title}}",
+          "tooltip": "Insert Git activity for this day",
+          "hideOnDesktop": false,
+          "hideOnMobile": true
+        },
+        {
+          "label": "→",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Anext-daily-note",
+          "tooltip": "Next daily note",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "border",
+        "even"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Home",
+      "updated": "2024-03-20T13:55:57.381Z",
+      "items": [
+        {
+          "label": "⭐️ Bookmarks",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=bookmarks%253Aopen",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "📅 Today",
+          "url": "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Aopen-daily-note",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "right",
+        "sticky"
+      ],
+      "mobileStyles": []
+    }
+  ],
+  "folderMappings": [
+    {
+      "folder": "Calendar/Notes",
+      "toolbar": "Daily Notes"
+    },
+    {
+      "folder": "/",
+      "toolbar": "Home"
+    }
+  ],
+  "toolbarProp": "notetoolbar"
+}
