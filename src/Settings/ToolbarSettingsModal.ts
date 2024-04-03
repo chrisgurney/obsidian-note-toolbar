@@ -5,7 +5,7 @@ import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, ToolbarItemSetti
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
-import { IconModal } from './IconModal';
+import { IconSuggestModal } from './IconSuggestModal';
 
 export default class ToolbarSettingsModal extends Modal {
 
@@ -162,7 +162,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 							.setTooltip("Select icon (optional)")
 							.onClick(async () => {
-								const modal = new IconModal(this, toolbarItem);
+								const modal = new IconSuggestModal(this, cb.extraSettingsEl, this.toolbar, index);
 								modal.open();
 							});
 						cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -172,7 +172,7 @@ export default class ToolbarSettingsModal extends Modal {
 								switch (e.key) {
 									case "Enter":
 									case " ":
-										const modal = new IconModal(this, toolbarItem);
+										const modal = new IconSuggestModal(this, cb.extraSettingsEl, this.toolbar, index);
 										modal.open();
 										e.preventDefault();									
 								}
