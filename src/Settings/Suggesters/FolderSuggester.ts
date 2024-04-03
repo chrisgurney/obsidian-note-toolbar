@@ -1,19 +1,21 @@
-// Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
+import { AbstractInputSuggest, App, TAbstractFile, TFolder } from "obsidian";
 
-import { TAbstractFile, TFolder } from "obsidian";
-import { TextInputSuggester } from "./suggester";
+export class FolderSuggester extends AbstractInputSuggest<TFolder> {
 
-export class FolderSuggester extends TextInputSuggester<TFolder> {
+    private inputEl: HTMLInputElement;
+
+    constructor(app: App, inputEl: HTMLInputElement) {
+        super(app, inputEl);
+        this.inputEl = inputEl;
+    }
+
     getSuggestions(inputStr: string): TFolder[] {
         const abstractFiles = this.app.vault.getAllLoadedFiles();
         const folders: TFolder[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         abstractFiles.forEach((folder: TAbstractFile) => {
-            if (
-                folder instanceof TFolder &&
-                folder.path.toLowerCase().contains(lowerCaseInputStr)
-            ) {
+            if (folder instanceof TFolder && folder.path.toLowerCase().contains(lowerCaseInputStr)) {
                 folders.push(folder);
             }
         });

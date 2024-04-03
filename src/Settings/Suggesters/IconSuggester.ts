@@ -1,17 +1,13 @@
-// Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
+import { AbstractInputSuggest, App, IconName, getIconIds, setIcon } from "obsidian";
 
-import { App, IconName, TAbstractFile, TFolder, getIconIds, setIcon } from "obsidian";
-import { TextInputSuggester } from "./suggester";
-import NoteToolbarPlugin from "src/main";
+export class IconSuggester extends AbstractInputSuggest<IconName> {
 
-export class IconSuggester extends TextInputSuggester<IconName> {
+    private inputEl: HTMLInputElement;
 
-    private plugin: NoteToolbarPlugin;
-
-    constructor(app: App, plugin: NoteToolbarPlugin, inputEl: HTMLInputElement | HTMLTextAreaElement) {
+    constructor(app: App, inputEl: HTMLInputElement) {
         super(app, inputEl);
         inputEl.addClass("note-toolbar-icon-input");
-        this.plugin = plugin;
+        this.inputEl = inputEl;
     }
 
     getSuggestions(inputStr: string): IconName[] {

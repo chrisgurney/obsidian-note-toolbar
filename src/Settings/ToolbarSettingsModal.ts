@@ -257,7 +257,7 @@ export default class ToolbarSettingsModal extends Modal {
 					command: new Setting(linkCommandFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
 						.addSearch((cb) => {
-							new CommandSuggester(this.app, this.plugin, cb.inputEl);
+							new CommandSuggester(this.app, cb.inputEl);
 							cb.setPlaceholder("Search for command")
 								.setValue(toolbarItem.link)
 								.onChange(debounce(async (command) => {
@@ -461,6 +461,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Styles")
+			.setHeading()
 			.setDesc(stylingDescription)
 			.setClass("note-toolbar-setting-no-controls");
 

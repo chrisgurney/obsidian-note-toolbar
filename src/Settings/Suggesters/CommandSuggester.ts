@@ -1,7 +1,4 @@
-// Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
-
-import { App, Command, TAbstractFile, TFolder } from "obsidian";
-import { TextInputSuggester } from "./suggester";
+import { AbstractInputSuggest, App, Command } from "obsidian";
 import NoteToolbarPlugin from "src/main";
 
 declare module "obsidian" {
@@ -14,14 +11,14 @@ declare module "obsidian" {
     }
 }
 
-export class CommandSuggester extends TextInputSuggester<Command> {
+export class CommandSuggester extends AbstractInputSuggest<Command> {
 
-    private plugin: NoteToolbarPlugin;
+    private inputEl: HTMLInputElement;
     private commands: Command[];
 
-    constructor(app: App, plugin: NoteToolbarPlugin, inputEl: HTMLInputElement | HTMLTextAreaElement) {
+    constructor(app: App, inputEl: HTMLInputElement) {
         super(app, inputEl);
-        this.plugin = plugin;
+        this.inputEl = inputEl;
         this.commands = Object.values(this.app.commands.commands);
     }
 

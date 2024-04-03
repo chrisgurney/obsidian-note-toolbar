@@ -28,7 +28,7 @@ export class IconModal extends Modal {
 		new Setting(iconSuggesterDiv)
             .setDesc("Select an icon for this item")
 			.addSearch((cb) => {
-				new IconSuggester(this.app, this.plugin, cb.inputEl);
+				new IconSuggester(this.app, cb.inputEl);
 				cb.setPlaceholder("Icon")
 					.setValue("")
 					.onChange(debounce(async (icon) => {
