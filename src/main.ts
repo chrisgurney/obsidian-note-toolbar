@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce, setIcon } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
 import { debugLog, isValidUri } from './Utils/Utils';
