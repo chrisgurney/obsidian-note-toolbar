@@ -378,8 +378,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			Object.entries(item.linkAttr).forEach(([key, value]) => {
 				toolbarItem.setAttribute(`data-toolbar-link-attr-${key}`, value);
 			});
-			toolbarItem.setAttribute("data-tooltip-position", "top");
-			toolbarItem.setAttribute("aria-label", item.tooltip ? item.tooltip : "");
+			item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
 			toolbarItem.setAttribute("rel", "noopener");
 			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
 

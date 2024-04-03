@@ -48,7 +48,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		this.displayToolbarList(containerEl);
 
-		containerEl.createEl("h2", { text: "Display rules" });
+		new Setting(containerEl).setName("Display rules").setHeading();
+
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
 
