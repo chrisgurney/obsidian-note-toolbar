@@ -2,7 +2,7 @@ import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePat
 import NoteToolbarPlugin from '../main';
 import { arraymove, debugLog, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
-import { DEFAULT_TOOLBAR_SETTINGS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 
