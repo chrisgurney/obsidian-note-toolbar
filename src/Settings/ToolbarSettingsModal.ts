@@ -453,7 +453,7 @@ export default class ToolbarSettingsModal extends Modal {
 			stylingDescription.createEl("br"),
 			"See the ",
 			stylingDescription.createEl("a", {
-				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars#styles",
+				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars",
 				text: "documentation",
 			}),
 			" about the list of supported styles."
