@@ -48,15 +48,15 @@ If you want your toolbar to show without using a property, try mapping a folder 
 
 # Examples
 
-Any plugin that can generate a URL can be executed from the toolbar. [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and more examples to come.
+Toolbar items can be commands, files, or URIs (website URLs and plugin URIs). [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and examples.
 
 Some quick examples:
 
 | Example | How? |
 | --- | --- |
-| Link to Next, Previous, and Today's Daily Note | Use the Core _Daily notes_ plugin + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Daily-Notes)) |
-| Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templates)) |
-| Show Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command + [Advanced URI](https://github.com/Vinzent03/obsidian-advanced-uri) ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Bookmarks)), OR use a [Note Toolbar Callout](#note-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your bookmarks. ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Bookmarks)) |
+| Link to Next, Previous, and Today's Daily Note | Use the Core _Daily notes_ plugin's commands ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Daily-Notes)) |
+| Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templates)) |
+| Show Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Bookmarks)), OR use a [Note Toolbar Callout](#note-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your bookmarks. ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Bookmarks)) |
 | Execute Shell Commands | Using the [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) plugin. ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Shell-Commands)) |
 
 [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars, and I'll add them to [the examples](https://github.com/chrisgurney/obsidian-note-toolbar/Examples)!
