@@ -54,7 +54,7 @@ Once installed, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New
 
 ## Installing via Community Plugins
 
-- [ ] TBD - This plugin is not yet released as I work out the details, but you're welcome to install it via BRAT. I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)!
+- [ ] TBD - This plugin is in the approval process, but you're welcome to install it via BRAT. I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) and any [issues](https://github.com/chrisgurney/obsidian-note-toolbar/issues) you uncover!
 
 ## Installing via BRAT
 
@@ -87,7 +87,7 @@ Shout out to other projects and people who helped me with questions I had while 
 
 # Contribute 🧑‍💻
 
-Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! If they sound good, pull requests are welcome!
+Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
 
 # Support 🛟
 
