@@ -1,4 +1,4 @@
-# Note Toolbar
+![Note Toolbar Obsidian Plugin - Create flexible toolbars for your notes](./docs/share_banner.jpg)
 
 The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible way to create toolbars at the top of your notes.
 
