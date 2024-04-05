@@ -354,14 +354,19 @@
             padding-bottom: 0;
         }
     }
+    & .setting-item-description {
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
 
 .note-toolbar-setting-toolbar-list-preview-item {
-    margin-right: 4px;
     align-items: center;
-    display: inline-flex;
+    display: flex;
+    margin-right: 4px;
     & span {
         margin-right: 2px;
+        white-space: nowrap;
     }
 }
 
