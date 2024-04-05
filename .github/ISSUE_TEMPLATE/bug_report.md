@@ -20,11 +20,15 @@ assignees: chrisgurney
 
 
 **Screenshots (if you think it will help)**
+_Video or a GIF would be appreciated._
 
 
+**Theme links and CSS snippets (if applicable):**
+_Themes and CSS snippets can affect the display of the toolbar. Include any being used here to help diagnose display issues._
 
-**Plugin links (if applicable to the issue):**
 
+**Plugin links (if applicable):**
+_If you're using a specific plugin that isn't working with the toolbar, link it here._
 
 
 **Desktop environment:**
@@ -40,3 +44,4 @@ assignees: chrisgurney
 
 **Additional context**
 _Add any other context about the problem here._
+
