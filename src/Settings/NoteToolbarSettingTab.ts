@@ -75,10 +75,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const toolbarsDesc = document.createDocumentFragment();
 		toolbarsDesc.append(
-			"Define the toolbars you want to add to your notes. ",
+			"Define the toolbars you want to add to your notes • ",
 			toolbarsDesc.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
 				text: "User Guide",
+			}),
+			" • ",
+			toolbarsDesc.createEl("a", {
+				href: "https://github.com/chrisgurney/obsidian-note-toolbar/releases",
+				text: "v" + this.plugin.manifest.version,
 			})
 		);
 
