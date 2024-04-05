@@ -1,13 +1,13 @@
 ![Note Toolbar Obsidian Plugin](./docs/readme_banner.png)
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [!["Buy Me A Coffee"](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/cheznine)
 
 The Note Toolbar plugin for [Obsidian](https://obsidian.md) provides a flexible way to create toolbars at the top of your notes.
 
 With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) which you can add anywhere in your notes.
 
-📖 **How to use this plugin: [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)**<br/>☕️ <b>Support me: <a href="https://www.buymeacoffee.com/cheznine" target="_blank">Buy me a coffee</a></b>
+📖 **How to use this plugin: [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)**
 
 ![Demo of a sticky toolbar](./docs/note_toolbar_demo.gif)
 
