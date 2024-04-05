@@ -21,9 +21,9 @@ With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisg
 
 <details>
 <summary>Installing beta versions via BRAT</summary>
-[BRAT](https://github.com/TfTHacker/obsidian42-brat) lets you beta-test plugins, to provide feedback.<br/>
+<a href="https://github.com/TfTHacker/obsidian42-brat">BRAT</a> lets you beta-test plugins, to provide feedback.<br/>
 <br/>
-I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) and any [issues](https://github.com/chrisgurney/obsidian-note-toolbar/issues) you uncover!<br/>
+I welcome <a href="https://github.com/chrisgurney/obsidian-note-toolbar/discussions">your feedback</a> and any <a href="https://github.com/chrisgurney/obsidian-note-toolbar/issues">issues</a> you uncover!<br/>
 <br/>
 <blockquote>
   <ol>
@@ -37,7 +37,7 @@ I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/d
     <li>Open BRAT settings (<i>Settings -> Obsidian 42 - BRAT</i>)</li>
     <li>Scroll to the <i>Beta Plugin List</i> section</li>
     <li><i>Add Beta Plugin</i></li>
-    <li>Specify this repository: <pre>chrisgurney/obsidian-note-toolbar</pre></li>
+    <li>Specify this repository: <code>chrisgurney/obsidian-note-toolbar</code></li>
     <li><i>Enable the Note Toolbar plugin</i> (<i>Settings &gt; Community plugins</i>)</li>
   </ol>
 </blockquote>
