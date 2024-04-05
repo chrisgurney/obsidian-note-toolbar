@@ -13,7 +13,7 @@ With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisg
 
 # Installation
 
-[Install here](https://obsidian.md/plugins?id=note-toolbar) or:
+[Click here](https://obsidian.md/plugins?id=note-toolbar) or:
 
 1. Open Obsidian's settings, and click _Community plugins_
 2. Search for _Note Toolbar_ and select it
