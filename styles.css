@@ -345,10 +345,24 @@
 }
 
 .note-toolbar-setting-toolbar-list {
+    & svg {
+        height: var(--font-ui-smaller);
+        width: var(--font-ui-smaller);
+        display: block;
+    }
     &:has(:last-child) {
         .is-mobile & {
             padding-bottom: 0;
         }
+    }
+}
+
+.note-toolbar-setting-toolbar-list-preview-item {
+    margin-right: 4px;
+    align-items: center;
+    display: inline-flex;
+    & span {
+        margin-right: 2px;
     }
 }
 

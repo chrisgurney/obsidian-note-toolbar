@@ -99,13 +99,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				(toolbarItem, index) => {
 					new Setting(toolbarListDiv)
 						.setName(toolbarItem.name)
-						.setDesc(toolbarItem.items.length > 0 ? 
-							toolbarItem.items
-								.filter((item: ToolbarItemSettings) => {
-									return ((item.label === "" && item.icon === "") ? false : true);
-								})
-								.map(item => (item.icon ? '[' + (item.icon.startsWith("lucide-") ? item.icon.substring(7) : item.icon) + '] ' : '') + item.label).join(' | ') : 
-							emptyMessageFr("No toolbar items. Click Edit to update this toolbar."))
+						.setDesc(this.createToolbarPreviewFr(toolbarItem.items))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setTooltip("Update this toolbar's items")
@@ -357,5 +351,45 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		});
 
     }
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+	/**
+	 * Constructs a preview of the given toolbar, including the icons used.
+	 * @param toolbarItems Array of ToolbarItemSettings to display in the preview.
+	 * @returns DocumentFragment
+	 */
+	private createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): DocumentFragment {
+		let toolbarFr: DocumentFragment = document.createDocumentFragment();
+		if (toolbarItems.length > 0) {
+			toolbarItems
+				.filter((item: ToolbarItemSettings) => {
+					// ignore all empty toolbar items (no label or icon)
+					return ((item.label === "" && item.icon === "") ? false : true);
+				})
+		 		.map(item => {
+					let itemFr = toolbarFr.createDiv();
+					itemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
+					let iconFr = toolbarFr.createSpan();
+					let labelFr = toolbarFr.createSpan();
+					if (item.icon) {
+						setIcon(iconFr, item.icon);
+						toolbarFr.append(iconFr);
+					}
+					if (item.label) {
+						labelFr.textContent = item.label;
+						toolbarFr.append(labelFr);
+					}
+					itemFr.append(iconFr, labelFr);
+					toolbarFr.append(itemFr);
+				});
+		}
+		else {
+			toolbarFr = emptyMessageFr("No toolbar items. Click Edit to update this toolbar.");
+		}
+		return toolbarFr;
+	}
 
 }
