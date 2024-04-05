@@ -1,4 +1,4 @@
-![Note Toolbar Obsidian Plugin - Create flexible toolbars for your notes](./docs/share_banner.jpg)
+![Note Toolbar Obsidian Plugin](./docs/readme_banner.png)
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
