@@ -13,9 +13,39 @@ With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisg
 
 ![Demo of a sticky toolbar](./docs/note_toolbar_demo.gif)
 
+# Installation
+
+1. Open Obsidian's settings, and click _Community plugins_
+2. Search for _Note Toolbar_ and select it
+3. _Install_
+
+<details>
+<summary>Installing beta versions via BRAT</summary>
+[BRAT](https://github.com/TfTHacker/obsidian42-brat) lets you beta-test plugins, to provide feedback.<br/>
+<br/>
+I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) and any [issues](https://github.com/chrisgurney/obsidian-note-toolbar/issues) you uncover!<br/>
+<br/>
+<blockquote>
+  <ol>
+    <li>Install the BRAT plugin:
+      <ul>
+        <li>Open <i>Settings > Community Plugins</i></li>
+        <li><i>Disable safe mode</i>, if enabled</li>
+        <li>Browse, and <i>search for "BRAT"</i></li>
+        <li>Install the latest version of <i>Obsidian 42 - BRAT</i></li>
+      </ul></li>
+    <li>Open BRAT settings (<i>Settings -> Obsidian 42 - BRAT</i>)</li>
+    <li>Scroll to the <i>Beta Plugin List</i> section</li>
+    <li><i>Add Beta Plugin</i></li>
+    <li>Specify this repository: <pre>chrisgurney/obsidian-note-toolbar</pre></li>
+    <li><i>Enable the Note Toolbar plugin</i> (<i>Settings &gt; Community plugins</i>)</li>
+  </ol>
+</blockquote>
+</details>
+
 # Getting Started 🚀
 
-Once installed and enabled, in Note Toolbar's settings:
+Once enabled, open Note Toolbar's settings:
 
 1. Create a _+ New toolbar_
 2. Give the toolbar a _name_.
@@ -49,27 +79,6 @@ Once installed, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New
 ![Example of settings configuration](./docs/settings.png)
 
 ![Example of settings for a new toolbar](./docs/settings_edit_toolbar_full.png)
-
-# Installation
-
-## Installing via Community Plugins
-
-- [ ] TBD - This plugin is in the approval process, but you're welcome to install it via BRAT. I welcome [your feedback](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) and any [issues](https://github.com/chrisgurney/obsidian-note-toolbar/issues) you uncover!
-
-## Installing via BRAT
-
-[BRAT](https://github.com/TfTHacker/obsidian42-brat) lets you beta-test plugins, to provide feedback.
-
-1. Install the BRAT plugin:
-  - Open _Settings > Community Plugins_
-  - _Disable safe mode_, if enabled
-  - Browse, and _search for "BRAT"_
-  - Install the latest version of _Obsidian 42 - BRAT_
-2. Open BRAT settings (_Settings -> Obsidian 42 - BRAT_)
-3. Scroll to the _Beta Plugin List_ section
-4. _Add Beta Plugin_
-5. Specify this repository: `chrisgurney/obsidian-note-toolbar`
-6. _Enable the Note Toolbar plugin_ (_Settings -> Community Plugins_)
 
 # License
 
