@@ -89,8 +89,7 @@
 
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
     position: sticky;
-    /* TODO: figure out if 0.5em can come from a var; hint, it's not var(--inline-title-margin-bottom) */
-    top: calc(var(--inline-title-size) * -1 - 0.5em); 
+    top: calc(var(--header-height) * -1);
     z-index: 2;
     .is-mobile &, .is-phone & {
         top: -1rem;
