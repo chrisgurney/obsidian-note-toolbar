@@ -103,6 +103,6 @@ Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolb
 
 [Ask questions here](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) or [request a feature](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/ideas). If you run into something that looks like a bug, please [log an issue](https://github.com/chrisgurney/obsidian-note-toolbar/issues).
 
-If you find this plugin useful, I accept donations. Thank you!
+If you find this plugin useful, and wish to support me financially, I accept donations. Thank you!
 
 [!["Buy Me A Coffee"](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/cheznine)
