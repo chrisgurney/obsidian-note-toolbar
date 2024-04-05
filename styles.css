@@ -403,8 +403,11 @@
     & .setting-item-control {
         display: none;
     }
-    & .setting-item-description a:focus-within {
-        box-shadow: 0 0 0 2px;
+    & .setting-item-description a {
+        white-space: nowrap;
+        &:focus-within {
+            box-shadow: 0 0 0 2px;
+        }
     }
 }
 
