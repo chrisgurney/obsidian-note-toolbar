@@ -20,6 +20,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
 		this.addCommand({id: 'focus', name: 'Focus', callback: async () => this.focusCommand()});
+		this.addCommand({id: 'show-properties', name: 'Show Properties', callback: async () => this.propsVisibleCommand('show')});
+		this.addCommand({id: 'hide-properties', name: 'Hide Properties', callback: async () => this.propsVisibleCommand('hide')});
+		this.addCommand({id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.propsVisibleCommand('toggle')});
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
@@ -474,6 +477,32 @@ export default class NoteToolbarPlugin extends Plugin {
 			const link = visibleItems[0] ? visibleItems[0].querySelector('a') : null;
 			debugLog("focus command: focussed item: ", link);
 			link?.focus();
+		}
+
+	}
+
+	/**
+	 * Shows, completely hides, or toggles the visibility of this note's Properties.
+	 * @param visibility Set to 'show', 'hide', or 'toggle'
+	 */
+	async propsVisibleCommand(visibility: 'show' | 'hide' | 'toggle'): Promise<void> {
+
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let props = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
+		if (props) {
+			visibility === 'toggle' && props.style.display === 'none' ? visibility = 'show' : visibility = 'hide'; 
+			switch (visibility) {
+				case 'show':
+					props.style.display = 'var(--metadata-display-editing)';
+					// expand the Properties heading if it's collapsed, because Obsidian seems to want to keep it closed sometimes
+					if (props.classList.contains('is-collapsed')) {
+						(props.querySelector('.metadata-properties-heading') as HTMLElement).click();
+					}
+					break;
+				case 'hide':
+					props.style.display = 'none';
+					break;
+			}
 		}
 
 	}
