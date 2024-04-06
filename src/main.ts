@@ -489,8 +489,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let props = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
+		debugLog("propsVisibleCommand: ", "visibility: ", visibility, "props: ", props);
 		if (props) {
-			visibility === 'toggle' && props.style.display === 'none' ? visibility = 'show' : visibility = 'hide'; 
+			let propsDisplayStyle = getComputedStyle(props).getPropertyValue('display');
+			visibility === 'toggle' && propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide'; 
 			switch (visibility) {
 				case 'show':
 					props.style.display = 'var(--metadata-display-editing)';
