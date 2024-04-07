@@ -266,51 +266,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile (note) to check if we need to create a toolbar.
 	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
 	 */
-	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined) {
+	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined): Promise<void> {
 
 		debugLog('checkAndRenderToolbar()');
 
-		//
-		// check: does this note need a toolbar?
-		//
-		
-		let matchingToolbar: ToolbarSettings | undefined = undefined;
-
-		// debugLog('- frontmatter: ', frontmatter);
-		const propName = this.settings.toolbarProp;
-		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
-		if (notetoolbarProp !== null) {
-			// is it valid? (i.e., is there a matching toolbar?)
-			matchingToolbar = this.getToolbarSettingsFromProps(notetoolbarProp);
-		}
-
-		// we still don't have a matching toolbar
-		if (!matchingToolbar) {
-
-			// check if the note is in a folder that's mapped, and if the mapping is valid
-			let mapping;
-			for (let index = 0; index < this.settings.folderMappings.length; index++) {
-				mapping = this.settings.folderMappings[index];
-				// debugLog('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
-				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-					// debugLog('- mapping found -> ' + mapping.toolbar);
-					// continue until we get a matching toolbar
-					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
-					if (matchingToolbar) {
-						// debugLog('  - matched toolbar:', matchingToolbar);
-						break;
-					}
-				}
-			}
-
-		}
+		// get matching toolbar for this note, if there is one		
+		let matchingToolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, file);
 		
 		//
-		// check: is there already a toolbar to remove?
+		// check: is there already a toolbar to deal with?
 		//
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
-		debugLog("- view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
+		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
 		if (existingToolbarEl) {
 
 			// debugLog('checkAndRenderToolbar: existing toolbar');
@@ -353,6 +319,51 @@ export default class NoteToolbarPlugin extends Plugin {
 			debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
 			this.renderToolbarFromSettings(matchingToolbar);
 		}
+
+	}
+
+	/**
+	 * Get toolbar for the given frontmatter (based on a toolbar prop), and failing that the file (based on folder mappings).
+	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
+	 * @param file The note to check if we have a toolbar for.
+	 * @returns ToolbarSettings or undefined, if there is no matching toolbar.
+	 */
+	private getMatchingToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
+
+		debugLog('getMatchingToolbar()');
+
+		let matchingToolbar: ToolbarSettings | undefined = undefined;
+
+		// debugLog('- frontmatter: ', frontmatter);
+		const propName = this.settings.toolbarProp;
+		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
+		if (notetoolbarProp !== null) {
+			// is it valid? (i.e., is there a matching toolbar?)
+			matchingToolbar = this.getToolbarSettingsFromProps(notetoolbarProp);
+		}
+
+		// we still don't have a matching toolbar
+		if (!matchingToolbar) {
+
+			// check if the note is in a folder that's mapped, and if the mapping is valid
+			let mapping;
+			for (let index = 0; index < this.settings.folderMappings.length; index++) {
+				mapping = this.settings.folderMappings[index];
+				// debugLog('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
+				if (file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
+					// debugLog('- mapping found -> ' + mapping.toolbar);
+					// continue until we get a matching toolbar
+					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
+					if (matchingToolbar) {
+						// debugLog('  - matched toolbar:', matchingToolbar);
+						break;
+					}
+				}
+			}
+
+		}
+
+		return matchingToolbar;
 
 	}
 
@@ -430,19 +441,13 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
 
 		/* inject it between the properties and content divs */
-		// TODO: remove; leaving here until rendering issues are fully sorted
-		// let propertiesContainer = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
-		// let propertiesContainer = this.app.workspace.activeEditor?.contentEl.querySelector('.metadata-container');
-		// let propertiesContainer = currentView?.contentEl.querySelector('.metadata-container');
-		// let propertiesContainer = this.app.workspace.containerEl.querySelector('.cm-editor > .metadata-container');
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let propertiesContainer = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
-		if (!propertiesContainer) {
+		let propsContainer = this.getPropsEl();
+		if (!propsContainer) {
 			console.error("Unable to find propertiesContainer to insert toolbar");
 			debugLog(document.readyState);
 			// debugger;
 		}
-		propertiesContainer?.insertAdjacentElement("afterend", embedBlock);
+		propsContainer?.insertAdjacentElement("afterend", embedBlock);
 
 	}
 
@@ -466,8 +471,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async focusCommand(): Promise<void> {
 
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let itemsUl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container .callout-content > ul');
+		let itemsUl: HTMLElement | null = this.getToolbarListEl();
 		if (itemsUl) {
 			debugLog("focus command: toolbar: ", itemsUl);
 			let items = Array.from(itemsUl.children);
@@ -487,8 +491,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async propsVisibleCommand(visibility: 'show' | 'hide' | 'toggle'): Promise<void> {
 
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let props = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
+		let props = this.getPropsEl();
 		debugLog("propsVisibleCommand: ", "visibility: ", visibility, "props: ", props);
 		if (props) {
 			let propsDisplayStyle = getComputedStyle(props).getPropertyValue('display');
@@ -521,8 +524,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		debugLog("toolbarKeyboardHandler: ", e);
 
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let itemsUl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container .callout-content > ul');
+		let itemsUl: HTMLElement | null = this.getToolbarListEl();
 		if (itemsUl) {
 
 			let items = Array.from(itemsUl.children);
@@ -665,6 +667,46 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		return s;
 
+	}
+
+	/*************************************************************************
+	 * ELEMENT GETTERS
+	 *************************************************************************/
+
+	/**
+	 * Gets the Properties container in the current view.
+	 * @returns HTMLElement or null, if it doesn't exist.
+	 */
+	private getPropsEl(): HTMLElement | null {
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		// TODO: remove; leaving here until rendering issues are fully sorted
+		// let propertiesContainer = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
+		// let propertiesContainer = this.app.workspace.activeEditor?.contentEl.querySelector('.metadata-container');
+		// let propertiesContainer = currentView?.contentEl.querySelector('.metadata-container');
+		// let propertiesContainer = this.app.workspace.containerEl.querySelector('.cm-editor > .metadata-container');
+		let propertiesContainer = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
+		return propertiesContainer;
+	}
+
+	/**
+	 * Get the toolbar element, in the current view.
+	 * @returns HTMLElement or null, if it doesn't exist.
+	 */
+	private getToolbarEl(): HTMLElement | null {
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container') as HTMLElement;
+		// debugLog("getToolbarContainer: view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
+		return existingToolbarEl;
+	}
+
+	/**
+	 * Get the toolbar element's <ul> element, in the current view.
+	 * @returns HTMLElement or null, if it doesn't exist.
+	 */
+	private getToolbarListEl(): HTMLElement | null {
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let itemsUl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
+		return itemsUl;
 	}
 
 	/*************************************************************************
