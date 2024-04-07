@@ -273,49 +273,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		// get matching toolbar for this note, if there is one		
 		let matchingToolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, file);
 		
-		//
-		// check: is there already a toolbar to deal with?
-		//
-		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
-		if (existingToolbarEl) {
-
-			// debugLog('checkAndRenderToolbar: existing toolbar');
-
-			let existingToolbarName = existingToolbarEl?.getAttribute("data-name");
-			let existingToolbarUpdated = existingToolbarEl.getAttribute("data-updated");
-			let existingToolbarHasSibling = existingToolbarEl.nextElementSibling;
-
-			// if we don't need it, remove it
-			if (!matchingToolbar) {
-				debugLog("- toolbar not needed, removing existing toolbar: " + existingToolbarName);
-				existingToolbarEl.remove();
-				existingToolbarEl = null;
-			}
-			// we need a toolbar BUT the name of the existing toolbar doesn't match
-			else if (matchingToolbar.name !== existingToolbarName) {
-				debugLog("- toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
-				existingToolbarEl.remove();
-				existingToolbarEl = null;
-			}
-			// we need a toolbar BUT it needs to be updated
-			else if (matchingToolbar.updated !== existingToolbarUpdated) {
-				debugLog("- existing toolbar out of date, removing existing toolbar");
-				existingToolbarEl.remove();
-				existingToolbarEl = null;
-			}
-			// existingToolbarEl is not in the correct position: can happen when switching layouts
-			else if (existingToolbarHasSibling) {
-				debugLog("- not in the correct position (has next sibling), removing existing toolbar");
-				existingToolbarEl.remove();
-				existingToolbarEl = null;
-			}
-
-			// TODO: if there's a setting to rerender the matchingToolbar (e.g., the names have vars), we can removeActiveToolbar
-
-		}
+		// remove existing toolbar if needed
+		let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
 
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
-		if (matchingToolbar && !existingToolbarEl) {
+		if (matchingToolbar && toolbarRemoved) {
 			debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
 			this.renderToolbarFromSettings(matchingToolbar);
 		}
@@ -729,6 +691,58 @@ export default class NoteToolbarPlugin extends Plugin {
 		existingToolbars.forEach((toolbar) => {
 			toolbar.remove();
 		});
+	}
+
+	/**
+	 * Removes toolbar in the current view only if needed: there is no valid toolbar to check against; 
+	 * the toolbar names don't match; it's out of date with the settings; or it's not in the correct DOM position. 
+	 * @param correctToolbar ToolbarSettings for the toolbar that should be used.
+	 * @returns true if the toolbar was removed, false otherwise.
+	 */
+	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined): boolean {
+
+		let toolbarRemoved: boolean = false;
+
+		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
+		if (existingToolbarEl) {
+
+			// debugLog('checkAndRenderToolbar: existing toolbar');
+			let existingToolbarName = existingToolbarEl?.getAttribute("data-name");
+			let existingToolbarUpdated = existingToolbarEl.getAttribute("data-updated");
+			let existingToolbarHasSibling = existingToolbarEl.nextElementSibling;
+
+			// if we don't have a toolbar to check against
+			if (!correctToolbar) {
+				debugLog("- toolbar not needed, removing existing toolbar: " + existingToolbarName);
+				toolbarRemoved = true;
+			}
+			// we need a toolbar BUT the name of the existing toolbar doesn't match
+			else if (correctToolbar.name !== existingToolbarName) {
+				debugLog("- toolbar needed, removing existing toolbar (name does not match): " + existingToolbarName);
+				toolbarRemoved = true;
+			}
+			// we need a toolbar BUT it needs to be updated
+			else if (correctToolbar.updated !== existingToolbarUpdated) {
+				debugLog("- existing toolbar out of date, removing existing toolbar");
+				toolbarRemoved = true;
+			}
+			// existingToolbarEl is not in the correct position: can happen when switching layouts
+			else if (existingToolbarHasSibling) {
+				debugLog("- not in the correct position (has next sibling), removing existing toolbar");
+				toolbarRemoved = true;
+			}
+
+			if (toolbarRemoved) {
+				existingToolbarEl.remove();
+				existingToolbarEl = null;
+			}
+
+			// TODO: if there's a setting to rerender the matchingToolbar (e.g., the names have vars), we can removeActiveToolbar
+			
+		}
+
+		return toolbarRemoved;
+
 	}
 
 }
