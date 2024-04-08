@@ -457,7 +457,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		debugLog("propsVisibleCommand: ", "visibility: ", visibility, "props: ", props);
 		if (props) {
 			let propsDisplayStyle = getComputedStyle(props).getPropertyValue('display');
-			visibility === 'toggle' && propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide'; 
+			visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
 			switch (visibility) {
 				case 'show':
 					props.style.display = 'var(--metadata-display-editing)';
