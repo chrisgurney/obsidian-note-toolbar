@@ -473,7 +473,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			switch (visibility) {
 				case 'show':
 					props.style.display = 'var(--metadata-display-editing)';
-					// expand the Properties heading if it's collapsed, because Obsidian seems to want to keep it closed sometimes
+					// expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
 					if (props.classList.contains('is-collapsed')) {
 						(props.querySelector('.metadata-properties-heading') as HTMLElement).click();
 						// ...and trigger note save, to remove the fold from local storage
