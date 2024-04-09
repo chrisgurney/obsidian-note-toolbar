@@ -44,10 +44,12 @@ export interface ToolbarItemSettings {
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
-	/* used to describe the type of url, for efficiency on toolbar render and click handling */
 	tooltip: string;
 }
 
+/**
+ * Used to describe the type of url, for efficiency on toolbar render and click handling.
+ */
 export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
@@ -61,7 +63,7 @@ export type LinkType = 'command' | 'file' | 'uri';
  */
 export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
     { border: "border" },
-	{ noborder: "no border" },
+    { noborder: "no border" },
     { center: "center items" },
     { even: "evenly space items" },
     { left: "left align items" },
