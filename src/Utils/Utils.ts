@@ -1,6 +1,6 @@
 import { setIcon } from "obsidian";
 
-const DEBUG: boolean = false;
+const DEBUG: boolean = true;
 
 /**
  * Utility to swap item in an array, used with list controls I borrowed from Templater.
