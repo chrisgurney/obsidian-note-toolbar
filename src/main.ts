@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
 import { debugLog, isValidUri } from './Utils/Utils';
@@ -476,6 +476,9 @@ export default class NoteToolbarPlugin extends Plugin {
 					// expand the Properties heading if it's collapsed, because Obsidian seems to want to keep it closed sometimes
 					if (props.classList.contains('is-collapsed')) {
 						(props.querySelector('.metadata-properties-heading') as HTMLElement).click();
+						// ...and trigger note save, to remove the fold from local storage
+						let currentView = this.app.workspace.getActiveViewOfType(TextFileView);
+						currentView?.requestSave();
 					}
 					break;
 				case 'hide':
