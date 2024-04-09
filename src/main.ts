@@ -298,6 +298,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// debugLog('- frontmatter: ', frontmatter);
 		const propName = this.settings.toolbarProp;
+
 		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
 		if (notetoolbarProp !== null) {
 			// is it valid? (i.e., is there a matching toolbar?)
@@ -405,9 +406,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		/* inject it between the properties and content divs */
 		let propsContainer = this.getPropsEl();
 		if (!propsContainer) {
-			console.error("Unable to find propertiesContainer to insert toolbar");
-			debugLog(document.readyState);
-			// debugger;
+			debugLog("renderToolbarFromSettings: Unable to find propertiesContainer to insert toolbar");
 		}
 		propsContainer?.insertAdjacentElement("afterend", embedBlock);
 
@@ -647,6 +646,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// let propertiesContainer = currentView?.contentEl.querySelector('.metadata-container');
 		// let propertiesContainer = this.app.workspace.containerEl.querySelector('.cm-editor > .metadata-container');
 		let propertiesContainer = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
+		debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
 		return propertiesContainer;
 	}
 
@@ -657,7 +657,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	private getToolbarEl(): HTMLElement | null {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container') as HTMLElement;
-		// debugLog("getToolbarContainer: view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
+		debugLog("getToolbarEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
+		debugLog("getToolbarEl: view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
 		return existingToolbarEl;
 	}
 
@@ -697,13 +698,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Removes toolbar in the current view only if needed: there is no valid toolbar to check against; 
 	 * the toolbar names don't match; it's out of date with the settings; or it's not in the correct DOM position. 
 	 * @param correctToolbar ToolbarSettings for the toolbar that should be used.
-	 * @returns true if the toolbar was removed, false otherwise.
+	 * @returns true if the toolbar was removed (or doesn't exist), false otherwise.
 	 */
 	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined): boolean {
 
 		let toolbarRemoved: boolean = false;
-
 		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
+
+		debugLog("removeToolbarIfNeeded: correct: ", correctToolbar, "existing: ", existingToolbarEl);
+
 		if (existingToolbarEl) {
 
 			// debugLog('checkAndRenderToolbar: existing toolbar');
@@ -726,9 +729,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				debugLog("- existing toolbar out of date, removing existing toolbar");
 				toolbarRemoved = true;
 			}
-			// existingToolbarEl is not in the correct position: can happen when switching layouts
-			else if (existingToolbarHasSibling) {
-				debugLog("- not in the correct position (has next sibling), removing existing toolbar");
+			// existingToolbarEl is not in the correct position, in preview mode
+			else if (existingToolbarHasSibling?.hasClass('inline-title')) {
+				debugLog("- not in the correct position (sibling is `inline-title`), removing existing toolbar");
 				toolbarRemoved = true;
 			}
 
@@ -739,6 +742,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// TODO: if there's a setting to rerender the matchingToolbar (e.g., the names have vars), we can removeActiveToolbar
 			
+		}
+		else {
+			debugLog("- no existing toolbar");
+			toolbarRemoved = true;
 		}
 
 		return toolbarRemoved;
