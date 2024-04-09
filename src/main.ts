@@ -211,12 +211,19 @@ export default class NoteToolbarPlugin extends Plugin {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
 			debugLog('file-open: ' + file.name);
-			// TODO: remove; leave this here until rendering issues are sorted
-			// this.app.workspace.onLayoutReady(() => {
-			// 	debugLog("LAYOUT READY");
-			// 	this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
-			// });
-			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
+			let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+			let viewMode = currentView?.getMode();
+			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
+			switch(viewMode) {
+				case "preview":
+					// removing toolbar that could have moved to the wrong spot; will be added on layout change
+					this.removeToolbarIfNeeded(
+						this.getMatchingToolbar(frontmatter, file));
+					break;
+				case "source":
+					this.checkAndRenderToolbar(file, frontmatter);
+					break;
+			}		
 		}
 	};
 
@@ -236,10 +243,13 @@ export default class NoteToolbarPlugin extends Plugin {
 					existingToolbarEl = null;
 				}
 			case "source":
+				// debounce seems to be needed here, even with a 0 delay
 				this.app.workspace.onLayoutReady(debounce(() => {
 					debugLog("layout-change: LAYOUT READY");
 					this.renderToolbarForActiveFile();
-				}, (viewMode === "preview" ? 200 : 0)));
+				}, 0));
+				// not convinced this delay for preview mode is needed; commenting out for now
+				// debounce(() => { ... }, (viewMode === "preview" ? 200 : 0)));
 				break;
 			default:
 				return;
@@ -249,7 +259,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * On changes to metadata, trigger the checks and rendering of a toolbar if necessary.
 	 * @param file TFile in which metadata changed.
-	 * @param data ???
+	 * @param data ??? (not used)
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
@@ -284,7 +294,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
 			this.renderToolbarFromSettings(matchingToolbar);
 		}
-
+		
 	}
 
 	/**
@@ -749,6 +759,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		else {
 			debugLog("- no existing toolbar");
 			toolbarRemoved = true;
+		}
+
+		if (!toolbarRemoved) {
+			debugLog("removeToolbarIfNeeded: nothing done");
 		}
 
 		return toolbarRemoved;
