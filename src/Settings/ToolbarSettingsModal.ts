@@ -6,6 +6,7 @@ import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
 import { IconSuggestModal } from './IconSuggestModal';
+import { FileSuggester } from './Suggesters/FileSuggester';
 
 export default class ToolbarSettingsModal extends Modal {
 
@@ -271,17 +272,17 @@ export default class ToolbarSettingsModal extends Modal {
 					//
 					file: new Setting(linkFileFieldDiv)
 						.setClass("note-toolbar-setting-item-field-link")
-						.addText(text => text
-							.setPlaceholder("Path to file, with extension")
-							.setValue(toolbarItem.link)
-							.onChange(
-								debounce(async (value) => {
+						.addSearch((cb) => {
+							new FileSuggester(this.app, cb.inputEl);
+							cb.setPlaceholder("Search for file")
+								.setValue(toolbarItem.link)
+								.onChange(debounce(async (value) => {
 									toolbarItem.linkAttr.type = 'file';
 									const file = this.app.vault.getAbstractFileByPath(value);
 									if (!(file instanceof TFile)) {
 										if (document.getElementById("note-toolbar-item-link-note-error") === null) {
 											let errorDiv = this.containerEl.createEl("div", { 
-												text: "This file does not exist. Missing a file extension?", 
+												text: "This file does not exist.", 
 												attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
 												linkContainerDiv.insertAdjacentElement('afterend', errorDiv);
 												itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
@@ -293,8 +294,9 @@ export default class ToolbarSettingsModal extends Modal {
 										document.getElementById("note-toolbar-item-link-note-error")?.remove();
 										itemLinkFields[index].file.settingEl.children[1].removeClass("note-toolbar-setting-error");	
 										await this.plugin.saveSettings();
-									}
-								}, 750))),
+									}									
+								}, 750))
+						}),
 					//
 					// URI
 					//
