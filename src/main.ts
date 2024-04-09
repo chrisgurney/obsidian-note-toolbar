@@ -15,7 +15,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		await this.loadSettings();
 
-		// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
+		this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
@@ -228,13 +228,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		let viewMode = currentView?.getMode();
 		debugLog('layout-change: ', viewMode);
 		switch(viewMode) {
-			case "source":
 			case "preview":
-				// if we're in editing or reading mode...
-				debugLog("layout-change: ", viewMode, " -> re-rendering toolbar");
-				this.removeActiveToolbar();
+				let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
+				if (existingToolbarEl?.nextElementSibling?.hasClass('inline-title')) {
+					debugLog("layout-change: removing invalid preview toolbar");
+					existingToolbarEl.remove();
+					existingToolbarEl = null;
+				}
+			case "source":
 				this.app.workspace.onLayoutReady(debounce(() => {
-					debugLog("LAYOUT READY");
+					debugLog("layout-change: LAYOUT READY");
 					this.renderToolbarForActiveFile();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
