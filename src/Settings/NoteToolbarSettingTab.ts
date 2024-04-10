@@ -200,7 +200,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                 if (
                                     newFolder &&
                                     this.plugin.settings.folderMappings.some(
-                                        (e) => e.folder.toLowerCase() == newFolder.toLowerCase()
+                                        (mapping, mapIndex) => {
+											return index != mapIndex ? mapping.folder.toLowerCase() === newFolder.toLowerCase() : undefined;
+										}
                                     )
                                 ) {
 									if (document.getElementById("note-toolbar-name-error") === null) {
@@ -214,9 +216,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								else {
 									document.getElementById("note-toolbar-name-error")?.remove();
 									toolbarFolderListItemDiv.children[0].removeClass("note-toolbar-setting-error");
-									this.plugin.settings.folderMappings[
-										index
-									].folder = normalizePath(newFolder);
+									this.plugin.settings.folderMappings[index].folder = newFolder ? normalizePath(newFolder) : "";
 									await this.plugin.saveSettings();
 								}
                             }, 250));

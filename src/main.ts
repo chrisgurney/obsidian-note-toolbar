@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION } from './Settings/NoteToolbarSettings';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping } from './Settings/NoteToolbarSettings';
 import { debugLog, isValidUri } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -322,12 +322,13 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (!matchingToolbar) {
 
 			// check if the note is in a folder that's mapped, and if the mapping is valid
-			let mapping;
+			let mapping: FolderMapping;
+			let filePath: string;
 			for (let index = 0; index < this.settings.folderMappings.length; index++) {
 				mapping = this.settings.folderMappings[index];
-				// debugLog('checkAndRenderToolbar: checking folder mappings: ' + file.path + ' | ' + mapping.folder);
-				if (mapping.folder === '*' || file.path.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-					// debugLog('- mapping found -> ' + mapping.toolbar);
+				filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
+				// debugLog('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
+				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					// continue until we get a matching toolbar
 					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
 					if (matchingToolbar) {
