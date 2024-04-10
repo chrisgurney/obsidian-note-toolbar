@@ -35,6 +35,7 @@
  * Options are as follows, and can be combined (per the above example):
  *   border = adds a top and bottom border
  *   noborder = turns off border (default)
+ *   button = applies a button-like appearance
  *   center = aligns items center
  *   even = distributes items evenly
  *   floatl = floats the toolbar left of nearby content
@@ -50,6 +51,7 @@
  * Add these mobile-equivalent styles to override the defaults, above:
  *   mbrder = border
  *   mnbrder = noborder
+ *   mbtn = button
  *   mctr = center
  *   mevn = even
  *   mfltl = floatl
