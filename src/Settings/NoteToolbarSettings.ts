@@ -63,6 +63,7 @@ export type LinkType = 'command' | 'file' | 'uri';
  */
 export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
     { border: "border" },
+	{ button: "button" },
     { noborder: "no border" },
     { center: "center items" },
     { even: "evenly space items" },
@@ -80,6 +81,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
  */
 export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mbrder: "border" },
+	{ mbtn: "button"},
     { mnbrder: "no border" },
     { mctr: "center items" },
     { mevn: "evenly space items" },

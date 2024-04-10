@@ -299,6 +299,22 @@
         }
     }
 
+    &[data-callout-metadata*="button"] ul {
+        gap: 0.5em;
+        & a {
+            background-color: var(--interactive-normal);
+            box-shadow: var(--input-shadow);    
+        }
+    }
+
+    &[data-callout-metadata*="mbtn"] ul {
+        gap: 0.5em;
+        & a {
+            background-color: var(--interactive-normal);
+            box-shadow: var(--input-shadow);    
+        }
+    }
+
     &.cg-note-toolbar-callout {
         /* margin-top: fix for reading mode */
         margin-top: 0; 
