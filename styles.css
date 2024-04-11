@@ -347,6 +347,26 @@
     max-width: var(--var-max-width); */
 }
 
+.cg-note-toolbar-reading-sticky {
+    font-size: var(--font-text-size);
+    margin-bottom: 0;
+    padding: var(--file-margins);
+    padding-bottom: 0;
+    padding-top: 0;
+    &:hover {
+        /* undoes fix (#14) which causes a layout shift on hover */
+        overflow: visible !important;
+    }
+    & .cg-note-toolbar-callout {
+        border-top: none !important;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: var(--file-line-width);
+        transition: border-top 0.5s ease-out;
+    }
+}
+
 /*****************************************************************************
 * Settings Styles (for Note Toolbar Plugin)
 ******************************************************************************/
