@@ -15,9 +15,22 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		await this.loadSettings();
 
-		this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
+		// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
+
+		// To try, provided by kometenstaub:
+		// https://github.com/kometenstaub/customizable-page-header-buttons/blob/3551bfd86dae842f7a1288839bcd5a74d24344b7/src/main.ts#L261
+		// this.register(
+		// 	around(Workspace.prototype, {
+		// 		changeLayout(old) {
+		// 			return async function changeLayout(this: Workspace, ws: any) {
+		// 				await old.call(this, ws);
+		// 				// my function call here
+		// 			};
+		// 		},
+		// 	})
+		// );
 
 		this.addCommand({id: 'focus', name: 'Focus', callback: async () => this.focusCommand()});
 		this.addCommand({id: 'show-properties', name: 'Show Properties', callback: async () => this.propsVisibleCommand('show')});
@@ -210,12 +223,22 @@ export default class NoteToolbarPlugin extends Plugin {
 	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
-			debugLog('file-open: ' + file.name);
+			debugLog('FILE-OPEN: ' + file.name);
 			let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 			let viewMode = currentView?.getMode();
 			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
 			switch(viewMode) {
 				case "preview":
+					let stickyToolbar = currentView?.containerEl.querySelector('.cg-note-toolbar-reading-sticky');
+					// let stickyToolbar = currentView?.containerEl.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-reading-sticky');
+					debugLog("file-open: unsticking: ", stickyToolbar);
+					if (stickyToolbar) {
+						stickyToolbar.removeClass('cg-note-toolbar-reading-sticky');
+						debugLog("file-open: should be unstuck: ", stickyToolbar);
+						// put the toolbar back
+						let toolbarMarker = currentView?.containerEl.querySelector('#cg-note-toolbar-marker');
+						toolbarMarker?.insertAdjacentElement("afterend", stickyToolbar);
+					}
 					// removing toolbar that could have moved to the wrong spot; will be added on layout change
 					this.removeToolbarIfNeeded(
 						this.getMatchingToolbar(frontmatter, file));
