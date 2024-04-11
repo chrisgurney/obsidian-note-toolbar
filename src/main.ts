@@ -419,20 +419,20 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarUl.appendChild(noteToolbarLi);
 		});		
 
-		let noteToolbarCalloutContent = document.createDiv();
+		let noteToolbarCalloutContent = document.createElement("div");
 		noteToolbarCalloutContent.className = "callout-content";
 		noteToolbarCalloutContent.append(noteToolbarUl);
 
-		let noteToolbarCallout = document.createDiv();
+		let noteToolbarCallout = document.createElement("div");
 		noteToolbarCallout.className = "callout cg-note-toolbar-callout";
 		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
 		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 		noteToolbarCallout.append(noteToolbarCalloutContent);
 
 		/* workaround to emulate callout-in-content structure, to use same sticky css */
-		let div = document.createDiv();
+		let div = document.createElement("div");
 		div.append(noteToolbarCallout);
-		let embedBlock = document.createDiv();
+		let embedBlock = document.createElement("div");
 		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
 		embedBlock.setAttribute("data-name", toolbar.name);
 		embedBlock.setAttribute("data-updated", toolbar.updated);
