@@ -302,7 +302,7 @@
     }
 
     &[data-callout-metadata*="button"] ul {
-        gap: 0.5em;
+        gap: var(--size-4-2);
         & a {
             background-color: var(--interactive-normal);
             box-shadow: var(--input-shadow);    
@@ -310,7 +310,7 @@
     }
 
     &[data-callout-metadata*="mbtn"] ul {
-        gap: 0.5em;
+        gap: var(--size-4-2);
         & a {
             background-color: var(--interactive-normal);
             box-shadow: var(--input-shadow);    
