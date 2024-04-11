@@ -50,7 +50,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.contentEl.empty();
 
-		let settingsDiv = this.containerEl.createEl("div");
+		let settingsDiv = this.containerEl.createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
 
 		this.displayNameSetting(settingsDiv);
@@ -79,7 +79,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
-		let toolbarNameDiv = this.containerEl.createEl("div");
+		let toolbarNameDiv = this.containerEl.createDiv();
 		new Setting(toolbarNameDiv)
 			.setName("Name")
 			.setDesc("Give this toolbar a unique name.")
@@ -144,16 +144,16 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.toolbar.items.forEach(
 			(toolbarItem, index) => {
-				let itemDiv = this.containerEl.createEl("div");
+				let itemDiv = this.containerEl.createDiv();
 				itemDiv.className = "note-toolbar-setting-item";
-				let itemTopContainer = this.containerEl.createEl("div");
+				let itemTopContainer = this.containerEl.createDiv();
 				itemTopContainer.className = "note-toolbar-setting-item-top-container";
 
 				//
 				// Item name and tooltip
 				//
 
-				let textFieldsContainer = this.containerEl.createEl("div");
+				let textFieldsContainer = this.containerEl.createDiv();
 				textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
 				textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
@@ -209,10 +209,10 @@ export default class ToolbarSettingsModal extends Modal {
 				// Item link
 				//
 
-				let linkContainerDiv = this.containerEl.createEl("div");
+				let linkContainerDiv = this.containerEl.createDiv();
 				linkContainerDiv.className = "note-toolbar-setting-item-link-container";
 
-				let linkTypeDiv = this.containerEl.createEl("div");
+				let linkTypeDiv = this.containerEl.createDiv();
 
 				const s1t = new Setting(linkTypeDiv)
 					.addDropdown((dropdown) =>
@@ -244,7 +244,7 @@ export default class ToolbarSettingsModal extends Modal {
 							})
 					);
 
-				let linkFieldDiv = this.containerEl.createEl("div");
+				let linkFieldDiv = this.containerEl.createDiv();
 				linkFieldDiv.className = "note-toolbar-setting-item-link-container";
 
 				let linkCommandFieldDiv = this.containerEl.createDiv();
@@ -336,7 +336,7 @@ export default class ToolbarSettingsModal extends Modal {
 				// Item list controls
 				// 
 
-				let itemControlsDiv = this.containerEl.createEl("div");
+				let itemControlsDiv = this.containerEl.createDiv();
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
 					.addExtraButton((cb) => {
@@ -364,7 +364,7 @@ export default class ToolbarSettingsModal extends Modal {
 							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "delete"));
 					});
 
-				let itemFieldsControlsContainer = this.containerEl.createEl("div");
+				let itemFieldsControlsContainer = this.containerEl.createDiv();
 				itemFieldsControlsContainer.className = "note-toolbar-setting-item-fields-and-controls";
 				itemFieldsControlsContainer.appendChild(textFieldsContainer);
 				itemFieldsControlsContainer.appendChild(itemControlsDiv);
@@ -378,7 +378,7 @@ export default class ToolbarSettingsModal extends Modal {
 				// Toggles
 				// 
 
-				let togglesContainer = this.containerEl.createEl("div");
+				let togglesContainer = this.containerEl.createDiv();
 				togglesContainer.className = "note-toolbar-setting-item-toggles-container";
 				const s2 = new Setting(togglesContainer)
 					.setClass("note-toolbar-setting-item-toggle")

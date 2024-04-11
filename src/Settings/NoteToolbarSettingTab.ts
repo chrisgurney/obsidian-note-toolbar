@@ -187,7 +187,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				let toolbarFolderListItemDiv = containerEl.createDiv();
 				toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
 
-				let textFieldsDiv = this.containerEl.createEl("div");
+				let textFieldsDiv = this.containerEl.createDiv();
 				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
 				textFieldsDiv.className = "note-toolbar-setting-item-fields";
 				const fs = new Setting(textFieldsDiv)
@@ -234,7 +234,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                 await this.plugin.saveSettings();
                             }, 250));
 					});
-				let itemControlsDiv = this.containerEl.createEl("div");
+				let itemControlsDiv = this.containerEl.createDiv();
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
 					.addExtraButton((cb) => {
