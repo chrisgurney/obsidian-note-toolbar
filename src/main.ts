@@ -528,6 +528,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let itemsUl: HTMLElement | null = this.getToolbarListEl();
 		if (itemsUl) {
 
+			// remove any items that are not visible (i.e., hidden on desktop/mobile) as they are not navigable
 			let items = Array.from(itemsUl.children);
 			const visibleItems = items.filter(item => {
 				return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
@@ -551,6 +552,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ' ':
 					(document?.activeElement as HTMLElement).click();
 					e.preventDefault();
+					break;
+				case 'Escape':
+					// need this implemented for Reading mode, as escape does nothing
+					let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+					let viewMode = currentView?.getMode();
+					if (viewMode === 'preview') {
+						(document?.activeElement as HTMLElement).blur();
+					}
 					break;
 			}
 
