@@ -333,6 +333,14 @@
     
 }
 
+/*************************************************************************
+ * Supporting Toolbar Styles
+ *************************************************************************/
+
+#cg-note-toolbar-marker {
+    visibility: hidden;
+}
+
 .cg-note-toolbar-container {
     box-shadow: 0 0 0 1px var(--background-primary);
     margin-bottom: 1em;
