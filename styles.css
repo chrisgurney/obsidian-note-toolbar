@@ -87,44 +87,50 @@ settings:
         title: Toolbar
         type: heading
         level: 1
-        collapsed: false
-    -
-        id: cg-nt-tbar-bg-color
-        title: Toolbar background color
-        type: variable-themed-color
-        format: hex
-        default-light: '#'
-        default-dark: '#'
+        collapsed: true
     -
         id: cg-nt-tbar-border-color
-        title: Toolbar border color
+        title: Border color
         type: variable-themed-color
         format: hex
         default-light: '#'
         default-dark: '#'
+    -
+        id: cg-nt-tbar-bg-color
+        title: Background color
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-padding-inline
+        title: Left + Right padding (in rem units)
+        type: variable-number
+        default: 0
+        format: em
     -
         id: titlebar-heading
         title: Toolbar Items
         type: heading
         level: 1
-        collapsed: false
+        collapsed: true
     -
         id: cg-nt-item-text-color
-        title: Item text color
+        title: Text color
         type: variable-themed-color
         format: hex
         default-light: '#'
         default-dark: '#'
     -
         id: cg-nt-item-text-color-hover
-        title: Item text color (on hover)
+        title: Text color (on hover)
         type: variable-themed-color
         format: hex
         default-light: '#'
         default-dark: '#'
     -
         id: cg-nt-item-bg-color-hover
-        title: Item background color (on hover)
+        title: Background color (on hover)
         type: variable-themed-color
         format: hex
         default-light: '#'
@@ -134,10 +140,10 @@ settings:
         title: Toolbar Items (button style)
         type: heading
         level: 1
-        collapsed: false
+        collapsed: true
     -
         id: cg-nt-item-button-bg-color
-        title: Button background color
+        title: Background color
         type: variable-themed-color
         format: hex
         default-light: '#'
@@ -147,6 +153,7 @@ settings:
 body {
     --cg-nt-tbar-bg-color: var(--background-primary);
     --cg-nt-tbar-border-color: var(--hr-color);
+    --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
     --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
@@ -207,7 +214,8 @@ body {
     }
 
     border-radius: 0;
-    padding: inherit;
+    padding: 0;
+    padding-inline: var(--cg-nt-tbar-padding-inline);
     width: 100%;
     /* max-width: var(--file-line-width); */
 
