@@ -508,9 +508,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					// expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
 					if (props.classList.contains('is-collapsed')) {
 						(props.querySelector('.metadata-properties-heading') as HTMLElement).click();
-						// ...and trigger note save, to remove the fold from local storage
-						let currentView = this.app.workspace.getActiveViewOfType(TextFileView);
-						currentView?.requestSave();
+						// trigger note save, to remove the fold from local storage (way to do this without a save?)
+						// removing this for now, as it may be unexpected for users tracking modified time etc.
+						// let currentView = this.app.workspace.getActiveViewOfType(TextFileView);
+						// currentView?.requestSave();
 					}
 					break;
 				case 'hide':
