@@ -104,7 +104,7 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-tbar-padding-inline
-        title: Left + Right padding (in rem units)
+        title: Left + Right padding (in em units)
         type: variable-number
         default: 0
         format: em
