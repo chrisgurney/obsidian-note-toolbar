@@ -76,6 +76,15 @@
  *   - Shell Commands (for executing shell scripts, Python code, etc.) 
  *****************************************************************************/
 
+body {
+    --cg-nt-tbar-bg-color: var(--background-primary);
+    --cg-nt-tbar-border-color: var(--hr-color);
+    --cg-nt-item-text-color: var(--metadata-label-text-color);
+    --cg-nt-item-text-color-hover: var(--text-normal);
+    --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
+    --cg-nt-item-button-bg-color: var(--interactive-normal);
+}
+
 .metadata-container {
     margin-block-end: 0;
 }
@@ -123,7 +132,7 @@
 
 .callout[data-callout="note-toolbar"] {
 
-    background-color: var(--background-primary);
+    background-color: var(--cg-nt-tbar-bg-color);
     
     .callout & {
         background-color: inherit;
@@ -171,7 +180,7 @@
         }
 
         & a {
-            color: var(--metadata-label-text-color);
+            color: var(--cg-nt-item-text-color);
             padding: 0.5em 0.75em 0.5em 0.75em;
             display: block;
             text-decoration: none;
@@ -189,8 +198,8 @@
         & a:hover {
             box-shadow: none;
             opacity: var(--icon-opacity-hover);
-            background-color: var(--background-modifier-hover);
-            color: var(--text-normal);
+            background-color: var(--cg-nt-item-bg-color-hover);
+            color: var(--cg-nt-item-text-color-hover);
         }
 
         & a.external-link {
@@ -204,15 +213,15 @@
      *************************************************************************/
 
     &[data-callout-metadata*="border"] {
-        border-top: solid 1px var(--hr-color);
-        border-bottom: solid 1px var(--hr-color);
+        border-top: solid 1px var(--cg-nt-tbar-border-color);
+        border-bottom: solid 1px var(--cg-nt-tbar-border-color);
         border-radius: 0;
     }
 
     &[data-callout-metadata*="mbrder"] {
         .is-mobile & {
-            border-top: solid 1px var(--hr-color);
-            border-bottom: solid 1px var(--hr-color);
+            border-top: solid 1px var(--cg-nt-tbar-border-color);
+            border-bottom: solid 1px var(--cg-nt-tbar-border-color);
             border-radius: 0;
         }
     }
@@ -304,7 +313,7 @@
     &[data-callout-metadata*="button"] ul {
         gap: var(--size-4-2);
         & a {
-            background-color: var(--interactive-normal);
+            background-color: var(--cg-nt-item-button-bg-color);
             box-shadow: var(--input-shadow);    
         }
     }
@@ -312,7 +321,7 @@
     &[data-callout-metadata*="mbtn"] ul {
         gap: var(--size-4-2);
         & a {
-            background-color: var(--interactive-normal);
+            background-color: var(--cg-nt-item-button-bg-color);
             box-shadow: var(--input-shadow);    
         }
     }
