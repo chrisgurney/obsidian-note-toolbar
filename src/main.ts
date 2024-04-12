@@ -39,7 +39,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
-		await this.renderToolbarForActiveFile();
+		this.app.workspace.onLayoutReady(() => {
+			this.renderToolbarForActiveFile();
+		});
 		debugLog('LOADED');
 
 	}
