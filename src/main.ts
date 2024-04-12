@@ -19,7 +19,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
-		// To try, provided by kometenstaub:
+		// To possibly try, provided by kometenstaub, requires monkey-around:
 		// https://github.com/kometenstaub/customizable-page-header-buttons/blob/3551bfd86dae842f7a1288839bcd5a74d24344b7/src/main.ts#L261
 		// this.register(
 		// 	around(Workspace.prototype, {
@@ -220,6 +220,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On opening of a file, check and render toolbar if necessary.
 	 * @param file TFile that was opened.
 	 */
+	/*
 	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
@@ -240,8 +241,8 @@ export default class NoteToolbarPlugin extends Plugin {
 						toolbarMarker?.insertAdjacentElement("afterend", stickyToolbar);
 					}
 					// removing toolbar that could have moved to the wrong spot; will be added on layout change
-					this.removeToolbarIfNeeded(
-						this.getMatchingToolbar(frontmatter, file));
+					let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
+					this.removeToolbarIfNeeded(this.getMatchingToolbar(frontmatter, file), existingToolbarEl);
 					break;
 				case "source":
 					this.checkAndRenderToolbar(file, frontmatter);
@@ -249,6 +250,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}		
 		}
 	};
+	*/
 
 	/**
 	 * On layout changes, check and render toolbar if necessary. 
