@@ -77,6 +77,72 @@
  * https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts
  * 
  *****************************************************************************/
+/* @settings
+
+name: Note Toolbar
+id: note-toolbar
+settings:
+    -
+        id: toolbar-styles
+        title: Toolbar
+        type: heading
+        level: 1
+        collapsed: false
+    -
+        id: cg-nt-tbar-bg-color
+        title: Toolbar background color
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-border-color
+        title: Toolbar border color
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: titlebar-heading
+        title: Toolbar Items
+        type: heading
+        level: 1
+        collapsed: false
+    -
+        id: cg-nt-item-text-color
+        title: Item text color
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-text-color-hover
+        title: Item text color (on hover)
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-bg-color-hover
+        title: Item background color (on hover)
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: titlebar-heading
+        title: Toolbar Items (button style)
+        type: heading
+        level: 1
+        collapsed: false
+    -
+        id: cg-nt-item-button-bg-color
+        title: Button background color
+        type: variable-themed-color
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+*/
 
 body {
     --cg-nt-tbar-bg-color: var(--background-primary);

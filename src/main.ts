@@ -39,6 +39,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
+		// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
+		this.app.workspace.trigger("parse-style-settings");
+
 		this.app.workspace.onLayoutReady(() => {
 			this.renderToolbarForActiveFile();
 		});
