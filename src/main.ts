@@ -375,7 +375,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Renders the toolbar for the provided toolbar settings.
 	 * @param toolbar ToolbarSettings
 	 */
-	async renderToolbarFromSettings(toolbar: ToolbarSettings) {
+	async renderToolbarFromSettings(toolbar: ToolbarSettings): Promise<void> {
 
 		debugLog("renderToolbarFromSettings: ", toolbar);
 
@@ -473,6 +473,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async focusCommand(): Promise<void> {
 
+		debugLog("focusCommand()");
 		let itemsUl: HTMLElement | null = this.getToolbarListEl();
 		if (itemsUl) {
 			debugLog("focus command: toolbar: ", itemsUl);
