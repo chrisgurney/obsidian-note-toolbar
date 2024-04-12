@@ -33,9 +33,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		// );
 
 		this.addCommand({id: 'focus', name: 'Focus', callback: async () => this.focusCommand()});
-		this.addCommand({id: 'show-properties', name: 'Show Properties', callback: async () => this.propsVisibleCommand('show')});
-		this.addCommand({id: 'hide-properties', name: 'Hide Properties', callback: async () => this.propsVisibleCommand('hide')});
-		this.addCommand({id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.propsVisibleCommand('toggle')});
+		this.addCommand({id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show')});
+		this.addCommand({id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide')});
+		this.addCommand({id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle')});
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
@@ -487,10 +487,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Shows, completely hides, or toggles the visibility of this note's Properties.
 	 * @param visibility Set to 'show', 'hide', or 'toggle'
 	 */
-	async propsVisibleCommand(visibility: 'show' | 'hide' | 'toggle'): Promise<void> {
+	async togglePropsCommand(visibility: 'show' | 'hide' | 'toggle'): Promise<void> {
 
 		let props = this.getPropsEl();
-		debugLog("propsVisibleCommand: ", "visibility: ", visibility, "props: ", props);
+		debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", props);
 		if (props) {
 			let propsDisplayStyle = getComputedStyle(props).getPropertyValue('display');
 			visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
