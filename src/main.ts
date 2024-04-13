@@ -58,164 +58,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.removeAllToolbars();
 		debugLog('UNLOADED');
 	}
-
-	/*************************************************************************
-	 * SETTINGS LOADERS
-	 *************************************************************************/
-
-	/**
-	 * Loads settings, and migrates from old versions if needed.
-	 * 
-	 * 1. Update SETTINGS_VERSION in NoteToolbarSettings.
-	 * 2. Add MIGRATION block below.
-	 * 
-	 * Credit to Fevol on Discord for the sample code to migrate.
-	 * @link https://discord.com/channels/686053708261228577/840286264964022302/1213507979782127707
-	 */
-	async loadSettings(): Promise<void> {
-
-		const loaded_settings = await this.loadData();
-		debugLog("loadSettings: loaded settings: ", loaded_settings);
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
-	
-		let old_version = loaded_settings?.version as number;
-		let new_version: number;
-
-		// if we actually have existing settings for this plugin, and the old version does not match the current...
-		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
-
-			debugLog("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
-			debugLog("running migrations...");
-
-			// first version without update (i.e., version is `undefined`)
-			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
-			if (!old_version) {
-				new_version = 20240318.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				// for each: double-check setting to migrate is there
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					if (tb.styles) {
-						debugLog("\t- OLD SETTING: " + tb.styles);
-						debugLog("\t\t- SETTING: this.settings.toolbars[index].defaultStyles: " + this.settings.toolbars[index].defaultStyles);
-						this.settings.toolbars[index].defaultStyles = tb.styles;
-						debugLog("\t\t- SET: " + this.settings.toolbars[index].defaultStyles);
-						debugLog("\t\t- SETTING: this.settings.toolbars[index].mobileStyles = []");
-						this.settings.toolbars[index].mobileStyles = [];
-						delete tb.styles;
-					}
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			// MIGRATION: added urlAttr setting
-			if (old_version === 20240318.1) {
-				new_version = 20240322.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					tb.items.forEach((item: any, item_index: number) => {
-						if (!item?.urlAttr) {
-							debugLog("  - add urlAttr for: ", tb.name, item.label);
-							// assume old urls are indeed urls and have variables
-							item.urlAttr = {
-								hasVars: true,
-								isUri: true
-							};
-						}
-					});
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			// MIGRATION: support for generic links with types
-			if (old_version === 20240322.1) {
-				new_version = 20240330.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					tb.items.forEach((item: any, item_index: number) => {
-						this.settings.toolbars[index].items[item_index].icon = "";
-						if (item.url) {
-							this.settings.toolbars[index].items[item_index].link = item.url;
-							delete item.url;
-						}
-						if (item.urlAttr) {
-							this.settings.toolbars[index].items[item_index].linkAttr = {
-								commandId: "",
-								hasVars: item.urlAttr.hasVars,
-								type: item.urlAttr.isUri ? "uri" : "file"
-							};
-							delete item.urlAttr;
-						}
-					});
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			this.settings.version = SETTINGS_VERSION;
-			debugLog("updated settings:", this.settings);
-
-			// ensure that migrated settings are saved 
-			await this.saveSettings();
-
-		}
-
-	}
-
-	/**
-	 * Saves settings.
-	 * Sorts the toolbar list (by name) first.
-	 */
-	async saveSettings(): Promise<void> {
-		await this.saveData(this.settings);
-
-		// TODO: update the toolbar instead of removing and re-adding to the DOM?
-		await this.removeActiveToolbar();
-		await this.renderToolbarForActiveFile();
-
-		debugLog("SETTINGS SAVED: " + new Date().getTime());
-	}
-
-	/**
-	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
-	 */
-	async onExternalSettingsChange(): Promise<void> {
-		debugLog("onExternalSettingsChange()");
-		// reload in-memory settings
-		// FIXME? removing for now due to bug with settings not being saved properly while editing
-		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	/**
-	 * Gets toolbar from settings, using the provided name.
-	 * @param name Name of toolbar to get settings for (case-insensitive).
-	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
-	 */
-	getToolbarSettings(name: string | null): ToolbarSettings | undefined {
-		return name ? this.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
-	}
-
-	/**
-	 * Gets toolbar from settings, using the provided array of strings (which will come from note frontmatter).
-	 * @param names List of potential toolbars to get settings for (case-insensitive); only the first match is returned.
-	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
-	 */
-	getToolbarSettingsFromProps(names: string[] | null): ToolbarSettings | undefined {
-		if (!names) return undefined;
-		if (typeof names === "string") {
-			return this.getToolbarSettings(names);
-		}
-		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
-	}
-
-	/**
-	 * Removes the provided toolbar from settings; does nothing if it does not exist.
-	 * @param name Name of the toolbar to remove.
-	 */
-	deleteToolbarFromSettings(name: string) {
-		this.settings.toolbars = this.settings.toolbars.filter(tbar => tbar.name !== name);
-	}
  
 	/*************************************************************************
 	 * LISTENERS
@@ -810,6 +652,164 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		return toolbarRemoved;
 
+	}
+
+	/*************************************************************************
+	 * SETTINGS LOADERS
+	 *************************************************************************/
+
+	/**
+	 * Loads settings, and migrates from old versions if needed.
+	 * 
+	 * 1. Update SETTINGS_VERSION in NoteToolbarSettings.
+	 * 2. Add MIGRATION block below.
+	 * 
+	 * Credit to Fevol on Discord for the sample code to migrate.
+	 * @link https://discord.com/channels/686053708261228577/840286264964022302/1213507979782127707
+	 */
+	async loadSettings(): Promise<void> {
+
+		const loaded_settings = await this.loadData();
+		debugLog("loadSettings: loaded settings: ", loaded_settings);
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
+	
+		let old_version = loaded_settings?.version as number;
+		let new_version: number;
+
+		// if we actually have existing settings for this plugin, and the old version does not match the current...
+		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
+
+			debugLog("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
+			debugLog("running migrations...");
+
+			// first version without update (i.e., version is `undefined`)
+			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
+			if (!old_version) {
+				new_version = 20240318.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				// for each: double-check setting to migrate is there
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					if (tb.styles) {
+						debugLog("\t- OLD SETTING: " + tb.styles);
+						debugLog("\t\t- SETTING: this.settings.toolbars[index].defaultStyles: " + this.settings.toolbars[index].defaultStyles);
+						this.settings.toolbars[index].defaultStyles = tb.styles;
+						debugLog("\t\t- SET: " + this.settings.toolbars[index].defaultStyles);
+						debugLog("\t\t- SETTING: this.settings.toolbars[index].mobileStyles = []");
+						this.settings.toolbars[index].mobileStyles = [];
+						delete tb.styles;
+					}
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: added urlAttr setting
+			if (old_version === 20240318.1) {
+				new_version = 20240322.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						if (!item?.urlAttr) {
+							debugLog("  - add urlAttr for: ", tb.name, item.label);
+							// assume old urls are indeed urls and have variables
+							item.urlAttr = {
+								hasVars: true,
+								isUri: true
+							};
+						}
+					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: support for generic links with types
+			if (old_version === 20240322.1) {
+				new_version = 20240330.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						this.settings.toolbars[index].items[item_index].icon = "";
+						if (item.url) {
+							this.settings.toolbars[index].items[item_index].link = item.url;
+							delete item.url;
+						}
+						if (item.urlAttr) {
+							this.settings.toolbars[index].items[item_index].linkAttr = {
+								commandId: "",
+								hasVars: item.urlAttr.hasVars,
+								type: item.urlAttr.isUri ? "uri" : "file"
+							};
+							delete item.urlAttr;
+						}
+					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			this.settings.version = SETTINGS_VERSION;
+			debugLog("updated settings:", this.settings);
+
+			// ensure that migrated settings are saved 
+			await this.saveSettings();
+
+		}
+
+	}
+
+	/**
+	 * Saves settings.
+	 * Sorts the toolbar list (by name) first.
+	 */
+	async saveSettings(): Promise<void> {
+		await this.saveData(this.settings);
+
+		// TODO: update the toolbar instead of removing and re-adding to the DOM?
+		await this.removeActiveToolbar();
+		await this.renderToolbarForActiveFile();
+
+		debugLog("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+	/**
+	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
+	 */
+	async onExternalSettingsChange(): Promise<void> {
+		debugLog("onExternalSettingsChange()");
+		// reload in-memory settings
+		// FIXME? removing for now due to bug with settings not being saved properly while editing
+		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
+	/**
+	 * Gets toolbar from settings, using the provided name.
+	 * @param name Name of toolbar to get settings for (case-insensitive).
+	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
+	 */
+	getToolbarSettings(name: string | null): ToolbarSettings | undefined {
+		return name ? this.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
+	}
+
+	/**
+	 * Gets toolbar from settings, using the provided array of strings (which will come from note frontmatter).
+	 * @param names List of potential toolbars to get settings for (case-insensitive); only the first match is returned.
+	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
+	 */
+	getToolbarSettingsFromProps(names: string[] | null): ToolbarSettings | undefined {
+		if (!names) return undefined;
+		if (typeof names === "string") {
+			return this.getToolbarSettings(names);
+		}
+		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
+	}
+
+	/**
+	 * Removes the provided toolbar from settings; does nothing if it does not exist.
+	 * @param name Name of the toolbar to remove.
+	 */
+	deleteToolbarFromSettings(name: string) {
+		this.settings.toolbars = this.settings.toolbars.filter(tbar => tbar.name !== name);
 	}
 
 }
