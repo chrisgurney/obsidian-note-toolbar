@@ -16,21 +16,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		await this.loadSettings();
 
 		// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
+		this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
-
-		// To possibly try, provided by kometenstaub, requires monkey-around:
-		// https://github.com/kometenstaub/customizable-page-header-buttons/blob/3551bfd86dae842f7a1288839bcd5a74d24344b7/src/main.ts#L261
-		// this.register(
-		// 	around(Workspace.prototype, {
-		// 		changeLayout(old) {
-		// 			return async function changeLayout(this: Workspace, ws: any) {
-		// 				await old.call(this, ws);
-		// 				// my function call here
-		// 			};
-		// 		},
-		// 	})
-		// );
 
 		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.focusCommand() });
 		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
@@ -42,10 +30,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
 		this.app.workspace.trigger("parse-style-settings");
 
+		debugLog('LOADED');
+
 		this.app.workspace.onLayoutReady(() => {
+			debugLog('onload: rendering initial toolbar');
 			this.renderToolbarForActiveFile();
 		});
-		debugLog('LOADED');
 
 	}
 
@@ -59,6 +49,23 @@ export default class NoteToolbarPlugin extends Plugin {
 		debugLog('UNLOADED');
 	}
  
+	/* keeping for potential future use
+	async storeLeafId(currentView: MarkdownView) {
+		// @ts-ignore
+		this.activeLeafIds.push(currentView?.file?.path + '_' + currentView?.leaf.id);
+	}
+
+	haveLeafId(currentView: MarkdownView): boolean {
+		// @ts-ignore
+		return this.activeLeafIds.contains(currentView?.file?.path + '_' + currentView?.leaf.id);
+	}
+
+	async removeLeafId(idToRemove: string) {
+		// not sure when to call this; can't find event that's fired when leaf closes
+		this.activeLeafIds.remove(idToRemove);
+	}
+	*/
+
 	/*************************************************************************
 	 * LISTENERS
 	 *************************************************************************/
@@ -67,66 +74,60 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On opening of a file, check and render toolbar if necessary.
 	 * @param file TFile that was opened.
 	 */
-	/*
 	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
-			debugLog('FILE-OPEN: ' + file.name);
-			let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-			let viewMode = currentView?.getMode();
-			let frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
-			switch(viewMode) {
-				case "preview":
-					let stickyToolbar = currentView?.containerEl.querySelector('.cg-note-toolbar-reading-sticky');
-					// let stickyToolbar = currentView?.containerEl.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-reading-sticky');
-					debugLog("file-open: unsticking: ", stickyToolbar);
-					if (stickyToolbar) {
-						stickyToolbar.removeClass('cg-note-toolbar-reading-sticky');
-						debugLog("file-open: should be unstuck: ", stickyToolbar);
-						// put the toolbar back
-						let toolbarMarker = currentView?.containerEl.querySelector('#cg-note-toolbar-marker');
-						toolbarMarker?.insertAdjacentElement("afterend", stickyToolbar);
-					}
-					// removing toolbar that could have moved to the wrong spot; will be added on layout change
-					let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
-					this.removeToolbarIfNeeded(this.getMatchingToolbar(frontmatter, file), existingToolbarEl);
-					break;
-				case "source":
-					this.checkAndRenderToolbar(file, frontmatter);
-					break;
-			}		
+			debugLog('file-open: ' + file.name);
+			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 		}
 	};
-	*/
 
 	/**
-	 * On layout changes, check and render toolbar if necessary. 
+	 * On layout changes, delete, check and render toolbar if necessary.
 	 */
 	layoutChangeListener = () => {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let viewMode = currentView?.getMode();
-		debugLog('layout-change: ', viewMode);
+		debugLog('===== LAYOUT-CHANGE ===== ', viewMode);
+		// check for editing or reading mode
 		switch(viewMode) {
-			case "preview":
-				let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
-				if (existingToolbarEl?.nextElementSibling?.hasClass('inline-title')) {
-					debugLog("layout-change: removing invalid preview toolbar");
-					existingToolbarEl.remove();
-					existingToolbarEl = null;
-				}
 			case "source":
-				// debounce seems to be needed here, even with a 0 delay
+			case "preview":
+				debugLog("layout-change: ", viewMode, " -> re-rendering toolbar");
+				this.removeActiveToolbar();
 				this.app.workspace.onLayoutReady(debounce(() => {
-					debugLog("layout-change: LAYOUT READY");
+					debugLog("LAYOUT READY");
 					this.renderToolbarForActiveFile();
-				}, 0));
-				// not convinced this delay for preview mode is needed; commenting out for now
-				// debounce(() => { ... }, (viewMode === "preview" ? 200 : 0)));
+				}, (viewMode === "preview" ? 200 : 0)));
 				break;
 			default:
 				return;
 		}
 	};
+
+	/**
+	 * On leaf changes, delete, check and render toolbar if necessary. 
+	 */
+	leafChangeListener = (event: any) => {
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let viewMode = currentView?.getMode();
+		// console.clear();
+		debugLog('===== LEAF-CHANGE ===== ', viewMode, event);
+		// @ts-ignore - TODO: if I need an identifier for the leaf + file, I think I can use this:
+		debugLog(currentView?.file?.path, currentView?.leaf.id);
+		// check for editing or reading mode
+		switch(viewMode) {
+			case "source":
+			case "preview":
+				debugLog("leaf-change: ", viewMode, " -> re-rendering toolbar");
+				this.removeActiveToolbar();
+				// don't seem to need a delay before rendering for leaf changes
+				this.renderToolbarForActiveFile();
+				break;
+			default:
+				return;
+		}
+	}
 
 	/**
 	 * On changes to metadata, trigger the checks and rendering of a toolbar if necessary.
