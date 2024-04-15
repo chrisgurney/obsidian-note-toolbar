@@ -32,10 +32,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		// 	})
 		// );
 
-		this.addCommand({id: 'focus', name: 'Focus', callback: async () => this.focusCommand()});
-		this.addCommand({id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show')});
-		this.addCommand({id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide')});
-		this.addCommand({id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle')});
+		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.focusCommand() });
+		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
+		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
+		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
@@ -292,7 +292,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		/* inject it between the properties and content divs */
 		let propsContainer = this.getPropsEl();
 		if (!propsContainer) {
-			debugLog("renderToolbarFromSettings: Unable to find propertiesContainer to insert toolbar");
+			debugLog("🛑 renderToolbarFromSettings: Unable to find propertiesContainer to insert toolbar");
 		}
 		propsContainer?.insertAdjacentElement("afterend", embedBlock);
 
@@ -517,7 +517,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// handle the case where the prop might be a list
 					let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
 					const linkWrap = /\[\[|\]\]/g; // remove [[ and ]] in case an internal link was passed
-					return (encode ? encodeURIComponent(fm.replace(linkWrap,'')) : fm.replace(linkWrap,''));
+					return (encode ? encodeURIComponent(fm.replace(linkWrap, '')) : fm.replace(linkWrap, ''));
 				}
 				else {
 					return '';
