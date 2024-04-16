@@ -579,8 +579,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	private getToolbarListEl(): HTMLElement | null {
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let itemsUl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
+		let itemsUl = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
 		return itemsUl;
 	}
 
