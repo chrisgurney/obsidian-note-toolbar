@@ -529,9 +529,10 @@ export default class ToolbarSettingsModal extends Modal {
 				(style, index) => {
 					new Setting(defaultStyleDiv)
 						.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
+						.setTooltip("Use in Callout or CSS: " + style)
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
-								.setTooltip("Delete")
+								.setTooltip("Remove")
 								.onClick(async () => this.listMoveHandler(null, this.toolbar.defaultStyles, index, "delete"));
 							cb.extraSettingsEl.setAttribute("tabindex", "0");
 							this.plugin.registerDomEvent(
@@ -587,9 +588,10 @@ export default class ToolbarSettingsModal extends Modal {
 				(style, index) => {
 					new Setting(mobileStyleDiv)
 						.setName(this.getValueForKey(MOBILE_STYLE_OPTIONS, style))
+						.setTooltip("Use in Callout or CSS: " + style)
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
-								.setTooltip("Delete")
+								.setTooltip("Remove")
 								.onClick(async () => this.listMoveHandler(null, this.toolbar.mobileStyles, index, "delete"));
 							cb.extraSettingsEl.setAttribute("tabindex", "0");
 							this.plugin.registerDomEvent(
