@@ -1,7 +1,7 @@
 import { ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
 import { arraymove, calcItemVisPlatform, calcItemVisToggles, debugLog, emptyMessageFr, hasVars } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
@@ -55,6 +55,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.displayNameSetting(settingsDiv);
 		this.displayItemList(settingsDiv);
+		this.displayPositionSetting(settingsDiv);
 		this.displayStyleSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
@@ -460,6 +461,32 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
+	 * Displays the Position setting.
+	 * @param settingsDiv HTMLElement to add the settings to.
+	 */
+	displayPositionSetting(settingsDiv: HTMLElement) {
+
+		new Setting(settingsDiv)
+			.setName("Position")
+			.setDesc("Where to position this toolbar.")
+			.setClass("note-toolbar-setting-spaced")
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOptions(
+						POSITION_OPTIONS.reduce((acc, option) => {
+							return { ...acc, ...option };
+						}, {}))
+					.setValue(this.toolbar.positions[0].position)
+					.onChange(async (val: 'props' | 'top') => {
+						this.toolbar.positions = [{ position: val, contexts: [{ platform: 'all', view: 'all' }]}];
+						await this.plugin.saveSettings();
+						this.display();
+					})
+				);
+
+	}
+
+	/**
 	 * Displays the Style settings.
 	 * @param settingsDiv HTMLElement to add the settings to.
 	 */
@@ -479,7 +506,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Styles")
-			.setHeading()
 			.setDesc(stylingDescription)
 			.setClass("note-toolbar-setting-no-controls");
 
@@ -610,7 +636,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(settingsDiv)
 			.setName("Delete this toolbar")
 			.setDesc("This action cannot be undone.")
-			.setClass("note-toolbar-setting-item-delete-button")
+			.setClass("note-toolbar-setting-spaced")
 			.addButton((button: ButtonComponent) => {
 				button
 					.setClass("mod-warning")
