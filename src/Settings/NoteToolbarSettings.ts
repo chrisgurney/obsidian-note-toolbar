@@ -73,8 +73,8 @@ export interface ToolbarItemLinkAttr {
 export type LinkType = 'command' | 'file' | 'uri';
 
 export const POSITION_OPTIONS: { [key: string]: string }[] = [
-	{ top: "Top" },
-	{ props: "Below Properties (default)" },
+	{ top: "Top (fixed)" },
+	{ props: "Below Properties" },
 ];
 
 /**

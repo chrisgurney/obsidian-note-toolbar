@@ -440,6 +440,7 @@ body {
     max-width: var(--var-max-width); */
 }
 
+.cg-note-toolbar-position-top,
 .cg-note-toolbar-reading-sticky {
     font-size: var(--font-text-size);
     margin-bottom: 0;

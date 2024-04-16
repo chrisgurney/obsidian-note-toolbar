@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping } from './Settings/NoteToolbarSettings';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position } from './Settings/NoteToolbarSettings';
 import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -291,12 +291,25 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
 
-		/* inject it between the properties and content divs */
-		let propsEl = this.getPropsEl();
-		if (!propsEl) {
-			debugLog("🛑 renderToolbarFromSettings: Unable to find propertiesContainer to insert toolbar");
+		switch(toolbar.positions[0].position) {
+			case 'top':
+				embedBlock.addClass('cg-note-toolbar-position-top');
+				let viewHeader = document.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
+				if (!viewHeader) {
+					debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
+				}
+				viewHeader.insertAdjacentElement("afterend", embedBlock);
+				break;
+			case 'props':
+			default:
+				/* inject it between the properties and content divs */
+				let propsEl = this.getPropsEl();
+				if (!propsEl) {
+					debugLog("🛑 renderToolbarFromSettings: Unable to find .metadata-container to insert toolbar");
+				}
+				propsEl?.insertAdjacentElement("afterend", embedBlock);
+				break;
 		}
-		propsEl?.insertAdjacentElement("afterend", embedBlock);
 
 	}
 
@@ -552,13 +565,17 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	/**
 	 * Get the toolbar element, in the current view.
+	 * @param positionsToCheck 
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	private getToolbarEl(): HTMLElement | null {
+	private getToolbarEl(positionsToCheck: Position[] | undefined): HTMLElement | null {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container') as HTMLElement;
-		debugLog("getToolbarEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container');
-		debugLog("getToolbarEl: view mode: ", currentView?.getMode(), " existingToolbarEl: ", existingToolbarEl);
+		let toolbarQuery = '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container';
+		if (positionsToCheck && positionsToCheck[0].position === 'top') {
+			toolbarQuery = '.workspace-leaf.mod-active .workspace-leaf-content .cg-note-toolbar-container';
+		}
+		let existingToolbarEl = document.querySelector(toolbarQuery) as HTMLElement;
+		debugLog("getToolbarEl: ", toolbarQuery, existingToolbarEl);
 		return existingToolbarEl;
 	}
 
@@ -603,7 +620,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined): boolean {
 
 		let toolbarRemoved: boolean = false;
-		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
+		let existingToolbarEl: HTMLElement | null = this.getToolbarEl(correctToolbar?.positions);
 
 		debugLog("removeToolbarIfNeeded: correct: ", correctToolbar, "existing: ", existingToolbarEl);
 
