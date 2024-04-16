@@ -2,7 +2,7 @@ import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePat
 import NoteToolbarPlugin from '../main';
 import { arraymove, debugLog, emptyMessageFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
-import { ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { Position, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 
@@ -127,12 +127,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setCta()
 					.onClick(async () => {
 						let newToolbar = {
-							name: "",
-							updated: new Date().toISOString(),
+							defaultStyles: ["border", "even", "sticky"],
 							items: [],
-							defaultStyles: ["border","even","sticky"],
 							mobileStyles: [],
-						};
+							name: "",
+							positions: [{position: 'props', contexts: [{platform: 'all', view: 'all'}]}],
+							updated: new Date().toISOString(),
+						} as ToolbarSettings;
 						this.plugin.settings.toolbars.push(newToolbar);
 						await this.plugin.saveSettings();
 						this.openSettingsModal(newToolbar);

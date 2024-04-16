@@ -35,7 +35,7 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 };
 
 export interface Position {
-	contexts: ViewContext[];
+	contexts: Array<ViewContext>;
 	position: 'props' | 'top';
 }
 
