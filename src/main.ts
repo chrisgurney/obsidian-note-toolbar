@@ -568,13 +568,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param positionsToCheck 
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	private getToolbarEl(positionsToCheck: Position[] | undefined): HTMLElement | null {
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let toolbarQuery = '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .cg-note-toolbar-container';
-		if (positionsToCheck && positionsToCheck[0].position === 'top') {
-			toolbarQuery = '.workspace-leaf.mod-active .workspace-leaf-content .cg-note-toolbar-container';
-		}
-		let existingToolbarEl = document.querySelector(toolbarQuery) as HTMLElement;
+	private getToolbarEl(): HTMLElement | null {
+		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
 		debugLog("getToolbarEl: ", toolbarQuery, existingToolbarEl);
 		return existingToolbarEl;
 	}
@@ -620,7 +615,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined): boolean {
 
 		let toolbarRemoved: boolean = false;
-		let existingToolbarEl: HTMLElement | null = this.getToolbarEl(correctToolbar?.positions);
+		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
 
 		debugLog("removeToolbarIfNeeded: correct: ", correctToolbar, "existing: ", existingToolbarEl);
 
