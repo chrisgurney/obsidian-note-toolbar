@@ -21,6 +21,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
 		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.focusCommand() });
+		this.addCommand({ id: 'open-settings', name: 'Open Plugin Settings', callback: async () => this.openSettingsCommand() });
 		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
 		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
 		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
@@ -346,6 +347,16 @@ export default class NoteToolbarPlugin extends Plugin {
 			link?.focus();
 		}
 
+	}
+
+	/**
+	 * Convenience command to open Note Toolbar's settings.
+	 */
+	async openSettingsCommand(): Promise<void> {
+		// @ts-ignore
+		const settings = this.app.setting;
+		settings.open();
+		settings.openTabById('note-toolbar');
 	}
 
 	/**
