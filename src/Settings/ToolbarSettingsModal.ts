@@ -479,6 +479,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setValue(this.toolbar.positions[0].position)
 					.onChange(async (val: 'props' | 'top') => {
 						this.toolbar.positions = [{ position: val, contexts: [{ platform: 'all', view: 'all' }]}];
+						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
 						this.display();
 					})
