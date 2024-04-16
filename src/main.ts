@@ -296,7 +296,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (!propsEl) {
 			debugLog("🛑 renderToolbarFromSettings: Unable to find propertiesContainer to insert toolbar");
 		}
-		propsContainer?.insertAdjacentElement("afterend", embedBlock);
+		propsEl?.insertAdjacentElement("afterend", embedBlock);
 
 	}
 
@@ -343,21 +343,21 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let propsEl = this.getPropsEl();
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", props);
+		debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
 		// @ts-ignore make sure we're not in source (code) view
-		if (props && !currentView.editMode.sourceMode) {
-			let propsDisplayStyle = getComputedStyle(props).getPropertyValue('display');
+		if (propsEl && !currentView.editMode.sourceMode) {
+			let propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
 			visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
 			switch (visibility) {
 				case 'show':
-					props.style.display = 'var(--metadata-display-editing)';
+					propsEl.style.display = 'var(--metadata-display-editing)';
 					// expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
-					if (props.classList.contains('is-collapsed')) {
-						(props.querySelector('.metadata-properties-heading') as HTMLElement).click();
+					if (propsEl.classList.contains('is-collapsed')) {
+						(propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
 					}	
 					break;
 				case 'hide':
-					props.style.display = 'none';
+					propsEl.style.display = 'none';
 					break;
 			}
 		}
