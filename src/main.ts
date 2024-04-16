@@ -570,7 +570,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	private getToolbarEl(): HTMLElement | null {
 		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
-		debugLog("getToolbarEl: ", toolbarQuery, existingToolbarEl);
+		debugLog("getToolbarEl: ", existingToolbarEl);
 		return existingToolbarEl;
 	}
 
