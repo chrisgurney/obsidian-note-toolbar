@@ -292,8 +292,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
 
 		/* inject it between the properties and content divs */
-		let propsContainer = this.getPropsEl();
-		if (!propsContainer) {
+		let propsEl = this.getPropsEl();
+		if (!propsEl) {
 			debugLog("🛑 renderToolbarFromSettings: Unable to find propertiesContainer to insert toolbar");
 		}
 		propsContainer?.insertAdjacentElement("afterend", embedBlock);
@@ -341,7 +341,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async togglePropsCommand(visibility: 'show' | 'hide' | 'toggle'): Promise<void> {
 
-		let props = this.getPropsEl();
+		let propsEl = this.getPropsEl();
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", props);
 		// @ts-ignore make sure we're not in source (code) view
