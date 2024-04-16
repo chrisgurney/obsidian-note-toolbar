@@ -497,7 +497,7 @@ export default class ToolbarSettingsModal extends Modal {
 		stylingDescription.append(
 			"List of styles to apply to the toolbar (default: border even sticky).",
 			stylingDescription.createEl("br"),
-			"See the ",
+			"Sticky does not apply in Reading mode. See the ",
 			stylingDescription.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars",
 				text: "documentation",
