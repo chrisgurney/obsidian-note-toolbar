@@ -1,5 +1,5 @@
 /* remember to update when settings structure changes */
-export const SETTINGS_VERSION = 20240330.1;
+export const SETTINGS_VERSION = 20240416.1;
 
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
@@ -20,6 +20,7 @@ export interface ToolbarSettings {
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
 	name: string;
+	positions: Array<Position>;
 	updated: string;
 	// TODO: add setting to force rerender of toolbar? (for label variables)
 }
@@ -29,8 +30,22 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	items: [],
 	mobileStyles: [],
 	name: "",
+	positions: [{position: 'props', contexts: [{platform: 'all', view: 'all'}]}],
 	updated: new Date().toISOString(),
 };
+
+export interface Position {
+	contexts: ViewContext[];
+	position: 'props' | 'top';
+}
+
+export interface ViewContext {
+	platform: PlatformType;
+	view: ViewType;
+}
+
+export type PlatformType = 'all' | 'desktop' | 'mobile' | 'none';
+export type ViewType = 'all' | 'preview' | 'source';
 
 export interface FolderMapping {
 	folder: string;
@@ -38,8 +53,7 @@ export interface FolderMapping {
 }
 
 export interface ToolbarItemSettings {
-	hideOnDesktop: boolean;
-	hideOnMobile: boolean;
+	contexts: ViewContext[];
 	icon: string;
 	label: string;
 	link: string;

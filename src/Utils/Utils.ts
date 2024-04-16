@@ -1,4 +1,4 @@
-import { setIcon } from "obsidian";
+import { PlatformType } from "src/Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -14,6 +14,48 @@ export function arraymove<T>(arr: (T | string)[], fromIndex: number, toIndex: nu
 	const element = arr[fromIndex];
 	arr[fromIndex] = arr[toIndex];
 	arr[toIndex] = element;
+}
+
+/**
+ * Item visibility: Returns the platform value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
+ * Platform value should be the opposite of these flags.
+ * @param hideOnDesktop 
+ * @param hideOnMobile 
+ * @returns PlatformType
+ */
+export function calcItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolean): PlatformType {
+	if (!hideOnDesktop && !hideOnMobile) {
+		return 'all';
+	} else if (hideOnDesktop && hideOnMobile) {
+		return 'none';
+	} else if (hideOnMobile) {
+		return 'desktop';
+	} else if (hideOnDesktop) {
+		return 'mobile';
+	} else {
+		// this case should never occur
+		return 'all';
+	}
+}
+
+/**
+ * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
+ * toggle values are the opposite of the Platform values.
+ * @param platform PlatformOptions
+ * @returns booleans corresponding with hideOnDesktop, hideOnMobile
+ */
+export function calcItemVisToggles(platform: PlatformType): [boolean, boolean] {
+	// returns [hideOnDesktop, hideOnMobile]
+	switch (platform) {
+		case 'all':
+			return [false, false];
+		case 'desktop':
+			return [false, true];
+		case 'mobile':
+			return [true, false];
+		case 'none':
+			return [true, true];
+	}
 }
 
 /**

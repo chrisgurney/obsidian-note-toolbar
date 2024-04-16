@@ -1,0 +1,587 @@
+{
+  "folderMappings": [
+    {
+      "folder": "Calendar/Notes",
+      "toolbar": "Daily Notes"
+    },
+    {
+      "folder": "Daily Notes",
+      "toolbar": "Daily Notes"
+    },
+    {
+      "folder": "*",
+      "toolbar": "Global Nav"
+    }
+  ],
+  "toolbarProp": "notetoolbar",
+  "toolbars": [
+    {
+      "name": "asdf",
+      "updated": "2024-04-10T14:28:53.523Z",
+      "items": [
+        {
+          "label": "Welcome",
+          "icon": "",
+          "link": "Welcome.md",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "initCommandIds": [
+        "note-toolbar:focus"
+      ],
+      "items": [
+        {
+          "label": "Toggle Pin",
+          "icon": "lucide-pin",
+          "link": "Toggle pin",
+          "linkAttr": {
+            "commandId": "workspace:toggle-pin",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Toggle properties",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "",
+          "icon": "lucide-keyboard",
+          "link": "Note Toolbar: Focus",
+          "linkAttr": {
+            "commandId": "note-toolbar:focus",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Focus",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "mobileStyles": [],
+      "name": "Command Test",
+      "updated": "2024-04-09T15:20:48.284Z"
+    },
+    {
+      "name": "Daily Notes",
+      "updated": "2024-04-11T15:33:59.734Z",
+      "items": [
+        {
+          "label": "←",
+          "tooltip": "Previous daily note",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "Daily notes: Open previous daily note",
+          "linkAttr": {
+            "commandId": "daily-notes:goto-prev",
+            "hasVars": false,
+            "type": "command"
+          }
+        },
+        {
+          "label": "Today",
+          "tooltip": "Today's daily note",
+          "hideOnDesktop": true,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Test&commandid=daily-notes",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "TODO",
+          "tooltip": "Insert tasks",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "icon": "lucide-check-square",
+          "link": "obsidian://shell-commands/?vault=Test&execute=zg60qq8r6h",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "@focus",
+          "tooltip": "Insert tasks to focus on",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Test&execute=jttqryu9sd",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "✪ Events",
+          "tooltip": "Insert today's events",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Test&execute=r0qcncyump&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "Insert...",
+          "tooltip": "Choose template to insert",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "lucide-chevron-right",
+          "link": "Templates: Insert template",
+          "linkAttr": {
+            "commandId": "insert-template",
+            "hasVars": false,
+            "type": "command"
+          }
+        },
+        {
+          "label": "Blocked?",
+          "tooltip": "What to do if I'm blocked",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "Welcome.md",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          }
+        },
+        {
+          "label": "☑︎ Done",
+          "tooltip": "Insert items done on this day",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Design&execute=um5sony1zn&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "⏀ Activity",
+          "tooltip": "Insert Git activity for this day",
+          "hideOnDesktop": false,
+          "hideOnMobile": true,
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Design&execute=41451u5h99&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "→",
+          "tooltip": "Next daily note",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "Daily notes: Open next daily note",
+          "linkAttr": {
+            "commandId": "daily-notes:goto-next",
+            "hasVars": false,
+            "type": "command"
+          }
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Daily Notes Nav",
+      "updated": "2024-03-29T10:37:28.087Z",
+      "items": [
+        {
+          "label": "←",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-prev",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "📅 Today",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=daily-notes",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "🏡 Home",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "Home 🏡",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          }
+        },
+        {
+          "label": "⭐️ Bookmarks",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=bookmarks%253Aopen",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "→",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-next",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "border",
+        "right"
+      ],
+      "mobileStyles": [
+        "mnbrder",
+        "mnstcky"
+      ]
+    },
+    {
+      "name": "Efforts Nav",
+      "updated": "2024-03-29T10:53:58.493Z",
+      "items": [
+        {
+          "label": "↖ Up",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "file"
+          }
+        },
+        {
+          "label": "Project Tasks",
+          "tooltip": "Get tasks for this project from Things",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Design&execute=2zjvxvte3q&_task_project={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "+ Deliverable",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Areplace-in-file-templater",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "sticky",
+        "right"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Global Nav",
+      "updated": "2024-04-10T19:34:34.508Z",
+      "items": [
+        {
+          "label": "↖ Up ",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "file"
+          }
+        },
+        {
+          "label": "Banner Test",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "Banners Conflict Test.md",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          }
+        },
+        {
+          "label": "📅 Today",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "",
+          "link": "Daily notes: Open today's daily note",
+          "linkAttr": {
+            "commandId": "daily-notes",
+            "hasVars": false,
+            "type": "command"
+          }
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "right",
+        "sticky"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Home",
+      "updated": "2024-04-07T14:52:05.987Z",
+      "items": [
+        {
+          "label": "Bookmarks",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "lucide-bookmark",
+          "link": "Bookmarks: Show bookmarks",
+          "linkAttr": {
+            "commandId": "bookmarks:open",
+            "hasVars": false,
+            "type": "command"
+          }
+        },
+        {
+          "label": "Today",
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false,
+          "icon": "lucide-calendar",
+          "link": "obsidian://advanced-uri?vault=Test&commandid=periodic-notes%253Aopen-daily-note",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Toggle properties",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "right",
+        "sticky"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Icon Test",
+      "updated": "2024-04-10T12:07:50.226Z",
+      "items": [
+        {
+          "label": "Access",
+          "icon": "lucide-alarm-minus",
+          "link": "Welcome",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "Access this",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Pin Note",
+          "icon": "lucide-pin",
+          "link": "Toggle pin",
+          "linkAttr": {
+            "commandId": "workspace:toggle-pin",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Pin",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "",
+          "icon": "lucide-alert-circle",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Nothing!",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "Last Item",
+          "icon": "lucide-activity",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Does nothing",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "button"
+      ],
+      "mobileStyles": []
+    },
+    {
+      "name": "Tools",
+      "updated": "2024-04-05T12:44:53.755Z",
+      "items": [
+        {
+          "label": "",
+          "icon": "lucide-alarm-clock",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "",
+          "icon": "lucide-alert-circle",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        },
+        {
+          "label": "",
+          "icon": "lucide-air-vent",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "hideOnDesktop": false,
+          "hideOnMobile": false
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": []
+    }
+  ],
+  "version": 20240330.1
+}

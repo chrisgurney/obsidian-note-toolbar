@@ -1,5 +1,5 @@
-import { ButtonComponent, Modal, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, hasVars } from 'src/Utils/Utils';
+import { ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
+import { arraymove, calcItemVisPlatform, calcItemVisToggles, debugLog, emptyMessageFr, hasVars } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
@@ -140,6 +140,11 @@ export default class ToolbarSettingsModal extends Modal {
 			command: Setting;
 			file: Setting;
 			uri: Setting;
+		}[] = [];
+
+		let itemVisToggles: {
+			hideOnDesktop: boolean;
+			hideOnMobile: boolean;
 		}[] = [];
 
 		this.toolbar.items.forEach(
@@ -378,6 +383,12 @@ export default class ToolbarSettingsModal extends Modal {
 				// Toggles
 				// 
 
+				const [hideOnDesktopValue, hideOnMobileValue] = calcItemVisToggles(toolbarItem.contexts[0].platform);
+				itemVisToggles.push({
+					hideOnDesktop: hideOnDesktopValue,
+					hideOnMobile: hideOnMobileValue
+				});
+
 				let togglesContainer = this.containerEl.createDiv();
 				togglesContainer.className = "note-toolbar-setting-item-toggles-container";
 				const s2 = new Setting(togglesContainer)
@@ -386,9 +397,12 @@ export default class ToolbarSettingsModal extends Modal {
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on mobile'))
-							.setValue(toolbarItem.hideOnMobile)
+							.setValue(itemVisToggles[index].hideOnMobile)
 							.onChange(async (hideOnMobile) => {
-								toolbarItem.hideOnMobile = hideOnMobile;
+								itemVisToggles[index].hideOnMobile = hideOnMobile;
+								toolbarItem.contexts = [{
+									platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
+									view: 'all'}];
 								this.toolbar.updated = new Date().toISOString();
 								await this.plugin.saveSettings();
 							});
@@ -399,9 +413,12 @@ export default class ToolbarSettingsModal extends Modal {
 					.addToggle((toggle) => {
 						toggle
 							.setTooltip(('If enabled, this item will not appear on desktop'))
-							.setValue(toolbarItem.hideOnDesktop)
+							.setValue(itemVisToggles[index].hideOnDesktop)
 							.onChange(async (hideOnDesktop) => {
-								toolbarItem.hideOnDesktop = hideOnDesktop;
+								itemVisToggles[index].hideOnDesktop = hideOnDesktop;
+								toolbarItem.contexts = [{
+									platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
+									view: 'all'}];
 								this.toolbar.updated = new Date().toISOString();
 								await this.plugin.saveSettings();
 							});
@@ -432,8 +449,7 @@ export default class ToolbarSettingsModal extends Modal {
 								type: this.toolbar.items.last()?.linkAttr.type ?? "uri"
 							},
 							tooltip: "",
-							hideOnDesktop: false,
-							hideOnMobile: false
+							contexts: [{platform: 'all', view: 'all'}],
 						});
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();

@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping } from './Settings/NoteToolbarSettings';
-import { debugLog, isValidUri } from './Utils/Utils';
+import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -262,8 +262,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 
 			let noteToolbarLi = document.createElement("li");
-			item.hideOnMobile ? noteToolbarLi.className = "hide-on-mobile" : false;
-			item.hideOnDesktop ? noteToolbarLi.className += "hide-on-desktop" : false;
+			const [hideOnDesktop, hideOnMobile] = calcItemVisToggles(item.contexts[0].platform);
+			hideOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
+			hideOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 			noteToolbarLi.append(toolbarItem);
 
 			noteToolbarUl.appendChild(noteToolbarLi);
@@ -724,7 +725,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				old_version = new_version;
 			}
 
-			// MIGRATION: support for generic links with types
+			// MIGRATION: support for icons + generic links with types
 			if (old_version === 20240322.1) {
 				new_version = 20240330.1;
 				debugLog("- starting migration: " + old_version + " -> " + new_version);
@@ -744,6 +745,31 @@ export default class NoteToolbarPlugin extends Plugin {
 							delete item.urlAttr;
 						}
 					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: support for position + contexts
+			if (old_version === 20240330.1) {
+				new_version = 20240416.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						// convert hideOnDesktop + hideOnMobile to contexts
+						this.settings.toolbars[index].items[item_index].contexts = [{
+							platform: calcItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
+							view: 'all'}];
+						delete item.hideOnDesktop;
+						delete item.hideOnMobile;
+					});
+					this.settings.toolbars[index].positions = [{
+						position: 'props', 
+						contexts: [{
+							platform: 'all', 
+							view: 'all'
+						}]
+					}]
 				});
 				// for the next migration to run
 				old_version = new_version;
