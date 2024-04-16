@@ -442,6 +442,7 @@ body {
 
 .cg-note-toolbar-position-top,
 .cg-note-toolbar-reading-sticky {
+    background-color: var(--cg-nt-tbar-bg-color);
     font-size: var(--font-text-size);
     margin-bottom: 0;
     padding: var(--file-margins);
