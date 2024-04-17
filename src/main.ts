@@ -449,15 +449,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarClickHandler(e: MouseEvent) {
 
-		debugLog('toolbarClickHandler: ', e);
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let url = clickedEl.getAttribute("href");
 
 		if (url != null) {
 			
-			debugLog('- clicked el: ', clickedEl);
-
 			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
+			linkType ? (['command', 'file', 'uri'].includes(linkType) ? e.preventDefault() : undefined) : undefined
+
+			debugLog('toolbarClickHandler: ', e, 'clickedEl: ', clickedEl);
+
 			// default to true if it doesn't exist, treating the url as though it is a URI with vars
 			let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
 							 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
@@ -479,14 +480,12 @@ export default class NoteToolbarPlugin extends Plugin {
 					let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
 					debugLog("- executeCommandById: ", linkCommandId);
 					linkCommandId ? this.app.commands.executeCommandById(linkCommandId) : undefined;
-					e.preventDefault();
 					break;
 				case 'file':
 					// it's an internal link (note); try to open it
 					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
 					debugLog("- openLinkText: ", url, " from: ", activeFile);
 					this.app.workspace.openLinkText(url, activeFile);
-					e.preventDefault();
 					break;
 				case 'uri':
 					if (isValidUri(url)) {
@@ -498,7 +497,6 @@ export default class NoteToolbarPlugin extends Plugin {
 						let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
 						this.app.workspace.openLinkText(url, activeFile);
 					}
-					e.preventDefault();
 					break;
 			}
 		
@@ -511,7 +509,6 @@ export default class NoteToolbarPlugin extends Plugin {
 					let functionName = url.slice(8); // remove 'onclick:'
 					if (typeof (window as any)[functionName] === 'function') {
 						(window as any)[functionName]();
-						e.preventDefault();
 					}
 				}
 			}
