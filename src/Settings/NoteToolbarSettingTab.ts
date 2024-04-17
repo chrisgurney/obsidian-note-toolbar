@@ -83,7 +83,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			" • ",
 			toolbarsDesc.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/releases",
-				text: "v" + this.plugin.manifest.version,
+				text: "Release Notes",
 			})
 		);
 
