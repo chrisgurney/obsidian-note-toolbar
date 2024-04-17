@@ -550,18 +550,27 @@ body {
 
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
+    & .setting-item {
+        border-bottom: none !important;
+    }
 }
 
 .note-toolbar-setting-item-top-container {
     display: flex;
     flex-flow: wrap;
     justify-content: space-between;
+    & .setting-item {
+        border-bottom: none !important;
+    }
 }
 
 .note-toolbar-setting-item-toggles-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
+    & .setting-item {
+        border-bottom: none !important;
+    }
 }
 
 .note-toolbar-setting-item-icon {
@@ -606,7 +615,7 @@ body {
 }
 
 .note-toolbar-setting-item-field {
-    border-top: none;
+    border-top: none !important;
     flex-grow: 1;
     padding-top: 0 !important;
     & .setting-item-info {
@@ -647,7 +656,7 @@ body {
 }
 
 .note-toolbar-setting-item-field-link {
-    border-top: none;
+    border-top: none !important;
     /* default to none, so we can render it ahead of time; set visible based on type to show */
     display: none;
     padding-top: 0 !important;
@@ -659,15 +668,15 @@ body {
         }
     }
     &[data-active="true"] {
-        display: inherit;
+        display: inherit !important;
     }
     &[data-active="false"] {
-        display: none;
+        display: none !important;
     }
 }
 
 .note-toolbar-setting-item-toggle {
-    border-top: none;
+    border-top: none !important;
     padding: 0.75em 0 0.75em 0 !important;
     &:not(:first-child) {
         padding-left: 1em !important;
@@ -714,7 +723,7 @@ body {
 }
 
 .note-toolbar-setting-item-styles {
-    border-top: none;
+    border-top: none !important;
     & > .setting-item-info {
         align-self: flex-start;
     }
@@ -728,8 +737,8 @@ body {
     gap: 0.25em;
     width: 100%;
     .setting-item {
-        border-top: none;
-        border: dashed 1px var(--pill-color-remove);
+        border-top: none !important;
+        border: dashed 1px var(--pill-color-remove) !important;
         border-radius: var(--pill-radius);
         padding: 0 0.25em 0 0.75em !important;
         flex-wrap: nowrap;
