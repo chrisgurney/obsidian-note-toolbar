@@ -403,6 +403,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		let itemsUl: HTMLElement | null = this.getToolbarListEl();
 		if (itemsUl) {
 
+			// not preventing default from 'Escape' for now (I think this helps)
+			e.key ? (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', ' '].includes(e.key) ? e.preventDefault() : undefined) : undefined
+
 			// remove any items that are not visible (i.e., hidden on desktop/mobile) as they are not navigable
 			let items = Array.from(itemsUl.children);
 			const visibleItems = items.filter(item => {
@@ -416,17 +419,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				case 'ArrowDown':
 					const nextIndex = (currentIndex + 1) % visibleItems.length;
 					visibleItems[nextIndex].querySelector('a')?.focus();
-					e.preventDefault();
 					break;
 				case 'ArrowLeft':
 				case 'ArrowUp':
 					const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
 					visibleItems[prevIndex].querySelector('a')?.focus();
-					e.preventDefault();
 					break;
 				case ' ':
 					(document?.activeElement as HTMLElement).click();
-					e.preventDefault();
 					break;
 				case 'Escape':
 					// need this implemented for Reading mode, as escape does nothing
