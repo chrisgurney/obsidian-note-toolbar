@@ -89,14 +89,6 @@ settings:
         level: 1
         collapsed: true
     -
-        id: cg-nt-tbar-border-color
-        title: Border color
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
         id: cg-nt-tbar-bg-color
         title: Background color
         type: variable-themed-color
@@ -104,6 +96,21 @@ settings:
         format: hex
         default-light: '#'
         default-dark: '#'
+    -
+        id: cg-nt-tbar-border-color
+        title: Border color
+        description: Top and bottom borders only
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-border-radius
+        title: Border radius (in px units)
+        type: variable-number
+        default: 0
+        format: px
     -
         id: cg-nt-tbar-padding-inline
         title: Left + Right padding (in em units)
@@ -114,7 +121,7 @@ settings:
     -
         id: cg-nt-tbar-top-sticky-pos-desktop
         title: Top sticky offset desktop (in px units)
-        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, does not apply when Position = Top (fixed).
+        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed).
         type: variable-number
         default: -40
         format: px
@@ -180,6 +187,7 @@ settings:
 body {
     --cg-nt-tbar-bg-color: var(--background-primary);
     --cg-nt-tbar-border-color: var(--hr-color);
+    --cg-nt-tbar-border-radius: 0px;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
@@ -243,7 +251,7 @@ body {
         background-color: inherit;
     }
 
-    border-radius: 0;
+    border-radius: var(--cg-nt-tbar-border-radius);
     padding: 0;
     padding-inline: var(--cg-nt-tbar-padding-inline);
     width: 100%;
@@ -457,6 +465,7 @@ body {
 }
 
 .cg-note-toolbar-container {
+    border-radius: var(--cg-nt-tbar-border-radius);
     box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color);
     margin-bottom: 1em;
     .is-mobile & {
