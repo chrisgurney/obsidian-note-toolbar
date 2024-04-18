@@ -141,7 +141,7 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-item-border-radius
-        title: Border radius
+        title: Border radius (in px units)
         type: variable-number
         default: 5
         format: px
