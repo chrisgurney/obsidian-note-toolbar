@@ -92,6 +92,7 @@ settings:
         id: cg-nt-tbar-border-color
         title: Border color
         type: variable-themed-color
+        opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
@@ -99,6 +100,7 @@ settings:
         id: cg-nt-tbar-bg-color
         title: Background color
         type: variable-themed-color
+        opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
@@ -130,6 +132,7 @@ settings:
         id: cg-nt-item-text-color
         title: Text color
         type: variable-themed-color
+        opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
@@ -137,6 +140,7 @@ settings:
         id: cg-nt-item-text-color-hover
         title: Text color (on hover)
         type: variable-themed-color
+        opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
@@ -144,6 +148,7 @@ settings:
         id: cg-nt-item-bg-color-hover
         title: Background color (on hover)
         type: variable-themed-color
+        opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
@@ -157,6 +162,7 @@ settings:
         id: cg-nt-item-button-bg-color
         title: Background color
         type: variable-themed-color
+        opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
