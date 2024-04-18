@@ -107,18 +107,21 @@ settings:
     -
         id: cg-nt-tbar-padding-inline
         title: Left + Right padding (in em units)
+        description: Helpful if you've set a background color for the toolbar (larger = more indented)
         type: variable-number
         default: 0
         format: em
     -
         id: cg-nt-tbar-top-sticky-pos-desktop
         title: Top sticky offset desktop (in px units)
+        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, does not apply when Position = Top (fixed).
         type: variable-number
         default: -40
         format: px
     -
         id: cg-nt-tbar-top-sticky-pos-mobile
         title: Top sticky offset mobile (in rem units)
+        description: See above.
         type: variable-number
         default: -1
         format: rem
@@ -128,6 +131,20 @@ settings:
         type: heading
         level: 1
         collapsed: true
+    -
+        id: cg-nt-item-bg-color-hover
+        title: Background color (on hover)
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-border-radius
+        title: Border radius
+        type: variable-number
+        default: 5
+        format: px
     -
         id: cg-nt-item-text-color
         title: Text color
@@ -139,14 +156,6 @@ settings:
     -
         id: cg-nt-item-text-color-hover
         title: Text color (on hover)
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-bg-color-hover
-        title: Background color (on hover)
         type: variable-themed-color
         opacity: true
         format: hex
@@ -174,10 +183,11 @@ body {
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
+    --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
+    --cg-nt-item-border-radius: var(--button-radius);
+    --cg-nt-item-button-bg-color: var(--interactive-normal);
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
-    --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
-    --cg-nt-item-button-bg-color: var(--interactive-normal);
 }
 
 .metadata-container {
@@ -281,7 +291,7 @@ body {
             display: block;
             text-decoration: none;
             font-size: var(--metadata-label-font-size);
-            border-radius: var(--button-radius);
+            border-radius: var(--cg-nt-item-border-radius);
             height: 100%;
         }
 
@@ -410,7 +420,7 @@ body {
         gap: var(--size-4-2);
         & a {
             background-color: var(--cg-nt-item-button-bg-color);
-            box-shadow: var(--input-shadow);    
+            box-shadow: var(--input-shadow);
         }
     }
 
@@ -418,7 +428,7 @@ body {
         gap: var(--size-4-2);
         & a {
             background-color: var(--cg-nt-item-button-bg-color);
-            box-shadow: var(--input-shadow);    
+            box-shadow: var(--input-shadow);
         }
     }
 
