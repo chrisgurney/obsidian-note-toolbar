@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuItem, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position } from './Settings/NoteToolbarSettings';
 import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
@@ -288,6 +288,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
 		embedBlock.setAttribute("data-name", toolbar.name);
 		embedBlock.setAttribute("data-updated", toolbar.updated);
+		embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
 		embedBlock.append(div);
 
 		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
@@ -517,6 +518,28 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 	
+	/**
+	 * Shows a context menu with a link to settings, for convenience.
+	 * @param e MouseEvent
+	 */
+	async toolbarContextMenuHandler(e: MouseEvent) {
+
+		e.preventDefault();
+
+		let contextMenu = new Menu();
+		contextMenu.addItem((item) => {
+		  item
+			.setTitle("Note Toolbar settings...")
+			.setIcon("lucide-wrench")
+			.onClick((e) => {
+				this.openSettingsCommand();
+			});
+		});
+
+		contextMenu.showAtPosition(e);
+
+	}
+
 	/**
 	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
 	 * @param s String to replace the variables in.
