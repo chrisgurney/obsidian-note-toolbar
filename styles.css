@@ -447,7 +447,7 @@ body {
 }
 
 .cg-note-toolbar-container {
-    box-shadow: 0 0 0 1px var(--background-primary);
+    box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color);
     margin-bottom: 1em;
     .is-mobile & {
         margin: 0.4em 0 1em 0;
