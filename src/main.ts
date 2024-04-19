@@ -520,7 +520,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 	
 	/**
-	 * Shows a context menu with a link to settings, for convenience.
+	 * Shows a context menu with links to settings/configuration.
 	 * @param e MouseEvent
 	 */
 	async toolbarContextMenuHandler(e: MouseEvent) {
