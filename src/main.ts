@@ -297,11 +297,15 @@ export default class NoteToolbarPlugin extends Plugin {
 		switch(toolbar.positions[0].position) {
 			case 'top':
 				embedBlock.addClass('cg-note-toolbar-position-top');
-				let viewHeader = document.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
-				if (!viewHeader) {
-					debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
-				}
-				viewHeader.insertAdjacentElement("afterend", embedBlock);
+				// make sure this header has a view-content sibling with a markdown-source/edit-view child 
+				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
+				// debugLog('🟡 CURRENT VIEW: ', currentView);
+				// debugLog('🟡 VIEW HEADER: ', viewHeader);
+				// let viewHeader = document.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
+				viewHeader 
+					? viewHeader.insertAdjacentElement("afterend", embedBlock)
+					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
 				break;
 			case 'props':
 			default:
