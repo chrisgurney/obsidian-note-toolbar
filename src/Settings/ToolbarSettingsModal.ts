@@ -136,7 +136,7 @@ export default class ToolbarSettingsModal extends Modal {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables",
 				text: "variables",
 			}),
-			" supported in links."
+			" supported."
 		);
 
 		new Setting(settingsDiv)
