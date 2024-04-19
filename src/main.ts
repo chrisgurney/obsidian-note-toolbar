@@ -533,7 +533,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let toolbarSettings = toolbarName ? this.getToolbarSettings(toolbarName) : undefined;
 
 		let contextMenu = new Menu();
-		if (toolbarSettings) {
+		if (toolbarSettings !== undefined) {
 			contextMenu.addItem((item) => {
 				item
 				  .setTitle("Edit " + toolbarName + "...")
