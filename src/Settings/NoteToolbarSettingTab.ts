@@ -9,14 +9,16 @@ import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	plugin: NoteToolbarPlugin;
+	app: App;
 
 	constructor(app: App, plugin: NoteToolbarPlugin) {
 		super(app, plugin);
+		this.app = app;
 		this.plugin = plugin;
 	}
 
     public openSettingsModal(toolbar: ToolbarSettings) {
-        const modal = new ToolbarSettingsModal(this, toolbar);
+        const modal = new ToolbarSettingsModal(this.app, this.plugin, this, toolbar);
 		modal.setTitle("Edit Toolbar");
         modal.open();
     }

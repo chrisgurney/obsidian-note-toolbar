@@ -1,4 +1,4 @@
-import { ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
+import { App, ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
 import { arraymove, calcItemVisPlatform, calcItemVisToggles, debugLog, emptyMessageFr, hasVars } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
@@ -12,12 +12,19 @@ export default class ToolbarSettingsModal extends Modal {
 
 	public plugin: NoteToolbarPlugin;
 	public toolbar: ToolbarSettings;
-	private parent: NoteToolbarSettingTab;
+	private parent: NoteToolbarSettingTab | null;
 
-	constructor(parent: NoteToolbarSettingTab, toolbar: ToolbarSettings) {
-		super(parent.plugin.app);
+	/**
+	 * Displays a new edit toolbar modal, for the given toolbar.
+	 * @param app reference to the app
+	 * @param plugin reference to the plugin
+	 * @param parent NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
+	 * @param toolbar ToolbarSettings to edit
+	 */
+	constructor(app: App, plugin: NoteToolbarPlugin, parent: NoteToolbarSettingTab | null = null, toolbar: ToolbarSettings) {
+		super(app);
 		this.parent = parent;
-		this.plugin = parent.plugin;
+		this.plugin = plugin;
 		this.toolbar = toolbar;
 	}
 
@@ -34,7 +41,7 @@ export default class ToolbarSettingsModal extends Modal {
 	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
-		this.parent.display();
+		this.parent ? this.parent.display() : undefined;
 	}
 
 	/*************************************************************************

@@ -2,6 +2,7 @@ import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuItem, Plugin,
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position } from './Settings/NoteToolbarSettings';
 import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
+import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -526,12 +527,29 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		e.preventDefault();
 
+		// figure out what toolbar we're in
+		let toolbarEl = (e.target as Element).closest('.cg-note-toolbar-container');
+		let toolbarName = toolbarEl?.getAttribute('data-name');
+		let toolbarSettings = toolbarName ? this.getToolbarSettings(toolbarName) : undefined;
+
 		let contextMenu = new Menu();
-		contextMenu.addItem((item) => {
+		if (toolbarSettings) {
+			contextMenu.addItem((item) => {
+				item
+				  .setTitle("Edit " + toolbarName + "...")
+				  .setIcon("lucide-pen-box")
+				  .onClick((menuEvent) => {
+					const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
+					modal.setTitle("Edit Toolbar: " + toolbarName);
+					modal.open();
+				  });
+			  });
+		}
+  		contextMenu.addItem((item) => {
 		  item
 			.setTitle("Note Toolbar settings...")
 			.setIcon("lucide-wrench")
-			.onClick((e) => {
+			.onClick((menuEvent) => {
 				this.openSettingsCommand();
 			});
 		});
