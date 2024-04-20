@@ -11,8 +11,8 @@ export class FolderSuggester extends AbstractInputSuggest<string> {
 
     private inputEl: HTMLInputElement;
 
-    private PATTERN_ALL_FILES: FolderSuggester.Pattern = { pattern: '*', desc: 'all files' };
-    private PATTERN_ROOT_ONLY: FolderSuggester.Pattern = { pattern: '/', desc: 'vault root only' };
+    private PATTERN_ALL_FILES: FolderSuggester.Pattern = { pattern: '*', desc: 'all folders' };
+    private PATTERN_ROOT_ONLY: FolderSuggester.Pattern = { pattern: '/', desc: 'root folder only' };
 
     constructor(app: App, inputEl: HTMLInputElement) {
         super(app, inputEl);
