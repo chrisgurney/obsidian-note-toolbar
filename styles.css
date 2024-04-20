@@ -648,6 +648,13 @@ body {
     gap: 0 1em;
 }
 
+.note-toolbar-setting-folder-suggestion-item-muted {
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    color: var(--text-muted);
+}
+
 .note-toolbar-setting-item-fields {
     display: flex;
     gap: 0 1em;
