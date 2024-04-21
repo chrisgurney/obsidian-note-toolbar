@@ -3,6 +3,7 @@ import { AbstractInputSuggest, App, TAbstractFile, TFolder } from "obsidian";
 module FolderSuggester {
     export type Pattern = {
         pattern: string,
+        label: string,
         desc: string
     }
 }
@@ -11,8 +12,8 @@ export class FolderSuggester extends AbstractInputSuggest<string> {
 
     private inputEl: HTMLInputElement;
 
-    private PATTERN_ALL_FILES: FolderSuggester.Pattern = { pattern: '*', desc: 'all folders' };
-    private PATTERN_ROOT_ONLY: FolderSuggester.Pattern = { pattern: '/', desc: 'root folder only' };
+    private PATTERN_ALL_FILES: FolderSuggester.Pattern = { pattern: '*', label: '*', desc: 'all folders' };
+    private PATTERN_ROOT_ONLY: FolderSuggester.Pattern = { pattern: '/', label: '/', desc: 'root folder only' };
 
     constructor(app: App, inputEl: HTMLInputElement) {
         super(app, inputEl);
@@ -54,9 +55,13 @@ export class FolderSuggester extends AbstractInputSuggest<string> {
         this.close();
     }
 
+	/*************************************************************************
+	 * DISPLAY HELPERS
+	 *************************************************************************/
+
     renderPattern(el: HTMLElement, suggestion: FolderSuggester.Pattern) {
         el.addClass('note-toolbar-setting-folder-suggestion-item-muted');
-        el.createSpan().setText(suggestion.pattern);
+        el.createSpan().setText(suggestion.label);
         el.createSpan().setText(suggestion.desc);
     }
 
