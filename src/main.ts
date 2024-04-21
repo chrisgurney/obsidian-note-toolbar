@@ -456,9 +456,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	async toolbarClickHandler(e: MouseEvent) {
 
 		let clickedEl = e.currentTarget as HTMLLinkElement;
-		let url = clickedEl.getAttribute("href");
+		let href = clickedEl.getAttribute("href");
 
-		if (url != null) {
+		if (href != null) {
 			
 			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
 			linkType ? (['command', 'file', 'uri'].includes(linkType) ? e.preventDefault() : undefined) : undefined
@@ -472,8 +472,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (linkHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
 				// only replace vars in URIs; might consider other substitution in future
-				url = this.replaceVars(url, activeFile, linkType === "uri");
-				debugLog('- url vars replaced: ', url);
+				href = this.replaceVars(href, activeFile, linkType === "uri");
+				debugLog('- uri vars replaced: ', href);
 			}
 
 			// remove the focus effect if clicked with a mouse
@@ -490,18 +490,18 @@ export default class NoteToolbarPlugin extends Plugin {
 				case 'file':
 					// it's an internal link (note); try to open it
 					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					debugLog("- openLinkText: ", url, " from: ", activeFile);
-					this.app.workspace.openLinkText(url, activeFile);
+					debugLog("- openLinkText: ", href, " from: ", activeFile);
+					this.app.workspace.openLinkText(href, activeFile);
 					break;
 				case 'uri':
-					if (isValidUri(url)) {
+					if (isValidUri(href)) {
 						// if actually a url, just open the url
-						window.open(url, '_blank');
+						window.open(href, '_blank');
 					}
 					else {
 						// as fallback, treat it as internal note
 						let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-						this.app.workspace.openLinkText(url, activeFile);
+						this.app.workspace.openLinkText(href, activeFile);
 					}
 					break;
 			}
@@ -510,9 +510,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (false) {
 				// if it's a js function that exists, call it without any parameters
 				// @ts-ignore
-				if (url.toLowerCase().startsWith('onclick:')) {
+				if (href.toLowerCase().startsWith('onclick:')) {
 					// @ts-ignore
-					let functionName = url.slice(8); // remove 'onclick:'
+					let functionName = href.slice(8); // remove 'onclick:'
 					if (typeof (window as any)[functionName] === 'function') {
 						(window as any)[functionName]();
 					}
