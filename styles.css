@@ -513,6 +513,10 @@ body {
     .is-mobile & {
         padding: 1em;
     }
+    & .setting-item:focus-within {
+        outline: solid 2px var(--background-modifier-border-focus);
+        border-radius: var(--button-radius);
+    }   
 } 
 
 .note-toolbar-setting-item {
@@ -522,6 +526,10 @@ body {
     padding: 1.5em 1.5em 0.5em 1.5em;
     .is-mobile & {
         padding: 1em;
+    }
+    &:focus-within {
+        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
 }
 
