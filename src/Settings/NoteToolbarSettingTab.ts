@@ -302,33 +302,40 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * Handles moving mappings up and down the list, and deletion, based on click or keyboard event.
 	 * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
 	 * @param index Number of the item in the list we're moving/deleting.
-	 * @param direction Direction of the move, or "delete".
+	 * @param action Direction of the move, or "delete".
 	 */
-	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, direction: "up" | "down" | "delete"): Promise<void> {
+	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, action: 'up' | 'down' | 'delete'): Promise<void> {
 		if (keyEvent) {
 			switch (keyEvent.key) {
-				case "ArrowUp":
-					direction = "up";
+				case 'ArrowUp':
+					keyEvent.preventDefault();
+					action = 'up';
 					break;
-				case "ArrowDown":
-					direction = "down";
+				case 'ArrowDown':
+					keyEvent.preventDefault();
+					action = 'down';
 					break;
-				case "Enter":
+				case 'Delete':
+				case 'Backspace':
+					keyEvent.preventDefault();
+					action = 'delete';	
+				case 'Enter':
+				case ' ':
+					keyEvent.preventDefault();
 					break;
 				default:
 					return;
 			}
 		}
-		switch (direction) {
-			case "up":
+		switch (action) {
+			case 'up':
 				arraymove(this.plugin.settings.folderMappings, index, index - 1);
-				keyEvent?.preventDefault();
 				break;
-			case "down":
+			case 'down':
 				arraymove(this.plugin.settings.folderMappings, index, index + 1);
 				keyEvent?.preventDefault();
 				break;
-			case "delete":
+			case 'delete':
 				this.plugin.settings.folderMappings.splice(index, 1);
 				keyEvent?.preventDefault();
 				break;

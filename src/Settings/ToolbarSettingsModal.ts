@@ -674,40 +674,45 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	async listMoveHandler(
 		keyEvent: KeyboardEvent | null, 
-		itemArray: ToolbarItemSettings[] | string[], 
+		itemArray: ToolbarItemSettings[] | string[],
 		index: number, 
-		action: "up" | "down" | "delete"
+		action: 'up' | 'down' | 'delete' | undefined = undefined
 	): Promise<void> {
 		if (keyEvent) {
 			switch (keyEvent.key) {
-				case "ArrowUp":
-					action = "up";
+				case 'ArrowUp':
+					keyEvent.preventDefault();
+					action = 'up';
 					break;
-				case "ArrowDown":
-					action = "down";
+				case 'ArrowDown':
+					keyEvent.preventDefault();
+					action = 'down';
 					break;
-				case "Enter":
-				case " ":
+				case 'Delete':
+				case 'Backspace':
+					keyEvent.preventDefault();
+					action = 'delete';
+					break;
+				case 'Enter':
+				case ' ':
+					keyEvent.preventDefault();
 					break;
 				default:
 					return;
 			}
 		}
 		switch (action) {
-			case "up":
+			case 'up':
 				arraymove(itemArray, index, index - 1);
 				this.toolbar.updated = new Date().toISOString();
-				keyEvent?.preventDefault();		
 				break;
-			case "down":
+			case 'down':
 				arraymove(itemArray, index, index + 1);
 				this.toolbar.updated = new Date().toISOString();
-				keyEvent?.preventDefault();
 				break;
-			case "delete":
+			case 'delete':
 				itemArray.splice(index, 1);
 				this.toolbar.updated = new Date().toISOString();
-				keyEvent?.preventDefault();
 				break;
 		}
 		await this.plugin.saveSettings();

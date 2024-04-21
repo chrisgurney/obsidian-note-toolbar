@@ -505,7 +505,17 @@ body {
 * Settings Styles (for Note Toolbar Plugin)
 ******************************************************************************/
 
-.note-toolbar-setting-toolbar-list, .note-toolbar-setting-item {
+.note-toolbar-setting-toolbar-list {
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin: 0em 0em 1em 0em;
+    padding: 1.5em 1.5em 0.5em 1.5em;
+    .is-mobile & {
+        padding: 1em;
+    }
+} 
+
+.note-toolbar-setting-item {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
     margin: 0em 0em 1em 0em;
