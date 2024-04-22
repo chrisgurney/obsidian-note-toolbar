@@ -257,7 +257,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "down"));
 					})
 					.addExtraButton((cb) => {
-						cb.setIcon("cross")
+						cb.setIcon("trash")
 							.setTooltip("Delete")
 							.onClick(async () => this.listMoveHandler(null, index, "delete"));
 						cb.extraSettingsEl.setAttribute("tabindex", "0");
