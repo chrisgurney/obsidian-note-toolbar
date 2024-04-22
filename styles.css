@@ -38,8 +38,8 @@
  *   button = applies a button-like appearance
  *   center = aligns items center
  *   even = distributes items evenly
- *   floatl = floats the toolbar left of nearby content
- *   floatr = floats the toolbar right of nearby content
+ *   floatl = floats the toolbar left of nearby content within a callout
+ *   floatr = floats the toolbar right of nearby content within a callout
  *   nofloat = turns off float (default)
  *   left = aligns items left (default)
  *   right = aligns items right
