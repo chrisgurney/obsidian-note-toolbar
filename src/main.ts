@@ -300,11 +300,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		switch(toolbar.positions[0].position) {
 			case 'top':
 				embedBlock.addClass('cg-note-toolbar-position-top');
-				// make sure this header has a view-content sibling with a markdown-source/edit-view child 
 				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
-				// debugLog('🟡 CURRENT VIEW: ', currentView);
-				// debugLog('🟡 VIEW HEADER: ', viewHeader);
+				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
 				// let viewHeader = document.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
 				viewHeader 
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
