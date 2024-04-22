@@ -241,9 +241,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}).map((item: ToolbarItemSettings) => {
 
-			let toolbarItem = document.createElement("a");
+			// changed to span as temporary(?) fix (#19) for links on Android
+			let toolbarItem = document.createElement('span');
 			toolbarItem.className = "external-link";
 			toolbarItem.setAttribute("href", item.link);
+			toolbarItem.setAttribute("role", "link");
+			toolbarItem.tabIndex = 0;
 			Object.entries(item.linkAttr).forEach(([key, value]) => {
 				toolbarItem.setAttribute(`data-toolbar-link-attr-${key}`, value);
 			});
@@ -349,7 +352,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const visibleItems = items.filter(item => {
 				return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
 			});
-			const link = visibleItems[0] ? visibleItems[0].querySelector('a') : null;
+			const link = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
 			debugLog("focus command: focussed item: ", link);
 			link?.focus();
 		}
@@ -425,12 +428,12 @@ export default class NoteToolbarPlugin extends Plugin {
 				case 'ArrowRight':
 				case 'ArrowDown':
 					const nextIndex = (currentIndex + 1) % visibleItems.length;
-					visibleItems[nextIndex].querySelector('a')?.focus();
+					visibleItems[nextIndex].querySelector('span')?.focus();
 					break;
 				case 'ArrowLeft':
 				case 'ArrowUp':
 					const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
-					visibleItems[prevIndex].querySelector('a')?.focus();
+					visibleItems[prevIndex].querySelector('span')?.focus();
 					break;
 				case 'Enter':
 				case ' ':
