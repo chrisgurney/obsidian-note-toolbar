@@ -186,15 +186,18 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// debugLog('- frontmatter: ', frontmatter);
 		const propName = this.settings.toolbarProp;
+		let ignoreToolbar = false;
 
 		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
 		if (notetoolbarProp !== null) {
+			// if any prop = 'none' then don't return a toolbar
+			notetoolbarProp.includes('none') ? ignoreToolbar = true : false;
 			// is it valid? (i.e., is there a matching toolbar?)
-			matchingToolbar = this.getToolbarSettingsFromProps(notetoolbarProp);
+			ignoreToolbar ? undefined : matchingToolbar = this.getToolbarSettingsFromProps(notetoolbarProp);
 		}
 
 		// we still don't have a matching toolbar
-		if (!matchingToolbar) {
+		if (!matchingToolbar && !ignoreToolbar) {
 
 			// check if the note is in a folder that's mapped, and if the mapping is valid
 			let mapping: FolderMapping;
