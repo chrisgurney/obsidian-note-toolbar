@@ -510,9 +510,13 @@ body {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
     margin: 0em 0em 1em 0em;
-    padding: 1.5em 1.5em 0.5em 1.5em;
+    padding: 1em 1em 0.5em 1em;
     .is-mobile & {
         padding: 1em;
+    }
+    & .setting-item {
+        padding: 0.5em;
+        margin: 0.25em;
     }
     & .setting-item:focus-within {
         outline: solid 2px var(--background-modifier-border-focus);
