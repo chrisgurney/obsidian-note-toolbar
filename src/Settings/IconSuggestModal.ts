@@ -19,6 +19,11 @@ export class IconSuggestModal extends SuggestModal<IconName> {
         this.toolbarSettings = toolbarSettings;
         this.toolbarItemIndex = index;
         this.setPlaceholder("Search for an icon");
+        this.setInstructions([
+            {command: '↑↓', purpose: 'to navigate'},
+            {command: '↵', purpose: 'to use'},
+            {command: 'esc', purpose: 'to dismiss'},
+        ]);
     }
 
     getSuggestions(inputStr: string): IconName[] {
