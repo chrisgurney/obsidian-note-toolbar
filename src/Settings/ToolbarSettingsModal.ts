@@ -369,7 +369,7 @@ export default class ToolbarSettingsModal extends Modal {
 							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "down"));
 					})
 					.addExtraButton((cb) => {
-						cb.setIcon("cross")
+						cb.setIcon("trash")
 							.setTooltip("Delete")
 							.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "delete"));
 						cb.extraSettingsEl.setAttribute("tabindex", "0");
