@@ -147,12 +147,6 @@ settings:
         default-light: '#'
         default-dark: '#'
     -
-        id: cg-nt-item-border-radius
-        title: Border radius (in px units)
-        type: variable-number
-        default: 5
-        format: px
-    -
         id: cg-nt-item-text-color
         title: Text color
         type: variable-themed-color
@@ -168,6 +162,24 @@ settings:
         format: hex
         default-light: '#'
         default-dark: '#'
+    -
+        id: cg-nt-item-border-radius
+        title: Border radius (in px units)
+        type: variable-number
+        default: 5
+        format: px
+    -
+        id: cg-nt-item-font-size
+        title: Font size (in em units)
+        type: variable-number
+        default: 0.875
+        format: em
+    -
+        id: cg-nt-item-icon-size
+        title: Icon size (in px units)
+        type: variable-number
+        default: 18
+        format: px
     -
         id: titlebar-heading
         title: Toolbar Items (button style)
@@ -194,6 +206,8 @@ body {
     --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-item-border-radius: var(--button-radius);
     --cg-nt-item-button-bg-color: var(--interactive-normal);
+    --cg-nt-item-font-size: var(--metadata-label-font-size);
+    --cg-nt-item-icon-size: var(--icon-size);
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
 }
@@ -298,9 +312,13 @@ body {
             padding: 0.5em 0.75em 0.5em 0.75em;
             display: block;
             text-decoration: none;
-            font-size: var(--metadata-label-font-size);
+            font-size: var(--cg-nt-item-font-size);
             border-radius: var(--cg-nt-item-border-radius);
             height: 100%;
+            & svg {
+                height: var(--cg-nt-item-icon-size);
+                width: var(--cg-nt-item-icon-size);
+            }
         }
 
         & a:focus-within, span.external-link:focus-within {
