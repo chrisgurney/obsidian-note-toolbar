@@ -231,7 +231,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		debugLog("renderToolbarFromSettings: ", toolbar);
 
 		/* create the unordered list of menu items */
-		let noteToolbarUl = document.createElement("ul");
+		let noteToolbarUl = activeDocument.createElement("ul");
 		noteToolbarUl.setAttribute("role", "menu");
 
 		toolbar.items.filter((item: ToolbarItemSettings) => {
@@ -242,7 +242,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}).map((item: ToolbarItemSettings) => {
 
 			// changed to span as temporary(?) fix (#19) for links on Android
-			let toolbarItem = document.createElement('span');
+			let toolbarItem = activeDocument.createElement('span');
 			toolbarItem.className = "external-link";
 			toolbarItem.setAttribute("href", item.link);
 			toolbarItem.setAttribute("role", "link");
@@ -269,7 +269,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				setIcon(toolbarItem, item.icon);
 			}
 
-			let noteToolbarLi = document.createElement("li");
+			let noteToolbarLi = activeDocument.createElement("li");
 			const [hideOnDesktop, hideOnMobile] = calcItemVisToggles(item.contexts[0].platform);
 			hideOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
 			hideOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
@@ -278,20 +278,20 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarUl.appendChild(noteToolbarLi);
 		});		
 
-		let noteToolbarCalloutContent = document.createElement("div");
+		let noteToolbarCalloutContent = activeDocument.createElement("div");
 		noteToolbarCalloutContent.className = "callout-content";
 		noteToolbarCalloutContent.append(noteToolbarUl);
 
-		let noteToolbarCallout = document.createElement("div");
+		let noteToolbarCallout = activeDocument.createElement("div");
 		noteToolbarCallout.className = "callout cg-note-toolbar-callout";
 		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
 		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 		noteToolbarCallout.append(noteToolbarCalloutContent);
 
 		/* workaround to emulate callout-in-content structure, to use same sticky css */
-		let div = document.createElement("div");
+		let div = activeDocument.createElement("div");
 		div.append(noteToolbarCallout);
-		let embedBlock = document.createElement("div");
+		let embedBlock = activeDocument.createElement("div");
 		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
 		embedBlock.setAttribute("data-name", toolbar.name);
 		embedBlock.setAttribute("data-updated", toolbar.updated);
@@ -306,7 +306,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
 				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
-				// let viewHeader = document.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
+				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
 				viewHeader 
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
 					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
@@ -421,7 +421,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const visibleItems = items.filter(item => {
 				return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
 			});
-			let currentIndex = visibleItems.indexOf(document.activeElement?.parentElement as HTMLElement);
+			let currentIndex = visibleItems.indexOf(activeDocument.activeElement?.parentElement as HTMLElement);
 
 			// only use preventDefault within these cases, as we want to allow for tabbing out of the toolbar
 			switch (e.key) {
@@ -437,14 +437,14 @@ export default class NoteToolbarPlugin extends Plugin {
 					break;
 				case 'Enter':
 				case ' ':
-					(document?.activeElement as HTMLElement).click();
+					(activeDocument?.activeElement as HTMLElement).click();
 					break;
 				case 'Escape':
 					// need this implemented for Reading mode, as escape does nothing
 					let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 					let viewMode = currentView?.getMode();
 					if (viewMode === 'preview') {
-						(document?.activeElement as HTMLElement).blur();
+						(activeDocument?.activeElement as HTMLElement).blur();
 					}
 					break;
 			}
@@ -612,11 +612,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	private getPropsEl(): HTMLElement | null {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		// TODO: remove; leaving here until rendering issues are fully sorted
-		// let propertiesContainer = document.querySelector('.workspace-tab-container > .mod-active .metadata-container');
+		// let propertiesContainer = activeDocument.querySelector('.workspace-tab-container > .mod-active .metadata-container');
 		// let propertiesContainer = this.app.workspace.activeEditor?.contentEl.querySelector('.metadata-container');
 		// let propertiesContainer = currentView?.contentEl.querySelector('.metadata-container');
 		// let propertiesContainer = this.app.workspace.containerEl.querySelector('.cm-editor > .metadata-container');
-		let propertiesContainer = document.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
+		let propertiesContainer = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
 		debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
 		return propertiesContainer;
 	}
@@ -627,7 +627,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	private getToolbarEl(): HTMLElement | null {
-		let existingToolbarEl = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
+		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
 		debugLog("getToolbarEl: ", existingToolbarEl);
 		return existingToolbarEl;
 	}
@@ -637,7 +637,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	private getToolbarListEl(): HTMLElement | null {
-		let itemsUl = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
+		let itemsUl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
 		return itemsUl;
 	}
 
@@ -649,7 +649,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Remove the toolbar on the active file.
 	 */
 	async removeActiveToolbar(): Promise<void> {
-		let existingToolbar = document.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
+		let existingToolbar = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
 		existingToolbar?.remove();
 	}
 
@@ -657,7 +657,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Remove any toolbars in all open files.
 	 */
 	async removeAllToolbars(): Promise<void> {
-		let existingToolbars = document.querySelectorAll('.cg-note-toolbar-container');
+		let existingToolbars = activeDocument.querySelectorAll('.cg-note-toolbar-container');
 		existingToolbars.forEach((toolbar) => {
 			toolbar.remove();
 		});
