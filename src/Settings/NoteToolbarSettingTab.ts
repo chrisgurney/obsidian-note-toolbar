@@ -152,7 +152,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Property")
-			.setDesc("If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings.")
+			.setDesc("If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings. Set to 'none' to hide the toolbar.")
 			.addText(text => text
 				.setPlaceholder('Property')
 				.setValue(this.plugin.settings.toolbarProp)
