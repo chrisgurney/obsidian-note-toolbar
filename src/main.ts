@@ -477,7 +477,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (linkHasVars) {
 				let activeFile = this.app.workspace.getActiveFile();
 				// only replace vars in URIs; might consider other substitution in future
-				href = this.replaceVars(href, activeFile, linkType === "uri");
+				href = this.replaceVars(href, activeFile, false);
 				debugLog('- uri vars replaced: ', href);
 			}
 
