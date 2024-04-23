@@ -10,6 +10,23 @@ With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisg
 
 ![Demo of a sticky toolbar](./docs/note_toolbar_demo.gif)
 
+# Features
+
+Here is a list of key features of the Note Toolbar plugin. For the latest additions, see the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
+
+- [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to Commands, Files, and URIs/URLs
+- [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property
+  - Designed to fit cleanly in Obsidian's UI; position each toolbar below the Properties section, or at the top of notes
+  - Toolbar items can use Obsidian's built-in icons, labels (which can include emojis), or a mix of both
+  - Set optional tooltips for each item
+  - Show items specifically on mobile, desktop, or both
+- [Variables](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables) let you sub in the note's title or properties into URIs
+- [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) let you create and place toolbars anywhere within your notes
+- [Style toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars) by adding borders, sticking to the top of your note on scroll, making them look like buttons, and aligning items (left, right, centered, evenly spaced)
+  - Change or override these styles on mobile
+- [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, and to quickly access toolbar configuration 
+- [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
+
 # Installation
 
 [Click here](https://obsidian.md/plugins?id=note-toolbar) or:
@@ -57,18 +74,9 @@ If you want your toolbar to show without using a property, try mapping a folder 
 
 # Examples
 
-Toolbar items can be commands, files, or URIs (website URLs and plugin URIs). [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and examples.
+[See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and [examples](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples).
 
-Some quick examples:
-
-| Example | How? |
-| --- | --- |
-| Link to Next, Previous, and Today's Daily Note | Use the Core _Daily notes_ plugin's commands ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Daily-Notes)) |
-| Insert Template | Use [Templater](https://github.com/SilentVoid13/Templater)'s `Open insert template modal` command ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templates)) |
-| Show Bookmarks | Open the Bookmarks panel with the `Bookmarks: Show bookmarks` command ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Bookmarks)), OR use a [Note Toolbar Callout](#note-toolbar-callouts) and [Dataview](https://github.com/blacksmithgu/obsidian-dataview) to generate a toolbar with your bookmarks. ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Bookmarks)) |
-| Execute Shell Commands | Using the [Shell Commands](https://github.com/Taitava/obsidian-shellcommands) plugin. ([Instructions](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Shell-Commands)) |
-
-[Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) how you use your toolbars, and I'll add them to [the examples](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples)!
+[Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell) how you use your toolbars!
 
 # User Guide
 
