@@ -74,6 +74,8 @@ If you want your toolbar to show without using a property, try mapping a folder 
 
 # Examples
 
+![Example Daily Notes toolbar including Daily Notes navigation, and multiple command shortcuts](./docs/example_toolbar_daily_notes.png)
+
 [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and [examples](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples).
 
 [Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell) how you use your toolbars!
