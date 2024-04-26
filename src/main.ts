@@ -1,6 +1,6 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuItem, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuItem, Platform, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position } from './Settings/NoteToolbarSettings';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr } from './Settings/NoteToolbarSettings';
 import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
@@ -167,7 +167,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
 		if (matchingToolbar && toolbarRemoved) {
 			debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
-			this.renderToolbarFromSettings(matchingToolbar);
+			this.renderToolbar(matchingToolbar);
 		}
 		
 	}
@@ -226,7 +226,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Renders the toolbar for the provided toolbar settings.
 	 * @param toolbar ToolbarSettings
 	 */
-	async renderToolbarFromSettings(toolbar: ToolbarSettings): Promise<void> {
+	async renderToolbar(toolbar: ToolbarSettings): Promise<void> {
 
 		debugLog("renderToolbarFromSettings: ", toolbar);
 
@@ -461,9 +461,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	async toolbarClickHandler(e: MouseEvent) {
 
 		let clickedEl = e.currentTarget as HTMLLinkElement;
-		let href = clickedEl.getAttribute("href");
+		let linkHref = clickedEl.getAttribute("href");
 
-		if (href != null) {
+		if (linkHref != null) {
 			
 			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
 			linkType ? (['command', 'file', 'uri'].includes(linkType) ? e.preventDefault() : undefined) : undefined
@@ -474,60 +474,72 @@ export default class NoteToolbarPlugin extends Plugin {
 			let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
 							 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
 
-			if (linkHasVars) {
-				let activeFile = this.app.workspace.getActiveFile();
-				// only replace vars in URIs; might consider other substitution in future
-				href = this.replaceVars(href, activeFile, false);
-				debugLog('- uri vars replaced: ', href);
-			}
-
+			let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
+			
 			// remove the focus effect if clicked with a mouse
 			if ((e as PointerEvent)?.pointerType === "mouse") {
 				clickedEl.blur();
 			}
 
-			switch (linkType) {
-				case 'command':
-					let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
-					debugLog("- executeCommandById: ", linkCommandId);
-					linkCommandId ? this.app.commands.executeCommandById(linkCommandId) : undefined;
-					break;
-				case 'file':
-					// it's an internal link (note); try to open it
-					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					debugLog("- openLinkText: ", href, " from: ", activeFile);
-					this.app.workspace.openLinkText(href, activeFile);
-					break;
-				case 'uri':
-					if (isValidUri(href)) {
-						// if actually a url, just open the url
-						window.open(href, '_blank');
-					}
-					else {
-						// as fallback, treat it as internal note
-						let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-						this.app.workspace.openLinkText(href, activeFile);
-					}
-					break;
-			}
-		
-			// archiving for later
-			if (false) {
-				// if it's a js function that exists, call it without any parameters
-				// @ts-ignore
-				if (href.toLowerCase().startsWith('onclick:')) {
-					// @ts-ignore
-					let functionName = href.slice(8); // remove 'onclick:'
-					if (typeof (window as any)[functionName] === 'function') {
-						(window as any)[functionName]();
-					}
-				}
-			}
+			this.handleLink(linkHref, { commandId: linkCommandId, hasVars: linkHasVars, type: linkType } as ToolbarItemLinkAttr);
 
 		}
 
 	}
 	
+	/**
+	 * Handles the link provided.
+	 * @param linkHref What the link is for.
+	 * @param linkAttr Attributes of the link.
+	 */
+	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr) {
+
+		if (linkAttr.hasVars) {
+			let activeFile = this.app.workspace.getActiveFile();
+			// only replace vars in URIs; might consider other substitution in future
+			linkHref = this.replaceVars(linkHref, activeFile, false);
+			debugLog('- uri vars replaced: ', linkHref);
+		}
+
+		switch (linkAttr.type) {
+			case 'command':
+				debugLog("- executeCommandById: ", linkAttr.commandId);
+				linkAttr.commandId ? this.app.commands.executeCommandById(linkAttr.commandId) : undefined;
+				break;
+			case 'file':
+				// it's an internal link (note); try to open it
+				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+				debugLog("- openLinkText: ", linkHref, " from: ", activeFile);
+				this.app.workspace.openLinkText(linkHref, activeFile);
+				break;
+			case 'uri':
+				if (isValidUri(linkHref)) {
+					// if actually a url, just open the url
+					window.open(linkHref, '_blank');
+				}
+				else {
+					// as fallback, treat it as internal note
+					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+					this.app.workspace.openLinkText(linkHref, activeFile);
+				}
+				break;
+		}
+	
+		// archiving for later
+		if (false) {
+			// if it's a js function that exists, call it without any parameters
+			// @ts-ignore
+			if (href.toLowerCase().startsWith('onclick:')) {
+				// @ts-ignore
+				let functionName = href.slice(8); // remove 'onclick:'
+				if (typeof (window as any)[functionName] === 'function') {
+					(window as any)[functionName]();
+				}
+			}
+		}
+		
+	}
+
 	/**
 	 * Shows a context menu with links to settings/configuration.
 	 * @param e MouseEvent
