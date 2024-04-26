@@ -1,6 +1,6 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuItem, Platform, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuItem, Platform, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr } from './Settings/NoteToolbarSettings';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
 import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
@@ -284,9 +284,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 
 			let noteToolbarLi = activeDocument.createElement("li");
-			const [hideOnDesktop, hideOnMobile] = calcItemVisToggles(item.contexts[0].platform);
-			hideOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
-			hideOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
+			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+			!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
+			!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 			noteToolbarLi.append(toolbarItem);
 
 			noteToolbarUl.appendChild(noteToolbarLi);
@@ -347,8 +347,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let menu = new Menu();
 		toolbar.items.forEach((toolbarItem, index) => {
-			const [hideOnDesktop, hideOnMobile] = calcItemVisToggles(toolbarItem.contexts[0].platform);
-			if (!hideOnMobile) {
+			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
+			if (showOnMobile) {
 				menu.addItem((item) => {
 					item
 						.setIcon(toolbarItem.icon ? toolbarItem.icon : null)
@@ -360,6 +360,19 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 			}
 		});
+
+		// temporary? shortcut to edit this toolbar
+		menu.addSeparator();
+		menu.addItem((item) => {
+			item
+				  .setTitle("Edit " + toolbar.name + "...")
+				  .setIcon("lucide-pen-box")
+				  .onClick((menuEvent) => {
+					const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
+					modal.setTitle("Edit Toolbar: " + toolbar.name);
+					modal.open();
+				  });
+			  });
 
 		return menu;
 
@@ -892,6 +905,52 @@ export default class NoteToolbarPlugin extends Plugin {
 							view: 'all'
 						}]
 					}]
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: 
+			if (old_version === 20240416.1) {
+				new_version = 20240426.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						this.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+							this.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
+							switch (ctx.platform) {
+								case 'desktop':
+									this.settings.toolbars[index].items[item_index].visibility.desktop = {
+										allViews: {	components: ['icon', 'label'] }
+									}
+									break;
+								case 'mobile':
+									this.settings.toolbars[index].items[item_index].visibility.mobile = {
+										allViews: {	components: ['icon', 'label'] }
+									}
+									this.settings.toolbars[index].items[item_index].visibility.tablet = {
+										allViews: {	components: ['icon', 'label'] }
+									}
+									break;
+								case 'all':
+									this.settings.toolbars[index].items[item_index].visibility.desktop = {
+										allViews: {	components: ['icon', 'label'] }
+									}
+									this.settings.toolbars[index].items[item_index].visibility.mobile = {
+										allViews: {	components: ['icon', 'label'] }
+									}
+									this.settings.toolbars[index].items[item_index].visibility.tablet = {
+										allViews: {	components: ['icon', 'label'] }
+									}
+									break;						
+								case 'none':
+								default:
+									break;
+							}
+							// TODO: remove old contexts property
+							// delete this.settings.toolbars[index].items[item_index].contexts;
+						});
+					});
 				});
 				// for the next migration to run
 				old_version = new_version;

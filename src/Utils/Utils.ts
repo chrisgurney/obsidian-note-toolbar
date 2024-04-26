@@ -1,4 +1,4 @@
-import { PlatformType } from "src/Settings/NoteToolbarSettings";
+import { ComponentType, ItemViewContext, PlatformType, ViewType, Visibility } from "src/Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -41,20 +41,50 @@ export function calcItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolea
 /**
  * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
  * toggle values are the opposite of the Platform values.
- * @param platform PlatformOptions
- * @returns booleans corresponding with hideOnDesktop, hideOnMobile
+ * @param Visibility
+ * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
  */
-export function calcItemVisToggles(platform: PlatformType): [boolean, boolean] {
-	// returns [hideOnDesktop, hideOnMobile]
-	switch (platform) {
-		case 'all':
-			return [false, false];
-		case 'desktop':
-			return [false, true];
-		case 'mobile':
-			return [true, false];
-		case 'none':
-			return [true, true];
+export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
+    const desktopHasComponents = hasComponents(visibility.desktop);
+    const mobileHasComponents = hasComponents(visibility.mobile);
+    const tabletHasComponents = hasComponents(visibility.tablet);
+    return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
+}
+
+/**
+ * Local function to check if given visibility has components or not, for use in determining whether or not 
+ * we should show it on a given platform.
+ * @param platform platform visibility to check
+ * @returns true if it has components; false otherwise
+ */
+function hasComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
+    return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
+}
+
+/**
+ * Removes the given component from the given visibility prop.
+ * @param platform platform visibility to remove from
+ * @param component component to remove
+ */
+export function removeComponentVisibility(platform: { allViews?: { components: ComponentType[] }}, component: ComponentType) {
+	if (platform && platform.allViews) {
+        const index = platform.allViews.components.indexOf(component);
+        if (index !== -1) {
+            platform.allViews.components.splice(index, 1);
+        }
+    }
+}
+
+/**
+ * Adds the given component to the given visibility prop.
+ * @param platform platform visibility to add to
+ * @param component component to add
+ */
+export function addComponentVisibility(platform: { allViews?: { components: ComponentType[] }}, component: ComponentType) {
+	if (platform && platform.allViews) {
+		if (!platform.allViews.components.includes(component)) {
+			platform.allViews.components.push(component);
+		}
 	}
 }
 
@@ -77,6 +107,19 @@ export function emptyMessageFr(message: string): DocumentFragment {
 	messageFrText.textContent = message;
 	messageFr.append(messageFrText);
 	return messageFr;
+}
+
+/**
+ * Gets the position of the given element. Should probably use only if not available otherwise.
+ * @param element to get position of
+ * @returns x, y position
+ */
+export function getPosition(element: HTMLElement): { x: number, y: number } {
+    const rect = element.getBoundingClientRect();
+    return {
+        x: rect.left + activeWindow.scrollX,
+        y: rect.top + activeWindow.scrollY
+    };
 }
 
 /**

@@ -650,6 +650,9 @@ body {
     justify-content: flex-end;
     & .setting-item {
         border-bottom: none !important;
+        &:first-child {
+            padding: inherit;
+        }
     }
 }
 

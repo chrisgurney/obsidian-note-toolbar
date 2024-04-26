@@ -1,5 +1,5 @@
 /* remember to update when settings structure changes */
-export const SETTINGS_VERSION = 20240416.1;
+export const SETTINGS_VERSION = 20240426.1;
 
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
@@ -44,8 +44,32 @@ export interface ViewContext {
 	view: ViewType;
 }
 
-export type PlatformType = 'all' | 'desktop' | 'mobile' | 'none';
+export interface Visibility {
+	desktop: {
+		allViews?: { components: ComponentType[] }
+		editingView?: { components: ComponentType[] },
+		readingView?: { components: ComponentType[] }
+	},
+	tablet: {
+		allViews?: { components: ComponentType[] }
+		editingView?: { components: ComponentType[] },
+		readingView?: { components: ComponentType[] }
+	},
+	mobile: {
+		allViews?: { components: ComponentType[] }
+		editingView?: { components: ComponentType[] },
+		readingView?: { components: ComponentType[] }
+	}
+}
+
+export interface ItemViewContext extends ViewContext {
+	component: ComponentType;
+}
+
+export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
+export type PositionType = 'props' | 'top';
 export type ViewType = 'all' | 'preview' | 'source';
+export type ComponentType = 'icon' | 'label';
 
 export interface FolderMapping {
 	folder: string;
@@ -53,12 +77,16 @@ export interface FolderMapping {
 }
 
 export interface ToolbarItemSettings {
-	contexts: ViewContext[];
+	/**
+	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration)
+	 */
+	contexts?: ViewContext[];
 	icon: string;
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
 	tooltip: string;
+	visibility: Visibility;
 }
 
 /**

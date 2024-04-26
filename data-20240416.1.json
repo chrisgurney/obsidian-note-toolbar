@@ -1,0 +1,1100 @@
+{
+  "folderMappings": [
+    {
+      "folder": "Calendar/Notes",
+      "toolbar": "Daily Notes"
+    },
+    {
+      "folder": "Daily Notes",
+      "toolbar": "Daily Notes"
+    },
+    {
+      "folder": "",
+      "toolbar": "Global Nav"
+    }
+  ],
+  "toolbarProp": "notetoolbar",
+  "toolbars": [
+    {
+      "name": "asdf2",
+      "updated": "2024-04-19T12:37:11.344Z",
+      "items": [
+        {
+          "label": "Welcome",
+          "icon": "lucide-home",
+          "link": "Welcome.md",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-pin",
+          "link": "Toggle pin",
+          "linkAttr": {
+            "commandId": "workspace:toggle-pin",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "initCommandIds": [
+        "note-toolbar:focus"
+      ],
+      "items": [
+        {
+          "label": "Toggle Pin",
+          "icon": "lucide-pin",
+          "link": "Toggle pin",
+          "linkAttr": {
+            "commandId": "workspace:toggle-pin",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Toggle properties",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-keyboard",
+          "link": "Note Toolbar: Focus",
+          "linkAttr": {
+            "commandId": "note-toolbar:focus",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Focus",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Up",
+          "icon": "lucide-arrow-up-left",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "mobileStyles": [],
+      "name": "Command Test",
+      "updated": "2024-04-26T02:22:36.095Z",
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Daily Notes",
+      "updated": "2024-04-26T02:28:59.975Z",
+      "items": [
+        {
+          "label": "",
+          "tooltip": "Previous daily note",
+          "icon": "lucide-arrow-left",
+          "link": "Daily notes: Open previous daily note",
+          "linkAttr": {
+            "commandId": "daily-notes:goto-prev",
+            "hasVars": false,
+            "type": "command"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "tooltip": "Next daily note",
+          "icon": "lucide-arrow-right",
+          "link": "Daily notes: Open next daily note",
+          "linkAttr": {
+            "commandId": "daily-notes:goto-next",
+            "hasVars": false,
+            "type": "command"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "tooltip": "Today's daily note",
+          "icon": "lucide-calendar",
+          "link": "obsidian://advanced-uri?vault=Test&commandid=daily-notes",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Focus",
+          "tooltip": "Insert tasks to focus on",
+          "icon": "lucide-check-square",
+          "link": "obsidian://shell-commands/?vault=Test&execute=jttqryu9sd",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "tooltip": "Open Todo",
+          "icon": "lucide-list-todo",
+          "link": "things:///show?id=today",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "✪ Events",
+          "tooltip": "Insert today's events",
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Test&execute=r0qcncyump&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "tooltip": "Choose template to insert",
+          "icon": "lucide-chevron-right-square",
+          "link": "Templates: Insert template",
+          "linkAttr": {
+            "commandId": "insert-template",
+            "hasVars": false,
+            "type": "command"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "tooltip": "What to do if I'm blocked",
+          "icon": "question-mark-glyph",
+          "link": "Welcome.md",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "tooltip": "Insert items done on this day",
+          "icon": "lucide-badge-check",
+          "link": "obsidian://shell-commands/?vault=Design&execute=um5sony1zn&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "tooltip": "Insert Git activity for this day",
+          "icon": "lucide-git-commit-vertical",
+          "link": "obsidian://shell-commands/?vault=Design&execute=41451u5h99&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-arrow-up-left",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "tooltip": "Up",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Daily Notes Nav",
+      "updated": "2024-03-29T10:37:28.087Z",
+      "items": [
+        {
+          "label": "←",
+          "tooltip": "",
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-prev",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "📅 Today",
+          "tooltip": "",
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=daily-notes",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "🏡 Home",
+          "tooltip": "",
+          "icon": "",
+          "link": "Home 🏡",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "⭐️ Bookmarks",
+          "tooltip": "",
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=bookmarks%253Aopen",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "→",
+          "tooltip": "",
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=daily-notes%253Agoto-next",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "border",
+        "right"
+      ],
+      "mobileStyles": [
+        "mnbrder",
+        "mnstcky"
+      ],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Efforts Nav",
+      "updated": "2024-03-29T10:53:58.493Z",
+      "items": [
+        {
+          "label": "↖ Up",
+          "tooltip": "",
+          "icon": "",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "file"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Project Tasks",
+          "tooltip": "Get tasks for this project from Things",
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Design&execute=2zjvxvte3q&_task_project={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "+ Deliverable",
+          "tooltip": "",
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Areplace-in-file-templater",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "sticky",
+        "right"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "items": [
+        {
+          "label": "Up",
+          "icon": "",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "file"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "mobileStyles": [],
+      "name": "File Prop Test",
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "updated": "2024-04-19T13:25:28.751Z"
+    },
+    {
+      "name": "Global Nav",
+      "updated": "2024-04-26T14:18:26.652Z",
+      "items": [
+        {
+          "label": "Up",
+          "tooltip": "",
+          "icon": "lucide-arrow-up-left",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "file"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Banner Test",
+          "tooltip": "",
+          "icon": "",
+          "link": "Banners Conflict Test.md",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Today",
+          "tooltip": "",
+          "icon": "lucide-calendar",
+          "link": "Daily notes: Open today's daily note",
+          "linkAttr": {
+            "commandId": "daily-notes",
+            "hasVars": false,
+            "type": "command"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Hide on Mobile",
+          "icon": "lucide-smartphone",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Hide on Desktop",
+          "icon": "lucide-monitor",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all",
+              "component": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "right",
+        "sticky"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Home",
+      "updated": "2024-04-20T14:10:29.013Z",
+      "items": [
+        {
+          "label": "Today",
+          "tooltip": "",
+          "icon": "lucide-calendar",
+          "link": "Daily notes: Open today's daily note",
+          "linkAttr": {
+            "commandId": "daily-notes",
+            "hasVars": false,
+            "type": "command"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Bookmarks",
+          "tooltip": "",
+          "icon": "lucide-bookmark",
+          "link": "Bookmarks: Show bookmarks",
+          "linkAttr": {
+            "commandId": "bookmarks:open",
+            "hasVars": false,
+            "type": "command"
+          },
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Properties",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Toggle properties",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-share",
+          "link": "Copy Obsidian URL",
+          "linkAttr": {
+            "commandId": "workspace:copy-url",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Copy Obsidian URL",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "button",
+        "left"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Icon Test",
+      "updated": "2024-04-10T12:07:50.226Z",
+      "items": [
+        {
+          "label": "Access",
+          "icon": "lucide-alarm-minus",
+          "link": "Welcome",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "Access this",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Pin Note",
+          "icon": "lucide-pin",
+          "link": "Toggle pin",
+          "linkAttr": {
+            "commandId": "workspace:toggle-pin",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Pin",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-alert-circle",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Nothing!",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "Last Item",
+          "icon": "lucide-activity",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Does nothing",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "button"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tools",
+      "updated": "2024-04-05T12:44:53.755Z",
+      "items": [
+        {
+          "label": "",
+          "icon": "lucide-alarm-clock",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-alert-circle",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-air-vent",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "toptest",
+      "updated": "2024-04-21T02:48:00.176Z",
+      "items": [
+        {
+          "label": "mobile hidden",
+          "icon": "",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "desktop hidden",
+          "icon": "",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "both hidden",
+          "icon": "",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "none",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "border",
+        "sticky",
+        "even"
+      ],
+      "mobileStyles": [],
+      "positions": [
+        {
+          "position": "top",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "defaultStyles": [
+        "border",
+        "even",
+        "sticky"
+      ],
+      "items": [
+        {
+          "label": "",
+          "icon": "lucide-globe",
+          "link": "{{prop_url}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "mobileStyles": [],
+      "name": "Var Test",
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "updated": "2024-04-23T00:37:41.813Z"
+    }
+  ],
+  "version": 20240416.1
+}

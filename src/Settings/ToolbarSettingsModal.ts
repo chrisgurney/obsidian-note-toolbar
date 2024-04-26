@@ -1,7 +1,7 @@
-import { App, ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
-import { arraymove, calcItemVisPlatform, calcItemVisToggles, debugLog, emptyMessageFr, hasVars } from 'src/Utils/Utils';
+import { App, ButtonComponent, Menu, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
+import { arraymove, calcItemVisPlatform, calcItemVisToggles, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
@@ -148,11 +148,6 @@ export default class ToolbarSettingsModal extends Modal {
 			command: Setting;
 			file: Setting;
 			uri: Setting;
-		}[] = [];
-
-		let itemVisToggles: {
-			hideOnDesktop: boolean;
-			hideOnMobile: boolean;
 		}[] = [];
 
 		this.toolbar.items.forEach(
@@ -391,48 +386,91 @@ export default class ToolbarSettingsModal extends Modal {
 				// Toggles
 				// 
 
-				const [hideOnDesktopValue, hideOnMobileValue] = calcItemVisToggles(toolbarItem.contexts[0].platform);
-				itemVisToggles.push({
-					hideOnDesktop: hideOnDesktopValue,
-					hideOnMobile: hideOnMobileValue
-				});
+				let visibilityContainer = this.containerEl.createDiv();
+				visibilityContainer.className = "note-toolbar-setting-item-toggles-container";
 
-				let togglesContainer = this.containerEl.createDiv();
-				togglesContainer.className = "note-toolbar-setting-item-toggles-container";
-				const s2 = new Setting(togglesContainer)
+				const p1 = new Setting(visibilityContainer)
 					.setClass("note-toolbar-setting-item-toggle")
-					.setName("Hide on: mobile")
-					.addToggle((toggle) => {
-						toggle
-							.setTooltip(('If enabled, this item will not appear on mobile'))
-							.setValue(itemVisToggles[index].hideOnMobile)
-							.onChange(async (hideOnMobile) => {
-								itemVisToggles[index].hideOnMobile = hideOnMobile;
-								toolbarItem.contexts = [{
-									platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
-									view: 'all'}];
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
+					.addExtraButton((cb) => {
+						cb.setIcon("monitor")
+							.setTooltip("Desktop visibility")
+							.onClick(async () => {
+								// create the setting if it doesn't exist or was removed
+								toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
+								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
+								visibilityMenu.showAtPosition(getPosition(cb.extraSettingsEl));
+							});
+						});
+				let desktopStateLabel = this.containerEl.createDiv('setting-item-name');
+				// TODO: show current state next to each icon
+				// desktopStateLabel.setText(itemVisToggles[index].hideOnDesktop ? 'Hidden' : '');
+				p1.settingEl.append(desktopStateLabel);
+
+				// TODO: implement tablet settings
+				// const p2 = new Setting(togglesContainer)
+				// 	.setClass("note-toolbar-setting-item-toggle")
+				// 	.addExtraButton((cb) => {
+				// 		cb.setIcon("tablet")
+				// 			.setTooltip("Tablet")
+				// 			.onClick(async () => {
+
+				// 			})
+				// 	});
+
+				const p3 = new Setting(visibilityContainer)
+					.setClass("note-toolbar-setting-item-toggle")
+					.addExtraButton((cb) => {
+						cb.setIcon("smartphone")
+							.setTooltip("Mobile visibility")
+							.onClick(async () => {
+								// create the setting if it doesn't exist or was removed
+								toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
+								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile');
+								visibilityMenu.showAtPosition(getPosition(cb.extraSettingsEl));
 							});
 					});
-				const s3 = new Setting(togglesContainer)
-					.setClass("note-toolbar-setting-item-toggle")
-					.setName("desktop")
-					.addToggle((toggle) => {
-						toggle
-							.setTooltip(('If enabled, this item will not appear on desktop'))
-							.setValue(itemVisToggles[index].hideOnDesktop)
-							.onChange(async (hideOnDesktop) => {
-								itemVisToggles[index].hideOnDesktop = hideOnDesktop;
-								toolbarItem.contexts = [{
-									platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
-									view: 'all'}];
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-							});
-					});
-				itemDiv.appendChild(togglesContainer);
+				let mobileStateLabel = this.containerEl.createDiv('setting-item-name');
+				// TODO: show current state next to each icon
+				// mobileStateLabel.setText(itemVisToggles[index].hideOnMobile ? 'Hidden' : '');
+				p3.settingEl.append(mobileStateLabel);
+
+				itemDiv.appendChild(visibilityContainer);
 				settingsDiv.appendChild(itemDiv);
+	
+				// TODO: remove once done with referencing
+				// const s2 = new Setting(togglesContainer)
+				// 	.setClass("note-toolbar-setting-item-toggle")
+				// 	.setName("Hide on: mobile")
+				// 	.addToggle((toggle) => {
+				// 		toggle
+				// 			.setTooltip(('If enabled, this item will not appear on mobile'))
+				// 			.setValue(itemVisToggles[index].hideOnMobile)
+				// 			.onChange(async (hideOnMobile) => {
+				// 				itemVisToggles[index].hideOnMobile = hideOnMobile;
+				// 				toolbarItem.contexts = [{
+				// 					platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
+				// 					view: 'all'}];
+				// 				this.toolbar.updated = new Date().toISOString();
+				// 				await this.plugin.saveSettings();
+				// 			});
+				// 	});
+				// const s3 = new Setting(togglesContainer)
+				// 	.setClass("note-toolbar-setting-item-toggle")
+				// 	.setName("desktop")
+				// 	.addToggle((toggle) => {
+				// 		toggle
+				// 			.setTooltip(('If enabled, this item will not appear on desktop'))
+				// 			.setValue(itemVisToggles[index].hideOnDesktop)
+				// 			.onChange(async (hideOnDesktop) => {
+				// 				itemVisToggles[index].hideOnDesktop = hideOnDesktop;
+				// 				toolbarItem.contexts = [{
+				// 					platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
+				// 					view: 'all'}];
+				// 				this.toolbar.updated = new Date().toISOString();
+				// 				await this.plugin.saveSettings();
+				// 			});
+				// 	});
+
 			});
 
 		//
@@ -457,13 +495,71 @@ export default class ToolbarSettingsModal extends Modal {
 								type: this.toolbar.items.last()?.linkAttr.type ?? "uri"
 							},
 							tooltip: "",
-							contexts: [{platform: 'all', view: 'all'}],
+							visibility: {
+								desktop: { allViews: { components: ['icon', 'label'] } },
+								mobile: { allViews: { components: ['icon', 'label'] } },
+								tablet: { allViews: { components: ['icon', 'label'] } },
+							},
 						});
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
 						this.display(true);
 					});
 			});
+
+	}
+
+	/**
+	 * 
+	 */
+	getItemVisibilityMenu(platform: any, platformName: string): Menu {
+
+		let isComponentVisible = {
+			icon: (platform && platform.allViews) ? platform.allViews.components.includes('icon') : false,
+			label: (platform && platform.allViews) ? platform.allViews.components.includes('label') : false,
+		};
+
+		let menu = new Menu();
+		menu.addItem((menuItem) => {
+			menuItem
+				.setTitle(isComponentVisible.icon ? 
+					'Icon showing on ' + platformName : 'Icon hidden on ' + platformName)
+				.setIcon("image")
+				.setChecked(isComponentVisible.icon)
+				.onClick(async (menuEvent) => {
+					if (isComponentVisible.icon) {
+						removeComponentVisibility(platform, 'icon');
+						isComponentVisible.icon = false;
+					}
+					else {
+						addComponentVisibility(platform, 'icon');
+						isComponentVisible.icon = true;
+					}
+					this.toolbar.updated = new Date().toISOString();
+					await this.plugin.saveSettings();
+				});
+		});
+		menu.addItem((menuItem) => {
+			menuItem
+				.setTitle(isComponentVisible.label ? 
+					'Label showing on ' + platformName : 'Label hidden on ' + platformName)
+				.setIcon("whole-word")
+				.setChecked(isComponentVisible.label)
+				.onClick(async (menuEvent) => {
+					if (isComponentVisible.label) {
+						removeComponentVisibility(platform, 'label');
+						isComponentVisible.label = false;
+					}
+					else {
+						addComponentVisibility(platform, 'label');
+						isComponentVisible.label = true;
+					}
+					this.toolbar.updated = new Date().toISOString();
+					await this.plugin.saveSettings();
+				});
+		});
+
+		return menu;
 
 	}
 
