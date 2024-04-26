@@ -27,6 +27,20 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
 		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
 
+		if (Platform.isMobile) {
+			debugLog('isMobile');
+			this.addRibbonIcon('hammer', 'Note Toolbar', (event) => {
+				let activeFile = this.app.workspace.getActiveFile();
+				if (activeFile) {
+					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
+					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
+					if (toolbar) {
+						this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
+					}
+				}
+			});
+		}
+
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
 		// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
@@ -321,6 +335,33 @@ export default class NoteToolbarPlugin extends Plugin {
 				propsEl?.insertAdjacentElement("afterend", embedBlock);
 				break;
 		}
+
+	}
+
+	/**
+	 * Renders the given toolbar as a menu and returns it.
+	 * @param toolbar 
+	 * @returns Menu with toolbar's items
+	 */
+	async renderToolbarAsMenu(toolbar: ToolbarSettings): Promise<Menu> {
+
+		let menu = new Menu();
+		toolbar.items.forEach((toolbarItem, index) => {
+			const [hideOnDesktop, hideOnMobile] = calcItemVisToggles(toolbarItem.contexts[0].platform);
+			if (!hideOnMobile) {
+				menu.addItem((item) => {
+					item
+						.setIcon(toolbarItem.icon ? toolbarItem.icon : null)
+						.setTitle(toolbarItem.label)
+						.onClick((menuEvent) => {
+							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
+							this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
+						});
+					});
+			}
+		});
+
+		return menu;
 
 	}
 
