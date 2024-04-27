@@ -73,9 +73,9 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
  * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
  */
 export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
-    const desktopHasComponents = hasAnyComponents(visibility.desktop);
-    const mobileHasComponents = hasAnyComponents(visibility.mobile);
-    const tabletHasComponents = hasAnyComponents(visibility.tablet);
+    const desktopHasComponents = hasVisibleComponents(visibility.desktop);
+    const mobileHasComponents = hasVisibleComponents(visibility.mobile);
+    const tabletHasComponents = hasVisibleComponents(visibility.tablet);
     return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
 }
 
@@ -85,7 +85,7 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
  * @param platform platform visibility to check
  * @returns true if it has components; false otherwise
  */
-function hasAnyComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
+function hasVisibleComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
     return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
 }
 
