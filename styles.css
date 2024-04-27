@@ -780,19 +780,28 @@ body {
 
 .note-toolbar-setting-item-toggle {
     border-top: none !important;
-    padding: 0.75em 0 0.75em 0 !important;
-    &:not(:first-child) {
-        padding-left: 1em !important;
-    }
     .is-mobile & {
         padding-bottom: 0em !important;
     }
     & .setting-item-info {
-        margin-right: 0.5em;
+        margin-right: 0em;
     }
-    & .setting-item-name {
-        color: var(--text-muted);
-        font-size: var(--font-ui-smaller);
+    & .setting-item-control button {
+        background: none;
+        box-shadow: none;
+        color: var(--icon-color);
+        gap: 0.5em;
+        padding: var(--size-2-2);
+        &:hover {
+            opacity: var(--icon-opacity-hover);
+            color: var(--icon-color-hover);
+            background-color: var(--background-modifier-hover);
+        }
+        &:focus {
+            border-radius: var(--input-radius);
+            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
     }
 }
 

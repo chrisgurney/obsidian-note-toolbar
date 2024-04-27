@@ -1,5 +1,5 @@
-import { App, ButtonComponent, Menu, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
-import { arraymove, calcItemVisPlatform, calcItemVisToggles, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility } from 'src/Utils/Utils';
+import { App, ButtonComponent, Menu, Modal, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
+import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
@@ -391,33 +391,43 @@ export default class ToolbarSettingsModal extends Modal {
 
 				const p1 = new Setting(visibilityContainer)
 					.setClass("note-toolbar-setting-item-toggle")
-					.addExtraButton((cb) => {
-						cb.setIcon("monitor")
-							.setTooltip("Set desktop visibility")
+					.addButton((cb) => {
+						let btnIcon = cb.buttonEl.createSpan();
+						setIcon(btnIcon, 'monitor');
+						let state = this.getPlatformStateLabel(toolbarItem.visibility.desktop);
+						if (state) {
+							let btnLabel = cb.buttonEl.createSpan();
+							btnLabel.setText(state);
+						}
+						cb.setTooltip('Set desktop visibility')
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
 								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
-								visibilityMenu.showAtPosition(getPosition(cb.extraSettingsEl));
+								visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 							});
-						})
-					.settingEl.append(this.getPlatformStateLabel(toolbarItem.visibility.desktop));
+					});
 
 				// TODO: implement tablet settings
 
 				const p3 = new Setting(visibilityContainer)
 					.setClass("note-toolbar-setting-item-toggle")
-					.addExtraButton((cb) => {
-						cb.setIcon("smartphone")
-							.setTooltip("Set mobile visibility")
+					.addButton((cb) => {
+						let btnIcon = cb.buttonEl.createSpan();
+						setIcon(btnIcon, 'smartphone');
+						let state = this.getPlatformStateLabel(toolbarItem.visibility.mobile);
+						if (state) {
+							let btnLabel = cb.buttonEl.createSpan();
+							btnLabel.setText(state);
+						}
+						cb.setTooltip('Set mobile visibility')
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
 								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile');
-								visibilityMenu.showAtPosition(getPosition(cb.extraSettingsEl));
+								visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 							});
-					})
-					.settingEl.append(this.getPlatformStateLabel(toolbarItem.visibility.mobile));
+					});
 
 				itemDiv.appendChild(visibilityContainer);
 				settingsDiv.appendChild(itemDiv);
@@ -519,20 +529,19 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * 
 	 */
-	getPlatformStateLabel(platform: any): HTMLElement {
+	getPlatformStateLabel(platform: any): string {
 
-		let desktopStateLabel = this.containerEl.createDiv('setting-item-name');
 		let dkComponents = platform.allViews?.components;
 		if (dkComponents) {
 			if (dkComponents.length === 2) {
-				// show nothing
+				return '';
 			} else if (dkComponents.length === 1) {
-				desktopStateLabel.setText(dkComponents[0]);
+				return dkComponents[0];
 			} else {
-				desktopStateLabel.setText('hidden');
+				return 'hidden';
 			}
 		}
-		return desktopStateLabel;
+		return '';
 
 	}
 
