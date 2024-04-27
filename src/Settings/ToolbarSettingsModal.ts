@@ -383,7 +383,7 @@ export default class ToolbarSettingsModal extends Modal {
 				itemDiv.appendChild(itemTopContainer);
 
 				//
-				// Toggles
+				// Visibility
 				// 
 
 				let visibilityContainer = this.containerEl.createDiv();
@@ -422,40 +422,6 @@ export default class ToolbarSettingsModal extends Modal {
 				itemDiv.appendChild(visibilityContainer);
 				settingsDiv.appendChild(itemDiv);
 	
-				// TODO: remove once done with referencing
-				// const s2 = new Setting(togglesContainer)
-				// 	.setClass("note-toolbar-setting-item-toggle")
-				// 	.setName("Hide on: mobile")
-				// 	.addToggle((toggle) => {
-				// 		toggle
-				// 			.setTooltip(('If enabled, this item will not appear on mobile'))
-				// 			.setValue(itemVisToggles[index].hideOnMobile)
-				// 			.onChange(async (hideOnMobile) => {
-				// 				itemVisToggles[index].hideOnMobile = hideOnMobile;
-				// 				toolbarItem.contexts = [{
-				// 					platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
-				// 					view: 'all'}];
-				// 				this.toolbar.updated = new Date().toISOString();
-				// 				await this.plugin.saveSettings();
-				// 			});
-				// 	});
-				// const s3 = new Setting(togglesContainer)
-				// 	.setClass("note-toolbar-setting-item-toggle")
-				// 	.setName("desktop")
-				// 	.addToggle((toggle) => {
-				// 		toggle
-				// 			.setTooltip(('If enabled, this item will not appear on desktop'))
-				// 			.setValue(itemVisToggles[index].hideOnDesktop)
-				// 			.onChange(async (hideOnDesktop) => {
-				// 				itemVisToggles[index].hideOnDesktop = hideOnDesktop;
-				// 				toolbarItem.contexts = [{
-				// 					platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
-				// 					view: 'all'}];
-				// 				this.toolbar.updated = new Date().toISOString();
-				// 				await this.plugin.saveSettings();
-				// 			});
-				// 	});
-
 			});
 
 		//
