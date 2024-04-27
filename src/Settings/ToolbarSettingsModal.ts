@@ -400,22 +400,10 @@ export default class ToolbarSettingsModal extends Modal {
 								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
 								visibilityMenu.showAtPosition(getPosition(cb.extraSettingsEl));
 							});
-						});
-				let desktopStateLabel = this.containerEl.createDiv('setting-item-name');
-				// TODO: show current state next to each icon
-				// desktopStateLabel.setText(itemVisToggles[index].hideOnDesktop ? 'Hidden' : '');
-				p1.settingEl.append(desktopStateLabel);
+						})
+					.settingEl.append(this.getPlatformStateLabel(toolbarItem.visibility.desktop));
 
 				// TODO: implement tablet settings
-				// const p2 = new Setting(togglesContainer)
-				// 	.setClass("note-toolbar-setting-item-toggle")
-				// 	.addExtraButton((cb) => {
-				// 		cb.setIcon("tablet")
-				// 			.setTooltip("Tablet")
-				// 			.onClick(async () => {
-
-				// 			})
-				// 	});
 
 				const p3 = new Setting(visibilityContainer)
 					.setClass("note-toolbar-setting-item-toggle")
@@ -428,11 +416,8 @@ export default class ToolbarSettingsModal extends Modal {
 								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile');
 								visibilityMenu.showAtPosition(getPosition(cb.extraSettingsEl));
 							});
-					});
-				let mobileStateLabel = this.containerEl.createDiv('setting-item-name');
-				// TODO: show current state next to each icon
-				// mobileStateLabel.setText(itemVisToggles[index].hideOnMobile ? 'Hidden' : '');
-				p3.settingEl.append(mobileStateLabel);
+					})
+					.settingEl.append(this.getPlatformStateLabel(toolbarItem.visibility.mobile));
 
 				itemDiv.appendChild(visibilityContainer);
 				settingsDiv.appendChild(itemDiv);
@@ -508,7 +493,7 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -537,6 +522,7 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.saveSettings();
+					this.display();
 				});
 		});
 		menu.addItem((menuItem) => {
@@ -556,10 +542,31 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.saveSettings();
+					this.display();
 				});
 		});
 
 		return menu;
+
+	}
+
+	/**
+	 * 
+	 */
+	getPlatformStateLabel(platform: any): HTMLElement {
+
+		let desktopStateLabel = this.containerEl.createDiv('setting-item-name');
+		let dkComponents = platform.allViews?.components;
+		if (dkComponents) {
+			if (dkComponents.length === 2) {
+				// show nothing
+			} else if (dkComponents.length === 1) {
+				desktopStateLabel.setText(dkComponents[0]);
+			} else {
+				desktopStateLabel.setText('hidden');
+			}
+		}
+		return desktopStateLabel;
 
 	}
 
