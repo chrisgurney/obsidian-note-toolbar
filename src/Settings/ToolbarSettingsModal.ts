@@ -497,7 +497,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * 
 	 */
-	getItemVisibilityMenu(platform: any, platformName: string): Menu {
+	getItemVisibilityMenu(platform: any, platformLabel: string): Menu {
 
 		let isComponentVisible = {
 			icon: (platform && platform.allViews) ? platform.allViews.components.includes('icon') : false,
@@ -508,7 +508,7 @@ export default class ToolbarSettingsModal extends Modal {
 		menu.addItem((menuItem) => {
 			menuItem
 				.setTitle(isComponentVisible.icon ? 
-					'Icon showing on ' + platformName : 'Icon hidden on ' + platformName)
+					'Icon showing on ' + platformLabel : 'Icon hidden on ' + platformLabel)
 				.setIcon("image")
 				.setChecked(isComponentVisible.icon)
 				.onClick(async (menuEvent) => {
@@ -528,7 +528,7 @@ export default class ToolbarSettingsModal extends Modal {
 		menu.addItem((menuItem) => {
 			menuItem
 				.setTitle(isComponentVisible.label ? 
-					'Label showing on ' + platformName : 'Label hidden on ' + platformName)
+					'Label showing on ' + platformLabel : 'Label hidden on ' + platformLabel)
 				.setIcon("whole-word")
 				.setChecked(isComponentVisible.label)
 				.onClick(async (menuEvent) => {
