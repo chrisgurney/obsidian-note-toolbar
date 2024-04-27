@@ -272,27 +272,20 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (item.label) {
 				if (item.icon) {
 					let itemIcon = toolbarItem.createSpan();
-					!dkHasIcon ? itemIcon.addClass('hide-on-desktop') : undefined;
-					!mbHasIcon ? itemIcon.addClass('hide-on-mobile') : undefined;
-					// !tabHasIcon ? itemIcon.addClass('hide-on-tablet') : undefined;
+					this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
 					setIcon(itemIcon, item.icon);
+
 					let itemLabel = toolbarItem.createSpan();
-					!dkHasLabel ? itemLabel.addClass('hide-on-desktop') : undefined;
-					!mbHasLabel ? itemLabel.addClass('hide-on-mobile') : undefined;
-					// !tabHasLabel ? itemLabel.addClass('hide-on-tablet') : undefined;
+					this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
 					itemLabel.innerText = item.label;
 				}
 				else {
-					!dkHasLabel ? toolbarItem.addClass('hide-on-desktop') : undefined;
-					!mbHasLabel ? toolbarItem.addClass('hide-on-mobile') : undefined;
-					// !tabHasLabel ? toolbarItem.addClass('hide-on-tablet') : undefined;
+					this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
 					toolbarItem.innerText = item.label;
 				}
 			}
 			else {
-				!dkHasIcon ? toolbarItem.addClass('hide-on-desktop') : undefined;
-				!mbHasIcon ? toolbarItem.addClass('hide-on-mobile') : undefined;
-				// !toolbarItem ? itemIcon.addClass('hide-on-tablet') : undefined;
+				this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
 				setIcon(toolbarItem, item.icon);
 			}
 
@@ -303,7 +296,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarLi.append(toolbarItem);
 
 			noteToolbarUl.appendChild(noteToolbarLi);
-		});		
+		});
 
 		let noteToolbarCalloutContent = activeDocument.createElement("div");
 		noteToolbarCalloutContent.className = "callout-content";
@@ -350,7 +343,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 	}
-
+	
 	/**
 	 * Renders the given toolbar as a menu and returns it.
 	 * @param toolbar 
@@ -400,6 +393,22 @@ export default class NoteToolbarPlugin extends Plugin {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			this.checkAndRenderToolbar(activeFile, frontmatter);
 		}	
+	}
+
+	/**
+	 * Sets the appropriate class on the given component, based on its visibility settings.
+	 * @param element HTMLElement to set the display class on
+	 * @param dkVisible true if component is visible on desktop
+	 * @param mbVisibile true if component is visible on mobile
+	 */
+	setComponentDisplayClass(element: HTMLElement, dkVisible: boolean, mbVisibile: boolean): void {
+		if (!dkVisible && !mbVisibile) {
+			element.addClass('hide');
+		} else {
+			!dkVisible && element.addClass('hide-on-desktop');
+			!mbVisibile && element.addClass('hide-on-mobile');
+			// !tabVisible && element.addClass('hide-on-tablet');
+		}
 	}
 
 	/*************************************************************************

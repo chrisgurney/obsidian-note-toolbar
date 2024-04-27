@@ -304,6 +304,9 @@ body {
                     display: block !important;
                 }
             }
+            & span.hide {
+                display: none;
+            }
             & span.hide-on-mobile {
                 .is-mobile & {
                     display: none;
