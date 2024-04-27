@@ -393,7 +393,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-toggle")
 					.addExtraButton((cb) => {
 						cb.setIcon("monitor")
-							.setTooltip("Desktop visibility")
+							.setTooltip("Set desktop visibility")
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
@@ -409,7 +409,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-toggle")
 					.addExtraButton((cb) => {
 						cb.setIcon("smartphone")
-							.setTooltip("Mobile visibility")
+							.setTooltip("Set mobile visibility")
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
@@ -474,7 +474,7 @@ export default class ToolbarSettingsModal extends Modal {
 		menu.addItem((menuItem) => {
 			menuItem
 				.setTitle(isComponentVisible.icon ? 
-					'Icon showing on ' + platformLabel : 'Icon hidden on ' + platformLabel)
+					'Icon shows on ' + platformLabel : 'Icon hidden on ' + platformLabel)
 				.setIcon("image")
 				.setChecked(isComponentVisible.icon)
 				.onClick(async (menuEvent) => {
@@ -494,7 +494,7 @@ export default class ToolbarSettingsModal extends Modal {
 		menu.addItem((menuItem) => {
 			menuItem
 				.setTitle(isComponentVisible.label ? 
-					'Label showing on ' + platformLabel : 'Label hidden on ' + platformLabel)
+					'Label shows on ' + platformLabel : 'Label hidden on ' + platformLabel)
 				.setIcon("whole-word")
 				.setChecked(isComponentVisible.label)
 				.onClick(async (menuEvent) => {
