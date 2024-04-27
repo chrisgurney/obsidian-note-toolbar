@@ -368,19 +368,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		});
 
-		// temporary? shortcut to edit this toolbar
-		menu.addSeparator();
-		menu.addItem((item) => {
-			item
-				  .setTitle("Edit " + toolbar.name + "...")
-				  .setIcon("lucide-pen-box")
-				  .onClick((menuEvent) => {
-					const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
-					modal.setTitle("Edit Toolbar: " + toolbar.name);
-					modal.open();
-				  });
-			  });
-
 		return menu;
 
 	}
