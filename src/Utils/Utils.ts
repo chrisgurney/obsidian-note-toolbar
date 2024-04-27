@@ -39,25 +39,53 @@ export function calcItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolea
 }
 
 /**
+ * Component visibility: Returns booleans indicating whether to show each component in a link, for all platforms. 
+ * @param visibility 
+ */
+export function calcComponentVisToggles(visibility: Visibility) {
+	const desktopComponents = hasComponents(visibility.desktop);
+	const mobileComponents = hasComponents(visibility.mobile);
+	const tabletComponents = hasComponents(visibility.tablet);
+	return desktopComponents.concat(mobileComponents, tabletComponents);
+}
+
+/**
+ * Local function to effectively convert component strings to booleans.
+ * @param platform platform visibiliity to get
+ * @returns booleans indicating whether there's an icon and a label, for each desktop, mobile, and tablet
+ */
+function hasComponents(platform: { allViews?: { components: string[] } }): [boolean, boolean] {
+    let hasIcon = false;
+    let hasLabel = false;
+
+    if (platform && platform.allViews) {
+        hasIcon = platform.allViews.components.includes('icon');
+        hasLabel = platform.allViews.components.includes('label');
+    }
+
+    return [hasIcon, hasLabel];
+}
+
+/**
  * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
  * toggle values are the opposite of the Platform values.
  * @param Visibility
  * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
  */
 export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
-    const desktopHasComponents = hasComponents(visibility.desktop);
-    const mobileHasComponents = hasComponents(visibility.mobile);
-    const tabletHasComponents = hasComponents(visibility.tablet);
+    const desktopHasComponents = hasAnyComponents(visibility.desktop);
+    const mobileHasComponents = hasAnyComponents(visibility.mobile);
+    const tabletHasComponents = hasAnyComponents(visibility.tablet);
     return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
 }
 
 /**
- * Local function to check if given visibility has components or not, for use in determining whether or not 
+ * Local function to check if given visibility has any components or not, for use in determining whether or not 
  * we should show it on a given platform.
  * @param platform platform visibility to check
  * @returns true if it has components; false otherwise
  */
-function hasComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
+function hasAnyComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
     return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
 }
 

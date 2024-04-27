@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuItem, Platform, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
-import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
+import { calcComponentVisToggles, calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -268,18 +268,31 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbarItem.setAttribute("rel", "noopener");
 			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
 
+			const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
 			if (item.label) {
 				if (item.icon) {
 					let itemIcon = toolbarItem.createSpan();
+					!dkHasIcon ? itemIcon.addClass('hide-on-desktop') : undefined;
+					!mbHasIcon ? itemIcon.addClass('hide-on-mobile') : undefined;
+					// !tabHasIcon ? itemIcon.addClass('hide-on-tablet') : undefined;
 					setIcon(itemIcon, item.icon);
 					let itemLabel = toolbarItem.createSpan();
+					!dkHasLabel ? itemLabel.addClass('hide-on-desktop') : undefined;
+					!mbHasLabel ? itemLabel.addClass('hide-on-mobile') : undefined;
+					// !tabHasLabel ? itemLabel.addClass('hide-on-tablet') : undefined;
 					itemLabel.innerText = item.label;
 				}
 				else {
+					!dkHasLabel ? toolbarItem.addClass('hide-on-desktop') : undefined;
+					!mbHasLabel ? toolbarItem.addClass('hide-on-mobile') : undefined;
+					// !tabHasLabel ? toolbarItem.addClass('hide-on-tablet') : undefined;
 					toolbarItem.innerText = item.label;
 				}
 			}
 			else {
+				!dkHasIcon ? toolbarItem.addClass('hide-on-desktop') : undefined;
+				!mbHasIcon ? toolbarItem.addClass('hide-on-mobile') : undefined;
+				// !toolbarItem ? itemIcon.addClass('hide-on-tablet') : undefined;
 				setIcon(toolbarItem, item.icon);
 			}
 
