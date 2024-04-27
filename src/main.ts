@@ -23,6 +23,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.focusCommand() });
 		this.addCommand({ id: 'open-settings', name: 'Open Plugin Settings', callback: async () => this.openSettingsCommand() });
+		this.addCommand({ id: 'open-toolbar-settings', name: 'Open Toolbar Settings', callback: async () => this.openToolbarSettingsCommand() });
 		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
 		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
 		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
@@ -443,6 +444,21 @@ export default class NoteToolbarPlugin extends Plugin {
 		const settings = this.app.setting;
 		settings.open();
 		settings.openTabById('note-toolbar');
+	}
+
+	/**
+	 * Convenience command to open this toolbar's settings.
+	 */
+	async openToolbarSettingsCommand(): Promise<void> {
+		// figure out what toolbar is on the screen
+		let toolbarEl = this.getToolbarEl();
+		let toolbarName = toolbarEl?.getAttribute('data-name');
+		let toolbarSettings = toolbarName ? this.getToolbarSettings(toolbarName) : undefined;
+		if (toolbarSettings) {
+			const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
+			modal.setTitle("Edit Toolbar: " + toolbarName);
+			modal.open();
+		}
 	}
 
 	/**
