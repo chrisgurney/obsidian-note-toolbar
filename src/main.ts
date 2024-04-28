@@ -299,17 +299,23 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarUl.appendChild(noteToolbarLi);
 		});
 
-		let noteToolbarCalloutContent = activeDocument.createElement("div");
-		noteToolbarCalloutContent.className = "callout-content";
-		noteToolbarCalloutContent.append(noteToolbarUl);
-
 		let noteToolbarCallout = activeDocument.createElement("div");
-		noteToolbarCallout.className = "callout cg-note-toolbar-callout";
-		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
-		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
-		noteToolbarCallout.append(noteToolbarCalloutContent);
 
-		/* workaround to emulate callout-in-content structure, to use same sticky css */
+		// don't render content if it's empty, but keep the metadata so the toolbar settings command still works
+		if (toolbar.items.length > 0) {
+
+			let noteToolbarCalloutContent = activeDocument.createElement("div");
+			noteToolbarCalloutContent.className = "callout-content";
+			noteToolbarCalloutContent.append(noteToolbarUl);
+			
+			noteToolbarCallout.className = "callout cg-note-toolbar-callout";
+			noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
+			noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
+			noteToolbarCallout.append(noteToolbarCalloutContent);
+
+		}
+
+		/* extra div workaround to emulate callout-in-content structure, to use same sticky css */
 		let div = activeDocument.createElement("div");
 		div.append(noteToolbarCallout);
 		let embedBlock = activeDocument.createElement("div");
