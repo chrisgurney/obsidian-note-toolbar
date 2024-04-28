@@ -790,8 +790,8 @@ body {
         background: none;
         box-shadow: none;
         color: var(--icon-color);
-        gap: 0.5em;
-        padding: var(--size-2-2);
+        gap: var(--size-4-2);
+        padding: var(--size-4-2);
         &:hover {
             opacity: var(--icon-opacity-hover);
             color: var(--icon-color-hover);
