@@ -527,18 +527,21 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
-	 * 
+	 * Gets the current state of visibility for a given platform.
+	 * @param platform visibility to check
 	 */
 	getPlatformStateLabel(platform: any): string {
 
-		let dkComponents = platform.allViews?.components;
-		if (dkComponents) {
-			if (dkComponents.length === 2) {
-				return '';
-			} else if (dkComponents.length === 1) {
-				return dkComponents[0];
-			} else {
-				return 'hidden';
+		if (platform && platform.allViews) {
+			let dkComponents = platform.allViews?.components;
+			if (dkComponents) {
+				if (dkComponents.length === 2) {
+					return '';
+				} else if (dkComponents.length === 1) {
+					return dkComponents[0];
+				} else {
+					return 'hidden';
+				}
 			}
 		}
 		return '';
