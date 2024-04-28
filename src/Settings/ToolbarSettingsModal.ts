@@ -469,87 +469,6 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 
 	}
-	
-	/**
-	 * Returns the visibility menu to display, for the given platform.
-	 * @param platform visibility to check for component visibility
-	 * @param platformLabel string to show in the menu 
-	 * @returns Menu
-	 */
-	getItemVisibilityMenu(platform: any, platformLabel: string): Menu {
-
-		let isComponentVisible = {
-			icon: (platform && platform.allViews) ? platform.allViews.components.includes('icon') : false,
-			label: (platform && platform.allViews) ? platform.allViews.components.includes('label') : false,
-		};
-
-		let menu = new Menu();
-		menu.addItem((menuItem) => {
-			menuItem
-				.setTitle(isComponentVisible.icon ? 
-					'Icon shows on ' + platformLabel : 'Icon hidden on ' + platformLabel)
-				.setIcon("image")
-				.setChecked(isComponentVisible.icon)
-				.onClick(async (menuEvent) => {
-					if (isComponentVisible.icon) {
-						removeComponentVisibility(platform, 'icon');
-						isComponentVisible.icon = false;
-					}
-					else {
-						addComponentVisibility(platform, 'icon');
-						isComponentVisible.icon = true;
-					}
-					this.toolbar.updated = new Date().toISOString();
-					await this.plugin.saveSettings();
-					this.display();
-				});
-		});
-		menu.addItem((menuItem) => {
-			menuItem
-				.setTitle(isComponentVisible.label ? 
-					'Label shows on ' + platformLabel : 'Label hidden on ' + platformLabel)
-				.setIcon("whole-word")
-				.setChecked(isComponentVisible.label)
-				.onClick(async (menuEvent) => {
-					if (isComponentVisible.label) {
-						removeComponentVisibility(platform, 'label');
-						isComponentVisible.label = false;
-					}
-					else {
-						addComponentVisibility(platform, 'label');
-						isComponentVisible.label = true;
-					}
-					this.toolbar.updated = new Date().toISOString();
-					await this.plugin.saveSettings();
-					this.display();
-				});
-		});
-
-		return menu;
-
-	}
-
-	/**
-	 * Gets the current state of visibility for a given platform.
-	 * @param platform visibility to check
-	 */
-	getPlatformStateLabel(platform: any): string {
-
-		if (platform && platform.allViews) {
-			let dkComponents = platform.allViews?.components;
-			if (dkComponents) {
-				if (dkComponents.length === 2) {
-					return '';
-				} else if (dkComponents.length === 1) {
-					return dkComponents[0];
-				} else {
-					return 'hidden';
-				}
-			}
-		}
-		return '';
-
-	}
 
 	/**
 	 * Displays the Position setting.
@@ -829,6 +748,87 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
+
+	/**
+	 * Returns the visibility menu to display, for the given platform.
+	 * @param platform visibility to check for component visibility
+	 * @param platformLabel string to show in the menu 
+	 * @returns Menu
+	 */
+	getItemVisibilityMenu(platform: any, platformLabel: string): Menu {
+
+		let isComponentVisible = {
+			icon: (platform && platform.allViews) ? platform.allViews.components.includes('icon') : false,
+			label: (platform && platform.allViews) ? platform.allViews.components.includes('label') : false,
+		};
+
+		let menu = new Menu();
+		menu.addItem((menuItem) => {
+			menuItem
+				.setTitle(isComponentVisible.icon ? 
+					'Icon shows on ' + platformLabel : 'Icon hidden on ' + platformLabel)
+				.setIcon("image")
+				.setChecked(isComponentVisible.icon)
+				.onClick(async (menuEvent) => {
+					if (isComponentVisible.icon) {
+						removeComponentVisibility(platform, 'icon');
+						isComponentVisible.icon = false;
+					}
+					else {
+						addComponentVisibility(platform, 'icon');
+						isComponentVisible.icon = true;
+					}
+					this.toolbar.updated = new Date().toISOString();
+					await this.plugin.saveSettings();
+					this.display();
+				});
+		});
+		menu.addItem((menuItem) => {
+			menuItem
+				.setTitle(isComponentVisible.label ? 
+					'Label shows on ' + platformLabel : 'Label hidden on ' + platformLabel)
+				.setIcon("whole-word")
+				.setChecked(isComponentVisible.label)
+				.onClick(async (menuEvent) => {
+					if (isComponentVisible.label) {
+						removeComponentVisibility(platform, 'label');
+						isComponentVisible.label = false;
+					}
+					else {
+						addComponentVisibility(platform, 'label');
+						isComponentVisible.label = true;
+					}
+					this.toolbar.updated = new Date().toISOString();
+					await this.plugin.saveSettings();
+					this.display();
+				});
+		});
+
+		return menu;
+
+	}
+
+	/**
+	 * Gets the current state of visibility for a given platform.
+	 * @param platform visibility to check
+	 */
+	getPlatformStateLabel(platform: any): string {
+
+		if (platform && platform.allViews) {
+			let dkComponents = platform.allViews?.components;
+			if (dkComponents) {
+				if (dkComponents.length === 2) {
+					return '';
+				} else if (dkComponents.length === 1) {
+					return dkComponents[0];
+				} else {
+					return 'hidden';
+				}
+			}
+		}
+		return '';
+
+	}
 
 	/**
 	 * Returns the value for the provided key from the provided dictionary.
