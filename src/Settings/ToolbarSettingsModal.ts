@@ -471,7 +471,10 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 	
 	/**
-	 * 
+	 * Returns the visibility menu to display, for the given platform.
+	 * @param platform visibility to check for component visibility
+	 * @param platformLabel string to show in the menu 
+	 * @returns Menu
 	 */
 	getItemVisibilityMenu(platform: any, platformLabel: string): Menu {
 
