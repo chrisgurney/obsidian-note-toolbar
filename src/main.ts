@@ -301,13 +301,14 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let noteToolbarCallout = activeDocument.createElement("div");
 
-		// don't render content if it's empty, but keep the metadata so the toolbar settings command still works
+		// don't render content if it's empty, but keep the metadata so the toolbar commands & menu still work
+		// TODO: also check if all child items are display: none - use Platform.isMobile and check the mb booleans, dk otherwise?
 		if (toolbar.items.length > 0) {
 
 			let noteToolbarCalloutContent = activeDocument.createElement("div");
 			noteToolbarCalloutContent.className = "callout-content";
 			noteToolbarCalloutContent.append(noteToolbarUl);
-			
+
 			noteToolbarCallout.className = "callout cg-note-toolbar-callout";
 			noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
 			noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
