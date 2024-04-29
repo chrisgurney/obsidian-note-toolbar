@@ -30,7 +30,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (Platform.isMobile) {
 			debugLog('isMobile');
-			this.addRibbonIcon('hammer', 'Note Toolbar', (event) => {
+			this.addRibbonIcon('more-vertical', 'Note Toolbar', (event) => {
 				let activeFile = this.app.workspace.getActiveFile();
 				if (activeFile) {
 					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
