@@ -598,7 +598,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Default")
-			.setDesc("Applies to all unless overridden.")
+			.setDesc("Applies to all platforms unless overridden.")
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(defaultStyleDiv);
 
