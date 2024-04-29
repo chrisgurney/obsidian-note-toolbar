@@ -478,8 +478,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName('Position')
-			.setDesc('Where to position this toolbar.')
-			.setClass('note-toolbar-setting-spaced');
+			.setHeading()
+			.setDesc('Where to position this toolbar.');
 
 		new Setting(settingsDiv)
 			.setName('Desktop')
@@ -541,7 +541,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(settingsDiv)
 			.setName("Styles")
 			.setDesc(stylingDescription)
-			.setClass("note-toolbar-setting-no-controls");
+			.setHeading();
 
 		//
 		// Default
@@ -671,6 +671,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Delete this toolbar")
+			.setHeading()
 			.setDesc("This action cannot be undone.")
 			.setClass("note-toolbar-setting-spaced")
 			.addButton((button: ButtonComponent) => {

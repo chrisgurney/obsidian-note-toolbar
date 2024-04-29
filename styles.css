@@ -833,7 +833,6 @@ body {
 }
 
 .note-toolbar-setting-item-styles {
-    border-top: none !important;
     & > .setting-item-info {
         align-self: flex-start;
     }
