@@ -709,6 +709,20 @@ body {
     color: var(--text-muted);
 }
 
+.note-toolbar-setting-mapping-field {
+    border-top: none !important;
+    padding-top: 0 !important;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        justify-content: flex-start;
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+
 .note-toolbar-setting-item-fields {
     display: flex;
     gap: 0 1em;

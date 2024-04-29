@@ -197,7 +197,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
 				textFieldsDiv.className = "note-toolbar-setting-item-fields";
 				const fs = new Setting(textFieldsDiv)
-					.setClass("note-toolbar-setting-item-field")
+					.setClass("note-toolbar-setting-mapping-field")
 					.addSearch((cb) => {
 						new FolderSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder("Folder")
@@ -228,7 +228,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                             }, 250));
 					});
 				const ts = new Setting(textFieldsDiv)
-					.setClass("note-toolbar-setting-item-field")
+					.setClass("note-toolbar-setting-mapping-field")
 					.addSearch((cb) => {
 						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 						cb.setPlaceholder("Toolbar")
