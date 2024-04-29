@@ -397,7 +397,7 @@ export default class ToolbarSettingsModal extends Modal {
 							let btnLabel = cb.buttonEl.createSpan();
 							btnLabel.setText(state);
 						}
-						cb.setTooltip('Desktop' + (!state ? ': Visible ' : ' ') + '(Click to change)')
+						cb.setTooltip('Desktop' + (!state ? ': Visible ' : ' ') + '(click to change)')
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
@@ -414,7 +414,7 @@ export default class ToolbarSettingsModal extends Modal {
 							let btnLabel = cb.buttonEl.createSpan();
 							btnLabel.setText(state);
 						}
-						cb.setTooltip('Mobile' + (!state ? ': Visible ' : ' ') + '(Click to change)')
+						cb.setTooltip('Mobile' + (!state ? ': Visible ' : ' ') + '(click to change)')
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
