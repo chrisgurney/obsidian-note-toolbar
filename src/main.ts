@@ -955,42 +955,84 @@ export default class NoteToolbarPlugin extends Plugin {
 				new_version = 20240426.1;
 				debugLog("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					tb.items.forEach((item: any, item_index: number) => {
-						this.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
-							if (!this.settings.toolbars[index].items[item_index].visibility) {
-								this.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
-								switch (ctx.platform) {
-									case 'desktop':
-										this.settings.toolbars[index].items[item_index].visibility.desktop = {
-											allViews: {	components: ['icon', 'label'] }
+					// toolbar position -> platform-specific positions
+					if (this.settings.toolbars[index].positions) {
+						this.settings.toolbars[index].positions?.forEach((pos, posIndex) => {
+							this.settings.toolbars[index].position = {} as Position;
+							if (pos.contexts) {
+								pos.contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+									if (pos.position) {
+										switch (ctx.platform) {
+											case 'desktop':
+												this.settings.toolbars[index].position.desktop = {
+													allViews: { position: pos.position }
+												}
+												break;
+											case 'mobile':
+												this.settings.toolbars[index].position.mobile = {
+													allViews: { position: pos.position }
+												}
+												this.settings.toolbars[index].position.tablet = {
+													allViews: { position: pos.position }
+												}
+												break;
+											case 'all':
+												this.settings.toolbars[index].position.desktop = {
+													allViews: { position: pos.position }
+												}
+												this.settings.toolbars[index].position.mobile = {
+													allViews: { position: pos.position }
+												}
+												this.settings.toolbars[index].position.tablet = {
+													allViews: { position: pos.position }
+												}
+												break;
 										}
-										break;
-									case 'mobile':
-										this.settings.toolbars[index].items[item_index].visibility.mobile = {
-											allViews: {	components: ['icon', 'label'] }
-										}
-										this.settings.toolbars[index].items[item_index].visibility.tablet = {
-											allViews: {	components: ['icon', 'label'] }
-										}
-										break;
-									case 'all':
-										this.settings.toolbars[index].items[item_index].visibility.desktop = {
-											allViews: {	components: ['icon', 'label'] }
-										}
-										this.settings.toolbars[index].items[item_index].visibility.mobile = {
-											allViews: {	components: ['icon', 'label'] }
-										}
-										this.settings.toolbars[index].items[item_index].visibility.tablet = {
-											allViews: {	components: ['icon', 'label'] }
-										}
-										break;						
-									case 'none':
-									default:
-										break;
-								}
-								delete this.settings.toolbars[index].items[item_index].contexts;
+									}
+								});
 							}
 						});
+						delete this.settings.toolbars[index].positions;
+					}
+					// item contexts -> item / component visibility
+					tb.items.forEach((item: any, item_index: number) => {
+						if (this.settings.toolbars[index].items[item_index].contexts) {							
+							this.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+								if (!this.settings.toolbars[index].items[item_index].visibility) {
+									this.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
+									switch (ctx.platform) {
+										case 'desktop':
+											this.settings.toolbars[index].items[item_index].visibility.desktop = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;
+										case 'mobile':
+											this.settings.toolbars[index].items[item_index].visibility.mobile = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.settings.toolbars[index].items[item_index].visibility.tablet = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;
+										case 'all':
+											this.settings.toolbars[index].items[item_index].visibility.desktop = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.settings.toolbars[index].items[item_index].visibility.mobile = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.settings.toolbars[index].items[item_index].visibility.tablet = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;						
+										case 'none':
+										default:
+											break;
+									}
+								}
+							});
+							delete this.settings.toolbars[index].items[item_index].contexts;
+						}
 					});
 				});
 				// for the next migration to run
