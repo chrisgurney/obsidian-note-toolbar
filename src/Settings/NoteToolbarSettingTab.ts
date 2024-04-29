@@ -133,7 +133,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							items: [],
 							mobileStyles: [],
 							name: "",
-							positions: [{position: 'props', contexts: [{platform: 'all', view: 'all'}]}],
+							position: { 
+								desktop: { allViews: { position: 'props' } }, 
+								mobile: { allViews: { position: 'props' } }, 
+								tablet: { allViews: { position: 'props' } } },
 							updated: new Date().toISOString(),
 						} as ToolbarSettings;
 						this.plugin.settings.toolbars.push(newToolbar);

@@ -663,9 +663,6 @@ body {
     justify-content: flex-end;
     & .setting-item {
         border-bottom: none !important;
-        &:first-child {
-            padding: inherit;
-        }
     }
 }
 
@@ -780,6 +777,7 @@ body {
 
 .note-toolbar-setting-item-toggle {
     border-top: none !important;
+    padding: 0.75em 0 !important;
     .is-mobile & {
         padding-bottom: 0em !important;
     }

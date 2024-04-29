@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuItem, Platform, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin, TFile, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
@@ -299,11 +299,17 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarUl.appendChild(noteToolbarLi);
 		});
 
+		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
+		let position;
+		Platform.isMobile
+			? position = toolbar.position.mobile?.allViews?.position ?? 'props'
+			: position = toolbar.position.desktop?.allViews?.position ?? 'props';
+
 		let noteToolbarCallout = activeDocument.createElement("div");
 
 		// don't render content if it's empty, but keep the metadata so the toolbar commands & menu still work
 		// TODO: also check if all child items are display: none - use Platform.isMobile and check the mb booleans, dk otherwise?
-		if (toolbar.items.length > 0) {
+		if (toolbar.items.length > 0 && position !== 'hidden') {
 
 			let noteToolbarCalloutContent = activeDocument.createElement("div");
 			noteToolbarCalloutContent.className = "callout-content";
@@ -328,7 +334,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
 
-		switch(toolbar.positions[0].position) {
+		switch(position) {
 			case 'top':
 				embedBlock.addClass('cg-note-toolbar-position-top');
 				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
@@ -339,6 +345,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
 					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
 				break;
+			case 'hidden':
+				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
 			case 'props':
 			default:
 				/* inject it between the properties and content divs */

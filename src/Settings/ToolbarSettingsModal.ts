@@ -1,7 +1,7 @@
 import { App, ButtonComponent, Menu, Modal, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
@@ -477,23 +477,46 @@ export default class ToolbarSettingsModal extends Modal {
 	displayPositionSetting(settingsDiv: HTMLElement) {
 
 		new Setting(settingsDiv)
-			.setName("Position")
-			.setDesc("Where to position this toolbar.")
-			.setClass("note-toolbar-setting-spaced")
+			.setName('Position')
+			.setDesc('Where to position this toolbar.')
+			.setClass('note-toolbar-setting-spaced');
+
+		new Setting(settingsDiv)
+			.setName('Desktop')
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(
 						POSITION_OPTIONS.reduce((acc, option) => {
 							return { ...acc, ...option };
 						}, {}))
-					.setValue(this.toolbar.positions[0].position)
-					.onChange(async (val: 'props' | 'top') => {
-						this.toolbar.positions = [{ position: val, contexts: [{ platform: 'all', view: 'all' }]}];
+					.setValue(this.toolbar.position.desktop?.allViews?.position ?? 'props')
+					.onChange(async (val: PositionType) => {
+						this.toolbar.position = { 
+							desktop: { allViews: { position: val } } };
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
 						this.display();
 					})
 				);
+
+				new Setting(settingsDiv)
+				.setName('Mobile')
+				.addDropdown((dropdown) =>
+					dropdown
+						.addOptions(
+							POSITION_OPTIONS.reduce((acc, option) => {
+								return { ...acc, ...option };
+							}, {}))
+						.setValue(this.toolbar.position.mobile?.allViews?.position ?? 'props')
+						.onChange(async (val: PositionType) => {
+							this.toolbar.position = { 
+								mobile: { allViews: { position: val } },
+								tablet: { allViews: { position: val } } };
+							this.toolbar.updated = new Date().toISOString();
+							await this.plugin.saveSettings();
+							this.display();
+						})
+					);
 
 	}
 

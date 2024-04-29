@@ -20,7 +20,11 @@ export interface ToolbarSettings {
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
 	name: string;
-	positions: Array<Position>;
+	/**
+	 * @deprecated positions property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
+	 */
+	positions?: Array<Position>;
+	position: Position;
 	updated: string;
 	// TODO: add setting to force rerender of toolbar? (for label variables)
 }
@@ -30,13 +34,38 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	items: [],
 	mobileStyles: [],
 	name: "",
-	positions: [{position: 'props', contexts: [{platform: 'all', view: 'all'}]}],
+	position: {
+		desktop: { allViews: { position: 'props' } },
+		tablet: { allViews: { position: 'props' } },
+		mobile: { allViews: { position: 'props' } },
+	},
 	updated: new Date().toISOString(),
 };
 
 export interface Position {
-	contexts: Array<ViewContext>;
-	position: 'props' | 'top';
+	desktop?: {
+		allViews?: { position: PositionType },
+		editingView?: { position: PositionType },
+		readingView?: { position: PositionType },
+	},
+	tablet?: {
+		allViews?: { position: PositionType },
+		editingView?: { position: PositionType },
+		readingView?: { position: PositionType },
+	},
+	mobile?: {
+		allViews?: { position: PositionType },
+		editingView?: { position: PositionType },
+		readingView?: { position: PositionType },
+	},
+	/**
+	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
+	 */
+	contexts?: Array<ViewContext>;
+	/**
+	 * @deprecated position property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
+	 */
+	position?: 'props' | 'top';
 }
 
 export interface ViewContext {
@@ -67,7 +96,7 @@ export interface ItemViewContext extends ViewContext {
 }
 
 export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
-export type PositionType = 'props' | 'top';
+export type PositionType = 'hidden' | 'props' | 'top';
 export type ViewType = 'all' | 'preview' | 'source';
 export type ComponentType = 'icon' | 'label';
 
@@ -103,6 +132,7 @@ export type LinkType = 'command' | 'file' | 'uri';
 export const POSITION_OPTIONS: { [key: string]: string }[] = [
 	{ top: "Top (fixed)" },
 	{ props: "Below Properties" },
+	{ hidden: "Hidden (do not display)" },
 ];
 
 /**
