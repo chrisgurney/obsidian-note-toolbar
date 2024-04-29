@@ -17,13 +17,13 @@ export function arraymove<T>(arr: (T | string)[], fromIndex: number, toIndex: nu
 }
 
 /**
- * Item visibility: Returns the platform value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
+ * Migration: Returns the platform visibility value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
  * Platform value should be the opposite of these flags.
  * @param hideOnDesktop 
  * @param hideOnMobile 
  * @returns PlatformType
  */
-export function calcItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolean): PlatformType {
+export function migrateItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolean): PlatformType {
 	if (!hideOnDesktop && !hideOnMobile) {
 		return 'all';
 	} else if (hideOnDesktop && hideOnMobile) {

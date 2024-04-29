@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuItem, Platform, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
+import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -925,7 +925,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					tb.items.forEach((item: any, item_index: number) => {
 						// convert hideOnDesktop + hideOnMobile to contexts
 						this.settings.toolbars[index].items[item_index].contexts = [{
-							platform: calcItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
+							platform: migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
 							view: 'all'}];
 						delete item.hideOnDesktop;
 						delete item.hideOnMobile;
