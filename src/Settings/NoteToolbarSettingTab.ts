@@ -176,8 +176,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Folder mappings")
-			.setHeading()
-			.setDesc("Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.");
+			.setDesc("Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.")
+			.setClass("note-toolbar-setting-no-border");
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl

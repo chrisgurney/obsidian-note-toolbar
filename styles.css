@@ -625,6 +625,10 @@ body {
     padding-bottom: 1em !important;
 }
 
+.note-toolbar-setting-no-border {
+    border-top: none !important;
+}
+
 .note-toolbar-setting-no-controls {
     & .setting-item-control {
         display: none;
