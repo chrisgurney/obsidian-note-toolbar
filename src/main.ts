@@ -251,6 +251,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		toolbar.items.filter((item: ToolbarItemSettings) => {
 
+			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
 			return ((item.label === "" && item.icon === "") ? false : true);
 
