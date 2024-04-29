@@ -850,7 +850,7 @@ export default class ToolbarSettingsModal extends Modal {
 				}
 			}
 		}
-		return '';
+		return 'hidden';
 
 	}
 
