@@ -559,7 +559,7 @@ body {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
     margin: 0em 0em 1em 0em;
-    padding: 1.5em 1.5em 0.5em 1.5em;
+    padding: 1.5em;
     .is-mobile & {
         padding: 1em;
     }
@@ -657,7 +657,7 @@ body {
     }
 }
 
-.note-toolbar-setting-item-toggles-container {
+.note-toolbar-setting-item-visibility-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -775,37 +775,21 @@ body {
     }
 }
 
-.note-toolbar-setting-item-toggle {
-    border-top: none !important;
-    padding: 0.75em 0 !important;
-    .is-mobile & {
-        padding-bottom: 0em !important;
-    }
-    & .setting-item-info {
-        margin-right: 0em;
-    }
-    & .setting-item-control button {
-        background: none;
-        box-shadow: none;
-        color: var(--icon-color);
-        gap: var(--size-4-2);
-        padding: var(--size-4-2);
-        &:hover {
-            opacity: var(--icon-opacity-hover);
-            color: var(--icon-color-hover);
-            background-color: var(--background-modifier-hover);
-        }
-        &:focus {
-            border-radius: var(--input-radius);
-            box-shadow: 0 0 0 1px var(--background-modifier-border);
-            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-        }
-    }
+.note-toolbar-setting-item-visibility {
+    display: flex;
 }
 
 .note-toolbar-setting-item-controls {
-    margin-left: auto;
-    .setting-item {
+    display: flex;
+}
+
+.note-toolbar-setting-item-visibility-and-controls {
+    border-top: none !important;
+    display: flex;
+    padding-top: 0.75em !important;
+    justify-content: space-between;
+    & .setting-item {
+        padding-bottom: 0 !important;
         & .setting-item-info {
             display: none;
         }
@@ -821,13 +805,29 @@ body {
                 box-shadow: 0 0 0 1px var(--background-modifier-border);
                 box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
             }
+            & button {
+                background: none;
+                box-shadow: none;
+                color: var(--icon-color);
+                gap: var(--size-4-2);
+                padding: var(--size-4-2);
+                &:hover {
+                    opacity: var(--icon-opacity-hover);
+                    color: var(--icon-color-hover);
+                    background-color: var(--background-modifier-hover);
+                }
+                &:focus {
+                    border-radius: var(--input-radius);
+                    box-shadow: 0 0 0 1px var(--background-modifier-border);
+                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+                }
+            }
         }
     }
 }
 
-.note-toolbar-setting-item-fields-and-controls {
+.note-toolbar-setting-item-fields {
     display: flex;
-    flex-direction: column-reverse;
     flex-grow: 1;
     flex-wrap: wrap;
 }

@@ -217,8 +217,8 @@ export default class ToolbarSettingsModal extends Modal {
 				// Item link
 				//
 
-				let linkContainerDiv = this.containerEl.createDiv();
-				linkContainerDiv.className = "note-toolbar-setting-item-link-container";
+				let linkContainer = this.containerEl.createDiv();
+				linkContainer.className = "note-toolbar-setting-item-link-container";
 
 				let linkTypeDiv = this.containerEl.createDiv();
 
@@ -292,7 +292,7 @@ export default class ToolbarSettingsModal extends Modal {
 											let errorDiv = this.containerEl.createEl("div", { 
 												text: "This file does not exist.", 
 												attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
-												linkContainerDiv.insertAdjacentElement('afterend', errorDiv);
+												linkContainer.insertAdjacentElement('afterend', errorDiv);
 												itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
 										}
 									}
@@ -337,16 +337,16 @@ export default class ToolbarSettingsModal extends Modal {
 				itemLinkFields[index].uri.settingEl.setAttribute("data-active", 
 					toolbarItem.linkAttr.type === "uri" ? "true" : "false");
 
-				linkContainerDiv.append(linkTypeDiv);
-				linkContainerDiv.append(linkFieldDiv);
+				linkContainer.append(linkTypeDiv);
+				linkContainer.append(linkFieldDiv);
 
 				//
 				// Item list controls
 				// 
 
-				let itemControlsDiv = this.containerEl.createDiv();
-				itemControlsDiv.className = "note-toolbar-setting-item-controls";
-				const s1d = new Setting(itemControlsDiv)
+				let itemControlsContainer = this.containerEl.createDiv();
+				itemControlsContainer.className = "note-toolbar-setting-item-controls";
+				const s1d = new Setting(itemControlsContainer)
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
@@ -372,25 +372,23 @@ export default class ToolbarSettingsModal extends Modal {
 							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "delete"));
 					});
 
-				let itemFieldsControlsContainer = this.containerEl.createDiv();
-				itemFieldsControlsContainer.className = "note-toolbar-setting-item-fields-and-controls";
-				itemFieldsControlsContainer.appendChild(textFieldsContainer);
-				itemFieldsControlsContainer.appendChild(itemControlsDiv);
-
-				itemTopContainer.appendChild(itemFieldsControlsContainer);
-				itemTopContainer.appendChild(linkContainerDiv);
-
+				let itemFieldsContainer = this.containerEl.createDiv();
+				itemFieldsContainer.className = "note-toolbar-setting-item-fields";
+				itemFieldsContainer.appendChild(textFieldsContainer);
+				
+				itemTopContainer.appendChild(itemFieldsContainer);
+				itemTopContainer.appendChild(linkContainer);
 				itemDiv.appendChild(itemTopContainer);
 
 				//
 				// Visibility
 				// 
 
-				let visibilityContainer = this.containerEl.createDiv();
-				visibilityContainer.className = "note-toolbar-setting-item-toggles-container";
+				let visibilityControlsContainer = this.containerEl.createDiv();
+				visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
 
-				const p1 = new Setting(visibilityContainer)
-					.setClass("note-toolbar-setting-item-toggle")
+				const visButtons = new Setting(visibilityControlsContainer)
+					.setClass("note-toolbar-setting-item-visibility")
 					.addButton((cb) => {
 						let btnIcon = cb.buttonEl.createSpan();
 						setIcon(btnIcon, 'monitor');
@@ -406,12 +404,8 @@ export default class ToolbarSettingsModal extends Modal {
 								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
 								visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 							});
-					});
-
-				// TODO: implement tablet settings
-
-				const p3 = new Setting(visibilityContainer)
-					.setClass("note-toolbar-setting-item-toggle")
+					})
+					// TODO: implement tablet settings
 					.addButton((cb) => {
 						let btnIcon = cb.buttonEl.createSpan();
 						setIcon(btnIcon, 'smartphone');
@@ -429,7 +423,13 @@ export default class ToolbarSettingsModal extends Modal {
 							});
 					});
 
-				itemDiv.appendChild(visibilityContainer);
+				let itemVisilityAndControlsContainer = this.containerEl.createDiv();
+				itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
+				itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
+				itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
+
+				itemDiv.appendChild(itemVisilityAndControlsContainer);
+
 				settingsDiv.appendChild(itemDiv);
 	
 			});
