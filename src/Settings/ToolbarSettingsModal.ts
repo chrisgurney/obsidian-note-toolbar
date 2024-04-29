@@ -158,7 +158,7 @@ export default class ToolbarSettingsModal extends Modal {
 				itemTopContainer.className = "note-toolbar-setting-item-top-container";
 
 				//
-				// Item name and tooltip
+				// Item icon, name, and tooltip
 				//
 
 				let textFieldsContainer = this.containerEl.createDiv();
