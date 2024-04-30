@@ -375,7 +375,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				menu.addItem((item) => {
 					item
 						.setIcon(toolbarItem.icon ? toolbarItem.icon : null)
-						.setTitle(toolbarItem.label)
+						.setTitle(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip)
 						.onClick((menuEvent) => {
 							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
 							this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
