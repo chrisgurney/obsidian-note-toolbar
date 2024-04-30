@@ -491,32 +491,30 @@ export default class ToolbarSettingsModal extends Modal {
 						}, {}))
 					.setValue(this.toolbar.position.desktop?.allViews?.position ?? 'props')
 					.onChange(async (val: PositionType) => {
-						this.toolbar.position = { 
-							desktop: { allViews: { position: val } } };
+						this.toolbar.position.desktop = { allViews: { position: val } };
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
 						this.display();
 					})
 				);
 
-				new Setting(settingsDiv)
-				.setName('Mobile')
-				.addDropdown((dropdown) =>
-					dropdown
-						.addOptions(
-							POSITION_OPTIONS.reduce((acc, option) => {
-								return { ...acc, ...option };
-							}, {}))
-						.setValue(this.toolbar.position.mobile?.allViews?.position ?? 'props')
-						.onChange(async (val: PositionType) => {
-							this.toolbar.position = { 
-								mobile: { allViews: { position: val } },
-								tablet: { allViews: { position: val } } };
-							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.saveSettings();
-							this.display();
-						})
-					);
+		new Setting(settingsDiv)
+			.setName('Mobile')
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOptions(
+						POSITION_OPTIONS.reduce((acc, option) => {
+							return { ...acc, ...option };
+						}, {}))
+					.setValue(this.toolbar.position.mobile?.allViews?.position ?? 'props')
+					.onChange(async (val: PositionType) => {
+						this.toolbar.position.mobile = { allViews: { position: val } };
+						this.toolbar.position.tablet = { allViews: { position: val } };
+						this.toolbar.updated = new Date().toISOString();
+						await this.plugin.saveSettings();
+						this.display();
+					})
+				);
 
 	}
 
