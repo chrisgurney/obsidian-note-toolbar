@@ -1,20 +1,20 @@
 import { IconName, SuggestModal, getIconIds, setIcon } from "obsidian";
 import NoteToolbarPlugin from "src/main";
 import { debugLog } from "src/Utils/Utils";
-import { ToolbarItemSettings } from "./NoteToolbarSettings";
+import { NoteToolbarSettings, ToolbarItemSettings } from "./NoteToolbarSettings";
 
 export class IconSuggestModal extends SuggestModal<IconName> {
 
     private parentEl: HTMLElement;
     public plugin: NoteToolbarPlugin;
-    private toolbarItem: ToolbarItemSettings;
+    private settingsWithIcon: ToolbarItemSettings | NoteToolbarSettings;
 
-	constructor(plugin: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, parentEl: HTMLElement) {
+	constructor(plugin: NoteToolbarPlugin, settingsWithIcon: ToolbarItemSettings | NoteToolbarSettings, parentEl: HTMLElement) {
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-mini-dialog");
         this.parentEl = parentEl;
         this.plugin = plugin;
-        this.toolbarItem = toolbarItem;
+        this.settingsWithIcon = settingsWithIcon;
         this.setPlaceholder("Search for an icon");
         this.setInstructions([
             {command: '↑↓', purpose: 'to navigate'},
@@ -54,8 +54,8 @@ export class IconSuggestModal extends SuggestModal<IconName> {
      * @param selectedIcon Icon to save.
      */
     onChooseSuggestion(item: string, evt: MouseEvent | KeyboardEvent) {
-        debugLog("onChooseSuggestion: ", this.toolbarItem);
-        this.toolbarItem.icon = (item === "No icon" ? "" : item);
+        debugLog("onChooseSuggestion: ", this.settingsWithIcon);
+        this.settingsWithIcon.icon = (item === "No icon" ? "" : item);
         this.plugin.saveSettings();
         setIcon(this.parentEl, item === "No icon" ? "lucide-plus-square" : item);
         this.parentEl.setAttribute("data-note-toolbar-no-icon", item === "No icon" ? "true" : "false");
