@@ -5,6 +5,7 @@ import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { Position, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
+import { IconSuggestModal } from './IconSuggestModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -54,6 +55,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
+		this.displayOtherSettings(containerEl);
 
 		if (focusOnLastItem) {
 			// set focus on last thing in the list, if the label is empty
@@ -295,6 +297,42 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+	}
+
+	/**
+	 * 
+	 * @param containerEl 
+	 */
+	displayOtherSettings(containerEl: HTMLElement): void {
+
+		new Setting(containerEl)
+			.setName("Other settings")
+			.setHeading();
+
+		const s1a = new Setting(containerEl)
+			.setName("Icon")
+			.setDesc("Sets the icon to show in the ribbon (on mobile)")
+			.addButton((cb) => {
+				cb.setIcon(this.plugin.settings.icon)
+					.setTooltip("Select icon")
+					.onClick(async () => {
+						const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+						modal.open();
+					});
+				cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.plugin.settings.icon ? "true" : "false");
+				cb.buttonEl.setAttribute("tabindex", "0");
+				this.plugin.registerDomEvent(
+					cb.buttonEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+								modal.open();
+								e.preventDefault();									
+						}
+					});
+			});
+			
 	}
 
 	/*************************************************************************
