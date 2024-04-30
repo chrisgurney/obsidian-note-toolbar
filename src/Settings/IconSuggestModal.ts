@@ -1,15 +1,13 @@
 import { IconName, SuggestModal, getIconIds, setIcon } from "obsidian";
-import ToolbarSettingsModal from "./ToolbarSettingsModal";
 import NoteToolbarPlugin from "src/main";
 import { debugLog } from "src/Utils/Utils";
-import { ToolbarSettings } from "./NoteToolbarSettings";
+import { ToolbarItemSettings } from "./NoteToolbarSettings";
 
 export class IconSuggestModal extends SuggestModal<IconName> {
 
     private parentEl: HTMLElement;
     public plugin: NoteToolbarPlugin;
-    private toolbarItemIndex: number;
-    private toolbarSettings: ToolbarSettings;
+    private toolbarItem: ToolbarItemSettings;
 
 	constructor(plugin: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, parentEl: HTMLElement) {
         super(plugin.app);
