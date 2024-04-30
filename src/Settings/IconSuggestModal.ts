@@ -11,13 +11,12 @@ export class IconSuggestModal extends SuggestModal<IconName> {
     private toolbarItemIndex: number;
     private toolbarSettings: ToolbarSettings;
 
-	constructor(parent: ToolbarSettingsModal, parentEl: HTMLElement, toolbarSettings: ToolbarSettings, index: number) {
-        super(parent.plugin.app);
+	constructor(plugin: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, parentEl: HTMLElement) {
+        super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-mini-dialog");
         this.parentEl = parentEl;
-        this.plugin = parent.plugin;
-        this.toolbarSettings = toolbarSettings;
-        this.toolbarItemIndex = index;
+        this.plugin = plugin;
+        this.toolbarItem = toolbarItem;
         this.setPlaceholder("Search for an icon");
         this.setInstructions([
             {command: '↑↓', purpose: 'to navigate'},
@@ -57,8 +56,8 @@ export class IconSuggestModal extends SuggestModal<IconName> {
      * @param selectedIcon Icon to save.
      */
     onChooseSuggestion(item: string, evt: MouseEvent | KeyboardEvent) {
-        debugLog("onChooseSuggestion: ", this.toolbarItemIndex, item);
-        this.toolbarSettings.items[this.toolbarItemIndex].icon = (item === "No icon" ? "" : item);
+        debugLog("onChooseSuggestion: ", this.toolbarItem);
+        this.toolbarItem.icon = (item === "No icon" ? "" : item);
         this.plugin.saveSettings();
         setIcon(this.parentEl, item === "No icon" ? "lucide-plus-square" : item);
         this.parentEl.setAttribute("data-note-toolbar-no-icon", item === "No icon" ? "true" : "false");

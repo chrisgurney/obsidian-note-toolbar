@@ -171,7 +171,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 							.setTooltip("Select icon (optional)")
 							.onClick(async () => {
-								const modal = new IconSuggestModal(this, cb.extraSettingsEl, this.toolbar, index);
+								const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
 								modal.open();
 							});
 						cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -181,7 +181,7 @@ export default class ToolbarSettingsModal extends Modal {
 								switch (e.key) {
 									case "Enter":
 									case " ":
-										const modal = new IconSuggestModal(this, cb.extraSettingsEl, this.toolbar, index);
+										const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
 										modal.open();
 										e.preventDefault();									
 								}
