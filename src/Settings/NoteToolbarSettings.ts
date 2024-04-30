@@ -3,6 +3,7 @@ export const SETTINGS_VERSION = 20240426.1;
 
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
+	icon: string;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -10,6 +11,7 @@ export interface NoteToolbarSettings {
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	folderMappings: [],
+	icon: "circle-ellipsis",
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
