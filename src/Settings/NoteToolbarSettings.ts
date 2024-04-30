@@ -98,7 +98,7 @@ export interface ItemViewContext extends ViewContext {
 }
 
 export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
-export type PositionType = 'hidden' | 'props' | 'top';
+export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
 export type ViewType = 'all' | 'preview' | 'source';
 export type ComponentType = 'icon' | 'label';
 
@@ -134,6 +134,8 @@ export type LinkType = 'command' | 'file' | 'uri';
 export const POSITION_OPTIONS: { [key: string]: string }[] = [
 	{ top: "Top (fixed)" },
 	{ props: "Below Properties" },
+	{ fabl: "Floating button: left" },
+	{ fabr: "Floating button: right" },
 	{ hidden: "Hidden (do not display)" },
 ];
 
