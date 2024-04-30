@@ -246,7 +246,64 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbar(toolbar: ToolbarSettings): Promise<void> {
 
-		debugLog("renderToolbarFromSettings: ", toolbar);
+		debugLog("renderToolbar: ", toolbar);
+
+		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
+		let position;
+		Platform.isMobile
+			? position = toolbar.position.mobile?.allViews?.position ?? 'props'
+			: position = toolbar.position.desktop?.allViews?.position ?? 'props';
+
+		// TODO: handle position === 'fabl' || position === 'fabr'
+		// TODO: handle position === 'hidden'
+
+		let noteToolbarElement = await this.renderToolbarAsCallout(toolbar);
+
+		/* extra div workaround to emulate callout-in-content structure, to use same sticky css */
+		let div = activeDocument.createElement("div");
+		div.append(noteToolbarElement);
+		let embedBlock = activeDocument.createElement("div");
+		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
+		embedBlock.setAttribute("data-name", toolbar.name);
+		embedBlock.setAttribute("data-updated", toolbar.updated);
+		embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
+		embedBlock.append(div);
+
+		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
+
+		// add the toolbar to the editor UI
+		switch(position) {
+			case 'top':
+				embedBlock.addClass('cg-note-toolbar-position-top');
+				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
+				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
+				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
+				viewHeader 
+					? viewHeader.insertAdjacentElement("afterend", embedBlock)
+					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
+				break;
+			case 'hidden':
+				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
+			case 'props':
+			default:
+				// inject it between the properties and content divs
+				let propsEl = this.getPropsEl();
+				if (!propsEl) {
+					debugLog("🛑 renderToolbarFromSettings: Unable to find .metadata-container to insert toolbar");
+				}
+				propsEl?.insertAdjacentElement("afterend", embedBlock);
+				break;
+		}
+
+	}
+	
+	/**
+	 * Renders the given toolbar as a callout (to add to the container) and returns it.
+	 * @param toolbar
+	 * @returns HTMLElement cg-note-toolbar-callout
+	 */
+	async renderToolbarAsCallout(toolbar: ToolbarSettings): Promise<HTMLElement> {
 
 		/* create the unordered list of menu items */
 		let noteToolbarUl = activeDocument.createElement("ul");
@@ -303,17 +360,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarUl.appendChild(noteToolbarLi);
 		});
 
-		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
-		let position;
-		Platform.isMobile
-			? position = toolbar.position.mobile?.allViews?.position ?? 'props'
-			: position = toolbar.position.desktop?.allViews?.position ?? 'props';
-
 		let noteToolbarCallout = activeDocument.createElement("div");
 
 		// don't render content if it's empty, but keep the metadata so the toolbar commands & menu still work
 		// TODO: also check if all child items are display: none - use Platform.isMobile and check the mb booleans, dk otherwise?
-		if (toolbar.items.length > 0 && position !== 'hidden') {
+		if (toolbar.items.length > 0) {
 
 			let noteToolbarCalloutContent = activeDocument.createElement("div");
 			noteToolbarCalloutContent.className = "callout-content";
@@ -326,44 +377,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 
-		/* extra div workaround to emulate callout-in-content structure, to use same sticky css */
-		let div = activeDocument.createElement("div");
-		div.append(noteToolbarCallout);
-		let embedBlock = activeDocument.createElement("div");
-		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
-		embedBlock.setAttribute("data-name", toolbar.name);
-		embedBlock.setAttribute("data-updated", toolbar.updated);
-		embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
-		embedBlock.append(div);
-
-		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
-
-		switch(position) {
-			case 'top':
-				embedBlock.addClass('cg-note-toolbar-position-top');
-				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
-				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
-				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
-				viewHeader 
-					? viewHeader.insertAdjacentElement("afterend", embedBlock)
-					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
-				break;
-			case 'hidden':
-				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
-			case 'props':
-			default:
-				/* inject it between the properties and content divs */
-				let propsEl = this.getPropsEl();
-				if (!propsEl) {
-					debugLog("🛑 renderToolbarFromSettings: Unable to find .metadata-container to insert toolbar");
-				}
-				propsEl?.insertAdjacentElement("afterend", embedBlock);
-				break;
-		}
+		return noteToolbarCallout;
 
 	}
-	
+
 	/**
 	 * Renders the given toolbar as a menu and returns it.
 	 * @param toolbar 
