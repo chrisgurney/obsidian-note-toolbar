@@ -311,7 +311,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const s1a = new Setting(containerEl)
 			.setName("Icon")
-			.setDesc("Sets the icon to show in the ribbon (on mobile)")
+			.setDesc("Sets the icon to show in the ribbon (on mobile). Restart the app to see the change.")
 			.addButton((cb) => {
 				cb.setIcon(this.plugin.settings.icon)
 					.setTooltip("Select icon")
