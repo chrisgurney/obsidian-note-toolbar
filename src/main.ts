@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin, TFile, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
@@ -27,6 +27,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
 		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
 		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
+
+		// add icons specific to the plugin
+		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
 
 		if (Platform.isMobile) {
 			debugLog('isMobile');
@@ -374,7 +377,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (showOnMobile) {
 				menu.addItem((item) => {
 					item
-						.setIcon(toolbarItem.icon ? toolbarItem.icon : null)
+						.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
 						.setTitle(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip)
 						.onClick((menuEvent) => {
 							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
