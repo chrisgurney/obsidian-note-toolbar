@@ -426,11 +426,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		noteToolbarFabButton.setAttribute('aria-label', 'Open Note Toolbar');
 		setIcon(noteToolbarFabButton, this.settings.icon);
 
-		// noteToolbarFabButton.onClickEvent((event) => {
-		// 	event.preventDefault();
-		// 	this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
-		// });
-		
 		noteToolbarFabContainer.append(noteToolbarFabButton);
 
 		return noteToolbarFabContainer;
