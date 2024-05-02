@@ -131,13 +131,20 @@ export interface ToolbarItemLinkAttr {
 
 export type LinkType = 'command' | 'file' | 'uri';
 
-export const POSITION_OPTIONS: { [key: string]: string }[] = [
-	{ top: "Top (fixed)" },
-	{ props: "Below Properties" },
-	{ fabl: "Floating button: left" },
-	{ fabr: "Floating button: right" },
-	{ hidden: "Hidden (do not display)" },
-];
+export const POSITION_OPTIONS = {
+	desktop: [
+		{ top: "Top (fixed)" },
+		{ props: "Below Properties" },
+		{ hidden: "Hidden (do not display)" },
+	],
+	mobile: [
+		{ top: "Top (fixed)" },
+		{ props: "Below Properties" },
+		{ fabl: "Floating button: left" },
+		{ fabr: "Floating button: right" },
+		{ hidden: "Hidden (do not display)" },
+	]
+}
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.

@@ -486,7 +486,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(
-						POSITION_OPTIONS.reduce((acc, option) => {
+						POSITION_OPTIONS.desktop.reduce((acc, option) => {
 							return { ...acc, ...option };
 						}, {}))
 					.setValue(this.toolbar.position.desktop?.allViews?.position ?? 'props')
@@ -503,7 +503,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(
-						POSITION_OPTIONS.reduce((acc, option) => {
+						POSITION_OPTIONS.mobile.reduce((acc, option) => {
 							return { ...acc, ...option };
 						}, {}))
 					.setValue(this.toolbar.position.mobile?.allViews?.position ?? 'props')
