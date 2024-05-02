@@ -568,8 +568,14 @@ body {
     --_viewport-margin: 2.5vmin;
     position: fixed;
     z-index: auto;
-    inset-block: auto var(--_viewport-margin);
-    inset-inline: auto var(--_viewport-margin);
+    right: var(--_viewport-margin);
+    &[data-fab-position="left"] {
+        left: var(--_viewport-margin);
+        right: unset;
+    }
+    bottom: var(--_viewport-margin);
+    /* inset-block: auto var(--_viewport-margin);
+    inset-inline: auto var(--_viewport-margin); */
     display: flex;
     flex-direction: column-reverse;
     place-items: center;

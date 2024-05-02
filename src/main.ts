@@ -262,7 +262,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		switch (position) {
 			case 'fabl':
 			case 'fabr':
-				// TODO: handle left and right positions (pass as param)
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
 				embedBlock.append(noteToolbarElement);
 				break;
