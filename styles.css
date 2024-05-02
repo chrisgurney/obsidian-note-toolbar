@@ -189,6 +189,19 @@ settings:
         default: 1.8
         format: px
     -
+        id: cg-nt-fab-pos-x
+        title: Distance from side (in px units)
+        description: Relative to the side it is aligned to (left or right). 
+        type: variable-number
+        default: 24
+        format: px
+    -
+        id: cg-nt-fab-pos-y
+        title: Distance from bottom (in px units)
+        type: variable-number
+        default: 24
+        format: px
+    -
         id: titlebar-heading
         title: Toolbar Items
         type: heading
@@ -261,6 +274,8 @@ body {
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
     --cg-nt-fab-bg-color: var(--interactive-normal);
     --cg-nt-fab-bg-color-hover: var(--interactive-hover);
+    --cg-nt-fab-pos-x: 24px;
+    --cg-nt-fab-pos-y: 24px;
     --cg-nt-fab-icon-color: var(--icon-color);
     --cg-nt-fab-icon-size: var(--icon-l);
     --cg-nt-fab-icon-stroke-width: var(--icon-l-stroke-width);
@@ -561,21 +576,18 @@ body {
 
 /* FAB styles adapted from: https://web.dev/articles/building/a-fab-component */
 .cg-note-toolbar-fab-container {
-    --_viewport-margin: 2.5vmin;
+    --_viewport-margin: 24px;
     position: fixed;
     z-index: auto;
-    right: var(--_viewport-margin);
-    &[data-fab-position="left"] {
-        left: var(--_viewport-margin);
-        right: unset;
-    }
-    bottom: var(--_viewport-margin);
-    /* inset-block: auto var(--_viewport-margin);
-    inset-inline: auto var(--_viewport-margin); */
     display: flex;
     flex-direction: column-reverse;
     place-items: center;
-    gap: var(--_viewport-margin);
+    bottom: var(--cg-nt-fab-pos-y);
+    right: var(--cg-nt-fab-pos-x);
+    &[data-fab-position="left"] {
+        left: var(--cg-nt-fab-pos-x);
+        right: unset;
+    }
 }
 
 .cg-note-toolbar-fab {
