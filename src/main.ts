@@ -263,6 +263,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case 'fabl':
 			case 'fabr':
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
+				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
 				break;
 			case 'props':
