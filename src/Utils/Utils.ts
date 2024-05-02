@@ -1,4 +1,4 @@
-import { PlatformType } from "src/Settings/NoteToolbarSettings";
+import { ComponentType, ItemViewContext, PlatformType, ViewType, Visibility } from "src/Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -17,13 +17,13 @@ export function arraymove<T>(arr: (T | string)[], fromIndex: number, toIndex: nu
 }
 
 /**
- * Item visibility: Returns the platform value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
+ * Migration: Returns the platform visibility value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
  * Platform value should be the opposite of these flags.
  * @param hideOnDesktop 
  * @param hideOnMobile 
  * @returns PlatformType
  */
-export function calcItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolean): PlatformType {
+export function migrateItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolean): PlatformType {
 	if (!hideOnDesktop && !hideOnMobile) {
 		return 'all';
 	} else if (hideOnDesktop && hideOnMobile) {
@@ -39,22 +39,80 @@ export function calcItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolea
 }
 
 /**
+ * Component visibility: Returns booleans indicating whether to show each component in a link, for all platforms. 
+ * @param visibility 
+ */
+export function calcComponentVisToggles(visibility: Visibility) {
+	const desktopComponents = hasComponents(visibility.desktop);
+	const mobileComponents = hasComponents(visibility.mobile);
+	const tabletComponents = hasComponents(visibility.tablet);
+	return desktopComponents.concat(mobileComponents, tabletComponents);
+}
+
+/**
+ * Local function to effectively convert component strings to booleans.
+ * @param platform platform visibiliity to get
+ * @returns booleans indicating whether there's an icon and a label, for each desktop, mobile, and tablet
+ */
+function hasComponents(platform: { allViews?: { components: string[] } }): [boolean, boolean] {
+    let hasIcon = false;
+    let hasLabel = false;
+
+    if (platform && platform.allViews) {
+        hasIcon = platform.allViews.components.includes('icon');
+        hasLabel = platform.allViews.components.includes('label');
+    }
+
+    return [hasIcon, hasLabel];
+}
+
+/**
  * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
  * toggle values are the opposite of the Platform values.
- * @param platform PlatformOptions
- * @returns booleans corresponding with hideOnDesktop, hideOnMobile
+ * @param Visibility
+ * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
  */
-export function calcItemVisToggles(platform: PlatformType): [boolean, boolean] {
-	// returns [hideOnDesktop, hideOnMobile]
-	switch (platform) {
-		case 'all':
-			return [false, false];
-		case 'desktop':
-			return [false, true];
-		case 'mobile':
-			return [true, false];
-		case 'none':
-			return [true, true];
+export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
+    const desktopHasComponents = hasVisibleComponents(visibility.desktop);
+    const mobileHasComponents = hasVisibleComponents(visibility.mobile);
+    const tabletHasComponents = hasVisibleComponents(visibility.tablet);
+    return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
+}
+
+/**
+ * Local function to check if given visibility has any components or not, for use in determining whether or not 
+ * we should show it on a given platform.
+ * @param platform platform visibility to check
+ * @returns true if it has components; false otherwise
+ */
+function hasVisibleComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
+    return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
+}
+
+/**
+ * Removes the given component from the given visibility prop.
+ * @param platform platform visibility to remove from
+ * @param component component to remove
+ */
+export function removeComponentVisibility(platform: { allViews?: { components: ComponentType[] }}, component: ComponentType) {
+	if (platform && platform.allViews) {
+        const index = platform.allViews.components.indexOf(component);
+        if (index !== -1) {
+            platform.allViews.components.splice(index, 1);
+        }
+    }
+}
+
+/**
+ * Adds the given component to the given visibility prop.
+ * @param platform platform visibility to add to
+ * @param component component to add
+ */
+export function addComponentVisibility(platform: { allViews?: { components: ComponentType[] }}, component: ComponentType) {
+	if (platform && platform.allViews) {
+		if (!platform.allViews.components.includes(component)) {
+			platform.allViews.components.push(component);
+		}
 	}
 }
 
@@ -77,6 +135,19 @@ export function emptyMessageFr(message: string): DocumentFragment {
 	messageFrText.textContent = message;
 	messageFr.append(messageFrText);
 	return messageFr;
+}
+
+/**
+ * Gets the position of the given element. Should probably use only if not available otherwise.
+ * @param element to get position of
+ * @returns x, y position
+ */
+export function getPosition(element: HTMLElement): { x: number, y: number } {
+    const rect = element.getBoundingClientRect();
+    return {
+        x: rect.left + activeWindow.scrollX,
+        y: rect.top + activeWindow.scrollY
+    };
 }
 
 /**

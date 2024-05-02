@@ -1,7 +1,7 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuItem, Plugin, TFile, TextFileView, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position } from './Settings/NoteToolbarSettings';
-import { calcItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
+import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -23,9 +23,28 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.focusCommand() });
 		this.addCommand({ id: 'open-settings', name: 'Open Plugin Settings', callback: async () => this.openSettingsCommand() });
+		this.addCommand({ id: 'open-toolbar-settings', name: 'Open Toolbar Settings', callback: async () => this.openToolbarSettingsCommand() });
 		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
 		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
 		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
+
+		// add icons specific to the plugin
+		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
+
+		// adds the ribbon icon, on mobile only (seems redundant to add on desktop as well)
+		if (Platform.isMobile) {
+			debugLog('isMobile');
+			this.addRibbonIcon(this.settings.icon, 'Note Toolbar', (event) => {
+				let activeFile = this.app.workspace.getActiveFile();
+				if (activeFile) {
+					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
+					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
+					if (toolbar) {
+						this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
+					}
+				}
+			});
+		}
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
@@ -167,7 +186,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// render the toolbar if we have one, and we don't have an existing toolbar to keep
 		if (matchingToolbar && toolbarRemoved) {
 			debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
-			this.renderToolbarFromSettings(matchingToolbar);
+			this.renderToolbar(matchingToolbar);
 		}
 		
 	}
@@ -226,9 +245,92 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Renders the toolbar for the provided toolbar settings.
 	 * @param toolbar ToolbarSettings
 	 */
-	async renderToolbarFromSettings(toolbar: ToolbarSettings): Promise<void> {
+	async renderToolbar(toolbar: ToolbarSettings): Promise<void> {
 
-		debugLog("renderToolbarFromSettings: ", toolbar);
+		debugLog("renderToolbar: ", toolbar);
+
+		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
+		let position;
+		Platform.isMobile
+			? position = toolbar.position.mobile?.allViews?.position ?? 'props'
+			: position = toolbar.position.desktop?.allViews?.position ?? 'props';
+
+		let noteToolbarElement: HTMLElement;
+		let embedBlock = activeDocument.createElement("div");
+		embedBlock.addClass('cg-note-toolbar-container');
+
+		// render the toolbar based on its position
+		switch (position) {
+			case 'fabl':
+			case 'fabr':
+				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
+				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
+				embedBlock.append(noteToolbarElement);
+				this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
+				// this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
+				// this.registerDomEvent(embedBlock, 'focusin', (e) => { e.preventDefault() });
+				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
+				// this.registerDomEvent(embedBlock, 'focusin', (e) => this.toolbarFabHandler(e));			
+				break;
+			case 'props':
+			case 'top':
+				noteToolbarElement = await this.renderToolbarAsCallout(toolbar);
+				// extra div workaround to emulate callout-in-content structure, to use same sticky css
+				let div = activeDocument.createElement("div");
+				div.append(noteToolbarElement);
+				embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
+				embedBlock.append(div);
+				embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
+				this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));	
+				break;
+			case 'hidden':
+			default:
+				// we're not rendering it
+				break;
+		}
+
+		embedBlock.setAttribute("data-name", toolbar.name);
+		embedBlock.setAttribute("data-updated", toolbar.updated);
+
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+		// add the toolbar to the editor UI
+		switch(position) {
+			case 'fabl':
+			case 'fabr':
+				currentView?.containerEl.appendChild(embedBlock);
+				// activeDocument ? activeDocument.querySelector('.app-container')?.appendChild(embedBlock) : undefined
+				break;
+			case 'top':
+				embedBlock.addClass('cg-note-toolbar-position-top');
+				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
+				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
+				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
+				viewHeader 
+					? viewHeader.insertAdjacentElement("afterend", embedBlock)
+					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
+				break;
+			case 'hidden':
+				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
+			case 'props':
+			default:
+				// inject it between the properties and content divs
+				let propsEl = this.getPropsEl();
+				if (!propsEl) {
+					debugLog("🛑 renderToolbarFromSettings: Unable to find .metadata-container to insert toolbar");
+				}
+				propsEl?.insertAdjacentElement("afterend", embedBlock);
+				break;
+		}
+
+	}
+	
+	/**
+	 * Renders the given toolbar as a callout (to add to the container) and returns it.
+	 * @param toolbar
+	 * @returns HTMLElement cg-note-toolbar-callout
+	 */
+	async renderToolbarAsCallout(toolbar: ToolbarSettings): Promise<HTMLElement> {
 
 		/* create the unordered list of menu items */
 		let noteToolbarUl = activeDocument.createElement("ul");
@@ -236,6 +338,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		toolbar.items.filter((item: ToolbarItemSettings) => {
 
+			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
 			return ((item.label === "" && item.icon === "") ? false : true);
 
@@ -254,73 +357,110 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbarItem.setAttribute("rel", "noopener");
 			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
 
+			const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
 			if (item.label) {
 				if (item.icon) {
 					let itemIcon = toolbarItem.createSpan();
+					this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
 					setIcon(itemIcon, item.icon);
+
 					let itemLabel = toolbarItem.createSpan();
+					this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
 					itemLabel.innerText = item.label;
 				}
 				else {
+					this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
 					toolbarItem.innerText = item.label;
 				}
 			}
 			else {
+				this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
 				setIcon(toolbarItem, item.icon);
 			}
 
 			let noteToolbarLi = activeDocument.createElement("li");
-			const [hideOnDesktop, hideOnMobile] = calcItemVisToggles(item.contexts[0].platform);
-			hideOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
-			hideOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
+			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+			!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
+			!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 			noteToolbarLi.append(toolbarItem);
 
 			noteToolbarUl.appendChild(noteToolbarLi);
-		});		
-
-		let noteToolbarCalloutContent = activeDocument.createElement("div");
-		noteToolbarCalloutContent.className = "callout-content";
-		noteToolbarCalloutContent.append(noteToolbarUl);
+		});
 
 		let noteToolbarCallout = activeDocument.createElement("div");
-		noteToolbarCallout.className = "callout cg-note-toolbar-callout";
-		noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
-		noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
-		noteToolbarCallout.append(noteToolbarCalloutContent);
 
-		/* workaround to emulate callout-in-content structure, to use same sticky css */
-		let div = activeDocument.createElement("div");
-		div.append(noteToolbarCallout);
-		let embedBlock = activeDocument.createElement("div");
-		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
-		embedBlock.setAttribute("data-name", toolbar.name);
-		embedBlock.setAttribute("data-updated", toolbar.updated);
-		embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
-		embedBlock.append(div);
+		// don't render content if it's empty, but keep the metadata so the toolbar commands & menu still work
+		// TODO: also check if all child items are display: none - use Platform.isMobile and check the mb booleans, dk otherwise?
+		if (toolbar.items.length > 0) {
 
-		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
+			let noteToolbarCalloutContent = activeDocument.createElement("div");
+			noteToolbarCalloutContent.className = "callout-content";
+			noteToolbarCalloutContent.append(noteToolbarUl);
 
-		switch(toolbar.positions[0].position) {
-			case 'top':
-				embedBlock.addClass('cg-note-toolbar-position-top');
-				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
-				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
-				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
-				viewHeader 
-					? viewHeader.insertAdjacentElement("afterend", embedBlock)
-					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
-				break;
-			case 'props':
-			default:
-				/* inject it between the properties and content divs */
-				let propsEl = this.getPropsEl();
-				if (!propsEl) {
-					debugLog("🛑 renderToolbarFromSettings: Unable to find .metadata-container to insert toolbar");
-				}
-				propsEl?.insertAdjacentElement("afterend", embedBlock);
-				break;
+			noteToolbarCallout.className = "callout cg-note-toolbar-callout";
+			noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
+			noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
+			noteToolbarCallout.append(noteToolbarCalloutContent);
+
 		}
+
+		return noteToolbarCallout;
+
+	}
+
+	/**
+	 * 
+	 * @param toolbar 
+	 * @returns HTMLElement cg-note-toolbar-fab
+	 */
+	async renderToolbarAsFab(toolbar: ToolbarSettings): Promise<HTMLElement> {
+
+		let noteToolbarFabContainer = activeDocument.createElement('div');
+		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
+		noteToolbarFabContainer.setAttribute('role', 'group');
+		noteToolbarFabContainer.setAttribute('aria-label', 'Note Toolbar button');
+
+		let noteToolbarFabButton = activeDocument.createElement('button');
+		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
+		noteToolbarFabButton.setAttribute('title', 'Open Note Toolbar');
+		noteToolbarFabButton.setAttribute('aria-label', 'Open Note Toolbar');
+		setIcon(noteToolbarFabButton, this.settings.icon);
+
+		// noteToolbarFabButton.onClickEvent((event) => {
+		// 	event.preventDefault();
+		// 	this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
+		// });
+		
+		noteToolbarFabContainer.append(noteToolbarFabButton);
+
+		return noteToolbarFabContainer;
+
+	}
+
+	/**
+	 * Renders the given toolbar as a menu and returns it.
+	 * @param toolbar 
+	 * @returns Menu with toolbar's items
+	 */
+	async renderToolbarAsMenu(toolbar: ToolbarSettings): Promise<Menu> {
+
+		let menu = new Menu();
+		toolbar.items.forEach((toolbarItem, index) => {
+			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
+			if (showOnMobile) {
+				menu.addItem((item) => {
+					item
+						.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
+						.setTitle(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip)
+						.onClick((menuEvent) => {
+							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
+							this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
+						});
+					});
+			}
+		});
+
+		return menu;
 
 	}
 
@@ -333,6 +473,22 @@ export default class NoteToolbarPlugin extends Plugin {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			this.checkAndRenderToolbar(activeFile, frontmatter);
 		}	
+	}
+
+	/**
+	 * Sets the appropriate class on the given component, based on its visibility settings.
+	 * @param element HTMLElement to set the display class on
+	 * @param dkVisible true if component is visible on desktop
+	 * @param mbVisibile true if component is visible on mobile
+	 */
+	setComponentDisplayClass(element: HTMLElement, dkVisible: boolean, mbVisibile: boolean): void {
+		if (!dkVisible && !mbVisibile) {
+			element.addClass('hide');
+		} else {
+			!dkVisible && element.addClass('hide-on-desktop');
+			!mbVisibile && element.addClass('hide-on-mobile');
+			// !tabVisible && element.addClass('hide-on-tablet');
+		}
 	}
 
 	/*************************************************************************
@@ -370,6 +526,21 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
+	 * Convenience command to open this toolbar's settings.
+	 */
+	async openToolbarSettingsCommand(): Promise<void> {
+		// figure out what toolbar is on the screen
+		let toolbarEl = this.getToolbarEl();
+		let toolbarName = toolbarEl?.getAttribute('data-name');
+		let toolbarSettings = toolbarName ? this.getToolbarSettings(toolbarName) : undefined;
+		if (toolbarSettings) {
+			const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
+			modal.setTitle("Edit Toolbar: " + toolbarName);
+			modal.open();
+		}
+	}
+
+	/**
 	 * Shows, completely hides, or toggles the visibility of this note's Properties.
 	 * @param visibility Set to 'show', 'hide', or 'toggle'
 	 */
@@ -402,6 +573,26 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * HANDLERS
 	 *************************************************************************/
 	
+	/**
+	 * Handles the floating action button specifically on mobile.
+	 * @param event TouchEvent
+	 */
+	async toolbarFabHandler(event: TouchEvent) {
+
+		debugLog("toolbarFabHandler: ", event);
+		event.preventDefault();
+
+		let activeFile = this.app.workspace.getActiveFile();
+		if (activeFile) {
+			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
+			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
+			if (toolbar) {
+				this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition({x: 0, y: 0}); });
+			}
+		}
+
+	}
+
 	/**
 	 * Handles keyboard navigation within the toolbar.
 	 * @param e KeyboardEvent
@@ -461,9 +652,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	async toolbarClickHandler(e: MouseEvent) {
 
 		let clickedEl = e.currentTarget as HTMLLinkElement;
-		let href = clickedEl.getAttribute("href");
+		let linkHref = clickedEl.getAttribute("href");
 
-		if (href != null) {
+		if (linkHref != null) {
 			
 			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
 			linkType ? (['command', 'file', 'uri'].includes(linkType) ? e.preventDefault() : undefined) : undefined
@@ -474,60 +665,72 @@ export default class NoteToolbarPlugin extends Plugin {
 			let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
 							 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
 
-			if (linkHasVars) {
-				let activeFile = this.app.workspace.getActiveFile();
-				// only replace vars in URIs; might consider other substitution in future
-				href = this.replaceVars(href, activeFile, false);
-				debugLog('- uri vars replaced: ', href);
-			}
-
+			let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
+			
 			// remove the focus effect if clicked with a mouse
 			if ((e as PointerEvent)?.pointerType === "mouse") {
 				clickedEl.blur();
 			}
 
-			switch (linkType) {
-				case 'command':
-					let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
-					debugLog("- executeCommandById: ", linkCommandId);
-					linkCommandId ? this.app.commands.executeCommandById(linkCommandId) : undefined;
-					break;
-				case 'file':
-					// it's an internal link (note); try to open it
-					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					debugLog("- openLinkText: ", href, " from: ", activeFile);
-					this.app.workspace.openLinkText(href, activeFile);
-					break;
-				case 'uri':
-					if (isValidUri(href)) {
-						// if actually a url, just open the url
-						window.open(href, '_blank');
-					}
-					else {
-						// as fallback, treat it as internal note
-						let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-						this.app.workspace.openLinkText(href, activeFile);
-					}
-					break;
-			}
-		
-			// archiving for later
-			if (false) {
-				// if it's a js function that exists, call it without any parameters
-				// @ts-ignore
-				if (href.toLowerCase().startsWith('onclick:')) {
-					// @ts-ignore
-					let functionName = href.slice(8); // remove 'onclick:'
-					if (typeof (window as any)[functionName] === 'function') {
-						(window as any)[functionName]();
-					}
-				}
-			}
+			this.handleLink(linkHref, { commandId: linkCommandId, hasVars: linkHasVars, type: linkType } as ToolbarItemLinkAttr);
 
 		}
 
 	}
 	
+	/**
+	 * Handles the link provided.
+	 * @param linkHref What the link is for.
+	 * @param linkAttr Attributes of the link.
+	 */
+	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr) {
+
+		if (linkAttr.hasVars) {
+			let activeFile = this.app.workspace.getActiveFile();
+			// only replace vars in URIs; might consider other substitution in future
+			linkHref = this.replaceVars(linkHref, activeFile, false);
+			debugLog('- uri vars replaced: ', linkHref);
+		}
+
+		switch (linkAttr.type) {
+			case 'command':
+				debugLog("- executeCommandById: ", linkAttr.commandId);
+				linkAttr.commandId ? this.app.commands.executeCommandById(linkAttr.commandId) : undefined;
+				break;
+			case 'file':
+				// it's an internal link (note); try to open it
+				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+				debugLog("- openLinkText: ", linkHref, " from: ", activeFile);
+				this.app.workspace.openLinkText(linkHref, activeFile);
+				break;
+			case 'uri':
+				if (isValidUri(linkHref)) {
+					// if actually a url, just open the url
+					window.open(linkHref, '_blank');
+				}
+				else {
+					// as fallback, treat it as internal note
+					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+					this.app.workspace.openLinkText(linkHref, activeFile);
+				}
+				break;
+		}
+	
+		// archiving for later
+		if (false) {
+			// if it's a js function that exists, call it without any parameters
+			// @ts-ignore
+			if (href.toLowerCase().startsWith('onclick:')) {
+				// @ts-ignore
+				let functionName = href.slice(8); // remove 'onclick:'
+				if (typeof (window as any)[functionName] === 'function') {
+					(window as any)[functionName]();
+				}
+			}
+		}
+		
+	}
+
 	/**
 	 * Shows a context menu with links to settings/configuration.
 	 * @param e MouseEvent
@@ -827,7 +1030,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					tb.items.forEach((item: any, item_index: number) => {
 						// convert hideOnDesktop + hideOnMobile to contexts
 						this.settings.toolbars[index].items[item_index].contexts = [{
-							platform: calcItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
+							platform: migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
 							view: 'all'}];
 						delete item.hideOnDesktop;
 						delete item.hideOnMobile;
@@ -839,6 +1042,95 @@ export default class NoteToolbarPlugin extends Plugin {
 							view: 'all'
 						}]
 					}]
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: 
+			if (old_version === 20240416.1) {
+				new_version = 20240426.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					// toolbar position -> platform-specific positions
+					if (this.settings.toolbars[index].positions) {
+						this.settings.toolbars[index].positions?.forEach((pos, posIndex) => {
+							this.settings.toolbars[index].position = {} as Position;
+							if (pos.contexts) {
+								pos.contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+									if (pos.position) {
+										switch (ctx.platform) {
+											case 'desktop':
+												this.settings.toolbars[index].position.desktop = {
+													allViews: { position: pos.position }
+												}
+												break;
+											case 'mobile':
+												this.settings.toolbars[index].position.mobile = {
+													allViews: { position: pos.position }
+												}
+												this.settings.toolbars[index].position.tablet = {
+													allViews: { position: pos.position }
+												}
+												break;
+											case 'all':
+												this.settings.toolbars[index].position.desktop = {
+													allViews: { position: pos.position }
+												}
+												this.settings.toolbars[index].position.mobile = {
+													allViews: { position: pos.position }
+												}
+												this.settings.toolbars[index].position.tablet = {
+													allViews: { position: pos.position }
+												}
+												break;
+										}
+									}
+								});
+							}
+						});
+						delete this.settings.toolbars[index].positions;
+					}
+					// item contexts -> item / component visibility
+					tb.items.forEach((item: any, item_index: number) => {
+						if (this.settings.toolbars[index].items[item_index].contexts) {							
+							this.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+								if (!this.settings.toolbars[index].items[item_index].visibility) {
+									this.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
+									switch (ctx.platform) {
+										case 'desktop':
+											this.settings.toolbars[index].items[item_index].visibility.desktop = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;
+										case 'mobile':
+											this.settings.toolbars[index].items[item_index].visibility.mobile = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.settings.toolbars[index].items[item_index].visibility.tablet = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;
+										case 'all':
+											this.settings.toolbars[index].items[item_index].visibility.desktop = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.settings.toolbars[index].items[item_index].visibility.mobile = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.settings.toolbars[index].items[item_index].visibility.tablet = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;						
+										case 'none':
+										default:
+											break;
+									}
+								}
+							});
+							delete this.settings.toolbars[index].items[item_index].contexts;
+						}
+					});
 				});
 				// for the next migration to run
 				old_version = new_version;

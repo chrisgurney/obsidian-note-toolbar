@@ -133,6 +133,75 @@ settings:
         default: -1
         format: rem
     -
+        id: toolbar-fab-styles
+        title: 'Toolbar: Floating button (mobile)'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-fab-bg-color
+        title: Background color
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-fab-bg-color-hover
+        title: Background color (on press)
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-fab-icon-color
+        title: Icon color
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-fab-border-radius
+        title: Border radius (in px units)
+        description: How rounded the button is. The higher the number the more rounded.
+        type: variable-number
+        default: 999
+        format: px
+    -
+        id: cg-nt-fab-padding
+        title: Button padding (in px units)
+        description: Spacing around the icon.
+        type: variable-number
+        default: 12
+        format: px
+    -
+        id: cg-nt-fab-icon-size
+        title: Icon size (in px units)
+        type: variable-number
+        default: 24
+        format: px
+    -
+        id: cg-nt-fab-icon-stroke-width
+        title: Icon stroke width (in px units)
+        type: variable-number
+        default: 1.8
+        format: px
+    -
+        id: cg-nt-fab-pos-x
+        title: Distance from side (in px units)
+        description: Relative to the side it is aligned to (left or right). 
+        type: variable-number
+        default: 24
+        format: px
+    -
+        id: cg-nt-fab-pos-y
+        title: Distance from bottom (in px units)
+        type: variable-number
+        default: 24
+        format: px
+    -
         id: titlebar-heading
         title: Toolbar Items
         type: heading
@@ -182,7 +251,7 @@ settings:
         format: px
     -
         id: titlebar-heading
-        title: Toolbar Items (button style)
+        title: 'Toolbar Items: Button style'
         type: heading
         level: 1
         collapsed: true
@@ -203,6 +272,15 @@ body {
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
+    --cg-nt-fab-bg-color: var(--interactive-normal);
+    --cg-nt-fab-bg-color-hover: var(--interactive-hover);
+    --cg-nt-fab-pos-x: 24px;
+    --cg-nt-fab-pos-y: 24px;
+    --cg-nt-fab-icon-color: var(--icon-color);
+    --cg-nt-fab-icon-size: var(--icon-l);
+    --cg-nt-fab-icon-stroke-width: var(--icon-l-stroke-width);
+    --cg-nt-fab-border-radius: 999px;
+    --cg-nt-fab-padding: calc(var(--icon-l) / 2);
     --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-item-border-radius: var(--button-radius);
     --cg-nt-item-button-bg-color: var(--interactive-normal);
@@ -304,7 +382,20 @@ body {
                     display: block !important;
                 }
             }
-
+            & span.hide {
+                display: none;
+            }
+            & span.hide-on-mobile {
+                .is-mobile & {
+                    display: none;
+                }
+            }
+            & span.hide-on-desktop {
+                display: none;
+                .is-mobile & {
+                    display: block !important;
+                }
+            }
         }
 
         & a, span.external-link {
@@ -483,7 +574,52 @@ body {
     visibility: hidden;
 }
 
-.cg-note-toolbar-container {
+/* FAB styles adapted from: https://web.dev/articles/building/a-fab-component */
+.cg-note-toolbar-fab-container {
+    --_viewport-margin: 24px;
+    position: fixed;
+    z-index: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    place-items: center;
+    bottom: var(--cg-nt-fab-pos-y);
+    right: var(--cg-nt-fab-pos-x);
+    &[data-fab-position="left"] {
+        left: var(--cg-nt-fab-pos-x);
+        right: unset;
+    }
+}
+
+.cg-note-toolbar-fab {
+    padding: var(--cg-nt-fab-padding) !important;
+    border-radius: var(--cg-nt-fab-border-radius);
+    height: auto !important;
+    aspect-ratio: 1;
+    /* box-shadow: var(--input-shadow) !important; */
+    background-color: var(--cg-nt-fab-bg-color) !important;
+    color: var(--cg-nt-fab-icon-color);
+    -webkit-tap-highlight-color: transparent;
+    &:is(:active, :hover, :focus-visible) {
+        color: var(--cg-nt-fab-icon-color) !important;
+        background-color: var(--cg-nt-fab-bg-color-hover) !important;
+    }
+    & > svg {
+        inline-size: var(--cg-nt-fab-icon-size);
+        block-size: var(--cg-nt-fab-icon-size);
+        stroke-width: var(--cg-nt-fab-icon-stroke-width);
+        @media (prefers-reduced-motion: no-preference) {
+          will-change: transform;
+          transition: transform .5s var(--ease-squish-3);
+        }
+    }
+    &:active {
+        @media (prefers-reduced-motion: no-preference) {
+            transform: translateY(2%);
+        }
+    }
+}
+
+.cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
     box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color);
     margin-bottom: 1em;
@@ -546,7 +682,7 @@ body {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
     margin: 0em 0em 1em 0em;
-    padding: 1.5em 1.5em 0.5em 1.5em;
+    padding: 1.5em;
     .is-mobile & {
         padding: 1em;
     }
@@ -612,6 +748,10 @@ body {
     padding-bottom: 1em !important;
 }
 
+.note-toolbar-setting-no-border {
+    border-top: none !important;
+}
+
 .note-toolbar-setting-no-controls {
     & .setting-item-control {
         display: none;
@@ -630,6 +770,8 @@ body {
 
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
+    border-top: 1px solid var(--background-modifier-border);
+    padding-top: 0.75em !important;
     & .setting-item {
         border-bottom: none !important;
     }
@@ -644,7 +786,7 @@ body {
     }
 }
 
-.note-toolbar-setting-item-toggles-container {
+.note-toolbar-setting-item-visibility-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -696,9 +838,18 @@ body {
     color: var(--text-muted);
 }
 
-.note-toolbar-setting-item-fields {
-    display: flex;
-    gap: 0 1em;
+.note-toolbar-setting-mapping-field {
+    border-top: none !important;
+    padding-top: 0 !important;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        justify-content: flex-start;
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
 }
 
 .note-toolbar-setting-item-field {
@@ -762,27 +913,34 @@ body {
     }
 }
 
-.note-toolbar-setting-item-toggle {
-    border-top: none !important;
-    padding: 0.75em 0 0.75em 0 !important;
-    &:not(:first-child) {
-        padding-left: 1em !important;
-    }
-    .is-mobile & {
-        padding-bottom: 0em !important;
-    }
-    & .setting-item-info {
-        margin-right: 0.5em;
-    }
-    & .setting-item-name {
-        color: var(--text-muted);
-        font-size: var(--font-ui-smaller);
-    }
+.note-toolbar-setting-item-visibility {
+    display: flex;
 }
 
 .note-toolbar-setting-item-controls {
-    margin-left: auto;
-    .setting-item {
+    display: flex;
+    & .setting-item {
+        .is-mobile & {
+            padding-top: 0 !important;
+        }
+        & .setting-item-control {
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
+        }
+        & .setting-item-info {
+            display: none;
+        }
+    }
+}
+
+.note-toolbar-setting-item-visibility-and-controls {
+    border-top: none !important;
+    display: flex;
+    padding-top: 0.75em !important;
+    justify-content: space-between;
+    & .setting-item {
+        padding-bottom: 0 !important;
         & .setting-item-info {
             display: none;
         }
@@ -798,19 +956,38 @@ body {
                 box-shadow: 0 0 0 1px var(--background-modifier-border);
                 box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
             }
+            & button {
+                background: none;
+                box-shadow: none;
+                color: var(--icon-color);
+                gap: var(--size-4-2);
+                padding: var(--size-4-2);
+                &:hover {
+                    opacity: var(--icon-opacity-hover);
+                    color: var(--icon-color-hover);
+                    background-color: var(--background-modifier-hover);
+                }
+                &:focus {
+                    border-radius: var(--input-radius);
+                    box-shadow: 0 0 0 1px var(--background-modifier-border);
+                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+                }
+                & span:last-child {
+                    font-size: var(--font-smaller);
+                }
+            }
         }
     }
 }
 
-.note-toolbar-setting-item-fields-and-controls {
+.note-toolbar-setting-item-fields {
     display: flex;
-    flex-direction: column-reverse;
     flex-grow: 1;
     flex-wrap: wrap;
+    gap: 0 1em;
 }
 
 .note-toolbar-setting-item-styles {
-    border-top: none !important;
     & > .setting-item-info {
         align-self: flex-start;
     }

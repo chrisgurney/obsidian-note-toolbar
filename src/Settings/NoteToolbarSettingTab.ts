@@ -5,6 +5,7 @@ import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { Position, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
+import { IconSuggestModal } from './IconSuggestModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -54,6 +55,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
+		this.displayOtherSettings(containerEl);
 
 		if (focusOnLastItem) {
 			// set focus on last thing in the list, if the label is empty
@@ -133,7 +135,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							items: [],
 							mobileStyles: [],
 							name: "",
-							positions: [{position: 'props', contexts: [{platform: 'all', view: 'all'}]}],
+							position: { 
+								desktop: { allViews: { position: 'props' } }, 
+								mobile: { allViews: { position: 'props' } }, 
+								tablet: { allViews: { position: 'props' } } },
 							updated: new Date().toISOString(),
 						} as ToolbarSettings;
 						this.plugin.settings.toolbars.push(newToolbar);
@@ -174,7 +179,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Folder mappings")
 			.setDesc("Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.")
-			.setClass("note-toolbar-setting-no-controls");
+			.setClass("note-toolbar-setting-no-border");
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
@@ -194,7 +199,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
 				textFieldsDiv.className = "note-toolbar-setting-item-fields";
 				const fs = new Setting(textFieldsDiv)
-					.setClass("note-toolbar-setting-item-field")
+					.setClass("note-toolbar-setting-mapping-field")
 					.addSearch((cb) => {
 						new FolderSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder("Folder")
@@ -225,7 +230,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                             }, 250));
 					});
 				const ts = new Setting(textFieldsDiv)
-					.setClass("note-toolbar-setting-item-field")
+					.setClass("note-toolbar-setting-mapping-field")
 					.addSearch((cb) => {
 						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 						cb.setPlaceholder("Toolbar")
@@ -292,6 +297,42 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+	}
+
+	/**
+	 * 
+	 * @param containerEl 
+	 */
+	displayOtherSettings(containerEl: HTMLElement): void {
+
+		new Setting(containerEl)
+			.setName("Other settings")
+			.setHeading();
+
+		const s1a = new Setting(containerEl)
+			.setName("Icon")
+			.setDesc("Sets the icon to show in the ribbon (on mobile). Restart the app to see the change.")
+			.addButton((cb) => {
+				cb.setIcon(this.plugin.settings.icon)
+					.setTooltip("Select icon")
+					.onClick(async () => {
+						const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+						modal.open();
+					});
+				cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.plugin.settings.icon ? "true" : "false");
+				cb.buttonEl.setAttribute("tabindex", "0");
+				this.plugin.registerDomEvent(
+					cb.buttonEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+								modal.open();
+								e.preventDefault();									
+						}
+					});
+			});
+			
 	}
 
 	/*************************************************************************

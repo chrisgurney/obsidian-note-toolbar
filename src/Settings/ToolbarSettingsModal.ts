@@ -1,7 +1,7 @@
-import { App, ButtonComponent, Modal, Setting, TFile, debounce, normalizePath } from 'obsidian';
-import { arraymove, calcItemVisPlatform, calcItemVisToggles, debugLog, emptyMessageFr, hasVars } from 'src/Utils/Utils';
+import { App, ButtonComponent, Menu, Modal, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
+import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
@@ -131,7 +131,7 @@ export default class ToolbarSettingsModal extends Modal {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples",
 				text: "examples",
 			}),
-			", and for details about ",
+			", and for the ",
 			itemsDescription.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables",
 				text: "variables",
@@ -150,11 +150,6 @@ export default class ToolbarSettingsModal extends Modal {
 			uri: Setting;
 		}[] = [];
 
-		let itemVisToggles: {
-			hideOnDesktop: boolean;
-			hideOnMobile: boolean;
-		}[] = [];
-
 		this.toolbar.items.forEach(
 			(toolbarItem, index) => {
 				let itemDiv = this.containerEl.createDiv();
@@ -163,7 +158,7 @@ export default class ToolbarSettingsModal extends Modal {
 				itemTopContainer.className = "note-toolbar-setting-item-top-container";
 
 				//
-				// Item name and tooltip
+				// Item icon, name, and tooltip
 				//
 
 				let textFieldsContainer = this.containerEl.createDiv();
@@ -176,7 +171,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 							.setTooltip("Select icon (optional)")
 							.onClick(async () => {
-								const modal = new IconSuggestModal(this, cb.extraSettingsEl, this.toolbar, index);
+								const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
 								modal.open();
 							});
 						cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -186,7 +181,7 @@ export default class ToolbarSettingsModal extends Modal {
 								switch (e.key) {
 									case "Enter":
 									case " ":
-										const modal = new IconSuggestModal(this, cb.extraSettingsEl, this.toolbar, index);
+										const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
 										modal.open();
 										e.preventDefault();									
 								}
@@ -222,8 +217,8 @@ export default class ToolbarSettingsModal extends Modal {
 				// Item link
 				//
 
-				let linkContainerDiv = this.containerEl.createDiv();
-				linkContainerDiv.className = "note-toolbar-setting-item-link-container";
+				let linkContainer = this.containerEl.createDiv();
+				linkContainer.className = "note-toolbar-setting-item-link-container";
 
 				let linkTypeDiv = this.containerEl.createDiv();
 
@@ -297,7 +292,7 @@ export default class ToolbarSettingsModal extends Modal {
 											let errorDiv = this.containerEl.createEl("div", { 
 												text: "This file does not exist.", 
 												attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
-												linkContainerDiv.insertAdjacentElement('afterend', errorDiv);
+												linkContainer.insertAdjacentElement('afterend', errorDiv);
 												itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
 										}
 									}
@@ -342,16 +337,16 @@ export default class ToolbarSettingsModal extends Modal {
 				itemLinkFields[index].uri.settingEl.setAttribute("data-active", 
 					toolbarItem.linkAttr.type === "uri" ? "true" : "false");
 
-				linkContainerDiv.append(linkTypeDiv);
-				linkContainerDiv.append(linkFieldDiv);
+				linkContainer.append(linkTypeDiv);
+				linkContainer.append(linkFieldDiv);
 
 				//
 				// Item list controls
 				// 
 
-				let itemControlsDiv = this.containerEl.createDiv();
-				itemControlsDiv.className = "note-toolbar-setting-item-controls";
-				const s1d = new Setting(itemControlsDiv)
+				let itemControlsContainer = this.containerEl.createDiv();
+				itemControlsContainer.className = "note-toolbar-setting-item-controls";
+				const s1d = new Setting(itemControlsContainer)
 					.addExtraButton((cb) => {
 						cb.setIcon("up-chevron-glyph")
 							.setTooltip("Move up")
@@ -377,62 +372,66 @@ export default class ToolbarSettingsModal extends Modal {
 							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "delete"));
 					});
 
-				let itemFieldsControlsContainer = this.containerEl.createDiv();
-				itemFieldsControlsContainer.className = "note-toolbar-setting-item-fields-and-controls";
-				itemFieldsControlsContainer.appendChild(textFieldsContainer);
-				itemFieldsControlsContainer.appendChild(itemControlsDiv);
-
-				itemTopContainer.appendChild(itemFieldsControlsContainer);
-				itemTopContainer.appendChild(linkContainerDiv);
-
+				let itemFieldsContainer = this.containerEl.createDiv();
+				itemFieldsContainer.className = "note-toolbar-setting-item-fields";
+				itemFieldsContainer.appendChild(textFieldsContainer);
+				
+				itemTopContainer.appendChild(itemFieldsContainer);
+				itemTopContainer.appendChild(linkContainer);
 				itemDiv.appendChild(itemTopContainer);
 
 				//
-				// Toggles
+				// Visibility
 				// 
 
-				const [hideOnDesktopValue, hideOnMobileValue] = calcItemVisToggles(toolbarItem.contexts[0].platform);
-				itemVisToggles.push({
-					hideOnDesktop: hideOnDesktopValue,
-					hideOnMobile: hideOnMobileValue
-				});
+				let visibilityControlsContainer = this.containerEl.createDiv();
+				visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
 
-				let togglesContainer = this.containerEl.createDiv();
-				togglesContainer.className = "note-toolbar-setting-item-toggles-container";
-				const s2 = new Setting(togglesContainer)
-					.setClass("note-toolbar-setting-item-toggle")
-					.setName("Hide on: mobile")
-					.addToggle((toggle) => {
-						toggle
-							.setTooltip(('If enabled, this item will not appear on mobile'))
-							.setValue(itemVisToggles[index].hideOnMobile)
-							.onChange(async (hideOnMobile) => {
-								itemVisToggles[index].hideOnMobile = hideOnMobile;
-								toolbarItem.contexts = [{
-									platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
-									view: 'all'}];
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
+				const visButtons = new Setting(visibilityControlsContainer)
+					.setClass("note-toolbar-setting-item-visibility")
+					.addButton((cb) => {
+						let btnIcon = cb.buttonEl.createSpan();
+						setIcon(btnIcon, 'monitor');
+						let state = this.getPlatformStateLabel(toolbarItem.visibility.desktop);
+						if (state) {
+							let btnLabel = cb.buttonEl.createSpan();
+							btnLabel.setText(state);
+						}
+						cb.setTooltip(state ? 'Change desktop visibility' : 'Showing on desktop')
+							.onClick(async () => {
+								// create the setting if it doesn't exist or was removed
+								toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
+								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
+								visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
+							});
+					})
+					// TODO: implement tablet settings
+					.addButton((cb) => {
+						let btnIcon = cb.buttonEl.createSpan();
+						setIcon(btnIcon, 'smartphone');
+						let state = this.getPlatformStateLabel(toolbarItem.visibility.mobile);
+						if (state) {
+							let btnLabel = cb.buttonEl.createSpan();
+							btnLabel.setText(state);
+						}
+						cb.setTooltip(state ? 'Change mobile visibility' : 'Showing on mobile')
+							.onClick(async () => {
+								// create the setting if it doesn't exist or was removed
+								toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
+								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile');
+								visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 							});
 					});
-				const s3 = new Setting(togglesContainer)
-					.setClass("note-toolbar-setting-item-toggle")
-					.setName("desktop")
-					.addToggle((toggle) => {
-						toggle
-							.setTooltip(('If enabled, this item will not appear on desktop'))
-							.setValue(itemVisToggles[index].hideOnDesktop)
-							.onChange(async (hideOnDesktop) => {
-								itemVisToggles[index].hideOnDesktop = hideOnDesktop;
-								toolbarItem.contexts = [{
-									platform: calcItemVisPlatform(itemVisToggles[index].hideOnDesktop, itemVisToggles[index].hideOnMobile), 
-									view: 'all'}];
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-							});
-					});
-				itemDiv.appendChild(togglesContainer);
+
+				let itemVisilityAndControlsContainer = this.containerEl.createDiv();
+				itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
+				itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
+				itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
+
+				itemDiv.appendChild(itemVisilityAndControlsContainer);
+
 				settingsDiv.appendChild(itemDiv);
+	
 			});
 
 		//
@@ -457,7 +456,11 @@ export default class ToolbarSettingsModal extends Modal {
 								type: this.toolbar.items.last()?.linkAttr.type ?? "uri"
 							},
 							tooltip: "",
-							contexts: [{platform: 'all', view: 'all'}],
+							visibility: {
+								desktop: { allViews: { components: ['icon', 'label'] } },
+								mobile: { allViews: { components: ['icon', 'label'] } },
+								tablet: { allViews: { components: ['icon', 'label'] } },
+							},
 						});
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
@@ -474,18 +477,39 @@ export default class ToolbarSettingsModal extends Modal {
 	displayPositionSetting(settingsDiv: HTMLElement) {
 
 		new Setting(settingsDiv)
-			.setName("Position")
-			.setDesc("Where to position this toolbar.")
-			.setClass("note-toolbar-setting-spaced")
+			.setName('Position')
+			.setHeading()
+			.setDesc('Where to position this toolbar.');
+
+		new Setting(settingsDiv)
+			.setName('Desktop')
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(
-						POSITION_OPTIONS.reduce((acc, option) => {
+						POSITION_OPTIONS.desktop.reduce((acc, option) => {
 							return { ...acc, ...option };
 						}, {}))
-					.setValue(this.toolbar.positions[0].position)
-					.onChange(async (val: 'props' | 'top') => {
-						this.toolbar.positions = [{ position: val, contexts: [{ platform: 'all', view: 'all' }]}];
+					.setValue(this.toolbar.position.desktop?.allViews?.position ?? 'props')
+					.onChange(async (val: PositionType) => {
+						this.toolbar.position.desktop = { allViews: { position: val } };
+						this.toolbar.updated = new Date().toISOString();
+						await this.plugin.saveSettings();
+						this.display();
+					})
+				);
+
+		new Setting(settingsDiv)
+			.setName('Mobile')
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOptions(
+						POSITION_OPTIONS.mobile.reduce((acc, option) => {
+							return { ...acc, ...option };
+						}, {}))
+					.setValue(this.toolbar.position.mobile?.allViews?.position ?? 'props')
+					.onChange(async (val: PositionType) => {
+						this.toolbar.position.mobile = { allViews: { position: val } };
+						this.toolbar.position.tablet = { allViews: { position: val } };
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
 						this.display();
@@ -515,7 +539,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(settingsDiv)
 			.setName("Styles")
 			.setDesc(stylingDescription)
-			.setClass("note-toolbar-setting-no-controls");
+			.setHeading();
 
 		//
 		// Default
@@ -572,7 +596,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Default")
-			.setDesc("Applies to all unless overridden.")
+			.setDesc("Applies to all platforms unless overridden.")
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(defaultStyleDiv);
 
@@ -645,6 +669,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Delete this toolbar")
+			.setHeading()
 			.setDesc("This action cannot be undone.")
 			.setClass("note-toolbar-setting-spaced")
 			.addButton((button: ButtonComponent) => {
@@ -745,6 +770,87 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
+
+	/**
+	 * Returns the visibility menu to display, for the given platform.
+	 * @param platform visibility to check for component visibility
+	 * @param platformLabel string to show in the menu 
+	 * @returns Menu
+	 */
+	getItemVisibilityMenu(platform: any, platformLabel: string): Menu {
+
+		let isComponentVisible = {
+			icon: (platform && platform.allViews) ? platform.allViews.components.includes('icon') : false,
+			label: (platform && platform.allViews) ? platform.allViews.components.includes('label') : false,
+		};
+
+		let menu = new Menu();
+		menu.addItem((menuItem) => {
+			menuItem
+				.setTitle(isComponentVisible.icon ? 
+					'Icon shows on ' + platformLabel : 'Icon hidden on ' + platformLabel)
+				.setIcon("image")
+				.setChecked(isComponentVisible.icon)
+				.onClick(async (menuEvent) => {
+					if (isComponentVisible.icon) {
+						removeComponentVisibility(platform, 'icon');
+						isComponentVisible.icon = false;
+					}
+					else {
+						addComponentVisibility(platform, 'icon');
+						isComponentVisible.icon = true;
+					}
+					this.toolbar.updated = new Date().toISOString();
+					await this.plugin.saveSettings();
+					this.display();
+				});
+		});
+		menu.addItem((menuItem) => {
+			menuItem
+				.setTitle(isComponentVisible.label ? 
+					'Label shows on ' + platformLabel : 'Label hidden on ' + platformLabel)
+				.setIcon("whole-word")
+				.setChecked(isComponentVisible.label)
+				.onClick(async (menuEvent) => {
+					if (isComponentVisible.label) {
+						removeComponentVisibility(platform, 'label');
+						isComponentVisible.label = false;
+					}
+					else {
+						addComponentVisibility(platform, 'label');
+						isComponentVisible.label = true;
+					}
+					this.toolbar.updated = new Date().toISOString();
+					await this.plugin.saveSettings();
+					this.display();
+				});
+		});
+
+		return menu;
+
+	}
+
+	/**
+	 * Gets the current state of visibility for a given platform.
+	 * @param platform visibility to check
+	 */
+	getPlatformStateLabel(platform: any): string {
+
+		if (platform && platform.allViews) {
+			let dkComponents = platform.allViews?.components;
+			if (dkComponents) {
+				if (dkComponents.length === 2) {
+					return '';
+				} else if (dkComponents.length === 1) {
+					return dkComponents[0];
+				} else {
+					return 'hidden';
+				}
+			}
+		}
+		return 'hidden';
+
+	}
 
 	/**
 	 * Returns the value for the provided key from the provided dictionary.

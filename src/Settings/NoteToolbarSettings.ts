@@ -1,8 +1,9 @@
 /* remember to update when settings structure changes */
-export const SETTINGS_VERSION = 20240416.1;
+export const SETTINGS_VERSION = 20240426.1;
 
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
+	icon: string;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -10,6 +11,7 @@ export interface NoteToolbarSettings {
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	folderMappings: [],
+	icon: "circle-ellipsis",
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
@@ -20,7 +22,11 @@ export interface ToolbarSettings {
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
 	name: string;
-	positions: Array<Position>;
+	/**
+	 * @deprecated positions property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
+	 */
+	positions?: Array<Position>;
+	position: Position;
 	updated: string;
 	// TODO: add setting to force rerender of toolbar? (for label variables)
 }
@@ -30,13 +36,38 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	items: [],
 	mobileStyles: [],
 	name: "",
-	positions: [{position: 'props', contexts: [{platform: 'all', view: 'all'}]}],
+	position: {
+		desktop: { allViews: { position: 'props' } },
+		tablet: { allViews: { position: 'props' } },
+		mobile: { allViews: { position: 'props' } },
+	},
 	updated: new Date().toISOString(),
 };
 
 export interface Position {
-	contexts: Array<ViewContext>;
-	position: 'props' | 'top';
+	desktop?: {
+		allViews?: { position: PositionType },
+		editingView?: { position: PositionType },
+		readingView?: { position: PositionType },
+	},
+	tablet?: {
+		allViews?: { position: PositionType },
+		editingView?: { position: PositionType },
+		readingView?: { position: PositionType },
+	},
+	mobile?: {
+		allViews?: { position: PositionType },
+		editingView?: { position: PositionType },
+		readingView?: { position: PositionType },
+	},
+	/**
+	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
+	 */
+	contexts?: Array<ViewContext>;
+	/**
+	 * @deprecated position property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
+	 */
+	position?: 'props' | 'top';
 }
 
 export interface ViewContext {
@@ -44,8 +75,32 @@ export interface ViewContext {
 	view: ViewType;
 }
 
-export type PlatformType = 'all' | 'desktop' | 'mobile' | 'none';
+export interface Visibility {
+	desktop: {
+		allViews?: { components: ComponentType[] }
+		editingView?: { components: ComponentType[] },
+		readingView?: { components: ComponentType[] }
+	},
+	tablet: {
+		allViews?: { components: ComponentType[] }
+		editingView?: { components: ComponentType[] },
+		readingView?: { components: ComponentType[] }
+	},
+	mobile: {
+		allViews?: { components: ComponentType[] }
+		editingView?: { components: ComponentType[] },
+		readingView?: { components: ComponentType[] }
+	}
+}
+
+export interface ItemViewContext extends ViewContext {
+	component: ComponentType;
+}
+
+export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
+export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
 export type ViewType = 'all' | 'preview' | 'source';
+export type ComponentType = 'icon' | 'label';
 
 export interface FolderMapping {
 	folder: string;
@@ -53,12 +108,16 @@ export interface FolderMapping {
 }
 
 export interface ToolbarItemSettings {
-	contexts: ViewContext[];
+	/**
+	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration)
+	 */
+	contexts?: ViewContext[];
 	icon: string;
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
 	tooltip: string;
+	visibility: Visibility;
 }
 
 /**
@@ -72,10 +131,20 @@ export interface ToolbarItemLinkAttr {
 
 export type LinkType = 'command' | 'file' | 'uri';
 
-export const POSITION_OPTIONS: { [key: string]: string }[] = [
-	{ top: "Top (fixed)" },
-	{ props: "Below Properties" },
-];
+export const POSITION_OPTIONS = {
+	desktop: [
+		{ top: "Top (fixed)" },
+		{ props: "Below Properties" },
+		{ hidden: "Hidden (do not display)" },
+	],
+	mobile: [
+		{ top: "Top (fixed)" },
+		{ props: "Below Properties" },
+		{ fabl: "Floating button: left" },
+		{ fabr: "Floating button: right" },
+		{ hidden: "Hidden (do not display)" },
+	]
+}
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
