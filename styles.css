@@ -444,7 +444,7 @@ body {
 
     &[data-callout-metadata*="button"] ul {
         gap: var(--size-4-2);
-        & a {
+        & a, span.external-link {
             background-color: var(--cg-nt-item-button-bg-color);
             box-shadow: var(--input-shadow);
         }
@@ -452,7 +452,7 @@ body {
 
     &[data-callout-metadata*="mbtn"] ul {
         gap: var(--size-4-2);
-        & a {
+        & a, span.external-link {
             background-color: var(--cg-nt-item-button-bg-color);
             box-shadow: var(--input-shadow);
         }
