@@ -254,28 +254,50 @@ export default class NoteToolbarPlugin extends Plugin {
 			? position = toolbar.position.mobile?.allViews?.position ?? 'props'
 			: position = toolbar.position.desktop?.allViews?.position ?? 'props';
 
-		// TODO: handle position === 'fabl' || position === 'fabr'
-		// TODO: handle position === 'hidden'
-
-		let noteToolbarElement = await this.renderToolbarAsCallout(toolbar);
-
-		/* extra div workaround to emulate callout-in-content structure, to use same sticky css */
-		let div = activeDocument.createElement("div");
-		div.append(noteToolbarElement);
+		let noteToolbarElement: HTMLElement;
 		let embedBlock = activeDocument.createElement("div");
-		embedBlock.className = "cm-embed-block cm-callout cg-note-toolbar-container";
+		embedBlock.addClass('cg-note-toolbar-container');
+
+		// render the toolbar based on its position
+		switch (position) {
+			case 'fabl':
+			case 'fabr':
+				// TODO: handle left and right positions (pass as param)
+				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
+				embedBlock.append(noteToolbarElement);
+				break;
+			case 'props':
+			case 'top':
+				noteToolbarElement = await this.renderToolbarAsCallout(toolbar);
+				// extra div workaround to emulate callout-in-content structure, to use same sticky css
+				let div = activeDocument.createElement("div");
+				div.append(noteToolbarElement);
+				embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
+				embedBlock.append(div);
+				break;
+			case 'hidden':
+			default:
+				// we're not rendering it
+				break;
+		}
+
 		embedBlock.setAttribute("data-name", toolbar.name);
 		embedBlock.setAttribute("data-updated", toolbar.updated);
 		embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
-		embedBlock.append(div);
 
 		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
 
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
 		// add the toolbar to the editor UI
 		switch(position) {
+			case 'fabl':
+			case 'fabr':
+				currentView?.containerEl.appendChild(embedBlock);
+				// activeDocument ? activeDocument.querySelector('.app-container')?.appendChild(embedBlock) : undefined
+				break;
 			case 'top':
 				embedBlock.addClass('cg-note-toolbar-position-top');
-				let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
 				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
 				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
@@ -378,6 +400,34 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		return noteToolbarCallout;
+
+	}
+
+	/**
+	 * 
+	 * @param toolbar 
+	 * @returns HTMLElement cg-note-toolbar-fab
+	 */
+	async renderToolbarAsFab(toolbar: ToolbarSettings): Promise<HTMLElement> {
+
+		let noteToolbarFabContainer = activeDocument.createElement('div');
+		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
+		noteToolbarFabContainer.setAttribute('role', 'group');
+		noteToolbarFabContainer.setAttribute('aria-label', 'Note Toolbar button');
+
+		let noteToolbarFabButton = activeDocument.createElement('button');
+		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
+		noteToolbarFabButton.setAttribute('title', 'Open Note Toolbar');
+		noteToolbarFabButton.setAttribute('aria-label', 'Open Note Toolbar');
+		setIcon(noteToolbarFabButton, this.settings.icon);
+
+		noteToolbarFabButton.onClickEvent((event) => {
+			this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
+		});
+		
+		noteToolbarFabContainer.append(noteToolbarFabButton);
+
+		return noteToolbarFabContainer;
 
 	}
 

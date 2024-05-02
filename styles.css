@@ -497,6 +497,53 @@ body {
 }
 
 .cg-note-toolbar-container {
+
+}
+
+/* FAB styles adapted from: https://web.dev/articles/building/a-fab-component */
+.cg-note-toolbar-fab-container {
+    --_viewport-margin: 2.5vmin;
+    position: fixed;
+    z-index: auto;
+    inset-block: auto var(--_viewport-margin);
+    inset-inline: auto var(--_viewport-margin);
+    display: flex;
+    flex-direction: column-reverse;
+    place-items: center;
+    gap: var(--_viewport-margin);
+}
+
+.cg-note-toolbar-fab {
+    --_size: 2rem;
+    padding: calc(var(--_size) / 2);
+    border-radius: 50%;
+    height: auto !important;
+    aspect-ratio: 1;
+    /* box-shadow: var(--input-shadow) !important; */
+    background-color: var(--interactive-normal) !important;
+    color: var(--icon-color);
+    -webkit-tap-highlight-color: transparent;
+    &:is(:active, :hover, :focus-visible) {
+        color: var(--icon-color-hover) !important;
+        background-color: var(--background-modifier-hover) !important;
+    }
+    & > svg {
+        inline-size: var(--_size);
+        block-size: var(--_size);
+        /* stroke-width: 3px; */
+        @media (prefers-reduced-motion: no-preference) {
+          will-change: transform;
+          transition: transform .5s var(--ease-squish-3);
+        }
+    }
+    &:active {
+        @media (prefers-reduced-motion: no-preference) {
+            transform: translateY(2%);
+        }
+    }
+}
+
+.cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
     box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color);
     margin-bottom: 1em;
