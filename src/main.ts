@@ -31,6 +31,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// add icons specific to the plugin
 		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
 
+		// adds the ribbon icon, on mobile only (seems redundant to add on desktop as well)
 		if (Platform.isMobile) {
 			debugLog('isMobile');
 			this.addRibbonIcon(this.settings.icon, 'Note Toolbar', (event) => {
@@ -265,6 +266,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
 				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
+				this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
+				// this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
+				// this.registerDomEvent(embedBlock, 'focusin', (e) => { e.preventDefault() });
+				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
+				// this.registerDomEvent(embedBlock, 'focusin', (e) => this.toolbarFabHandler(e));			
 				break;
 			case 'props':
 			case 'top':
@@ -274,6 +280,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				div.append(noteToolbarElement);
 				embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
 				embedBlock.append(div);
+				embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
+				this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));	
 				break;
 			case 'hidden':
 			default:
@@ -283,9 +291,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		embedBlock.setAttribute("data-name", toolbar.name);
 		embedBlock.setAttribute("data-updated", toolbar.updated);
-		embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
-
-		this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));
 
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
@@ -421,9 +426,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		noteToolbarFabButton.setAttribute('aria-label', 'Open Note Toolbar');
 		setIcon(noteToolbarFabButton, this.settings.icon);
 
-		noteToolbarFabButton.onClickEvent((event) => {
-			this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
-		});
+		// noteToolbarFabButton.onClickEvent((event) => {
+		// 	event.preventDefault();
+		// 	this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
+		// });
 		
 		noteToolbarFabContainer.append(noteToolbarFabButton);
 
@@ -567,6 +573,26 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * HANDLERS
 	 *************************************************************************/
 	
+	/**
+	 * Handles the floating action button specifically on mobile.
+	 * @param event TouchEvent
+	 */
+	async toolbarFabHandler(event: TouchEvent) {
+
+		debugLog("toolbarFabHandler: ", event);
+		event.preventDefault();
+
+		let activeFile = this.app.workspace.getActiveFile();
+		if (activeFile) {
+			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
+			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
+			if (toolbar) {
+				this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition({x: 0, y: 0}); });
+			}
+		}
+
+	}
+
 	/**
 	 * Handles keyboard navigation within the toolbar.
 	 * @param e KeyboardEvent
