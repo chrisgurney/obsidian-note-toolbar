@@ -51,11 +51,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		this.displayToolbarList(containerEl);
 
-		new Setting(containerEl).setName("Display rules").setHeading();
+		new Setting(containerEl)
+			.setName("Display rules")
+			.setHeading();
 
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
-		this.displayOtherSettings(containerEl);
+		this.displayMobileSettings(containerEl);
 
 		if (focusOnLastItem) {
 			// set focus on last thing in the list, if the label is empty
@@ -303,15 +305,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * 
 	 * @param containerEl 
 	 */
-	displayOtherSettings(containerEl: HTMLElement): void {
+	displayMobileSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName("Other settings")
+			.setName("Mobile settings")
 			.setHeading();
 
-		const s1a = new Setting(containerEl)
-			.setName("Icon")
-			.setDesc("Sets the icon to show in the ribbon (on mobile). Restart the app to see the change.")
+		const s1 = new Setting(containerEl)
+			.setName("Mobile icon")
+			.setDesc("Sets the icon to show in the ribbon and floating button (on mobile). Restart the app to see the change.")
 			.addButton((cb) => {
 				cb.setIcon(this.plugin.settings.icon)
 					.setTooltip("Select icon")
@@ -332,7 +334,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					});
 			});
-			
+		
+		const s2 = new Setting(containerEl)
+			.setName("Show 'Edit toolbar' in mobile toolbar")
+			.setDesc("If enabled, an item for toolbar settings will be shown in mobile toolbars.")
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showEditInFabMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showEditInFabMenu = value;
+					this.plugin.saveSettings();
+				});
+			});
+
 	}
 
 	/*************************************************************************

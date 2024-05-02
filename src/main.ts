@@ -425,7 +425,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		noteToolbarFabButton.setAttribute('title', 'Open Note Toolbar');
 		noteToolbarFabButton.setAttribute('aria-label', 'Open Note Toolbar');
 		setIcon(noteToolbarFabButton, this.settings.icon);
-
+		
 		noteToolbarFabContainer.append(noteToolbarFabButton);
 
 		return noteToolbarFabContainer;
@@ -454,6 +454,19 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 			}
 		});
+
+		if (this.settings.showEditInFabMenu) {
+			menu.addItem((item) => {
+				item
+					.setTitle("Edit " + toolbar.name + "...")
+					.setIcon("lucide-pen-box")
+					.onClick((menuEvent) => {
+					const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
+					modal.setTitle("Edit Toolbar: " + toolbar.name);
+					modal.open();
+				});
+			});
+		}
 
 		return menu;
 
