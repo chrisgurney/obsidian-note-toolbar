@@ -336,13 +336,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 		
 		const s2 = new Setting(containerEl)
-			.setName("Show 'Edit toolbar' in mobile toolbar")
-			.setDesc("If enabled, an item for toolbar settings will be shown in mobile toolbars.")
+			.setName("Show 'Edit toolbar' in mobile toolbar menus")
+			.setDesc("If enabled, an item for toolbar settings will be shown in mobile toolbar menus. Restart the app to see the change.")
 			.addToggle((cb) => {
 				cb.setValue(this.plugin.settings.showEditInFabMenu)
 				cb.onChange(async (value) => {
 					this.plugin.settings.showEditInFabMenu = value;
 					this.plugin.saveSettings();
+					// TODO? force the re-rendering of the current toolbar to update the menu
 				});
 			});
 
