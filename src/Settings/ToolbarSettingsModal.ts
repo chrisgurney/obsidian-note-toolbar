@@ -124,7 +124,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		const itemsDescription = document.createDocumentFragment();
 		itemsDescription.append(
-			"Items that appear in the toolbar, in order.",
+			"Items in the toolbar, in order from left to right.",
 			itemsDescription.createEl("br"),
 			"See the documentation for ",
 			itemsDescription.createEl("a", {
