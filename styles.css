@@ -189,19 +189,6 @@ settings:
         default: 1.8
         format: px
     -
-        id: cg-nt-fab-pos-x
-        title: Distance from side (as % of viewport height)
-        description: Relative to the side it is aligned to (left or right). 
-        type: variable-number
-        default: 2.5
-        format: vmin
-    -
-        id: cg-nt-fab-pos-y
-        title: Distance from bottom (as % of viewport height)
-        type: variable-number
-        default: 2.5
-        format: vmin
-    -
         id: titlebar-heading
         title: Toolbar Items
         type: heading
@@ -275,7 +262,8 @@ body {
     --cg-nt-fab-bg-color: var(--interactive-normal);
     --cg-nt-fab-bg-color-hover: var(--interactive-hover);
     --cg-nt-fab-pos-x: 4vmin;
-    --cg-nt-fab-pos-y: 4vmin;
+    /* --cg-nt-fab-pos-y: calc(90vh - 110px); */
+    --cg-nt-fab-pos-y: calc(100vh - 138px);
     --cg-nt-fab-icon-color: var(--icon-color);
     --cg-nt-fab-icon-size: var(--icon-l);
     --cg-nt-fab-icon-stroke-width: var(--icon-l-stroke-width);
@@ -582,7 +570,7 @@ body {
     display: flex;
     flex-direction: column-reverse;
     place-items: center;
-    bottom: var(--cg-nt-fab-pos-y);
+    top: var(--cg-nt-fab-pos-y);
     right: var(--cg-nt-fab-pos-x);
     &[data-fab-position="left"] {
         left: var(--cg-nt-fab-pos-x);
