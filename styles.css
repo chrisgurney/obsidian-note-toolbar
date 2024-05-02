@@ -559,10 +559,6 @@ body {
     visibility: hidden;
 }
 
-.cg-note-toolbar-container {
-
-}
-
 /* FAB styles adapted from: https://web.dev/articles/building/a-fab-component */
 .cg-note-toolbar-fab-container {
     --_viewport-margin: 2.5vmin;
