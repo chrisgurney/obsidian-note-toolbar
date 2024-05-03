@@ -134,7 +134,7 @@ settings:
         format: rem
     -
         id: toolbar-fab-styles
-        title: 'Toolbar: Floating button (mobile)'
+        title: 'Floating button'
         type: heading
         level: 1
         collapsed: true
