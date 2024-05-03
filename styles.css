@@ -919,6 +919,7 @@ body {
 .note-toolbar-setting-item-controls {
     display: flex;
     & .setting-item {
+        border-bottom: none !important;
         .is-mobile & {
             padding-top: 0 !important;
         }
