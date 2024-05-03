@@ -133,8 +133,65 @@ settings:
         default: -1
         format: rem
     -
+        id: titlebar-heading
+        title: Toolbar Items
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-item-bg-color-hover
+        title: Background color (on hover)
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-button-bg-color
+        title: 'Button style: Background color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-text-color
+        title: Text color
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-text-color-hover
+        title: Text color (on hover)
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-border-radius
+        title: Border radius (in px units)
+        type: variable-number
+        default: 5
+        format: px
+    -
+        id: cg-nt-item-font-size
+        title: Font size (in em units)
+        type: variable-number
+        default: 0.875
+        format: em
+    -
+        id: cg-nt-item-icon-size
+        title: Icon size (in px units)
+        type: variable-number
+        default: 18
+        format: px
+    -
         id: toolbar-fab-styles
         title: 'Floating button'
+        description: 'Set toolbar position to floating button'
         type: heading
         level: 1
         collapsed: true
@@ -202,62 +259,6 @@ settings:
         type: variable-number
         default: 90
         format: vh
-    -
-        id: titlebar-heading
-        title: Toolbar Items
-        type: heading
-        level: 1
-        collapsed: true
-    -
-        id: cg-nt-item-bg-color-hover
-        title: Background color (on hover)
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-text-color
-        title: Text color
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-text-color-hover
-        title: Text color (on hover)
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-border-radius
-        title: Border radius (in px units)
-        type: variable-number
-        default: 5
-        format: px
-    -
-        id: cg-nt-item-font-size
-        title: Font size (in em units)
-        type: variable-number
-        default: 0.875
-        format: em
-    -
-        id: cg-nt-item-icon-size
-        title: Icon size (in px units)
-        type: variable-number
-        default: 18
-        format: px
-    -
-        id: cg-nt-item-button-bg-color
-        title: Button style background color
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
 */
 
 body {
