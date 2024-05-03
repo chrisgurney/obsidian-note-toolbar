@@ -190,13 +190,15 @@ settings:
         format: px
     -
         id: cg-nt-fab-pos-x
-        title: Button X position (in vw units)
+        title: Button X position
+        description: As a percentage of the editor's width, from the left edge (reversed when button is on right).
         type: variable-number
         default: 82
         format: vw
     -
         id: cg-nt-fab-pos-y
-        title: Button Y position (in vh units)
+        title: Button Y position
+        description: As a percentage of the editor's height, from the top edge.
         type: variable-number
         default: 90
         format: vh
