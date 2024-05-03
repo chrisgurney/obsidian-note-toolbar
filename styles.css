@@ -189,6 +189,18 @@ settings:
         default: 1.8
         format: px
     -
+        id: cg-nt-fab-pos-x
+        title: Button X position (in vw units)
+        type: variable-number
+        default: 82
+        format: vw
+    -
+        id: cg-nt-fab-pos-y
+        title: Button Y position (in vh units)
+        type: variable-number
+        default: 90
+        format: vh
+    -
         id: titlebar-heading
         title: Toolbar Items
         type: heading
@@ -262,7 +274,7 @@ body {
     --cg-nt-fab-bg-color: var(--interactive-normal);
     --cg-nt-fab-bg-color-hover: var(--interactive-hover);
     --cg-nt-fab-pos-x: 82vw;
-    --cg-nt-fab-pos-y: calc(90vh - 110px);
+    --cg-nt-fab-pos-y: 90vh;
     --cg-nt-fab-icon-color: var(--icon-color);
     --cg-nt-fab-icon-size: var(--icon-l);
     --cg-nt-fab-icon-stroke-width: var(--icon-l-stroke-width);
@@ -569,7 +581,7 @@ body {
     display: flex;
     flex-direction: column-reverse;
     place-items: center;
-    top: var(--cg-nt-fab-pos-y);
+    top: calc(var(--cg-nt-fab-pos-y) - 110px);
     left: var(--cg-nt-fab-pos-x);
     right: unset;
     transform: translate(0, 5%);
