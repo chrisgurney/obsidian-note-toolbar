@@ -313,7 +313,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const s1 = new Setting(containerEl)
 			.setName("Mobile icon")
-			.setDesc("Sets the icon to show in the navigation bar (requires restart) and floating button.")
+			.setDesc("Sets the icon for the navigation bar (requires restart) and floating button.")
 			.addButton((cb) => {
 				cb.setIcon(this.plugin.settings.icon)
 					.setTooltip("Select icon")
@@ -336,8 +336,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 		
 		const s2 = new Setting(containerEl)
-			.setName("Show 'Edit toolbar' in mobile toolbar menus")
-			.setDesc("If enabled, an item for toolbar settings will be shown in mobile toolbar menus. Restart the app to see the change.")
+			.setName("Show 'Edit toolbar' link in toolbar menus")
+			.setDesc("Add an item to access the toolbar's settings in the mobile toolbar menu.")
 			.addToggle((cb) => {
 				cb.setValue(this.plugin.settings.showEditInFabMenu)
 				cb.onChange(async (value) => {
