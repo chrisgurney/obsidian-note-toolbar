@@ -191,7 +191,7 @@ settings:
     -
         id: toolbar-fab-styles
         title: 'Floating button'
-        description: 'Set toolbar position to floating button'
+        description: 'Set toolbar mobile position to "floating button"'
         type: heading
         level: 1
         collapsed: true
