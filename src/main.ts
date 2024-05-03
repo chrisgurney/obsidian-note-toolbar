@@ -456,6 +456,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		});
 
 		if (this.settings.showEditInFabMenu) {
+			menu.addSeparator();
 			menu.addItem((item) => {
 				item
 					.setTitle("Edit " + toolbar.name + "...")
