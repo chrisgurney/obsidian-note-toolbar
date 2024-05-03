@@ -251,14 +251,8 @@ settings:
         default: 18
         format: px
     -
-        id: titlebar-heading
-        title: 'Toolbar Items: Button style'
-        type: heading
-        level: 1
-        collapsed: true
-    -
         id: cg-nt-item-button-bg-color
-        title: Background color
+        title: Button style background color
         type: variable-themed-color
         opacity: true
         format: hex
