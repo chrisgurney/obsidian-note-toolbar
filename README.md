@@ -57,6 +57,7 @@ As beta versions become available, I welcome <a href="https://github.com/chrisgu
     <li><i>Add Beta Plugin</i></li>
     <li>Specify this repository: <code>chrisgurney/obsidian-note-toolbar</code></li>
     <li><i>Enable the Note Toolbar plugin</i> (<i>Settings &gt; Community plugins</i>)</li>
+    <li>Restart Obsidian, or re-open your vault.</li>
   </ol>
 </blockquote>
 </details>
