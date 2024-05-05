@@ -447,9 +447,9 @@ export default class NoteToolbarPlugin extends Plugin {
 					item
 						.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
 						.setTitle(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip)
-						.onClick((menuEvent) => {
+						.onClick(async (menuEvent) => {
 							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-							this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
+							await this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
 						});
 					});
 			}
