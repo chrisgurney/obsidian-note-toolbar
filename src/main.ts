@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri } from './Utils/Utils';
+import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, getPosition } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -266,7 +266,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
 				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
-				this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
+				this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e, embedBlock));
 				// this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
 				// this.registerDomEvent(embedBlock, 'focusin', (e) => { e.preventDefault() });
 				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
@@ -586,7 +586,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Handles the floating action button specifically on mobile.
 	 * @param event TouchEvent
 	 */
-	async toolbarFabHandler(event: TouchEvent) {
+	async toolbarFabHandler(event: TouchEvent, element: HTMLElement) {
 
 		debugLog("toolbarFabHandler: ", event);
 		event.preventDefault();
@@ -596,7 +596,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 			if (toolbar) {
-				this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition({x: 0, y: 0}); });
+				this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(getPosition(element)); });
 			}
 		}
 
