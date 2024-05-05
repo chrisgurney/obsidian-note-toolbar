@@ -317,7 +317,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.addButton((cb) => {
 				cb.setIcon(this.plugin.settings.icon)
 					.setTooltip("Select icon")
-					.onClick(async () => {
+					.onClick(async (e) => {
+						e.preventDefault();
 						const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
 						modal.open();
 					});
@@ -328,9 +329,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						switch (e.key) {
 							case "Enter":
 							case " ":
+								e.preventDefault();					
 								const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
 								modal.open();
-								e.preventDefault();									
 						}
 					});
 			});
