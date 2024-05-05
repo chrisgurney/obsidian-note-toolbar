@@ -84,13 +84,19 @@ id: note-toolbar
 settings:
     -
         id: toolbar-styles
-        title: Toolbar
+        title: Toolbars
         type: heading
         level: 1
         collapsed: true
     -
+        id: toolbar-styles
+        title: 🎨 Colors
+        type: heading
+        level: 2
+        collapsed: true
+    -
         id: cg-nt-tbar-bg-color
-        title: Background color
+        title: 'Toolbar: Background color'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -98,19 +104,71 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-tbar-border-color
-        title: Border color
-        description: Top and bottom borders only
+        title: 'Toolbar: Border color'
+        description: 'Toolbar: Top + Bottom borders'
         type: variable-themed-color
         opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
     -
-        id: cg-nt-tbar-border-radius
-        title: Border radius (in px units)
+        id: cg-nt-item-bg-color-hover
+        title: 'Items: Background color (on hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-button-bg-color
+        title: 'Items: Button style: Background color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-text-color
+        title: 'Items: Text color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-text-color-hover
+        title: 'Items: Text color (on hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: toolbar-styles
+        title: ↕ Positioning
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-top-sticky-pos-desktop
+        title: Top sticky offset on desktop (in px units)
+        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed).
         type: variable-number
-        default: 0
+        default: -40
         format: px
+    -
+        id: cg-nt-tbar-top-sticky-pos-mobile
+        title: Top sticky offset on mobile (in rem units)
+        description: See above.
+        type: variable-number
+        default: -1
+        format: rem
+    -
+        id: toolbar-styles
+        title: 📐 Sizing and Spacing
+        type: heading
+        level: 2
+        collapsed: true
     -
         id: cg-nt-tbar-margin-y
         title: Top + Bottom margin (in em units)
@@ -125,87 +183,47 @@ settings:
         default: 0
         format: em
     -
-        id: cg-nt-tbar-top-sticky-pos-desktop
-        title: Top sticky offset desktop (in px units)
-        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed).
-        type: variable-number
-        default: -40
-        format: px
-    -
-        id: cg-nt-tbar-top-sticky-pos-mobile
-        title: Top sticky offset mobile (in rem units)
-        description: See above.
-        type: variable-number
-        default: -1
-        format: rem
-    -
-        id: titlebar-heading
-        title: Toolbar Items
-        type: heading
-        level: 1
-        collapsed: true
-    -
-        id: cg-nt-item-bg-color-hover
-        title: Background color (on hover)
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-button-bg-color
-        title: 'Button style: Background color'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-text-color
-        title: Text color
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-text-color-hover
-        title: Text color (on hover)
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-border-radius
-        title: Border radius (in px units)
-        type: variable-number
-        default: 5
-        format: px
-    -
         id: cg-nt-item-font-size
-        title: Font size (in em units)
+        title: 'Items: Font size (in em units)'
         type: variable-number
         default: 0.875
         format: em
     -
         id: cg-nt-item-icon-size
-        title: Icon size (in px units)
+        title: 'Items: Icon size (in px units)'
         type: variable-number
         default: 18
         format: px
     -
         id: cg-nt-item-padding-x
-        title: Item Left + Right padding (in em units)
+        title: 'Items: Left + Right padding (in em units)'
         type: variable-number
         default: 0.75
         format: em
     -
         id: cg-nt-item-padding-y
-        title: Item Top + Bottom padding (in em units)
+        title: 'Items Top + Bottom padding (in em units)'
         type: variable-number
         default: 0.5
         format: em
+    -
+        id: toolbar-styles
+        title: 😎 Style
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-border-radius
+        title: 'Toolbar: Border radius (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: cg-nt-item-border-radius
+        title: 'Items: Border radius (in px units)'
+        type: variable-number
+        default: 5
+        format: px
     -
         id: toolbar-fab-styles
         title: 'Floating button'
