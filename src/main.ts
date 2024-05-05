@@ -462,10 +462,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					.setTitle("Edit toolbar: " + toolbar.name + "...")
 					.setIcon("lucide-pen-box")
 					.onClick((menuEvent) => {
-					const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
-					modal.setTitle("Edit Toolbar: " + toolbar.name);
-					modal.open();
-				});
+						const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
+						modal.setTitle("Edit Toolbar: " + toolbar.name);
+						modal.open();
+					});
 			});
 		}
 
@@ -757,13 +757,13 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarSettings !== undefined) {
 			contextMenu.addItem((item) => {
 				item
-				  .setTitle("Edit " + toolbarName + "...")
-				  .setIcon("lucide-pen-box")
-				  .onClick((menuEvent) => {
-					const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-					modal.setTitle("Edit Toolbar: " + toolbarName);
-					modal.open();
-				  });
+					.setTitle("Edit " + toolbarName + "...")
+					.setIcon("lucide-pen-box")
+					.onClick((menuEvent) => {
+						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
+						modal.setTitle("Edit Toolbar: " + toolbarName);
+						modal.open();
+					});
 			  });
 		}
   		contextMenu.addItem((item) => {
