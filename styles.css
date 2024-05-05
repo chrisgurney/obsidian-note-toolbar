@@ -112,9 +112,15 @@ settings:
         default: 0
         format: px
     -
+        id: cg-nt-tbar-margin-y
+        title: Top + Bottom margin (in em units)
+        type: variable-number
+        default: 0.5
+        format: em
+    -
         id: cg-nt-tbar-padding-inline
         title: Left + Right padding (in em units)
-        description: Helpful if you've set a background color for the toolbar (larger = more indented)
+        description: Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented.
         type: variable-number
         default: 0
         format: em
@@ -188,6 +194,18 @@ settings:
         type: variable-number
         default: 18
         format: px
+    -
+        id: cg-nt-item-padding-x
+        title: Item Left + Right padding (in em units)
+        type: variable-number
+        default: 0.75
+        format: em
+    -
+        id: cg-nt-item-padding-y
+        title: Item Top + Bottom padding (in em units)
+        type: variable-number
+        default: 0.5
+        format: em
     -
         id: toolbar-fab-styles
         title: 'Floating button'
@@ -265,6 +283,7 @@ body {
     --cg-nt-tbar-bg-color: var(--background-primary);
     --cg-nt-tbar-border-color: var(--hr-color);
     --cg-nt-tbar-border-radius: 0px;
+    --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
@@ -282,6 +301,8 @@ body {
     --cg-nt-item-button-bg-color: var(--interactive-normal);
     --cg-nt-item-font-size: var(--metadata-label-font-size);
     --cg-nt-item-icon-size: var(--icon-size);
+    --cg-nt-item-padding-x: 0.75em;
+    --cg-nt-item-padding-y: 0.5em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
 }
@@ -355,7 +376,7 @@ body {
             display: flex;
             flex-wrap: wrap;
             gap: 0rem;
-            margin: 0.5em 0 0.5em 0;
+            margin: var(--cg-nt-tbar-margin-y) 0;
             padding-inline-start: 0;
         }
     
@@ -396,7 +417,7 @@ body {
 
         & a, span.external-link {
             color: var(--cg-nt-item-text-color);
-            padding: 0.5em 0.75em 0.5em 0.75em;
+            padding: var(--cg-nt-item-padding-x) var(--cg-nt-item-padding-y);
             display: block;
             text-decoration: none;
             font-size: var(--cg-nt-item-font-size);
