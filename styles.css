@@ -84,15 +84,9 @@ id: note-toolbar
 settings:
     -
         id: toolbar-styles
-        title: Toolbars
-        type: heading
-        level: 1
-        collapsed: true
-    -
-        id: toolbar-styles
         title: 🎨 Colors
         type: heading
-        level: 2
+        level: 1
         collapsed: true
     -
         id: cg-nt-tbar-bg-color
@@ -147,7 +141,7 @@ settings:
         id: toolbar-styles
         title: ↕ Positioning
         type: heading
-        level: 2
+        level: 1
         collapsed: true
     -
         id: cg-nt-tbar-top-sticky-pos-desktop
@@ -167,7 +161,7 @@ settings:
         id: toolbar-styles
         title: 📐 Sizing and Spacing
         type: heading
-        level: 2
+        level: 1
         collapsed: true
     -
         id: cg-nt-tbar-margin-y
@@ -210,7 +204,7 @@ settings:
         id: toolbar-styles
         title: 😎 Style
         type: heading
-        level: 2
+        level: 1
         collapsed: true
     -
         id: cg-nt-tbar-border-radius
