@@ -927,6 +927,11 @@ body {
             .is-mobile & {
                 margin-top: 0 !important;
             }
+            & .setting-editor-extra-setting-button:focus-within {
+                border-radius: var(--input-radius);
+                box-shadow: 0 0 0 1px var(--background-modifier-border);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            }
         }
         & .setting-item-info {
             display: none;
