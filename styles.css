@@ -429,7 +429,7 @@ body {
 
         & a, span.external-link {
             color: var(--cg-nt-item-text-color);
-            padding: var(--cg-nt-item-padding-x) var(--cg-nt-item-padding-y);
+            padding: var(--cg-nt-item-padding-y) var(--cg-nt-item-padding-x);
             display: block;
             text-decoration: none;
             font-size: var(--cg-nt-item-font-size);
