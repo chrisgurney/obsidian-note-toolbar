@@ -786,6 +786,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		});
 
+		// if position = top, show "Set position: Below props"
+		// if position = props, show "Set position: Top (fixed)"
+
 		contextMenu.showAtPosition(e);
 
 	}
