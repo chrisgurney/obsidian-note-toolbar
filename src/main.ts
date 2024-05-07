@@ -604,8 +604,8 @@ export default class NoteToolbarPlugin extends Plugin {
 						x: elemRect.x,
 						y: elemRect.bottom,
 						width: elemRect.width,
-						overlap: !0,
-						left: !0
+						overlap: true,
+						left: true
 					});
 				});
 			}
