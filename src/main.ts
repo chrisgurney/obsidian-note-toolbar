@@ -266,7 +266,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
 				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
-				this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e, noteToolbarElement));
+				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
 				// this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
 				// this.registerDomEvent(embedBlock, 'focusin', (e) => { e.preventDefault() });
 				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
@@ -587,7 +587,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param event TouchEvent
 	 * @param posAtElement HTMLElement to position the menu at, which might be different from where the touch event originated
 	 */
-	async toolbarFabHandler(event: TouchEvent, posAtElement: HTMLElement) {
+	async toolbarFabHandler(event: MouseEvent, posAtElement: HTMLElement) {
 
 		debugLog("toolbarFabHandler: ", event);
 		event.preventDefault();
@@ -597,7 +597,17 @@ export default class NoteToolbarPlugin extends Plugin {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 			if (toolbar) {
-				this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(getPosition(posAtElement)); });
+				this.renderToolbarAsMenu(toolbar).then(menu => { 
+					// menu.showAtPosition(getPosition(posAtElement));
+					let elemRect = posAtElement.getBoundingClientRect();
+					menu.showAtPosition({
+						x: elemRect.x,
+						y: elemRect.bottom,
+						width: elemRect.width,
+						overlap: !0,
+						left: !0
+					});
+				});
 			}
 		}
 
