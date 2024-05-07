@@ -584,8 +584,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 	/**
 	 * Handles the floating action button specifically on mobile.
-	 * @param event TouchEvent
-	 * @param posAtElement HTMLElement to position the menu at, which might be different from where the touch event originated
+	 * @param event MouseEvent
+	 * @param posAtElement HTMLElement to position the menu at, which might be different from where the event originated
 	 */
 	async toolbarFabHandler(event: MouseEvent, posAtElement: HTMLElement) {
 
