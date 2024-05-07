@@ -765,7 +765,36 @@ export default class NoteToolbarPlugin extends Plugin {
 		let toolbarSettings = toolbarName ? this.getToolbarSettings(toolbarName) : undefined;
 
 		let contextMenu = new Menu();
+
 		if (toolbarSettings !== undefined) {
+
+			let currentPosition = undefined;
+			let platform = undefined;
+			if (Platform.isDesktop) {
+				currentPosition = toolbarSettings.position.desktop?.allViews?.position;
+				platform = 'desktop';
+			}
+			else if (Platform.isMobile) {
+				currentPosition = toolbarSettings.position.mobile?.allViews?.position;
+				platform = 'mobile';
+			}
+			if (platform && (currentPosition === 'props' || currentPosition === 'top')) {
+				contextMenu.addItem((item) => {
+					item
+						.setTitle(currentPosition === 'props' ? "Set position: Top (fixed)" : "Set position: Below Properties")
+						.setIcon(currentPosition === 'props' ? 'arrow-up-to-line' : 'arrow-down-narrow-wide')
+						.onClick((menuEvent) => {
+							let newPosition: 'props' | 'top' = currentPosition === 'props' ? 'top' : 'props';
+							platform === 'desktop' ?
+								toolbarSettings.position.desktop = { allViews: { position: newPosition } }
+								: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
+							toolbarSettings.updated = new Date().toISOString();
+							this.saveSettings();
+						});
+				});
+				contextMenu.addSeparator();
+			}
+
 			contextMenu.addItem((item) => {
 				item
 					.setTitle("Edit toolbar: " + toolbarName + "...")
@@ -776,7 +805,9 @@ export default class NoteToolbarPlugin extends Plugin {
 						modal.open();
 					});
 			  });
+
 		}
+
   		contextMenu.addItem((item) => {
 		  item
 			.setTitle("Note Toolbar settings...")
@@ -785,9 +816,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.openSettingsCommand();
 			});
 		});
-
-		// if position = top, show "Set position: Below props"
-		// if position = props, show "Set position: Top (fixed)"
 
 		contextMenu.showAtPosition(e);
 
