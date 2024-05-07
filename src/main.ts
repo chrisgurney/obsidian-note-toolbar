@@ -778,18 +778,20 @@ export default class NoteToolbarPlugin extends Plugin {
 				currentPosition = toolbarSettings.position.mobile?.allViews?.position;
 				platform = 'mobile';
 			}
-			if ((platform === 'desktop' || platform === 'mobile') && (currentPosition === 'props' || currentPosition === 'top')) {
+			if (platform !== undefined && (currentPosition === 'props' || currentPosition === 'top')) {
 				contextMenu.addItem((item) => {
 					item
 						.setTitle(currentPosition === 'props' ? "Set position: Top (fixed)" : "Set position: Below Properties")
 						.setIcon(currentPosition === 'props' ? 'arrow-up-to-line' : 'arrow-down-narrow-wide')
 						.onClick((menuEvent) => {
-							let newPosition: 'props' | 'top' = currentPosition === 'props' ? 'top' : 'props';
-							platform === 'desktop' ?
+							let newPosition: PositionType = currentPosition === 'props' ? 'top' : 'props';
+							if (toolbarSettings.position) {
+								platform === 'desktop' ?
 								toolbarSettings.position.desktop = { allViews: { position: newPosition } }
 								: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
-							toolbarSettings.updated = new Date().toISOString();
-							this.saveSettings();
+								toolbarSettings.updated = new Date().toISOString();
+								this.saveSettings();
+							}
 						});
 				});
 				contextMenu.addSeparator();
