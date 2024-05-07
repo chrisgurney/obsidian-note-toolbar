@@ -408,7 +408,7 @@ export default class ToolbarSettingsModal extends Modal {
 					// TODO: implement tablet settings
 					.addButton((cb) => {
 						let btnIcon = cb.buttonEl.createSpan();
-						setIcon(btnIcon, 'smartphone');
+						setIcon(btnIcon, 'tablet-smartphone');
 						let state = this.getPlatformStateLabel(toolbarItem.visibility.mobile);
 						if (state) {
 							let btnLabel = cb.buttonEl.createSpan();
