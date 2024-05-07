@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility } from './Settings/NoteToolbarSettings';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, getPosition } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
 
@@ -768,8 +768,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (toolbarSettings !== undefined) {
 
-			let currentPosition = undefined;
-			let platform = undefined;
+			let currentPosition: PositionType | undefined;
+			let platform: 'desktop' | 'mobile' | undefined;
 			if (Platform.isDesktop) {
 				currentPosition = toolbarSettings.position.desktop?.allViews?.position;
 				platform = 'desktop';
