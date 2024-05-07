@@ -768,7 +768,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarSettings !== undefined) {
 			contextMenu.addItem((item) => {
 				item
-					.setTitle("Edit " + toolbarName + "...")
+					.setTitle("Edit toolbar: " + toolbarName + "...")
 					.setIcon("lucide-pen-box")
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
