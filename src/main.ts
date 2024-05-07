@@ -778,7 +778,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				currentPosition = toolbarSettings.position.mobile?.allViews?.position;
 				platform = 'mobile';
 			}
-			if (platform !== undefined && (currentPosition === 'props' || currentPosition === 'top')) {
+			if ((platform === 'desktop' || platform === 'mobile') && (currentPosition === 'props' || currentPosition === 'top')) {
 				contextMenu.addItem((item) => {
 					item
 						.setTitle(currentPosition === 'props' ? "Set position: Top (fixed)" : "Set position: Below Properties")
