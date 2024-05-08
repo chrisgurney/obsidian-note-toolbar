@@ -829,6 +829,9 @@ body {
     }
     & .setting-item-control {
         margin-top: 0 !important;
+        border: dashed 1px;
+        border-radius: var(--input-radius);
+        border-color: var(--background-modifier-border);
         & .clickable-icon[data-note-toolbar-no-icon="true"] {
             & svg {
                 filter: brightness(0.5);
