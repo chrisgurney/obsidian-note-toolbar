@@ -730,11 +730,6 @@ body {
         width: var(--font-ui-smaller);
         display: block;
     }
-    &:has(:last-child) {
-        .is-mobile & {
-            padding-bottom: 0;
-        }
-    }
     & .setting-item-description {
         display: flex;
         flex-wrap: wrap;
