@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Menu, Modal, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
@@ -141,7 +141,9 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Items")
-			.setDesc(itemsDescription)
+			.setDesc(learnMoreFr(
+				"Items in the toolbar, in order from left to right.", 
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"))
 			.setClass("note-toolbar-setting-no-controls");
 
 		let itemLinkFields: {
@@ -478,8 +480,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName('Position')
-			.setHeading()
-			.setDesc('Where to position this toolbar.');
+			.setDesc(learnMoreFr(
+				"Where to position this toolbar.", 
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars"))
+			.setHeading();
 
 		new Setting(settingsDiv)
 			.setName('Desktop')
@@ -524,21 +528,12 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayStyleSetting(settingsDiv: HTMLElement) {
 
-		const stylingDescription = document.createDocumentFragment();
-		stylingDescription.append(
-			"List of styles to apply to the toolbar (default: border even sticky).",
-			stylingDescription.createEl("br"),
-			"Sticky does not apply in Reading mode. See the ",
-			stylingDescription.createEl("a", {
-				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars",
-				text: "documentation",
-			}),
-			" about the list of supported styles."
-		);
-
 		new Setting(settingsDiv)
 			.setName("Styles")
-			.setDesc(stylingDescription)
+			.setDesc(learnMoreFr(
+				"List of styles to apply to the toolbar.",
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars"
+			))
 			.setHeading();
 
 		//
@@ -594,9 +589,13 @@ export default class ToolbarSettingsModal extends Modal {
 					})
 		);
 
+		const defaultDesc = document.createDocumentFragment();
+		defaultDesc.append("Applies to all platforms unless overridden.");
+		this.toolbar.defaultStyles.includes('sticky') ? defaultDesc.append( defaultDesc.createEl("br"), "Sticky does not apply in Reading mode.") : undefined;
+
 		new Setting(settingsDiv)
 			.setName("Default")
-			.setDesc("Applies to all platforms unless overridden.")
+			.setDesc(defaultDesc)
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(defaultStyleDiv);
 
@@ -653,9 +652,13 @@ export default class ToolbarSettingsModal extends Modal {
 					})
 		);
 
+		const mobileDesc = document.createDocumentFragment();
+		mobileDesc.append("Override default styles.");
+		this.toolbar.mobileStyles.includes('mstcky') ? mobileDesc.append( mobileDesc.createEl("br"), "Sticky does not apply in Reading mode.") : undefined;
+
 		new Setting(settingsDiv)
 			.setName("Mobile")
-			.setDesc("Override default styles.")
+			.setDesc(mobileDesc)
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(mobileStyleDiv);
 

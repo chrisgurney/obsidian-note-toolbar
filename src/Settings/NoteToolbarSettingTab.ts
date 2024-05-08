@@ -1,6 +1,6 @@
 import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from '../main';
-import { arraymove, debugLog, emptyMessageFr } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, learnMoreFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { Position, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
@@ -53,6 +53,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Display rules")
+			.setDesc(learnMoreFr(
+				"Define which notes to display toolbars on.", 
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars"))
 			.setHeading();
 
 		this.displayPropertySetting(containerEl);
