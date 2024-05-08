@@ -137,6 +137,15 @@ export function emptyMessageFr(message: string): DocumentFragment {
 	return messageFr;
 }
 
+export function learnMoreFr(message: string, url: string): DocumentFragment {
+	let messageFr = document.createDocumentFragment();
+	messageFr.append(
+		message, ' ',
+		messageFr.createEl('a', {href: url, text: "Learn more"})
+	)
+	return messageFr;
+}
+
 /**
  * Gets the position of the given element. Should probably use only if not available otherwise.
  * @param element to get position of
