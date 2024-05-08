@@ -929,6 +929,10 @@ body {
     display: none;
     padding-top: 0 !important;
     width: 100%;
+    & .setting-item-control {
+        flex-direction: column;
+        align-items: flex-start;
+    };
     & .setting-item-control, .search-input-container {
         width: 100%;
         & input[type="text"] {
@@ -940,6 +944,27 @@ body {
     }
     &[data-active="false"] {
         display: none !important;
+    }
+}
+
+/* hides the field help text while keeping it tabbable, if the container does not have focus within it */
+.note-toolbar-setting-item:not(:focus-within) .note-toolbar-setting-field-help {
+    clip-path: rect(1px, 1px, 1px, 1px);
+    overflow: hidden;
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+}
+
+.note-toolbar-setting-field-help {
+    color: var(--text-muted);
+    font-size: var(--font-ui-smaller);
+    padding-top: var(--size-4-1);
+    line-height: var(--line-height-tight);
+    display: block;
+    & a:focus-within {
+        box-shadow: 0 0 0 2px;
     }
 }
 

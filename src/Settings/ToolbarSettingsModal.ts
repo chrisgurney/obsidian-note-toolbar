@@ -261,6 +261,14 @@ export default class ToolbarSettingsModal extends Modal {
 				let linkFileFieldDiv = this.containerEl.createDiv();
 				let linkUriFieldDiv = this.containerEl.createDiv();
 
+				let linkFieldHelpDiv = this.containerEl.createDiv();
+				linkFieldHelpDiv.addClass("note-toolbar-setting-field-help");
+				linkFieldHelpDiv.appendChild(
+					learnMoreFr(
+						"Use your note's props with variables.",
+						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
+				)
+
 				itemLinkFields.push({
 					//
 					// command
@@ -323,8 +331,8 @@ export default class ToolbarSettingsModal extends Modal {
 									toolbarItem.linkAttr.commandId = '';
 									this.toolbar.updated = new Date().toISOString();
 									await this.plugin.saveSettings();
-								}, 750))),
-
+								}, 750))
+							.inputEl.insertAdjacentElement('afterend', linkFieldHelpDiv))
 				});
 
 				linkFieldDiv.append(itemLinkFields[index].command.settingEl);
