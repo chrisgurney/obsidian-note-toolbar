@@ -12,21 +12,25 @@ With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisg
 
 # Features
 
-Here is a list of key features of the Note Toolbar plugin. For the latest additions, see the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
+For the latest additions, see the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
 
 - [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to Commands, Files, and URIs/URLs
 - [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property
-  - Designed to fit cleanly in Obsidian's UI; position each toolbar below the Properties section, or at the top of notes
+  - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbar-position) below the Properties section, at the top of notes, as a floating button (on mobile)
+  - Access the toolbar from the navigation bar (on mobile)
   - Toolbar items can use Obsidian's built-in icons, labels (which can include emojis), or a mix of both
   - Set optional tooltips for each item
   - Show items specifically on mobile, desktop, or both
+  - Choose whether the icon, label, or both are displayed
 - [Variables](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables) let you sub in the note's title or properties into URIs
 - [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) let you create and place toolbars anywhere within your notes
 - [Style toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars) by adding borders, sticking to the top of your note on scroll, making them look like buttons, and aligning items (left, right, centered, evenly spaced)
-  - Change or override these styles on mobile
-  - Or use the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support) for even more options (colors, sizing, etc.)
-- [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, and to quickly access toolbar configuration 
+  - Change or override these styles on mobile (i.e, phone and tablet)
+  - Use any icon for the floating button or nav bar (on mobile)
+  - Or use the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support) for even more options (colors, positioning, sizing, etc.)
+- [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, and to quickly access toolbar configuration
 - [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
+- Right-click toolbars to quickly change the position, or to access configuration
 
 # Installation
 
