@@ -696,7 +696,7 @@ body {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
     margin: 0em 0em 1em 0em;
-    padding: 1em 1em 0.5em 1em;
+    padding: 1em 1em;
     .is-mobile & {
         padding: 1em;
     }
