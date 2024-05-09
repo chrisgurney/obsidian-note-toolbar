@@ -749,6 +749,8 @@ body {
 .note-toolbar-setting-empty-message {
     color: var(--text-muted);
     height: var(--input-height);
+    display: flex;
+    align-items: center;
     padding-bottom: 1em;
     .note-toolbar-setting-item-styles & {
         padding-bottom: 0;    
@@ -1080,7 +1082,6 @@ body {
         &:last-child {
             border: none !important;
             padding: 0em !important;
-            flex-basis: 100%;
         }
         & .setting-item-info {
             margin-right: 0.25em;
@@ -1106,7 +1107,7 @@ body {
             & select[class="dropdown"] {
                 border-radius: 2em;
                 font-size: var(--metadata-input-font-size);
-                max-width: 50%;
+                max-width: 8em;
             }
         }
     }
