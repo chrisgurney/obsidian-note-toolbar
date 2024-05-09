@@ -768,6 +768,30 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (toolbarSettings !== undefined) {
 
+			contextMenu.addItem((item) => {
+				item
+					.setTitle("Edit toolbar: " + toolbarName + "...")
+					.setIcon("lucide-pen-box")
+					.onClick((menuEvent) => {
+						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
+						modal.setTitle("Edit Toolbar: " + toolbarName);
+						modal.open();
+					});
+			  });
+
+		}
+
+		contextMenu.addItem((item) => {
+			item
+			  .setTitle("Note Toolbar settings...")
+			  .setIcon("lucide-wrench")
+			  .onClick((menuEvent) => {
+				  this.openSettingsCommand();
+			  });
+		  });
+  
+		if (toolbarSettings !== undefined) {
+
 			let currentPosition: PositionType | undefined;
 			let platform: 'desktop' | 'mobile' | undefined;
 			if (Platform.isDesktop) {
@@ -779,6 +803,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				platform = 'mobile';
 			}
 			if (platform !== undefined && (currentPosition === 'props' || currentPosition === 'top')) {
+				contextMenu.addSeparator();
 				contextMenu.addItem((item) => {
 					item
 						.setTitle(currentPosition === 'props' ? "Set position: Top (fixed)" : "Set position: Below Properties")
@@ -794,30 +819,9 @@ export default class NoteToolbarPlugin extends Plugin {
 							}
 						});
 				});
-				contextMenu.addSeparator();
 			}
 
-			contextMenu.addItem((item) => {
-				item
-					.setTitle("Edit toolbar: " + toolbarName + "...")
-					.setIcon("lucide-pen-box")
-					.onClick((menuEvent) => {
-						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-						modal.setTitle("Edit Toolbar: " + toolbarName);
-						modal.open();
-					});
-			  });
-
 		}
-
-  		contextMenu.addItem((item) => {
-		  item
-			.setTitle("Note Toolbar settings...")
-			.setIcon("lucide-wrench")
-			.onClick((menuEvent) => {
-				this.openSettingsCommand();
-			});
-		});
 
 		contextMenu.showAtPosition(e);
 
