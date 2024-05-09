@@ -832,15 +832,17 @@ body {
         border: dashed 1px;
         border-radius: var(--input-radius);
         border-color: var(--background-modifier-border);
+        padding: var(--size-2-2) !important;
         & .clickable-icon[data-note-toolbar-no-icon="true"] {
             & svg {
                 filter: brightness(0.5);
             }
-        }    
-        & .clickable-icon:focus-within {
+        }   
+        &:focus-within {
             border-radius: var(--input-radius);
             box-shadow: 0 0 0 1px var(--background-modifier-border);
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            transition: box-shadow 0.15s ease-in-out, border 0.15s ease-in-out;
         }
     }
 }
