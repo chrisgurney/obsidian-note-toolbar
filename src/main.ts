@@ -258,6 +258,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let noteToolbarElement: HTMLElement;
 		let embedBlock = activeDocument.createElement("div");
 		embedBlock.addClass('cg-note-toolbar-container');
+		embedBlock.setAttribute('data-tbar-position', position);
 
 		// render the toolbar based on its position
 		switch (position) {
@@ -510,16 +511,36 @@ export default class NoteToolbarPlugin extends Plugin {
 	async focusCommand(): Promise<void> {
 
 		debugLog("focusCommand()");
-		let itemsUl: HTMLElement | null = this.getToolbarListEl();
-		if (itemsUl) {
-			debugLog("focus command: toolbar: ", itemsUl);
-			let items = Array.from(itemsUl.children);
-			const visibleItems = items.filter(item => {
-				return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
-			});
-			const link = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-			debugLog("focus command: focussed item: ", link);
-			link?.focus();
+		// need to get the type of toolbar first
+		let toolbarEl = this.getToolbarEl();
+		let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
+		switch (toolbarPosition) {
+			case 'fabr':
+			case 'fabl':
+				// trigger the menu
+				let toolbarFab = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
+				debugLog("focusCommand: button: ", toolbarFab);
+				toolbarFab.click();
+				break;
+			case 'props':
+			case 'top':
+				// get the list and set focus on the first visible item
+				let itemsUl: HTMLElement | null = this.getToolbarListEl();
+				if (itemsUl) {
+					debugLog("focusCommand: toolbar: ", itemsUl);
+					let items = Array.from(itemsUl.children);
+					const visibleItems = items.filter(item => {
+						return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+					});
+					const link = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
+					debugLog("focusCommand: focussed item: ", link);
+					link?.focus();
+				}
+				break;
+			case 'hidden':
+			default:
+				// do nothing
+				break;
 		}
 
 	}
@@ -598,8 +619,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 			if (toolbar) {
 				this.renderToolbarAsMenu(toolbar).then(menu => { 
-					// menu.showAtPosition(getPosition(posAtElement));
 					let elemRect = posAtElement.getBoundingClientRect();
+					// from inspecting how Obsidian handles the navigation bar
 					menu.showAtPosition({
 						x: elemRect.x,
 						y: elemRect.bottom,
