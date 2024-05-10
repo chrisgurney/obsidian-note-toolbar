@@ -425,6 +425,9 @@ body {
                     display: block !important;
                 }
             }
+            &::before {
+                content: none !important; /* removes decoration added by ITS theme */
+            }
         }
 
         & a, span.external-link {
@@ -456,6 +459,9 @@ body {
 
         & a.external-link, span.external-link {
             background-image: none; /* hide the external link icon */
+            &::after {
+                content: none !important; /* removes decoration added by ITS theme */
+            }
         }
 
     }
