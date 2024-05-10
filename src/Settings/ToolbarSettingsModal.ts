@@ -248,7 +248,7 @@ export default class ToolbarSettingsModal extends Modal {
 				linkFieldHelpDiv.addClass("note-toolbar-setting-field-help");
 				linkFieldHelpDiv.appendChild(
 					learnMoreFr(
-						"Use your note's props with variables.",
+						"Tip: Use note properties in URIs.",
 						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
 				)
 
