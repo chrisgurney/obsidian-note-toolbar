@@ -122,23 +122,6 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayItemList(settingsDiv: HTMLElement) {
 
-		const itemsDescription = document.createDocumentFragment();
-		itemsDescription.append(
-			"Items in the toolbar, in order from left to right.",
-			itemsDescription.createEl("br"),
-			"See the documentation for ",
-			itemsDescription.createEl("a", {
-				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples",
-				text: "examples",
-			}),
-			", and for the ",
-			itemsDescription.createEl("a", {
-				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables",
-				text: "variables",
-			}),
-			" supported."
-		);
-
 		new Setting(settingsDiv)
 			.setName("Items")
 			.setDesc(learnMoreFr(
