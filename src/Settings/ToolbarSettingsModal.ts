@@ -385,12 +385,12 @@ export default class ToolbarSettingsModal extends Modal {
 					.addButton((cb) => {
 						let btnIcon = cb.buttonEl.createSpan();
 						setIcon(btnIcon, 'monitor');
-						let state = this.getPlatformStateLabel(toolbarItem.visibility.desktop);
+						let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
 						if (state) {
 							let btnLabel = cb.buttonEl.createSpan();
 							btnLabel.setText(state);
 						}
-						cb.setTooltip(state ? 'Change desktop visibility' : 'Showing on desktop')
+						cb.setTooltip(tooltip)
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
@@ -402,12 +402,12 @@ export default class ToolbarSettingsModal extends Modal {
 					.addButton((cb) => {
 						let btnIcon = cb.buttonEl.createSpan();
 						setIcon(btnIcon, 'tablet-smartphone');
-						let state = this.getPlatformStateLabel(toolbarItem.visibility.mobile);
+						let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
 						if (state) {
 							let btnLabel = cb.buttonEl.createSpan();
 							btnLabel.setText(state);
 						}
-						cb.setTooltip(state ? 'Change mobile visibility' : 'Showing on mobile')
+						cb.setTooltip(tooltip)
 							.onClick(async () => {
 								// create the setting if it doesn't exist or was removed
 								toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
@@ -827,22 +827,23 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Gets the current state of visibility for a given platform.
 	 * @param platform visibility to check
+	 * @returns a single word (hidden, visible, or the component name), and a sentence for the tooltip
 	 */
-	getPlatformStateLabel(platform: any): string {
+	getPlatformStateLabel(platform: any, platformLabel: string): [string, string] {
 
 		if (platform && platform.allViews) {
 			let dkComponents = platform.allViews?.components;
 			if (dkComponents) {
 				if (dkComponents.length === 2) {
-					return '';
+					return ['', 'visible on ' + platformLabel];
 				} else if (dkComponents.length === 1) {
-					return dkComponents[0];
+					return [dkComponents[0], dkComponents[0] + ' visible on ' + platformLabel];
 				} else {
-					return 'hidden';
+					return ['hidden', 'hidden on ' + platformLabel];
 				}
 			}
 		}
-		return 'hidden';
+		return ['hidden', 'hidden on ' + platformLabel];
 
 	}
 
