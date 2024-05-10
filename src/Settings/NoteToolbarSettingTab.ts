@@ -2,7 +2,7 @@ import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePat
 import NoteToolbarPlugin from '../main';
 import { arraymove, debugLog, emptyMessageFr, learnMoreFr } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
-import { Position, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { Position, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from './IconSuggestModal';
@@ -48,6 +48,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// 				debugLog("result: " + result);
 		// 			});
 		// 	});
+
+		if (this.plugin.settings.version !== SETTINGS_VERSION) {
+			new Setting(containerEl)
+				.setName("⚠️ Error loading plugin: Please reload")
+				.setDesc("Old settings file detected. Please restart plugin.")
+				.setClass('note-toolbar-setting-plugin-error')
+				.setHeading();
+		}
 
 		this.displayToolbarList(containerEl);
 
