@@ -692,6 +692,15 @@ body {
 * Settings Styles (for Note Toolbar Plugin)
 ******************************************************************************/
 
+.note-toolbar-setting-plugin-error {
+    & .setting-item-name {
+        color: var(--color-red);
+    }
+    border: solid 1px var(--color-red) !important;
+    padding: 1em !important;
+    border-radius: 8px;
+}
+
 .note-toolbar-setting-toolbar-list {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
