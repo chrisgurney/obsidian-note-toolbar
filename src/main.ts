@@ -115,7 +115,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			case "source":
 			case "preview":
 				debugLog("layout-change: ", viewMode, " -> re-rendering toolbar");
-				this.removeActiveToolbar();
+				let toolbarEl = this.getToolbarEl();
+				let toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
+				debugLog("layout-change: position: ", toolbarPos);
+				// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
+				toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
 				this.app.workspace.onLayoutReady(debounce(() => {
 					debugLog("LAYOUT READY");
 					this.renderToolbarForActiveFile();
@@ -931,6 +935,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async removeActiveToolbar(): Promise<void> {
 		let existingToolbar = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
+		debugLog("removeActiveToolbar: existingToolbar: ", existingToolbar);
 		existingToolbar?.remove();
 	}
 
