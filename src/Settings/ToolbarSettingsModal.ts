@@ -563,9 +563,13 @@ export default class ToolbarSettingsModal extends Modal {
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(
-						DEFAULT_STYLE_OPTIONS.reduce((acc, option) => {
-							return { ...acc, ...option };
-						}, {}))
+						DEFAULT_STYLE_OPTIONS
+							.filter((option) => {
+								return !this.toolbar.defaultStyles.includes(Object.keys(option)[0]);
+							})
+							.reduce((acc, option) => {
+								return { ...acc, ...option };
+							}, {}))
 					.setValue("")
 					.onChange(async (val) => {
 						if (this.toolbar.defaultStyles.includes(val)) {
@@ -626,9 +630,13 @@ export default class ToolbarSettingsModal extends Modal {
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(
-						MOBILE_STYLE_OPTIONS.reduce((acc, option) => {
-							return {...acc, ...option};
-						}, {}))
+						MOBILE_STYLE_OPTIONS
+							.filter((option) => {
+								return !this.toolbar.mobileStyles.includes(Object.keys(option)[0]);
+							})
+							.reduce((acc, option) => {
+								return {...acc, ...option};
+							}, {}))
 					.setValue(this.toolbar.mobileStyles.join(", ") || "")
 					.onChange(async (val) => {
 						if (this.toolbar.mobileStyles.includes(val)) {
