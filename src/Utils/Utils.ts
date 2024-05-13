@@ -191,7 +191,7 @@ export function isValidUri(u: string): boolean {
 /** 
  * Scrolls the element into view. Implemented as scrollIntoView doesn't work consistently on mobile (iOS, at least).
  */
-export function scrollElementIntoView(parent: HTMLElement, element: HTMLElement, behavior?: 'smooth' | 'instant' | 'auto') {
+export function scrollElementIntoView(parent: HTMLElement, element: HTMLElement) {
 	const scrollOffset = element.getBoundingClientRect().top + element.scrollTop;
-	parent.scrollTo({ top: scrollOffset, behavior: behavior || 'auto' });
+	parent.scrollTo({ top: scrollOffset, behavior: 'auto' });
 }
