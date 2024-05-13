@@ -1,5 +1,5 @@
-import { App, ButtonComponent, Menu, Modal, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, scrollElementIntoView } from 'src/Utils/Utils';
+import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
+import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
@@ -73,8 +73,12 @@ export default class ToolbarSettingsModal extends Modal {
 			let inputToFocus = this.contentEl.querySelector('#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]') as HTMLInputElement;
 			let inputContainer = inputToFocus.closest('.note-toolbar-setting-item') as HTMLElement;
 			if (inputToFocus?.value.length === 0) {
-				scrollElementIntoView(this.modalEl, inputContainer);
 				inputToFocus.focus();
+				if (Platform.isMobile) {
+					setTimeout(() => { 
+						inputContainer.scrollIntoView(true);
+					}, 100);
+				}
 			}
 		}
 
