@@ -141,7 +141,7 @@ export function learnMoreFr(message: string, url: string): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
-		messageFr.createEl('a', {href: url, text: "Learn more"})
+		messageFr.createEl('a', {href: url, text: "Learn\u00A0more"})
 	)
 	return messageFr;
 }

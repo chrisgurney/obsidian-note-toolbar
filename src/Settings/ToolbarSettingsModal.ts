@@ -244,7 +244,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let linkFileFieldDiv = this.containerEl.createDiv();
 				let linkUriFieldDiv = this.containerEl.createDiv();
 
-				let linkFieldHelpDiv = this.containerEl.createDiv();
+				let linkFieldHelpDiv = createEl("div");
 				linkFieldHelpDiv.addClass("note-toolbar-setting-field-help");
 				linkFieldHelpDiv.appendChild(
 					learnMoreFr(
@@ -495,6 +495,12 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName('Mobile')
+			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden' ? 
+				learnMoreFr(
+					"Tip: Access toolbars from the navigation bar.",
+					"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars")
+				: ''
+			)
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(

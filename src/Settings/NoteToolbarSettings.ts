@@ -144,7 +144,7 @@ export const POSITION_OPTIONS = {
 		{ props: "Below Properties" },
 		{ fabl: "Floating button: left" },
 		{ fabr: "Floating button: right" },
-		{ hidden: "Hidden (do not display)" },
+		{ hidden: "Hidden / Navigation bar" },
 	]
 }
 
