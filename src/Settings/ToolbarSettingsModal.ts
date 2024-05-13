@@ -500,7 +500,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden' ? 
 				learnMoreFr(
 					"Tip: Access toolbars from the navigation bar.",
-					"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars")
+					"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bar")
 				: ''
 			)
 			.addDropdown((dropdown) =>
