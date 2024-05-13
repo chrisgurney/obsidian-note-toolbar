@@ -71,8 +71,10 @@ export default class ToolbarSettingsModal extends Modal {
 		if (focusOnLastItem) {
 			// set focus on last item in the list, if the label is empty
 			let inputToFocus = this.contentEl.querySelector('#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]') as HTMLInputElement;
+			let inputContainer = inputToFocus.closest('.note-toolbar-setting-item');
 			if (inputToFocus?.value.length === 0) {
 				inputToFocus.focus();
+				inputContainer?.scrollIntoView(false);
 			}
 		}
 
