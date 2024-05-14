@@ -319,6 +319,10 @@ body {
     --cg-nt-item-text-color-hover: var(--text-normal);
 }
 
+& .is-android {
+    --cg-nt-fab-border-radius: var(--radius-xl);
+}
+
 .metadata-container {
     margin-block-end: 0;
 }
