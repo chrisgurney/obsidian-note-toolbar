@@ -471,7 +471,7 @@ body {
     }
 
     /*************************************************************************
-     * Toolbar Styles (sticky's at top)
+     * Toolbar Styles (sticky's further up in this file)
      *************************************************************************/
 
     &[data-callout-metadata*="border"] {

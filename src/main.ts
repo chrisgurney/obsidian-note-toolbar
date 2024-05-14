@@ -696,6 +696,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarClickHandler(e: MouseEvent) {
 
+		debugLog('toolbarClickHandler: ', e);
+
 		let clickedEl = e.currentTarget as HTMLLinkElement;
 		let linkHref = clickedEl.getAttribute("href");
 
@@ -704,7 +706,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
 			linkType ? (['command', 'file', 'uri'].includes(linkType) ? e.preventDefault() : undefined) : undefined
 
-			debugLog('toolbarClickHandler: ', e, 'clickedEl: ', clickedEl);
+			debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
 
 			// default to true if it doesn't exist, treating the url as though it is a URI with vars
 			let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
