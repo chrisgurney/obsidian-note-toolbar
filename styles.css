@@ -252,9 +252,9 @@ settings:
     -
         id: cg-nt-fab-border-radius
         title: Border radius (in px units)
-        description: How rounded the button is. The higher the number the more rounded.
+        description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
         type: variable-number
-        default: 999
+        default: 0
         format: px
     -
         id: cg-nt-fab-padding
