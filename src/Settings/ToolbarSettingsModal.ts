@@ -130,10 +130,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName("Items")
+			.setHeading()
 			.setDesc(learnMoreFr(
 				"Items in the toolbar, in order from left to right.", 
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"))
-			.setClass("note-toolbar-setting-no-controls");
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"));
 
 		let itemLinkFields: {
 			command: Setting;
