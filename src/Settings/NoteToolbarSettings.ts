@@ -152,6 +152,7 @@ export const POSITION_OPTIONS = {
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
 export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
+	{ autohide: "auto-hide*" },
     { border: "border" },
 	{ button: "button" },
     { noborder: "no border" },
@@ -159,11 +160,18 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
     { even: "evenly space items" },
     { left: "left align items" },
     { right: "right align items" },
-    { sticky: "sticky" },
+    { sticky: "sticky*" },
     { nosticky: "not sticky" },
-    { floatl: "float left" },
-    { floatr: "float right" },
+    { floatl: "float left*" },
+    { floatr: "float right*" },
     { nofloat: "no float" },
+];
+
+export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
+	{ autohide: "Auto-hide does not apply on mobile." },
+	{ floatl: "Float left only works within callouts." },
+	{ floatr: "Float right only works within callouts." },
+	{ sticky: "Sticky does not apply in Reading mode." },
 ];
 
 /**
@@ -177,9 +185,15 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mevn: "evenly space items" },
     { mlft: "left align items" },
     { mrght: "right align items" },
-    { mstcky: "sticky" },
+    { mstcky: "sticky*" },
     { mnstcky: "not sticky" },
-    { mfltl: "float left" },
-    { mfltr: "float right" },
+    { mfltl: "float left*" },
+    { mfltr: "float right*" },
     { mnflt: "no float" },
+];
+
+export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
+	{ mfltl: "Float left only works within callouts." },
+	{ mfltr: "Float right only works within callouts." },
+	{ mstcky: "Sticky does not apply in Reading mode." },
 ];

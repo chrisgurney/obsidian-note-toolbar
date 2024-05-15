@@ -474,6 +474,22 @@ body {
      * Toolbar Styles (sticky's further up in this file)
      *************************************************************************/
 
+    &[data-callout-metadata*="autohide"] {
+        &:not(.is-mobile &) {
+            opacity: 0;
+            transition: all 0.2s ease-in-out;
+            -webkit-transition: all 0.2s ease-in-out;
+        }
+    }
+
+    &[data-callout-metadata*="autohide"]:hover {
+        &:not(.is-mobile &) {
+            opacity: 1;
+            transition: all 0.2s ease-in-out;
+            -webkit-transition: all 0.2s ease-in-out;
+        }
+    }
+
     &[data-callout-metadata*="border"] {
         border-top: solid 1px var(--cg-nt-tbar-border-color);
         border-bottom: solid 1px var(--cg-nt-tbar-border-color);

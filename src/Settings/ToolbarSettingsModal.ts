@@ -1,7 +1,7 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
@@ -558,7 +558,7 @@ export default class ToolbarSettingsModal extends Modal {
 				(style, index) => {
 					new Setting(defaultStyleDiv)
 						.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
-						.setTooltip("Use in Callout or CSS: " + style)
+						.setTooltip(this.getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style) + 'Use in Callout or CSS: ' + style)
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
 								.setTooltip("Remove")
@@ -598,7 +598,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		const defaultDesc = document.createDocumentFragment();
 		defaultDesc.append("Applies to all platforms unless overridden.");
-		this.toolbar.defaultStyles.includes('sticky') ? defaultDesc.append( defaultDesc.createEl("br"), "Sticky does not apply in Reading mode.") : undefined;
+		defaultDesc.append(this.getStyleDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
 
 		new Setting(settingsDiv)
 			.setName("Default")
@@ -625,7 +625,7 @@ export default class ToolbarSettingsModal extends Modal {
 				(style, index) => {
 					new Setting(mobileStyleDiv)
 						.setName(this.getValueForKey(MOBILE_STYLE_OPTIONS, style))
-						.setTooltip("Use in Callout or CSS: " + style)
+						.setTooltip(this.getValueForKey(MOBILE_STYLE_DISCLAIMERS, style) + 'Use in Callout or CSS: ' + style)
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
 								.setTooltip("Remove")
@@ -665,7 +665,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		const mobileDesc = document.createDocumentFragment();
 		mobileDesc.append("Override default styles.");
-		this.toolbar.mobileStyles.includes('mstcky') ? mobileDesc.append( mobileDesc.createEl("br"), "Sticky does not apply in Reading mode.") : undefined;
+		mobileDesc.append(this.getStyleDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
 
 		new Setting(settingsDiv)
 			.setName("Mobile")
@@ -868,6 +868,22 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
+	 * Returns a fragment containing any applicable style disclaimers to show, for the provided styles.
+	 * @param disclaimers List of disclaimers, corresponds with DEFAULT and MOBILE _STYLE_DISCLAIMERS
+	 * @param stylesToCheck styles that have been applied by the user, to check for applicable disclaimers
+	 * @returns DocumentFragment with disclaimers to show in settings UI
+	 */
+	getStyleDisclaimersFr(disclaimers: {[key: string]: string}[], stylesToCheck: string[]): DocumentFragment {
+		let disclaimersFr = document.createDocumentFragment();
+		stylesToCheck.forEach(style => {
+			disclaimers.find(disclaimer => style in disclaimer)
+				? disclaimersFr.append( disclaimersFr.createEl("br"), "* ", this.getValueForKey(disclaimers, style) )
+				: undefined;
+		});
+		return disclaimersFr;
+	}
+
+	/**
 	 * Returns the value for the provided key from the provided dictionary.
 	 * @param dict key-value dictionary
 	 * @param key string key
@@ -875,7 +891,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	getValueForKey(dict: {[key: string]: string}[], key: string): string {
 		const option = dict.find(option => key in option);
-		return option ? Object.values(option)[0] : 'INVALID OPTION';
+		return option ? Object.values(option)[0] : '';
 	}
 
 }
