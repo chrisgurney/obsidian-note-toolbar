@@ -133,36 +133,40 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 
-		new Setting(itemsContainer)
+		let itemsSetting = new Setting(itemsContainer)
 			.setName("Items")
 			.setHeading()
 			.setDesc(learnMoreFr(
 				"Items in the toolbar, in order from left to right.", 
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"))
-			.addExtraButton((cb) => {
-				cb.setIcon('right-triangle')
-				.setTooltip("Collapse all items")
-				.onClick(async () => {
-					let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
-					if (itemsContainer) {
-						this.itemListOpen = !this.itemListOpen;
-						itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
-						let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
-						this.itemListOpen ? heading?.setText("Items") : heading?.setText("Items (" + this.toolbar.items.length + ")");
-						cb.setTooltip(this.itemListOpen ? "Collapse all items" : "Expand all items");
-					}
-				})
-				.extraSettingsEl.tabIndex = 0;
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ":
-								e.preventDefault();
-								cb.extraSettingsEl.click();
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"));
+		
+		if (this.toolbar.items.length > 0) {
+			itemsSetting
+				.addExtraButton((cb) => {
+					cb.setIcon('right-triangle')
+					.setTooltip("Collapse all items")
+					.onClick(async () => {
+						let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
+						if (itemsContainer) {
+							this.itemListOpen = !this.itemListOpen;
+							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+							let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
+							this.itemListOpen ? heading?.setText("Items") : heading?.setText("Items (" + this.toolbar.items.length + ")");
+							cb.setTooltip(this.itemListOpen ? "Collapse all items" : "Expand all items");
 						}
-					});
-			});
+					})
+					.extraSettingsEl.tabIndex = 0;
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ":
+									e.preventDefault();
+									cb.extraSettingsEl.click();
+							}
+						});
+				});
+		}
 
 		let itemLinkFields: {
 			command: Setting;
