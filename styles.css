@@ -853,6 +853,28 @@ body {
     }
 }
 
+.note-toolbar-setting-items-container {
+    padding-top: 0.75em;
+    &[data-active="true"] {
+        & .note-toolbar-setting-items-list-container {
+            display: inherit !important;
+        }
+        & .setting-item-heading .setting-item-control svg {
+            transform: rotate(0deg);
+            transition: 0.1s;
+        }
+    }
+    &[data-active="false"] {
+        & .note-toolbar-setting-items-list-container {
+            display: none !important;
+        }
+        & .setting-item-heading .setting-item-control svg {
+            transform: rotate(-90deg);
+            transition: 0.1s;
+        }
+    }
+}
+
 .note-toolbar-setting-item-top-container {
     display: flex;
     flex-flow: wrap;

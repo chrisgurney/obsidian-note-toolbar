@@ -13,6 +13,7 @@ export default class ToolbarSettingsModal extends Modal {
 	public plugin: NoteToolbarPlugin;
 	public toolbar: ToolbarSettings;
 	private parent: NoteToolbarSettingTab | null;
+	private itemListOpen: boolean = true; 
 
 	/**
 	 * Displays a new edit toolbar modal, for the given toolbar.
@@ -97,7 +98,6 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(toolbarNameDiv)
 			.setName("Name")
 			.setDesc("Give this toolbar a unique name.")
-			.setHeading()
 			.addText(text => text
 				.setPlaceholder('Name')
 				.setValue(this.toolbar.name)
@@ -129,18 +129,49 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayItemList(settingsDiv: HTMLElement) {
 
-		new Setting(settingsDiv)
+		let itemsContainer = createDiv();
+		itemsContainer.addClass('note-toolbar-setting-items-container');
+		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+
+		new Setting(itemsContainer)
 			.setName("Items")
 			.setHeading()
 			.setDesc(learnMoreFr(
 				"Items in the toolbar, in order from left to right.", 
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"));
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"))
+			.addExtraButton((cb) => {
+				cb.setIcon('right-triangle')
+				.setTooltip("Collapse all items")
+				.onClick(async () => {
+					let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
+					if (itemsContainer) {
+						this.itemListOpen = !this.itemListOpen;
+						itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+						let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
+						this.itemListOpen ? heading?.setText("Items") : heading?.setText("Items (" + this.toolbar.items.length + ")");
+						cb.setTooltip(this.itemListOpen ? "Collapse all items" : "Expand all items");
+					}
+				})
+				.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								e.preventDefault();
+								cb.extraSettingsEl.click();
+						}
+					});
+			});
 
 		let itemLinkFields: {
 			command: Setting;
 			file: Setting;
 			uri: Setting;
 		}[] = [];
+
+		let itemsListContainer = createDiv();
+		itemsListContainer.addClass('note-toolbar-setting-items-list-container');	
 
 		this.toolbar.items.forEach(
 			(toolbarItem, index) => {
@@ -430,7 +461,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 				itemDiv.appendChild(itemVisilityAndControlsContainer);
 
-				settingsDiv.appendChild(itemDiv);
+				itemsListContainer.appendChild(itemDiv);
 	
 			});
 
@@ -438,7 +469,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// Add new item button
 		//
 
-		new Setting(settingsDiv)
+		new Setting(itemsListContainer)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
@@ -467,6 +498,9 @@ export default class ToolbarSettingsModal extends Modal {
 						this.display(true);
 					});
 			});
+
+		itemsContainer.appendChild(itemsListContainer);
+		settingsDiv.appendChild(itemsContainer);
 
 	}
 
