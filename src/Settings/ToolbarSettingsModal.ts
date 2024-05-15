@@ -97,6 +97,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(toolbarNameDiv)
 			.setName("Name")
 			.setDesc("Give this toolbar a unique name.")
+			.setHeading()
 			.addText(text => text
 				.setPlaceholder('Name')
 				.setValue(this.toolbar.name)
