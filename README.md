@@ -10,6 +10,10 @@ With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisg
 
 ![Demo of a sticky toolbar](./docs/note_toolbar_demo.gif)
 
+More options on mobile:
+
+![Mobile options for accessing the toolbar](./docs/mobile_options.png)
+
 # Features
 
 For the latest additions, see the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
