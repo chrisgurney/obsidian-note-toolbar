@@ -272,6 +272,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							.setTooltip("Drag to rearrange")
 							.onClick(() => {})
 							.extraSettingsEl.addClass('setting-drag-icon');
+						cb.extraSettingsEl.tabIndex = 0;
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index));
 					});
 				toolbarFolderListItemDiv.append(textFieldsDiv);
 				toolbarFolderListItemDiv.append(itemControlsDiv);
@@ -284,8 +287,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 			var sortable = Sortable.create(toolbarFolderListDiv, {
 				onSort: async (item) => {
-					// TODO: do we need to check this? no classes are showing:
-					// debugLog("sortable: class: ", item.from.className, " -> ", item.to.className);
 					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 					if (item.oldIndex !== undefined && item.newIndex !== undefined) {
 						moveElement(this.plugin.settings.folderMappings, item.oldIndex, item.newIndex);
@@ -375,9 +376,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * Handles moving mappings up and down the list, and deletion, based on click or keyboard event.
 	 * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
 	 * @param index Number of the item in the list we're moving/deleting.
-	 * @param action Direction of the move, or "delete".
+	 * @param action Direction of the move, "delete", or don't provided if just checking the keyboard for the action
 	 */
-	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, action: 'up' | 'down' | 'delete'): Promise<void> {
+	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, action?: 'up' | 'down' | 'delete'): Promise<void> {
 		if (keyEvent) {
 			switch (keyEvent.key) {
 				case 'ArrowUp':
