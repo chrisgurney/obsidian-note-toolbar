@@ -1048,9 +1048,6 @@ body {
     & .sortable-chosen {
         background-color: var(--background-primary);
     }
-    & .sortable-drag {
-        /* border: none; */
-    }
     & .sortable-ghost {
         & .setting-item {
             opacity: 0;

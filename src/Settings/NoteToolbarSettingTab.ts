@@ -288,7 +288,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 			var sortable = Sortable.create(toolbarFolderListDiv, {
 				chosenClass: 'sortable-chosen',
-				dragClass: 'sortable-drag',
 				ghostClass: 'sortable-ghost',
 				onSort: async (item) => {
 					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
