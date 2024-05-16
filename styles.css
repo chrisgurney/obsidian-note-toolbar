@@ -1067,6 +1067,13 @@ body {
     }
 }
 
+.note-toolbar-setting-item-delete {
+    padding-right: var(--size-4-1);
+    & .setting-item {
+        display: none;
+    }
+}
+
 .note-toolbar-setting-item-visibility {
     display: flex;
 }
