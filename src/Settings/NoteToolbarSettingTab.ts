@@ -1,11 +1,12 @@
 import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from '../main';
-import { arraymove, debugLog, emptyMessageFr, learnMoreFr } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
-import { Position, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from './IconSuggestModal';
+import Sortable from 'sortablejs';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -259,33 +260,39 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
 					.addExtraButton((cb) => {
-						cb.setIcon("up-chevron-glyph")
-							.setTooltip("Move up")
-							.onClick(async () => this.listMoveHandler(null, index, "up"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "up"));
-					})
-					.addExtraButton((cb) => {
-						cb.setIcon("down-chevron-glyph")
-							.setTooltip("Move down")
-							.onClick(async () => this.listMoveHandler(null, index, "down"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "down"));
-					})
-					.addExtraButton((cb) => {
 						cb.setIcon("trash")
 							.setTooltip("Delete")
 							.onClick(async () => this.listMoveHandler(null, index, "delete"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
+						cb.extraSettingsEl.tabIndex = 0;
 						this.plugin.registerDomEvent(
 							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
+					})
+					.addExtraButton((cb) => {
+						cb.setIcon("menu")
+							.setTooltip("Drag to rearrange")
+							.onClick(() => {})
+							.extraSettingsEl.addClass('setting-drag-icon');
+						cb.extraSettingsEl.tabIndex = 0;
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index));
 					});
 				toolbarFolderListItemDiv.append(textFieldsDiv);
 				toolbarFolderListItemDiv.append(itemControlsDiv);
+				
+				toolbarFolderListItemDiv.draggable = true;
+				toolbarFolderListItemDiv.setAttribute('note-toolbar-list-index', index.toString());
 
 				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
+			});
+
+			var sortable = Sortable.create(toolbarFolderListDiv, {
+				onSort: async (item) => {
+					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+					if (item.oldIndex !== undefined && item.newIndex !== undefined) {
+						moveElement(this.plugin.settings.folderMappings, item.oldIndex, item.newIndex);
+						await this.plugin.saveSettings();
+					}
+				}
 			});
 
 			containerEl.append(toolbarFolderListDiv);
@@ -369,9 +376,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * Handles moving mappings up and down the list, and deletion, based on click or keyboard event.
 	 * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
 	 * @param index Number of the item in the list we're moving/deleting.
-	 * @param action Direction of the move, or "delete".
+	 * @param action Direction of the move, "delete", or don't provided if just checking the keyboard for the action
 	 */
-	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, action: 'up' | 'down' | 'delete'): Promise<void> {
+	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, action?: 'up' | 'down' | 'delete'): Promise<void> {
 		if (keyEvent) {
 			switch (keyEvent.key) {
 				case 'ArrowUp':

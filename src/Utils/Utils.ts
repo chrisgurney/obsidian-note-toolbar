@@ -17,6 +17,16 @@ export function arraymove<T>(arr: (T | string)[], fromIndex: number, toIndex: nu
 }
 
 /**
+ * Utility to move item in an array.
+ */
+export function moveElement<T>(array: T[], fromIndex: number, toIndex: number): void {
+	if (fromIndex !== toIndex && fromIndex >= 0 && fromIndex < array.length && toIndex >= 0 && toIndex < array.length) {
+		const element = array.splice(fromIndex, 1)[0];
+		array.splice(toIndex, 0, element);
+	}
+}
+
+/**
  * Migration: Returns the platform visibility value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
  * Platform value should be the opposite of these flags.
  * @param hideOnDesktop 
