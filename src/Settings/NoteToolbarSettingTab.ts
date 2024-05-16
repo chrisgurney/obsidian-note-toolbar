@@ -288,12 +288,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				chosenClass: 'sortable-chosen',
 				ghostClass: 'sortable-ghost',
 				handle: '.sortable-handle',
-				onChange: (item) => {
-					navigator.vibrate(50);
-				},
-				onChoose: (item) => {
-					navigator.vibrate(50);
-				},
+				onChange: (item) => navigator.vibrate(50),
+				onChoose: (item) => navigator.vibrate(50),
 				onSort: async (item) => {
 					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 					if (item.oldIndex !== undefined && item.newIndex !== undefined) {
