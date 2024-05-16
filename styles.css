@@ -1055,6 +1055,16 @@ body {
         background-color: var(--interactive-accent);
         opacity: 0.4;
     }
+    & .sortable-handle {
+        cursor: move;
+        cursor: -webkit-grabbing;
+    }
+    & .sortable-handle:hover {
+        cursor: grab;
+    }
+    & .sortable-handle:active {
+        cursor: grabbing;
+    }
 }
 
 .note-toolbar-setting-item-visibility {
@@ -1071,12 +1081,6 @@ body {
         & .setting-item-control {
             .is-mobile & {
                 margin-top: 0 !important;
-            }
-            & .setting-drag-icon:hover {
-                cursor: grab;
-            }
-            & .setting-drag-icon:active {
-                cursor: grabbing;
             }
         }
         & .setting-item-info {

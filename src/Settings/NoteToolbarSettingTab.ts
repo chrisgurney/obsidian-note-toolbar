@@ -265,30 +265,29 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                                 await this.plugin.saveSettings();
                             }, 250));
 					});
-				let itemControlsDiv = this.containerEl.createDiv();
-				itemControlsDiv.className = "note-toolbar-setting-item-controls";
-				const s1d = new Setting(itemControlsDiv)
+
+				let itemHandleDiv = this.containerEl.createDiv();
+				itemHandleDiv.addClass("note-toolbar-setting-item-controls");
+				const s1d = new Setting(itemHandleDiv)
 					.addExtraButton((cb) => {
 						cb.setIcon("menu")
 							.setTooltip("Drag to rearrange")
-							.onClick(() => {})
-							.extraSettingsEl.addClass('setting-drag-icon');
+							.extraSettingsEl.addClass('sortable-handle');
 						cb.extraSettingsEl.tabIndex = 0;
 						this.plugin.registerDomEvent(
 							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index));
 					});
-				toolbarFolderListItemDiv.append(textFieldsDiv);
-				toolbarFolderListItemDiv.append(itemControlsDiv);
-				
-				toolbarFolderListItemDiv.draggable = true;
-				toolbarFolderListItemDiv.setAttribute('note-toolbar-list-index', index.toString());
 
+				toolbarFolderListItemDiv.append(textFieldsDiv);
+				toolbarFolderListItemDiv.append(itemHandleDiv);
 				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
+
 			});
 
 			var sortable = Sortable.create(toolbarFolderListDiv, {
 				chosenClass: 'sortable-chosen',
 				ghostClass: 'sortable-ghost',
+				handle: '.sortable-handle',
 				onSort: async (item) => {
 					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 					if (item.oldIndex !== undefined && item.newIndex !== undefined) {
