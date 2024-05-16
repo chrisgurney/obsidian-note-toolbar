@@ -6,6 +6,7 @@ import { Position, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from './IconSuggestModal';
+import Sortable from 'sortablejs';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -268,22 +269,22 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				let itemControlsDiv = this.containerEl.createDiv();
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
-					.addExtraButton((cb) => {
-						cb.setIcon("up-chevron-glyph")
-							.setTooltip("Move up")
-							.onClick(async () => this.listMoveHandler(null, index, "up"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "up"));
-					})
-					.addExtraButton((cb) => {
-						cb.setIcon("down-chevron-glyph")
-							.setTooltip("Move down")
-							.onClick(async () => this.listMoveHandler(null, index, "down"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "down"));
-					})
+					// .addExtraButton((cb) => {
+					// 	cb.setIcon("up-chevron-glyph")
+					// 		.setTooltip("Move up")
+					// 		.onClick(async () => this.listMoveHandler(null, index, "up"));
+					// 	cb.extraSettingsEl.setAttribute("tabindex", "0");
+					// 	this.plugin.registerDomEvent(
+					// 		cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "up"));
+					// })
+					// .addExtraButton((cb) => {
+					// 	cb.setIcon("down-chevron-glyph")
+					// 		.setTooltip("Move down")
+					// 		.onClick(async () => this.listMoveHandler(null, index, "down"));
+					// 	cb.extraSettingsEl.setAttribute("tabindex", "0");
+					// 	this.plugin.registerDomEvent(
+					// 		cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, index, "down"));
+					// })
 					.addExtraButton((cb) => {
 						cb.setIcon("trash")
 							.setTooltip("Delete")
@@ -306,6 +307,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				// this.plugin.registerDomEvent(toolbarFolderListItemDiv, 'dragstart', (e) => this.dragStartHandler(e));
 
 				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
+			});
+
+			var sortable = Sortable.create(toolbarFolderListDiv, {
+				onSort: async (item) => {
+					// TODO: do we need to check this? no classes are showing:
+					// debugLog("sortable: class: ", item.from.className, " -> ", item.to.className);
+					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+					if (item.oldIndex !== undefined && item.newIndex !== undefined) {
+						moveElement(this.plugin.settings.folderMappings, item.oldIndex, item.newIndex);
+						await this.plugin.saveSettings();
+					}
+				}
 			});
 
 			containerEl.append(toolbarFolderListDiv);
