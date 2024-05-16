@@ -1069,8 +1069,17 @@ body {
 
 .note-toolbar-setting-item-delete {
     padding-right: var(--size-4-1);
-    & .setting-item {
+    .is-mobile & {
+        padding-top: 0 !important;
+    }
+    & .setting-item-info {
         display: none;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            align-items: center;
+            margin-top: 0 !important;
+        }
     }
 }
 
