@@ -214,6 +214,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				textFieldsDiv.className = "note-toolbar-setting-item-fields";
 				const fs = new Setting(textFieldsDiv)
 					.setClass("note-toolbar-setting-mapping-field")
+					.addExtraButton((cb) => {
+						cb.setIcon("trash")
+							.setTooltip("Delete")
+							.onClick(async () => this.listMoveHandler(null, index, "delete"));
+						cb.extraSettingsEl.tabIndex = 0;
+						this.plugin.registerDomEvent(
+							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
+					})
 					.addSearch((cb) => {
 						new FolderSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder("Folder")
@@ -259,14 +267,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				let itemControlsDiv = this.containerEl.createDiv();
 				itemControlsDiv.className = "note-toolbar-setting-item-controls";
 				const s1d = new Setting(itemControlsDiv)
-					.addExtraButton((cb) => {
-						cb.setIcon("trash")
-							.setTooltip("Delete")
-							.onClick(async () => this.listMoveHandler(null, index, "delete"));
-						cb.extraSettingsEl.tabIndex = 0;
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
-					})
 					.addExtraButton((cb) => {
 						cb.setIcon("menu")
 							.setTooltip("Drag to rearrange")
