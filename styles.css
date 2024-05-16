@@ -1059,12 +1059,32 @@ body {
             .is-mobile & {
                 margin-top: 0 !important;
             }
+            & .setting-drag-icon:hover {
+                cursor: grab;
+            }
         }
         & .setting-item-info {
             display: none;
         }
     }
 }
+
+/* .note-toolbar-setting-drop-over {
+    border: solid 1px red;
+}
+
+.note-toolbar-setting-drop-zone {
+    background-color: var(--interactive-accent);
+    border-radius: var(--input-radius);
+    min-height: 5px;
+    max-height: 5px;
+    &[data-active="true"] {
+        display: inherit !important;
+    }
+    &[data-active="false"] {
+        display: none !important;
+    }
+} */
 
 .note-toolbar-setting-item-visibility-and-controls {
     border-top: none !important;

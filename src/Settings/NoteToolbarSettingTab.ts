@@ -1,6 +1,6 @@
 import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from '../main';
-import { arraymove, debugLog, emptyMessageFr, learnMoreFr } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
 import { Position, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
@@ -11,6 +11,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	plugin: NoteToolbarPlugin;
 	app: App;
+
+	// private dndTargetEl: HTMLDivElement;
+	// private dndStartIndex: string | null = null;
 
 	constructor(app: App, plugin: NoteToolbarPlugin) {
 		super(app, plugin);
@@ -67,7 +70,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		this.displayPropertySetting(containerEl);
+
 		this.displayFolderMap(containerEl);
+
+		// reusable drop zone element for list drag-and-drop
+		// this.dndTargetEl = createDiv();
+		// this.dndTargetEl.addClass('note-toolbar-setting-drop-zone');
+		// this.dndTargetEl.setAttribute('data-active', 'false');
+
 		this.displayMobileSettings(containerEl);
 
 		if (focusOnLastItem) {
@@ -281,14 +291,26 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						cb.extraSettingsEl.setAttribute("tabindex", "0");
 						this.plugin.registerDomEvent(
 							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
+					})
+					.addExtraButton((cb) => {
+						cb.setIcon("menu")
+							.setTooltip("Drag to rearrange")
+							.onClick(() => {})
+							.extraSettingsEl.addClass('setting-drag-icon');
 					});
 				toolbarFolderListItemDiv.append(textFieldsDiv);
 				toolbarFolderListItemDiv.append(itemControlsDiv);
+				
+				toolbarFolderListItemDiv.draggable = true;
+				toolbarFolderListItemDiv.setAttribute('note-toolbar-list-index', index.toString());
+				// this.plugin.registerDomEvent(toolbarFolderListItemDiv, 'dragstart', (e) => this.dragStartHandler(e));
 
 				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
 			});
 
 			containerEl.append(toolbarFolderListDiv);
+			// this.plugin.registerDomEvent(containerEl, 'dragover', (e) => this.dragOverHandler(e));
+			// this.plugin.registerDomEvent(containerEl, 'drop', (e) => this.dropHandler(e));
 
 		}
 
@@ -364,6 +386,88 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	/*************************************************************************
 	 * SETTINGS DISPLAY HANDLERS
 	 *************************************************************************/
+
+	// async dragStartHandler(event: DragEvent) {
+	// 	debugLog("⬆️ dragStartHandler: ", event);
+	// 	event.dataTransfer ? event.dataTransfer.dropEffect = 'move' : undefined;
+
+	// 	// add the target element's id to the data transfer object
+	// 	let startEventTarget = event.target as HTMLElement;
+	// 	let startRowTarget = startEventTarget.closest('.note-toolbar-setting-folder-list-item-container') as HTMLElement;
+	// 	// startRowTarget.style.border = 'solid 1px green';
+	// 	// workaround for event.dataTransfer.setData() not working consistently
+	// 	this.dndStartIndex = startRowTarget.getAttribute('note-toolbar-list-index');
+	// 	debugLog("dragStartHandler: start position: ", this.dndStartIndex);
+	// 	// this.dndTargetEl.style.height = activeWindow.getComputedStyle(startEventTarget).getPropertyValue('height');
+	// }
+
+	// async dragOverHandler(event: DragEvent) {
+	// 	// debugLog("dragOverHandler: ", event);
+	// 	event.preventDefault();
+	// 	event.stopImmediatePropagation();
+	// 	event.dataTransfer ? event.dataTransfer.dropEffect = 'move' : undefined;
+
+	// 	let eventTarget = event.target as HTMLElement;
+	// 	// debugLog("dragOverHandler: target: ", eventTarget);
+	// 	if (eventTarget) {
+	// 		// get the row that we're over
+	// 		let overRowTarget = eventTarget.closest('.note-toolbar-setting-folder-list-item-container') as HTMLElement | null;
+	// 		let overRowIndex = overRowTarget?.getAttribute('note-toolbar-list-index');
+	// 		if (overRowTarget && overRowIndex) {
+	// 			if (this.dndStartIndex !== overRowIndex) {
+	// 				debugLog("dragOverHandler: ", this.dndStartIndex, overRowIndex);
+	// 				// overRowTarget.addClass('note-toolbar-setting-drop-over');
+	// 				let clientY = event.clientY;
+	// 				if (clientY && overRowTarget) {
+	// 					const targetHeight = overRowTarget.clientHeight;
+	// 					const positionRelativeToTarget = clientY - overRowTarget.getBoundingClientRect().top;
+	// 					if (positionRelativeToTarget < targetHeight / 2) {
+	// 						overRowTarget.insertAdjacentElement('beforebegin', this.dndTargetEl);
+	// 						this.dndTargetEl.setAttribute('note-toolbar-list-index', overRowIndex);
+	// 						// this.dndTargetEl.setText(overRowIndex);
+	// 					}
+	// 					else {
+	// 						overRowTarget.insertAdjacentElement('afterend', this.dndTargetEl);
+	// 						this.dndTargetEl.setAttribute('note-toolbar-list-index', overRowIndex);
+	// 						// this.dndTargetEl.setText(overRowIndex);
+	// 					}
+	// 				}
+	// 				this.dndTargetEl.setAttribute('data-active', 'true');
+	// 			}
+	// 			else {
+	// 				this.dndTargetEl.setAttribute('data-active', 'false');
+	// 				this.dndTargetEl.removeAttribute('note-toolbar-list-index');
+	// 			}
+	// 		}
+	// 	}
+	// }
+	
+	// async dropHandler(event: DragEvent) {
+	// 	debugLog("⬇️ dropHandler: ", event);
+	// 	event.preventDefault();
+	// 	event.stopImmediatePropagation();
+
+	// 	let eventTarget = event.target as HTMLElement;
+	// 	let dropRowTarget = eventTarget.closest('.note-toolbar-setting-folder-list-item-container') as HTMLElement | null;
+	// 	let dropRowIndex = dropRowTarget?.getAttribute('note-toolbar-list-index');
+	// 	debugLog("dropHandler: drop data: ", eventTarget);
+	// 	// make sure that that the move is valid
+	// 	if (this.dndStartIndex && dropRowIndex) {
+	// 		debugLog("dropHandler: dragged: ", this.dndStartIndex, " -> ", dropRowIndex);
+	// 		debugLog(this.plugin.settings.folderMappings[0], this.plugin.settings.folderMappings[1]);
+	// 		moveElement(this.plugin.settings.folderMappings, parseInt(this.dndStartIndex), parseInt(dropRowIndex));
+	// 		debugLog(this.plugin.settings.folderMappings[0], this.plugin.settings.folderMappings[1]);
+	// 		// TODO: save settings and refresh without holding up dragOverHandler
+	// 		const doSave = debounce(async () => {
+	// 			debugLog("SAVING...");
+	// 			await this.plugin.saveSettings();
+	// 		}, 250);
+	// 		this.display();
+	// 		doSave();
+	// 	}
+	// 	this.dndTargetEl.setAttribute('data-active', 'false');
+	// 	this.dndStartIndex = null;
+	// }
 
 	/**
 	 * Handles moving mappings up and down the list, and deletion, based on click or keyboard event.
