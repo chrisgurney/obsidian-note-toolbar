@@ -202,6 +202,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 		else {
 			let toolbarFolderListDiv = containerEl.createDiv();
+			toolbarFolderListDiv.addClass('note-toolbar-sortablejs-list');
 
 			this.plugin.settings.folderMappings.forEach(
 				(mapping, index) => {
@@ -286,6 +287,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 			var sortable = Sortable.create(toolbarFolderListDiv, {
+				chosenClass: 'sortable-chosen',
+				dragClass: 'sortable-drag',
+				ghostClass: 'sortable-ghost',
 				onSort: async (item) => {
 					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 					if (item.oldIndex !== undefined && item.newIndex !== undefined) {

@@ -1044,6 +1044,22 @@ body {
     }
 }
 
+.note-toolbar-sortablejs-list {
+    & .sortable-chosen {
+        background-color: var(--background-primary);
+    }
+    & .sortable-drag {
+        /* border: none; */
+    }
+    & .sortable-ghost {
+        & .setting-item {
+            opacity: 0;
+        }
+        background-color: var(--interactive-accent);
+        opacity: 0.4;
+    }
+}
+
 .note-toolbar-setting-item-visibility {
     display: flex;
 }
@@ -1062,29 +1078,15 @@ body {
             & .setting-drag-icon:hover {
                 cursor: grab;
             }
+            & .setting-drag-icon:active {
+                cursor: grabbing;
+            }
         }
         & .setting-item-info {
             display: none;
         }
     }
 }
-
-/* .note-toolbar-setting-drop-over {
-    border: solid 1px red;
-}
-
-.note-toolbar-setting-drop-zone {
-    background-color: var(--interactive-accent);
-    border-radius: var(--input-radius);
-    min-height: 5px;
-    max-height: 5px;
-    &[data-active="true"] {
-        display: inherit !important;
-    }
-    &[data-active="false"] {
-        display: none !important;
-    }
-} */
 
 .note-toolbar-setting-item-visibility-and-controls {
     border-top: none !important;
