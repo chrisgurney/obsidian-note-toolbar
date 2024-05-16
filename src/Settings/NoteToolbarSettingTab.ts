@@ -213,7 +213,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				let ds = new Setting(toolbarFolderListItemDiv)
 					.setClass("note-toolbar-setting-item-delete")
 					.addExtraButton((cb) => {
-						cb.setIcon("trash")
+						cb.setIcon("minus-circle")
 							.setTooltip("Delete")
 							.onClick(async () => this.listMoveHandler(null, index, "delete"));
 						cb.extraSettingsEl.tabIndex = 0;
