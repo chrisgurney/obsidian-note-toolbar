@@ -596,9 +596,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 			this.toolbar.defaultStyles.forEach(
 				(style, index) => {
+					let styleDisclaimer = this.getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
 					new Setting(defaultStyleDiv)
 						.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
-						.setTooltip(this.getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style) + 'Use in Callout or CSS: ' + style)
+						.setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + 'Use in Callout or CSS: ' + style)
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
 								.setTooltip("Remove")
@@ -663,9 +664,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 			this.toolbar.mobileStyles.forEach(
 				(style, index) => {
+					let styleDisclaimer = this.getValueForKey(MOBILE_STYLE_DISCLAIMERS, style);
 					new Setting(mobileStyleDiv)
 						.setName(this.getValueForKey(MOBILE_STYLE_OPTIONS, style))
-						.setTooltip(this.getValueForKey(MOBILE_STYLE_DISCLAIMERS, style) + 'Use in Callout or CSS: ' + style)
+						.setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + 'Use in Callout or CSS: ' + style)
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
 								.setTooltip("Remove")
