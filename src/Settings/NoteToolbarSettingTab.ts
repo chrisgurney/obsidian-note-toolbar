@@ -153,7 +153,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.className = "note-toolbar-setting-empty-message";
 		}
 		else {		
-			let toolbarListDiv = containerEl.createDiv();
+			let toolbarListDiv = createDiv();
 			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
 				(toolbarItem, index) => {
@@ -243,13 +243,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
-			let toolbarFolderListDiv = containerEl.createDiv();
+			let toolbarFolderListDiv = createDiv();
 			toolbarFolderListDiv.addClass('note-toolbar-sortablejs-list');
 
 			this.plugin.settings.folderMappings.forEach(
 				(mapping, index) => {
 
-				let toolbarFolderListItemDiv = containerEl.createDiv();
+				let toolbarFolderListItemDiv = createDiv();
 				toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
 
 				let ds = new Setting(toolbarFolderListItemDiv)
@@ -263,7 +263,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
 					});
 
-				let textFieldsDiv = this.containerEl.createDiv();
+				let textFieldsDiv = createDiv();
 				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
 				textFieldsDiv.className = "note-toolbar-setting-item-fields";
 				const fs = new Setting(textFieldsDiv)
@@ -311,7 +311,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
                             }, 250));
 					});
 
-				let itemHandleDiv = this.containerEl.createDiv();
+				let itemHandleDiv = createDiv();
 				itemHandleDiv.addClass("note-toolbar-setting-item-controls");
 				const s1d = new Setting(itemHandleDiv)
 					.addExtraButton((cb) => {
@@ -508,10 +508,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					return ((item.label === "" && item.icon === "") ? false : true);
 				})
 		 		.map(item => {
-					let itemFr = toolbarFr.createDiv();
+					let itemFr = createDiv();
 					itemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
-					let iconFr = toolbarFr.createSpan();
-					let labelFr = toolbarFr.createSpan();
+					let iconFr = createSpan();
+					let labelFr = createSpan();
 					if (item.icon) {
 						setIcon(iconFr, item.icon);
 						toolbarFr.append(iconFr);
