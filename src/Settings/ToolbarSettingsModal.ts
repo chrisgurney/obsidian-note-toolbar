@@ -183,11 +183,10 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemsListContainer = createDiv();
 		itemsListContainer.addClass('note-toolbar-setting-items-list-container');	
 
-		this.toolbar.items.forEach(
-			(toolbarItem, index) => {
-				let itemDiv = this.getItemForm(toolbarItem, index, itemLinkFields);
-				itemsListContainer.appendChild(itemDiv);
-			});
+		this.toolbar.items.forEach((toolbarItem, index) => {
+			let itemDiv = this.getItemForm(toolbarItem, index, itemLinkFields);
+			itemsListContainer.appendChild(itemDiv);
+		});
 
 		//
 		// Add new item button
