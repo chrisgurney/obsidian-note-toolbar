@@ -13,6 +13,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	plugin: NoteToolbarPlugin;
 	app: App;
 
+	private itemListOpen: boolean = true;
+
 	constructor(app: App, plugin: NoteToolbarPlugin) {
 		super(app, plugin);
 		this.app = app;
@@ -91,6 +93,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayToolbarList(containerEl: HTMLElement): void {
 
+		let itemsContainer = createDiv();
+		itemsContainer.addClass('note-toolbar-setting-items-container');
+		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+
 		const toolbarsDesc = document.createDocumentFragment();
 		toolbarsDesc.append(
 			"Define the toolbars you want to add to your notes. ",
@@ -105,17 +111,47 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			})
 		);
 
-		new Setting(containerEl)
+		let toolbarListSetting = new Setting(itemsContainer)
 			.setName("Toolbars")
-			.setDesc(toolbarsDesc)
-			.setClass("note-toolbar-setting-no-controls");
+			.setDesc(toolbarsDesc);
+
+		if (this.plugin.settings.toolbars.length > 0) {
+			toolbarListSetting
+				.addExtraButton((cb) => {
+					cb.setIcon('right-triangle')
+					.setTooltip("Collapse all items")
+					.onClick(async () => {
+						let itemsContainer = containerEl.querySelector('.note-toolbar-setting-items-container');
+						if (itemsContainer) {
+							this.itemListOpen = !this.itemListOpen;
+							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+							let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
+							this.itemListOpen ? heading?.setText("Toolbars") : heading?.setText("Toolbars (" + this.plugin.settings.toolbars.length + ")");
+							cb.setTooltip(this.itemListOpen ? "Collapse all toolbars" : "Expand all toolbars");
+						}
+					})
+					.extraSettingsEl.tabIndex = 0;
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ":
+									e.preventDefault();
+									cb.extraSettingsEl.click();
+							}
+						});
+				});
+		}
+
+		let itemsListContainer = createDiv();
+		itemsListContainer.addClass('note-toolbar-setting-items-list-container');	
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
 				.createEl("div", { text: emptyMessageFr("Click the button to create a toolbar.") })
 				.className = "note-toolbar-setting-empty-message";
 		}
-		else {
+		else {		
 			let toolbarListDiv = containerEl.createDiv();
 			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
@@ -133,10 +169,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								});
 							});
 				});
-			containerEl.append(toolbarListDiv);
+
+			itemsListContainer.appendChild(toolbarListDiv);
+
 		}
 
-		new Setting(containerEl)
+		new Setting(itemsListContainer)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
@@ -160,6 +198,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.openSettingsModal(newToolbar);
 					});
 			});
+
+		itemsContainer.appendChild(itemsListContainer);
+		containerEl.append(itemsContainer);
 
 	}
 

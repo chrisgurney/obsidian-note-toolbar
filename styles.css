@@ -718,7 +718,7 @@ body {
 * Settings Styles (for Note Toolbar Plugin)
 ******************************************************************************/
 
-.setting-item-heading {
+.setting-item-info {
     & .setting-item-description a:focus-within {
         box-shadow: 0 0 0 2px;
     }
@@ -828,18 +828,6 @@ body {
     border-top: none !important;
 }
 
-.note-toolbar-setting-no-controls {
-    & .setting-item-control {
-        display: none;
-    }
-    & .setting-item-description a {
-        white-space: nowrap;
-        &:focus-within {
-            box-shadow: 0 0 0 2px;
-        }
-    }
-}
-
 .note-toolbar-setting-spaced {
     margin-top: 2em !important;
 }
@@ -859,7 +847,7 @@ body {
         & .note-toolbar-setting-items-list-container {
             display: inherit !important;
         }
-        & .setting-item-heading .setting-item-control svg {
+        & .setting-item .setting-item-control svg {
             transform: rotate(0deg);
             transition: 0.1s;
         }
@@ -868,7 +856,7 @@ body {
         & .note-toolbar-setting-items-list-container {
             display: none !important;
         }
-        & .setting-item-heading .setting-item-control svg {
+        & .setting-item .setting-item-control svg {
             transform: rotate(-90deg);
             transition: 0.1s;
         }
