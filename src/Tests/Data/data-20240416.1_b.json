@@ -1,0 +1,262 @@
+{
+  "folderMappings": [
+    {
+      "folder": "*",
+      "toolbar": "Navigation toolbar"
+    }
+  ],
+  "toolbarProp": "notetoolbar",
+  "toolbars": [
+    {
+      "name": "Navigation toolbar",
+      "updated": "2024-04-25T18:43:21.580Z",
+      "items": [
+        {
+          "label": "",
+          "icon": "lucide-plus",
+          "link": "New tab",
+          "linkAttr": {
+            "commandId": "workspace:new-tab",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-x",
+          "link": "Close current tab",
+          "linkAttr": {
+            "commandId": "workspace:close",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-minimize-2",
+          "link": "Hover Editor: Open current file in new Hover Editor",
+          "linkAttr": {
+            "commandId": "obsidian-hover-editor:open-current-file-in-new-popover",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "BC-trail-icon",
+          "link": "Breadcrumbs: Toggle: Show Trail/Grid in Edit & LP mode",
+          "linkAttr": {
+            "commandId": "breadcrumbs:Toggle-trail-in-Edit&LP",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-file",
+          "link": "Create new note",
+          "linkAttr": {
+            "commandId": "file-explorer:new-file",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-arrow-left",
+          "link": "Go to previous tab",
+          "linkAttr": {
+            "commandId": "workspace:previous-tab",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-arrow-right",
+          "link": "Go to next tab",
+          "linkAttr": {
+            "commandId": "workspace:next-tab",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "mobile",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "",
+          "link": "",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "tabs",
+          "link": "Toggle stacked tabs",
+          "linkAttr": {
+            "commandId": "workspace:toggle-stacked-tabs",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-split-square-vertical",
+          "link": "Continuous Mode: Toggle continuous mode in active tab group",
+          "linkAttr": {
+            "commandId": "continuous-mode:toggle-continuous-mode-active",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "panelTopDashed",
+          "link": "Continuous Mode: Toggle visibility of note titles in active tab group",
+          "linkAttr": {
+            "commandId": "continuous-mode:toggle-continuous-mode-view-headers",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-git-fork",
+          "link": "Graph view: Open local graph",
+          "linkAttr": {
+            "commandId": "graph:open-local",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        },
+        {
+          "label": "",
+          "icon": "lucide-folder-input",
+          "link": "Move current file to another folder",
+          "linkAttr": {
+            "commandId": "file-explorer:move-file",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "contexts": [
+            {
+              "platform": "desktop",
+              "view": "all"
+            }
+          ]
+        }
+      ],
+      "defaultStyles": [
+        "even",
+        "button",
+        "noborder",
+        "sticky"
+      ],
+      "mobileStyles": [
+        "mstcky",
+        "mevn",
+        "mnbrder",
+        "mbtn"
+      ],
+      "positions": [
+        {
+          "position": "props",
+          "contexts": [
+            {
+              "platform": "all",
+              "view": "all"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "version": 20240416.1
+}
