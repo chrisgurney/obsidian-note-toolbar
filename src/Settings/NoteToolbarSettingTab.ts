@@ -2,7 +2,7 @@ import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePat
 import NoteToolbarPlugin from '../main';
 import { arraymove, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
-import { SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
+import { FolderMapping, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from './IconSuggestModal';
@@ -145,7 +145,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 
 		let itemsListContainer = createDiv();
-		itemsListContainer.addClass('note-toolbar-setting-items-list-container');	
+		itemsListContainer.addClass('note-toolbar-setting-items-list-container');
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			containerEl
@@ -246,87 +246,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			let toolbarFolderListDiv = createDiv();
 			toolbarFolderListDiv.addClass('note-toolbar-sortablejs-list');
 
-			this.plugin.settings.folderMappings.forEach(
-				(mapping, index) => {
-
-				let toolbarFolderListItemDiv = createDiv();
-				toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
-
-				let ds = new Setting(toolbarFolderListItemDiv)
-					.setClass("note-toolbar-setting-item-delete")
-					.addExtraButton((cb) => {
-						cb.setIcon("minus-circle")
-							.setTooltip("Delete")
-							.onClick(async () => this.listMoveHandler(null, index, "delete"));
-						cb.extraSettingsEl.tabIndex = 0;
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
-					});
-
-				let textFieldsDiv = createDiv();
-				textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
-				textFieldsDiv.className = "note-toolbar-setting-item-fields";
-				const fs = new Setting(textFieldsDiv)
-					.setClass("note-toolbar-setting-mapping-field")
-					.addSearch((cb) => {
-						new FolderSuggester(this.app, cb.inputEl);
-						cb.setPlaceholder("Folder")
-							.setValue(mapping.folder)
-							.onChange(debounce(async (newFolder) => {
-                                if (
-                                    newFolder &&
-                                    this.plugin.settings.folderMappings.some(
-                                        (mapping, mapIndex) => {
-											return index != mapIndex ? mapping.folder.toLowerCase() === newFolder.toLowerCase() : undefined;
-										}
-                                    )
-                                ) {
-									if (document.getElementById("note-toolbar-name-error") === null) {
-										let errorDiv = containerEl.createEl("div", { 
-											text: "This folder already has a toolbar associated with it.", 
-											attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
-										toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
-										toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
-									}
-                                }
-								else {
-									document.getElementById("note-toolbar-name-error")?.remove();
-									toolbarFolderListItemDiv.children[0].removeClass("note-toolbar-setting-error");
-									this.plugin.settings.folderMappings[index].folder = newFolder ? normalizePath(newFolder) : "";
-									await this.plugin.saveSettings();
-								}
-                            }, 250));
-					});
-				const ts = new Setting(textFieldsDiv)
-					.setClass("note-toolbar-setting-mapping-field")
-					.addSearch((cb) => {
-						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-						cb.setPlaceholder("Toolbar")
-							.setValue(mapping.toolbar)
-							.onChange(debounce(async (newToolbar) => {
-                                this.plugin.settings.folderMappings[
-                                    index
-                                ].toolbar = newToolbar;
-                                await this.plugin.saveSettings();
-                            }, 250));
-					});
-
-				let itemHandleDiv = createDiv();
-				itemHandleDiv.addClass("note-toolbar-setting-item-controls");
-				const s1d = new Setting(itemHandleDiv)
-					.addExtraButton((cb) => {
-						cb.setIcon("menu")
-							.setTooltip("Drag to rearrange")
-							.extraSettingsEl.addClass('sortable-handle');
-						cb.extraSettingsEl.tabIndex = 0;
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index));
-					});
-
-				toolbarFolderListItemDiv.append(textFieldsDiv);
-				toolbarFolderListItemDiv.append(itemHandleDiv);
+			this.plugin.settings.folderMappings.forEach((mapping, index) => {
+				let toolbarFolderListItemDiv = this.getMappingItem(mapping, index);
 				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
-
 			});
 
 			var sortable = Sortable.create(toolbarFolderListDiv, {
@@ -365,6 +287,95 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.display(true);
 					});
 			});
+
+	}
+
+	/**
+	 * Returns the form to edit a mapping line.
+	 * @param mapping mapping to return the form for
+	 * @param index index of the mapping in the mapping list
+	 * @returns the form element as a div
+	 */
+	getMappingItem(mapping: FolderMapping, index: number): HTMLDivElement {
+
+		let toolbarFolderListItemDiv = createDiv();
+		toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
+
+		let ds = new Setting(toolbarFolderListItemDiv)
+			.setClass("note-toolbar-setting-item-delete")
+			.addExtraButton((cb) => {
+				cb.setIcon("minus-circle")
+					.setTooltip("Delete")
+					.onClick(async () => this.listMoveHandler(null, index, "delete"));
+				cb.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
+			});
+
+		let textFieldsDiv = createDiv();
+		textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
+		textFieldsDiv.className = "note-toolbar-setting-item-fields";
+		const fs = new Setting(textFieldsDiv)
+			.setClass("note-toolbar-setting-mapping-field")
+			.addSearch((cb) => {
+				new FolderSuggester(this.app, cb.inputEl);
+				cb.setPlaceholder("Folder")
+					.setValue(mapping.folder)
+					.onChange(debounce(async (newFolder) => {
+						if (
+							newFolder &&
+							this.plugin.settings.folderMappings.some(
+								(mapping, mapIndex) => {
+									return index != mapIndex ? mapping.folder.toLowerCase() === newFolder.toLowerCase() : undefined;
+								}
+							)
+						) {
+							if (document.getElementById("note-toolbar-name-error") === null) {
+								let errorDiv = createEl("div", { 
+									text: "This folder already has a toolbar associated with it.", 
+									attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
+								toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
+								toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
+							}
+						}
+						else {
+							document.getElementById("note-toolbar-name-error")?.remove();
+							toolbarFolderListItemDiv.children[0].removeClass("note-toolbar-setting-error");
+							this.plugin.settings.folderMappings[index].folder = newFolder ? normalizePath(newFolder) : "";
+							await this.plugin.saveSettings();
+						}
+					}, 250));
+			});
+		const ts = new Setting(textFieldsDiv)
+			.setClass("note-toolbar-setting-mapping-field")
+			.addSearch((cb) => {
+				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				cb.setPlaceholder("Toolbar")
+					.setValue(mapping.toolbar)
+					.onChange(debounce(async (newToolbar) => {
+						this.plugin.settings.folderMappings[
+							index
+						].toolbar = newToolbar;
+						await this.plugin.saveSettings();
+					}, 250));
+			});
+
+		let itemHandleDiv = createDiv();
+		itemHandleDiv.addClass("note-toolbar-setting-item-controls");
+		const s1d = new Setting(itemHandleDiv)
+			.addExtraButton((cb) => {
+				cb.setIcon("menu")
+					.setTooltip("Drag to rearrange")
+					.extraSettingsEl.addClass('sortable-handle');
+				cb.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index));
+			});
+
+		toolbarFolderListItemDiv.append(textFieldsDiv);
+		toolbarFolderListItemDiv.append(itemHandleDiv);
+
+		return toolbarFolderListItemDiv;
 
 	}
 
