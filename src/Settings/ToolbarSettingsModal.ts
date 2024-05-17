@@ -58,7 +58,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.contentEl.empty();
 
-		let settingsDiv = this.containerEl.createDiv();
+		let settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
 
 		this.displayNameSetting(settingsDiv);
@@ -95,7 +95,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
-		let toolbarNameDiv = this.containerEl.createDiv();
+		let toolbarNameDiv = createDiv();
 		new Setting(toolbarNameDiv)
 			.setName("Name")
 			.setDesc("Give this toolbar a unique name.")
@@ -169,305 +169,15 @@ export default class ToolbarSettingsModal extends Modal {
 				});
 		}
 
-		let itemLinkFields: {
-			command: Setting;
-			file: Setting;
-			uri: Setting;
-		}[] = [];
+		let itemLinkFields: { command: Setting, file: Setting, uri: Setting }[] = [];
 
 		let itemsListContainer = createDiv();
 		itemsListContainer.addClass('note-toolbar-setting-items-list-container');	
 
 		this.toolbar.items.forEach(
 			(toolbarItem, index) => {
-				let itemDiv = this.containerEl.createDiv();
-				itemDiv.className = "note-toolbar-setting-item";
-				let itemTopContainer = this.containerEl.createDiv();
-				itemTopContainer.className = "note-toolbar-setting-item-top-container";
-
-				//
-				// Item icon, name, and tooltip
-				//
-
-				let textFieldsContainer = this.containerEl.createDiv();
-				textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
-				textFieldsContainer.className = "note-toolbar-setting-item-fields";
-
-				const s1a = new Setting(textFieldsContainer)
-					.setClass("note-toolbar-setting-item-icon")
-					.addExtraButton((cb) => {
-						cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
-							.setTooltip("Select icon (optional)")
-							.onClick(async () => {
-								const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
-								modal.open();
-							});
-						cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => {
-								switch (e.key) {
-									case "Enter":
-									case " ":
-										const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
-										modal.open();
-										e.preventDefault();									
-								}
-							});
-					});
-
-				const s1b = new Setting(textFieldsContainer)
-					.setClass("note-toolbar-setting-item-field")
-					.addText(text => text
-						.setPlaceholder('Label (optional, if icon set)')
-						.setValue(toolbarItem.label)
-						.onChange(
-							debounce(async (value) => {
-								toolbarItem.label = value;
-								// TODO: if the label contains vars, set the flag to always rerender this toolbar
-								// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-							}, 750)));
-				const s1c = new Setting(textFieldsContainer)
-					.setClass("note-toolbar-setting-item-field")
-					.addText(text => text
-						.setPlaceholder('Tooltip (optional)')
-						.setValue(toolbarItem.tooltip)
-						.onChange(
-							debounce(async (value) => {
-								toolbarItem.tooltip = value;
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
-							}, 750)));
-
-				//
-				// Item link
-				//
-
-				let linkContainer = this.containerEl.createDiv();
-				linkContainer.className = "note-toolbar-setting-item-link-container";
-
-				let linkTypeDiv = this.containerEl.createDiv();
-
-				const s1t = new Setting(linkTypeDiv)
-					.addDropdown((dropdown) =>
-						dropdown
-							.addOptions({command: "Command", file: "File", uri: "URI"})
-							.setValue(toolbarItem.linkAttr.type)
-							.onChange(async (value) => {
-								toolbarItem.linkAttr.type = value as LinkType;
-								switch (value) {
-									case "command":
-										toolbarItem.link = "";
-										itemLinkFields[index].command.settingEl.setAttribute("data-active", "true");
-										itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
-										break;
-									case "file":
-										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].file.settingEl.setAttribute("data-active", "true");
-										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
-										break;
-									case "uri":
-										itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
-										itemLinkFields[index].uri.settingEl.setAttribute("data-active", "true");
-										break;
-								}
-								await this.plugin.saveSettings();
-								this.display();
-							})
-					);
-
-				let linkFieldDiv = this.containerEl.createDiv();
-				linkFieldDiv.className = "note-toolbar-setting-item-link-container";
-
-				let linkCommandFieldDiv = this.containerEl.createDiv();
-				let linkFileFieldDiv = this.containerEl.createDiv();
-				let linkUriFieldDiv = this.containerEl.createDiv();
-
-				let linkFieldHelpDiv = createEl("div");
-				linkFieldHelpDiv.addClass("note-toolbar-setting-field-help");
-				linkFieldHelpDiv.appendChild(
-					learnMoreFr(
-						"Tip: Use note properties in URIs.",
-						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
-				)
-
-				itemLinkFields.push({
-					//
-					// command
-					//
-					command: new Setting(linkCommandFieldDiv)
-						.setClass("note-toolbar-setting-item-field-link")
-						.addSearch((cb) => {
-							new CommandSuggester(this.app, cb.inputEl);
-							cb.setPlaceholder("Search for command")
-								.setValue(toolbarItem.link)
-								.onChange(debounce(async (command) => {
-									toolbarItem.link = command;
-									toolbarItem.linkAttr.type = 'command';
-									toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
-									await this.plugin.saveSettings();
-								}, 250))}),
-					//
-					// file
-					//
-					file: new Setting(linkFileFieldDiv)
-						.setClass("note-toolbar-setting-item-field-link")
-						.addSearch((cb) => {
-							new FileSuggester(this.app, cb.inputEl);
-							cb.setPlaceholder("Search for file")
-								.setValue(toolbarItem.link)
-								.onChange(debounce(async (value) => {
-									toolbarItem.linkAttr.type = 'file';
-									const file = this.app.vault.getAbstractFileByPath(value);
-									if (!(file instanceof TFile)) {
-										if (document.getElementById("note-toolbar-item-link-note-error") === null) {
-											let errorDiv = this.containerEl.createEl("div", { 
-												text: "This file does not exist.", 
-												attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
-												linkContainer.insertAdjacentElement('afterend', errorDiv);
-												itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
-										}
-									}
-									else {
-										toolbarItem.link = normalizePath(value);
-										toolbarItem.linkAttr.commandId = '';
-										document.getElementById("note-toolbar-item-link-note-error")?.remove();
-										itemLinkFields[index].file.settingEl.children[1].removeClass("note-toolbar-setting-error");	
-										await this.plugin.saveSettings();
-									}									
-								}, 750))
-						}),
-					//
-					// URI
-					//
-					uri: new Setting(linkUriFieldDiv)
-						.setClass("note-toolbar-setting-item-field-link")
-						.addText(text => text
-							.setPlaceholder("Website, URI, or note title")
-							.setValue(toolbarItem.link)
-							.onChange(
-								debounce(async (value) => {
-									toolbarItem.link = value;
-									toolbarItem.linkAttr.type = 'uri';
-									toolbarItem.linkAttr.hasVars = hasVars(value);
-									toolbarItem.linkAttr.commandId = '';
-									this.toolbar.updated = new Date().toISOString();
-									await this.plugin.saveSettings();
-								}, 750))
-							.inputEl.insertAdjacentElement('afterend', linkFieldHelpDiv))
-				});
-
-				linkFieldDiv.append(itemLinkFields[index].command.settingEl);
-				linkFieldDiv.append(itemLinkFields[index].file.settingEl);
-				linkFieldDiv.append(itemLinkFields[index].uri.settingEl);
-
-				// set visibility based on the type
-				itemLinkFields[index].command.settingEl.setAttribute("data-active", 
-					toolbarItem.linkAttr.type === "command" ? "true" : "false");
-				itemLinkFields[index].file.settingEl.setAttribute("data-active", 
-					toolbarItem.linkAttr.type === "file" ? "true" : "false");
-				itemLinkFields[index].uri.settingEl.setAttribute("data-active", 
-					toolbarItem.linkAttr.type === "uri" ? "true" : "false");
-
-				linkContainer.append(linkTypeDiv);
-				linkContainer.append(linkFieldDiv);
-
-				//
-				// Item list controls
-				// 
-
-				let itemControlsContainer = this.containerEl.createDiv();
-				itemControlsContainer.className = "note-toolbar-setting-item-controls";
-				const s1d = new Setting(itemControlsContainer)
-					.addExtraButton((cb) => {
-						cb.setIcon("up-chevron-glyph")
-							.setTooltip("Move up")
-							.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "up"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "up"));
-					})
-					.addExtraButton((cb) => {
-						cb.setIcon("down-chevron-glyph")
-							.setTooltip("Move down")
-							.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "down"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "down"));
-					})
-					.addExtraButton((cb) => {
-						cb.setIcon("trash")
-							.setTooltip("Delete")
-							.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "delete"));
-						cb.extraSettingsEl.setAttribute("tabindex", "0");
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "delete"));
-					});
-
-				let itemFieldsContainer = this.containerEl.createDiv();
-				itemFieldsContainer.className = "note-toolbar-setting-item-fields";
-				itemFieldsContainer.appendChild(textFieldsContainer);
-				
-				itemTopContainer.appendChild(itemFieldsContainer);
-				itemTopContainer.appendChild(linkContainer);
-				itemDiv.appendChild(itemTopContainer);
-
-				//
-				// Visibility
-				// 
-
-				let visibilityControlsContainer = this.containerEl.createDiv();
-				visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
-
-				const visButtons = new Setting(visibilityControlsContainer)
-					.setClass("note-toolbar-setting-item-visibility")
-					.addButton((cb) => {
-						let btnIcon = cb.buttonEl.createSpan();
-						setIcon(btnIcon, 'monitor');
-						let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
-						if (state) {
-							let btnLabel = cb.buttonEl.createSpan();
-							btnLabel.setText(state);
-						}
-						cb.setTooltip(tooltip)
-							.onClick(async () => {
-								// create the setting if it doesn't exist or was removed
-								toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
-								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
-								visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
-							});
-					})
-					// TODO: implement tablet settings
-					.addButton((cb) => {
-						let btnIcon = cb.buttonEl.createSpan();
-						setIcon(btnIcon, 'tablet-smartphone');
-						let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
-						if (state) {
-							let btnLabel = cb.buttonEl.createSpan();
-							btnLabel.setText(state);
-						}
-						cb.setTooltip(tooltip)
-							.onClick(async () => {
-								// create the setting if it doesn't exist or was removed
-								toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
-								let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile');
-								visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
-							});
-					});
-
-				let itemVisilityAndControlsContainer = this.containerEl.createDiv();
-				itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
-				itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
-				itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
-
-				itemDiv.appendChild(itemVisilityAndControlsContainer);
-
+				let itemDiv = this.getItemForm(toolbarItem, index, itemLinkFields);
 				itemsListContainer.appendChild(itemDiv);
-	
 			});
 
 		//
@@ -506,6 +216,301 @@ export default class ToolbarSettingsModal extends Modal {
 
 		itemsContainer.appendChild(itemsListContainer);
 		settingsDiv.appendChild(itemsContainer);
+
+	}
+
+	/**
+	 * Returns the form to edit a given toolbar item.
+	 */
+	getItemForm(toolbarItem: ToolbarItemSettings, index: number, itemLinkFields: { command: Setting, file: Setting, uri: Setting }[]): HTMLDivElement {
+
+		let itemDiv = createDiv();
+		itemDiv.className = "note-toolbar-setting-item";
+		let itemTopContainer = createDiv();
+		itemTopContainer.className = "note-toolbar-setting-item-top-container";
+
+		//
+		// Item icon, name, and tooltip
+		//
+
+		let textFieldsContainer = createDiv();
+		textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
+		textFieldsContainer.className = "note-toolbar-setting-item-fields";
+
+		const s1a = new Setting(textFieldsContainer)
+			.setClass("note-toolbar-setting-item-icon")
+			.addExtraButton((cb) => {
+				cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
+					.setTooltip("Select icon (optional)")
+					.onClick(async () => {
+						const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
+						modal.open();
+					});
+				cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
+				cb.extraSettingsEl.setAttribute("tabindex", "0");
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
+								modal.open();
+								e.preventDefault();									
+						}
+					});
+			});
+
+		const s1b = new Setting(textFieldsContainer)
+			.setClass("note-toolbar-setting-item-field")
+			.addText(text => text
+				.setPlaceholder('Label (optional, if icon set)')
+				.setValue(toolbarItem.label)
+				.onChange(
+					debounce(async (value) => {
+						toolbarItem.label = value;
+						// TODO: if the label contains vars, set the flag to always rerender this toolbar
+						// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
+						this.toolbar.updated = new Date().toISOString();
+						await this.plugin.saveSettings();
+					}, 750)));
+		const s1c = new Setting(textFieldsContainer)
+			.setClass("note-toolbar-setting-item-field")
+			.addText(text => text
+				.setPlaceholder('Tooltip (optional)')
+				.setValue(toolbarItem.tooltip)
+				.onChange(
+					debounce(async (value) => {
+						toolbarItem.tooltip = value;
+						this.toolbar.updated = new Date().toISOString();
+						await this.plugin.saveSettings();
+					}, 750)));
+
+		//
+		// Item link
+		//
+
+		let linkContainer = createDiv();
+		linkContainer.className = "note-toolbar-setting-item-link-container";
+
+		let linkTypeDiv = createDiv();
+
+		const s1t = new Setting(linkTypeDiv)
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOptions({command: "Command", file: "File", uri: "URI"})
+					.setValue(toolbarItem.linkAttr.type)
+					.onChange(async (value) => {
+						toolbarItem.linkAttr.type = value as LinkType;
+						switch (value) {
+							case "command":
+								toolbarItem.link = "";
+								itemLinkFields[index].command.settingEl.setAttribute("data-active", "true");
+								itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
+								itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
+								break;
+							case "file":
+								itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
+								itemLinkFields[index].file.settingEl.setAttribute("data-active", "true");
+								itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
+								break;
+							case "uri":
+								itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
+								itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
+								itemLinkFields[index].uri.settingEl.setAttribute("data-active", "true");
+								break;
+						}
+						await this.plugin.saveSettings();
+						this.display();
+					})
+			);
+
+		let linkFieldDiv = createDiv();
+		linkFieldDiv.className = "note-toolbar-setting-item-link-container";
+
+		let linkCommandFieldDiv = createDiv();
+		let linkFileFieldDiv = createDiv();
+		let linkUriFieldDiv = createDiv();
+
+		let linkFieldHelpDiv = createEl("div");
+		linkFieldHelpDiv.addClass("note-toolbar-setting-field-help");
+		linkFieldHelpDiv.appendChild(
+			learnMoreFr(
+				"Tip: Use note properties in URIs.",
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
+		)
+
+		itemLinkFields.push({
+			//
+			// command
+			//
+			command: new Setting(linkCommandFieldDiv)
+				.setClass("note-toolbar-setting-item-field-link")
+				.addSearch((cb) => {
+					new CommandSuggester(this.app, cb.inputEl);
+					cb.setPlaceholder("Search for command")
+						.setValue(toolbarItem.link)
+						.onChange(debounce(async (command) => {
+							toolbarItem.link = command;
+							toolbarItem.linkAttr.type = 'command';
+							toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
+							await this.plugin.saveSettings();
+						}, 250))}),
+			//
+			// file
+			//
+			file: new Setting(linkFileFieldDiv)
+				.setClass("note-toolbar-setting-item-field-link")
+				.addSearch((cb) => {
+					new FileSuggester(this.app, cb.inputEl);
+					cb.setPlaceholder("Search for file")
+						.setValue(toolbarItem.link)
+						.onChange(debounce(async (value) => {
+							toolbarItem.linkAttr.type = 'file';
+							const file = this.app.vault.getAbstractFileByPath(value);
+							if (!(file instanceof TFile)) {
+								if (document.getElementById("note-toolbar-item-link-note-error") === null) {
+									let errorDiv = this.containerEl.createEl("div", { 
+										text: "This file does not exist.", 
+										attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
+										linkContainer.insertAdjacentElement('afterend', errorDiv);
+										itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
+								}
+							}
+							else {
+								toolbarItem.link = normalizePath(value);
+								toolbarItem.linkAttr.commandId = '';
+								document.getElementById("note-toolbar-item-link-note-error")?.remove();
+								itemLinkFields[index].file.settingEl.children[1].removeClass("note-toolbar-setting-error");	
+								await this.plugin.saveSettings();
+							}									
+						}, 750))
+				}),
+			//
+			// URI
+			//
+			uri: new Setting(linkUriFieldDiv)
+				.setClass("note-toolbar-setting-item-field-link")
+				.addText(text => text
+					.setPlaceholder("Website, URI, or note title")
+					.setValue(toolbarItem.link)
+					.onChange(
+						debounce(async (value) => {
+							toolbarItem.link = value;
+							toolbarItem.linkAttr.type = 'uri';
+							toolbarItem.linkAttr.hasVars = hasVars(value);
+							toolbarItem.linkAttr.commandId = '';
+							this.toolbar.updated = new Date().toISOString();
+							await this.plugin.saveSettings();
+						}, 750))
+					.inputEl.insertAdjacentElement('afterend', linkFieldHelpDiv))
+		});
+
+		linkFieldDiv.append(itemLinkFields[index].command.settingEl);
+		linkFieldDiv.append(itemLinkFields[index].file.settingEl);
+		linkFieldDiv.append(itemLinkFields[index].uri.settingEl);
+
+		// set visibility based on the type
+		itemLinkFields[index].command.settingEl.setAttribute("data-active", 
+			toolbarItem.linkAttr.type === "command" ? "true" : "false");
+		itemLinkFields[index].file.settingEl.setAttribute("data-active", 
+			toolbarItem.linkAttr.type === "file" ? "true" : "false");
+		itemLinkFields[index].uri.settingEl.setAttribute("data-active", 
+			toolbarItem.linkAttr.type === "uri" ? "true" : "false");
+
+		linkContainer.append(linkTypeDiv);
+		linkContainer.append(linkFieldDiv);
+
+		//
+		// Item list controls
+		// 
+
+		let itemControlsContainer = createDiv();
+		itemControlsContainer.className = "note-toolbar-setting-item-controls";
+		const s1d = new Setting(itemControlsContainer)
+			.addExtraButton((cb) => {
+				cb.setIcon("up-chevron-glyph")
+					.setTooltip("Move up")
+					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "up"));
+				cb.extraSettingsEl.setAttribute("tabindex", "0");
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "up"));
+			})
+			.addExtraButton((cb) => {
+				cb.setIcon("down-chevron-glyph")
+					.setTooltip("Move down")
+					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "down"));
+				cb.extraSettingsEl.setAttribute("tabindex", "0");
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "down"));
+			})
+			.addExtraButton((cb) => {
+				cb.setIcon("trash")
+					.setTooltip("Delete")
+					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "delete"));
+				cb.extraSettingsEl.setAttribute("tabindex", "0");
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "delete"));
+			});
+
+		let itemFieldsContainer = createDiv();
+		itemFieldsContainer.className = "note-toolbar-setting-item-fields";
+		itemFieldsContainer.appendChild(textFieldsContainer);
+		
+		itemTopContainer.appendChild(itemFieldsContainer);
+		itemTopContainer.appendChild(linkContainer);
+		itemDiv.appendChild(itemTopContainer);
+
+		//
+		// Visibility
+		// 
+
+		let visibilityControlsContainer = createDiv();
+		visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
+
+		const visButtons = new Setting(visibilityControlsContainer)
+			.setClass("note-toolbar-setting-item-visibility")
+			.addButton((cb) => {
+				let btnIcon = cb.buttonEl.createSpan();
+				setIcon(btnIcon, 'monitor');
+				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
+				if (state) {
+					let btnLabel = cb.buttonEl.createSpan();
+					btnLabel.setText(state);
+				}
+				cb.setTooltip(tooltip)
+					.onClick(async () => {
+						// create the setting if it doesn't exist or was removed
+						toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
+						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
+						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
+					});
+			})
+			// TODO: implement tablet settings
+			.addButton((cb) => {
+				let btnIcon = cb.buttonEl.createSpan();
+				setIcon(btnIcon, 'tablet-smartphone');
+				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
+				if (state) {
+					let btnLabel = cb.buttonEl.createSpan();
+					btnLabel.setText(state);
+				}
+				cb.setTooltip(tooltip)
+					.onClick(async () => {
+						// create the setting if it doesn't exist or was removed
+						toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
+						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile');
+						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
+					});
+			});
+
+		let itemVisilityAndControlsContainer = createDiv();
+		itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
+		itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
+		itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
+
+		itemDiv.appendChild(itemVisilityAndControlsContainer);
+
+		return itemDiv;
 
 	}
 
@@ -583,7 +588,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// Default
 		//
 
-		let defaultStyleDiv = this.containerEl.createDiv();
+		let defaultStyleDiv = createDiv();
 		defaultStyleDiv.className = "note-toolbar-setting-item-style";
 
 		if (this.toolbar.defaultStyles.length == 0) {
@@ -651,7 +656,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// Mobile
 		//
 
-		let mobileStyleDiv = this.containerEl.createDiv();
+		let mobileStyleDiv = createDiv();
 		mobileStyleDiv.className = "note-toolbar-setting-item-style";
 
 		if (this.toolbar.mobileStyles.length == 0) {
