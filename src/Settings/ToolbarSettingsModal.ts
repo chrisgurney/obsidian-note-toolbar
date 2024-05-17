@@ -134,6 +134,10 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 
+		//
+		// Heading + expand/collapse button
+		//
+
 		let itemsSetting = new Setting(itemsContainer)
 			.setName("Items")
 			.setHeading()
@@ -168,6 +172,10 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 				});
 		}
+
+		//
+		// Item list
+		//
 
 		// TODO: investigate: could these fields be built as needed, instead of caching them all?
 		let itemLinkFields: { command: Setting, file: Setting, uri: Setting }[] = [];
