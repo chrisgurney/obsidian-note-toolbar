@@ -52,7 +52,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Displays the toolbar item's settings.
 	 */
-	public display(focusOnLastItem: boolean = false) {
+	public display(focusId?: string) {
 
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
@@ -69,18 +69,15 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.contentEl.appendChild(settingsDiv);
 
-		if (focusOnLastItem) {
-			// set focus on last item in the list, if the label is empty
-			let inputToFocus = this.contentEl.querySelector('#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]') as HTMLInputElement;
-			let inputContainer = inputToFocus.closest('.note-toolbar-setting-item') as HTMLElement;
-			if (inputToFocus?.value.length === 0) {
-				inputToFocus.focus();
-				if (Platform.isMobile) {
-					setTimeout(() => { 
-						inputContainer.scrollIntoView(true);
-					}, 100);
-				}
-			}
+		if (focusId) {
+			let focusEl = this.contentEl.querySelector(focusId) as HTMLElement;
+			// TODO? option to scroll to element's ancestor by class
+			// e.g., let scrollToEl = focusEl.closest('.note-toolbar-setting-item') as HTMLElement;
+			// scrollToEl.scrollIntoView(true);
+			focusEl?.focus();
+			setTimeout(() => { 
+				focusEl?.scrollIntoView(true);
+			}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
 		}
 		else {
 			// scroll to the position when the modal was last open
@@ -218,7 +215,7 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.display(true);
+						this.display('#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]');
 					});
 			});
 

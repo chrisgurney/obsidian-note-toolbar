@@ -1,4 +1,4 @@
-import { App, ButtonComponent, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
+import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from '../main';
 import { arraymove, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './ToolbarSettingsModal';
@@ -34,7 +34,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	/**
 	 * Displays the main settings.
 	 */
-	public display(focusOnLastItem: boolean = false): void {
+	public display(focusId?: string): void {
 
 		const { containerEl } = this;
 		containerEl.empty();
@@ -73,13 +73,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayFolderMap(containerEl);
 		this.displayMobileSettings(containerEl);
 
-		if (focusOnLastItem) {
-			// set focus on last thing in the list, if the label is empty
-			let inputToFocus = this.containerEl.querySelector(
-				'#note-toolbar-setting-item-field-' + (this.plugin.settings.folderMappings.length - 1) + ' input[type="search"]') as HTMLInputElement;
-			if (inputToFocus?.value.length === 0) {
-				inputToFocus.focus();
-			}
+		if (focusId) {
+			let focusEl = this.containerEl.querySelector(focusId) as HTMLElement;
+			focusEl?.focus();
+			setTimeout(() => { 
+				focusEl?.scrollIntoView(true);
+			}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
 		}
 
 		// scroll to the position when the modal was last open
@@ -284,7 +283,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						};
 						this.plugin.settings.folderMappings.push(newMapping);
 						await this.plugin.saveSettings();
-						this.display(true);
+						this.display('#note-toolbar-setting-item-field-' + (this.plugin.settings.folderMappings.length - 1) + ' input[type="search"]');
 					});
 			});
 
