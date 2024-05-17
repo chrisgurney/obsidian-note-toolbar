@@ -169,6 +169,7 @@ export default class ToolbarSettingsModal extends Modal {
 				});
 		}
 
+		// TODO: investigate: could these fields be built as needed, instead of caching them all?
 		let itemLinkFields: { command: Setting, file: Setting, uri: Setting }[] = [];
 
 		let itemsListContainer = createDiv();
@@ -221,8 +222,16 @@ export default class ToolbarSettingsModal extends Modal {
 
 	/**
 	 * Returns the form to edit a given toolbar item.
+	 * @param toolbarItem item to return the form for
+	 * @param index index of the item in the toolbar item list
+	 * @param itemLinkFields reusable list of fields for each of the item link types
+	 * @returns the form element as a div
 	 */
-	getItemForm(toolbarItem: ToolbarItemSettings, index: number, itemLinkFields: { command: Setting, file: Setting, uri: Setting }[]): HTMLDivElement {
+	getItemForm(
+		toolbarItem: ToolbarItemSettings, 
+		index: number, 
+		itemLinkFields: { command: Setting, file: Setting, uri: Setting }[]
+	): HTMLDivElement {
 
 		let itemDiv = createDiv();
 		itemDiv.className = "note-toolbar-setting-item";
