@@ -102,7 +102,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			"Define the toolbars you want to add to your notes. ",
 			toolbarsDesc.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
-				text: "User Guide",
+				text: "User\u00A0Guide",
 			}),
 			" • ",
 			toolbarsDesc.createEl("a", {
@@ -113,7 +113,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		let toolbarListSetting = new Setting(itemsContainer)
 			.setName("Toolbars")
-			.setDesc(toolbarsDesc);
+			.setDesc(toolbarsDesc)
+			.setHeading();
 
 		if (this.plugin.settings.toolbars.length > 0) {
 			toolbarListSetting
