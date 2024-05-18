@@ -52,7 +52,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Displays the toolbar item's settings.
 	 */
-	public display(focusId?: string) {
+	public display(focusId?: string, scrollToClass?: string) {
 
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
@@ -71,12 +71,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 		if (focusId) {
 			let focusEl = this.contentEl.querySelector(focusId) as HTMLElement;
-			// TODO? option to scroll to element's ancestor by class
-			// e.g., let scrollToEl = focusEl.closest('.note-toolbar-setting-item') as HTMLElement;
-			// scrollToEl.scrollIntoView(true);
 			focusEl?.focus();
 			setTimeout(() => { 
-				focusEl?.scrollIntoView(true);
+				let scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
+				scrollToEl?.scrollIntoView(true);
 			}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
 		}
 		else {
@@ -215,7 +213,9 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.display('#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]');
+						this.display(
+							'#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]',
+							'.note-toolbar-setting-item');
 					});
 			});
 
