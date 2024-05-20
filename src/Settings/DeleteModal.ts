@@ -20,8 +20,12 @@ export class DeleteModal extends Modal {
     public onOpen() {
         this.setTitle("Delete toolbar: " + this.toolbar.name);
         this.contentEl.createEl("p", {text: "Are you sure you want to delete this toolbar?"});
-        const delete_button = this.contentEl.createEl("button", {text: "Yes, delete"});
+        let delete_button = this.contentEl.createEl('button', {text: "Delete"});
+        delete_button.addClass("mod-warning");
         delete_button.onclick = async () => this.delete();
+        this.contentEl.createEl('span').setText('\u00A0\u00A0');
+        let cancel_button = this.contentEl.createEl('button', {text: "Cancel"});
+        cancel_button.onclick = async () => this.close();
     }
 
     protected async delete() {
