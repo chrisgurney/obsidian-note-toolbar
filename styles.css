@@ -1085,7 +1085,8 @@ body {
 }
 */
 
-.note-toolbar-setting-field-help {
+.note-toolbar-setting-field-help,
+.note-toolbar-setting-field-error {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
     padding-top: var(--size-4-1);
@@ -1094,6 +1095,10 @@ body {
     & a:focus-within {
         box-shadow: 0 0 0 2px;
     }
+}
+
+.note-toolbar-setting-field-error {
+    color: var(--color-red);
 }
 
 .note-toolbar-sortablejs-list {

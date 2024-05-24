@@ -633,19 +633,16 @@ export default class ToolbarSettingsModal extends Modal {
 									if (document.getElementById("note-toolbar-item-link-note-error") === null) {
 										let errorDiv = this.containerEl.createEl("div", { 
 											text: "This file does not exist.", 
-											attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
-											// FIXME: can we get/provide this setting's parent container here?
-											// linkContainer.insertAdjacentElement('afterend', errorDiv);
-											// FIXME: can this be changed back into this settingEl?
-											// itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
+											attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-field-error" });
+										cb.inputEl.parentElement?.insertAdjacentElement('afterend', errorDiv);
+										cb.inputEl.parentElement?.addClass('note-toolbar-setting-error');
 									}
 								}
 								else {
 									toolbarItem.link = normalizePath(value);
 									toolbarItem.linkAttr.commandId = '';
-									document.getElementById("note-toolbar-item-link-note-error")?.remove();
-									// FIXME: can this be changed back into this settingEl?
-									// itemLinkFields[index].file.settingEl.children[1].removeClass("note-toolbar-setting-error");	
+									document.getElementById('note-toolbar-item-link-note-error')?.remove();
+									cb.inputEl.parentElement?.removeClass('note-toolbar-setting-error');
 									await this.plugin.saveSettings();
 								}									
 							}, 750))
@@ -667,7 +664,7 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							}, 750))
 						);
-					helpText ? uriSetting.controlEl.insertAdjacentElement('beforeend', helpText) : undefined;
+				helpText ? uriSetting.controlEl.insertAdjacentElement('beforeend', helpText) : undefined;
 				break;
 		}
 
