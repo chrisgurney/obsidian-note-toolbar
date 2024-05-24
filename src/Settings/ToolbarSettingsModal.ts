@@ -55,6 +55,8 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	public display(focusId?: string, scrollToClass?: string) {
 
+		debugLog("‼️ REDRAWING MODAL");
+
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
 		this.contentEl.empty();
@@ -460,11 +462,8 @@ export default class ToolbarSettingsModal extends Modal {
 					.addOptions({command: "Command", file: "File", uri: "URI"})
 					.setValue(toolbarItem.linkAttr.type)
 					.onChange(async (value) => {
-						// TODO: get the existing field div for this item
 						let itemRow = toolbarItemList.querySelector('.note-toolbar-setting-items-container-row[data-index="' + index + '"]');
-						debugLog("🍀 dropdown change in row: ", itemRow);
 						let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
-						debugLog(itemLinkFieldDiv);
 						if (itemLinkFieldDiv) {
 							toolbarItem.linkAttr.type = value as LinkType;
 							itemLinkFieldDiv.empty();
@@ -567,7 +566,6 @@ export default class ToolbarSettingsModal extends Modal {
 						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 					});
 			})
-			// TODO: implement tablet settings
 			.addButton((cb) => {
 				let btnIcon = cb.buttonEl.createSpan();
 				setIcon(btnIcon, 'tablet-smartphone');
@@ -634,7 +632,7 @@ export default class ToolbarSettingsModal extends Modal {
 										let errorDiv = this.containerEl.createEl("div", { 
 											text: "This file does not exist.", 
 											attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
-											// FIXME: can we get/provide this setting's parent container?
+											// FIXME: can we get/provide this setting's parent container here?
 											// linkContainer.insertAdjacentElement('afterend', errorDiv);
 											// FIXME: can this be changed back into this settingEl?
 											// itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
