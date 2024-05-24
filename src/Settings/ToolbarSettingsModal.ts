@@ -196,9 +196,6 @@ export default class ToolbarSettingsModal extends Modal {
 		// Item list
 		//
 
-		// TODO: investigate: could these fields be built as needed, instead of caching them all?
-		let itemLinkFields: { command: Setting, file: Setting, uri: Setting }[] = [];
-
 		let itemsListContainer = createDiv();
 		itemsListContainer.addClass('note-toolbar-setting-items-list-container');
 		let itemsSortableContainer = createDiv();
@@ -240,9 +237,6 @@ export default class ToolbarSettingsModal extends Modal {
 				});
 			itemPreviewContainer.append(itemHandleDiv);
 
-			let itemForm = this.getItemForm(toolbarItem, index, itemLinkFields);
-			itemForm.setAttribute('data-active', 'false');
-
 			//
 			// create the list
 			//
@@ -251,6 +245,8 @@ export default class ToolbarSettingsModal extends Modal {
 			itemContainer.addClass("note-toolbar-setting-items-container-row");
 			itemContainer.setAttribute("data-index", index.toString());
 			itemContainer.appendChild(itemPreviewContainer);
+			let itemForm = this.getItemForm(itemsSortableContainer, toolbarItem, index);
+			itemForm.setAttribute('data-active', 'false');
 			itemContainer.appendChild(itemForm);
 			
 			itemsSortableContainer.appendChild(itemContainer);
@@ -385,14 +381,9 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Returns the form to edit a given toolbar item.
 	 * @param toolbarItem item to return the form for
 	 * @param index index of the item in the toolbar item list
-	 * @param itemLinkFields reusable list of fields for each of the item link types
 	 * @returns the form element as a div
 	 */
-	getItemForm(
-		toolbarItem: ToolbarItemSettings, 
-		index: number, 
-		itemLinkFields: { command: Setting, file: Setting, uri: Setting }[]
-	): HTMLDivElement {
+	getItemForm(toolbarItemList: HTMLDivElement, toolbarItem: ToolbarItemSettings, index: number): HTMLDivElement {
 
 		let itemDiv = createDiv();
 		itemDiv.className = "note-toolbar-setting-item";
@@ -462,133 +453,51 @@ export default class ToolbarSettingsModal extends Modal {
 		let linkContainer = createDiv();
 		linkContainer.className = "note-toolbar-setting-item-link-container";
 
-		let linkTypeDiv = createDiv();
-
-		const s1t = new Setting(linkTypeDiv)
+		let linkSelector = createDiv();
+		const s1t = new Setting(linkSelector)
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions({command: "Command", file: "File", uri: "URI"})
 					.setValue(toolbarItem.linkAttr.type)
 					.onChange(async (value) => {
-						toolbarItem.linkAttr.type = value as LinkType;
-						switch (value) {
-							case "command":
-								toolbarItem.link = "";
-								itemLinkFields[index].command.settingEl.setAttribute("data-active", "true");
-								itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
-								itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
-								break;
-							case "file":
-								itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-								itemLinkFields[index].file.settingEl.setAttribute("data-active", "true");
-								itemLinkFields[index].uri.settingEl.setAttribute("data-active", "false");
-								break;
-							case "uri":
-								itemLinkFields[index].command.settingEl.setAttribute("data-active", "false");
-								itemLinkFields[index].file.settingEl.setAttribute("data-active", "false");
-								itemLinkFields[index].uri.settingEl.setAttribute("data-active", "true");
-								break;
+						// TODO: get the existing field div for this item
+						let itemRow = toolbarItemList.querySelector('.note-toolbar-setting-items-container-row[data-index="' + index + '"]');
+						debugLog("🍀 dropdown change in row: ", itemRow);
+						let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
+						debugLog(itemLinkFieldDiv);
+						if (itemLinkFieldDiv) {
+							toolbarItem.linkAttr.type = value as LinkType;
+							itemLinkFieldDiv.empty();
+							switch (value) {
+								case 'command':
+									this.getLinkSetting('command', itemLinkFieldDiv, toolbarItem, '');
+									break;
+								case 'file':
+									this.getLinkSetting('file', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
+									break;
+								case 'uri':
+									this.getLinkSetting('uri', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
+									break;
+							}
+							await this.plugin.saveSettings();
 						}
-						await this.plugin.saveSettings();
-						this.display();
 					})
 			);
 
-		let linkFieldDiv = createDiv();
-		linkFieldDiv.className = "note-toolbar-setting-item-link-container";
+		let linkField = createDiv();
+		linkField.className = "note-toolbar-setting-item-link-field";
+		this.getLinkSetting(toolbarItem.linkAttr.type, linkField, toolbarItem, toolbarItem.link);
 
-		let linkCommandFieldDiv = createDiv();
-		let linkFileFieldDiv = createDiv();
-		let linkUriFieldDiv = createDiv();
-
-		let linkFieldHelpDiv = createEl("div");
-		linkFieldHelpDiv.addClass("note-toolbar-setting-field-help");
-		linkFieldHelpDiv.appendChild(
+		let linkFieldHelp = createEl("div");
+		linkFieldHelp.addClass("note-toolbar-setting-field-help");
+		linkFieldHelp.appendChild(
 			learnMoreFr(
 				"Tip: Use note properties in URIs.",
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
 		)
 
-		itemLinkFields.push({
-			//
-			// command
-			//
-			command: new Setting(linkCommandFieldDiv)
-				.setClass("note-toolbar-setting-item-field-link")
-				.addSearch((cb) => {
-					new CommandSuggester(this.app, cb.inputEl);
-					cb.setPlaceholder("Search for command")
-						.setValue(toolbarItem.link)
-						.onChange(debounce(async (command) => {
-							toolbarItem.link = command;
-							toolbarItem.linkAttr.type = 'command';
-							toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
-							await this.plugin.saveSettings();
-						}, 250))}),
-			//
-			// file
-			//
-			file: new Setting(linkFileFieldDiv)
-				.setClass("note-toolbar-setting-item-field-link")
-				.addSearch((cb) => {
-					new FileSuggester(this.app, cb.inputEl);
-					cb.setPlaceholder("Search for file")
-						.setValue(toolbarItem.link)
-						.onChange(debounce(async (value) => {
-							toolbarItem.linkAttr.type = 'file';
-							const file = this.app.vault.getAbstractFileByPath(value);
-							if (!(file instanceof TFile)) {
-								if (document.getElementById("note-toolbar-item-link-note-error") === null) {
-									let errorDiv = this.containerEl.createEl("div", { 
-										text: "This file does not exist.", 
-										attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
-										linkContainer.insertAdjacentElement('afterend', errorDiv);
-										itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
-								}
-							}
-							else {
-								toolbarItem.link = normalizePath(value);
-								toolbarItem.linkAttr.commandId = '';
-								document.getElementById("note-toolbar-item-link-note-error")?.remove();
-								itemLinkFields[index].file.settingEl.children[1].removeClass("note-toolbar-setting-error");	
-								await this.plugin.saveSettings();
-							}									
-						}, 750))
-				}),
-			//
-			// URI
-			//
-			uri: new Setting(linkUriFieldDiv)
-				.setClass("note-toolbar-setting-item-field-link")
-				.addText(text => text
-					.setPlaceholder("Website, URI, or note title")
-					.setValue(toolbarItem.link)
-					.onChange(
-						debounce(async (value) => {
-							toolbarItem.link = value;
-							toolbarItem.linkAttr.type = 'uri';
-							toolbarItem.linkAttr.hasVars = hasVars(value);
-							toolbarItem.linkAttr.commandId = '';
-							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.saveSettings();
-						}, 750))
-					.inputEl.insertAdjacentElement('afterend', linkFieldHelpDiv))
-		});
-
-		linkFieldDiv.append(itemLinkFields[index].command.settingEl);
-		linkFieldDiv.append(itemLinkFields[index].file.settingEl);
-		linkFieldDiv.append(itemLinkFields[index].uri.settingEl);
-
-		// set visibility based on the type
-		itemLinkFields[index].command.settingEl.setAttribute("data-active", 
-			toolbarItem.linkAttr.type === "command" ? "true" : "false");
-		itemLinkFields[index].file.settingEl.setAttribute("data-active", 
-			toolbarItem.linkAttr.type === "file" ? "true" : "false");
-		itemLinkFields[index].uri.settingEl.setAttribute("data-active", 
-			toolbarItem.linkAttr.type === "uri" ? "true" : "false");
-
-		linkContainer.append(linkTypeDiv);
-		linkContainer.append(linkFieldDiv);
+		linkContainer.append(linkSelector);
+		linkContainer.append(linkField);
 
 		//
 		// Item list controls
@@ -684,6 +593,84 @@ export default class ToolbarSettingsModal extends Modal {
 		itemDiv.appendChild(itemVisilityAndControlsContainer);
 
 		return itemDiv;
+
+	}
+
+	getLinkSetting(
+		type: 'command' | 'file' | 'uri', 
+		fieldDiv: HTMLDivElement, 
+		toolbarItem: ToolbarItemSettings, 
+		value: string) 
+	{
+
+		debugLog("getLinkSetting");
+		switch(type) {
+			case 'command': 
+				new Setting(fieldDiv)
+					.setClass("note-toolbar-setting-item-field-link")
+					.addSearch((cb) => {
+						new CommandSuggester(this.app, cb.inputEl);
+						cb.setPlaceholder("Search for command")
+							.setValue(value)
+							.onChange(debounce(async (command) => {
+								toolbarItem.link = command;
+								toolbarItem.linkAttr.type = 'command';
+								toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
+								await this.plugin.saveSettings();
+							}, 250))});
+				break;
+			case 'file':
+				new Setting(fieldDiv)
+					.setClass("note-toolbar-setting-item-field-link")
+					.addSearch((cb) => {
+						new FileSuggester(this.app, cb.inputEl);
+						cb.setPlaceholder("Search for file")
+							.setValue(value)
+							.onChange(debounce(async (value) => {
+								toolbarItem.linkAttr.type = 'file';
+								const file = this.app.vault.getAbstractFileByPath(value);
+								if (!(file instanceof TFile)) {
+									if (document.getElementById("note-toolbar-item-link-note-error") === null) {
+										let errorDiv = this.containerEl.createEl("div", { 
+											text: "This file does not exist.", 
+											attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-error-message" });
+											// FIXME: can we get/provide this setting's parent container?
+											// linkContainer.insertAdjacentElement('afterend', errorDiv);
+											// FIXME: can this be changed back into this settingEl?
+											// itemLinkFields[index].file.settingEl.children[1].addClass("note-toolbar-setting-error");
+									}
+								}
+								else {
+									toolbarItem.link = normalizePath(value);
+									toolbarItem.linkAttr.commandId = '';
+									document.getElementById("note-toolbar-item-link-note-error")?.remove();
+									// FIXME: can this be changed back into this settingEl?
+									// itemLinkFields[index].file.settingEl.children[1].removeClass("note-toolbar-setting-error");	
+									await this.plugin.saveSettings();
+								}									
+							}, 750))
+					});
+				break;
+			case 'uri': 
+				new Setting(fieldDiv)
+					.setClass("note-toolbar-setting-item-field-link")
+					.addText(text => text
+						.setPlaceholder("Website, URI, or note title")
+						.setValue(value)
+						.onChange(
+							debounce(async (value) => {
+								toolbarItem.link = value;
+								toolbarItem.linkAttr.type = 'uri';
+								toolbarItem.linkAttr.hasVars = hasVars(value);
+								toolbarItem.linkAttr.commandId = '';
+								this.toolbar.updated = new Date().toISOString();
+								await this.plugin.saveSettings();
+							}, 750))
+						);
+						// FIXME: what was this for?
+						// .inputEl.insertAdjacentElement('afterend', fieldDiv));
+				break;		
+		}
 
 	}
 
