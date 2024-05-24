@@ -760,7 +760,6 @@ body {
 .note-toolbar-setting-item {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
-    margin: 0em 0em 1em 0em;
     padding: 1.5em;
     .is-mobile & {
         padding: 1em;
@@ -769,6 +768,51 @@ body {
         box-shadow: inset 0 0 0 1px var(--background-modifier-border);
         box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
+    &[data-active="true"] {
+        display: inherit !important;
+    }
+    &[data-active="false"] {
+        display: none !important;
+    }
+}
+
+.note-toolbar-setting-item-preview-container {
+    align-items: center;
+    display: flex;
+    & .note-toolbar-setting-item-controls {
+        & .setting-item {
+            padding-bottom: 0;
+        }
+    }
+    &[data-active="true"] {
+        display: flex !important;
+    }
+    &[data-active="false"] {
+        display: none !important;
+    }
+}
+
+.note-toolbar-setting-item-preview {
+    display: flex;
+    gap: 0 0.5em;
+    flex-grow: 1;
+    padding: 8px;
+    &:focus-within {
+        border-radius: var(--input-radius);
+        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
+    }
+    &:hover {
+        border-radius: var(--input-radius);
+        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
+        cursor: pointer;    
+    }
+}
+
+.note-toolbar-setting-item-preview-tooltip {
+    color: var(--text-muted);
+    font-style: italic;
 }
 
 .note-toolbar-setting-toolbar-list {
@@ -860,6 +904,13 @@ body {
             transform: rotate(-90deg);
             transition: 0.1s;
         }
+    }
+}
+
+& .note-toolbar-setting-items-container-row {
+    margin: 0.5em 0em;
+    &:last-child {
+        margin-bottom: 1em;
     }
 }
 
@@ -1013,12 +1064,13 @@ body {
 
 /* hides the field help text while keeping it tabbable, if the container does not have focus within it */
 .note-toolbar-setting-item:not(:focus-within) .note-toolbar-setting-field-help {
-    clip-path: rect(1px, 1px, 1px, 1px);
+    /* CG: commenting as this conflicts with expandable list items, but CSS still might be useful */
+    /* clip-path: rect(1px, 1px, 1px, 1px);
     overflow: hidden;
     position: absolute;
     height: 1px;
     width: 1px;
-    margin: -1px;
+    margin: -1px; */
 }
 
 .note-toolbar-setting-field-help {
@@ -1041,6 +1093,7 @@ body {
             opacity: 0;
         }
         background-color: var(--interactive-accent);
+        border-radius: var(--input-radius);
         opacity: 0.4;
     }
     & .sortable-handle {
@@ -1056,12 +1109,13 @@ body {
 }
 
 .note-toolbar-setting-item-delete {
-    padding-right: var(--size-4-1);
-    .is-phone & {
-        padding-right: var(--size-4-2);
-    }
-    .is-mobile & {
-        padding-top: 0 !important;
+    border: none;
+    padding-top: 0 !important;
+    .note-toolbar-setting-folder-list-item-container & {
+        padding-right: var(--size-4-1);
+        .is-phone & {
+            padding-right: var(--size-4-2);
+        }
     }
     & .setting-item-info {
         display: none;

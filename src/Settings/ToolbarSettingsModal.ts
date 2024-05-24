@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS } from './NoteToolbarSettings';
 import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
@@ -7,6 +7,7 @@ import { DeleteModal } from './DeleteModal';
 import { CommandSuggester } from './Suggesters/CommandSuggester';
 import { IconSuggestModal } from './IconSuggestModal';
 import { FileSuggester } from './Suggesters/FileSuggester';
+import Sortable from 'sortablejs';
 
 export default class ToolbarSettingsModal extends Modal {
 
@@ -69,6 +70,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.contentEl.appendChild(settingsDiv);
 
+		// if provided, focus on the given element
 		if (focusId) {
 			let focusEl = this.contentEl.querySelector(focusId) as HTMLElement;
 			focusEl?.focus();
@@ -81,6 +83,28 @@ export default class ToolbarSettingsModal extends Modal {
 			// scroll to the position when the modal was last open
 			this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
 		}
+
+		// listen for clicks outside the list area, to collapse form that might be open
+		this.plugin.registerDomEvent(settingsDiv, 'click', (e) => {
+
+			debugLog("modal listener: ", e.target);
+
+			// if el clicked was row, note row index
+			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
+			let itemIndex = rowClicked ? rowClicked.getAttribute('data-index') : undefined;
+
+			// collapse all items except row
+			let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > .note-toolbar-setting-items-container-row');
+			listItems.forEach((row, index) => {
+				if (index.toString() !== itemIndex) {
+					let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
+					let itemForm = row.querySelector('.note-toolbar-setting-item');
+					itemPreview?.setAttribute('data-active', 'true');
+					itemForm?.setAttribute('data-active', 'false');
+				}
+			});
+
+		});
 
 	}
 
@@ -176,12 +200,68 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemLinkFields: { command: Setting, file: Setting, uri: Setting }[] = [];
 
 		let itemsListContainer = createDiv();
-		itemsListContainer.addClass('note-toolbar-setting-items-list-container');	
+		itemsListContainer.addClass('note-toolbar-setting-items-list-container');
+		let itemsSortableContainer = createDiv();
+		itemsSortableContainer.addClass('note-toolbar-sortablejs-list');
 
 		this.toolbar.items.forEach((toolbarItem, index) => {
-			let itemDiv = this.getItemForm(toolbarItem, index, itemLinkFields);
-			itemsListContainer.appendChild(itemDiv);
+
+			// TODO: handle empty state; or don't allow in the first place?
+			let itemPreviewContainer = createDiv();
+			itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
+			let itemPreview = createDiv();
+			itemPreview.className = "note-toolbar-setting-item-preview";
+			itemPreview.tabIndex = 0;
+			setIcon(itemPreview, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
+			let itemPreviewLabel = createSpan();
+			toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
+			toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
+			itemPreviewContainer.appendChild(itemPreview).appendChild(itemPreviewLabel);
+
+			let itemHandleDiv = createDiv();
+			itemHandleDiv.addClass("note-toolbar-setting-item-controls");
+			new Setting(itemHandleDiv)
+				.addExtraButton((cb) => {
+					cb.setIcon("menu")
+						.setTooltip("Drag to rearrange")
+						.extraSettingsEl.addClass('sortable-handle');
+					cb.extraSettingsEl.tabIndex = 0;
+					// TODO: register keyboard handler
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl,	'keydown', (e) => { debugLog('TODO'); });
+				});
+			itemPreviewContainer.append(itemHandleDiv);
+
+			let itemForm = this.getItemForm(toolbarItem, index, itemLinkFields);
+			itemForm.setAttribute('data-active', 'false');
+
+			let itemContainer = createDiv();
+			itemContainer.addClass("note-toolbar-setting-items-container-row");
+			itemContainer.setAttribute("data-index", index.toString());
+			itemContainer.appendChild(itemPreviewContainer);
+			itemContainer.appendChild(itemForm);
+			
+			itemsSortableContainer.appendChild(itemContainer);
+			
+			this.plugin.registerDomEvent(
+				itemPreview, 'keydown', (e) => {
+					switch (e.key) {
+						case "Enter":
+						case " ":
+							e.preventDefault();
+							this.toggleItemView(itemContainer, 'form');
+					}
+				});
+			this.plugin.registerDomEvent(
+				itemPreview, 'click', (e) => {
+					// TODO: check if span or svg to put focus in relevant field?
+					debugLog("clicked on: ", e.target);
+					this.toggleItemView(itemContainer, 'form');
+				});
+
 		});
+
+		itemsListContainer.appendChild(itemsSortableContainer);
 
 		//
 		// Add new item button
@@ -221,6 +301,63 @@ export default class ToolbarSettingsModal extends Modal {
 
 		itemsContainer.appendChild(itemsListContainer);
 		settingsDiv.appendChild(itemsContainer);
+
+		var sortable = Sortable.create(itemsSortableContainer, {
+			chosenClass: 'sortable-chosen',
+			ghostClass: 'sortable-ghost',
+			handle: '.sortable-handle',
+			onChange: (item) => navigator.vibrate(50),
+			onChoose: (item) => navigator.vibrate(50),
+			onSort: async (item) => {
+				debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+				if (item.oldIndex !== undefined && item.newIndex !== undefined) {
+					moveElement(this.toolbar.items, item.oldIndex, item.newIndex);
+					await this.plugin.saveSettings();
+				}
+			}
+		});
+
+	}
+
+	/**
+	 * Toggles the item to the provided state, or toggles it if no state is provided.
+	 * @param itemContainer 
+	 * @param state 
+	 */
+	private toggleItemView(itemContainer: HTMLDivElement, state?: 'preview' | 'form') {
+
+		debugLog("toggleItemView", itemContainer);
+		let itemPreviewContainer = itemContainer.querySelector(".note-toolbar-setting-item-preview-container");
+		let itemForm = itemContainer.querySelector(".note-toolbar-setting-item");
+		let previewState: string;
+		let formState: string;
+
+		if (state) {
+			switch (state) {
+				case 'form':
+					previewState = 'false';
+					formState = 'true';
+					break;
+				case 'preview':
+					previewState = 'true';
+					formState = 'false';
+					break;
+			}
+		}
+		else {
+			previewState = itemPreviewContainer?.getAttribute('data-active') === 'true' ? 'false' : 'true';
+			formState = itemForm?.getAttribute('data-active') === 'true' ? 'false' : 'true';
+		}
+
+		itemForm?.setAttribute('data-active', formState);
+		itemPreviewContainer?.setAttribute('data-active', previewState);
+
+		// move focus to form / field
+		if (formState === 'true') {	
+			let focusField = itemForm?.querySelector(".note-toolbar-setting-item-icon .setting-item-control .clickable-icon") as HTMLElement;
+			debugLog("toggleItemView focusField: ", focusField);
+			focusField ? focusField.focus() : undefined;
+		}
 
 	}
 
@@ -455,9 +592,12 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.extraSettingsEl.setAttribute("tabindex", "0");
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "down"));
-			})
+			});
+
+		const c1e = new Setting(itemControlsContainer)
+			.setClass("note-toolbar-setting-item-delete")
 			.addExtraButton((cb) => {
-				cb.setIcon("trash")
+				cb.setIcon("minus-circle")
 					.setTooltip("Delete")
 					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "delete"));
 				cb.extraSettingsEl.setAttribute("tabindex", "0");
