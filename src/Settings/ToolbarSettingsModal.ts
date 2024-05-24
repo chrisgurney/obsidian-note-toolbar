@@ -455,6 +455,14 @@ export default class ToolbarSettingsModal extends Modal {
 		let linkContainer = createDiv();
 		linkContainer.className = "note-toolbar-setting-item-link-container";
 
+		let uriFieldHelp = createDiv();
+		uriFieldHelp.addClass("note-toolbar-setting-field-help");
+		uriFieldHelp.appendChild(
+			learnMoreFr(
+				"Tip: Use note properties in URIs.",
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
+			);
+
 		let linkSelector = createDiv();
 		const s1t = new Setting(linkSelector)
 			.addDropdown((dropdown) =>
@@ -475,7 +483,7 @@ export default class ToolbarSettingsModal extends Modal {
 									this.getLinkSetting('file', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
 									break;
 								case 'uri':
-									this.getLinkSetting('uri', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
+									this.getLinkSetting('uri', itemLinkFieldDiv, toolbarItem, toolbarItem.link, uriFieldHelp);
 									break;
 							}
 							await this.plugin.saveSettings();
@@ -485,16 +493,9 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let linkField = createDiv();
 		linkField.className = "note-toolbar-setting-item-link-field";
-		this.getLinkSetting(toolbarItem.linkAttr.type, linkField, toolbarItem, toolbarItem.link);
-
-		let linkFieldHelp = createEl("div");
-		linkFieldHelp.addClass("note-toolbar-setting-field-help");
-		linkFieldHelp.appendChild(
-			learnMoreFr(
-				"Tip: Use note properties in URIs.",
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
-		)
-
+		this.getLinkSetting(
+			toolbarItem.linkAttr.type, linkField, toolbarItem, toolbarItem.link, 
+			toolbarItem.linkAttr.type === 'uri' ? uriFieldHelp : undefined);
 		linkContainer.append(linkSelector);
 		linkContainer.append(linkField);
 
@@ -598,7 +599,8 @@ export default class ToolbarSettingsModal extends Modal {
 		type: 'command' | 'file' | 'uri', 
 		fieldDiv: HTMLDivElement, 
 		toolbarItem: ToolbarItemSettings, 
-		value: string) 
+		value: string,
+		helpText?: HTMLDivElement)
 	{
 
 		debugLog("getLinkSetting");
@@ -650,7 +652,7 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 				break;
 			case 'uri': 
-				new Setting(fieldDiv)
+				const uriSetting = new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
 					.addText(text => text
 						.setPlaceholder("Website, URI, or note title")
@@ -665,9 +667,8 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							}, 750))
 						);
-						// FIXME: what was this for?
-						// .inputEl.insertAdjacentElement('afterend', fieldDiv));
-				break;		
+					helpText ? uriSetting.controlEl.insertAdjacentElement('beforeend', helpText) : undefined;
+				break;
 		}
 
 	}
