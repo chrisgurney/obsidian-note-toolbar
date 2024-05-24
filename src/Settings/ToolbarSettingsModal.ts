@@ -206,6 +206,10 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.toolbar.items.forEach((toolbarItem, index) => {
 
+			//
+			// generate the item preview
+			// 
+
 			// TODO: handle empty state; or don't allow in the first place?
 			let itemPreviewContainer = createDiv();
 			itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
@@ -217,6 +221,10 @@ export default class ToolbarSettingsModal extends Modal {
 			toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
 			toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
 			itemPreviewContainer.appendChild(itemPreview).appendChild(itemPreviewLabel);
+
+			//
+			// add the drag-and-drop handle
+			//
 
 			let itemHandleDiv = createDiv();
 			itemHandleDiv.addClass("note-toolbar-setting-item-controls");
@@ -235,6 +243,10 @@ export default class ToolbarSettingsModal extends Modal {
 			let itemForm = this.getItemForm(toolbarItem, index, itemLinkFields);
 			itemForm.setAttribute('data-active', 'false');
 
+			//
+			// create the list
+			//
+
 			let itemContainer = createDiv();
 			itemContainer.addClass("note-toolbar-setting-items-container-row");
 			itemContainer.setAttribute("data-index", index.toString());
@@ -243,6 +255,10 @@ export default class ToolbarSettingsModal extends Modal {
 			
 			itemsSortableContainer.appendChild(itemContainer);
 			
+			// 
+			// listen for clicks within the list to expand the items
+			//
+
 			this.plugin.registerDomEvent(
 				itemPreview, 'keydown', (e) => {
 					switch (e.key) {
@@ -261,10 +277,29 @@ export default class ToolbarSettingsModal extends Modal {
 
 		});
 
+		//
+		// make the list drag-and-droppable
+		//
+
+		var sortable = Sortable.create(itemsSortableContainer, {
+			chosenClass: 'sortable-chosen',
+			ghostClass: 'sortable-ghost',
+			handle: '.sortable-handle',
+			onChange: (item) => navigator.vibrate(50),
+			onChoose: (item) => navigator.vibrate(50),
+			onSort: async (item) => {
+				debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+				if (item.oldIndex !== undefined && item.newIndex !== undefined) {
+					moveElement(this.toolbar.items, item.oldIndex, item.newIndex);
+					await this.plugin.saveSettings();
+				}
+			}
+		});
+
 		itemsListContainer.appendChild(itemsSortableContainer);
 
 		//
-		// Add new item button
+		// "Add toolbar item" button
 		//
 
 		new Setting(itemsListContainer)
@@ -301,21 +336,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 		itemsContainer.appendChild(itemsListContainer);
 		settingsDiv.appendChild(itemsContainer);
-
-		var sortable = Sortable.create(itemsSortableContainer, {
-			chosenClass: 'sortable-chosen',
-			ghostClass: 'sortable-ghost',
-			handle: '.sortable-handle',
-			onChange: (item) => navigator.vibrate(50),
-			onChoose: (item) => navigator.vibrate(50),
-			onSort: async (item) => {
-				debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
-				if (item.oldIndex !== undefined && item.newIndex !== undefined) {
-					moveElement(this.toolbar.items, item.oldIndex, item.newIndex);
-					await this.plugin.saveSettings();
-				}
-			}
-		});
 
 	}
 
