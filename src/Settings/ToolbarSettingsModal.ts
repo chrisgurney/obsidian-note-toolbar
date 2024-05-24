@@ -235,7 +235,7 @@ export default class ToolbarSettingsModal extends Modal {
 					cb.extraSettingsEl.tabIndex = 0;
 					// TODO: register keyboard handler
 					this.plugin.registerDomEvent(
-						cb.extraSettingsEl,	'keydown', (e) => { debugLog('TODO'); });
+						cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index) );
 				});
 			itemPreviewContainer.append(itemHandleDiv);
 
@@ -918,7 +918,7 @@ export default class ToolbarSettingsModal extends Modal {
 		keyEvent: KeyboardEvent | null, 
 		itemArray: ToolbarItemSettings[] | string[],
 		index: number, 
-		action: 'up' | 'down' | 'delete' | undefined = undefined
+		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {
 		if (keyEvent) {
 			switch (keyEvent.key) {
