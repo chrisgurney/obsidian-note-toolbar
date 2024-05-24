@@ -1034,14 +1034,31 @@ body {
     }
 }
 
+.note-toolbar-setting-item-link-field {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    column-gap: 1em;
+    row-gap: 1em;
+    & .setting-item {
+        padding: 0;
+    }
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+
 .note-toolbar-setting-item-link {
     width: 100%;
 }
 
 .note-toolbar-setting-item-field-link {
     border-top: none !important;
-    /* default to none, so we can render it ahead of time; set visible based on type to show */
-    display: none;
     padding-top: 0 !important;
     width: 100%;
     & .setting-item-control {
@@ -1053,12 +1070,6 @@ body {
         & input[type="text"] {
             width: 100%;
         }
-    }
-    &[data-active="true"] {
-        display: inherit !important;
-    }
-    &[data-active="false"] {
-        display: none !important;
     }
 }
 
