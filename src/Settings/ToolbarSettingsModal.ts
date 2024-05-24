@@ -505,24 +505,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemControlsContainer = createDiv();
 		itemControlsContainer.className = "note-toolbar-setting-item-controls";
-		const s1d = new Setting(itemControlsContainer)
-			.addExtraButton((cb) => {
-				cb.setIcon("up-chevron-glyph")
-					.setTooltip("Move up")
-					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "up"));
-				cb.extraSettingsEl.setAttribute("tabindex", "0");
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "up"));
-			})
-			.addExtraButton((cb) => {
-				cb.setIcon("down-chevron-glyph")
-					.setTooltip("Move down")
-					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "down"));
-				cb.extraSettingsEl.setAttribute("tabindex", "0");
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "down"));
-			});
-
 		const c1e = new Setting(itemControlsContainer)
 			.setClass("note-toolbar-setting-item-delete")
 			.addExtraButton((cb) => {
