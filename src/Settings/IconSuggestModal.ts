@@ -53,12 +53,24 @@ export class IconSuggestModal extends SuggestModal<IconName> {
      * Saves the selected icon to settings, closes the modal, refreshes the parent.
      * @param selectedIcon Icon to save.
      */
-    onChooseSuggestion(item: string, evt: MouseEvent | KeyboardEvent) {
+    onChooseSuggestion(selectedIcon: string, evt: MouseEvent | KeyboardEvent) {
         debugLog("onChooseSuggestion: ", this.settingsWithIcon);
-        this.settingsWithIcon.icon = (item === "No icon" ? "" : item);
+        this.settingsWithIcon.icon = (selectedIcon === "No icon" ? "" : selectedIcon);
         this.plugin.saveSettings();
-        setIcon(this.parentEl, item === "No icon" ? "lucide-plus-square" : item);
-        this.parentEl.setAttribute("data-note-toolbar-no-icon", item === "No icon" ? "true" : "false");
+        debugLog("this.parentEl:", this.parentEl);
+        if (this.parentEl.hasClass('note-toolbar-setting-items-container-row')) {
+            // update the icon for the preview and form
+            let formEl = this.parentEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
+            formEl ? setIcon(formEl, selectedIcon === 'No icon' ? 'lucide-plus-square' : selectedIcon) : undefined;
+            formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === 'No icon' ? 'true' : 'false');
+            let previewEl = this.parentEl.querySelector('.note-toolbar-setting-item-preview > span') as HTMLElement;
+            previewEl ? setIcon(previewEl, selectedIcon === 'No icon' ? 'lucide-plus-square' : selectedIcon) : undefined;
+        }
+        else {
+            // update the mobile setting
+            setIcon(this.parentEl, selectedIcon === 'No icon' ? 'lucide-plus-square' : selectedIcon);
+            this.parentEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === 'No icon' ? 'true' : 'false');
+        }
         this.close();
     }
 

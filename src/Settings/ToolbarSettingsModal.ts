@@ -217,12 +217,15 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreview.id = 'note-toolbar-setting-item-preview-id-' + index;
 			itemPreview.tabIndex = 0;
 
-			// TODO: replace below with call to updatePreview function
-			setIcon(itemPreview, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
+			// TODO: replace below with call to updatePreview function?
+			let itemPreviewIcon = createSpan();
+			setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
 			let itemPreviewLabel = createSpan();
 			toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
 			toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
-			itemPreviewContainer.appendChild(itemPreview).appendChild(itemPreviewLabel);
+			itemPreview.appendChild(itemPreviewIcon);
+			itemPreview.appendChild(itemPreviewLabel);
+			itemPreviewContainer.appendChild(itemPreview);
 
 			//
 			// add the drag-and-drop handle
@@ -405,13 +408,14 @@ export default class ToolbarSettingsModal extends Modal {
 		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + index;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
-		const s1a = new Setting(textFieldsContainer)
+		new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-icon")
 			.addExtraButton((cb) => {
 				cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 					.setTooltip("Select icon (optional)")
 					.onClick(async () => {
-						const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
+						let itemRow = toolbarItemList.querySelector('.note-toolbar-setting-items-container-row[data-index="' + index + '"]') as HTMLElement;
+						const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 						modal.open();
 					});
 				cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -421,8 +425,9 @@ export default class ToolbarSettingsModal extends Modal {
 						switch (e.key) {
 							case "Enter":
 							case " ":
-								e.preventDefault();					
-								const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
+								e.preventDefault();
+								let itemRow = toolbarItemList.querySelector('.note-toolbar-setting-items-container-row[data-index="' + index + '"]') as HTMLElement;			
+								const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 								modal.open();
 						}
 					});
@@ -440,7 +445,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.updateItemPreview(toolbarItem, index);
+						this.updatePreviewText(toolbarItem, index);
 					}, 750)));
 		new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
@@ -452,7 +457,7 @@ export default class ToolbarSettingsModal extends Modal {
 						toolbarItem.tooltip = value;
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.updateItemPreview(toolbarItem, index);
+						this.updatePreviewText(toolbarItem, index);
 					}, 750)));
 
 		//
@@ -1086,16 +1091,12 @@ export default class ToolbarSettingsModal extends Modal {
 		return option ? Object.values(option)[0] : '';
 	}
 
-	updateItemPreview(toolbarItem: ToolbarItemSettings, previewIndex: number) {
-		let itemPreviewEl = this.contentEl.querySelector('#note-toolbar-setting-item-preview-id-' + previewIndex) as HTMLElement;
-		// TODO: update icon
-		setIcon(itemPreviewEl, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
-		let itemPreviewTextEl = itemPreviewEl?.querySelector('span');
-		debugLog("PREVIEW TEXT: ", itemPreviewTextEl);
-		itemPreviewTextEl ? itemPreviewTextEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
+	updatePreviewText(toolbarItem: ToolbarItemSettings, previewIndex: number) {
+		let itemPreviewEl = this.contentEl.querySelector('#note-toolbar-setting-item-preview-id-' + previewIndex + ' span:last-child') as HTMLElement;
+		itemPreviewEl ? itemPreviewEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
 		toolbarItem.label 
-			? itemPreviewTextEl?.removeClass('note-toolbar-setting-item-preview-tooltip') 
-			: itemPreviewTextEl?.addClass('note-toolbar-setting-item-preview-tooltip');
+			? itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip') 
+			: itemPreviewEl?.addClass('note-toolbar-setting-item-preview-tooltip');
 	}
 
 }
