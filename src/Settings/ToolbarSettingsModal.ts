@@ -89,7 +89,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// listen for clicks outside the list area, to collapse form that might be open
 		this.plugin.registerDomEvent(settingsDiv, 'click', (e) => {
 
-			debugLog("modal listener: ", e.target);
+			// debugLog("modal click listener: ", e.target);
 
 			// if el clicked was row, note row index
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
@@ -534,34 +534,26 @@ export default class ToolbarSettingsModal extends Modal {
 		const visButtons = new Setting(visibilityControlsContainer)
 			.setClass("note-toolbar-setting-item-visibility")
 			.addButton((cb) => {
-				let btnIcon = cb.buttonEl.createSpan();
-				setIcon(btnIcon, 'monitor');
+				setIcon(cb.buttonEl, 'monitor');
 				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
-				if (state) {
-					let btnLabel = cb.buttonEl.createSpan();
-					btnLabel.setText(state);
-				}
+				state ? cb.buttonEl.createSpan().setText(state) : undefined;
 				cb.setTooltip(tooltip)
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
-						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop');
+						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', cb);
 						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 					});
 			})
 			.addButton((cb) => {
-				let btnIcon = cb.buttonEl.createSpan();
-				setIcon(btnIcon, 'tablet-smartphone');
+				setIcon(cb.buttonEl, 'tablet-smartphone');
 				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
-				if (state) {
-					let btnLabel = cb.buttonEl.createSpan();
-					btnLabel.setText(state);
-				}
+				state ? cb.buttonEl.createSpan().setText(state) : undefined;
 				cb.setTooltip(tooltip)
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
-						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile');
+						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
 						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 					});
 			});
@@ -976,7 +968,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param platformLabel string to show in the menu 
 	 * @returns Menu
 	 */
-	getItemVisibilityMenu(platform: any, platformLabel: string): Menu {
+	getItemVisibilityMenu(platform: any, platformLabel: string, button: ButtonComponent): Menu {
 
 		let isComponentVisible = {
 			icon: (platform && platform.allViews) ? platform.allViews.components.includes('icon') : false,
@@ -1001,7 +993,12 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.saveSettings();
-					this.display();
+					let [state, tooltip] = this.getPlatformStateLabel(platform, 'desktop');
+					debugLog("getItemVisibilityMenu", button.buttonEl);
+					let oldState = button.buttonEl.querySelector('span');
+					oldState ? button.buttonEl.removeChild(oldState) : undefined;
+					state ? button.buttonEl.createSpan().setText(state) : undefined;
+					button.setTooltip(tooltip);
 				});
 		});
 		menu.addItem((menuItem) => {
@@ -1021,7 +1018,11 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.saveSettings();
-					this.display();
+					let [state, tooltip] = this.getPlatformStateLabel(platform, 'mobile');
+					let oldState = button.buttonEl.querySelector('span');
+					oldState ? button.buttonEl.removeChild(oldState) : undefined;
+					state ? button.buttonEl.createSpan().setText(state) : undefined;
+					button.setTooltip(tooltip);
 				});
 		});
 
