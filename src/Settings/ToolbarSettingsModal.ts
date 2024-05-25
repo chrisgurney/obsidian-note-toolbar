@@ -512,7 +512,7 @@ export default class ToolbarSettingsModal extends Modal {
 		linkContainer.append(linkField);
 
 		//
-		// Item list controls
+		// delete button
 		// 
 
 		let itemControlsContainer = createDiv();
@@ -537,7 +537,7 @@ export default class ToolbarSettingsModal extends Modal {
 		itemDiv.appendChild(itemTopContainer);
 
 		//
-		// Visibility
+		// visibility controls
 		// 
 
 		let visibilityControlsContainer = createDiv();
@@ -572,8 +572,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemVisilityAndControlsContainer = createDiv();
 		itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
-		itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
 		itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
+		itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
 
 		itemDiv.appendChild(itemVisilityAndControlsContainer);
 
