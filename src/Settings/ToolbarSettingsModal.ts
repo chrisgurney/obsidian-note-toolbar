@@ -423,7 +423,7 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			});
 
-		const s1b = new Setting(textFieldsContainer)
+		new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
 			.addText(text => text
 				.setPlaceholder('Label (optional, if icon set)')
@@ -436,7 +436,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
 					}, 750)));
-		const s1c = new Setting(textFieldsContainer)
+		new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
 			.addText(text => text
 				.setPlaceholder('Tooltip (optional)')
@@ -993,8 +993,7 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.saveSettings();
-					let [state, tooltip] = this.getPlatformStateLabel(platform, 'desktop');
-					debugLog("getItemVisibilityMenu", button.buttonEl);
+					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
 					let oldState = button.buttonEl.querySelector('span');
 					oldState ? button.buttonEl.removeChild(oldState) : undefined;
 					state ? button.buttonEl.createSpan().setText(state) : undefined;
@@ -1018,7 +1017,7 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.saveSettings();
-					let [state, tooltip] = this.getPlatformStateLabel(platform, 'mobile');
+					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
 					let oldState = button.buttonEl.querySelector('span');
 					oldState ? button.buttonEl.removeChild(oldState) : undefined;
 					state ? button.buttonEl.createSpan().setText(state) : undefined;
