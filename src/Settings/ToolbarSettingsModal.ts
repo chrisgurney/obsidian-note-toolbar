@@ -214,7 +214,10 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
 			let itemPreview = createDiv();
 			itemPreview.className = "note-toolbar-setting-item-preview";
+			itemPreview.id = 'note-toolbar-setting-item-preview-id-' + index;
 			itemPreview.tabIndex = 0;
+
+			// TODO: replace below with call to updatePreview function
 			setIcon(itemPreview, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
 			let itemPreviewLabel = createSpan();
 			toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
@@ -326,8 +329,9 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
+						// TODO: have the list redraw itself, with option to leave last expanded and set focus?
 						this.display(
-							'#note-toolbar-setting-item-field-' + (this.toolbar.items.length - 1) + ' input[type="text"]',
+							'#note-toolbar-setting-item-field-id-' + (this.toolbar.items.length - 1) + ' input[type="text"]',
 							'.note-toolbar-setting-item');
 					});
 			});
@@ -381,6 +385,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 	/**
 	 * Returns the form to edit a given toolbar item.
+	 * @param toolbarItemList
 	 * @param toolbarItem item to return the form for
 	 * @param index index of the item in the toolbar item list
 	 * @returns the form element as a div
@@ -397,7 +402,7 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let textFieldsContainer = createDiv();
-		textFieldsContainer.id = "note-toolbar-setting-item-field-" + index;
+		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + index;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
 		const s1a = new Setting(textFieldsContainer)
@@ -416,9 +421,9 @@ export default class ToolbarSettingsModal extends Modal {
 						switch (e.key) {
 							case "Enter":
 							case " ":
+								e.preventDefault();					
 								const modal = new IconSuggestModal(this.plugin, toolbarItem, cb.extraSettingsEl);
 								modal.open();
-								e.preventDefault();									
 						}
 					});
 			});
@@ -435,6 +440,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
+						this.updateItemPreview(toolbarItem, index);
 					}, 750)));
 		new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
@@ -446,6 +452,7 @@ export default class ToolbarSettingsModal extends Modal {
 						toolbarItem.tooltip = value;
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
+						this.updateItemPreview(toolbarItem, index);
 					}, 750)));
 
 		//
@@ -1077,6 +1084,18 @@ export default class ToolbarSettingsModal extends Modal {
 	getValueForKey(dict: {[key: string]: string}[], key: string): string {
 		const option = dict.find(option => key in option);
 		return option ? Object.values(option)[0] : '';
+	}
+
+	updateItemPreview(toolbarItem: ToolbarItemSettings, previewIndex: number) {
+		let itemPreviewEl = this.contentEl.querySelector('#note-toolbar-setting-item-preview-id-' + previewIndex) as HTMLElement;
+		// TODO: update icon
+		setIcon(itemPreviewEl, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
+		let itemPreviewTextEl = itemPreviewEl?.querySelector('span');
+		debugLog("PREVIEW TEXT: ", itemPreviewTextEl);
+		itemPreviewTextEl ? itemPreviewTextEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
+		toolbarItem.label 
+			? itemPreviewTextEl?.removeClass('note-toolbar-setting-item-preview-tooltip') 
+			: itemPreviewTextEl?.addClass('note-toolbar-setting-item-preview-tooltip');
 	}
 
 }
