@@ -89,16 +89,12 @@ export default class ToolbarSettingsModal extends Modal {
 		// listen for clicks outside the list area, to collapse form that might be open
 		this.plugin.registerDomEvent(settingsDiv, 'click', (e) => {
 
-			// debugLog("modal click listener: ", e.target);
-
-			// if el clicked was row, note row index
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
-			let itemIndex = rowClicked ? rowClicked.getAttribute('data-index') : undefined;
 
 			// collapse all items except row
 			let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > .note-toolbar-setting-items-container-row');
 			listItems.forEach((row, index) => {
-				if (index.toString() !== itemIndex) {
+				if (row !== rowClicked) {
 					let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
 					let itemForm = row.querySelector('.note-toolbar-setting-item');
 					itemPreview?.setAttribute('data-active', 'true');
@@ -214,7 +210,6 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
 			let itemPreview = createDiv();
 			itemPreview.className = "note-toolbar-setting-item-preview";
-			itemPreview.id = 'note-toolbar-setting-item-preview-id-' + index;
 			itemPreview.tabIndex = 0;
 
 			// TODO: replace below with call to updatePreview function?
@@ -239,7 +234,6 @@ export default class ToolbarSettingsModal extends Modal {
 						.setTooltip("Drag to rearrange")
 						.extraSettingsEl.addClass('sortable-handle');
 					cb.extraSettingsEl.tabIndex = 0;
-					// TODO: register keyboard handler
 					this.plugin.registerDomEvent(
 						cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index) );
 				});
@@ -251,7 +245,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 			let itemContainer = createDiv();
 			itemContainer.addClass("note-toolbar-setting-items-container-row");
-			itemContainer.setAttribute("data-index", index.toString());
 			itemContainer.appendChild(itemPreviewContainer);
 			let itemForm = this.getItemForm(itemsSortableContainer, toolbarItem, index);
 			itemForm.setAttribute('data-active', 'false');
@@ -414,7 +407,7 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 					.setTooltip("Select icon (optional)")
 					.onClick(async () => {
-						let itemRow = toolbarItemList.querySelector('.note-toolbar-setting-items-container-row[data-index="' + index + '"]') as HTMLElement;
+						let itemRow = this.getItemRowEl(index);
 						const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 						modal.open();
 					});
@@ -426,7 +419,7 @@ export default class ToolbarSettingsModal extends Modal {
 							case "Enter":
 							case " ":
 								e.preventDefault();
-								let itemRow = toolbarItemList.querySelector('.note-toolbar-setting-items-container-row[data-index="' + index + '"]') as HTMLElement;			
+								let itemRow = this.getItemRowEl(index);			
 								const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 								modal.open();
 						}
@@ -482,7 +475,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.addOptions({command: "Command", file: "File", uri: "URI"})
 					.setValue(toolbarItem.linkAttr.type)
 					.onChange(async (value) => {
-						let itemRow = toolbarItemList.querySelector('.note-toolbar-setting-items-container-row[data-index="' + index + '"]');
+						let itemRow = this.getItemRowEl(index);
 						let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
 						if (itemLinkFieldDiv) {
 							toolbarItem.linkAttr.type = value as LinkType;
@@ -1092,11 +1085,16 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	updatePreviewText(toolbarItem: ToolbarItemSettings, previewIndex: number) {
-		let itemPreviewEl = this.contentEl.querySelector('#note-toolbar-setting-item-preview-id-' + previewIndex + ' span:last-child') as HTMLElement;
+		let itemPreviewContainer = this.getItemRowEl(previewIndex);
+		let itemPreviewEl = itemPreviewContainer.querySelector('span:last-child');
 		itemPreviewEl ? itemPreviewEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
 		toolbarItem.label 
 			? itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip') 
 			: itemPreviewEl?.addClass('note-toolbar-setting-item-preview-tooltip');
+	}
+
+	getItemRowEl(index: number): HTMLElement {
+		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div:nth-child(' + (index + 1) + ')') as HTMLElement;
 	}
 
 }
