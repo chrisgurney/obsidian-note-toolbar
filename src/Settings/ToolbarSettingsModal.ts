@@ -223,10 +223,7 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreview.appendChild(itemPreviewLabel);
 			itemPreviewContainer.appendChild(itemPreview);
 
-			//
-			// add the drag-and-drop handle
-			//
-
+			// add the preview drag-and-drop handle
 			let itemHandleDiv = createDiv();
 			itemHandleDiv.addClass("note-toolbar-setting-item-controls");
 			new Setting(itemHandleDiv)
@@ -241,7 +238,7 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreviewContainer.append(itemHandleDiv);
 
 			//
-			// create the list
+			// create the list (preview + form for each item)
 			//
 
 			let itemContainer = createDiv();
