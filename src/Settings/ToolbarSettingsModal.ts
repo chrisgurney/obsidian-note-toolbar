@@ -1087,8 +1087,8 @@ export default class ToolbarSettingsModal extends Modal {
 		return option ? Object.values(option)[0] : '';
 	}
 
-	updatePreviewText(toolbarItem: ToolbarItemSettings, previewIndex: number) {
-		let itemPreviewContainer = this.getItemRowEl(previewIndex);
+	updatePreviewText(toolbarItem: ToolbarItemSettings, rowId: number) {
+		let itemPreviewContainer = this.getItemRowElById(rowId);
 		let itemPreviewEl = itemPreviewContainer.querySelector('span:last-child');
 		itemPreviewEl ? itemPreviewEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
 		toolbarItem.label 
@@ -1096,8 +1096,8 @@ export default class ToolbarSettingsModal extends Modal {
 			: itemPreviewEl?.addClass('note-toolbar-setting-item-preview-tooltip');
 	}
 
-	getItemRowEl(index: number): HTMLElement {
-		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div:nth-child(' + (index + 1) + ')') as HTMLElement;
+	getItemRowElById(rowId: number): HTMLElement {
+		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[data-row-id="' + rowId + '"]') as HTMLElement;
 	}
 
 }
