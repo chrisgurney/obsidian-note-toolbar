@@ -15,6 +15,7 @@ export default class ToolbarSettingsModal extends Modal {
 	public toolbar: ToolbarSettings;
 	private parent: NoteToolbarSettingTab | null;
 	private itemListOpen: boolean = true; 
+	private itemListIdCounter: number = 0;
 
 	/**
 	 * Displays a new edit toolbar modal, for the given toolbar.
@@ -92,7 +93,7 @@ export default class ToolbarSettingsModal extends Modal {
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
 
 			// collapse all items except row
-			let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > .note-toolbar-setting-items-container-row');
+			let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
 			listItems.forEach((row, index) => {
 				if (row !== rowClicked) {
 					let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
@@ -244,11 +245,13 @@ export default class ToolbarSettingsModal extends Modal {
 			//
 
 			let itemContainer = createDiv();
+			itemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
 			itemContainer.addClass("note-toolbar-setting-items-container-row");
 			itemContainer.appendChild(itemPreviewContainer);
-			let itemForm = this.getItemForm(itemsSortableContainer, toolbarItem, index);
+			let itemForm = this.getItemForm(itemsSortableContainer, toolbarItem, this.itemListIdCounter);
 			itemForm.setAttribute('data-active', 'false');
 			itemContainer.appendChild(itemForm);
+			this.itemListIdCounter++;
 			
 			itemsSortableContainer.appendChild(itemContainer);
 			
@@ -383,10 +386,10 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Returns the form to edit a given toolbar item.
 	 * @param toolbarItemList
 	 * @param toolbarItem item to return the form for
-	 * @param index index of the item in the toolbar item list
+	 * @param id row ID of the item in the toolbar item list
 	 * @returns the form element as a div
 	 */
-	getItemForm(toolbarItemList: HTMLDivElement, toolbarItem: ToolbarItemSettings, index: number): HTMLDivElement {
+	getItemForm(toolbarItemList: HTMLDivElement, toolbarItem: ToolbarItemSettings, id: number): HTMLDivElement {
 
 		let itemDiv = createDiv();
 		itemDiv.className = "note-toolbar-setting-item";
@@ -398,7 +401,7 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let textFieldsContainer = createDiv();
-		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + index;
+		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + id;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
 		new Setting(textFieldsContainer)
@@ -407,7 +410,7 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 					.setTooltip("Select icon (optional)")
 					.onClick(async () => {
-						let itemRow = this.getItemRowEl(index);
+						let itemRow = this.getItemRowElById(id);
 						const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 						modal.open();
 					});
@@ -419,7 +422,7 @@ export default class ToolbarSettingsModal extends Modal {
 							case "Enter":
 							case " ":
 								e.preventDefault();
-								let itemRow = this.getItemRowEl(index);			
+								let itemRow = this.getItemRowElById(id);			
 								const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 								modal.open();
 						}
@@ -438,7 +441,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.updatePreviewText(toolbarItem, index);
+						this.updatePreviewText(toolbarItem, id);
 					}, 750)));
 		new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
@@ -450,7 +453,7 @@ export default class ToolbarSettingsModal extends Modal {
 						toolbarItem.tooltip = value;
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.updatePreviewText(toolbarItem, index);
+						this.updatePreviewText(toolbarItem, id);
 					}, 750)));
 
 		//
@@ -475,7 +478,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.addOptions({command: "Command", file: "File", uri: "URI"})
 					.setValue(toolbarItem.linkAttr.type)
 					.onChange(async (value) => {
-						let itemRow = this.getItemRowEl(index);
+						let itemRow = this.getItemRowElById(id);
 						let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
 						if (itemLinkFieldDiv) {
 							toolbarItem.linkAttr.type = value as LinkType;
@@ -515,10 +518,10 @@ export default class ToolbarSettingsModal extends Modal {
 			.addExtraButton((cb) => {
 				cb.setIcon("minus-circle")
 					.setTooltip("Delete")
-					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, index, "delete"));
+					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, id, "delete"));
 				cb.extraSettingsEl.setAttribute("tabindex", "0");
 				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index, "delete"));
+					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, id, "delete"));
 			});
 
 		let itemFieldsContainer = createDiv();
