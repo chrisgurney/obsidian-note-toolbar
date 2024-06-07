@@ -14,6 +14,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	app: App;
 
 	private itemListOpen: boolean = true;
+	private itemListIdCounter: number = 0;
 
 	constructor(app: App, plugin: NoteToolbarPlugin) {
 		super(app, plugin);
@@ -269,6 +270,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		}
 
+		//
+		// "Add a new mapping" button
+		//
+
 		new Setting(containerEl)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
@@ -283,6 +288,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						};
 						this.plugin.settings.folderMappings.push(newMapping);
 						await this.plugin.saveSettings();
+						// TODO: add a form item to the existing list
+							// TODO: put the existing code in a function
+						// TODO: set the focus in the form
 						this.display('#note-toolbar-setting-item-field-' + (this.plugin.settings.folderMappings.length - 1) + ' input[type="search"]');
 					});
 			});
@@ -299,6 +307,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		let toolbarFolderListItemDiv = createDiv();
 		toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
+		toolbarFolderListItemDiv.setAttribute('data-row-id', this.itemListIdCounter.toString());
+		let textFieldsDiv = createDiv();
+		textFieldsDiv.id = "note-toolbar-setting-item-field-" + this.itemListIdCounter;
+		textFieldsDiv.className = "note-toolbar-setting-item-fields";
 
 		let ds = new Setting(toolbarFolderListItemDiv)
 			.setClass("note-toolbar-setting-item-delete")
@@ -311,9 +323,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
 			});
 
-		let textFieldsDiv = createDiv();
-		textFieldsDiv.id = "note-toolbar-setting-item-field-" + index;
-		textFieldsDiv.className = "note-toolbar-setting-item-fields";
+		// new Setting(textFieldsDiv)
+		// 	.setClass("note-toolbar-setting-mapping-field")
+		// 	.addDropdown((dropdown) => 
+		// 		dropdown
+		// 			.addOptions({folder: "Folder"})
+		// 			.setValue('folder')
+		// 			.onChange(async (value) => {
+
+		// 			})
+		// );
+
 		const fs = new Setting(textFieldsDiv)
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
@@ -366,13 +386,21 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setIcon("menu")
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
+				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
 				cb.extraSettingsEl.tabIndex = 0;
 				this.plugin.registerDomEvent(
-					cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index));
+					cb.extraSettingsEl,	'keydown', (e) => {
+						let currentEl = e.target as HTMLElement;
+						let rowId = currentEl.getAttribute('data-row-id');
+						debugLog("rowId", rowId);
+						rowId ? this.listMoveHandlerById(e, rowId) : undefined;
+					});
 			});
 
 		toolbarFolderListItemDiv.append(textFieldsDiv);
 		toolbarFolderListItemDiv.append(itemHandleDiv);
+
+		this.itemListIdCounter++;
 
 		return toolbarFolderListItemDiv;
 
@@ -477,7 +505,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.display();
 	}
 
+	async listMoveHandlerById(
+		keyEvent: KeyboardEvent | null, 
+		rowId: string,
+		action?: 'up' | 'down' | 'delete'
+	): Promise<void> {	
+		let itemIndex = this.getIndexByRowId(rowId);
+		debugLog("listMoveHandlerById: moving index:", itemIndex);
+		await this.listMoveHandler(keyEvent, itemIndex, action);
+	}
+
 	private lastScrollPosition: number;
+
 	/**
 	 * Remembers the scrolling position of the user and jumps to it on display.
 	 * @author Taitava (Shell Commands plugin)
@@ -538,6 +577,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarFr = emptyMessageFr("No toolbar items. Click Edit to update this toolbar.");
 		}
 		return toolbarFr;
+	}
+
+	getIndexByRowId(rowId: string): number {
+		const list = this.getItemListEls();
+		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute('data-row-id') === rowId);
+	}
+
+	getItemListEls(): NodeListOf<HTMLElement> {
+		return this.containerEl.querySelectorAll('.note-toolbar-sortablejs-list > div[data-row-id]');
 	}
 
 }
