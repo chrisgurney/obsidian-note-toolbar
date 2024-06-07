@@ -203,51 +203,20 @@ export default class ToolbarSettingsModal extends Modal {
 		this.toolbar.items.forEach((toolbarItem, index) => {
 
 			//
-			// generate the item preview
-			// 
-
-			// TODO: handle empty state; or don't allow in the first place?
-			let itemPreviewContainer = createDiv();
-			itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
-			let itemPreview = createDiv();
-			itemPreview.className = "note-toolbar-setting-item-preview";
-			itemPreview.tabIndex = 0;
-
-			// TODO: replace below with call to updatePreview function?
-			let itemPreviewIcon = createSpan();
-			setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
-			let itemPreviewLabel = createSpan();
-			toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
-			toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
-			itemPreview.appendChild(itemPreviewIcon);
-			itemPreview.appendChild(itemPreviewLabel);
-			itemPreviewContainer.appendChild(itemPreview);
-
-			// add the preview drag-and-drop handle
-			let itemHandleDiv = createDiv();
-			itemHandleDiv.addClass("note-toolbar-setting-item-controls");
-			new Setting(itemHandleDiv)
-				.addExtraButton((cb) => {
-					cb.setIcon("menu")
-						.setTooltip("Drag to rearrange")
-						.extraSettingsEl.addClass('sortable-handle');
-					cb.extraSettingsEl.tabIndex = 0;
-					this.plugin.registerDomEvent(
-						cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index) );
-				});
-			itemPreviewContainer.append(itemHandleDiv);
-
-			//
-			// create the list (preview + form for each item)
+			// generate the preview + form for each item
 			//
 
 			let itemContainer = createDiv();
 			itemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
 			itemContainer.addClass("note-toolbar-setting-items-container-row");
-			itemContainer.appendChild(itemPreviewContainer);
-			let itemForm = this.getItemForm(itemsSortableContainer, toolbarItem, this.itemListIdCounter);
+
+			let itemPreview = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
+			itemContainer.appendChild(itemPreview);
+
+			let itemForm = this.generateItemForm(toolbarItem, this.itemListIdCounter);
 			itemForm.setAttribute('data-active', 'false');
 			itemContainer.appendChild(itemForm);
+
 			this.itemListIdCounter++;
 			
 			itemsSortableContainer.appendChild(itemContainer);
@@ -325,7 +294,9 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						// TODO: have the list redraw itself, with option to leave last expanded and set focus?
+						// TODO: add a preview and form item to the existing list
+							// TODO: put the existing code in a function
+						// TODO: set the focus in the form
 						this.display(
 							'#note-toolbar-setting-item-field-id-' + (this.toolbar.items.length - 1) + ' input[type="text"]',
 							'.note-toolbar-setting-item');
@@ -380,13 +351,57 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
+	 * Returns the preview for a given toolbar item.
+	 */
+	generateItemPreview(toolbarItem: ToolbarItemSettings, rowId: string): HTMLDivElement {
+
+		// TODO: handle empty state; or don't allow in the first place?
+		let itemPreviewContainer = createDiv();
+		itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
+		let itemPreview = createDiv();
+		itemPreview.className = "note-toolbar-setting-item-preview";
+		itemPreview.tabIndex = 0;
+
+		// TODO: replace below with call to updatePreview function?
+		let itemPreviewIcon = createSpan();
+		setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
+		let itemPreviewLabel = createSpan();
+		toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
+		toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
+		itemPreview.appendChild(itemPreviewIcon);
+		itemPreview.appendChild(itemPreviewLabel);
+		itemPreviewContainer.appendChild(itemPreview);
+
+		// add the preview drag-and-drop handle
+		let itemHandleDiv = createDiv();
+		itemHandleDiv.addClass("note-toolbar-setting-item-controls");
+		new Setting(itemHandleDiv)
+			.addExtraButton((cb) => {
+				cb.setIcon("menu")
+					.setTooltip("Drag to rearrange")
+					.extraSettingsEl.addClass('sortable-handle');
+				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				cb.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl,	'keydown', (e) => {
+						let currentEl = e.target as HTMLElement;
+						let rowId = currentEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId) : undefined;
+					} );
+			});
+		itemPreviewContainer.append(itemHandleDiv);
+
+		return itemPreviewContainer;
+
+	}
+
+	/**
 	 * Returns the form to edit a given toolbar item.
-	 * @param toolbarItemList
 	 * @param toolbarItem item to return the form for
 	 * @param id row ID of the item in the toolbar item list
 	 * @returns the form element as a div
 	 */
-	getItemForm(toolbarItemList: HTMLDivElement, toolbarItem: ToolbarItemSettings, id: number): HTMLDivElement {
+	generateItemForm(toolbarItem: ToolbarItemSettings, id: number): HTMLDivElement {
 
 		let itemDiv = createDiv();
 		itemDiv.className = "note-toolbar-setting-item";
@@ -562,6 +577,24 @@ export default class ToolbarSettingsModal extends Modal {
 						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 					});
 			});
+
+		//
+		// add a drag-and-drop handle for the form
+		//
+
+		// let itemHandleDiv = createDiv();
+		// itemHandleDiv.addClass("note-toolbar-setting-item-controls");
+		// new Setting(itemHandleDiv)
+		// 	.addExtraButton((cb) => {
+		// 		cb.setIcon("menu")
+		// 			.setTooltip("Drag to rearrange")
+		// 			.extraSettingsEl.addClass('sortable-handle');
+		// 		cb.extraSettingsEl.tabIndex = 0;
+		// 		this.plugin.registerDomEvent(
+		//			// TODO: can't use index here, how to use ID then?
+		// 			cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index) );
+		// 	});
+		// visibilityControlsContainer.append(itemHandleDiv);
 
 		let itemVisilityAndControlsContainer = createDiv();
 		itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
@@ -940,6 +973,17 @@ export default class ToolbarSettingsModal extends Modal {
 		this.display();
 	}
 
+	async listMoveHandlerById(
+		keyEvent: KeyboardEvent | null, 
+		itemArray: ToolbarItemSettings[] | string[],
+		rowId: string,
+		action?: 'up' | 'down' | 'delete'
+	): Promise<void> {	
+		let itemIndex = this.getIndexByRowId(rowId);
+		debugLog("listMoveHandlerById: moving index:", itemIndex);
+		await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
+	}
+
 	private lastScrollPosition: number;
 	/**
 	 * Remembers the scrolling position of the user and jumps to it on display.
@@ -1091,6 +1135,15 @@ export default class ToolbarSettingsModal extends Modal {
 		toolbarItem.label 
 			? itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip') 
 			: itemPreviewEl?.addClass('note-toolbar-setting-item-preview-tooltip');
+	}
+
+	getIndexByRowId(rowId: string): number {
+		const list = this.getItemListEls();
+		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute('data-row-id') === rowId);
+	}
+
+	getItemListEls(): NodeListOf<HTMLElement> {
+		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[data-row-id]');
 	}
 
 	getItemRowElById(rowId: number): HTMLElement {
