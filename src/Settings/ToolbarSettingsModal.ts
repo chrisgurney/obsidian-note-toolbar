@@ -56,7 +56,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	public display(focusId?: string, scrollToClass?: string) {
 
-		debugLog("‼️ REDRAWING MODAL");
+		debugLog("🟡 REDRAWING MODAL 🟡");
 
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
@@ -584,25 +584,20 @@ export default class ToolbarSettingsModal extends Modal {
 						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
 						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
 					});
+			})
+			.addExtraButton((cb) => {
+				cb.setIcon("menu")
+					.setTooltip("Drag to rearrange")
+					.extraSettingsEl.addClass('sortable-handle');
+				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				cb.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl,	'keydown', (e) => {
+						let currentEl = e.target as HTMLElement;
+						let rowId = currentEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId) : undefined;
+					} );
 			});
-
-		//
-		// add a drag-and-drop handle for the form
-		//
-
-		// let itemHandleDiv = createDiv();
-		// itemHandleDiv.addClass("note-toolbar-setting-item-controls");
-		// new Setting(itemHandleDiv)
-		// 	.addExtraButton((cb) => {
-		// 		cb.setIcon("menu")
-		// 			.setTooltip("Drag to rearrange")
-		// 			.extraSettingsEl.addClass('sortable-handle');
-		// 		cb.extraSettingsEl.tabIndex = 0;
-		// 		this.plugin.registerDomEvent(
-		//			// TODO: can't use index here, how to use ID then?
-		// 			cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, index) );
-		// 	});
-		// visibilityControlsContainer.append(itemHandleDiv);
 
 		let itemVisilityAndControlsContainer = createDiv();
 		itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
