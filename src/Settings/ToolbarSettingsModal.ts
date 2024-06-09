@@ -213,7 +213,7 @@ export default class ToolbarSettingsModal extends Modal {
 			let itemPreview = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
 			itemContainer.appendChild(itemPreview);
 
-			let itemForm = this.generateItemForm(toolbarItem, this.itemListIdCounter);
+			let itemForm = this.generateItemForm(toolbarItem, this.itemListIdCounter.toString());
 			itemForm.setAttribute('data-active', 'false');
 			itemContainer.appendChild(itemForm);
 
@@ -398,10 +398,10 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Returns the form to edit a given toolbar item.
 	 * @param toolbarItem item to return the form for
-	 * @param id row ID of the item in the toolbar item list
+	 * @param rowId row ID of the item in the toolbar item list
 	 * @returns the form element as a div
 	 */
-	generateItemForm(toolbarItem: ToolbarItemSettings, id: number): HTMLDivElement {
+	generateItemForm(toolbarItem: ToolbarItemSettings, rowId: string): HTMLDivElement {
 
 		let itemDiv = createDiv();
 		itemDiv.className = "note-toolbar-setting-item";
@@ -413,7 +413,7 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let textFieldsContainer = createDiv();
-		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + id;
+		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + rowId;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
 		new Setting(textFieldsContainer)
@@ -422,7 +422,7 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 					.setTooltip("Select icon (optional)")
 					.onClick(async () => {
-						let itemRow = this.getItemRowElById(id);
+						let itemRow = this.getItemRowElById(rowId);
 						const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 						modal.open();
 					});
@@ -453,7 +453,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.updatePreviewText(toolbarItem, id);
+						this.updatePreviewText(toolbarItem, rowId);
 					}, 750)));
 		new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
@@ -465,7 +465,7 @@ export default class ToolbarSettingsModal extends Modal {
 						toolbarItem.tooltip = value;
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						this.updatePreviewText(toolbarItem, id);
+						this.updatePreviewText(toolbarItem, rowId);
 					}, 750)));
 
 		//
@@ -490,7 +490,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.addOptions({command: "Command", file: "File", uri: "URI"})
 					.setValue(toolbarItem.linkAttr.type)
 					.onChange(async (value) => {
-						let itemRow = this.getItemRowElById(id);
+						let itemRow = this.getItemRowElById(rowId);
 						let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
 						if (itemLinkFieldDiv) {
 							toolbarItem.linkAttr.type = value as LinkType;
@@ -1128,7 +1128,7 @@ export default class ToolbarSettingsModal extends Modal {
 		return option ? Object.values(option)[0] : '';
 	}
 
-	updatePreviewText(toolbarItem: ToolbarItemSettings, rowId: number) {
+	updatePreviewText(toolbarItem: ToolbarItemSettings, rowId: string) {
 		let itemPreviewContainer = this.getItemRowElById(rowId);
 		let itemPreviewEl = itemPreviewContainer.querySelector('span:last-child');
 		itemPreviewEl ? itemPreviewEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
@@ -1146,7 +1146,7 @@ export default class ToolbarSettingsModal extends Modal {
 		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[data-row-id]');
 	}
 
-	getItemRowElById(rowId: number): HTMLElement {
+	getItemRowElById(rowId: string): HTMLElement {
 		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[data-row-id="' + rowId + '"]') as HTMLElement;
 	}
 
