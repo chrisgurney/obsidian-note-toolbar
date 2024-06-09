@@ -434,7 +434,7 @@ export default class ToolbarSettingsModal extends Modal {
 							case "Enter":
 							case " ":
 								e.preventDefault();
-								let itemRow = this.getItemRowElById(id);			
+								let itemRow = this.getItemRowElById(rowId);			
 								const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 								modal.open();
 						}
