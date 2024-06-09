@@ -220,26 +220,6 @@ export default class ToolbarSettingsModal extends Modal {
 			this.itemListIdCounter++;
 			
 			itemsSortableContainer.appendChild(itemContainer);
-			
-			// 
-			// listen for clicks within the list to expand the items
-			//
-
-			this.plugin.registerDomEvent(
-				itemPreview, 'keydown', (e) => {
-					switch (e.key) {
-						case "Enter":
-						case " ":
-							e.preventDefault();
-							this.toggleItemView(itemContainer, 'form');
-					}
-				});
-			this.plugin.registerDomEvent(
-				itemPreview, 'click', (e) => {
-					// TODO: check if span or svg to put focus in relevant field?
-					debugLog("clicked on: ", e.target);
-					this.toggleItemView(itemContainer, 'form');
-				});
 
 		});
 
@@ -276,30 +256,50 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText("+ Add toolbar item")
 					.setCta()
 					.onClick(async () => {
-						this.toolbar.items.push({
-							label: "",
-							icon: "",
-							link: "",
-							linkAttr: {
-								commandId: "",
-								hasVars: false,
-								type: this.toolbar.items.last()?.linkAttr.type ?? "uri"
-							},
-							tooltip: "",
-							visibility: {
-								desktop: { allViews: { components: ['icon', 'label'] } },
-								mobile: { allViews: { components: ['icon', 'label'] } },
-								tablet: { allViews: { components: ['icon', 'label'] } },
-							},
-						});
+						let newToolbarItem: ToolbarItemSettings =
+							{
+								label: "",
+								icon: "",
+								link: "",
+								linkAttr: {
+									commandId: "",
+									hasVars: false,
+									type: this.toolbar.items.last()?.linkAttr.type ?? "uri"
+								},
+								tooltip: "",
+								visibility: {
+									desktop: { allViews: { components: ['icon', 'label'] } },
+									mobile: { allViews: { components: ['icon', 'label'] } },
+									tablet: { allViews: { components: ['icon', 'label'] } },
+								},
+							};
+						this.toolbar.items.push(newToolbarItem);
 						this.toolbar.updated = new Date().toISOString();
 						await this.plugin.saveSettings();
-						// TODO: add a preview and form item to the existing list
-							// TODO: put the existing code in a function
-						// TODO: set the focus in the form
-						this.display(
-							'#note-toolbar-setting-item-field-id-' + (this.toolbar.items.length - 1) + ' input[type="text"]',
-							'.note-toolbar-setting-item');
+
+						//
+						// add preview and form to the list
+						//
+
+						let newItemContainer = createDiv();
+						newItemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
+						newItemContainer.addClass("note-toolbar-setting-items-container-row");
+			
+						let newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
+						newItemPreview.setAttribute('data-active', 'false');
+						newItemContainer.appendChild(newItemPreview);
+			
+						let newItemForm = this.generateItemForm(newToolbarItem, this.itemListIdCounter.toString());
+						newItemForm.setAttribute('data-active', 'true');
+						newItemContainer.appendChild(newItemForm);
+			
+						this.itemListIdCounter++;
+						
+						itemsSortableContainer.appendChild(newItemContainer);
+
+						// set focus in the form
+						let focusField = newItemForm?.querySelector(".note-toolbar-setting-item-icon .setting-item-control .clickable-icon") as HTMLElement;
+						focusField ? focusField.focus() : undefined;
 					});
 			});
 
@@ -313,11 +313,11 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param itemContainer 
 	 * @param state 
 	 */
-	private toggleItemView(itemContainer: HTMLDivElement, state?: 'preview' | 'form') {
+	private toggleItemView(itemPreviewContainer: HTMLDivElement, state?: 'preview' | 'form') {
 
-		debugLog("toggleItemView", itemContainer);
-		let itemPreviewContainer = itemContainer.querySelector(".note-toolbar-setting-item-preview-container");
-		let itemForm = itemContainer.querySelector(".note-toolbar-setting-item");
+		let itemForm = itemPreviewContainer.nextElementSibling;
+		debugLog("toggleItemView", itemPreviewContainer, itemForm);
+		
 		let previewState: string;
 		let formState: string;
 
@@ -380,7 +380,7 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon("menu")
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
-				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				cb.extraSettingsEl.setAttribute('data-row-id', rowId);
 				cb.extraSettingsEl.tabIndex = 0;
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl,	'keydown', (e) => {
@@ -390,6 +390,26 @@ export default class ToolbarSettingsModal extends Modal {
 					} );
 			});
 		itemPreviewContainer.append(itemHandleDiv);
+
+		// 
+		// listen for clicks within the list to expand the items
+		//
+
+		this.plugin.registerDomEvent(
+			itemPreview, 'keydown', (e) => {
+				switch (e.key) {
+					case "Enter":
+					case " ":
+						e.preventDefault();
+						this.toggleItemView(itemPreviewContainer, 'form');
+				}
+			});
+		this.plugin.registerDomEvent(
+			itemPreview, 'click', (e) => {
+				// TODO: check if span or svg to put focus in relevant field?
+				debugLog("clicked on: ", e.target);
+				this.toggleItemView(itemPreviewContainer, 'form');
+			});
 
 		return itemPreviewContainer;
 
