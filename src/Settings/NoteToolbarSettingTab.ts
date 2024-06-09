@@ -317,12 +317,22 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.addExtraButton((cb) => {
 				cb.setIcon("minus-circle")
 					.setTooltip("Delete")
-					.onClick(async () => this.listMoveHandler(null, index, "delete"));
+					.onClick(async () => {
+						let rowId = cb.extraSettingsEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(null, rowId, 'delete') : undefined;
+					});
 				cb.extraSettingsEl.tabIndex = 0;
+				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
 				this.plugin.registerDomEvent(
-					cb.extraSettingsEl,	'keydown', (e) => this.listMoveHandler(e, index, "delete"));
+					cb.extraSettingsEl,	'keydown', (e) => {
+						let currentEl = e.target as HTMLElement;
+						let rowId = currentEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(e, rowId, 'delete') : undefined;
+					});
 			});
 
+		// FUTURE: dropdown for mapping types, such as for tags and file patterns
+		//
 		// new Setting(textFieldsDiv)
 		// 	.setClass("note-toolbar-setting-mapping-field")
 		// 	.addDropdown((dropdown) => 
