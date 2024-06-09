@@ -530,10 +530,18 @@ export default class ToolbarSettingsModal extends Modal {
 			.addExtraButton((cb) => {
 				cb.setIcon("minus-circle")
 					.setTooltip("Delete")
-					.onClick(async () => this.listMoveHandler(null, this.toolbar.items, id, "delete"));
+					.onClick(async () => {
+						let rowId = cb.extraSettingsEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(null, this.toolbar.items, rowId, 'delete') : undefined;
+					});
 				cb.extraSettingsEl.setAttribute("tabindex", "0");
+				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
 				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.items, id, "delete"));
+					cb.extraSettingsEl, 'keydown', (e) => {
+						let currentEl = e.target as HTMLElement;
+						let rowId = currentEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId, 'delete') : undefined;
+					});
 			});
 
 		let itemFieldsContainer = createDiv();
