@@ -377,7 +377,7 @@ export default class ToolbarSettingsModal extends Modal {
 		itemHandleDiv.addClass("note-toolbar-setting-item-controls");
 		new Setting(itemHandleDiv)
 			.addExtraButton((cb) => {
-				cb.setIcon("menu")
+				cb.setIcon('grip-horizontal')
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
 				cb.extraSettingsEl.setAttribute('data-row-id', rowId);
@@ -606,7 +606,7 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			})
 			.addExtraButton((cb) => {
-				cb.setIcon("menu")
+				cb.setIcon('grip-horizontal')
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
 				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());

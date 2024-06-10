@@ -393,7 +393,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		itemHandleDiv.addClass("note-toolbar-setting-item-controls");
 		const s1d = new Setting(itemHandleDiv)
 			.addExtraButton((cb) => {
-				cb.setIcon("menu")
+				cb.setIcon('grip-horizontal')
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
 				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
