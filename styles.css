@@ -797,6 +797,9 @@ body {
     gap: 0 0.5em;
     flex-grow: 1;
     padding: 8px 4px;
+    .is-mobile & {
+        padding-left: 0;
+    }
     & span {
         display: flex;
         align-items: center;
