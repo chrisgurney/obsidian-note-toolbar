@@ -798,6 +798,7 @@ body {
     padding: 8px;
     .is-mobile & {
         padding-inline-start: 0;
+        margin-inline-end: 0.25em;
     }
     & span {
         display: flex;
