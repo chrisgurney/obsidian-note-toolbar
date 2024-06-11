@@ -313,7 +313,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param itemContainer 
 	 * @param state 
 	 */
-	private toggleItemView(itemPreviewContainer: HTMLDivElement, state?: 'preview' | 'form') {
+	private toggleItemView(itemPreviewContainer: HTMLDivElement, state?: 'preview' | 'form', focusOn?: 'icon' | 'label' | 'tooltip') {
 
 		let itemForm = itemPreviewContainer.nextElementSibling;
 		debugLog("toggleItemView", itemPreviewContainer, itemForm);
@@ -343,7 +343,22 @@ export default class ToolbarSettingsModal extends Modal {
 
 		// move focus to form / field
 		if (formState === 'true') {	
-			let focusField = itemForm?.querySelector(".note-toolbar-setting-item-icon .setting-item-control .clickable-icon") as HTMLElement;
+			let focusSelector = "#note-toolbar-item-field-icon .clickable-icon";
+			if (focusOn) {
+				switch (focusOn) {
+					case 'label': 
+						focusSelector = "#note-toolbar-item-field-label input";
+						break;
+					case 'tooltip': 
+						focusSelector = "#note-toolbar-item-field-tooltip input";
+						break;
+					case 'icon':
+					default:
+						// default case, focus on first field (icon)
+						break;
+				}
+			}
+			let focusField = itemForm?.querySelector(focusSelector) as HTMLElement;
 			debugLog("toggleItemView focusField: ", focusField);
 			focusField ? focusField.focus() : undefined;
 		}
@@ -418,9 +433,18 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 		this.plugin.registerDomEvent(
 			itemPreview, 'click', (e) => {
-				// TODO: check if span or svg to put focus in relevant field?
+				const target = e.target as Element;
 				debugLog("clicked on: ", e.target);
-				this.toggleItemView(itemPreviewContainer, 'form');
+				let focusOn: 'icon' | 'label' | 'tooltip' = 'label';
+				if (target instanceof SVGAElement || target?.closest('svg')) {
+					focusOn = 'icon';
+				}
+				else if (target instanceof HTMLSpanElement) {
+					if (target.classList.contains("note-toolbar-setting-item-preview-tooltip")) {
+						focusOn = 'tooltip';
+					}
+				}
+				this.toggleItemView(itemPreviewContainer, 'form', focusOn);
 			});
 
 		return itemPreviewContainer;
@@ -448,7 +472,7 @@ export default class ToolbarSettingsModal extends Modal {
 		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + rowId;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
-		new Setting(textFieldsContainer)
+		let iconField = new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-icon")
 			.addExtraButton((cb) => {
 				cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
@@ -472,8 +496,9 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 					});
 			});
+		iconField.settingEl.id = 'note-toolbar-item-field-icon';
 
-		new Setting(textFieldsContainer)
+		let labelField = new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
 			.addText(text => text
 				.setPlaceholder('Label (optional, if icon set)')
@@ -487,7 +512,9 @@ export default class ToolbarSettingsModal extends Modal {
 						await this.plugin.saveSettings();
 						this.updatePreviewText(toolbarItem, rowId);
 					}, 750)));
-		new Setting(textFieldsContainer)
+		labelField.settingEl.id = 'note-toolbar-item-field-label';
+
+		let tooltipField = new Setting(textFieldsContainer)
 			.setClass("note-toolbar-setting-item-field")
 			.addText(text => text
 				.setPlaceholder('Tooltip (optional)')
@@ -499,7 +526,8 @@ export default class ToolbarSettingsModal extends Modal {
 						await this.plugin.saveSettings();
 						this.updatePreviewText(toolbarItem, rowId);
 					}, 750)));
-
+		tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
+					
 		//
 		// Item link
 		//
