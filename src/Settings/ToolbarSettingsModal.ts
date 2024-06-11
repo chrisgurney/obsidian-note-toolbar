@@ -89,22 +89,29 @@ export default class ToolbarSettingsModal extends Modal {
 
 		// listen for clicks outside the list area, to collapse form that might be open
 		this.plugin.registerDomEvent(settingsDiv, 'click', (e) => {
-
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
-
-			// collapse all items except row
-			let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
-			listItems.forEach((row, index) => {
-				if (row !== rowClicked) {
-					let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
-					let itemForm = row.querySelector('.note-toolbar-setting-item');
-					itemPreview?.setAttribute('data-active', 'true');
-					itemForm?.setAttribute('data-active', 'false');
-				}
-			});
-
+			this.collapseItemForms(settingsDiv, rowClicked);
 		});
 
+		// listen for focus changes, to collapse form that might be open
+		this.plugin.registerDomEvent(settingsDiv, 'focusin', (e) => {
+			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
+			this.collapseItemForms(settingsDiv, rowClicked);
+		});
+
+	}
+
+	collapseItemForms(settingsDiv: HTMLDivElement, rowClicked: Element | null) {
+		// collapse all items except row
+		let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
+		listItems.forEach((row, index) => {
+			if (row !== rowClicked) {
+				let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
+				let itemForm = row.querySelector('.note-toolbar-setting-item');
+				itemPreview?.setAttribute('data-active', 'true');
+				itemForm?.setAttribute('data-active', 'false');
+			}
+		});
 	}
 
 	/**
