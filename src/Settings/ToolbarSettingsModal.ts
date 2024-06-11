@@ -389,6 +389,7 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemPreviewIcon = createSpan();
 		setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
 		let itemPreviewLabel = createSpan();
+		itemPreviewLabel.id = 'note-toolbar-item-preview-label';
 		toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
 		toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
 		itemPreview.appendChild(itemPreviewIcon);
@@ -1201,7 +1202,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 	updatePreviewText(toolbarItem: ToolbarItemSettings, rowId: string) {
 		let itemPreviewContainer = this.getItemRowElById(rowId);
-		let itemPreviewEl = itemPreviewContainer.querySelector('span:last-child');
+		let itemPreviewEl = itemPreviewContainer.querySelector('#note-toolbar-item-preview-label');
 		itemPreviewEl ? itemPreviewEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
 		toolbarItem.label 
 			? itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip') 
