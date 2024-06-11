@@ -925,12 +925,6 @@ body {
     }
 }
 
-& .note-toolbar-setting-items-container-row {
-    &:last-child {
-        margin-bottom: 1em;
-    }
-}
-
 .note-toolbar-setting-item-top-container {
     display: flex;
     flex-flow: wrap;
@@ -1121,6 +1115,7 @@ body {
 .note-toolbar-sortablejs-list {
     display: flex;
     flex-direction: column;
+    margin-bottom: 1em;
     & .sortable-chosen {
         background-color: var(--background-primary);
     }
