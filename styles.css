@@ -817,6 +817,12 @@ body {
     }
 }
 
+.note-toolbar-setting-item-preview-edit-mobile {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .note-toolbar-setting-item-preview-tooltip {
     color: var(--text-muted);
     font-style: italic;

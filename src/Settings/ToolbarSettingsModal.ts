@@ -369,7 +369,19 @@ export default class ToolbarSettingsModal extends Modal {
 		toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
 		toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
 		itemPreview.appendChild(itemPreviewIcon);
-		itemPreview.appendChild(itemPreviewLabel);
+		// add an icon to indicate each line is editable on mobile (as there's no hover state available)
+		if (Platform.isMobile) {
+			let itemPreviewLabelEditIcon = createDiv();
+			itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
+			let itemPreviewMobileEditIcon = createSpan();
+			setIcon(itemPreviewMobileEditIcon, 'lucide-pencil');
+			itemPreviewLabelEditIcon.appendChild(itemPreviewLabel);
+			itemPreviewLabelEditIcon.appendChild(itemPreviewMobileEditIcon);
+			itemPreview.appendChild(itemPreviewLabelEditIcon);
+		}
+		else {
+			itemPreview.appendChild(itemPreviewLabel);
+		}
 		itemPreviewContainer.appendChild(itemPreview);
 
 		// add the preview drag-and-drop handle
