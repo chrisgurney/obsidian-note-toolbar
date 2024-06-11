@@ -88,7 +88,7 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 
 		// listen for clicks outside the list area, to collapse form that might be open
-		this.plugin.registerDomEvent(settingsDiv, 'click', (e) => {
+		this.plugin.registerDomEvent(this.modalEl, 'click', (e) => {
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
 			this.collapseItemForms(settingsDiv, rowClicked);
 		});
