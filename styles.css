@@ -1141,6 +1141,7 @@ body {
 .note-toolbar-setting-item-delete {
     border: none;
     padding: 0 !important;
+    padding-inline-end: 0.25em !important;
     & .setting-item-info {
         display: none;
     }
