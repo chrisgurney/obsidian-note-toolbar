@@ -383,6 +383,7 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemPreview = createDiv();
 		itemPreview.className = "note-toolbar-setting-item-preview";
 		itemPreview.tabIndex = 0;
+		setTooltip(itemPreview, 'Edit toolbar item');
 
 		// TODO: replace below with call to updatePreview function?
 		let itemPreviewIcon = createSpan();
