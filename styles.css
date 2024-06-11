@@ -707,8 +707,7 @@ body {
     & .cg-note-toolbar-callout {
         border-top: none !important;
         margin-bottom: 0;
-        margin-left: auto;
-        margin-right: auto;
+        margin-inline: auto auto;
         max-width: var(--file-line-width);
         transition: border-top 0.5s ease-out;
     }
@@ -798,7 +797,7 @@ body {
     flex-grow: 1;
     padding: 8px;
     .is-mobile & {
-        padding-left: 0;
+        padding-inline-start: 0;
     }
     & span {
         display: flex;
@@ -843,9 +842,9 @@ body {
 .note-toolbar-setting-toolbar-list-preview-item {
     align-items: center;
     display: flex;
-    margin-right: 4px;
+    margin-inline-end: 4px;
     & span {
-        margin-right: 2px;
+        margin-inline-end: 2px;
         white-space: nowrap;
     }
 }
@@ -1142,9 +1141,9 @@ body {
     border: none;
     padding-top: 0 !important;
     .note-toolbar-setting-folder-list-item-container & {
-        padding-right: var(--size-4-1);
+        padding-inline-end: var(--size-4-1);
         .is-phone & {
-            padding-right: var(--size-4-2);
+            padding-inline-end: var(--size-4-2);
         }
     }
     & .setting-item-info {
@@ -1248,7 +1247,9 @@ body {
         border-top: none !important;
         border: dashed 1px var(--pill-color-remove) !important;
         border-radius: var(--pill-radius);
-        padding: 0 0.25em 0 0.75em !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding-inline: 0.75em 0.25em !important;
         flex-wrap: nowrap;
         height: var(--input-height);
         .is-mobile & {
@@ -1263,7 +1264,7 @@ body {
             padding: 0em !important;
         }
         & .setting-item-info {
-            margin-right: 0.25em;
+            margin-inline-end: 0.25em;
             color: var(--pill-color);
             & .setting-item-name {
                 font-size: var(--metadata-input-font-size);
@@ -1299,6 +1300,6 @@ body {
 }
 
 .vertical-tab-content.note-toolbar-setting-modal {
-    padding-left: var(--size-4-5);
-    padding-right: var(--size-4-5);
+    padding-inline-start: var(--size-4-5);
+    padding-inline-end: var(--size-4-5);
 }
