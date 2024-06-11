@@ -291,7 +291,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						// TODO: add a form item to the existing list
 							// TODO: put the existing code in a function
 						// TODO: set the focus in the form
-						this.display('#note-toolbar-setting-item-field-' + (this.plugin.settings.folderMappings.length - 1) + ' input[type="search"]');
+						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]');
 					});
 			});
 
