@@ -891,7 +891,7 @@ body {
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
     border-top: 1px solid var(--background-modifier-border);
-    padding-top: 0.75em !important;
+    padding: 8px 0;
     & .setting-item {
         border-bottom: none !important;
     }
@@ -920,7 +920,6 @@ body {
 }
 
 & .note-toolbar-setting-items-container-row {
-    margin: 0.5em 0em;
     &:last-child {
         margin-bottom: 1em;
     }
@@ -997,7 +996,7 @@ body {
 
 .note-toolbar-setting-mapping-field {
     border-top: none !important;
-    padding-top: 0 !important;
+    padding: 0 !important;
     & .setting-item-info {
         display: none;
     }
@@ -1114,6 +1113,8 @@ body {
 }
 
 .note-toolbar-sortablejs-list {
+    display: flex;
+    flex-direction: column;
     & .sortable-chosen {
         background-color: var(--background-primary);
     }
@@ -1139,13 +1140,7 @@ body {
 
 .note-toolbar-setting-item-delete {
     border: none;
-    padding-top: 0 !important;
-    .note-toolbar-setting-folder-list-item-container & {
-        padding-inline-end: var(--size-4-1);
-        .is-phone & {
-            padding-inline-end: var(--size-4-2);
-        }
-    }
+    padding: 0 !important;
     & .setting-item-info {
         display: none;
     }
@@ -1168,9 +1163,7 @@ body {
     display: flex;
     & .setting-item {
         border-bottom: none !important;
-        .is-mobile & {
-            padding-top: 0 !important;
-        }
+        padding: 0 !important;
         & .setting-item-control {
             .is-mobile & {
                 margin-top: 0 !important;
@@ -1227,7 +1220,7 @@ body {
     display: flex;
     flex-grow: 1;
     flex-wrap: wrap;
-    gap: 0 1em;
+    gap: 0.5em 1em;
 }
 
 .note-toolbar-setting-item-styles {
