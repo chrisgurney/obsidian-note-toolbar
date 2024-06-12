@@ -394,7 +394,6 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	generateItemPreview(toolbarItem: ToolbarItemSettings, rowId: string): HTMLDivElement {
 
-		// TODO: handle empty state; or don't allow in the first place?
 		let itemPreviewContainer = createDiv();
 		itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
 		let itemPreview = createDiv();
