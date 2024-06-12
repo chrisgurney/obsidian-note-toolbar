@@ -584,7 +584,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 		}
 		else {
-			toolbarFr = emptyMessageFr("No toolbar items. Click Edit to update this toolbar.");
+			toolbarFr = emptyMessageFr("No toolbar items. Edit this toolbar to add them.");
 		}
 		return toolbarFr;
 	}
