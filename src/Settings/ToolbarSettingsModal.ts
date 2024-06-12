@@ -54,7 +54,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Displays the toolbar item's settings.
 	 */
-	public display(focusId?: string, scrollToClass?: string) {
+	public display() {
 
 		debugLog("🟡 REDRAWING MODAL 🟡");
 
@@ -73,19 +73,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.contentEl.appendChild(settingsDiv);
 
-		// if provided, focus on the given element
-		if (focusId) {
-			let focusEl = this.contentEl.querySelector(focusId) as HTMLElement;
-			focusEl?.focus();
-			setTimeout(() => { 
-				let scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
-				scrollToEl?.scrollIntoView(true);
-			}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
-		}
-		else {
-			// scroll to the position when the modal was last open
-			this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
-		}
+		// scroll to the position when the modal was last open
+		this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
 
 		// listen for clicks outside the list area, to collapse form that might be open
 		this.plugin.registerDomEvent(this.modalEl, 'click', (e) => {
@@ -1095,6 +1084,15 @@ export default class ToolbarSettingsModal extends Modal {
 		});
 
     }
+
+	private scrollToPosition(focusId: string, scrollToClass?: string) {
+		let focusEl = this.contentEl.querySelector(focusId) as HTMLElement;
+		focusEl?.focus();
+		setTimeout(() => { 
+			let scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
+			scrollToEl?.scrollIntoView(true);
+		}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
+	}
 
 	/*************************************************************************
 	 * UTILITIES
