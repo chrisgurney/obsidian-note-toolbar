@@ -323,6 +323,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// set focus in the form
 						let focusField = newItemForm?.querySelector(".note-toolbar-setting-item-icon .setting-item-control .clickable-icon") as HTMLElement;
 						focusField ? focusField.focus() : undefined;
+
 					});
 			});
 
@@ -406,7 +407,8 @@ export default class ToolbarSettingsModal extends Modal {
 		setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
 		let itemPreviewLabel = createSpan();
 		itemPreviewLabel.id = 'note-toolbar-item-preview-label';
-		toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : itemPreviewLabel.setText(toolbarItem.tooltip);
+		toolbarItem.label ? itemPreviewLabel.setText(toolbarItem.label) : 
+			toolbarItem.tooltip ? itemPreviewLabel.setText(toolbarItem.tooltip) : itemPreviewLabel.setText('No label or tooltip set');
 		toolbarItem.label ? undefined : itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
 		itemPreview.appendChild(itemPreviewIcon);
 		// add an icon to indicate each line is editable on mobile (as there's no hover state available)
