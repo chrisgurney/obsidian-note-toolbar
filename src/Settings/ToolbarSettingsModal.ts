@@ -207,28 +207,38 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemsSortableContainer = createDiv();
 		itemsSortableContainer.addClass('note-toolbar-sortablejs-list');
 
-		this.toolbar.items.forEach((toolbarItem, index) => {
+		if (this.toolbar.items.length === 0) {
 
-			//
+			// display empty state
+			let emptyMsg = this.containerEl.createEl("div", 
+				{ text: emptyMessageFr("No toolbar items.") });
+			emptyMsg.className = "note-toolbar-setting-empty-message";
+			itemsSortableContainer.append(emptyMsg);
+
+		}
+		else {
+
 			// generate the preview + form for each item
-			//
+			this.toolbar.items.forEach((toolbarItem, index) => {
 
-			let itemContainer = createDiv();
-			itemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
-			itemContainer.addClass("note-toolbar-setting-items-container-row");
+				let itemContainer = createDiv();
+				itemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				itemContainer.addClass("note-toolbar-setting-items-container-row");
 
-			let itemPreview = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
-			itemContainer.appendChild(itemPreview);
+				let itemPreview = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
+				itemContainer.appendChild(itemPreview);
 
-			let itemForm = this.generateItemForm(toolbarItem, this.itemListIdCounter.toString());
-			itemForm.setAttribute('data-active', 'false');
-			itemContainer.appendChild(itemForm);
+				let itemForm = this.generateItemForm(toolbarItem, this.itemListIdCounter.toString());
+				itemForm.setAttribute('data-active', 'false');
+				itemContainer.appendChild(itemForm);
 
-			this.itemListIdCounter++;
-			
-			itemsSortableContainer.appendChild(itemContainer);
+				this.itemListIdCounter++;
+				
+				itemsSortableContainer.appendChild(itemContainer);
 
-		});
+			});
+
+		}
 
 		//
 		// make the list drag-and-droppable
@@ -263,6 +273,12 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText("+ Add toolbar item")
 					.setCta()
 					.onClick(async () => {
+
+						// removes the empty state message before we add anything to the list
+						if (this.toolbar.items.length === 0) {
+							itemsSortableContainer.empty();
+						}
+
 						let newToolbarItem: ToolbarItemSettings =
 							{
 								label: "",
