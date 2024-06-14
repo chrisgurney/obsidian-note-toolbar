@@ -90,19 +90,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 	}
 
-	collapseItemForms(settingsDiv: HTMLDivElement, rowClicked: Element | null) {
-		// collapse all items except row
-		let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
-		listItems.forEach((row, index) => {
-			if (row !== rowClicked) {
-				let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
-				let itemForm = row.querySelector('.note-toolbar-setting-item');
-				itemPreview?.setAttribute('data-active', 'true');
-				itemForm?.setAttribute('data-active', 'false');
-			}
-		});
-	}
-
 	/**
 	 * Displays the Name setting.
 	 * @param settingsDiv HTMLElement to add the setting to.
@@ -318,6 +305,26 @@ export default class ToolbarSettingsModal extends Modal {
 
 		itemsContainer.appendChild(itemsListContainer);
 		settingsDiv.appendChild(itemsContainer);
+
+	}
+
+	/**
+	 * Collapses all item forms except for one that might have been expanded.
+	 * @param settingsDiv HTMLElement to settings are within.
+	 * @param rowClicked Optional Element that was clicked/expanded.
+	 */
+	collapseItemForms(settingsDiv: HTMLDivElement, rowClicked: Element | null) {
+
+		// collapse all items except row
+		let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
+		listItems.forEach((row, index) => {
+			if (row !== rowClicked) {
+				let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
+				let itemForm = row.querySelector('.note-toolbar-setting-item');
+				itemPreview?.setAttribute('data-active', 'true');
+				itemForm?.setAttribute('data-active', 'false');
+			}
+		});
 
 	}
 
