@@ -1,11 +1,11 @@
 import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from '../main';
 import { arraymove, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'src/Utils/Utils';
-import ToolbarSettingsModal from './ToolbarSettingsModal';
+import ToolbarSettingsModal from './Modals/ToolbarSettingsModal';
 import { FolderMapping, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
 import { ToolbarSuggester } from './Suggesters/ToolbarSuggester';
-import { IconSuggestModal } from './IconSuggestModal';
+import { IconSuggestModal } from './Modals/IconSuggestModal';
 import Sortable from 'sortablejs';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {

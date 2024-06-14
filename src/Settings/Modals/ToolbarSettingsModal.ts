@@ -1,12 +1,12 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS } from './NoteToolbarSettings';
-import { NoteToolbarSettingTab } from './NoteToolbarSettingTab';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS } from '../NoteToolbarSettings';
+import { NoteToolbarSettingTab } from '../NoteToolbarSettingTab';
 import { DeleteModal } from './DeleteModal';
-import { CommandSuggester } from './Suggesters/CommandSuggester';
+import { CommandSuggester } from '../Suggesters/CommandSuggester';
 import { IconSuggestModal } from './IconSuggestModal';
-import { FileSuggester } from './Suggesters/FileSuggester';
+import { FileSuggester } from '../Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 
 export default class ToolbarSettingsModal extends Modal {

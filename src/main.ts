@@ -2,7 +2,7 @@ import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin,
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, getPosition } from './Utils/Utils';
-import ToolbarSettingsModal from './Settings/ToolbarSettingsModal';
+import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal';
 
 export default class NoteToolbarPlugin extends Plugin {
 
