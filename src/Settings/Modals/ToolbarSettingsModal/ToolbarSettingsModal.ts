@@ -1099,6 +1099,11 @@ export default class ToolbarSettingsModal extends Modal {
 
     }
 
+	/**
+	 * Scrolls to the element, or element with container class provided.
+	 * @param focusId Looks for the element with this ID.
+	 * @param scrollToClass Looks for this containing class and scrolls to it if provided.
+	 */
 	private scrollToPosition(focusId: string, scrollToClass?: string) {
 		let focusEl = this.contentEl.querySelector(focusId) as HTMLElement;
 		focusEl?.focus();
