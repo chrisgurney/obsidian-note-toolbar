@@ -1058,6 +1058,13 @@ export default class ToolbarSettingsModal extends Modal {
 		this.display();
 	}
 
+	/**
+	 * Handles moving items within a list, and deletion, based on click or keyboard event, given the ID of the row.
+	 * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
+	 * @param itemArray Array that we're operating on.
+	 * @param rowId ID of the item in the list we're moving/deleting.
+	 * @param action Direction of the move, or "delete".
+	 */
 	async listMoveHandlerById(
 		keyEvent: KeyboardEvent | null, 
 		itemArray: ToolbarItemSettings[] | string[],
