@@ -297,8 +297,12 @@ export default class ToolbarSettingsModal extends Modal {
 						itemsSortableContainer.appendChild(newItemContainer);
 
 						// set focus in the form
-						let focusField = newItemForm?.querySelector(".note-toolbar-setting-item-icon .setting-item-control .clickable-icon") as HTMLElement;
-						focusField ? focusField.focus() : undefined;
+						let focusField = newItemForm?.querySelector('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon') as HTMLElement;
+						if (focusField) {
+							focusField.focus();
+							// scroll to the form
+							this.scrollToPosition('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon', 'note-toolbar-setting-item');
+						}
 
 					});
 			});
@@ -1101,11 +1105,11 @@ export default class ToolbarSettingsModal extends Modal {
 
 	/**
 	 * Scrolls to the element, or element with container class provided.
-	 * @param focusId Looks for the element with this ID.
+	 * @param selectors Looks for the element that matches these selectors.
 	 * @param scrollToClass Looks for this containing class and scrolls to it if provided.
 	 */
-	private scrollToPosition(focusId: string, scrollToClass?: string) {
-		let focusEl = this.contentEl.querySelector(focusId) as HTMLElement;
+	private scrollToPosition(selectors: string, scrollToClass?: string) {
+		let focusEl = this.contentEl.querySelector(selectors) as HTMLElement;
 		focusEl?.focus();
 		setTimeout(() => { 
 			let scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
