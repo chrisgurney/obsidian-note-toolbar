@@ -828,7 +828,8 @@ body {
     }
 }
 
-.note-toolbar-setting-item-preview-tooltip {
+.note-toolbar-setting-item-preview-tooltip,
+.note-toolbar-setting-item-preview-empty {
     color: var(--text-muted);
     font-style: italic;
 }
