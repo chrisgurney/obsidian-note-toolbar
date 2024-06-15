@@ -462,7 +462,7 @@ export default class ToolbarSettingsModal extends Modal {
 				const target = e.target as Element;
 				debugLog("clicked on: ", e.target);
 				let focusOn: 'icon' | 'label' | 'tooltip' = 'label';
-				if (target instanceof SVGElement || target?.closest('svg')) {
+				if (target instanceof SVGElement || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
 					focusOn = 'icon';
 				}
 				else if (target instanceof HTMLSpanElement) {
