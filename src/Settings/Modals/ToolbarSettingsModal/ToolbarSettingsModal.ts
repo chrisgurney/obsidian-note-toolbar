@@ -384,7 +384,14 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 			let focusField = itemForm?.querySelector(focusSelector) as HTMLElement;
 			debugLog("toggleItemView focusField: ", focusField);
-			focusField ? focusField.focus() : undefined;
+
+			// set focus in the form
+			if (focusField) {
+				focusField.focus();
+				// scroll to the form
+				this.scrollToPosition(focusSelector, 'note-toolbar-setting-item');
+			}
+
 		}
 
 	}
