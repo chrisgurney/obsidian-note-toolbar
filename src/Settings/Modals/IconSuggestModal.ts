@@ -63,11 +63,11 @@ export class IconSuggestModal extends SuggestModal<IconName> {
             let formEl = this.parentEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
             formEl ? setIcon(formEl, selectedIcon === 'No icon' ? 'lucide-plus-square' : selectedIcon) : undefined;
             formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === 'No icon' ? 'true' : 'false');
-            let previewEl = this.parentEl.querySelector('.note-toolbar-setting-item-preview > span') as HTMLElement;
-            previewEl ? setIcon(previewEl, selectedIcon === 'No icon' ? 'note-toolbar-none' : selectedIcon) : undefined;
+            let previewIconEl = this.parentEl.querySelector('.note-toolbar-setting-item-preview > span') as HTMLElement;
+            previewIconEl ? setIcon(previewIconEl, selectedIcon === 'No icon' ? 'note-toolbar-none' : selectedIcon) : undefined;
         }
         else {
-            // update the mobile setting
+            // update Mobile Settings > Mobile icon
             setIcon(this.parentEl, selectedIcon === 'No icon' ? 'lucide-plus-square' : selectedIcon);
             this.parentEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === 'No icon' ? 'true' : 'false');
         }
