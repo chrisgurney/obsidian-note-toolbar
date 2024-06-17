@@ -408,7 +408,10 @@ export default class ToolbarSettingsModal extends Modal {
 		itemPreview.tabIndex = 0;
 		setTooltip(itemPreview, 'Edit toolbar item');
 
-		// TODO: replace below with call to updatePreview function?
+		//
+		// set preview icon and text
+		//
+
 		let itemPreviewIcon = createSpan();
 		setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
 		let itemPreviewLabel = createSpan();
@@ -440,7 +443,10 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 		itemPreviewContainer.appendChild(itemPreview);
 
+		//
 		// add the preview drag-and-drop handle
+		//
+
 		let itemHandleDiv = createDiv();
 		itemHandleDiv.addClass("note-toolbar-setting-item-controls");
 		new Setting(itemHandleDiv)
@@ -1256,10 +1262,21 @@ export default class ToolbarSettingsModal extends Modal {
 	updatePreviewText(toolbarItem: ToolbarItemSettings, rowId: string) {
 		let itemPreviewContainer = this.getItemRowElById(rowId);
 		let itemPreviewEl = itemPreviewContainer.querySelector('#note-toolbar-item-preview-label');
-		itemPreviewEl ? itemPreviewEl.setText(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip) : undefined;
-		toolbarItem.label 
-			? itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip') 
-			: itemPreviewEl?.addClass('note-toolbar-setting-item-preview-tooltip');
+		if (toolbarItem.label) {
+			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
+			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
+			itemPreviewEl?.setText(toolbarItem.label);
+		}
+		else if (toolbarItem.tooltip) {
+			itemPreviewEl?.addClass("note-toolbar-setting-item-preview-tooltip");
+			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
+			itemPreviewEl?.setText(toolbarItem.tooltip);
+		}
+		else {
+			itemPreviewEl?.addClass("note-toolbar-setting-item-preview-empty");
+			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
+			itemPreviewEl?.setText('No label or tooltip set');
+		}
 	}
 
 	getIndexByRowId(rowId: string): number {
