@@ -413,7 +413,7 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let itemPreviewIcon = createSpan();
-		setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty');
+		setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
 		let itemPreviewLabel = createSpan();
 		itemPreviewLabel.id = 'note-toolbar-item-preview-label';
 		if (toolbarItem.label) {
@@ -424,7 +424,7 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
 		}
 		else {
-			itemPreviewLabel.setText('No label or tooltip set');
+			itemPreviewLabel.setText('No label set');
 			itemPreviewLabel.addClass("note-toolbar-setting-item-preview-empty");
 		}
 		itemPreview.appendChild(itemPreviewIcon);
@@ -1275,7 +1275,7 @@ export default class ToolbarSettingsModal extends Modal {
 		else {
 			itemPreviewEl?.addClass("note-toolbar-setting-item-preview-empty");
 			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
-			itemPreviewEl?.setText('No label or tooltip set');
+			itemPreviewEl?.setText('No label set');
 		}
 	}
 

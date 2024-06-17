@@ -64,7 +64,7 @@ export class IconSuggestModal extends SuggestModal<IconName> {
             formEl ? setIcon(formEl, selectedIcon === 'No icon' ? 'lucide-plus-square' : selectedIcon) : undefined;
             formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === 'No icon' ? 'true' : 'false');
             let previewEl = this.parentEl.querySelector('.note-toolbar-setting-item-preview > span') as HTMLElement;
-            previewEl ? setIcon(previewEl, selectedIcon === 'No icon' ? 'note-toolbar-empty' : selectedIcon) : undefined;
+            previewEl ? setIcon(previewEl, selectedIcon === 'No icon' ? 'note-toolbar-none' : selectedIcon) : undefined;
         }
         else {
             // update the mobile setting

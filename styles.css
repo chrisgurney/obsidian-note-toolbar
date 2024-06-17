@@ -793,7 +793,6 @@ body {
 
 .note-toolbar-setting-item-preview {
     display: flex;
-    gap: 0 0.5em;
     flex-grow: 1;
     padding: 8px;
     .is-mobile & {
@@ -803,6 +802,12 @@ body {
     & span {
         display: flex;
         align-items: center;
+    }
+    & svg.note-toolbar-none {
+        width: 0;
+    }
+    & svg:not(.note-toolbar-none) {
+        margin-right: 0.5em;
     }
     &:focus-within {
         border-radius: var(--input-radius);
@@ -828,11 +833,8 @@ body {
     }
 }
 
+.note-toolbar-setting-item-preview-empty,
 .note-toolbar-setting-item-preview-tooltip {
-    color: var(--text-muted);
-}
-
-.note-toolbar-setting-item-preview-empty {
     color: var(--color-base-60);
     font-style: italic;
 }
