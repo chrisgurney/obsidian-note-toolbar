@@ -26,6 +26,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.addCommand({ id: 'open-toolbar-settings', name: 'Open Toolbar Settings', callback: async () => this.openToolbarSettingsCommand() });
 		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
 		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
+		this.addCommand({ id: 'fold-properties', name: 'Fold Properties', callback: async () => this.togglePropsCommand('fold') });
 		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
 
 		// add icons specific to the plugin
@@ -576,10 +577,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Shows, completely hides, or toggles the visibility of this note's Properties.
-	 * @param visibility Set to 'show', 'hide', or 'toggle'
+	 * Shows, completely hides, folds, or toggles the visibility of this note's Properties.
+	 * @param visibility Set to 'show', 'hide', 'fold', or 'toggle'
 	 */
-	async togglePropsCommand(visibility: 'show' | 'hide' | 'toggle'): Promise<void> {
+	async togglePropsCommand(visibility: 'show' | 'hide' | 'fold' | 'toggle'): Promise<void> {
 
 		let propsEl = this.getPropsEl();
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
@@ -599,6 +600,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				case 'hide':
 					propsEl.style.display = 'none';
 					break;
+				case 'fold':
+					if (!propsEl.classList.contains('is-collapsed')) {
+						(propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
+					}
+					break;	
 			}
 		}
 
