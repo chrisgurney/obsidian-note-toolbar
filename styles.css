@@ -907,6 +907,18 @@ body {
     & .setting-item {
         border-bottom: none !important;
     }
+    & .note-toolbar-setting-item-fields {
+        padding-right: 8px;
+        & .setting-item {
+            flex-grow: 1;
+            & .search-input-container {
+                flex-grow: 1;
+                & input {
+                    padding-inline-end: 0;
+                }
+            }
+        }
+    }
 }
 
 .note-toolbar-setting-items-container {
