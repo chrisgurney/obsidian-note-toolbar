@@ -247,8 +247,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarFolderListDiv.addClass('note-toolbar-sortablejs-list');
 
 			this.plugin.settings.folderMappings.forEach((mapping, index) => {
-				let toolbarFolderListItemDiv = this.getMappingItem(mapping, index);
+				let rowId = this.itemListIdCounter.toString();
+				let toolbarFolderListItemDiv = this.generateMappingForm(mapping, rowId);
 				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
+				this.itemListIdCounter++;
 			});
 
 			var sortable = Sortable.create(toolbarFolderListDiv, {
@@ -300,14 +302,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	/**
 	 * Returns the form to edit a mapping line.
 	 * @param mapping mapping to return the form for
-	 * @param index index of the mapping in the mapping list
+	 * @param rowId row ID of the mapping in the mapping list
 	 * @returns the form element as a div
 	 */
-	getMappingItem(mapping: FolderMapping, index: number): HTMLDivElement {
+	generateMappingForm(mapping: FolderMapping, rowId: string): HTMLDivElement {
 
 		let toolbarFolderListItemDiv = createDiv();
 		toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
-		toolbarFolderListItemDiv.setAttribute('data-row-id', this.itemListIdCounter.toString());
+		toolbarFolderListItemDiv.setAttribute('data-row-id', rowId);
 		let textFieldsDiv = createDiv();
 		textFieldsDiv.id = "note-toolbar-setting-item-field-" + this.itemListIdCounter;
 		textFieldsDiv.className = "note-toolbar-setting-item-fields";
@@ -322,7 +324,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						rowId ? this.listMoveHandlerById(null, rowId, 'delete') : undefined;
 					});
 				cb.extraSettingsEl.tabIndex = 0;
-				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				cb.extraSettingsEl.setAttribute('data-row-id', rowId);
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl,	'keydown', (e) => {
 						let currentEl = e.target as HTMLElement;
@@ -354,8 +356,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						if (
 							newFolder &&
 							this.plugin.settings.folderMappings.some(
-								(mapping, mapIndex) => {
-									return index != mapIndex ? mapping.folder.toLowerCase() === newFolder.toLowerCase() : undefined;
+								(map, mapIndex) => {
+									return mapping != map ? map.folder.toLowerCase() === newFolder.toLowerCase() : undefined;
 								}
 							)
 						) {
@@ -370,7 +372,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						else {
 							document.getElementById("note-toolbar-name-error")?.remove();
 							toolbarFolderListItemDiv.children[0].removeClass("note-toolbar-setting-error");
-							this.plugin.settings.folderMappings[index].folder = newFolder ? normalizePath(newFolder) : "";
+							mapping.folder = newFolder ? normalizePath(newFolder) : "";
 							await this.plugin.saveSettings();
 						}
 					}, 250));
@@ -382,9 +384,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setPlaceholder("Toolbar")
 					.setValue(mapping.toolbar)
 					.onChange(debounce(async (newToolbar) => {
-						this.plugin.settings.folderMappings[
-							index
-						].toolbar = newToolbar;
+						mapping.toolbar = newToolbar;
 						await this.plugin.saveSettings();
 					}, 250));
 			});
@@ -409,8 +409,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		toolbarFolderListItemDiv.append(textFieldsDiv);
 		toolbarFolderListItemDiv.append(itemHandleDiv);
-
-		this.itemListIdCounter++;
 
 		return toolbarFolderListItemDiv;
 
