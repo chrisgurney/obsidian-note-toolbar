@@ -421,7 +421,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayMobileSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName("Mobile settings")
+			.setName("Mobile")
 			.setHeading();
 
 		const s1 = new Setting(containerEl)
