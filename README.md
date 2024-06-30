@@ -99,7 +99,7 @@ Once installed, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New
 
 ![Example of settings configuration](./docs/settings.png)
 
-![Example of settings for a new toolbar](./docs/settings_edit_toolbar_full.png)
+![Example of settings for a toolbar](./docs/settings_edit_toolbar_example.png)
 
 # License
 
