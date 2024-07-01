@@ -127,4 +127,4 @@ Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolb
 
 If you find this plugin useful, and wish to support me financially, I accept donations. Thank you!
 
-[!["Buy Me A Coffee"](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/cheznine)
+<a href="https://www.buymeacoffee.com/cheznine"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=cheznine&button_colour=fe9b27&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00" /></a>
