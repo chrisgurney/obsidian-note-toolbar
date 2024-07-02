@@ -70,6 +70,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayItemList(settingsDiv);
 		this.displayPositionSetting(settingsDiv);
 		this.displayStyleSetting(settingsDiv);
+		this.displayUsageSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
 		this.contentEl.appendChild(settingsDiv);
@@ -1018,6 +1019,40 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
+	 * Displays the Usage setting section.
+	 * @param settingsDiv HTMLElement to add the setting to.
+	 */
+	displayUsageSetting(settingsDiv: HTMLElement) {
+
+		let usageDescFr = document.createDocumentFragment();
+		let descLinkFr = usageDescFr.createEl('a', {href: '#', text: "Search for property usage"});
+		let [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(this.toolbar.name);
+
+		usageDescFr.append(
+			`This toolbar is used in ${mappingCount} mapping(s) and ${itemCount} toolbar item(s).`,
+			usageDescFr.createEl("br"),
+			descLinkFr
+		);
+
+		this.plugin.registerDomEvent(descLinkFr, 'click', event => {
+			this.close();
+			// @ts-ignore
+			this.app.setting.close();
+			window.open(this.getToolbarPropSearchUri(this.toolbar.name));
+		});
+
+		let usageSetting = new Setting(settingsDiv)
+			.setName("Usage")
+			.setDesc(usageDescFr)
+			.setHeading();
+		
+		// let iconEl = createSpan();
+		// setIcon(iconEl, 'line-chart');
+		// usageSetting.nameEl.insertAdjacentElement('afterbegin', iconEl);
+
+	}
+
+	/**
 	 * Displays the Delete button.
 	 * @param settingsDiv HTMLElement to add the settings to.
 	 */
@@ -1158,6 +1193,29 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
+
+	/**
+	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
+	 * @param toolbarName name of the toolbar to look for.
+	 * @returns string 'obsidian://' URI.
+	 */
+	getToolbarPropSearchUri(toolbarName: string): string {
+		let searchUri = 'obsidian://search?vault=' + this.app.vault.getName() + '&query=[' + this.plugin.settings.toolbarProp + ': ' + toolbarName + ']';
+		return encodeURI(searchUri);
+	}
+
+	/**
+	 * Search through settings to find out where this toolbar is referenced.
+	 * @param toolbarName name of the toolbar to check usage for.
+	 * @returns mappingCount and itemCount
+	 */
+	getToolbarSettingsUsage(toolbarName: string): [number, number] {
+		let mappingCount = this.plugin.settings.folderMappings.filter(mapping => mapping.toolbar === toolbarName).length;
+		let itemCount = this.plugin.settings.toolbars.reduce((count, toolbar) => {
+			return count + toolbar.items.filter(item => item.link === toolbarName && item.linkAttr.type === 'menu').length;
+		}, 0);
+		return [mappingCount, itemCount];
+	}
 
 	/**
 	 * Returns the visibility menu to display, for the given platform.
