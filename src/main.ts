@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, PaneType, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, getPosition } from './Utils/Utils';
@@ -699,19 +699,19 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * On click of an item in the toolbar, we replace any variables that might
 	 * be in the URL, and then open it.
-	 * @param e MouseEvent
+	 * @param event MouseEvent
 	 */
-	async toolbarClickHandler(e: MouseEvent) {
+	async toolbarClickHandler(event: MouseEvent) {
 
-		debugLog('toolbarClickHandler: ', e);
+		debugLog('toolbarClickHandler: ', event);
 
-		let clickedEl = e.currentTarget as HTMLLinkElement;
+		let clickedEl = event.currentTarget as HTMLLinkElement;
 		let linkHref = clickedEl.getAttribute("href");
 
 		if (linkHref != null) {
 			
 			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
-			linkType ? (['command', 'file', 'uri'].includes(linkType) ? e.preventDefault() : undefined) : undefined
+			linkType ? (['command', 'file', 'uri'].includes(linkType) ? event.preventDefault() : undefined) : undefined
 
 			debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
 
@@ -722,22 +722,41 @@ export default class NoteToolbarPlugin extends Plugin {
 			let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
 			
 			// remove the focus effect if clicked with a mouse
-			if ((e as PointerEvent)?.pointerType === "mouse") {
+			if ((event as PointerEvent)?.pointerType === "mouse") {
 				clickedEl.blur();
 			}
 
-			this.handleLink(linkHref, { commandId: linkCommandId, hasVars: linkHasVars, type: linkType } as ToolbarItemLinkAttr);
+			this.handleLink(linkHref, { commandId: linkCommandId, hasVars: linkHasVars, type: linkType } as ToolbarItemLinkAttr, event);
 
 		}
 
 	}
 	
 	/**
+	 * Determines where to open a link given any modifiers held on click.
+	 * @param event MouseEvent
+	 * @returns PaneType or undefined
+	 */
+	getLinkDest(event?: MouseEvent): PaneType | undefined {
+		let linkDest: PaneType | undefined = undefined;
+		// check if modifier keys were pressed on click, to fix #91
+		if (event) {
+			// rules per: https://help.obsidian.md/User+interface/Tabs#Open+a+link
+			const modifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
+			if (modifierPressed) {
+				linkDest = event?.altKey ? (event?.shiftKey ? 'window' : 'split') : 'tab';
+			}
+		}
+		return linkDest;
+	}
+
+	/**
 	 * Handles the link provided.
 	 * @param linkHref What the link is for.
 	 * @param linkAttr Attributes of the link.
+	 * @param event MouseEvent (if link was clicked) to check if modifiers were pressed
 	 */
-	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr) {
+	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr, event?: MouseEvent) {
 
 		if (linkAttr.hasVars) {
 			let activeFile = this.app.workspace.getActiveFile();
@@ -755,7 +774,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// it's an internal link (note); try to open it
 				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
 				debugLog("- openLinkText: ", linkHref, " from: ", activeFile);
-				this.app.workspace.openLinkText(linkHref, activeFile);
+				this.app.workspace.openLinkText(linkHref, activeFile, this.getLinkDest(event));
 				break;
 			case 'uri':
 				if (isValidUri(linkHref)) {
@@ -765,7 +784,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				else {
 					// as fallback, treat it as internal note
 					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					this.app.workspace.openLinkText(linkHref, activeFile);
+					this.app.workspace.openLinkText(linkHref, activeFile, this.getLinkDest(event));
 				}
 				break;
 		}
