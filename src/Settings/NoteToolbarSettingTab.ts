@@ -158,7 +158,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			this.plugin.settings.toolbars.forEach(
 				(toolbarItem, index) => {
 					new Setting(toolbarListDiv)
-						.setName(toolbarItem.name)
+						.setName(toolbarItem.name ? toolbarItem.name : "⚠️ Toolbar name not set")
 						.setDesc(this.createToolbarPreviewFr(toolbarItem.items))
 						.addButton((button: ButtonComponent) => {
 							button
