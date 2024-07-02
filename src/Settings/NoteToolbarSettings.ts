@@ -131,7 +131,14 @@ export interface ToolbarItemLinkAttr {
 	type: LinkType;
 };
 
-export type LinkType = 'command' | 'file' | 'uri';
+export type LinkType = 'command' | 'file' | 'menu' | 'uri';
+
+export const LINK_OPTIONS = {
+	command: "Command",
+	file: "File",
+	menu: "Menu",
+	uri: "URI"
+}
 
 export const POSITION_OPTIONS = {
 	desktop: [
