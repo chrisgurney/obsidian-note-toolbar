@@ -881,10 +881,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
 				const key = p1.trim();
 				if (frontmatter && frontmatter[key] !== undefined) {
+					// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
+					const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
 					// handle the case where the prop might be a list
 					let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-					const linkWrap = /\[\[|\]\]/g; // remove [[ and ]] in case an internal link was passed
-					return (encode ? encodeURIComponent(fm.replace(linkWrap, '')) : fm.replace(linkWrap, ''));
+					return (encode ? encodeURIComponent(fm.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1'));
 				}
 				else {
 					return '';
