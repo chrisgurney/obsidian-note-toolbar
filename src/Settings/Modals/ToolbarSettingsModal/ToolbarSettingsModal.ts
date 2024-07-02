@@ -1,13 +1,14 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS } from '../../NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from '../../NoteToolbarSettings';
 import { NoteToolbarSettingTab } from '../../NoteToolbarSettingTab';
 import { DeleteModal } from '../DeleteModal';
 import { CommandSuggester } from '../../Suggesters/CommandSuggester';
 import { IconSuggestModal } from '../IconSuggestModal';
 import { FileSuggester } from '../../Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
+import { ToolbarSuggester } from 'src/Settings/Suggesters/ToolbarSuggester';
 
 export default class ToolbarSettingsModal extends Modal {
 
@@ -594,7 +595,7 @@ export default class ToolbarSettingsModal extends Modal {
 		const s1t = new Setting(linkSelector)
 			.addDropdown((dropdown) =>
 				dropdown
-					.addOptions({command: "Command", file: "File", uri: "URI"})
+					.addOptions(LINK_OPTIONS)
 					.setValue(toolbarItem.linkAttr.type)
 					.onChange(async (value) => {
 						let itemRow = this.getItemRowElById(rowId);
@@ -608,6 +609,9 @@ export default class ToolbarSettingsModal extends Modal {
 									break;
 								case 'file':
 									this.getLinkSetting('file', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
+									break;
+								case 'menu':
+									this.getLinkSetting('menu', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
 									break;
 								case 'uri':
 									this.getLinkSetting('uri', itemLinkFieldDiv, toolbarItem, toolbarItem.link, uriFieldHelp);
@@ -718,7 +722,7 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	getLinkSetting(
-		type: 'command' | 'file' | 'uri', 
+		type: 'command' | 'file' | 'menu' | 'uri', 
 		fieldDiv: HTMLDivElement, 
 		toolbarItem: ToolbarItemSettings, 
 		value: string,
@@ -768,6 +772,19 @@ export default class ToolbarSettingsModal extends Modal {
 									await this.plugin.saveSettings();
 								}									
 							}, 750))
+					});
+				break;
+			case 'menu':
+				const menuSetting = new Setting(fieldDiv)
+					.setClass("note-toolbar-setting-item-field-link")
+					.addSearch((cb) => {
+						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+						cb.setPlaceholder("Toolbar")
+							.setValue(toolbarItem.link)
+							.onChange(debounce(async (value) => {
+								toolbarItem.link = value;
+								await this.plugin.saveSettings();
+							}, 250));
 					});
 				break;
 			case 'uri': 
