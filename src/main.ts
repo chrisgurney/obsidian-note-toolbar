@@ -67,7 +67,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * removes all toolbars.
 	 */
 	async onunload() {
-		// TODO: is this necessary?
 		this.removeAllToolbars();
 		debugLog('UNLOADED');
 	}
@@ -724,7 +723,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 			let currentIndex = visibleItems.indexOf(activeDocument.activeElement?.parentElement as HTMLElement);
 
-			// only use preventDefault within these cases, as we want to allow for tabbing out of the toolbar
 			switch (e.key) {
 				case 'ArrowRight':
 				case 'ArrowDown':
@@ -983,11 +981,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	private getPropsEl(): HTMLElement | null {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		// TODO: remove; leaving here until rendering issues are fully sorted
-		// let propertiesContainer = activeDocument.querySelector('.workspace-tab-container > .mod-active .metadata-container');
-		// let propertiesContainer = this.app.workspace.activeEditor?.contentEl.querySelector('.metadata-container');
-		// let propertiesContainer = currentView?.contentEl.querySelector('.metadata-container');
-		// let propertiesContainer = this.app.workspace.containerEl.querySelector('.cm-editor > .metadata-container');
 		let propertiesContainer = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
 		debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
 		return propertiesContainer;
@@ -1082,8 +1075,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				existingToolbarEl = null;
 			}
 
-			// TODO: if there's a setting to rerender the matchingToolbar (e.g., the names have vars), we can removeActiveToolbar
-			
 		}
 		else {
 			debugLog("- no existing toolbar");
@@ -1323,7 +1314,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	async saveSettings(): Promise<void> {
 		await this.saveData(this.settings);
 
-		// TODO: update the toolbar instead of removing and re-adding to the DOM?
 		await this.removeActiveToolbar();
 		await this.renderToolbarForActiveFile();
 
