@@ -960,7 +960,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
 					// handle the case where the prop might be a list
 					let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-					return (encode ? encodeURIComponent(fm.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1'));
+					return (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm?.replace(linkWrap, '$1'));
 				}
 				else {
 					return '';
