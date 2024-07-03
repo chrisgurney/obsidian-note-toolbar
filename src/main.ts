@@ -537,7 +537,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let itemSetting = toolbar.items[index];
 			let itemElHref = itemEl.getAttribute("href");
-			debugLog(itemEl, "should correspond to setting:", itemSetting);
+			// debugLog(itemEl, "should correspond to setting:", itemSetting);
 			if (itemElHref === itemSetting.link) {
 
 				// if link resolves to nothing, there's no need to display the item
