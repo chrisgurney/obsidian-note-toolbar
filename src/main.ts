@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, PaneType, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType } from './Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, getPosition } from './Utils/Utils';
+import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, hasVars } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -189,12 +189,15 @@ export default class NoteToolbarPlugin extends Plugin {
 		// remove existing toolbar if needed
 		let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
 
-		// render the toolbar if we have one, and we don't have an existing toolbar to keep
-		if (matchingToolbar && toolbarRemoved) {
-			debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
-			this.renderToolbar(matchingToolbar);
+		if (matchingToolbar) {
+			// render the toolbar if we have one, and we don't have an existing toolbar to keep
+			if (toolbarRemoved) {
+				debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
+				await this.renderToolbar(matchingToolbar);	
+			}
+			await this.updateToolbar(matchingToolbar, file);
 		}
-		
+
 	}
 
 	/**
@@ -374,10 +377,12 @@ export default class NoteToolbarPlugin extends Plugin {
 					let itemLabel = toolbarItem.createSpan();
 					this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
 					itemLabel.innerText = item.label;
+					itemLabel.setAttribute('id', 'label');
 				}
 				else {
 					this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
 					toolbarItem.innerText = item.label;
+					toolbarItem.setAttribute('id', 'label');
 				}
 			}
 			else {
@@ -498,6 +503,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param mbVisibile true if component is visible on mobile
 	 */
 	setComponentDisplayClass(element: HTMLElement, dkVisible: boolean, mbVisibile: boolean): void {
+		// remove any display classes in case they were set elsewhere
+		element.removeClasses(['hide', 'hide-on-desktop', 'hide-on-mobile']);
 		if (!dkVisible && !mbVisibile) {
 			element.addClass('hide');
 		} else {
@@ -505,6 +512,57 @@ export default class NoteToolbarPlugin extends Plugin {
 			!mbVisibile && element.addClass('hide-on-mobile');
 			// !tabVisible && element.addClass('hide-on-tablet');
 		}
+	}
+
+	/**
+	 * Updates any toolbar elements that use properties, including labels and tooltips.
+	 * If the item resolves to a URI that's empty, the item is hidden.
+	 * @param toolbar ToolbarSettings to get values from.
+	 * @param activeFile TFile to update toolbar for.
+	 */
+	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile) {
+
+		let toolbarEl = this.getToolbarEl();
+		debugLog("updateToolar()", toolbarEl);
+
+		// if we have a toolbarEl, double-check toolbar's name and updated stamp are as provided
+		let toolbarElName = toolbarEl?.getAttribute("data-name");
+		let toolbarElUpdated = toolbarEl?.getAttribute("data-updated");
+		if (toolbarEl === null || toolbar.name !== toolbarElName || toolbar.updated !== toolbarElUpdated) {
+			return;
+		}
+
+		// iterate over the item elements of this toolbarEl
+		let toolbarItemEls = toolbarEl.querySelectorAll('.callout-content > ul > li > span');
+		toolbarItemEls.forEach((itemEl: HTMLElement, index) => {
+
+			let itemSetting = toolbar.items[index];
+			let itemElHref = itemEl.getAttribute("href");
+			debugLog(itemEl, "should correspond to setting:", itemSetting);
+			if (itemElHref === itemSetting.link) {
+
+				// if link resolves to nothing, there's no need to display the item
+				if (hasVars(itemSetting.link) && this.replaceVars(itemSetting.link, activeFile, false) === "") {
+					// FIXME: don't think this is being updated when prop goes from empty to having a value
+					itemEl.addClass('hide');
+					return;
+				}
+
+				// update tooltip + label
+				if (hasVars(itemSetting.tooltip)) {
+					let newTooltip = this.replaceVars(itemSetting.tooltip, activeFile, false);
+					setTooltip(itemEl, newTooltip, { placement: "top" });
+				}
+				if (hasVars(itemSetting.label)) {
+					let newLabel = this.replaceVars(itemSetting.label, activeFile, false);
+					let itemElLabel = itemEl.querySelector('#label');
+					itemElLabel?.setText(newLabel);
+				}
+
+			}
+
+		});
+
 	}
 
 	/*************************************************************************
