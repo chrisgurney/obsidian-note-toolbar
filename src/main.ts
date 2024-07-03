@@ -555,6 +555,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (hasVars(itemSetting.label)) {
 					let newLabel = this.replaceVars(itemSetting.label, activeFile, false);
 					let itemElLabel = itemEl.querySelector('#label');
+					// FIXME: should remove the element altogether if snewLabel is empty, but will need to add it back
 					itemElLabel?.setText(newLabel);
 				}
 
@@ -951,22 +952,20 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		// have to get this at run/click-time, as file or metadata may not have changed
 		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
-		if (frontmatter) {
-			// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-			s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
-				const key = p1.trim();
-				if (frontmatter && frontmatter[key] !== undefined) {
-					// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
-					const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
-					// handle the case where the prop might be a list
-					let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-					return (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm?.replace(linkWrap, '$1'));
-				}
-				else {
-					return '';
-				}
-			});
-		}
+		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
+		s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
+			const key = p1.trim();
+			if (frontmatter && frontmatter[key] !== undefined) {
+				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
+				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
+				// handle the case where the prop might be a list
+				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
+				return (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm?.replace(linkWrap, '$1'));
+			}
+			else {
+				return '';
+			}
+		});
 		return s;
 
 	}
