@@ -42,7 +42,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 					if (toolbar) {
-						this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
+						this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { menu.showAtPosition(event); });
 					}
 				}
 			});
@@ -448,16 +448,24 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar 
 	 * @returns Menu with toolbar's items
 	 */
-	async renderToolbarAsMenu(toolbar: ToolbarSettings): Promise<Menu> {
+	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile): Promise<Menu> {
 
 		let menu = new Menu();
 		toolbar.items.forEach((toolbarItem, index) => {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if (showOnMobile) {
+				// don't show the item if the link has variables and resolves to nothing
+				if (hasVars(toolbarItem.link) && this.replaceVars(toolbarItem.link, activeFile, false) === "") {
+					return;
+				}
+				// replace variables in labels (or tooltip, if no label set)
+				let title = toolbarItem.label ? 
+					(hasVars(toolbarItem.label) ? this.replaceVars(toolbarItem.label, activeFile, false) : toolbarItem.label) : 
+					(hasVars(toolbarItem.tooltip) ? this.replaceVars(toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
 				menu.addItem((item) => {
 					item
 						.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
-						.setTitle(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip)
+						.setTitle(title)
 						.onClick(async (menuEvent) => {
 							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
 							await this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
@@ -697,7 +705,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 			if (toolbar) {
-				this.renderToolbarAsMenu(toolbar).then(menu => { 
+				this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
 					let elemRect = posAtElement.getBoundingClientRect();
 					// from inspecting how Obsidian handles the navigation bar
 					menu.showAtPosition({
