@@ -541,10 +541,14 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (itemElHref === itemSetting.link) {
 
 				// if link resolves to nothing, there's no need to display the item
-				if (hasVars(itemSetting.link) && this.replaceVars(itemSetting.link, activeFile, false) === "") {
-					// FIXME: don't think this is being updated when prop goes from empty to having a value
-					itemEl.addClass('hide');
-					return;
+				if (hasVars(itemSetting.link)) {
+					if (this.replaceVars(itemSetting.link, activeFile, false) === "") {
+						itemEl.parentElement?.addClass('hide'); // hide the containing li element
+						return;
+					}
+					else {
+						itemEl.parentElement?.removeClass('hide'); // unhide the containing li element
+					}
 				}
 
 				// update tooltip + label
@@ -555,8 +559,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (hasVars(itemSetting.label)) {
 					let newLabel = this.replaceVars(itemSetting.label, activeFile, false);
 					let itemElLabel = itemEl.querySelector('#label');
-					// FIXME: should remove the element altogether if snewLabel is empty, but will need to add it back
-					itemElLabel?.setText(newLabel);
+					if (newLabel) {
+						itemElLabel?.removeClass('hide');
+						itemElLabel?.setText(newLabel);
+					}
+					else {
+						itemElLabel?.addClass('hide');
+						itemElLabel?.setText('');
+					}
 				}
 
 			}
@@ -960,7 +970,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
 				// handle the case where the prop might be a list
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-				return (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm?.replace(linkWrap, '$1'));
+				return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
 			}
 			else {
 				return '';
