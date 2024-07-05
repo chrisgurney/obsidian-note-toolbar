@@ -472,7 +472,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						.setTitle(title)
 						.onClick(async (menuEvent) => {
 							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-							await this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
+							await this.handleLink(toolbarItem.link, toolbarItem.linkAttr, menuEvent);
 						});
 					});
 			}
@@ -812,11 +812,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 	
 	/**
-	 * Determines where to open a link given any modifiers held on click.
-	 * @param event MouseEvent
+	 * Determines where to open a link given any modifiers held on link activation.
+	 * @param event MouseEvent or KeyboardEvent
 	 * @returns PaneType or undefined
 	 */
-	getLinkDest(event?: MouseEvent): PaneType | undefined {
+	getLinkDest(event: MouseEvent | KeyboardEvent): PaneType | undefined {
 		let linkDest: PaneType | undefined = undefined;
 		// check if modifier keys were pressed on click, to fix #91
 		if (event) {
@@ -833,12 +833,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Handles the link provided.
 	 * @param linkHref What the link is for.
 	 * @param linkAttr Attributes of the link.
-	 * @param event MouseEvent (if link was clicked) to check if modifiers were pressed
+	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 */
-	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr, event?: MouseEvent) {
+	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr, event: MouseEvent | KeyboardEvent) {
+
+		let activeFile = this.app.workspace.getActiveFile();
 
 		if (linkAttr.hasVars) {
-			let activeFile = this.app.workspace.getActiveFile();
 			// only replace vars in URIs; might consider other substitution in future
 			linkHref = this.replaceVars(linkHref, activeFile, false);
 			debugLog('- uri vars replaced: ', linkHref);
@@ -851,9 +852,27 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 			case 'file':
 				// it's an internal link (note); try to open it
-				let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-				debugLog("- openLinkText: ", linkHref, " from: ", activeFile);
-				this.app.workspace.openLinkText(linkHref, activeFile, this.getLinkDest(event));
+				let activeFilePath = activeFile ? activeFile.path : '';
+				debugLog("- openLinkText: ", linkHref, " from: ", activeFilePath);
+				this.app.workspace.openLinkText(linkHref, activeFilePath, this.getLinkDest(event));
+				break;
+			case 'menu':
+				let toolbar = this.getToolbarSettings(linkHref);
+				debugLog("menu item for toolbar", toolbar);
+				if (toolbar && activeFile) {
+					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
+						let clickedEl = event?.targetNode as HTMLLinkElement;
+						let elemRect = clickedEl.getBoundingClientRect();
+						// from inspecting how Obsidian handles the navigation bar
+						menu.showAtPosition({
+							x: elemRect.x,
+							y: elemRect.bottom,
+							width: elemRect.width,
+							overlap: true,
+							left: false
+						});
+					});
+				}
 				break;
 			case 'uri':
 				if (isValidUri(linkHref)) {
