@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, PaneType, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType } from './Settings/NoteToolbarSettings';
+import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, hasVars } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 
@@ -790,7 +790,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (linkHref != null) {
 			
 			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
-			linkType ? (['command', 'file', 'uri'].includes(linkType) ? event.preventDefault() : undefined) : undefined
+			linkType ? (linkType in LINK_OPTIONS ? event.preventDefault() : undefined) : undefined
 
 			debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
 

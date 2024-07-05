@@ -723,7 +723,7 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	getLinkSetting(
-		type: 'command' | 'file' | 'menu' | 'uri', 
+		type: LinkType, 
 		fieldDiv: HTMLDivElement, 
 		toolbarItem: ToolbarItemSettings, 
 		value: string,
