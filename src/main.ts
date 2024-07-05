@@ -42,7 +42,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 					if (toolbar) {
-						this.renderToolbarAsMenu(toolbar).then(menu => { menu.showAtPosition(event); });
+						this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { menu.showAtPosition(event); });
 					}
 				}
 			});
@@ -448,16 +448,24 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar 
 	 * @returns Menu with toolbar's items
 	 */
-	async renderToolbarAsMenu(toolbar: ToolbarSettings): Promise<Menu> {
+	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile): Promise<Menu> {
 
 		let menu = new Menu();
 		toolbar.items.forEach((toolbarItem, index) => {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if (showOnMobile) {
+				// don't show the item if the link has variables and resolves to nothing
+				if (hasVars(toolbarItem.link) && this.replaceVars(toolbarItem.link, activeFile, false) === "") {
+					return;
+				}
+				// replace variables in labels (or tooltip, if no label set)
+				let title = toolbarItem.label ? 
+					(hasVars(toolbarItem.label) ? this.replaceVars(toolbarItem.label, activeFile, false) : toolbarItem.label) : 
+					(hasVars(toolbarItem.tooltip) ? this.replaceVars(toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
 				menu.addItem((item) => {
 					item
 						.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
-						.setTitle(toolbarItem.label ? toolbarItem.label : toolbarItem.tooltip)
+						.setTitle(title)
 						.onClick(async (menuEvent) => {
 							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
 							await this.handleLink(toolbarItem.link, toolbarItem.linkAttr);
@@ -541,10 +549,14 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (itemElHref === itemSetting.link) {
 
 				// if link resolves to nothing, there's no need to display the item
-				if (hasVars(itemSetting.link) && this.replaceVars(itemSetting.link, activeFile, false) === "") {
-					// FIXME: don't think this is being updated when prop goes from empty to having a value
-					itemEl.addClass('hide');
-					return;
+				if (hasVars(itemSetting.link)) {
+					if (this.replaceVars(itemSetting.link, activeFile, false) === "") {
+						itemEl.parentElement?.addClass('hide'); // hide the containing li element
+						return;
+					}
+					else {
+						itemEl.parentElement?.removeClass('hide'); // unhide the containing li element
+					}
 				}
 
 				// update tooltip + label
@@ -555,8 +567,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (hasVars(itemSetting.label)) {
 					let newLabel = this.replaceVars(itemSetting.label, activeFile, false);
 					let itemElLabel = itemEl.querySelector('#label');
-					// FIXME: should remove the element altogether if snewLabel is empty, but will need to add it back
-					itemElLabel?.setText(newLabel);
+					if (newLabel) {
+						itemElLabel?.removeClass('hide');
+						itemElLabel?.setText(newLabel);
+					}
+					else {
+						itemElLabel?.addClass('hide');
+						itemElLabel?.setText('');
+					}
 				}
 
 			}
@@ -687,7 +705,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 			if (toolbar) {
-				this.renderToolbarAsMenu(toolbar).then(menu => { 
+				this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
 					let elemRect = posAtElement.getBoundingClientRect();
 					// from inspecting how Obsidian handles the navigation bar
 					menu.showAtPosition({
@@ -960,7 +978,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
 				// handle the case where the prop might be a list
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-				return (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm?.replace(linkWrap, '$1'));
+				return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
 			}
 			else {
 				return '';

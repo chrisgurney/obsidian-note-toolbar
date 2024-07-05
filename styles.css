@@ -404,6 +404,9 @@ body {
             & div.list-bullet {
                 display: none; /* remove for reading mode */
             }
+            &.hide {
+                display: none;
+            }
             &.hide-on-mobile {
                 .is-mobile & {
                     display: none;
