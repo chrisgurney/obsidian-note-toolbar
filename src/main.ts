@@ -457,7 +457,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let menu = new Menu();
 		toolbar.items.forEach((toolbarItem, index) => {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
-			if (showOnMobile) {
+			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// don't show the item if the link has variables and resolves to nothing
 				if (hasVars(toolbarItem.link) && this.replaceVars(toolbarItem.link, activeFile, false) === "") {
 					return;
