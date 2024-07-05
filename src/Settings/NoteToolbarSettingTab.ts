@@ -157,7 +157,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
 				(toolbarItem, index) => {
-					new Setting(toolbarListDiv)
+					let toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbarItem.name ? toolbarItem.name : "⚠️ Toolbar name not set")
 						.setDesc(this.createToolbarPreviewFr(toolbarItem.items))
 						.addButton((button: ButtonComponent) => {
@@ -169,6 +169,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									this.openSettingsModal(toolbarItem);
 								});
 							});
+					toolbarItem.name ? undefined : toolbarListItemSetting.nameEl.addClass('mod-warning');
 				});
 
 			itemsListContainer.appendChild(toolbarListDiv);
