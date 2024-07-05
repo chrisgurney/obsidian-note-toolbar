@@ -42,7 +42,9 @@ export default class NoteToolbarPlugin extends Plugin {
 					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 					if (toolbar) {
-						this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { menu.showAtPosition(event); });
+						this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
+							menu.showAtPosition(event); 
+						});
 					}
 				}
 			});
@@ -445,10 +447,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	/**
 	 * Renders the given toolbar as a menu and returns it.
-	 * @param toolbar 
+	 * @param toolbar ToolbarSettings to show menu for.
+	 * @param activeFile TFile to show menu for.
+	 * @param showEditToolbar set true to show Edit Toolbar link in menu.
 	 * @returns Menu with toolbar's items
 	 */
-	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile): Promise<Menu> {
+	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile, showEditToolbar: boolean = false): Promise<Menu> {
 
 		let menu = new Menu();
 		toolbar.items.forEach((toolbarItem, index) => {
@@ -474,7 +478,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		});
 
-		if (this.settings.showEditInFabMenu) {
+		if (showEditToolbar) {
 			menu.addSeparator();
 			menu.addItem((item) => {
 				item
@@ -705,7 +709,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 			if (toolbar) {
-				this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
 					let elemRect = posAtElement.getBoundingClientRect();
 					// from inspecting how Obsidian handles the navigation bar
 					menu.showAtPosition({
