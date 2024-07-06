@@ -584,14 +584,6 @@ export default class ToolbarSettingsModal extends Modal {
 		let linkContainer = createDiv();
 		linkContainer.className = "note-toolbar-setting-item-link-container";
 
-		let uriFieldHelp = createDiv();
-		uriFieldHelp.addClass("note-toolbar-setting-field-help");
-		uriFieldHelp.appendChild(
-			learnMoreFr(
-				"Tip: Use note properties in URIs.",
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
-			);
-
 		let linkSelector = createDiv();
 		const s1t = new Setting(linkSelector)
 			.addDropdown((dropdown) =>
@@ -604,20 +596,7 @@ export default class ToolbarSettingsModal extends Modal {
 						if (itemLinkFieldDiv) {
 							toolbarItem.linkAttr.type = value as LinkType;
 							itemLinkFieldDiv.empty();
-							switch (value) {
-								case 'command':
-									this.getLinkSetting('command', itemLinkFieldDiv, toolbarItem, '');
-									break;
-								case 'file':
-									this.getLinkSetting('file', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
-									break;
-								case 'menu':
-									this.getLinkSetting('menu', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
-									break;
-								case 'uri':
-									this.getLinkSetting('uri', itemLinkFieldDiv, toolbarItem, toolbarItem.link, uriFieldHelp);
-									break;
-							}
+							this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
 							await this.plugin.saveSettings();
 						}
 					})
@@ -625,9 +604,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let linkField = createDiv();
 		linkField.className = "note-toolbar-setting-item-link-field";
-		this.getLinkSetting(
-			toolbarItem.linkAttr.type, linkField, toolbarItem, toolbarItem.link, 
-			toolbarItem.linkAttr.type === 'uri' ? uriFieldHelp : undefined);
+		this.getLinkSettingForType(toolbarItem.linkAttr.type, linkField, toolbarItem);
 		linkContainer.append(linkSelector);
 		linkContainer.append(linkField);
 
@@ -727,8 +704,15 @@ export default class ToolbarSettingsModal extends Modal {
 		fieldDiv: HTMLDivElement, 
 		toolbarItem: ToolbarItemSettings, 
 		value: string,
-		helpText?: HTMLDivElement)
+		helpTextFr?: DocumentFragment)
 	{
+
+		let fieldHelp = undefined;
+		if (helpTextFr) {
+			fieldHelp = createDiv();
+			fieldHelp.addClass("note-toolbar-setting-field-help");
+			fieldHelp.append(helpTextFr);
+		}
 
 		debugLog("getLinkSetting");
 		switch(type) {
@@ -787,6 +771,7 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							}, 250));
 					});
+				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
 			case 'uri': 
 				const uriSetting = new Setting(fieldDiv)
@@ -804,10 +789,39 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							}, 750))
 						);
-				helpText ? uriSetting.controlEl.insertAdjacentElement('beforeend', helpText) : undefined;
+				fieldHelp ? uriSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
 		}
 
+	}
+
+	getLinkSettingForType(
+		type: LinkType, 
+		fieldDiv: HTMLDivElement, 
+		toolbarItem: ToolbarItemSettings
+	) {
+		switch (type) {
+			case 'command':
+				this.getLinkSetting('command', fieldDiv, toolbarItem, '');
+				break;
+			case 'file':
+				this.getLinkSetting('file', fieldDiv, toolbarItem, toolbarItem.link);
+				break;
+			case 'menu':
+				this.getLinkSetting('menu', fieldDiv, toolbarItem, toolbarItem.link, 
+					learnMoreFr(
+						"Select a toolbar to open as a menu.",
+						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
+				);
+				break;
+			case 'uri':
+				this.getLinkSetting('uri', fieldDiv, toolbarItem, toolbarItem.link, 
+					learnMoreFr(
+						"Tip: Use note properties in URIs.",
+						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
+				);
+				break;
+		}
 	}
 
 	/**
