@@ -1,4 +1,5 @@
-import { ComponentType, ItemViewContext, PlatformType, ViewType, Visibility } from "src/Settings/NoteToolbarSettings";
+import { setIcon } from "obsidian";
+import { ComponentType, ItemViewContext, PlatformType, ToolbarItemSettings, ViewType, Visibility } from "src/Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -132,6 +133,42 @@ export function addComponentVisibility(platform: { allViews?: { components: Comp
  */
 export function debugLog(message?: any, ...optionalParams: any[]): void {
 	DEBUG && console.log(message, ...optionalParams);
+}
+
+/**
+ * Constructs a preview of the given toolbar, including the icons used.
+ * @param toolbarItems Array of ToolbarItemSettings to display in the preview.
+ * @returns DocumentFragment
+ */
+export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): DocumentFragment {
+	let toolbarFr: DocumentFragment = document.createDocumentFragment();
+	if (toolbarItems.length > 0) {
+		toolbarItems
+			.filter((item: ToolbarItemSettings) => {
+				// ignore all empty toolbar items (no label or icon)
+				return ((item.label === "" && item.icon === "") ? false : true);
+			})
+			.map(item => {
+				let itemFr = createDiv();
+				itemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
+				let iconFr = createSpan();
+				let labelFr = createSpan();
+				if (item.icon) {
+					setIcon(iconFr, item.icon);
+					toolbarFr.append(iconFr);
+				}
+				if (item.label) {
+					labelFr.textContent = item.label;
+					toolbarFr.append(labelFr);
+				}
+				itemFr.append(iconFr, labelFr);
+				toolbarFr.append(itemFr);
+			});
+	}
+	else {
+		toolbarFr = emptyMessageFr("No items. Edit this toolbar to add items.");
+	}
+	return toolbarFr;
 }
 
 /**
