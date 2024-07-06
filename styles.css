@@ -842,18 +842,6 @@ body {
     font-style: italic;
 }
 
-.note-toolbar-setting-toolbar-list {
-    & svg {
-        height: var(--font-ui-smaller);
-        width: var(--font-ui-smaller);
-        display: block;
-    }
-    & .setting-item-description {
-        display: flex;
-        flex-wrap: wrap;
-    }
-}
-
 .note-toolbar-setting-toolbar-list-preview-item {
     align-items: center;
     display: flex;
@@ -1124,8 +1112,19 @@ body {
     padding-top: var(--size-4-1);
     line-height: var(--line-height-tight);
     display: block;
+    text-align: start;
     & a:focus-within {
         box-shadow: 0 0 0 2px;
+    }
+}
+
+.note-toolbar-setting-tbar-preview {
+    display: flex;
+    flex-wrap: wrap;
+    & svg {
+        height: var(--font-ui-smaller);
+        width: var(--font-ui-smaller);
+        display: block;
     }
 }
 

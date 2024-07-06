@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from '../main';
-import { arraymove, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'src/Utils/Utils';
+import { arraymove, createToolbarPreviewFr, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'src/Utils/Utils';
 import ToolbarSettingsModal from './Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 import { FolderMapping, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from './NoteToolbarSettings';
 import { FolderSuggester } from './Suggesters/FolderSuggester';
@@ -154,12 +154,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 		else {		
 			let toolbarListDiv = createDiv();
-			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
 				(toolbarItem, index) => {
-					new Setting(toolbarListDiv)
+					let toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbarItem.name ? toolbarItem.name : "⚠️ Toolbar name not set")
-						.setDesc(this.createToolbarPreviewFr(toolbarItem.items))
+						.setDesc(createToolbarPreviewFr(toolbarItem.items))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setTooltip("Update this toolbar's items")
@@ -169,6 +168,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									this.openSettingsModal(toolbarItem);
 								});
 							});
+					toolbarItem.name ? undefined : toolbarListItemSetting.nameEl.addClass('mod-warning');
 				});
 
 			itemsListContainer.appendChild(toolbarListDiv);
@@ -550,42 +550,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
-
-	/**
-	 * Constructs a preview of the given toolbar, including the icons used.
-	 * @param toolbarItems Array of ToolbarItemSettings to display in the preview.
-	 * @returns DocumentFragment
-	 */
-	private createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): DocumentFragment {
-		let toolbarFr: DocumentFragment = document.createDocumentFragment();
-		if (toolbarItems.length > 0) {
-			toolbarItems
-				.filter((item: ToolbarItemSettings) => {
-					// ignore all empty toolbar items (no label or icon)
-					return ((item.label === "" && item.icon === "") ? false : true);
-				})
-		 		.map(item => {
-					let itemFr = createDiv();
-					itemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
-					let iconFr = createSpan();
-					let labelFr = createSpan();
-					if (item.icon) {
-						setIcon(iconFr, item.icon);
-						toolbarFr.append(iconFr);
-					}
-					if (item.label) {
-						labelFr.textContent = item.label;
-						toolbarFr.append(labelFr);
-					}
-					itemFr.append(iconFr, labelFr);
-					toolbarFr.append(itemFr);
-				});
-		}
-		else {
-			toolbarFr = emptyMessageFr("No items. Edit this toolbar to add items.");
-		}
-		return toolbarFr;
-	}
 
 	getIndexByRowId(rowId: string): number {
 		const list = this.getItemListEls();

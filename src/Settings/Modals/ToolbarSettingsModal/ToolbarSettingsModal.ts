@@ -1,13 +1,14 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PlatformType, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS } from '../../NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from '../../NoteToolbarSettings';
 import { NoteToolbarSettingTab } from '../../NoteToolbarSettingTab';
 import { DeleteModal } from '../DeleteModal';
 import { CommandSuggester } from '../../Suggesters/CommandSuggester';
 import { IconSuggestModal } from '../IconSuggestModal';
 import { FileSuggester } from '../../Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
+import { ToolbarSuggester } from 'src/Settings/Suggesters/ToolbarSuggester';
 
 export default class ToolbarSettingsModal extends Modal {
 
@@ -69,6 +70,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayItemList(settingsDiv);
 		this.displayPositionSetting(settingsDiv);
 		this.displayStyleSetting(settingsDiv);
+		this.displayUsageSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
 		this.contentEl.appendChild(settingsDiv);
@@ -582,19 +584,11 @@ export default class ToolbarSettingsModal extends Modal {
 		let linkContainer = createDiv();
 		linkContainer.className = "note-toolbar-setting-item-link-container";
 
-		let uriFieldHelp = createDiv();
-		uriFieldHelp.addClass("note-toolbar-setting-field-help");
-		uriFieldHelp.appendChild(
-			learnMoreFr(
-				"Tip: Use note properties in URIs.",
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
-			);
-
 		let linkSelector = createDiv();
 		const s1t = new Setting(linkSelector)
 			.addDropdown((dropdown) =>
 				dropdown
-					.addOptions({command: "Command", file: "File", uri: "URI"})
+					.addOptions(LINK_OPTIONS)
 					.setValue(toolbarItem.linkAttr.type)
 					.onChange(async (value) => {
 						let itemRow = this.getItemRowElById(rowId);
@@ -602,17 +596,7 @@ export default class ToolbarSettingsModal extends Modal {
 						if (itemLinkFieldDiv) {
 							toolbarItem.linkAttr.type = value as LinkType;
 							itemLinkFieldDiv.empty();
-							switch (value) {
-								case 'command':
-									this.getLinkSetting('command', itemLinkFieldDiv, toolbarItem, '');
-									break;
-								case 'file':
-									this.getLinkSetting('file', itemLinkFieldDiv, toolbarItem, toolbarItem.link);
-									break;
-								case 'uri':
-									this.getLinkSetting('uri', itemLinkFieldDiv, toolbarItem, toolbarItem.link, uriFieldHelp);
-									break;
-							}
+							this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
 							await this.plugin.saveSettings();
 						}
 					})
@@ -620,9 +604,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let linkField = createDiv();
 		linkField.className = "note-toolbar-setting-item-link-field";
-		this.getLinkSetting(
-			toolbarItem.linkAttr.type, linkField, toolbarItem, toolbarItem.link, 
-			toolbarItem.linkAttr.type === 'uri' ? uriFieldHelp : undefined);
+		this.getLinkSettingForType(toolbarItem.linkAttr.type, linkField, toolbarItem);
 		linkContainer.append(linkSelector);
 		linkContainer.append(linkField);
 
@@ -718,12 +700,19 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	getLinkSetting(
-		type: 'command' | 'file' | 'uri', 
+		type: LinkType, 
 		fieldDiv: HTMLDivElement, 
 		toolbarItem: ToolbarItemSettings, 
 		value: string,
-		helpText?: HTMLDivElement)
+		helpTextFr?: DocumentFragment)
 	{
+
+		let fieldHelp = undefined;
+		if (helpTextFr) {
+			fieldHelp = createDiv();
+			fieldHelp.addClass("note-toolbar-setting-field-help");
+			fieldHelp.append(helpTextFr);
+		}
 
 		debugLog("getLinkSetting");
 		switch(type) {
@@ -770,6 +759,37 @@ export default class ToolbarSettingsModal extends Modal {
 							}, 750))
 					});
 				break;
+			case 'menu':
+				const menuSetting = new Setting(fieldDiv)
+					.setClass("note-toolbar-setting-item-field-link")
+					.addSearch((cb) => {
+						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+						cb.setPlaceholder("Toolbar")
+							.setValue(toolbarItem.link)
+							.onChange(debounce(async (value) => {
+								toolbarItem.link = value;
+								await this.plugin.saveSettings();
+								// update help text with toolbar preview or default if none selected
+								let menuToolbar = this.plugin.getToolbarSettings(toolbarItem.link);
+								let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
+								let helpTextFr = document.createDocumentFragment();
+								menuPreviewFr 
+									? helpTextFr.append(menuPreviewFr) 
+									: helpTextFr.append(
+										learnMoreFr(
+											"Select a toolbar to open as a menu.",
+											"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
+									);
+								fieldHelp = createDiv();
+								fieldHelp.addClass("note-toolbar-setting-field-help");
+								fieldHelp.append(helpTextFr);
+								let existingHelp = menuSetting.controlEl.querySelector('.note-toolbar-setting-field-help');
+								existingHelp?.remove();
+								fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+							}, 250));
+					});
+				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+				break;
 			case 'uri': 
 				const uriSetting = new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
@@ -786,10 +806,45 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.saveSettings();
 							}, 750))
 						);
-				helpText ? uriSetting.controlEl.insertAdjacentElement('beforeend', helpText) : undefined;
+				fieldHelp ? uriSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
 		}
 
+	}
+
+	getLinkSettingForType(
+		type: LinkType, 
+		fieldDiv: HTMLDivElement, 
+		toolbarItem: ToolbarItemSettings
+	) {
+		switch (type) {
+			case 'command':
+				this.getLinkSetting('command', fieldDiv, toolbarItem, '');
+				break;
+			case 'file':
+				this.getLinkSetting('file', fieldDiv, toolbarItem, toolbarItem.link);
+				break;
+			case 'menu':
+				let menuToolbar = this.plugin.getToolbarSettings(toolbarItem.link);
+				let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
+				let fieldHelp = document.createDocumentFragment();
+				menuPreviewFr 
+					? fieldHelp.append(menuPreviewFr) 
+					: fieldHelp.append(
+						learnMoreFr(
+							"Select a toolbar to open as a menu.",
+							"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
+					);
+				this.getLinkSetting('menu', fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
+				break;
+			case 'uri':
+				this.getLinkSetting('uri', fieldDiv, toolbarItem, toolbarItem.link, 
+					learnMoreFr(
+						"Tip: Use note properties in URIs.",
+						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
+				);
+				break;
+		}
 	}
 
 	/**
@@ -1001,6 +1056,40 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
+	 * Displays the Usage setting section.
+	 * @param settingsDiv HTMLElement to add the setting to.
+	 */
+	displayUsageSetting(settingsDiv: HTMLElement) {
+
+		let usageDescFr = document.createDocumentFragment();
+		let descLinkFr = usageDescFr.createEl('a', {href: '#', text: "Search for property usage"});
+		let [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(this.toolbar.name);
+
+		usageDescFr.append(
+			`This toolbar is used in ${mappingCount} mapping(s) and ${itemCount} toolbar item(s).`,
+			usageDescFr.createEl("br"),
+			descLinkFr
+		);
+
+		this.plugin.registerDomEvent(descLinkFr, 'click', event => {
+			this.close();
+			// @ts-ignore
+			this.app.setting.close();
+			window.open(this.getToolbarPropSearchUri(this.toolbar.name));
+		});
+
+		let usageSetting = new Setting(settingsDiv)
+			.setName("Usage")
+			.setDesc(usageDescFr)
+			.setHeading();
+		
+		// let iconEl = createSpan();
+		// setIcon(iconEl, 'line-chart');
+		// usageSetting.nameEl.insertAdjacentElement('afterbegin', iconEl);
+
+	}
+
+	/**
 	 * Displays the Delete button.
 	 * @param settingsDiv HTMLElement to add the settings to.
 	 */
@@ -1141,6 +1230,29 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
+
+	/**
+	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
+	 * @param toolbarName name of the toolbar to look for.
+	 * @returns string 'obsidian://' URI.
+	 */
+	getToolbarPropSearchUri(toolbarName: string): string {
+		let searchUri = 'obsidian://search?vault=' + this.app.vault.getName() + '&query=[' + this.plugin.settings.toolbarProp + ': ' + toolbarName + ']';
+		return encodeURI(searchUri);
+	}
+
+	/**
+	 * Search through settings to find out where this toolbar is referenced.
+	 * @param toolbarName name of the toolbar to check usage for.
+	 * @returns mappingCount and itemCount
+	 */
+	getToolbarSettingsUsage(toolbarName: string): [number, number] {
+		let mappingCount = this.plugin.settings.folderMappings.filter(mapping => mapping.toolbar === toolbarName).length;
+		let itemCount = this.plugin.settings.toolbars.reduce((count, toolbar) => {
+			return count + toolbar.items.filter(item => item.link === toolbarName && item.linkAttr.type === 'menu').length;
+		}, 0);
+		return [mappingCount, itemCount];
+	}
 
 	/**
 	 * Returns the visibility menu to display, for the given platform.
