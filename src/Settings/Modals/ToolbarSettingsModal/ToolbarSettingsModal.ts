@@ -769,6 +769,23 @@ export default class ToolbarSettingsModal extends Modal {
 							.onChange(debounce(async (value) => {
 								toolbarItem.link = value;
 								await this.plugin.saveSettings();
+								// update help text with toolbar preview or default if none selected
+								let menuToolbar = this.plugin.getToolbarSettings(toolbarItem.link);
+								let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
+								let helpTextFr = document.createDocumentFragment();
+								menuPreviewFr 
+									? helpTextFr.append(menuPreviewFr) 
+									: helpTextFr.append(
+										learnMoreFr(
+											"Select a toolbar to open as a menu.",
+											"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
+									);
+								fieldHelp = createDiv();
+								fieldHelp.addClass("note-toolbar-setting-field-help");
+								fieldHelp.append(helpTextFr);
+								let existingHelp = menuSetting.controlEl.querySelector('.note-toolbar-setting-field-help');
+								existingHelp?.remove();
+								fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 							}, 250));
 					});
 				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
