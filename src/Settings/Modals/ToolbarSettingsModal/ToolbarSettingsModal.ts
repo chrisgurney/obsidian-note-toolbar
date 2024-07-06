@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from '../../NoteToolbarSettings';
 import { NoteToolbarSettingTab } from '../../NoteToolbarSettingTab';
@@ -808,11 +808,17 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting('file', fieldDiv, toolbarItem, toolbarItem.link);
 				break;
 			case 'menu':
-				this.getLinkSetting('menu', fieldDiv, toolbarItem, toolbarItem.link, 
-					learnMoreFr(
-						"Select a toolbar to open as a menu.",
-						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
-				);
+				let menuToolbar = this.plugin.getToolbarSettings(toolbarItem.link);
+				let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
+				let fieldHelp = document.createDocumentFragment();
+				menuPreviewFr 
+					? fieldHelp.append(menuPreviewFr) 
+					: fieldHelp.append(
+						learnMoreFr(
+							"Select a toolbar to open as a menu.",
+							"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
+					);
+				this.getLinkSetting('menu', fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
 				break;
 			case 'uri':
 				this.getLinkSetting('uri', fieldDiv, toolbarItem, toolbarItem.link, 

@@ -142,6 +142,9 @@ export function debugLog(message?: any, ...optionalParams: any[]): void {
  */
 export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): DocumentFragment {
 	let toolbarFr: DocumentFragment = document.createDocumentFragment();
+	let previewContainer = toolbarFr.createDiv();
+	previewContainer.addClass('note-toolbar-setting-tbar-preview');
+	let itemsFr: DocumentFragment = document.createDocumentFragment();
 	if (toolbarItems.length > 0) {
 		toolbarItems
 			.filter((item: ToolbarItemSettings) => {
@@ -155,19 +158,20 @@ export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): Doc
 				let labelFr = createSpan();
 				if (item.icon) {
 					setIcon(iconFr, item.icon);
-					toolbarFr.append(iconFr);
+					itemsFr.append(iconFr);
 				}
 				if (item.label) {
 					labelFr.textContent = item.label;
-					toolbarFr.append(labelFr);
+					itemsFr.append(labelFr);
 				}
 				itemFr.append(iconFr, labelFr);
-				toolbarFr.append(itemFr);
+				itemsFr.append(itemFr);
 			});
 	}
 	else {
-		toolbarFr = emptyMessageFr("No items. Edit this toolbar to add items.");
+		itemsFr = emptyMessageFr("No items. Edit this toolbar to add items.");
 	}
+	previewContainer.appendChild(itemsFr);
 	return toolbarFr;
 }
 
