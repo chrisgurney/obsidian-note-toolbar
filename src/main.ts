@@ -737,7 +737,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (itemsUl) {
 
 			// not preventing default from 'Escape' for now (I think this helps)
-			e.key ? (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', ' '].includes(e.key) ? e.preventDefault() : undefined) : undefined
+			e.key ? (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', ' '].includes(e.key) ? e.preventDefault() : undefined) : undefined;
 
 			// remove any items that are not visible (i.e., hidden on desktop/mobile) as they are not navigable
 			let items = Array.from(itemsUl.children);
@@ -759,6 +759,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					break;
 				case 'Enter':
 				case ' ':
+					// FIXME? option + meta key modifiers not working here (shift + control work?)
+					//        or put another way: hot keys are not being honored here
 					(activeDocument?.activeElement as HTMLElement).click();
 					break;
 				case 'Escape':
