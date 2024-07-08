@@ -154,6 +154,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 		else {		
 			let toolbarListDiv = createDiv();
+			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
 				(toolbarItem, index) => {
 					let toolbarListItemSetting = new Setting(toolbarListDiv)
