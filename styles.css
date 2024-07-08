@@ -196,7 +196,7 @@ settings:
         format: em
     -
         id: cg-nt-item-padding-y
-        title: 'Items Top + Bottom padding (in em units)'
+        title: 'Items: Top + Bottom padding (in em units)'
         type: variable-number
         default: 0.5
         format: em
