@@ -1,4 +1,4 @@
-import { AbstractInputSuggest, App, TAbstractFile, TFile } from "obsidian";
+import { AbstractInputSuggest, App, TAbstractFile, TFile, TFolder } from "obsidian";
 
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
@@ -14,8 +14,9 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
+        // also include folders in the list of files
         files = abstractFiles.filter((file: TAbstractFile) =>
-            file instanceof TFile && file.path.toLowerCase().includes(lowerCaseInputStr)
+            (file instanceof TFile || file instanceof TFolder) && file.path.toLowerCase().includes(lowerCaseInputStr)
         );
 
         return files;

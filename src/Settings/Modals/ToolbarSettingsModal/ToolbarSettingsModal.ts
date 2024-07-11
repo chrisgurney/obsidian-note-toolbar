@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from '../../NoteToolbarSettings';
@@ -735,15 +735,15 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
 						new FileSuggester(this.app, cb.inputEl);
-						cb.setPlaceholder("Search for file")
+						cb.setPlaceholder("Search for file or folder")
 							.setValue(value)
 							.onChange(debounce(async (value) => {
 								toolbarItem.linkAttr.type = 'file';
 								const file = this.app.vault.getAbstractFileByPath(value);
-								if (!(file instanceof TFile)) {
+								if (!(file instanceof TFile) && !(file instanceof TFolder)) {
 									if (document.getElementById("note-toolbar-item-link-note-error") === null) {
 										let errorDiv = this.containerEl.createEl("div", { 
-											text: "This file does not exist.", 
+											text: "This file or folder does not exist.", 
 											attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-field-error" });
 										cb.inputEl.parentElement?.insertAdjacentElement('afterend', errorDiv);
 										cb.inputEl.parentElement?.addClass('note-toolbar-setting-error');

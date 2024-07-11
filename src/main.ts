@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, PaneType, Platform, Plugin, TFile, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, hasVars } from './Utils/Utils';
@@ -856,7 +856,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				// it's an internal link (note); try to open it
 				let activeFilePath = activeFile ? activeFile.path : '';
 				debugLog("- openLinkText: ", linkHref, " from: ", activeFilePath);
-				this.app.workspace.openLinkText(linkHref, activeFilePath, this.getLinkDest(event));
+				let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
+				if (fileOrFolder instanceof TFile) {
+					this.app.workspace.openLinkText(linkHref, activeFilePath, this.getLinkDest(event));
+				} 
+				else if (fileOrFolder instanceof TFolder) {
+					// @ts-ignore
+					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
+				}
 				break;
 			case 'menu':
 				let toolbar = this.getToolbarSettings(linkHref);
