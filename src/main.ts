@@ -871,7 +871,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (toolbar && activeFile) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 						let clickedEl = event?.targetNode as HTMLLinkElement;
-						let elemRect = clickedEl.getBoundingClientRect();
+						let clickedLinkEl = clickedEl.closest('.external-link') as HTMLLinkElement | null;
+						let elemRect = clickedLinkEl ? clickedLinkEl.getBoundingClientRect() : clickedEl.getBoundingClientRect();
 						// from inspecting how Obsidian handles the navigation bar
 						menu.showAtPosition({
 							x: elemRect.x,
