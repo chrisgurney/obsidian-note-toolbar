@@ -23,12 +23,14 @@ assignees: chrisgurney
 _Video or a GIF would be appreciated._
 
 
-**Theme links and CSS snippets (if applicable):**
-_Themes and CSS snippets can affect the display of the toolbar. Include any being used here to help diagnose display issues._
+
+**Debug info:**
+_Run "Show debug info" in Obsidian and paste it here (recommended). Alternately, fill out the sections below._
 
 
-**Plugin links (if applicable):**
-_If you're using a specific plugin that isn't working with the toolbar, link it here._
+
+**Plugin, Theme links, and CSS snippets (if applicable):**
+_Plugins, themes, and CSS snippets can affect the display of the toolbar. Include any being used here to help diagnose display issues._
 
 
 **Desktop environment:**
