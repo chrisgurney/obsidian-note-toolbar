@@ -4,6 +4,13 @@ import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSett
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, hasVars } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 
+// allows access to Menu DOM, to add a class for styling
+declare module "obsidian" {
+	interface Menu {
+		dom: HTMLDivElement
+	}
+}
+
 export default class NoteToolbarPlugin extends Plugin {
 
 	settings: NoteToolbarSettings;
@@ -900,6 +907,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							overlap: true,
 							left: false
 						});
+						menu.dom.addClass('note-toolbar-menu');
 					});
 				}
 				break;
