@@ -779,7 +779,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		/**
-		 * Issues a click in order to put focus in menus (works in non-native menus only).
+		 * Issues a down-arrow event in order to put focus in menus (works in non-native menus only).
 		 */
 		function putFocusInMenu() {
 			setTimeout(() => {
