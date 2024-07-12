@@ -761,7 +761,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ' ':
 					// FIXME? option + meta key modifiers not working here (shift + control work?)
 					//        or put another way: hot keys are not being honored here
-					(activeDocument?.activeElement as HTMLElement).click();
+					let activeEl = activeDocument?.activeElement as HTMLElement;
+					activeEl.click();
+					let linkType = activeEl.getAttribute("data-toolbar-link-attr-type");
+					linkType === 'menu' ? putFocusInMenu() : undefined;
 					break;
 				case 'Escape':
 					// need this implemented for Reading mode, as escape does nothing
@@ -773,6 +776,22 @@ export default class NoteToolbarPlugin extends Plugin {
 					break;
 			}
 
+		}
+
+		/**
+		 * Issues a click in order to put focus in menus (works in non-native menus only).
+		 */
+		function putFocusInMenu() {
+			setTimeout(() => {
+				const downArrowEvent = new KeyboardEvent('keydown', {
+					key: 'ArrowDown',
+					code: 'ArrowDown',
+					keyCode: 40, // Note: keyCode is deprecated
+					bubbles: true,
+					cancelable: true
+				});
+				activeDocument.dispatchEvent(downArrowEvent);
+			}, 50);
 		}
 
 	}
