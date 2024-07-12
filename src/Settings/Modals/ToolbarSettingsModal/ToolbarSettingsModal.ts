@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'src/Utils/Utils';
+import { arraymove, debugLog, emptyMessageFr, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from '../../NoteToolbarSettings';
 import { NoteToolbarSettingTab } from '../../NoteToolbarSettingTab';
@@ -659,7 +659,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
 						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', cb);
-						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
+						visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
 					});
 			})
 			.addButton((cb) => {
@@ -671,7 +671,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
 						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
-						visibilityMenu.showAtPosition(getPosition(cb.buttonEl));
+						visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
 					});
 			})
 			.addExtraButton((cb) => {

@@ -202,7 +202,7 @@ export function learnMoreFr(message: string, url: string): DocumentFragment {
  * @param element to get position of
  * @returns x, y position
  */
-export function getPosition(element: HTMLElement): { x: number, y: number } {
+export function getElementPosition(element: HTMLElement): { x: number, y: number } {
     const rect = element.getBoundingClientRect();
     return {
         x: rect.left + activeWindow.scrollX,
