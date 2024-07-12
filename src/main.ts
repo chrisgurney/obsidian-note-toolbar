@@ -973,16 +973,13 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarSettings !== undefined) {
 
 			let currentPosition: PositionType | undefined;
-			let platform: 'desktop' | 'mobile' | undefined;
 			if (Platform.isDesktop) {
 				currentPosition = toolbarSettings.position.desktop?.allViews?.position;
-				platform = 'desktop';
 			}
 			else if (Platform.isMobile) {
 				currentPosition = toolbarSettings.position.mobile?.allViews?.position;
-				platform = 'mobile';
 			}
-			if (platform !== undefined && (currentPosition === 'props' || currentPosition === 'top')) {
+			if (currentPosition === 'props' || currentPosition === 'top') {
 				contextMenu.addSeparator();
 				contextMenu.addItem((item) => {
 					item
@@ -991,9 +988,9 @@ export default class NoteToolbarPlugin extends Plugin {
 						.onClick((menuEvent) => {
 							let newPosition: PositionType = currentPosition === 'props' ? 'top' : 'props';
 							if (toolbarSettings?.position) {
-								platform === 'desktop' ?
-								toolbarSettings.position.desktop = { allViews: { position: newPosition } }
-								: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
+								Platform.isDesktop ?
+									toolbarSettings.position.desktop = { allViews: { position: newPosition } }
+									: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
 								toolbarSettings.updated = new Date().toISOString();
 								this.saveSettings();
 							}
