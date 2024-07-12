@@ -289,6 +289,95 @@ settings:
         type: variable-number
         default: 90
         format: vh
+    -
+        id: toolbar-menus
+        title: 'Menus'
+        description: 'Styles for Menu type items'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: toolbar-menu-colors
+        title: '🎨 Colors'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-menu-bg-color
+        title: 'Menu: Background color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-menu-border-color
+        title: 'Menu: Border color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-menu-item-bg-color-hover
+        title: 'Item: Background color (hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-menu-icon-color
+        title: 'Icon color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-menu-item-text-color
+        title: 'Text color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: toolbar-menu-styles
+        title: 😎 Style
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-menu-border-radius
+        title: 'Menu: Border radius (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: cg-nt-menu-item-border-radius
+        title: 'Item: Border radius (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: toolbar-menu-sizing
+        title: 📐 Sizing
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-menu-item-font-size
+        title: 'Font size (in em units)'
+        type: variable-number
+        default: 0.875
+        format: em
+    -
+        id: cg-nt-menu-icon-size
+        title: 'Icon size (in px units)'
+        type: variable-number
+        default: 16
+        format: px
 */
 
 body {
@@ -317,6 +406,15 @@ body {
     --cg-nt-item-padding-y: 0.5em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
+    --cg-nt-menu-bg-color: var(--background-secondary);
+    --cg-nt-menu-border-color: var(--hr-color);
+    --cg-nt-menu-border-radius: var(--radius-m);
+    --cg-nt-menu-icon-color: var(--text-muted);
+    --cg-nt-menu-icon-size: var(--icon-size);
+    --cg-nt-menu-item-bg-color-hover: var(--background-modifier-hover);
+    --cg-nt-menu-item-border-radius: var(--radius-s);
+    --cg-nt-menu-item-font-size: var(--font-ui-small);
+    --cg-nt-menu-item-text-color: var(--text-normal);
 }
 
 & .is-android {
@@ -713,6 +811,27 @@ body {
         margin-inline: auto auto;
         max-width: var(--file-line-width);
         transition: border-top 0.5s ease-out;
+    }
+}
+
+.note-toolbar-menu {
+    background-color: var(--cg-nt-menu-bg-color);
+    border-color: var(--cg-nt-menu-border-color);
+    border-radius: var(--cg-nt-menu-border-radius);
+    & .menu-item {
+        border-radius: var(--cg-nt-menu-item-border-radius);
+        color: var(--cg-nt-menu-item-text-color);
+        font-size: var(--cg-nt-menu-item-font-size);
+        & .menu-item-icon {
+            color: var(--cg-nt-menu-icon-color);
+            & svg {
+                height: var(--cg-nt-menu-icon-size);
+                width: var(--cg-nt-menu-icon-size);
+            }
+        }
+    }
+    & .menu-item.selected:not(.is-label):not(.is-disabled) {
+        background-color: var(--cg-nt-menu-item-bg-color-hover);
     }
 }
 
