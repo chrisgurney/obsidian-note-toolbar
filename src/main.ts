@@ -980,13 +980,7 @@ export default class NoteToolbarPlugin extends Plugin {
   
 		if (toolbarSettings !== undefined) {
 
-			let currentPosition: PositionType | undefined;
-			if (Platform.isDesktop) {
-				currentPosition = toolbarSettings.position.desktop?.allViews?.position;
-			}
-			else if (Platform.isMobile) {
-				currentPosition = toolbarSettings.position.mobile?.allViews?.position;
-			}
+			let currentPosition = this.getToolbarPosition(toolbarSettings);
 			if (currentPosition === 'props' || currentPosition === 'top') {
 				contextMenu.addSeparator();
 				contextMenu.addItem((item) => {
@@ -1402,6 +1396,22 @@ export default class NoteToolbarPlugin extends Plugin {
 		// reload in-memory settings
 		// FIXME? removing for now due to bug with settings not being saved properly while editing
 		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
+	/**
+	 * Gets the current position of the toolbar based on the provided settings.
+	 * @param ToolbarSettings to check for a position.
+	 * @returns PositionType | undefined
+	 */
+	getToolbarPosition(settings: ToolbarSettings): PositionType | undefined {
+		let currentPosition: PositionType | undefined;
+		if (Platform.isDesktop) {
+			currentPosition = settings.position.desktop?.allViews?.position;
+		}
+		else if (Platform.isMobile) {
+			currentPosition = settings.position.mobile?.allViews?.position;
+		}
+		return currentPosition;
 	}
 
 	/**
