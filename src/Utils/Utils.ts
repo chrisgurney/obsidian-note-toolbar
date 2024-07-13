@@ -238,3 +238,19 @@ export function isValidUri(u: string): boolean {
 		return false
 	}
 }
+
+/**
+ * Issues a down-arrow event in order to put focus in menus (works in non-native menus only).
+ */
+export function putFocusInMenu() {
+	setTimeout(() => {
+		const downArrowEvent = new KeyboardEvent('keydown', {
+			key: 'ArrowDown',
+			code: 'ArrowDown',
+			keyCode: 40, // Note: keyCode is deprecated
+			bubbles: true,
+			cancelable: true
+		});
+		activeDocument.dispatchEvent(downArrowEvent);
+	}, 50);
+}
