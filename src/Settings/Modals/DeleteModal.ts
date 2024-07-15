@@ -29,8 +29,8 @@ export class DeleteModal extends Modal {
     }
 
     protected async delete() {
-        this.plugin.deleteToolbarFromSettings(this.toolbar.name);
-        await this.plugin.saveSettings();
+        this.plugin.settingsManager.deleteToolbar(this.toolbar.name);
+        await this.plugin.settingsManager.save();
         this.close();
         this.parent.close();
     }

@@ -1,8 +1,9 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
-import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu } from './Utils/Utils';
+import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
+import { SettingsManager } from './Settings/SettingsManager';
 
 // allows access to Menu DOM, to add a class for styling
 declare module "obsidian" {
@@ -14,6 +15,7 @@ declare module "obsidian" {
 export default class NoteToolbarPlugin extends Plugin {
 
 	settings: NoteToolbarSettings;
+	settingsManager: SettingsManager;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -21,7 +23,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async onload() {
 
-		await this.loadSettings();
+		this.settingsManager = new SettingsManager(this);
+		await this.settingsManager.load();
 
 		// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
 		this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));
@@ -80,6 +83,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		debugLog('UNLOADED');
 	}
  
+	/**
+	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
+	 */
+	async onExternalSettingsChange(): Promise<void> {
+		debugLog("onExternalSettingsChange()");
+		// reload in-memory settings
+		// FIXME? removing for now due to bug with settings not being saved properly while editing
+		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
 	/* keeping for potential future use
 	async storeLeafId(currentView: MarkdownView) {
 		// @ts-ignore
@@ -229,7 +242,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// if any prop = 'none' then don't return a toolbar
 			notetoolbarProp.includes('none') ? ignoreToolbar = true : false;
 			// is it valid? (i.e., is there a matching toolbar?)
-			ignoreToolbar ? undefined : matchingToolbar = this.getToolbarSettingsFromProps(notetoolbarProp);
+			ignoreToolbar ? undefined : matchingToolbar = this.settingsManager.getToolbarFromProps(notetoolbarProp);
 		}
 
 		// we still don't have a matching toolbar
@@ -244,7 +257,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// debugLog('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
 				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					// continue until we get a matching toolbar
-					matchingToolbar = this.getToolbarSettings(mapping.toolbar);
+					matchingToolbar = this.settingsManager.getToolbar(mapping.toolbar);
 					if (matchingToolbar) {
 						// debugLog('  - matched toolbar:', matchingToolbar);
 						break;
@@ -655,7 +668,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// figure out what toolbar is on the screen
 		let toolbarEl = this.getToolbarEl();
 		let toolbarName = toolbarEl?.getAttribute('data-name');
-		let toolbarSettings = toolbarName ? this.getToolbarSettings(toolbarName) : undefined;
+		let toolbarSettings = toolbarName ? this.settingsManager.getToolbar(toolbarName) : undefined;
 		if (toolbarSettings) {
 			const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
 			modal.setTitle("Edit Toolbar: " + toolbarName);
@@ -875,7 +888,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 			case 'menu':
-				let toolbar = this.getToolbarSettings(linkHref);
+				let toolbar = this.settingsManager.getToolbar(linkHref);
 				debugLog("- menu item for toolbar", toolbar, activeFile);
 				if (toolbar && activeFile) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
@@ -950,7 +963,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// figure out what toolbar we're in
 		let toolbarEl = (e.target as Element).closest('.cg-note-toolbar-container');
 		let toolbarName = toolbarEl?.getAttribute('data-name');
-		let toolbarSettings = toolbarName ? this.getToolbarSettings(toolbarName) : undefined;
+		let toolbarSettings = toolbarName ? this.settingsManager.getToolbar(toolbarName) : undefined;
 
 		let contextMenu = new Menu();
 
@@ -980,7 +993,7 @@ export default class NoteToolbarPlugin extends Plugin {
   
 		if (toolbarSettings !== undefined) {
 
-			let currentPosition = this.getToolbarPosition(toolbarSettings);
+			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
 			if (currentPosition === 'props' || currentPosition === 'top') {
 				contextMenu.addSeparator();
 				contextMenu.addItem((item) => {
@@ -994,7 +1007,7 @@ export default class NoteToolbarPlugin extends Plugin {
 									toolbarSettings.position.desktop = { allViews: { position: newPosition } }
 									: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
 								toolbarSettings.updated = new Date().toISOString();
-								this.saveSettings();
+								this.settingsManager.save();
 							}
 						});
 				});
@@ -1164,293 +1177,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		return toolbarRemoved;
 
-	}
-
-	/*************************************************************************
-	 * SETTINGS LOADERS
-	 *************************************************************************/
-
-	/**
-	 * Loads settings, and migrates from old versions if needed.
-	 * 
-	 * 1. Update SETTINGS_VERSION in NoteToolbarSettings.
-	 * 2. Add MIGRATION block below.
-	 * 
-	 * Credit to Fevol on Discord for the sample code to migrate.
-	 * @link https://discord.com/channels/686053708261228577/840286264964022302/1213507979782127707
-	 */
-	async loadSettings(): Promise<void> {
-
-		const loaded_settings = await this.loadData();
-		debugLog("loadSettings: loaded settings: ", loaded_settings);
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
-	
-		let old_version = loaded_settings?.version as number;
-		let new_version: number;
-
-		// if we actually have existing settings for this plugin, and the old version does not match the current...
-		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
-
-			debugLog("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
-			debugLog("running migrations...");
-
-			// first version without update (i.e., version is `undefined`)
-			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
-			if (!old_version) {
-				new_version = 20240318.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				// for each: double-check setting to migrate is there
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					if (tb.styles) {
-						debugLog("\t- OLD SETTING: " + tb.styles);
-						debugLog("\t\t- SETTING: this.settings.toolbars[index].defaultStyles: " + this.settings.toolbars[index].defaultStyles);
-						this.settings.toolbars[index].defaultStyles = tb.styles;
-						debugLog("\t\t- SET: " + this.settings.toolbars[index].defaultStyles);
-						debugLog("\t\t- SETTING: this.settings.toolbars[index].mobileStyles = []");
-						this.settings.toolbars[index].mobileStyles = [];
-						delete tb.styles;
-					}
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			// MIGRATION: added urlAttr setting
-			if (old_version === 20240318.1) {
-				new_version = 20240322.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					tb.items.forEach((item: any, item_index: number) => {
-						if (!item?.urlAttr) {
-							debugLog("  - add urlAttr for: ", tb.name, item.label);
-							// assume old urls are indeed urls and have variables
-							item.urlAttr = {
-								hasVars: true,
-								isUri: true
-							};
-						}
-					});
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			// MIGRATION: support for icons + generic links with types
-			if (old_version === 20240322.1) {
-				new_version = 20240330.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					tb.items.forEach((item: any, item_index: number) => {
-						this.settings.toolbars[index].items[item_index].icon = "";
-						if (item.url) {
-							this.settings.toolbars[index].items[item_index].link = item.url;
-							delete item.url;
-						}
-						if (item.urlAttr) {
-							this.settings.toolbars[index].items[item_index].linkAttr = {
-								commandId: "",
-								hasVars: item.urlAttr.hasVars,
-								type: item.urlAttr.isUri ? "uri" : "file"
-							};
-							delete item.urlAttr;
-						}
-					});
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			// MIGRATION: support for position + contexts
-			if (old_version === 20240330.1) {
-				new_version = 20240416.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					tb.items.forEach((item: any, item_index: number) => {
-						// convert hideOnDesktop + hideOnMobile to contexts
-						this.settings.toolbars[index].items[item_index].contexts = [{
-							platform: migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
-							view: 'all'}];
-						delete item.hideOnDesktop;
-						delete item.hideOnMobile;
-					});
-					this.settings.toolbars[index].positions = [{
-						position: 'props', 
-						contexts: [{
-							platform: 'all', 
-							view: 'all'
-						}]
-					}]
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			// MIGRATION: 
-			if (old_version === 20240416.1) {
-				new_version = 20240426.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
-				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					// toolbar position -> platform-specific positions
-					if (this.settings.toolbars[index].positions) {
-						this.settings.toolbars[index].positions?.forEach((pos, posIndex) => {
-							this.settings.toolbars[index].position = {} as Position;
-							if (pos.contexts) {
-								pos.contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
-									if (pos.position) {
-										switch (ctx.platform) {
-											case 'desktop':
-												this.settings.toolbars[index].position.desktop = {
-													allViews: { position: pos.position }
-												}
-												break;
-											case 'mobile':
-												this.settings.toolbars[index].position.mobile = {
-													allViews: { position: pos.position }
-												}
-												this.settings.toolbars[index].position.tablet = {
-													allViews: { position: pos.position }
-												}
-												break;
-											case 'all':
-												this.settings.toolbars[index].position.desktop = {
-													allViews: { position: pos.position }
-												}
-												this.settings.toolbars[index].position.mobile = {
-													allViews: { position: pos.position }
-												}
-												this.settings.toolbars[index].position.tablet = {
-													allViews: { position: pos.position }
-												}
-												break;
-										}
-									}
-								});
-							}
-						});
-						delete this.settings.toolbars[index].positions;
-					}
-					// item contexts -> item / component visibility
-					tb.items.forEach((item: any, item_index: number) => {
-						if (this.settings.toolbars[index].items[item_index].contexts) {							
-							this.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
-								if (!this.settings.toolbars[index].items[item_index].visibility) {
-									this.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
-									switch (ctx.platform) {
-										case 'desktop':
-											this.settings.toolbars[index].items[item_index].visibility.desktop = {
-												allViews: {	components: ['icon', 'label'] }
-											}
-											break;
-										case 'mobile':
-											this.settings.toolbars[index].items[item_index].visibility.mobile = {
-												allViews: {	components: ['icon', 'label'] }
-											}
-											this.settings.toolbars[index].items[item_index].visibility.tablet = {
-												allViews: {	components: ['icon', 'label'] }
-											}
-											break;
-										case 'all':
-											this.settings.toolbars[index].items[item_index].visibility.desktop = {
-												allViews: {	components: ['icon', 'label'] }
-											}
-											this.settings.toolbars[index].items[item_index].visibility.mobile = {
-												allViews: {	components: ['icon', 'label'] }
-											}
-											this.settings.toolbars[index].items[item_index].visibility.tablet = {
-												allViews: {	components: ['icon', 'label'] }
-											}
-											break;						
-										case 'none':
-										default:
-											break;
-									}
-								}
-							});
-							delete this.settings.toolbars[index].items[item_index].contexts;
-						}
-					});
-				});
-				// for the next migration to run
-				old_version = new_version;
-			}
-
-			this.settings.version = SETTINGS_VERSION;
-			debugLog("updated settings:", this.settings);
-
-			// ensure that migrated settings are saved 
-			await this.saveSettings();
-
-		}
-
-	}
-
-	/**
-	 * Saves settings.
-	 * Sorts the toolbar list (by name) first.
-	 */
-	async saveSettings(): Promise<void> {
-		await this.saveData(this.settings);
-
-		await this.removeActiveToolbar();
-		await this.renderToolbarForActiveFile();
-
-		debugLog("SETTINGS SAVED: " + new Date().getTime());
-	}
-
-	/**
-	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
-	 */
-	async onExternalSettingsChange(): Promise<void> {
-		debugLog("onExternalSettingsChange()");
-		// reload in-memory settings
-		// FIXME? removing for now due to bug with settings not being saved properly while editing
-		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	/**
-	 * Gets the current position of the toolbar based on the provided settings.
-	 * @param ToolbarSettings to check for a position.
-	 * @returns PositionType | undefined
-	 */
-	getToolbarPosition(settings: ToolbarSettings): PositionType | undefined {
-		let currentPosition: PositionType | undefined;
-		if (Platform.isDesktop) {
-			currentPosition = settings.position.desktop?.allViews?.position;
-		}
-		else if (Platform.isMobile) {
-			currentPosition = settings.position.mobile?.allViews?.position;
-		}
-		return currentPosition;
-	}
-
-	/**
-	 * Gets toolbar from settings, using the provided name.
-	 * @param name Name of toolbar to get settings for (case-insensitive).
-	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
-	 */
-	getToolbarSettings(name: string | null): ToolbarSettings | undefined {
-		return name ? this.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
-	}
-
-	/**
-	 * Gets toolbar from settings, using the provided array of strings (which will come from note frontmatter).
-	 * @param names List of potential toolbars to get settings for (case-insensitive); only the first match is returned.
-	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
-	 */
-	getToolbarSettingsFromProps(names: string[] | null): ToolbarSettings | undefined {
-		if (!names) return undefined;
-		if (typeof names === "string") {
-			return this.getToolbarSettings(names);
-		}
-		return this.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
-	}
-
-	/**
-	 * Removes the provided toolbar from settings; does nothing if it does not exist.
-	 * @param name Name of the toolbar to remove.
-	 */
-	deleteToolbarFromSettings(name: string) {
-		this.settings.toolbars = this.settings.toolbars.filter(tbar => tbar.name !== name);
 	}
 
 }

@@ -196,7 +196,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							updated: new Date().toISOString(),
 						} as ToolbarSettings;
 						this.plugin.settings.toolbars.push(newToolbar);
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						this.openSettingsModal(newToolbar);
 					});
 			});
@@ -222,7 +222,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					this.plugin.settings.toolbarProp = value;
 					// FIXME? set all toolbars to updated?
 					// this.plugin.settings.toolbars.updated = new Date().toISOString();
-					await this.plugin.saveSettings();	
+					await this.plugin.settingsManager.save();	
 				}, 750)));
 
 	}
@@ -264,7 +264,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 					if (item.oldIndex !== undefined && item.newIndex !== undefined) {
 						moveElement(this.plugin.settings.folderMappings, item.oldIndex, item.newIndex);
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 					}
 				}
 			});
@@ -290,7 +290,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							toolbar: ""
 						};
 						this.plugin.settings.folderMappings.push(newMapping);
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						// TODO: add a form item to the existing list
 							// TODO: put the existing code in a function
 						// TODO: set the focus in the form
@@ -374,7 +374,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							document.getElementById("note-toolbar-name-error")?.remove();
 							toolbarFolderListItemDiv.children[0].removeClass("note-toolbar-setting-error");
 							mapping.folder = newFolder ? normalizePath(newFolder) : "";
-							await this.plugin.saveSettings();
+							await this.plugin.settingsManager.save();
 						}
 					}, 250));
 			});
@@ -386,7 +386,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(mapping.toolbar)
 					.onChange(debounce(async (newToolbar) => {
 						mapping.toolbar = newToolbar;
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 					}, 250));
 			});
 
@@ -457,7 +457,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setValue(this.plugin.settings.showEditInFabMenu)
 				cb.onChange(async (value) => {
 					this.plugin.settings.showEditInFabMenu = value;
-					this.plugin.saveSettings();
+					await this.plugin.settingsManager.save();
 					// TODO? force the re-rendering of the current toolbar to update the menu
 				});
 			});
@@ -510,7 +510,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				keyEvent?.preventDefault();
 				break;
 		}
-		await this.plugin.saveSettings();
+		await this.plugin.settingsManager.save();
 		this.display();
 	}
 

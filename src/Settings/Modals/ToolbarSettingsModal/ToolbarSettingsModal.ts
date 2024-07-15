@@ -107,7 +107,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setValue(this.toolbar.name)
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
-					let existingToolbar = this.plugin.getToolbarSettings(value);
+					let existingToolbar = this.plugin.settingsManager.getToolbar(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
 						toolbarNameDiv.createEl("div", { 
 							text: "A toolbar already exists with this name", 
@@ -120,7 +120,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 					}
 				}, 750)));
 		settingsDiv.append(toolbarNameDiv);
@@ -232,7 +232,7 @@ export default class ToolbarSettingsModal extends Modal {
 				debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 				if (item.oldIndex !== undefined && item.newIndex !== undefined) {
 					moveElement(this.toolbar.items, item.oldIndex, item.newIndex);
-					await this.plugin.saveSettings();
+					await this.plugin.settingsManager.save();
 				}
 			}
 		});
@@ -276,7 +276,7 @@ export default class ToolbarSettingsModal extends Modal {
 							};
 						this.toolbar.items.push(newToolbarItem);
 						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 
 						//
 						// add preview and form to the list
@@ -558,7 +558,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// TODO: if the label contains vars, set the flag to always rerender this toolbar
 						// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						this.updatePreviewText(toolbarItem, rowId);
 					}, 750)));
 		labelField.settingEl.id = 'note-toolbar-item-field-label';
@@ -572,7 +572,7 @@ export default class ToolbarSettingsModal extends Modal {
 					debounce(async (value) => {
 						toolbarItem.tooltip = value;
 						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						this.updatePreviewText(toolbarItem, rowId);
 					}, 750)));
 		tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
@@ -597,7 +597,7 @@ export default class ToolbarSettingsModal extends Modal {
 							toolbarItem.linkAttr.type = value as LinkType;
 							itemLinkFieldDiv.empty();
 							this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
-							await this.plugin.saveSettings();
+							await this.plugin.settingsManager.save();
 						}
 					})
 			);
@@ -727,7 +727,7 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.link = command;
 								toolbarItem.linkAttr.type = 'command';
 								toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
-								await this.plugin.saveSettings();
+								await this.plugin.settingsManager.save();
 							}, 250))});
 				break;
 			case 'file':
@@ -754,7 +754,7 @@ export default class ToolbarSettingsModal extends Modal {
 									toolbarItem.linkAttr.commandId = '';
 									document.getElementById('note-toolbar-item-link-note-error')?.remove();
 									cb.inputEl.parentElement?.removeClass('note-toolbar-setting-error');
-									await this.plugin.saveSettings();
+									await this.plugin.settingsManager.save();
 								}									
 							}, 750))
 					});
@@ -768,9 +768,9 @@ export default class ToolbarSettingsModal extends Modal {
 							.setValue(toolbarItem.link)
 							.onChange(debounce(async (value) => {
 								toolbarItem.link = value;
-								await this.plugin.saveSettings();
+								await this.plugin.settingsManager.save();
 								// update help text with toolbar preview or default if none selected
-								let menuToolbar = this.plugin.getToolbarSettings(toolbarItem.link);
+								let menuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
 								let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
 								let helpTextFr = document.createDocumentFragment();
 								menuPreviewFr 
@@ -803,7 +803,7 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.linkAttr.hasVars = hasVars(value);
 								toolbarItem.linkAttr.commandId = '';
 								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.saveSettings();
+								await this.plugin.settingsManager.save();
 							}, 750))
 						);
 				fieldHelp ? uriSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
@@ -825,7 +825,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting('file', fieldDiv, toolbarItem, toolbarItem.link);
 				break;
 			case 'menu':
-				let menuToolbar = this.plugin.getToolbarSettings(toolbarItem.link);
+				let menuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
 				let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
 				let fieldHelp = document.createDocumentFragment();
 				menuPreviewFr 
@@ -872,7 +872,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.onChange(async (val: PositionType) => {
 						this.toolbar.position.desktop = { allViews: { position: val } };
 						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						this.display();
 					})
 				);
@@ -896,7 +896,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toolbar.position.mobile = { allViews: { position: val } };
 						this.toolbar.position.tablet = { allViews: { position: val } };
 						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						this.display();
 					})
 				);
@@ -970,7 +970,7 @@ export default class ToolbarSettingsModal extends Modal {
 						else {
 							this.toolbar.defaultStyles.push(val);
 						}
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						this.display();
 					})
 		);
@@ -1038,7 +1038,7 @@ export default class ToolbarSettingsModal extends Modal {
 						else {
 							this.toolbar.mobileStyles.push(val);
 						}
-						await this.plugin.saveSettings();
+						await this.plugin.settingsManager.save();
 						this.display();
 					})
 		);
@@ -1168,7 +1168,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.toolbar.updated = new Date().toISOString();
 				break;
 		}
-		await this.plugin.saveSettings();
+		await this.plugin.settingsManager.save();
 		this.display();
 	}
 
@@ -1284,7 +1284,7 @@ export default class ToolbarSettingsModal extends Modal {
 						isComponentVisible.icon = true;
 					}
 					this.toolbar.updated = new Date().toISOString();
-					await this.plugin.saveSettings();
+					await this.plugin.settingsManager.save();
 					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
 					let oldState = button.buttonEl.querySelector('span');
 					oldState ? button.buttonEl.removeChild(oldState) : undefined;
@@ -1308,7 +1308,7 @@ export default class ToolbarSettingsModal extends Modal {
 						isComponentVisible.label = true;
 					}
 					this.toolbar.updated = new Date().toISOString();
-					await this.plugin.saveSettings();
+					await this.plugin.settingsManager.save();
 					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
 					let oldState = button.buttonEl.querySelector('span');
 					oldState ? button.buttonEl.removeChild(oldState) : undefined;

@@ -56,7 +56,7 @@ export class IconSuggestModal extends SuggestModal<IconName> {
     onChooseSuggestion(selectedIcon: string, evt: MouseEvent | KeyboardEvent) {
         debugLog("onChooseSuggestion: ", this.settingsWithIcon);
         this.settingsWithIcon.icon = (selectedIcon === "No icon" ? "" : selectedIcon);
-        this.plugin.saveSettings();
+        this.plugin.settingsManager.save();
         debugLog("this.parentEl:", this.parentEl);
         if (this.parentEl.hasClass('note-toolbar-setting-items-container-row')) {
             // update the icon for the preview and form

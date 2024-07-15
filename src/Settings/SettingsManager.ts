@@ -1,0 +1,287 @@
+import NoteToolbarPlugin from "src/main";
+import { DEFAULT_SETTINGS, ItemViewContext, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "./NoteToolbarSettings";
+import { Platform } from "obsidian";
+import { debugLog, migrateItemVisPlatform } from "src/Utils/Utils";
+
+export class SettingsManager {
+
+    public plugin: NoteToolbarPlugin;
+
+    constructor(plugin: NoteToolbarPlugin) {
+        this.plugin = plugin;
+    }
+
+	/**
+	 * Removes the provided toolbar from settings; does nothing if it does not exist.
+	 * @param name Name of the toolbar to remove.
+	 */
+	public deleteToolbar(name: string) {
+		this.plugin.settings.toolbars = this.plugin.settings.toolbars.filter(tbar => tbar.name !== name);
+	}
+
+	/**
+	 * Gets toolbar from settings, using the provided name.
+	 * @param name Name of toolbar to get settings for (case-insensitive).
+	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
+	 */
+	public getToolbar(name: string | null): ToolbarSettings | undefined {
+		return name ? this.plugin.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
+	}
+
+	/**
+	 * Gets toolbar from settings, using the provided array of strings (which will come from note frontmatter).
+	 * @param names List of potential toolbars to get settings for (case-insensitive); only the first match is returned.
+	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
+	 */
+	public getToolbarFromProps(names: string[] | null): ToolbarSettings | undefined {
+		if (!names) return undefined;
+		if (typeof names === "string") {
+			return this.getToolbar(names);
+		}
+		return this.plugin.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
+	}
+
+	/**
+	 * Gets the current position of the toolbar based on the provided settings.
+	 * @param ToolbarSettings to check for a position.
+	 * @returns PositionType | undefined
+	 */
+	public getToolbarPosition(settings: ToolbarSettings): PositionType | undefined {
+		let currentPosition: PositionType | undefined;
+		if (Platform.isDesktop) {
+			currentPosition = settings.position.desktop?.allViews?.position;
+		}
+		else if (Platform.isMobile) {
+			currentPosition = settings.position.mobile?.allViews?.position;
+		}
+		return currentPosition;
+	}
+
+	/**
+	 * Loads settings, and migrates from old versions if needed.
+	 * 
+	 * 1. Update SETTINGS_VERSION in NoteToolbarSettings.
+	 * 2. Add MIGRATION block below.
+	 * 
+	 * Credit to Fevol on Discord for the sample code to migrate.
+	 * @link https://discord.com/channels/686053708261228577/840286264964022302/1213507979782127707
+	 */
+	async load(): Promise<void> {
+
+		const loaded_settings = await this.plugin.loadData();
+		debugLog("loadSettings: loaded settings: ", loaded_settings);
+		this.plugin.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
+	
+		let old_version = loaded_settings?.version as number;
+		let new_version: number;
+
+		// if we actually have existing settings for this plugin, and the old version does not match the current...
+		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
+
+			debugLog("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
+			debugLog("running migrations...");
+
+			// first version without update (i.e., version is `undefined`)
+			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
+			if (!old_version) {
+				new_version = 20240318.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				// for each: double-check setting to migrate is there
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					if (tb.styles) {
+						debugLog("\t- OLD SETTING: " + tb.styles);
+						debugLog("\t\t- SETTING: this.plugin.settings.toolbars[index].defaultStyles: " + this.plugin.settings.toolbars[index].defaultStyles);
+						this.plugin.settings.toolbars[index].defaultStyles = tb.styles;
+						debugLog("\t\t- SET: " + this.plugin.settings.toolbars[index].defaultStyles);
+						debugLog("\t\t- SETTING: this.plugin.settings.toolbars[index].mobileStyles = []");
+						this.plugin.settings.toolbars[index].mobileStyles = [];
+						delete tb.styles;
+					}
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: added urlAttr setting
+			if (old_version === 20240318.1) {
+				new_version = 20240322.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						if (!item?.urlAttr) {
+							debugLog("  - add urlAttr for: ", tb.name, item.label);
+							// assume old urls are indeed urls and have variables
+							item.urlAttr = {
+								hasVars: true,
+								isUri: true
+							};
+						}
+					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: support for icons + generic links with types
+			if (old_version === 20240322.1) {
+				new_version = 20240330.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						this.plugin.settings.toolbars[index].items[item_index].icon = "";
+						if (item.url) {
+							this.plugin.settings.toolbars[index].items[item_index].link = item.url;
+							delete item.url;
+						}
+						if (item.urlAttr) {
+							this.plugin.settings.toolbars[index].items[item_index].linkAttr = {
+								commandId: "",
+								hasVars: item.urlAttr.hasVars,
+								type: item.urlAttr.isUri ? "uri" : "file"
+							};
+							delete item.urlAttr;
+						}
+					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: support for position + contexts
+			if (old_version === 20240330.1) {
+				new_version = 20240416.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						// convert hideOnDesktop + hideOnMobile to contexts
+						this.plugin.settings.toolbars[index].items[item_index].contexts = [{
+							platform: migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
+							view: 'all'}];
+						delete item.hideOnDesktop;
+						delete item.hideOnMobile;
+					});
+					this.plugin.settings.toolbars[index].positions = [{
+						position: 'props', 
+						contexts: [{
+							platform: 'all', 
+							view: 'all'
+						}]
+					}]
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: 
+			if (old_version === 20240416.1) {
+				new_version = 20240426.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					// toolbar position -> platform-specific positions
+					if (this.plugin.settings.toolbars[index].positions) {
+						this.plugin.settings.toolbars[index].positions?.forEach((pos, posIndex) => {
+							this.plugin.settings.toolbars[index].position = {} as Position;
+							if (pos.contexts) {
+								pos.contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+									if (pos.position) {
+										switch (ctx.platform) {
+											case 'desktop':
+												this.plugin.settings.toolbars[index].position.desktop = {
+													allViews: { position: pos.position }
+												}
+												break;
+											case 'mobile':
+												this.plugin.settings.toolbars[index].position.mobile = {
+													allViews: { position: pos.position }
+												}
+												this.plugin.settings.toolbars[index].position.tablet = {
+													allViews: { position: pos.position }
+												}
+												break;
+											case 'all':
+												this.plugin.settings.toolbars[index].position.desktop = {
+													allViews: { position: pos.position }
+												}
+												this.plugin.settings.toolbars[index].position.mobile = {
+													allViews: { position: pos.position }
+												}
+												this.plugin.settings.toolbars[index].position.tablet = {
+													allViews: { position: pos.position }
+												}
+												break;
+										}
+									}
+								});
+							}
+						});
+						delete this.plugin.settings.toolbars[index].positions;
+					}
+					// item contexts -> item / component visibility
+					tb.items.forEach((item: any, item_index: number) => {
+						if (this.plugin.settings.toolbars[index].items[item_index].contexts) {							
+							this.plugin.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+								if (!this.plugin.settings.toolbars[index].items[item_index].visibility) {
+									this.plugin.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
+									switch (ctx.platform) {
+										case 'desktop':
+											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;
+										case 'mobile':
+											this.plugin.settings.toolbars[index].items[item_index].visibility.mobile = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.plugin.settings.toolbars[index].items[item_index].visibility.tablet = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;
+										case 'all':
+											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.plugin.settings.toolbars[index].items[item_index].visibility.mobile = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											this.plugin.settings.toolbars[index].items[item_index].visibility.tablet = {
+												allViews: {	components: ['icon', 'label'] }
+											}
+											break;						
+										case 'none':
+										default:
+											break;
+									}
+								}
+							});
+							delete this.plugin.settings.toolbars[index].items[item_index].contexts;
+						}
+					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			this.plugin.settings.version = SETTINGS_VERSION;
+			debugLog("updated settings:", this.plugin.settings);
+
+			// ensure that migrated settings are saved 
+			await this.save();
+
+		}
+
+	}
+
+	/**
+	 * Saves settings.
+	 * Sorts the toolbar list (by name) first.
+	 */
+	async save(): Promise<void> {
+		await this.plugin.saveData(this.plugin.settings);
+
+		await this.plugin.removeActiveToolbar();
+		await this.plugin.renderToolbarForActiveFile();
+
+		debugLog("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+}
