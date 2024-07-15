@@ -1,14 +1,14 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, emptyMessageFr, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'src/Utils/Utils';
 import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from '../../NoteToolbarSettings';
-import { NoteToolbarSettingTab } from '../../NoteToolbarSettingTab';
-import { DeleteModal } from '../DeleteModal';
-import { CommandSuggester } from '../../Suggesters/CommandSuggester';
-import { IconSuggestModal } from '../IconSuggestModal';
-import { FileSuggester } from '../../Suggesters/FileSuggester';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from 'src/Settings/NoteToolbarSettings';
+import { NoteToolbarSettingTab } from 'src/Settings/UI/NoteToolbarSettingTab';
+import { DeleteModal } from 'src/Settings/UI/Modals/DeleteModal';
+import { CommandSuggester } from 'src/Settings/UI/Suggesters/CommandSuggester';
+import { IconSuggestModal } from 'src/Settings/UI/Modals/IconSuggestModal';
+import { FileSuggester } from 'src/Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
-import { ToolbarSuggester } from 'src/Settings/Suggesters/ToolbarSuggester';
+import { ToolbarSuggester } from 'src/Settings/UI/Suggesters/ToolbarSuggester';
 
 export default class ToolbarSettingsModal extends Modal {
 

@@ -1,8 +1,8 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
-import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
+import { NoteToolbarSettingTab } from './Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest } from './Utils/Utils';
-import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
+import ToolbarSettingsModal from './Settings/UI/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 import { SettingsManager } from './Settings/SettingsManager';
 
 // allows access to Menu DOM, to add a class for styling
