@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu } from './Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 import { SettingsManager } from './Settings/SettingsManager';
 
@@ -479,13 +479,13 @@ export default class NoteToolbarPlugin extends Plugin {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// don't show the item if the link has variables and resolves to nothing
-				if (hasVars(toolbarItem.link) && this.replaceVars(toolbarItem.link, activeFile, false) === "") {
+				if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
 					return;
 				}
 				// replace variables in labels (or tooltip, if no label set)
 				let title = toolbarItem.label ? 
-					(hasVars(toolbarItem.label) ? this.replaceVars(toolbarItem.label, activeFile, false) : toolbarItem.label) : 
-					(hasVars(toolbarItem.tooltip) ? this.replaceVars(toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
+					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
+					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
 				menu.addItem((item) => {
 					item
 						.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
@@ -574,7 +574,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 				// if link resolves to nothing, there's no need to display the item
 				if (hasVars(itemSetting.link)) {
-					if (this.replaceVars(itemSetting.link, activeFile, false) === "") {
+					if (replaceVars(this.app, itemSetting.link, activeFile, false) === "") {
 						itemEl.parentElement?.addClass('hide'); // hide the containing li element
 						return;
 					}
@@ -585,11 +585,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 				// update tooltip + label
 				if (hasVars(itemSetting.tooltip)) {
-					let newTooltip = this.replaceVars(itemSetting.tooltip, activeFile, false);
+					let newTooltip = replaceVars(this.app, itemSetting.tooltip, activeFile, false);
 					setTooltip(itemEl, newTooltip, { placement: "top" });
 				}
 				if (hasVars(itemSetting.label)) {
-					let newLabel = this.replaceVars(itemSetting.label, activeFile, false);
+					let newLabel = replaceVars(this.app, itemSetting.label, activeFile, false);
 					let itemElLabel = itemEl.querySelector('#label');
 					if (newLabel) {
 						itemElLabel?.removeClass('hide');
@@ -865,7 +865,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (linkAttr.hasVars) {
 			// only replace vars in URIs; might consider other substitution in future
-			linkHref = this.replaceVars(linkHref, activeFile, false);
+			linkHref = replaceVars(this.app, linkHref, activeFile, false);
 			debugLog('- uri vars replaced: ', linkHref);
 		}
 
@@ -1016,39 +1016,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		contextMenu.showAtPosition(e);
-
-	}
-
-	/**
-	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
-	 * @param s String to replace the variables in.
-	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
-	 * @param encode True if we should encode the variables (recommended if part of external URL).
-	 * @returns String with the variables replaced.
-	 */
-	replaceVars(s: string, file: TFile | null, encode: boolean): string {
-
-		let noteTitle = file?.basename;
-		if (noteTitle != null) {
-			s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
-		}
-		// have to get this at run/click-time, as file or metadata may not have changed
-		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
-		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-		s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
-			const key = p1.trim();
-			if (frontmatter && frontmatter[key] !== undefined) {
-				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
-				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
-				// handle the case where the prop might be a list
-				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-				return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
-			}
-			else {
-				return '';
-			}
-		});
-		return s;
 
 	}
 

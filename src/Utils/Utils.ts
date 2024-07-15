@@ -1,4 +1,4 @@
-import { setIcon } from "obsidian";
+import { App, TFile, setIcon } from "obsidian";
 import { ComponentType, ItemViewContext, PlatformType, ToolbarItemSettings, ViewType, Visibility } from "src/Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
@@ -253,4 +253,38 @@ export function putFocusInMenu() {
 		});
 		activeDocument.dispatchEvent(downArrowEvent);
 	}, 50);
+}
+
+/**
+ * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
+ * @param app App
+ * @param s String to replace the variables in.
+ * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
+ * @param encode True if we should encode the variables (recommended if part of external URL).
+ * @returns String with the variables replaced.
+ */
+export function replaceVars(app: App, s: string, file: TFile | null, encode: boolean): string {
+
+	let noteTitle = file?.basename;
+	if (noteTitle != null) {
+		s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
+	}
+	// have to get this at run/click-time, as file or metadata may not have changed
+	let frontmatter = file ? app.metadataCache.getFileCache(file)?.frontmatter : undefined;
+	// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
+	s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
+		const key = p1.trim();
+		if (frontmatter && frontmatter[key] !== undefined) {
+			// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
+			const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
+			// handle the case where the prop might be a list
+			let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
+			return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
+		}
+		else {
+			return '';
+		}
+	});
+	return s;
+
 }
