@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_SETTINGS, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "./NoteToolbarSettings";
+import { DEFAULT_SETTINGS, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 import { Platform } from "obsidian";
 import { debugLog } from "Utils/Utils";
 
