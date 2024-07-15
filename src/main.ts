@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { DEFAULT_SETTINGS, ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, SETTINGS_VERSION, FolderMapping, Position, ToolbarItemLinkAttr, ItemViewContext, Visibility, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, migrateItemVisPlatform, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu } from './Utils/Utils';
@@ -718,14 +718,13 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (toolbar) {
 				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
 					let elemRect = posAtElement.getBoundingClientRect();
-					// from inspecting how Obsidian handles the navigation bar
-					menu.showAtPosition({
-						x: elemRect.x,
-						y: elemRect.bottom,
-						width: elemRect.width,
-						overlap: true,
-						left: true
-					});
+					let menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: true };
+					let fabEl = this.getToolbarFabEl();
+					// store menu position for sub-menu positioning
+					fabEl?.setAttribute('data-menu-pos', JSON.stringify(menuPos));
+					// add class so we can style the menu
+					menu.dom.addClass('note-toolbar-menu');
+					menu.showAtPosition(menuPos);
 				});
 			}
 		}
@@ -877,21 +876,38 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 			case 'menu':
 				let toolbar = this.getToolbarSettings(linkHref);
-				debugLog("menu item for toolbar", toolbar);
+				debugLog("- menu item for toolbar", toolbar, activeFile);
 				if (toolbar && activeFile) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
-						let clickedEl = event?.targetNode as HTMLLinkElement;
-						let clickedLinkEl = clickedEl.closest('.external-link') as HTMLLinkElement | null;
-						let elemRect = clickedLinkEl ? clickedLinkEl.getBoundingClientRect() : clickedEl.getBoundingClientRect();
-						// from inspecting how Obsidian handles the navigation bar
-						menu.showAtPosition({
-							x: elemRect.x,
-							y: elemRect.bottom,
-							width: elemRect.width,
-							overlap: true,
-							left: false
-						});
+						let menuPos: MenuPositionDef | undefined = undefined;
+						let fabEl = this.getToolbarFabEl();
+						let toolbarEl = this.getToolbarEl();
+						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
+
+						// store menu position for sub-menu positioning
+						if (fabEl) {
+							let elemRect = fabEl.getBoundingClientRect();	
+							menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: true };
+							fabEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
+						}
+						else if (toolbarEl && clickedItemEl) {
+							let elemRect = clickedItemEl.getBoundingClientRect();
+							menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
+							toolbarEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
+						}
+
+						// if we don't have a position yet, try to get it from the previous menu
+						if (!menuPos) {
+							let previousPosData = fabEl ? fabEl.getAttribute('data-menu-pos') : toolbarEl?.getAttribute('data-menu-pos');
+							menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
+						}
+
+						// add class so we can style the menu
 						menu.dom.addClass('note-toolbar-menu');
+
+						// position the data and set focus in it if necessary
+						menuPos ? menu.showAtPosition(menuPos) : undefined;
+						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
 					});
 				}
 				break;
@@ -1056,6 +1072,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	private getToolbarListEl(): HTMLElement | null {
 		let itemsUl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
 		return itemsUl;
+	}
+
+	/**
+	 * Get the floating action button, if it exists.
+	 * @returns HTMLElement or null, if it doesn't exist.
+	 */
+	private getToolbarFabEl(): HTMLElement | null {
+		let existingToolbarFabEl = activeDocument.querySelector('.cg-note-toolbar-fab-container') as HTMLElement;
+		return existingToolbarFabEl;
 	}
 
 	/*************************************************************************
