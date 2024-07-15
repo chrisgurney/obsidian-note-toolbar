@@ -194,6 +194,7 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mrght: "right align items" },
     { mstcky: "sticky*" },
     { mnstcky: "not sticky" },
+	{ mnwrp: "don't wrap items*" },
     { mfltl: "float left*" },
     { mfltr: "float right*" },
     { mnflt: "no float" },
@@ -202,5 +203,6 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ mfltl: "Float left only works within callouts." },
 	{ mfltr: "Float right only works within callouts." },
+	{ mnwrp: "Works best if items are not evenly spaced or centered." },
 	{ mstcky: "Sticky does not apply in Reading mode." },
 ];

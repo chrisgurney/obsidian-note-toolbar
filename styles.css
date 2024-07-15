@@ -689,6 +689,12 @@ body {
         }
     }
 
+    &[data-callout-metadata*="mnwrp"] ul {
+        .is-mobile & {
+            flex-wrap: nowrap;
+        }
+    }
+
     &[data-callout-metadata*="button"] ul {
         gap: var(--size-4-2);
         & a, span.external-link {
