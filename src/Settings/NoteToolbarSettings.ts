@@ -1,6 +1,12 @@
 /* remember to update when settings structure changes */
 export const SETTINGS_VERSION = 20240426.1;
 
+export type ComponentType = 'icon' | 'label';
+export type LinkType = 'command' | 'file' | 'group' | 'menu' | 'uri';
+export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
+export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
+export type ViewType = 'all' | 'preview' | 'source';
+
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
 	icon: string;
@@ -99,11 +105,6 @@ export interface ItemViewContext extends ViewContext {
 	component: ComponentType;
 }
 
-export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
-export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
-export type ViewType = 'all' | 'preview' | 'source';
-export type ComponentType = 'icon' | 'label';
-
 export interface FolderMapping {
 	folder: string;
 	toolbar: string;
@@ -131,12 +132,11 @@ export interface ToolbarItemLinkAttr {
 	type: LinkType;
 };
 
-export type LinkType = 'command' | 'file' | 'menu' | 'uri';
-
 export const LINK_OPTIONS = {
 	command: "Command",
 	file: "File",
-	menu: "Menu",
+	group: "Item Group",
+	menu: "Item Menu",
 	uri: "URI"
 }
 
