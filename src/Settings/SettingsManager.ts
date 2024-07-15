@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "src/main";
-import { DEFAULT_SETTINGS, ItemViewContext, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "./NoteToolbarSettings";
+import { DEFAULT_SETTINGS, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "./NoteToolbarSettings";
 import { Platform } from "obsidian";
-import { debugLog, migrateItemVisPlatform } from "src/Utils/Utils";
+import { debugLog } from "src/Utils/Utils";
 
 export class SettingsManager {
 
@@ -155,7 +155,7 @@ export class SettingsManager {
 					tb.items.forEach((item: any, item_index: number) => {
 						// convert hideOnDesktop + hideOnMobile to contexts
 						this.plugin.settings.toolbars[index].items[item_index].contexts = [{
-							platform: migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
+							platform: this.migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
 							view: 'all'}];
 						delete item.hideOnDesktop;
 						delete item.hideOnMobile;
@@ -282,6 +282,32 @@ export class SettingsManager {
 		await this.plugin.renderToolbarForActiveFile();
 
 		debugLog("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+	/*************************************************************************
+	 * HELPERS
+	 *************************************************************************/
+
+	/**
+	 * Migration: Returns the platform visibility value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
+	 * Platform value should be the opposite of these flags.
+	 * @param hideOnDesktop 
+	 * @param hideOnMobile 
+	 * @returns PlatformType
+	 */
+	migrateItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolean): PlatformType {
+		if (!hideOnDesktop && !hideOnMobile) {
+			return 'all';
+		} else if (hideOnDesktop && hideOnMobile) {
+			return 'none';
+		} else if (hideOnMobile) {
+			return 'desktop';
+		} else if (hideOnDesktop) {
+			return 'mobile';
+		} else {
+			// this case should never occur
+			return 'all';
+		}
 	}
 
 }
