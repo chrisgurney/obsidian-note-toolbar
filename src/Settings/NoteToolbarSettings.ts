@@ -135,7 +135,6 @@ export interface ToolbarItemLinkAttr {
 export const LINK_OPTIONS = {
 	command: "Command",
 	file: "File",
-	group: "Item Group",
 	menu: "Item Menu",
 	uri: "URI"
 }
