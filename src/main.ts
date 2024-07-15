@@ -1,9 +1,10 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
+import { CommandsManager } from 'Commands/CommandsManager';
 
 // allows access to Menu DOM, to add a class for styling
 declare module "obsidian" {
@@ -14,7 +15,8 @@ declare module "obsidian" {
 
 export default class NoteToolbarPlugin extends Plugin {
 
-	settings: NoteToolbarSettings;
+	commands: CommandsManager;
+	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 
 	/**
@@ -31,13 +33,15 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
-		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.focusCommand() });
-		this.addCommand({ id: 'open-settings', name: 'Open Plugin Settings', callback: async () => this.openSettingsCommand() });
-		this.addCommand({ id: 'open-toolbar-settings', name: 'Open Toolbar Settings', callback: async () => this.openToolbarSettingsCommand() });
-		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.togglePropsCommand('show') });
-		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.togglePropsCommand('hide') });
-		this.addCommand({ id: 'fold-properties', name: 'Fold Properties', callback: async () => this.togglePropsCommand('fold') });
-		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.togglePropsCommand('toggle') });
+		this.commands = new CommandsManager(this);
+
+		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.commands.focus() });
+		this.addCommand({ id: 'open-settings', name: 'Open Plugin Settings', callback: async () => this.commands.openSettings() });
+		this.addCommand({ id: 'open-toolbar-settings', name: 'Open Toolbar Settings', callback: async () => this.commands.openToolbarSettings() });
+		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.commands.toggleProps('show') });
+		this.addCommand({ id: 'hide-properties', name: 'Hide Properties', callback: async () => this.commands.toggleProps('hide') });
+		this.addCommand({ id: 'fold-properties', name: 'Fold Properties', callback: async () => this.commands.toggleProps('fold') });
+		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.commands.toggleProps('toggle') });
 
 		// add icons specific to the plugin
 		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
@@ -608,109 +612,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/*************************************************************************
-	 * COMMANDS
-	 *************************************************************************/
-
-	/**
-	 * Sets the focus on the first item in the toolbar.
-	 */
-	async focusCommand(): Promise<void> {
-
-		debugLog("focusCommand()");
-		// need to get the type of toolbar first
-		let toolbarEl = this.getToolbarEl();
-		let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
-		switch (toolbarPosition) {
-			case 'fabr':
-			case 'fabl':
-				// trigger the menu
-				let toolbarFab = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
-				debugLog("focusCommand: button: ", toolbarFab);
-				toolbarFab.click();
-				break;
-			case 'props':
-			case 'top':
-				// get the list and set focus on the first visible item
-				let itemsUl: HTMLElement | null = this.getToolbarListEl();
-				if (itemsUl) {
-					debugLog("focusCommand: toolbar: ", itemsUl);
-					let items = Array.from(itemsUl.children);
-					const visibleItems = items.filter(item => {
-						return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
-					});
-					const link = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-					debugLog("focusCommand: focussed item: ", link);
-					link?.focus();
-				}
-				break;
-			case 'hidden':
-			default:
-				// do nothing
-				break;
-		}
-
-	}
-
-	/**
-	 * Convenience command to open Note Toolbar's settings.
-	 */
-	async openSettingsCommand(): Promise<void> {
-		// @ts-ignore
-		const settings = this.app.setting;
-		settings.open();
-		settings.openTabById('note-toolbar');
-	}
-
-	/**
-	 * Convenience command to open this toolbar's settings.
-	 */
-	async openToolbarSettingsCommand(): Promise<void> {
-		// figure out what toolbar is on the screen
-		let toolbarEl = this.getToolbarEl();
-		let toolbarName = toolbarEl?.getAttribute('data-name');
-		let toolbarSettings = toolbarName ? this.settingsManager.getToolbar(toolbarName) : undefined;
-		if (toolbarSettings) {
-			const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
-			modal.setTitle("Edit Toolbar: " + toolbarName);
-			modal.open();
-		}
-	}
-
-	/**
-	 * Shows, completely hides, folds, or toggles the visibility of this note's Properties.
-	 * @param visibility Set to 'show', 'hide', 'fold', or 'toggle'
-	 */
-	async togglePropsCommand(visibility: 'show' | 'hide' | 'fold' | 'toggle'): Promise<void> {
-
-		let propsEl = this.getPropsEl();
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
-		// @ts-ignore make sure we're not in source (code) view
-		if (propsEl && !currentView.editMode.sourceMode) {
-			let propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
-			visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
-			switch (visibility) {
-				case 'show':
-					propsEl.style.display = 'var(--metadata-display-editing)';
-					// expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
-					if (propsEl.classList.contains('is-collapsed')) {
-						(propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
-					}	
-					break;
-				case 'hide':
-					propsEl.style.display = 'none';
-					break;
-				case 'fold':
-					if (!propsEl.classList.contains('is-collapsed')) {
-						(propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
-					}
-					break;	
-			}
-		}
-
-	}
-
-	/*************************************************************************
 	 * HANDLERS
 	 *************************************************************************/
 	
@@ -978,7 +879,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			  .setTitle("Note Toolbar settings...")
 			  .setIcon("lucide-wrench")
 			  .onClick((menuEvent) => {
-				  this.openSettingsCommand();
+				  this.commands.openSettings();
 			  });
 		  });
   
@@ -1018,7 +919,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Gets the Properties container in the current view.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	private getPropsEl(): HTMLElement | null {
+	getPropsEl(): HTMLElement | null {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let propertiesContainer = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
 		debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
@@ -1030,7 +931,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param positionsToCheck 
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	private getToolbarEl(): HTMLElement | null {
+	getToolbarEl(): HTMLElement | null {
 		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
 		debugLog("getToolbarEl: ", existingToolbarEl);
 		return existingToolbarEl;
@@ -1040,7 +941,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Get the toolbar element's <ul> element, in the current view.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	private getToolbarListEl(): HTMLElement | null {
+	getToolbarListEl(): HTMLElement | null {
 		let itemsUl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
 		return itemsUl;
 	}
@@ -1049,7 +950,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Get the floating action button, if it exists.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	private getToolbarFabEl(): HTMLElement | null {
+	getToolbarFabEl(): HTMLElement | null {
 		let existingToolbarFabEl = activeDocument.querySelector('.cg-note-toolbar-fab-container') as HTMLElement;
 		return existingToolbarFabEl;
 	}
