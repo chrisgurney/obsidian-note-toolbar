@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, PaneType, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from './Settings/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from './Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars } from './Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest } from './Utils/Utils';
 import ToolbarSettingsModal from './Settings/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
 import { SettingsManager } from './Settings/SettingsManager';
 
@@ -836,24 +836,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 	
 	/**
-	 * Determines where to open a link given any modifiers held on link activation.
-	 * @param event MouseEvent or KeyboardEvent
-	 * @returns PaneType or undefined
-	 */
-	getLinkDest(event: MouseEvent | KeyboardEvent): PaneType | undefined {
-		let linkDest: PaneType | undefined = undefined;
-		// check if modifier keys were pressed on click, to fix #91
-		if (event) {
-			// rules per: https://help.obsidian.md/User+interface/Tabs#Open+a+link
-			const modifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
-			if (modifierPressed) {
-				linkDest = event?.altKey ? (event?.shiftKey ? 'window' : 'split') : 'tab';
-			}
-		}
-		return linkDest;
-	}
-
-	/**
 	 * Handles the link provided.
 	 * @param linkHref What the link is for.
 	 * @param linkAttr Attributes of the link.
@@ -880,7 +862,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				debugLog("- openLinkText: ", linkHref, " from: ", activeFilePath);
 				let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
 				if (fileOrFolder instanceof TFile) {
-					this.app.workspace.openLinkText(linkHref, activeFilePath, this.getLinkDest(event));
+					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkDest(event));
 				} 
 				else if (fileOrFolder instanceof TFolder) {
 					// @ts-ignore
@@ -932,7 +914,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				else {
 					// as fallback, treat it as internal note
 					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					this.app.workspace.openLinkText(linkHref, activeFile, this.getLinkDest(event));
+					this.app.workspace.openLinkText(linkHref, activeFile, getLinkDest(event));
 				}
 				break;
 		}

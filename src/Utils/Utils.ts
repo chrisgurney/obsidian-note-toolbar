@@ -1,4 +1,4 @@
-import { App, TFile, setIcon } from "obsidian";
+import { App, PaneType, Platform, TFile, setIcon } from "obsidian";
 import { ComponentType, ItemViewContext, PlatformType, ToolbarItemSettings, ViewType, Visibility } from "src/Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
@@ -208,6 +208,24 @@ export function getElementPosition(element: HTMLElement): { x: number, y: number
         x: rect.left + activeWindow.scrollX,
         y: rect.top + activeWindow.scrollY
     };
+}
+
+/**
+ * Determines where to open a link given any modifiers held on link activation.
+ * @param event MouseEvent or KeyboardEvent
+ * @returns PaneType or undefined
+ */
+export function getLinkDest(event: MouseEvent | KeyboardEvent): PaneType | undefined {
+	let linkDest: PaneType | undefined = undefined;
+	// check if modifier keys were pressed on click, to fix #91
+	if (event) {
+		// rules per: https://help.obsidian.md/User+interface/Tabs#Open+a+link
+		const modifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
+		if (modifierPressed) {
+			linkDest = event?.altKey ? (event?.shiftKey ? 'window' : 'split') : 'tab';
+		}
+	}
+	return linkDest;
 }
 
 /**
