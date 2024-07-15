@@ -1,7 +1,7 @@
 import { Modal } from "obsidian";
 import ToolbarSettingsModal from "./ToolbarSettingsModal/ToolbarSettingsModal";
-import NoteToolbarPlugin from "src/main";
-import { ToolbarSettings } from "src/Settings/NoteToolbarSettings";
+import NoteToolbarPlugin from "main";
+import { ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export class DeleteModal extends Modal {
 

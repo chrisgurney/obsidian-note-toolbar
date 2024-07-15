@@ -1,4 +1,4 @@
-import { debugLog } from "src/Utils/Utils";
+import { debugLog } from "Utils/Utils";
 
 /**
  * Currently experimental adapter to try to integrate Dataview.

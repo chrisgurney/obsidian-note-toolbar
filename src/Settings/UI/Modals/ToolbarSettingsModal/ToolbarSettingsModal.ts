@@ -1,14 +1,14 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'src/Utils/Utils';
-import NoteToolbarPlugin from 'src/main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from 'src/Settings/NoteToolbarSettings';
-import { NoteToolbarSettingTab } from 'src/Settings/UI/NoteToolbarSettingTab';
-import { DeleteModal } from 'src/Settings/UI/Modals/DeleteModal';
-import { CommandSuggester } from 'src/Settings/UI/Suggesters/CommandSuggester';
-import { IconSuggestModal } from 'src/Settings/UI/Modals/IconSuggestModal';
-import { FileSuggester } from 'src/Settings/UI/Suggesters/FileSuggester';
+import { arraymove, debugLog, emptyMessageFr, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'Utils/Utils';
+import NoteToolbarPlugin from 'main';
+import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
+import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
+import { DeleteModal } from 'Settings/UI/Modals/DeleteModal';
+import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
+import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal';
+import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
-import { ToolbarSuggester } from 'src/Settings/UI/Suggesters/ToolbarSuggester';
+import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 
 export default class ToolbarSettingsModal extends Modal {
 

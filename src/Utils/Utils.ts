@@ -1,5 +1,5 @@
 import { App, PaneType, Platform, TFile, setIcon } from "obsidian";
-import { ComponentType, ToolbarItemSettings, Visibility } from "src/Settings/NoteToolbarSettings";
+import { ComponentType, ToolbarItemSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
