@@ -543,6 +543,9 @@ body {
             font-size: var(--cg-nt-item-font-size);
             border-radius: var(--cg-nt-item-border-radius);
             height: 100%;
+            & span#label {
+                white-space: nowrap;
+            }
             & svg {
                 height: var(--cg-nt-item-icon-size);
                 width: var(--cg-nt-item-icon-size);
