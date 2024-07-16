@@ -1166,20 +1166,23 @@ body {
 }
 
 .note-toolbar-setting-item-link-container {
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    column-gap: 1em;
-    row-gap: 1em;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+    gap: 0.75em;
+    width: 100%;
     & .setting-item {
         padding: 0;
-    }
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        .is-mobile & {
-            margin-top: 0 !important;
+        & .setting-item-info {
+            display: none;
+        }
+        & .setting-item-control {
+            justify-content: start;
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
         }
     }
 }
@@ -1211,6 +1214,9 @@ body {
     border-top: none !important;
     padding-top: 0 !important;
     width: 100%;
+    & .setting-item-info {
+        display: none;
+    }
     & .setting-item-control {
         flex-direction: column;
         align-items: flex-start;
