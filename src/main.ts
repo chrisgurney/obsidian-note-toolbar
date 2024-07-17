@@ -762,13 +762,13 @@ export default class NoteToolbarPlugin extends Plugin {
 				let activeFilePath = activeFile ? activeFile.path : '';
 				debugLog("- openLinkText: ", linkHref, " from: ", activeFilePath);
 				let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
-				if (fileOrFolder instanceof TFile) {
-					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkDest(event));
-				} 
-				else if (fileOrFolder instanceof TFolder) {
+				if (fileOrFolder instanceof TFolder) {
 					// @ts-ignore
 					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
 				}
+				else {
+					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkDest(event));
+				} 
 				break;
 			case 'menu':
 				let toolbar = this.settingsManager.getToolbar(linkHref);
