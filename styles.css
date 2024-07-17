@@ -1361,7 +1361,7 @@ body {
                     color: var(--icon-color-hover);
                     background-color: var(--background-modifier-hover);
                 }
-                &:focus {
+                &:focus-visible {
                     border-radius: var(--input-radius);
                     box-shadow: 0 0 0 1px var(--background-modifier-border);
                     box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
