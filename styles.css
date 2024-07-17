@@ -552,7 +552,7 @@ body {
             }
         }
 
-        & a:focus-within, span.external-link:focus-within {
+        & li:has(:focus-visible) {
             border-radius: var(--metadata-property-radius);
             box-shadow: inset 0 0 0 1px var(--background-modifier-border);
             box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
