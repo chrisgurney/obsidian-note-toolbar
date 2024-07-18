@@ -76,18 +76,24 @@ export function getElementPosition(element: HTMLElement): { x: number, y: number
 }
 
 /**
- * Determines where to open a link given any modifiers held on link activation.
+ * Determines where to open a link given any modifiers used on link activation.
  * @param event MouseEvent or KeyboardEvent
  * @returns PaneType or undefined
  */
 export function getLinkDest(event: MouseEvent | KeyboardEvent): PaneType | undefined {
 	let linkDest: PaneType | undefined = undefined;
-	// check if modifier keys were pressed on click, to fix #91
 	if (event) {
-		// rules per: https://help.obsidian.md/User+interface/Tabs#Open+a+link
-		const modifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
-		if (modifierPressed) {
-			linkDest = event?.altKey ? (event?.shiftKey ? 'window' : 'split') : 'tab';
+		// check if middle button was clicked
+		if (event instanceof MouseEvent && event.type === 'auxclick' && event.button === 1) {
+			linkDest = 'tab';
+		}
+		else {
+			// check if modifier keys were pressed on click, to fix #91
+			// rules per: https://help.obsidian.md/User+interface/Tabs#Open+a+link
+			const modifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
+			if (modifierPressed) {
+				linkDest = event?.altKey ? (event?.shiftKey ? 'window' : 'split') : 'tab';
+			}
 		}
 	}
 	return linkDest;

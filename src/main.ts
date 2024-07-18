@@ -390,7 +390,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 			item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
 			toolbarItem.setAttribute("rel", "noopener");
-			toolbarItem.onclick = (e) => this.toolbarClickHandler(e);
+			this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
+			this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
 
 			const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
 			if (item.label) {
@@ -709,28 +710,33 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		debugLog('toolbarClickHandler: ', event);
 
-		let clickedEl = event.currentTarget as HTMLLinkElement;
-		let linkHref = clickedEl.getAttribute("href");
+		// allow standard and middle clicks through
+		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
 
-		if (linkHref != null) {
-			
-			let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
-			linkType ? (linkType in LINK_OPTIONS ? event.preventDefault() : undefined) : undefined
-
-			debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
-
-			// default to true if it doesn't exist, treating the url as though it is a URI with vars
-			let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
-							 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
-
-			let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
-			
-			// remove the focus effect if clicked with a mouse
-			if ((event as PointerEvent)?.pointerType === "mouse") {
-				clickedEl.blur();
+			let clickedEl = event.currentTarget as HTMLLinkElement;
+			let linkHref = clickedEl.getAttribute("href");
+	
+			if (linkHref != null) {
+				
+				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
+				linkType ? (linkType in LINK_OPTIONS ? event.preventDefault() : undefined) : undefined
+	
+				debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
+	
+				// default to true if it doesn't exist, treating the url as though it is a URI with vars
+				let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
+								 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
+	
+				let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
+				
+				// remove the focus effect if clicked with a mouse
+				if ((event as PointerEvent)?.pointerType === "mouse") {
+					clickedEl.blur();
+				}
+	
+				this.handleLink(linkHref, { commandId: linkCommandId, hasVars: linkHasVars, type: linkType } as ToolbarItemLinkAttr, event);
+	
 			}
-
-			this.handleLink(linkHref, { commandId: linkCommandId, hasVars: linkHasVars, type: linkType } as ToolbarItemLinkAttr, event);
 
 		}
 
