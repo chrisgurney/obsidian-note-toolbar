@@ -1,5 +1,6 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, emptyMessageFr, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, learnMoreFr, moveElement, createToolbarPreviewFr } from 'Utils/Utils';
+import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement } from 'Utils/Utils';
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr } from "Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';

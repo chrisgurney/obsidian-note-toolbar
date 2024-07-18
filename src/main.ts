@@ -2,7 +2,7 @@ import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, 
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest } from 'Utils/Utils';
-import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
+import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 

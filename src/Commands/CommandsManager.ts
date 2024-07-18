@@ -1,4 +1,4 @@
-import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal/ToolbarSettingsModal";
+import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { debugLog } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { MarkdownView } from "obsidian";

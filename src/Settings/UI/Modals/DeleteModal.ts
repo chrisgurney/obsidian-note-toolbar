@@ -1,5 +1,5 @@
 import { Modal } from "obsidian";
-import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal/ToolbarSettingsModal";
+import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import NoteToolbarPlugin from "main";
 import { ToolbarSettings } from "Settings/NoteToolbarSettings";
 

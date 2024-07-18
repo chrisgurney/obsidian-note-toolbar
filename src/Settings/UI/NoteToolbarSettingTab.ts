@@ -1,7 +1,8 @@
 import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from 'main';
-import { arraymove, createToolbarPreviewFr, debugLog, emptyMessageFr, learnMoreFr, moveElement } from 'Utils/Utils';
-import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal/ToolbarSettingsModal';
+import { arraymove, debugLog, moveElement } from 'Utils/Utils';
+import { createToolbarPreviewFr, emptyMessageFr, learnMoreFr } from "Utils/SettingsUIUtils";
+import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { FolderMapping, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
