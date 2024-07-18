@@ -6,7 +6,6 @@ import { ToolbarItemSettings } from "Settings/NoteToolbarSettings";
  * @param toolbarItems Array of ToolbarItemSettings to display in the preview.
  * @returns DocumentFragment
  */
-
 export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): DocumentFragment {
 	let toolbarFr: DocumentFragment = document.createDocumentFragment();
 	let previewContainer = toolbarFr.createDiv();
@@ -41,12 +40,12 @@ export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): Doc
 	previewContainer.appendChild(itemsFr);
 	return toolbarFr;
 }
+
 /**
  * Creates a text fragment with the given message, for an empty state.
  * @param message Message to return as a fragment.
  * @returns DocumentFragment containing the message and styling.
  */
-
 export function emptyMessageFr(message: string): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	let messageFrText = document.createElement("i");
@@ -54,13 +53,13 @@ export function emptyMessageFr(message: string): DocumentFragment {
 	messageFr.append(messageFrText);
 	return messageFr;
 }
+
 /**
  * Creates a text fragment with help text and a Learn More link.
  * @param message Message to return as a fragment.
  * @param url Link to documentation.
  * @returns DocumentFragment containing the message and styling.
  */
-
 export function learnMoreFr(message: string, url: string): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	messageFr.append(
