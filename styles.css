@@ -572,6 +572,10 @@ body {
             &::after {
                 content: none !important; /* removes decoration added by ITS theme */
             }
+            & span.cm-iconize-icon {
+                transform: unset !important;
+                vertical-align: middle;
+            }
         }
 
     }
