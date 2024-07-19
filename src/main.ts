@@ -64,6 +64,12 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		}
 
+		// adds a protocol handler to execute commands, as an alternative to needing Advanced URI
+		this.registerObsidianProtocolHandler("note-toolbar", async (e) => {
+			// example usage: obsidian://note-toolbar?commandid=workspace%3Atoggle-pin
+			e.commandid ? this.app.commands.executeCommandById(decodeURIComponent(e.commandid)) : undefined;
+		});
+
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
 		// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
