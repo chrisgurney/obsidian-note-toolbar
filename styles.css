@@ -589,14 +589,9 @@ body {
             opacity: 0;
             transition: all 0.2s ease-in-out;
             -webkit-transition: all 0.2s ease-in-out;
-        }
-    }
-
-    &[data-callout-metadata*="autohide"]:hover {
-        &:not(.is-mobile &) {
-            opacity: 1;
-            transition: all 0.2s ease-in-out;
-            -webkit-transition: all 0.2s ease-in-out;
+            &:hover {
+                opacity: 1;
+            }
         }
     }
 
