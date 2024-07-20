@@ -304,7 +304,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		switch (position) {
 			case 'fabl':
 			case 'fabr':
-				noteToolbarElement = await this.renderToolbarAsFab(toolbar);
+				noteToolbarElement = await this.renderToolbarAsFab(position);
 				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
@@ -453,16 +453,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * 
-	 * @param toolbar 
+	 * Creates a floating button to attach event to, to render the menu.
+	 * @param position button position (i.e., 'fabl' or 'fabr') 
 	 * @returns HTMLElement cg-note-toolbar-fab
 	 */
-	async renderToolbarAsFab(toolbar: ToolbarSettings): Promise<HTMLElement> {
+	async renderToolbarAsFab(position: string): Promise<HTMLElement> {
 
 		let noteToolbarFabContainer = activeDocument.createElement('div');
 		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
 		noteToolbarFabContainer.setAttribute('role', 'group');
 		noteToolbarFabContainer.setAttribute('aria-label', 'Note Toolbar button');
+		noteToolbarFabContainer.setAttribute('data-tbar-position', position);
 
 		let noteToolbarFabButton = activeDocument.createElement('button');
 		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
@@ -638,14 +639,23 @@ export default class NoteToolbarPlugin extends Plugin {
 			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 			if (toolbar) {
 				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-					let elemRect = posAtElement.getBoundingClientRect();
-					let menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: true };
 					let fabEl = this.getToolbarFabEl();
-					// store menu position for sub-menu positioning
-					fabEl?.setAttribute('data-menu-pos', JSON.stringify(menuPos));
-					// add class so we can style the menu
-					menu.dom.addClass('note-toolbar-menu');
-					menu.showAtPosition(menuPos);
+					if (fabEl) {
+						let fabPos = fabEl.getAttribute('data-tbar-position');
+						// determine menu orientation based on button position
+						let elemRect = posAtElement.getBoundingClientRect();
+						let menuPos = { 
+							x: (fabPos === 'fabl' ? elemRect.x : elemRect.x + elemRect.width), 
+							y: (elemRect.top - 6),
+							overlap: true,
+							left: (fabPos === 'fabl' ? false : true)
+						};
+						// store menu position for sub-menu positioning
+						fabEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
+						// add class so we can style the menu
+						menu.dom.addClass('note-toolbar-menu');
+						menu.showAtPosition(menuPos);
+					}
 				});
 			}
 		}
@@ -793,12 +803,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
 
 						// store menu position for sub-menu positioning
-						if (fabEl) {
-							let elemRect = fabEl.getBoundingClientRect();	
-							menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: true };
-							fabEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
-						}
-						else if (toolbarEl && clickedItemEl) {
+						if (toolbarEl && clickedItemEl) {
 							let elemRect = clickedItemEl.getBoundingClientRect();
 							menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
 							toolbarEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
