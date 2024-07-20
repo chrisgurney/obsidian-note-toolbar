@@ -143,6 +143,8 @@ export const POSITION_OPTIONS = {
 	desktop: [
 		{ top: "Top (fixed)" },
 		{ props: "Below Properties" },
+		{ fabl: "Floating button: left" },
+		{ fabr: "Floating button: right" },
 		{ hidden: "Hidden (do not display)" },
 	],
 	mobile: [

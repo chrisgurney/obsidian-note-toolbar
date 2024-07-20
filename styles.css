@@ -748,14 +748,22 @@ body {
     display: flex;
     flex-direction: column-reverse;
     place-items: center;
-    top: calc(var(--cg-nt-fab-pos-y) - 110px);
-    left: var(--cg-nt-fab-pos-x);
-    right: unset;
-    transform: translate(0, 5%);
+    top: calc(var(--cg-nt-fab-pos-y) - 4em);
+    left: unset;
+    right: 4em;
     &[data-fab-position="left"] {
-        left: unset;
-        right: var(--cg-nt-fab-pos-x);
+        left: 4em;
+        right: unset;
+    }
+    .is-mobile & {
+        left: var(--cg-nt-fab-pos-x);
+        right: unset;
+        top: calc(var(--cg-nt-fab-pos-y) - 110px);
         transform: translate(0, 5%);
+        &[data-fab-position="left"] {
+            left: unset;
+            right: var(--cg-nt-fab-pos-x);
+        }
     }
 }
 
