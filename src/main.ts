@@ -308,6 +308,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
+				this.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
 				// this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
 				// this.registerDomEvent(embedBlock, 'focusin', (e) => { e.preventDefault() });
 				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
@@ -321,7 +322,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				div.append(noteToolbarElement);
 				embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
 				embedBlock.append(div);
-				embedBlock.oncontextmenu = (e) => this.toolbarContextMenuHandler(e);
+				this.registerDomEvent(embedBlock, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
 				this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));	
 				break;
 			case 'hidden':
