@@ -794,6 +794,9 @@ body {
             transform: translateY(2%);
         }
     }
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .cg-note-toolbar-bar-container {
