@@ -646,7 +646,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						let elemRect = posAtElement.getBoundingClientRect();
 						let menuPos = { 
 							x: (fabPos === 'fabl' ? elemRect.x : elemRect.x + elemRect.width), 
-							y: (elemRect.top - 6),
+							y: (elemRect.top - 4),
 							overlap: true,
 							left: (fabPos === 'fabl' ? false : true)
 						};
