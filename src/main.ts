@@ -821,12 +821,14 @@ export default class NoteToolbarPlugin extends Plugin {
 						// position (and potentially offset) the menu, and then set focus in it if necessary
 						if (menuPos) {
 							menu.showAtPosition(menuPos);
-							// reposition if the menu overlaps the right edge
-							let menuOverflow = activeWindow.innerWidth - (menuPos.x + menu.dom.offsetWidth);
-							// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
-							if (menuOverflow <= 2) {
-								// show the menu along the right edge of the window instead
-								menu.showAtPosition( { x: activeWindow.innerWidth, y: menuPos.y, overlap: true, left: true } );
+							if (!menuPos.left) {
+								// reposition if the menu overlaps the right edge
+								let menuOverflow = activeWindow.innerWidth - (menuPos.x + menu.dom.offsetWidth);
+								// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
+								if (menuOverflow <= 2) {
+									// show the menu along the right edge of the window instead
+									menu.showAtPosition( { x: activeWindow.innerWidth, y: menuPos.y, overlap: true, left: true } );
+								}
 							}
 						}
 						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
