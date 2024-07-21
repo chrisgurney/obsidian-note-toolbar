@@ -723,7 +723,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.addSearch((cb) => {
 						new CommandSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder("Search for command")
-							.setValue(value)
+							.setValue(toolbarItem.link)
 							.onChange(debounce(async (command) => {
 								toolbarItem.link = command;
 								toolbarItem.linkAttr.type = 'command';
