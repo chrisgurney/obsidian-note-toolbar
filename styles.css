@@ -206,7 +206,7 @@ settings:
         type: heading
         level: 1
         collapsed: true
-    -
+    -    
         id: cg-nt-tbar-border-radius
         title: 'Toolbar: Border radius (in px units)'
         type: variable-number
@@ -224,6 +224,12 @@ settings:
         description: 'Set toolbar mobile position to "floating button"'
         type: heading
         level: 1
+        collapsed: true
+    -
+        id: toolbar-fab-colors
+        title: '↳ 🎨 Colors'
+        type: heading
+        level: 2
         collapsed: true
     -
         id: cg-nt-fab-bg-color
@@ -250,12 +256,11 @@ settings:
         default-light: '#'
         default-dark: '#'
     -
-        id: cg-nt-fab-border-radius
-        title: Border radius (in px units)
-        description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
-        type: variable-number
-        default: 0
-        format: px
+        id: toolbar-fab-sizing-spacing
+        title: '↳ 📐 Sizing and Spacing'
+        type: heading
+        level: 2
+        collapsed: true
     -
         id: cg-nt-fab-padding
         title: Button padding (in px units)
@@ -277,18 +282,45 @@ settings:
         format: px
     -
         id: cg-nt-fab-pos-x
-        title: Button X position
+        title: Button X position on mobile
         description: As a percentage of the editor's width, from the left edge (reversed when button is on right).
         type: variable-number
         default: 82
         format: vw
     -
         id: cg-nt-fab-pos-y
-        title: Button Y position
+        title: Button Y position on mobile
         description: As a percentage of the editor's height, from the top edge.
         type: variable-number
         default: 90
         format: vh
+    -
+        id: cg-nt-fab-pos-x-desktop
+        title: Button X position on desktop (in em units)
+        description: Distance from the edge of the editor view.
+        type: variable-number
+        default: 4
+        format: em
+    -
+        id: cg-nt-fab-pos-y-desktop
+        title: Button Y position on desktop
+        description: As a percentage of the editor's height, from the top edge.
+        type: variable-number
+        default: 90
+        format: vh
+    -
+        id: toolbar-fab-style
+        title: '↳ 😎 Style'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-fab-border-radius
+        title: Border radius (in px units)
+        description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
+        type: variable-number
+        default: 0
+        format: px
     -
         id: toolbar-menus
         title: 'Menus'
@@ -298,7 +330,7 @@ settings:
         collapsed: true
     -
         id: toolbar-menu-colors
-        title: '🎨 Colors'
+        title: '↳ 🎨 Colors'
         type: heading
         level: 2
         collapsed: true
@@ -343,26 +375,8 @@ settings:
         default-light: '#'
         default-dark: '#'
     -
-        id: toolbar-menu-styles
-        title: 😎 Style
-        type: heading
-        level: 2
-        collapsed: true
-    -
-        id: cg-nt-menu-border-radius
-        title: 'Menu: Border radius (in px units)'
-        type: variable-number
-        default: 0
-        format: px
-    -
-        id: cg-nt-menu-item-border-radius
-        title: 'Item: Border radius (in px units)'
-        type: variable-number
-        default: 0
-        format: px
-    -
         id: toolbar-menu-sizing
-        title: 📐 Sizing
+        title:  '↳ 📐 Sizing'
         type: heading
         level: 2
         collapsed: true
@@ -378,6 +392,24 @@ settings:
         type: variable-number
         default: 16
         format: px
+    -
+        id: toolbar-menu-styles
+        title: '↳ 😎 Style'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-menu-border-radius
+        title: 'Menu: Border radius (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: cg-nt-menu-item-border-radius
+        title: 'Item: Border radius (in px units)'
+        type: variable-number
+        default: 0
+        format: px
 */
 
 body {
@@ -392,6 +424,8 @@ body {
     --cg-nt-fab-bg-color-hover: var(--interactive-hover);
     --cg-nt-fab-pos-x: 82vw;
     --cg-nt-fab-pos-y: 90vh;
+    --cg-nt-fab-pos-x-desktop: 4em;
+    --cg-nt-fab-pos-y-desktop: 90vh;
     --cg-nt-fab-icon-color: var(--icon-color);
     --cg-nt-fab-icon-size: var(--icon-l);
     --cg-nt-fab-icon-stroke-width: var(--icon-l-stroke-width);
@@ -748,11 +782,11 @@ body {
     display: flex;
     flex-direction: column-reverse;
     place-items: center;
-    top: calc(var(--cg-nt-fab-pos-y) - 4em);
+    top: calc(var(--cg-nt-fab-pos-y-desktop) - 4em);
     left: unset;
-    right: 4em;
+    right: var(--cg-nt-fab-pos-x-desktop);
     &[data-fab-position="left"] {
-        left: 4em;
+        left: var(--cg-nt-fab-pos-x-desktop);
         right: unset;
     }
     .is-mobile & {
