@@ -1,5 +1,5 @@
-import { App, PaneType, Platform, TFile } from "obsidian";
-import { ComponentType, Visibility } from "Settings/NoteToolbarSettings";
+import { App, ItemView, PaneType, Platform, TFile } from "obsidian";
+import { ComponentType, DEFAULT_TOOLBAR_SETTINGS, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -133,6 +133,32 @@ export function hasVars(s: string): boolean {
  */
 function hasVisibleComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
     return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
+}
+
+/**
+ * Check if current view is a canvas.
+ * Without a proper check, the toolbar gets added to other ItemViews e.g., Bookmarks view
+ * @param itemView the current ItemView
+ * @returns true if data looks like canvas data.
+ * @link https://github.com/Zachatoo/obsidian-canvas-send-to-back/blob/68b27531f644784047be98af2b1cc6c102acf51f/src/canvas.ts#L35-L45
+ */
+export function isViewCanvas(itemView: any): boolean {
+	debugLog("isViewCanvas", itemView);
+	// @ts-ignore
+	return itemView && itemView.file && itemView.file.extension === 'canvas';
+	// following does not work if there is no data in the canvas
+	// if (!itemView || !itemView.getViewData || !itemView.setViewData || !itemView.requestSave) {
+	// 	return false;
+	// }
+	// const data: unknown = JSON.parse(itemView.getViewData());
+	// return (
+	// 	!!data &&
+	// 	typeof data === "object" &&
+	// 	"nodes" in data &&
+	// 	Array.isArray(data.nodes) &&
+	// 	"edges" in data &&
+	// 	Array.isArray(data.edges)
+	// );
 }
 
 /**
