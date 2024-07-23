@@ -1,7 +1,7 @@
-import { CachedMetadata, FrontMatterCache, MarkdownView, Menu, MenuPositionDef, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
@@ -167,23 +167,32 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On leaf changes, delete, check and render toolbar if necessary. 
 	 */
 	leafChangeListener = (event: any) => {
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let viewMode = currentView?.getMode();
-		// console.clear();
-		debugLog('===== LEAF-CHANGE ===== ', viewMode, event);
+		debugLog('===== LEAF-CHANGE ===== ', event);
+		let renderToolbar = false;
+		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (currentView) {
+			// check for editing or reading mode
+			renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
+		}
+		else {
+			// render on canvas: disabled until granular mappings are in place
+			if (false) {
+				currentView = this.app.workspace.getActiveViewOfType(ItemView);
+				if (isViewCanvas(currentView)) {
+					renderToolbar = true;
+				}
+				else {
+					return;
+				}
+			}
+		}
 		// @ts-ignore - TODO: if I need an identifier for the leaf + file, I think I can use this:
 		debugLog(currentView?.file?.path, currentView?.leaf.id);
-		// check for editing or reading mode
-		switch(viewMode) {
-			case "source":
-			case "preview":
-				debugLog("leaf-change: ", viewMode, " -> re-rendering toolbar");
-				this.removeActiveToolbar();
-				// don't seem to need a delay before rendering for leaf changes
-				this.renderToolbarForActiveFile();
-				break;
-			default:
-				return;
+
+		if (renderToolbar) {
+			this.removeActiveToolbar();
+			// don't seem to need a delay before rendering for leaf changes
+			this.renderToolbarForActiveFile();
 		}
 	}
 
@@ -295,6 +304,21 @@ export default class NoteToolbarPlugin extends Plugin {
 			? position = toolbar.position.mobile?.allViews?.position ?? 'props'
 			: position = toolbar.position.desktop?.allViews?.position ?? 'props';
 
+		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (!currentView) {
+			// render on canvas: disabled until granular mappings are in place
+			if (false) {
+				currentView = this.app.workspace.getActiveViewOfType(ItemView);
+				if (isViewCanvas(currentView)) {
+					// it's a canvas: move to 'top' if the position is set to 'props'
+					position === 'props' ? position = 'top' : undefined;
+				}
+				else {
+					return;
+				}
+			}
+		}
+
 		let noteToolbarElement: HTMLElement;
 		let embedBlock = activeDocument.createElement("div");
 		embedBlock.addClass('cg-note-toolbar-container');
@@ -333,8 +357,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		embedBlock.setAttribute("data-name", toolbar.name);
 		embedBlock.setAttribute("data-updated", toolbar.updated);
-
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// add the toolbar to the editor UI
 		switch(position) {
