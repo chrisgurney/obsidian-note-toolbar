@@ -256,30 +256,11 @@ settings:
         default-light: '#'
         default-dark: '#'
     -
-        id: toolbar-fab-sizing-spacing
-        title: '↳ 📐 Sizing and Spacing'
+        id: toolbar-fab-positioning
+        title: '↳ ↕ Positioning'
         type: heading
         level: 2
         collapsed: true
-    -
-        id: cg-nt-fab-padding
-        title: Button padding (in px units)
-        description: Spacing around the icon.
-        type: variable-number
-        default: 12
-        format: px
-    -
-        id: cg-nt-fab-icon-size
-        title: Icon size (in px units)
-        type: variable-number
-        default: 24
-        format: px
-    -
-        id: cg-nt-fab-icon-stroke-width
-        title: Icon stroke width (in px units)
-        type: variable-number
-        default: 1.8
-        format: px
     -
         id: cg-nt-fab-pos-x
         title: Button X position on mobile
@@ -308,6 +289,31 @@ settings:
         type: variable-number
         default: 90
         format: vh
+    -
+        id: toolbar-fab-sizing-spacing
+        title: '↳ 📐 Sizing and Spacing'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-fab-padding
+        title: Button padding (in px units)
+        description: Spacing around the icon.
+        type: variable-number
+        default: 12
+        format: px
+    -
+        id: cg-nt-fab-icon-size
+        title: Icon size (in px units)
+        type: variable-number
+        default: 24
+        format: px
+    -
+        id: cg-nt-fab-icon-stroke-width
+        title: Icon stroke width (in px units)
+        type: variable-number
+        default: 1.8
+        format: px
     -
         id: toolbar-fab-style
         title: '↳ 😎 Style'
