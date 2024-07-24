@@ -146,7 +146,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName("Items")
 			.setHeading()
 			.setDesc(learnMoreFr(
-				"Items in the toolbar, in order from left to right.", 
+				"Items in the toolbar, in order.", 
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"));
 		
 		if (this.toolbar.items.length > 0) {
