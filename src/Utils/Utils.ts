@@ -144,6 +144,7 @@ function hasVisibleComponents(platform: { allViews?: { components: ComponentType
  */
 export function isViewCanvas(itemView: any): boolean {
 	debugLog("isViewCanvas", itemView);
+	return itemView.getViewType() === 'canvas';
 	// @ts-ignore
 	return itemView && itemView.file && itemView.file.extension === 'canvas';
 	// following does not work if there is no data in the canvas
