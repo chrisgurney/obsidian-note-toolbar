@@ -1,5 +1,5 @@
-import { App, ItemView, PaneType, Platform, TFile } from "obsidian";
-import { ComponentType, DEFAULT_TOOLBAR_SETTINGS, Visibility } from "Settings/NoteToolbarSettings";
+import { App, PaneType, Platform, TFile } from "obsidian";
+import { ComponentType, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -60,6 +60,14 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
  */
 export function debugLog(message?: any, ...optionalParams: any[]): void {
 	DEBUG && console.log(message, ...optionalParams);
+}
+
+/**
+ * Gets a new UUID.
+ * @returns string UUID
+ */
+export function getUUID(): string {
+	return window.crypto.randomUUID();
 }
 
 /**

@@ -322,6 +322,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		let noteToolbarElement: HTMLElement;
 		let embedBlock = activeDocument.createElement("div");
 		embedBlock.addClass('cg-note-toolbar-container');
+		toolbar.uuid ? embedBlock.id = toolbar.uuid : undefined;
+		embedBlock.setAttribute("data-name", toolbar.name);
+		embedBlock.setAttribute("data-updated", toolbar.updated);
 		embedBlock.setAttribute('data-tbar-position', position);
 
 		// render the toolbar based on its position
@@ -354,9 +357,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				// we're not rendering it
 				break;
 		}
-
-		embedBlock.setAttribute("data-name", toolbar.name);
-		embedBlock.setAttribute("data-updated", toolbar.updated);
 
 		// add the toolbar to the editor UI
 		switch(position) {
@@ -410,6 +410,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// changed to span as temporary(?) fix (#19) for links on Android
 			let toolbarItem = activeDocument.createElement('span');
+			item.uuid ? toolbarItem.id = item.uuid : undefined;
 			toolbarItem.className = "external-link";
 			toolbarItem.setAttribute("href", item.link);
 			toolbarItem.setAttribute("role", "link");

@@ -1,3 +1,5 @@
+import { getUUID } from "Utils/Utils";
+
 /* remember to update when settings structure changes */
 export const SETTINGS_VERSION = 20240426.1;
 
@@ -26,6 +28,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 }
 
 export interface ToolbarSettings {
+	uuid: string;
 	defaultStyles: string[];
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
@@ -40,6 +43,7 @@ export interface ToolbarSettings {
 }
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
+	uuid: getUUID(),
 	defaultStyles: ["border","even","sticky"],
 	items: [],
 	mobileStyles: [],
@@ -111,6 +115,7 @@ export interface FolderMapping {
 }
 
 export interface ToolbarItemSettings {
+	uuid: string;
 	/**
 	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration)
 	 */
