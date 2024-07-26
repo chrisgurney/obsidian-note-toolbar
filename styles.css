@@ -83,10 +83,17 @@ name: Note Toolbar
 id: note-toolbar
 settings:
     -
-        id: toolbar-colors
-        title: 🎨 Colors
+        id: toolbar
+        title: Toolbars
+        description: 'Styles for standard toolbars and items'
         type: heading
         level: 1
+        collapsed: true
+    -
+        id: toolbar-colors
+        title: '↳ 🎨 Colors'
+        type: heading
+        level: 2
         collapsed: true
     -
         id: cg-nt-tbar-bg-color
@@ -139,9 +146,9 @@ settings:
         default-dark: '#'
     -
         id: toolbar-positioning
-        title: ↕ Positioning
+        title: '↳ ↕ Positioning'
         type: heading
-        level: 1
+        level: 2
         collapsed: true
     -
         id: cg-nt-tbar-top-sticky-pos-desktop
@@ -159,9 +166,9 @@ settings:
         format: rem
     -
         id: toolbar-sizing-spacing
-        title: 📐 Sizing and Spacing
+        title: '↳ 📐 Sizing and Spacing'
         type: heading
-        level: 1
+        level: 2
         collapsed: true
     -
         id: cg-nt-tbar-margin-y
@@ -202,9 +209,9 @@ settings:
         format: em
     -
         id: toolbar-styles
-        title: 😎 Style
+        title: '↳ 😎 Style'
         type: heading
-        level: 1
+        level: 2
         collapsed: true
     -    
         id: cg-nt-tbar-border-radius
@@ -221,7 +228,7 @@ settings:
     -
         id: toolbar-fab-styles
         title: 'Floating button'
-        description: 'Set toolbar mobile position to "floating button"'
+        description: 'Set toolbar position to "floating button"'
         type: heading
         level: 1
         collapsed: true
