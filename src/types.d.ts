@@ -1,4 +1,3 @@
-import "obsidian";
 import { INoteToolbarApi } from "Api/NoteToolbarApi";
 import NoteToolbar from "main";
 
