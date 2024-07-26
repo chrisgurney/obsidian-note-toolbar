@@ -337,7 +337,7 @@ settings:
     -
         id: toolbar-menus
         title: 'Item Menus'
-        description: 'Styles for Menu type items'
+        description: 'Styles for Item Menu type items'
         type: heading
         level: 1
         collapsed: true
