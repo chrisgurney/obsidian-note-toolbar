@@ -20,8 +20,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async onload() {
 
-		(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
-		(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);
+		if (false) {
+			(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
+			(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
+		}
 
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
