@@ -1,15 +1,5 @@
 import { AbstractInputSuggest, App, Command } from "obsidian";
 
-declare module "obsidian" {
-    interface App {
-        commands: {
-            executeCommandById: (id: string) => unknown;
-            listCommands: () => [{ id: string; name: string }];
-            commands: Record<string, { name: string; id: string }>;
-        };
-    }
-}
-
 export class CommandSuggester extends AbstractInputSuggest<Command> {
 
     private inputEl: HTMLInputElement;

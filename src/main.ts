@@ -5,16 +5,11 @@ import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasV
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
-
-// allows access to Menu DOM, to add a class for styling
-declare module "obsidian" {
-	interface Menu {
-		dom: HTMLDivElement
-	}
-}
+import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
 
 export default class NoteToolbarPlugin extends Plugin {
 
+	api: INoteToolbarApi;
 	commands: CommandsManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
@@ -24,6 +19,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * adds listeners, settings, and renders the toolbar for the active file.
 	 */
 	async onload() {
+
+		(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
+		(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);
 
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
@@ -74,6 +72,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
 		this.app.workspace.trigger("parse-style-settings");
+
+		this.api = new NoteToolbarApi(this).initialize();
 
 		debugLog('LOADED');
 
@@ -789,6 +789,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 */
 	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr, event: MouseEvent | KeyboardEvent) {
+
+		debugLog("handleLink");
+		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
 
