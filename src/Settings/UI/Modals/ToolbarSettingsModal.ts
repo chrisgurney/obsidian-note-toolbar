@@ -1055,6 +1055,13 @@ export default class ToolbarSettingsModal extends Modal {
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(mobileStyleDiv);
 
+
+		new Setting(settingsDiv)
+			.setDesc(learnMoreFr(
+				"Customize even more with the Style Settings plugin.", 
+				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support")
+			);
+
 	}
 
 	/**
