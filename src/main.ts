@@ -20,6 +20,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async onload() {
 
+		// FIXME: adds a ton of time to startup; can this be optimized? or just put behind a setting?
 		if (false) {
 			(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
 			(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
