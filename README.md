@@ -16,7 +16,9 @@ More options on mobile:
 
 # Features
 
-For the latest additions, see the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
+Wondering what's new? See the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
+
+Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Roadmap)
 
 - [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to commands, files/folders, URIs/URLs, and have menus.
 - [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property
