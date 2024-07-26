@@ -227,7 +227,7 @@ settings:
         format: px
     -
         id: toolbar-fab-styles
-        title: 'Floating button'
+        title: 'Floating Button'
         description: 'Set toolbar position to "floating button"'
         type: heading
         level: 1
@@ -336,7 +336,7 @@ settings:
         format: px
     -
         id: toolbar-menus
-        title: 'Menus'
+        title: 'Item Menus'
         description: 'Styles for Menu type items'
         type: heading
         level: 1
