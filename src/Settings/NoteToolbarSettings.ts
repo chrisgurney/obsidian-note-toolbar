@@ -1,7 +1,7 @@
 import { getUUID } from "Utils/Utils";
 
 /* remember to update when settings structure changes */
-export const SETTINGS_VERSION = 20240426.1;
+export const SETTINGS_VERSION = 20240727.1;
 
 export type ComponentType = 'icon' | 'label';
 export type LinkType = 'command' | 'file' | 'group' | 'menu' | 'uri';

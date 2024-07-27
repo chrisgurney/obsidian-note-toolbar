@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_SETTINGS, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 import { Platform } from "obsidian";
-import { debugLog } from "Utils/Utils";
+import { debugLog, getUUID } from "Utils/Utils";
 
 export class SettingsManager {
 
@@ -172,7 +172,7 @@ export class SettingsManager {
 				old_version = new_version;
 			}
 
-			// MIGRATION: 
+			// MIGRATION: platform-specific positions + item/component visibiility
 			if (old_version === 20240416.1) {
 				new_version = 20240426.1;
 				debugLog("- starting migration: " + old_version + " -> " + new_version);
@@ -261,6 +261,21 @@ export class SettingsManager {
 				old_version = new_version;
 			}
 
+			// MIGRATION: adding IDs to toolbars and items
+			if (old_version === 20240426.1) {
+				new_version = 20240727.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.uuid = tb.uuid ? tb.uuid : getUUID();
+					tb.items.forEach((item: any, item_index: number) => {
+						item.uuid = item.uuid ? item.uuid : getUUID();
+					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// COMMENT THIS OUT while testing new migration code
 			this.plugin.settings.version = SETTINGS_VERSION;
 			debugLog("updated settings:", this.plugin.settings);
 
