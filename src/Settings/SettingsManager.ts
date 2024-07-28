@@ -20,11 +20,20 @@ export class SettingsManager {
 	}
 
 	/**
+	 * Gets toolbar from settings, using the provided UUID.
+	 * @param id UUID of toolbar to get settings for.
+	 * @returns ToolbarSettings for the provided matched toolbar ID, undefined otherwise.
+	 */
+	public getToolbar(uuid: string | null): ToolbarSettings | undefined {
+		return uuid ? this.plugin.settings.toolbars.find(tbar => tbar.uuid === uuid) : undefined;
+	}
+
+	/**
 	 * Gets toolbar from settings, using the provided name.
 	 * @param name Name of toolbar to get settings for (case-insensitive).
 	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
 	 */
-	public getToolbar(name: string | null): ToolbarSettings | undefined {
+	public getToolbarByName(name: string | null): ToolbarSettings | undefined {
 		return name ? this.plugin.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
 	}
 
@@ -36,9 +45,19 @@ export class SettingsManager {
 	public getToolbarFromProps(names: string[] | null): ToolbarSettings | undefined {
 		if (!names) return undefined;
 		if (typeof names === "string") {
-			return this.getToolbar(names);
+			return this.getToolbarByName(names);
 		}
 		return this.plugin.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
+	}
+
+	/**
+	 * Gets the name of the toolbar based on its UUID.
+	 * @param uuid 
+	 * @returns Name of the toolbar; empty string otherwise.
+	 */
+	public getToolbarName(uuid: string): string {
+		let toolbarName = this.plugin.settings.toolbars.find(tbar => tbar.uuid === uuid)?.name;
+		return toolbarName ? toolbarName : "";
 	}
 
 	/**

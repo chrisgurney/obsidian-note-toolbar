@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest, isViewCanvas } from 'Utils/Utils';
@@ -250,7 +250,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns ToolbarSettings or undefined, if there is no matching toolbar.
 	 */
 	private getMatchingToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
-
+		// TODO: rename function to getMappedToolbar()
 		debugLog('getMatchingToolbar()');
 
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
@@ -793,7 +793,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr, event: MouseEvent | KeyboardEvent) {
 
-		debugLog("handleLink");
+		debugLog("handleLink", linkHref, linkAttr, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
@@ -864,6 +864,9 @@ export default class NoteToolbarPlugin extends Plugin {
 						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
 					});
 				}
+				else if (!toolbar) {
+					new Notice(`Check toolbar settings. Menu toolbar not found: ${linkHref}`);
+				}
 				break;
 			case 'uri':
 				if (isValidUri(linkHref)) {
@@ -903,8 +906,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// figure out what toolbar we're in
 		let toolbarEl = (e.target as Element).closest('.cg-note-toolbar-container');
-		let toolbarName = toolbarEl?.getAttribute('data-name');
-		let toolbarSettings = toolbarName ? this.settingsManager.getToolbar(toolbarName) : undefined;
+		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbar(toolbarEl.id) : undefined;
 
 		let contextMenu = new Menu();
 
@@ -912,11 +914,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			contextMenu.addItem((item) => {
 				item
-					.setTitle("Edit toolbar: " + toolbarName + "...")
+					.setTitle("Edit toolbar: " + toolbarSettings.name + "...")
 					.setIcon("lucide-pen-box")
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-						modal.setTitle("Edit Toolbar: " + toolbarName);
+						modal.setTitle("Edit Toolbar: " + toolbarSettings.name);
 						modal.open();
 					});
 			  });

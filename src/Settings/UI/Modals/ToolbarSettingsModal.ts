@@ -108,7 +108,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setValue(this.toolbar.name)
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
-					let existingToolbar = this.plugin.settingsManager.getToolbar(value);
+					let existingToolbar = this.plugin.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
 						toolbarNameDiv.createEl("div", { 
 							text: "A toolbar already exists with this name", 
@@ -767,12 +767,23 @@ export default class ToolbarSettingsModal extends Modal {
 					.addSearch((cb) => {
 						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 						cb.setPlaceholder("Toolbar")
-							.setValue(toolbarItem.link)
-							.onChange(debounce(async (value) => {
-								toolbarItem.link = value;
-								await this.plugin.settingsManager.save();
+							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
+							.onChange(debounce(async (name) => {
+								// TODO? return an ID from the suggester vs. the name
+								let menuToolbar = this.plugin.settingsManager.getToolbarByName(name);
+								if (menuToolbar) {
+									document.getElementById("note-toolbar-exist-error")?.remove();
+									fieldDiv.removeClass("note-toolbar-setting-error");
+									toolbarItem.link = menuToolbar.uuid;
+									await this.plugin.settingsManager.save();
+								}
+								else {
+									fieldDiv.createEl("div", { 
+										text: "Toolbar does not exist", 
+										attr: { id: "note-toolbar-exist-error" }, cls: "note-toolbar-setting-error-message" });
+									fieldDiv.addClass("note-toolbar-setting-error");
+								}
 								// update help text with toolbar preview or default if none selected
-								let menuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
 								let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
 								let helpTextFr = document.createDocumentFragment();
 								menuPreviewFr 
@@ -827,11 +838,11 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting('file', fieldDiv, toolbarItem, toolbarItem.link);
 				break;
 			case 'menu':
-				let menuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
+				let menuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.uuid);
 				let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
 				let fieldHelp = document.createDocumentFragment();
 				menuPreviewFr 
-					? fieldHelp.append(menuPreviewFr) 
+					? fieldHelp.append(menuPreviewFr)
 					: fieldHelp.append(
 						learnMoreFr(
 							"Select a toolbar to open as a menu.",

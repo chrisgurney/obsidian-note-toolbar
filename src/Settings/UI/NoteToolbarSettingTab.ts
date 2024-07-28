@@ -385,10 +385,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 				cb.setPlaceholder("Toolbar")
-					.setValue(mapping.toolbar)
-					.onChange(debounce(async (newToolbar) => {
-						mapping.toolbar = newToolbar;
-						await this.plugin.settingsManager.save();
+					.setValue(this.plugin.settingsManager.getToolbarName(mapping.toolbar))
+					.onChange(debounce(async (name) => {
+						let mappedToolbar = this.plugin.settingsManager.getToolbarByName(name);
+						if (mappedToolbar) {
+							mapping.toolbar = mappedToolbar.uuid;
+							await this.plugin.settingsManager.save();
+						}
+						// TODO: if not valid show error/warning
 					}, 250));
 			});
 
