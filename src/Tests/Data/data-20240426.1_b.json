@@ -1,0 +1,979 @@
+{
+  "folderMappings": [
+    {
+      "folder": "Calendar/Notes",
+      "toolbar": "Daily Notes"
+    },
+    {
+      "folder": "Portfolio/Efforts",
+      "toolbar": "Efforts Nav"
+    },
+    {
+      "folder": "Portfolio/Atlas/Maps/Job Hunting",
+      "toolbar": "Opportunities Nav"
+    },
+    {
+      "folder": "*",
+      "toolbar": "Global Nav"
+    }
+  ],
+  "icon": "circle-ellipsis",
+  "showEditInFabMenu": true,
+  "toolbarProp": "notetoolbar",
+  "toolbars": [
+    {
+      "name": "Daily Notes",
+      "updated": "2024-06-09T11:12:41.835Z",
+      "items": [
+        {
+          "label": "",
+          "tooltip": "Previous daily note",
+          "icon": "lucide-arrow-left",
+          "link": "Daily notes: Open previous daily note",
+          "linkAttr": {
+            "commandId": "daily-notes:goto-prev",
+            "hasVars": false,
+            "type": "command"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "label",
+                  "icon"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "tooltip": "Next daily note",
+          "icon": "lucide-arrow-right",
+          "link": "Daily notes: Open next daily note",
+          "linkAttr": {
+            "commandId": "daily-notes:goto-next",
+            "hasVars": false,
+            "type": "command"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "Today",
+          "tooltip": "Today's daily note",
+          "icon": "",
+          "link": "Daily notes: Open today's daily note",
+          "linkAttr": {
+            "commandId": "daily-notes",
+            "hasVars": false,
+            "type": "command"
+          },
+          "visibility": {
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "Focus",
+          "tooltip": "Insert tasks to focus on",
+          "icon": "lucide-check-square",
+          "link": "obsidian://shell-commands/?vault=Design&execute=jttqryu9sd",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "tooltip": "Open Things",
+          "icon": "lucide-list-todo",
+          "link": "things:///show?id=today",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "Events",
+          "tooltip": "Insert today's events",
+          "icon": "lucide-calendar-clock",
+          "link": "obsidian://shell-commands/?vault=Design&execute=r0qcncyump&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "tooltip": "Insert items done on this day",
+          "icon": "lucide-badge-check",
+          "link": "obsidian://shell-commands/?vault=Design&execute=um5sony1zn&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "tooltip": "Insert Git activity for this day",
+          "icon": "lucide-git-commit-vertical",
+          "link": "obsidian://shell-commands/?vault=Design&execute=41451u5h99&_task_date={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "tooltip": "What to do if I'm blocked",
+          "icon": "question-mark-glyph",
+          "link": "Atlas/Notes/What to do if I'm Blocked.md",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-timer",
+          "link": "Status Bar Pomodoro Timer: Start pomodoro",
+          "linkAttr": {
+            "commandId": "obsidian-statusbar-pomo:start-satusbar-pomo",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Start Pomodoro timer",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "tooltip": "Choose template to insert",
+          "icon": "templater-icon",
+          "link": "Templater: Open Insert Template modal",
+          "linkAttr": {
+            "commandId": "templater-obsidian:insert-templater",
+            "hasVars": false,
+            "type": "command"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-share",
+          "link": "Copy Obsidian URL",
+          "linkAttr": {
+            "commandId": "workspace:copy-url",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Copy Obsidian URL",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Toggle Properties",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "defaultStyles": [
+        "even"
+      ],
+      "mobileStyles": [],
+      "position": {
+        "desktop": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "mobile": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "tablet": {
+          "allViews": {
+            "position": "props"
+          }
+        }
+      }
+    },
+    {
+      "name": "Efforts Nav",
+      "updated": "2024-06-09T11:11:27.168Z",
+      "items": [
+        {
+          "label": "↖ Up",
+          "tooltip": "",
+          "icon": "",
+          "link": "{{prop_up}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "file"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "Project Tasks",
+          "tooltip": "Get tasks for this project from Things",
+          "icon": "",
+          "link": "obsidian://shell-commands/?vault=Design&execute=2zjvxvte3q&_task_project={{note_title}}",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "+ Deliverable",
+          "tooltip": "",
+          "icon": "",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Areplace-in-file-templater",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-share",
+          "link": "Copy Obsidian URL",
+          "linkAttr": {
+            "commandId": "workspace:copy-url",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Copy Obsidian URL",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "right"
+      ],
+      "mobileStyles": [],
+      "position": {
+        "desktop": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "mobile": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "tablet": {
+          "allViews": {
+            "position": "props"
+          }
+        }
+      }
+    },
+    {
+      "name": "Global Nav",
+      "updated": "2024-06-17T16:18:24.762Z",
+      "items": [
+        {
+          "label": "Home",
+          "tooltip": "",
+          "icon": "lucide-home",
+          "link": "Home 🏡",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "file"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "Today",
+          "tooltip": "",
+          "icon": "calendar-day",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=daily-notes",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-share",
+          "link": "Copy Obsidian URL",
+          "linkAttr": {
+            "commandId": "workspace:copy-url",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Copy Obsidian URL",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "",
+          "icon": "lucide-table-properties",
+          "link": "Note Toolbar: Toggle Properties",
+          "linkAttr": {
+            "commandId": "note-toolbar:toggle-properties",
+            "hasVars": false,
+            "type": "command"
+          },
+          "tooltip": "Toggle Properties",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "defaultStyles": [
+        "sticky",
+        "right"
+      ],
+      "mobileStyles": [],
+      "position": {
+        "desktop": {
+          "allViews": {
+            "position": "top"
+          }
+        },
+        "mobile": {
+          "allViews": {
+            "position": "top"
+          }
+        },
+        "tablet": {
+          "allViews": {
+            "position": "top"
+          }
+        }
+      }
+    },
+    {
+      "name": "Home",
+      "updated": "2024-04-04T02:19:17.660Z",
+      "items": [
+        {
+          "label": "Bookmarks",
+          "tooltip": "",
+          "icon": "lucide-bookmark",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=bookmarks%253Aopen",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": true,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "label": "Today",
+          "tooltip": "",
+          "icon": "calendar-day",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=periodic-notes%253Aopen-daily-note",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "defaultStyles": [
+        "right",
+        "sticky"
+      ],
+      "mobileStyles": [],
+      "position": {
+        "desktop": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "mobile": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "tablet": {
+          "allViews": {
+            "position": "props"
+          }
+        }
+      }
+    },
+    {
+      "defaultStyles": [
+        "border",
+        "sticky",
+        "right"
+      ],
+      "items": [
+        {
+          "label": "Lead Note",
+          "icon": "lucide-file-plus",
+          "link": "obsidian://advanced-uri?vault=Design&commandid=templater-obsidian%253Areplace-in-file-templater",
+          "linkAttr": {
+            "commandId": "",
+            "hasVars": false,
+            "type": "uri"
+          },
+          "tooltip": "",
+          "visibility": {
+            "desktop": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "mobile": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            },
+            "tablet": {
+              "allViews": {
+                "components": [
+                  "icon",
+                  "label"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "mobileStyles": [],
+      "name": "Opportunities Nav",
+      "updated": "2024-04-18T15:53:59.002Z",
+      "position": {
+        "desktop": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "mobile": {
+          "allViews": {
+            "position": "props"
+          }
+        },
+        "tablet": {
+          "allViews": {
+            "position": "props"
+          }
+        }
+      }
+    }
+  ],
+  "version": 20240426.1
+}
