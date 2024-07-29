@@ -1083,7 +1083,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let usageDescFr = document.createDocumentFragment();
 		let descLinkFr = usageDescFr.createEl('a', {href: '#', text: "Search for property usage"});
-		let [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(this.toolbar.name);
+		let [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(this.toolbar.uuid);
 
 		usageDescFr.append(
 			`This toolbar is used in ${mappingCount} mapping(s) and ${itemCount} toolbar item(s).`,
@@ -1263,13 +1263,13 @@ export default class ToolbarSettingsModal extends Modal {
 
 	/**
 	 * Search through settings to find out where this toolbar is referenced.
-	 * @param toolbarName name of the toolbar to check usage for.
+	 * @param id UUID of the toolbar to check usage for.
 	 * @returns mappingCount and itemCount
 	 */
-	getToolbarSettingsUsage(toolbarName: string): [number, number] {
-		let mappingCount = this.plugin.settings.folderMappings.filter(mapping => mapping.toolbar === toolbarName).length;
+	getToolbarSettingsUsage(id: string): [number, number] {
+		let mappingCount = this.plugin.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
 		let itemCount = this.plugin.settings.toolbars.reduce((count, toolbar) => {
-			return count + toolbar.items.filter(item => item.link === toolbarName && item.linkAttr.type === 'menu').length;
+			return count + toolbar.items.filter(item => item.link === id && item.linkAttr.type === 'menu').length;
 		}, 0);
 		return [mappingCount, itemCount];
 	}
