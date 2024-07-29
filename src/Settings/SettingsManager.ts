@@ -13,7 +13,7 @@ export class SettingsManager {
 
 	/**
 	 * Removes the provided toolbar from settings; does nothing if it does not exist.
-	 * @param name Name of the toolbar to remove.
+	 * @param id UUID of the toolbar to remove.
 	 */
 	public deleteToolbar(name: string) {
 		this.plugin.settings.toolbars = this.plugin.settings.toolbars.filter(tbar => tbar.name !== name);
