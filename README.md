@@ -53,7 +53,7 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
 <br/>
 As beta versions become available, I welcome <a href="https://github.com/chrisgurney/obsidian-note-toolbar/discussions">your feedback</a> and any <a href="https://github.com/chrisgurney/obsidian-note-toolbar/issues">issues</a> you uncover!<br/>
 <br/>
-<em>Disclaimer: Betas are pre-release versions of the plugin. It is strongly encouraged to make a backup of your Note Toolbar's <code>data.json</code> file before proceeding.</em><br/>
+<em>Disclaimer: Betas are pre-release versions of the plugin. It is strongly encouraged to make a backup of your Note Toolbar's <code>data.json</code> file before proceeding, and/or test within a separate vault (depending on the nature of the beta).</em><br/>
 <br/>
 <blockquote>
   <ol>
