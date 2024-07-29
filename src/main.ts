@@ -910,8 +910,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let contextMenu = new Menu();
 
-		if (toolbarSettings !== undefined) {
-
+		if (toolbarSettings) {
 			contextMenu.addItem((item) => {
 				item
 					.setTitle("Edit toolbar: " + toolbarSettings.name + "...")
@@ -922,7 +921,6 @@ export default class NoteToolbarPlugin extends Plugin {
 						modal.open();
 					});
 			  });
-
 		}
 
 		contextMenu.addItem((item) => {
