@@ -56,8 +56,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		if (this.plugin.settings.version !== SETTINGS_VERSION) {
 			new Setting(containerEl)
-				.setName("⚠️ Error loading plugin: Please reload")
-				.setDesc("Old settings file detected. Please restart plugin.")
+				.setName("⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.")
+				.setDesc(`Old settings file loaded (${this.plugin.settings.version}) but latest is ${SETTINGS_VERSION}`)
 				.setClass('note-toolbar-setting-plugin-error')
 				.setHeading();
 		}
