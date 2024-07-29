@@ -51,9 +51,9 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
 <br/>
 <a href="https://github.com/TfTHacker/obsidian42-brat">BRAT</a> lets you beta-test plugins, to provide feedback.<br/>
 <br/>
-<em>Disclaimer: Betas are pre-release versions of the plugin. It is strongly encouraged to make a backup of your Note Toolbar's <code>data.json</code> file before proceeding.</em><br/>
-<br/>
 As beta versions become available, I welcome <a href="https://github.com/chrisgurney/obsidian-note-toolbar/discussions">your feedback</a> and any <a href="https://github.com/chrisgurney/obsidian-note-toolbar/issues">issues</a> you uncover!<br/>
+<br/>
+<em>Disclaimer: Betas are pre-release versions of the plugin. It is strongly encouraged to make a backup of your Note Toolbar's <code>data.json</code> file before proceeding.</em><br/>
 <br/>
 <blockquote>
   <ol>
