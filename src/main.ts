@@ -913,11 +913,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarSettings) {
 			contextMenu.addItem((item) => {
 				item
-					.setTitle("Edit toolbar: " + toolbarSettings.name + "...")
+					.setTitle("Edit toolbar: " + toolbarSettings?.name + "...")
 					.setIcon("lucide-pen-box")
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-						modal.setTitle("Edit Toolbar: " + toolbarSettings.name);
+						modal.setTitle("Edit Toolbar: " + toolbarSettings?.name);
 						modal.open();
 					});
 			  });
