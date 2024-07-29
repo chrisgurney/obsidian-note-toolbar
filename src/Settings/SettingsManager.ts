@@ -280,15 +280,31 @@ export class SettingsManager {
 				old_version = new_version;
 			}
 
-			// MIGRATION: adding IDs to toolbars and items
+			// MIGRATION: add and use IDs for toolbars and items
 			if (old_version === 20240426.1) {
 				new_version = 20240727.1;
 				debugLog("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					// add UUIDs to toolbars first
 					tb.uuid = tb.uuid ? tb.uuid : getUUID();
+				});
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					// add UUIDs to items
 					tb.items.forEach((item: any, item_index: number) => {
 						item.uuid = item.uuid ? item.uuid : getUUID();
+						// update item menu type references to use toolbar UUIDs
+						if (item.linkAttr.type === 'menu') {
+							let menuToIdToolbar = this.getToolbarByName(item.link);
+							// just skip if we can't find it
+							menuToIdToolbar ? item.link = menuToIdToolbar?.uuid : undefined;
+						}
 					});
+				});
+				// update folder mappings to use toolbar UUIDs
+				loaded_settings.folderMappings?.forEach((mapping: any, index: number) => {
+					let mapToIdToolbar = this.getToolbarByName(mapping.toolbar);
+					// just skip if we can't find it
+					mapToIdToolbar ? mapping.toolbar = mapToIdToolbar.uuid : undefined;
 				});
 				// for the next migration to run
 				old_version = new_version;
