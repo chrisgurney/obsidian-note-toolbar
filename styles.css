@@ -224,7 +224,16 @@ settings:
         title: 'Items: Border radius (in px units)'
         type: variable-number
         default: 5
-        format: px
+        format: px        
+    -
+        id: cg-nt-tbar-inactive-opacity
+        title: 'Toolbar: Inactive opacity'
+        description: 'When focus is in another tab, dim the toolbar'
+        type: variable-number-slider
+        default: 0.8
+        min: 0
+        max: 1
+        step: 0.05
     -
         id: toolbar-fab-styles
         title: 'Floating Button'
@@ -429,6 +438,7 @@ body {
     --cg-nt-tbar-bg-color: var(--background-primary);
     --cg-nt-tbar-border-color: var(--hr-color);
     --cg-nt-tbar-border-radius: 0px;
+    --cg-nt-tbar-inactive-opacity: 0.8;
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
@@ -784,7 +794,10 @@ body {
                 margin: 0 auto;
             }
         }
-
+        /* user feedback that toolbar interaction is not available; workaround for #69 */
+        &:not(.is-focused &), &:not(.mod-active &) {
+            opacity: var(--cg-nt-tbar-inactive-opacity);
+        }
     }
     
 }
