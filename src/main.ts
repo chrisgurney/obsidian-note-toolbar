@@ -865,7 +865,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 				}
 				else if (!toolbar) {
-					new Notice(`Check toolbar settings. Menu toolbar not found: ${linkHref}`);
+					new Notice(`Check settings for this menu item. Toolbar not found: "${linkHref}"`);
 				}
 				break;
 			case 'uri':
