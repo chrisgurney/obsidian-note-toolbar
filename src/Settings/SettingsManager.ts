@@ -291,8 +291,8 @@ export class SettingsManager {
 						: getUUID();
 				});
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
-					// add UUIDs to items
 					tb.items.forEach((item: any, item_index: number) => {
+						// add UUIDs to items
 						this.plugin.settings.toolbars[index].items[item_index].uuid = this.plugin.settings.toolbars[index].items[item_index].uuid
 							? this.plugin.settings.toolbars[index].items[item_index].uuid
 							: getUUID();
@@ -310,7 +310,7 @@ export class SettingsManager {
 				loaded_settings.folderMappings?.forEach((mapping: any, index: number) => {
 					let mapToIdToolbar = this.getToolbarByName(mapping.toolbar);
 					// just skip if we can't find it
-					mapToIdToolbar ? mapping.toolbar = mapToIdToolbar.uuid : undefined;
+					mapToIdToolbar ? this.plugin.settings.folderMappings[index].toolbar = mapToIdToolbar.uuid : undefined;
 				});
 				// for the next migration to run
 				old_version = new_version;
