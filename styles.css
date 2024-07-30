@@ -642,6 +642,16 @@ body {
         }
     }
 
+    &[data-callout-metadata*="between"] ul {
+        justify-content: space-between;
+    }
+    
+    &[data-callout-metadata*="mbtwn"] ul {
+        .is-mobile & {
+            justify-content: space-between;
+        }
+    }
+
     &[data-callout-metadata*="border"] {
         border-top: solid 1px var(--cg-nt-tbar-border-color);
         border-bottom: solid 1px var(--cg-nt-tbar-border-color);
