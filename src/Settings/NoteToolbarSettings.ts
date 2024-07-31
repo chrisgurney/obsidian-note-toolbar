@@ -4,7 +4,7 @@ import { getUUID } from "Utils/Utils";
 export const SETTINGS_VERSION = 20240727.1;
 
 export type ComponentType = 'icon' | 'label';
-export type LinkType = 'command' | 'file' | 'group' | 'menu' | 'uri';
+export type ItemType = 'command' | 'file' | 'group' | 'menu' | 'uri';
 export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
 export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
 export type ViewType = 'all' | 'preview' | 'source';
@@ -134,7 +134,7 @@ export interface ToolbarItemSettings {
 export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
-	type: LinkType;
+	type: ItemType;
 };
 
 export const LINK_OPTIONS = {

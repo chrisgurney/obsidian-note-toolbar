@@ -2,7 +2,7 @@ import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, d
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr } from "Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { DEFAULT_STYLE_OPTIONS, LinkType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { DeleteModal } from 'Settings/UI/Modals/DeleteModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -596,7 +596,7 @@ export default class ToolbarSettingsModal extends Modal {
 						let itemRow = this.getItemRowElById(rowId);
 						let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
 						if (itemLinkFieldDiv) {
-							toolbarItem.linkAttr.type = value as LinkType;
+							toolbarItem.linkAttr.type = value as ItemType;
 							itemLinkFieldDiv.empty();
 							this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
 							await this.plugin.settingsManager.save();
@@ -702,7 +702,7 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	getLinkSetting(
-		type: LinkType, 
+		type: ItemType, 
 		fieldDiv: HTMLDivElement, 
 		toolbarItem: ToolbarItemSettings, 
 		value: string,
@@ -826,7 +826,7 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	getLinkSettingForType(
-		type: LinkType, 
+		type: ItemType, 
 		fieldDiv: HTMLDivElement, 
 		toolbarItem: ToolbarItemSettings
 	) {
