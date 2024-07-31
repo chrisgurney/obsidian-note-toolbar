@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
 import { Platform } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 
@@ -175,7 +175,7 @@ export class SettingsManager {
 						// convert hideOnDesktop + hideOnMobile to contexts
 						this.plugin.settings.toolbars[index].items[item_index].contexts = [{
 							platform: this.migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
-							view: 'all'}];
+							view: ViewType.All}];
 						delete item.hideOnDesktop;
 						delete item.hideOnMobile;
 					});
@@ -183,7 +183,7 @@ export class SettingsManager {
 						position: PositionType.Props, 
 						contexts: [{
 							platform: PlatformType.All, 
-							view: 'all'
+							view: ViewType.All
 						}]
 					}]
 				});

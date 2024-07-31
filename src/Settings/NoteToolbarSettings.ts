@@ -28,7 +28,11 @@ export enum PositionType {
 	Props = 'props',
 	Top = 'top'
 }
-export type ViewType = 'all' | 'preview' | 'source';
+export enum ViewType {
+	All = 'all',
+	Preview = 'preview',
+	Source = 'source'
+}
 
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
