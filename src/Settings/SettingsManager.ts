@@ -180,7 +180,7 @@ export class SettingsManager {
 						delete item.hideOnMobile;
 					});
 					this.plugin.settings.toolbars[index].positions = [{
-						position: 'props', 
+						position: PositionType.Props, 
 						contexts: [{
 							platform: PlatformType.All, 
 							view: 'all'

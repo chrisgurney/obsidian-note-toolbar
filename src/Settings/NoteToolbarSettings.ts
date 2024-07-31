@@ -21,7 +21,13 @@ export enum PlatformType {
 	Mobile = 'mobile',
 	None = 'none'
 }
-export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
+export enum PositionType {
+	FabLeft = 'fabl',
+	FabRight = 'fabr',
+	Hidden = 'hidden',
+	Props = 'props',
+	Top = 'top'
+}
 export type ViewType = 'all' | 'preview' | 'source';
 
 export interface NoteToolbarSettings {
@@ -64,9 +70,9 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	mobileStyles: [],
 	name: "",
 	position: {
-		desktop: { allViews: { position: 'props' } },
-		tablet: { allViews: { position: 'props' } },
-		mobile: { allViews: { position: 'props' } },
+		desktop: { allViews: { position: PositionType.Props } },
+		tablet: { allViews: { position: PositionType.Props } },
+		mobile: { allViews: { position: PositionType.Props } },
 	},
 	updated: new Date().toISOString(),
 };
@@ -94,7 +100,7 @@ export interface Position {
 	/**
 	 * @deprecated position property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
 	 */
-	position?: 'props' | 'top';
+	position?: PositionType.Props | PositionType.Top;
 }
 
 export interface ViewContext {

@@ -942,7 +942,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						.setTitle(currentPosition === 'props' ? "Set position: Top (fixed)" : "Set position: Below Properties")
 						.setIcon(currentPosition === 'props' ? 'arrow-up-to-line' : 'arrow-down-narrow-wide')
 						.onClick((menuEvent) => {
-							let newPosition: PositionType = currentPosition === 'props' ? 'top' : 'props';
+							let newPosition: PositionType = currentPosition === PositionType.Props ? PositionType.Top : PositionType.Props;
 							if (toolbarSettings?.position) {
 								Platform.isDesktop ?
 									toolbarSettings.position.desktop = { allViews: { position: newPosition } }
