@@ -117,8 +117,8 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
     let hasLabel = false;
 
     if (platform && platform.allViews) {
-        hasIcon = platform.allViews.components.includes('icon');
-        hasLabel = platform.allViews.components.includes('label');
+        hasIcon = platform.allViews.components.includes(ComponentType.Icon);
+        hasLabel = platform.allViews.components.includes(ComponentType.Label);
     }
 
     return [hasIcon, hasLabel];

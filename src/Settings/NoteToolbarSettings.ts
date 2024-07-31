@@ -3,7 +3,10 @@ import { getUUID } from "Utils/Utils";
 /* remember to update when settings structure changes */
 export const SETTINGS_VERSION = 20240727.1;
 
-export type ComponentType = 'icon' | 'label';
+export enum ComponentType {
+	Icon = 'icon',
+	Label = 'label'
+}
 export type ItemType = 'command' | 'file' | 'group' | 'menu' | 'uri';
 export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
 export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';

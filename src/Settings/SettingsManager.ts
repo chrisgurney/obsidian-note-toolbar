@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_SETTINGS, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, DEFAULT_SETTINGS, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 import { Platform } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 
@@ -244,28 +244,28 @@ export class SettingsManager {
 									switch (ctx.platform) {
 										case 'desktop':
 											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
-												allViews: {	components: ['icon', 'label'] }
+												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
 										case 'mobile':
 											this.plugin.settings.toolbars[index].items[item_index].visibility.mobile = {
-												allViews: {	components: ['icon', 'label'] }
+												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											this.plugin.settings.toolbars[index].items[item_index].visibility.tablet = {
-												allViews: {	components: ['icon', 'label'] }
+												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
 										case 'all':
 											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
-												allViews: {	components: ['icon', 'label'] }
+												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											this.plugin.settings.toolbars[index].items[item_index].visibility.mobile = {
-												allViews: {	components: ['icon', 'label'] }
+												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											this.plugin.settings.toolbars[index].items[item_index].visibility.tablet = {
-												allViews: {	components: ['icon', 'label'] }
+												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
-											break;						
+											break;
 										case 'none':
 										default:
 											break;

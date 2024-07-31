@@ -2,7 +2,7 @@ import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, d
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr } from "Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { DeleteModal } from 'Settings/UI/Modals/DeleteModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -271,9 +271,9 @@ export default class ToolbarSettingsModal extends Modal {
 								},
 								tooltip: "",
 								visibility: {
-									desktop: { allViews: { components: ['icon', 'label'] } },
-									mobile: { allViews: { components: ['icon', 'label'] } },
-									tablet: { allViews: { components: ['icon', 'label'] } },
+									desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+									mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+									tablet: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
 								},
 							};
 						this.toolbar.items.push(newToolbarItem);
@@ -1283,8 +1283,8 @@ export default class ToolbarSettingsModal extends Modal {
 	getItemVisibilityMenu(platform: any, platformLabel: string, button: ButtonComponent): Menu {
 
 		let isComponentVisible = {
-			icon: (platform && platform.allViews) ? platform.allViews.components.includes('icon') : false,
-			label: (platform && platform.allViews) ? platform.allViews.components.includes('label') : false,
+			icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
+			label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
 		};
 
 		let menu = new Menu();
@@ -1296,11 +1296,11 @@ export default class ToolbarSettingsModal extends Modal {
 				.setChecked(isComponentVisible.icon)
 				.onClick(async (menuEvent) => {
 					if (isComponentVisible.icon) {
-						removeComponentVisibility(platform, 'icon');
+						removeComponentVisibility(platform, ComponentType.Icon);
 						isComponentVisible.icon = false;
 					}
 					else {
-						addComponentVisibility(platform, 'icon');
+						addComponentVisibility(platform, ComponentType.Icon);
 						isComponentVisible.icon = true;
 					}
 					this.toolbar.updated = new Date().toISOString();
@@ -1320,11 +1320,11 @@ export default class ToolbarSettingsModal extends Modal {
 				.setChecked(isComponentVisible.label)
 				.onClick(async (menuEvent) => {
 					if (isComponentVisible.label) {
-						removeComponentVisibility(platform, 'label');
+						removeComponentVisibility(platform, ComponentType.Label);
 						isComponentVisible.label = false;
 					}
 					else {
-						addComponentVisibility(platform, 'label');
+						addComponentVisibility(platform, ComponentType.Label);
 						isComponentVisible.label = true;
 					}
 					this.toolbar.updated = new Date().toISOString();
