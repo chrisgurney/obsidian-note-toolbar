@@ -14,7 +14,13 @@ export enum ItemType {
 	Menu = 'menu',
 	Uri = 'uri'
 }
-export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
+export enum PlatformType {
+	All = 'all',
+	Desktop = 'desktop',
+	Tablet = 'tablet',
+	Mobile = 'mobile',
+	None = 'none'
+}
 export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
 export type ViewType = 'all' | 'preview' | 'source';
 

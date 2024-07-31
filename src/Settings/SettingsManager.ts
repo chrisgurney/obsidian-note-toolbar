@@ -182,7 +182,7 @@ export class SettingsManager {
 					this.plugin.settings.toolbars[index].positions = [{
 						position: 'props', 
 						contexts: [{
-							platform: 'all', 
+							platform: PlatformType.All, 
 							view: 'all'
 						}]
 					}]
@@ -204,12 +204,12 @@ export class SettingsManager {
 								pos.contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
 									if (pos.position) {
 										switch (ctx.platform) {
-											case 'desktop':
+											case PlatformType.Desktop:
 												this.plugin.settings.toolbars[index].position.desktop = {
 													allViews: { position: pos.position }
 												}
 												break;
-											case 'mobile':
+											case PlatformType.Mobile:
 												this.plugin.settings.toolbars[index].position.mobile = {
 													allViews: { position: pos.position }
 												}
@@ -217,7 +217,7 @@ export class SettingsManager {
 													allViews: { position: pos.position }
 												}
 												break;
-											case 'all':
+											case PlatformType.All:
 												this.plugin.settings.toolbars[index].position.desktop = {
 													allViews: { position: pos.position }
 												}
@@ -242,12 +242,12 @@ export class SettingsManager {
 								if (!this.plugin.settings.toolbars[index].items[item_index].visibility) {
 									this.plugin.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
 									switch (ctx.platform) {
-										case 'desktop':
+										case PlatformType.Desktop:
 											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
-										case 'mobile':
+										case PlatformType.Mobile:
 											this.plugin.settings.toolbars[index].items[item_index].visibility.mobile = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
@@ -255,7 +255,7 @@ export class SettingsManager {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
-										case 'all':
+										case PlatformType.All:
 											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
@@ -266,7 +266,7 @@ export class SettingsManager {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
-										case 'none':
+										case PlatformType.None:
 										default:
 											break;
 									}
@@ -353,16 +353,16 @@ export class SettingsManager {
 	 */
 	migrateItemVisPlatform(hideOnDesktop: boolean, hideOnMobile: boolean): PlatformType {
 		if (!hideOnDesktop && !hideOnMobile) {
-			return 'all';
+			return PlatformType.All;
 		} else if (hideOnDesktop && hideOnMobile) {
-			return 'none';
+			return PlatformType.None;
 		} else if (hideOnMobile) {
-			return 'desktop';
+			return PlatformType.Desktop;
 		} else if (hideOnDesktop) {
-			return 'mobile';
+			return PlatformType.Mobile;
 		} else {
 			// this case should never occur
-			return 'all';
+			return PlatformType.All;
 		}
 	}
 
