@@ -267,7 +267,7 @@ export default class ToolbarSettingsModal extends Modal {
 								linkAttr: {
 									commandId: "",
 									hasVars: false,
-									type: this.toolbar.items.last()?.linkAttr.type ?? "uri"
+									type: this.toolbar.items.last()?.linkAttr.type ?? ItemType.Uri
 								},
 								tooltip: "",
 								visibility: {
@@ -718,7 +718,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		debugLog("getLinkSetting");
 		switch(type) {
-			case 'command': 
+			case ItemType.Command: 
 				new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
@@ -727,12 +727,12 @@ export default class ToolbarSettingsModal extends Modal {
 							.setValue(toolbarItem.link)
 							.onChange(debounce(async (command) => {
 								toolbarItem.link = command;
-								toolbarItem.linkAttr.type = 'command';
+								toolbarItem.linkAttr.type = ItemType.Command;
 								toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
 								await this.plugin.settingsManager.save();
 							}, 250))});
 				break;
-			case 'file':
+			case ItemType.File:
 				new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
@@ -740,7 +740,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder("Search for file or folder")
 							.setValue(value)
 							.onChange(debounce(async (value) => {
-								toolbarItem.linkAttr.type = 'file';
+								toolbarItem.linkAttr.type = ItemType.File;
 								const file = this.app.vault.getAbstractFileByPath(value);
 								if (!(file instanceof TFile) && !(file instanceof TFolder)) {
 									if (document.getElementById("note-toolbar-item-link-note-error") === null) {
@@ -761,7 +761,7 @@ export default class ToolbarSettingsModal extends Modal {
 							}, 750))
 					});
 				break;
-			case 'menu':
+			case ItemType.Menu:
 				const menuSetting = new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
@@ -803,7 +803,7 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
-			case 'uri': 
+			case ItemType.Uri: 
 				const uriSetting = new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
 					.addText(text => text
@@ -812,7 +812,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.onChange(
 							debounce(async (value) => {
 								toolbarItem.link = value;
-								toolbarItem.linkAttr.type = 'uri';
+								toolbarItem.linkAttr.type = ItemType.Uri;
 								toolbarItem.linkAttr.hasVars = hasVars(value);
 								toolbarItem.linkAttr.commandId = '';
 								this.toolbar.updated = new Date().toISOString();
@@ -831,13 +831,13 @@ export default class ToolbarSettingsModal extends Modal {
 		toolbarItem: ToolbarItemSettings
 	) {
 		switch (type) {
-			case 'command':
-				this.getLinkSetting('command', fieldDiv, toolbarItem, '');
+			case ItemType.Command:
+				this.getLinkSetting(ItemType.Command, fieldDiv, toolbarItem, '');
 				break;
-			case 'file':
-				this.getLinkSetting('file', fieldDiv, toolbarItem, toolbarItem.link);
+			case ItemType.File:
+				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, toolbarItem.link);
 				break;
-			case 'menu':
+			case ItemType.Menu:
 				let menuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.uuid);
 				let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
 				let fieldHelp = document.createDocumentFragment();
@@ -848,10 +848,10 @@ export default class ToolbarSettingsModal extends Modal {
 							"Select a toolbar to open as a menu.",
 							"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
 					);
-				this.getLinkSetting('menu', fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
+				this.getLinkSetting(ItemType.Menu, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
 				break;
-			case 'uri':
-				this.getLinkSetting('uri', fieldDiv, toolbarItem, toolbarItem.link, 
+			case ItemType.Uri:
+				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
 					learnMoreFr(
 						"Tip: Use note properties in URIs.",
 						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
@@ -1269,7 +1269,7 @@ export default class ToolbarSettingsModal extends Modal {
 	getToolbarSettingsUsage(id: string): [number, number] {
 		let mappingCount = this.plugin.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
 		let itemCount = this.plugin.settings.toolbars.reduce((count, toolbar) => {
-			return count + toolbar.items.filter(item => item.link === id && item.linkAttr.type === 'menu').length;
+			return count + toolbar.items.filter(item => item.link === id && item.linkAttr.type === ItemType.Menu).length;
 		}, 0);
 		return [mappingCount, itemCount];
 	}

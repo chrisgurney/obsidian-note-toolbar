@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ComponentType, DEFAULT_SETTINGS, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 import { Platform } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 
@@ -156,7 +156,7 @@ export class SettingsManager {
 							this.plugin.settings.toolbars[index].items[item_index].linkAttr = {
 								commandId: "",
 								hasVars: item.urlAttr.hasVars,
-								type: item.urlAttr.isUri ? "uri" : "file"
+								type: item.urlAttr.isUri ? ItemType.Uri : ItemType.File
 							};
 							delete item.urlAttr;
 						}
@@ -297,7 +297,7 @@ export class SettingsManager {
 							? this.plugin.settings.toolbars[index].items[item_index].uuid
 							: getUUID();
 						// update item menu type references to use toolbar UUIDs
-						if (item.linkAttr.type === 'menu') {
+						if (item.linkAttr.type === ItemType.Menu) {
 							let menuToIdToolbar = this.getToolbarByName(item.link);
 							// just skip if we can't find it
 							menuToIdToolbar 

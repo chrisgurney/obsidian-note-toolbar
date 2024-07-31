@@ -7,7 +7,13 @@ export enum ComponentType {
 	Icon = 'icon',
 	Label = 'label'
 }
-export type ItemType = 'command' | 'file' | 'group' | 'menu' | 'uri';
+export enum ItemType {
+	Command = 'command',
+	File = 'file',
+	Group = 'group',
+	Menu = 'menu',
+	Uri = 'uri'
+}
 export type PlatformType = 'all' | 'desktop' | 'tablet' | 'mobile' | 'none';
 export type PositionType = 'fabl' | 'fabr' | 'hidden' | 'props' | 'top';
 export type ViewType = 'all' | 'preview' | 'source';
@@ -141,10 +147,10 @@ export interface ToolbarItemLinkAttr {
 };
 
 export const LINK_OPTIONS = {
-	command: "Command",
-	file: "File",
-	menu: "Item Menu",
-	uri: "URI"
+	[ItemType.Command]: "Command",
+	[ItemType.File]: "File",
+	[ItemType.Menu]: "Item Menu",
+	[ItemType.Uri]: "URI"
 }
 
 export const POSITION_OPTIONS = {

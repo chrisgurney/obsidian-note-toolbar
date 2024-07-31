@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS, ItemType } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -727,8 +727,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					//        or put another way: hot keys are not being honored here
 					let activeEl = activeDocument?.activeElement as HTMLElement;
 					activeEl.click();
-					let linkType = activeEl.getAttribute("data-toolbar-link-attr-type");
-					linkType === 'menu' ? putFocusInMenu() : undefined;
+					let itemType = activeEl.getAttribute("data-toolbar-link-attr-type");
+					itemType === ItemType.Menu ? putFocusInMenu() : undefined;
 					break;
 				case 'Escape':
 					// need this implemented for Reading mode, as escape does nothing
@@ -805,11 +805,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		switch (linkAttr.type) {
-			case 'command':
+			case ItemType.Command:
 				debugLog("- executeCommandById: ", linkAttr.commandId);
 				linkAttr.commandId ? this.app.commands.executeCommandById(linkAttr.commandId) : undefined;
 				break;
-			case 'file':
+			case ItemType.File:
 				// it's an internal link (note); try to open it
 				let activeFilePath = activeFile ? activeFile.path : '';
 				debugLog("- openLinkText: ", linkHref, " from: ", activeFilePath);
@@ -822,7 +822,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkDest(event));
 				} 
 				break;
-			case 'menu':
+			case ItemType.Menu:
 				let toolbar = this.settingsManager.getToolbar(linkHref);
 				debugLog("- menu item for toolbar", toolbar, activeFile);
 				if (toolbar && activeFile) {
@@ -868,7 +868,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					new Notice(`Check Note Toolbar setting for this menu item. Toolbar not found: "${linkHref}"`);
 				}
 				break;
-			case 'uri':
+			case ItemType.Uri:
 				if (isValidUri(linkHref)) {
 					// if actually a url, just open the url
 					window.open(linkHref, '_blank');
