@@ -531,7 +531,10 @@ export default class NoteToolbarPlugin extends Plugin {
 						.setTitle(title)
 						.onClick(async (menuEvent) => {
 							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-							await this.handleLink(toolbarItem.link, toolbarItem.linkAttr, menuEvent);
+							await this.handleLink(
+								toolbarItem.link,
+								toolbarItem.linkAttr.type, toolbarItem.linkAttr.hasVars, toolbarItem.linkAttr.commandId,
+								menuEvent);
 						});
 					});
 			}
@@ -761,8 +764,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 			if (linkHref != null) {
 				
-				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type");
-				linkType ? (linkType in LINK_OPTIONS ? event.preventDefault() : undefined) : undefined
+				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
+				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
 	
 				debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
 	
@@ -777,7 +780,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					clickedEl.blur();
 				}
 	
-				this.handleLink(linkHref, { commandId: linkCommandId, hasVars: linkHasVars, type: linkType } as ToolbarItemLinkAttr, event);
+				this.handleLink(linkHref, linkType, linkHasVars, linkCommandId, event);
 	
 			}
 
@@ -788,26 +791,28 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Handles the link provided.
 	 * @param linkHref What the link is for.
-	 * @param linkAttr Attributes of the link.
+	 * @param type: ItemType
+	 * @param hasVars: boolean
+	 * @param commandId: string or null
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 */
-	async handleLink(linkHref: string, linkAttr: ToolbarItemLinkAttr, event: MouseEvent | KeyboardEvent) {
+	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event: MouseEvent | KeyboardEvent) {
 
-		debugLog("handleLink", linkHref, linkAttr, event);
+		debugLog("handleLink", linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
 
-		if (linkAttr.hasVars) {
+		if (hasVars) {
 			// only replace vars in URIs; might consider other substitution in future
 			linkHref = replaceVars(this.app, linkHref, activeFile, false);
 			debugLog('- uri vars replaced: ', linkHref);
 		}
 
-		switch (linkAttr.type) {
+		switch (type) {
 			case ItemType.Command:
-				debugLog("- executeCommandById: ", linkAttr.commandId);
-				linkAttr.commandId ? this.app.commands.executeCommandById(linkAttr.commandId) : undefined;
+				debugLog("- executeCommandById: ", commandId);
+				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
