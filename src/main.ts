@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS, ItemType } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -44,6 +44,17 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.addCommand({ id: 'fold-properties', name: 'Fold Properties', callback: async () => this.commands.toggleProps('fold') });
 		this.addCommand({ id: 'toggle-properties', name: 'Toggle Properties', callback: async () => this.commands.toggleProps('toggle') });
 
+		this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
+
+		this.registerEvent(this.app.workspace.on('window-open', (win) => {
+			win.doc.on('click', '.callout[data-callout="note-toolbar"] a.external-link', (e: MouseEvent) => {
+				this.calloutLinkHandler(e);
+			});
+		}));
+		activeDocument.on('click', '.callout[data-callout="note-toolbar"] a.external-link', (e: MouseEvent) => {
+			this.calloutLinkHandler(e);
+		});
+
 		// add icons specific to the plugin
 		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
 		addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none></svg>');
@@ -64,44 +75,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			});
 		}
-
-		this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
-
-		// track the last clicked external link so we can take action on callout links
-		activeDocument.on('click', '.callout[data-callout="note-toolbar"] a.external-link', (e) => {
-			
-			let clickedEl = e.target as HTMLLinkElement;
-			let dataEl = clickedEl.nextElementSibling;
-			if (clickedEl && dataEl) {
-				let supportedAttrs = ['data-ntb-folder', 'data-ntb-menu', 'data-ntb-command'];
-				var attribute = supportedAttrs.find(attr => dataEl.hasAttribute(attr));
-				var value = attribute ? dataEl?.getAttribute(attribute) : null;
-				switch (attribute) {
-					case 'data-ntb-command':
-						e.preventDefault(); // prevent callout code block from opening
-						value ? this.app.commands.executeCommandById(value) : undefined;
-						break;
-					case 'data-ntb-folder':
-						// let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
-						// if (fileOrFolder instanceof TFolder) {
-						// 	// @ts-ignore
-						// 	this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
-						// }
-						break;
-					case 'data-ntb-menu':
-						e.preventDefault(); // prevent callout code block from opening
-						let activeFile = this.app.workspace.getActiveFile();
-						let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
-						if (toolbar && activeFile) {
-							this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-								this.showMenuAtElement(menu, clickedEl);
-							});
-						}
-						break;
-				}
-			}
-
-		});
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
@@ -729,6 +702,128 @@ export default class NoteToolbarPlugin extends Plugin {
 	/*************************************************************************
 	 * HANDLERS
 	 *************************************************************************/
+
+	/**
+	 * Handles links followed from Note Toolbar Callouts, including handling commands, folders, and menus.
+	 * Links take the form [Tools]()<data data-ntb-menu="Tools"/>
+	 * @param MouseEvent 
+	 */
+	async calloutLinkHandler(e: MouseEvent) {
+
+		debugLog('🟡 EXTERNAL LINK CLICKED');
+		let clickedEl = e.target as HTMLLinkElement;
+		let dataEl = clickedEl.nextElementSibling;
+		if (clickedEl && dataEl) {
+			// make sure it's a valid attribute, and get its value
+			var attribute = Object.values(CalloutAttr).find(attr => dataEl.hasAttribute(attr));
+			attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
+			var value = attribute ? dataEl?.getAttribute(attribute) : null;
+			debugLog('🟡 EXTERNAL LINK', attribute, value);
+			switch (attribute) {
+				case CalloutAttr.Command:
+					value ? this.app.commands.executeCommandById(value) : undefined;
+					break;
+				case CalloutAttr.Folder:
+					let fileOrFolder = value ? this.app.vault.getAbstractFileByPath(value) : undefined;
+					if (fileOrFolder instanceof TFolder) {
+						// @ts-ignore
+						this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
+					}
+					break;
+				case CalloutAttr.Menu:
+					let activeFile = this.app.workspace.getActiveFile();
+					let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
+					if (toolbar && activeFile) {
+						this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+							this.showMenuAtElement(menu, clickedEl);
+						});
+					}
+					break;
+			}
+		}
+
+	}
+
+	/**
+	 * Handles the link provided.
+	 * @param linkHref What the link is for.
+	 * @param type: ItemType
+	 * @param hasVars: boolean
+	 * @param commandId: string or null
+	 * @param event MouseEvent or KeyboardEvent from where link is activated
+	 */
+	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event: MouseEvent | KeyboardEvent) {
+
+		debugLog("handleLink", linkHref, type, hasVars, commandId, event);
+		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
+
+		let activeFile = this.app.workspace.getActiveFile();
+
+		if (hasVars) {
+			// only replace vars in URIs; might consider other substitution in future
+			linkHref = replaceVars(this.app, linkHref, activeFile, false);
+			debugLog('- uri vars replaced: ', linkHref);
+		}
+
+		switch (type) {
+			case ItemType.Command:
+				debugLog("- executeCommandById: ", commandId);
+				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
+				break;
+			case ItemType.File:
+				// it's an internal link (note); try to open it
+				let activeFilePath = activeFile ? activeFile.path : '';
+				debugLog("- openLinkText: ", linkHref, " from: ", activeFilePath);
+				let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
+				if (fileOrFolder instanceof TFolder) {
+					// @ts-ignore
+					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
+				}
+				else {
+					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkDest(event));
+				} 
+				break;
+			case ItemType.Menu:
+				let toolbar = this.settingsManager.getToolbar(linkHref);
+				debugLog("- menu item for toolbar", toolbar, activeFile);
+				if (toolbar && activeFile) {
+					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
+						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
+						this.showMenuAtElement(menu, clickedItemEl);
+						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
+					});
+				}
+				else if (!toolbar) {
+					new Notice(`Check Note Toolbar setting for this menu item. Toolbar not found: "${linkHref}"`);
+				}
+				break;
+			case ItemType.Uri:
+				if (isValidUri(linkHref)) {
+					// if actually a url, just open the url
+					window.open(linkHref, '_blank');
+				}
+				else {
+					// as fallback, treat it as internal note
+					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
+					this.app.workspace.openLinkText(linkHref, activeFile, getLinkDest(event));
+				}
+				break;
+		}
+	
+		// archiving for later
+		if (false) {
+			// if it's a js function that exists, call it without any parameters
+			// @ts-ignore
+			if (href.toLowerCase().startsWith('onclick:')) {
+				// @ts-ignore
+				let functionName = href.slice(8); // remove 'onclick:'
+				if (typeof (window as any)[functionName] === 'function') {
+					(window as any)[functionName]();
+				}
+			}
+		}
+		
+	}
 	
 	/**
 	 * Handles calls to the obsidian://note-toolbar URI.
@@ -877,87 +972,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 	
-	/**
-	 * Handles the link provided.
-	 * @param linkHref What the link is for.
-	 * @param type: ItemType
-	 * @param hasVars: boolean
-	 * @param commandId: string or null
-	 * @param event MouseEvent or KeyboardEvent from where link is activated
-	 */
-	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event: MouseEvent | KeyboardEvent) {
-
-		debugLog("handleLink", linkHref, type, hasVars, commandId, event);
-		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
-
-		let activeFile = this.app.workspace.getActiveFile();
-
-		if (hasVars) {
-			// only replace vars in URIs; might consider other substitution in future
-			linkHref = replaceVars(this.app, linkHref, activeFile, false);
-			debugLog('- uri vars replaced: ', linkHref);
-		}
-
-		switch (type) {
-			case ItemType.Command:
-				debugLog("- executeCommandById: ", commandId);
-				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
-				break;
-			case ItemType.File:
-				// it's an internal link (note); try to open it
-				let activeFilePath = activeFile ? activeFile.path : '';
-				debugLog("- openLinkText: ", linkHref, " from: ", activeFilePath);
-				let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
-				if (fileOrFolder instanceof TFolder) {
-					// @ts-ignore
-					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
-				}
-				else {
-					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkDest(event));
-				} 
-				break;
-			case ItemType.Menu:
-				let toolbar = this.settingsManager.getToolbar(linkHref);
-				debugLog("- menu item for toolbar", toolbar, activeFile);
-				if (toolbar && activeFile) {
-					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
-						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
-						this.showMenuAtElement(menu, clickedItemEl);
-						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
-					});
-				}
-				else if (!toolbar) {
-					new Notice(`Check Note Toolbar setting for this menu item. Toolbar not found: "${linkHref}"`);
-				}
-				break;
-			case ItemType.Uri:
-				if (isValidUri(linkHref)) {
-					// if actually a url, just open the url
-					window.open(linkHref, '_blank');
-				}
-				else {
-					// as fallback, treat it as internal note
-					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					this.app.workspace.openLinkText(linkHref, activeFile, getLinkDest(event));
-				}
-				break;
-		}
-	
-		// archiving for later
-		if (false) {
-			// if it's a js function that exists, call it without any parameters
-			// @ts-ignore
-			if (href.toLowerCase().startsWith('onclick:')) {
-				// @ts-ignore
-				let functionName = href.slice(8); // remove 'onclick:'
-				if (typeof (window as any)[functionName] === 'function') {
-					(window as any)[functionName]();
-				}
-			}
-		}
-		
-	}
-
 	/**
 	 * Shows a context menu with links to settings/configuration.
 	 * @param e MouseEvent

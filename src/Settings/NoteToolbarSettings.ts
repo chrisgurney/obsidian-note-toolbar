@@ -34,6 +34,12 @@ export enum ViewType {
 	Source = 'source'
 }
 
+export enum CalloutAttr {
+    Command = 'data-ntb-command',
+    Folder = 'data-ntb-folder',
+    Menu = 'data-ntb-menu'
+}
+
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
 	icon: string;
