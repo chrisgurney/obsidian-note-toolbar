@@ -46,6 +46,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
 
+		debugLog('🟡 ONLOAD: EXTERNAL LINK: HANDLER SETUP');
 		this.registerEvent(this.app.workspace.on('window-open', (win) => {
 			win.doc.on('click', '.callout[data-callout="note-toolbar"] a.external-link', (e: MouseEvent) => {
 				this.calloutLinkHandler(e);
@@ -710,7 +711,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async calloutLinkHandler(e: MouseEvent) {
 
-		debugLog('🟡 EXTERNAL LINK CLICKED');
+		debugLog('🟡 EXTERNAL LINK: CLICKED');
 		let clickedEl = e.target as HTMLLinkElement;
 		let dataEl = clickedEl.nextElementSibling;
 		if (clickedEl && dataEl) {
