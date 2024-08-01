@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, ToolbarItemLinkAttr, PositionType, LINK_OPTIONS, ItemType } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest, isViewCanvas } from 'Utils/Utils';
@@ -65,10 +65,42 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		}
 
-		// adds a protocol handler to execute commands, as an alternative to needing Advanced URI
-		this.registerObsidianProtocolHandler("note-toolbar", async (e) => {
-			// example usage: obsidian://note-toolbar?commandid=workspace%3Atoggle-pin
-			e.commandid ? this.app.commands.executeCommandById(decodeURIComponent(e.commandid)) : undefined;
+		this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
+
+		// track the last clicked external link so we can take action on callout links
+		activeDocument.on('click', '.callout[data-callout="note-toolbar"] a.external-link', (e) => {
+			
+			let clickedEl = e.target as HTMLLinkElement;
+			let dataEl = clickedEl.nextElementSibling;
+			if (clickedEl && dataEl) {
+				let supportedAttrs = ['data-ntb-folder', 'data-ntb-menu', 'data-ntb-command'];
+				var attribute = supportedAttrs.find(attr => dataEl.hasAttribute(attr));
+				var value = attribute ? dataEl?.getAttribute(attribute) : null;
+				switch (attribute) {
+					case 'data-ntb-command':
+						e.preventDefault(); // prevent callout code block from opening
+						value ? this.app.commands.executeCommandById(value) : undefined;
+						break;
+					case 'data-ntb-folder':
+						// let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
+						// if (fileOrFolder instanceof TFolder) {
+						// 	// @ts-ignore
+						// 	this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
+						// }
+						break;
+					case 'data-ntb-menu':
+						e.preventDefault(); // prevent callout code block from opening
+						let activeFile = this.app.workspace.getActiveFile();
+						let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
+						if (toolbar && activeFile) {
+							this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+								this.showMenuAtElement(menu, clickedEl);
+							});
+						}
+						break;
+				}
+			}
+
 		});
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
@@ -588,6 +620,51 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
+	 * Shows toolbar menu at the given element, adjusting its position if necessary.
+	 * @param Menu
+	 * @param Element to position the menu at, or null if using a saved menu position.
+	 */
+	async showMenuAtElement(menu: Menu, clickedItemEl: Element | null) {
+
+		debugLog('showMenuAtElement', clickedItemEl);
+
+		let menuPos: MenuPositionDef | undefined = undefined;
+		let fabEl = this.getToolbarFabEl();
+		let toolbarEl = this.getToolbarEl();
+
+		// store menu position for sub-menu positioning
+		if (toolbarEl && clickedItemEl) {
+			let elemRect = clickedItemEl.getBoundingClientRect();
+			menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
+			toolbarEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
+		}
+
+		// if we don't have a position yet, try to get it from the previous menu
+		if (!menuPos) {
+			let previousPosData = fabEl ? fabEl.getAttribute('data-menu-pos') : toolbarEl?.getAttribute('data-menu-pos');
+			menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
+		}
+
+		// add class so we can style the menu
+		menu.dom.addClass('note-toolbar-menu');
+
+		// position (and potentially offset) the menu, and then set focus in it if necessary
+		if (menuPos) {
+			menu.showAtPosition(menuPos);
+			if (!menuPos.left) {
+				// reposition if the menu overlaps the right edge
+				let menuOverflow = activeWindow.innerWidth - (menuPos.x + menu.dom.offsetWidth);
+				// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
+				if (menuOverflow <= 2) {
+					// show the menu along the right edge of the window instead
+					menu.showAtPosition( { x: activeWindow.innerWidth, y: menuPos.y, overlap: true, left: true } );
+				}
+			}
+		}
+
+	}
+
+	/**
 	 * Updates any toolbar elements that use properties, including labels and tooltips.
 	 * If the item resolves to a URI that's empty, the item is hidden.
 	 * @param toolbar ToolbarSettings to get values from.
@@ -653,6 +730,18 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * HANDLERS
 	 *************************************************************************/
 	
+	/**
+	 * Handles calls to the obsidian://note-toolbar URI.
+	 * @param data ObsidianProtocolData
+	 */
+	async protocolHandler(data: ObsidianProtocolData) {
+		if (data.commandid) {
+			// execute commands, as an alternative to needing Advanced URI
+			// example usage: obsidian://note-toolbar?commandid=workspace%3Atoggle-pin
+			this.app.commands.executeCommandById(decodeURIComponent(data.commandid));
+		}
+	}
+
 	/**
 	 * Handles the floating action button specifically on mobile.
 	 * @param event MouseEvent
@@ -832,40 +921,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				debugLog("- menu item for toolbar", toolbar, activeFile);
 				if (toolbar && activeFile) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
-						let menuPos: MenuPositionDef | undefined = undefined;
-						let fabEl = this.getToolbarFabEl();
-						let toolbarEl = this.getToolbarEl();
 						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
-
-						// store menu position for sub-menu positioning
-						if (toolbarEl && clickedItemEl) {
-							let elemRect = clickedItemEl.getBoundingClientRect();
-							menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
-							toolbarEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
-						}
-
-						// if we don't have a position yet, try to get it from the previous menu
-						if (!menuPos) {
-							let previousPosData = fabEl ? fabEl.getAttribute('data-menu-pos') : toolbarEl?.getAttribute('data-menu-pos');
-							menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
-						}
-
-						// add class so we can style the menu
-						menu.dom.addClass('note-toolbar-menu');
-
-						// position (and potentially offset) the menu, and then set focus in it if necessary
-						if (menuPos) {
-							menu.showAtPosition(menuPos);
-							if (!menuPos.left) {
-								// reposition if the menu overlaps the right edge
-								let menuOverflow = activeWindow.innerWidth - (menuPos.x + menu.dom.offsetWidth);
-								// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
-								if (menuOverflow <= 2) {
-									// show the menu along the right edge of the window instead
-									menu.showAtPosition( { x: activeWindow.innerWidth, y: menuPos.y, overlap: true, left: true } );
-								}
-							}
-						}
+						this.showMenuAtElement(menu, clickedItemEl);
 						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
 					});
 				}
