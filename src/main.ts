@@ -734,6 +734,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				case CalloutAttr.Menu:
 					let activeFile = this.app.workspace.getActiveFile();
 					let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
+					toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
 					if (toolbar && activeFile) {
 						this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
 							this.showMenuAtElement(menu, clickedEl);
