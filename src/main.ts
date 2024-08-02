@@ -13,6 +13,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	commands: CommandsManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
+	
+	lastCalloutLink: Element | null = null; // track the last used callout link, for the menu URI
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -712,9 +714,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	async calloutLinkHandler(e: MouseEvent) {
 
 		debugLog('🟡 EXTERNAL LINK: CLICKED');
-		let clickedEl = e.target as HTMLLinkElement;
-		let dataEl = clickedEl.nextElementSibling;
-		if (clickedEl && dataEl) {
+		this.lastCalloutLink = e.target as HTMLLinkElement;
+		let dataEl = this.lastCalloutLink?.nextElementSibling;
+		if (this.lastCalloutLink && dataEl) {
 			// make sure it's a valid attribute, and get its value
 			var attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
 			attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
@@ -737,7 +739,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
 					if (toolbar && activeFile) {
 						this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-							this.showMenuAtElement(menu, clickedEl);
+							this.showMenuAtElement(menu, this.lastCalloutLink);
 						});
 					}
 					break;
