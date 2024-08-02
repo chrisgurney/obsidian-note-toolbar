@@ -727,11 +727,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.handleLinkCommand(value);
 					break;
 				case CalloutAttr.Folder:
-					let fileOrFolder = value ? this.app.vault.getAbstractFileByPath(value) : undefined;
-					if (fileOrFolder instanceof TFolder) {
-						// @ts-ignore
-						this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
-					}
+					this.handleLinkFolder(value);
 					break;
 				case CalloutAttr.Menu:
 					let activeFile = this.app.workspace.getActiveFile();
@@ -835,6 +831,19 @@ export default class NoteToolbarPlugin extends Plugin {
 	async handleLinkCommand(commandId: string | null) {
 		debugLog("handleLinkCommand()", commandId);
 		commandId ? this.app.commands.executeCommandById(commandId) : undefined;
+	}
+
+	/**
+	 * Highlights the provided folder in the file explorer.
+	 * @param folder folder to highlight, or null if nothing to do.
+	 */
+	async handleLinkFolder(folder: string | null) {
+		debugLog("handleLinkFolder()", folder);
+		let tFileOrFolder = folder ? this.app.vault.getAbstractFileByPath(folder) : undefined;
+		if (tFileOrFolder instanceof TFolder) {
+			// @ts-ignore
+			this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(tFileOrFolder);
+		}
 	}
 	
 	/**
