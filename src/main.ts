@@ -832,10 +832,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param data ObsidianProtocolData
 	 */
 	async protocolHandler(data: ObsidianProtocolData) {
-		if (data.commandid) {
+		if (data.commandid || data.command) {
 			// execute commands, as an alternative to needing Advanced URI
-			// example usage: obsidian://note-toolbar?commandid=workspace%3Atoggle-pin
-			this.app.commands.executeCommandById(decodeURIComponent(data.commandid));
+			// supports both commandid= and command= for backwards-compatability with Advanced URI
+			// example usage: obsidian://note-toolbar?command=workspace%3Atoggle-pin
+			this.app.commands.executeCommandById(decodeURIComponent(data.commandid || data.command));
 		}
 	}
 
