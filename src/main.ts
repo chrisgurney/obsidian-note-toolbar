@@ -853,9 +853,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async protocolHandler(data: ObsidianProtocolData) {
 		debugLog('protocolHandler()', data);
+		// supports both commandid= and command= for backwards-compatability with Advanced URI
 		if (data.commandid || data.command) {
-			// execute commands, as an alternative to needing Advanced URI
-			// supports both commandid= and command= for backwards-compatability with Advanced URI
 			this.handleLinkCommand(decodeURIComponent(data.commandid || data.command));
 		}
 		else if (data.folder) {
