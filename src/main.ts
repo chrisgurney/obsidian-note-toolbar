@@ -724,7 +724,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			debugLog('🟡 EXTERNAL LINK', attribute, value);
 			switch (attribute) {
 				case CalloutAttr.Command:
-					value ? this.app.commands.executeCommandById(value) : undefined;
+					this.handleLinkCommand(value);
 					break;
 				case CalloutAttr.Folder:
 					let fileOrFolder = value ? this.app.vault.getAbstractFileByPath(value) : undefined;
@@ -771,8 +771,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				debugLog("- executeCommandById: ", commandId);
-				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
+				this.handleLinkCommand(commandId);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -828,6 +827,15 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		
 	}
+
+	/**
+	 * Executes the provided command.
+	 * @param commandId encoded command string, or null if nothing to do.
+	 */
+	async handleLinkCommand(commandId: string | null) {
+		debugLog("handleLinkCommand()", commandId);
+		commandId ? this.app.commands.executeCommandById(commandId) : undefined;
+	}
 	
 	/**
 	 * Handles calls to the obsidian://note-toolbar URI.
@@ -838,7 +846,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// execute commands, as an alternative to needing Advanced URI
 			// supports both commandid= and command= for backwards-compatability with Advanced URI
 			// example usage: obsidian://note-toolbar?command=workspace%3Atoggle-pin
-			this.app.commands.executeCommandById(decodeURIComponent(data.commandid || data.command));
+			this.handleLinkCommand(decodeURIComponent(data.commandid || data.command));
 		}
 	}
 
