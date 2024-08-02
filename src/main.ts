@@ -603,21 +603,18 @@ export default class NoteToolbarPlugin extends Plugin {
 	async showMenuAtElement(menu: Menu, clickedItemEl: Element | null) {
 
 		debugLog('showMenuAtElement', clickedItemEl);
-
 		let menuPos: MenuPositionDef | undefined = undefined;
-		let fabEl = this.getToolbarFabEl();
-		let toolbarEl = this.getToolbarEl();
 
 		// store menu position for sub-menu positioning
-		if (toolbarEl && clickedItemEl) {
+		if (clickedItemEl) {
 			let elemRect = clickedItemEl.getBoundingClientRect();
 			menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
-			toolbarEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
+			localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
 		}
 
 		// if we don't have a position yet, try to get it from the previous menu
 		if (!menuPos) {
-			let previousPosData = fabEl ? fabEl.getAttribute('data-menu-pos') : toolbarEl?.getAttribute('data-menu-pos');
+			let previousPosData = localStorage.getItem('note-toolbar-menu-pos');
 			menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
 		}
 
@@ -900,7 +897,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							left: (fabPos === 'fabl' ? false : true)
 						};
 						// store menu position for sub-menu positioning
-						fabEl.setAttribute('data-menu-pos', JSON.stringify(menuPos));
+						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
 						// add class so we can style the menu
 						menu.dom.addClass('note-toolbar-menu');
 						menu.showAtPosition(menuPos);
