@@ -1,7 +1,7 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkDest, isViewCanvas } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
@@ -779,7 +779,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
 				}
 				else {
-					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkDest(event));
+					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiDest(event));
 				} 
 				break;
 			case ItemType.Menu:
@@ -804,7 +804,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				else {
 					// as fallback, treat it as internal note
 					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					this.app.workspace.openLinkText(linkHref, activeFile, getLinkDest(event));
+					this.app.workspace.openLinkText(linkHref, activeFile, getLinkUiDest(event));
 				}
 				break;
 		}

@@ -88,7 +88,7 @@ export function getElementPosition(element: HTMLElement): { x: number, y: number
  * @param event MouseEvent or KeyboardEvent
  * @returns PaneType or undefined
  */
-export function getLinkDest(event: MouseEvent | KeyboardEvent): PaneType | undefined {
+export function getLinkUiDest(event: MouseEvent | KeyboardEvent): PaneType | undefined {
 	let linkDest: PaneType | undefined = undefined;
 	if (event) {
 		// check if middle button was clicked
