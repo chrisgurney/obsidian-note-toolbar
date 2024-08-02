@@ -838,7 +838,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, toolbarItem.link);
 				break;
 			case ItemType.Menu:
-				let menuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.uuid);
+				let menuToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.uuid);
 				let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
 				let fieldHelp = document.createDocumentFragment();
 				menuPreviewFr 

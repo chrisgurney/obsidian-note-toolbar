@@ -24,7 +24,7 @@ export class SettingsManager {
 	 * @param id UUID of toolbar to get settings for.
 	 * @returns ToolbarSettings for the provided matched toolbar ID, undefined otherwise.
 	 */
-	public getToolbar(uuid: string | null): ToolbarSettings | undefined {
+	public getToolbarById(uuid: string | null): ToolbarSettings | undefined {
 		return uuid ? this.plugin.settings.toolbars.find(tbar => tbar.uuid === uuid) : undefined;
 	}
 

@@ -67,7 +67,7 @@ export class CommandsManager {
     async openToolbarSettings(): Promise<void> {
         // figure out what toolbar is on the screen
         let toolbarEl = this.plugin.getToolbarEl();
-        let toolbarSettings = toolbarEl ? this.plugin.settingsManager.getToolbar(toolbarEl?.id) : undefined;
+        let toolbarSettings = toolbarEl ? this.plugin.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
         if (toolbarSettings) {
             const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, null, toolbarSettings);
             modal.setTitle("Edit Toolbar: " + toolbarSettings.name);

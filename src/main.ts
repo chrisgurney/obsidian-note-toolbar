@@ -285,7 +285,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// debugLog('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
 				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					// continue until we get a matching toolbar
-					matchingToolbar = this.settingsManager.getToolbar(mapping.toolbar);
+					matchingToolbar = this.settingsManager.getToolbarById(mapping.toolbar);
 					if (matchingToolbar) {
 						// debugLog('  - matched toolbar:', matchingToolbar);
 						break;
@@ -785,7 +785,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				} 
 				break;
 			case ItemType.Menu:
-				let toolbar = this.settingsManager.getToolbar(linkHref);
+				let toolbar = this.settingsManager.getToolbarById(linkHref);
 				debugLog("- menu item for toolbar", toolbar, activeFile);
 				if (toolbar && activeFile) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
@@ -983,7 +983,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// figure out what toolbar we're in
 		let toolbarEl = (e.target as Element).closest('.cg-note-toolbar-container');
-		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbar(toolbarEl.id) : undefined;
+		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbarById(toolbarEl.id) : undefined;
 
 		let contextMenu = new Menu();
 
