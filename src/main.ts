@@ -307,7 +307,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbar(toolbar: ToolbarSettings): Promise<void> {
 
-		debugLog("renderToolbar: ", toolbar);
+		debugLog("renderToolbar()", toolbar);
 
 		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
 		let position;
@@ -607,7 +607,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async showMenuAtElement(menu: Menu, clickedItemEl: Element | null) {
 
-		debugLog('showMenuAtElement', clickedItemEl);
+		debugLog('showMenuAtElement()', clickedItemEl);
 		let menuPos: MenuPositionDef | undefined = undefined;
 
 		// store menu position for sub-menu positioning
@@ -975,7 +975,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarClickHandler(event: MouseEvent) {
 
-		debugLog('toolbarClickHandler: ', event);
+		debugLog('toolbarClickHandler()', event);
 
 		// allow standard and middle clicks through
 		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
@@ -1095,7 +1095,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	getToolbarEl(): HTMLElement | null {
 		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
-		debugLog("getToolbarEl: ", existingToolbarEl);
+		debugLog("getToolbarEl()", existingToolbarEl);
 		return existingToolbarEl;
 	}
 
@@ -1151,7 +1151,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let toolbarRemoved: boolean = false;
 		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
 
-		debugLog("removeToolbarIfNeeded: correct: ", correctToolbar, "existing: ", existingToolbarEl);
+		debugLog("removeToolbarIfNeeded() correct:", correctToolbar, "existing:", existingToolbarEl);
 
 		if (existingToolbarEl) {
 
