@@ -334,9 +334,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		let embedBlock = activeDocument.createElement("div");
 		embedBlock.addClass('cg-note-toolbar-container');
 		toolbar.uuid ? embedBlock.id = toolbar.uuid : undefined;
-		embedBlock.setAttribute("data-name", toolbar.name);
-		embedBlock.setAttribute("data-updated", toolbar.updated);
-		embedBlock.setAttribute('data-tbar-position', position);
+		embedBlock.setAttrs({
+			'data-name': toolbar.name,
+			'data-updated': toolbar.updated,
+			'data-tbar-position': position
+		});
 
 		// render the toolbar based on its position
 		switch (position) {
@@ -423,14 +425,16 @@ export default class NoteToolbarPlugin extends Plugin {
 			let toolbarItem = activeDocument.createElement('span');
 			item.uuid ? toolbarItem.id = item.uuid : undefined;
 			toolbarItem.className = "external-link";
-			toolbarItem.setAttribute("href", item.link);
-			toolbarItem.setAttribute("role", "link");
+			toolbarItem.setAttrs({
+				'href': item.link,
+				'role': 'link',
+				'rel': 'noopener'
+			});
 			toolbarItem.tabIndex = 0;
 			Object.entries(item.linkAttr).forEach(([key, value]) => {
 				toolbarItem.setAttribute(`data-toolbar-link-attr-${key}`, value);
 			});
 			item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
-			toolbarItem.setAttribute("rel", "noopener");
 			this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
 			this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
 
@@ -496,13 +500,14 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let noteToolbarFabContainer = activeDocument.createElement('div');
 		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
-		noteToolbarFabContainer.setAttribute('role', 'group');
-		noteToolbarFabContainer.setAttribute('aria-label', 'Note Toolbar button');
-		noteToolbarFabContainer.setAttribute('data-tbar-position', position);
+		noteToolbarFabContainer.setAttrs({
+			role: 'group',
+			'aria-label': 'Note Toolbar button',
+			'data-tbar-position': position
+		});
 
 		let noteToolbarFabButton = activeDocument.createElement('button');
 		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
-		noteToolbarFabButton.setAttribute('title', 'Open Note Toolbar');
 		noteToolbarFabButton.setAttribute('aria-label', 'Open Note Toolbar');
 		setIcon(noteToolbarFabButton, this.settings.icon);
 		
