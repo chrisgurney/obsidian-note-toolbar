@@ -461,6 +461,9 @@ body {
     --cg-nt-item-icon-size: var(--icon-size);
     --cg-nt-item-padding-x: 0.75em;
     --cg-nt-item-padding-y: 0.5em;
+    --cg-nt-item-sep-color: var(--background-modifier-border);
+    --cg-nt-item-sep-margin-x: 0.25em;
+    --cg-nt-item-sep-margin-y: 0.25em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
     --cg-nt-menu-bg-color: var(--background-secondary);
@@ -590,6 +593,13 @@ body {
             &::before {
                 content: none !important; /* removes decoration added by ITS theme */
             }
+        }
+
+        & li:has(> data[data-ntb-sep]),
+        & li:has(> a.external-link + data[data-ntb-sep]) {
+            border-left: 1px solid var(--cg-nt-item-sep-color);
+            margin: var(--cg-nt-item-sep-margin-y) var(--cg-nt-item-sep-margin-x);
+            width: 1px;
         }
 
         & a, span.external-link {
