@@ -37,7 +37,8 @@ export enum ViewType {
 export enum CalloutAttr {
     Command = 'data-ntb-command',
     Folder = 'data-ntb-folder',
-    Menu = 'data-ntb-menu'
+    Menu = 'data-ntb-menu',
+	Separator = 'data-ntb-sep'
 }
 
 export interface NoteToolbarSettings {

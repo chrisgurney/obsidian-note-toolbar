@@ -600,6 +600,9 @@ body {
             border-left: 1px solid var(--cg-nt-item-sep-color);
             margin: var(--cg-nt-item-sep-margin-y) var(--cg-nt-item-sep-margin-x);
             width: 1px;
+            & a:hover {
+                background: none;
+            }
         }
 
         & a, span.external-link {
