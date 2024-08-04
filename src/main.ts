@@ -60,7 +60,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// add icons specific to the plugin
 		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
-		addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none></svg>');
+		addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none"></svg>');
 
 		// adds the ribbon icon, on mobile only (seems redundant to add on desktop as well)
 		if (Platform.isMobile) {
