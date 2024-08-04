@@ -146,7 +146,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName("Items")
 			.setHeading()
 			.setDesc(learnMoreFr(
-				"Items in the toolbar, in order.", 
+				"Add items to the toolbar, in order.",
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"));
 		
 		if (this.toolbar.items.length > 0) {
@@ -251,66 +251,12 @@ export default class ToolbarSettingsModal extends Modal {
 					.setTooltip("Add a new item to the toolbar")
 					.setButtonText("+ Add toolbar item")
 					.setCta()
-					.onClick(async () => {
-
-						// removes the empty state message before we add anything to the list
-						if (this.toolbar.items.length === 0) {
-							itemsSortableContainer.empty();
-						}
-
-						let newToolbarItem: ToolbarItemSettings =
-							{
-								uuid: getUUID(),
-								label: "",
-								icon: "",
-								link: "",
-								linkAttr: {
-									commandId: "",
-									hasVars: false,
-									type: this.toolbar.items.last()?.linkAttr.type ?? ItemType.Uri
-								},
-								tooltip: "",
-								visibility: {
-									desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-									mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-									tablet: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-								},
-							};
-						this.toolbar.items.push(newToolbarItem);
-						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.settingsManager.save();
-
-						//
-						// add preview and form to the list
-						//
-
-						let newItemContainer = createDiv();
-						newItemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
-						newItemContainer.addClass("note-toolbar-setting-items-container-row");
-			
-						let newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
-						newItemPreview.setAttribute('data-active', 'false');
-						newItemContainer.appendChild(newItemPreview);
-			
-						let newItemForm = this.generateItemForm(newToolbarItem, this.itemListIdCounter.toString());
-						newItemForm.setAttribute('data-active', 'true');
-						newItemContainer.appendChild(newItemForm);
-			
-						this.itemListIdCounter++;
-						
-						itemsSortableContainer.appendChild(newItemContainer);
-
-						// set focus in the form
-						let focusField = newItemForm?.querySelector('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon') as HTMLElement;
-						if (focusField) {
-							focusField.focus();
-							// scroll to the form
-							this.scrollToPosition('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon', 'note-toolbar-setting-item');
-						}
-
-					});
+					.onClick(async () => this.addItemHandler(
+						itemsSortableContainer,
+						this.toolbar.items.last()?.linkAttr.type ?? ItemType.Uri));
 			});
 
+		itemsListContainer.appendChild(itemsListButtonContainer);
 		itemsContainer.appendChild(itemsListContainer);
 		settingsDiv.appendChild(itemsContainer);
 
@@ -616,24 +562,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemControlsContainer = createDiv();
 		itemControlsContainer.className = "note-toolbar-setting-item-controls";
-		const c1e = new Setting(itemControlsContainer)
-			.setClass("note-toolbar-setting-item-delete")
-			.addExtraButton((cb) => {
-				cb.setIcon("minus-circle")
-					.setTooltip("Delete")
-					.onClick(async () => {
-						let rowId = cb.extraSettingsEl.getAttribute('data-row-id');
-						rowId ? this.listMoveHandlerById(null, this.toolbar.items, rowId, 'delete') : undefined;
-					});
-				cb.extraSettingsEl.setAttribute("tabindex", "0");
-				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						let currentEl = e.target as HTMLElement;
-						let rowId = currentEl.getAttribute('data-row-id');
-						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId, 'delete') : undefined;
-					});
-			});
+		this.getDeleteButton(itemControlsContainer);
 
 		let itemFieldsContainer = createDiv();
 		itemFieldsContainer.className = "note-toolbar-setting-item-fields";
@@ -698,6 +627,33 @@ export default class ToolbarSettingsModal extends Modal {
 		itemDiv.appendChild(itemVisilityAndControlsContainer);
 
 		return itemDiv;
+
+	}
+
+	/**
+	 * Generates the item delete button.
+	 * @param el HTMLElement to put the delete button in.
+	 */
+	getDeleteButton(el: HTMLElement) {
+
+		new Setting(el)
+			.setClass("note-toolbar-setting-item-delete")
+			.addExtraButton((cb) => {
+				cb.setIcon("minus-circle")
+					.setTooltip("Delete")
+					.onClick(async () => {
+						let rowId = cb.extraSettingsEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(null, this.toolbar.items, rowId, 'delete') : undefined;
+					});
+				cb.extraSettingsEl.setAttribute("tabindex", "0");
+				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						let currentEl = e.target as HTMLElement;
+						let rowId = currentEl.getAttribute('data-row-id');
+						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId, 'delete') : undefined;
+					});
+			});
 
 	}
 
@@ -1137,6 +1093,69 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * SETTINGS DISPLAY HANDLERS
 	 *************************************************************************/
+
+	/**
+	 * Adds a new empty item to the given container (and settings).
+	 * @param itemContainer HTMLElement to add the new item to.
+	 */
+	async addItemHandler(itemContainer: HTMLElement, itemType: ItemType) {
+
+		// removes the empty state message before we add anything to the list
+		if (this.toolbar.items.length === 0) {
+			itemContainer.empty();
+		}
+
+		let newToolbarItem: ToolbarItemSettings =
+			{
+				uuid: getUUID(),
+				label: "",
+				icon: "",
+				link: "",
+				linkAttr: {
+					commandId: "",
+					hasVars: false,
+					type: itemType
+				},
+				tooltip: "",
+				visibility: {
+					desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+					mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+					tablet: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+				},
+			};
+		this.toolbar.items.push(newToolbarItem);
+		this.toolbar.updated = new Date().toISOString();
+		await this.plugin.settingsManager.save();
+
+		//
+		// add preview and form to the list
+		//
+
+		let newItemContainer = createDiv();
+		newItemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
+		newItemContainer.addClass("note-toolbar-setting-items-container-row");
+
+		let newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
+		newItemPreview.setAttribute('data-active', 'false');
+		newItemContainer.appendChild(newItemPreview);
+
+		let newItemForm = this.generateItemForm(newToolbarItem, this.itemListIdCounter.toString());
+		newItemForm.setAttribute('data-active', 'true');
+		newItemContainer.appendChild(newItemForm);
+
+		this.itemListIdCounter++;
+		
+		itemContainer.appendChild(newItemContainer);
+
+		// set focus in the form
+		let focusField = newItemForm?.querySelector('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon') as HTMLElement;
+		if (focusField) {
+			focusField.focus();
+			// scroll to the form
+			this.scrollToPosition('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon', 'note-toolbar-setting-item');
+		}
+
+	}
 
 	/**
 	 * Handles moving items within a list, and deletion, based on click or keyboard event.
