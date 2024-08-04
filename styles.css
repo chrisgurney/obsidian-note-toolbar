@@ -85,7 +85,7 @@ settings:
     -
         id: toolbar
         title: Toolbars
-        description: 'Styles for standard toolbars and items'
+        description: 'Styles for standard toolbars'
         type: heading
         level: 1
         collapsed: true
@@ -97,7 +97,7 @@ settings:
         collapsed: true
     -
         id: cg-nt-tbar-bg-color
-        title: 'Toolbar: Background color'
+        title: 'Background color'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -105,51 +105,11 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-tbar-border-color
-        title: 'Toolbar: Border color'
-        description: 'Toolbar: Top + Bottom borders'
+        title: 'Border color'
+        description: 'Top + Bottom borders'
         type: variable-themed-color
         opacity: true
         format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-bg-color-hover
-        title: 'Items: Background color (on hover)'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-button-bg-color
-        title: 'Items: Button style: Background color'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-text-color
-        title: 'Items: Text color'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-text-color-hover
-        title: 'Items: Text color (on hover)'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-sep-color
-        title: 'Separator: Color'
-        type: variable-themed-color
-        opacity: true
-        format: hex        
         default-light: '#'
         default-dark: '#'
     -
@@ -192,48 +152,6 @@ settings:
         default: 0
         format: em
     -
-        id: cg-nt-item-font-size
-        title: 'Items: Font size (in em units)'
-        type: variable-number
-        default: 0.875
-        format: em
-    -
-        id: cg-nt-item-icon-size
-        title: 'Items: Icon size (in px units)'
-        type: variable-number
-        default: 18
-        format: px
-    -
-        id: cg-nt-item-padding-x
-        title: 'Items: Left + Right padding (in em units)'
-        type: variable-number
-        default: 0.75
-        format: em
-    -
-        id: cg-nt-item-padding-y
-        title: 'Items: Top + Bottom padding (in em units)'
-        type: variable-number
-        default: 0.5
-        format: em
-    -
-        id: cg-nt-item-sep-margin-x
-        title: 'Separator: Left + Right margin (in em units)'
-        type: variable-number
-        default: 0.25
-        format: em
-    -
-        id: cg-nt-item-sep-margin-y
-        title: 'Separator: Top + Bottom margin (in em units)'
-        type: variable-number
-        default: 0.25
-        format: em
-    -
-        id: cg-nt-item-sep-width
-        title: 'Separator: Width'
-        type: variable-number
-        default: 1
-        format: px
-    -
         id: toolbar-styles
         title: '↳ 😎 Style'
         type: heading
@@ -241,25 +159,139 @@ settings:
         collapsed: true
     -    
         id: cg-nt-tbar-border-radius
-        title: 'Toolbar: Border radius (in px units)'
+        title: 'Border radius (in px units)'
         type: variable-number
         default: 0
         format: px
     -
-        id: cg-nt-item-border-radius
-        title: 'Items: Border radius (in px units)'
-        type: variable-number
-        default: 5
-        format: px        
-    -
         id: cg-nt-tbar-inactive-opacity
-        title: 'Toolbar: Inactive opacity'
+        title: 'Inactive opacity'
         description: 'When focus is in another tab, dim the toolbar'
         type: variable-number-slider
         default: 0.8
         min: 0
         max: 1
         step: 0.05
+    -
+        id: item
+        title: Items
+        description: 'Styles for toolbar items'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: item-colors
+        title: '↳ 🎨 Colors'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-item-bg-color-hover
+        title: 'Background color (on hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-button-bg-color
+        title: 'Background color (for button style)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-text-color
+        title: 'Text color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-text-color-hover
+        title: 'Text color (on hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: item-sizing-spacing
+        title: '↳ 📐 Sizing and Spacing'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-item-font-size
+        title: 'Font size (in em units)'
+        type: variable-number
+        default: 0.875
+        format: em
+    -
+        id: cg-nt-item-icon-size
+        title: 'Icon size (in px units)'
+        type: variable-number
+        default: 18
+        format: px
+    -
+        id: cg-nt-item-padding-x
+        title: 'Left + Right padding (in em units)'
+        type: variable-number
+        default: 0.75
+        format: em
+    -
+        id: cg-nt-item-padding-y
+        title: 'Top + Bottom padding (in em units)'
+        type: variable-number
+        default: 0.5
+        format: em
+    -
+        id: item-styles
+        title: '↳ 😎 Style'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-item-border-radius
+        title: 'Border radius (in px units)'
+        type: variable-number
+        default: 5
+        format: px
+    -
+        id: sep
+        title: Separators
+        description: 'Styles for toolbar separators'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-item-sep-color
+        title: '🎨 Color'
+        type: variable-themed-color
+        opacity: true
+        format: hex        
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-sep-margin-x
+        title: '📐 Left + Right margin (in em units)'
+        type: variable-number
+        default: 0.25
+        format: em
+    -
+        id: cg-nt-item-sep-margin-y
+        title: '📐 Top + Bottom margin (in em units)'
+        type: variable-number
+        default: 0.25
+        format: em
+    -
+        id: cg-nt-item-sep-width
+        title: '📐 Width'
+        type: variable-number
+        default: 1
+        format: px
     -
         id: toolbar-fab-styles
         title: 'Floating Button'
@@ -305,28 +337,28 @@ settings:
         collapsed: true
     -
         id: cg-nt-fab-pos-x
-        title: Button X position on mobile
+        title: X position on mobile
         description: As a percentage of the editor's width, from the left edge (reversed when button is on right).
         type: variable-number
         default: 82
         format: vw
     -
         id: cg-nt-fab-pos-y
-        title: Button Y position on mobile
+        title: Y position on mobile
         description: As a percentage of the editor's height, from the top edge.
         type: variable-number
         default: 90
         format: vh
     -
         id: cg-nt-fab-pos-x-desktop
-        title: Button X position on desktop (in em units)
+        title: X position on desktop (in em units)
         description: Distance from the edge of the editor view.
         type: variable-number
         default: 4
         format: em
     -
         id: cg-nt-fab-pos-y-desktop
-        title: Button Y position on desktop
+        title: Y position on desktop
         description: As a percentage of the editor's height, from the top edge.
         type: variable-number
         default: 90
@@ -339,7 +371,7 @@ settings:
         collapsed: true
     -
         id: cg-nt-fab-padding
-        title: Button padding (in px units)
+        title: Padding (in px units)
         description: Spacing around the icon.
         type: variable-number
         default: 12
