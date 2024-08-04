@@ -36,7 +36,9 @@ export class CommandsManager {
                     debugLog("focusCommand: toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);
                     const visibleItems = items.filter(item => {
-                        return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+                        const hasSpan = item.querySelector('span') !== null; // to filter out separators
+                        const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+                        return hasSpan && isVisible;
                     });
                     const link = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
                     debugLog("focusCommand: focussed item: ", link);
