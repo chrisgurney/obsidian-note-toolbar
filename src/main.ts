@@ -417,48 +417,60 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
-			return ((item.label === "" && item.icon === "") ? false : true);
+			return ((item.label === "" && item.icon === "" && item.linkAttr.type !== ItemType.Separator) ? false : true);
 
 		}).map((item: ToolbarItemSettings) => {
 
-			// changed to span as temporary(?) fix (#19) for links on Android
-			let toolbarItem = activeDocument.createElement('span');
-			item.uuid ? toolbarItem.id = item.uuid : undefined;
-			toolbarItem.className = "external-link";
-			toolbarItem.setAttrs({
-				'href': item.link,
-				'role': 'link',
-				'rel': 'noopener'
-			});
-			toolbarItem.tabIndex = 0;
-			Object.entries(item.linkAttr).forEach(([key, value]) => {
-				toolbarItem.setAttribute(`data-toolbar-link-attr-${key}`, value);
-			});
-			item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
-			this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
-			this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
+			let toolbarItem: HTMLElement;
 
-			const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
-			if (item.label) {
-				if (item.icon) {
-					let itemIcon = toolbarItem.createSpan();
-					this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
-					setIcon(itemIcon, item.icon);
+			if (item.linkAttr.type === ItemType.Separator) {
 
-					let itemLabel = toolbarItem.createSpan();
-					this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
-					itemLabel.innerText = item.label;
-					itemLabel.setAttribute('id', 'label');
-				}
-				else {
-					this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
-					toolbarItem.innerText = item.label;
-					toolbarItem.setAttribute('id', 'label');
-				}
+				toolbarItem = activeDocument.createElement('data');
+				toolbarItem.setAttribute('data-ntb-sep', '');
+
 			}
 			else {
-				this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
-				setIcon(toolbarItem, item.icon);
+
+				// changed to span as temporary(?) fix (#19) for links on Android
+				toolbarItem = activeDocument.createElement('span');
+				item.uuid ? toolbarItem.id = item.uuid : undefined;
+				toolbarItem.className = "external-link";
+				toolbarItem.setAttrs({
+					'href': item.link,
+					'role': 'link',
+					'rel': 'noopener'
+				});
+				toolbarItem.tabIndex = 0;
+				Object.entries(item.linkAttr).forEach(([key, value]) => {
+					toolbarItem.setAttribute(`data-toolbar-link-attr-${key}`, value);
+				});
+				item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
+				this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
+				this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
+	
+				const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
+				if (item.label) {
+					if (item.icon) {
+						let itemIcon = toolbarItem.createSpan();
+						this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
+						setIcon(itemIcon, item.icon);
+	
+						let itemLabel = toolbarItem.createSpan();
+						this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
+						itemLabel.innerText = item.label;
+						itemLabel.setAttribute('id', 'label');
+					}
+					else {
+						this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
+						toolbarItem.innerText = item.label;
+						toolbarItem.setAttribute('id', 'label');
+					}
+				}
+				else {
+					this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
+					setIcon(toolbarItem, item.icon);
+				}
+
 			}
 
 			let noteToolbarLi = activeDocument.createElement("li");
@@ -530,26 +542,32 @@ export default class NoteToolbarPlugin extends Plugin {
 		toolbar.items.forEach((toolbarItem, index) => {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-				// don't show the item if the link has variables and resolves to nothing
-				if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
-					return;
+				if (toolbarItem.linkAttr.type === ItemType.Separator) {
+					menu.addSeparator();
 				}
-				// replace variables in labels (or tooltip, if no label set)
-				let title = toolbarItem.label ? 
-					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
-					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
-				menu.addItem((item) => {
-					item
-						.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
-						.setTitle(title)
-						.onClick(async (menuEvent) => {
-							debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-							await this.handleLink(
-								toolbarItem.link,
-								toolbarItem.linkAttr.type, toolbarItem.linkAttr.hasVars, toolbarItem.linkAttr.commandId,
-								menuEvent);
+				else {
+					// don't show the item if the link has variables and resolves to nothing
+					if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
+						return;
+					}
+					// replace variables in labels (or tooltip, if no label set)
+					let title = toolbarItem.label ? 
+						(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
+						(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
+
+					menu.addItem((item) => {
+						item
+							.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
+							.setTitle(title)
+							.onClick(async (menuEvent) => {
+								debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
+								await this.handleLink(
+									toolbarItem.link,
+									toolbarItem.linkAttr.type, toolbarItem.linkAttr.hasVars, toolbarItem.linkAttr.commandId,
+									menuEvent);
+							});
 						});
-					});
+				}
 			}
 		});
 
