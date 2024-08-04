@@ -1029,6 +1029,17 @@ body {
         padding-inline-start: 0;
         margin-inline-end: 0.25em;
     }
+    &[data-item-type="separator"] {
+        & span {
+            height: 1em;
+            width: 100%;
+        }
+        & hr {
+            border: solid 1px var(--background-modifier-border);
+            margin: 0;
+            width: 100%
+        }
+    }
     & span {
         display: flex;
         align-items: center;
@@ -1155,6 +1166,15 @@ body {
             transform: rotate(-90deg);
             transition: 0.1s;
         }
+    }
+}
+
+.note-toolbar-setting-items-button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    & .setting-item {
+        padding-bottom: 0 !important;
     }
 }
 

@@ -241,10 +241,20 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsListContainer.appendChild(itemsSortableContainer);
 
 		//
-		// "Add toolbar item" button
+		// Add item buttons
 		//
 
-		new Setting(itemsListContainer)
+		let itemsListButtonContainer = createDiv();
+		itemsListButtonContainer.addClass('note-toolbar-setting-items-button-container');
+
+		new Setting(itemsListButtonContainer)
+			.addExtraButton((cb) => {
+				cb.setIcon('lucide-align-horizontal-justify-center')
+				  .setTooltip("Add a separator the toolbar")
+				  .onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
+			});
+
+		new Setting(itemsListButtonContainer)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
@@ -362,35 +372,50 @@ export default class ToolbarSettingsModal extends Modal {
 		// set preview icon and text
 		//
 
-		let itemPreviewIcon = createSpan();
-		setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
-		let itemPreviewLabel = createSpan();
-		itemPreviewLabel.id = 'note-toolbar-item-preview-label';
-		if (toolbarItem.label) {
-			itemPreviewLabel.setText(toolbarItem.label);
-		}
-		else if (toolbarItem.tooltip) {
-			itemPreviewLabel.setText(toolbarItem.tooltip);
-			itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
+		if (toolbarItem.linkAttr.type === ItemType.Separator) {
+
+			let separatorLine = createSpan()
+			separatorLine.createEl('hr');
+
+			itemPreview.setAttribute('data-item-type', 'separator');
+			itemPreview.append(separatorLine);
+
 		}
 		else {
-			itemPreviewLabel.setText('No label set');
-			itemPreviewLabel.addClass("note-toolbar-setting-item-preview-empty");
+
+			let itemPreviewIcon = createSpan();
+			setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
+			let itemPreviewLabel = createSpan();
+			itemPreviewLabel.id = 'note-toolbar-item-preview-label';
+			if (toolbarItem.label) {
+				itemPreviewLabel.setText(toolbarItem.label);
+			}
+			else if (toolbarItem.tooltip) {
+				itemPreviewLabel.setText(toolbarItem.tooltip);
+				itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
+			}
+			else {
+				itemPreviewLabel.setText('No label set');
+				itemPreviewLabel.addClass("note-toolbar-setting-item-preview-empty");
+			}
+			itemPreview.appendChild(itemPreviewIcon);
+
+			// add an icon to indicate each line is editable on mobile (as there's no hover state available)
+			if (Platform.isMobile) {
+				let itemPreviewLabelEditIcon = createDiv();
+				itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
+				let itemPreviewMobileEditIcon = createSpan();
+				setIcon(itemPreviewMobileEditIcon, 'lucide-pencil');
+				itemPreviewLabelEditIcon.appendChild(itemPreviewLabel);
+				itemPreviewLabelEditIcon.appendChild(itemPreviewMobileEditIcon);
+				itemPreview.appendChild(itemPreviewLabelEditIcon);
+			}
+			else {
+				itemPreview.appendChild(itemPreviewLabel);
+			}
+
 		}
-		itemPreview.appendChild(itemPreviewIcon);
-		// add an icon to indicate each line is editable on mobile (as there's no hover state available)
-		if (Platform.isMobile) {
-			let itemPreviewLabelEditIcon = createDiv();
-			itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
-			let itemPreviewMobileEditIcon = createSpan();
-			setIcon(itemPreviewMobileEditIcon, 'lucide-pencil');
-			itemPreviewLabelEditIcon.appendChild(itemPreviewLabel);
-			itemPreviewLabelEditIcon.appendChild(itemPreviewMobileEditIcon);
-			itemPreview.appendChild(itemPreviewLabelEditIcon);
-		}
-		else {
-			itemPreview.appendChild(itemPreviewLabel);
-		}
+
 		itemPreviewContainer.appendChild(itemPreview);
 
 		//

@@ -12,6 +12,7 @@ export enum ItemType {
 	File = 'file',
 	Group = 'group',
 	Menu = 'menu',
+	Separator = 'separator',
 	Uri = 'uri'
 }
 export enum PlatformType {
