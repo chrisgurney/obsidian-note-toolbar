@@ -366,13 +366,14 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemPreview = createDiv();
 		itemPreview.className = "note-toolbar-setting-item-preview";
 		itemPreview.tabIndex = 0;
-		setTooltip(itemPreview, 'Edit toolbar item');
 
 		//
 		// set preview icon and text
 		//
 
 		if (toolbarItem.linkAttr.type === ItemType.Separator) {
+
+			setTooltip(itemPreview, 'Edit separator');
 
 			let separatorLine = createSpan()
 			separatorLine.createEl('hr');
@@ -382,6 +383,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		}
 		else {
+
+			setTooltip(itemPreview, 'Edit toolbar item');
 
 			let itemPreviewIcon = createSpan();
 			setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
@@ -486,100 +489,112 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemTopContainer = createDiv();
 		itemTopContainer.className = "note-toolbar-setting-item-top-container";
 
-		//
-		// Item icon, name, and tooltip
-		//
-
 		let textFieldsContainer = createDiv();
 		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + rowId;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
-		let iconField = new Setting(textFieldsContainer)
-			.setClass("note-toolbar-setting-item-icon")
-			.addExtraButton((cb) => {
-				cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
-					.setTooltip("Select icon (optional)")
-					.onClick(async () => {
-						let itemRow = this.getItemRowElById(rowId);
-						const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
-						modal.open();
-					});
-				cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
-				cb.extraSettingsEl.setAttribute("tabindex", "0");
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ":
-								e.preventDefault();
-								let itemRow = this.getItemRowElById(rowId);			
-								const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
-								modal.open();
-						}
-					});
-			});
-		iconField.settingEl.id = 'note-toolbar-item-field-icon';
+		if (toolbarItem.linkAttr.type !== ItemType.Separator) {
 
-		let labelField = new Setting(textFieldsContainer)
-			.setClass("note-toolbar-setting-item-field")
-			.addText(text => text
-				.setPlaceholder('Label (optional, if icon set)')
-				.setValue(toolbarItem.label)
-				.onChange(
-					debounce(async (value) => {
-						toolbarItem.label = value;
-						// TODO: if the label contains vars, set the flag to always rerender this toolbar
-						// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
-						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.settingsManager.save();
-						this.updatePreviewText(toolbarItem, rowId);
-					}, 750)));
-		labelField.settingEl.id = 'note-toolbar-item-field-label';
+			//
+			// Item icon, name, and tooltip
+			//
 
-		let tooltipField = new Setting(textFieldsContainer)
-			.setClass("note-toolbar-setting-item-field")
-			.addText(text => text
-				.setPlaceholder('Tooltip (optional)')
-				.setValue(toolbarItem.tooltip)
-				.onChange(
-					debounce(async (value) => {
-						toolbarItem.tooltip = value;
-						this.toolbar.updated = new Date().toISOString();
-						await this.plugin.settingsManager.save();
-						this.updatePreviewText(toolbarItem, rowId);
-					}, 750)));
-		tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
-					
-		//
-		// Item link
-		//
+			let iconField = new Setting(textFieldsContainer)
+				.setClass("note-toolbar-setting-item-icon")
+				.addExtraButton((cb) => {
+					cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
+						.setTooltip("Select icon (optional)")
+						.onClick(async () => {
+							let itemRow = this.getItemRowElById(rowId);
+							const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
+							modal.open();
+						});
+					cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
+					cb.extraSettingsEl.setAttribute("tabindex", "0");
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ":
+									e.preventDefault();
+									let itemRow = this.getItemRowElById(rowId);			
+									const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
+									modal.open();
+							}
+						});
+				});
+			iconField.settingEl.id = 'note-toolbar-item-field-icon';
 
-		let linkContainer = createDiv();
-		linkContainer.className = "note-toolbar-setting-item-link-container";
-
-		let linkSelector = createDiv();
-		const s1t = new Setting(linkSelector)
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOptions(LINK_OPTIONS)
-					.setValue(toolbarItem.linkAttr.type)
-					.onChange(async (value) => {
-						let itemRow = this.getItemRowElById(rowId);
-						let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
-						if (itemLinkFieldDiv) {
-							toolbarItem.linkAttr.type = value as ItemType;
-							itemLinkFieldDiv.empty();
-							this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
+			let labelField = new Setting(textFieldsContainer)
+				.setClass("note-toolbar-setting-item-field")
+				.addText(text => text
+					.setPlaceholder('Label (optional, if icon set)')
+					.setValue(toolbarItem.label)
+					.onChange(
+						debounce(async (value) => {
+							toolbarItem.label = value;
+							// TODO: if the label contains vars, set the flag to always rerender this toolbar
+							// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
+							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
-						}
-					})
-			);
+							this.updatePreviewText(toolbarItem, rowId);
+						}, 750)));
+			labelField.settingEl.id = 'note-toolbar-item-field-label';
 
-		let linkField = createDiv();
-		linkField.className = "note-toolbar-setting-item-link-field";
-		this.getLinkSettingForType(toolbarItem.linkAttr.type, linkField, toolbarItem);
-		linkContainer.append(linkSelector);
-		linkContainer.append(linkField);
+			let tooltipField = new Setting(textFieldsContainer)
+				.setClass("note-toolbar-setting-item-field")
+				.addText(text => text
+					.setPlaceholder('Tooltip (optional)')
+					.setValue(toolbarItem.tooltip)
+					.onChange(
+						debounce(async (value) => {
+							toolbarItem.tooltip = value;
+							this.toolbar.updated = new Date().toISOString();
+							await this.plugin.settingsManager.save();
+							this.updatePreviewText(toolbarItem, rowId);
+						}, 750)));
+			tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
+					
+			//
+			// Item link
+			//
+
+			let linkContainer = createDiv();
+			linkContainer.className = "note-toolbar-setting-item-link-container";
+
+			let linkSelector = createDiv();
+			const s1t = new Setting(linkSelector)
+				.addDropdown((dropdown) =>
+					dropdown
+						.addOptions(LINK_OPTIONS)
+						.setValue(toolbarItem.linkAttr.type)
+						.onChange(async (value) => {
+							let itemRow = this.getItemRowElById(rowId);
+							let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
+							if (itemLinkFieldDiv) {
+								toolbarItem.linkAttr.type = value as ItemType;
+								itemLinkFieldDiv.empty();
+								this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
+								await this.plugin.settingsManager.save();
+							}
+						})
+				);
+
+			let linkField = createDiv();
+			linkField.className = "note-toolbar-setting-item-link-field";
+			this.getLinkSettingForType(toolbarItem.linkAttr.type, linkField, toolbarItem);
+			linkContainer.append(linkSelector);
+			linkContainer.append(linkField);
+
+			let itemFieldsContainer = createDiv();
+			itemFieldsContainer.className = "note-toolbar-setting-item-fields";
+			itemFieldsContainer.appendChild(textFieldsContainer);
+			
+			itemTopContainer.appendChild(itemFieldsContainer);
+			itemTopContainer.appendChild(linkContainer);
+			itemDiv.appendChild(itemTopContainer);
+
+		}
 
 		//
 		// delete button
@@ -589,13 +604,12 @@ export default class ToolbarSettingsModal extends Modal {
 		itemControlsContainer.className = "note-toolbar-setting-item-controls";
 		this.getDeleteButton(itemControlsContainer);
 
-		let itemFieldsContainer = createDiv();
-		itemFieldsContainer.className = "note-toolbar-setting-item-fields";
-		itemFieldsContainer.appendChild(textFieldsContainer);
-		
-		itemTopContainer.appendChild(itemFieldsContainer);
-		itemTopContainer.appendChild(linkContainer);
-		itemDiv.appendChild(itemTopContainer);
+		// we'll just show "Separator" after the delete button, to keep the UI minimal
+		if (toolbarItem.linkAttr.type === ItemType.Separator) {
+			let separatorTitle = createSpan();
+			separatorTitle.setText('Separator');
+			itemControlsContainer.append(separatorTitle);
+		}
 
 		//
 		// visibility controls
@@ -646,6 +660,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemVisilityAndControlsContainer = createDiv();
 		itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
+		(toolbarItem.linkAttr.type === ItemType.Separator) 
+			? itemVisilityAndControlsContainer.setAttribute('data-item-type', 'separator') : undefined;
 		itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
 		itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
 

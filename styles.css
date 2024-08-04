@@ -1486,6 +1486,14 @@ body {
             }
         }
     }
+    &[data-item-type="separator"] {
+        padding-top: 0 !important;
+        & span {
+            align-content: center;
+            color: var(--text-muted);
+            margin-left: 0.25em;
+        }
+    }
 }
 
 .note-toolbar-setting-item-fields {
