@@ -634,6 +634,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let menuOverflow = activeWindow.innerWidth - (menuPos.x + menu.dom.offsetWidth);
 				// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
 				if (menuOverflow <= 2) {
+					debugLog('⬅️ repositioned menu');
 					// show the menu along the right edge of the window instead
 					menu.showAtPosition( { x: activeWindow.innerWidth, y: menuPos.y, overlap: true, left: true } );
 				}
