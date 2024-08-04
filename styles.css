@@ -145,6 +145,14 @@ settings:
         default-light: '#'
         default-dark: '#'
     -
+        id: cg-nt-item-sep-color
+        title: 'Separator: Color'
+        type: variable-themed-color
+        opacity: true
+        format: hex        
+        default-light: '#'
+        default-dark: '#'
+    -
         id: toolbar-positioning
         title: '↳ ↕ Positioning'
         type: heading
@@ -207,6 +215,24 @@ settings:
         type: variable-number
         default: 0.5
         format: em
+    -
+        id: cg-nt-item-sep-margin-x
+        title: 'Separator: Left + Right margin (in em units)'
+        type: variable-number
+        default: 0.25
+        format: em
+    -
+        id: cg-nt-item-sep-margin-y
+        title: 'Separator: Top + Bottom margin (in em units)'
+        type: variable-number
+        default: 0.25
+        format: em
+    -
+        id: cg-nt-item-sep-width
+        title: 'Separator: Width'
+        type: variable-number
+        default: 1
+        format: px
     -
         id: toolbar-styles
         title: '↳ 😎 Style'
@@ -462,6 +488,7 @@ body {
     --cg-nt-item-padding-x: 0.75em;
     --cg-nt-item-padding-y: 0.5em;
     --cg-nt-item-sep-color: var(--background-modifier-border);
+    --cg-nt-item-sep-width: 1px;
     --cg-nt-item-sep-margin-x: 0.25em;
     --cg-nt-item-sep-margin-y: 0.25em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
@@ -597,7 +624,7 @@ body {
 
         & li:has(> data[data-ntb-sep]),
         & li:has(> a.external-link + data[data-ntb-sep]) {
-            border-left: 1px solid var(--cg-nt-item-sep-color);
+            border-left: var(--cg-nt-item-sep-width) solid var(--cg-nt-item-sep-color);
             margin: var(--cg-nt-item-sep-margin-y) var(--cg-nt-item-sep-margin-x);
             width: 1px;
             & a:hover {
