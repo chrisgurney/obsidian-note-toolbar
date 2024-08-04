@@ -949,7 +949,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			// remove any items that are not visible (i.e., hidden on desktop/mobile) as they are not navigable
 			let items = Array.from(itemsUl.children);
 			const visibleItems = items.filter(item => {
-				return window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+				const hasSpan = item.querySelector('span') !== null; // to filter out separators
+				const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+				return hasSpan && isVisible;
 			});
 			let currentIndex = visibleItems.indexOf(activeDocument.activeElement?.parentElement as HTMLElement);
 
