@@ -8,6 +8,7 @@ export enum ComponentType {
 	Label = 'label'
 }
 export enum ItemType {
+	Break = 'break',
 	Command = 'command',
 	File = 'file',
 	Group = 'group',
@@ -36,6 +37,7 @@ export enum ViewType {
 }
 
 export enum CalloutAttr {
+	Break = 'data-ntb-break',
     Command = 'data-ntb-command',
     Folder = 'data-ntb-folder',
     Menu = 'data-ntb-menu',

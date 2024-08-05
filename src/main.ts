@@ -417,17 +417,21 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
-			return ((item.label === "" && item.icon === "" && item.linkAttr.type !== ItemType.Separator) ? false : true);
+			return ((
+				item.label === "" && item.icon === "" 
+				&& ![ItemType.Break, ItemType.Separator].includes(item.linkAttr.type)) ? false : true);
 
 		}).map((item: ToolbarItemSettings) => {
 
 			let toolbarItem: HTMLElement;
 
-			if (item.linkAttr.type === ItemType.Separator) {
-
+			if (item.linkAttr.type === ItemType.Break) {
+				toolbarItem = activeDocument.createElement('data');
+				toolbarItem.setAttribute('data-ntb-break', '');
+			}
+			else if (item.linkAttr.type === ItemType.Separator) {
 				toolbarItem = activeDocument.createElement('data');
 				toolbarItem.setAttribute('data-ntb-sep', '');
-
 			}
 			else {
 
@@ -542,7 +546,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		toolbar.items.forEach((toolbarItem, index) => {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-				if (toolbarItem.linkAttr.type === ItemType.Separator) {
+				if (toolbarItem.linkAttr.type === ItemType.Break) {
+					return;
+				}
+				else if (toolbarItem.linkAttr.type === ItemType.Separator) {
 					menu.addSeparator();
 				}
 				else {

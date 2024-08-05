@@ -250,8 +250,15 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(itemsListButtonContainer)
 			.addExtraButton((cb) => {
 				cb.setIcon('lucide-align-horizontal-justify-center')
-				  .setTooltip("Add a separator the toolbar")
+				  .setTooltip("Add a separator to the toolbar")
 				  .onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
+			});
+
+		new Setting(itemsListButtonContainer)
+			.addExtraButton((cb) => {
+				cb.setIcon('lucide-corner-down-left')
+				  .setTooltip("Add a line break to the toolbar")
+				  .onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Break));
 			});
 
 		new Setting(itemsListButtonContainer)
@@ -371,16 +378,12 @@ export default class ToolbarSettingsModal extends Modal {
 		// set preview icon and text
 		//
 
-		if (toolbarItem.linkAttr.type === ItemType.Separator) {
-
-			setTooltip(itemPreview, 'Edit separator');
-
-			let separatorLine = createSpan()
+		if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+			setTooltip(itemPreview, 'Edit ' + toolbarItem.linkAttr.type);
+			let separatorLine = createSpan();
 			separatorLine.createEl('hr');
-
-			itemPreview.setAttribute('data-item-type', 'separator');
+			itemPreview.setAttribute('data-item-type', toolbarItem.linkAttr.type);
 			itemPreview.append(separatorLine);
-
 		}
 		else {
 
@@ -493,7 +496,7 @@ export default class ToolbarSettingsModal extends Modal {
 		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + rowId;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
-		if (toolbarItem.linkAttr.type !== ItemType.Separator) {
+		if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 
 			//
 			// Item icon, name, and tooltip
@@ -604,10 +607,11 @@ export default class ToolbarSettingsModal extends Modal {
 		itemControlsContainer.className = "note-toolbar-setting-item-controls";
 		this.getDeleteButton(itemControlsContainer);
 
-		// we'll just show "Separator" after the delete button, to keep the UI minimal
-		if (toolbarItem.linkAttr.type === ItemType.Separator) {
+		// we'll just show these types after the delete button, to keep the UI minimal
+		if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+			let type = toolbarItem.linkAttr.type;
 			let separatorTitle = createSpan();
-			separatorTitle.setText('Separator');
+			separatorTitle.setText(type.charAt(0).toUpperCase() + type.slice(1));
 			itemControlsContainer.append(separatorTitle);
 		}
 
@@ -628,8 +632,8 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
-						// toggle (instead of menu) for separators
-						if (toolbarItem.linkAttr.type === ItemType.Separator) {
+						// toggle (instead of menu) for breaks + separators
+						if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 							let platform = toolbarItem.visibility.desktop;
 
 							let isComponentVisible = {
@@ -668,8 +672,8 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
-						// toggle (instead of menu) for separators
-						if (toolbarItem.linkAttr.type === ItemType.Separator) {
+						// toggle (instead of menu) for breaks + separators
+						if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 							let platform = toolbarItem.visibility.mobile;
 
 							let isComponentVisible = {
@@ -716,8 +720,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemVisilityAndControlsContainer = createDiv();
 		itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
-		(toolbarItem.linkAttr.type === ItemType.Separator) 
-			? itemVisilityAndControlsContainer.setAttribute('data-item-type', 'separator') : undefined;
+		([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) 
+			? itemVisilityAndControlsContainer.setAttribute('data-item-type', toolbarItem.linkAttr.type) : undefined;
 		itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
 		itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
 
