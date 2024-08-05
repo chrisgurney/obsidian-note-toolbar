@@ -405,7 +405,7 @@ settings:
         title: Padding on desktop (in px units)
         description: Spacing around the icon.
         type: variable-number
-        default: 16
+        default: 12
         format: px
     -
         id: cg-nt-fab-icon-size
@@ -578,7 +578,7 @@ body {
     --cg-nt-fab-border-radius: 999px;
     --cg-nt-fab-border-radius-desktop: 999px;
     --cg-nt-fab-padding: calc(var(--icon-l) / 2);
-    --cg-nt-fab-padding-desktop: 16px;
+    --cg-nt-fab-padding-desktop: calc(var(--icon-l) / 1.5);
     --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-item-border-radius: var(--button-radius);
     --cg-nt-item-button-bg-color: var(--interactive-normal);
