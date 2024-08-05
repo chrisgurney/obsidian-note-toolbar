@@ -1323,6 +1323,9 @@ body {
     & .setting-item {
         padding-bottom: 0 !important;
     }
+    & svg {
+        color: var(--interactive-accent);
+    }
 }
 
 .note-toolbar-setting-item-top-container {
