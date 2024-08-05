@@ -694,11 +694,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				// if link resolves to nothing, there's no need to display the item
 				if (hasVars(itemSetting.link)) {
 					if (replaceVars(this.app, itemSetting.link, activeFile, false) === "") {
-						itemEl.parentElement?.addClass('hide'); // hide the containing li element
+						itemEl.addClass('hide'); // hide the containing li element
 						return;
 					}
 					else {
-						itemEl.parentElement?.removeClass('hide'); // unhide the containing li element
+						itemEl.removeClass('hide'); // unhide the containing li element
 					}
 				}
 
