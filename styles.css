@@ -452,6 +452,15 @@ settings:
         default: 0
         format: px
     -
+        id: cg-nt-fab-inactive-opacity
+        title: 'Inactive opacity'
+        description: 'When focus is in another tab, dim the floatinb button'
+        type: variable-number-slider
+        default: 0.7
+        min: 0
+        max: 1
+        step: 0.05
+    -
         id: toolbar-menus
         title: 'Item Menus'
         description: 'Styles for Item Menu type items'
@@ -555,6 +564,7 @@ body {
     --cg-nt-fab-bg-color-desktop: var(--interactive-normal);
     --cg-nt-fab-bg-color-hover: var(--interactive-hover);
     --cg-nt-fab-bg-color-hover-desktop: var(--interactive-hover);
+    --cg-nt-fab-inactive-opacity: 0.7;
     --cg-nt-fab-pos-x: 82vw;
     --cg-nt-fab-pos-y: 90vh;
     --cg-nt-fab-pos-x-desktop: 4em;
@@ -963,6 +973,10 @@ body {
             left: unset;
             right: var(--cg-nt-fab-pos-x);
         }
+    }
+    /* user feedback that toolbar interaction is not available; workaround for #69 */
+    &:not(.is-focused &), &:not(.mod-active &) {
+        opacity: var(--cg-nt-fab-inactive-opacity);
     }
 }
 
