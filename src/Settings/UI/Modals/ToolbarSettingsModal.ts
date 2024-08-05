@@ -628,8 +628,36 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
-						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', cb);
-						visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
+						// toggle (instead of menu) for separators
+						if (toolbarItem.linkAttr.type === ItemType.Separator) {
+							let platform = toolbarItem.visibility.desktop;
+
+							let isComponentVisible = {
+								icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
+								label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+							};
+							if (isComponentVisible.icon && isComponentVisible.label) {
+								removeComponentVisibility(platform, ComponentType.Icon);
+								removeComponentVisibility(platform, ComponentType.Label);
+								isComponentVisible.icon = false;
+								isComponentVisible.label = false;
+							}
+							else {
+								addComponentVisibility(platform, ComponentType.Icon);
+								addComponentVisibility(platform, ComponentType.Label);
+								isComponentVisible.icon = true;
+								isComponentVisible.label = true;						
+							}
+							let [state, tooltip] = this.getPlatformStateLabel(platform, 'desktop');
+							updateButton(cb, state, tooltip);
+
+							this.toolbar.updated = new Date().toISOString();
+							await this.plugin.settingsManager.save();
+						}
+						else {
+							let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', cb);
+							visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));	
+						}
 					});
 			})
 			.addButton((cb) => {
@@ -640,8 +668,36 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
-						let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
-						visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
+						// toggle (instead of menu) for separators
+						if (toolbarItem.linkAttr.type === ItemType.Separator) {
+							let platform = toolbarItem.visibility.mobile;
+
+							let isComponentVisible = {
+								icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
+								label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+							};
+							if (isComponentVisible.icon && isComponentVisible.label) {
+								removeComponentVisibility(platform, ComponentType.Icon);
+								removeComponentVisibility(platform, ComponentType.Label);
+								isComponentVisible.icon = false;
+								isComponentVisible.label = false;
+							}
+							else {
+								addComponentVisibility(platform, ComponentType.Icon);
+								addComponentVisibility(platform, ComponentType.Label);
+								isComponentVisible.icon = true;
+								isComponentVisible.label = true;						
+							}
+							let [state, tooltip] = this.getPlatformStateLabel(platform, 'mobile');
+							updateButton(cb, state, tooltip);
+
+							this.toolbar.updated = new Date().toISOString();
+							await this.plugin.settingsManager.save();
+						}
+						else {
+							let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
+							visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
+						}
 					});
 			})
 			.addExtraButton((cb) => {
@@ -668,6 +724,23 @@ export default class ToolbarSettingsModal extends Modal {
 		itemDiv.appendChild(itemVisilityAndControlsContainer);
 
 		return itemDiv;
+
+		function updateButton(button: ButtonComponent, label: string, tooltip: string): void {
+			const children = Array.from(button.buttonEl.childNodes);
+			const labelNode = children.find(node => node.nodeType === Node.TEXT_NODE);
+		
+			if (label) {
+				if (labelNode) {
+					labelNode.textContent = label;
+				} else {
+					button.buttonEl.appendChild(document.createTextNode(label));
+				}
+			} 
+			else if (labelNode) {
+				button.buttonEl.removeChild(labelNode);
+			}
+			button.setTooltip(tooltip);
+		}
 
 	}
 
