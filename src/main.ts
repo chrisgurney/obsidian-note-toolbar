@@ -670,7 +670,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile) {
 
 		let toolbarEl = this.getToolbarEl();
-		debugLog("updateToolar()", toolbarEl);
+		debugLog("updateToolbar()", toolbarEl);
 
 		// if we have a toolbarEl, double-check toolbar's name and updated stamp are as provided
 		let toolbarElName = toolbarEl?.getAttribute("data-name");
@@ -680,13 +680,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		// iterate over the item elements of this toolbarEl
-		let toolbarItemEls = toolbarEl.querySelectorAll('.callout-content > ul > li > span');
+		let toolbarItemEls = toolbarEl.querySelectorAll('.callout-content > ul > li');
 		toolbarItemEls.forEach((itemEl: HTMLElement, index) => {
 
+			let itemSpanEl = itemEl.querySelector('span.external-link');
+
+			// skip separators
+			if (!itemSpanEl) { return }
+
 			let itemSetting = toolbar.items[index];
-			let itemElHref = itemEl.getAttribute("href");
-			// debugLog(itemEl, "should correspond to setting:", itemSetting);
-			if (itemElHref === itemSetting.link) {
+			if (itemSpanEl.id === itemSetting.uuid) {
 
 				// if link resolves to nothing, there's no need to display the item
 				if (hasVars(itemSetting.link)) {
