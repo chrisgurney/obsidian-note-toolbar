@@ -1728,6 +1728,11 @@ body {
             }
         }
     }
+    .is-mobile & {
+        .setting-item:has(select[class="dropdown"]) {
+            flex: 0 0 100%;
+        }
+    }
 }
 
 .note-toolbar-setting-mini-dialog {
