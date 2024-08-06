@@ -203,17 +203,14 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ autohide: "auto-hide*" },
     { border: "border" },
 	{ button: "button" },
-    { noborder: "no border" },
     { center: "center items" },
 	{ between: "space between items" },
     { even: "space items evenly" },
     { left: "left align items" },
     { right: "right align items" },
     { sticky: "sticky*" },
-    { nosticky: "not sticky" },
     { floatl: "float left*" },
-    { floatr: "float right*" },
-    { nofloat: "no float" },
+    { floatr: "float right*" }
 ];
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
