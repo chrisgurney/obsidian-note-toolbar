@@ -1332,6 +1332,9 @@ body {
     & .setting-item {
         border-top: none;
         padding: 0 !important;
+        & .setting-item-control {
+            gap: var(--size-4-4);
+        }
     }
     & svg {
         color: var(--interactive-accent);
