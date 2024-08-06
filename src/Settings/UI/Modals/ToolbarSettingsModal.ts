@@ -247,7 +247,8 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemsListButtonContainer = createDiv();
 		itemsListButtonContainer.addClass('note-toolbar-setting-items-button-container');
 
-		new Setting(itemsListButtonContainer)
+		let formattingButtons = createSpan();
+		new Setting(formattingButtons)
 			.addExtraButton((btn) => {
 				btn.setIcon('lucide-align-horizontal-justify-center')
 					.setTooltip("Add a separator to the toolbar")
@@ -257,7 +258,10 @@ export default class ToolbarSettingsModal extends Modal {
 				btn.setIcon('lucide-corner-down-left')
 					.setTooltip("Add a line break to the toolbar")
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Break));
-			})
+			});
+		itemsListButtonContainer.appendChild(formattingButtons);
+
+		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
 				btn.setTooltip("Add a new item to the toolbar")
 					.setButtonText("+ Add toolbar item")

@@ -1188,13 +1188,15 @@ body {
             width: 100%;
         }
         & hr {
-            border: solid 1px var(--background-modifier-border);
             margin: 0;
             width: 100%
         }
     }
+    &[data-item-type="separator"] hr {
+        border: dashed 1px var(--color-base-40);
+    }
     &[data-item-type="break"] hr {
-        border: dashed 1px var(--background-modifier-border);
+        border: solid 1px var(--color-base-50);
     }
     & span {
         display: flex;
@@ -1328,10 +1330,13 @@ body {
 .note-toolbar-setting-items-button-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: space-between;
     & .setting-item {
         border-top: none;
         padding: 0 !important;
+        & .setting-item-info {
+            display: none;
+        }
         & .setting-item-control {
             gap: var(--size-4-4);
         }
