@@ -1328,6 +1328,7 @@ body {
 }
 
 .note-toolbar-setting-items-button-container {
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
