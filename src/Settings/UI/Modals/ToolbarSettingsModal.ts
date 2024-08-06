@@ -248,29 +248,21 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsListButtonContainer.addClass('note-toolbar-setting-items-button-container');
 
 		new Setting(itemsListButtonContainer)
-			.addExtraButton((cb) => {
-				cb.setIcon('lucide-align-horizontal-justify-center')
-				  .setTooltip("Add a separator to the toolbar")
-				  .onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
-			});
-
-		new Setting(itemsListButtonContainer)
-			.addExtraButton((cb) => {
-				cb.setIcon('lucide-corner-down-left')
-				  .setTooltip("Add a line break to the toolbar")
-				  .onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Break));
-			});
-
-		new Setting(itemsListButtonContainer)
-			.setClass("note-toolbar-setting-button")
-			.addButton((button: ButtonComponent) => {
-				button
-					.setTooltip("Add a new item to the toolbar")
+			.addExtraButton((btn) => {
+				btn.setIcon('lucide-align-horizontal-justify-center')
+					.setTooltip("Add a separator to the toolbar")
+					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
+			})
+			.addExtraButton((btn) => {
+				btn.setIcon('lucide-corner-down-left')
+					.setTooltip("Add a line break to the toolbar")
+					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Break));
+			})
+			.addButton((btn) => {
+				btn.setTooltip("Add a new item to the toolbar")
 					.setButtonText("+ Add toolbar item")
 					.setCta()
-					.onClick(async () => this.addItemHandler(
-						itemsSortableContainer,
-						this.toolbar.items.last()?.linkAttr.type ?? ItemType.Uri));
+					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Command));
 			});
 
 		itemsListContainer.appendChild(itemsListButtonContainer);
