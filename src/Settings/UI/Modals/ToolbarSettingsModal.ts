@@ -379,7 +379,7 @@ export default class ToolbarSettingsModal extends Modal {
 		if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 			setTooltip(itemPreview, 'Edit ' + toolbarItem.linkAttr.type);
 			let separatorLine = createSpan();
-			separatorLine.createEl('hr');
+			separatorLine.setText(toolbarItem.linkAttr.type);
 			itemPreview.setAttribute('data-item-type', toolbarItem.linkAttr.type);
 			itemPreview.append(separatorLine);
 		}

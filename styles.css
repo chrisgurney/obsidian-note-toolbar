@@ -1186,19 +1186,34 @@ body {
     &[data-item-type="break"],
     &[data-item-type="separator"] {
         & span {
+            color: var(--color-base-50);
+            display: flex;
+            flex-direction: row;
+            font-variant: small-caps;
             height: 1em;
             width: 100%;
-        }
-        & hr {
-            margin: 0;
-            width: 100%
+            &:before, &:after {
+                content: "";
+                flex: 1 1;
+                margin: auto;    
+            }
+            &:before {
+                margin-right: 10px;
+            }
+            &:after {
+                margin-left: 10px;
+            }
         }
     }
-    &[data-item-type="separator"] hr {
-        border: dashed 1px var(--color-base-40);
+    &[data-item-type="separator"] > span {
+        &:before, &:after {
+            border: dashed 1px var(--color-base-40);
+        }
     }
-    &[data-item-type="break"] hr {
-        border: solid 1px var(--color-base-50);
+    &[data-item-type="break"] > span {
+        &:before, &:after {
+            border: solid 1px var(--color-base-50);
+        }
     }
     & span {
         display: flex;
