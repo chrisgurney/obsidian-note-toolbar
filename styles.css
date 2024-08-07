@@ -721,6 +721,7 @@ body {
             }
         }
 
+        & li:has(> section),
         & li:has(> data[data-ntb-sep]),
         & li:has(> a.external-link + data[data-ntb-sep]) {
             border-left: var(--cg-nt-item-sep-width) solid var(--cg-nt-item-sep-color);
@@ -730,6 +731,7 @@ body {
                 background: none;
             }
         }
+        & li:has(> br),
         & li:has(> data[data-ntb-break]),
         & li:has(> a.external-link + data[data-ntb-break]) {
             flex-basis: 100%;
