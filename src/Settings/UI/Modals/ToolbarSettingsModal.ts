@@ -245,7 +245,7 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let itemsListButtonContainer = createDiv();
-		itemsListButtonContainer.addClass('note-toolbar-setting-items-button-container');
+		itemsListButtonContainer.addClasses(['setting-item', 'note-toolbar-setting-items-button-container']);
 
 		let formattingButtons = createSpan();
 		new Setting(formattingButtons)
