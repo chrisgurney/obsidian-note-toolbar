@@ -1189,6 +1189,7 @@ body {
             color: var(--color-base-50);
             display: flex;
             flex-direction: row;
+            font-size: var(--font-ui-smaller);
             font-variant: small-caps;
             height: 1em;
             width: 100%;
