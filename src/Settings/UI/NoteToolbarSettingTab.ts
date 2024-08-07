@@ -62,18 +62,21 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.setHeading();
 		}
 
+		// toolbar list
 		this.displayToolbarList(containerEl);
 
+		// display rules
 		new Setting(containerEl)
 			.setName("Display rules")
 			.setDesc(learnMoreFr(
 				"Define which notes to display toolbars on.", 
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars"))
 			.setHeading();
-
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
-		this.displayMobileSettings(containerEl);
+
+		// other global settings
+		this.displayOtherSettings(containerEl);
 
 		if (focusId) {
 			let focusEl = this.containerEl.querySelector(focusId) as HTMLElement;
@@ -422,18 +425,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
-	 * 
+	 * Displays other global settings.
 	 * @param containerEl 
 	 */
-	displayMobileSettings(containerEl: HTMLElement): void {
+	displayOtherSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName("Mobile")
+			.setName("Other")
 			.setHeading();
 
 		const s1 = new Setting(containerEl)
-			.setName("Mobile icon")
-			.setDesc("Sets the icon for the navigation bar (requires restart) and floating button.")
+			.setName("Icon")
+			.setDesc("Sets the icon for the floating button and navigation bar (mobile). Requires restart.")
 			.addButton((cb) => {
 				cb.setIcon(this.plugin.settings.icon)
 					.setTooltip("Select icon")
@@ -458,7 +461,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		
 		const s2 = new Setting(containerEl)
 			.setName("Show 'Edit toolbar' link in toolbar menus")
-			.setDesc("Add an item to access the toolbar's settings in the mobile toolbar menu.")
+			.setDesc("Adds an item to access the toolbar's settings in toolbar menus.")
 			.addToggle((cb) => {
 				cb.setValue(this.plugin.settings.showEditInFabMenu)
 				cb.onChange(async (value) => {
