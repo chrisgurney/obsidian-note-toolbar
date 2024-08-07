@@ -426,13 +426,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let toolbarItem: HTMLElement;
 
-			if (item.linkAttr.type === ItemType.Break) {
+			if ([ItemType.Break, ItemType.Separator].includes(item.linkAttr.type)) {
 				toolbarItem = activeDocument.createElement('data');
-				toolbarItem.setAttribute('data-ntb-break', '');
-			}
-			else if (item.linkAttr.type === ItemType.Separator) {
-				toolbarItem = activeDocument.createElement('data');
-				toolbarItem.setAttribute('data-ntb-sep', '');
+				toolbarItem.setAttribute(
+					item.linkAttr.type === ItemType.Break ? 'data-ntb-break' : 'data-ntb-sep', '');
+				toolbarItem.setAttribute('role', 'separator');
 			}
 			else {
 
