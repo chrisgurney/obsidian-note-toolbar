@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr } from "Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
@@ -250,8 +250,10 @@ export default class ToolbarSettingsModal extends Modal {
 		let formattingButtons = createSpan();
 		new Setting(formattingButtons)
 			.addExtraButton((btn) => {
-				btn.setIcon('lucide-align-horizontal-justify-center')
-					.setTooltip("Add a separator to the toolbar")
+				let icon = getIcon('note-toolbar-separator');
+				btn.extraSettingsEl.empty(); // remove existing gear icon
+				icon? btn.extraSettingsEl.appendChild(icon) : undefined;
+				btn.setTooltip("Add a separator to the toolbar")
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
 			})
 			.addExtraButton((btn) => {
