@@ -1199,10 +1199,10 @@ body {
                 margin: auto;    
             }
             &:before {
-                margin-right: 10px;
+                margin-right: 6px;
             }
             &:after {
-                margin-left: 10px;
+                margin-left: 6px;
             }
         }
     }
