@@ -83,99 +83,177 @@ name: Note Toolbar
 id: note-toolbar
 settings:
     -
-        id: toolbar
-        title: Toolbars
-        description: 'Styles for standard toolbars'
+        id: toolbar-fab-styles
+        title: 'Floating Button'
+        description: 'Styles for floating buttons (set toolbar position to "floating button")'
         type: heading
         level: 1
         collapsed: true
     -
-        id: toolbar-colors
+        id: toolbar-fab-colors
         title: '↳ 🎨 Colors'
         type: heading
         level: 2
         collapsed: true
     -
-        id: cg-nt-tbar-bg-color
-        title: 'Background color'
+        id: cg-nt-fab-bg-color-desktop
+        title: Background color on desktop
         type: variable-themed-color
         opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
     -
-        id: cg-nt-tbar-border-color
-        title: 'Border color'
-        description: 'Top + Bottom borders'
+        id: cg-nt-fab-bg-color
+        title: 'Background color on mobile 📱'
         type: variable-themed-color
         opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
     -
-        id: toolbar-positioning
+        id: cg-nt-fab-bg-color-hover-desktop
+        title: Background color on desktop (on hover)
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-fab-bg-color-hover
+        title: 'Background color on mobile (on press) 📱'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-fab-icon-color-desktop
+        title: Icon color on desktop
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-fab-icon-color
+        title: 'Icon color on mobile 📱'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: toolbar-fab-positioning
         title: '↳ ↕ Positioning'
         type: heading
         level: 2
         collapsed: true
     -
-        id: cg-nt-tbar-top-sticky-pos-desktop
-        title: Top sticky offset on desktop (in px units)
-        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed).
+        id: cg-nt-fab-pos-x-desktop
+        title: X position on desktop (in em units)
+        description: Distance from the edge of the editor view.
         type: variable-number
-        default: -40
-        format: px
+        default: 4
+        format: em
     -
-        id: cg-nt-tbar-top-sticky-pos-mobile
-        title: Top sticky offset on mobile (in rem units)
-        description: See above.
+        id: cg-nt-fab-pos-x
+        title: 'X position on mobile (in vw units) 📱'
+        description: As a percentage of the editor's width, from the left edge (reversed when button is on right).
         type: variable-number
-        default: -1
-        format: rem
+        default: 82
+        format: vw
     -
-        id: toolbar-sizing-spacing
+        id: cg-nt-fab-pos-y-desktop
+        title: Y position on desktop (in vh units)
+        description: As a percentage of the editor's height, from the top edge.
+        type: variable-number
+        default: 90
+        format: vh
+    -
+        id: cg-nt-fab-pos-y
+        title: 'Y position on mobile (in vh units) 📱'
+        description: As a percentage of the editor's height, from the top edge.
+        type: variable-number
+        default: 90
+        format: vh
+    -
+        id: toolbar-fab-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
         type: heading
         level: 2
         collapsed: true
     -
-        id: cg-nt-tbar-margin-y
-        title: Top + Bottom margin (in em units)
+        id: cg-nt-fab-padding-desktop
+        title: Padding on desktop (in px units)
+        description: Spacing around the icon.
         type: variable-number
-        default: 0.5
-        format: em
+        default: 12
+        format: px
     -
-        id: cg-nt-tbar-padding-inline
-        title: Left + Right padding (in em units)
-        description: Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented.
+        id: cg-nt-fab-padding
+        title: 'Padding on mobile (in px units) 📱'
+        description: Spacing around the icon.
         type: variable-number
-        default: 0
-        format: em
+        default: 12
+        format: px
     -
-        id: toolbar-styles
+        id: cg-nt-fab-icon-size-desktop
+        title: Icon size on desktop (in px units)
+        type: variable-number
+        default: 24
+        format: px
+    -
+        id: cg-nt-fab-icon-size
+        title: 'Icon size on mobile (in px units) 📱'
+        type: variable-number
+        default: 24
+        format: px
+    -
+        id: cg-nt-fab-icon-stroke-width-desktop
+        title: Icon stroke width on desktop (in px units)
+        type: variable-number
+        default: 1.8
+        format: px
+    -
+        id: cg-nt-fab-icon-stroke-width
+        title: 'Icon stroke width on mobile (in px units) 📱'
+        type: variable-number
+        default: 1.8
+        format: px
+    -
+        id: toolbar-fab-style
         title: '↳ 😎 Style'
         type: heading
         level: 2
         collapsed: true
-    -    
-        id: cg-nt-tbar-border-radius
-        title: 'Border radius (in px units)'
+    -
+        id: cg-nt-fab-border-radius-desktop
+        title: Border radius on desktop (in px units)
+        description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
         type: variable-number
         default: 0
         format: px
     -
-        id: cg-nt-tbar-inactive-opacity
+        id: cg-nt-fab-border-radius
+        title: 'Border radius on mobile (in px units) 📱'
+        description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: cg-nt-fab-inactive-opacity
         title: 'Inactive opacity'
-        description: 'When focus is in another tab, dim the toolbar'
+        description: 'When focus is in another tab, dim the floatinb button'
         type: variable-number-slider
-        default: 0.8
+        default: 0.7
         min: 0
         max: 1
         step: 0.05
     -
         id: item
         title: Items
-        description: 'Styles for toolbar items'
+        description: 'Styles for items within toolbars'
         type: heading
         level: 1
         collapsed: true
@@ -260,209 +338,8 @@ settings:
         default: 5
         format: px
     -
-        id: sep
-        title: Separators
-        description: 'Styles for toolbar separators'
-        type: heading
-        level: 1
-        collapsed: true
-    -
-        id: cg-nt-item-sep-color
-        title: '🎨 Color'
-        type: variable-themed-color
-        opacity: true
-        format: hex        
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-item-sep-margin-x
-        title: '📐 Left + Right margin (in em units)'
-        type: variable-number
-        default: 0.25
-        format: em
-    -
-        id: cg-nt-item-sep-margin-y
-        title: '📐 Top + Bottom margin (in em units)'
-        type: variable-number
-        default: 0.25
-        format: em
-    -
-        id: cg-nt-item-sep-width
-        title: '📐 Width'
-        type: variable-number
-        default: 1
-        format: px
-    -
-        id: toolbar-fab-styles
-        title: 'Floating Button'
-        description: 'Set toolbar position to "floating button"'
-        type: heading
-        level: 1
-        collapsed: true
-    -
-        id: toolbar-fab-colors
-        title: '↳ 🎨 Colors'
-        type: heading
-        level: 2
-        collapsed: true
-    -
-        id: cg-nt-fab-bg-color
-        title: Background color on mobile
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-fab-bg-color-desktop
-        title: Background color on desktop
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-fab-bg-color-hover
-        title: Background color on mobile (on press)
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-fab-bg-color-hover-desktop
-        title: Background color on desktop (on hover)
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-fab-icon-color
-        title: Icon color on mobile
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-fab-icon-color-desktop
-        title: Icon color on desktop
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: toolbar-fab-positioning
-        title: '↳ ↕ Positioning'
-        type: heading
-        level: 2
-        collapsed: true
-    -
-        id: cg-nt-fab-pos-x
-        title: X position on mobile
-        description: As a percentage of the editor's width, from the left edge (reversed when button is on right).
-        type: variable-number
-        default: 82
-        format: vw
-    -
-        id: cg-nt-fab-pos-y
-        title: Y position on mobile
-        description: As a percentage of the editor's height, from the top edge.
-        type: variable-number
-        default: 90
-        format: vh
-    -
-        id: cg-nt-fab-pos-x-desktop
-        title: X position on desktop (in em units)
-        description: Distance from the edge of the editor view.
-        type: variable-number
-        default: 4
-        format: em
-    -
-        id: cg-nt-fab-pos-y-desktop
-        title: Y position on desktop
-        description: As a percentage of the editor's height, from the top edge.
-        type: variable-number
-        default: 90
-        format: vh
-    -
-        id: toolbar-fab-sizing-spacing
-        title: '↳ 📐 Sizing and Spacing'
-        type: heading
-        level: 2
-        collapsed: true
-    -
-        id: cg-nt-fab-padding
-        title: Padding on mobile (in px units)
-        description: Spacing around the icon.
-        type: variable-number
-        default: 12
-        format: px
-    -
-        id: cg-nt-fab-padding-desktop
-        title: Padding on desktop (in px units)
-        description: Spacing around the icon.
-        type: variable-number
-        default: 12
-        format: px
-    -
-        id: cg-nt-fab-icon-size
-        title: Icon size on mobile (in px units)
-        type: variable-number
-        default: 24
-        format: px
-    -
-        id: cg-nt-fab-icon-size-desktop
-        title: Icon size on desktop (in px units)
-        type: variable-number
-        default: 24
-        format: px
-    -
-        id: cg-nt-fab-icon-stroke-width
-        title: Icon stroke width on mobile (in px units)
-        type: variable-number
-        default: 1.8
-        format: px
-    -
-        id: cg-nt-fab-icon-stroke-width-desktop
-        title: Icon stroke width on desktop (in px units)
-        type: variable-number
-        default: 1.8
-        format: px
-    -
-        id: toolbar-fab-style
-        title: '↳ 😎 Style'
-        type: heading
-        level: 2
-        collapsed: true
-    -
-        id: cg-nt-fab-border-radius
-        title: Border radius on mobile (in px units)
-        description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
-        type: variable-number
-        default: 0
-        format: px
-    -
-        id: cg-nt-fab-border-radius-desktop
-        title: Border radius on desktop (in px units)
-        description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
-        type: variable-number
-        default: 0
-        format: px
-    -
-        id: cg-nt-fab-inactive-opacity
-        title: 'Inactive opacity'
-        description: 'When focus is in another tab, dim the floatinb button'
-        type: variable-number-slider
-        default: 0.7
-        min: 0
-        max: 1
-        step: 0.05
-    -
         id: toolbar-menus
-        title: 'Item Menus'
+        title: 'Menus'
         description: 'Styles for Item Menu type items'
         type: heading
         level: 1
@@ -549,6 +426,129 @@ settings:
         type: variable-number
         default: 0
         format: px
+    -
+        id: sep
+        title: Separators
+        description: 'Styles for toolbar separators'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-item-sep-color
+        title: '🎨 Color'
+        type: variable-themed-color
+        opacity: true
+        format: hex        
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-item-sep-margin-x
+        title: '📐 Left + Right margin (in em units)'
+        type: variable-number
+        default: 0.25
+        format: em
+    -
+        id: cg-nt-item-sep-margin-y
+        title: '📐 Top + Bottom margin (in em units)'
+        type: variable-number
+        default: 0.25
+        format: em
+    -
+        id: cg-nt-item-sep-width
+        title: '📐 Width'
+        type: variable-number
+        default: 1
+        format: px
+    -
+        id: toolbar
+        title: Toolbars
+        description: 'Styles for standard toolbars'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: toolbar-colors
+        title: '↳ 🎨 Colors'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-bg-color
+        title: 'Background color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-border-color
+        title: 'Border color'
+        description: 'Top + Bottom borders'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: toolbar-positioning
+        title: '↳ ↕ Positioning'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-top-sticky-pos-desktop
+        title: Top sticky offset on desktop (in px units)
+        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed).
+        type: variable-number
+        default: -40
+        format: px
+    -
+        id: cg-nt-tbar-top-sticky-pos-mobile
+        title: 'Top sticky offset on mobile (in rem units) 📱'
+        description: See above.
+        type: variable-number
+        default: -1
+        format: rem
+    -
+        id: toolbar-sizing-spacing
+        title: '↳ 📐 Sizing and Spacing'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-margin-y
+        title: Top + Bottom margin (in em units)
+        type: variable-number
+        default: 0.5
+        format: em
+    -
+        id: cg-nt-tbar-padding-inline
+        title: Left + Right padding (in em units)
+        description: Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented.
+        type: variable-number
+        default: 0
+        format: em
+    -
+        id: toolbar-styles
+        title: '↳ 😎 Style'
+        type: heading
+        level: 2
+        collapsed: true
+    -    
+        id: cg-nt-tbar-border-radius
+        title: 'Border radius (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: cg-nt-tbar-inactive-opacity
+        title: 'Inactive opacity'
+        description: 'When focus is in another tab, dim the toolbar'
+        type: variable-number-slider
+        default: 0.8
+        min: 0
+        max: 1
+        step: 0.05
 */
 
 body {
