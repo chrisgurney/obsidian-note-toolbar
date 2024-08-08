@@ -103,21 +103,17 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(toolbarNameDiv)
 			.setName("Name")
 			.setDesc("Give this toolbar a unique name.")
-			.addText(text => text
+			.addText(cb => cb
 				.setPlaceholder('Name')
 				.setValue(this.toolbar.name)
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
 					let existingToolbar = this.plugin.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
-						toolbarNameDiv.createEl("div", { 
-							text: "A toolbar already exists with this name", 
-							attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
-						toolbarNameDiv.addClass("note-toolbar-setting-error");
+						this.setFieldError(cb.inputEl, "A toolbar already exists with this name.");
 					}
 					else {
-						document.getElementById("note-toolbar-name-error")?.remove();
-						toolbarNameDiv.removeClass("note-toolbar-setting-error");
+						this.removeFieldError(cb.inputEl);
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
@@ -815,21 +811,14 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.linkAttr.type = ItemType.File;
 								const file = this.app.vault.getAbstractFileByPath(value);
 								if (!(file instanceof TFile) && !(file instanceof TFolder)) {
-									if (document.getElementById("note-toolbar-item-link-note-error") === null) {
-										let errorDiv = this.containerEl.createEl("div", { 
-											text: "This file or folder does not exist.", 
-											attr: { id: "note-toolbar-item-link-note-error" }, cls: "note-toolbar-setting-field-error" });
-										cb.inputEl.parentElement?.insertAdjacentElement('afterend', errorDiv);
-										cb.inputEl.parentElement?.addClass('note-toolbar-setting-error');
-									}
+									this.setFieldError(cb.inputEl.parentElement, "This file or folder does not exist.");
 								}
 								else {
 									toolbarItem.link = normalizePath(value);
 									toolbarItem.linkAttr.commandId = '';
-									document.getElementById('note-toolbar-item-link-note-error')?.remove();
-									cb.inputEl.parentElement?.removeClass('note-toolbar-setting-error');
+									this.removeFieldError(cb.inputEl.parentElement);
 									await this.plugin.settingsManager.save();
-								}									
+								}					
 							}, 750))
 					});
 				break;
@@ -844,33 +833,20 @@ export default class ToolbarSettingsModal extends Modal {
 								// TODO? return an ID from the suggester vs. the name
 								let menuToolbar = this.plugin.settingsManager.getToolbarByName(name);
 								if (menuToolbar) {
-									document.getElementById("note-toolbar-exist-error")?.remove();
-									fieldDiv.removeClass("note-toolbar-setting-error");
+									this.removeFieldError(cb.inputEl.parentElement);
 									toolbarItem.link = menuToolbar.uuid;
 									await this.plugin.settingsManager.save();
 								}
 								else {
-									fieldDiv.createEl("div", { 
-										text: "Toolbar does not exist", 
-										attr: { id: "note-toolbar-exist-error" }, cls: "note-toolbar-setting-error-message" });
-									fieldDiv.addClass("note-toolbar-setting-error");
+									this.setFieldError(cb.inputEl.parentElement, "Toolbar does not exist");
 								}
 								// update help text with toolbar preview or default if none selected
-								let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
-								let helpTextFr = document.createDocumentFragment();
-								menuPreviewFr 
-									? helpTextFr.append(menuPreviewFr) 
-									: helpTextFr.append(
-										learnMoreFr(
-											"Select a toolbar to open as a menu.",
-											"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
-									);
-								fieldHelp = createDiv();
-								fieldHelp.addClass("note-toolbar-setting-field-help");
-								fieldHelp.append(helpTextFr);
-								let existingHelp = menuSetting.controlEl.querySelector('.note-toolbar-setting-field-help');
-								existingHelp?.remove();
-								fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+								let menuPreviewFr = menuToolbar 
+									? createToolbarPreviewFr(menuToolbar.items) 
+									: learnMoreFr(
+										"Select a toolbar to open as a menu.",
+										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
+								this.setFieldHelp(menuSetting, menuPreviewFr);
 							}, 250));
 					});
 				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
@@ -1524,6 +1500,38 @@ export default class ToolbarSettingsModal extends Modal {
 	getValueForKey(dict: {[key: string]: string}[], key: string): string {
 		const option = dict.find(option => key in option);
 		return option ? Object.values(option)[0] : '';
+	}
+
+	setFieldError(fieldEl: HTMLElement | null, errorText: string) {
+		if (fieldEl) {
+			let fieldContainerEl = fieldEl.closest('.setting-item-control');
+			if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
+				let errorDiv = createEl('div', { 
+					text: errorText, 
+					cls: 'note-toolbar-setting-field-error' });
+				fieldEl.insertAdjacentElement('afterend', errorDiv);
+				fieldEl.addClass('note-toolbar-setting-error');
+			}
+		}
+	}
+
+	setFieldHelp(field: Setting, helpFr: DocumentFragment) {
+		let helpTextFr = document.createDocumentFragment();
+		helpTextFr.append(helpFr);
+		let fieldHelp = createDiv();
+		fieldHelp.addClass('note-toolbar-setting-field-help');
+		fieldHelp.append(helpTextFr);
+		let existingHelp = field.controlEl.querySelector('.note-toolbar-setting-field-help');
+		existingHelp?.remove();
+		fieldHelp ? field.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+	}
+
+	removeFieldError(fieldEl: HTMLElement | null) {
+		if (fieldEl) {
+			let fieldContainerEl = fieldEl.closest('.setting-item-control');
+			fieldContainerEl?.querySelector('.note-toolbar-setting-field-error')?.remove();
+			fieldEl?.removeClass('note-toolbar-setting-error');
+		}
 	}
 
 	updatePreviewText(toolbarItem: ToolbarItemSettings, rowId: string) {
