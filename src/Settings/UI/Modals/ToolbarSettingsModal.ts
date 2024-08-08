@@ -846,7 +846,7 @@ export default class ToolbarSettingsModal extends Modal {
 									: learnMoreFr(
 										"Select a toolbar to open as a menu.",
 										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
-								this.setFieldHelp(menuSetting, menuPreviewFr);
+								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 250));
 					});
 				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
@@ -1502,6 +1502,11 @@ export default class ToolbarSettingsModal extends Modal {
 		return option ? Object.values(option)[0] : '';
 	}
 
+	/**
+	 * Updates the given element with an error border and text.
+	 * @param fieldEl HTMLElement to update
+	 * @param errorText Error text to display
+	 */
 	setFieldError(fieldEl: HTMLElement | null, errorText: string) {
 		if (fieldEl) {
 			let fieldContainerEl = fieldEl.closest('.setting-item-control');
@@ -1515,17 +1520,26 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 	}
 
-	setFieldHelp(field: Setting, helpFr: DocumentFragment) {
+	/**
+	 * Updates the given element with the given help text.
+	 * @param fieldEl HTMLElement to update
+	 * @param helpFr DocumentFragment of the help text
+	 */
+	setFieldHelp(fieldEl: HTMLElement, helpFr: DocumentFragment) {
 		let helpTextFr = document.createDocumentFragment();
 		helpTextFr.append(helpFr);
 		let fieldHelp = createDiv();
 		fieldHelp.addClass('note-toolbar-setting-field-help');
 		fieldHelp.append(helpTextFr);
-		let existingHelp = field.controlEl.querySelector('.note-toolbar-setting-field-help');
+		let existingHelp = fieldEl.querySelector('.note-toolbar-setting-field-help');
 		existingHelp?.remove();
-		fieldHelp ? field.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+		fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 	}
 
+	/**
+	 * Removes the error on the field.
+	 * @param fieldEl HTMLElement to update
+	 */
 	removeFieldError(fieldEl: HTMLElement | null) {
 		if (fieldEl) {
 			let fieldContainerEl = fieldEl.closest('.setting-item-control');
