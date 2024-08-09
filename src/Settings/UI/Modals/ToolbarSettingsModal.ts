@@ -521,7 +521,7 @@ export default class ToolbarSettingsModal extends Modal {
 					cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
 						.setTooltip("Select icon (optional)")
 						.onClick(async () => {
-							let itemRow = this.getItemRowElById(rowId);
+							let itemRow = this.getItemRowEl(toolbarItem.uuid);
 							const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 							modal.open();
 						});
@@ -533,7 +533,7 @@ export default class ToolbarSettingsModal extends Modal {
 								case "Enter":
 								case " ":
 									e.preventDefault();
-									let itemRow = this.getItemRowElById(rowId);			
+									let itemRow = this.getItemRowEl(toolbarItem.uuid);
 									const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
 									modal.open();
 							}
@@ -553,7 +553,7 @@ export default class ToolbarSettingsModal extends Modal {
 							// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
-							this.updatePreview('text', toolbarItem, rowId);
+							this.updatePreview('text', toolbarItem);
 						}, 750)));
 			labelField.settingEl.id = 'note-toolbar-item-field-label';
 
@@ -567,7 +567,7 @@ export default class ToolbarSettingsModal extends Modal {
 							toolbarItem.tooltip = value;
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
-							this.updatePreview('text', toolbarItem, rowId);
+							this.updatePreview('text', toolbarItem);
 						}, 750)));
 			tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
 			
@@ -585,7 +585,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.addOptions(LINK_OPTIONS)
 						.setValue(toolbarItem.linkAttr.type)
 						.onChange(async (value) => {
-							let itemRow = this.getItemRowElById(rowId);
+							let itemRow = this.getItemRowEl(toolbarItem.uuid);
 							let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
 							if (itemLinkFieldDiv) {
 								toolbarItem.linkAttr.type = value as ItemType;
@@ -1601,8 +1601,8 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 	}
 
-	updatePreview(previewType: 'text' | 'toolbar', toolbarItem: ToolbarItemSettings, rowId: string) {
-		let itemPreviewContainer = this.getItemRowElById(rowId);
+	updatePreview(previewType: 'text' | 'toolbar', toolbarItem: ToolbarItemSettings) {
+		let itemPreviewContainer = this.getItemRowEl(toolbarItem.uuid);
 		let itemPreviewEl = itemPreviewContainer.querySelector('#note-toolbar-item-preview-label');
 		switch (previewType) {
 			case 'text':
@@ -1644,13 +1644,8 @@ export default class ToolbarSettingsModal extends Modal {
 		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[' + SettingsAttr.RowId + ']');
 	}
 
-	getItemRowElById(rowId: string): HTMLElement {
-		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[' + SettingsAttr.RowId + '="' + rowId + '"]') as HTMLElement;
-	}
-
-	getItemRowElByUuid(id: string): HTMLElement {
-		// TODO: use the item's UUID instead
-		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[' + SettingsAttr.ItemUuid + '="' + id + '"]') as HTMLElement;
+	getItemRowEl(uuid: string): HTMLElement {
+		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[' + SettingsAttr.ItemUuid + '="' + uuid + '"]') as HTMLElement;
 	}
 
 }
