@@ -172,9 +172,14 @@ export interface ToolbarItemLinkAttr {
 	type: ItemType;
 };
 
+/******************************************************************************
+ UI STRINGS
+ ******************************************************************************/
+
 export const LINK_OPTIONS = {
 	[ItemType.Command]: "Command",
 	[ItemType.File]: "File",
+	[ItemType.Group]: "Item Group",
 	[ItemType.Menu]: "Item Menu",
 	[ItemType.Uri]: "URI"
 }

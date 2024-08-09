@@ -372,48 +372,58 @@ export default class ToolbarSettingsModal extends Modal {
 		// set preview icon and text
 		//
 
-		if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-			setTooltip(itemPreview, 'Edit ' + toolbarItem.linkAttr.type);
-			let separatorLine = createSpan();
-			separatorLine.setText(toolbarItem.linkAttr.type);
-			itemPreview.setAttribute('data-item-type', toolbarItem.linkAttr.type);
-			itemPreview.append(separatorLine);
+		let itemPreviewContent = createSpan();
+		
+		switch(toolbarItem.linkAttr.type) {
+			case ItemType.Break:
+			case ItemType.Separator:
+				setTooltip(itemPreview, 'Edit ' + toolbarItem.linkAttr.type);
+				itemPreviewContent.setText(toolbarItem.linkAttr.type);
+				itemPreview.setAttribute('data-item-type', toolbarItem.linkAttr.type);
+				itemPreview.append(itemPreviewContent);
+				break;
+			case ItemType.Group:
+				setTooltip(itemPreview, 'Edit item group');
+				let groupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
+				groupToolbar ? itemPreviewContent.appendChild(createToolbarPreviewFr(groupToolbar.items)) : undefined;
+				break;
+			case ItemType.Command:
+			case ItemType.File:
+			case ItemType.Menu:
+			case ItemType.Uri:
+				setTooltip(itemPreview, 'Edit toolbar item');
+				let itemPreviewIcon = createSpan();
+				setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
+				itemPreviewContent.id = 'note-toolbar-item-preview-label';
+				if (toolbarItem.label) {
+					itemPreviewContent.setText(toolbarItem.label);
+				}
+				else if (toolbarItem.tooltip) {
+					itemPreviewContent.setText(toolbarItem.tooltip);
+					itemPreviewContent.addClass("note-toolbar-setting-item-preview-tooltip");
+				}
+				else {
+					itemPreviewContent.setText('No label set');
+					itemPreviewContent.addClass("note-toolbar-setting-item-preview-empty");
+				}
+				itemPreview.appendChild(itemPreviewIcon);
+				break;
 		}
-		else {
 
-			setTooltip(itemPreview, 'Edit toolbar item');
-
-			let itemPreviewIcon = createSpan();
-			setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
-			let itemPreviewLabel = createSpan();
-			itemPreviewLabel.id = 'note-toolbar-item-preview-label';
-			if (toolbarItem.label) {
-				itemPreviewLabel.setText(toolbarItem.label);
-			}
-			else if (toolbarItem.tooltip) {
-				itemPreviewLabel.setText(toolbarItem.tooltip);
-				itemPreviewLabel.addClass("note-toolbar-setting-item-preview-tooltip");
-			}
-			else {
-				itemPreviewLabel.setText('No label set');
-				itemPreviewLabel.addClass("note-toolbar-setting-item-preview-empty");
-			}
-			itemPreview.appendChild(itemPreviewIcon);
-
-			// add an icon to indicate each line is editable on mobile (as there's no hover state available)
-			if (Platform.isMobile) {
+		// add an icon to indicate each line is editable on mobile (as there's no hover state available)
+		if (Platform.isMobile) {
+			if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 				let itemPreviewLabelEditIcon = createDiv();
 				itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
-				let itemPreviewMobileEditIcon = createSpan();
-				setIcon(itemPreviewMobileEditIcon, 'lucide-pencil');
-				itemPreviewLabelEditIcon.appendChild(itemPreviewLabel);
-				itemPreviewLabelEditIcon.appendChild(itemPreviewMobileEditIcon);
+				let itemPreviewEditIcon = createSpan();
+				setIcon(itemPreviewEditIcon, 'lucide-pencil');
+				itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
+				itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
 				itemPreview.appendChild(itemPreviewLabelEditIcon);
 			}
-			else {
-				itemPreview.appendChild(itemPreviewLabel);
-			}
-
+		}
+		else {
+			itemPreview.appendChild(itemPreviewContent);
 		}
 
 		itemPreviewContainer.appendChild(itemPreview);
@@ -534,7 +544,7 @@ export default class ToolbarSettingsModal extends Modal {
 							// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
-							this.updatePreviewText(toolbarItem, rowId);
+							this.updatePreview('text', toolbarItem, rowId);
 						}, 750)));
 			labelField.settingEl.id = 'note-toolbar-item-field-label';
 
@@ -548,10 +558,10 @@ export default class ToolbarSettingsModal extends Modal {
 							toolbarItem.tooltip = value;
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
-							this.updatePreviewText(toolbarItem, rowId);
+							this.updatePreview('text', toolbarItem, rowId);
 						}, 750)));
 			tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
-					
+			
 			//
 			// Item link
 			//
@@ -822,6 +832,36 @@ export default class ToolbarSettingsModal extends Modal {
 							}, 750))
 					});
 				break;
+			case ItemType.Group:
+				const groupSetting = new Setting(fieldDiv)
+					.setClass("note-toolbar-setting-item-field-link")
+					.addSearch((cb) => {
+						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+						cb.setPlaceholder("Toolbar")
+							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
+							.onChange(debounce(async (name) => {
+								let groupToolbar = this.plugin.settingsManager.getToolbarByName(name);
+								if (groupToolbar) {
+									this.removeFieldError(cb.inputEl.parentElement);
+									toolbarItem.link = groupToolbar.uuid;
+									await this.plugin.settingsManager.save();
+									debugLog('🟡', fieldDiv);
+									// TODO: this.updatePreview('toolbar', toolbarItem, rowId);
+								}
+								else {
+									this.setFieldError(cb.inputEl.parentElement, "Toolbar does not exist");
+								}
+								// update help text with toolbar preview or default if none selected
+								let groupPreviewFr = groupToolbar 
+									? createToolbarPreviewFr(groupToolbar.items) 
+									: learnMoreFr(
+										"Select a toolbar to insert into this one.",
+										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
+								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
+							}, 250));
+					});
+				fieldHelp ? groupSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+				break;
 			case ItemType.Menu:
 				const menuSetting = new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
@@ -885,18 +925,19 @@ export default class ToolbarSettingsModal extends Modal {
 			case ItemType.File:
 				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, toolbarItem.link);
 				break;
+			case ItemType.Group:
 			case ItemType.Menu:
-				let menuToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.uuid);
-				let menuPreviewFr = menuToolbar ? createToolbarPreviewFr(menuToolbar.items) : undefined;
+				let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.uuid);
+				let previewFr = menuGroupToolbar ? createToolbarPreviewFr(menuGroupToolbar.items) : undefined;
 				let fieldHelp = document.createDocumentFragment();
-				menuPreviewFr 
-					? fieldHelp.append(menuPreviewFr)
+				previewFr 
+					? fieldHelp.append(previewFr)
 					: fieldHelp.append(
 						learnMoreFr(
-							"Select a toolbar to open as a menu.",
+							type === ItemType.Group ? "Select a toolbar to insert into this one." : "Select a toolbar to open as a menu.",
 							"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
 					);
-				this.getLinkSetting(ItemType.Menu, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
+				this.getLinkSetting(type, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
 				break;
 			case ItemType.Uri:
 				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
@@ -1548,36 +1589,51 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 	}
 
-	updatePreviewText(toolbarItem: ToolbarItemSettings, rowId: string) {
+	updatePreview(previewType: 'text' | 'toolbar', toolbarItem: ToolbarItemSettings, rowId: string) {
 		let itemPreviewContainer = this.getItemRowElById(rowId);
 		let itemPreviewEl = itemPreviewContainer.querySelector('#note-toolbar-item-preview-label');
-		if (toolbarItem.label) {
-			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
-			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
-			itemPreviewEl?.setText(toolbarItem.label);
-		}
-		else if (toolbarItem.tooltip) {
-			itemPreviewEl?.addClass("note-toolbar-setting-item-preview-tooltip");
-			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
-			itemPreviewEl?.setText(toolbarItem.tooltip);
-		}
-		else {
-			itemPreviewEl?.addClass("note-toolbar-setting-item-preview-empty");
-			itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
-			itemPreviewEl?.setText('No label set');
+		switch (previewType) {
+			case 'text':
+				if (toolbarItem.label) {
+					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
+					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
+					itemPreviewEl?.setText(toolbarItem.label);
+				}
+				else if (toolbarItem.tooltip) {
+					itemPreviewEl?.addClass("note-toolbar-setting-item-preview-tooltip");
+					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
+					itemPreviewEl?.setText(toolbarItem.tooltip);
+				}
+				else {
+					itemPreviewEl?.addClass("note-toolbar-setting-item-preview-empty");
+					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
+					itemPreviewEl?.setText('No label set');
+				}
+				break;
+			case 'toolbar':
+				let previewToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
+				previewToolbar 
+					? itemPreviewEl?.appendChild(createToolbarPreviewFr(previewToolbar.items)) 
+					: itemPreviewEl?.empty();
+				// TODO: remove the old toolbar preview?
+				// TODO: if it's empty, empty it out
+				break;
 		}
 	}
 
 	getIndexByRowId(rowId: string): number {
 		const list = this.getItemListEls();
+		// TODO: use the item's UUID instead
 		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute('data-row-id') === rowId);
 	}
 
 	getItemListEls(): NodeListOf<HTMLElement> {
+		// TODO: use the item's UUID instead
 		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[data-row-id]');
 	}
 
 	getItemRowElById(rowId: string): HTMLElement {
+		// TODO: use the item's UUID instead
 		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[data-row-id="' + rowId + '"]') as HTMLElement;
 	}
 
