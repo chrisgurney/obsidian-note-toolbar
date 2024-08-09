@@ -11,6 +11,12 @@ import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 
+enum SettingsAttr {
+	Active = 'data-active',
+	ItemUuid = 'data-item-uuid',
+	RowId = 'data-row-id',
+}
+
 export default class ToolbarSettingsModal extends Modal {
 
 	public plugin: NoteToolbarPlugin;
@@ -132,7 +138,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemsContainer = createDiv();
 		itemsContainer.addClass('note-toolbar-setting-items-container');
-		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+		itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
 
 		//
 		// Heading + expand/collapse button
@@ -154,7 +160,7 @@ export default class ToolbarSettingsModal extends Modal {
 						let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
 							this.itemListOpen = !this.itemListOpen;
-							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+							itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
 							this.itemListOpen ? heading?.setText("Items") : heading?.setText("Items (" + this.toolbar.items.length + ")");
 							cb.setTooltip(this.itemListOpen ? "Collapse all items" : "Expand all items");
@@ -197,14 +203,15 @@ export default class ToolbarSettingsModal extends Modal {
 			this.toolbar.items.forEach((toolbarItem, index) => {
 
 				let itemContainer = createDiv();
-				itemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				itemContainer.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
+				itemContainer.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				itemContainer.addClass("note-toolbar-setting-items-container-row");
 
 				let itemPreview = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
 				itemContainer.appendChild(itemPreview);
 
 				let itemForm = this.generateItemForm(toolbarItem, this.itemListIdCounter.toString());
-				itemForm.setAttribute('data-active', 'false');
+				itemForm.setAttribute(SettingsAttr.Active, 'false');
 				itemContainer.appendChild(itemForm);
 
 				this.itemListIdCounter++;
@@ -286,8 +293,8 @@ export default class ToolbarSettingsModal extends Modal {
 			if (row !== rowClicked) {
 				let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
 				let itemForm = row.querySelector('.note-toolbar-setting-item');
-				itemPreview?.setAttribute('data-active', 'true');
-				itemForm?.setAttribute('data-active', 'false');
+				itemPreview?.setAttribute(SettingsAttr.Active, 'true');
+				itemForm?.setAttribute(SettingsAttr.Active, 'false');
 			}
 		});
 
@@ -319,12 +326,12 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 		}
 		else {
-			previewState = itemPreviewContainer?.getAttribute('data-active') === 'true' ? 'false' : 'true';
-			formState = itemForm?.getAttribute('data-active') === 'true' ? 'false' : 'true';
+			previewState = itemPreviewContainer?.getAttribute(SettingsAttr.Active) === 'true' ? 'false' : 'true';
+			formState = itemForm?.getAttribute(SettingsAttr.Active) === 'true' ? 'false' : 'true';
 		}
 
-		itemForm?.setAttribute('data-active', formState);
-		itemPreviewContainer?.setAttribute('data-active', previewState);
+		itemForm?.setAttribute(SettingsAttr.Active, formState);
+		itemPreviewContainer?.setAttribute(SettingsAttr.Active, previewState);
 
 		// move focus to form / field
 		if (formState === 'true') {	
@@ -439,12 +446,14 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon('grip-horizontal')
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
-				cb.extraSettingsEl.setAttribute('data-row-id', rowId);
+				cb.extraSettingsEl.setAttribute(SettingsAttr.RowId, rowId);
+				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				cb.extraSettingsEl.tabIndex = 0;
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl,	'keydown', (e) => {
 						let currentEl = e.target as HTMLElement;
-						let rowId = currentEl.getAttribute('data-row-id');
+						let rowId = currentEl.getAttribute(SettingsAttr.RowId);
+						let itemId = currentEl.getAttribute(SettingsAttr.ItemUuid);
 						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId) : undefined;
 					} );
 			});
@@ -609,7 +618,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemControlsContainer = createDiv();
 		itemControlsContainer.className = "note-toolbar-setting-item-controls";
-		this.getDeleteButton(itemControlsContainer);
+		this.getDeleteButton(itemControlsContainer, toolbarItem);
 
 		// we'll just show these types after the delete button, to keep the UI minimal
 		if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
@@ -712,12 +721,13 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon('grip-horizontal')
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
-				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				cb.extraSettingsEl.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
+				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				cb.extraSettingsEl.tabIndex = 0;
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl,	'keydown', (e) => {
 						let currentEl = e.target as HTMLElement;
-						let rowId = currentEl.getAttribute('data-row-id');
+						let rowId = currentEl.getAttribute(SettingsAttr.RowId);
 						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId) : undefined;
 					} );
 			});
@@ -756,7 +766,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Generates the item delete button.
 	 * @param el HTMLElement to put the delete button in.
 	 */
-	getDeleteButton(el: HTMLElement) {
+	getDeleteButton(el: HTMLElement, toolbarItem: ToolbarItemSettings) {
 
 		new Setting(el)
 			.setClass("note-toolbar-setting-item-delete")
@@ -764,15 +774,16 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon("minus-circle")
 					.setTooltip("Delete")
 					.onClick(async () => {
-						let rowId = cb.extraSettingsEl.getAttribute('data-row-id');
+						let rowId = cb.extraSettingsEl.getAttribute(SettingsAttr.RowId);
 						rowId ? this.listMoveHandlerById(null, this.toolbar.items, rowId, 'delete') : undefined;
 					});
 				cb.extraSettingsEl.setAttribute("tabindex", "0");
-				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
+				cb.extraSettingsEl.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
+				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl, 'keydown', (e) => {
 						let currentEl = e.target as HTMLElement;
-						let rowId = currentEl.getAttribute('data-row-id');
+						let rowId = currentEl.getAttribute(SettingsAttr.RowId);
 						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId, 'delete') : undefined;
 					});
 			});
@@ -1265,15 +1276,16 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let newItemContainer = createDiv();
-		newItemContainer.setAttribute('data-row-id', this.itemListIdCounter.toString());
+		newItemContainer.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
+		newItemContainer.setAttribute(SettingsAttr.ItemUuid, newToolbarItem.uuid);
 		newItemContainer.addClass("note-toolbar-setting-items-container-row");
 
 		let newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
-		newItemPreview.setAttribute('data-active', 'false');
+		newItemPreview.setAttribute(SettingsAttr.Active, 'false');
 		newItemContainer.appendChild(newItemPreview);
 
 		let newItemForm = this.generateItemForm(newToolbarItem, this.itemListIdCounter.toString());
-		newItemForm.setAttribute('data-active', 'true');
+		newItemForm.setAttribute(SettingsAttr.Active, 'true');
 		newItemContainer.appendChild(newItemForm);
 
 		this.itemListIdCounter++;
@@ -1624,17 +1636,21 @@ export default class ToolbarSettingsModal extends Modal {
 	getIndexByRowId(rowId: string): number {
 		const list = this.getItemListEls();
 		// TODO: use the item's UUID instead
-		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute('data-row-id') === rowId);
+		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute(SettingsAttr.RowId) === rowId);
 	}
 
 	getItemListEls(): NodeListOf<HTMLElement> {
 		// TODO: use the item's UUID instead
-		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[data-row-id]');
+		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[' + SettingsAttr.RowId + ']');
 	}
 
 	getItemRowElById(rowId: string): HTMLElement {
+		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[' + SettingsAttr.RowId + '="' + rowId + '"]') as HTMLElement;
+	}
+
+	getItemRowElByUuid(id: string): HTMLElement {
 		// TODO: use the item's UUID instead
-		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[data-row-id="' + rowId + '"]') as HTMLElement;
+		return this.contentEl.querySelector('.note-toolbar-sortablejs-list > div[' + SettingsAttr.ItemUuid + '="' + id + '"]') as HTMLElement;
 	}
 
 }
