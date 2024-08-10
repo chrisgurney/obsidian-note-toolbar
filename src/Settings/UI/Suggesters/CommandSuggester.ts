@@ -32,6 +32,7 @@ export class CommandSuggester extends AbstractInputSuggest<Command> {
         this.inputEl.value = command.name;
         this.inputEl.setAttribute("data-command-id", command.id);
         this.inputEl.trigger("input");
+        this.inputEl.blur();
         this.close();
     }
 }

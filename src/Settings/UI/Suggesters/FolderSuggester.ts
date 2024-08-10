@@ -52,6 +52,7 @@ export class FolderSuggester extends AbstractInputSuggest<string> {
     selectSuggestion(folder: string): void {
         this.inputEl.value = folder;
         this.inputEl.trigger("input");
+        this.inputEl.blur();
         this.close();
     }
 

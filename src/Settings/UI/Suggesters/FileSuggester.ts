@@ -29,6 +29,7 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
     selectSuggestion(file: TAbstractFile): void {
         this.inputEl.value = file.path;
         this.inputEl.trigger("input");
+        this.inputEl.blur();
         this.close();
     }
 }

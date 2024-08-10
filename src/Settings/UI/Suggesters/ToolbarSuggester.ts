@@ -34,6 +34,7 @@ export class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettings> {
     selectSuggestion(toolbar: ToolbarSettings): void {
         this.inputEl.value = toolbar.name;
         this.inputEl.trigger("input");
+        this.inputEl.blur();
         this.close();
     }
 }
