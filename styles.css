@@ -1226,6 +1226,9 @@ body {
     & svg:not(.note-toolbar-none) {
         margin-right: 0.5em;
     }
+    & .note-toolbar-setting-tbar-preview {
+        color: var(--color-base-60);
+    }
     &:focus-within {
         border-radius: var(--input-radius);
         box-shadow: inset 0 0 0 1px var(--background-modifier-border);
