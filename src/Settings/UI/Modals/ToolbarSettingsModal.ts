@@ -529,6 +529,7 @@ export default class ToolbarSettingsModal extends Modal {
 							if (itemLinkFieldDiv) {
 								toolbarItem.linkAttr.type = value as ItemType;
 								itemLinkFieldDiv.empty();
+								toolbarItem.link = '';
 								this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
@@ -864,10 +865,10 @@ export default class ToolbarSettingsModal extends Modal {
 	) {
 		switch (type) {
 			case ItemType.Command:
-				this.getLinkSetting(ItemType.Command, fieldDiv, toolbarItem, '');
+				this.getLinkSetting(ItemType.Command, fieldDiv, toolbarItem, toolbarItem.link);
 				break;
 			case ItemType.File:
-				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, '');
+				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, toolbarItem.link);
 				break;
 			case ItemType.Group:
 			case ItemType.Menu:
@@ -883,7 +884,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting(type, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
 				break;
 			case ItemType.Uri:
-				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, '', 
+				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
 					learnMoreFr(
 						"Tip: Use note properties in URIs.",
 						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
