@@ -686,6 +686,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		// iterate over the item elements of this toolbarEl
+		// TODO: use the hasvars attribute to further filter this down
 		let toolbarItemEls = toolbarEl.querySelectorAll('.callout-content > ul > li');
 		toolbarItemEls.forEach((itemEl: HTMLElement, index) => {
 
@@ -790,7 +791,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let activeFile = this.app.workspace.getActiveFile();
 
 		if (hasVars) {
-			// only replace vars in URIs; might consider other substitution in future
+			// TODO: expand to also replace vars in labels + tooltips
 			linkHref = replaceVars(this.app, linkHref, activeFile, false);
 			debugLog('- uri vars replaced: ', linkHref);
 		}

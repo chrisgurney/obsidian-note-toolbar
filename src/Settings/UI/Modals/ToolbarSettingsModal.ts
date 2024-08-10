@@ -752,6 +752,8 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.link = command;
 								toolbarItem.linkAttr.type = ItemType.Command;
 								toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
+								// TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.hasVars = false;
 								await this.plugin.settingsManager.save();
 							}, 250))});
 				break;
@@ -771,6 +773,8 @@ export default class ToolbarSettingsModal extends Modal {
 								else {
 									toolbarItem.link = normalizePath(value);
 									toolbarItem.linkAttr.commandId = '';
+									// TODO: check for vars in labels & tooltips
+									toolbarItem.linkAttr.hasVars = false;
 									this.removeFieldError(cb.inputEl.parentElement);
 									await this.plugin.settingsManager.save();
 								}					
@@ -789,6 +793,9 @@ export default class ToolbarSettingsModal extends Modal {
 								if (groupToolbar) {
 									this.removeFieldError(cb.inputEl.parentElement);
 									toolbarItem.link = groupToolbar.uuid;
+									toolbarItem.linkAttr.commandId = '';
+									// TODO: check for vars in labels & tooltips
+									toolbarItem.linkAttr.hasVars = false;
 									await this.plugin.settingsManager.save();
 									this.renderPreview(toolbarItem);
 								}
@@ -819,6 +826,9 @@ export default class ToolbarSettingsModal extends Modal {
 								if (menuToolbar) {
 									this.removeFieldError(cb.inputEl.parentElement);
 									toolbarItem.link = menuToolbar.uuid;
+									toolbarItem.linkAttr.commandId = '';
+									// TODO: check for vars in labels & tooltips
+									toolbarItem.linkAttr.hasVars = false;
 									await this.plugin.settingsManager.save();
 									this.renderPreview(toolbarItem);
 								}

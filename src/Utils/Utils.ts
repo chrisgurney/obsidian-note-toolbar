@@ -129,6 +129,7 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
  * @param s The string to check.
  */
 export function hasVars(s: string): boolean {
+	// TODO: check for vars in item labels & tooltips as well
 	const urlVariableRegex = /{{.*?}}/g;
 	return urlVariableRegex.test(s);
 }
