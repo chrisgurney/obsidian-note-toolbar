@@ -841,8 +841,7 @@ export default class ToolbarSettingsModal extends Modal {
 									this.removeFieldError(cb.inputEl.parentElement);
 									toolbarItem.link = groupToolbar.uuid;
 									await this.plugin.settingsManager.save();
-									debugLog('🟡', fieldDiv);
-									// TODO: this.updatePreview('toolbar', toolbarItem, rowId);
+									this.updatePreview('toolbar', toolbarItem);
 								}
 								else {
 									this.setFieldError(cb.inputEl.parentElement, "Toolbar does not exist");
@@ -1587,32 +1586,30 @@ export default class ToolbarSettingsModal extends Modal {
 
 	updatePreview(previewType: 'text' | 'toolbar', toolbarItem: ToolbarItemSettings) {
 		let itemPreviewContainer = this.getItemRowEl(toolbarItem.uuid);
-		let itemPreviewEl = itemPreviewContainer.querySelector('#note-toolbar-item-preview-label');
 		switch (previewType) {
 			case 'text':
+				let itemPreviewLabelEl = itemPreviewContainer.querySelector('#note-toolbar-item-preview-label');
 				if (toolbarItem.label) {
-					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
-					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
-					itemPreviewEl?.setText(toolbarItem.label);
+					itemPreviewLabelEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
+					itemPreviewLabelEl?.removeClass('note-toolbar-setting-item-preview-empty');
+					itemPreviewLabelEl?.setText(toolbarItem.label);
 				}
 				else if (toolbarItem.tooltip) {
-					itemPreviewEl?.addClass("note-toolbar-setting-item-preview-tooltip");
-					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-empty');
-					itemPreviewEl?.setText(toolbarItem.tooltip);
+					itemPreviewLabelEl?.addClass("note-toolbar-setting-item-preview-tooltip");
+					itemPreviewLabelEl?.removeClass('note-toolbar-setting-item-preview-empty');
+					itemPreviewLabelEl?.setText(toolbarItem.tooltip);
 				}
 				else {
-					itemPreviewEl?.addClass("note-toolbar-setting-item-preview-empty");
-					itemPreviewEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
-					itemPreviewEl?.setText('No label set');
+					itemPreviewLabelEl?.addClass("note-toolbar-setting-item-preview-empty");
+					itemPreviewLabelEl?.removeClass('note-toolbar-setting-item-preview-tooltip');
+					itemPreviewLabelEl?.setText('No label set');
 				}
 				break;
 			case 'toolbar':
+				let itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview');
+				itemPreviewEl?.empty();
 				let previewToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
-				previewToolbar 
-					? itemPreviewEl?.appendChild(createToolbarPreviewFr(previewToolbar.items)) 
-					: itemPreviewEl?.empty();
-				// TODO: remove the old toolbar preview?
-				// TODO: if it's empty, empty it out
+				previewToolbar ? itemPreviewEl?.appendChild(createToolbarPreviewFr(previewToolbar.items)) : undefined;
 				break;
 		}
 	}
