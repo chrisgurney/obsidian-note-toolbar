@@ -798,7 +798,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.addSearch((cb) => {
 						new CommandSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder("Search for command")
-							.setValue(toolbarItem.link)
+							.setValue(value)
 							.onChange(debounce(async (command) => {
 								toolbarItem.link = command;
 								toolbarItem.linkAttr.type = ItemType.Command;
@@ -918,7 +918,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting(ItemType.Command, fieldDiv, toolbarItem, '');
 				break;
 			case ItemType.File:
-				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, toolbarItem.link);
+				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, '');
 				break;
 			case ItemType.Group:
 			case ItemType.Menu:
@@ -935,7 +935,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting(type, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
 				break;
 			case ItemType.Uri:
-				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
+				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, '', 
 					learnMoreFr(
 						"Tip: Use note properties in URIs.",
 						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
