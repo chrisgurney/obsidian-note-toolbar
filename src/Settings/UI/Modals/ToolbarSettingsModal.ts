@@ -871,11 +871,10 @@ export default class ToolbarSettingsModal extends Modal {
 				break;
 			case ItemType.Group:
 			case ItemType.Menu:
-				let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.uuid);
-				let previewFr = menuGroupToolbar ? createToolbarPreviewFr(menuGroupToolbar.items) : undefined;
+				let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
 				let fieldHelp = document.createDocumentFragment();
-				previewFr 
-					? fieldHelp.append(previewFr)
+				menuGroupToolbar
+					? fieldHelp.append(createToolbarPreviewFr(menuGroupToolbar.items))
 					: fieldHelp.append(
 						learnMoreFr(
 							type === ItemType.Group ? "Select a toolbar to insert into this one." : "Select a toolbar to open as a menu.",
