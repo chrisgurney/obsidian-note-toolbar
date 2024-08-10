@@ -13,8 +13,7 @@ import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 
 enum SettingsAttr {
 	Active = 'data-active',
-	ItemUuid = 'data-item-uuid',
-	RowId = 'data-row-id',
+	ItemUuid = 'data-item-uuid'
 }
 
 export default class ToolbarSettingsModal extends Modal {
@@ -203,14 +202,13 @@ export default class ToolbarSettingsModal extends Modal {
 			this.toolbar.items.forEach((toolbarItem, index) => {
 
 				let itemContainer = createDiv();
-				itemContainer.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
 				itemContainer.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				itemContainer.addClass("note-toolbar-setting-items-container-row");
 
 				let itemPreview = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
 				itemContainer.appendChild(itemPreview);
 
-				let itemForm = this.generateItemForm(toolbarItem, this.itemListIdCounter.toString());
+				let itemForm = this.generateItemForm(toolbarItem);
 				itemForm.setAttribute(SettingsAttr.Active, 'false');
 				itemContainer.appendChild(itemForm);
 
@@ -446,15 +444,11 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon('grip-horizontal')
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
-				cb.extraSettingsEl.setAttribute(SettingsAttr.RowId, rowId);
 				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				cb.extraSettingsEl.tabIndex = 0;
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl,	'keydown', (e) => {
-						let currentEl = e.target as HTMLElement;
-						let rowId = currentEl.getAttribute(SettingsAttr.RowId);
-						let itemId = currentEl.getAttribute(SettingsAttr.ItemUuid);
-						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId) : undefined;
+						this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
 					} );
 			});
 		itemPreviewContainer.append(itemHandleDiv);
@@ -495,10 +489,9 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Returns the form to edit a given toolbar item.
 	 * @param toolbarItem item to return the form for
-	 * @param rowId row ID of the item in the toolbar item list
 	 * @returns the form element as a div
 	 */
-	generateItemForm(toolbarItem: ToolbarItemSettings, rowId: string): HTMLDivElement {
+	generateItemForm(toolbarItem: ToolbarItemSettings): HTMLDivElement {
 
 		let itemDiv = createDiv();
 		itemDiv.className = "note-toolbar-setting-item";
@@ -506,7 +499,6 @@ export default class ToolbarSettingsModal extends Modal {
 		itemTopContainer.className = "note-toolbar-setting-item-top-container";
 
 		let textFieldsContainer = createDiv();
-		textFieldsContainer.id = "note-toolbar-setting-item-field-id-" + rowId;
 		textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
 		if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
@@ -721,14 +713,11 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon('grip-horizontal')
 					.setTooltip("Drag to rearrange")
 					.extraSettingsEl.addClass('sortable-handle');
-				cb.extraSettingsEl.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
 				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				cb.extraSettingsEl.tabIndex = 0;
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl,	'keydown', (e) => {
-						let currentEl = e.target as HTMLElement;
-						let rowId = currentEl.getAttribute(SettingsAttr.RowId);
-						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId) : undefined;
+						this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
 					} );
 			});
 
@@ -774,17 +763,13 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon("minus-circle")
 					.setTooltip("Delete")
 					.onClick(async () => {
-						let rowId = cb.extraSettingsEl.getAttribute(SettingsAttr.RowId);
-						rowId ? this.listMoveHandlerById(null, this.toolbar.items, rowId, 'delete') : undefined;
+						this.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');
 					});
 				cb.extraSettingsEl.setAttribute("tabindex", "0");
-				cb.extraSettingsEl.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
 				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				this.plugin.registerDomEvent(
 					cb.extraSettingsEl, 'keydown', (e) => {
-						let currentEl = e.target as HTMLElement;
-						let rowId = currentEl.getAttribute(SettingsAttr.RowId);
-						rowId ? this.listMoveHandlerById(e, this.toolbar.items, rowId, 'delete') : undefined;
+						this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid, 'delete');
 					});
 			});
 
@@ -1276,7 +1261,6 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let newItemContainer = createDiv();
-		newItemContainer.setAttribute(SettingsAttr.RowId, this.itemListIdCounter.toString());
 		newItemContainer.setAttribute(SettingsAttr.ItemUuid, newToolbarItem.uuid);
 		newItemContainer.addClass("note-toolbar-setting-items-container-row");
 
@@ -1284,7 +1268,7 @@ export default class ToolbarSettingsModal extends Modal {
 		newItemPreview.setAttribute(SettingsAttr.Active, 'false');
 		newItemContainer.appendChild(newItemPreview);
 
-		let newItemForm = this.generateItemForm(newToolbarItem, this.itemListIdCounter.toString());
+		let newItemForm = this.generateItemForm(newToolbarItem);
 		newItemForm.setAttribute(SettingsAttr.Active, 'true');
 		newItemContainer.appendChild(newItemForm);
 
@@ -1360,16 +1344,16 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Handles moving items within a list, and deletion, based on click or keyboard event, given the ID of the row.
 	 * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
 	 * @param itemArray Array that we're operating on.
-	 * @param rowId ID of the item in the list we're moving/deleting.
+	 * @param itemUuid ID of the item in the list we're moving/deleting.
 	 * @param action Direction of the move, or "delete".
 	 */
 	async listMoveHandlerById(
 		keyEvent: KeyboardEvent | null, 
 		itemArray: ToolbarItemSettings[] | string[],
-		rowId: string,
+		itemUuid: string,
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {	
-		let itemIndex = this.getIndexByRowId(rowId);
+		let itemIndex = this.getIndexByUuid(itemUuid);
 		debugLog("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
 	}
@@ -1633,15 +1617,13 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 	}
 
-	getIndexByRowId(rowId: string): number {
+	getIndexByUuid(uuid: string): number {
 		const list = this.getItemListEls();
-		// TODO: use the item's UUID instead
-		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute(SettingsAttr.RowId) === rowId);
-	}
+		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute(SettingsAttr.ItemUuid) === uuid);
+	}	
 
 	getItemListEls(): NodeListOf<HTMLElement> {
-		// TODO: use the item's UUID instead
-		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[' + SettingsAttr.RowId + ']');
+		return this.contentEl.querySelectorAll('.note-toolbar-sortablejs-list > div[' + SettingsAttr.ItemUuid + ']');
 	}
 
 	getItemRowEl(uuid: string): HTMLElement {
