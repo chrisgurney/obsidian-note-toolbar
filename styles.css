@@ -1732,6 +1732,7 @@ input[type="text"].note-toolbar-setting-error {
         &:last-child {
             border: none !important;
             padding: 0em !important;
+            flex: 0 0 100%;
         }
         & .setting-item-info {
             margin-inline-end: 0.25em;
@@ -1754,11 +1755,6 @@ input[type="text"].note-toolbar-setting-error {
                 font-size: var(--metadata-input-font-size);
                 max-width: 8em;
             }
-        }
-    }
-    .is-mobile & {
-        .setting-item:has(select[class="dropdown"]) {
-            flex: 0 0 100%;
         }
     }
 }
