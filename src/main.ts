@@ -441,7 +441,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Returns the callout LIs for the items in the given toolbar.
 	 * @param toolbar ToolbarSettings to render
-	 * @param depth tracks how deep to go to stop recursion
+	 * @param depth tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
 	async renderToolbarLItems(toolbar: ToolbarSettings, depth: number = 0): Promise<HTMLLIElement[]> {
@@ -572,40 +572,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile, showEditToolbar: boolean = false): Promise<Menu> {
 
 		let menu = new Menu();
-		toolbar.items.forEach((toolbarItem, index) => {
-			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
-			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-				if (toolbarItem.linkAttr.type === ItemType.Break) {
-					return;
-				}
-				else if (toolbarItem.linkAttr.type === ItemType.Separator) {
-					menu.addSeparator();
-				}
-				else {
-					// don't show the item if the link has variables and resolves to nothing
-					if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
-						return;
-					}
-					// replace variables in labels (or tooltip, if no label set)
-					let title = toolbarItem.label ? 
-						(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
-						(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
-
-					menu.addItem((item) => {
-						item
-							.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
-							.setTitle(title)
-							.onClick(async (menuEvent) => {
-								debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-								await this.handleLink(
-									toolbarItem.link,
-									toolbarItem.linkAttr.type, toolbarItem.linkAttr.hasVars, toolbarItem.linkAttr.commandId,
-									menuEvent);
-							});
-						});
-				}
-			}
-		});
+		await this.renderMenuItems(menu, toolbar, activeFile);
 
 		if (showEditToolbar) {
 			menu.addSeparator();
@@ -622,6 +589,61 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		return menu;
+
+	}
+
+	/**
+	 * Adds items from the given toolbar to the given menu.
+	 * @param menu Menu to add items to.
+	 * @param toolbar ToolbarSettings to add menu items for.
+	 * @param activeFile TFile to show menu for.
+	 * @param depth tracks how deep we are to stop recursion.
+	 * @returns 
+	 */
+	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, activeFile: TFile, depth: number = 0): Promise<void> {
+
+		if (depth >= 2) {
+			return; // stop recursion
+		}
+
+		for (const toolbarItem of toolbar.items) {
+			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
+			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+				switch(toolbarItem.linkAttr.type) {
+					case ItemType.Break:
+					case ItemType.Separator:
+						menu.addSeparator();
+						break;
+					case ItemType.Group:
+						let groupToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, activeFile, depth + 1) : undefined;
+						break;
+					default:
+						// don't show the item if the link has variables and resolves to nothing
+						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
+							return;
+						}
+						// replace variables in labels (or tooltip, if no label set)
+						let title = toolbarItem.label ? 
+							(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
+							(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
+
+						menu.addItem((item) => {
+							item
+								.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
+								.setTitle(title)
+								.onClick(async (menuEvent) => {
+									debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
+									await this.handleLink(
+										toolbarItem.link,
+										toolbarItem.linkAttr.type, toolbarItem.linkAttr.hasVars, toolbarItem.linkAttr.commandId,
+										menuEvent);
+								});
+							});
+						break;
+				}
+			}
+		};
 
 	}
 
