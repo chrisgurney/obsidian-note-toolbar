@@ -1355,8 +1355,9 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-items-button-container {
-    align-items: center;
+    align-items: center !important;
     display: flex;
+    flex-direction: row !important;
     flex-wrap: wrap;
     justify-content: space-between;
     & .setting-item {
@@ -1367,6 +1368,7 @@ input[type="text"].note-toolbar-setting-error {
         }
         & .setting-item-control {
             gap: var(--size-4-4);
+            margin-top: 0 !important;
         }
     }
     & svg {
