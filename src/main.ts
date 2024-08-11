@@ -405,7 +405,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 	/**
 	 * Renders the given toolbar as a callout (to add to the container) and returns it.
-	 * @param toolbar
+	 * @param toolbar ToolbarSettings to render
 	 * @returns HTMLElement cg-note-toolbar-callout
 	 */
 	async renderToolbarAsCallout(toolbar: ToolbarSettings): Promise<HTMLElement> {
@@ -414,6 +414,38 @@ export default class NoteToolbarPlugin extends Plugin {
 		let noteToolbarUl = activeDocument.createElement("ul");
 		noteToolbarUl.setAttribute("role", "menu");
 
+		let noteToolbarLiArray = await this.renderToolbarLItems(toolbar);
+		noteToolbarUl.append(...noteToolbarLiArray);
+
+		let noteToolbarCallout = activeDocument.createElement("div");
+
+		// don't render content if it's empty, but keep the metadata so the toolbar commands & menu still work
+		// TODO: also check if all child items are display: none - use Platform.isMobile and check the mb booleans, dk otherwise?
+		if (toolbar.items.length > 0) {
+
+			let noteToolbarCalloutContent = activeDocument.createElement("div");
+			noteToolbarCalloutContent.className = "callout-content";
+			noteToolbarCalloutContent.append(noteToolbarUl);
+
+			noteToolbarCallout.className = "callout cg-note-toolbar-callout";
+			noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
+			noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
+			noteToolbarCallout.append(noteToolbarCalloutContent);
+
+		}
+
+		return noteToolbarCallout;
+
+	}
+
+	/**
+	 * Returns the callout LIs for the items in the given toolbar.
+	 * @param toolbar ToolbarSettings to render
+	 * @returns Array of HTMLLIElements
+	 */
+	async renderToolbarLItems(toolbar: ToolbarSettings): Promise<HTMLLIElement[]> {
+
+		let noteToolbarLiArray: HTMLLIElement[] = [];
 		toolbar.items.filter((item: ToolbarItemSettings) => {
 
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
@@ -482,28 +514,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 			noteToolbarLi.append(toolbarItem);
 
-			noteToolbarUl.appendChild(noteToolbarLi);
+			noteToolbarLiArray.push(noteToolbarLi);
 		});
 
-		let noteToolbarCallout = activeDocument.createElement("div");
-
-		// don't render content if it's empty, but keep the metadata so the toolbar commands & menu still work
-		// TODO: also check if all child items are display: none - use Platform.isMobile and check the mb booleans, dk otherwise?
-		if (toolbar.items.length > 0) {
-
-			let noteToolbarCalloutContent = activeDocument.createElement("div");
-			noteToolbarCalloutContent.className = "callout-content";
-			noteToolbarCalloutContent.append(noteToolbarUl);
-
-			noteToolbarCallout.className = "callout cg-note-toolbar-callout";
-			noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
-			noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
-			noteToolbarCallout.append(noteToolbarCalloutContent);
-
-		}
-
-		return noteToolbarCallout;
-
+		return noteToolbarLiArray;
+		
 	}
 
 	/**
