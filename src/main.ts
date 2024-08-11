@@ -446,79 +446,89 @@ export default class NoteToolbarPlugin extends Plugin {
 	async renderToolbarLItems(toolbar: ToolbarSettings): Promise<HTMLLIElement[]> {
 
 		let noteToolbarLiArray: HTMLLIElement[] = [];
-		toolbar.items.filter((item: ToolbarItemSettings) => {
+
+		for (const item of toolbar.items) {
 
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
-			return ((
-				item.label === "" && item.icon === "" 
-				&& ![ItemType.Break, ItemType.Separator].includes(item.linkAttr.type)) ? false : true);
-
-		}).map((item: ToolbarItemSettings) => {
-
-			let toolbarItem: HTMLElement;
-
-			if ([ItemType.Break, ItemType.Separator].includes(item.linkAttr.type)) {
-				toolbarItem = activeDocument.createElement('data');
-				toolbarItem.setAttribute(
-					item.linkAttr.type === ItemType.Break ? 'data-ntb-break' : 'data-ntb-sep', '');
-				toolbarItem.setAttribute('role', 'separator');
+			if (item.label === "" && item.icon === "" 
+				&& ![ItemType.Break, ItemType.Group, ItemType.Separator].includes(item.linkAttr.type)) {
+				continue;
 			}
-			else {
 
-				// changed to span as temporary(?) fix (#19) for links on Android
-				toolbarItem = activeDocument.createElement('span');
-				item.uuid ? toolbarItem.id = item.uuid : undefined;
-				toolbarItem.className = "external-link";
-				toolbarItem.setAttrs({
-					'href': item.link,
-					'role': 'link',
-					'rel': 'noopener'
-				});
-				toolbarItem.tabIndex = 0;
-				Object.entries(item.linkAttr).forEach(([key, value]) => {
-					toolbarItem.setAttribute(`data-toolbar-link-attr-${key}`, value);
-				});
-				item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
-				this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
-				this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
-	
-				const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
-				if (item.label) {
-					if (item.icon) {
-						let itemIcon = toolbarItem.createSpan();
-						this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
-						setIcon(itemIcon, item.icon);
-	
-						let itemLabel = toolbarItem.createSpan();
-						this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
-						itemLabel.innerText = item.label;
-						itemLabel.setAttribute('id', 'label');
+			let toolbarItem: HTMLElement | undefined = undefined;
+
+			switch (item.linkAttr.type) {
+				case ItemType.Break:
+				case ItemType.Separator:
+					toolbarItem = activeDocument.createElement('data');
+					toolbarItem.setAttribute(
+						item.linkAttr.type === ItemType.Break ? 'data-ntb-break' : 'data-ntb-sep', '');
+					toolbarItem.setAttribute('role', 'separator');
+					break;
+				case ItemType.Group:
+					let groupToolbar = this.settingsManager.getToolbarById(item.link);
+					if (groupToolbar) {
+						let groupLItems = await this.renderToolbarLItems(groupToolbar);
+						noteToolbarLiArray.push(...groupLItems);
+					}
+					break;
+				default:
+					// changed to span as temporary(?) fix (#19) for links on Android
+					toolbarItem = activeDocument.createElement('span');
+					item.uuid ? toolbarItem.id = item.uuid : undefined;
+					toolbarItem.className = "external-link";
+					toolbarItem.setAttrs({
+						'href': item.link,
+						'role': 'link',
+						'rel': 'noopener'
+					});
+					toolbarItem.tabIndex = 0;
+					Object.entries(item.linkAttr).forEach(([key, value]) => {
+						toolbarItem?.setAttribute(`data-toolbar-link-attr-${key}`, value);
+					});
+					item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
+					this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
+					this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
+		
+					const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
+					if (item.label) {
+						if (item.icon) {
+							let itemIcon = toolbarItem.createSpan();
+							this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
+							setIcon(itemIcon, item.icon);
+		
+							let itemLabel = toolbarItem.createSpan();
+							this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
+							itemLabel.innerText = item.label;
+							itemLabel.setAttribute('id', 'label');
+						}
+						else {
+							this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
+							toolbarItem.innerText = item.label;
+							toolbarItem.setAttribute('id', 'label');
+						}
 					}
 					else {
-						this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
-						toolbarItem.innerText = item.label;
-						toolbarItem.setAttribute('id', 'label');
+						this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
+						setIcon(toolbarItem, item.icon);
 					}
-				}
-				else {
-					this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
-					setIcon(toolbarItem, item.icon);
-				}
-
+					break;
 			}
 
-			let noteToolbarLi = activeDocument.createElement("li");
-			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
-			!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
-			!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
-			noteToolbarLi.append(toolbarItem);
+			if (toolbarItem) {
+				let noteToolbarLi = activeDocument.createElement("li");
+				const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
+				!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
+				noteToolbarLi.append(toolbarItem);
+				noteToolbarLiArray.push(noteToolbarLi);
+			}
 
-			noteToolbarLiArray.push(noteToolbarLi);
-		});
+		}
 
 		return noteToolbarLiArray;
-		
+
 	}
 
 	/**
