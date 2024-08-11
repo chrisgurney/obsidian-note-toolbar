@@ -740,7 +740,6 @@ export default class ToolbarSettingsModal extends Modal {
 			fieldHelp.append(helpTextFr);
 		}
 
-		debugLog("getLinkSetting");
 		switch(type) {
 			case ItemType.Command: 
 				new Setting(fieldDiv)
