@@ -441,9 +441,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Returns the callout LIs for the items in the given toolbar.
 	 * @param toolbar ToolbarSettings to render
+	 * @param depth tracks how deep to go to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderToolbarLItems(toolbar: ToolbarSettings): Promise<HTMLLIElement[]> {
+	async renderToolbarLItems(toolbar: ToolbarSettings, depth: number = 0): Promise<HTMLLIElement[]> {
+
+		if (depth >= 2) {
+			return []; // stop recursion
+		}
 
 		let noteToolbarLiArray: HTMLLIElement[] = [];
 
@@ -469,7 +474,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ItemType.Group:
 					let groupToolbar = this.settingsManager.getToolbarById(item.link);
 					if (groupToolbar) {
-						let groupLItems = await this.renderToolbarLItems(groupToolbar);
+						let groupLItems = await this.renderToolbarLItems(groupToolbar, depth + 1);
 						noteToolbarLiArray.push(...groupLItems);
 					}
 					break;
