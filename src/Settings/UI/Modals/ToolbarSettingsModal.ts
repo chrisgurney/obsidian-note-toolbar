@@ -145,6 +145,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemsSetting = new Setting(itemsContainer)
 			.setName("Items")
+			.setClass('note-toolbar-setting-items-header')
 			.setHeading()
 			.setDesc(learnMoreFr(
 				"Add items to the toolbar, in order.",

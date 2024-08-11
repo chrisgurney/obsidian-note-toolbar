@@ -1278,6 +1278,10 @@ body {
     .note-toolbar-setting-item-styles & {
         padding-bottom: 0;    
     }
+    .note-toolbar-setting-items-list-container & {
+        padding: 0;
+        margin: auto;
+    }
 }
 
 .note-toolbar-setting-error-message {
@@ -1330,6 +1334,12 @@ input[type="text"].note-toolbar-setting-error {
             }
         }
     }
+}
+
+.note-toolbar-setting-items-header {
+    border-bottom: 1px solid var(--background-modifier-border) !important;
+    border-width: 0 0 var(--border-width) 0 !important;
+    margin-bottom: 1em;
 }
 
 .note-toolbar-setting-items-container {
