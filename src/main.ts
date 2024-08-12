@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
@@ -631,7 +631,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 						menu.addItem((item) => {
 							item
-								.setIcon(toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-empty')
+								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
 								.setTitle(title)
 								.onClick(async (menuEvent) => {
 									debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
