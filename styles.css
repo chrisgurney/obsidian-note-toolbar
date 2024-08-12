@@ -721,7 +721,7 @@ body {
             }
         }
 
-        & li:has(> section),
+        & li:has(> hr),
         & li:has(> data[data-ntb-sep]),
         & li:has(> a.external-link + data[data-ntb-sep]) {
             border-left: var(--cg-nt-item-sep-width) solid var(--cg-nt-item-sep-color);
