@@ -1,12 +1,15 @@
 import { setIcon } from "obsidian";
-import { ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { SettingsManager } from "Settings/SettingsManager";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
  * @param toolbarItems Array of ToolbarItemSettings to display in the preview.
+ * @param settingsManager Optional SettingsManager if Groups need to be expanded within previews. 
  * @returns DocumentFragment
  */
-export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): DocumentFragment {
+export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[], settingsManager?: SettingsManager): DocumentFragment {
+
 	let toolbarFr: DocumentFragment = document.createDocumentFragment();
 	let previewContainer = toolbarFr.createDiv();
 	previewContainer.addClass('note-toolbar-setting-tbar-preview');
@@ -14,24 +17,51 @@ export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): Doc
 	if (toolbarItems.length > 0) {
 		toolbarItems
 			.filter((item: ToolbarItemSettings) => {
+
 				// ignore all empty toolbar items (no label or icon)
-				return ((item.label === "" && item.icon === "") ? false : true);
+				return ((item.label === "" && item.icon === "" && 
+					![ItemType.Break, ItemType.Group, ItemType.Separator].includes(item.linkAttr.type)) ? false : true);
+	 
 			})
 			.map(item => {
-				let itemFr = createDiv();
-				itemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
-				let iconFr = createSpan();
-				let labelFr = createSpan();
-				if (item.icon) {
-					setIcon(iconFr, item.icon);
-					itemsFr.append(iconFr);
+
+				switch (item.linkAttr.type) {
+					case ItemType.Break:
+					case ItemType.Separator:
+						break;
+					case ItemType.Group:
+						if (settingsManager) {
+							let groupToolbar = settingsManager.getToolbarById(item.link);
+							if (groupToolbar) {
+								let groupItemFr = createDiv();
+								groupItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
+								let groupNameFr = createSpan();
+								groupNameFr.addClass('note-toolbar-setting-group-preview');
+								groupNameFr.setText(groupToolbar.name);
+								groupItemFr.append(groupNameFr);
+								itemsFr.append(groupItemFr);
+							}
+						}
+						break;
+					default:
+						let defaultItemFr = createDiv();
+						defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
+						let iconFr = createSpan();
+						let labelFr = createSpan();
+						if (item.icon) {
+							setIcon(iconFr, item.icon);
+							itemsFr.append(iconFr);
+						}
+						if (item.label) {
+							labelFr.textContent = item.label;
+							itemsFr.append(labelFr);
+						}
+						defaultItemFr.append(iconFr, labelFr);
+						itemsFr.append(defaultItemFr);
+						break;
+
 				}
-				if (item.label) {
-					labelFr.textContent = item.label;
-					itemsFr.append(labelFr);
-				}
-				itemFr.append(iconFr, labelFr);
-				itemsFr.append(itemFr);
+
 			});
 	}
 	else {
@@ -39,6 +69,7 @@ export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[]): Doc
 	}
 	previewContainer.appendChild(itemsFr);
 	return toolbarFr;
+
 }
 
 /**

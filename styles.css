@@ -1262,10 +1262,20 @@ body {
 .note-toolbar-setting-toolbar-list-preview-item {
     align-items: center;
     display: flex;
+    line-height: var(--line-height-normal);
     margin-inline-end: 4px;
     & span {
         margin-inline-end: 2px;
         white-space: nowrap;
+        &.note-toolbar-setting-group-preview {
+            /* border-radius: 4px; */
+            border-top: solid 1px var(--background-modifier-border);
+            border-bottom: solid 1px var(--background-modifier-border);
+            font-variant: small-caps;
+            line-height: normal;
+            text-transform: lowercase;
+            padding: 0px 8px;
+        }
     }
 }
 
