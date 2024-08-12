@@ -441,12 +441,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Returns the callout LIs for the items in the given toolbar.
 	 * @param toolbar ToolbarSettings to render
-	 * @param depth tracks how deep we are to stop recursion
+	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderToolbarLItems(toolbar: ToolbarSettings, depth: number = 0): Promise<HTMLLIElement[]> {
+	async renderToolbarLItems(toolbar: ToolbarSettings, recursions: number = 0): Promise<HTMLLIElement[]> {
 
-		if (depth >= 2) {
+		if (recursions >= 2) {
 			return []; // stop recursion
 		}
 
@@ -474,7 +474,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ItemType.Group:
 					let groupToolbar = this.settingsManager.getToolbarById(item.link);
 					if (groupToolbar) {
-						let groupLItems = await this.renderToolbarLItems(groupToolbar, depth + 1);
+						let groupLItems = await this.renderToolbarLItems(groupToolbar, recursions + 1);
 						noteToolbarLiArray.push(...groupLItems);
 					}
 					break;
@@ -597,12 +597,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param menu Menu to add items to.
 	 * @param toolbar ToolbarSettings to add menu items for.
 	 * @param activeFile TFile to show menu for.
-	 * @param depth tracks how deep we are to stop recursion.
+	 * @param recursions tracks how deep we are to stop recursion.
 	 * @returns 
 	 */
-	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, activeFile: TFile, depth: number = 0): Promise<void> {
+	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, activeFile: TFile, recursions: number = 0): Promise<void> {
 
-		if (depth >= 2) {
+		if (recursions >= 2) {
 			return; // stop recursion
 		}
 
@@ -616,7 +616,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						break;
 					case ItemType.Group:
 						let groupToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
-						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, activeFile, depth + 1) : undefined;
+						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, activeFile, recursions + 1) : undefined;
 						break;
 					default:
 						// don't show the item if the link has variables and resolves to nothing
