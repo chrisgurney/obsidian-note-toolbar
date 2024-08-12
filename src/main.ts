@@ -611,6 +611,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
+						// show breaks as separators in menus
 					case ItemType.Separator:
 						menu.addSeparator();
 						break;
