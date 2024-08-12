@@ -730,6 +730,9 @@ body {
             & a:hover {
                 background: none;
             }
+            hr {
+                margin: initial;
+            }
         }
         & li:has(> br),
         & li:has(> data[data-ntb-break]),
