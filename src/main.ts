@@ -622,7 +622,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					default:
 						// don't show the item if the link has variables and resolves to nothing
 						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
-							return;
+							break;
 						}
 						// replace variables in labels (or tooltip, if no label set)
 						let title = toolbarItem.label ? 
