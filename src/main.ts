@@ -956,6 +956,22 @@ export default class NoteToolbarPlugin extends Plugin {
 				});
 			}
 		}
+		else if (data.toolbarsettings) {
+			let toolbarSettings;
+			if (data.toolbarsettings.length > 0) {
+				toolbarSettings = this.settingsManager.getToolbarByName(data.toolbarsettings);
+				!toolbarSettings ? new Notice(`Toolbar not found: ${data.toolbarsettings}`) : undefined;
+			}
+			else {
+				let toolbarEl = this.getToolbarEl(); // if not given, figure out what toolbar is on screen
+				toolbarSettings = toolbarEl ? this.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
+			}
+			if (toolbarSettings) {
+				const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
+				modal.setTitle("Edit Toolbar: " + toolbarSettings.name);
+				modal.open();
+			}
+		}
 	}
 
 	/**
