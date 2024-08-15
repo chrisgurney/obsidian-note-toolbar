@@ -6,10 +6,11 @@ import { SettingsManager } from "Settings/SettingsManager";
  * Constructs a preview of the given toolbar, including the icons used.
  * @param toolbar ToolbarSettings to display in the preview.
  * @param settingsManager Optional SettingsManager if Groups need to be expanded within previews. 
+ * @param showEditLink set to true to add a link to edit the toolbar, after the preview; default is false.
  * @returns DocumentFragment
  */
 export function createToolbarPreviewFr(
-	toolbar: ToolbarSettings, settingsManager?: SettingsManager): DocumentFragment {
+	toolbar: ToolbarSettings, settingsManager?: SettingsManager, showEditLink: boolean = false): DocumentFragment {
 
 	let toolbarFr: DocumentFragment = document.createDocumentFragment();
 	let previewContainer = toolbarFr.createDiv();
@@ -69,6 +70,13 @@ export function createToolbarPreviewFr(
 		itemsFr = emptyMessageFr("No items. Edit this toolbar to add items.");
 	}
 	previewContainer.appendChild(itemsFr);
+
+	if (showEditLink) {
+		let toolbarLink = createEl('a');
+		toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
+		toolbarLink.setText('Edit');
+		previewContainer.appendChild(toolbarLink);
+	}
 
 	return toolbarFr;
 

@@ -810,7 +810,7 @@ export default class ToolbarSettingsModal extends Modal {
 								}
 								// update help text with toolbar preview or default if none selected
 								let groupPreviewFr = groupToolbar 
-									? createToolbarPreviewFr(groupToolbar) 
+									? createToolbarPreviewFr(groupToolbar, undefined, true) 
 									: learnMoreFr(
 										"Select a toolbar to insert into this one.",
 										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
@@ -843,7 +843,7 @@ export default class ToolbarSettingsModal extends Modal {
 								}
 								// update help text with toolbar preview or default if none selected
 								let menuPreviewFr = menuToolbar 
-									? createToolbarPreviewFr(menuToolbar)
+									? createToolbarPreviewFr(menuToolbar, undefined, true)
 									: learnMoreFr(
 										"Select a toolbar to open as a menu.",
 										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
@@ -891,7 +891,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
 				let fieldHelp = document.createDocumentFragment();
 				menuGroupToolbar
-					? fieldHelp.append(createToolbarPreviewFr(menuGroupToolbar))
+					? fieldHelp.append(createToolbarPreviewFr(menuGroupToolbar, undefined, true))
 					: fieldHelp.append(
 						learnMoreFr(
 							type === ItemType.Group ? "Select a toolbar to insert into this one." : "Select a toolbar to open as a menu.",
