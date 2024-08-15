@@ -1603,6 +1603,10 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
+.note-toolbar-setting-tbar-preview-edit {
+    margin-top: 6px;
+}
+
 .note-toolbar-setting-field-error {
     color: var(--color-red);
 }

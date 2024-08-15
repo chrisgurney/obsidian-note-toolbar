@@ -72,10 +72,13 @@ export function createToolbarPreviewFr(
 	previewContainer.appendChild(itemsFr);
 
 	if (showEditLink) {
+		let toolbarLinkContainer = createDiv();
+		toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
 		let toolbarLink = createEl('a');
 		toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
-		toolbarLink.setText('Edit');
-		previewContainer.appendChild(toolbarLink);
+		toolbarLink.setText('Edit toolbar: ' + toolbar.name);
+		toolbarLinkContainer.appendChild(toolbarLink);
+		toolbarFr.appendChild(toolbarLinkContainer);
 	}
 
 	return toolbarFr;
