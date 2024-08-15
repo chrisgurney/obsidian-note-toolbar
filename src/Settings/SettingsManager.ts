@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
 import { Platform } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 
@@ -48,6 +48,22 @@ export class SettingsManager {
 			return this.getToolbarByName(names);
 		}
 		return this.plugin.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
+	}
+
+	/**
+	 * Gets toolbar item from settings, using the provided UUID.
+	 * @param id UUID of toolbar item to get settings for.
+	 * @returns ToolbarItemSettings for the provided matched toolbar ID, undefined otherwise.
+	 */
+	public getToolbarItemById(uuid: string | null): ToolbarItemSettings | undefined {
+		if (!uuid) return undefined;
+		for (const toolbar of this.plugin.settings.toolbars) {
+			const item = toolbar.items.find((item: ToolbarItemSettings) => item.uuid === uuid);
+			if (item) {
+				return item;
+			}
+		}
+		return undefined;
 	}
 
 	/**

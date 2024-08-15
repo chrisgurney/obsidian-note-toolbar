@@ -748,8 +748,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			// skip separators
 			if (!itemSpanEl) { return }
 
-			let itemSetting = toolbar.items[index];
-			if (itemSpanEl.id === itemSetting.uuid) {
+			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
+			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 
 				// if link resolves to nothing, there's no need to display the item
 				if (hasVars(itemSetting.link)) {
