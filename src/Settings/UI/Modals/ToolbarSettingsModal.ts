@@ -580,9 +580,9 @@ export default class ToolbarSettingsModal extends Modal {
 		const visButtons = new Setting(visibilityControlsContainer)
 			.setClass("note-toolbar-setting-item-visibility")
 			.addButton((cb) => {
-				setIcon(cb.buttonEl, 'monitor');
 				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
-				state ? cb.buttonEl.createSpan().setText(state) : undefined;
+				setIcon(cb.buttonEl, 'monitor');
+				this.updateItemVisButton(cb, state, tooltip);
 				cb.setTooltip(tooltip)
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
@@ -608,7 +608,7 @@ export default class ToolbarSettingsModal extends Modal {
 								isComponentVisible.label = true;						
 							}
 							let [state, tooltip] = this.getPlatformStateLabel(platform, 'desktop');
-							updateButton(cb, state, tooltip);
+							this.updateItemVisButton(cb, state, tooltip);
 
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
@@ -620,9 +620,9 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			})
 			.addButton((cb) => {
-				setIcon(cb.buttonEl, 'tablet-smartphone');
 				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
-				state ? cb.buttonEl.createSpan().setText(state) : undefined;
+				setIcon(cb.buttonEl, 'tablet-smartphone');
+				this.updateItemVisButton(cb, state, tooltip);
 				cb.setTooltip(tooltip)
 					.onClick(async () => {
 						// create the setting if it doesn't exist or was removed
@@ -648,7 +648,7 @@ export default class ToolbarSettingsModal extends Modal {
 								isComponentVisible.label = true;						
 							}
 							let [state, tooltip] = this.getPlatformStateLabel(platform, 'mobile');
-							updateButton(cb, state, tooltip);
+							this.updateItemVisButton(cb, state, tooltip);
 
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
@@ -682,23 +682,29 @@ export default class ToolbarSettingsModal extends Modal {
 
 		return itemDiv;
 
-		function updateButton(button: ButtonComponent, label: string, tooltip: string): void {
-			const children = Array.from(button.buttonEl.childNodes);
-			const labelNode = children.find(node => node.nodeType === Node.TEXT_NODE);
-		
-			if (label) {
-				if (labelNode) {
-					labelNode.textContent = label;
-				} else {
-					button.buttonEl.appendChild(document.createTextNode(label));
-				}
-			} 
-			else if (labelNode) {
-				button.buttonEl.removeChild(labelNode);
-			}
-			button.setTooltip(tooltip);
-		}
+	}
 
+	/**
+	 * Updates the appearance of the provided item form visibility button.
+	 * @param button ButtonComponent for the visibility button
+	 * @param label string label to add to the button (i.e., the visibility state, or none)
+	 * @param tooltip string tooltip to add to the button (i.e., the visibility state, or none)
+	 */
+	private updateItemVisButton(button: ButtonComponent, label: string, tooltip: string): void {
+		const children = Array.from(button.buttonEl.childNodes);
+		const labelNode = children.find(node => node.nodeType === Node.TEXT_NODE);
+	
+		if (label) {
+			if (labelNode) {
+				labelNode.textContent = label;
+			} else {
+				button.buttonEl.appendChild(document.createTextNode(label));
+			}
+		} 
+		else if (labelNode) {
+			button.buttonEl.removeChild(labelNode);
+		}
+		button.setTooltip(tooltip);
 	}
 
 	/**
@@ -1412,10 +1418,7 @@ export default class ToolbarSettingsModal extends Modal {
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.settingsManager.save();
 					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
-					let oldState = button.buttonEl.querySelector('span');
-					oldState ? button.buttonEl.removeChild(oldState) : undefined;
-					state ? button.buttonEl.createSpan().setText(state) : undefined;
-					button.setTooltip(tooltip);
+					this.updateItemVisButton(button, state, tooltip);
 				});
 		});
 		menu.addItem((menuItem) => {
@@ -1436,10 +1439,7 @@ export default class ToolbarSettingsModal extends Modal {
 					this.toolbar.updated = new Date().toISOString();
 					await this.plugin.settingsManager.save();
 					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
-					let oldState = button.buttonEl.querySelector('span');
-					oldState ? button.buttonEl.removeChild(oldState) : undefined;
-					state ? button.buttonEl.createSpan().setText(state) : undefined;
-					button.setTooltip(tooltip);
+					this.updateItemVisButton(button, state, tooltip);
 				});
 		});
 
