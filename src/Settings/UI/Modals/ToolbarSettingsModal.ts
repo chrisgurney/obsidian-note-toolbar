@@ -588,7 +588,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
 						// toggle (instead of menu) for breaks + separators
-						if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+						if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 							let platform = toolbarItem.visibility.desktop;
 
 							let isComponentVisible = {
@@ -628,7 +628,7 @@ export default class ToolbarSettingsModal extends Modal {
 						// create the setting if it doesn't exist or was removed
 						toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
 						// toggle (instead of menu) for breaks + separators
-						if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+						if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 							let platform = toolbarItem.visibility.mobile;
 
 							let isComponentVisible = {

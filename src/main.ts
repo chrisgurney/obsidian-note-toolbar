@@ -462,6 +462,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 
 			let toolbarItem: HTMLElement | undefined = undefined;
+			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
 
 			switch (item.linkAttr.type) {
 				case ItemType.Break:
@@ -474,8 +475,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ItemType.Group:
 					let groupToolbar = this.settingsManager.getToolbarById(item.link);
 					if (groupToolbar) {
-						let groupLItems = await this.renderToolbarLItems(groupToolbar, recursions + 1);
-						noteToolbarLiArray.push(...groupLItems);
+						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+							let groupLItems = await this.renderToolbarLItems(groupToolbar, recursions + 1);
+							noteToolbarLiArray.push(...groupLItems);
+						}
 					}
 					break;
 				default:
@@ -523,7 +526,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			if (toolbarItem) {
 				let noteToolbarLi = activeDocument.createElement("li");
-				const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
 				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
 				!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 				noteToolbarLi.append(toolbarItem);
