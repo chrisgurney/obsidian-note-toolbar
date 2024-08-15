@@ -749,7 +749,8 @@ body {
             font-size: var(--cg-nt-item-font-size);
             border-radius: var(--cg-nt-item-border-radius);
             height: 100%;
-            & span#label {
+            &.cg-note-toolbar-item-label,
+            & .cg-note-toolbar-item-label {
                 white-space: nowrap;
             }
             & svg {

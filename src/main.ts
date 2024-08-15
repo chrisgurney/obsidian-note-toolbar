@@ -506,12 +506,12 @@ export default class NoteToolbarPlugin extends Plugin {
 							let itemLabel = toolbarItem.createSpan();
 							this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
 							itemLabel.innerText = item.label;
-							itemLabel.setAttribute('id', 'label');
+							itemLabel.addClass('cg-note-toolbar-item-label');
 						}
 						else {
 							this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
 							toolbarItem.innerText = item.label;
-							toolbarItem.setAttribute('id', 'label');
+							toolbarItem.addClass('cg-note-toolbar-item-label');
 						}
 					}
 					else {
@@ -743,7 +743,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let toolbarItemEls = toolbarEl.querySelectorAll('.callout-content > ul > li');
 		toolbarItemEls.forEach((itemEl: HTMLElement, index) => {
 
-			let itemSpanEl = itemEl.querySelector('span.external-link');
+			let itemSpanEl = itemEl.querySelector('span.external-link') as HTMLSpanElement;
 
 			// skip separators
 			if (!itemSpanEl) { return }
@@ -765,11 +765,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				// update tooltip + label
 				if (hasVars(itemSetting.tooltip)) {
 					let newTooltip = replaceVars(this.app, itemSetting.tooltip, activeFile, false);
-					setTooltip(itemEl, newTooltip, { placement: "top" });
+					setTooltip(itemSpanEl, newTooltip, { placement: "top" });
 				}
 				if (hasVars(itemSetting.label)) {
 					let newLabel = replaceVars(this.app, itemSetting.label, activeFile, false);
-					let itemElLabel = itemEl.querySelector('#label');
+					let itemElLabel = itemEl.querySelector('.cg-note-toolbar-item-label');
 					if (newLabel) {
 						itemElLabel?.removeClass('hide');
 						itemElLabel?.setText(newLabel);
