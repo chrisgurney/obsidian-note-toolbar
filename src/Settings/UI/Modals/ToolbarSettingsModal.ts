@@ -810,7 +810,7 @@ export default class ToolbarSettingsModal extends Modal {
 								}
 								// update help text with toolbar preview or default if none selected
 								let groupPreviewFr = groupToolbar 
-									? createToolbarPreviewFr(groupToolbar.items) 
+									? createToolbarPreviewFr(groupToolbar) 
 									: learnMoreFr(
 										"Select a toolbar to insert into this one.",
 										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
@@ -843,7 +843,7 @@ export default class ToolbarSettingsModal extends Modal {
 								}
 								// update help text with toolbar preview or default if none selected
 								let menuPreviewFr = menuToolbar 
-									? createToolbarPreviewFr(menuToolbar.items) 
+									? createToolbarPreviewFr(menuToolbar)
 									: learnMoreFr(
 										"Select a toolbar to open as a menu.",
 										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
@@ -891,7 +891,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
 				let fieldHelp = document.createDocumentFragment();
 				menuGroupToolbar
-					? fieldHelp.append(createToolbarPreviewFr(menuGroupToolbar.items))
+					? fieldHelp.append(createToolbarPreviewFr(menuGroupToolbar))
 					: fieldHelp.append(
 						learnMoreFr(
 							type === ItemType.Group ? "Select a toolbar to insert into this one." : "Select a toolbar to open as a menu.",
@@ -1565,7 +1565,7 @@ export default class ToolbarSettingsModal extends Modal {
 			case ItemType.Group:
 				setTooltip(itemPreview, 'Edit item group');
 				let groupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
-				groupToolbar ? itemPreviewContent.appendChild(createToolbarPreviewFr(groupToolbar.items)) : undefined;
+				groupToolbar ? itemPreviewContent.appendChild(createToolbarPreviewFr(groupToolbar)) : undefined;
 				break;
 			default:
 				setTooltip(itemPreview, 'Edit toolbar item');

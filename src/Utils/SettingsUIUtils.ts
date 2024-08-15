@@ -1,21 +1,22 @@
 import { setIcon } from "obsidian";
-import { ItemType, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
- * @param toolbarItems Array of ToolbarItemSettings to display in the preview.
+ * @param toolbar ToolbarSettings to display in the preview.
  * @param settingsManager Optional SettingsManager if Groups need to be expanded within previews. 
  * @returns DocumentFragment
  */
-export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[], settingsManager?: SettingsManager): DocumentFragment {
+export function createToolbarPreviewFr(
+	toolbar: ToolbarSettings, settingsManager?: SettingsManager): DocumentFragment {
 
 	let toolbarFr: DocumentFragment = document.createDocumentFragment();
 	let previewContainer = toolbarFr.createDiv();
 	previewContainer.addClass('note-toolbar-setting-tbar-preview');
 	let itemsFr: DocumentFragment = document.createDocumentFragment();
-	if (toolbarItems.length > 0) {
-		toolbarItems
+	if (toolbar.items.length > 0) {
+		toolbar.items
 			.filter((item: ToolbarItemSettings) => {
 
 				// ignore all empty toolbar items (no label or icon)
@@ -68,6 +69,7 @@ export function createToolbarPreviewFr(toolbarItems: ToolbarItemSettings[], sett
 		itemsFr = emptyMessageFr("No items. Edit this toolbar to add items.");
 	}
 	previewContainer.appendChild(itemsFr);
+
 	return toolbarFr;
 
 }

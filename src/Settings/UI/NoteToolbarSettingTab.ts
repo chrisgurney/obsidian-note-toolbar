@@ -163,7 +163,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				(toolbarItem, index) => {
 					let toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbarItem.name ? toolbarItem.name : "⚠️ Toolbar name not set")
-						.setDesc(createToolbarPreviewFr(toolbarItem.items, this.plugin.settingsManager))
+						.setDesc(createToolbarPreviewFr(toolbarItem, this.plugin.settingsManager))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setTooltip("Update this toolbar's items")
