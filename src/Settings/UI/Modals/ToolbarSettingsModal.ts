@@ -541,6 +541,13 @@ export default class ToolbarSettingsModal extends Modal {
 								this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
+								// for case where icon/label/tooltip fields are not used, disable them
+								const disableFields = toolbarItem.linkAttr.type === ItemType.Group;
+								iconField.setDisabled(disableFields);
+								debugLog(iconField.controlEl);
+								(iconField.controlEl.firstChild as Element | null)?.setAttribute("tabindex", disableFields ? "-1" : "0");
+								labelField.setDisabled(disableFields);
+								tooltipField.setDisabled(disableFields);
 							}
 						})
 				);
@@ -558,6 +565,13 @@ export default class ToolbarSettingsModal extends Modal {
 			itemTopContainer.appendChild(itemFieldsContainer);
 			itemTopContainer.appendChild(linkContainer);
 			itemDiv.appendChild(itemTopContainer);
+
+			// for case where icon/label/tooltip fields are not used, disable them
+			const disableFields = toolbarItem.linkAttr.type === ItemType.Group;
+			iconField.setDisabled(disableFields);
+			(iconField.controlEl.firstChild as Element | null)?.setAttribute("tabindex", disableFields ? "-1" : "0");
+			labelField.setDisabled(disableFields);
+			tooltipField.setDisabled(disableFields);
 
 		}
 
