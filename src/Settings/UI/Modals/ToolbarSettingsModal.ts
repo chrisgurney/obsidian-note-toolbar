@@ -304,10 +304,10 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param itemContainer 
 	 * @param state 
 	 */
-	private toggleItemView(itemPreviewContainer: HTMLDivElement, state?: 'preview' | 'form', focusOn?: 'icon' | 'label' | 'tooltip') {
+	private toggleItemView(itemPreviewContainer: HTMLDivElement, state?: 'preview' | 'form', focusOn?: 'icon' | 'label' | 'tooltip' | 'link') {
 
 		let itemForm = itemPreviewContainer.nextElementSibling;
-		debugLog("toggleItemView", itemPreviewContainer, itemForm);
+		debugLog("toggleItemView", itemPreviewContainer, itemForm, focusOn);
 		
 		let previewState: string;
 		let formState: string;
@@ -339,6 +339,9 @@ export default class ToolbarSettingsModal extends Modal {
 				switch (focusOn) {
 					case 'label': 
 						focusSelector = "#note-toolbar-item-field-label input";
+						break;
+					case 'link':
+						focusSelector = ".note-toolbar-setting-item-field-link input";
 						break;
 					case 'tooltip': 
 						focusSelector = "#note-toolbar-item-field-tooltip input";
@@ -417,9 +420,13 @@ export default class ToolbarSettingsModal extends Modal {
 		this.plugin.registerDomEvent(
 			itemPreview, 'click', (e) => {
 				const target = e.target as Element;
-				debugLog("clicked on: ", e.target);
-				let focusOn: 'icon' | 'label' | 'tooltip' = 'label';
-				if (target instanceof SVGElement || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
+				const currentTarget = e.currentTarget as Element;
+				debugLog("clicked on: ", currentTarget, target);
+				let focusOn: 'icon' | 'label' | 'link' | 'tooltip' = 'label';
+				if (currentTarget.querySelector('.note-toolbar-setting-tbar-preview')) {
+					focusOn = 'link';
+				}
+				else if (target instanceof SVGElement || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
 					focusOn = 'icon';
 				}
 				else if (target instanceof HTMLSpanElement) {
