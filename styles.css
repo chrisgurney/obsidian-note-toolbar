@@ -1176,6 +1176,8 @@ body {
 .note-toolbar-setting-item-preview-container {
     align-items: center;
     display: flex;
+    box-sizing: border-box;
+    min-height: calc(var(--line-height-tight) * var(--font-ui-medium) + 16px);
     & .note-toolbar-setting-item-controls {
         & .setting-item {
             padding-bottom: 0;
