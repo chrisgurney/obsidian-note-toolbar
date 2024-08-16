@@ -380,7 +380,7 @@ export default class ToolbarSettingsModal extends Modal {
 		itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
 		let itemPreview = createDiv();
 		itemPreview.className = "note-toolbar-setting-item-preview";
-		itemPreview.role = "button";
+		itemPreview.setAttribute('role', 'button');
 		itemPreview.tabIndex = 0;
 		itemPreviewContainer.appendChild(itemPreview);
 
