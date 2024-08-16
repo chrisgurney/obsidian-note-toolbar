@@ -1585,8 +1585,8 @@ export default class ToolbarSettingsModal extends Modal {
 				itemPreview.append(itemPreviewContent);
 				break;
 			case ItemType.Group:
-				setTooltip(itemPreview, 'Edit item group');
 				let groupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
+				setTooltip(itemPreview, 'Edit item group' + (groupToolbar ? ' (' + groupToolbar.name + ')' : ''));
 				groupToolbar ? itemPreviewContent.appendChild(createToolbarPreviewFr(groupToolbar)) : undefined;
 				break;
 			default:
