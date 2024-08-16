@@ -1200,6 +1200,9 @@ body {
         padding-inline-start: 0;
         margin-inline-end: 0.25em;
     }
+    &[data-item-type="group"] {
+        line-height: var(--line-height-tight);
+    }
     &[data-item-type="break"],
     &[data-item-type="separator"] {
         & span {
@@ -1285,11 +1288,10 @@ body {
         margin-inline-end: 2px;
         white-space: nowrap;
         &.note-toolbar-setting-group-preview {
-            /* border-radius: 4px; */
-            border-top: solid 1px var(--background-modifier-border);
-            border-bottom: solid 1px var(--background-modifier-border);
+            border-radius: 4px;
+            border: solid 1px var(--background-modifier-border);
             font-variant: small-caps;
-            line-height: normal;
+            line-height: var(--line-height-tight);
             text-transform: lowercase;
             padding: 0px 8px;
         }
