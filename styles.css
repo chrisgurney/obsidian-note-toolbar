@@ -1194,6 +1194,7 @@ body {
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
+    font-size: var(--font-ui-medium);
     padding: 8px;
     .is-mobile & {
         padding-inline-start: 0;

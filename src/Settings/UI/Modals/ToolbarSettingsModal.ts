@@ -13,7 +13,8 @@ import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 
 enum SettingsAttr {
 	Active = 'data-active',
-	ItemUuid = 'data-item-uuid'
+	ItemUuid = 'data-item-uuid',
+	PreviewType = 'data-item-type',
 }
 
 export default class ToolbarSettingsModal extends Modal {
@@ -695,8 +696,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemVisilityAndControlsContainer = createDiv();
 		itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
-		([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) 
-			? itemVisilityAndControlsContainer.setAttribute('data-item-type', toolbarItem.linkAttr.type) : undefined;
+		itemVisilityAndControlsContainer.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
 		itemVisilityAndControlsContainer.appendChild(itemControlsContainer);
 		itemVisilityAndControlsContainer.appendChild(visibilityControlsContainer);
 
@@ -1576,12 +1576,12 @@ export default class ToolbarSettingsModal extends Modal {
 		let itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
 		itemPreview?.empty();
 		let itemPreviewContent = createSpan();
+		itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
 		switch(toolbarItem.linkAttr.type) {
 			case ItemType.Break:
 			case ItemType.Separator:
 				setTooltip(itemPreview, 'Edit ' + toolbarItem.linkAttr.type);
 				itemPreviewContent.setText(toolbarItem.linkAttr.type);
-				itemPreview.setAttribute('data-item-type', toolbarItem.linkAttr.type);
 				itemPreview.append(itemPreviewContent);
 				break;
 			case ItemType.Group:
