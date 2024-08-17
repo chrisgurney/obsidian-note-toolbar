@@ -1264,6 +1264,7 @@ body {
 
 .note-toolbar-setting-item-preview-edit-mobile {
     display: flex;
+    column-gap: 0.5em;
     justify-content: space-between;
     width: 100%;
     & .note-toolbar-setting-item-preview-edit-mobile-icon svg {
