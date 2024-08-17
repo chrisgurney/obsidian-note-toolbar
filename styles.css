@@ -1268,8 +1268,8 @@ body {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    & svg {
-        color: var(--text-muted);
+    & .note-toolbar-setting-item-preview-edit-mobile-icon svg {
+        color: var(--interactive-accent);
     }
 }
 
