@@ -819,10 +819,15 @@ export default class NoteToolbarPlugin extends Plugin {
 					let activeFile = this.app.workspace.getActiveFile();
 					let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
 					toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
-					if (toolbar && activeFile) {
-						this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-							this.showMenuAtElement(menu, this.lastCalloutLink);
-						});
+					if (activeFile) {
+						if (toolbar) {
+							this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+								this.showMenuAtElement(menu, this.lastCalloutLink);
+							});
+						}
+						else {
+							new Notice(`Toolbar not found: "${value}"`);
+						}
 					}
 					break;
 			}
@@ -916,7 +921,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async handleLinkCommand(commandId: string | null) {
 		debugLog("handleLinkCommand()", commandId);
-		commandId ? this.app.commands.executeCommandById(commandId) : undefined;
+		if (commandId) {
+			if (commandId in app.commands.commands) {
+				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
+			}
+			else {
+				new Notice(`Command not found: "${commandId}"`);
+			}
+		}
 	}
 
 	/**
@@ -929,6 +941,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (tFileOrFolder instanceof TFolder) {
 			// @ts-ignore
 			this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(tFileOrFolder);
+		}
+		else {
+			new Notice(`Folder not found: "${folder}"`);
 		}
 	}
 	
@@ -950,10 +965,15 @@ export default class NoteToolbarPlugin extends Plugin {
 			let activeFile = this.app.workspace.getActiveFile();
 			let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(data.menu);
 			toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(data.menu); // try getting by UUID
-			if (toolbar && activeFile) {
-				this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-					this.showMenuAtElement(menu, this.lastCalloutLink);
-				});
+			if (activeFile) {
+				if (toolbar) {
+					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+						this.showMenuAtElement(menu, this.lastCalloutLink);
+					});
+				}
+				else {
+					new Notice(`Toolbar not found: "${data.menu}"`);
+				}
 			}
 		}
 		else if (data.toolbarsettings) {
