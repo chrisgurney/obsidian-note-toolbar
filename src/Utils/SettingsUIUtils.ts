@@ -48,17 +48,18 @@ export function createToolbarPreviewFr(
 					default:
 						let defaultItemFr = createDiv();
 						defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
-						let iconFr = createSpan();
-						let labelFr = createSpan();
 						if (item.icon) {
+							let iconFr = createSpan();
 							setIcon(iconFr, item.icon);
 							itemsFr.append(iconFr);
+							defaultItemFr.append(iconFr);
 						}
 						if (item.label) {
+							let labelFr = createSpan();
 							labelFr.textContent = item.label;
 							itemsFr.append(labelFr);
+							defaultItemFr.append(labelFr);
 						}
-						defaultItemFr.append(iconFr, labelFr);
 						itemsFr.append(defaultItemFr);
 						break;
 

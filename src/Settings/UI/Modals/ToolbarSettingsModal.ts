@@ -1592,8 +1592,9 @@ export default class ToolbarSettingsModal extends Modal {
 			default:
 				setTooltip(itemPreview, 'Edit toolbar item');
 				let itemPreviewIcon = createSpan();
+				itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
 				setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
-				itemPreviewContent.id = 'note-toolbar-item-preview-label';
+				itemPreviewContent.addClass('note-toolbar-setting-item-preview-label');
 				if (toolbarItem.label) {
 					itemPreviewContent.setText(toolbarItem.label);
 				}

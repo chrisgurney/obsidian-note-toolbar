@@ -1195,6 +1195,7 @@ body {
     display: flex;
     flex-grow: 1;
     font-size: var(--font-ui-medium);
+    column-gap: 0.5em;
     padding: 8px;
     .is-mobile & {
         padding-inline-start: 0;
@@ -1243,9 +1244,6 @@ body {
     & svg.note-toolbar-none {
         width: 0;
     }
-    & svg:not(.note-toolbar-none) {
-        margin-right: 0.5em;
-    }
     & .note-toolbar-setting-tbar-preview {
         color: var(--color-base-60);
     }
@@ -1282,10 +1280,9 @@ body {
 .note-toolbar-setting-toolbar-list-preview-item {
     align-items: center;
     display: flex;
+    gap: 4px;
     line-height: var(--line-height-normal);
-    margin-inline-end: 4px;
     & span {
-        margin-inline-end: 2px;
         white-space: nowrap;
         &.note-toolbar-setting-group-preview {
             border-radius: 4px;
@@ -1607,6 +1604,7 @@ input[type="text"].note-toolbar-setting-error {
 
 .note-toolbar-setting-tbar-preview {
     display: flex;
+    gap: 2px 8px;
     flex-wrap: wrap;
     & svg {
         height: var(--font-ui-smaller);
