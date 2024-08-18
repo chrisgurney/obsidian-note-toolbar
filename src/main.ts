@@ -80,6 +80,17 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		}
 
+		// TODO: refactor all UI strings so they can be localized; example:
+		// i18next.addResourceBundle('en', 'plugin-note-toolbar', {
+		// 	hello: 'Hello!'
+		// });
+		// i18next.addResourceBundle('es', 'plugin-note-toolbar', {
+		// 	hello: 'Hola!'
+		// });
+
+		// TODO: get the translation function, and make it available to the plugin; example:
+		// const t = i18next.getFixedT(null, 'plugin-note-toolbar', null);
+
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
 		// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
