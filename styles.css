@@ -681,6 +681,8 @@ body {
         }
     
         & li {
+            align-items: center;
+            display: flex;
             list-style: none;
             padding: 0;
             margin: 0;
@@ -744,7 +746,7 @@ body {
         & a, span.external-link {
             color: var(--cg-nt-item-text-color);
             padding: var(--cg-nt-item-padding-y) var(--cg-nt-item-padding-x);
-            display: block;
+            display: flex;
             text-decoration: none;
             font-size: var(--cg-nt-item-font-size);
             border-radius: var(--cg-nt-item-border-radius);
@@ -774,15 +776,18 @@ body {
             }
         }
 
-        & a.external-link, span.external-link {
+        & a.external-link, span.external-link, a.internal-link {
             background-image: none; /* hide the external link icon */
+            gap: 0 0.5em;
             &::after {
                 content: none !important; /* removes decoration added by ITS theme */
             }
-            & span.cm-iconize-icon {
-                transform: unset !important;
-                vertical-align: middle;
-            }
+        }
+
+        & span.cm-iconize-icon {
+            transform: unset !important;
+            align-items: center;
+            vertical-align: middle;
         }
 
     }
@@ -936,7 +941,6 @@ body {
         /* margin-top: fix for reading mode */
         margin-top: 0; 
         & a, span.external-link {
-            align-items: center;
             display: flex;
             gap: 0 0.5em;
             & svg {
