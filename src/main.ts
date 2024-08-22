@@ -50,11 +50,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		debugLog('🟡 ONLOAD: EXTERNAL LINK: HANDLER SETUP');
 		this.registerEvent(this.app.workspace.on('window-open', (win) => {
-			win.doc.on('click', '.callout[data-callout="note-toolbar"] a.external-link', (e: MouseEvent) => {
+			this.registerDomEvent(win.doc, 'click', (e: MouseEvent) => {
 				this.calloutLinkHandler(e);
 			});
 		}));
-		activeDocument.on('click', '.callout[data-callout="note-toolbar"] a.external-link', (e: MouseEvent) => {
+		this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
 			this.calloutLinkHandler(e);
 		});
 
@@ -810,37 +810,40 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async calloutLinkHandler(e: MouseEvent) {
 
-		debugLog('🟡 EXTERNAL LINK: CLICKED');
-		this.lastCalloutLink = e.target as HTMLLinkElement;
-		let dataEl = this.lastCalloutLink?.nextElementSibling;
-		if (this.lastCalloutLink && dataEl) {
-			// make sure it's a valid attribute, and get its value
-			var attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
-			attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
-			var value = attribute ? dataEl?.getAttribute(attribute) : null;
-			debugLog('🟡 EXTERNAL LINK', attribute, value);
-			switch (attribute) {
-				case CalloutAttr.Command:
-					this.handleLinkCommand(value);
-					break;
-				case CalloutAttr.Folder:
-					this.handleLinkFolder(value);
-					break;
-				case CalloutAttr.Menu:
-					let activeFile = this.app.workspace.getActiveFile();
-					let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
-					toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
-					if (activeFile) {
-						if (toolbar) {
-							this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-								this.showMenuAtElement(menu, this.lastCalloutLink);
-							});
+		const target = e.target as HTMLElement;
+		if (target.matches('.callout[data-callout="note-toolbar"] a.external-link')) {
+			debugLog('🟡 EXTERNAL LINK: CLICKED');
+			this.lastCalloutLink = e.target as HTMLLinkElement;
+			let dataEl = this.lastCalloutLink?.nextElementSibling;
+			if (this.lastCalloutLink && dataEl) {
+				// make sure it's a valid attribute, and get its value
+				var attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
+				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
+				var value = attribute ? dataEl?.getAttribute(attribute) : null;
+				debugLog('🟡 EXTERNAL LINK', attribute, value);
+				switch (attribute) {
+					case CalloutAttr.Command:
+						this.handleLinkCommand(value);
+						break;
+					case CalloutAttr.Folder:
+						this.handleLinkFolder(value);
+						break;
+					case CalloutAttr.Menu:
+						let activeFile = this.app.workspace.getActiveFile();
+						let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
+						toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
+						if (activeFile) {
+							if (toolbar) {
+								this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+									this.showMenuAtElement(menu, this.lastCalloutLink);
+								});
+							}
+							else {
+								new Notice(`Toolbar not found: "${value}"`);
+							}
 						}
-						else {
-							new Notice(`Toolbar not found: "${value}"`);
-						}
-					}
-					break;
+						break;
+				}
 			}
 		}
 
