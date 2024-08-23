@@ -921,6 +921,22 @@ body {
         }
     }
 
+    &[data-callout-metadata*="wide"] {
+        max-width: none;
+    }
+
+    &[data-callout-metadata*="mwd"] {
+        .is-mobile & {
+            max-width: none;
+        }
+    }
+
+    &[data-callout-metadata*="mnwd"] {
+        .is-mobile & {
+            max-width: var(--file-line-width);
+        }
+    }
+
     &[data-callout-metadata*="button"] ul {
         gap: var(--size-4-2);
         & a, span.external-link {

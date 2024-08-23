@@ -215,7 +215,8 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
     { right: "right align items" },
     { sticky: "sticky*" },
     { floatl: "float left*" },
-    { floatr: "float right*" }
+    { floatr: "float right*" },
+	{ wide: "editor width" }
 ];
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
@@ -243,6 +244,8 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mfltl: "float left*" },
     { mfltr: "float right*" },
     { mnflt: "no float" },
+	{ mwd: "editor width" },
+	{ mnwd: "content width" }
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
