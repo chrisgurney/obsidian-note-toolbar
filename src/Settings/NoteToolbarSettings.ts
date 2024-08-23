@@ -209,7 +209,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
     { border: "border" },
 	{ button: "button items" },
     { center: "center items" },
-	{ wide: "editor width" },
+	{ wide: "editor width*" },
     { floatl: "float left*" },
     { floatr: "float right*" },
     { left: "left align items" },
@@ -224,6 +224,7 @@ export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ floatl: "Float left only works within callouts." },
 	{ floatr: "Float right only works within callouts." },
 	{ sticky: "Sticky does not apply in Reading mode." },
+	{ wide: "Editor width works only if toolbar position is Top (fixed)." },
 ];
 
 /**
@@ -234,9 +235,9 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mnbrder: "no border" },
 	{ mbtn: "button items"},
     { mctr: "center items" },
-	{ mnwd: "content width" },
+	{ mnwd: "content width*" },
 	{ mnwrp: "don't wrap items*" },
-	{ mwd: "editor width" },
+	{ mwd: "editor width*" },
     { mfltl: "float left*" },
     { mfltr: "float right*" },
     { mnflt: "no float" },
@@ -253,4 +254,6 @@ export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ mfltr: "Float right only works within callouts." },
 	{ mnwrp: "Works best if items are not evenly spaced or centered." },
 	{ mstcky: "Sticky does not apply in Reading mode." },
+	{ mnwd: "Content width works only if toolbar position is Top (fixed)." },
+	{ mwd: "Editor width works only if toolbar position is Top (fixed)." },
 ];
