@@ -1078,7 +1078,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		if (this.toolbar.mobileStyles.length == 0) {
 			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr("No mobile styles set.") });
+				{ text: emptyMessageFr("No mobile styles set. Using default styles.") });
 			emptyMsg.className = "note-toolbar-setting-empty-message";
 			mobileStyleDiv.append(emptyMsg);
 		}

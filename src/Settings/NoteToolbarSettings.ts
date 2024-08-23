@@ -207,16 +207,16 @@ export const POSITION_OPTIONS = {
 export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ autohide: "auto-hide*" },
     { border: "border" },
-	{ button: "button" },
+	{ button: "button items" },
     { center: "center items" },
-	{ between: "space between items" },
-    { even: "space items evenly" },
-    { left: "left align items" },
-    { right: "right align items" },
-    { sticky: "sticky*" },
+	{ wide: "editor width" },
     { floatl: "float left*" },
     { floatr: "float right*" },
-	{ wide: "editor width" }
+    { left: "left align items" },
+    { right: "right align items" },
+	{ between: "space between items" },
+    { even: "space items evenly" },
+    { sticky: "sticky*" },
 ];
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
@@ -231,21 +231,21 @@ export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
  */
 export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { mbrder: "border" },
-	{ mbtn: "button"},
     { mnbrder: "no border" },
+	{ mbtn: "button items"},
     { mctr: "center items" },
-	{ mbtwn: "space between items" },
-    { mevn: "space items evenly" },
-    { mlft: "left align items" },
-    { mrght: "right align items" },
-    { mstcky: "sticky*" },
-    { mnstcky: "not sticky" },
+	{ mnwd: "content width" },
 	{ mnwrp: "don't wrap items*" },
+	{ mwd: "editor width" },
     { mfltl: "float left*" },
     { mfltr: "float right*" },
     { mnflt: "no float" },
-	{ mwd: "editor width" },
-	{ mnwd: "content width" }
+    { mlft: "left align items" },
+    { mrght: "right align items" },
+	{ mbtwn: "space between items" },
+    { mevn: "space items evenly" },
+    { mstcky: "sticky*" },
+    { mnstcky: "not sticky" },
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
