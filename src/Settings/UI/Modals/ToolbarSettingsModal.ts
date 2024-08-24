@@ -11,6 +11,14 @@ import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 
+enum ItemFormComponent {
+	Delete = 'delete',
+	Icon = 'icon',
+	Label = 'label',
+	Link = 'link',
+	Tooltip = 'tooltip',
+}
+
 enum SettingsAttr {
 	Active = 'data-active',
 	ItemUuid = 'data-item-uuid',
@@ -321,9 +329,10 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param itemContainer 
 	 * @param state 
 	 */
-	private toggleItemView(itemPreviewContainer: HTMLDivElement, state?: 'preview' | 'form', focusOn?: 'icon' | 'label' | 'tooltip' | 'link') {
+	private toggleItemView(itemPreviewContainer: HTMLDivElement, state: 'preview' | 'form', focusOn?: ItemFormComponent) {
 
 		let itemForm = itemPreviewContainer.nextElementSibling;
+		let itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type');
 		debugLog("toggleItemView", itemPreviewContainer, itemForm, focusOn);
 		
 		let previewState: string;
@@ -351,26 +360,39 @@ export default class ToolbarSettingsModal extends Modal {
 
 		// move focus to form / field
 		if (formState === 'true') {	
-			let focusSelector = "#note-toolbar-item-field-icon .clickable-icon";
-			if (focusOn) {
-				switch (focusOn) {
-					case 'label': 
-						focusSelector = "#note-toolbar-item-field-label input";
+			let focusSelector = "";
+			if (itemType) {
+				switch (itemType) {
+					case ItemType.Break:
+					case ItemType.Separator:
+						focusOn = ItemFormComponent.Delete;
 						break;
-					case 'link':
-						focusSelector = ".note-toolbar-setting-item-field-link input";
+					case ItemType.Group:
+						focusOn = ItemFormComponent.Link;
 						break;
-					case 'tooltip': 
-						focusSelector = "#note-toolbar-item-field-tooltip input";
-						break;
-					case 'icon':
 					default:
-						// default case, focus on first field (icon)
+						focusOn = ItemFormComponent.Icon;
 						break;
 				}
 			}
+			switch (focusOn) {
+				case ItemFormComponent.Delete:
+					focusSelector = ".note-toolbar-setting-item-delete .clickable-icon";
+					break;
+				case ItemFormComponent.Icon:
+					focusSelector = "#note-toolbar-item-field-icon .clickable-icon";
+					break;
+				case ItemFormComponent.Label: 
+					focusSelector = "#note-toolbar-item-field-label input";
+					break;
+				case ItemFormComponent.Link:
+					focusSelector = ".note-toolbar-setting-item-field-link input";
+					break;
+				case ItemFormComponent.Tooltip:
+					focusSelector = "#note-toolbar-item-field-tooltip input";
+					break;
+			}
 			let focusField = itemForm?.querySelector(focusSelector) as HTMLElement;
-			debugLog("toggleItemView focusField: ", focusField);
 
 			// set focus in the form
 			if (focusField) {
@@ -440,16 +462,16 @@ export default class ToolbarSettingsModal extends Modal {
 				const target = e.target as Element;
 				const currentTarget = e.currentTarget as Element;
 				debugLog("clicked on: ", currentTarget, target);
-				let focusOn: 'icon' | 'label' | 'link' | 'tooltip' = 'label';
+				let focusOn: ItemFormComponent = ItemFormComponent.Label;
 				if (currentTarget.querySelector('.note-toolbar-setting-tbar-preview')) {
-					focusOn = 'link';
+					focusOn = ItemFormComponent.Link;
 				}
 				else if (target instanceof SVGElement || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
-					focusOn = 'icon';
+					focusOn = ItemFormComponent.Icon;
 				}
 				else if (target instanceof HTMLSpanElement) {
 					if (target.classList.contains("note-toolbar-setting-item-preview-tooltip")) {
-						focusOn = 'tooltip';
+						focusOn = ItemFormComponent.Tooltip;
 					}
 				}
 				this.toggleItemView(itemPreviewContainer, 'form', focusOn);
