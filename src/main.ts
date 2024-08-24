@@ -65,7 +65,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// adds the ribbon icon, on mobile only (seems redundant to add on desktop as well)
 		if (Platform.isMobile) {
-			debugLog('isMobile');
 			this.addRibbonIcon(this.settings.icon, 'Note Toolbar', (event) => {
 				let activeFile = this.app.workspace.getActiveFile();
 				if (activeFile) {
@@ -73,6 +72,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
 					if (toolbar) {
 						this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
+							// add class so we can style the menu
+							menu.dom.addClass('note-toolbar-menu');
 							menu.showAtPosition(event); 
 						});
 					}
