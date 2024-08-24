@@ -55,6 +55,22 @@ export default class ToolbarSettingsModal extends Modal {
 		this.parent ? this.parent.display() : undefined;
 	}
 
+	/**
+	 * Closes an expanded form if it's open, otherwise closes the modal. 
+	 */
+	onEscapeKey() {
+		let focussedElement = activeDocument.activeElement;
+		if (focussedElement instanceof HTMLElement) {
+			let settingForm = focussedElement.closest('.note-toolbar-setting-item');
+			if (settingForm) {
+				let settingsDiv = this.modalEl.querySelector('.note-toolbar-setting-modal') as HTMLDivElement;
+				settingsDiv ? this.collapseItemForms(settingsDiv, null) : undefined;
+				return;
+			}
+		}
+		this.close();
+	}
+
 	/*************************************************************************
 	 * SETTINGS DISPLAY
 	 *************************************************************************/
