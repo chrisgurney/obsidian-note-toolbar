@@ -71,8 +71,9 @@ export default class ToolbarSettingsModal extends Modal {
 		if (focussedElement instanceof HTMLElement) {
 			let settingForm = focussedElement.closest('.note-toolbar-setting-item');
 			if (settingForm) {
+				let rowEscaped = focussedElement.closest('.note-toolbar-setting-items-container-row');
 				let settingsDiv = this.modalEl.querySelector('.note-toolbar-setting-modal') as HTMLDivElement;
-				settingsDiv ? this.collapseItemForms(settingsDiv, null) : undefined;
+				settingsDiv ? this.collapseItemForms(settingsDiv, rowEscaped, true) : undefined;
 				return;
 			}
 		}
@@ -307,18 +308,23 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Collapses all item forms except for one that might have been expanded.
 	 * @param settingsDiv HTMLElement to settings are within.
-	 * @param rowClicked Optional Element that was clicked/expanded.
+	 * @param activeRow Optional Element that was clicked/expanded.
+	 * @param closeAll true if all forms should be closed; false if the active one should be left open
 	 */
-	collapseItemForms(settingsDiv: HTMLDivElement, rowClicked: Element | null) {
+	collapseItemForms(settingsDiv: HTMLDivElement, activeRow: Element | null, closeAll: boolean = false) {
 
 		// collapse all items except row
 		let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
-		listItems.forEach((row, index) => {
-			if (row !== rowClicked) {
-				let itemPreview = row.querySelector('.note-toolbar-setting-item-preview-container');
+		listItems.forEach((row) => {
+			let itemPreviewContainer = row.querySelector('.note-toolbar-setting-item-preview-container') as HTMLElement;
+			if (closeAll || row !== activeRow) {
 				let itemForm = row.querySelector('.note-toolbar-setting-item');
-				itemPreview?.setAttribute(SettingsAttr.Active, 'true');
+				itemPreviewContainer?.setAttribute(SettingsAttr.Active, 'true');
 				itemForm?.setAttribute(SettingsAttr.Active, 'false');
+			}
+			if (closeAll && row === activeRow) {
+				let itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
+				itemPreview.focus();
 			}
 		});
 
@@ -362,6 +368,7 @@ export default class ToolbarSettingsModal extends Modal {
 		if (formState === 'true') {	
 			let focusSelector = "";
 			if (itemType) {
+				// figure out focus element for keyboard and special UI types
 				switch (itemType) {
 					case ItemType.Break:
 					case ItemType.Separator:
