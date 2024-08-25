@@ -1291,7 +1291,14 @@ body {
     column-gap: 0.5em;
     justify-content: space-between;
     width: 100%;
-    & .note-toolbar-setting-item-preview-edit-mobile-icon svg {
+}
+
+.note-toolbar-setting-icon-button {
+    border-top: none !important;
+}
+
+.note-toolbar-setting-icon-button-cta {
+    & svg {
         color: var(--interactive-accent);
     }
 }
@@ -1696,10 +1703,14 @@ input[type="text"].note-toolbar-setting-error {
 
 .note-toolbar-setting-item-visibility {
     display: flex;
+    & button {
+        font-size: var(--font-ui-smaller);
+    }
 }
 
 .note-toolbar-setting-item-controls {
     display: flex;
+    gap: var(--size-4-2);
     & .setting-item {
         border-bottom: none !important;
         padding: 0 !important;
