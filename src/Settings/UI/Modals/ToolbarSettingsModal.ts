@@ -782,18 +782,13 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(el)
 			.setClass("note-toolbar-setting-item-delete")
-			.addExtraButton((cb) => {
+			.addButton((cb) => {
 				cb.setIcon("minus-circle")
 					.setTooltip("Delete")
 					.onClick(async () => {
 						this.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');
 					});
-				cb.extraSettingsEl.setAttribute("tabindex", "0");
-				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid, 'delete');
-					});
+				cb.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 			});
 
 	}
