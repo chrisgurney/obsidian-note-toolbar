@@ -20,6 +20,51 @@ export class SettingsManager {
 	}
 
 	/**
+	 * Duplicates the given toolbar and adds it to the plugin settings.
+	 * @param toolbar ToolbarSettings to duplicate.
+	 */
+	public async duplicateToolbar(toolbar: ToolbarSettings): Promise<void> {
+		debugLog('duplicateToolbar', toolbar);
+		let newToolbar = {
+			uuid: getUUID(),
+			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)),
+			items: [],
+			mobileStyles: JSON.parse(JSON.stringify(toolbar.mobileStyles)),
+			name: this.getUniqueToolbarName(toolbar.name),
+			position: JSON.parse(JSON.stringify(toolbar.position)),
+			updated: new Date().toISOString(),
+		} as ToolbarSettings;
+		toolbar.items.forEach((item) => {
+			this.duplicateToolbarItem(newToolbar, item);
+		});
+		debugLog('duplicateToolbar: duplicated', newToolbar);
+		this.plugin.settings.toolbars.push(newToolbar);
+		this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
+		await this.plugin.settingsManager.save();
+	}
+
+	/**
+	 * Duplicates the given toolbar item, and adds it to the given toolbar.
+	 * @param toolbar ToolbarSettings to duplicate the item within.
+	 * @param item ToolbarItemSettings to duplicate.
+	 */
+	public duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false) {
+		debugLog('duplicateToolbarItem', item);
+		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
+		newItem.uuid = getUUID();
+		debugLog('duplicateToolbarItem: duplicated', newItem);
+		if (insertAfter) {
+			const index = toolbar.items.indexOf(item);
+			if (index !== -1) {
+				toolbar.items.splice(index + 1, 0, newItem);
+			}
+		}
+		else {
+			toolbar.items.push(newItem);
+		}
+	}
+
+	/**
 	 * Gets toolbar from settings, using the provided UUID.
 	 * @param id UUID of toolbar to get settings for.
 	 * @returns ToolbarSettings for the provided matched toolbar ID, undefined otherwise.
@@ -90,6 +135,25 @@ export class SettingsManager {
 			currentPosition = settings.position.mobile?.allViews?.position;
 		}
 		return currentPosition;
+	}
+
+	/**
+	 * Gets a unique name for a new toolbar copy, using the provided name.
+	 * @param name name of the toolbar to generate a unique copy name for
+	 * @returns unique toolbar name
+	 */
+	private getUniqueToolbarName(name: string): string {
+		let uniqueName = name;
+		let counter = 1;
+	
+		const existingNames = this.plugin.settings.toolbars.map(toolbar => toolbar.name);
+	
+		while (existingNames.includes(uniqueName)) {
+			uniqueName = `${name} copy${counter > 1 ? ` ${counter}` : ''}`;
+			counter++;
+		}
+	
+		return uniqueName;
 	}
 
 	/**
