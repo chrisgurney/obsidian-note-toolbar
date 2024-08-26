@@ -154,29 +154,54 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		itemsListContainer.addClass('note-toolbar-setting-items-list-container');
 
 		if (this.plugin.settings.toolbars.length == 0) {
-			containerEl
+			itemsListContainer
 				.createEl("div", { text: emptyMessageFr("Click the button to create a toolbar.") })
 				.className = "note-toolbar-setting-empty-message";
 		}
-		else {		
+		else {
 			let toolbarListDiv = createDiv();
 			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
-				(toolbarItem, index) => {
+				(toolbar) => {
 					let toolbarListItemSetting = new Setting(toolbarListDiv)
-						.setName(toolbarItem.name ? toolbarItem.name : "⚠️ Toolbar name not set")
-						.setDesc(createToolbarPreviewFr(toolbarItem, this.plugin.settingsManager))
+						.setName(toolbar.name ? toolbar.name : "⚠️ Toolbar name not set")
+						.setDesc(createToolbarPreviewFr(toolbar, this.plugin.settingsManager))
 						.addButton((button: ButtonComponent) => {
 							button
-								.setTooltip("Update this toolbar's items")
+								.setIcon('copy-plus')
+								.setTooltip("Duplicate this toolbar")
+								.onClick(() => {
+									this.plugin.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
+										this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
+									});
+								});
+						})
+						.addButton((button: ButtonComponent) => {
+							button
+								.setTooltip("Update this toolbar")
 								.setButtonText("Edit")
 								.setCta()
 								.onClick(() => {
-									this.openSettingsModal(toolbarItem);
+									this.openSettingsModal(toolbar);
 								});
 							});
-					toolbarItem.name ? undefined : toolbarListItemSetting.nameEl.addClass('mod-warning');
-				});
+					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
+					toolbar.name ? undefined : toolbarListItemSetting.nameEl.addClass('mod-warning');
+			
+					this.plugin.registerDomEvent(
+						toolbarListItemSetting.settingEl, 'keydown', (e: KeyboardEvent) => {
+							switch (e.key) {
+								case "d":
+									const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+									if (modifierPressed) {
+										this.plugin.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
+											this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
+										});
+									}
+								}
+					});
+				}
+			);
 
 			itemsListContainer.appendChild(toolbarListDiv);
 

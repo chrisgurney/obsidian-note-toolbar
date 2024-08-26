@@ -1171,10 +1171,23 @@ body {
     & .setting-item {
         padding: 0.5em;
         margin: 0.25em;
-    }
-    & .setting-item:focus-within {
-        outline: solid 2px var(--background-modifier-border-focus);
-        border-radius: var(--button-radius);
+        /* duplicate toolbar button */
+        & button:first-child {
+            opacity: 0;
+            .is-mobile & {
+                opacity: 1;
+            }
+        }
+        &:hover button:first-child {
+            opacity: 1;
+        }
+        &:focus-within {
+            outline: solid 2px var(--background-modifier-border-focus);
+            border-radius: var(--button-radius);
+            & button:first-child {
+                opacity: 1;
+            }
+        }
     }
 } 
 

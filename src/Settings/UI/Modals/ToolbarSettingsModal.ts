@@ -461,8 +461,15 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		this.plugin.registerDomEvent(
-			itemPreview, 'keydown', (e) => {
+			itemPreview, 'keydown', (e: KeyboardEvent) => {
 				switch (e.key) {
+					case "d":
+						const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+						if (modifierPressed) {
+							const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+							this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+						}
+						break;
 					case "Enter":
 					case " ":
 						e.preventDefault();
@@ -635,7 +642,26 @@ export default class ToolbarSettingsModal extends Modal {
 		itemControlsContainer.className = "note-toolbar-setting-item-controls";
 		this.getDeleteButton(itemControlsContainer, toolbarItem);
 
-		// we'll just show these types after the delete button, to keep the UI minimal
+		//
+		// duplicate button
+		//
+
+		new Setting(itemControlsContainer)
+			.setClass('note-toolbar-setting-item-visibility-and-controls')
+			.addButton((button: ButtonComponent) => {
+				button
+					.setIcon('copy-plus')
+					.setTooltip("Duplicate this item")
+					.onClick(() => {
+						const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+						this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+					});
+		})
+
+		//
+		// separators + breaks: show these types after the buttons, to keep the UI minimal
+		//
+
 		if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
 			let type = toolbarItem.linkAttr.type;
 			let separatorTitle = createSpan();
