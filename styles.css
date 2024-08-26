@@ -1293,10 +1293,6 @@ body {
     width: 100%;
 }
 
-.note-toolbar-setting-icon-button {
-    border-top: none !important;
-}
-
 .note-toolbar-setting-icon-button-cta {
     & svg {
         color: var(--interactive-accent);
