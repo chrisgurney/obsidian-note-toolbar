@@ -87,7 +87,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Displays the toolbar item's settings.
 	 */
-	public display() {
+	public display(focusSelector?: string) {
 
 		debugLog("🟡 REDRAWING MODAL 🟡");
 
@@ -107,9 +107,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.contentEl.appendChild(settingsDiv);
 
-		// scroll to the position when the modal was last open
-		this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
-
 		// listen for clicks outside the list area, to collapse form that might be open
 		this.plugin.registerDomEvent(this.modalEl, 'click', (e) => {
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
@@ -121,6 +118,14 @@ export default class ToolbarSettingsModal extends Modal {
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
 			this.collapseItemForms(settingsDiv, rowClicked);
 		});
+
+		if (focusSelector) {
+			let focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
+			focusEl?.focus();
+		}
+
+		// scroll to the position when the modal was last open
+		this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
 
 	}
 
