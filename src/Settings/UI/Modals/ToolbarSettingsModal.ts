@@ -1661,7 +1661,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let itemPreviewLabelEditIcon = createDiv();
 				itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
 				let itemPreviewEditIcon = createSpan();
-				itemPreviewEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile-icon");
+				itemPreviewEditIcon.addClass("note-toolbar-setting-icon-button-cta");
 				setIcon(itemPreviewEditIcon, 'lucide-pencil');
 				itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
 				itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
