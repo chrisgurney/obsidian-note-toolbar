@@ -22,8 +22,9 @@ export class SettingsManager {
 	/**
 	 * Duplicates the given toolbar and adds it to the plugin settings.
 	 * @param toolbar ToolbarSettings to duplicate.
+	 * @returns string UUID of the new toolbar.
 	 */
-	public async duplicateToolbar(toolbar: ToolbarSettings): Promise<void> {
+	public async duplicateToolbar(toolbar: ToolbarSettings): Promise<string> {
 		debugLog('duplicateToolbar', toolbar);
 		let newToolbar = {
 			uuid: getUUID(),
@@ -41,14 +42,16 @@ export class SettingsManager {
 		this.plugin.settings.toolbars.push(newToolbar);
 		this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 		await this.plugin.settingsManager.save();
+		return newToolbar.uuid;
 	}
 
 	/**
 	 * Duplicates the given toolbar item, and adds it to the given toolbar.
 	 * @param toolbar ToolbarSettings to duplicate the item within.
 	 * @param item ToolbarItemSettings to duplicate.
+	 * @returns string UUID of the new item.
 	 */
-	public duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false) {
+	public duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false): string {
 		debugLog('duplicateToolbarItem', item);
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
 		newItem.uuid = getUUID();
@@ -62,6 +65,7 @@ export class SettingsManager {
 		else {
 			toolbar.items.push(newItem);
 		}
+		return newItem.uuid;
 	}
 
 	/**
