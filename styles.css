@@ -1683,22 +1683,8 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
-.note-toolbar-setting-item-delete {
-    border: none;
-    padding: 0 !important;
-    padding-inline-end: 0.25em !important;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        .is-mobile & {
-            align-items: center;
-            margin-top: 0 !important;
-        }
-        & svg {
-            color: var(--text-error);
-        }
-    }
+.note-toolbar-setting-item-delete svg {
+    color: var(--text-error);
 }
 
 .note-toolbar-setting-item-visibility {
