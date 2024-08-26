@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath, setIcon } from 'obsidian';
+import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -36,7 +36,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	/**
 	 * Displays the main settings.
 	 */
-	public display(focusId?: string): void {
+	public display(focusSelector?: string, scrollToFocus: boolean = false): void {
 
 		const { containerEl } = this;
 		containerEl.empty();
@@ -78,12 +78,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// other global settings
 		this.displayOtherSettings(containerEl);
 
-		if (focusId) {
-			let focusEl = this.containerEl.querySelector(focusId) as HTMLElement;
+		if (focusSelector) {
+			let focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
 			focusEl?.focus();
-			setTimeout(() => { 
-				focusEl?.scrollIntoView(true);
-			}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
+			if (scrollToFocus) {
+				setTimeout(() => { 
+					focusEl?.scrollIntoView(true);
+				}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard	
+			}
 		}
 
 		// scroll to the position when the modal was last open
@@ -299,7 +301,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						// TODO: add a form item to the existing list
 							// TODO: put the existing code in a function
 						// TODO: set the focus in the form
-						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]');
+						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
 					});
 			});
 
