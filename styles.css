@@ -1679,8 +1679,36 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
-.note-toolbar-setting-item-delete svg {
-    color: var(--text-error);
+.note-toolbar-setting-item-delete {
+    padding: 0 8px 0 0;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+        & button {
+            background: none;
+            box-shadow: none;
+            color: var(--icon-color);
+            gap: var(--size-4-2);
+            padding: var(--size-4-2);
+            &:hover {
+                opacity: var(--icon-opacity-hover);
+                color: var(--icon-color-hover);
+                background-color: var(--background-modifier-hover);
+            }
+            &:focus-visible {
+                border-radius: var(--input-radius);
+                box-shadow: 0 0 0 1px var(--background-modifier-border);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            }
+        }
+    }
+    & svg {
+        color: var(--text-error);
+    }
 }
 
 .note-toolbar-setting-item-visibility {
