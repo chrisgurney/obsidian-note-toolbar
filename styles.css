@@ -1176,6 +1176,7 @@ body {
             opacity: 0;
             .is-mobile & {
                 opacity: 1;
+                width: auto;
             }
         }
         &:hover button:first-child {
