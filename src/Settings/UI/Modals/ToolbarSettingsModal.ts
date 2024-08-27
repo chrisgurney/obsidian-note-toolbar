@@ -344,7 +344,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemForm = itemPreviewContainer.nextElementSibling;
 		let itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type');
-		debugLog("toggleItemView", itemPreviewContainer, itemForm, focusOn);
+		debugLog("toggleItemView", itemPreviewContainer, itemForm, itemType, focusOn);
 		
 		let previewState: string;
 		let formState: string;
@@ -383,13 +383,13 @@ export default class ToolbarSettingsModal extends Modal {
 						focusOn = ItemFormComponent.Link;
 						break;
 					default:
-						focusOn = ItemFormComponent.Icon;
+						focusOn = focusOn ? focusOn : ItemFormComponent.Icon;
 						break;
 				}
 			}
 			switch (focusOn) {
 				case ItemFormComponent.Delete:
-					focusSelector = ".note-toolbar-setting-item-delete .clickable-icon";
+					focusSelector = ".note-toolbar-setting-item-delete button";
 					break;
 				case ItemFormComponent.Icon:
 					focusSelector = "#note-toolbar-item-field-icon .clickable-icon";
