@@ -68,7 +68,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// display rules
 		new Setting(containerEl)
-			.setName("Display rules")
+			.setName(t('setting.display-rules.title'))
 			.setDesc(learnMoreFr(
 				"Define which notes to display toolbars on.", 
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars"))
@@ -119,7 +119,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		);
 
 		let toolbarListSetting = new Setting(itemsContainer)
-			.setName("Toolbars")
+			.setName(t('setting.toolbars.title'))
 			.setDesc(toolbarsDesc)
 			.setHeading();
 
@@ -452,7 +452,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayOtherSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName("Other")
+			.setName(t('setting.other.title'))
 			.setHeading();
 
 		const s1 = new Setting(containerEl)
