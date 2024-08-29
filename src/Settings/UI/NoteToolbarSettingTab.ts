@@ -8,6 +8,7 @@ import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
+import { t } from 'main';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 

@@ -7,7 +7,7 @@ declare global {
         NoteToolbar?: NoteToolbar;
     }
     // TODO: provide access to Obsidian's translation framework
-    // var i18next: any;
+    var i18next: any;
 }
 
 declare module "obsidian" {

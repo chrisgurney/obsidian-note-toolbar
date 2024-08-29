@@ -6,6 +6,9 @@ import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
+import { en } from 'Settings/UI/I18n/en';
+
+export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -81,16 +84,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		}
 
-		// TODO: refactor all UI strings so they can be localized; example:
-		// i18next.addResourceBundle('en', 'plugin-note-toolbar', {
-		// 	hello: 'Hello!'
-		// });
-		// i18next.addResourceBundle('es', 'plugin-note-toolbar', {
-		// 	hello: 'Hola!'
-		// });
-
-		// TODO: get the translation function, and make it available to the plugin; example:
-		// const t = i18next.getFixedT(null, 'plugin-note-toolbar', null);
+		// load localized strings
+		i18next.addResourceBundle('en', 'plugin-note-toolbar', en);
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
