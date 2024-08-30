@@ -6,7 +6,7 @@ import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
-import { en } from 'I18n/en';
+import * as en from 'I18n/en.json';
 
 export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 

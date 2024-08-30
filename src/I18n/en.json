@@ -1,0 +1,15 @@
+{
+    "setting": {
+        "toolbars": {
+            "name": "Toolbars"
+        },
+        "display-rules": {
+            "name": "Display rules",
+            "description": "Define which notes to display toolbars on."
+        },
+        "other": {
+            "name": "Other",
+            "description": "test"
+        }
+    }
+}
