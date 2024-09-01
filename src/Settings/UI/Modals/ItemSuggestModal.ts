@@ -20,7 +20,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // this.parentEl = parentEl;
         this.plugin = plugin;
         this.activeFile = activeFile;
-        this.setPlaceholder("Search for an item");
+        this.setPlaceholder("Search for an item...");
         this.setInstructions([
             {command: '↑↓', purpose: 'to navigate'},
             {command: '↵', purpose: 'to use'},

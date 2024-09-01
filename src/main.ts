@@ -42,6 +42,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.commands = new CommandsManager(this);
 
 		this.addCommand({ id: 'focus', name: 'Focus', callback: async () => this.commands.focus() });
+		this.addCommand({ id: 'open-quick-tools', name: 'Open quick tools', callback: async () => this.commands.openItemSuggester() });
 		this.addCommand({ id: 'open-settings', name: 'Open plugin settings', callback: async () => this.commands.openSettings() });
 		this.addCommand({ id: 'open-toolbar-settings', name: 'Open toolbar settings', callback: async () => this.commands.openToolbarSettings() });
 		this.addCommand({ id: 'show-properties', name: 'Show Properties', callback: async () => this.commands.toggleProps('show') });
