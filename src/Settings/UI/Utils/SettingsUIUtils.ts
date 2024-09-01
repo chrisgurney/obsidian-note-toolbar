@@ -1,4 +1,4 @@
-import { setIcon } from "obsidian";
+import { getIcon, setIcon } from "obsidian";
 import { ItemType, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 
@@ -46,21 +46,26 @@ export function createToolbarPreviewFr(
 						}
 						break;
 					default:
-						let defaultItemFr = createDiv();
-						defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
-						if (item.icon) {
-							let iconFr = createSpan();
-							setIcon(iconFr, item.icon);
-							itemsFr.append(iconFr);
-							defaultItemFr.append(iconFr);
+						let iconExists = getIcon(item.icon);
+						if (iconExists || item.label) {
+							let defaultItemFr = createDiv();
+							defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
+							if (item.icon) {
+								if (iconExists) {
+									let iconFr = createSpan();
+									setIcon(iconFr, item.icon);
+									itemsFr.append(iconFr);
+									defaultItemFr.append(iconFr);
+								}
+							}
+							if (item.label) {
+								let labelFr = createSpan();
+								labelFr.textContent = item.label;
+								itemsFr.append(labelFr);
+								defaultItemFr.append(labelFr);
+							}
+							itemsFr.append(defaultItemFr);
 						}
-						if (item.label) {
-							let labelFr = createSpan();
-							labelFr.textContent = item.label;
-							itemsFr.append(labelFr);
-							defaultItemFr.append(labelFr);
-						}
-						itemsFr.append(defaultItemFr);
 						break;
 
 				}

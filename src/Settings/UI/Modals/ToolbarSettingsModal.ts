@@ -285,7 +285,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.addExtraButton((btn) => {
 				let icon = getIcon('note-toolbar-separator');
 				btn.extraSettingsEl.empty(); // remove existing gear icon
-				icon? btn.extraSettingsEl.appendChild(icon) : undefined;
+				icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
 				btn.setTooltip("Add a separator to the toolbar")
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
 			})
@@ -1677,7 +1677,7 @@ export default class ToolbarSettingsModal extends Modal {
 					itemPreviewContent.setText('No label set');
 					itemPreviewContent.addClass("note-toolbar-setting-item-preview-empty");
 				}
-				itemPreview.appendChild(itemPreviewIcon);
+				getIcon(toolbarItem.icon) ? itemPreview.appendChild(itemPreviewIcon) : undefined;
 				break;
 		}
 
