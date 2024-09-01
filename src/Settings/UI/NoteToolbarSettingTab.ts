@@ -57,8 +57,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		if (this.plugin.settings.version !== SETTINGS_VERSION) {
 			new Setting(containerEl)
-				.setName("⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.")
-				.setDesc(`Old settings file loaded (${this.plugin.settings.version}) but latest is ${SETTINGS_VERSION}`)
+				.setName(t('setting.error-old-settings-name'))
+				.setDesc(t('setting.error-old-settings-description', { oldVersion: this.plugin.settings.version + '', currentVersion: SETTINGS_VERSION + '' }))
 				.setClass('note-toolbar-setting-plugin-error')
 				.setHeading();
 		}
@@ -68,9 +68,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// display rules
 		new Setting(containerEl)
-			.setName(t('setting.display-rules.title'))
+			.setName(t('setting.display-rules.name'))
 			.setDesc(learnMoreFr(
-				"Define which notes to display toolbars on.", 
+				t('setting.display-rules.description'), 
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars"))
 			.setHeading();
 		this.displayPropertySetting(containerEl);
@@ -106,10 +106,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const toolbarsDesc = document.createDocumentFragment();
 		toolbarsDesc.append(
-			"Define the toolbars you want to add to your notes. ",
+			t('setting.toolbars.description'),
+			" ",
 			toolbarsDesc.createEl("a", {
 				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
-				text: "User\u00A0Guide",
+				text: t('setting.user-guide'),
 			}),
 			" • ",
 			toolbarsDesc.createEl("a", {
@@ -119,7 +120,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		);
 
 		let toolbarListSetting = new Setting(itemsContainer)
-			.setName(t('setting.toolbars.title'))
+			.setName(t('setting.toolbars.name'))
 			.setDesc(toolbarsDesc)
 			.setHeading();
 
@@ -127,15 +128,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarListSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip("Collapse all items")
+					.setTooltip(t('setting.toolbars.tooltip-collapse-tbars'))
 					.onClick(async () => {
 						let itemsContainer = containerEl.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
 							this.itemListOpen = !this.itemListOpen;
 							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
-							this.itemListOpen ? heading?.setText("Toolbars") : heading?.setText("Toolbars (" + this.plugin.settings.toolbars.length + ")");
-							cb.setTooltip(this.itemListOpen ? "Collapse all toolbars" : "Expand all toolbars");
+							this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name') + " (" + this.plugin.settings.toolbars.length + ")");
+							cb.setTooltip(this.itemListOpen ? t('setting.toolbars.tooltip-collapse-tbars') : t('setting.toolbars.tooltip-expand-tbars'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
@@ -156,7 +157,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			itemsListContainer
-				.createEl("div", { text: emptyMessageFr("Click the button to create a toolbar.") })
+				.createEl("div", { text: emptyMessageFr(t('setting.toolbars.label-empty-create-tbar')) })
 				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
@@ -165,12 +166,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			this.plugin.settings.toolbars.forEach(
 				(toolbar) => {
 					let toolbarListItemSetting = new Setting(toolbarListDiv)
-						.setName(toolbar.name ? toolbar.name : "⚠️ Toolbar name not set")
+						.setName(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'))
 						.setDesc(createToolbarPreviewFr(toolbar, this.plugin.settingsManager))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setIcon('copy-plus')
-								.setTooltip("Duplicate this toolbar")
+								.setTooltip(t('setting.toolbars.tooltip-duplicate-tbar'))
 								.onClick(() => {
 									this.plugin.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
 										this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
@@ -179,8 +180,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						})
 						.addButton((button: ButtonComponent) => {
 							button
-								.setTooltip("Update this toolbar")
-								.setButtonText("Edit")
+								.setTooltip(t('setting.toolbars.tooltip-edit-tbar'))
+								.setButtonText(t('setting.toolbars.button-edit-tbar'))
 								.setCta()
 								.onClick(() => {
 									this.openSettingsModal(toolbar);
@@ -212,8 +213,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
-					.setTooltip("Add a new toolbar")
-					.setButtonText("+ New toolbar")
+					.setTooltip(t('setting.toolbars.tooltip-new-tbar'))
+					.setButtonText(t('setting.toolbars.button-new-tbar'))
 					.setCta()
 					.onClick(async () => {
 						let newToolbar = {
@@ -452,15 +453,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayOtherSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName(t('setting.other.title'))
+			.setName(t('setting.other.name'))
 			.setHeading();
 
 		const s1 = new Setting(containerEl)
-			.setName("Icon")
-			.setDesc("Sets the icon for the floating button and navigation bar (mobile). Requires restart.")
+			.setName(t('setting.other.icon.name'))
+			.setDesc(t('setting.other.icon.description'))
 			.addButton((cb) => {
 				cb.setIcon(this.plugin.settings.icon)
-					.setTooltip("Select icon")
+					.setTooltip(t('setting.other.icon.tooltip'))
 					.onClick(async (e) => {
 						e.preventDefault();
 						const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
@@ -481,8 +482,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 		
 		const s2 = new Setting(containerEl)
-			.setName("Show 'Edit toolbar' link in toolbar menus")
-			.setDesc("Adds an item to access the toolbar's settings in toolbar menus.")
+			.setName(t('setting.other.show-edit-tbar.name'))
+			.setDesc(t('setting.other.show-edit-tbar.description'))
 			.addToggle((cb) => {
 				cb.setValue(this.plugin.settings.showEditInFabMenu)
 				cb.onChange(async (value) => {

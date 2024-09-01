@@ -1,7 +1,20 @@
 {
     "setting": {
+        "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
+        "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
+        "user-guide": "User\u00A0Guide",
         "toolbars": {
-            "name": "Toolbars"
+            "name": "Toolbars",
+            "description": "Define the toolbars you want to add to your notes.",
+            "button-edit-tbar": "Edit",
+            "button-new-tbar": "+ New toolbar",
+            "label-empty-create-tbar": "Click the button to create a toolbar.",
+            "label-tbar-name-not-set": "⚠️ Toolbar name not set",
+            "tooltip-collapse-tbars": "Collapse all toolbars",
+            "tooltip-duplicate-tbar": "Duplicate this toolbar",
+            "tooltip-edit-tbar": "Update this toolbar",
+            "tooltip-expand-tbars": "Expand all toolbars",
+            "tooltip-new-tbar": "Add a new toolbar"
         },
         "display-rules": {
             "name": "Display rules",
@@ -9,7 +22,15 @@
         },
         "other": {
             "name": "Other",
-            "description": "test"
+            "icon": {
+                "name": "Icon",
+                "description": "Sets the icon for the floating button and navigation bar (mobile). Requires restart.",
+                "tooltip": "Select icon"
+            },
+            "show-edit-tbar": {
+                "name": "Show 'Edit toolbar' link in toolbar menus",
+                "description": "Adds an item to access the toolbar's settings in toolbar menus."
+            }
         }
     }
 }
