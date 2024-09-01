@@ -1,4 +1,4 @@
-import { SuggestModal, TFile, setIcon } from "obsidian";
+import { SuggestModal, TFile, getIcon, setIcon } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { debugLog, hasVars, replaceVars } from "Utils/Utils";
 import { ItemType, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
@@ -89,8 +89,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
         el.addClass("note-toolbar-item-suggestion");
         if (item.icon) {
-            let iconGlyph = el.createSpan();
-            setIcon(iconGlyph, item.icon);
+            let svgExists = getIcon(item.icon);
+            if (svgExists) {
+                let iconGlyph = el.createSpan();
+                setIcon(iconGlyph, item.icon);
+            }
         }
         let itemNameEl = el.createSpan();
         var itemName = item.label || item.tooltip;
