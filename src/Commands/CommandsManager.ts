@@ -1,3 +1,4 @@
+import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { debugLog } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
@@ -51,6 +52,15 @@ export class CommandsManager {
                 break;
         }
 
+    }
+
+    /**
+     * Opens the item suggester modal.
+     */
+    async openItemSuggester(): Promise<void> {
+        let activeFile = this.plugin.app.workspace.getActiveFile();
+        const modal = new ItemSuggestModal(this.plugin, activeFile);
+        modal.open();
     }
 
     /**

@@ -1500,6 +1500,30 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
+.note-toolbar-item-suggester-name {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    column-gap: 1em;
+    width: 100%;
+}
+
+.note-toolbar-item-suggester-var {
+    font-family: monospace;
+    font-size: var(--font-ui-small);
+    color: var(--text-muted);
+}
+
+.note-toolbar-item-suggestion {
+    align-items: center;
+    display: flex;
+    column-gap: 0.5rem;
+    & svg {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
 .note-toolbar-icon-suggestion {
     align-items: center;
     display: flex;
