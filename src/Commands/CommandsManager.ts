@@ -12,7 +12,7 @@ export class CommandsManager {
     }
 
     /**
-     * Sets the focus on the first item in the toolbar.
+     * Sets the keyboard's focus on the first visible item in the toolbar.
      */
     async focus(): Promise<void> {
 
