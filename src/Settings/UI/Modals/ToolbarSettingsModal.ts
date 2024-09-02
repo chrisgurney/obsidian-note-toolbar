@@ -1081,7 +1081,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		if (this.toolbar.defaultStyles.length == 0) {
 			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr("No default styles set.") });
+				{ text: emptyMessageFr(t('setting.styles.option-default-empty')) });
 			emptyMsg.className = "note-toolbar-setting-empty-message";
 			defaultStyleDiv.append(emptyMsg);
 		}
@@ -1092,10 +1092,10 @@ export default class ToolbarSettingsModal extends Modal {
 					let styleDisclaimer = this.getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
 					new Setting(defaultStyleDiv)
 						.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
-						.setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + 'Use in Callout or CSS: ' + style)
+						.setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
 						.addExtraButton((cb) => {
 							cb.setIcon("cross")
-								.setTooltip("Remove")
+								.setTooltip(t('setting.styles.style-remove-tooltip'))
 								.onClick(async () => this.listMoveHandler(null, this.toolbar.defaultStyles, index, "delete"));
 							cb.extraSettingsEl.setAttribute("tabindex", "0");
 							this.plugin.registerDomEvent(
@@ -1131,11 +1131,11 @@ export default class ToolbarSettingsModal extends Modal {
 		);
 
 		const defaultDesc = document.createDocumentFragment();
-		defaultDesc.append("Applies to all platforms unless overridden.");
+		defaultDesc.append(t('setting.styles.option-default-description'));
 		defaultDesc.append(this.getStyleDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
 
 		new Setting(settingsDiv)
-			.setName("Default")
+			.setName(t('setting.styles.option-default-name'))
 			.setDesc(defaultDesc)
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(defaultStyleDiv);
@@ -1149,7 +1149,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		if (this.toolbar.mobileStyles.length == 0) {
 			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr("No mobile styles set. Using default styles.") });
+				{ text: emptyMessageFr(t('setting.styles.option-mobile-empty')) });
 			emptyMsg.className = "note-toolbar-setting-empty-message";
 			mobileStyleDiv.append(emptyMsg);
 		}
@@ -1199,11 +1199,11 @@ export default class ToolbarSettingsModal extends Modal {
 		);
 
 		const mobileDesc = document.createDocumentFragment();
-		mobileDesc.append("Override default styles.");
+		mobileDesc.append(t('setting.styles.option-mobile-description'));
 		mobileDesc.append(this.getStyleDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
 
 		new Setting(settingsDiv)
-			.setName("Mobile")
+			.setName(t('setting.styles.option-mobile-name'))
 			.setDesc(mobileDesc)
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(mobileStyleDiv);
@@ -1211,7 +1211,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setDesc(learnMoreFr(
-				"Customize even more with the Style Settings plugin.", 
+				t('setting.styles.help'), 
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support")
 			);
 
@@ -1224,11 +1224,11 @@ export default class ToolbarSettingsModal extends Modal {
 	displayUsageSetting(settingsDiv: HTMLElement) {
 
 		let usageDescFr = document.createDocumentFragment();
-		let descLinkFr = usageDescFr.createEl('a', {href: '#', text: "Search for property usage"});
+		let descLinkFr = usageDescFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
 		let [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(this.toolbar.uuid);
 
 		usageDescFr.append(
-			`This toolbar is used in ${mappingCount} mapping(s) and ${itemCount} toolbar item(s).`,
+			t('setting.usage.description', { mappingCount: mappingCount, itemCount: itemCount }),
 			usageDescFr.createEl("br"),
 			descLinkFr
 		);
@@ -1241,7 +1241,7 @@ export default class ToolbarSettingsModal extends Modal {
 		});
 
 		let usageSetting = new Setting(settingsDiv)
-			.setName("Usage")
+			.setName(t('setting.usage.name'))
 			.setDesc(usageDescFr)
 			.setHeading();
 		
@@ -1258,15 +1258,15 @@ export default class ToolbarSettingsModal extends Modal {
 	displayDeleteButton(settingsDiv: HTMLElement) {
 
 		new Setting(settingsDiv)
-			.setName("Delete this toolbar")
+			.setName(t('setting.delete-toolbar.name'))
 			.setHeading()
-			.setDesc("This action cannot be undone.")
+			.setDesc(t('setting.delete-toolbar.description'))
 			.setClass("note-toolbar-setting-spaced")
 			.addButton((button: ButtonComponent) => {
 				button
 					.setClass("mod-warning")
-					.setTooltip("Delete this toolbar")
-					.setButtonText("Delete...")
+					.setTooltip(t('setting.delete-toolbar.button-delete-tooltip'))
+					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
 					.onClick(() => {
 						const modal = new DeleteModal(this);

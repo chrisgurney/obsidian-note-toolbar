@@ -7,6 +7,12 @@
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
         "user-guide": "User\u00A0Guide",
+        "delete-toolbar": {
+            "name": "Delete this toolbar",
+            "description": "This action cannot be undone.",
+            "button-delete": "Delete...",
+            "button-delete-tooltip": "Delete this toolbar"
+        },
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on.",
@@ -75,7 +81,16 @@
         },
         "styles": {
             "name": "Styles",
-            "description": "List of styles to apply to the toolbar."
+            "description": "List of styles to apply to the toolbar.",
+            "help": "Customize even more with the Style Settings plugin.",
+            "option-default-name": "Default",
+            "option-default-description": "Applies to all platforms unless overridden.",
+            "option-default-empty": "No default styles set.",
+            "option-mobile-name": "Mobile",
+            "option-mobile-description": "Override default styles.",
+            "option-mobile-empty": "No mobile styles set. Using default styles.",
+            "style-tooltip-use-class": "Use in Callout or CSS: {{class}}",
+            "style-remove-tooltip": "Remove"
         },
         "toolbars": {
             "name": "Toolbars",
@@ -90,6 +105,11 @@
             "button-new-tbar-tooltip": "Add a new toolbar",
             "label-empty-create-tbar": "Click the button to create a toolbar.",
             "label-tbar-name-not-set": "⚠️ Toolbar name not set"
+        },
+        "usage": {
+            "name": "Usage",
+            "description": "This toolbar is used in {{mappingCount}} mapping(s) and {{itemCount}} toolbar item(s).",
+            "description-search": "Search for property usage"
         }
     }
 }
