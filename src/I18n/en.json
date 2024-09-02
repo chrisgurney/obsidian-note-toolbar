@@ -5,36 +5,6 @@
         "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
         "user-guide": "User\u00A0Guide",
-        "name": {
-            "name": "Name",
-            "description": "Give this toolbar a unique name.",
-            "error-toolbar-already-exists": "A toolbar already exists with this name."
-        },
-        "items": {
-            "name": "Items",
-            "name-with-count": "Items ({{count}})",
-            "description": "Add items to the toolbar, in order.",
-            "label-empty-no-items": "No toolbar items.",
-            "tooltip-collapse-items": "Collapse all items",
-            "tooltip-expand-items": "Expand all items",
-            "button-add-break-tooltip": "Add a line break to the toolbar",
-            "button-add-separator-tooltip": "Add a separator to the toolbar",
-            "button-new-item": "+ Add toolbar item",
-            "button-new-item-tooltip": "Add a new item to the toolbar"
-        },
-        "toolbars": {
-            "name": "Toolbars",
-            "description": "Define the toolbars you want to add to your notes.",
-            "button-edit-tbar": "Edit",
-            "button-new-tbar": "+ New toolbar",
-            "label-empty-create-tbar": "Click the button to create a toolbar.",
-            "label-tbar-name-not-set": "⚠️ Toolbar name not set",
-            "tooltip-collapse-tbars": "Collapse all toolbars",
-            "tooltip-duplicate-tbar": "Duplicate this toolbar",
-            "tooltip-edit-tbar": "Update this toolbar",
-            "tooltip-expand-tbars": "Expand all toolbars",
-            "tooltip-new-tbar": "Add a new toolbar"
-        },
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on.",
@@ -50,6 +20,23 @@
             "button-new-mapping-tooltip": "Add a new mapping",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it."
         },
+        "items": {
+            "name": "Items",
+            "name-with-count": "Items ({{count}})",
+            "description": "Add items to the toolbar, in order.",
+            "label-empty-no-items": "No toolbar items.",
+            "tooltip-collapse-items": "Collapse all items",
+            "tooltip-expand-items": "Expand all items",
+            "button-add-break-tooltip": "Add a line break to the toolbar",
+            "button-add-separator-tooltip": "Add a separator to the toolbar",
+            "button-new-item": "+ Add toolbar item",
+            "button-new-item-tooltip": "Add a new item to the toolbar"
+        },
+        "name": {
+            "name": "Name",
+            "description": "Give this toolbar a unique name.",
+            "error-toolbar-already-exists": "A toolbar already exists with this name."
+        },
         "other": {
             "name": "Other",
             "icon": {
@@ -61,6 +48,19 @@
                 "name": "Show 'Edit toolbar' link in toolbar menus",
                 "description": "Adds an item to access the toolbar's settings in toolbar menus."
             }
+        },
+        "toolbars": {
+            "name": "Toolbars",
+            "description": "Define the toolbars you want to add to your notes.",
+            "button-edit-tbar": "Edit",
+            "button-new-tbar": "+ New toolbar",
+            "label-empty-create-tbar": "Click the button to create a toolbar.",
+            "label-tbar-name-not-set": "⚠️ Toolbar name not set",
+            "tooltip-collapse-tbars": "Collapse all toolbars",
+            "tooltip-duplicate-tbar": "Duplicate this toolbar",
+            "tooltip-edit-tbar": "Update this toolbar",
+            "tooltip-expand-tbars": "Expand all toolbars",
+            "tooltip-new-tbar": "Add a new toolbar"
         }
     }
 }
