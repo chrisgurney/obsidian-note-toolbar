@@ -1,5 +1,7 @@
 {
     "setting": {
+        "button-delete-tooltip": "Delete",
+        "button-drag-tooltip": "Drag to rearrange",
         "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
         "user-guide": "User\u00A0Guide",
@@ -18,7 +20,18 @@
         },
         "display-rules": {
             "name": "Display rules",
-            "description": "Define which notes to display toolbars on."
+            "description": "Define which notes to display toolbars on.",
+            "option-property": "Property",
+            "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings. Set to 'none' to hide the toolbar.",
+            "option-property-placeholder": "Property",
+            "option-folder-mappings": "Folder mappings",
+            "option-folder-mappings-description": "Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.",
+            "option-folder-mappings-empty": "Click the button to create a mapping.",
+            "placeholder-mapping-folder": "Folder",
+            "placeholder-mapping-toolbar": "Toolbar",
+            "button-new-mapping": "+ New mapping",
+            "button-new-mapping-tooltip": "Add a new mapping",
+            "error-folder-already-mapped": "This folder already has a toolbar associated with it."
         },
         "other": {
             "name": "Other",

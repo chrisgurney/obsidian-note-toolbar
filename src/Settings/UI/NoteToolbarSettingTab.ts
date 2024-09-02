@@ -247,10 +247,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayPropertySetting(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName("Property")
-			.setDesc("If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings. Set to 'none' to hide the toolbar.")
+			.setName(t('setting.display-rules.option-property'))
+			.setDesc(t('setting.display-rules.option-property-description'))
 			.addText(text => text
-				.setPlaceholder('Property')
+				.setPlaceholder(t('setting.display-rules.option-property-placeholder'))
 				.setValue(this.plugin.settings.toolbarProp)
 				.onChange(debounce(async (value) => {
 					this.plugin.settings.toolbarProp = value;
@@ -268,13 +268,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayFolderMap(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName("Folder mappings")
-			.setDesc("Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.")
+			.setName(t('setting.display-rules.option-folder-mappings'))
+			.setDesc(t('setting.display-rules.option-folder-mappings-description'))
 			.setClass("note-toolbar-setting-no-border");
 
 		if (this.plugin.settings.folderMappings.length == 0) {
 			containerEl
-				.createEl("div", { text: emptyMessageFr("Click the button to create a mapping.") })
+				.createEl("div", { text: emptyMessageFr(t('setting.display-rules.option-folder-mappings-empty')) })
 				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
@@ -315,8 +315,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
-					.setTooltip("Add a new mapping")
-					.setButtonText("+ New mapping")
+					.setTooltip(t('setting.display-rules.button-new-mapping-tooltip'))
+					.setButtonText(t('setting.display-rules.button-new-mapping'))
 					.setCta()
 					.onClick(async () => {
 						let newMapping = {
@@ -353,7 +353,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-item-delete")
 			.addButton((cb) => {
 				cb.setIcon("minus-circle")
-					.setTooltip("Delete")
+					.setTooltip(t('setting.button-delete-tooltip'))
 					.onClick(async () => {
 						let rowId = cb.buttonEl.getAttribute('data-row-id');
 						rowId ? this.listMoveHandlerById(null, rowId, 'delete') : undefined;
@@ -378,7 +378,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
 				new FolderSuggester(this.app, cb.inputEl);
-				cb.setPlaceholder("Folder")
+				cb.setPlaceholder(t('setting.display-rules.placeholder-mapping-folder'))
 					.setValue(mapping.folder)
 					.onChange(debounce(async (newFolder) => {
 						if (
@@ -391,7 +391,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						) {
 							if (document.getElementById("note-toolbar-name-error") === null) {
 								let errorDiv = createEl("div", { 
-									text: "This folder already has a toolbar associated with it.", 
+									text: t('setting.display-rules.error-folder-already-mapped'), 
 									attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
 								toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
 								toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
@@ -409,7 +409,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder("Toolbar")
+				cb.setPlaceholder(t('setting.display-rules.placeholder-mapping-toolbar'))
 					.setValue(this.plugin.settingsManager.getToolbarName(mapping.toolbar))
 					.onChange(debounce(async (name) => {
 						let mappedToolbar = this.plugin.settingsManager.getToolbarByName(name);
@@ -426,7 +426,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		const s1d = new Setting(itemHandleDiv)
 			.addExtraButton((cb) => {
 				cb.setIcon('grip-horizontal')
-					.setTooltip("Drag to rearrange")
+					.setTooltip(t('setting.button-drag-tooltip'))
 					.extraSettingsEl.addClass('sortable-handle');
 				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
 				cb.extraSettingsEl.tabIndex = 0;
