@@ -186,7 +186,7 @@ export default class ToolbarSettingsModal extends Modal {
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.items.tooltip-collapse-items'))
+					.setTooltip(t('setting.items.button-collapse-items-tooltip'))
 					.onClick(async () => {
 						let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
@@ -194,7 +194,7 @@ export default class ToolbarSettingsModal extends Modal {
 							itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
 							this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
-							cb.setTooltip(this.itemListOpen ? t('setting.items.tooltip-collapse-items') : t('setting.items.tooltip-expand-items'));
+							cb.setTooltip(this.itemListOpen ? t('setting.items.button-collapse-items-tooltip') : t('setting.items.button-expand-items-tooltip'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
@@ -550,7 +550,7 @@ export default class ToolbarSettingsModal extends Modal {
 			let labelField = new Setting(textFieldsContainer)
 				.setClass("note-toolbar-setting-item-field")
 				.addText(text => text
-					.setPlaceholder(t('setting.item.placeholder-label'))
+					.setPlaceholder(t('setting.item.option-label-placeholder'))
 					.setValue(toolbarItem.label)
 					.onChange(
 						debounce(async (value) => {
@@ -566,7 +566,7 @@ export default class ToolbarSettingsModal extends Modal {
 			let tooltipField = new Setting(textFieldsContainer)
 				.setClass("note-toolbar-setting-item-field")
 				.addText(text => text
-					.setPlaceholder(t('setting.item.placeholder-tooltip'))
+					.setPlaceholder(t('setting.item.option-tooltip-placeholder'))
 					.setValue(toolbarItem.tooltip)
 					.onChange(
 						debounce(async (value) => {
@@ -760,7 +760,7 @@ export default class ToolbarSettingsModal extends Modal {
 			})
 			.addExtraButton((cb) => {
 				cb.setIcon('grip-horizontal')
-					.setTooltip("Drag to rearrange")
+					.setTooltip(t('setting.button-drag-tooltip'))
 					.extraSettingsEl.addClass('sortable-handle');
 				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				cb.extraSettingsEl.tabIndex = 0;
@@ -815,7 +815,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setClass("note-toolbar-setting-item-delete")
 			.addButton((cb) => {
 				cb.setIcon("minus-circle")
-					.setTooltip("Delete")
+					.setTooltip(t('setting.button-delete-tooltip'))
 					.onClick(async () => {
 						this.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');
 					});
@@ -845,7 +845,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
 						new CommandSuggester(this.app, cb.inputEl);
-						cb.setPlaceholder("Search for command")
+						cb.setPlaceholder(t('setting.item.option-command-placeholder'))
 							.setValue(value)
 							.onChange(debounce(async (command) => {
 								toolbarItem.link = command;
@@ -861,13 +861,13 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
 						new FileSuggester(this.app, cb.inputEl);
-						cb.setPlaceholder("Search for file or folder")
+						cb.setPlaceholder(t('setting.item.option-file-placeholder'))
 							.setValue(value)
 							.onChange(debounce(async (value) => {
 								toolbarItem.linkAttr.type = ItemType.File;
 								const file = this.app.vault.getAbstractFileByPath(value);
 								if (!(file instanceof TFile) && !(file instanceof TFolder)) {
-									this.setFieldError(cb.inputEl.parentElement, "This file or folder does not exist.");
+									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-file-error-does-not-exist'));
 								}
 								else {
 									toolbarItem.link = normalizePath(value);
@@ -885,7 +885,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
 						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-						cb.setPlaceholder("Toolbar")
+						cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
 								let groupToolbar = this.plugin.settingsManager.getToolbarByName(name);
@@ -899,13 +899,13 @@ export default class ToolbarSettingsModal extends Modal {
 									this.renderPreview(toolbarItem);
 								}
 								else {
-									this.setFieldError(cb.inputEl.parentElement, "Toolbar does not exist");
+									this.setFieldError(cb.inputEl.parentElement, (t('setting.item.option-item-group-error-does-not-exist')));
 								}
 								// update help text with toolbar preview or default if none selected
 								let groupPreviewFr = groupToolbar 
 									? createToolbarPreviewFr(groupToolbar, undefined, true) 
 									: learnMoreFr(
-										"Select a toolbar to insert into this one.",
+										t('setting.item.option-item-group-help'),
 										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 250));
@@ -917,7 +917,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
 						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-						cb.setPlaceholder("Toolbar")
+						cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
 								// TODO? return an ID from the suggester vs. the name
@@ -932,13 +932,13 @@ export default class ToolbarSettingsModal extends Modal {
 									this.renderPreview(toolbarItem);
 								}
 								else {
-									this.setFieldError(cb.inputEl.parentElement, "Toolbar does not exist");
+									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-item-menu-error-does-not-exist'));
 								}
 								// update help text with toolbar preview or default if none selected
 								let menuPreviewFr = menuToolbar 
 									? createToolbarPreviewFr(menuToolbar, undefined, true)
 									: learnMoreFr(
-										"Select a toolbar to open as a menu.",
+										t('setting.item.option-item-menu-help'),
 										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 250));
@@ -949,7 +949,7 @@ export default class ToolbarSettingsModal extends Modal {
 				const uriSetting = new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
 					.addText(text => text
-						.setPlaceholder("Website, URI, or note title")
+						.setPlaceholder(t('setting.item.option-uri-placehoder'))
 						.setValue(value)
 						.onChange(
 							debounce(async (value) => {
@@ -987,7 +987,7 @@ export default class ToolbarSettingsModal extends Modal {
 					? fieldHelp.append(createToolbarPreviewFr(menuGroupToolbar, undefined, true))
 					: fieldHelp.append(
 						learnMoreFr(
-							type === ItemType.Group ? "Select a toolbar to insert into this one." : "Select a toolbar to open as a menu.",
+							type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
 							"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
 					);
 				this.getLinkSetting(type, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
@@ -995,7 +995,7 @@ export default class ToolbarSettingsModal extends Modal {
 			case ItemType.Uri:
 				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
 					learnMoreFr(
-						"Tip: Use note properties in URIs.",
+						t('setting.item.option-uri-help'),
 						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
 				);
 				break;
@@ -1009,14 +1009,14 @@ export default class ToolbarSettingsModal extends Modal {
 	displayPositionSetting(settingsDiv: HTMLElement) {
 
 		new Setting(settingsDiv)
-			.setName('Position')
+			.setName(t('setting.position.name'))
 			.setDesc(learnMoreFr(
-				"Where to position this toolbar.", 
+				t('setting.position.description'), 
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars"))
 			.setHeading();
 
 		new Setting(settingsDiv)
-			.setName('Desktop')
+			.setName(t('setting.option-platform-desktop'))
 			.addDropdown((dropdown) =>
 				dropdown
 					.addOptions(
@@ -1033,10 +1033,10 @@ export default class ToolbarSettingsModal extends Modal {
 				);
 
 		new Setting(settingsDiv)
-			.setName('Mobile')
+			.setName(t('setting.option-platform-mobile'))
 			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden' ? 
 				learnMoreFr(
-					"Tip: Access toolbars from the navigation bar.",
+					t('setting.position.option-mobile-help'),
 					"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bar")
 				: ''
 			)
@@ -1065,9 +1065,9 @@ export default class ToolbarSettingsModal extends Modal {
 	displayStyleSetting(settingsDiv: HTMLElement) {
 
 		new Setting(settingsDiv)
-			.setName("Styles")
+			.setName(t('setting.styles.name'))
 			.setDesc(learnMoreFr(
-				"List of styles to apply to the toolbar.",
+				t('setting.styles.description'),
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars"
 			))
 			.setHeading();

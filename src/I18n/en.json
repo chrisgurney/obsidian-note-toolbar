@@ -4,6 +4,8 @@
         "button-drag-tooltip": "Drag to rearrange",
         "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
+        "option-platform-desktop": "Desktop",
+        "option-platform-mobile": "Mobile",
         "user-guide": "User\u00A0Guide",
         "display-rules": {
             "name": "Display rules",
@@ -21,20 +23,31 @@
             "error-folder-already-mapped": "This folder already has a toolbar associated with it."
         },
         "item": {
+            "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
-            "placeholder-label": "Label (optional, if icon set)",
-            "placeholder-tooltip": "Tooltip (optional)",
-            "button-duplicate-tooltip": "Duplicate this item"
+            "option-command-placeholder": "Search for command",
+            "option-file-placeholder": "Search for file or folder",
+            "option-file-error-does-not-exist": "This file or folder does not exist.",
+            "option-item-group-placeholder": "Toolbar",
+            "option-item-group-help": "Select a toolbar to insert into this one.",
+            "option-item-group-error-does-not-exist": "Toolbar does not exist",
+            "option-item-menu-placeholder": "Toolbar",
+            "option-item-menu-help": "Select a toolbar to open as a menu.",
+            "option-item-menu-error-does-not-exist": "Toolbar does not exist",            
+            "option-label-placeholder": "Label (optional, if icon set)",
+            "option-tooltip-placeholder": "Tooltip (optional)",
+            "option-uri-placehoder": "Website, URI, or note title",
+            "option-uri-help": "Tip: Use note properties in URIs."
         },
         "items": {
             "name": "Items",
             "name-with-count": "Items ({{count}})",
             "description": "Add items to the toolbar, in order.",
             "label-empty-no-items": "No toolbar items.",
-            "tooltip-collapse-items": "Collapse all items",
-            "tooltip-expand-items": "Expand all items",
             "button-add-break-tooltip": "Add a line break to the toolbar",
             "button-add-separator-tooltip": "Add a separator to the toolbar",
+            "button-collapse-items-tooltip": "Collapse all items",
+            "button-expand-items-tooltip": "Expand all items",
             "button-new-item": "+ Add toolbar item",
             "button-new-item-tooltip": "Add a new item to the toolbar"
         },
@@ -54,6 +67,15 @@
                 "name": "Show 'Edit toolbar' link in toolbar menus",
                 "description": "Adds an item to access the toolbar's settings in toolbar menus."
             }
+        },
+        "position": {
+            "name": "Position",
+            "description": "Where to position this toolbar.",
+            "option-mobile-help": "Tip: Access toolbars from the navigation bar."
+        },
+        "styles": {
+            "name": "Styles",
+            "description": "List of styles to apply to the toolbar."
         },
         "toolbars": {
             "name": "Toolbars",
