@@ -128,15 +128,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarListSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.toolbars.tooltip-collapse-tbars'))
+					.setTooltip(t('setting.toolbars.button-collapse-tbars-tooltip'))
 					.onClick(async () => {
 						let itemsContainer = containerEl.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
 							this.itemListOpen = !this.itemListOpen;
 							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
-							this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name') + " (" + this.plugin.settings.toolbars.length + ")");
-							cb.setTooltip(this.itemListOpen ? t('setting.toolbars.tooltip-collapse-tbars') : t('setting.toolbars.tooltip-expand-tbars'));
+							this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
+							cb.setTooltip(this.itemListOpen ? t('setting.toolbars.button-collapse-tbars-tooltip') : t('setting.toolbars.button-expand-tbars-tooltip'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
@@ -171,7 +171,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.addButton((button: ButtonComponent) => {
 							button
 								.setIcon('copy-plus')
-								.setTooltip(t('setting.toolbars.tooltip-duplicate-tbar'))
+								.setTooltip(t('setting.toolbars.button-duplicate-tbar-tooltip'))
 								.onClick(() => {
 									this.plugin.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
 										this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
@@ -180,7 +180,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						})
 						.addButton((button: ButtonComponent) => {
 							button
-								.setTooltip(t('setting.toolbars.tooltip-edit-tbar'))
+								.setTooltip(t('setting.toolbars.button-edit-tbar-tooltip'))
 								.setButtonText(t('setting.toolbars.button-edit-tbar'))
 								.setCta()
 								.onClick(() => {
@@ -213,7 +213,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
-					.setTooltip(t('setting.toolbars.tooltip-new-tbar'))
+					.setTooltip(t('setting.toolbars.button-new-tbar-tooltip'))
 					.setButtonText(t('setting.toolbars.button-new-tbar'))
 					.setCta()
 					.onClick(async () => {

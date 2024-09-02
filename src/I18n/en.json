@@ -20,6 +20,12 @@
             "button-new-mapping-tooltip": "Add a new mapping",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it."
         },
+        "item": {
+            "button-icon-tooltip": "Select icon (optional)",
+            "placeholder-label": "Label (optional, if icon set)",
+            "placeholder-tooltip": "Tooltip (optional)",
+            "button-duplicate-tooltip": "Duplicate this item"
+        },
         "items": {
             "name": "Items",
             "name-with-count": "Items ({{count}})",
@@ -51,16 +57,17 @@
         },
         "toolbars": {
             "name": "Toolbars",
+            "name-with-count": "Toolbars ({{count}})",
             "description": "Define the toolbars you want to add to your notes.",
+            "button-collapse-tbars-tooltip": "Collapse all toolbars",
+            "button-duplicate-tbar-tooltip": "Duplicate this toolbar",
             "button-edit-tbar": "Edit",
+            "button-expand-tbars-tooltip": "Expand all toolbars",
+            "button-edit-tbar-tooltip": "Update this toolbar",
             "button-new-tbar": "+ New toolbar",
+            "button-new-tbar-tooltip": "Add a new toolbar",
             "label-empty-create-tbar": "Click the button to create a toolbar.",
-            "label-tbar-name-not-set": "⚠️ Toolbar name not set",
-            "tooltip-collapse-tbars": "Collapse all toolbars",
-            "tooltip-duplicate-tbar": "Duplicate this toolbar",
-            "tooltip-edit-tbar": "Update this toolbar",
-            "tooltip-expand-tbars": "Expand all toolbars",
-            "tooltip-new-tbar": "Add a new toolbar"
+            "label-tbar-name-not-set": "⚠️ Toolbar name not set"
         }
     }
 }

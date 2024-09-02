@@ -445,7 +445,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(itemHandleDiv)
 			.addExtraButton((cb) => {
 				cb.setIcon('grip-horizontal')
-					.setTooltip("Drag to rearrange")
+					.setTooltip(t('setting.button-drag-tooltip'))
 					.extraSettingsEl.addClass('sortable-handle');
 				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				cb.extraSettingsEl.tabIndex = 0;
@@ -525,7 +525,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setClass("note-toolbar-setting-item-icon")
 				.addExtraButton((cb) => {
 					cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
-						.setTooltip("Select icon (optional)")
+						.setTooltip(t('setting.item.button-icon-tooltip'))
 						.onClick(async () => {
 							let itemRow = this.getItemRowEl(toolbarItem.uuid);
 							const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
@@ -550,7 +550,7 @@ export default class ToolbarSettingsModal extends Modal {
 			let labelField = new Setting(textFieldsContainer)
 				.setClass("note-toolbar-setting-item-field")
 				.addText(text => text
-					.setPlaceholder('Label (optional, if icon set)')
+					.setPlaceholder(t('setting.item.placeholder-label'))
 					.setValue(toolbarItem.label)
 					.onChange(
 						debounce(async (value) => {
@@ -566,7 +566,7 @@ export default class ToolbarSettingsModal extends Modal {
 			let tooltipField = new Setting(textFieldsContainer)
 				.setClass("note-toolbar-setting-item-field")
 				.addText(text => text
-					.setPlaceholder('Tooltip (optional)')
+					.setPlaceholder(t('setting.item.placeholder-tooltip'))
 					.setValue(toolbarItem.tooltip)
 					.onChange(
 						debounce(async (value) => {
@@ -651,7 +651,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.addButton((button: ButtonComponent) => {
 				button
 					.setIcon('copy-plus')
-					.setTooltip("Duplicate this item")
+					.setTooltip(t('setting.item.button-duplicate-tooltip'))
 					.onClick(() => {
 						const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
 						this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
