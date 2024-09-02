@@ -1514,6 +1514,10 @@ input[type="text"].note-toolbar-setting-error {
     color: var(--text-muted);
 }
 
+.note-toolbar-item-suggester-type {
+    opacity: 0.4;
+}
+
 .note-toolbar-item-suggestion {
     align-items: center;
     display: flex;

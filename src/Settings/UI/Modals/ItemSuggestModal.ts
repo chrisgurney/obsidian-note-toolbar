@@ -1,4 +1,4 @@
-import { SuggestModal, TFile, getIcon, setIcon } from "obsidian";
+import { SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { debugLog, hasVars, replaceVars } from "Utils/Utils";
 import { ItemType, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
@@ -97,13 +97,33 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         var itemName = item.label || item.tooltip;
         itemNameEl.addClass("note-toolbar-item-suggester-name");
         let itemLabel = itemNameEl.createSpan();
+
+        let itemMeta = itemNameEl.createSpan();
         // replace variables in labels (or tooltip, if no label set)
         let title = hasVars(itemName) ? replaceVars(this.app, itemName, this.activeFile, false) : itemName;
-        if (hasVars(itemName)) {
-            let itemVar = itemNameEl.createSpan();
-            itemVar.setText(itemName);
-            itemVar.addClass("note-toolbar-item-suggester-var");
+
+        itemMeta.addClass("note-toolbar-item-suggester-type");
+        switch (item.linkAttr.type) {
+            case ItemType.Command:
+                // setIcon(itemType, 'terminal');
+                setTooltip(itemMeta, 'Command');
+                break;
+            case ItemType.File:
+                setIcon(itemMeta, 'file');
+                setTooltip(itemMeta, 'File');
+                break;
+            case ItemType.Uri:
+                setIcon(itemMeta, 'globe');
+                setTooltip(itemMeta, 'URI');
+                break;
         }
+        
+        if (hasVars(itemName)) {
+            // let itemVar = itemNameEl.createSpan();
+            itemMeta.setText(itemName);
+            itemMeta.addClass("note-toolbar-item-suggester-var");
+        }
+
         itemLabel.setText(title);
     }
 
