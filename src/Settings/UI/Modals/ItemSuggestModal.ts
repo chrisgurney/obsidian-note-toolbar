@@ -56,14 +56,13 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let uniqueItemSuggestions = Array.from(
             new Set(
                 itemSuggestions.map(item => 
-                    `${(item.label || item.tooltip).toLowerCase()}|${item.linkAttr.type}|${item.link}`
+                    `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
                 )
             )
         ).map(uniqueKey => {
-            const [labelOrTooltip, linkAttrType, link] = uniqueKey.split('|');
+            const [labelOrTooltip, link] = uniqueKey.split('|');
             return itemSuggestions.find(item =>
                 (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
-                item.linkAttr.type === linkAttrType &&
                 item.link === link
             )!;
         });
