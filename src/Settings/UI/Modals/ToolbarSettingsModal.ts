@@ -1,7 +1,7 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
-import NoteToolbarPlugin from 'main';
+import NoteToolbarPlugin, { t } from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { DeleteModal } from 'Settings/UI/Modals/DeleteModal';
@@ -137,8 +137,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let toolbarNameDiv = createDiv();
 		new Setting(toolbarNameDiv)
-			.setName("Name")
-			.setDesc("Give this toolbar a unique name.")
+			.setName(t('setting.name.name'))
+			.setDesc(t('setting.name.description'))
 			.addText(cb => cb
 				.setPlaceholder('Name')
 				.setValue(this.toolbar.name)
@@ -146,7 +146,7 @@ export default class ToolbarSettingsModal extends Modal {
 					// check for existing toolbar with this name
 					let existingToolbar = this.plugin.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
-						this.setFieldError(cb.inputEl, "A toolbar already exists with this name.");
+						this.setFieldError(cb.inputEl, t('setting.name.error-toolbar-already-exists'));
 					}
 					else {
 						this.removeFieldError(cb.inputEl);
@@ -175,26 +175,26 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		let itemsSetting = new Setting(itemsContainer)
-			.setName("Items")
+			.setName(t('setting.items.name'))
 			.setClass('note-toolbar-setting-items-header')
 			.setHeading()
 			.setDesc(learnMoreFr(
-				"Add items to the toolbar, in order.",
+				t('setting.items.description'),
 				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"));
 		
 		if (this.toolbar.items.length > 0) {
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip("Collapse all items")
+					.setTooltip(t('setting.items.tooltip-collapse-items'))
 					.onClick(async () => {
 						let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
 							this.itemListOpen = !this.itemListOpen;
 							itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
-							this.itemListOpen ? heading?.setText("Items") : heading?.setText("Items (" + this.toolbar.items.length + ")");
-							cb.setTooltip(this.itemListOpen ? "Collapse all items" : "Expand all items");
+							this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
+							cb.setTooltip(this.itemListOpen ? t('setting.items.tooltip-collapse-items') : t('setting.items.tooltip-expand-items'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
@@ -223,7 +223,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 			// display empty state
 			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr("No toolbar items.") });
+				{ text: emptyMessageFr(t('setting.items.label-empty-no-items')) });
 			emptyMsg.className = "note-toolbar-setting-empty-message";
 			itemsSortableContainer.append(emptyMsg);
 
@@ -286,20 +286,20 @@ export default class ToolbarSettingsModal extends Modal {
 				let icon = getIcon('note-toolbar-separator');
 				btn.extraSettingsEl.empty(); // remove existing gear icon
 				icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
-				btn.setTooltip("Add a separator to the toolbar")
+				btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
 			})
 			.addExtraButton((btn) => {
 				btn.setIcon('lucide-corner-down-left')
-					.setTooltip("Add a line break to the toolbar")
+					.setTooltip(t('setting.items.button-add-break-tooltip'))
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Break));
 			});
 		itemsListButtonContainer.appendChild(formattingButtons);
 
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
-				btn.setTooltip("Add a new item to the toolbar")
-					.setButtonText("+ Add toolbar item")
+				btn.setTooltip(t('setting.items.button-new-item-tooltip'))
+					.setButtonText(t('setting.items.button-new-item'))
 					.setCta()
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Command));
 			});
