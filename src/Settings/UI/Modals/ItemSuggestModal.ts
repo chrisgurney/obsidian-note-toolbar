@@ -1,7 +1,7 @@
 import { SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { debugLog, hasVars, replaceVars } from "Utils/Utils";
-import { ItemType, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
@@ -20,11 +20,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // this.parentEl = parentEl;
         this.plugin = plugin;
         this.activeFile = activeFile;
-        this.setPlaceholder("Search for an item...");
+        this.setPlaceholder(t('setting.item-suggester.placeholder'));
         this.setInstructions([
-            {command: '↑↓', purpose: 'to navigate'},
-            {command: '↵', purpose: 'to use'},
-            {command: 'esc', purpose: 'to dismiss'},
+            {command: '↑↓', purpose: t('setting.item-suggester.instruction-navigate')},
+            {command: '↵', purpose: t('setting.item-suggester.instruction-use')},
+            {command: 'esc', purpose: t('setting.item-suggester.instruction-dismiss')},
         ]);
     }
 
@@ -106,15 +106,15 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         switch (item.linkAttr.type) {
             case ItemType.Command:
                 // setIcon(itemType, 'terminal');
-                setTooltip(itemMeta, 'Command');
+                setTooltip(itemMeta, t('setting.item.option-command'));
                 break;
             case ItemType.File:
                 setIcon(itemMeta, 'file');
-                setTooltip(itemMeta, 'File');
+                setTooltip(itemMeta, t('setting.item.option-file'));
                 break;
             case ItemType.Uri:
                 setIcon(itemMeta, 'globe');
-                setTooltip(itemMeta, 'URI');
+                setTooltip(itemMeta, t('setting.item.option-uri'));
                 break;
         }
         

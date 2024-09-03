@@ -42,7 +42,7 @@
         },
         "icon-suggester": {
             "option-no-icon": "No icon",
-            "placeholder": "Search for an icon",
+            "placeholder": "Search for an icon...",
 			"instruction-navigate": "to navigate",
 			"instruction-use": "to use icon",
 			"instruction-dismiss": "to dismiss"
@@ -77,6 +77,12 @@
             "option-visibility-hidden": "hidden",
             "option-visibility-hidden-platform": "hidden on {{platform}}",
             "option-visibility-visible-platform": "visible on {{platform}}"
+        },
+        "item-suggester": {
+            "placeholder": "Search for an item...",
+			"instruction-navigate": "to navigate",
+			"instruction-use": "to use item",
+			"instruction-dismiss": "to dismiss"
         },
         "items": {
             "name": "Items",
