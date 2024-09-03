@@ -1,14 +1,11 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
-import * as en from 'I18n/en.json';
-
-export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -84,9 +81,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			});
 		}
-
-		// load localized strings
-		i18next.addResourceBundle('en', 'plugin-note-toolbar', en);
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 

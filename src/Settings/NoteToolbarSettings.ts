@@ -1,7 +1,11 @@
 import { getUUID } from "Utils/Utils";
+import * as en from 'I18n/en.json';
 
 /* remember to update when settings structure changes */
 export const SETTINGS_VERSION = 20240727.1;
+
+export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
+i18next.addResourceBundle('en', 'plugin-note-toolbar', en); // load localized strings
 
 export enum ComponentType {
 	Icon = 'icon',
@@ -177,27 +181,27 @@ export interface ToolbarItemLinkAttr {
  ******************************************************************************/
 
 export const LINK_OPTIONS = {
-	[ItemType.Command]: "Command",
-	[ItemType.File]: "File",
-	[ItemType.Group]: "Item Group",
-	[ItemType.Menu]: "Item Menu",
-	[ItemType.Uri]: "URI"
+	[ItemType.Command]: t('setting.item.option-command'),
+	[ItemType.File]: t('setting.item.option-file'),
+	[ItemType.Group]: t('setting.item.option-item-group'),
+	[ItemType.Menu]: t('setting.item.option-item-menu'),
+	[ItemType.Uri]: t('setting.item.option-uri')
 }
 
 export const POSITION_OPTIONS = {
 	desktop: [
-		{ top: "Top (fixed)" },
-		{ props: "Below Properties" },
-		{ fabl: "Floating button: left" },
-		{ fabr: "Floating button: right" },
-		{ hidden: "Hidden (do not display)" },
+		{ top: t('setting.position.option-top') },
+		{ props: t('setting.position.option-props') },
+		{ fabl: t('setting.position.option-fabl') },
+		{ fabr: t('setting.position.option-fabr') },
+		{ hidden: t('setting.position.option-hidden') },
 	],
 	mobile: [
-		{ top: "Top (fixed)" },
-		{ props: "Below Properties" },
-		{ fabl: "Floating button: left" },
-		{ fabr: "Floating button: right" },
-		{ hidden: "Hidden / Navigation bar" },
+		{ top: t('toolbar.menu-position-top') },
+		{ props: t('toolbar.menu-position-props') },
+		{ fabl: t('setting.position.option-fabl') },
+		{ fabr: t('setting.position.option-fabr') },
+		{ hidden: t('setting.position.option-hidden-mobile') },
 	]
 }
 
@@ -205,55 +209,55 @@ export const POSITION_OPTIONS = {
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
 export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
-	{ autohide: "auto-hide*" },
-    { border: "border" },
-	{ button: "button items" },
-    { center: "center items" },
-	{ wide: "editor width*" },
-    { floatl: "float left*" },
-    { floatr: "float right*" },
-    { left: "left align items" },
-    { right: "right align items" },
-	{ between: "space between items" },
-    { even: "space items evenly" },
-    { sticky: "sticky*" },
+	{ autohide: t('setting.styles.option-autohide') },
+    { border: t('setting.styles.option-border') },
+	{ button: t('setting.styles.option-button') },
+    { center: t('setting.styles.option-center') },
+	{ wide: t('setting.styles.option-wide') },
+    { floatl: t('setting.styles.option-floatl') },
+    { floatr: t('setting.styles.option-floatr') },
+    { left: t('setting.styles.option-left') },
+    { right: t('setting.styles.option-right') },
+	{ between: t('setting.styles.option-between') },
+    { even: t('setting.styles.option-even') },
+    { sticky: t('setting.styles.option-sticky') },
 ];
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
-	{ autohide: "Auto-hide does not apply on mobile." },
-	{ floatl: "Float left only works within callouts." },
-	{ floatr: "Float right only works within callouts." },
-	{ sticky: "Sticky does not apply in Reading mode." },
-	{ wide: "Editor width works only if toolbar position is Top (fixed)." },
+	{ autohide: t('setting.styles.option-autohide-disclaimer') },
+	{ floatl: t('setting.styles.option-floatl-disclaimer') },
+	{ floatr: t('setting.styles.option-floatr-disclaimer') },
+	{ sticky: t('setting.styles.option-sticky-disclaimer') },
+	{ wide: t('setting.styles.option-wide-disclaimer') },
 ];
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
 export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
-    { mbrder: "border" },
-    { mnbrder: "no border" },
-	{ mbtn: "button items"},
-    { mctr: "center items" },
-	{ mnwd: "content width*" },
-	{ mnwrp: "don't wrap items*" },
-	{ mwd: "editor width*" },
-    { mfltl: "float left*" },
-    { mfltr: "float right*" },
-    { mnflt: "no float" },
-    { mlft: "left align items" },
-    { mrght: "right align items" },
-	{ mbtwn: "space between items" },
-    { mevn: "space items evenly" },
-    { mstcky: "sticky*" },
-    { mnstcky: "not sticky" },
+    { mbrder: t('setting.styles.option-border') },
+    { mnbrder: t('setting.styles.option-noborder') },
+	{ mbtn: t('setting.styles.option-button') },
+    { mctr: t('setting.styles.option-center') },
+	{ mnwd: t('setting.styles.option-nowide') },
+	{ mnwrp: t('setting.styles.option-nowrap') },
+	{ mwd: t('setting.styles.option-wide') },
+    { mfltl: t('setting.styles.option-floatl') },
+    { mfltr: t('setting.styles.option-floatr') },
+    { mnflt: t('setting.styles.option-nofloat') },
+    { mlft: t('setting.styles.option-left') },
+    { mrght: t('setting.styles.option-right') },
+	{ mbtwn: t('setting.styles.option-between') },
+    { mevn: t('setting.styles.option-even') },
+    { mstcky: t('setting.styles.option-sticky') },
+    { mnstcky: t('setting.styles.option-notsticky') },
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
-	{ mfltl: "Float left only works within callouts." },
-	{ mfltr: "Float right only works within callouts." },
-	{ mnwrp: "Works best if items are not evenly spaced or centered." },
-	{ mstcky: "Sticky does not apply in Reading mode." },
-	{ mnwd: "Content width works only if toolbar position is Top (fixed)." },
-	{ mwd: "Editor width works only if toolbar position is Top (fixed)." },
+	{ mfltl: t('setting.styles.option-floatl-disclaimer') },
+	{ mfltr: t('setting.styles.option-floatr-disclaimer') },
+	{ mnwrp: t('setting.styles.option-nowrap-disclaimer') },
+	{ mstcky: t('setting.styles.option-sticky-disclaimer') },
+	{ mnwd:  t('setting.styles.option-nowide-disclaimer') },
+	{ mwd: t('setting.styles.option-wide-disclaimer') },
 ];

@@ -3,12 +3,11 @@ import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
-import { FolderMapping, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
-import { t } from 'main';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 

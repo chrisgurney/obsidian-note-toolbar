@@ -1,6 +1,5 @@
-import { t } from "main";
 import { getIcon, setIcon } from "obsidian";
-import { ItemType, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 
 /**
