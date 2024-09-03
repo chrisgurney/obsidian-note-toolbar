@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, ToolbarItemSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -557,13 +557,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
 		noteToolbarFabContainer.setAttrs({
 			role: 'group',
-			'aria-label': 'Note Toolbar button',
 			'data-tbar-position': position
 		});
 
 		let noteToolbarFabButton = activeDocument.createElement('button');
 		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
-		noteToolbarFabButton.setAttribute('aria-label', 'Open Note Toolbar');
+		noteToolbarFabButton.setAttribute('aria-label', t('toolbar.button-floating-tooltip'));
 		setIcon(noteToolbarFabButton, this.settings.icon);
 		
 		noteToolbarFabContainer.append(noteToolbarFabButton);
@@ -588,11 +587,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			menu.addSeparator();
 			menu.addItem((item) => {
 				item
-					.setTitle("Edit toolbar: " + toolbar.name + "...")
+					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbar.name }))
 					.setIcon("lucide-pen-box")
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
-						modal.setTitle("Edit Toolbar: " + toolbar.name);
+						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name }));
 						modal.open();
 					});
 			});
@@ -836,7 +835,7 @@ export default class NoteToolbarPlugin extends Plugin {
 								});
 							}
 							else {
-								new Notice(`Toolbar not found: "${value}"`);
+								new Notice(t('notice.error-item-menu-not-found', { toolbar: value }));
 							}
 						}
 						break;
@@ -895,7 +894,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 				}
 				else if (!toolbar) {
-					new Notice(`Check Note Toolbar setting for this menu item. Toolbar not found: "${linkHref}"`);
+					new Notice(t('notice.error-item-menu-not-found', { toolbar: linkHref }));
 				}
 				break;
 			case ItemType.Uri:
@@ -937,7 +936,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
 			}
 			else {
-				new Notice(`Command not found: "${commandId}"`);
+				new Notice(t('notice.error-command-not-found', { command: commandId }));
 			}
 		}
 	}
@@ -954,7 +953,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(tFileOrFolder);
 		}
 		else {
-			new Notice(`Folder not found: "${folder}"`);
+			new Notice(t('notice.error-folder-not-found', { folder: folder }));
 		}
 	}
 	
@@ -983,7 +982,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 				}
 				else {
-					new Notice(`Toolbar not found: "${data.menu}"`);
+					new Notice(t('notice.error-item-menu-not-found', { toolbar: data.menu }));
 				}
 			}
 		}
@@ -991,7 +990,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let toolbarSettings;
 			if (data.toolbarsettings.length > 0) {
 				toolbarSettings = this.settingsManager.getToolbarByName(data.toolbarsettings);
-				!toolbarSettings ? new Notice(`Toolbar not found: ${data.toolbarsettings}`) : undefined;
+				!toolbarSettings ? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })) : undefined;
 			}
 			else {
 				let toolbarEl = this.getToolbarEl(); // if not given, figure out what toolbar is on screen
@@ -999,7 +998,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 			if (toolbarSettings) {
 				const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
-				modal.setTitle("Edit Toolbar: " + toolbarSettings.name);
+				modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
 				modal.open();
 			}
 		}
@@ -1159,11 +1158,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarSettings) {
 			contextMenu.addItem((item) => {
 				item
-					.setTitle("Edit toolbar: " + toolbarSettings?.name + "...")
+					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name }))
 					.setIcon("lucide-pen-box")
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-						modal.setTitle("Edit Toolbar: " + toolbarSettings?.name);
+						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name }));
 						modal.open();
 					});
 			  });
@@ -1171,7 +1170,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		contextMenu.addItem((item) => {
 			item
-			  .setTitle("Note Toolbar settings...")
+			  .setTitle(t('toolbar.menu-toolbar-settings'))
 			  .setIcon("lucide-wrench")
 			  .onClick((menuEvent) => {
 				  this.commands.openSettings();
@@ -1185,7 +1184,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				contextMenu.addSeparator();
 				contextMenu.addItem((item) => {
 					item
-						.setTitle(currentPosition === 'props' ? "Set position: Top (fixed)" : "Set position: Below Properties")
+						.setTitle(currentPosition === 'props' ? t('toolbar.menu-position-top') : t('toolbar.menu-position-props'))
 						.setIcon(currentPosition === 'props' ? 'arrow-up-to-line' : 'arrow-down-narrow-wide')
 						.onClick((menuEvent) => {
 							let newPosition: PositionType = currentPosition === PositionType.Props ? PositionType.Top : PositionType.Props;

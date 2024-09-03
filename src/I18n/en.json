@@ -1,4 +1,10 @@
 {
+    "notice": {
+        "error-command-not-found": "Check Note Toolbar setting for this command. Command not found: {{command}}",
+        "error-folder-not-found": "Check Note Toolbar setting for this folder. Folder not found: {{folder}}",
+        "error-item-menu-not-found": "Check Note Toolbar setting for this menu item. Toolbar not found: {{toolbar}}",
+        "error-toolbar-not-found": "Check Note Toolbar setting for this toolbar. Toolbar not found: {{folder}}"
+    },
     "setting": {
         "button-delete-tooltip": "Delete",
         "button-drag-tooltip": "Drag to rearrange",
@@ -6,6 +12,7 @@
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
+        "title-edit-toolbar": "Edit Toolbar: {{toolbar}}",
         "user-guide": "User\u00A0Guide",
         "delete-toolbar": {
             "name": "Delete this toolbar",
@@ -64,7 +71,7 @@
             "button-new-item": "+ Add toolbar item",
             "button-new-item-tooltip": "Add a new item to the toolbar",
             "option-item-empty-label": "No label set",
-            "option-edit-item-group-tooltip": "Edit item group ({{toolbar}})",
+            "option-edit-item-group-tooltip": "Edit item group: {{toolbar}}",
             "option-edit-item-group-tooltip_none": "Edit item group",
             "option-edit-item-tooltip": "Edit toolbar item",
             "option-edit-item-type-tooltip": "Edit {{itemType}}"
@@ -123,5 +130,12 @@
             "description": "This toolbar is used in {{mappingCount}} mapping(s) and {{itemCount}} toolbar item(s).",
             "description-search": "Search for property usage"
         }
+    },
+    "toolbar": {
+        "button-floating-tooltip": "Open Note Toolbar",
+        "menu-edit-toolbar": "Edit Toolbar: {{toolbar}}...",
+        "menu-position-props": "Set position: Below Properties",
+        "menu-position-top": "Set position: Top (fixed)",
+        "menu-toolbar-settings": "Note Toolbar settings..."
     }
 }
