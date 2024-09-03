@@ -1,3 +1,4 @@
+import { t } from "Settings/NoteToolbarSettings";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { debugLog } from "Utils/Utils";
@@ -82,7 +83,7 @@ export class CommandsManager {
         let toolbarSettings = toolbarEl ? this.plugin.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
         if (toolbarSettings) {
             const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, null, toolbarSettings);
-            modal.setTitle("Edit Toolbar: " + toolbarSettings.name);
+            modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
             modal.open();
         }
     }

@@ -1,7 +1,7 @@
 import { Modal } from "obsidian";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import NoteToolbarPlugin from "main";
-import { ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export class DeleteModal extends Modal {
 
@@ -18,13 +18,13 @@ export class DeleteModal extends Modal {
     }
 
     public onOpen() {
-        this.setTitle("Delete toolbar: " + this.toolbar.name);
-        this.contentEl.createEl("p", {text: "Are you sure you want to delete this toolbar?"});
-        let delete_button = this.contentEl.createEl('button', {text: "Delete"});
+        this.setTitle(t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }));
+        this.contentEl.createEl("p", {text: t('setting.delete-toolbar.label-delete-confirm') });
+        let delete_button = this.contentEl.createEl('button', {text: t('setting.delete-toolbar.button-delete-confirm')});
         delete_button.addClass("mod-warning");
         delete_button.onclick = async () => this.delete();
         this.contentEl.createEl('span').setText('\u00A0\u00A0');
-        let cancel_button = this.contentEl.createEl('button', {text: "Cancel"});
+        let cancel_button = this.contentEl.createEl('button', {text: t('setting.button-cancel')});
         cancel_button.onclick = async () => this.close();
     }
 

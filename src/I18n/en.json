@@ -6,6 +6,7 @@
         "error-toolbar-not-found": "Check Note Toolbar setting for this toolbar. Toolbar not found: {{folder}}"
     },
     "setting": {
+        "button-cancel": "Cancel",
         "button-delete-tooltip": "Delete",
         "button-drag-tooltip": "Drag to rearrange",
         "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
@@ -18,8 +19,11 @@
         "delete-toolbar": {
             "name": "Delete this toolbar",
             "description": "This action cannot be undone.",
+            "title": "Delete toolbar: {{toolbar}}",
             "button-delete": "Delete...",
-            "button-delete-tooltip": "Delete this toolbar"
+            "button-delete-confirm": "Delete",
+            "button-delete-tooltip": "Delete this toolbar",
+            "label-delete-confirm": "Are you sure you want to delete this toolbar?"
         },
         "display-rules": {
             "name": "Display rules",
@@ -35,6 +39,13 @@
             "button-new-mapping": "+ New mapping",
             "button-new-mapping-tooltip": "Add a new mapping",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it."
+        },
+        "icon-suggester": {
+            "option-no-icon": "No icon",
+            "placeholder": "Search for an icon",
+			"instruction-navigate": "to navigate",
+			"instruction-use": "to use icon",
+			"instruction-dismiss": "to dismiss"
         },
         "item": {
             "button-duplicate-tooltip": "Duplicate this item",
