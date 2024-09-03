@@ -178,9 +178,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName(t('setting.items.name'))
 			.setClass('note-toolbar-setting-items-header')
 			.setHeading()
-			.setDesc(learnMoreFr(
-				t('setting.items.description'),
-				"Creating-toolbar-items"));
+			.setDesc(learnMoreFr(t('setting.items.description'), 'Creating-toolbar-items'));
 		
 		if (this.toolbar.items.length > 0) {
 			itemsSetting
@@ -904,9 +902,7 @@ export default class ToolbarSettingsModal extends Modal {
 								// update help text with toolbar preview or default if none selected
 								let groupPreviewFr = groupToolbar 
 									? createToolbarPreviewFr(groupToolbar, undefined, true) 
-									: learnMoreFr(
-										t('setting.item.option-item-group-help'),
-										"Creating-toolbar-items");
+									: learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 250));
 					});
@@ -937,9 +933,7 @@ export default class ToolbarSettingsModal extends Modal {
 								// update help text with toolbar preview or default if none selected
 								let menuPreviewFr = menuToolbar 
 									? createToolbarPreviewFr(menuToolbar, undefined, true)
-									: learnMoreFr(
-										t('setting.item.option-item-menu-help'),
-										"Creating-toolbar-items");
+									: learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 250));
 					});
@@ -988,16 +982,13 @@ export default class ToolbarSettingsModal extends Modal {
 					: fieldHelp.append(
 						learnMoreFr(
 							type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
-							"Creating-toolbar-items")
+							'Creating-toolbar-items')
 					);
 				this.getLinkSetting(type, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
 				break;
 			case ItemType.Uri:
 				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
-					learnMoreFr(
-						t('setting.item.option-uri-help'),
-						"Variables")
-				);
+					learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));
 				break;
 		}
 	}
@@ -1010,9 +1001,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName(t('setting.position.name'))
-			.setDesc(learnMoreFr(
-				t('setting.position.description'), 
-				"Positioning-toolbars"))
+			.setDesc(learnMoreFr(t('setting.position.description'), 'Positioning-toolbars'))
 			.setHeading();
 
 		new Setting(settingsDiv)
@@ -1034,10 +1023,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName(t('setting.option-platform-mobile'))
-			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden' ? 
-				learnMoreFr(
-					t('setting.position.option-mobile-help'),
-					"Navigation-bar")
+			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden'
+				? learnMoreFr(t('setting.position.option-mobile-help'), 'Navigation-bar')
 				: ''
 			)
 			.addDropdown((dropdown) =>
@@ -1066,10 +1053,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(settingsDiv)
 			.setName(t('setting.styles.name'))
-			.setDesc(learnMoreFr(
-				t('setting.styles.description'),
-				"Styling-toolbars"
-			))
+			.setDesc(learnMoreFr(t('setting.styles.description'), 'Styling-toolbars'))
 			.setHeading();
 
 		//
@@ -1210,10 +1194,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 
 		new Setting(settingsDiv)
-			.setDesc(learnMoreFr(
-				t('setting.styles.help'), 
-				"Style-Settings-plugin-support")
-			);
+			.setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
 
 	}
 

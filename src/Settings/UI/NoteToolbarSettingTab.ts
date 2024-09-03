@@ -68,9 +68,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// display rules
 		new Setting(containerEl)
 			.setName(t('setting.display-rules.name'))
-			.setDesc(learnMoreFr(
-				t('setting.display-rules.description'), 
-				"Defining-where-to-show-toolbars"))
+			.setDesc(learnMoreFr(t('setting.display-rules.description'), 'Defining-where-to-show-toolbars'))
 			.setHeading();
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
