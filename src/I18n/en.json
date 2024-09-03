@@ -93,7 +93,9 @@
             "option-visibility-component-visible-platform": "{{component}} visible on {{platform}}",
             "option-visibility-hidden": "hidden",
             "option-visibility-hidden-platform": "hidden on {{platform}}",
-            "option-visibility-visible-platform": "visible on {{platform}}"
+            "option-visibility-visible-platform": "visible on {{platform}}",
+            "option-visibility-platform-desktop": "desktop",
+            "option-visibility-platform-mobile": "mobile"
         },
         "item-suggester": {
             "placeholder": "Search for an item...",

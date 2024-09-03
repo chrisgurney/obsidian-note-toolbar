@@ -679,7 +679,7 @@ export default class ToolbarSettingsModal extends Modal {
 		const visButtons = new Setting(visibilityControlsContainer)
 			.setClass("note-toolbar-setting-item-visibility")
 			.addButton((cb) => {
-				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
+				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'));
 				setIcon(cb.buttonEl, 'monitor');
 				this.updateItemVisButton(cb, state, tooltip);
 				cb.setTooltip(tooltip)
@@ -706,20 +706,20 @@ export default class ToolbarSettingsModal extends Modal {
 								isComponentVisible.icon = true;
 								isComponentVisible.label = true;						
 							}
-							let [state, tooltip] = this.getPlatformStateLabel(platform, 'desktop');
+							let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-desktop'));
 							this.updateItemVisButton(cb, state, tooltip);
 
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
 						}
 						else {
-							let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', cb);
+							let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'), cb);
 							visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));	
 						}
 					});
 			})
 			.addButton((cb) => {
-				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
+				let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, t('setting.item.option-visibility-platform-mobile'));
 				setIcon(cb.buttonEl, 'tablet-smartphone');
 				this.updateItemVisButton(cb, state, tooltip);
 				cb.setTooltip(tooltip)
@@ -746,14 +746,14 @@ export default class ToolbarSettingsModal extends Modal {
 								isComponentVisible.icon = true;
 								isComponentVisible.label = true;						
 							}
-							let [state, tooltip] = this.getPlatformStateLabel(platform, 'mobile');
+							let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-mobile'));
 							this.updateItemVisButton(cb, state, tooltip);
 
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
 						}
 						else {
-							let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
+							let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, t('setting.item.option-visibility-platform-mobile'), cb);
 							visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
 						}
 					});
