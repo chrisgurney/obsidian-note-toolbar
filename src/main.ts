@@ -66,7 +66,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// adds the ribbon icon, on mobile only (seems redundant to add on desktop as well)
 		if (Platform.isMobile) {
-			this.addRibbonIcon(this.settings.icon, 'Note Toolbar', (event) => {
+			this.addRibbonIcon(this.settings.icon, t('plugin.name'), (event) => {
 				let activeFile = this.app.workspace.getActiveFile();
 				if (activeFile) {
 					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;

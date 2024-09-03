@@ -15,6 +15,9 @@
         "error-item-menu-not-found": "Check Note Toolbar setting for this menu item. Toolbar not found: {{toolbar}}",
         "error-toolbar-not-found": "Check Note Toolbar setting for this toolbar. Toolbar not found: {{folder}}"
     },
+    "plugin": {
+        "name": "Note Toolbar"
+    },
     "setting": {
         "button-cancel": "Cancel",
         "button-delete-tooltip": "Delete",
