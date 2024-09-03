@@ -13,6 +13,7 @@
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
         "title-edit-toolbar": "Edit Toolbar: {{toolbar}}",
+        "learn-more": "Learn\u00A0more",
         "user-guide": "User\u00A0Guide",
         "delete-toolbar": {
             "name": "Delete this toolbar",
@@ -38,6 +39,8 @@
         "item": {
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
+            "label-preview-edit": "Edit toolbar: {{toolbar}}",
+            "label-preview-empty-no-items": "No items. Edit this toolbar to add items.",
             "option-command-placeholder": "Search for command",
             "option-component-icon": "icon",
             "option-component-label": "label",
@@ -133,7 +136,7 @@
     },
     "toolbar": {
         "button-floating-tooltip": "Open Note Toolbar",
-        "menu-edit-toolbar": "Edit Toolbar: {{toolbar}}...",
+        "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
         "menu-position-props": "Set position: Below Properties",
         "menu-position-top": "Set position: Top (fixed)",
         "menu-toolbar-settings": "Note Toolbar settings..."

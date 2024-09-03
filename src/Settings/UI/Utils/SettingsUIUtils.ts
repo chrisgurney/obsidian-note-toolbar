@@ -1,3 +1,4 @@
+import { t } from "main";
 import { getIcon, setIcon } from "obsidian";
 import { ItemType, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
@@ -73,7 +74,7 @@ export function createToolbarPreviewFr(
 			});
 	}
 	else {
-		itemsFr = emptyMessageFr("No items. Edit this toolbar to add items.");
+		itemsFr = emptyMessageFr(t('setting.item.label-preview-empty-no-items'));
 	}
 	previewContainer.appendChild(itemsFr);
 
@@ -82,7 +83,7 @@ export function createToolbarPreviewFr(
 		toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
 		let toolbarLink = createEl('a');
 		toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
-		toolbarLink.setText('Edit toolbar: ' + toolbar.name);
+		toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name }));
 		toolbarLinkContainer.appendChild(toolbarLink);
 		toolbarFr.appendChild(toolbarLinkContainer);
 	}
@@ -114,7 +115,7 @@ export function learnMoreFr(message: string, url: string): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
-		messageFr.createEl('a', { href: url, text: "Learn\u00A0more" })
+		messageFr.createEl('a', { href: url, text: t('setting.learn-more') })
 	);
 	return messageFr;
 }
