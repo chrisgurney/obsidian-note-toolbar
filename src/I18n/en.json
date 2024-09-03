@@ -1,4 +1,14 @@
 {
+    "command": {
+        "command-focus": "Focus",
+        "command-quick-tools": "Open quick tools",
+        "command-settings": "Open plugin settings",
+        "command-toolbar-settings": "Open toolbar settings",
+        "command-show-properties": "Show Properties",
+        "command-hide-properties": "Hide Properties",
+        "command-fold-properties": "Fold Properties",
+        "command-toggle-properties": "Toggle Properties"
+    },
     "notice": {
         "error-command-not-found": "Check Note Toolbar setting for this command. Command not found: {{command}}",
         "error-folder-not-found": "Check Note Toolbar setting for this folder. Folder not found: {{folder}}",
@@ -31,6 +41,8 @@
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings. Set to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property",
+            "option-folder-all": "all folders",
+            "option-folder-root": "root folder only",
             "option-folder-mappings": "Folder mappings",
             "option-folder-mappings-description": "Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.",
             "option-folder-mappings-empty": "Click the button to create a mapping.",
@@ -177,6 +189,7 @@
             "button-edit-tbar-tooltip": "Update this toolbar",
             "button-new-tbar": "+ New toolbar",
             "button-new-tbar-tooltip": "Add a new toolbar",
+            "duplicate-file-suffix": "copy",
             "label-empty-create-tbar": "Click the button to create a toolbar.",
             "label-tbar-name-not-set": "⚠️ Toolbar name not set"
         },

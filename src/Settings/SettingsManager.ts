@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
 import { Platform } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 
@@ -153,7 +153,7 @@ export class SettingsManager {
 		const existingNames = this.plugin.settings.toolbars.map(toolbar => toolbar.name);
 	
 		while (existingNames.includes(uniqueName)) {
-			uniqueName = `${name} copy${counter > 1 ? ` ${counter}` : ''}`;
+			uniqueName = `${name} ${t('setting.toolbars.duplicate-file-suffix')}${counter > 1 ? ` ${counter}` : ''}`;
 			counter++;
 		}
 	
