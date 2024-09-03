@@ -3,7 +3,7 @@ import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
-import { FolderMapping, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, RELEASES_URL, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
@@ -70,7 +70,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-rules.name'))
 			.setDesc(learnMoreFr(
 				t('setting.display-rules.description'), 
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars"))
+				"Defining-where-to-show-toolbars"))
 			.setHeading();
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
@@ -107,15 +107,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		toolbarsDesc.append(
 			t('setting.toolbars.description'),
 			" ",
-			toolbarsDesc.createEl("a", {
-				href: "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
-				text: t('setting.user-guide'),
-			}),
+			toolbarsDesc.createEl("a", { href: USER_GUIDE_URL,	text: t('setting.user-guide') }),
 			" • ",
-			toolbarsDesc.createEl("a", {
-				href: "https://github.com/chrisgurney/obsidian-note-toolbar/releases",
-				text: "v" + this.plugin.manifest.version,
-			})
+			toolbarsDesc.createEl("a", { href: RELEASES_URL, text: "v" + this.plugin.manifest.version })
 		);
 
 		let toolbarListSetting = new Setting(itemsContainer)

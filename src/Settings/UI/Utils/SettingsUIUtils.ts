@@ -1,5 +1,5 @@
 import { getIcon, setIcon } from "obsidian";
-import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 
 /**
@@ -107,14 +107,14 @@ export function emptyMessageFr(message: string): DocumentFragment {
 /**
  * Creates a text fragment with help text and a Learn More link.
  * @param message Message to return as a fragment.
- * @param url Link to documentation.
+ * @param page Documentation page (i.e., URL after `.../wiki/`).
  * @returns DocumentFragment containing the message and styling.
  */
-export function learnMoreFr(message: string, url: string): DocumentFragment {
+export function learnMoreFr(message: string, page: string): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
-		messageFr.createEl('a', { href: url, text: t('setting.learn-more') })
+		messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: t('setting.learn-more') })
 	);
 	return messageFr;
 }

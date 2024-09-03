@@ -4,6 +4,12 @@ import * as en from 'I18n/en.json';
 /* remember to update when settings structure changes */
 export const SETTINGS_VERSION = 20240727.1;
 
+export const USER_GUIDE_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
+export const RELEASES_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
+
+/**
+ * Setup translations
+ */
 export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 i18next.addResourceBundle('en', 'plugin-note-toolbar', en); // load localized strings
 

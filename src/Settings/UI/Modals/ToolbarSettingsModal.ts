@@ -180,7 +180,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setHeading()
 			.setDesc(learnMoreFr(
 				t('setting.items.description'),
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items"));
+				"Creating-toolbar-items"));
 		
 		if (this.toolbar.items.length > 0) {
 			itemsSetting
@@ -906,7 +906,7 @@ export default class ToolbarSettingsModal extends Modal {
 									? createToolbarPreviewFr(groupToolbar, undefined, true) 
 									: learnMoreFr(
 										t('setting.item.option-item-group-help'),
-										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
+										"Creating-toolbar-items");
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 250));
 					});
@@ -939,7 +939,7 @@ export default class ToolbarSettingsModal extends Modal {
 									? createToolbarPreviewFr(menuToolbar, undefined, true)
 									: learnMoreFr(
 										t('setting.item.option-item-menu-help'),
-										"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items");
+										"Creating-toolbar-items");
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 250));
 					});
@@ -988,7 +988,7 @@ export default class ToolbarSettingsModal extends Modal {
 					: fieldHelp.append(
 						learnMoreFr(
 							type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
-							"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items")
+							"Creating-toolbar-items")
 					);
 				this.getLinkSetting(type, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
 				break;
@@ -996,7 +996,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
 					learnMoreFr(
 						t('setting.item.option-uri-help'),
-						"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables")
+						"Variables")
 				);
 				break;
 		}
@@ -1012,7 +1012,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName(t('setting.position.name'))
 			.setDesc(learnMoreFr(
 				t('setting.position.description'), 
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars"))
+				"Positioning-toolbars"))
 			.setHeading();
 
 		new Setting(settingsDiv)
@@ -1037,7 +1037,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden' ? 
 				learnMoreFr(
 					t('setting.position.option-mobile-help'),
-					"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bar")
+					"Navigation-bar")
 				: ''
 			)
 			.addDropdown((dropdown) =>
@@ -1068,7 +1068,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName(t('setting.styles.name'))
 			.setDesc(learnMoreFr(
 				t('setting.styles.description'),
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars"
+				"Styling-toolbars"
 			))
 			.setHeading();
 
@@ -1212,7 +1212,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(settingsDiv)
 			.setDesc(learnMoreFr(
 				t('setting.styles.help'), 
-				"https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support")
+				"Style-Settings-plugin-support")
 			);
 
 	}
