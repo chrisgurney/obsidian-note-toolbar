@@ -38,14 +38,14 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.commands = new CommandsManager(this);
 
-		this.addCommand({ id: 'focus', name: t('command.command-focus'), callback: async () => this.commands.focus() });
-		this.addCommand({ id: 'open-quick-tools', name: t('command.command-quick-tools'), callback: async () => this.commands.openItemSuggester() });
-		this.addCommand({ id: 'open-settings', name: t('command.command-settings'), callback: async () => this.commands.openSettings() });
-		this.addCommand({ id: 'open-toolbar-settings', name: t('command.command-toolbar-settings'), callback: async () => this.commands.openToolbarSettings() });
-		this.addCommand({ id: 'show-properties', name: t('command.command-show-properties'), callback: async () => this.commands.toggleProps('show') });
-		this.addCommand({ id: 'hide-properties', name: t('command.command-hide-properties'), callback: async () => this.commands.toggleProps('hide') });
-		this.addCommand({ id: 'fold-properties', name: t('command.command-fold-properties'), callback: async () => this.commands.toggleProps('fold') });
-		this.addCommand({ id: 'toggle-properties', name: t('command.command-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
+		this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
+		this.addCommand({ id: 'open-quick-tools', name: t('command.name-quick-tools'), callback: async () => this.commands.openItemSuggester() });
+		this.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.commands.openSettings() });
+		this.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.commands.openToolbarSettings() });
+		this.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.commands.toggleProps('show') });
+		this.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.commands.toggleProps('hide') });
+		this.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.commands.toggleProps('fold') });
+		this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
 
 		this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
 

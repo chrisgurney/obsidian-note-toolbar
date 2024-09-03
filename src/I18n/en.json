@@ -1,13 +1,13 @@
 {
     "command": {
-        "command-focus": "Focus",
-        "command-quick-tools": "Open quick tools",
-        "command-settings": "Open plugin settings",
-        "command-toolbar-settings": "Open toolbar settings",
-        "command-show-properties": "Show Properties",
-        "command-hide-properties": "Hide Properties",
-        "command-fold-properties": "Fold Properties",
-        "command-toggle-properties": "Toggle Properties"
+        "name-focus": "Focus",
+        "name-quick-tools": "Open quick tools",
+        "name-settings": "Open plugin settings",
+        "name-toolbar-settings": "Open toolbar settings",
+        "name-show-properties": "Show Properties",
+        "name-hide-properties": "Hide Properties",
+        "name-fold-properties": "Fold Properties",
+        "name-toggle-properties": "Toggle Properties"
     },
     "notice": {
         "error-command-not-found": "Check Note Toolbar setting for this command. Command not found: {{command}}",
