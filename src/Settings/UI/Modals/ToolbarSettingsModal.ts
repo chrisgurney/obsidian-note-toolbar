@@ -1654,9 +1654,13 @@ export default class ToolbarSettingsModal extends Modal {
 		itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
 		switch(toolbarItem.linkAttr.type) {
 			case ItemType.Break:
+				setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
+				itemPreviewContent.setText(t('setting.item.option-break'));
+				itemPreview.append(itemPreviewContent);
+				break;
 			case ItemType.Separator:
 				setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
-				itemPreviewContent.setText(toolbarItem.linkAttr.type);
+				itemPreviewContent.setText(t('setting.item.option-separator'));
 				itemPreview.append(itemPreviewContent);
 				break;
 			case ItemType.Group:
