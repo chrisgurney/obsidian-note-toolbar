@@ -1495,8 +1495,9 @@ export default class ToolbarSettingsModal extends Modal {
 		let menu = new Menu();
 		menu.addItem((menuItem) => {
 			menuItem
-				.setTitle(isComponentVisible.icon ? 
-					'Icon shows on ' + platformLabel : 'Icon hidden on ' + platformLabel)
+				.setTitle(isComponentVisible.icon 
+					? t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-icon'), platform: platformLabel })
+					: t('setting.item.option-visibility-component-hidden-platform', { component: t('setting.item.option-component-icon'), platform: platformLabel }))
 				.setIcon("image")
 				.setChecked(isComponentVisible.icon)
 				.onClick(async (menuEvent) => {
@@ -1516,8 +1517,9 @@ export default class ToolbarSettingsModal extends Modal {
 		});
 		menu.addItem((menuItem) => {
 			menuItem
-				.setTitle(isComponentVisible.label ? 
-					'Label shows on ' + platformLabel : 'Label hidden on ' + platformLabel)
+				.setTitle(isComponentVisible.label 
+					? t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-label'), platform: platformLabel })
+					: t('setting.item.option-visibility-component-hidden-platform', { component: t('setting.item.option-component-label'), platform: platformLabel }))
 				.setIcon("whole-word")
 				.setChecked(isComponentVisible.label)
 				.onClick(async (menuEvent) => {
@@ -1551,15 +1553,17 @@ export default class ToolbarSettingsModal extends Modal {
 			let dkComponents = platform.allViews?.components;
 			if (dkComponents) {
 				if (dkComponents.length === 2) {
-					return ['', 'visible on ' + platformLabel];
+					return ['', t('setting.item.option-visibility-visible-platform', { platform: platformLabel })];
 				} else if (dkComponents.length === 1) {
-					return [dkComponents[0], dkComponents[0] + ' visible on ' + platformLabel];
+					return [
+						dkComponents[0], 
+						t('setting.item.option-visibility-component-visible-platform', { component: dkComponents[0], platform: platformLabel })];
 				} else {
-					return ['hidden', 'hidden on ' + platformLabel];
+					return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
 				}
 			}
 		}
-		return ['hidden', 'hidden on ' + platformLabel];
+		return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
 
 	}
 
@@ -1651,17 +1655,18 @@ export default class ToolbarSettingsModal extends Modal {
 		switch(toolbarItem.linkAttr.type) {
 			case ItemType.Break:
 			case ItemType.Separator:
-				setTooltip(itemPreview, 'Edit ' + toolbarItem.linkAttr.type);
+				setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
 				itemPreviewContent.setText(toolbarItem.linkAttr.type);
 				itemPreview.append(itemPreviewContent);
 				break;
 			case ItemType.Group:
 				let groupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
-				setTooltip(itemPreview, 'Edit item group' + (groupToolbar ? ' (' + groupToolbar.name + ')' : ''));
+				setTooltip(itemPreview, 
+					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
 				groupToolbar ? itemPreviewContent.appendChild(createToolbarPreviewFr(groupToolbar)) : undefined;
 				break;
 			default:
-				setTooltip(itemPreview, 'Edit toolbar item');
+				setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
 				let itemPreviewIcon = createSpan();
 				itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
 				setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
@@ -1674,7 +1679,7 @@ export default class ToolbarSettingsModal extends Modal {
 					itemPreviewContent.addClass("note-toolbar-setting-item-preview-tooltip");
 				}
 				else {
-					itemPreviewContent.setText('No label set');
+					itemPreviewContent.setText(t('setting.items.option-item-empty-label'));
 					itemPreviewContent.addClass("note-toolbar-setting-item-preview-empty");
 				}
 				getIcon(toolbarItem.icon) ? itemPreview.appendChild(itemPreviewIcon) : undefined;

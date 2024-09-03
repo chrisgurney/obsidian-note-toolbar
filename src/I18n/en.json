@@ -32,6 +32,8 @@
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
             "option-command-placeholder": "Search for command",
+            "option-component-icon": "icon",
+            "option-component-label": "label",
             "option-file-placeholder": "Search for file or folder",
             "option-file-error-does-not-exist": "This file or folder does not exist.",
             "option-item-group-placeholder": "Toolbar",
@@ -43,7 +45,12 @@
             "option-label-placeholder": "Label (optional, if icon set)",
             "option-tooltip-placeholder": "Tooltip (optional)",
             "option-uri-placehoder": "Website, URI, or note title",
-            "option-uri-help": "Tip: Use note properties in URIs."
+            "option-uri-help": "Tip: Use note properties in URIs.",
+            "option-visibility-component-hidden-platform": "{{component}} hidden on {{platform}}",
+            "option-visibility-component-visible-platform": "{{component}} visible on {{platform}}",
+            "option-visibility-hidden": "hidden",
+            "option-visibility-hidden-platform": "hidden on {{platform}}",
+            "option-visibility-visible-platform": "visible on {{platform}}"
         },
         "items": {
             "name": "Items",
@@ -55,7 +62,12 @@
             "button-collapse-items-tooltip": "Collapse all items",
             "button-expand-items-tooltip": "Expand all items",
             "button-new-item": "+ Add toolbar item",
-            "button-new-item-tooltip": "Add a new item to the toolbar"
+            "button-new-item-tooltip": "Add a new item to the toolbar",
+            "option-item-empty-label": "No label set",
+            "option-edit-item-group-tooltip": "Edit item group ({{toolbar}})",
+            "option-edit-item-group-tooltip_none": "Edit item group",
+            "option-edit-item-tooltip": "Edit toolbar item",
+            "option-edit-item-type-tooltip": "Edit {{itemType}}"
         },
         "name": {
             "name": "Name",
