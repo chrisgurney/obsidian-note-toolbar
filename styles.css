@@ -427,6 +427,55 @@ settings:
         default: 0
         format: px
     -
+        id: quick-tools
+        title: Quick tools
+        description: 'Styles for the Quick Tools window'
+        type: heading
+        level: 1
+        collapsed: true
+    - 
+        id: cg-nt-quick-tools-item-bg-color-hover
+        title: '🎨 Background color (hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-quick-tools-item-text-color
+        title: '🎨 Text + Icon color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-quick-tools-item-text-color-hover
+        title: '🎨 Text + Icon color (on hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-quick-tools-item-font-size
+        title: '📐 Font size (in em units)'
+        type: variable-number
+        default: 1
+        format: em
+    -
+        id: cg-nt-quick-tools-icon-size
+        title: '📐 Icon size (in px units)'
+        type: variable-number
+        default: 18
+        format: px
+    -
+        id: cg-nt-quick-tools-item-border-radius
+        title: '😎 Border radius (in px units)'
+        type: variable-number
+        default: 4
+        format: px
+    -
         id: sep
         title: Separators
         description: 'Styles for toolbar separators'
@@ -549,55 +598,6 @@ settings:
         min: 0
         max: 1
         step: 0.05
-    -
-        id: quick-tools
-        title: Quick tools
-        description: 'Styles for the quick tools window'
-        type: heading
-        level: 1
-        collapsed: true
-    - 
-        id: cg-nt-quick-tools-item-bg-color-hover
-        title: '🎨 Background color (hover)'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-quick-tools-item-text-color
-        title: '🎨 Text + Icon color'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-quick-tools-item-text-color-hover
-        title: '🎨 Text + Icon color (on hover)'
-        type: variable-themed-color
-        opacity: true
-        format: hex
-        default-light: '#'
-        default-dark: '#'
-    -
-        id: cg-nt-quick-tools-item-font-size
-        title: '📐 Font size (in em units)'
-        type: variable-number
-        default: 1
-        format: em
-    -
-        id: cg-nt-quick-tools-icon-size
-        title: '📐 Icon size (in px units)'
-        type: variable-number
-        default: 18
-        format: px
-    -
-        id: cg-nt-quick-tools-item-border-radius
-        title: '😎 Border radius (in px units)'
-        type: variable-number
-        default: 4
-        format: px
 */
 
 body {
