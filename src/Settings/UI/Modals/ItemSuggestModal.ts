@@ -16,7 +16,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
 	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null) {
         super(plugin.app);
-        this.modalEl.addClass("note-toolbar-setting-mini-dialog");
+        this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         // this.parentEl = parentEl;
         this.plugin = plugin;
         this.activeFile = activeFile;

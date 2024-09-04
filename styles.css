@@ -549,6 +549,55 @@ settings:
         min: 0
         max: 1
         step: 0.05
+    -
+        id: quick-tools
+        title: Quick tools
+        description: 'Styles for the quick tools window'
+        type: heading
+        level: 1
+        collapsed: true
+    - 
+        id: cg-nt-quick-tools-item-bg-color-hover
+        title: '🎨 Background color (hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-quick-tools-item-text-color
+        title: '🎨 Text + Icon color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-quick-tools-item-text-color-hover
+        title: '🎨 Text + Icon color (on hover)'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-quick-tools-item-font-size
+        title: '📐 Font size (in em units)'
+        type: variable-number
+        default: 1
+        format: em
+    -
+        id: cg-nt-quick-tools-icon-size
+        title: '📐 Icon size (in px units)'
+        type: variable-number
+        default: 18
+        format: px
+    -
+        id: cg-nt-quick-tools-item-border-radius
+        title: '😎 Border radius (in px units)'
+        type: variable-number
+        default: 4
+        format: px
 */
 
 body {
@@ -601,6 +650,12 @@ body {
     --cg-nt-menu-item-border-radius: var(--radius-s);
     --cg-nt-menu-item-font-size: var(--font-ui-small);
     --cg-nt-menu-item-text-color: var(--text-normal);
+    --cg-nt-quick-tools-icon-size: var(--icon-size);
+    --cg-nt-quick-tools-item-bg-color-hover: var(--background-modifier-hover);
+    --cg-nt-quick-tools-item-text-color-hover: var(--text-normal);
+    --cg-nt-quick-tools-item-font-size: 1em;
+    --cg-nt-quick-tools-item-border-radius: var(--radius-s);
+    --cg-nt-quick-tools-item-text-color: var(--text-normal);
 }
 
 & .is-android {
@@ -1888,6 +1943,31 @@ input[type="text"].note-toolbar-setting-error {
                 border-radius: 2em;
                 font-size: var(--metadata-input-font-size);
                 max-width: 8em;
+            }
+        }
+    }
+}
+
+.note-toolbar-setting-item-suggester-dialog {
+    width: calc(var(--dialog-width) / 1.5);
+    & .note-toolbar-item-suggestion {
+        & .note-toolbar-item-suggester-name, svg.svg-icon {
+            color: var(--cg-nt-quick-tools-item-text-color);
+        }
+        & .note-toolbar-item-suggester-name {
+            font-size: var(--cg-nt-quick-tools-item-font-size);
+        }
+        & svg.svg-icon {
+            height: var(--cg-nt-quick-tools-icon-size);
+            width: var(--cg-nt-quick-tools-icon-size);
+        }
+        &.is-selected {
+            box-shadow: none;
+            opacity: var(--icon-opacity-hover);
+            background-color: var(--cg-nt-quick-tools-item-bg-color-hover);
+            border-radius: var(--cg-nt-quick-tools-item-border-radius);
+            & .note-toolbar-item-suggester-name, svg.svg-icon {
+                color: var(--cg-nt-quick-tools-item-text-color-hover);
             }
         }
     }
