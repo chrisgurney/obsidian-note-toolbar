@@ -131,10 +131,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * Closes the modal and executes the given item.
      * @param selectedItem Item to use.
      */
-    async onChooseSuggestion(selectedItem: ToolbarItemSettings, evt: MouseEvent | KeyboardEvent) {
-        debugLog("onChooseSuggestion: ", selectedItem, this.activeFile);
+    async onChooseSuggestion(selectedItem: ToolbarItemSettings, event: MouseEvent | KeyboardEvent) {
+        debugLog("onChooseSuggestion: ", selectedItem, this.activeFile, event);
         this.close();
-        await this.plugin.handleLink(selectedItem.link, selectedItem.linkAttr.type, selectedItem.linkAttr.hasVars, selectedItem.linkAttr.commandId);
+        await this.plugin.handleLink(
+            selectedItem.link, selectedItem.linkAttr.type, selectedItem.linkAttr.hasVars, selectedItem.linkAttr.commandId, event);
     }
 
 }
