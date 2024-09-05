@@ -1,6 +1,6 @@
 import { getUUID } from "Utils/Utils";
 import * as en from 'I18n/en.json';
-import * as zhCN from 'I18n/zh-CN.json';
+import * as zh_CN from 'I18n/zh-CN.json';
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20240727.1;
@@ -10,10 +10,13 @@ export const RELEASES_URL = 'https://github.com/chrisgurney/obsidian-note-toolba
 
 /**
  * Setup translations
+ * 
+ * Language codes used by Obsidian per:
+ * https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages
  */
 export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 i18next.addResourceBundle('en', 'plugin-note-toolbar', en); // load localized strings for English
-i18next.addResourceBundle('zh-CN', 'plugin-note-toolbar', zhCN); // load localized strings for Chinese Simplified
+i18next.addResourceBundle('zh', 'plugin-note-toolbar', zh_CN); // load localized strings for Chinese Simplified
 
 export enum ComponentType {
 	Icon = 'icon',
