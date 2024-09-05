@@ -76,6 +76,17 @@ As beta versions become available, I welcome <a href="https://github.com/chrisgu
 </blockquote>
 </details>
 
+# Translations 🌎🌍🌏
+
+Note Toolbar is also available in:
+
+|Language|What's translated|
+|---|---|
+|简体中文 Simplified Chinese|Plugin and Settings UI|
+
+[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118)
+
+
 # Getting Started 🚀
 
 Once enabled, open Note Toolbar's settings:
@@ -123,14 +134,6 @@ Shout out to other projects and people who helped me with questions I had while 
 # Contribute 🧑‍💻
 
 Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
-
-## Translations 🌎🌍🌏
-
-Note Toolbar also available in:
-
-|Language|What's translated|
-|---|---|
-|简体中文 Simplified Chinese|Plugin and Settings UI|
 
 [Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118)
 
