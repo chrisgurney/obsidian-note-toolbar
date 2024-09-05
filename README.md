@@ -76,7 +76,7 @@ As beta versions become available, I welcome <a href="https://github.com/chrisgu
 </blockquote>
 </details>
 
-# Translations 🌎🌍🌏
+# Translations 🌐
 
 Note Toolbar is also available in:
 
