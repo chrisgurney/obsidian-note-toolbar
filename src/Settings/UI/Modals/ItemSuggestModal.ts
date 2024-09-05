@@ -1,6 +1,6 @@
-import { SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obsidian";
+import { Platform, SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obsidian";
 import NoteToolbarPlugin from "main";
-import { debugLog, hasVars, replaceVars } from "Utils/Utils";
+import { calcItemVisToggles, debugLog, hasVars, replaceVars } from "Utils/Utils";
 import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
@@ -38,15 +38,20 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         const itemSuggestions: ToolbarItemSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        // add items with labels/tooltips, not menus, match search string, 
-        // and does not have a var link and label/tooltip that resolves to nothing
+        // get list of items
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
             toolbar.items.forEach((item: ToolbarItemSettings) => {
                 let itemName = (item.label || item.tooltip).toLowerCase();
+                // add items with labels/tooltips, not menus, matching search string
                 if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemName.contains(lowerCaseInputStr)) {
-                    if (!(hasVars(item.link) && replaceVars(this.app, item.link, this.activeFile, false) === "") &&
-                        !(hasVars(itemName) && replaceVars(this.app, itemName, this.activeFile, false) === "")) {
-                        itemSuggestions.push(item);
+                    const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+                    // ...and is visible on this platform
+                    if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+                        // ...and does not have a var link and label/tooltip that resolves to nothing
+                        if (!(hasVars(item.link) && replaceVars(this.app, item.link, this.activeFile, false) === "") &&
+                            !(hasVars(itemName) && replaceVars(this.app, itemName, this.activeFile, false) === "")) {
+                            itemSuggestions.push(item);
+                        }
                     }
                 }
             });
