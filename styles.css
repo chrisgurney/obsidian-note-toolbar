@@ -1962,8 +1962,6 @@ input[type="text"].note-toolbar-setting-error {
             width: var(--cg-nt-quick-tools-icon-size);
         }
         &.is-selected {
-            box-shadow: none;
-            opacity: var(--icon-opacity-hover);
             background-color: var(--cg-nt-quick-tools-item-bg-color-hover);
             border-radius: var(--cg-nt-quick-tools-item-border-radius);
             & .note-toolbar-item-suggester-name, svg.svg-icon {
