@@ -124,6 +124,16 @@ Shout out to other projects and people who helped me with questions I had while 
 
 Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
 
+## Translations
+
+Note Toolbar also available in:
+
+|Language|What's translated|
+|---|---|
+|简体中文 Simplified Chinese|Plugin and Settings UI|
+
+[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118)
+
 # Support 🛟
 
 📖 **See [Troubleshooting](https://github.com/chrisgurney/obsidian-note-toolbar/Troubleshooting) in the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
