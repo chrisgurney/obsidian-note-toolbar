@@ -82,7 +82,7 @@ Note Toolbar is also available in:
 
 |Language|What's translated|Contributors|
 |---|---|---|
-|简体中文 Simplified Chinese|Plugin and Settings UI|[@Moyf](https://github.com/Moyf)|
+|简体中文 Simplified Chinese|Plugin UI|[@Moyf](https://github.com/Moyf)|
 
 [Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118)
 
