@@ -124,7 +124,7 @@ Shout out to other projects and people who helped me with questions I had while 
 
 Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
 
-## Translations
+## Translations 🌎🌍🌏
 
 Note Toolbar also available in:
 
