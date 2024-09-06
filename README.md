@@ -85,7 +85,7 @@ Note Toolbar is also available in:
 |Український Ukrainian|Plugin UI, Style Settings|[@Laktiv](https://github.com/laktiv)|
 |简体中文 Simplified Chinese|Plugin UI|[@Moyf](https://github.com/Moyf)|
 
-[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118)
+[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118#discussioncomment-10548222)
 
 
 # Getting Started 🚀
