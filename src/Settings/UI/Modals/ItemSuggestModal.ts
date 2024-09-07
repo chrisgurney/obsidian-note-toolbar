@@ -15,17 +15,24 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param activeFile TFile for the active file (so vars can be replaced)
      */
 	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null) {
+
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         // this.parentEl = parentEl;
         this.plugin = plugin;
         this.activeFile = activeFile;
+
         this.setPlaceholder(t('setting.item-suggester.placeholder'));
         this.setInstructions([
             {command: '↑↓', purpose: t('setting.item-suggester.instruction-navigate')},
             {command: '↵', purpose: t('setting.item-suggester.instruction-use')},
             {command: 'esc', purpose: t('setting.item-suggester.instruction-dismiss')},
         ]);
+
+        // handle meta key selections
+        this.scope.register(['Meta'], 'Enter', (event) => this.handleKeyboardSelection(event));
+        this.scope.register(['Meta', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
+
     }
 
     /**
@@ -91,6 +98,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
         el.addClass("note-toolbar-item-suggestion");
+        el.setAttribute('id', item.uuid);
         if (item.icon) {
             let svgExists = getIcon(item.icon);
             if (svgExists) {
@@ -130,6 +138,16 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
 
         itemLabel.setText(title);
+    }
+
+    /**
+     * Handle case where keyboard with meta key is used to make selection. 
+     * @param event KeyboardEvent
+     */
+    async handleKeyboardSelection(event: KeyboardEvent) {
+        let selectedItem = this.modalEl.querySelector('.note-toolbar-item-suggestion.is-selected');
+        let item = selectedItem?.id ? this.plugin.settingsManager.getToolbarItemById(selectedItem?.id) : undefined;
+        item ? this.onChooseSuggestion(item, event) : undefined;
     }
 
     /**
