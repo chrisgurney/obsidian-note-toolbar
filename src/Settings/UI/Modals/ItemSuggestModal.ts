@@ -30,8 +30,14 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         ]);
 
         // handle meta key selections
-        this.scope.register(['Meta'], 'Enter', (event) => this.handleKeyboardSelection(event));
-        this.scope.register(['Meta', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
+        if (Platform.isWin || Platform.isLinux) {
+            this.scope.register(['Ctrl'], 'Enter', (event) => this.handleKeyboardSelection(event));
+            this.scope.register(['Ctrl', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
+        }
+        else {
+            this.scope.register(['Meta'], 'Enter', (event) => this.handleKeyboardSelection(event));
+            this.scope.register(['Meta', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
+        }
 
     }
 
