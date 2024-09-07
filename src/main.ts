@@ -1079,12 +1079,11 @@ export default class NoteToolbarPlugin extends Plugin {
 					break;
 				case 'Enter':
 				case ' ':
-					// FIXME? option + meta key modifiers not working here (shift + control work?)
-					//        or put another way: hot keys are not being honored here
 					let activeEl = activeDocument?.activeElement as HTMLElement;
-					activeEl.click();
-					let itemType = activeEl.getAttribute("data-toolbar-link-attr-type");
-					itemType === ItemType.Menu ? putFocusInMenu() : undefined;
+					let selectedItem = this.settingsManager.getToolbarItemById(activeEl?.id);
+					if (selectedItem) {
+						await this.handleItemLink(selectedItem, e);
+					}
 					break;
 				case 'Escape':
 					// need this implemented for Reading mode, as escape does nothing
