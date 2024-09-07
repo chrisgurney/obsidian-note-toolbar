@@ -36,6 +36,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
+		this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
+
 		this.commands = new CommandsManager(this);
 
 		this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
@@ -149,6 +151,23 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 		}
 	};
+
+	/**
+	 * On rename of file, update any item links that reference the old name.
+	 * @param file TFile of the new file.
+	 * @param oldPath old path.
+	 */
+	fileRenameListener = (file: TFile, oldPath: string) => {
+		debugLog('fileRenameListener:', file, oldPath);
+		this.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
+			toolbar.items.forEach((item: ToolbarItemSettings) => {
+				if (item.link === oldPath) {
+					debugLog('fileRenameListener: changing', item.link, 'to', file.path);
+					item.link = file.path;
+				}
+			});
+		});
+	}
 
 	/**
 	 * On layout changes, delete, check and render toolbar if necessary.
