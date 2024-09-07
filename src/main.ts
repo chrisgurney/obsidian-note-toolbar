@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -638,10 +638,7 @@ export default class NoteToolbarPlugin extends Plugin {
 								.setTitle(title)
 								.onClick(async (menuEvent) => {
 									debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-									await this.handleLink(
-										toolbarItem.link,
-										toolbarItem.linkAttr.type, toolbarItem.linkAttr.hasVars, toolbarItem.linkAttr.commandId,
-										menuEvent);
+									await this.handleItemLink(toolbarItem, menuEvent);
 								});
 							});
 						break;
@@ -837,6 +834,15 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
+	}
+
+	/**
+	 * Handles the link in the item provided.
+	 * @param item: ToolbarItemSettings for the item that was selected
+	 * @param event MouseEvent or KeyboardEvent from where link is activated
+	 */
+	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent) {
+		await this.handleLink(item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event);
 	}
 
 	/**
@@ -1127,7 +1133,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					clickedEl.blur();
 				}
 	
-				this.handleLink(linkHref, linkType, linkHasVars, linkCommandId, event);
+				await this.handleLink(linkHref, linkType, linkHasVars, linkCommandId, event);
 	
 			}
 
