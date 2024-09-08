@@ -210,8 +210,8 @@ export const POSITION_OPTIONS = {
 		{ hidden: t('setting.position.option-hidden') },
 	],
 	mobile: [
-		{ top: t('toolbar.menu-position-top') },
-		{ props: t('toolbar.menu-position-props') },
+		{ top: t('setting.position.option-top') },
+		{ props: t('setting.position.option-props') },
 		{ fabl: t('setting.position.option-fabl') },
 		{ fabr: t('setting.position.option-fabr') },
 		{ hidden: t('setting.position.option-hidden-mobile') },
