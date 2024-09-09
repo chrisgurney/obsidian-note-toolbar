@@ -311,7 +311,7 @@ settings:
         title.de: 'Inaktive Deckkraft'
         description: 'When focus is in another tab, dim the floating button'
         description.uk: 'Коли фокус знаходиться на іншій вкладці, зменшіть плаваючу кнопку'
-        description.de: 'Wenn der Fokus auf einer anderen Registerkarte liegt, wird die schwebende Schaltfläche abgeblendet'.
+        description.de: 'Wenn der Fokus auf einer anderen Registerkarte liegt, wird die schwebende Schaltfläche abgeblendet'
         type: variable-number-slider
         default: 0.7
         min: 0
