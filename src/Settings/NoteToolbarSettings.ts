@@ -10,10 +10,12 @@ export const SETTINGS_VERSION = 20240727.1;
  * https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages
  ******************************************************************************/
 
+import * as de from 'I18n/de.json';
 import * as en from 'I18n/en.json';
 import * as uk from 'I18n/uk.json';
 import * as zh_CN from 'I18n/zh-CN.json';
 
+i18next.addResourceBundle('de', 'plugin-note-toolbar', de); // load localized strings for German
 i18next.addResourceBundle('en', 'plugin-note-toolbar', en); // load localized strings for English
 i18next.addResourceBundle('uk', 'plugin-note-toolbar', uk); // load localized strings for Ukrainian
 i18next.addResourceBundle('zh', 'plugin-note-toolbar', zh_CN); // load localized strings for Chinese Simplified
