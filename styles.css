@@ -1754,7 +1754,6 @@ input[type="text"].note-toolbar-setting-error {
 
 .note-toolbar-item-suggester-note {
     color: var(--text-muted);
-    font-family: monospace;
     font-size: var(--font-ui-smaller);
     line-height: var(--line-height-normal);
     overflow-wrap: anywhere;
