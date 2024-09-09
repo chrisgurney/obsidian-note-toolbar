@@ -2,6 +2,7 @@ import { getUUID } from "Utils/Utils";
 import * as en from 'I18n/en.json';
 import * as uk from 'I18n/uk.json';
 import * as zh_CN from 'I18n/zh-CN.json';
+import * as de from 'I18n/de.json';
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20240727.1;
@@ -19,6 +20,7 @@ export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string
 i18next.addResourceBundle('en', 'plugin-note-toolbar', en); // load localized strings for English
 i18next.addResourceBundle('uk', 'plugin-note-toolbar', uk); // load localized strings for Ukrainian
 i18next.addResourceBundle('zh', 'plugin-note-toolbar', zh_CN); // load localized strings for Chinese Simplified
+i18next.addResourceBundle('de', 'plugin-note-toolbar', de); // load localized strings for German
 
 export enum ComponentType {
 	Icon = 'icon',
