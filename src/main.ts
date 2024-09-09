@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -58,6 +58,10 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		}));
 		this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
+			const target = e.target as HTMLElement;
+			if (!target.matches('.cg-note-toolbar-container')) {
+				this.removeFocusStyle();
+			}
 			this.calloutLinkHandler(e);
 		});
 
@@ -656,8 +660,13 @@ export default class NoteToolbarPlugin extends Plugin {
 								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
 								.setTitle(title)
 								.onClick(async (menuEvent) => {
-									debugLog(toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
+									debugLog(menuEvent, toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
 									await this.handleItemLink(toolbarItem, menuEvent);
+									// fixes issue where focus sticks on executing commands
+									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
+										await this.removeFocusStyle();
+										this.app.commands.executeCommandById('editor:focus');
+									}
 								});
 							});
 						break;
@@ -1074,7 +1083,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (itemsUl) {
 
 			// not preventing default from 'Escape' for now (I think this helps)
-			e.key ? (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', ' '].includes(e.key) ? e.preventDefault() : undefined) : undefined;
+			e.key ? (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', 'Shift', 'Tab', ' '].includes(e.key) ? e.preventDefault() : undefined) : undefined;
 
 			// remove any items that are not visible (i.e., hidden on desktop/mobile) as they are not navigable
 			let items = Array.from(itemsUl.children);
@@ -1083,17 +1092,29 @@ export default class NoteToolbarPlugin extends Plugin {
 				const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
 				return hasSpan && isVisible;
 			});
-			let currentIndex = visibleItems.indexOf(activeDocument.activeElement?.parentElement as HTMLElement);
+			let currentEl = activeDocument.activeElement?.parentElement as HTMLElement;
+			let currentIndex = visibleItems.indexOf(currentEl);
 
-			switch (e.key) {
+			let key = e.key;
+			// need to capture tab in order to move the focus style across the toolbar
+			if (e.key === 'Tab') {
+				key = e.shiftKey ? 'ArrowLeft' : 'ArrowRight';
+			}
+
+			switch (key) {
 				case 'ArrowRight':
 				case 'ArrowDown':
 					const nextIndex = (currentIndex + 1) % visibleItems.length;
+					debugLog(currentEl);
+					currentEl.removeClass(ToolbarStyle.ItemFocused);
+					visibleItems[nextIndex].addClass(ToolbarStyle.ItemFocused);
 					visibleItems[nextIndex].querySelector('span')?.focus();
 					break;
 				case 'ArrowLeft':
 				case 'ArrowUp':
 					const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+					currentEl.removeClass(ToolbarStyle.ItemFocused);
+					visibleItems[prevIndex].addClass(ToolbarStyle.ItemFocused);
 					visibleItems[prevIndex].querySelector('span')?.focus();
 					break;
 				case 'Enter':
@@ -1111,11 +1132,32 @@ export default class NoteToolbarPlugin extends Plugin {
 					if (viewMode === 'preview') {
 						(activeDocument?.activeElement as HTMLElement).blur();
 					}
+					// put focus back on element if it's a toolbar item
+					if (currentEl.tagName === 'LI' && currentEl.closest('.cg-note-toolbar-callout')) {
+						currentEl.addClass(ToolbarStyle.ItemFocused);
+					}
+					else {
+						await this.removeFocusStyle();
+					}
 					break;
 			}
 
 		}
 
+	}
+
+	/**
+	 * Removes the focus class from all items in the toolbar.
+	 */
+	async removeFocusStyle() {
+		debugLog('removeFocusStyle()');
+		// remove focus effect from all toolbar items
+		let toolbarListEl = this.getToolbarListEl();
+		if (toolbarListEl) {
+			Array.from(toolbarListEl.children).forEach(element => {
+				element.removeClass(ToolbarStyle.ItemFocused);
+			});
+		}
 	}
 
 	/**
@@ -1149,8 +1191,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				// remove the focus effect if clicked with a mouse
 				if ((event as PointerEvent)?.pointerType === "mouse") {
 					clickedEl.blur();
+					await this.removeFocusStyle();
 				}
-	
+
 				await this.handleLink(linkHref, linkType, linkHasVars, linkCommandId, event);
 	
 			}

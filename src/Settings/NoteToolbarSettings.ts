@@ -61,6 +61,10 @@ export enum CalloutAttr {
 	Separator = 'data-ntb-sep'
 }
 
+export enum ToolbarStyle {
+	ItemFocused = 'tbar-item-focused'
+}
+
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
 	icon: string;

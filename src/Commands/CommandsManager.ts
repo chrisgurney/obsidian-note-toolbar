@@ -1,4 +1,4 @@
-import { t } from "Settings/NoteToolbarSettings";
+import { t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { debugLog } from "Utils/Utils";
@@ -42,9 +42,10 @@ export class CommandsManager {
                         const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
                         return hasSpan && isVisible;
                     });
-                    const link = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-                    debugLog("focusCommand: focussed item: ", link);
-                    link?.focus();
+                    const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
+                    debugLog("focusCommand: focussed item: ", linkEl);
+                    visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
+                    linkEl?.focus();
                 }
                 break;
             case 'hidden':

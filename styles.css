@@ -911,7 +911,7 @@ body {
             }
         }
 
-        & li:has(:focus-visible), li:has(:focus-within) {
+        & li.tbar-item-focused {
             border-radius: var(--cg-nt-item-border-radius);
             box-shadow: inset 0 0 0 1px var(--background-modifier-border);
             box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
