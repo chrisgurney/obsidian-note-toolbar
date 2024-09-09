@@ -370,7 +370,7 @@ settings:
         id: cg-nt-item-text-color-hover
         title: 'Text color (on hover)'
         title.uk: 'Колір тексту (при наведенні)'
-        title.de 'Textfarbe (beim Überfahren mit der Maus)'
+        title.de: 'Textfarbe (beim Überfahren mit der Maus)'
         type: variable-themed-color
         opacity: true
         format: hex
