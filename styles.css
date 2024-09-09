@@ -1658,10 +1658,12 @@ input[type="text"].note-toolbar-setting-error {
     width: 100%;
 }
 
-.note-toolbar-item-suggester-var {
-    font-family: monospace;
-    font-size: var(--font-ui-small);
+.note-toolbar-item-suggester-meta {
     color: var(--text-muted);
+    font-family: monospace;
+    font-size: var(--font-ui-smaller);
+    line-height: var(--line-height-normal);
+    overflow-wrap: anywhere;
 }
 
 .note-toolbar-item-suggester-type {

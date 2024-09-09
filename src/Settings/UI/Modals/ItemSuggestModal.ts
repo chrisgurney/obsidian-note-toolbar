@@ -54,9 +54,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // get list of items
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
             toolbar.items.forEach((item: ToolbarItemSettings) => {
-                let itemName = (item.label || item.tooltip).toLowerCase();
+                let itemName = item.label || item.tooltip;
+                let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
                 // add items with labels/tooltips, not menus, matching search string
-                if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemName.contains(lowerCaseInputStr)) {
+                if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(lowerCaseInputStr)) {
                     const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
                     // ...and is visible on this platform
                     if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
@@ -88,10 +89,19 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // sort the results
         uniqueItemSuggestions.sort((a, b) => {
             // remove non-alphanumeric characters including emojis
-            const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '');
-            const aValue = cleanString(a.label || a.tooltip || '');
-            const bValue = cleanString(b.label || b.tooltip || '');
-            return aValue.localeCompare(bValue);
+            const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
+            const aItemNameRaw = cleanString(a.label || a.tooltip || '');
+            const bItemNameRaw = cleanString(b.label || b.tooltip || '');
+            const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : ''));
+            const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : ''));
+
+            // check if primary contains the search string, and prioritize primary matches
+            const aPrimaryMatch = aItemName.includes(lowerCaseInputStr);
+            const bPrimaryMatch = bItemName.includes(lowerCaseInputStr);
+            if (aPrimaryMatch && !bPrimaryMatch) return -1;
+            if (!aPrimaryMatch && bPrimaryMatch) return 1;
+
+            return aItemNameRaw.localeCompare(bItemNameRaw);
         });
 
         return uniqueItemSuggestions;
@@ -137,13 +147,22 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 break;
         }
         
-        if (hasVars(itemName)) {
-            // let itemVar = itemNameEl.createSpan();
-            itemMeta.setText(itemName);
-            itemMeta.addClass("note-toolbar-item-suggester-var");
+        itemLabel.setText(title);
+
+        const inputStrLower = this.inputEl.value.toLowerCase();
+        // if what's shown doesn't already contain the searched string, show it below
+        if (!title.toLowerCase().includes(inputStrLower)) {
+            let inputMatch = 
+                item.label.toLowerCase().includes(inputStrLower)
+                    ? item.label
+                    : item.tooltip.toLowerCase().includes(inputStrLower) 
+                        ? item.tooltip 
+                        : item.link;
+            let itemRawEl = itemLabel.createDiv();
+            itemRawEl.addClass('note-toolbar-item-suggester-meta');
+            itemRawEl.setText(inputMatch);
         }
 
-        itemLabel.setText(title);
     }
 
     /**
