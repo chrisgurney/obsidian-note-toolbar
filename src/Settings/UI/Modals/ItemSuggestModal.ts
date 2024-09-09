@@ -159,7 +159,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                         ? item.tooltip 
                         : item.link;
             let itemRawEl = itemLabel.createDiv();
-            itemRawEl.addClass('note-toolbar-item-suggester-meta');
+            itemRawEl.addClass('note-toolbar-item-suggester-note');
             itemRawEl.setText(inputMatch);
         }
 
