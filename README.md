@@ -80,11 +80,11 @@ As beta versions become available, I welcome <a href="https://github.com/chrisgu
 
 Note Toolbar is also available in:
 
-|Language|What's translated|Contributors|
-|---|---|---|
-|Deutsch German|Plugin UI, Style Settings|[@hartimd](https://github.com/hartimd)|
-|Український Ukrainian|Plugin UI, Style Settings|[@Laktiv](https://github.com/laktiv)|
-|简体中文 Simplified Chinese|Plugin UI|[@Moyf](https://github.com/Moyf)|
+|Language name|Native name|What's translated|Contributors|
+|---|---|---|---|
+|Chinese (Simplified)|简体中文|Plugin UI|[@Moyf](https://github.com/Moyf)|
+|German|Deutsch|Plugin UI, Style Settings|[@hartimd](https://github.com/hartimd)|
+|Ukrainian|Український|Plugin UI, Style Settings|[@Laktiv](https://github.com/laktiv)|
 
 [Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118#discussioncomment-10548222)
 
