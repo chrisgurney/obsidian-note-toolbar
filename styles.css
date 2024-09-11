@@ -1,82 +1,3 @@
-/*****************************************************************************
- * NOTE TOOLBAR
- * 
- * Author: Chris Gurney https://chrisgurney.ca/ https://github.com/chrisgurney/
- * License: Feel free to use and modify. Attribution would be appreciated.
- * 
- * Adds an unobtrusive toolbar that blends well with your Obsidian note, made 
- * up of any items you provide in a standard markdown list.
- * 
- * INSTALLATION
- * 
- * Install the Note Toolbar plugin via Community Plugins.
- *
- * OR (if you just want to use callout CSS)
- *   1. Add this CSS file to your .obsidian/snippets folder in your vault.
- *   2. Enable it in Obsidian Settings... > Appearance > CSS Snippets
- * 
- * USAGE
- * https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts
- * 
- * Create a toolbar by creating a callout containing any list, like this:
- * 
- * > [!note-toolbar]
- * > - [Link Menu Item](obsidian://...)
- * > - [[Page Menu Item]]
- * > - Menu Item That Won't Do Anything
- * 
- * To control its appearance, optionally add metadata by adding a | and listing
- * options, for example:
- *
- * > [!note-toolbar|border-right-sticky]
- *
- * STYLES
- * 
- * Options are as follows, and can be combined (per the above example):
- *   border = adds a top and bottom border
- *   noborder = turns off border (default)
- *   button = applies a button-like appearance
- *   center = aligns items center
- *   even = distributes items evenly
- *   floatl = floats the toolbar left of nearby content within a callout
- *   floatr = floats the toolbar right of nearby content within a callout
- *   nofloat = turns off float (default)
- *   left = aligns items left (default)
- *   right = aligns items right
- *   sticky = sticks toolbar to top on scroll
- *   nosticky = turns off stickiness (default)
- * 
- * STYLES (MOBILE OVERRIDES)
- * 
- * Add these mobile-equivalent styles to override the defaults, above:
- *   mbrder = border
- *   mnbrder = noborder
- *   mbtn = button
- *   mctr = center
- *   mevn = even
- *   mfltl = floatl
- *   mfltr = floatr
- *   mnflt = nofloat
- *   mlft = left
- *   mrght = right
- *   mstcky = sticky
- *   mnstcky = nosticky
- * 
- * USAGE TIPS
- * 
- * - Toolbars can be placed anywhere in a note, even within other callouts!
- * - That said, you may want to place the toolbar one space below the top of a 
- *   note, so that the callout code doesn't get expanded when switching to the note
- *   in Editing mode.
- * - Below "settings" comment block is for the Style Settings plugin, and can be ignored
- *   if you are just copy/pasting this CSS for a snippet.
- *   https://github.com/mgmeyers/obsidian-style-settings
- * 
- * LATEST DOCUMENTATION
- * 
- * https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts
- * 
- *****************************************************************************/
 /* @settings
 
 name: Note Toolbar
@@ -845,10 +766,10 @@ body {
     --cg-nt-quick-tools-item-font-size: 1em;
     --cg-nt-quick-tools-item-border-radius: var(--radius-s);
     --cg-nt-quick-tools-item-text-color: var(--text-normal);
-}
 
-& .is-android {
-    --cg-nt-fab-border-radius: var(--radius-xl);
+    &.is-android {
+        --cg-nt-fab-border-radius: var(--radius-xl);
+    }
 }
 
 .metadata-container {
