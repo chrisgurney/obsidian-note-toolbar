@@ -7,7 +7,7 @@ settings:
         title.uk: 'Плаваюча кнопка'
         title.de: 'Schwebende Schaltfläche'
         description: 'Styles for floating buttons (set toolbar position to "floating button")'
-        description.uk: 'Стилі для плаваючих кнопок (встановіть позицію панелі інструментів на «плаваючу кнопку»)'
+        description.uk: 'Стилі  плаваючих кнопок (встановіть позицію панелі «Плаваюча кнопка»)'
         description.de: 'Stile für schwebende Schaltflächen (Position der Symbolleiste auf „schwebende Schaltfläche“ setzen)'
         type: heading
         level: 1
@@ -33,7 +33,7 @@ settings:
     -
         id: cg-nt-fab-bg-color
         title: 'Background color on mobile 📱'
-        title.uk: 'Колір фону на мобільному 📱'
+        title.uk: 'Колір фону на мобільному пристрої 📱'
         title.de: 'Hintergrundfarbe am Handy 📱'
         type: variable-themed-color
         opacity: true
@@ -53,7 +53,7 @@ settings:
     -
         id: cg-nt-fab-bg-color-hover
         title: 'Background color on mobile (on press) 📱'
-        title.uk: 'Колір фону на мобільному (при натисканні) 📱'
+        title.uk: 'Колір фону на мобільному пристрої (при натисканні) 📱'
         title.de: 'Hintergrundfarbe am Handy (bei Drücken) 📱'
         type: variable-themed-color
         opacity: true
@@ -63,7 +63,7 @@ settings:
     -
         id: cg-nt-fab-icon-color-desktop
         title: Icon color on desktop
-        title.uk: 'Колір значків на робочому столі'
+        title.uk: 'Колір іконок на робочому столі'
         title.de: 'Symbolfarbe am PC'
         type: variable-themed-color
         opacity: true
@@ -73,7 +73,7 @@ settings:
     -
         id: cg-nt-fab-icon-color
         title: 'Icon color on mobile 📱'
-        title.uk: 'Колір значка на мобільному телефоні 📱'
+        title.uk: 'Колір іконки на мобільному пристрої 📱'
         title.de: 'Symbolfarbe am Handy 📱'
         type: variable-themed-color
         opacity: true
@@ -102,7 +102,7 @@ settings:
     -
         id: cg-nt-fab-pos-x
         title: 'X position on mobile (in vw units) 📱'
-        title.uk: 'Позиція X на мобільному (в vw) 📱'
+        title.uk: 'Позиція X на мобільному (% ширини) 📱'
         title.de: 'X-Position am Handy (in vw-Einheiten) 📱'
         description: As a percentage of the editor's width, from the left edge (reversed when button is on right).
         description.uk: 'У відсотках від ширини редактора, від лівого краю (у зворотному порядку, коли кнопка знаходиться праворуч)'
@@ -113,7 +113,7 @@ settings:
     -
         id: cg-nt-fab-pos-y-desktop
         title: Y position on desktop (in vh units)
-        title.uk: 'Позиція Y на робочому столі (vh)'
+        title.uk: 'Позиція Y на робочому столі (% висоти)'
         title.de: 'Y-Position am PC (in vh-Einheiten)'
         description: As a percentage of the editor's height, from the top edge.
         description.uk: 'У відсотках від висоти редактора, від верхнього краю'
@@ -124,7 +124,7 @@ settings:
     -
         id: cg-nt-fab-pos-y
         title: 'Y position on mobile (in vh units) 📱'
-        title.uk: 'Позиція Y на мобільному телефоні (vh) 📱'
+        title.uk: 'Позиція Y на мобільному пристрої (% висоти) 📱'
         title.de: 'Y-Position am Handy (in vh-Einheiten) 📱'
         description: As a percentage of the editor's height, from the top edge.
         description.uk: 'У відсотках від висоти редактора, від верхнього краю'
@@ -143,10 +143,10 @@ settings:
     -
         id: cg-nt-fab-padding-desktop
         title: Padding on desktop (in px units)
-        title.uk: 'Відступ на робочому столі (пікселі)'
+        title.uk: 'Відступи на робочому столі (пікселі)'
         title.de: 'Abstand am PC (in px)'
         description: Spacing around the icon.
-        description.uk: 'Відстань навколо іконки'
+        description.uk: 'Відступи навколо іконок'
         description.de: 'Abstand um das Symbol herum'
         type: variable-number
         default: 12
@@ -154,17 +154,17 @@ settings:
     -
         id: cg-nt-fab-padding
         title: 'Padding on mobile (in px units) 📱'
-        title.uk: 'Відступ на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Відступи на мобільному пристрої (пікселі) 📱'
         title.de: 'Abstand am Handy (in px) 📱'
         description: Spacing around the icon.
-        description.uk: 'Відстань навколо іконки'
+        description.uk: 'Відступи навколо іконок'
         type: variable-number
         default: 12
         format: px
     -
         id: cg-nt-fab-icon-size-desktop
         title: Icon size on desktop (in px units)
-        title.uk: 'Розмір піктограми на робочому столі (пікселі)'
+        title.uk: 'Розмір іконки на робочому столі (пікселі)'
         title.de: 'Symbolgröße am PC (in px) 📱'
         type: variable-number
         default: 24
@@ -172,7 +172,7 @@ settings:
     -
         id: cg-nt-fab-icon-size
         title: 'Icon size on mobile (in px units) 📱'
-        title.uk: 'Розмір значка на мобільному телефоні (пікселі) 📱'
+        title.uk: 'Розмір іконки на мобільному пристрої (пікселі) 📱'
         title.de: 'Symbolgröße am Handy (in px) 📱'
         type: variable-number
         default: 24
@@ -180,7 +180,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width-desktop
         title: Icon stroke width on desktop (in px units)
-        title.uk: 'Ширина штриха піктограми на робочому столі (пікселі)'
+        title.uk: 'Ширина рамки іконки на робочому столі (пікселі)'
         title.de: 'Symbol-Strichstärke am PC (in px)'
         type: variable-number
         default: 1.8
@@ -188,7 +188,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width
         title: 'Icon stroke width on mobile (in px units) 📱'
-        title.uk: 'Ширина штриха піктограми на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Ширина рамки іконки на мобільному пристрої (пікселі) 📱'
         title.de: 'Symbol-Strichstärke am Handy (in px) 📱'
         type: variable-number
         default: 1.8
@@ -204,7 +204,7 @@ settings:
     -
         id: cg-nt-fab-border-radius-desktop
         title: Border radius on desktop (in px units)
-        title.uk: 'Закруглення рамки на робочому столі (пікселі)'
+        title.uk: 'Радіус рамки на робочому столі (пікселі)'
         title.de: 'Rahmenabrundung am PC (in px)'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
         description.uk: 'Наскільки округла кнопка. Чим більше число, тим більше округлення. (Додаток за замовчуванням Android = 16, iOS = 999)'
@@ -215,7 +215,7 @@ settings:
     -
         id: cg-nt-fab-border-radius
         title: 'Border radius on mobile (in px units) 📱'
-        title.uk: 'Закруглення рамки на мобільному телефоні (пікселі) 📱'
+        title.uk: 'Радіус рамки на мобільному пристрої (пікселі) 📱'
         title.de: 'Rahmenabrundung am Handy (in px) 📱'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
         description.uk: 'Наскільки округла кнопка. Чим більше число, тим більше округлення. (Додаток за замовчуванням Android = 16, iOS = 999)'
@@ -226,10 +226,10 @@ settings:
     -
         id: cg-nt-fab-inactive-opacity
         title: 'Inactive opacity'
-        title.uk: 'Неактивна непрозорість'
+        title.uk: 'Прозорість у неактивному режимі'
         title.de: 'Inaktive Deckkraft'
         description: 'When focus is in another tab, dim the floating button'
-        description.uk: 'Коли фокус знаходиться на іншій вкладці, зменшіть плаваючу кнопку'
+        description.uk: 'Зменшіть плаваючу кнопку, коли фокус знаходиться на іншій вкладці'
         description.de: 'Wenn der Fokus auf einer anderen Registerkarte liegt, wird die schwebende Schaltfläche abgeblendet'
         type: variable-number-slider
         default: 0.7
@@ -242,7 +242,7 @@ settings:
         title.uk: 'Елементи'
         title.de: Elemente
         description: 'Styles for items within toolbars'
-        description.uk: 'Стилі для елементів вне панелей'
+        description.uk: 'Стилі Елементів вне панелей'
         description.de: 'Stile für Elemente von Toolbars'
         type: heading
         level: 1
@@ -268,7 +268,7 @@ settings:
     -
         id: cg-nt-item-button-bg-color
         title: 'Background color (for button style)'
-        title.uk: 'Колір фону (для стиля кнопки)'
+        title.uk: 'Колір фону (стиль кнопки)'
         title.de: 'Hintergrundfarbe (für Schaltflächen)'
         type: variable-themed-color
         opacity: true
@@ -357,7 +357,7 @@ settings:
         title.uk: 'Меню'
         title.de: 'Menüs'
         description: 'Styles for Item Menu type items'
-        description.uk: 'Стилі для Елементів меню'
+        description.uk: 'Стилі Елементів меню'
         description.de: 'Stile für Element-Menüs'
         type: heading
         level: 1
@@ -423,7 +423,7 @@ settings:
     -
         id: toolbar-menu-sizing
         title:  '↳ 📐 Sizing'
-        title.uk: '↳ 📐 Розмір'
+        title.uk: '↳ 📐 Розміри'
         title.de:  '↳ 📐 Skalierung'
         type: heading
         level: 2
@@ -431,7 +431,7 @@ settings:
     -
         id: cg-nt-menu-item-font-size
         title: 'Font size (in em units)'
-        title.uk: 'Розмір шрифту (em)'
+        title.uk: 'Розмір текста (em)'
         title.de: 'Schriftgröße (in em)'
         type: variable-number
         default: 0.875
@@ -439,7 +439,7 @@ settings:
     -
         id: cg-nt-menu-icon-size
         title: 'Icon size (in px units)'
-        title.uk: 'Розмір піктограми (пікселі)'
+        title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
         type: variable-number
         default: 16
@@ -474,7 +474,7 @@ settings:
         title.uk: 'Швидкі інструменти'
         title.de: Schnellwahl
         description: 'Styles for the Quick Tools window'
-        description.uk: 'Стилі для вікна швидких інструментів'
+        description.uk: 'Стилі вікна Швидких інструментів'
         description.de: 'Stile für das Schnellwahlfenster'
         type: heading
         level: 1
@@ -492,7 +492,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-text-color
         title: '🎨 Text + Icon color'
-        title.uk: '🎨 Колір тексту та іконки'
+        title.uk: '🎨 Кольори текста та іконки'
         title.de: '🎨 Text + Symbol-Farbe'
         type: variable-themed-color
         opacity: true
@@ -502,7 +502,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-text-color-hover
         title: '🎨 Text + Icon color (on hover)'
-        title.uk: '🎨 Текст + колір іконки (при наведенні)'
+        title.uk: '🎨 Кольори текста та іконки (при наведенні)'
         title.de: '🎨 Text + Symbol-Farbe (beim Überfahren mit der Maus)'
         type: variable-themed-color
         opacity: true
@@ -520,7 +520,7 @@ settings:
     -
         id: cg-nt-quick-tools-icon-size
         title: '📐 Icon size (in px units)'
-        title.uk: '📐 Розмір піктограми (пікселі)'
+        title.uk: '📐 Розмір іконки (пікселі)'
         title.de: '📐 Symbolgröße (in px)'
         type: variable-number
         default: 18
@@ -539,7 +539,7 @@ settings:
         title.uk: 'Роздільники'
         title.de: Trenner
         description: 'Styles for toolbar separators'
-        description.uk: 'Стилі для роздільників панелей'
+        description.uk: 'Стилі Роздільників'
         description.de: 'Stile für Toolbar-Trenner'
         type: heading
         level: 1
@@ -557,7 +557,7 @@ settings:
     -
         id: cg-nt-item-sep-margin-x
         title: '📐 Left + Right margin (in em units)'
-        title.uk: '📐 Лівий та правий відступ (em)'
+        title.uk: '📐 Лівий та правий відступи (em)'
         title.de: '📐 Linker und rechter Abstand (in em)'
         type: variable-number
         default: 0.25
@@ -565,7 +565,7 @@ settings:
     -
         id: cg-nt-item-sep-margin-y
         title: '📐 Top + Bottom margin (in em units)'
-        title.uk: '📐 Верхній та нижній відступ (em)'
+        title.uk: '📐 Верхній та нижній відступи (em)'
         title.de: '📐 Oberer und unterer Abstand (in em)'
         type: variable-number
         default: 0.25
@@ -584,7 +584,7 @@ settings:
         title.uk: 'Панелі'
         title.de: Toolbars
         description: 'Styles for standard toolbars'
-        description.uk: 'Стилі для стандартних панелей'
+        description.uk: 'Стилі Панелей'
         description.de: 'Stile für die Standard-Toolbars'
         type: heading
         level: 1
@@ -613,7 +613,7 @@ settings:
         title.uk: 'Колір рамки'
         title.de: 'Rand-Farbe'
         description: 'Top + Bottom borders'
-        description.uk: 'Верхня + нижня рамка'
+        description.uk: 'Верхня та нижня рамки'
         description.de: 'Obere + untere Ränder'
         type: variable-themed-color
         opacity: true
@@ -634,7 +634,7 @@ settings:
         title.uk: 'Верхнє липке зміщення на робочому столі (пікселі)'
         title.de: 'Oberer Sticky-Offset am PC (in rem-Einheiten) 📱'
         description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed).
-        description.uk: 'Для деяких тем панель інструментів не прилипає до верху (більша = далі від верху). Note, this will not apply when Position = Top (fixed)'
+        description.uk: 'З деякими темами панель не приліпає зверху (більше = далі від верху). Це не буде застосовано, якщо позиція = Зверху (фіксовано)'
         description.de: 'Bei einigen Themes klebt die Symbolleiste nicht ganz oben (größer = weiter von oben). Beachten Sie, dass dies nicht gilt, wenn Position = Oben (fixiert)'
         type: variable-number
         default: -40
@@ -642,10 +642,10 @@ settings:
     -
         id: cg-nt-tbar-top-sticky-pos-mobile
         title: 'Top sticky offset on mobile (in rem units) 📱'
-        title.uk: 'Верхній липкий офсет на мобільному телефоні (rem) 📱'
+        title.uk: 'Верхній липкий офсет на мобільному пристрої (rem) 📱'
         title.de: 'Oberer Sticky-Offset am Handy (in rem-Einheiten) 📱'
         description: See above.
-        description.uk: 'Дивіться вище'
+        description.uk: 'Дивіться вище.'
         description.de: Siehe oben.
         type: variable-number
         default: -1
@@ -661,7 +661,7 @@ settings:
     -
         id: cg-nt-tbar-margin-y
         title: Top + Bottom margin (in em units)
-        title.uk: 'Верхній та нижній відступ (em)'
+        title.uk: 'Верхній та нижній відступи (em)'
         title.de: 'Oberer + unterer Abstand (in em-Einheiten)'
         type: variable-number
         default: 0.5
@@ -669,10 +669,10 @@ settings:
     -
         id: cg-nt-tbar-padding-inline
         title: Left + Right padding (in em units)
-        title.uk: 'Відступ ліворуч + праворуч (em)'
+        title.uk: 'Лівий та правий відступи (em)'
         title.de: 'Linker + rechter Abstand (in em-Einheiten)'
         description: Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented.
-        description.uk: 'Корисно, якщо ви встановили колір фону для панелі інструментів або використовуєте кнопки. Larger = more indented'
+        description.uk: 'Корисно, коли встановлен колір фону панелі та використовуються кнопки. Більший = більше відступів'
         description.de: 'Hilfreich, wenn Sie eine Hintergrundfarbe für die Symbolleiste festgelegt haben oder Schaltflächen verwenden. Größer = mehr eingerückt.'
         type: variable-number
         default: 0
@@ -688,7 +688,7 @@ settings:
     -    
         id: cg-nt-tbar-border-radius
         title: 'Border radius (in px units)'
-        title.uk: 'Закруглення рамки (пікселі)'
+        title.uk: 'Закруглення рамок (пікселі)'
         title.de: 'Rahmenrundung (in px)'
         type: variable-number
         default: 0
@@ -696,10 +696,10 @@ settings:
     -
         id: cg-nt-tbar-inactive-opacity
         title: 'Inactive opacity'
-        title.uk: 'Неактивна непрозорість'
+        title.uk: 'Прозорість у неактивному режимі'
         title.de: 'Inaktive Deckkraft'
         description: 'When focus is in another tab, dim the toolbar'
-        description.uk: 'Коли фокус знаходиться на іншій вкладці, затемніть панель інструментів'
+        description.uk: 'Затемняє панель інструментів, коли фокус знаходиться на іншій вкладці'
         description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
         type: variable-number-slider
         default: 0.8
