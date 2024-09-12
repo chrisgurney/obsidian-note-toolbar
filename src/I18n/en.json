@@ -135,7 +135,7 @@
             "ribbon-action": {
                 "name": "Ribbon icon action 📱",
                 "description": "Action to take when the ribbon icon (on phones) is used.",
-                "option-toolbar": "Show toolbar",
+                "option-toolbar": "Show toolbar menu",
                 "option-item-suggester": "Show Quick Tools"
             },
             "show-edit-tbar": {
