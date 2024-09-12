@@ -53,6 +53,10 @@ export enum PositionType {
 	Props = 'props',
 	Top = 'top'
 }
+export enum RibbonAction {
+	ItemSuggester = 'item-suggester',
+	Toolbar = 'toolbar'
+}
 export enum ViewType {
 	All = 'all',
 	Preview = 'preview',
@@ -74,6 +78,7 @@ export enum ToolbarStyle {
 export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
 	icon: string;
+	ribbonAction: RibbonAction;
 	showEditInFabMenu: boolean;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
@@ -83,6 +88,7 @@ export interface NoteToolbarSettings {
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	folderMappings: [],
 	icon: "circle-ellipsis",
+	ribbonAction: RibbonAction.Toolbar,
 	showEditInFabMenu: false,
 	toolbarProp: "notetoolbar",
 	toolbars: [],
@@ -229,6 +235,11 @@ export const POSITION_OPTIONS = {
 		{ fabr: t('setting.position.option-fabr') },
 		{ hidden: t('setting.position.option-hidden-mobile') },
 	]
+}
+
+export const RIBBON_ACTION_OPTIONS = {
+	[RibbonAction.ItemSuggester]: t('setting.other.ribbon-action.option-item-suggester'),
+	[RibbonAction.Toolbar]: (t('setting.other.ribbon-action.option-toolbar')),	
 }
 
 /**

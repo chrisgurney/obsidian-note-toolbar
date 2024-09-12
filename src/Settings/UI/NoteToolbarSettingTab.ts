@@ -3,7 +3,7 @@ import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
-import { FolderMapping, RELEASES_URL, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, RELEASES_URL, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings, USER_GUIDE_URL } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
@@ -447,7 +447,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.other.name'))
 			.setHeading();
 
-		const s1 = new Setting(containerEl)
+		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
 			.setDesc(t('setting.other.icon.description'))
 			.addButton((cb) => {
@@ -472,7 +472,20 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 		
-		const s2 = new Setting(containerEl)
+		new Setting(containerEl)
+			.setName(t('setting.other.ribbon-action.name'))
+			.setDesc(t('setting.other.ribbon-action.description'))
+			.addDropdown((dropdown) => 
+				dropdown
+					.addOptions(RIBBON_ACTION_OPTIONS)
+					.setValue(this.plugin.settings.ribbonAction)
+					.onChange(async (value: RibbonAction) => {
+						this.plugin.settings.ribbonAction = value;
+						await this.plugin.settingsManager.save();
+					})
+				);
+
+		new Setting(containerEl)
 			.setName(t('setting.other.show-edit-tbar.name'))
 			.setDesc(t('setting.other.show-edit-tbar.description'))
 			.addToggle((cb) => {

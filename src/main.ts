@@ -1,6 +1,6 @@
 import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -72,20 +72,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// adds the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 		if (Platform.isPhone) {
-			this.addRibbonIcon(this.settings.icon, t('plugin.name'), (event) => {
-				let activeFile = this.app.workspace.getActiveFile();
-				if (activeFile) {
-					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
-					if (toolbar) {
-						this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-							// add class so we can style the menu
-							menu.dom.addClass('note-toolbar-menu');
-							menu.showAtPosition(event); 
-						});
-					}
-				}
-			});
+			this.addRibbonIcon(this.settings.icon, t('plugin.name'), (event) => this.ribbonMenuHandler(event));
 		}
 
 		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
@@ -1033,7 +1020,34 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Handles the floating action button specifically on mobile.
+	 * Handles what happens when the ribbon icon is used.
+	 * @param event MouseEvent
+	 */
+	async ribbonMenuHandler(event: MouseEvent) {
+		switch (this.settings.ribbonAction) {
+			case (RibbonAction.ItemSuggester):
+				debugLog('itemSuggester');
+				await this.commands.openItemSuggester();
+				break;
+			case (RibbonAction.Toolbar):
+				let activeFile = this.app.workspace.getActiveFile();
+				if (activeFile) {
+					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
+					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
+					if (toolbar) {
+						this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
+							// add class so we can style the menu
+							menu.dom.addClass('note-toolbar-menu');
+							menu.showAtPosition(event); 
+						});
+					}
+				}
+				break;
+		}
+	}
+
+	/**
+	 * Handles the floating action button.
 	 * @param event MouseEvent
 	 * @param posAtElement HTMLElement to position the menu at, which might be different from where the event originated
 	 */
