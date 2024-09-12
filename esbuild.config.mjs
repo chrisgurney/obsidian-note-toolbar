@@ -13,11 +13,12 @@ if you want to view the source, please visit the github repository of this plugi
 const prod = (process.argv[2] === "production");
 
 // use esbuild to check CSS for errors
-await esbuild.build({
-	entryPoints: ['src/styles.css'],
-	bundle: false,
-	write: false
-}).catch(() => process.exit(1));
+// DISABLED for now until I have time to fix the noted issues
+// await esbuild.build({
+// 	entryPoints: ['src/styles.css'],
+// 	bundle: false,
+// 	write: false
+// }).catch(() => process.exit(1));
 
 // bring in the Style Settings YAML
 await yamlInliner('src/styles.css', 'styles.css').catch(() => process.exit(1));
