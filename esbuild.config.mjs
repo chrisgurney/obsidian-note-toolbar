@@ -1,6 +1,6 @@
 import esbuild from "esbuild";
 import chokidar from "chokidar";
-import { yamlInliner } from "./build/yamlInliner.mjs";
+import { yamlInliner } from "./build/yaml-inliner.mjs";
 import process from "process";
 import builtins from "builtin-modules";
 
