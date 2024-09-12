@@ -25,7 +25,7 @@ export async function yamlInliner(inputCssPath, outputCssPath) {
                   });
                 })
                 .catch(err => {
-                  console.error(`Error reading YAML file: ${fullPath}`, err);
+                  console.error(`[yaml-inliner] error reading YAML file: ${fullPath}`, err);
                 })
             );
           }
@@ -47,9 +47,9 @@ export async function yamlInliner(inputCssPath, outputCssPath) {
 
     await fs.writeFile(outputCssPath, result.css);
 
-    console.log('CSS processing complete with PostCSS and yamlInliner');
+    console.log('[yaml-inliner] CSS processing complete');
   } catch (error) {
-    console.error('PostCSS processing failed:', error);
+    console.error('[yaml-inliner] PostCSS processing failed:', error);
     throw error;
   }
 }
