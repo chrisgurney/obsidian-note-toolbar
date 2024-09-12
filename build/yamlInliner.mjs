@@ -47,7 +47,7 @@ export async function yamlInliner(inputCssPath, outputCssPath) {
 
     await fs.writeFile(outputCssPath, result.css);
 
-    console.log('[yaml-inliner] CSS processing complete');
+    console.log('[yaml-inliner] CSS processing complete; restart if changes are made to YAML');
   } catch (error) {
     console.error('[yaml-inliner] PostCSS processing failed:', error);
     throw error;
