@@ -2,7 +2,7 @@
     "command": {
         "name-focus": "Focus",
         "name-item-suggester": "Open quick tools",
-        "name-toolbar-suggester": "Open quick tools (toolbars)",
+        "name-toolbar-suggester": "Open quick toolbars",
         "name-settings": "Open plugin settings",
         "name-toolbar-settings": "Open toolbar settings",
         "name-show-properties": "Show Properties",
