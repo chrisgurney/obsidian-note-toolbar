@@ -2,32 +2,43 @@ import { Platform, SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obs
 import NoteToolbarPlugin from "main";
 import { calcItemVisToggles, debugLog, hasVars, replaceVars } from "Utils/Utils";
 import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
     // private parentEl: HTMLElement;
     public plugin: NoteToolbarPlugin;
     public activeFile: TFile | null;
+    public toolbarId: string | undefined;
 
     /**
      * Creates a new modal.
      * @param plugin NoteToolbarPlugin
      * @param activeFile TFile for the active file (so vars can be replaced)
+     * @param toolbarId string ID of the toolbar to optionally scope this ItemSuggestModal to
      */
-	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null) {
+	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, toolbarId?: string) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         // this.parentEl = parentEl;
         this.plugin = plugin;
         this.activeFile = activeFile;
+        this.toolbarId = toolbarId;
 
-        this.setPlaceholder(t('setting.item-suggester.placeholder'));
-        this.setInstructions([
-            {command: '↑↓', purpose: t('setting.item-suggester.instruction-navigate')},
-            {command: '↵', purpose: t('setting.item-suggester.instruction-use')},
-            {command: 'esc', purpose: t('setting.item-suggester.instruction-dismiss')},
-        ]);
+        this.setPlaceholder(t('setting.item-suggest-modal.placeholder'));
+        let instructions = [];
+        if (toolbarId) {
+            instructions.push(
+                {command: '←', purpose: t('setting.item-suggest-modal.instruction-back')},
+            );
+        }
+        instructions.push(
+            {command: '↑↓', purpose: t('setting.item-suggest-modal.instruction-navigate')},
+            {command: '↵', purpose: t('setting.item-suggest-modal.instruction-use')},
+            {command: 'esc', purpose: t('setting.item-suggest-modal.instruction-dismiss')},
+        );
+        this.setInstructions(instructions);
 
         // handle meta key selections
         if (Platform.isWin || Platform.isLinux) {
@@ -38,7 +49,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             this.scope.register(['Meta'], 'Enter', (event) => this.handleKeyboardSelection(event));
             this.scope.register(['Meta', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
         }
-
+        // handle back navigation
+        if (toolbarId) {
+            this.scope.register([], 'ArrowLeft', (event) => this.handleKeyboardSelection(event));
+        }
+    
     }
 
     /**
@@ -47,7 +62,17 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @returns array of ToolbarItemSettings
      */
     getSuggestions(inputStr: string): ToolbarItemSettings[] {
-        const pluginToolbars = this.plugin.settings.toolbars;
+
+        let pluginToolbars = [];
+        if (this.toolbarId) {
+            let toolbar = this.plugin.settingsManager.getToolbarById(this.toolbarId);
+            pluginToolbars = toolbar ? [toolbar] : [];
+        }
+        else {
+            pluginToolbars = this.plugin.settings.toolbars
+        }
+
+        // const pluginToolbars = this.plugin.settings.toolbars;
         const itemSuggestions: ToolbarItemSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
@@ -158,9 +183,9 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     : item.tooltip.toLowerCase().includes(inputStrLower) 
                         ? item.tooltip 
                         : item.link;
-            let itemRawEl = itemLabel.createDiv();
-            itemRawEl.addClass('note-toolbar-item-suggester-note');
-            itemRawEl.setText(inputMatch);
+            let itemNoteEl = itemLabel.createDiv();
+            itemNoteEl.addClass('note-toolbar-item-suggester-note');
+            itemNoteEl.setText(inputMatch);
         }
 
     }
@@ -170,9 +195,21 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param event KeyboardEvent
      */
     async handleKeyboardSelection(event: KeyboardEvent) {
-        let selectedItem = this.modalEl.querySelector('.note-toolbar-item-suggestion.is-selected');
-        let item = selectedItem?.id ? this.plugin.settingsManager.getToolbarItemById(selectedItem?.id) : undefined;
-        item ? this.onChooseSuggestion(item, event) : undefined;
+        switch (event.key) {
+            case 'ArrowLeft':
+                if (this.toolbarId && this.inputEl.value === '') {
+                    this.close();
+                    let activeFile = this.plugin.app.workspace.getActiveFile();
+                    const modal = new ToolbarSuggestModal(this.plugin, activeFile);
+                    modal.open();
+                }
+                break;
+            default:
+                let selectedItem = this.modalEl.querySelector('.note-toolbar-item-suggestion.is-selected');
+                let item = selectedItem?.id ? this.plugin.settingsManager.getToolbarItemById(selectedItem?.id) : undefined;
+                item ? this.onChooseSuggestion(item, event) : undefined;
+                break;    
+        }
     }
 
     /**
