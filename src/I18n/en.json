@@ -97,8 +97,9 @@
             "option-visibility-platform-desktop": "desktop",
             "option-visibility-platform-mobile": "mobile"
         },
-        "item-suggester": {
+        "item-suggest-modal": {
             "placeholder": "Search for an item...",
+            "instruction-back": "go back",
 			"instruction-navigate": "to navigate",
 			"instruction-use": "to use item",
 			"instruction-dismiss": "to dismiss"
