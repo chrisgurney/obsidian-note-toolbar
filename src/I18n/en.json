@@ -139,7 +139,7 @@
                 "description": "Action to take when the ribbon icon (on phones) is used.",
                 "option-toolbar": "Show toolbar menu",
                 "option-item-suggester": "Show Quick Tools",
-                "option-toolbar-suggester": "Show Quick Tools (toolbars)"
+                "option-toolbar-suggester": "Show Quick Toolbars"
             },
             "show-edit-tbar": {
                 "name": "Show 'Edit toolbar' link in toolbar menus",
