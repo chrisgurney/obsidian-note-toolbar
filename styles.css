@@ -106,7 +106,7 @@ settings:
         title.uk: 'Позиція X на робочому столі (em)'
         title.de: 'X-Position am PC (in vw-Einheiten)'
         title.zh: '桌面端X轴位置（单位：em）'
-        description: Distance from the edge of the editor view.
+        description: 'Distance from the edge of the editor view.'
         description.uk: 'Відстань від краю вікна редактора'
         description.de: 'Abstand vom Rand der Editoransicht.'
         description.zh: '距编辑器视图边缘的距离'
@@ -119,7 +119,7 @@ settings:
         title.uk: 'Позиція X на мобільному (% ширини) 📱'
         title.de: 'X-Position am Handy (in vw-Einheiten) 📱'
         title.zh: '移动端X轴位置（单位：vw）📱'
-        description: As a percentage of the editor's width, from the left edge (reversed when button is on right).
+        description: "As a percentage of the editor's width, from the left edge (reversed when button is on right)."
         description.uk: 'У відсотках від ширини редактора, від лівого краю (у зворотному порядку, коли кнопка знаходиться праворуч)'
         description.de: 'Als Prozentsatz der Breite des Editors, ausgehend vom linken Rand (umgekehrt, wenn sich die Schaltfläche rechts befindet).'
         description.zh: '基于左侧边缘，占编辑器宽度的百分比（当按钮在右侧时则相反）'
@@ -132,7 +132,7 @@ settings:
         title.uk: 'Позиція Y на робочому столі (% висоти)'
         title.de: 'Y-Position am PC (in vh-Einheiten)'
         title.zh: '桌面端Y轴位置（单位：vh）'
-        description: As a percentage of the editor's height, from the top edge.
+        description: "As a percentage of the editor's height, from the top edge."
         description.uk: 'У відсотках від висоти редактора, від верхнього краю'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '基于顶部边缘，占编辑器高度的百分比'
@@ -145,7 +145,7 @@ settings:
         title.uk: 'Позиція Y на мобільному пристрої (% висоти) 📱'
         title.de: 'Y-Position am Handy (in vh-Einheiten) 📱'
         title.zh: '移动端Y轴位置（单位：vh）📱'
-        description: As a percentage of the editor's height, from the top edge.
+        description: "As a percentage of the editor's height, from the top edge."
         description.uk: 'У відсотках від висоти редактора, від верхнього краю'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '基于顶部边缘，占编辑器高度的百分比'
@@ -167,7 +167,7 @@ settings:
         title.uk: 'Відступи на робочому столі (пікселі)'
         title.de: 'Abstand am PC (in px)'
         title.zh: '桌面端内边距（单位：像素）'
-        description: Spacing around the icon.
+        description: 'Spacing around the icon.'
         description.uk: 'Відступи навколо іконок'
         description.de: 'Abstand um das Symbol herum'
         description.zh: '图标周围的间距（Padding）'
@@ -180,7 +180,7 @@ settings:
         title.uk: 'Відступи на мобільному пристрої (пікселі) 📱'
         title.de: 'Abstand am Handy (in px) 📱'
         title.zh: '移动端内边距（单位：像素）📱'
-        description: Spacing around the icon.
+        description: 'Spacing around the icon.'
         description.uk: 'Відступи навколо іконок'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
@@ -480,7 +480,7 @@ settings:
         default-dark: '#'
     -
         id: toolbar-menu-sizing
-        title:  '↳ 📐 Sizing'
+        title: '↳ 📐 Sizing'
         title.uk: '↳ 📐 Розміри'
         title.de: '↳ 📐 Skalierung'
         title.zh: '↳ 📐 尺寸'
@@ -545,7 +545,7 @@ settings:
         type: heading
         level: 1
         collapsed: true
-    - 
+    -
         id: cg-nt-quick-tools-item-bg-color-hover
         title: '🎨 Background color (hover)'
         title.uk: '🎨 Колір фону (при наведенні)'
@@ -626,7 +626,7 @@ settings:
         title.zh: '🎨 颜色'
         type: variable-themed-color
         opacity: true
-        format: hex        
+        format: hex
         default-light: '#'
         default-dark: '#'
     -
@@ -719,7 +719,7 @@ settings:
         title.uk: 'Верхнє липке зміщення на робочому столі (пікселі)'
         title.de: 'Oberer Sticky-Offset am PC (in rem-Einheiten) 📱'
         title.zh: '桌面端顶部 Sticky 附着的偏移量（单位：像素）'
-        description: For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed).
+        description: "For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed)."
         description.uk: 'З деякими темами панель не приліпає зверху (більше = далі від верху). Це не буде застосовано, якщо позиція = Зверху (фіксовано)'
         description.de: 'Bei einigen Themes klebt die Symbolleiste nicht ganz oben (größer = weiter von oben). Beachten Sie, dass dies nicht gilt, wenn Position = Oben (fixiert)'
         description.zh: '对于某些主题，工具栏并不能完全贴在顶部（数值越大，离顶部越远）。注意，当位置为「置顶（固定）」时，此设置不适用。'
@@ -732,7 +732,7 @@ settings:
         title.uk: 'Верхній липкий офсет на мобільному пристрої (rem) 📱'
         title.de: 'Oberer Sticky-Offset am Handy (in rem-Einheiten) 📱'
         title.zh: '移动端顶部 Sticky 附着的偏移量（单位：rem）📱'
-        description: See above.
+        description: 'See above.'
         description.uk: 'Дивіться вище.'
         description.de: Siehe oben.
         description.zh: '参见上面的说明。'
@@ -763,7 +763,7 @@ settings:
         title.uk: 'Лівий та правий відступи (em)'
         title.de: 'Linker + rechter Abstand (in em-Einheiten)'
         title.zh: '左右内边距（单位：em）'
-        description: Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented.
+        description: "Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented."
         description.uk: 'Корисно, коли встановлен колір фону панелі та використовуються кнопки. Більший = більше відступів'
         description.de: 'Hilfreich, wenn Sie eine Hintergrundfarbe für die Symbolleiste festgelegt haben oder Schaltflächen verwenden. Größer = mehr eingerückt.'
         description.zh: '当您为工具栏设置了背景色、或者使用按钮时会很有用。数值越大，缩进越多。'
