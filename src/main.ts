@@ -41,7 +41,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.commands = new CommandsManager(this);
 
 		this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
-		this.addCommand({ id: 'open-quick-tools', name: t('command.name-quick-tools'), callback: async () => this.commands.openItemSuggester() });
+		this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openItemSuggester() });
+		this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
 		this.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.commands.openSettings() });
 		this.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.commands.openToolbarSettings() });
 		this.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.commands.toggleProps('show') });
@@ -1026,8 +1027,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	async ribbonMenuHandler(event: MouseEvent) {
 		switch (this.settings.ribbonAction) {
 			case (RibbonAction.ItemSuggester):
-				debugLog('itemSuggester');
 				await this.commands.openItemSuggester();
+				break;
+			case (RibbonAction.ToolbarSuggester):
+				await this.commands.openToolbarSuggester();
 				break;
 			case (RibbonAction.Toolbar):
 				let activeFile = this.app.workspace.getActiveFile();

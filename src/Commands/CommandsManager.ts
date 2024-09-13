@@ -1,6 +1,7 @@
 import { t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
+import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { debugLog } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { MarkdownView } from "obsidian";
@@ -58,10 +59,11 @@ export class CommandsManager {
 
     /**
      * Opens the item suggester modal.
+     * @param toolbarId optional ID of a toolbar to limit the ItemSuggestModal to show
      */
-    async openItemSuggester(): Promise<void> {
+    async openItemSuggester(toolbarId?: string): Promise<void> {
         let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ItemSuggestModal(this.plugin, activeFile);
+        const modal = new ItemSuggestModal(this.plugin, activeFile, toolbarId);
         modal.open();
     }
 
@@ -87,6 +89,15 @@ export class CommandsManager {
             modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
             modal.open();
         }
+    }
+
+    /**
+     * Opens the toolbar suggester modal.
+     */
+    async openToolbarSuggester(): Promise<void> {
+        let activeFile = this.plugin.app.workspace.getActiveFile();
+        const modal = new ToolbarSuggestModal(this.plugin, activeFile);
+        modal.open();
     }
 
     /**

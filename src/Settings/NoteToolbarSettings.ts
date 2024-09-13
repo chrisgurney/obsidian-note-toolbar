@@ -55,6 +55,7 @@ export enum PositionType {
 }
 export enum RibbonAction {
 	ItemSuggester = 'item-suggester',
+	ToolbarSuggester = 'toolbar-suggester',
 	Toolbar = 'toolbar'
 }
 export enum ViewType {
@@ -239,7 +240,8 @@ export const POSITION_OPTIONS = {
 
 export const RIBBON_ACTION_OPTIONS = {
 	[RibbonAction.ItemSuggester]: t('setting.other.ribbon-action.option-item-suggester'),
-	[RibbonAction.Toolbar]: (t('setting.other.ribbon-action.option-toolbar')),	
+	[RibbonAction.ToolbarSuggester]: t('setting.other.ribbon-action.option-toolbar-suggester'),
+	[RibbonAction.Toolbar]: (t('setting.other.ribbon-action.option-toolbar')),
 }
 
 /**

@@ -1,7 +1,8 @@
 {
     "command": {
         "name-focus": "Focus",
-        "name-quick-tools": "Open quick tools",
+        "name-item-suggester": "Open quick tools",
+        "name-toolbar-suggester": "Open quick tools (toolbars)",
         "name-settings": "Open plugin settings",
         "name-toolbar-settings": "Open toolbar settings",
         "name-show-properties": "Show Properties",
@@ -137,7 +138,8 @@
                 "name": "Ribbon icon action 📱",
                 "description": "Action to take when the ribbon icon (on phones) is used.",
                 "option-toolbar": "Show toolbar menu",
-                "option-item-suggester": "Show Quick Tools"
+                "option-item-suggester": "Show Quick Tools",
+                "option-toolbar-suggester": "Show Quick Tools (toolbars)"
             },
             "show-edit-tbar": {
                 "name": "Show 'Edit toolbar' link in toolbar menus",
@@ -191,6 +193,12 @@
             "option-mobile-empty": "No mobile styles set. Using default styles.",
             "style-tooltip-use-class": "Use in Callout or CSS: {{class}}",
             "style-remove-tooltip": "Remove"
+        },
+        "toolbar-suggest-modal": {
+            "placeholder": "Search for a toolbar...",
+			"instruction-navigate": "to navigate",
+			"instruction-use": "to open toolbar",
+			"instruction-dismiss": "to dismiss"
         },
         "toolbars": {
             "name": "Toolbars",
