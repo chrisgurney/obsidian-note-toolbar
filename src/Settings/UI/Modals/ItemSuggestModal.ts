@@ -30,13 +30,13 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let instructions = [];
         if (toolbarId) {
             instructions.push(
-                {command: '⌫ or ←', purpose: t('setting.item-suggest-modal.instruction-back')},
+                {command: t('setting.item-suggest-modal.key-back'), purpose: t('setting.item-suggest-modal.instruction-back')},
             );
         }
         instructions.push(
-            {command: '↑↓', purpose: t('setting.item-suggest-modal.instruction-navigate')},
-            {command: '↵', purpose: t('setting.item-suggest-modal.instruction-use')},
-            {command: 'esc', purpose: t('setting.item-suggest-modal.instruction-dismiss')},
+            {command: t('setting.item-suggest-modal.key-navigate'), purpose: t('setting.item-suggest-modal.instruction-navigate')},
+            {command: t('setting.item-suggest-modal.key-use'), purpose: t('setting.item-suggest-modal.instruction-use')},
+            {command: t('setting.item-suggest-modal.key-dismiss'), purpose: t('setting.item-suggest-modal.instruction-dismiss')},
         );
         this.setInstructions(instructions);
 

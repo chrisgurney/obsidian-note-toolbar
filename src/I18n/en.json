@@ -103,7 +103,11 @@
             "instruction-back": "to go back",
 			"instruction-navigate": "to navigate",
 			"instruction-use": "to use item",
-			"instruction-dismiss": "to dismiss"
+			"instruction-dismiss": "to dismiss",
+            "key-back": "⌫ or ←",
+            "key-navigate": "↑↓",
+            "key-use": "↵",
+            "key-dismiss": "esc"
         },
         "items": {
             "name": "Items",
