@@ -100,7 +100,7 @@
         },
         "item-suggest-modal": {
             "placeholder": "Search for an item...",
-            "instruction-back": "go back",
+            "instruction-back": "to go back",
 			"instruction-navigate": "to navigate",
 			"instruction-use": "to use item",
 			"instruction-dismiss": "to dismiss"

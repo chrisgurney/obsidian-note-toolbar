@@ -30,7 +30,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let instructions = [];
         if (toolbarId) {
             instructions.push(
-                {command: '←', purpose: t('setting.item-suggest-modal.instruction-back')},
+                {command: '⌫ or ←', purpose: t('setting.item-suggest-modal.instruction-back')},
             );
         }
         instructions.push(
@@ -52,6 +52,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // handle back navigation
         if (toolbarId) {
             this.scope.register([], 'ArrowLeft', (event) => this.handleKeyboardSelection(event));
+            this.scope.register([], 'Backspace', (event) => this.handleKeyboardSelection(event));
         }
     
     }
@@ -197,6 +198,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     async handleKeyboardSelection(event: KeyboardEvent) {
         switch (event.key) {
             case 'ArrowLeft':
+            case 'Backspace':
                 if (this.toolbarId && this.inputEl.value === '') {
                     this.close();
                     let activeFile = this.plugin.app.workspace.getActiveFile();
