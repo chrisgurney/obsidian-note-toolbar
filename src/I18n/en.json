@@ -43,7 +43,7 @@
             "name": "Display rules",
             "description": "Define which notes to display toolbars on.",
             "option-property": "Property",
-            "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings. Set to 'none' to hide the toolbar.",
+            "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. Takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property",
             "option-folder-all": "all folders",
             "option-folder-root": "root folder only",
@@ -146,8 +146,8 @@
                 "option-toolbar-suggester": "Show Quick Toolbars"
             },
             "show-edit-tbar": {
-                "name": "Show 'Edit toolbar' link in toolbar menus",
-                "description": "Adds an item to access the toolbar's settings in toolbar menus."
+                "name": "Show 'Edit toolbar' link in toolbar menus 📱",
+                "description": "Adds an item to access the toolbar's settings in toolbars that are displayed as menus at the bottom of the screen on phones."
             }
         },
         "position": {
