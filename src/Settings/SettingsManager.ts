@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
-import { ComponentType, DEFAULT_SETTINGS, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
-import { Platform } from "obsidian";
+import { ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
+import { FrontMatterCache, Platform, TFile } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 
 export class SettingsManager {
@@ -66,6 +66,56 @@ export class SettingsManager {
 			toolbar.items.push(newItem);
 		}
 		return newItem.uuid;
+	}
+
+	/**
+	 * Get toolbar for the given frontmatter (based on a toolbar prop), and failing that the file (based on folder mappings).
+	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
+	 * @param file The note to check if we have a toolbar for.
+	 * @returns ToolbarSettings or undefined, if there is no matching toolbar.
+	 */
+	public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
+
+		debugLog('getMappedToolbar()');
+
+		let matchingToolbar: ToolbarSettings | undefined = undefined;
+
+		// debugLog('- frontmatter: ', frontmatter);
+		const propName = this.plugin.settings.toolbarProp;
+		let ignoreToolbar = false;
+
+		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
+		if (notetoolbarProp !== null) {
+			// if any prop = 'none' then don't return a toolbar
+			notetoolbarProp.includes('none') ? ignoreToolbar = true : false;
+			// is it valid? (i.e., is there a matching toolbar?)
+			ignoreToolbar ? undefined : matchingToolbar = this.getToolbarFromProps(notetoolbarProp);
+		}
+
+		// we still don't have a matching toolbar
+		if (!matchingToolbar && !ignoreToolbar) {
+
+			// check if the note is in a folder that's mapped, and if the mapping is valid
+			let mapping: FolderMapping;
+			let filePath: string;
+			for (let index = 0; index < this.plugin.settings.folderMappings.length; index++) {
+				mapping = this.plugin.settings.folderMappings[index];
+				filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
+				// debugLog('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
+				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
+					// continue until we get a matching toolbar
+					matchingToolbar = this.getToolbarById(mapping.toolbar);
+					if (matchingToolbar) {
+						// debugLog('  - matched toolbar:', matchingToolbar);
+						break;
+					}
+				}
+			}
+
+		}
+
+		return matchingToolbar;
+
 	}
 
 	/**

@@ -249,7 +249,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		debugLog('checkAndRenderToolbar()');
 
 		// get matching toolbar for this note, if there is one		
-		let matchingToolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, file);
+		let matchingToolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, file);
 		
 		// remove existing toolbar if needed
 		let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
@@ -262,56 +262,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 			await this.updateToolbar(matchingToolbar, file);
 		}
-
-	}
-
-	/**
-	 * Get toolbar for the given frontmatter (based on a toolbar prop), and failing that the file (based on folder mappings).
-	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
-	 * @param file The note to check if we have a toolbar for.
-	 * @returns ToolbarSettings or undefined, if there is no matching toolbar.
-	 */
-	private getMatchingToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
-		// TODO: rename function to getMappedToolbar()
-		debugLog('getMatchingToolbar()');
-
-		let matchingToolbar: ToolbarSettings | undefined = undefined;
-
-		// debugLog('- frontmatter: ', frontmatter);
-		const propName = this.settings.toolbarProp;
-		let ignoreToolbar = false;
-
-		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
-		if (notetoolbarProp !== null) {
-			// if any prop = 'none' then don't return a toolbar
-			notetoolbarProp.includes('none') ? ignoreToolbar = true : false;
-			// is it valid? (i.e., is there a matching toolbar?)
-			ignoreToolbar ? undefined : matchingToolbar = this.settingsManager.getToolbarFromProps(notetoolbarProp);
-		}
-
-		// we still don't have a matching toolbar
-		if (!matchingToolbar && !ignoreToolbar) {
-
-			// check if the note is in a folder that's mapped, and if the mapping is valid
-			let mapping: FolderMapping;
-			let filePath: string;
-			for (let index = 0; index < this.settings.folderMappings.length; index++) {
-				mapping = this.settings.folderMappings[index];
-				filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
-				// debugLog('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
-				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-					// continue until we get a matching toolbar
-					matchingToolbar = this.settingsManager.getToolbarById(mapping.toolbar);
-					if (matchingToolbar) {
-						// debugLog('  - matched toolbar:', matchingToolbar);
-						break;
-					}
-				}
-			}
-
-		}
-
-		return matchingToolbar;
 
 	}
 
@@ -1036,7 +986,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let activeFile = this.app.workspace.getActiveFile();
 				if (activeFile) {
 					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-					let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
+					let toolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
 					if (toolbar) {
 						this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
 							// add class so we can style the menu
@@ -1062,7 +1012,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let activeFile = this.app.workspace.getActiveFile();
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			let toolbar: ToolbarSettings | undefined = this.getMatchingToolbar(frontmatter, activeFile);
+			let toolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
 			if (toolbar) {
 				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
 					let fabEl = this.getToolbarFabEl();
