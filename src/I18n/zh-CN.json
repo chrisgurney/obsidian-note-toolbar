@@ -1,7 +1,8 @@
 {
     "command": {
         "name-focus": "聚焦",
-        "name-quick-tools": "打开快速工具",
+        "name-item-suggester": "快速工具",
+        "name-toolbar-suggester": "快速工具栏",
         "name-settings": "打开插件设置",
         "name-toolbar-settings": "打开工具栏设置",
         "name-show-properties": "显示笔记属性",
@@ -131,6 +132,10 @@
                 "name": "图标",
                 "description": "设置浮动按钮和导航栏（移动端）的图标，需要重启。",
                 "tooltip": "选择图标"
+            },
+            "ribbon-action": {
+                "option-item-suggester": "快速工具",
+                "option-toolbar-suggester": "快速工具栏"
             },
             "show-edit-tbar": {
                 "name": "在工具栏菜单中显示'编辑工具栏'的链接",
