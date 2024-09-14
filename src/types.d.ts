@@ -29,6 +29,11 @@ declare module "obsidian" {
 		dom: HTMLDivElement
 	}
 
+    // allows access to sub-menus
+    interface MenuItem {
+        setSubmenu: () => Menu;
+    }
+
 	// interface Workspace {
     //     on(name: "note-toolbar:item-activated", callback: () => void, ctx?: any): EventRef;
     // }

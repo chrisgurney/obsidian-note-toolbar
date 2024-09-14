@@ -36,6 +36,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
+		// this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuListener));
 		this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
 
 		this.commands = new CommandsManager(this);
@@ -131,6 +132,27 @@ export default class NoteToolbarPlugin extends Plugin {
 	/*************************************************************************
 	 * LISTENERS
 	 *************************************************************************/
+
+	/**
+	 * On opening of the file meny, check and render toolbar as a submenu.
+	 * @param menu the file Menu
+	 * @param file TFile for link that was clicked on
+	 */
+	fileMenuListener = (menu: Menu, file: TFile) => {
+		let cache = this.app.metadataCache.getFileCache(file);
+		if (cache) {
+			let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
+			if (toolbar) {
+				menu.addItem((item) => {
+					item
+						.setIcon(this.settings.icon)
+						.setTitle(toolbar.name);
+					let subMenu = item.setSubmenu() as Menu;
+					this.renderMenuItems(subMenu, toolbar, file);
+				});
+			}
+		}
+	}
 
 	/**
 	 * On opening of a file, check and render toolbar if necessary.
