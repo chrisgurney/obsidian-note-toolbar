@@ -1,13 +1,14 @@
 import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getUUID, moveElement } from 'Utils/Utils';
-import { createToolbarPreviewFr, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, emptyMessageFr, iconTextFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { FolderMapping, RELEASES_URL, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings, USER_GUIDE_URL } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
+import { HelpModal } from './Modals/HelpModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -61,6 +62,32 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.setClass('note-toolbar-setting-plugin-error')
 				.setHeading();
 		}
+
+		const helpDesc = document.createDocumentFragment();
+		helpDesc.append(
+			helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + this.plugin.manifest.version })
+		);
+
+		// new Setting(containerEl)
+		// 	.setName('Note Toolbar' + ' v' + this.plugin.manifest.version)
+		// 	.setDesc("Learn more about using Note Toolbar.")
+		// 	.addButton((button: ButtonComponent) => {
+		// 		button
+		// 			.setTooltip('Open the release notes on github.com')
+		// 			.onClick(() => {
+		// 				window.open(RELEASES_URL, '_blank');
+		// 			})
+		// 			.buttonEl.setText("What's new?");
+		// 	})
+		// 	.addButton((button: ButtonComponent) => {
+		// 		button
+		// 			.setTooltip('Open help window')
+		// 			.onClick(() => {
+		// 				let help = new HelpModal(this.plugin);
+		// 				help.open();
+		// 			})
+		// 			.buttonEl.setText(iconTextFr('help-circle', 'Help'))
+		// 	});
 
 		// toolbar list
 		this.displayToolbarList(containerEl);
