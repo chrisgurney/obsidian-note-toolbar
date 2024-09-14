@@ -173,7 +173,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							button
 								.setTooltip(t('setting.toolbars.button-edit-tbar-tooltip'))
 								.setButtonText(t('setting.toolbars.button-edit-tbar'))
-								.setCta()
 								.onClick(() => {
 									this.openSettingsModal(toolbar);
 								});
@@ -474,7 +473,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		
 		new Setting(containerEl)
 			.setName(t('setting.other.ribbon-action.name'))
-			.setDesc(t('setting.other.ribbon-action.description'))
+			.setDesc(learnMoreFr(t('setting.other.ribbon-action.description'), 'Navigation-bar'))
 			.addDropdown((dropdown) => 
 				dropdown
 					.addOptions(RIBBON_ACTION_OPTIONS)
