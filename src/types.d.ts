@@ -2,15 +2,19 @@ import { INoteToolbarApi } from "Api/NoteToolbarApi";
 import NoteToolbar from "main";
 
 declare global {
+    
     interface Window {
         NoteToolbarApi?: INoteToolbarApi;
         NoteToolbar?: NoteToolbar;
     }
-    // TODO: provide access to Obsidian's translation framework
+
+    // provides access to Obsidian's translation framework
     var i18next: any;
+
 }
 
 declare module "obsidian" {
+
     // allows access to commands for execution
     interface App {
         commands: {
@@ -19,11 +23,14 @@ declare module "obsidian" {
             commands: Record<string, { name: string; id: string }>;
         };
     }
+
     // allows access to Menu DOM, to add a class for styling
 	interface Menu {
 		dom: HTMLDivElement
 	}
+
 	// interface Workspace {
     //     on(name: "note-toolbar:item-activated", callback: () => void, ctx?: any): EventRef;
     // }
+
 }
