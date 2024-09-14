@@ -1452,6 +1452,15 @@ body {
     }
 } 
 
+.note-toolbar-setting-text-with-icon {
+    display: flex;
+    column-gap: 0.5em;
+    align-items: center;
+    & svg {
+        vertical-align: middle;
+    }
+}
+
 .note-toolbar-setting-item {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);

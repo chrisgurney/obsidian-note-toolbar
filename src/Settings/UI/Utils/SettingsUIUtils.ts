@@ -104,6 +104,19 @@ export function emptyMessageFr(message: string): DocumentFragment {
 	return messageFr;
 }
 
+
+export function iconTextFr(icon: string, text: string): DocumentFragment {
+	let headingFr = document.createDocumentFragment();
+	let headingEl = headingFr.createEl('span');
+	headingEl.addClass('note-toolbar-setting-text-with-icon');
+	let headingIcon = headingEl.createEl('span');
+	setIcon(headingIcon, 'lucide-' + icon);
+	let headingText = headingEl.createEl('span');
+	headingText.setText(text);
+	headingFr.append(headingEl);
+	return headingFr;
+}
+
 /**
  * Creates a text fragment with help text and a Learn More link.
  * @param message Message to return as a fragment.
