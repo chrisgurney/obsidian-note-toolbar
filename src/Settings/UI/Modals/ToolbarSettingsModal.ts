@@ -1537,7 +1537,7 @@ export default class ToolbarSettingsModal extends Modal {
 					return ['', t('setting.item.option-visibility-visible-platform', { platform: platformLabel })];
 				} else if (dkComponents.length === 1) {
 					return [
-						dkComponents[0], 
+						(dkComponents[0] === ComponentType.Icon) ? t('setting.item.option-component-icon') : (dkComponents[0] === ComponentType.Label) ? t('setting.item.option-component-label') : dkComponents[0],
 						t('setting.item.option-visibility-component-visible-platform', { component: dkComponents[0], platform: platformLabel })];
 				} else {
 					return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
