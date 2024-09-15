@@ -82,7 +82,7 @@ Note Toolbar is also available in:
 
 |Language name|Native name|What's translated|Contributors|
 |---|---|---|---|
-|Chinese (Simplified)|简体中文|Plugin UI|[@Moyf](https://github.com/Moyf)|
+|Chinese (Simplified)|简体中文|Plugin UI, Style Settings|[@Moyf](https://github.com/Moyf)|
 |German|Deutsch|Plugin UI, Style Settings|[@hartimd](https://github.com/hartimd)|
 |Ukrainian|Український|Plugin UI, Style Settings|[@Laktiv](https://github.com/laktiv)|
 
