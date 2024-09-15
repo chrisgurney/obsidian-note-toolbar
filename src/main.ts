@@ -142,13 +142,13 @@ export default class NoteToolbarPlugin extends Plugin {
 		let cache = this.app.metadataCache.getFileCache(file);
 		if (cache) {
 			let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
-			if (toolbar !== undefined) {
+			if (toolbar) {
 				menu.addItem((item) => {
 					item
 						.setIcon(this.settings.icon)
-						.setTitle(toolbar.name);
+						.setTitle(toolbar?.name);
 					let subMenu = item.setSubmenu() as Menu;
-					this.renderMenuItems(subMenu, toolbar, file);
+					toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
 				});
 			}
 		}
