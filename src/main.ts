@@ -142,7 +142,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let cache = this.app.metadataCache.getFileCache(file);
 		if (cache) {
 			let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
-			if (toolbar) {
+			if (toolbar !== undefined) {
 				menu.addItem((item) => {
 					item
 						.setIcon(this.settings.icon)
