@@ -81,6 +81,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
             toolbar.items.forEach((item: ToolbarItemSettings) => {
                 let itemName = item.label || item.tooltip;
+                if (!itemName) itemName = item.icon ? item.link : '';
                 let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
                 // add items with labels/tooltips, not menus, matching search string
                 if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(lowerCaseInputStr)) {
@@ -150,6 +151,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
         let itemNameEl = el.createSpan();
         var itemName = item.label || item.tooltip;
+        if (!itemName) itemName = item.icon ? item.link : '';
         itemNameEl.addClass("note-toolbar-item-suggester-name");
         let itemLabel = itemNameEl.createSpan();
 
