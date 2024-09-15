@@ -146,7 +146,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				menu.addItem((item) => {
 					item
 						.setIcon(this.settings.icon)
-						.setTitle(toolbar?.name);
+						.setTitle(toolbar ? toolbar.name : '');
 					let subMenu = item.setSubmenu() as Menu;
 					toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
 				});
