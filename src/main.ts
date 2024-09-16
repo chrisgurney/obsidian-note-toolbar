@@ -144,13 +144,19 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (cache) {
 			let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
 			if (toolbar) {
-				menu.addItem((item) => {
-					item
-						.setIcon(this.settings.icon)
-						.setTitle(toolbar ? toolbar.name : '');
-					let subMenu = item.setSubmenu() as Menu;
-					toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
-				});
+				// the submenu UI doesn't appear to work on mobile, render items in menu
+				if (Platform.isMobile) {
+					this.renderMenuItems(menu, toolbar, file, 1);
+				}
+				else {
+					menu.addItem((item) => {
+						item
+							.setIcon(this.settings.icon)
+							.setTitle(toolbar ? toolbar.name : '');
+						let subMenu = item.setSubmenu() as Menu;
+						this.renderMenuItems(subMenu, toolbar, file);
+					});
+				}
 			}
 		}
 	}
@@ -611,17 +617,20 @@ export default class NoteToolbarPlugin extends Plugin {
 						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, activeFile, recursions + 1) : undefined;
 						break;
 					case ItemType.Menu:
-						// display menus in sub-menus, but only if we're not more than a level deep
-						if (recursions >= 1) break;
-						menu.addItem((item) => {
-							item
-								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
-								.setTitle(title);
-							let subMenu = item.setSubmenu() as Menu;
-							let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
-							menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, activeFile, recursions + 1) : undefined;
-						});
-						break;
+						// the sub-menu UI doesn't appear to work on mobile, so default to treat as link
+						if (!Platform.isMobile) {
+							// display menus in sub-menus, but only if we're not more than a level deep
+							if (recursions >= 1) break;
+							menu.addItem((item) => {
+								item
+									.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
+									.setTitle(title);
+								let subMenu = item.setSubmenu() as Menu;
+								let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, activeFile, recursions + 1) : undefined;
+							});
+							break;
+						}
 					default:
 						// don't show the item if the link has variables and resolves to nothing
 						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
