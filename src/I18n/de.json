@@ -1,7 +1,7 @@
 {
     "command": {
         "name-focus": "Fokus",
-        "name-quick-tools": "Schnellwahl öffen",
+        "name-item-suggester": "Schnellwahl öffen",
         "name-settings": "Plugin-Einstellungen öffnen",
         "name-toolbar-settings": "Toolbar-Einstellungen öffnen",
         "name-show-properties": "Eigenschaften anzeigen",
@@ -22,13 +22,14 @@
         "button-cancel": "Abbrechen",
         "button-delete-tooltip": "Löschen",
         "button-drag-tooltip": "Ziehen zum Umsortieren",
+        "button-learn-more": "Mehr\u00A0erfahren",
+        "button-user-guide": "Benutzer\u00A0Handbuch",
         "error-old-settings-name": "⚠️ Fehler: Bitte Note Toolbar deaktivieren und reaktivieren, oder Obsidian neustarten.",
         "error-old-settings-description": "Alte Einstellungsdatei geladen ({{oldVersion}}), aber aktuellste ist {{currentVersion}}",
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
         "title-edit-toolbar": "Toolbar bearbeiten: {{toolbar}}",
-        "learn-more": "Mehr\u00A0erfahren",
-        "user-guide": "Benutzer\u00A0Handbuch",
+        "title-edit-toolbar_none": "Toolbar bearbeiten",
         "delete-toolbar": {
             "name": "Diese Toolbar löschen",
             "description": "Dies kann nicht rückgängig gemacht werden.",

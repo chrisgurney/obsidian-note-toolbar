@@ -26,7 +26,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
     public openSettingsModal(toolbar: ToolbarSettings) {
         const modal = new ToolbarSettingsModal(this.app, this.plugin, this, toolbar);
-		modal.setTitle("Edit Toolbar" + (toolbar.name ? ': ' + toolbar.name : ''));
+		modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name }));
         modal.open();
     }
 
@@ -63,31 +63,36 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.setHeading();
 		}
 
-		const helpDesc = document.createDocumentFragment();
-		helpDesc.append(
-			helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + this.plugin.manifest.version })
-		);
+		// version + help (heading + buttons, on screens bigger than a phone)
+		if (!Platform.isPhone) {
 
-		// new Setting(containerEl)
-		// 	.setName('Note Toolbar' + ' v' + this.plugin.manifest.version)
-		// 	.setDesc("Learn more about using Note Toolbar.")
-		// 	.addButton((button: ButtonComponent) => {
-		// 		button
-		// 			.setTooltip('Open the release notes on github.com')
-		// 			.onClick(() => {
-		// 				window.open(RELEASES_URL, '_blank');
-		// 			})
-		// 			.buttonEl.setText("What's new?");
-		// 	})
-		// 	.addButton((button: ButtonComponent) => {
-		// 		button
-		// 			.setTooltip('Open help window')
-		// 			.onClick(() => {
-		// 				let help = new HelpModal(this.plugin);
-		// 				help.open();
-		// 			})
-		// 			.buttonEl.setText(iconTextFr('help-circle', 'Help'))
-		// 	});
+			const helpDesc = document.createDocumentFragment();
+			helpDesc.append(
+				helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + this.plugin.manifest.version })
+			);
+	
+			new Setting(containerEl)
+				.setName(t('plugin.name') + ' v' + this.plugin.manifest.version)
+				.setDesc(t('setting.help.description'))
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.button-whats-new-tooltip'))
+						.onClick(() => {
+							window.open(RELEASES_URL, '_blank');
+						})
+						.buttonEl.setText(t('setting.button-whats-new'));
+				})
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.button-help-tooltip'))
+						.onClick(() => {
+							let help = new HelpModal(this.plugin);
+							help.open();
+						})
+						.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
+				});
+
+		}
 
 		// toolbar list
 		this.displayToolbarList(containerEl);
@@ -131,11 +136,20 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		const toolbarsDesc = document.createDocumentFragment();
 		toolbarsDesc.append(
 			t('setting.toolbars.description'),
-			" ",
-			toolbarsDesc.createEl("a", { href: USER_GUIDE_URL,	text: t('setting.user-guide') }),
-			" • ",
-			toolbarsDesc.createEl("a", { href: RELEASES_URL, text: "v" + this.plugin.manifest.version })
 		);
+
+		if (Platform.isPhone) {
+
+			toolbarsDesc.append(
+				" ",
+				"v" + this.plugin.manifest.version,
+				" • ",
+				toolbarsDesc.createEl("a", { href: RELEASES_URL, text: t('setting.button-whats-new') }),
+				" • ",
+				toolbarsDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: t('setting.button-help') }),
+			);
+
+		}
 
 		let toolbarListSetting = new Setting(itemsContainer)
 			.setName(t('setting.toolbars.name'))

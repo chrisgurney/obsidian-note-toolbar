@@ -2190,6 +2190,20 @@ input[type="text"].note-toolbar-setting-error {
     width: calc(var(--dialog-width) / 1.5);
 }
 
+.is-phone .note-toolbar-setting-help-dialog {
+    padding: 1em;
+    .setting-item {
+        flex-direction: row !important;
+        .setting-item-control {
+            margin-top: 0 !important;
+            width: auto !important;
+            button {
+                width: auto;
+            }
+        }
+    }
+}
+
 .note-toolbar-setting-modal-container {
     .is-phone & {
         /* fix/workaround for Obsidian v1.5.11 bug: modals opened from settings have an inaccessible close button */

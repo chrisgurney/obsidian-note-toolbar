@@ -1,7 +1,7 @@
 {
     "command": {
         "name-focus": "Фокусування",
-        "name-quick-tools": "Відкрити швидкі інструменти",
+        "name-item-suggester": "Відкрити швидкі інструменти",
         "name-settings": "Відкрити налаштування додатку",
         "name-toolbar-settings": "Відкрити налаштування панелі",
         "name-show-properties": "Показати властивості",
@@ -22,13 +22,14 @@
         "button-cancel": "Скасувати",
         "button-delete-tooltip": "Видалити",
         "button-drag-tooltip": "Перетягніть, щоб змінити порядок",
+        "button-learn-more": "Дізнайтеся більше",
+        "button-user-guide": "Посібник користувача",
         "error-old-settings-name": "⚠️ Помилка: Будь ласка, вимкніть та запустіть заново Note Toolbar, або перезавантажте Obsidian.",
         "error-old-settings-description": "Завантажено старий файл налаштувань ({{oldVersion}}), найновіший - {{currentVersion}}",
         "option-platform-desktop": "Комп'ютер",
         "option-platform-mobile": "Мобільний",
         "title-edit-toolbar": "Редагувати Панель: {{toolbar}}",
-        "learn-more": "Дізнайтеся більше",
-        "user-guide": "Посібник користувача",
+        "title-edit-toolbar_none": "Редагувати Панель",
         "delete-toolbar": {
             "name": "Видалити цю панель",
             "description": "Цю дію не можна скасувати.",

@@ -6,6 +6,7 @@ import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
+import { HelpModal } from 'Settings/UI/Modals/HelpModal';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -969,6 +970,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		else if (data.folder) {
 			this.handleLinkFolder(data.folder);
+		}
+		else if (data.help) {
+			const helpModal = new HelpModal(this);
+			helpModal.open();
 		}
 		else if (data.menu) {
 			let activeFile = this.app.workspace.getActiveFile();
