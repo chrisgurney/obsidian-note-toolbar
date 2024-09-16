@@ -36,7 +36,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
-		// this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuListener));
+		this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuListener));
 		this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
 
 		this.commands = new CommandsManager(this);
