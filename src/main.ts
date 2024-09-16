@@ -146,7 +146,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (toolbar) {
 				// the submenu UI doesn't appear to work on mobile, render items in menu
 				if (Platform.isMobile) {
-					this.renderMenuItems(menu, toolbar, file, 1);
+					toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
 				}
 				else {
 					menu.addItem((item) => {
@@ -154,7 +154,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							.setIcon(this.settings.icon)
 							.setTitle(toolbar ? toolbar.name : '');
 						let subMenu = item.setSubmenu() as Menu;
-						this.renderMenuItems(subMenu, toolbar, file);
+						toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
 					});
 				}
 			}
