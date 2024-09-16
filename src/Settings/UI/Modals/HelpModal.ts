@@ -78,11 +78,11 @@ export class HelpModal extends Modal {
 			.setClass('note-toolbar-setting-no-border');
 
 		new Setting(this.modalEl)
-			.setName(iconTextFr('heart', t('setting.help.button-donate')))
+			.setName(iconTextFr('heart', t('setting.help.label-donate')))
 			.setDesc(t('setting.help.label-donate-description'))
 			.addButton((button: ButtonComponent) => {
 				button
-					.setButtonText(t('setting.help.label-donate'))
+					.setButtonText(t('setting.help.button-donate'))
 					.setTooltip(t('setting.help.button-donate-tooltip'))
 					.onClick(() => {
 						window.open('https://buymeacoffee.com/cheznine', '_blank');
