@@ -595,6 +595,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		for (const toolbarItem of toolbar.items) {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+				// replace variables in labels (or tooltip, if no label set)
+				let title = toolbarItem.label ? 
+					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
+					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -605,16 +609,23 @@ export default class NoteToolbarPlugin extends Plugin {
 						let groupToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
 						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, activeFile, recursions + 1) : undefined;
 						break;
+					case ItemType.Menu:
+						// display menus in sub-menus, but only if we're not more than a level deep
+						if (recursions >= 1) break;
+						menu.addItem((item) => {
+							item
+								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
+								.setTitle(title);
+							let subMenu = item.setSubmenu() as Menu;
+							let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+							menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, activeFile, recursions + 1) : undefined;
+						});
+						break;
 					default:
 						// don't show the item if the link has variables and resolves to nothing
 						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
 							break;
 						}
-						// replace variables in labels (or tooltip, if no label set)
-						let title = toolbarItem.label ? 
-							(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
-							(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
-
 						menu.addItem((item) => {
 							item
 								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
