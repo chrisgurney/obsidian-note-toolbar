@@ -63,8 +63,24 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.setHeading();
 		}
 
-		// version + help (heading + buttons, on screens bigger than a phone)
-		if (!Platform.isPhone) {
+		// version + help
+		if (Platform.isPhone) {
+
+			let helpContainerEl = containerEl.createDiv();
+			helpContainerEl.addClass('note-toolbar-setting-help-section');
+			const helpDesc = document.createDocumentFragment();
+			helpDesc.append(
+				" ",
+				"v" + this.plugin.manifest.version,
+				" • ",
+				helpDesc.createEl("a", { href: RELEASES_URL, text: t('setting.button-whats-new') }),
+				" • ",
+				helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }),
+			);
+			helpContainerEl.append(helpDesc);
+	
+		}
+		else {
 
 			const helpDesc = document.createDocumentFragment();
 			helpDesc.append(
@@ -133,27 +149,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 
-		const toolbarsDesc = document.createDocumentFragment();
-		toolbarsDesc.append(
-			t('setting.toolbars.description'),
-		);
-
-		if (Platform.isPhone) {
-
-			toolbarsDesc.append(
-				" ",
-				"v" + this.plugin.manifest.version,
-				" • ",
-				toolbarsDesc.createEl("a", { href: RELEASES_URL, text: t('setting.button-whats-new') }),
-				" • ",
-				toolbarsDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: t('setting.button-help') }),
-			);
-
-		}
-
 		let toolbarListSetting = new Setting(itemsContainer)
 			.setName(t('setting.toolbars.name'))
-			.setDesc(toolbarsDesc)
+			.setDesc(t('setting.toolbars.description'))
 			.setHeading();
 
 		if (this.plugin.settings.toolbars.length > 0) {

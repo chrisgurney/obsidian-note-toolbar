@@ -1453,7 +1453,7 @@ body {
 } 
 
 .note-toolbar-setting-text-with-icon {
-    display: flex;
+    display: inline-flex;
     column-gap: 0.5em;
     align-items: center;
     & svg {
@@ -2200,6 +2200,27 @@ input[type="text"].note-toolbar-setting-error {
             button {
                 width: auto;
             }
+        }
+    }
+}
+
+.note-toolbar-setting-help-section {
+    color: var(--text-muted);
+    font-size: var(--font-ui-smaller);
+    text-align: center;
+    a {
+        color: var(--text-muted);
+        display: inline-flex;
+        &:focus-visible {
+            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
+    }
+    .note-toolbar-setting-text-with-icon {
+        column-gap: 0.25em;
+        & svg {
+            height: var(--font-ui-smaller);
+            width: var(--font-ui-smaller);
         }
     }
 }
