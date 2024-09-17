@@ -70,7 +70,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			helpContainerEl.addClass('note-toolbar-setting-help-section');
 			const helpDesc = document.createDocumentFragment();
 			helpDesc.append(
-				" ",
 				"v" + this.plugin.manifest.version,
 				" • ",
 				helpDesc.createEl("a", { href: RELEASES_URL, text: t('setting.button-whats-new') }),
