@@ -941,7 +941,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async handleLinkCommand(commandId: string | null) {
 		debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
-			if (commandId in app.commands.commands) {
+			if (commandId in this.app.commands.commands) {
 				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
 			}
 			else {
