@@ -62,7 +62,7 @@
             "error-folder-already-mapped": "This folder already has a toolbar associated with it."
         },
         "help": {
-            "title": "Help",
+            "title": "Note Toolbar Help",
             "description": "Learn more about using Note Toolbar.",
             "button-donate": "Donate ↗",
             "button-donate-tooltip": "Open buymeacoffee.com",

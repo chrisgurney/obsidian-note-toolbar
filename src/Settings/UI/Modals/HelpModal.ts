@@ -21,6 +21,7 @@ export class HelpModal extends Modal {
 				button
 					.setButtonText(t('setting.help.button-open'))
 					.setTooltip(t('setting.help.button-open-github'))
+					.setCta()
 					.onClick(() => {
 						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/discussions', '_blank');
 					});
@@ -46,6 +47,7 @@ export class HelpModal extends Modal {
 				button
 					.setButtonText(t('setting.help.button-read'))
 					.setTooltip(t('setting.help.button-open-github'))
+					.setCta()
 					.onClick(() => {
 						window.open(USER_GUIDE_URL, '_blank');
 					});
