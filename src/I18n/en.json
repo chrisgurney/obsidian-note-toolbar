@@ -62,7 +62,7 @@
             "error-folder-already-mapped": "This folder already has a toolbar associated with it."
         },
         "help": {
-            "title": "Note Toolbar Help",
+            "title": "Help using Note Toolbar 🛟",
             "description": "Learn more about using Note Toolbar.",
             "button-donate": "Donate ↗",
             "button-donate-tooltip": "Open buymeacoffee.com",
@@ -76,12 +76,12 @@
             "label-article-2-description": "Learn how to create toolbars within your notes.",
             "label-donate": "Buy me a coffee",
             "label-donate-description": "If you find this plugin useful, and wish to support me financially, consider donating. Thank you!",
-            "label-feedback": "Feedback",
+            "label-feedback": "Provide feedback",
             "label-feedback-description": "Don't have a GitHub account? Use this Google form for any feedback, questions, issues, or ideas you may have.",
             "label-support": "Get support",
             "label-support-description": "Visit the forums on GitHub to ask questions to the community, and to log issues.",
-            "label-user-guide": "User Guide",
-            "label-user-guide-description": "Read the detailed user guide, including tips and examples."
+            "label-user-guide": "Read the User Guide",
+            "label-user-guide-description": "How to make the most out of the plugin, including tips and examples."
         },
         "icon-suggester": {
             "option-no-icon": "No icon",
