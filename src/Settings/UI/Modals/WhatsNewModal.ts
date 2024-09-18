@@ -1,8 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Component, MarkdownRenderer, Modal, Setting } from "obsidian";
 import { iconTextFr } from "../Utils/SettingsUIUtils";
-import { t } from "Settings/NoteToolbarSettings";
-import whatsnewText from "whatsnew.md";
+import { t, tdocs } from "Settings/NoteToolbarSettings";
 
 export class WhatsNewModal extends Modal {
 
@@ -40,7 +39,7 @@ export class WhatsNewModal extends Modal {
 		let markdownEl = this.contentEl.createDiv();
 		markdownEl.addClass('note-toolbar-setting-whatsnew-content');
 
-		MarkdownRenderer.render(this.plugin.app, whatsnewText, markdownEl, '/', this.component);
+		MarkdownRenderer.render(this.plugin.app, tdocs('whats-new'), markdownEl, '/', this.component);
 
     }
 

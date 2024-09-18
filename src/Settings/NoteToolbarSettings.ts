@@ -22,6 +22,14 @@ i18next.addResourceBundle('zh', 'plugin-note-toolbar', zh_CN); // load localized
 
 export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
+// DOCUMENTATION TRANSLATIONS
+
+import whatsnew_en from "I18n/whatsnew-en.md";
+
+i18next.addResourceBundle('en', 'plugin-note-toolbar-docs', { "whats-new": whatsnew_en });
+
+export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); // string translation function
+
 /******************************************************************************
  TYPES
  ******************************************************************************/
