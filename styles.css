@@ -2232,9 +2232,24 @@ input[type="text"].note-toolbar-setting-error {
 .note-toolbar-setting-whatsnew-banner {
     background: radial-gradient(50% 256.13% at 50% 52.32%, #70369B 3.68%, #06031C 94.88%);
     font-size: var(--font-ui-medium);
+    font-weight: var(--h2-weight);
     padding: 2em;
     text-align: center;
+    text-shadow: 1px 1px black;
     vertical-align: middle;
+}
+
+.is-phone .note-toolbar-setting-whatsnew-notes {
+    .setting-item {
+        flex-direction: row !important;
+        .setting-item-control {
+            margin-top: 0 !important;
+            width: auto !important;
+            button {
+                width: auto;
+            }
+        }
+    }
 }
 
 .note-toolbar-setting-whatsnew-content {
