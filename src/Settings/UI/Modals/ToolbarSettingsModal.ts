@@ -104,6 +104,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayStyleSetting(settingsDiv);
 		this.displayUsageSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
+		displayHelpSection(this.plugin, settingsDiv, true);
 
 		this.contentEl.appendChild(settingsDiv);
 
