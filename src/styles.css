@@ -1486,6 +1486,7 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .vertical-tab-content.note-toolbar-setting-modal {
+    padding-bottom: var(--size-4-5);
     padding-inline-start: var(--size-4-5);
     padding-inline-end: var(--size-4-5);
 }
