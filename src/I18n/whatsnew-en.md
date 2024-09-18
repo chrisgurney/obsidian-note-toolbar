@@ -2,7 +2,9 @@
 
 ## New Features 🎉
 
-Adds a new Help window in settings, to point users to documentation, support, and feedback.
+Adds the _What's New_ window in settings (you're looking at it), to provide highlights of the latest features in Note Toolbar.
+
+Adds a new _Help_ window in settings, to point users to documentation, support, and feedback.
 
 Adds toolbars to the file menu.
 - When right-clicking on an internal link, the toolbar is for the linked note.
@@ -14,4 +16,4 @@ Adds toolbars to the file menu.
 
 ## Improvements 🎉
 
-On desktop, sub-menu (items) are displayed within Obsidian's submenu UI.
+On desktop, sub-menu (i.e., Menu items within menus) are displayed using Obsidian's sub-menu UI, opening to the side of the menu instead of in place.
