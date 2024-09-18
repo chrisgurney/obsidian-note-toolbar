@@ -63,51 +63,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.setHeading();
 		}
 
-		// version + help
-		if (Platform.isPhone) {
-
-			let helpContainerEl = containerEl.createDiv();
-			helpContainerEl.addClass('note-toolbar-setting-help-section');
-			const helpDesc = document.createDocumentFragment();
-			helpDesc.append(
-				"v" + this.plugin.manifest.version,
-				" • ",
-				helpDesc.createEl("a", { href: RELEASES_URL, text: t('setting.button-whats-new') }),
-				" • ",
-				helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }),
-			);
-			helpContainerEl.append(helpDesc);
-	
-		}
-		else {
-
-			const helpDesc = document.createDocumentFragment();
-			helpDesc.append(
-				helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + this.plugin.manifest.version })
-			);
-	
-			new Setting(containerEl)
-				.setName(t('plugin.name') + ' v' + this.plugin.manifest.version)
-				.setDesc(t('setting.help.description'))
-				.addButton((button: ButtonComponent) => {
-					button
-						.setTooltip(t('setting.button-whats-new-tooltip'))
-						.onClick(() => {
-							window.open(RELEASES_URL, '_blank');
-						})
-						.buttonEl.setText(t('setting.button-whats-new'));
-				})
-				.addButton((button: ButtonComponent) => {
-					button
-						.setTooltip(t('setting.button-help-tooltip'))
-						.onClick(() => {
-							let help = new HelpModal(this.plugin);
-							help.open();
-						})
-						.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
-				});
-
-		}
+		// help
+		this.displayHelpSection(containerEl);
 
 		// toolbar list
 		this.displayToolbarList(containerEl);
@@ -135,6 +92,59 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// scroll to the position when the modal was last open
 		this.rememberLastPosition(this.containerEl);
+
+	}
+
+	/**
+	 * Displays the help section.
+	 * @param containerEl HTMLElement to add the content to.
+	 */
+	displayHelpSection(settingsDiv: HTMLElement) {
+		
+		if (Platform.isPhone) {
+
+			let helpContainerEl = settingsDiv.createDiv();
+			helpContainerEl.addClass('note-toolbar-setting-help-section');
+			const helpDesc = document.createDocumentFragment();
+			helpDesc.append(
+				"v" + this.plugin.manifest.version,
+				" • ",
+				helpDesc.createEl("a", { href: RELEASES_URL, text: t('setting.button-whats-new') }),
+				" • ",
+				helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }),
+			);
+			helpContainerEl.append(helpDesc);
+	
+		}
+		else {
+
+			const helpDesc = document.createDocumentFragment();
+			helpDesc.append(
+				helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + this.plugin.manifest.version })
+			);
+	
+			new Setting(settingsDiv)
+				.setName(t('plugin.name') + ' v' + this.plugin.manifest.version)
+				.setDesc(t('setting.help.description'))
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.button-whats-new-tooltip'))
+						.onClick(() => {
+							window.open(RELEASES_URL, '_blank');
+						})
+						.buttonEl.setText(t('setting.button-whats-new'));
+				})
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.button-help-tooltip'))
+						.onClick(() => {
+							let help = new HelpModal(this.plugin);
+							help.open();
+						})
+						.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
+				});
+
+		}
 
 	}
 
