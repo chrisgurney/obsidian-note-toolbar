@@ -58,6 +58,9 @@ const context = await esbuild.context({
 		...builtins],
 	format: "cjs",
 	target: "es2018",
+	loader: {
+		'.md': 'text',
+	},
 	logLevel: "info",
 	plugins: [yamlInlinerPlugin],
 	sourcemap: prod ? false : "inline",

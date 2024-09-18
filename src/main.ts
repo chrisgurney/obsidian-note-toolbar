@@ -7,6 +7,7 @@ import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { HelpModal } from 'Settings/UI/Modals/HelpModal';
+import { WhatsNewModal } from 'Settings/UI/Modals/WhatsNewModal';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -1014,6 +1015,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
 				modal.open();
 			}
+		}
+		else if (data.whatsnew) {
+			const whatsNewModal = new WhatsNewModal(this);
+			whatsNewModal.open();
 		}
 	}
 

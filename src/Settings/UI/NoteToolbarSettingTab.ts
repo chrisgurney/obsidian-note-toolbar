@@ -9,6 +9,7 @@ import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
 import { HelpModal } from './Modals/HelpModal';
+import { WhatsNewModal } from './Modals/WhatsNewModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -109,6 +110,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			helpDesc.append(
 				"v" + this.plugin.manifest.version,
 				" • ",
+				// helpDesc.createEl("a", { href: "obsidian://note-toolbar?whatsnew", text: t('setting.button-whats-new') }),
 				helpDesc.createEl("a", { href: RELEASES_URL, text: t('setting.button-whats-new') }),
 				" • ",
 				helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }),
@@ -131,6 +133,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.setTooltip(t('setting.button-whats-new-tooltip'))
 						.onClick(() => {
 							window.open(RELEASES_URL, '_blank');
+							// let whatsnew = new WhatsNewModal(this.plugin);
+							// whatsnew.open();
 						})
 						.buttonEl.setText(t('setting.button-whats-new'));
 				})
