@@ -843,8 +843,12 @@ input[type="text"].note-toolbar-setting-error {
     border-top: none !important;
 }
 
-.note-toolbar-setting-spaced {
+.note-toolbar-setting-top-spacing {
     margin-top: 2em !important;
+}
+
+.note-toolbar-setting-bottom-spacing {
+    margin-bottom: 2em !important;
 }
 
 .note-toolbar-setting-folder-list-item-container {
@@ -1482,6 +1486,5 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .vertical-tab-content.note-toolbar-setting-modal {
-    padding-inline-start: var(--size-4-5);
-    padding-inline-end: var(--size-4-5);
+    padding-inline-start: var(--size-4-2);
 }

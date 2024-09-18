@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Menu, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -1242,7 +1242,8 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName(t('setting.delete-toolbar.name'))
 			.setHeading()
 			.setDesc(t('setting.delete-toolbar.description'))
-			.setClass("note-toolbar-setting-spaced")
+			.setClass("note-toolbar-setting-top-spacing")
+			.setClass("note-toolbar-setting-bottom-spacing")
 			.addButton((button: ButtonComponent) => {
 				button
 					.setClass("mod-warning")
