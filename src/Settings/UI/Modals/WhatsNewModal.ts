@@ -18,12 +18,9 @@ export class WhatsNewModal extends Modal {
 
     public onOpen() {
 
-		// TODO: test what it looks like on mobile without a title
-        // this.setTitle("What's New");
-
 		let bannerEl = this.contentEl.createDiv();
 		bannerEl.addClass('note-toolbar-setting-whatsnew-banner');
-		bannerEl.setText("What's New in Note Toolbar?");
+		bannerEl.setText(t('setting.whats-new.title'));
 
 		let footerEl = this.contentEl.createDiv();
 		footerEl.addClass('note-toolbar-setting-whatsnew-notes');

@@ -24,11 +24,11 @@
         "button-delete-tooltip": "Delete",
         "button-drag-tooltip": "Drag to rearrange",
         "button-help": "Help",
-        "button-help-tooltip": "Open help window",
+        "button-help-tooltip": "Open the help window",
         "button-learn-more": "Learn\u00A0more",
         "button-user-guide": "User\u00A0Guide",
         "button-whats-new": "What's\u00A0new?",
-        "button-whats-new-tooltip": "Open the release notes on github.com",
+        "button-whats-new-tooltip": "Open the What's New window",
         "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
         "option-platform-desktop": "Desktop",
@@ -252,10 +252,11 @@
             "description-search": "Search for property usage"
         },
         "whats-new": {
+            "title": "What's new in Note Toolbar?",
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
             "label-release-notes": "Release notes",
-            "label-release-notes-description": "Read the full release notes on GitHub."
+            "label-release-notes-description": "Read the detailed notes for the latest releases."
         }
     },
     "toolbar": {
