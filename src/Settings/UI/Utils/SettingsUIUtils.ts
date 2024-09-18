@@ -1,6 +1,9 @@
-import { getIcon, setIcon } from "obsidian";
-import { ItemType, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL } from "Settings/NoteToolbarSettings";
+import { ButtonComponent, getIcon, Platform, setIcon, Setting } from "obsidian";
+import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
+import { WhatsNewModal } from "../Modals/WhatsNewModal";
+import { HelpModal } from "../Modals/HelpModal";
+import NoteToolbarPlugin from "main";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
@@ -90,6 +93,62 @@ export function createToolbarPreviewFr(
 	return toolbarFr;
 
 }
+
+/**
+ * Displays the help section.
+ * @param containerEl HTMLElement to add the content to.
+ * @param useTextVersion set to true to just use the small text version.
+ */
+export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLElement, useTextVersion: boolean = false) {
+	
+	if (Platform.isPhone || useTextVersion) {
+
+		let helpContainerEl = settingsDiv.createDiv();
+		helpContainerEl.addClass('note-toolbar-setting-help-section');
+		const helpDesc = document.createDocumentFragment();
+		helpDesc.append(
+			"v" + plugin.manifest.version,
+			" • ",
+			helpDesc.createEl("a", { href: "obsidian://note-toolbar?whatsnew", text: t('setting.button-whats-new') }),
+			" • ",
+			helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }),
+		);
+		helpContainerEl.append(helpDesc);
+
+	}
+	else {
+
+		const helpDesc = document.createDocumentFragment();
+		helpDesc.append(
+			helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + plugin.manifest.version })
+		);
+
+		new Setting(settingsDiv)
+			.setName(t('plugin.name') + ' v' + plugin.manifest.version)
+			.setDesc(t('setting.help.description'))
+			.addButton((button: ButtonComponent) => {
+				button
+					.setTooltip(t('setting.button-whats-new-tooltip'))
+					.onClick(() => {
+						let whatsnew = new WhatsNewModal(plugin);
+						whatsnew.open();
+					})
+					.buttonEl.setText(t('setting.button-whats-new'));
+			})
+			.addButton((button: ButtonComponent) => {
+				button
+					.setTooltip(t('setting.button-help-tooltip'))
+					.onClick(() => {
+						let help = new HelpModal(plugin);
+						help.open();
+					})
+					.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
+			});
+
+	}
+
+}
+
 
 /**
  * Creates a text fragment with the given message, for an empty state.
