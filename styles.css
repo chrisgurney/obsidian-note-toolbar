@@ -2225,6 +2225,45 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
+.note-toolbar-setting-whatsnew-dialog {
+    padding: 0;
+}
+
+.note-toolbar-setting-whatsnew-banner {
+    background: radial-gradient(50% 256.13% at 50% 52.32%, #70369B 3.68%, #06031C 94.88%);
+    font-size: var(--font-ui-medium);
+    padding: 2em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.note-toolbar-setting-whatsnew-content {
+    padding-inline: 1em;
+    h2 {
+        font-size: var(--font-ui-medium);
+    }
+    img {
+        border: 1px solid var(--background-modifier-border);
+        width: 100%;
+    }
+    p {
+        font-size: var(--font-ui-medium);
+    }
+    ul {
+        font-size: var(--font-ui-smaller);
+        margin-block-end: 2em;
+        padding-inline-start: 2em;
+    }
+}
+
+.note-toolbar-setting-whatsnew-notes {
+    border-bottom: 1px solid var(--background-modifier-border);
+    padding: 1em;
+    .setting-item {
+        padding-bottom: 0;
+    }
+}
+
 .note-toolbar-setting-modal-container {
     .is-phone & {
         /* fix/workaround for Obsidian v1.5.11 bug: modals opened from settings have an inaccessible close button */

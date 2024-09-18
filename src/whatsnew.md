@@ -1,3 +1,5 @@
+## v1.13
+
 ## New Features 🎉
 
 Adds a new Help window in settings, to point users to documentation, support, and feedback.

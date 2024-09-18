@@ -250,6 +250,12 @@
             "name": "Usage",
             "description": "This toolbar is used in {{mappingCount}} mapping(s) and {{itemCount}} toolbar item(s).",
             "description-search": "Search for property usage"
+        },
+        "whats-new": {
+            "button-read": "Read ↗",
+            "button-read-tooltip": "Open github.com",
+            "label-release-notes": "Release notes",
+            "label-release-notes-description": "Read the full release notes on GitHub."
         }
     },
     "toolbar": {
