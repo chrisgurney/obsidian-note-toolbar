@@ -12,7 +12,7 @@ export class WhatsNewModal extends Modal {
         super(plugin.app);
 		this.plugin = plugin;
 		this.component = new Component();
-        this.modalEl.addClass('note-toolbar-setting-mini-dialog', 'note-toolbar-setting-whatsnew-dialog');
+        this.modalEl.addClass('note-toolbar-setting-whatsnew-dialog');
     }
 
     public onOpen() {
