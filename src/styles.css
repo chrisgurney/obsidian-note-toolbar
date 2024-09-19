@@ -1464,18 +1464,21 @@ input[type="text"].note-toolbar-setting-error {
 
 .note-toolbar-setting-whatsnew-content {
     padding-inline: 1em;
+    h1 {
+        font-size: var(--font-ui-large);
+    }
     h2 {
         font-size: var(--font-ui-medium);
     }
     img {
         border: 1px solid var(--background-modifier-border);
+        margin-bottom: 1em;
         width: 100%;
     }
     p {
         font-size: var(--font-ui-medium);
     }
     ul {
-        font-size: var(--font-ui-smaller);
         margin-block-end: 2em;
         padding-inline-start: 2em;
     }
