@@ -1426,6 +1426,9 @@ input[type="text"].note-toolbar-setting-error {
 
 .note-toolbar-setting-whatsnew-dialog {
     padding: 0;
+    .modal-close-button {
+        color: #dadada;
+    }
 }
 
 .note-toolbar-setting-whatsnew-banner {
@@ -1437,9 +1440,9 @@ input[type="text"].note-toolbar-setting-error {
         radial-gradient(at 61% 56%, hsla(281,44%,13%,1) 0px, transparent 50%),
         radial-gradient(at 4% 7%, hsla(47,100%,50%,0.35) 0px, transparent 50%);
     color: #dadada;
-    font-size: var(--font-ui-medium);
+    font-size: var(--font-ui-large);
     font-weight: var(--h2-weight);
-    padding: 2em;
+    padding: 1.5em;
     text-align: center;
     text-shadow: 1px 1px black;
     vertical-align: middle;
