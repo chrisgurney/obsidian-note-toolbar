@@ -34,6 +34,7 @@ export class HelpModal extends Modal {
 				button
 					.setButtonText(t('setting.help.button-open'))
 					.setTooltip(t('setting.help.button-open-google'))
+					.setCta()
 					.onClick(() => {
 						window.open('https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform', '_blank');
 					});
@@ -86,6 +87,7 @@ export class HelpModal extends Modal {
 				button
 					.setButtonText(t('setting.help.button-donate'))
 					.setTooltip(t('setting.help.button-donate-tooltip'))
+					.setCta()
 					.onClick(() => {
 						window.open('https://buymeacoffee.com/cheznine', '_blank');
 					});
