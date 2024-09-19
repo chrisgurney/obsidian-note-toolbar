@@ -2,11 +2,11 @@
 
 ## New Features 🎉
 
-Added the _What's New_ window in settings (you're looking at it), to provide highlights of the latest features in Note Toolbar.
+There is now a _What's New_ window available in settings (you're looking at it), to provide highlights of the latest features in Note Toolbar. This window is displayed once, when accessing the plugin's settings.
 
-Added a new _Help_ window in settings, to point users to documentation, support, and feedback.
+Added a new _Help_ window also available in settings, to point users to documentation, support, and to a new, easy-to-use [feedback form](https://forms.gle/2C38u9F8xTrutB1q8).
 
-Added toolbars to the file menu.
+Access your toolbars from the file menu:
 - When right-clicking on an internal link, the toolbar for the linked note is displayed.
 - On desktop, the items are within a sub-menu that shows the toolbar's name (next to Note Toolbar's icon).
 - On mobile, the items are added directly to the menu.
