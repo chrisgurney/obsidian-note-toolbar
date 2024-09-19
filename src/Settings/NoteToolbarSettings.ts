@@ -2,6 +2,7 @@ import { getUUID } from "Utils/Utils";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20240727.1;
+export const WHATSNEW_VERSION = 1.13;
 
 /******************************************************************************
  * TRANSLATIONS
@@ -92,6 +93,7 @@ export interface NoteToolbarSettings {
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
+	whatsnew_version: number;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
@@ -102,6 +104,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
+	whatsnew_version: 0
 }
 
 export interface ToolbarSettings {
