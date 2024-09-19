@@ -124,7 +124,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 		);
 
 		new Setting(settingsDiv)
-			.setName(t('plugin.name') + ' v' + plugin.manifest.version)
+			.setName(t('plugin.name') + ' • v' + plugin.manifest.version)
 			.setDesc(t('setting.help.description'))
 			.addButton((button: ButtonComponent) => {
 				button
