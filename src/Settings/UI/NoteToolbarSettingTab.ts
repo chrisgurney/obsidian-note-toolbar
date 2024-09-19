@@ -1,14 +1,13 @@
 import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getUUID, moveElement } from 'Utils/Utils';
-import { createToolbarPreviewFr, displayHelpSection, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
-import { WhatsNewModal } from './Modals/WhatsNewModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -94,13 +93,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.rememberLastPosition(this.containerEl);
 
 		// show the What's New dialog once if the user hasn't seen it yet
-		if (this.plugin.settings.whatsnew_version !== WHATSNEW_VERSION) {
-			this.plugin.settings.whatsnew_version = WHATSNEW_VERSION;
-			this.plugin.settingsManager.save().then(() => {
-				const whatsnew = new WhatsNewModal(this.plugin);
-				whatsnew.open();
-			});
-		}
+		showWhatsNewIfNeeded(this.plugin);
 
 	}
 

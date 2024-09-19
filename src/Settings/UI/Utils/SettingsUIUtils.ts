@@ -1,5 +1,5 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting } from "obsidian";
-import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL } from "Settings/NoteToolbarSettings";
+import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { WhatsNewModal } from "../Modals/WhatsNewModal";
 import { HelpModal } from "../Modals/HelpModal";
@@ -149,7 +149,6 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 
 }
 
-
 /**
  * Creates a text fragment with the given message, for an empty state.
  * @param message Message to return as a fragment.
@@ -189,4 +188,20 @@ export function learnMoreFr(message: string, page: string): DocumentFragment {
 		messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: t('setting.button-learn-more') })
 	);
 	return messageFr;
+}
+
+/**
+ * Shows the What's New dialog if the user hasn't seen it yet.
+ */
+export function showWhatsNewIfNeeded(plugin: NoteToolbarPlugin) {
+
+	// show the What's New dialog once if the user hasn't seen it yet
+	if (plugin.settings.whatsnew_version !== WHATSNEW_VERSION) {
+		plugin.settings.whatsnew_version = WHATSNEW_VERSION;
+		plugin.settingsManager.save().then(() => {
+			const whatsnew = new WhatsNewModal(plugin);
+			whatsnew.open();
+		});
+	}
+
 }
