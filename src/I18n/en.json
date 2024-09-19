@@ -63,7 +63,7 @@
         },
         "help": {
             "title": "Help using Note Toolbar 🛟",
-            "description": "Learn more about using Note Toolbar.",
+            "description": "Create context-aware toolbars for your notes.",
             "button-donate": "Donate ↗",
             "button-donate-tooltip": "Open buymeacoffee.com",
             "button-open": "Open ↗",
