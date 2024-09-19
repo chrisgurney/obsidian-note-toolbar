@@ -2234,7 +2234,7 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-whatsnew-banner {
-    background-color:hsla(274,48%,40%,1);
+    background-color:hsla(268,51%,21%,1);
     background-image:
         radial-gradient(at 11% 14%, hsla(255,48%,30%,0.85) 0px, transparent 50%),
         radial-gradient(at 89% 11%, hsla(277,80%,6%,1) 0px, transparent 50%),
