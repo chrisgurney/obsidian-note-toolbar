@@ -1472,6 +1472,7 @@ input[type="text"].note-toolbar-setting-error {
     }
     img {
         border: 1px solid var(--background-modifier-border);
+        border-radius: 0.5rem;
         margin-bottom: 1em;
         width: 100%;
     }
