@@ -2241,6 +2241,7 @@ input[type="text"].note-toolbar-setting-error {
         radial-gradient(at 95% 91%, hsla(287,88%,66%,0.32) 0px, transparent 50%),
         radial-gradient(at 61% 56%, hsla(281,44%,13%,1) 0px, transparent 50%),
         radial-gradient(at 4% 7%, hsla(47,100%,50%,0.35) 0px, transparent 50%);
+    color: #dadada;
     font-size: var(--font-ui-medium);
     font-weight: var(--h2-weight);
     padding: 2em;
