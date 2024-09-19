@@ -2231,6 +2231,7 @@ input[type="text"].note-toolbar-setting-error {
 
 .note-toolbar-setting-whatsnew-dialog {
     padding: 0;
+    padding-bottom: 0.75em;
     .modal-close-button {
         color: #dadada;
     }
