@@ -24,9 +24,9 @@ export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string
 
 // DOCUMENTATION TRANSLATIONS
 
-import whatsnew_en from "I18n/whatsnew-en.md";
+import en_whatsnew from "I18n/en-whats-new.md";
 
-i18next.addResourceBundle('en', 'plugin-note-toolbar-docs', { "whats-new": whatsnew_en });
+i18next.addResourceBundle('en', 'plugin-note-toolbar-docs', { "whats-new": en_whatsnew });
 
 export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); // string translation function
 
