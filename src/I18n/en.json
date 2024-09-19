@@ -256,7 +256,7 @@
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
             "label-release-notes": "Release notes",
-            "label-release-notes-description": "Read the detailed notes for the latest releases."
+            "label-release-notes-description": "Detailed notes for the latest releases."
         }
     },
     "toolbar": {
