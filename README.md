@@ -86,7 +86,7 @@ Note Toolbar is also available in:
 |German|Deutsch|Plugin UI, Style Settings|[@hartimd](https://github.com/hartimd)|
 |Ukrainian|Український|Plugin UI, Style Settings|[@Laktiv](https://github.com/laktiv)|
 
-[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118#discussioncomment-10548222)
+[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
 
 # Getting Started 🚀
