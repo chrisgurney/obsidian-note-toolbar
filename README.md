@@ -137,7 +137,7 @@ Shout out to other projects and people who helped me with questions I had while 
 
 Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
 
-[Help add or review translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118)
+[Help add or review translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
 # Support 🛟
 
