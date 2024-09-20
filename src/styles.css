@@ -109,12 +109,8 @@ body {
 
 .callout[data-callout="note-toolbar"] {
 
-    background-color: var(--cg-nt-tbar-bg-color);
+    background-color: var(--cg-nt-tbar-bg-color) !important;
     
-    .callout & {
-        background-color: inherit;
-    }
-
     border-radius: var(--cg-nt-tbar-border-radius);
     padding: 0;
     padding-inline: var(--cg-nt-tbar-padding-inline);
