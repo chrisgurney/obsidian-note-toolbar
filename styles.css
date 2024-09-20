@@ -1354,7 +1354,7 @@ body {
     & .cg-note-toolbar-callout {
         border-top: none !important;
         margin-bottom: 0;
-        margin-inline: auto auto;
+        margin-inline: auto auto !important;
         max-width: var(--file-line-width);
         transition: border-top 0.5s ease-out;
     }
