@@ -1450,7 +1450,6 @@ input[type="text"].note-toolbar-setting-error {
         flex-direction: row !important;
         padding-top: 0 !important;
         .setting-item-control {
-            margin-top: 0 !important;
             width: auto !important;
             button {
                 width: auto;
