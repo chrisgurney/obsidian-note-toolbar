@@ -2246,9 +2246,9 @@ input[type="text"].note-toolbar-setting-error {
         radial-gradient(at 61% 56%, hsla(281,44%,13%,1) 0px, transparent 50%),
         radial-gradient(at 4% 7%, hsla(47,100%,50%,0.35) 0px, transparent 50%);
     color: #dadada;
-    font-size: var(--font-ui-large);
     font-weight: var(--h2-weight);
-    padding: 1.5em;
+    padding: 1.75em !important;
+    margin-bottom: 0;
     text-align: center;
     text-shadow: 1px 1px black;
     vertical-align: middle;
@@ -2257,6 +2257,7 @@ input[type="text"].note-toolbar-setting-error {
 .is-phone .note-toolbar-setting-whatsnew-notes {
     .setting-item {
         flex-direction: row !important;
+        padding-top: 0 !important;
         .setting-item-control {
             margin-top: 0 !important;
             width: auto !important;
@@ -2285,7 +2286,6 @@ input[type="text"].note-toolbar-setting-error {
         font-size: var(--font-ui-medium);
     }
     ul {
-        margin-block-end: 2em;
         padding-inline-start: 2em;
     }
 }

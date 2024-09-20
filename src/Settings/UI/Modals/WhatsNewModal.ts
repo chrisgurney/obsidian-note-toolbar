@@ -17,9 +17,8 @@ export class WhatsNewModal extends Modal {
 
     public onOpen() {
 
-		let bannerEl = this.contentEl.createDiv();
-		bannerEl.addClass('note-toolbar-setting-whatsnew-banner');
-		bannerEl.setText(t('setting.whats-new.title'));
+		this.setTitle(t('setting.whats-new.title'));
+		this.titleEl.addClass('note-toolbar-setting-whatsnew-banner');
 
 		let footerEl = this.contentEl.createDiv();
 		footerEl.addClass('note-toolbar-setting-whatsnew-notes');
