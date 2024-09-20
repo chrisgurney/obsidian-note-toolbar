@@ -408,6 +408,7 @@ body {
 
     &.cg-note-toolbar-callout {
         /* margin-top: fix for reading mode */
+        box-shadow: none;
         margin-top: 0; 
         & a, span.external-link {
             display: flex;
@@ -416,6 +417,11 @@ body {
                 display: block;
                 margin: 0 auto;
             }
+        }
+        & .callout-content {
+            box-shadow: none;
+            background-color: unset;
+            border-radius: unset;
         }
         &:hover {
             /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
