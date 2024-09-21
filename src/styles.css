@@ -532,7 +532,8 @@ body {
     }
     margin-bottom: 1em;
     .is-mobile & {
-        margin: 0.4em 0 1em 0;
+        margin-inline-start: 0;
+        margin-inline-end: 0;
     }
     &:hover {
         /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
