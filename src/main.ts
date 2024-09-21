@@ -594,11 +594,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Adds items from the given toolbar to the given menu.
 	 * @param menu Menu to add items to.
 	 * @param toolbar ToolbarSettings to add menu items for.
-	 * @param activeFile TFile to show menu for.
+	 * @param file TFile to show menu for.
 	 * @param recursions tracks how deep we are to stop recursion.
 	 * @returns 
 	 */
-	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, activeFile: TFile, recursions: number = 0): Promise<void> {
+	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile, recursions: number = 0): Promise<void> {
 
 		if (recursions >= 2) {
 			return; // stop recursion
@@ -609,8 +609,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
 				let title = toolbarItem.label ? 
-					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
-					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
+					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, file, false) : toolbarItem.label) : 
+					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, file, false) : toolbarItem.tooltip);
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -619,7 +619,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						break;
 					case ItemType.Group:
 						let groupToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
-						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, activeFile, recursions + 1) : undefined;
+						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, file, recursions + 1) : undefined;
 						break;
 					case ItemType.Menu:
 						// the sub-menu UI doesn't appear to work on mobile, so default to treat as link
@@ -632,13 +632,13 @@ export default class NoteToolbarPlugin extends Plugin {
 									.setTitle(title);
 								let subMenu = item.setSubmenu() as Menu;
 								let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
-								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, activeFile, recursions + 1) : undefined;
+								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
 							});
 							break;
 						}
 					default:
 						// don't show the item if the link has variables and resolves to nothing
-						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
+						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, file, false) === "") {
 							break;
 						}
 						menu.addItem((item) => {
