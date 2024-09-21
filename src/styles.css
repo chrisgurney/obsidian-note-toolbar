@@ -525,8 +525,8 @@ body {
 
 .cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
-    box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color);
     /* fix: (#90) box-shadow appearing over top of text */
+    /* box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color); */
     &:has(.callout[data-callout-metadata*="autohide"]) {
         box-shadow: none;
     }
