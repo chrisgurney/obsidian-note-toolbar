@@ -647,7 +647,7 @@ export default class NoteToolbarPlugin extends Plugin {
 								.setTitle(title)
 								.onClick(async (menuEvent) => {
 									debugLog(menuEvent, toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-									await this.handleItemLink(toolbarItem, menuEvent);
+									await this.handleItemLink(toolbarItem, menuEvent, file);
 									// fixes issue where focus sticks on executing commands
 									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
 										await this.removeFocusStyle();
@@ -854,9 +854,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Handles the link in the item provided.
 	 * @param item: ToolbarItemSettings for the item that was selected
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
+	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent) {
-		await this.handleLink(item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event);
+	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+		await this.handleLink(item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event, file);
 	}
 
 	/**
@@ -866,10 +867,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param hasVars: boolean
 	 * @param commandId: string or null
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
+	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent) {
+	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
 
-		debugLog("handleLink", linkHref, type, hasVars, commandId, event);
+		debugLog("handleLink()", linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
@@ -882,7 +884,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				this.handleLinkCommand(commandId);
+				if (file && (file !== activeFile)) {
+					this.handleLinkCommandInSidebar(file, commandId);
+				}
+				else {
+					this.handleLinkCommand(commandId);
+				}
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -946,11 +953,41 @@ export default class NoteToolbarPlugin extends Plugin {
 	async handleLinkCommand(commandId: string | null) {
 		debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
-			if (commandId in this.app.commands.commands) {
-				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
-			}
-			else {
+			if (!(commandId in this.app.commands.commands)) {
 				new Notice(t('notice.error-command-not-found', { command: commandId }));
+				return;
+			}
+			this.app.commands.executeCommandById(commandId);
+		}
+	}
+
+	/**
+	 * Opens the provided file in a sidebar and executes the given command.
+	 * @param file TFile to open in a sidebar
+	 * @param commandId command to execute on the given file 
+	 * @link https://github.com/platers/obsidian-linter/blob/cc23589d778fb56b95fe53b499e9f35683a2b129/src/main.ts#L699
+	 */
+	private async handleLinkCommandInSidebar(file: TFile, commandId: string | null) {
+		debugLog('handleLinkCommandInSidebar()', file, commandId);
+		if (commandId) {
+			if (!(commandId in this.app.commands.commands)) {
+				new Notice(t('notice.error-command-not-found', { command: commandId }));
+				return;
+			}
+			const sidebarTab = this.app.workspace.getRightLeaf(false);
+			const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
+			const activeEditor = activeLeaf ? activeLeaf.editor : null;
+			if (sidebarTab) {
+				await sidebarTab.openFile(file);
+				try {
+					this.app.commands.executeCommandById(commandId);
+				} catch (error) {
+					debugLog(error);
+				}
+				sidebarTab.detach();
+				if (activeEditor) {
+					activeEditor.focus();
+				}
 			}
 		}
 	}
