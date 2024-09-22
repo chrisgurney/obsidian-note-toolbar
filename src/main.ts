@@ -38,7 +38,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
-		this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuListener));
 		this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
 
 		this.commands = new CommandsManager(this);
@@ -73,6 +72,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
 		addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none"></svg>');
 		addIcon('note-toolbar-separator', '<path d="M23.4444 35.417H13.7222C8.35279 35.417 4 41.6988 4 44V55.5C4 57.8012 8.35279 64.5837 13.7222 64.5837H23.4444C28.8139 64.5837 33.1667 57.8012 33.1667 55.5L33.1667 44C33.1667 41.6988 28.8139 35.417 23.4444 35.417Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M86.4444 35.417H76.7222C71.3528 35.417 67 41.6988 67 44V55.5C67 57.8012 71.3528 64.5837 76.7222 64.5837H86.4444C91.8139 64.5837 96.1667 57.8012 96.1667 55.5L96.1667 44C96.1667 41.6988 91.8139 35.417 86.4444 35.417Z" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M49.8333 8.33301V91.6663" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>');
+
+		this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
 
 		// adds the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 		if (Platform.isPhone) {
@@ -134,37 +135,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	/*************************************************************************
 	 * LISTENERS
 	 *************************************************************************/
-
-	/**
-	 * On opening of the file meny, check and render toolbar as a submenu.
-	 * @param menu the file Menu
-	 * @param file TFile for link that was clicked on
-	 */
-	fileMenuListener = (menu: Menu, file: TFile) => {
-		// don't bother showing in the file menu for the active file
-		let activeFile = this.app.workspace.getActiveFile();
-		if (activeFile && file !== activeFile) {
-			let cache = this.app.metadataCache.getFileCache(file);
-			if (cache) {
-				let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
-				if (toolbar) {
-					// the submenu UI doesn't appear to work on mobile, render items in menu
-					if (Platform.isMobile) {
-						toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
-					}
-					else {
-						menu.addItem((item) => {
-							item
-								.setIcon(this.settings.icon)
-								.setTitle(toolbar ? toolbar.name : '');
-							let subMenu = item.setSubmenu() as Menu;
-							toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
-						});
-					}
-				}
-			}
-		}
-	}
 
 	/**
 	 * On opening of a file, check and render toolbar if necessary.
@@ -848,6 +818,37 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
+	}
+
+	/**
+	 * On opening of the file meny, check and render toolbar as a submenu.
+	 * @param menu the file Menu
+	 * @param file TFile for link that was clicked on
+	 */
+	fileMenuHandler = (menu: Menu, file: TFile) => {
+		// don't bother showing in the file menu for the active file
+		let activeFile = this.app.workspace.getActiveFile();
+		if (activeFile && file !== activeFile) {
+			let cache = this.app.metadataCache.getFileCache(file);
+			if (cache) {
+				let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
+				if (toolbar) {
+					// the submenu UI doesn't appear to work on mobile, render items in menu
+					if (Platform.isMobile) {
+						toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
+					}
+					else {
+						menu.addItem((item) => {
+							item
+								.setIcon(this.settings.icon)
+								.setTitle(toolbar ? toolbar.name : '');
+							let subMenu = item.setSubmenu() as Menu;
+							toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
+						});
+					}
+				}
+			}
+		}
 	}
 
 	/**
