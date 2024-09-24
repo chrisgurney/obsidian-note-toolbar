@@ -98,20 +98,23 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             });
         });
 
-        // remove duplicates
-        let uniqueItemSuggestions = Array.from(
-            new Set(
-                itemSuggestions.map(item => 
-                    `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
+        // remove duplicates (+ redundant item-suggester items)
+        let uniqueItemSuggestions = 
+            Array.from(
+                new Set(
+                    itemSuggestions
+                        .filter(item => item.linkAttr.commandId !== 'note-toolbar:open-item-suggester')
+                        .map(item => 
+                            `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
+                    )
                 )
-            )
-        ).map(uniqueKey => {
-            const [labelOrTooltip, link] = uniqueKey.split('|');
-            return itemSuggestions.find(item =>
-                (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
-                item.link === link
-            )!;
-        });
+            ).map(uniqueKey => {
+                const [labelOrTooltip, link] = uniqueKey.split('|');
+                return itemSuggestions.find(item =>
+                    (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
+                    item.link === link
+                )!;
+            });
 
         // sort the results
         uniqueItemSuggestions.sort((a, b) => {
