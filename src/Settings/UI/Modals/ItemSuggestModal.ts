@@ -154,7 +154,19 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
         let itemNameEl = el.createSpan();
         var itemName = item.label || item.tooltip;
-        if (!itemName) itemName = item.icon ? item.link : '';
+
+        // fallback if no label or tooltip
+        var isItemNameLink = false;
+        if (!itemName) {
+            if (item.icon) {
+                isItemNameLink = true;
+                itemName = item.link;
+            }
+            else {
+                itemName = '';
+            }
+        }
+
         itemNameEl.addClass("note-toolbar-item-suggester-name");
         let itemLabel = itemNameEl.createSpan();
 
@@ -165,7 +177,6 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         itemMeta.addClass("note-toolbar-item-suggester-type");
         switch (item.linkAttr.type) {
             case ItemType.Command:
-                // setIcon(itemType, 'terminal');
                 setTooltip(itemMeta, t('setting.item.option-command'));
                 break;
             case ItemType.File:
@@ -178,6 +189,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 break;
         }
         
+        isItemNameLink ? itemLabel.addClass('note-toolbar-item-suggester-name-is-link') : undefined;
         itemLabel.setText(title);
 
         const inputStrLower = this.inputEl.value.toLowerCase();
