@@ -890,7 +890,7 @@ input[type="text"].note-toolbar-setting-error {
         & .note-toolbar-setting-items-list-container {
             display: inherit !important;
         }
-        & .setting-item .setting-item-control svg {
+        & .setting-item .note-toolbar-setting-item-expand svg {
             transform: rotate(0deg);
             transition: 0.1s;
         }
@@ -899,7 +899,7 @@ input[type="text"].note-toolbar-setting-error {
         & .note-toolbar-setting-items-list-container {
             display: none !important;
         }
-        & .setting-item .setting-item-control svg {
+        & .setting-item .note-toolbar-setting-item-expand svg {
             transform: rotate(-90deg);
             transition: 0.1s;
         }

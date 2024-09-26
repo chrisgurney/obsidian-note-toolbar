@@ -200,6 +200,7 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
+					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
 					this.plugin.registerDomEvent(
 						cb.extraSettingsEl, 'keydown', (e) => {
 							switch (e.key) {
