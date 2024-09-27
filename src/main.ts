@@ -8,6 +8,7 @@ import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { HelpModal } from 'Settings/UI/Modals/HelpModal';
 import { WhatsNewModal } from 'Settings/UI/Modals/WhatsNewModal';
+import { exportToCallout } from 'Utils/ImportExport';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -1303,6 +1304,18 @@ export default class NoteToolbarPlugin extends Plugin {
 		  });
   
 		if (toolbarSettings !== undefined) {
+
+			// contextMenu.addSeparator();
+			// contextMenu.addItem((item) => {
+			// 	item
+			// 		.setTitle('Export as markdown')
+			// 		.setIcon('share')
+			// 		.onClick((menuEvent) => {
+			// 			let calloutExport = exportToCallout(this, toolbarSettings);
+			// 			navigator.clipboard.writeText(calloutExport);
+			// 			new Notice('Markdown copied to clipboard');
+			// 		})
+			// 	});
 
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
 			if (currentPosition === 'props' || currentPosition === 'top') {
