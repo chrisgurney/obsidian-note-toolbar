@@ -783,8 +783,7 @@ body {
 }
 
 .note-toolbar-setting-item-preview-empty,
-.note-toolbar-setting-item-preview-tooltip,
-.note-toolbar-item-suggester-name-is-link {
+.note-toolbar-setting-item-preview-tooltip {
     color: var(--color-base-60);
     font-style: italic;
 }

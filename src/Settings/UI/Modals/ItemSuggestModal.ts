@@ -189,7 +189,6 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 break;
         }
         
-        isItemNameLink ? itemLabel.addClass('note-toolbar-item-suggester-name-is-link') : undefined;
         itemLabel.setText(title);
 
         const inputStrLower = this.inputEl.value.toLowerCase();
