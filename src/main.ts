@@ -783,11 +783,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	async calloutLinkHandler(e: MouseEvent) {
 
 		let target = e.target as HTMLElement | null;
-		let clickedItemEl = target?.closest('a.external-link');
-		debugLog('calloutLinkHandler()', target, clickedItemEl);
+		let clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
 
 		if (clickedItemEl) {
-			debugLog('🟡 EXTERNAL LINK: CLICKED');
+			debugLog('calloutLinkHandler()', target, clickedItemEl);
 			this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
 			let dataEl = clickedItemEl?.nextElementSibling;
 			if (dataEl) {
