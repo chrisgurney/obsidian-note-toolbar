@@ -120,10 +120,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         uniqueItemSuggestions.sort((a, b) => {
             // remove non-alphanumeric characters including emojis
             const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
-            const aItemNameRaw = cleanString(a.label || a.tooltip || '');
-            const bItemNameRaw = cleanString(b.label || b.tooltip || '');
-            const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : ''));
-            const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : ''));
+            const aItemNameRaw = cleanString(a.label || a.tooltip || a.link || '');
+            const bItemNameRaw = cleanString(b.label || b.tooltip || a.link || '');
+            const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : '') || (!hasVars(a.link) ? a.link : ''));
+            const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : '') || (!hasVars(b.link) ? b.link : ''));
 
             // check if primary contains the search string, and prioritize primary matches
             const aPrimaryMatch = aItemName.includes(lowerCaseInputStr);
