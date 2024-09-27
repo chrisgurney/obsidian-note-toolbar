@@ -119,7 +119,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
  * @param str string to encode
  * @returns URI encoded string with certain characters preserved
  */
-export function encodeForCallout(str: string): string {
+function encodeForCallout(str: string): string {
     return encodeURIComponent(str)
         .replace(/%20/g, ' ')
         .replace(/%2F/g, '/')
