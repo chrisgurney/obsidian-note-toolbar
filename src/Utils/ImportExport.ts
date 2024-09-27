@@ -55,7 +55,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
     // const toKebabCaseWithPrefix = (s: string) => 
     //     'lucide-' + s.replace(/([A-Z])/g, '-$1').toLowerCase().slice(1);
 
-    const BULLET = '> - ';
+    const BULLET = '> -';
     toolbar.items.forEach((item, index) => {
 
         // if Iconize is enabled, add icons; otherwise don't output
@@ -70,22 +70,22 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
 
         switch(item.linkAttr.type) {
             case ItemType.Break:
-                itemsExport += BULLET + `<br/>`;
+                itemsExport += `${BULLET} <br/>`;
                 break;
             case ItemType.Command:
-                itemsExport += BULLET + `[${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`;
-                // calloutExport += `[${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
+                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`;
+                // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
                 break;
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = replaceVars(plugin.app, itemLink, activeFile, false);
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
-                    itemsExport += BULLET + `[${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`;
-                    // calloutExport += CALLOUT_BULLET + `[${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
+                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`;
+                    // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
                 }
                 else {
-                    itemsExport += BULLET + `[[${itemLink}|${itemIcon}${itemText}]]`;
+                    itemsExport += `${BULLET} [[${itemLink}|${itemIcon}${itemText}]]`;
                 }
                 break;
             case ItemType.Group:
@@ -93,14 +93,14 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
                 itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, recursions + 1) : '';
                 break;
             case ItemType.Menu:
-                itemsExport += BULLET + `[${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
-                // calloutExport += CALLOUT_BULLET + `[${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${itemLink}>)`;
+                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
+                // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${itemLink}>)`;
                 break;
             case ItemType.Separator:
-                itemsExport += BULLET + `<hr/>`;
+                itemsExport += `${BULLET} <hr/>`;
                 break;
             case ItemType.Uri:
-                itemsExport += BULLET + `[${itemIcon}${itemText}](<${itemLink}>)`;
+                itemsExport += `${BULLET} [${itemIcon}${itemText}](<${itemLink}>)`;
                 break;
         }
 
