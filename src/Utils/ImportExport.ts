@@ -37,8 +37,8 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
         let itemText = encodeForCallout(item.label);
         let itemLink = encodeForCallout(item.link);
 
-        // fallback if no icon or label = tooltip; otherwise generic name
-        itemText = itemText ? itemText : (item.tooltip ? item.tooltip : `Item${index + 1}`);
+        // fallback if no icon or label = tooltip; otherwise use a generic name
+        itemText = itemIcon ? itemText : (itemText ? itemText : (item.tooltip ? item.tooltip : `Item${index + 1}`));
 
         calloutExport += `> - `;
         switch(item.linkAttr.type) {
