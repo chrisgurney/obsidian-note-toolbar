@@ -36,10 +36,10 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
  * @param recursions tracks how deep we are to stop recursion
  * @returns Note Toolbar Callout items as a bulleted list string
  */
-function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, activeFile: TFile | null, recursions: number = 0) {
+function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, activeFile: TFile | null, recursions: number = 0): string {
 
     if (recursions >= 2) {
-        return []; // stop recursion
+        return ''; // stop recursion
     }
 
     let itemsExport = '';
