@@ -1,8 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { ItemType, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog, hasVars, replaceVars } from "./Utils";
-import { TAbstractFile, TFile, TFolder } from "obsidian";
-import { active } from "sortablejs";
+import { debugLog, replaceVars } from "./Utils";
+import { TFile, TFolder } from "obsidian";
 
 /**
  * Exports the given toolbar as a Note Toolbar Callout
