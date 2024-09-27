@@ -116,6 +116,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 )!;
             });
 
+        const recentItems: string[] = [];
+
         // sort the results
         uniqueItemSuggestions.sort((a, b) => {
             // remove non-alphanumeric characters including emojis
@@ -124,6 +126,12 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             const bItemNameRaw = cleanString(b.label || b.tooltip || a.link || '');
             const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : '') || (!hasVars(a.link) ? a.link : ''));
             const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : '') || (!hasVars(b.link) ? b.link : ''));
+
+            // prioritize recent items
+            const isARecent = recentItems.includes(aItemNameRaw);
+            const isBRecent = recentItems.includes(bItemNameRaw);
+            if (isARecent && !isBRecent) return -1;
+            if (!isARecent && isBRecent) return 1;
 
             // check if primary contains the search string, and prioritize primary matches
             const aPrimaryMatch = aItemName.includes(lowerCaseInputStr);
