@@ -781,12 +781,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async calloutLinkHandler(e: MouseEvent) {
 
-		const target = e.target as HTMLElement;
-		if (target.matches('.callout[data-callout="note-toolbar"] a.external-link')) {
+		let target = e.target as HTMLElement | null;
+		let clickedItemEl = target?.closest('a.external-link');
+		debugLog('calloutLinkHandler()', target, clickedItemEl);
+
+		if (clickedItemEl) {
 			debugLog('🟡 EXTERNAL LINK: CLICKED');
-			this.lastCalloutLink = e.target as HTMLLinkElement;
-			let dataEl = this.lastCalloutLink?.nextElementSibling;
-			if (this.lastCalloutLink && dataEl) {
+			this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
+			let dataEl = clickedItemEl?.nextElementSibling;
+			if (dataEl) {
 				// make sure it's a valid attribute, and get its value
 				var attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
 				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
@@ -805,7 +808,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
 						if (activeFile) {
 							if (toolbar) {
-								this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+								this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 									this.showMenuAtElement(menu, this.lastCalloutLink);
 								});
 							}
