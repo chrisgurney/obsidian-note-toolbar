@@ -1,9 +1,15 @@
 import NoteToolbarPlugin from "main";
 import { ItemType, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, hasVars, replaceVars } from "./Utils";
-import { TFolder } from "obsidian";
+import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { active } from "sortablejs";
 
+/**
+ * Exports the given toolbar as a Note Toolbar Callout
+ * @param plugin NoteToolbarPlugin
+ * @param toolbar ToolbarSettings for the toolbar to export
+ * @returns Note Toolbar Callout as a string
+ */
 export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): string {
     
     debugLog('exportToCallout()', 'enabled plugins', (plugin.app as any).plugins.plugins);
@@ -16,6 +22,28 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
 
     // get the active file just to provide context
     let activeFile = plugin.app.workspace.getActiveFile();
+
+    calloutExport += exportToCalloutList(plugin, toolbar, activeFile);
+
+    return calloutExport;
+
+}
+
+/**
+ * Exports the items in a given toolbar to a list that can be used in a Note Toolbar Callout
+ * @param plugin NoteToolbarPlugin
+ * @param toolbar ToolbarSettings for the toolbar to export
+ * @param activeFile TFile this export is being run from, for context if needed
+ * @param recursions tracks how deep we are to stop recursion
+ * @returns Note Toolbar Callout items as a bulleted list string
+ */
+function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, activeFile: TFile | null, recursions: number = 0) {
+
+    if (recursions >= 2) {
+        return []; // stop recursion
+    }
+
+    let itemsExport = '';
 
     // Iconize - check if plugin is enabled to output icons
     const hasIconize = (plugin.app as any).plugins.plugins['obsidian-icon-folder'];
@@ -32,7 +60,7 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
 
         // if Iconize is enabled, add icons; otherwise don't output
         let itemIcon = (hasIconize && item.icon) ? toIconizeFormat(item.icon) : '';
-        itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // add trailing space
+        itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
         let itemText = encodeForCallout(item.label);
         let itemLink = encodeForCallout(item.link);
@@ -40,13 +68,13 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
         // fallback if no icon or label = tooltip; otherwise use a generic name
         itemText = itemIcon ? itemText : (itemText ? itemText : (item.tooltip ? item.tooltip : `Item${index + 1}`));
 
-        calloutExport += `> - `;
+        itemsExport += `> - `;
         switch(item.linkAttr.type) {
             case ItemType.Break:
-                calloutExport += `<br/>`;
+                itemsExport += `<br/>`;
                 break;
             case ItemType.Command:
-                calloutExport += `[${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`;
+                itemsExport += `[${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`;
                 // calloutExport += `[${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
                 break;
             case ItemType.File:
@@ -54,34 +82,34 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
                 let resolvedItemLink = replaceVars(plugin.app, itemLink, activeFile, false);
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
-                    calloutExport += `[${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`;
+                    itemsExport += `[${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`;
                     // calloutExport += `[${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
                 }
                 else {
-                    calloutExport += `[[${itemLink}|${itemIcon}${itemText}]]`;
+                    itemsExport += `[[${itemLink}|${itemIcon}${itemText}]]`;
                 }
                 break;
             case ItemType.Group:
                 break;
             case ItemType.Menu:
-                calloutExport += `[${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
+                itemsExport += `[${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
                 // calloutExport += `[${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${itemLink}>)`;
                 break;
             case ItemType.Separator:
-                calloutExport += `<hr/>`;
+                itemsExport += `<hr/>`;
                 break;
             case ItemType.Uri:
-                calloutExport += `[${itemIcon}${itemText}](<${itemLink}>)`;
+                itemsExport += `[${itemIcon}${itemText}](<${itemLink}>)`;
                 break;
         }
 
-        calloutExport += item.tooltip ? ` <!-- ${encodeForCallout(item.tooltip)} -->` : '';
+        itemsExport += item.tooltip ? ` <!-- ${encodeForCallout(item.tooltip)} -->` : '';
 
-        calloutExport += `\n`;
+        itemsExport += `\n`;
 
     });
 
-    return calloutExport;
+    return itemsExport;
 
 }
 
