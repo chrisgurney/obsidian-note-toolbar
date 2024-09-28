@@ -17,12 +17,12 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
     const defaultStyles = toolbar.defaultStyles.length ? toolbar.defaultStyles.join('-') : '';
     const mobileStyles = toolbar.mobileStyles.length ? toolbar.mobileStyles.join('-') : '';
     const styles = [defaultStyles, mobileStyles].filter(Boolean).join('-');
-    let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}]\n`;
+    let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}]`;
 
     // get the active file just to provide context
     let activeFile = plugin.app.workspace.getActiveFile();
 
-    calloutExport += exportToCalloutList(plugin, toolbar, activeFile);
+    calloutExport += exportToCalloutList(plugin, toolbar, activeFile) + '\n';
 
     return calloutExport;
 
@@ -55,7 +55,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
     // const toKebabCaseWithPrefix = (s: string) => 
     //     'lucide-' + s.replace(/([A-Z])/g, '-$1').toLowerCase().slice(1);
 
-    const BULLET = '> -';
+    const BULLET = '\n> -';
     toolbar.items.forEach((item, index) => {
 
         // if Iconize is enabled, add icons; otherwise don't output
@@ -105,8 +105,6 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
         }
 
         itemsExport += item.tooltip ? ` <!-- ${encodeForCallout(item.tooltip)} -->` : '';
-
-        itemsExport += `\n`;
 
     });
 
