@@ -13,7 +13,7 @@
     "export": {
         "title": "Export as markdown",
         "item-generic": "Item{{number}}",
-        "notice-completed": "Markdown copied to clipboard"
+        "notice-completed": "Markdown copied to clipboard."
     },
     "notice": {
         "error-command-not-found": "Check Note Toolbar setting for this command. Command not found: {{command}}",
