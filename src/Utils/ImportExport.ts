@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ItemType, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, replaceVars } from "./Utils";
 import { TFile, TFolder } from "obsidian";
 
@@ -66,7 +66,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
         let itemLink = encodeForCallout(item.link);
 
         // fallback if no icon or label = tooltip; otherwise use a generic name
-        itemText = itemIcon ? itemText : (itemText ? itemText : (item.tooltip ? item.tooltip : `Item${index + 1}`));
+        itemText = itemIcon ? itemText : (itemText ? itemText : (item.tooltip ? item.tooltip : t('setting.export-item-generic', { number: index + 1 })));
 
         switch(item.linkAttr.type) {
             case ItemType.Break:
