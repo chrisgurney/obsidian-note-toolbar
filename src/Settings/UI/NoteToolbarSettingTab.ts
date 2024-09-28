@@ -128,6 +128,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
+					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
 					this.plugin.registerDomEvent(
 						cb.extraSettingsEl, 'keydown', (e) => {
 							switch (e.key) {

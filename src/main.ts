@@ -8,6 +8,7 @@ import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { HelpModal } from 'Settings/UI/Modals/HelpModal';
 import { WhatsNewModal } from 'Settings/UI/Modals/WhatsNewModal';
+import { exportToCallout } from 'Utils/ImportExport';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -38,7 +39,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
 
-		this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuListener));
 		this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
 
 		this.commands = new CommandsManager(this);
@@ -73,6 +73,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
 		addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none"></svg>');
 		addIcon('note-toolbar-separator', '<path d="M23.4444 35.417H13.7222C8.35279 35.417 4 41.6988 4 44V55.5C4 57.8012 8.35279 64.5837 13.7222 64.5837H23.4444C28.8139 64.5837 33.1667 57.8012 33.1667 55.5L33.1667 44C33.1667 41.6988 28.8139 35.417 23.4444 35.417Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M86.4444 35.417H76.7222C71.3528 35.417 67 41.6988 67 44V55.5C67 57.8012 71.3528 64.5837 76.7222 64.5837H86.4444C91.8139 64.5837 96.1667 57.8012 96.1667 55.5L96.1667 44C96.1667 41.6988 91.8139 35.417 86.4444 35.417Z" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M49.8333 8.33301V91.6663" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>');
+
+		this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
 
 		// adds the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 		if (Platform.isPhone) {
@@ -134,33 +136,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	/*************************************************************************
 	 * LISTENERS
 	 *************************************************************************/
-
-	/**
-	 * On opening of the file meny, check and render toolbar as a submenu.
-	 * @param menu the file Menu
-	 * @param file TFile for link that was clicked on
-	 */
-	fileMenuListener = (menu: Menu, file: TFile) => {
-		let cache = this.app.metadataCache.getFileCache(file);
-		if (cache) {
-			let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
-			if (toolbar) {
-				// the submenu UI doesn't appear to work on mobile, render items in menu
-				if (Platform.isMobile) {
-					toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
-				}
-				else {
-					menu.addItem((item) => {
-						item
-							.setIcon(this.settings.icon)
-							.setTitle(toolbar ? toolbar.name : '');
-						let subMenu = item.setSubmenu() as Menu;
-						toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
-					});
-				}
-			}
-		}
-	}
 
 	/**
 	 * On opening of a file, check and render toolbar if necessary.
@@ -590,11 +565,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Adds items from the given toolbar to the given menu.
 	 * @param menu Menu to add items to.
 	 * @param toolbar ToolbarSettings to add menu items for.
-	 * @param activeFile TFile to show menu for.
+	 * @param file TFile to show menu for.
 	 * @param recursions tracks how deep we are to stop recursion.
 	 * @returns 
 	 */
-	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, activeFile: TFile, recursions: number = 0): Promise<void> {
+	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile, recursions: number = 0): Promise<void> {
 
 		if (recursions >= 2) {
 			return; // stop recursion
@@ -605,8 +580,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
 				let title = toolbarItem.label ? 
-					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, activeFile, false) : toolbarItem.label) : 
-					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, activeFile, false) : toolbarItem.tooltip);
+					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, file, false) : toolbarItem.label) : 
+					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, file, false) : toolbarItem.tooltip);
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -615,7 +590,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						break;
 					case ItemType.Group:
 						let groupToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
-						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, activeFile, recursions + 1) : undefined;
+						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, file, recursions + 1) : undefined;
 						break;
 					case ItemType.Menu:
 						// the sub-menu UI doesn't appear to work on mobile, so default to treat as link
@@ -628,13 +603,13 @@ export default class NoteToolbarPlugin extends Plugin {
 									.setTitle(title);
 								let subMenu = item.setSubmenu() as Menu;
 								let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
-								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, activeFile, recursions + 1) : undefined;
+								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
 							});
 							break;
 						}
 					default:
 						// don't show the item if the link has variables and resolves to nothing
-						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, activeFile, false) === "") {
+						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, file, false) === "") {
 							break;
 						}
 						menu.addItem((item) => {
@@ -643,7 +618,7 @@ export default class NoteToolbarPlugin extends Plugin {
 								.setTitle(title)
 								.onClick(async (menuEvent) => {
 									debugLog(menuEvent, toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
-									await this.handleItemLink(toolbarItem, menuEvent);
+									await this.handleItemLink(toolbarItem, menuEvent, file);
 									// fixes issue where focus sticks on executing commands
 									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
 										await this.removeFocusStyle();
@@ -807,12 +782,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async calloutLinkHandler(e: MouseEvent) {
 
-		const target = e.target as HTMLElement;
-		if (target.matches('.callout[data-callout="note-toolbar"] a.external-link')) {
-			debugLog('🟡 EXTERNAL LINK: CLICKED');
-			this.lastCalloutLink = e.target as HTMLLinkElement;
-			let dataEl = this.lastCalloutLink?.nextElementSibling;
-			if (this.lastCalloutLink && dataEl) {
+		let target = e.target as HTMLElement | null;
+		let clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
+
+		if (clickedItemEl) {
+			debugLog('calloutLinkHandler()', target, clickedItemEl);
+			this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
+			let dataEl = clickedItemEl?.nextElementSibling;
+			if (dataEl) {
 				// make sure it's a valid attribute, and get its value
 				var attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
 				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
@@ -831,7 +808,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
 						if (activeFile) {
 							if (toolbar) {
-								this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+								this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 									this.showMenuAtElement(menu, this.lastCalloutLink);
 								});
 							}
@@ -847,12 +824,44 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
+	 * On opening of the file meny, check and render toolbar as a submenu.
+	 * @param menu the file Menu
+	 * @param file TFile for link that was clicked on
+	 */
+	fileMenuHandler = (menu: Menu, file: TFile) => {
+		// don't bother showing in the file menu for the active file
+		let activeFile = this.app.workspace.getActiveFile();
+		if (activeFile && file !== activeFile) {
+			let cache = this.app.metadataCache.getFileCache(file);
+			if (cache) {
+				let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
+				if (toolbar) {
+					// the submenu UI doesn't appear to work on mobile, render items in menu
+					if (Platform.isMobile) {
+						toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
+					}
+					else {
+						menu.addItem((item) => {
+							item
+								.setIcon(this.settings.icon)
+								.setTitle(toolbar ? toolbar.name : '');
+							let subMenu = item.setSubmenu() as Menu;
+							toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
+						});
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Handles the link in the item provided.
 	 * @param item: ToolbarItemSettings for the item that was selected
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
+	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent) {
-		await this.handleLink(item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event);
+	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+		await this.handleLink(item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event, file);
 	}
 
 	/**
@@ -862,10 +871,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param hasVars: boolean
 	 * @param commandId: string or null
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
+	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent) {
+	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
 
-		debugLog("handleLink", linkHref, type, hasVars, commandId, event);
+		debugLog("handleLink()", linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
@@ -878,7 +888,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				this.handleLinkCommand(commandId);
+				if (file && (file !== activeFile)) {
+					this.handleLinkCommandInSidebar(file, commandId);
+				}
+				else {
+					this.handleLinkCommand(commandId);
+				}
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -942,11 +957,41 @@ export default class NoteToolbarPlugin extends Plugin {
 	async handleLinkCommand(commandId: string | null) {
 		debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
-			if (commandId in this.app.commands.commands) {
-				commandId ? this.app.commands.executeCommandById(commandId) : undefined;
-			}
-			else {
+			if (!(commandId in this.app.commands.commands)) {
 				new Notice(t('notice.error-command-not-found', { command: commandId }));
+				return;
+			}
+			this.app.commands.executeCommandById(commandId);
+		}
+	}
+
+	/**
+	 * Opens the provided file in a sidebar and executes the given command.
+	 * @param file TFile to open in a sidebar
+	 * @param commandId command to execute on the given file 
+	 * @link https://github.com/platers/obsidian-linter/blob/cc23589d778fb56b95fe53b499e9f35683a2b129/src/main.ts#L699
+	 */
+	private async handleLinkCommandInSidebar(file: TFile, commandId: string | null) {
+		debugLog('handleLinkCommandInSidebar()', file, commandId);
+		if (commandId) {
+			if (!(commandId in this.app.commands.commands)) {
+				new Notice(t('notice.error-command-not-found', { command: commandId }));
+				return;
+			}
+			const sidebarTab = this.app.workspace.getRightLeaf(false);
+			const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
+			const activeEditor = activeLeaf ? activeLeaf.editor : null;
+			if (sidebarTab) {
+				await sidebarTab.openFile(file);
+				try {
+					this.app.commands.executeCommandById(commandId);
+				} catch (error) {
+					debugLog(error);
+				}
+				sidebarTab.detach();
+				if (activeEditor) {
+					activeEditor.focus();
+				}
 			}
 		}
 	}
@@ -1258,6 +1303,18 @@ export default class NoteToolbarPlugin extends Plugin {
 		  });
   
 		if (toolbarSettings !== undefined) {
+
+			// contextMenu.addSeparator();
+			// contextMenu.addItem((item) => {
+			// 	item
+			// 		.setTitle('Export as markdown')
+			// 		.setIcon('share')
+			// 		.onClick((menuEvent) => {
+			// 			let calloutExport = exportToCallout(this, toolbarSettings);
+			// 			navigator.clipboard.writeText(calloutExport);
+			// 			new Notice('Markdown copied to clipboard');
+			// 		})
+			// 	});
 
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
 			if (currentPosition === 'props' || currentPosition === 'top') {

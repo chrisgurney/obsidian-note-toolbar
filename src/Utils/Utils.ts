@@ -255,6 +255,7 @@ export function replaceVars(app: App, s: string, file: TFile | null, encode: boo
 			const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
 			// handle the case where the prop might be a list
 			let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
+			// FIXME: does not work with number properties
 			return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
 		}
 		else {

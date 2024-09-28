@@ -34,7 +34,7 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
   - Change or override these styles on mobile (i.e, phone and tablet)
   - Use any icon for the floating button or [nav bar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bar) (on mobile)
   - Or use the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support) for even more options (colors, positioning, sizing, etc.)
-- [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, and to quickly access toolbar configuration
+- [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, to access toolbar settings, and to quickly access all of your tools with [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools).
 - [Note Toolbar URIs](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) let you execute commands, focus on folders, open menus (within Note Toolbar Callouts), and open toolbar settings, from mostly anywhere within your notes
 - [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
 - Right-click toolbars to quickly change the position, or to access configuration
@@ -86,7 +86,7 @@ Note Toolbar is also available in:
 |German|Deutsch|Plugin UI, Style Settings|[@hartimd](https://github.com/hartimd)|
 |Ukrainian|Український|Plugin UI, Style Settings|[@Laktiv](https://github.com/laktiv)|
 
-[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118#discussioncomment-10548222)
+[Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
 
 # Getting Started 🚀
@@ -137,7 +137,7 @@ Shout out to other projects and people who helped me with questions I had while 
 
 Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
 
-[Help add or review translations.](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/118)
+[Help add or review translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
 # Support 🛟
 

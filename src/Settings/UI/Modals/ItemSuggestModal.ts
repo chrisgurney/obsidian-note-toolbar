@@ -98,29 +98,40 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             });
         });
 
-        // remove duplicates
-        let uniqueItemSuggestions = Array.from(
-            new Set(
-                itemSuggestions.map(item => 
-                    `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
+        // remove duplicates (+ redundant item-suggester items)
+        let uniqueItemSuggestions = 
+            Array.from(
+                new Set(
+                    itemSuggestions
+                        .filter(item => item.linkAttr.commandId !== 'note-toolbar:open-item-suggester')
+                        .map(item => 
+                            `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
+                    )
                 )
-            )
-        ).map(uniqueKey => {
-            const [labelOrTooltip, link] = uniqueKey.split('|');
-            return itemSuggestions.find(item =>
-                (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
-                item.link === link
-            )!;
-        });
+            ).map(uniqueKey => {
+                const [labelOrTooltip, link] = uniqueKey.split('|');
+                return itemSuggestions.find(item =>
+                    (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
+                    item.link === link
+                )!;
+            });
+
+        const recentItems: string[] = [];
 
         // sort the results
         uniqueItemSuggestions.sort((a, b) => {
             // remove non-alphanumeric characters including emojis
             const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
-            const aItemNameRaw = cleanString(a.label || a.tooltip || '');
-            const bItemNameRaw = cleanString(b.label || b.tooltip || '');
-            const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : ''));
-            const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : ''));
+            const aItemNameRaw = cleanString(a.label || a.tooltip || a.link || '');
+            const bItemNameRaw = cleanString(b.label || b.tooltip || a.link || '');
+            const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : '') || (!hasVars(a.link) ? a.link : ''));
+            const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : '') || (!hasVars(b.link) ? b.link : ''));
+
+            // prioritize recent items
+            const isARecent = recentItems.includes(aItemNameRaw);
+            const isBRecent = recentItems.includes(bItemNameRaw);
+            if (isARecent && !isBRecent) return -1;
+            if (!isARecent && isBRecent) return 1;
 
             // check if primary contains the search string, and prioritize primary matches
             const aPrimaryMatch = aItemName.includes(lowerCaseInputStr);
@@ -151,7 +162,19 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
         let itemNameEl = el.createSpan();
         var itemName = item.label || item.tooltip;
-        if (!itemName) itemName = item.icon ? item.link : '';
+
+        // fallback if no label or tooltip
+        var isItemNameLink = false;
+        if (!itemName) {
+            if (item.icon) {
+                isItemNameLink = true;
+                itemName = item.link;
+            }
+            else {
+                itemName = '';
+            }
+        }
+
         itemNameEl.addClass("note-toolbar-item-suggester-name");
         let itemLabel = itemNameEl.createSpan();
 
@@ -162,7 +185,6 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         itemMeta.addClass("note-toolbar-item-suggester-type");
         switch (item.linkAttr.type) {
             case ItemType.Command:
-                // setIcon(itemType, 'terminal');
                 setTooltip(itemMeta, t('setting.item.option-command'));
                 break;
             case ItemType.File:

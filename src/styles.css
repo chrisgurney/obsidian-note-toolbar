@@ -1,3 +1,5 @@
+/* note: make any modifications to this file in src/styles.css */
+
 @import "./style-settings.yaml";
 
 body {
@@ -109,12 +111,8 @@ body {
 
 .callout[data-callout="note-toolbar"] {
 
-    background-color: var(--cg-nt-tbar-bg-color);
+    background-color: var(--cg-nt-tbar-bg-color) !important;
     
-    .callout & {
-        background-color: inherit;
-    }
-
     border-radius: var(--cg-nt-tbar-border-radius);
     padding: 0;
     padding-inline: var(--cg-nt-tbar-padding-inline);
@@ -410,6 +408,7 @@ body {
 
     &.cg-note-toolbar-callout {
         /* margin-top: fix for reading mode */
+        box-shadow: none;
         margin-top: 0; 
         & a, span.external-link {
             display: flex;
@@ -418,6 +417,11 @@ body {
                 display: block;
                 margin: 0 auto;
             }
+        }
+        & .callout-content {
+            box-shadow: none;
+            background-color: unset;
+            border-radius: unset;
         }
         &:hover {
             /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
@@ -521,14 +525,15 @@ body {
 
 .cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
-    box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color);
     /* fix: (#90) box-shadow appearing over top of text */
+    /* box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color); */
     &:has(.callout[data-callout-metadata*="autohide"]) {
         box-shadow: none;
     }
     margin-bottom: 1em;
     .is-mobile & {
-        margin: 0.4em 0 1em 0;
+        margin-inline-start: 0;
+        margin-inline-end: 0;
     }
     &:hover {
         /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
@@ -553,7 +558,7 @@ body {
     & .cg-note-toolbar-callout {
         border-top: none !important;
         margin-bottom: 0;
-        margin-inline: auto auto;
+        margin-inline: auto auto !important;
         max-width: var(--file-line-width);
         transition: border-top 0.5s ease-out;
     }
@@ -884,7 +889,7 @@ input[type="text"].note-toolbar-setting-error {
         & .note-toolbar-setting-items-list-container {
             display: inherit !important;
         }
-        & .setting-item .setting-item-control svg {
+        & .setting-item .note-toolbar-setting-item-expand svg {
             transform: rotate(0deg);
             transition: 0.1s;
         }
@@ -893,7 +898,7 @@ input[type="text"].note-toolbar-setting-error {
         & .note-toolbar-setting-items-list-container {
             display: none !important;
         }
-        & .setting-item .setting-item-control svg {
+        & .setting-item .note-toolbar-setting-item-expand svg {
             transform: rotate(-90deg);
             transition: 0.1s;
         }
@@ -1441,9 +1446,9 @@ input[type="text"].note-toolbar-setting-error {
         radial-gradient(at 61% 56%, hsla(281,44%,13%,1) 0px, transparent 50%),
         radial-gradient(at 4% 7%, hsla(47,100%,50%,0.35) 0px, transparent 50%);
     color: #dadada;
-    font-size: var(--font-ui-large);
     font-weight: var(--h2-weight);
-    padding: 1.5em;
+    padding: 1.75em !important;
+    margin-bottom: 0;
     text-align: center;
     text-shadow: 1px 1px black;
     vertical-align: middle;
@@ -1452,8 +1457,8 @@ input[type="text"].note-toolbar-setting-error {
 .is-phone .note-toolbar-setting-whatsnew-notes {
     .setting-item {
         flex-direction: row !important;
+        padding-top: 0 !important;
         .setting-item-control {
-            margin-top: 0 !important;
             width: auto !important;
             button {
                 width: auto;
@@ -1472,6 +1477,7 @@ input[type="text"].note-toolbar-setting-error {
     }
     img {
         border: 1px solid var(--background-modifier-border);
+        border-radius: 0.5rem;
         margin-bottom: 1em;
         width: 100%;
     }
@@ -1479,7 +1485,6 @@ input[type="text"].note-toolbar-setting-error {
         font-size: var(--font-ui-medium);
     }
     ul {
-        margin-block-end: 2em;
         padding-inline-start: 2em;
     }
 }
