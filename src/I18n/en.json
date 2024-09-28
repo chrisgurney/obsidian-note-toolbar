@@ -10,12 +10,16 @@
         "name-fold-properties": "Fold Properties",
         "name-toggle-properties": "Toggle Properties"
     },
+    "export": {
+        "title": "Export as markdown",
+        "item-generic": "Item{{number}}",
+        "notice-completed": "Markdown copied to clipboard"
+    },
     "notice": {
         "error-command-not-found": "Check Note Toolbar setting for this command. Command not found: {{command}}",
         "error-folder-not-found": "Check Note Toolbar setting for this folder. Folder not found: {{folder}}",
         "error-item-menu-not-found": "Check Note Toolbar setting for this menu item. Toolbar not found: {{toolbar}}",
-        "error-toolbar-not-found": "Check Note Toolbar setting for this toolbar. Toolbar not found: {{folder}}",
-        "export-copied-to-clipboard": "Markdown copied to clipboard"
+        "error-toolbar-not-found": "Check Note Toolbar setting for this toolbar. Toolbar not found: {{folder}}"
     },
     "plugin": {
         "name": "Note Toolbar"
@@ -32,7 +36,6 @@
         "button-whats-new-tooltip": "Open the What's New window",
         "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
-        "export-item-generic": "Item{{number}}",
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
         "title-edit-toolbar": "Edit Toolbar: {{toolbar}}",
@@ -147,7 +150,6 @@
             "button-add-separator-tooltip": "Add a separator to the toolbar",
             "button-collapse-items-tooltip": "Collapse all items",
             "button-expand-items-tooltip": "Expand all items",
-            "button-export-tooltip": "Copy as markdown",
             "button-new-item": "+ Add toolbar item",
             "button-new-item-tooltip": "Add a new item to the toolbar",
             "option-item-empty-label": "No label set",
@@ -265,7 +267,6 @@
     "toolbar": {
         "button-floating-tooltip": "Open Note Toolbar",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
-        "menu-export": "Copy as markdown",
         "menu-position-props": "Set position: Below Properties",
         "menu-position-top": "Set position: Top (fixed)",
         "menu-toolbar-settings": "Note Toolbar settings..."
