@@ -4,7 +4,7 @@ import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { DeleteModal } from 'Settings/UI/Modals/DeleteModal';
+import { confirmWithModal } from 'Settings/UI/Modals/DeleteModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal';
 import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
@@ -1268,16 +1268,23 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
 					.onClick(() => {
-						const modal = new DeleteModal(
-							this,
+						confirmWithModal(
+							this.plugin.app, 
 							{ 
 								title: t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
 								questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
 								approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
 								denyLabel: t('setting.button-cancel'),
 								warning: true
-							});
-						modal.open();
+							}
+						).then((isConfirmed: boolean) => {
+							if (isConfirmed) {
+								this.plugin.settingsManager.deleteToolbar(this.toolbar.uuid);
+								this.plugin.settingsManager.save().then(() => {
+									this.close()
+								});
+							}
+						});
 					});
 			});
 

@@ -1,7 +1,4 @@
-import { ButtonComponent, Modal } from "obsidian";
-import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import NoteToolbarPlugin from "main";
-import { ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { App, ButtonComponent, Modal } from "obsidian";
 
 interface UiSettings {
     title: string,
@@ -11,21 +8,24 @@ interface UiSettings {
     warning: boolean
 };
 
+export async function confirmWithModal(app: App, uiSettings: UiSettings): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+        const modal = new DeleteModal(app, uiSettings);
+        modal.onClose = () => {
+            resolve(modal.isConfirmed);
+        };
+        modal.open();
+    });
+}
+
 export class DeleteModal extends Modal {
 
-	private parent: ToolbarSettingsModal;
-    public plugin: NoteToolbarPlugin;
-    private toolbar: ToolbarSettings;
-
-    public confirmed: boolean = false;
+    public isConfirmed: boolean = false;
     public uiSettings: UiSettings;
 
-	constructor(parent: ToolbarSettingsModal, uiSettings: UiSettings) {
-        super(parent.plugin.app);
+	constructor(app: App, uiSettings: UiSettings) {
+        super(app);
         this.modalEl.addClass('note-toolbar-setting-mini-dialog'); 
-        this.parent = parent;
-        this.plugin = parent.plugin;
-        this.toolbar = parent.toolbar;
         this.uiSettings = uiSettings;
     }
 
@@ -46,8 +46,8 @@ export class DeleteModal extends Modal {
             let btn1 = new ButtonComponent(btnContainerEl)
                 .setButtonText(this.uiSettings.approveLabel)
                 .onClick(() => {
-                    this.confirmed = true;
-                    this.delete();
+                    this.isConfirmed = true;
+                    this.close();
                 });
     
             this.uiSettings.warning ? btn1.setWarning() : btn1.setCta();
@@ -59,13 +59,6 @@ export class DeleteModal extends Modal {
                 });
 
         });
-    }
-
-    protected async delete() {
-        this.plugin.settingsManager.deleteToolbar(this.toolbar.uuid);
-        await this.plugin.settingsManager.save();
-        this.close();
-        this.parent.close();
     }
 
 }
