@@ -1,5 +1,5 @@
 import { App, PaneType, Platform, TFile } from "obsidian";
-import { ComponentType, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -264,4 +264,15 @@ export function replaceVars(app: App, s: string, file: TFile | null, encode: boo
 	});
 	return s;
 
+}
+
+/**
+ * Checks if the given toolbar uses variables at all.
+ * @param toolbar ToolbarSettings to check for variable usage
+ * @returns true if variables are used in the toolbar; false otherwise
+ */
+export function toolbarHasVars(toolbar: ToolbarSettings): boolean {
+    return toolbar.items.some(item =>
+        hasVars([item.label, item.tooltip, item.link].join(' '))
+    );
 }

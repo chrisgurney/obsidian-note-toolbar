@@ -1,7 +1,8 @@
 import NoteToolbarPlugin from "main";
 import { ItemType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog, replaceVars } from "./Utils";
+import { debugLog, replaceVars, toolbarHasVars } from "./Utils";
 import { TFile, TFolder } from "obsidian";
+import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 
 /**
  * Exports the given toolbar as a Note Toolbar Callout
@@ -9,7 +10,7 @@ import { TFile, TFolder } from "obsidian";
  * @param toolbar ToolbarSettings for the toolbar to export
  * @returns Note Toolbar Callout as a string
  */
-export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): string {
+export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): Promise<string> {
     
     debugLog('exportToCallout()', 'enabled plugins', (plugin.app as any).plugins.plugins);
 
@@ -19,10 +20,22 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
     const styles = [defaultStyles, mobileStyles].filter(Boolean).join('-');
     let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}]`;
 
-    // get the active file just to provide context
+    // get the active file to provide context, and to replace vars if requested
     let activeFile = plugin.app.workspace.getActiveFile();
 
-    calloutExport += exportToCalloutList(plugin, toolbar, activeFile) + '\n';
+    // if there are variables, as user if they should be replaced
+    if (toolbarHasVars(toolbar)) {
+        const isConfirmed = await confirmWithModal(plugin.app, { 
+            title: 'Variables were used in this toolbar',
+            questionLabel: 'Do you want to replace variables?',
+            approveLabel: 'Replace',
+            denyLabel: 'Leave as-is'
+        });
+        calloutExport += exportToCalloutList(plugin, toolbar, activeFile, isConfirmed) + '\n';
+    }
+    else {
+        calloutExport += exportToCalloutList(plugin, toolbar, activeFile, false) + '\n';
+    }
 
     return calloutExport;
 
@@ -33,10 +46,11 @@ export function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSetti
  * @param plugin NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
  * @param activeFile TFile this export is being run from, for context if needed
+ * @param resolveVars true if variables should be resolved, based on the activeFile
  * @param recursions tracks how deep we are to stop recursion
  * @returns Note Toolbar Callout items as a bulleted list string
  */
-function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, activeFile: TFile | null, recursions: number = 0): string {
+function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, activeFile: TFile | null, resolveVars: boolean, recursions: number = 0): string {
 
     if (recursions >= 2) {
         return ''; // stop recursion
@@ -62,8 +76,11 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
         let itemIcon = (hasIconize && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = encodeForCallout(item.label);
-        let itemLink = encodeForCallout(item.link);
+        let itemText = resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
+        let itemLink = resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
+
+        itemText = encodeForCallout(itemText);
+        itemLink = encodeForCallout(itemLink);
 
         // fallback if no icon or label = tooltip; otherwise use a generic name
         itemText = itemIcon ? itemText : (itemText ? itemText : (item.tooltip ? item.tooltip : t('export.item-generic', { number: index + 1 })));
@@ -90,7 +107,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
                 break;
             case ItemType.Group:
                 let groupToolbar = plugin.settingsManager.getToolbarById(item.link);
-                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, recursions + 1) : '';
+                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, resolveVars, recursions + 1) : '';
                 break;
             case ItemType.Menu:
                 itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
