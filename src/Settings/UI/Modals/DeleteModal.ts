@@ -9,23 +9,35 @@ export class DeleteModal extends Modal {
     public plugin: NoteToolbarPlugin;
     private toolbar: ToolbarSettings;
 
-	constructor(parent: ToolbarSettingsModal) {
+    private title: string;
+    private questionLabel: string;
+    private approveLabel: string;
+    private denyLabel: string;
+    private approveClass: string;
+
+	constructor(parent: ToolbarSettingsModal, title: string, questionLabel: string, approveLabel: string, denyLabel: string, approveClass: string) {
         super(parent.plugin.app);
         this.modalEl.addClass("note-toolbar-setting-mini-dialog"); 
         this.parent = parent;
         this.plugin = parent.plugin;
         this.toolbar = parent.toolbar;
+
+        this.title = title;
+        this.questionLabel = questionLabel;
+        this.approveLabel = approveLabel;
+        this.denyLabel = denyLabel;
+        this.approveClass = approveClass;
     }
 
     public onOpen() {
-        this.setTitle(t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }));
-        this.contentEl.createEl("p", {text: t('setting.delete-toolbar.label-delete-confirm') });
-        let delete_button = this.contentEl.createEl('button', {text: t('setting.delete-toolbar.button-delete-confirm')});
-        delete_button.addClass("mod-warning");
-        delete_button.onclick = async () => this.delete();
+        this.setTitle(this.title);
+        this.contentEl.createEl("p", {text: this.questionLabel });
+        let approveButton = this.contentEl.createEl('button', {text: this.approveLabel});
+        approveButton.addClass(this.approveClass);
         this.contentEl.createEl('span').setText('\u00A0\u00A0');
-        let cancel_button = this.contentEl.createEl('button', {text: t('setting.button-cancel')});
-        cancel_button.onclick = async () => this.close();
+        let denyButton = this.contentEl.createEl('button', {text: this.denyLabel});
+        approveButton.onclick = async () => this.delete();
+        denyButton.onclick = async () => this.close();
     }
 
     protected async delete() {

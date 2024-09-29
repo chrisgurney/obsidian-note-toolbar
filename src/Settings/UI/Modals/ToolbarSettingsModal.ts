@@ -1268,7 +1268,13 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
 					.onClick(() => {
-						const modal = new DeleteModal(this);
+						const modal = new DeleteModal(
+							this,
+							t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
+							t('setting.delete-toolbar.label-delete-confirm'),
+							t('setting.delete-toolbar.button-delete-confirm'),
+							t('setting.button-cancel'),
+							'mod-warning');
 						modal.open();
 					});
 			});
