@@ -11,46 +11,46 @@ export class DeleteModal extends Modal {
 
     public confirmed: boolean = false;
 
-    private strings: {
+    private uiSettings: {
         title: string,
         questionLabel: string,
         approveLabel: string,
         denyLabel: string,
-        approveClass: string
+        warning: boolean
     };
 
 	constructor(
         parent: ToolbarSettingsModal, 
-        strings: { title: string; questionLabel: string; approveLabel: string; denyLabel: string; approveClass: string; }
+        uiSettings: { title: string; questionLabel: string; approveLabel: string; denyLabel: string; warning: boolean; }
     ) {
         super(parent.plugin.app);
         this.modalEl.addClass('note-toolbar-setting-mini-dialog'); 
         this.parent = parent;
         this.plugin = parent.plugin;
         this.toolbar = parent.toolbar;
-        this.strings = strings;
+        this.uiSettings = uiSettings;
     }
 
     public onOpen() {
 
-        this.setTitle(this.strings.title);
+        this.setTitle(this.uiSettings.title);
 
-        this.contentEl.createEl("p", { text: this.strings.questionLabel });
+        this.contentEl.createEl("p", { text: this.uiSettings.questionLabel });
 
         let btnContainerEl = this.contentEl.createDiv();
         btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
 
         let btn1 = new ButtonComponent(btnContainerEl)
-            .setButtonText(this.strings.approveLabel)
+            .setButtonText(this.uiSettings.approveLabel)
             .onClick(() => {
                 this.confirmed = true;
                 this.delete();
             });
 
-        btn1.setWarning(); 
+        this.uiSettings.warning ? btn1.setWarning() : btn1.setCta();
 
         let btn2 = new ButtonComponent(btnContainerEl)
-            .setButtonText(this.strings.denyLabel)
+            .setButtonText(this.uiSettings.denyLabel)
             .onClick(() => {
                 this.close();
             });

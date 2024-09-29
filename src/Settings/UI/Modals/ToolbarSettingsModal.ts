@@ -1275,7 +1275,7 @@ export default class ToolbarSettingsModal extends Modal {
 								questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
 								approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
 								denyLabel: t('setting.button-cancel'),
-								approveClass: 'mod-warning'
+								warning: true
 							});
 						modal.open();
 					});
