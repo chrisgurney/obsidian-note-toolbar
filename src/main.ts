@@ -1311,9 +1311,11 @@ export default class NoteToolbarPlugin extends Plugin {
 					.setTitle(t('export.title'))
 					.setIcon('copy')
 					.onClick(async (menuEvent) => {
-						let calloutExport = await exportToCallout(this, toolbarSettings);
-						navigator.clipboard.writeText(calloutExport);
-						new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+						if (toolbarSettings) {
+							let calloutExport = await exportToCallout(this, toolbarSettings);
+							navigator.clipboard.writeText(calloutExport);
+							new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+						}
 					})
 				});
 
