@@ -32,29 +32,35 @@ export class DeleteModal extends Modal {
     }
 
     public onOpen() {
+        this.display();
+    }
 
-        this.setTitle(this.uiSettings.title);
+    async display() {
+        new Promise((resolve) => {
+            
+            this.setTitle(this.uiSettings.title);
 
-        this.contentEl.createEl("p", { text: this.uiSettings.questionLabel });
+            this.contentEl.createEl("p", { text: this.uiSettings.questionLabel });
+    
+            let btnContainerEl = this.contentEl.createDiv();
+            btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
+    
+            let btn1 = new ButtonComponent(btnContainerEl)
+                .setButtonText(this.uiSettings.approveLabel)
+                .onClick(() => {
+                    this.confirmed = true;
+                    this.delete();
+                });
+    
+            this.uiSettings.warning ? btn1.setWarning() : btn1.setCta();
+    
+            let btn2 = new ButtonComponent(btnContainerEl)
+                .setButtonText(this.uiSettings.denyLabel)
+                .onClick(() => {
+                    this.close();
+                });
 
-        let btnContainerEl = this.contentEl.createDiv();
-        btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
-
-        let btn1 = new ButtonComponent(btnContainerEl)
-            .setButtonText(this.uiSettings.approveLabel)
-            .onClick(() => {
-                this.confirmed = true;
-                this.delete();
-            });
-
-        this.uiSettings.warning ? btn1.setWarning() : btn1.setCta();
-
-        let btn2 = new ButtonComponent(btnContainerEl)
-            .setButtonText(this.uiSettings.denyLabel)
-            .onClick(() => {
-                this.close();
-            });
-
+        });
     }
 
     protected async delete() {
