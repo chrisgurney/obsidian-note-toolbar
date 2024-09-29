@@ -5,7 +5,7 @@ interface UiSettings {
     questionLabel: string,
     approveLabel: string,
     denyLabel: string,
-    warning: boolean
+    warning?: boolean
 };
 
 export async function confirmWithModal(app: App, uiSettings: UiSettings): Promise<boolean> {
