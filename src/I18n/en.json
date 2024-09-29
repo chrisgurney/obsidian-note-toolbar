@@ -13,7 +13,7 @@
     "export": {
         "title": "Copy as markdown",
         "item-generic": "Item{{number}}",
-        "notice-completed": "Markdown copied to clipboard.",
+        "notice-completed": "Toolbar copied to clipboard as markdown.",
         "confirm-vars-title": "Variables are used in this toolbar",
         "confirm-vars-question": "Do you want to replace these variables in the markdown?",
         "confirm-vars-approve": "Replace",
