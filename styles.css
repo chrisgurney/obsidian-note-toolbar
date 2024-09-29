@@ -2199,6 +2199,11 @@ input[type="text"].note-toolbar-setting-error {
     width: calc(var(--dialog-width) / 1.5);
 }
 
+.note-toolbar-setting-confirm-dialog-buttons {
+    column-gap: 0.5em;
+    display: flex;
+}
+
 .is-phone .note-toolbar-setting-help-dialog {
     padding: 1em;
     .setting-item {
