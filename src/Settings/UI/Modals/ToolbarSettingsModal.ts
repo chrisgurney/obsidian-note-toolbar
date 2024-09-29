@@ -4,7 +4,7 @@ import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { confirmWithModal } from 'Settings/UI/Modals/DeleteModal';
+import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal';
 import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';

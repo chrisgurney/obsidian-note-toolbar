@@ -10,7 +10,7 @@ interface UiSettings {
 
 export async function confirmWithModal(app: App, uiSettings: UiSettings): Promise<boolean> {
     return new Promise((resolve, reject) => {
-        const modal = new DeleteModal(app, uiSettings);
+        const modal = new ConfirmModal(app, uiSettings);
         modal.onClose = () => {
             resolve(modal.isConfirmed);
         };
@@ -18,7 +18,7 @@ export async function confirmWithModal(app: App, uiSettings: UiSettings): Promis
     });
 }
 
-export class DeleteModal extends Modal {
+export class ConfirmModal extends Modal {
 
     public isConfirmed: boolean = false;
     public uiSettings: UiSettings;
