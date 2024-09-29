@@ -1270,11 +1270,13 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(() => {
 						const modal = new DeleteModal(
 							this,
-							t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
-							t('setting.delete-toolbar.label-delete-confirm'),
-							t('setting.delete-toolbar.button-delete-confirm'),
-							t('setting.button-cancel'),
-							'mod-warning');
+							{ 
+								title: t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
+								questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
+								approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
+								denyLabel: t('setting.button-cancel'),
+								approveClass: 'mod-warning'
+							});
 						modal.open();
 					});
 			});
