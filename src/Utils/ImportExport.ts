@@ -26,10 +26,10 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     // if there are variables, as user if they should be replaced
     if (toolbarHasVars(toolbar)) {
         const isConfirmed = await confirmWithModal(plugin.app, { 
-            title: 'Variables were used in this toolbar',
-            questionLabel: 'Do you want to replace variables?',
-            approveLabel: 'Replace',
-            denyLabel: 'Leave as-is'
+            title: t('export.confirm-vars-title'),
+            questionLabel: t('export.confirm-vars-question'),
+            approveLabel: t('export.confirm-vars-approve'),
+            denyLabel: t('export.confirm-vars-deny')
         });
         calloutExport += exportToCalloutList(plugin, toolbar, activeFile, isConfirmed) + '\n';
     }
