@@ -79,8 +79,8 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
         let itemText = resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
         let itemLink = resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
 
-        itemText = encodeForCallout(itemText);
-        itemLink = encodeForCallout(itemLink);
+        itemText = encodeTextForCallout(itemText);
+        itemLink = encodeLinkForCallout(itemLink);
 
         // fallback if no icon or label = tooltip; otherwise use a generic name
         itemText = itemIcon ? itemText : (itemText ? itemText : (item.tooltip ? item.tooltip : t('export.item-generic', { number: index + 1 })));
@@ -121,7 +121,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
                 break;
         }
 
-        itemsExport += item.tooltip ? ` <!-- ${encodeForCallout(item.tooltip)} -->` : '';
+        itemsExport += item.tooltip ? ` <!-- ${encodeTextForCallout(item.tooltip)} -->` : '';
 
     });
 
@@ -130,15 +130,33 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
 }
 
 /**
- * Returns a string that shouldn't break the callout markdown.
+ * Returns a string that shouldn't break URL portion of a callout markdown link.
  * @param str string to encode
  * @returns URI encoded string with certain characters preserved
  */
-function encodeForCallout(str: string): string {
+function encodeLinkForCallout(str: string): string {
     return encodeURIComponent(str)
         .replace(/%20/g, ' ')
         .replace(/%2F/g, '/')
         .replace(/%3A/g, ':')
+        .replace(/%3F/g, '?')
+        .replace(/%5B/g, '\\[')
+        .replace(/%5D/g, '\\]')
+        .replace(/%7B/g, '{')
+        .replace(/%7D/g, '}');
+}
+
+/**
+ * Returns a string that shouldn't break the text portion of a callout markdown link.
+ * @param str string to encode
+ * @returns URI encoded string with certain characters preserved
+ */
+function encodeTextForCallout(str: string): string {
+    return encodeURIComponent(str)
+        .replace(/%20/g, ' ')
+        .replace(/%2F/g, '/')
+        .replace(/%3A/g, ':')
+        .replace(/%3F/g, '?')
         .replace(/%5B/g, '\\[')
         .replace(/%5D/g, '\\]')
         .replace(/%7B/g, '{')
