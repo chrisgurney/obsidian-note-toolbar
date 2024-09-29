@@ -122,8 +122,8 @@ function encodeForCallout(str: string): string {
         .replace(/%20/g, ' ')
         .replace(/%2F/g, '/')
         .replace(/%3A/g, ':')
-        .replace(/%5B/g, '\[')
-        .replace(/%5D/g, '\]')
+        .replace(/%5B/g, '\\[')
+        .replace(/%5D/g, '\\]')
         .replace(/%7B/g, '{')
         .replace(/%7D/g, '}');
 }
