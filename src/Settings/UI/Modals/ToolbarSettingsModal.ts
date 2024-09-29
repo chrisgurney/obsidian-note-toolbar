@@ -186,17 +186,17 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(learnMoreFr(t('setting.items.description'), 'Creating-toolbar-items'));
 		
 		if (this.toolbar.items.length > 0) {
-			// itemsSetting
-			// 	.addExtraButton((cb) => {
-			// 		cb.setIcon('share')
-			// 		.setTooltip('Export to markdown')
-			// 		.onClick(async () => {
-			// 			let calloutExport = exportToCallout(this.plugin, this.toolbar);
-			// 			navigator.clipboard.writeText(calloutExport);
-			// 			new Notice('Markdown copied to clipboard');
-			// 		})
-			// 		.extraSettingsEl.tabIndex = 0;
-			// 	});
+			itemsSetting
+				.addExtraButton((cb) => {
+					cb.setIcon('share')
+					.setTooltip(t('export.title'))
+					.onClick(async () => {
+						let calloutExport = await exportToCallout(this.plugin, this.toolbar);
+						navigator.clipboard.writeText(calloutExport);
+						new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+					})
+					.extraSettingsEl.tabIndex = 0;
+				});
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
