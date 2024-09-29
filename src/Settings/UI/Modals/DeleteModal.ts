@@ -1,7 +1,15 @@
 import { ButtonComponent, Modal } from "obsidian";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import NoteToolbarPlugin from "main";
-import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ToolbarSettings } from "Settings/NoteToolbarSettings";
+
+interface UiSettings {
+    title: string,
+    questionLabel: string,
+    approveLabel: string,
+    denyLabel: string,
+    warning: boolean
+};
 
 export class DeleteModal extends Modal {
 
@@ -10,19 +18,9 @@ export class DeleteModal extends Modal {
     private toolbar: ToolbarSettings;
 
     public confirmed: boolean = false;
+    public uiSettings: UiSettings;
 
-    private uiSettings: {
-        title: string,
-        questionLabel: string,
-        approveLabel: string,
-        denyLabel: string,
-        warning: boolean
-    };
-
-	constructor(
-        parent: ToolbarSettingsModal, 
-        uiSettings: { title: string; questionLabel: string; approveLabel: string; denyLabel: string; warning: boolean; }
-    ) {
+	constructor(parent: ToolbarSettingsModal, uiSettings: UiSettings) {
         super(parent.plugin.app);
         this.modalEl.addClass('note-toolbar-setting-mini-dialog'); 
         this.parent = parent;
@@ -37,7 +35,7 @@ export class DeleteModal extends Modal {
 
     async display() {
         new Promise((resolve) => {
-            
+
             this.setTitle(this.uiSettings.title);
 
             this.contentEl.createEl("p", { text: this.uiSettings.questionLabel });
