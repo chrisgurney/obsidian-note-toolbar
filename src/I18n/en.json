@@ -20,10 +20,10 @@
         "confirm-vars-deny": "Leave as-is"
     },
     "notice": {
-        "error-command-not-found": "Check Note Toolbar setting for this command. Command not found: {{command}}",
-        "error-folder-not-found": "Check Note Toolbar setting for this folder. Folder not found: {{folder}}",
-        "error-item-menu-not-found": "Check Note Toolbar setting for this menu item. Toolbar not found: {{toolbar}}",
-        "error-toolbar-not-found": "Check Note Toolbar setting for this toolbar. Toolbar not found: {{folder}}",
+        "error-command-not-found": "Check Note Toolbar setting or URI for this command. Command not found: {{command}}",
+        "error-folder-not-found": "Check Note Toolbar setting or URI for this folder. Folder not found: {{folder}}",
+        "error-item-menu-not-found": "Check Note Toolbar setting or URI for this menu item. Toolbar not found: {{toolbar}}",
+        "error-toolbar-not-found": "Check Note Toolbar setting or URI for this toolbar. Toolbar not found: {{toolbar}}",
         "error-uri-params-not-supported": "One or more of these Note Toolbar URI parameters is not supported: {{params}}"
     },
     "plugin": {
