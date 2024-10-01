@@ -1015,7 +1015,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 	/**
 	 * Handles calls to the obsidian://note-toolbar URI.
-	 * Supported: command=workspace%3Atoggle-pin | folder=Demos | menu=Tools
+	 * Supported: command=workspace%3Atoggle-pin | folder=Demos | menu=Tools | help | toolbarsettings=Tools | whatsnew
 	 * @param data ObsidianProtocolData
 	 */
 	async protocolHandler(data: ObsidianProtocolData) {
@@ -1065,6 +1065,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		else if (data.whatsnew) {
 			const whatsNewModal = new WhatsNewModal(this);
 			whatsNewModal.open();
+		}
+		else {
+			new Notice(t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')}));
 		}
 	}
 
