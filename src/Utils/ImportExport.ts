@@ -78,12 +78,14 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
 
         let itemText = resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
         let itemLink = resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
+        let itemTooltip = resolveVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
 
         itemText = encodeTextForCallout(itemText);
         itemLink = encodeLinkForCallout(itemLink);
+        itemTooltip = encodeTextForCallout(itemTooltip);
 
         // fallback if no icon or label = tooltip; otherwise use a generic name
-        itemText = itemIcon ? itemText : (itemText ? itemText : (item.tooltip ? item.tooltip : t('export.item-generic', { number: index + 1 })));
+        itemText = itemIcon ? itemText : (itemText ? itemText : (itemTooltip ? itemTooltip : t('export.item-generic', { number: index + 1 })));
 
         switch(item.linkAttr.type) {
             case ItemType.Break:
@@ -121,7 +123,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
                 break;
         }
 
-        itemsExport += item.tooltip ? ` <!-- ${encodeTextForCallout(item.tooltip)} -->` : '';
+        itemsExport += (itemTooltip && (itemText !== itemTooltip)) ? ` <!-- ${itemTooltip} -->` : '';
 
     });
 
