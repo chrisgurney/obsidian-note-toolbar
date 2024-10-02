@@ -96,8 +96,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 
 			this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
-			this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
-			
+			// this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
+
 		});
 
 	}
