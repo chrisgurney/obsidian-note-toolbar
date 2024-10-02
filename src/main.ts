@@ -26,52 +26,28 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async onload() {
 
-		// FIXME: adds a ton of time to startup; can this be optimized? or just put behind a setting?
-		if (false) {
-			(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
-			(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
-		}
-
+		// load the settings
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
 
-		this.commands = new CommandsManager(this);
-
-		this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
-		this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openItemSuggester() });
-		this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
-		this.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.commands.openSettings() });
-		this.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.commands.openToolbarSettings() });
-		this.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.commands.toggleProps('show') });
-		this.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.commands.toggleProps('hide') });
-		this.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.commands.toggleProps('fold') });
-		this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
-
-		this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
-
-		// add icons specific to the plugin
-		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
-		addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none"></svg>');
-		addIcon('note-toolbar-separator', '<path d="M23.4444 35.417H13.7222C8.35279 35.417 4 41.6988 4 44V55.5C4 57.8012 8.35279 64.5837 13.7222 64.5837H23.4444C28.8139 64.5837 33.1667 57.8012 33.1667 55.5L33.1667 44C33.1667 41.6988 28.8139 35.417 23.4444 35.417Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M86.4444 35.417H76.7222C71.3528 35.417 67 41.6988 67 44V55.5C67 57.8012 71.3528 64.5837 76.7222 64.5837H86.4444C91.8139 64.5837 96.1667 57.8012 96.1667 55.5L96.1667 44C96.1667 41.6988 91.8139 35.417 86.4444 35.417Z" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M49.8333 8.33301V91.6663" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>');
-
-		// adds the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
-		if (Platform.isPhone) {
-			this.addRibbonIcon(this.settings.icon, t('plugin.name'), (event) => this.ribbonMenuHandler(event));
-		}
-
-		this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
-
-		// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
-		this.app.workspace.trigger("parse-style-settings");
-
-		this.api = new NoteToolbarApi(this).initialize();
-
-		debugLog('LOADED');
-
 		this.app.workspace.onLayoutReady(() => {
 
+			// add icons specific to the plugin
+			addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
+			addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none"></svg>');
+			addIcon('note-toolbar-separator', '<path d="M23.4444 35.417H13.7222C8.35279 35.417 4 41.6988 4 44V55.5C4 57.8012 8.35279 64.5837 13.7222 64.5837H23.4444C28.8139 64.5837 33.1667 57.8012 33.1667 55.5L33.1667 44C33.1667 41.6988 28.8139 35.417 23.4444 35.417Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M86.4444 35.417H76.7222C71.3528 35.417 67 41.6988 67 44V55.5C67 57.8012 71.3528 64.5837 76.7222 64.5837H86.4444C91.8139 64.5837 96.1667 57.8012 96.1667 55.5L96.1667 44C96.1667 41.6988 91.8139 35.417 86.4444 35.417Z" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M49.8333 8.33301V91.6663" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>');	
+
+			// render the initial toolbar
 			debugLog('onload: rendering initial toolbar');
 			this.renderToolbarForActiveFile();
+
+			// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
+			if (Platform.isPhone) {
+				this.addRibbonIcon(this.settings.icon, t('plugin.name'), (event) => this.ribbonMenuHandler(event));
+			}
+
+			// add the settings UI
+			this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
 			// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
 			this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));
@@ -81,7 +57,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// monitor files being renamed to update menu items
 			this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
 
-			// callout click handlers
+			// Note Toolbar Callout click handlers
 			this.registerEvent(this.app.workspace.on('window-open', (win) => {
 				this.registerDomEvent(win.doc, 'click', (e: MouseEvent) => {
 					this.calloutLinkHandler(e);
@@ -95,8 +71,35 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.calloutLinkHandler(e);
 			});
 
+			// add items to menus, when needed
 			this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
 			// this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
+
+			// add commands
+			this.commands = new CommandsManager(this);
+			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
+			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openItemSuggester() });
+			this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
+			this.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.commands.openSettings() });
+			this.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.commands.openToolbarSettings() });
+			this.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.commands.toggleProps('show') });
+			this.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.commands.toggleProps('hide') });
+			this.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.commands.toggleProps('fold') });
+			this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
+	
+			// prototcol handler
+			this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
+	
+			// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
+			this.app.workspace.trigger("parse-style-settings");
+
+			// make API available
+			this.api = new NoteToolbarApi(this).initialize();
+			// TODO: remove once API has been implemented
+			if (false) {
+				(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
+				(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
+			}
 
 		});
 
