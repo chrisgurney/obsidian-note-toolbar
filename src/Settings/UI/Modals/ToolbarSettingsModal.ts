@@ -863,13 +863,27 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-command-placeholder'))
 							.setValue(value)
 							.onChange(debounce(async (command) => {
-								toolbarItem.link = command;
 								toolbarItem.linkAttr.type = ItemType.Command;
-								toolbarItem.linkAttr.commandId = cb.inputEl?.getAttribute("data-command-id") ?? "";
+								let commandId = cb.inputEl?.getAttribute('data-command-id') ?? '';
+								if (!command) {
+									this.setFieldError(cb.inputEl.parentElement);
+									commandId = '';
+								}
+								else if (!(commandId in this.app.commands.commands)) {
+									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-command-error-does-not-exist'));
+									command = '';
+									commandId = '';
+								}
+								else {
+									this.removeFieldError(cb.inputEl.parentElement);
+								}
+								toolbarItem.link = command;
+								toolbarItem.linkAttr.commandId = commandId;
 								// TODO: check for vars in labels & tooltips
 								toolbarItem.linkAttr.hasVars = false;
 								await this.plugin.settingsManager.save();
-							}, 250))});
+							}, 500));
+						});
 				break;
 			case ItemType.File:
 				new Setting(fieldDiv)
@@ -881,18 +895,22 @@ export default class ToolbarSettingsModal extends Modal {
 							.onChange(debounce(async (value) => {
 								toolbarItem.linkAttr.type = ItemType.File;
 								const file = this.app.vault.getAbstractFileByPath(value);
-								if (!(file instanceof TFile) && !(file instanceof TFolder)) {
+								if (!value) {
+									this.setFieldError(cb.inputEl.parentElement);
+								}
+								else if (!(file instanceof TFile) && !(file instanceof TFolder)) {
 									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-file-error-does-not-exist'));
+									value = '';
 								}
 								else {
-									toolbarItem.link = normalizePath(value);
-									toolbarItem.linkAttr.commandId = '';
-									// TODO: check for vars in labels & tooltips
-									toolbarItem.linkAttr.hasVars = false;
 									this.removeFieldError(cb.inputEl.parentElement);
-									await this.plugin.settingsManager.save();
-								}					
-							}, 750))
+								}
+								toolbarItem.link = value ? normalizePath(value) : '';
+								toolbarItem.linkAttr.commandId = '';
+								// TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.hasVars = false;
+								await this.plugin.settingsManager.save();
+							}, 500));
 					});
 				break;
 			case ItemType.Group:
@@ -903,25 +921,30 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
+								toolbarItem.linkAttr.type = ItemType.Group;
 								let groupToolbar = this.plugin.settingsManager.getToolbarByName(name);
-								if (groupToolbar) {
-									this.removeFieldError(cb.inputEl.parentElement);
-									toolbarItem.link = groupToolbar.uuid;
-									toolbarItem.linkAttr.commandId = '';
-									// TODO: check for vars in labels & tooltips
-									toolbarItem.linkAttr.hasVars = false;
-									await this.plugin.settingsManager.save();
-									this.renderPreview(toolbarItem);
+								if (!name) {
+									this.setFieldError(cb.inputEl.parentElement);
+								}
+								else if (!groupToolbar) {
+									this.setFieldError(cb.inputEl.parentElement, (t('setting.item.option-item-group-error-does-not-exist')));
+									name = '';
 								}
 								else {
-									this.setFieldError(cb.inputEl.parentElement, (t('setting.item.option-item-group-error-does-not-exist')));
+									this.removeFieldError(cb.inputEl.parentElement);
 								}
+								toolbarItem.link = groupToolbar ? groupToolbar.uuid : '';
+								toolbarItem.linkAttr.commandId = '';
+								// TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.hasVars = false;
+								await this.plugin.settingsManager.save();
+								this.renderPreview(toolbarItem);
 								// update help text with toolbar preview or default if none selected
 								let groupPreviewFr = groupToolbar 
 									? createToolbarPreviewFr(groupToolbar, undefined, true) 
 									: learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
-							}, 250));
+							}, 500));
 					});
 				fieldHelp ? groupSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
@@ -933,26 +956,31 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
+								toolbarItem.linkAttr.type = ItemType.Menu;
 								// TODO? return an ID from the suggester vs. the name
 								let menuToolbar = this.plugin.settingsManager.getToolbarByName(name);
-								if (menuToolbar) {
-									this.removeFieldError(cb.inputEl.parentElement);
-									toolbarItem.link = menuToolbar.uuid;
-									toolbarItem.linkAttr.commandId = '';
-									// TODO: check for vars in labels & tooltips
-									toolbarItem.linkAttr.hasVars = false;
-									await this.plugin.settingsManager.save();
-									this.renderPreview(toolbarItem);
+								if (!name) {
+									this.setFieldError(cb.inputEl.parentElement);
+								}
+								else if (!menuToolbar) {
+									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-item-menu-error-does-not-exist'));
+									name = '';
 								}
 								else {
-									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-item-menu-error-does-not-exist'));
+									this.removeFieldError(cb.inputEl.parentElement);
 								}
+								toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
+								toolbarItem.linkAttr.commandId = '';
+								// TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.hasVars = false;
+								await this.plugin.settingsManager.save();
+								this.renderPreview(toolbarItem);
 								// update help text with toolbar preview or default if none selected
 								let menuPreviewFr = menuToolbar 
 									? createToolbarPreviewFr(menuToolbar, undefined, true)
 									: learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
-							}, 250));
+							}, 500));
 					});
 				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
@@ -964,8 +992,14 @@ export default class ToolbarSettingsModal extends Modal {
 						.setValue(value)
 						.onChange(
 							debounce(async (value) => {
-								toolbarItem.link = value;
 								toolbarItem.linkAttr.type = ItemType.Uri;
+								if (!value) {
+									this.setFieldError(text.inputEl.parentElement);
+								}
+								else {
+									this.removeFieldError(text.inputEl.parentElement);
+								}
+								toolbarItem.link = value;
 								toolbarItem.linkAttr.hasVars = hasVars(value);
 								toolbarItem.linkAttr.commandId = '';
 								this.toolbar.updated = new Date().toISOString();
@@ -1613,14 +1647,16 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param fieldEl HTMLElement to update
 	 * @param errorText Error text to display
 	 */
-	setFieldError(fieldEl: HTMLElement | null, errorText: string) {
+	setFieldError(fieldEl: HTMLElement | null, errorText?: string) {
 		if (fieldEl) {
 			let fieldContainerEl = fieldEl.closest('.setting-item-control');
 			if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
-				let errorDiv = createEl('div', { 
-					text: errorText, 
-					cls: 'note-toolbar-setting-field-error' });
-				fieldEl.insertAdjacentElement('afterend', errorDiv);
+				if (errorText) {
+					let errorDiv = createEl('div', { 
+						text: errorText, 
+						cls: 'note-toolbar-setting-field-error' });
+					fieldEl.insertAdjacentElement('afterend', errorDiv);
+				}
 				fieldEl.addClass('note-toolbar-setting-error');
 			}
 		}
@@ -1681,7 +1717,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let groupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				groupToolbar ? itemPreviewContent.appendChild(createToolbarPreviewFr(groupToolbar)) : undefined;
+				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
 				break;
 			default:
 				setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));

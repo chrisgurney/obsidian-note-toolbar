@@ -14,12 +14,18 @@ export class CommandSuggester extends AbstractInputSuggest<Command> {
     getSuggestions(inputStr: string): Command[] {
         const suggestions: Command[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
+        this.inputEl.removeAttribute("data-command-id");
 
         this.commands.forEach((command: Command) => {
             if (command.name.toLowerCase().contains(lowerCaseInputStr)) {
                 suggestions.push(command);
             }
         });
+
+        // if there's only one result and it matches the suggestion, just select it
+        if ((suggestions.length === 1) && suggestions[0].name.toLowerCase() === lowerCaseInputStr) {
+            this.inputEl.setAttribute("data-command-id", suggestions[0].id);
+        }
 
         return suggestions;
     }
