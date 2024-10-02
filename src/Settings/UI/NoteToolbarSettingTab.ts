@@ -276,7 +276,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				this.itemListIdCounter++;
 			});
 
-			var sortable = Sortable.create(toolbarFolderListDiv, {
+			let sortable = Sortable.create(toolbarFolderListDiv, {
 				chosenClass: 'sortable-chosen',
 				ghostClass: 'sortable-ghost',
 				handle: '.sortable-handle',

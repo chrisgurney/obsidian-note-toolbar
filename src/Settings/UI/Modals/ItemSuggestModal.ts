@@ -161,10 +161,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             }
         }
         let itemNameEl = el.createSpan();
-        var itemName = item.label || item.tooltip;
+        let itemName = item.label || item.tooltip;
 
         // fallback if no label or tooltip
-        var isItemNameLink = false;
+        let isItemNameLink = false;
         if (!itemName) {
             if (item.icon) {
                 isItemNameLink = true;

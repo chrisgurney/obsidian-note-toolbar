@@ -271,7 +271,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// make the list drag-and-droppable
 		//
 
-		var sortable = Sortable.create(itemsSortableContainer, {
+		let sortable = Sortable.create(itemsSortableContainer, {
 			chosenClass: 'sortable-chosen',
 			ghostClass: 'sortable-ghost',
 			handle: '.sortable-handle',

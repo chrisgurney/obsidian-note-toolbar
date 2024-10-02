@@ -792,9 +792,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			let dataEl = clickedItemEl?.nextElementSibling;
 			if (dataEl) {
 				// make sure it's a valid attribute, and get its value
-				var attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
+				let attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
 				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
-				var value = attribute ? dataEl?.getAttribute(attribute) : null;
+				let value = attribute ? dataEl?.getAttribute(attribute) : null;
 				debugLog('🟡 EXTERNAL LINK', attribute, value);
 				switch (attribute) {
 					case CalloutAttr.Command:

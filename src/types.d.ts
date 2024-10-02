@@ -9,7 +9,7 @@ declare global {
     }
 
     // provides access to Obsidian's translation framework
-    var i18next: any;
+    let i18next: any;
 
 }
 
