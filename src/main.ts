@@ -8,7 +8,7 @@ import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { HelpModal } from 'Settings/UI/Modals/HelpModal';
 import { WhatsNewModal } from 'Settings/UI/Modals/WhatsNewModal';
-import { exportToCallout } from 'Utils/ImportExport';
+import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
 import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -832,7 +832,33 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * On opening of the file meny, check and render toolbar as a submenu.
+	 * On opening of the editor menu, check what was selected and add relevant menu options.
+	 */
+	editorMenuHandler = (menu: Menu, editor: Editor, info: MarkdownView | MarkdownFileInfo) => {
+		const selection = editor.getSelection().trim();
+		if (/^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(selection)) {
+			menu.addItem((item: MenuItem) => {
+				item
+					.setIcon('book-open')
+					.setTitle('Learn about Note Toolbar Callout syntax')
+					.onClick(async () => {
+						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts', '_blank');
+					});
+			});
+			menu.addItem((item: MenuItem) => {
+				item
+					.setIcon('import')
+					.setTitle('Create Note Toolbar from callout...')
+					.onClick(async () => {
+						await importFromCallout(selection);
+						// TODO: save settings
+					});
+			});
+		}
+	}
+
+	/**
+	 * On opening of the file menu, check and render toolbar as a submenu.
 	 * @param menu the file Menu
 	 * @param file TFile for link that was clicked on
 	 */
@@ -966,6 +992,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
+
+				// TODO: check if the plugin is installed
+					// if so, show message: enable the plugin + link
+					// if not, show message: install the plugin + link
+					// "try searching for this plugin" because not all plugins use their ID for the URI
+				// const [pluginPart, commandPart] = commandId.split(":");
+				// const plugin = (this.app as any).plugins.plugins[pluginPart];
+				// debugLog(pluginPart, commandPart, plugin);
+				// (pluginPart && (pluginPart !== "workspace")) ? debugLog(`obsidian://show-plugin?id=${pluginPart}`) : undefined;
+
 				new Notice(t('notice.error-command-not-found', { command: commandId }));
 				return;
 			}

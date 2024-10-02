@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ItemType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog, replaceVars, toolbarHasVars } from "./Utils";
+import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
 import { TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 
@@ -163,4 +163,51 @@ function encodeTextForCallout(str: string): string {
         .replace(/%5D/g, '\\]')
         .replace(/%7B/g, '{')
         .replace(/%7D/g, '}');
+}
+
+
+export async function importFromCallout(callout: string, existingToolbar?: ToolbarSettings): Promise<ToolbarSettings> {
+
+    debugLog('importFromCallout()', callout);
+
+    // TODO? double-check provided text is a Note Toolbar Callout; may not have this line in import
+    //const isNoteToolbarCallout = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(callout);
+
+    // TODO: if ToolbarSettings undefined, create a new ToolbarSettings object
+    let newToolbar = {
+        uuid: getUUID(),
+        defaultStyles: ["border", "even", "sticky"],
+        items: [],
+        mobileStyles: [],
+        // TODO: default toolbar name - add date?
+        name: "",
+        position: { 
+            desktop: { allViews: { position: 'props' } }, 
+            mobile: { allViews: { position: 'props' } }, 
+            tablet: { allViews: { position: 'props' } } },
+        updated: new Date().toISOString(),
+    } as ToolbarSettings;
+
+    // TODO: if first line has the note-toolbar identifier
+        // TODO: get the list of styles
+        // TODO: if there are styles and parent is ToolbarSettingsModal, prompt to ignore styles
+
+    // TODO: for each line item
+        // TODO: determine type and component:
+            // TODO: if it's a break or separator
+            // TODO: get the text and link portions (same time for internal and external links?)
+                // TODO: get tooltip portion from comment
+            // TODO: if it's just an external link or plain internal link
+                // TODO: otherwise, determine item type from data element or URI
+
+        // TODO: create break
+        // TODO: create command item
+        // TODO: create file/folder item
+        // TODO: create menu item
+        // TODO: create separator item
+        // TODO: create URI item
+
+    // TODO: return ToolbarSettings (but don't save it)
+    return newToolbar;
+
 }
