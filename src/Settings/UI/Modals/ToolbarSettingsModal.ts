@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
@@ -1507,7 +1507,7 @@ export default class ToolbarSettingsModal extends Modal {
 		};
 
 		let menu = new Menu();
-		menu.addItem((menuItem) => {
+		menu.addItem((menuItem: MenuItem) => {
 			menuItem
 				.setTitle(isComponentVisible.icon 
 					? t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-icon'), platform: platformLabel })
@@ -1529,7 +1529,7 @@ export default class ToolbarSettingsModal extends Modal {
 					this.updateItemVisButton(button, state, tooltip);
 				});
 		});
-		menu.addItem((menuItem) => {
+		menu.addItem((menuItem: MenuItem) => {
 			menuItem
 				.setTitle(isComponentVisible.label 
 					? t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-label'), platform: platformLabel })

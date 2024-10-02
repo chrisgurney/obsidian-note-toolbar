@@ -1,4 +1,4 @@
-import { CachedMetadata, FrontMatterCache, ItemView, MarkdownView, Menu, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, FolderMapping, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
@@ -546,7 +546,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (showEditToolbar) {
 			menu.addSeparator();
-			menu.addItem((item) => {
+			menu.addItem((item: MenuItem) => {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbar.name }))
 					.setIcon("lucide-pen-box")
@@ -598,7 +598,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						if (!Platform.isMobile) {
 							// display menus in sub-menus, but only if we're not more than a level deep
 							if (recursions >= 1) break;
-							menu.addItem((item) => {
+							menu.addItem((item: MenuItem) => {
 								item
 									.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
 									.setTitle(title);
@@ -613,7 +613,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, file, false) === "") {
 							break;
 						}
-						menu.addItem((item) => {
+						menu.addItem((item: MenuItem) => {
 							item
 								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
 								.setTitle(title)
@@ -842,7 +842,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
 					}
 					else {
-						menu.addItem((item) => {
+						menu.addItem((item: MenuItem) => {
 							item
 								.setIcon(this.settings.icon)
 								.setTitle(toolbar ? toolbar.name : '');
@@ -1285,7 +1285,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let contextMenu = new Menu();
 
 		if (toolbarSettings) {
-			contextMenu.addItem((item) => {
+			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name }))
 					.setIcon("lucide-pen-box")
@@ -1297,7 +1297,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			  });
 		}
 
-		contextMenu.addItem((item) => {
+		contextMenu.addItem((item: MenuItem) => {
 			item
 			  .setTitle(t('toolbar.menu-toolbar-settings'))
 			  .setIcon("lucide-wrench")
@@ -1309,7 +1309,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarSettings !== undefined) {
 
 			contextMenu.addSeparator();
-			contextMenu.addItem((item) => {
+			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setTitle(t('export.title'))
 					.setIcon('copy')
@@ -1325,7 +1325,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
 			if (currentPosition === 'props' || currentPosition === 'top') {
 				contextMenu.addSeparator();
-				contextMenu.addItem((item) => {
+				contextMenu.addItem((item: MenuItem) => {
 					item
 						.setTitle(currentPosition === 'props' ? t('toolbar.menu-position-top') : t('toolbar.menu-position-props'))
 						.setIcon(currentPosition === 'props' ? 'arrow-up-to-line' : 'arrow-down-narrow-wide')
