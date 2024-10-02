@@ -1214,6 +1214,7 @@ body {
     &.cg-note-toolbar-callout {
         /* margin-top: fix for reading mode */
         box-shadow: none;
+        line-height: normal;
         margin-top: 0; 
         & a, span.external-link {
             display: flex;
