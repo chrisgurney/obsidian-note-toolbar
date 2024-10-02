@@ -35,13 +35,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
 
-		// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
-		this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));
-		this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
-		this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
-
-		this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
-
 		this.commands = new CommandsManager(this);
 
 		this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
@@ -56,26 +49,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
 
-		debugLog('🟡 ONLOAD: EXTERNAL LINK: HANDLER SETUP');
-		this.registerEvent(this.app.workspace.on('window-open', (win) => {
-			this.registerDomEvent(win.doc, 'click', (e: MouseEvent) => {
-				this.calloutLinkHandler(e);
-			});
-		}));
-		this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
-			const target = e.target as HTMLElement;
-			if (!target.matches('.cg-note-toolbar-container')) {
-				this.removeFocusStyle();
-			}
-			this.calloutLinkHandler(e);
-		});
-
 		// add icons specific to the plugin
 		addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
 		addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none"></svg>');
 		addIcon('note-toolbar-separator', '<path d="M23.4444 35.417H13.7222C8.35279 35.417 4 41.6988 4 44V55.5C4 57.8012 8.35279 64.5837 13.7222 64.5837H23.4444C28.8139 64.5837 33.1667 57.8012 33.1667 55.5L33.1667 44C33.1667 41.6988 28.8139 35.417 23.4444 35.417Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M86.4444 35.417H76.7222C71.3528 35.417 67 41.6988 67 44V55.5C67 57.8012 71.3528 64.5837 76.7222 64.5837H86.4444C91.8139 64.5837 96.1667 57.8012 96.1667 55.5L96.1667 44C96.1667 41.6988 91.8139 35.417 86.4444 35.417Z" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M49.8333 8.33301V91.6663" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>');
-
-		this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
 
 		// adds the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 		if (Platform.isPhone) {
@@ -92,8 +69,35 @@ export default class NoteToolbarPlugin extends Plugin {
 		debugLog('LOADED');
 
 		this.app.workspace.onLayoutReady(() => {
+
 			debugLog('onload: rendering initial toolbar');
 			this.renderToolbarForActiveFile();
+
+			// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
+			this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));
+			this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
+			this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
+
+			// monitor files being renamed to update menu items
+			this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
+
+			// callout click handlers
+			this.registerEvent(this.app.workspace.on('window-open', (win) => {
+				this.registerDomEvent(win.doc, 'click', (e: MouseEvent) => {
+					this.calloutLinkHandler(e);
+				});
+			}));
+			this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
+				const target = e.target as HTMLElement;
+				if (!target.matches('.cg-note-toolbar-container')) {
+					this.removeFocusStyle();
+				}
+				this.calloutLinkHandler(e);
+			});
+
+			this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
+			this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
+			
 		});
 
 	}
