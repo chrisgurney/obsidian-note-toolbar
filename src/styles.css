@@ -614,9 +614,9 @@ body {
 
 .note-toolbar-setting-plugin-error {
     & .setting-item-name {
-        color: var(--color-red);
+        color: var(--text-error);
     }
-    border: solid 1px var(--color-red) !important;
+    border: solid 1px var(--text-error) !important;
     padding: 1em !important;
     border-radius: 8px;
 }
@@ -823,7 +823,7 @@ body {
 }
 
 .note-toolbar-setting-error-message {
-    color: var(--color-red);
+    color: var(--text-error);
     padding-bottom: 1em;
 }
 
@@ -831,7 +831,7 @@ body {
     flex-wrap: wrap;
 }
 input[type="text"].note-toolbar-setting-error {
-    box-shadow: 0 0 0 1px var(--color-red);
+    box-shadow: 0 0 0 1px var(--text-error);
 }
 .note-toolbar-setting-error {
     &.note-toolbar-setting-item-preview {
@@ -839,7 +839,7 @@ input[type="text"].note-toolbar-setting-error {
         box-shadow: 0 0 0 1px var(--text-error);
     }
     & input[type="text"], & input[type="search"] {
-        box-shadow: 0 0 0 1px var(--color-red);
+        box-shadow: 0 0 0 1px var(--text-error);
     }
 }
 
@@ -1170,7 +1170,7 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-field-error {
-    color: var(--color-red);
+    color: var(--text-error);
 }
 
 .note-toolbar-sortablejs-list {
