@@ -863,7 +863,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-command-placeholder'))
 							.setValue(value)
 							.onChange(debounce(async (command) => {
-								let commandId = cb.inputEl?.getAttribute('data-command-id') ?? '';
+								let commandId = command ? (cb.inputEl?.getAttribute('data-command-id') ?? 'COMMAND_DOES_NOT_EXIST') : '';
 								let isValid = this.updateItemComponentStatus(commandId, type, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? command : '';
 								toolbarItem.linkAttr.commandId = isValid ? commandId : '';
