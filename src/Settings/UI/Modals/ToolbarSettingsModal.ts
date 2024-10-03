@@ -1054,6 +1054,9 @@ export default class ToolbarSettingsModal extends Modal {
 			case Status.Empty:
 				// clear out existing field error, if there is one
 				this.removeFieldError(componentEl);
+				// TODO? flag for whether empty should show as an error or not
+				isValid = false;
+				break;
 			case Status.Invalid:
 				this.setFieldError(componentEl, statusMessage);
 				isValid = false;
