@@ -197,7 +197,7 @@
             "button-edit-tbar-tooltip": "Оновити цю панель",
             "button-new-tbar": "+ Нова панель",
             "button-new-tbar-tooltip": "Додати нову панель",
-            "duplicate-file-suffix": "скопіювати",
+            "duplicated-tbar-suffix": "скопіювати",
             "label-empty-create-tbar": "Натисніть кнопку, щоб створити нову панель.",
             "label-tbar-name-not-set": "⚠️ Ім'я панелі не встановлено"
         },

@@ -31,7 +31,7 @@ export class SettingsManager {
 			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)),
 			items: [],
 			mobileStyles: JSON.parse(JSON.stringify(toolbar.mobileStyles)),
-			name: this.getUniqueToolbarName(toolbar.name),
+			name: this.getUniqueToolbarName(toolbar.name, true),
 			position: JSON.parse(JSON.stringify(toolbar.position)),
 			updated: new Date().toISOString(),
 		} as ToolbarSettings;
@@ -194,16 +194,19 @@ export class SettingsManager {
 	/**
 	 * Gets a unique name for a new toolbar copy, using the provided name.
 	 * @param name name of the toolbar to generate a unique copy name for
+	 * @param isCopy true if this is a copy, appending word "copy"; false otherwise
 	 * @returns unique toolbar name
 	 */
-	private getUniqueToolbarName(name: string): string {
+	public getUniqueToolbarName(name: string, isCopy: boolean): string {
 		let uniqueName = name;
 		let counter = 1;
 	
 		const existingNames = this.plugin.settings.toolbars.map(toolbar => toolbar.name);
 	
 		while (existingNames.includes(uniqueName)) {
-			uniqueName = `${name} ${t('setting.toolbars.duplicate-file-suffix')}${counter > 1 ? ` ${counter}` : ''}`;
+			uniqueName = `${name} `;
+			uniqueName += isCopy ? t('setting.toolbars.duplicated-tbar-suffix') : '';
+			uniqueName += `${counter > 1 ? ` ${counter}` : ''}`;
 			counter++;
 		}
 	

@@ -166,7 +166,7 @@ function encodeTextForCallout(str: string): string {
 }
 
 
-export async function importFromCallout(callout: string, existingToolbar?: ToolbarSettings): Promise<ToolbarSettings> {
+export async function importFromCallout(plugin: NoteToolbarPlugin, callout: string, existingToolbar?: ToolbarSettings): Promise<ToolbarSettings> {
 
     debugLog('importFromCallout()', callout);
 
@@ -179,8 +179,7 @@ export async function importFromCallout(callout: string, existingToolbar?: Toolb
         defaultStyles: ["border", "even", "sticky"],
         items: [],
         mobileStyles: [],
-        // TODO: default toolbar name - add date?
-        name: "",
+        name: plugin.settingsManager.getUniqueToolbarName(t('setting.toolbars.imported-tbar-name'), false),
         position: { 
             desktop: { allViews: { position: 'props' } }, 
             mobile: { allViews: { position: 'props' } }, 

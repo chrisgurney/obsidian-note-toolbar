@@ -850,8 +850,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					.setIcon('import')
 					.setTitle('Create Note Toolbar from callout...')
 					.onClick(async () => {
-						await importFromCallout(selection);
-						// TODO: save settings
+						await importFromCallout(this, selection);
+						// TODO: save settings from import function call
 					});
 			});
 		}

@@ -254,7 +254,8 @@
             "button-edit-tbar-tooltip": "Update this toolbar",
             "button-new-tbar": "+ New toolbar",
             "button-new-tbar-tooltip": "Add a new toolbar",
-            "duplicate-file-suffix": "copy",
+            "duplicated-tbar-suffix": "copy",
+            "imported-tbar-name": "Imported toolbar",
             "label-empty-create-tbar": "Click the button to create a toolbar.",
             "label-tbar-name-not-set": "⚠️ Toolbar name not set"
         },

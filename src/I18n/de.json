@@ -197,7 +197,7 @@
             "button-edit-tbar-tooltip": "Diese Toolbar erweitern",
             "button-new-tbar": "+ Neue Toolbar",
             "button-new-tbar-tooltip": "Neue Toolbar hinzufügen",
-            "duplicate-file-suffix": "Kopieren",
+            "duplicated-tbar-suffix": "Kopieren",
             "label-empty-create-tbar": "Klicken Sie auf die Schaltfläche, um eine Toolbar zu erstellen.",
             "label-tbar-name-not-set": "⚠️ Toolbar-Name nicht festgelegt"
         },

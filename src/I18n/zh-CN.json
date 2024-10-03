@@ -202,7 +202,7 @@
             "button-edit-tbar-tooltip": "更新此工具栏",
             "button-new-tbar": "+ 新建工具栏",
             "button-new-tbar-tooltip": "添加一个新的工具栏",
-            "duplicate-file-suffix": "复制",
+            "duplicated-tbar-suffix": "复制",
             "label-empty-create-tbar": "点击按钮创建工具栏。",
             "label-tbar-name-not-set": "⚠️ 未设置工具栏名称"
         },
