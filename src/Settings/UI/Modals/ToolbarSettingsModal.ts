@@ -870,6 +870,7 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
+								this.renderPreview(toolbarItem);
 							}, 500));
 						this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, type, cb.inputEl.parentElement);
 					});	
@@ -888,6 +889,7 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
+								this.renderPreview(toolbarItem);
 							}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
 					});
@@ -960,6 +962,7 @@ export default class ToolbarSettingsModal extends Modal {
 									toolbarItem.linkAttr.type = type;
 									this.toolbar.updated = new Date().toISOString();
 									await this.plugin.settingsManager.save();
+									this.renderPreview(toolbarItem);
 								}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
 					});
@@ -1039,8 +1042,12 @@ export default class ToolbarSettingsModal extends Modal {
 				case ItemType.Menu:
 					let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
 					if (!toolbar) {
-						status = Status.Invalid;
-						statusMessage = t('setting.item.option-item-menu-error-does-not-exist');
+						// toolbars are stored by IDs for previews
+						toolbar = this.plugin.settingsManager.getToolbarById(itemValue);
+						if (!toolbar) {
+							status = Status.Invalid;
+							statusMessage = t('setting.item.option-item-menu-error-does-not-exist');
+						}
 					}
 					break;
 			}
@@ -1050,19 +1057,15 @@ export default class ToolbarSettingsModal extends Modal {
 			statusMessage = '';
 		}
 
+		this.removeFieldError(componentEl);
 		switch (status) {
 			case Status.Empty:
-				// clear out existing field error, if there is one
-				this.removeFieldError(componentEl);
-				// TODO? flag for whether empty should show as an error or not
+				// TODO: flag for whether empty should show as an error or not
 				isValid = false;
 				break;
 			case Status.Invalid:
 				this.setFieldError(componentEl, statusMessage);
 				isValid = false;
-				break;
-			default:
-				this.removeFieldError(componentEl);
 				break;
 		}
 
@@ -1676,6 +1679,10 @@ export default class ToolbarSettingsModal extends Modal {
 	setFieldError(fieldEl: HTMLElement | null, errorText?: string) {
 		if (fieldEl) {
 			let fieldContainerEl = fieldEl.closest('.setting-item-control');
+			if (!fieldContainerEl) {
+				fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview');
+				errorText = ''; // no need to show errorText for item previews
+			}
 			if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
 				if (errorText) {
 					let errorDiv = createEl('div', { 
@@ -1782,6 +1789,12 @@ export default class ToolbarSettingsModal extends Modal {
 		else {
 			itemPreview.appendChild(itemPreviewContent);
 		}
+
+		// check if items are valid (non-empty + valid), and highlight if not
+		this.updateItemComponentStatus(
+			(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
+			toolbarItem.linkAttr.type, 
+			itemPreview);
 
 	}
 
