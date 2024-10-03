@@ -871,7 +871,8 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 							}, 500));
-						});
+						this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, type, cb.inputEl.parentElement);
+					});	
 				break;
 			case ItemType.File:
 				new Setting(fieldDiv)
@@ -888,6 +889,7 @@ export default class ToolbarSettingsModal extends Modal {
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 							}, 500));
+						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
 					});
 				break;
 			case ItemType.Group:
@@ -912,6 +914,7 @@ export default class ToolbarSettingsModal extends Modal {
 									: learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 500));
+						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
 					});
 				fieldHelp ? groupSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
@@ -938,26 +941,28 @@ export default class ToolbarSettingsModal extends Modal {
 									: learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 500));
+						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
 					});
 				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
 			case ItemType.Uri: 
 				const uriSetting = new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
-					.addText(text => text
-						.setPlaceholder(t('setting.item.option-uri-placehoder'))
-						.setValue(value)
-						.onChange(
-							debounce(async (value) => {
-								this.updateItemComponentStatus(value, type, text.inputEl.parentElement);
-								toolbarItem.link = value;
-								toolbarItem.linkAttr.commandId = '';
-								toolbarItem.linkAttr.hasVars = hasVars(value);
-								toolbarItem.linkAttr.type = type;
-								this.toolbar.updated = new Date().toISOString();
-								await this.plugin.settingsManager.save();
-							}, 500))
-						);
+					.addText(cb => {
+						cb.setPlaceholder(t('setting.item.option-uri-placehoder'))
+							.setValue(value)
+							.onChange(
+								debounce(async (value) => {
+									this.updateItemComponentStatus(value, type, cb.inputEl.parentElement);
+									toolbarItem.link = value;
+									toolbarItem.linkAttr.commandId = '';
+									toolbarItem.linkAttr.hasVars = hasVars(value);
+									toolbarItem.linkAttr.type = type;
+									this.toolbar.updated = new Date().toISOString();
+									await this.plugin.settingsManager.save();
+								}, 500));
+						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
+					});
 				fieldHelp ? uriSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
 		}
