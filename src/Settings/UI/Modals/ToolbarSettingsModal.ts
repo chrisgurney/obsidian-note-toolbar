@@ -863,24 +863,12 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-command-placeholder'))
 							.setValue(value)
 							.onChange(debounce(async (command) => {
-								toolbarItem.linkAttr.type = ItemType.Command;
 								let commandId = cb.inputEl?.getAttribute('data-command-id') ?? '';
-								if (!command) {
-									this.setFieldError(cb.inputEl.parentElement);
-									commandId = '';
-								}
-								else if (!(commandId in this.app.commands.commands)) {
-									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-command-error-does-not-exist'));
-									command = '';
-									commandId = '';
-								}
-								else {
-									this.removeFieldError(cb.inputEl.parentElement);
-								}
-								toolbarItem.link = command;
-								toolbarItem.linkAttr.commandId = commandId;
-								// TODO: check for vars in labels & tooltips
-								toolbarItem.linkAttr.hasVars = false;
+								let isValid = this.updateItemComponentStatus(commandId, type, cb.inputEl.parentElement);
+								toolbarItem.link = isValid ? command : '';
+								toolbarItem.linkAttr.commandId = isValid ? commandId : '';
+								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 							}, 500));
 						});
@@ -893,22 +881,11 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-file-placeholder'))
 							.setValue(value)
 							.onChange(debounce(async (value) => {
-								toolbarItem.linkAttr.type = ItemType.File;
-								const file = this.app.vault.getAbstractFileByPath(value);
-								if (!value) {
-									this.setFieldError(cb.inputEl.parentElement);
-								}
-								else if (!(file instanceof TFile) && !(file instanceof TFolder)) {
-									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-file-error-does-not-exist'));
-									value = '';
-								}
-								else {
-									this.removeFieldError(cb.inputEl.parentElement);
-								}
-								toolbarItem.link = value ? normalizePath(value) : '';
+								let isValid = this.updateItemComponentStatus(value, type, cb.inputEl.parentElement);
+								toolbarItem.link = isValid ? normalizePath(value) : '';
 								toolbarItem.linkAttr.commandId = '';
-								// TODO: check for vars in labels & tooltips
-								toolbarItem.linkAttr.hasVars = false;
+								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 							}, 500));
 					});
@@ -921,22 +898,12 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
-								toolbarItem.linkAttr.type = ItemType.Group;
-								let groupToolbar = this.plugin.settingsManager.getToolbarByName(name);
-								if (!name) {
-									this.setFieldError(cb.inputEl.parentElement);
-								}
-								else if (!groupToolbar) {
-									this.setFieldError(cb.inputEl.parentElement, (t('setting.item.option-item-group-error-does-not-exist')));
-									name = '';
-								}
-								else {
-									this.removeFieldError(cb.inputEl.parentElement);
-								}
+								let isValid = this.updateItemComponentStatus(name, type, cb.inputEl.parentElement);
+								let groupToolbar = isValid ? this.plugin.settingsManager.getToolbarByName(name) : undefined;
 								toolbarItem.link = groupToolbar ? groupToolbar.uuid : '';
 								toolbarItem.linkAttr.commandId = '';
-								// TODO: check for vars in labels & tooltips
-								toolbarItem.linkAttr.hasVars = false;
+								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
 								// update help text with toolbar preview or default if none selected
@@ -956,23 +923,13 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
-								toolbarItem.linkAttr.type = ItemType.Menu;
+								this.updateItemComponentStatus(name, type, cb.inputEl.parentElement);
 								// TODO? return an ID from the suggester vs. the name
 								let menuToolbar = this.plugin.settingsManager.getToolbarByName(name);
-								if (!name) {
-									this.setFieldError(cb.inputEl.parentElement);
-								}
-								else if (!menuToolbar) {
-									this.setFieldError(cb.inputEl.parentElement, t('setting.item.option-item-menu-error-does-not-exist'));
-									name = '';
-								}
-								else {
-									this.removeFieldError(cb.inputEl.parentElement);
-								}
 								toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
 								toolbarItem.linkAttr.commandId = '';
-								// TODO: check for vars in labels & tooltips
-								toolbarItem.linkAttr.hasVars = false;
+								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
+								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
 								// update help text with toolbar preview or default if none selected
@@ -992,19 +949,14 @@ export default class ToolbarSettingsModal extends Modal {
 						.setValue(value)
 						.onChange(
 							debounce(async (value) => {
-								toolbarItem.linkAttr.type = ItemType.Uri;
-								if (!value) {
-									this.setFieldError(text.inputEl.parentElement);
-								}
-								else {
-									this.removeFieldError(text.inputEl.parentElement);
-								}
+								this.updateItemComponentStatus(value, type, text.inputEl.parentElement);
 								toolbarItem.link = value;
-								toolbarItem.linkAttr.hasVars = hasVars(value);
 								toolbarItem.linkAttr.commandId = '';
+								toolbarItem.linkAttr.hasVars = hasVars(value);
+								toolbarItem.linkAttr.type = type;
 								this.toolbar.updated = new Date().toISOString();
 								await this.plugin.settingsManager.save();
-							}, 750))
+							}, 500))
 						);
 				fieldHelp ? uriSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
@@ -1042,6 +994,72 @@ export default class ToolbarSettingsModal extends Modal {
 					learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));
 				break;
 		}
+	}
+
+	/**
+	 * Updates the UI state of the given component if the value is invalid.
+	 * @param itemValue string value to check
+	 * @param itemType ItemType to check against
+	 * @param componentEl HTMLElement to update
+	 * @returns true if the item is valid; false otherwise
+	 */
+	updateItemComponentStatus(itemValue: string, itemType: ItemType, componentEl: HTMLElement | null): boolean {
+
+		enum Status {
+			Empty = 'empty',
+			Invalid = 'invalid',
+			Valid = 'valid'
+		}
+
+		var status: Status = Status.Valid;
+		var statusMessage: string = '';
+		var isValid = true;
+
+		if (itemValue) {
+			switch(itemType) {
+				case ItemType.Command:
+					if (!(itemValue in this.app.commands.commands)) {
+						status = Status.Invalid;
+						statusMessage = t('setting.item.option-command-error-does-not-exist');
+					}
+					break;
+				case ItemType.File:
+					const file = this.app.vault.getAbstractFileByPath(itemValue);
+					if (!(file instanceof TFile) && !(file instanceof TFolder)) {
+						status = Status.Invalid;
+						statusMessage = t('setting.item.option-file-error-does-not-exist');
+					}
+					break;
+				case ItemType.Group:
+				case ItemType.Menu:
+					let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
+					if (!toolbar) {
+						status = Status.Invalid;
+						statusMessage = t('setting.item.option-item-menu-error-does-not-exist');
+					}
+					break;
+			}
+		}
+		else {
+			status = Status.Empty;
+			statusMessage = '';
+		}
+
+		switch (status) {
+			case Status.Empty:
+				// clear out existing field error, if there is one
+				this.removeFieldError(componentEl);
+			case Status.Invalid:
+				this.setFieldError(componentEl, statusMessage);
+				isValid = false;
+				break;
+			default:
+				this.removeFieldError(componentEl);
+				break;
+		}
+
+		return isValid;
+
 	}
 
 	/**
