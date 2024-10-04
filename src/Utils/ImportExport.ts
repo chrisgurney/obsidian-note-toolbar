@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ItemType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ComponentType, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
 import { TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
@@ -65,9 +65,6 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
             .split('-')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join('')}:`;
-    // TODO: for import code, to undo the above:
-    // const toKebabCaseWithPrefix = (s: string) => 
-    //     'lucide-' + s.replace(/([A-Z])/g, '-$1').toLowerCase().slice(1);
 
     const BULLET = '\n> -';
     toolbar.items.forEach((item, index) => {
@@ -174,24 +171,26 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     //const isNoteToolbarCallout = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(callout);
 
     // TODO: if ToolbarSettings undefined, create a new ToolbarSettings object
-    let newToolbar = {
-        uuid: getUUID(),
-        defaultStyles: ["border", "even", "sticky"],
-        items: [],
-        mobileStyles: [],
-        name: plugin.settingsManager.getUniqueToolbarName(t('setting.toolbars.imported-tbar-name'), false),
-        position: { 
-            desktop: { allViews: { position: 'props' } }, 
-            mobile: { allViews: { position: 'props' } }, 
-            tablet: { allViews: { position: 'props' } } },
-        updated: new Date().toISOString(),
-    } as ToolbarSettings;
-
+    if (!toolbar) {
+        toolbar = {
+            uuid: getUUID(),
+            defaultStyles: ["border", "even", "sticky"],
+            items: [],
+            mobileStyles: [],
+            name: plugin.settingsManager.getUniqueToolbarName(t('setting.toolbars.imported-tbar-name'), false),
+            position: { 
+                desktop: { allViews: { position: 'props' } }, 
+                mobile: { allViews: { position: 'props' } }, 
+                tablet: { allViews: { position: 'props' } } },
+            updated: new Date().toISOString(),
+        } as ToolbarSettings;
+    }
 
     const lines = callout.trim().split('\n');
 
     // parse the callout type and styles if present
-    // TODO: if there are styles and parent is ToolbarSettingsModal, prompt to ignore styles
+    // TODO: set the styles as provided
+    // TODO: if there are styles and toolbar is provided, prompt to ignore styles
     if (lines[0].includes('[!note-toolbar')) {
         const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\]/);
         if (metadataMatch) {
@@ -208,6 +207,13 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         
         var itemType: ItemType | undefined = undefined;
 
+        let icon = '';
+        let label = '';
+        let link = '';
+        let tooltip = '';
+        let dataType = '';
+        let dataValue = '';
+
         if (/<br\s*\/?>/.test(line)) {
             itemType = ItemType.Break;
         }
@@ -215,20 +221,18 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
             itemType = ItemType.Separator;
         }
         else {
+
             // FIXME? decode URLs not in angle brackets <>
             const linkMatch = line.match(/\[(.*?)\]\(<?(.*?)>?\)|\[\[(.*?)(?:\|(.*?))?\]\]/);
             const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
             const dataMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"|obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
 
-            let icon = null;
-            let label = null;
-            let link = null;
-            
             if (linkMatch) {
 
                 // for external links
                 if (linkMatch[1]) {
-                    itemType = ItemType.Uri; // default to URI but will change if command portion is set
+                    // default to URI, but change if data elements or Note Toolbar URI is used
+                    itemType = ItemType.Uri;
                     label = linkMatch[1];
                     link = linkMatch[2];
                 }
@@ -241,20 +245,30 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     
                 const iconMatch = label?.match(/(:Li\w+:)/);
                 if (iconMatch) {
-                    icon = iconMatch[1];
-                    label = label?.replace(icon, '').trim();
+                    // translate Iconize strings to Lucide icon strings
+                    const iconName = label?.match(/:Li(\w+):/);
+                    if (iconName) {
+                        icon = 'lucide-' + iconName[1]
+                            .replace(/([a-z])([A-Z])/g, '$1-$2')
+                            .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+                            .toLowerCase();
+                    }
+                    // remove the icon from the label string
+                    label = label?.replace(iconMatch[1], '').trim();
                 }
             }
+
+            tooltip = tooltipMatch ? tooltipMatch[1] : '';
     
             debugLog('• icon?', icon);
             debugLog('• label?', label);
             debugLog('• link?', link);
-            debugLog('• tooltip?', tooltipMatch ? tooltipMatch[1] : null);
+            debugLog('• tooltip?', tooltip);
     
             if (dataMatch) {
-                const dataType = dataMatch[1] || dataMatch[3];
-                const dataValue = dataMatch[2] || dataMatch[4];
-                debugLog('• data?', dataType, dataValue);
+                dataType = dataMatch[1] || dataMatch[3] || '';
+                link = dataMatch[2] || dataMatch[4] || '';
+                debugLog('• data?', dataType, link);
     
                 switch (dataType) {
                     case 'command':
@@ -264,25 +278,46 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                         itemType = ItemType.File;
                         break;
                     case 'menu':
+                        let menuToolbar = plugin.settingsManager.getToolbar(link);
+                        link = menuToolbar ? menuToolbar.uuid : '';
                         itemType = ItemType.Menu;
                         break;
                 }
             }
+
         }
 
         debugLog(`=> ${itemType?.toUpperCase()}`);
+        !itemType ? debugLog('importFromCallout: Unknown type') : undefined;
 
-        // TODO: determine item type based on what we got
+        // create the toolbar item and add it to the toolbar
+        if (itemType) {
 
-        // TODO: create break
-        // TODO: create command item
-        // TODO: create file/folder item
-        // TODO: create menu item
-        // TODO: create separator item
-        // TODO: create URI item
+            let toolbarItem: ToolbarItemSettings =
+			{
+				uuid: getUUID(),
+				label: label.trim(),
+				icon: icon.trim(),
+				link: link.trim(),
+				linkAttr: {
+					commandId: itemType === ItemType.Command ? dataValue.trim() : '',
+					hasVars: false,
+					type: itemType
+				},
+				tooltip: tooltip,
+				visibility: {
+					desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+					mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+					tablet: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
+				},
+			};
+
+            toolbar.items.push(toolbarItem);
+
+        }
 
     });
 
-    return newToolbar;
+    return toolbar;
 
 }
