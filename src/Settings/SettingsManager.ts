@@ -127,6 +127,22 @@ export class SettingsManager {
 	}
 
 	/**
+	 * Gets the toolbar from settings, using the provided value, checking both names and UUIDs.
+	 */
+	public getToolbar(nameOrUuid: string | null): ToolbarSettings | undefined {
+		if (!nameOrUuid) return undefined;
+		const isUuid = this.isUuid(nameOrUuid);
+		return this.plugin.settings.toolbars.find(tbar => 
+			isUuid ? tbar.uuid === nameOrUuid : tbar.name.toLowerCase() === nameOrUuid.toLowerCase()
+		);
+	}
+	  
+	private isUuid(value: string): boolean {
+		const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+		return uuidRegex.test(value);
+	}
+
+	/**
 	 * Gets toolbar from settings, using the provided UUID.
 	 * @param id UUID of toolbar to get settings for.
 	 * @returns ToolbarSettings for the provided matched toolbar ID, undefined otherwise.
