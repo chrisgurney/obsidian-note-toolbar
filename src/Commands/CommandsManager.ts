@@ -78,12 +78,19 @@ export class CommandsManager {
     }
 
     /**
-     * Convenience command to open this toolbar's settings.
+     * Convenience command to open the active toolbar's settings.
      */
     async openToolbarSettings(): Promise<void> {
         // figure out what toolbar is on the screen
         let toolbarEl = this.plugin.getToolbarEl();
-        let toolbarSettings = toolbarEl ? this.plugin.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
+        toolbarEl?.id ? await this.openToolbarSettingsForId(toolbarEl.id) : undefined;
+    }
+
+    /**
+     * Opens settings for a particular toolbar by ID.
+     */
+    async openToolbarSettingsForId(uuid: string): Promise<void> {
+        let toolbarSettings = this.plugin.settingsManager.getToolbarById(uuid);
         if (toolbarSettings) {
             const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, null, toolbarSettings);
             modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
