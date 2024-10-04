@@ -854,8 +854,9 @@ export default class NoteToolbarPlugin extends Plugin {
 					.setIcon('import')
 					.setTitle(t('import.option-create'))
 					.onClick(async () => {
-						await importFromCallout(this, selection);
-						// TODO: save settings from import function call
+						let toolbar = await importFromCallout(this, selection);
+						await this.settingsManager.addToolbar(toolbar);
+						await this.commands.openToolbarSettingsForId(toolbar.uuid);
 					});
 			});
 		}
