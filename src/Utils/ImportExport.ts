@@ -225,34 +225,57 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         // > - [Menu URI with ID](obsidian://note-toolbar?menu=7fb30215-d92c-43ce-8158-b79096672bd1)
         const commandMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"/);
 
-        let icon = null;
-        let label = null;
-        let link = null;
-        
-        if (linkMatch) {
-            // External link case
-            if (linkMatch[1]) {
-                label = linkMatch[1]; // Display name for external links
-                link = linkMatch[2];   // URL for external links
-            }
-            // Wiki link case
-            else if (linkMatch[3]) {
-                label = linkMatch[4] || linkMatch[3]; // Display name or note name
-                link = linkMatch[3];                 // Note name for wiki links
-            }
+            let icon = null;
+            let label = null;
+            let link = null;
+            
+            if (linkMatch) {
 
-            const iconMatch = label?.match(/(:Li\w+:)/);
-            if (iconMatch) {
-                icon = iconMatch[1];
-                label = label?.replace(icon, '').trim(); // Remove the icon from the label
+                // for external links
+                if (linkMatch[1]) {
+                    itemType = ItemType.Uri; // default to URI but will change if command portion is set
+                    label = linkMatch[1];
+                    link = linkMatch[2];
+                }
+                // for wikilinks
+                else if (linkMatch[3]) {
+                    itemType = ItemType.File;
+                    label = linkMatch[4] || linkMatch[3];
+                    link = linkMatch[3];
+                }
+    
+                const iconMatch = label?.match(/(:Li\w+:)/);
+                if (iconMatch) {
+                    icon = iconMatch[1];
+                    label = label?.replace(icon, '').trim();
+                }
+            }
+    
+            debugLog('• icon?', icon);
+            debugLog('• label?', label);
+            debugLog('• link?', link);
+            debugLog('• tooltip?', tooltipMatch ? tooltipMatch[1] : null);
+    
+            if (dataMatch) {
+                const dataType = dataMatch[1] || dataMatch[3];
+                const dataValue = dataMatch[2] || dataMatch[4];
+                debugLog('• data?', dataType, dataValue);
+    
+                switch (dataType) {
+                    case 'command':
+                        itemType = ItemType.Command;
+                        break;
+                    case 'folder':
+                        itemType = ItemType.File;
+                        break;
+                    case 'menu':
+                        itemType = ItemType.Menu;
+                        break;
+                }
             }
         }
 
-        debugLog('• icon?', icon);
-        debugLog('• label?', label);
-        debugLog('• link?', link);
-        debugLog('• tooltip?', tooltipMatch ? tooltipMatch[1] : null);
-        debugLog('• command?', commandMatch ? commandMatch[2] : null);
+        debugLog(`=> ${itemType?.toUpperCase()}`);
 
         // TODO: determine item type based on what we got
 
