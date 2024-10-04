@@ -835,8 +835,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On opening of the editor menu, check what was selected and add relevant menu options.
 	 */
 	editorMenuHandler = (menu: Menu, editor: Editor, info: MarkdownView | MarkdownFileInfo) => {
+		const calloutRegex = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/;
 		const selection = editor.getSelection().trim();
-		if (/^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(selection)) {
+		const line = editor.getLine(editor.getCursor().line).trim();
+		if (calloutRegex.test(selection) || calloutRegex.test(line)) {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setIcon('info')
@@ -845,6 +847,8 @@ export default class NoteToolbarPlugin extends Plugin {
 						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts', '_blank');
 					});
 			});
+		}
+		if (calloutRegex.test(selection)) {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setIcon('import')
