@@ -166,7 +166,7 @@ function encodeTextForCallout(str: string): string {
 }
 
 
-export async function importFromCallout(plugin: NoteToolbarPlugin, callout: string, existingToolbar?: ToolbarSettings): Promise<ToolbarSettings> {
+export async function importFromCallout(plugin: NoteToolbarPlugin, callout: string, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
 
     debugLog('importFromCallout()', callout);
 
@@ -187,17 +187,74 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         updated: new Date().toISOString(),
     } as ToolbarSettings;
 
-    // TODO: if first line has the note-toolbar identifier
-        // TODO: get the list of styles
-        // TODO: if there are styles and parent is ToolbarSettingsModal, prompt to ignore styles
 
-    // TODO: for each line item
-        // TODO: determine type and component:
-            // TODO: if it's a break or separator
-            // TODO: get the text and link portions (same time for internal and external links?)
-                // TODO: get tooltip portion from comment
-            // TODO: if it's just an external link or plain internal link
-                // TODO: otherwise, determine item type from data element or URI
+    const lines = callout.trim().split('\n');
+
+    // parse the callout type and styles if present
+    // TODO: if there are styles and parent is ToolbarSettingsModal, prompt to ignore styles
+    if (lines[0].includes('[!note-toolbar')) {
+        const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\]/);
+        if (metadataMatch) {
+            // debugLog('• type?', metadataMatch[1]);
+            debugLog('• styles?', metadataMatch[2].split(/[^a-zA-Z0-9]+/));
+        }
+        lines.shift();
+    }
+
+    // parse the rest
+    const toolbarItems = lines.map((line, index) => {
+
+        debugLog(index + 1);
+
+        if (line.includes('<br') && line.includes('>')) {
+            debugLog('• break');
+            return;
+        }
+    
+        if (line.includes('<hr') && line.includes('>')) {
+            debugLog('• separator');
+            return;
+        }
+
+        const linkMatch = line.match(/\[(.*?)\]\((.*?)\)|\[\[(.*?)(?:\|(.*?))?\]\]/);
+        const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
+        // TODO: also support Note Toolbar URIs
+        // > - [Command URI](<obsidian://note-toolbar?command=workspace:toggle-pin>)
+        // > - [Folder URI](obsidian://note-toolbar?folder=Demos)
+        // > - [Menu URI](obsidian://note-toolbar?menu=Tools)
+        // > - [Menu URI with ID](obsidian://note-toolbar?menu=7fb30215-d92c-43ce-8158-b79096672bd1)
+        const commandMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"/);
+
+        let icon = null;
+        let label = null;
+        let link = null;
+        
+        if (linkMatch) {
+            // External link case
+            if (linkMatch[1]) {
+                label = linkMatch[1]; // Display name for external links
+                link = linkMatch[2];   // URL for external links
+            }
+            // Wiki link case
+            else if (linkMatch[3]) {
+                label = linkMatch[4] || linkMatch[3]; // Display name or note name
+                link = linkMatch[3];                 // Note name for wiki links
+            }
+
+            const iconMatch = label?.match(/(:Li\w+:)/);
+            if (iconMatch) {
+                icon = iconMatch[1];
+                label = label?.replace(icon, '').trim(); // Remove the icon from the label
+            }
+        }
+
+        debugLog('• icon?', icon);
+        debugLog('• label?', label);
+        debugLog('• link?', link);
+        debugLog('• tooltip?', tooltipMatch ? tooltipMatch[1] : null);
+        debugLog('• command?', commandMatch ? commandMatch[2] : null);
+
+        // TODO: determine item type based on what we got
 
         // TODO: create break
         // TODO: create command item
@@ -206,7 +263,8 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         // TODO: create separator item
         // TODO: create URI item
 
-    // TODO: return ToolbarSettings (but don't save it)
+    });
+
     return newToolbar;
 
 }
