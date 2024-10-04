@@ -208,10 +208,10 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         
         var itemType: ItemType | undefined = undefined;
 
-        if (line.includes('<br') && line.includes('>')) {
+        if (/<br\s*\/?>/.test(line)) {
             itemType = ItemType.Break;
         }
-        else if (line.includes('<hr') && line.includes('>')) {
+        else if (/<hr\s*\/?>/.test(line)) {
             itemType = ItemType.Separator;
         }
         else {
