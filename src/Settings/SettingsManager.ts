@@ -12,6 +12,16 @@ export class SettingsManager {
     }
 
 	/**
+	 * Adds the given toolbar to the plugin settings.
+	 * @param toolbar ToolbarSettings to add.
+	 */
+	public async addToolbar(toolbar: ToolbarSettings): Promise<void> {
+		this.plugin.settings.toolbars.push(toolbar);
+		this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
+		await this.plugin.settingsManager.save();	
+	}
+
+	/**
 	 * Removes the provided toolbar from settings; does nothing if it does not exist.
 	 * @param id UUID of the toolbar to remove.
 	 */
@@ -39,9 +49,7 @@ export class SettingsManager {
 			this.duplicateToolbarItem(newToolbar, item);
 		});
 		debugLog('duplicateToolbar: duplicated', newToolbar);
-		this.plugin.settings.toolbars.push(newToolbar);
-		this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
-		await this.plugin.settingsManager.save();
+		await this.addToolbar(newToolbar);
 		return newToolbar.uuid;
 	}
 
