@@ -2,7 +2,7 @@ import { App, ButtonComponent, Menu, MenuItem, Modal, Notice, Platform, Setting,
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t } from 'Settings/NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -1380,11 +1380,7 @@ export default class ToolbarSettingsModal extends Modal {
 					type: itemType
 				},
 				tooltip: "",
-				visibility: {
-					desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-					mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-					tablet: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-				},
+				visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS,
 			};
 		this.toolbar.items.push(newToolbarItem);
 		this.toolbar.updated = new Date().toISOString();

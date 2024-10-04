@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ComponentType, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
 import { TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
@@ -305,11 +305,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
 					type: itemType
 				},
 				tooltip: tooltip,
-				visibility: {
-					desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-					mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-					tablet: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-				},
+				visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS,
 			};
 
             toolbar.items.push(toolbarItem);
