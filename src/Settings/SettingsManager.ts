@@ -214,7 +214,7 @@ export class SettingsManager {
 		while (existingNames.includes(uniqueName)) {
 			uniqueName = `${name}`;
 			uniqueName += isCopy ? ` t('setting.toolbars.duplicated-tbar-suffix')` : '';
-			uniqueName += (counter > 1) ? counter : '';
+			uniqueName += (counter > 1) ? ` ${counter}` : '';
 			counter++;
 		}
 	
