@@ -205,25 +205,20 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     const toolbarItems = lines.map((line, index) => {
 
         debugLog(index + 1);
+        
+        var itemType: ItemType | undefined = undefined;
 
         if (line.includes('<br') && line.includes('>')) {
-            debugLog('• break');
-            return;
+            itemType = ItemType.Break;
         }
-    
-        if (line.includes('<hr') && line.includes('>')) {
-            debugLog('• separator');
-            return;
+        else if (line.includes('<hr') && line.includes('>')) {
+            itemType = ItemType.Separator;
         }
-
-        const linkMatch = line.match(/\[(.*?)\]\((.*?)\)|\[\[(.*?)(?:\|(.*?))?\]\]/);
-        const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
-        // TODO: also support Note Toolbar URIs
-        // > - [Command URI](<obsidian://note-toolbar?command=workspace:toggle-pin>)
-        // > - [Folder URI](obsidian://note-toolbar?folder=Demos)
-        // > - [Menu URI](obsidian://note-toolbar?menu=Tools)
-        // > - [Menu URI with ID](obsidian://note-toolbar?menu=7fb30215-d92c-43ce-8158-b79096672bd1)
-        const commandMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"/);
+        else {
+            // FIXME? decode URLs not in angle brackets <>
+            const linkMatch = line.match(/\[(.*?)\]\(<?(.*?)>?\)|\[\[(.*?)(?:\|(.*?))?\]\]/);
+            const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
+            const dataMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"|obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
 
             let icon = null;
             let label = null;
