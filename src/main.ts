@@ -839,8 +839,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (/^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(selection)) {
 			menu.addItem((item: MenuItem) => {
 				item
-					.setIcon('book-open')
-					.setTitle('Learn about Note Toolbar Callout syntax')
+					.setIcon('info')
+					.setTitle(t('import.option-help'))
 					.onClick(async () => {
 						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts', '_blank');
 					});
@@ -848,7 +848,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setIcon('import')
-					.setTitle('Create Note Toolbar from callout...')
+					.setTitle(t('import.option-create'))
 					.onClick(async () => {
 						await importFromCallout(this, selection);
 						// TODO: save settings from import function call

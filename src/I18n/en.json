@@ -19,6 +19,10 @@
         "confirm-vars-approve": "Replace",
         "confirm-vars-deny": "Leave as-is"
     },
+    "import": {
+        "option-create": "Create Note Toolbar from callout...",
+        "option-help": "About Note Toolbar Callouts"
+    },
     "notice": {
         "error-command-not-found": "Check Note Toolbar setting or URI for this command. Command not found: {{command}}",
         "error-folder-not-found": "Check Note Toolbar setting or URI for this folder. Folder not found: {{folder}}",
