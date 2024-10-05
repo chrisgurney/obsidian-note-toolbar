@@ -231,7 +231,6 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         let label = '';
         let link = '';
         let tooltip = '';
-        let dataType = '';
         let dataValue = '';
 
         if (/<br\s*\/?>/.test(line)) {
@@ -245,7 +244,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
             // FIXME? decode URLs not in angle brackets <>
             const linkMatch = line.match(/\[(.*?)\]\(<?(.*?)>?\)|\[\[(.*?)(?:\|(.*?))?\]\]/);
             const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
-            const dataMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"|obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
+            const dataUriMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"|obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
 
             if (linkMatch) {
 
@@ -285,22 +284,23 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
             debugLog('• link?', link);
             debugLog('• tooltip?', tooltip);
     
-            if (dataMatch) {
-                dataType = dataMatch[1] || dataMatch[3] || '';
-                link = dataMatch[2] || dataMatch[4] || '';
-                debugLog('• data?', dataType, link);
+            if (dataUriMatch) {
+                const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
+                debugLog('• data?', dataUriType, link);
     
-                switch (dataType) {
+                switch (dataUriType) {
                     case 'command':
                         itemType = ItemType.Command;
+                        link = dataUriMatch[2] || dataUriMatch[4] || '';
                         break;
                     case 'folder':
                         itemType = ItemType.File;
+                        link = dataUriMatch[2] || dataUriMatch[4] || '';
                         break;
                     case 'menu':
+                        itemType = ItemType.Menu;
                         let menuToolbar = plugin.settingsManager.getToolbar(link);
                         link = menuToolbar ? menuToolbar.uuid : '';
-                        itemType = ItemType.Menu;
                         break;
                 }
             }
