@@ -288,12 +288,13 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         
                 if (dataUriMatch) {
                     const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
+                    const dataUriValue = dataUriMatch[2] || dataUriMatch[4] || '';
                     debugLog('• data?', dataUriType, link);
         
                     switch (dataUriType) {
                         case 'command':
                             itemType = ItemType.Command;
-                            commandId = dataUriMatch[2] || dataUriMatch[4] || '';
+                            commandId = dataUriValue;
                             const commandName = getCommandNameById(commandId);
                             link = commandName ? commandName : 'Unknown command';
                             errorLog += commandName ? '' : `- ${index + 1}. Command not recognized: ${commandId}\n`;
@@ -301,12 +302,14 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                             break;
                         case 'folder':
                             itemType = ItemType.File;
-                            link = dataUriMatch[2] || dataUriMatch[4] || '';
+                            link = dataUriValue;
                             break;
                         case 'menu':
                             itemType = ItemType.Menu;
-                            let menuToolbar = plugin.settingsManager.getToolbar(dataUriMatch[2] || dataUriMatch[4]);
+                            let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : '';
+                            errorLog += menuToolbar ? '' : `- ${index + 1}. Menu not found: ${dataUriValue}`;
+                            // TODO: link needs to trigger field error style somehow
                             break;
                     }
 
