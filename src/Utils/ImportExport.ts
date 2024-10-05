@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
 import { TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
@@ -162,7 +162,13 @@ function encodeTextForCallout(str: string): string {
         .replace(/%7D/g, '}');
 }
 
-
+/**
+ * Imports items from a callout string, adding them to a new toolbar, or the toolbar provided.
+ * @param plugin NoteToolbarPlugin
+ * @param callout Note Toolbar Calllout string to import
+ * @param toolbar optional ToolbarSettings for existing toolbar to import into
+ * @returns ToolbarSettings
+ */
 export async function importFromCallout(plugin: NoteToolbarPlugin, callout: string, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
 
     debugLog('importFromCallout()', callout);
@@ -189,13 +195,27 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     const lines = callout.trim().split('\n');
 
     // parse the callout type and styles if present
-    // TODO: set the styles as provided
-    // TODO: if there are styles and toolbar is provided, prompt to ignore styles
     if (lines[0].includes('[!note-toolbar')) {
         const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\]/);
         if (metadataMatch) {
-            // debugLog('• type?', metadataMatch[1]);
-            debugLog('• styles?', metadataMatch[2].split(/[^a-zA-Z0-9]+/));
+            let styles = metadataMatch[2].split(/[^a-zA-Z0-9]+/);
+
+            const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
+            const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
+            const validStyles = styles.filter(style => 
+                DEFAULT_STYLE_KEYS.includes(style) || MOBILE_STYLE_KEYS.includes(style)
+            );
+            const invalidStyles = styles.filter(style => 
+                !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
+            );
+
+            debugLog('• styles?', validStyles);
+            if (invalidStyles.length > 0) {
+                debugLog('  • invalid:', invalidStyles);
+            }
+
+            // TODO: if there are styles and toolbar is provided, prompt to ignore styles
+            toolbar.defaultStyles = validStyles;
         }
         lines.shift();
     }
