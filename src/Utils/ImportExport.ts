@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
-import { TFile, TFolder } from "obsidian";
+import { Command, TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 
 /**
@@ -176,7 +176,9 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     // TODO? double-check provided text is a Note Toolbar Callout; may not have this line in import
     //const isNoteToolbarCallout = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(callout);
 
-    // TODO: if ToolbarSettings undefined, create a new ToolbarSettings object
+    const lines = callout.trim().split('\n');
+
+    // create a new toolbar to return, if one wasn't provided
     if (!toolbar) {
         toolbar = {
             uuid: getUUID(),
@@ -191,8 +193,6 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
             updated: new Date().toISOString(),
         } as ToolbarSettings;
     }
-
-    const lines = callout.trim().split('\n');
 
     // parse the callout type and styles if present
     if (lines[0].includes('[!note-toolbar')) {
@@ -221,7 +221,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     }
 
     // parse the rest
-    const toolbarItems = lines.map((line, index) => {
+    lines.map((line, index) => {
 
         debugLog(index + 1);
         
@@ -231,7 +231,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         let label = '';
         let link = '';
         let tooltip = '';
-        let dataValue = '';
+        let commandId = '';
 
         if (/<br\s*\/?>/.test(line)) {
             itemType = ItemType.Break;
@@ -275,34 +275,40 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
                 }
-            }
 
-            tooltip = tooltipMatch ? tooltipMatch[1] : '';
+                tooltip = tooltipMatch ? tooltipMatch[1] : '';
     
-            debugLog('• icon?', icon);
-            debugLog('• label?', label);
-            debugLog('• link?', link);
-            debugLog('• tooltip?', tooltip);
-    
-            if (dataUriMatch) {
-                const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
-                debugLog('• data?', dataUriType, link);
-    
-                switch (dataUriType) {
-                    case 'command':
-                        itemType = ItemType.Command;
-                        link = dataUriMatch[2] || dataUriMatch[4] || '';
-                        break;
-                    case 'folder':
-                        itemType = ItemType.File;
-                        link = dataUriMatch[2] || dataUriMatch[4] || '';
-                        break;
-                    case 'menu':
-                        itemType = ItemType.Menu;
-                        let menuToolbar = plugin.settingsManager.getToolbar(link);
-                        link = menuToolbar ? menuToolbar.uuid : '';
-                        break;
+                debugLog('• icon?', icon);
+                debugLog('• label?', label);
+                debugLog('• link?', link);
+                debugLog('• tooltip?', tooltip);
+        
+                if (dataUriMatch) {
+                    const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
+                    debugLog('• data?', dataUriType, link);
+        
+                    switch (dataUriType) {
+                        case 'command':
+                            itemType = ItemType.Command;
+                            commandId = dataUriMatch[2] || dataUriMatch[4] || '';
+                            const commandName = getCommandNameById(commandId);
+                            link = commandName ? commandName : 'Unknown command';
+                            // TODO: log error
+                            // TODO: link needs to trigger field error style somehow
+                            break;
+                        case 'folder':
+                            itemType = ItemType.File;
+                            link = dataUriMatch[2] || dataUriMatch[4] || '';
+                            break;
+                        case 'menu':
+                            itemType = ItemType.Menu;
+                            let menuToolbar = plugin.settingsManager.getToolbar(dataUriMatch[2] || dataUriMatch[4]);
+                            link = menuToolbar ? menuToolbar.uuid : '';
+                            break;
+                    }
+
                 }
+
             }
 
         }
@@ -320,7 +326,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
 				icon: icon.trim(),
 				link: link.trim(),
 				linkAttr: {
-					commandId: itemType === ItemType.Command ? dataValue.trim() : '',
+					commandId: itemType === ItemType.Command ? commandId.trim() : '',
 					hasVars: false,
 					type: itemType
 				},
@@ -335,5 +341,18 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     });
 
     return toolbar;
+
+}
+
+/**
+ * Returns the name of a command based on its ID, if known.
+ * @param commandId command ID to look up
+ * @returns name of command; undefined otherwise
+ */
+function getCommandNameById(commandId: string): string | undefined {
+
+    const availableCommands: Command[] = Object.values(this.app.commands.commands);
+    const matchedCommand = availableCommands.find(command => command.id === commandId);
+    return matchedCommand ? matchedCommand.name : undefined;
 
 }
