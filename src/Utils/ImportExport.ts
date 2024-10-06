@@ -355,7 +355,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
 				visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS,
 			};
 
-            toolbar.items.push(toolbarItem);
+            toolbar?.items.push(toolbarItem);
 
         }
 
