@@ -161,7 +161,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.addButton((button: ButtonComponent) => {
 							button
 								.setIcon('more-horizontal')
-								.setTooltip("More options")
+								.setTooltip(t('setting.toolbars.button-more-tooltip'))
 								.onClick(() => {
 									let menu = new Menu();
 									menu.addItem((menuItem: MenuItem) => {

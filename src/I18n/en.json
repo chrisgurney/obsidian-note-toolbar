@@ -260,6 +260,7 @@
             "button-edit-tbar": "Edit",
             "button-expand-tbars-tooltip": "Expand all toolbars",
             "button-edit-tbar-tooltip": "Update this toolbar",
+            "button-more-tooltip": "More options",
             "button-new-tbar": "+ New toolbar",
             "button-new-tbar-tooltip": "Add a new toolbar",
             "duplicated-tbar-suffix": "copy",
