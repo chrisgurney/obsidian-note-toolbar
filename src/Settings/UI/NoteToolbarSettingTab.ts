@@ -1,6 +1,6 @@
-import { App, ButtonComponent, Platform, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
 import NoteToolbarPlugin from 'main';
-import { arraymove, debugLog, getUUID, moveElement } from 'Utils/Utils';
+import { arraymove, debugLog, getElementPosition, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
@@ -8,6 +8,7 @@ import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
+import { exportToCallout } from 'Utils/ImportExport';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -159,12 +160,41 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						.setDesc(createToolbarPreviewFr(toolbar, this.plugin.settingsManager))
 						.addButton((button: ButtonComponent) => {
 							button
-								.setIcon('copy-plus')
-								.setTooltip(t('setting.toolbars.button-duplicate-tbar-tooltip'))
+								.setIcon('more-horizontal')
+								.setTooltip("More options")
 								.onClick(() => {
-									this.plugin.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
-										this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
+									let menu = new Menu();
+									menu.addItem((menuItem: MenuItem) => {
+										menuItem
+											.setTitle(t('setting.toolbars.button-duplicate-tbar-tooltip'))
+											.setIcon('copy-plus')
+											.onClick(async () => {
+												this.plugin.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
+													this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
+												});
+											});
 									});
+									menu.addItem((menuItem: MenuItem) => {
+										menuItem
+											.setTitle(t('export.label-copy'))
+											.setIcon('copy')
+											.onClick(async () => {
+												let calloutExport = await exportToCallout(this.plugin, toolbar);
+												navigator.clipboard.writeText(calloutExport);
+												new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+											});
+									});
+									menu.addItem((menuItem: MenuItem) => {
+										menuItem
+											.setTitle(t('export.label-share'))
+											.setIcon('share')
+											.onClick(async () => {
+												const shareUri = await this.plugin.protocolManager.getShareUri(toolbar);
+												navigator.clipboard.writeText(shareUri);
+												new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
+											});
+									});
+									menu.showAtPosition(getElementPosition(button.buttonEl));
 								});
 						})
 						.addButton((button: ButtonComponent) => {

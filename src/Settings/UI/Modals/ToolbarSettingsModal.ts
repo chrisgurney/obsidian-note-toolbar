@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, MenuItem, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
@@ -10,7 +10,6 @@ import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal';
 import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
-import { exportToCallout } from 'Utils/ImportExport';
 
 enum ItemFormComponent {
 	Delete = 'delete',
@@ -186,46 +185,6 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(learnMoreFr(t('setting.items.description'), 'Creating-toolbar-items'));
 		
 		if (this.toolbar.items.length > 0) {
-			itemsSetting
-				.addExtraButton((cb) => {
-					cb.setIcon('share')
-					.setTooltip(t('export.label-share'))
-					.onClick(async () => {
-						const shareUri = await this.plugin.protocolManager.getShareUri(this.toolbar);
-						navigator.clipboard.writeText(shareUri);
-						new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
-					})
-					.extraSettingsEl.tabIndex = 0;
-					this.plugin.registerDomEvent(
-						cb.extraSettingsEl, 'keydown', (e) => {
-							switch (e.key) {
-								case "Enter":
-								case " ":
-									e.preventDefault();
-									cb.extraSettingsEl.click();
-							}
-						});
-				});
-			itemsSetting
-				.addExtraButton((cb) => {
-					cb.setIcon('copy')
-					.setTooltip(t('export.label-copy'))
-					.onClick(async () => {
-						let calloutExport = await exportToCallout(this.plugin, this.toolbar);
-						navigator.clipboard.writeText(calloutExport);
-						new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
-					})
-					.extraSettingsEl.tabIndex = 0;
-					this.plugin.registerDomEvent(
-						cb.extraSettingsEl, 'keydown', (e) => {
-							switch (e.key) {
-								case "Enter":
-								case " ":
-									e.preventDefault();
-									cb.extraSettingsEl.click();
-							}
-						});
-				});
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
