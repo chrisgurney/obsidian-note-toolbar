@@ -188,7 +188,7 @@ export default class ToolbarSettingsModal extends Modal {
 		if (this.toolbar.items.length > 0) {
 			itemsSetting
 				.addExtraButton((cb) => {
-					cb.setIcon('share')
+					cb.setIcon('copy')
 					.setTooltip(t('export.title'))
 					.onClick(async () => {
 						let calloutExport = await exportToCallout(this.plugin, this.toolbar);
