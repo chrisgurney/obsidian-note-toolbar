@@ -11,9 +11,11 @@
         "name-toggle-properties": "Toggle Properties"
     },
     "export": {
-        "title": "Copy as markdown",
         "item-generic": "Item{{number}}",
-        "notice-completed": "Toolbar copied to clipboard as markdown.",
+        "label-copy": "Copy as markdown",
+        "label-share": "Share toolbar",
+        "notice-completed": "Toolbar copied to clipboard as markdown",
+        "notice-shared": "Note Toolbar URI copied to clipboard",
         "confirm-vars-title": "Variables are used in this toolbar",
         "confirm-vars-question": "Do you want to replace these variables in the markdown?",
         "confirm-vars-approve": "Replace",

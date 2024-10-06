@@ -188,14 +188,43 @@ export default class ToolbarSettingsModal extends Modal {
 		if (this.toolbar.items.length > 0) {
 			itemsSetting
 				.addExtraButton((cb) => {
+					cb.setIcon('share')
+					.setTooltip(t('export.label-share'))
+					.onClick(async () => {
+						const shareUri = await this.plugin.protocolManager.getShareUri(this.toolbar);
+						navigator.clipboard.writeText(shareUri);
+						new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
+					})
+					.extraSettingsEl.tabIndex = 0;
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ":
+									e.preventDefault();
+									cb.extraSettingsEl.click();
+							}
+						});
+				});
+			itemsSetting
+				.addExtraButton((cb) => {
 					cb.setIcon('copy')
-					.setTooltip(t('export.title'))
+					.setTooltip(t('export.label-copy'))
 					.onClick(async () => {
 						let calloutExport = await exportToCallout(this.plugin, this.toolbar);
 						navigator.clipboard.writeText(calloutExport);
 						new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
 					})
 					.extraSettingsEl.tabIndex = 0;
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ":
+									e.preventDefault();
+									cb.extraSettingsEl.click();
+							}
+						});
 				});
 			itemsSetting
 				.addExtraButton((cb) => {

@@ -4,6 +4,7 @@ import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { HelpModal } from "Settings/UI/Modals/HelpModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { WhatsNewModal } from "Settings/UI/Modals/WhatsNewModal";
+import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 import { debugLog } from "Utils/Utils";
 
 export class ProtocolManager {
@@ -20,7 +21,7 @@ export class ProtocolManager {
 	 * @param data ObsidianProtocolData
 	 */
 	async handle(data: ObsidianProtocolData) {
-		debugLog('protocolHandler()', data);
+		debugLog('protocolHandler', data);
 		// supports both commandid= and command= for backwards-compatability with Advanced URI
 		if (data.commandid || data.commandId || data.command) {
 			this.plugin.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
@@ -32,6 +33,12 @@ export class ProtocolManager {
 			const helpModal = new HelpModal(this.plugin);
 			helpModal.open();
 		}
+        else if (data.import) {
+            const content = decodeURIComponent(data.import);
+            const toolbar = await importFromCallout(this.plugin, content);
+            await this.plugin.settingsManager.addToolbar(toolbar);
+            await this.plugin.commands.openToolbarSettingsForId(toolbar.uuid);
+        }
 		else if (data.menu) {
 			let activeFile = this.plugin.app.workspace.getActiveFile();
 			let toolbar: ToolbarSettings | undefined = this.plugin.settingsManager.getToolbarByName(data.menu);
@@ -71,5 +78,17 @@ export class ProtocolManager {
 			new Notice(t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')}));
 		}
 	}
+
+    /**
+     * Returns a URI which can be shared with other users, that imports the provided toolbar's callout markdown.
+     * @param toolbar ToolbarSettings to share
+     * @returns URI to share as a string
+     */
+    async getShareUri(toolbar: ToolbarSettings): Promise<string> {
+        let callout = await exportToCallout(this.plugin, toolbar, true);
+        let shareUri = `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`;
+        // TODO: check length of URI
+        return shareUri;
+    }
 
 }

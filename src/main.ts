@@ -73,7 +73,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// add items to menus, when needed
 			this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
-			// this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
+			this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
 
 			// add commands
 			this.commands = new CommandsManager(this);
@@ -1302,7 +1302,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addSeparator();
 			contextMenu.addItem((item: MenuItem) => {
 				item
-					.setTitle(t('export.title'))
+					.setTitle(t('export.label-copy'))
 					.setIcon('copy')
 					.onClick(async (menuEvent) => {
 						if (toolbarSettings) {
@@ -1312,6 +1312,18 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					})
 				});
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('share')
+					.setTitle(t('export.label-share'))
+					.onClick(async () => {
+						if (toolbarSettings) {
+							const shareUri = await this.protocolManager.getShareUri(toolbarSettings);
+							navigator.clipboard.writeText(shareUri);
+							new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
+						}
+					});
+			});
 
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
 			if (currentPosition === 'props' || currentPosition === 'top') {

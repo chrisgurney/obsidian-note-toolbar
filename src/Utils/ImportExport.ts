@@ -4,13 +4,20 @@ import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
 import { Command, Notice, TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 
+const toIconizeFormat = (s: string) => 
+    `:Li${s.replace(/^lucide-/, '')
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join('')}:`;
+
 /**
  * Exports the given toolbar as a Note Toolbar Callout
  * @param plugin NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
+ * @param forShareUri set to true if export is triggered from share
  * @returns Note Toolbar Callout as a string
  */
-export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): Promise<string> {
+export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, forShareUri: boolean = false): Promise<string> {
     
     debugLog('exportToCallout()', 'enabled plugins', (plugin.app as any).plugins.plugins);
 
@@ -23,19 +30,24 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     // get the active file to provide context, and to replace vars if requested
     let activeFile = plugin.app.workspace.getActiveFile();
 
+    let includeIcons = false;
+    let resolveVars = false;
+
+    // Iconize - check if plugin is enabled to output icons
+    const hasIconize = (plugin.app as any).plugins.plugins['obsidian-icon-folder'];
+    includeIcons = (hasIconize || forShareUri) ? true : false;
+
     // if there are variables, as user if they should be replaced
     if (toolbarHasVars(toolbar)) {
-        const isConfirmed = await confirmWithModal(plugin.app, { 
+        resolveVars = await confirmWithModal(plugin.app, { 
             title: t('export.confirm-vars-title'),
             questionLabel: t('export.confirm-vars-question'),
             approveLabel: t('export.confirm-vars-approve'),
             denyLabel: t('export.confirm-vars-deny')
         });
-        calloutExport += exportToCalloutList(plugin, toolbar, activeFile, isConfirmed) + '\n';
     }
-    else {
-        calloutExport += exportToCalloutList(plugin, toolbar, activeFile, false) + '\n';
-    }
+
+    calloutExport += exportToCalloutList(plugin, toolbar, activeFile, includeIcons, resolveVars) + '\n';
 
     return calloutExport;
 
@@ -46,11 +58,19 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
  * @param plugin NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
  * @param activeFile TFile this export is being run from, for context if needed
+ * @param includeIcons true if icons should be included in Iconize format
  * @param resolveVars true if variables should be resolved, based on the activeFile
  * @param recursions tracks how deep we are to stop recursion
  * @returns Note Toolbar Callout items as a bulleted list string
  */
-function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, activeFile: TFile | null, resolveVars: boolean, recursions: number = 0): string {
+function exportToCalloutList(
+    plugin: NoteToolbarPlugin,
+    toolbar: ToolbarSettings,
+    activeFile: TFile | null,
+    includeIcons: boolean,
+    resolveVars: boolean,
+    recursions: number = 0
+): string {
 
     if (recursions >= 2) {
         return ''; // stop recursion
@@ -58,19 +78,11 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
 
     let itemsExport = '';
 
-    // Iconize - check if plugin is enabled to output icons
-    const hasIconize = (plugin.app as any).plugins.plugins['obsidian-icon-folder'];
-    const toIconizeFormat = (s: string) => 
-        `:Li${s.replace(/^lucide-/, '')
-            .split('-')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join('')}:`;
-
     const BULLET = '\n> -';
     toolbar.items.forEach((item, index) => {
 
         // if Iconize is enabled, add icons; otherwise don't output
-        let itemIcon = (hasIconize && item.icon) ? toIconizeFormat(item.icon) : '';
+        let itemIcon = (includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
         let itemText = resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
@@ -106,7 +118,7 @@ function exportToCalloutList(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings
                 break;
             case ItemType.Group:
                 let groupToolbar = plugin.settingsManager.getToolbarById(item.link);
-                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, resolveVars, recursions + 1) : '';
+                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, resolveVars, includeIcons, recursions + 1) : '';
                 break;
             case ItemType.Menu:
                 itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
