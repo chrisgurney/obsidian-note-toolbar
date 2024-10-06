@@ -6,15 +6,15 @@ import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
-import { HelpModal } from 'Settings/UI/Modals/HelpModal';
-import { WhatsNewModal } from 'Settings/UI/Modals/WhatsNewModal';
 import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
 import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
+import { ProtocolManager } from 'Protocol/ProtocolManager';
 
 export default class NoteToolbarPlugin extends Plugin {
 
 	api: INoteToolbarApi;
 	commands: CommandsManager;
+	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 	
@@ -88,7 +88,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
 	
 			// prototcol handler
-			this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolHandler(data));
+			this.protocolManager = new ProtocolManager(this);
+			this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolManager.handle(data));
 	
 			// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
 			this.app.workspace.trigger("parse-style-settings");
@@ -1058,64 +1059,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		else {
 			new Notice(t('notice.error-folder-not-found', { folder: folder }));
-		}
-	}
-	
-	/**
-	 * Handles calls to the obsidian://note-toolbar URI.
-	 * Supported: command=workspace%3Atoggle-pin | folder=Demos | menu=Tools | help | toolbarsettings=Tools | whatsnew
-	 * @param data ObsidianProtocolData
-	 */
-	async protocolHandler(data: ObsidianProtocolData) {
-		debugLog('protocolHandler()', data);
-		// supports both commandid= and command= for backwards-compatability with Advanced URI
-		if (data.commandid || data.commandId || data.command) {
-			this.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
-		}
-		else if (data.folder) {
-			this.handleLinkFolder(data.folder);
-		}
-		else if (data.help) {
-			const helpModal = new HelpModal(this);
-			helpModal.open();
-		}
-		else if (data.menu) {
-			let activeFile = this.app.workspace.getActiveFile();
-			let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(data.menu);
-			toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(data.menu); // try getting by UUID
-			if (activeFile) {
-				if (toolbar) {
-					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-						this.showMenuAtElement(menu, this.lastCalloutLink);
-					});
-				}
-				else {
-					new Notice(t('notice.error-item-menu-not-found', { toolbar: data.menu }));
-				}
-			}
-		}
-		else if (data.toolbarsettings) {
-			let toolbarSettings;
-			if (data.toolbarsettings.length > 0) {
-				toolbarSettings = this.settingsManager.getToolbarByName(data.toolbarsettings);
-				!toolbarSettings ? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })) : undefined;
-			}
-			else {
-				let toolbarEl = this.getToolbarEl(); // if not given, figure out what toolbar is on screen
-				toolbarSettings = toolbarEl ? this.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
-			}
-			if (toolbarSettings) {
-				const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings);
-				modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
-				modal.open();
-			}
-		}
-		else if (data.whatsnew) {
-			const whatsNewModal = new WhatsNewModal(this);
-			whatsNewModal.open();
-		}
-		else {
-			new Notice(t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')}));
 		}
 	}
 
