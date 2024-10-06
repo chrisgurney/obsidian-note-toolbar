@@ -20,9 +20,9 @@ export class WhatsNewModal extends Modal {
 		this.setTitle(t('setting.whats-new.title'));
 		this.titleEl.addClass('note-toolbar-setting-whatsnew-banner');
 
-		let footerEl = this.contentEl.createDiv();
-		footerEl.addClass('note-toolbar-setting-whatsnew-notes');
-		new Setting(footerEl)
+		let releaseEl = this.contentEl.createDiv();
+		releaseEl.addClass('note-toolbar-setting-whatsnew-notes');
+		new Setting(releaseEl)
 			.setName(iconTextFr('book-text', t('setting.whats-new.label-release-notes')))
 			.setDesc(t('setting.whats-new.label-release-notes-description'))
 			.addButton((button: ButtonComponent) => {
@@ -36,7 +36,22 @@ export class WhatsNewModal extends Modal {
 			});
 
 		let markdownEl = this.contentEl.createDiv();
-		markdownEl.addClass('note-toolbar-setting-whatsnew-content');
+		markdownEl.addClass('note-toolbar-setting-whatsnew-content', 'note-toolbar-setting-whatsnew-section');
+
+		let roadmapEl = this.contentEl.createDiv();
+		roadmapEl.addClass('note-toolbar-setting-whatsnew-notes', 'note-toolbar-setting-whatsnew-section');
+		new Setting(roadmapEl)
+			.setName(iconTextFr('signpost', t('setting.whats-new.label-roadmap')))
+			.setDesc(t('setting.whats-new.label-roadmap-description'))
+			.addButton((button: ButtonComponent) => {
+				button
+					.setButtonText(t('setting.whats-new.button-read'))
+					.setTooltip(t('setting.whats-new.button-read-tooltip'))
+					.setCta()
+					.onClick(() => {
+						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Roadmap', '_blank');
+					});
+			});		
 
 		MarkdownRenderer.render(this.plugin.app, tdocs('whats-new'), markdownEl, '/', this.component);
 

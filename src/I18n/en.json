@@ -273,7 +273,9 @@
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
             "label-release-notes": "Release notes",
-            "label-release-notes-description": "Detailed notes for the latest releases are on GitHub."
+            "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
+            "label-roadmap": "Roadmap",
+            "label-roadmap-description": "Wondering what's ahead for Note Toolbar? Preview the new features ahead."
         }
     },
     "toolbar": {

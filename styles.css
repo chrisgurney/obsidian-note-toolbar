@@ -2290,10 +2290,12 @@ input[type="text"].note-toolbar-setting-error {
     h2 {
         font-size: var(--font-ui-medium);
     }
+    hr {
+        margin: 1rem 0;
+    }
     img {
         border: 1px solid var(--background-modifier-border);
         border-radius: 0.5rem;
-        margin-bottom: 1em;
         width: 100%;
     }
     p {
@@ -2305,11 +2307,14 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-whatsnew-notes {
-    border-bottom: 1px solid var(--background-modifier-border);
     padding: 1em;
     .setting-item {
         padding-bottom: 0;
     }
+}
+
+.note-toolbar-setting-whatsnew-section {
+    border-top: 1px solid var(--background-modifier-border);
 }
 
 .note-toolbar-setting-modal-container {
