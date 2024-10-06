@@ -28,6 +28,20 @@ export class HelpModal extends Modal {
 			});
 
 		new Setting(this.modalEl)
+			.setName(iconTextFr('bug', t('setting.help.label-bug')))
+			.setDesc(t('setting.help.label-bug-description'))
+			.addButton((button: ButtonComponent) => {
+				button
+					.setButtonText(t('setting.help.button-open'))
+					.setTooltip(t('setting.help.button-open-google'))
+					.setCta()
+					.onClick(() => {
+						window.open('https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform', '_blank');
+					});
+			})
+			.setClass('note-toolbar-setting-no-border');
+
+		new Setting(this.modalEl)
 			.setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
 			.setDesc(t('setting.help.label-feedback-description'))
 			.addButton((button: ButtonComponent) => {
