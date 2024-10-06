@@ -18,7 +18,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     const defaultStyles = toolbar.defaultStyles.length ? toolbar.defaultStyles.join('-') : '';
     const mobileStyles = toolbar.mobileStyles.length ? toolbar.mobileStyles.join('-') : '';
     const styles = [defaultStyles, mobileStyles].filter(Boolean).join('-');
-    let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}]`;
+    let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}] ${toolbar.name}`;
 
     // get the active file to provide context, and to replace vars if requested
     let activeFile = plugin.app.workspace.getActiveFile();
@@ -186,7 +186,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
             defaultStyles: ["border", "even", "sticky"],
             items: [],
             mobileStyles: [],
-            name: plugin.settingsManager.getUniqueToolbarName(t('setting.toolbars.imported-tbar-name'), false),
+            name: "",
             position: { 
                 desktop: { allViews: { position: 'props' } }, 
                 mobile: { allViews: { position: 'props' } }, 
@@ -197,9 +197,10 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
 
     // parse the callout type and styles if present
     if (lines[0].includes('[!note-toolbar')) {
-        const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\]/);
+        const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\](.*)/);
         if (metadataMatch) {
             let styles = metadataMatch[2].split(/[^a-zA-Z0-9]+/);
+            let name = metadataMatch[3].trim();
 
             const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
             const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
@@ -210,13 +211,15 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                 !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
             );
 
+            debugLog('• name?', name);
             debugLog('• styles?', validStyles);
             if (invalidStyles.length > 0) {
                 debugLog('  • invalid:', invalidStyles);
                 errorLog += `- Ignored invalid styles: ${invalidStyles}\n`;
             }
-
+        
             // TODO: if there are styles and toolbar is provided, prompt to ignore styles
+            toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.imported-tbar-name'), false);
             toolbar.defaultStyles = validStyles;
         }
         // remove line from the list to process next
