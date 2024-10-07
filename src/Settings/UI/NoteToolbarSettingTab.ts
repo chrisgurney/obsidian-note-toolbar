@@ -177,22 +177,22 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									});
 									menu.addItem((menuItem: MenuItem) => {
 										menuItem
-											.setTitle(t('export.label-copy'))
-											.setIcon('copy')
-											.onClick(async () => {
-												let calloutExport = await exportToCallout(this.plugin, toolbar);
-												navigator.clipboard.writeText(calloutExport);
-												new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
-											});
-									});
-									menu.addItem((menuItem: MenuItem) => {
-										menuItem
 											.setTitle(t('export.label-share'))
 											.setIcon('share')
 											.onClick(async () => {
 												const shareUri = await this.plugin.protocolManager.getShareUri(toolbar);
 												navigator.clipboard.writeText(shareUri);
 												new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
+											});
+									});
+									menu.addItem((menuItem: MenuItem) => {
+										menuItem
+											.setTitle(t('export.label-callout'))
+											.setIcon('copy')
+											.onClick(async () => {
+												let calloutExport = await exportToCallout(this.plugin, toolbar);
+												navigator.clipboard.writeText(calloutExport);
+												new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
 											});
 									});
 									menu.addSeparator();

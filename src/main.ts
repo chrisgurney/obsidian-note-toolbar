@@ -1302,18 +1302,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addSeparator();
 			contextMenu.addItem((item: MenuItem) => {
 				item
-					.setTitle(t('export.label-copy'))
-					.setIcon('copy')
-					.onClick(async (menuEvent) => {
-						if (toolbarSettings) {
-							let calloutExport = await exportToCallout(this, toolbarSettings);
-							navigator.clipboard.writeText(calloutExport);
-							new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
-						}
-					})
-				});
-			contextMenu.addItem((item: MenuItem) => {
-				item
 					.setIcon('share')
 					.setTitle(t('export.label-share'))
 					.onClick(async () => {
@@ -1324,6 +1312,18 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					});
 			});
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setTitle(t('export.label-callout'))
+					.setIcon('copy')
+					.onClick(async (menuEvent) => {
+						if (toolbarSettings) {
+							let calloutExport = await exportToCallout(this, toolbarSettings);
+							navigator.clipboard.writeText(calloutExport);
+							new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+						}
+					})
+				});
 
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
 			if (currentPosition === 'props' || currentPosition === 'top') {
