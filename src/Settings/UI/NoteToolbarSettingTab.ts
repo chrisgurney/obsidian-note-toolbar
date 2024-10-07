@@ -10,6 +10,7 @@ import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
 import { exportToCallout } from 'Utils/ImportExport';
 import { confirmWithModal } from './Modals/ConfirmModal';
+import { ShareModal } from './Modals/ShareModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -181,8 +182,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 											.setIcon('share')
 											.onClick(async () => {
 												const shareUri = await this.plugin.protocolManager.getShareUri(toolbar);
-												navigator.clipboard.writeText(shareUri);
-												new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
+												let shareModal = new ShareModal(this.plugin, shareUri);
+												shareModal.open();
 											});
 									});
 									menu.addItem((menuItem: MenuItem) => {

@@ -38,7 +38,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     includeIcons = (hasIconize || forShareUri) ? true : false;
 
     // if there are variables, as user if they should be replaced
-    if (toolbarHasVars(toolbar)) {
+    if (!forShareUri && toolbarHasVars(toolbar)) {
         resolveVars = await confirmWithModal(plugin.app, { 
             title: t('export.confirm-vars-title'),
             questionLabel: t('export.confirm-vars-question'),

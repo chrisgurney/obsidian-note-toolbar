@@ -9,6 +9,7 @@ import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
 import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ProtocolManager } from 'Protocol/ProtocolManager';
+import { ShareModal } from 'Settings/UI/Modals/ShareModal';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -1307,8 +1308,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					.onClick(async () => {
 						if (toolbarSettings) {
 							const shareUri = await this.protocolManager.getShareUri(toolbarSettings);
-							navigator.clipboard.writeText(shareUri);
-							new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
+							let shareModal = new ShareModal(this, shareUri);
+							shareModal.open();
 						}
 					});
 			});

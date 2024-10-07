@@ -2231,6 +2231,19 @@ input[type="text"].note-toolbar-setting-error {
     display: flex;
 }
 
+.note-toolbar-share-dialog {
+    .setting-item {
+        border-top: none;
+        .setting-item-info {
+            overflow: auto;
+            .setting-item-name {
+                font-family: var(--font-monospace);
+                text-wrap: nowrap;
+            }
+        }
+    }
+}
+
 .is-phone .note-toolbar-setting-help-dialog {
     padding: 1em;
     .setting-item {
