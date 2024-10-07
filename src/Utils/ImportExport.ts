@@ -227,7 +227,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
             debugLog('• styles?', validStyles);
             if (invalidStyles.length > 0) {
                 debugLog('  • invalid:', invalidStyles);
-                errorLog += `- Ignored invalid styles: ${invalidStyles}\n`;
+                errorLog += `Ignored invalid styles: ${invalidStyles}\n`;
             }
         
             // TODO: if there are styles and toolbar is provided, prompt to ignore styles
@@ -314,8 +314,9 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                             itemType = ItemType.Command;
                             commandId = dataUriValue;
                             const commandName = getCommandNameById(commandId);
-                            link = commandName ? commandName : 'Unknown command';
-                            errorLog += commandName ? '' : `- ${index + 1}. Command not recognized: ${commandId}\n`;
+                            // if the command name doesn't exist, show the command ID and an error
+                            link = commandName ? commandName : commandId;
+                            errorLog += commandName ? '' : `Item ${index + 1}: Command not recognized: ${commandId}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                         case 'folder':
@@ -326,7 +327,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                             itemType = ItemType.Menu;
                             let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : '';
-                            errorLog += menuToolbar ? '' : `- ${index + 1}. Menu not found: ${dataUriValue}`;
+                            errorLog += menuToolbar ? '' : `Item ${index + 1}: Menu not found: ${dataUriValue}`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                     }
@@ -366,7 +367,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
 
     // show errors to the user
     if (errorLog) {
-        errorLog = `Errors found on import:\n` + errorLog;
+        errorLog = `Errors found during toolbar import:\n` + errorLog;
         new Notice(errorLog, 0);
     }
 
