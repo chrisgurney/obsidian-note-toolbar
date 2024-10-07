@@ -182,7 +182,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 											.setIcon('share')
 											.onClick(async () => {
 												const shareUri = await this.plugin.protocolManager.getShareUri(toolbar);
-												let shareModal = new ShareModal(this.plugin, shareUri);
+												let shareModal = new ShareModal(this.plugin, shareUri, toolbar.name);
 												shareModal.open();
 											});
 									});

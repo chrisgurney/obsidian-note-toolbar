@@ -6,18 +6,23 @@ import { learnMoreFr } from "../Utils/SettingsUIUtils";
 export class ShareModal extends Modal {
 
     shareUri: string;
+    toolbarName: string;
 
-	constructor(plugin: NoteToolbarPlugin, shareUri: string) {
+	constructor(plugin: NoteToolbarPlugin, shareUri: string, toolbarName: string) {
         super(plugin.app);
         this.shareUri = shareUri;
+        this.toolbarName = toolbarName;
         this.modalEl.addClass('note-toolbar-setting-mini-dialog', 'note-toolbar-share-dialog');
     }
 
     public onOpen() {
 
-        this.setTitle("Share Note Toolbar URI");
+        this.setTitle(`Share toolbar: ${this.toolbarName}`);
 
-        this.contentEl.createEl("p", { text: learnMoreFr("Share this toolbar with another user with this link.", 'Importing-and-exporting') });
+        this.contentEl.createEl(
+            "p", 
+            { text: learnMoreFr("Share this toolbar with another Note Toolbar user with this link.", 'Importing-and-exporting') }
+        );
 
 		new Setting(this.modalEl)
 			.setName(this.shareUri)
