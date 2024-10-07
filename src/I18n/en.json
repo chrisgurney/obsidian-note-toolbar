@@ -14,7 +14,7 @@
         "item-generic": "Item{{number}}",
         "label-callout": "Copy as callout",
         "label-share": "Share...",
-        "label-share-description": "Share this toolbar with another Note Toolbar user with this link.",
+        "label-share-description": "Share this link with another Note Toolbar user to add your toolbar to their vault.",
         "title-share": "Share toolbar: {{toolbar}}",
         "button-copy-uri": "Copy URI",
         "button-copy-uri-description": "Copy this link to your clipboard",
