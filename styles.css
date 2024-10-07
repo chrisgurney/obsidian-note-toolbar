@@ -1642,8 +1642,27 @@ input[type="text"].note-toolbar-setting-error {
     &.note-toolbar-setting-item-preview {
         border-radius: var(--input-radius);
         box-shadow: 0 0 0 1px var(--text-error);
+        animation-duration: 1s, 1s;
+        animation-delay: 0s, .1s;
+        animation-name: note-toolbar-setting-error-grows, note-toolbar-setting-error-shrinks;
+        animation-timing-function: cubic-bezier(.2,0,0,1), cubic-bezier(.2,0,0,1);
     }
     & input[type="text"], & input[type="search"] {
+        box-shadow: 0 0 0 1px var(--text-error);
+    }
+}
+
+@keyframes note-toolbar-setting-error-grows {
+    0% {
+      box-shadow: 0 0 0 1px var(--text-error);
+    }
+    100% {
+        box-shadow: 0 0 0 3px var(--text-error);
+    }
+}
+  
+@keyframes note-toolbar-setting-error-shrinks {
+    0% {
         box-shadow: 0 0 0 1px var(--text-error);
     }
 }
