@@ -12,7 +12,7 @@ export class ShareModal extends Modal {
         super(plugin.app);
         this.shareUri = shareUri;
         this.toolbarName = toolbarName;
-        this.modalEl.addClass('note-toolbar-setting-mini-dialog', 'note-toolbar-share-dialog');
+        this.modalEl.addClass('note-toolbar-share-dialog');
     }
 
     public onOpen() {
