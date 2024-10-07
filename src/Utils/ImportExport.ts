@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
-import { Command, Notice, TFile, TFolder } from "obsidian";
+import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 
 const toIconizeFormat = (s: string) => 
@@ -285,10 +285,13 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                     // translate Iconize strings to Lucide icon strings
                     const iconName = label?.match(/:Li(\w+):/);
                     if (iconName) {
-                        icon = 'lucide-' + iconName[1]
+                        let iconImported = iconName[1]
                             .replace(/([a-z])([A-Z])/g, '$1-$2')
                             .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
                             .toLowerCase();
+                        // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
+                        icon = getIcon('lucide-' + iconImported) ? 'lucide-' + iconImported : (getIcon(iconImported) ? iconImported : '');
+                        errorLog += icon ? '' : `Item ${index + 1}: Icon not found: ${iconImported}`;
                     }
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
