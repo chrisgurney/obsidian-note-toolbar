@@ -17,19 +17,19 @@ export class ShareModal extends Modal {
 
     public onOpen() {
 
-        this.setTitle(`Share toolbar: ${this.toolbarName}`);
+        this.setTitle(t('export.title-share', { toolbar: this.toolbarName }));
 
         this.contentEl.createEl(
             "p", 
-            { text: learnMoreFr("Share this toolbar with another Note Toolbar user with this link.", 'Importing-and-exporting') }
+            { text: learnMoreFr(t('export.label-share-description'), 'Importing-and-exporting') }
         );
 
 		new Setting(this.modalEl)
 			.setName(this.shareUri)
 			.addButton((button: ButtonComponent) => {
 				button
-					.setButtonText("Copy URI")
-					.setTooltip("Copy this link to your clipboard")
+					.setButtonText(t('export.button-copy-uri'))
+					.setTooltip(t('export.button-copy-uri-description'))
 					.setCta()
 					.onClick(() => {
                         navigator.clipboard.writeText(this.shareUri);
