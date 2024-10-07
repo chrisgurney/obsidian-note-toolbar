@@ -176,6 +176,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 												});
 											});
 									});
+									menu.addSeparator();
 									menu.addItem((menuItem: MenuItem) => {
 										menuItem
 											.setTitle(t('export.label-share'))
