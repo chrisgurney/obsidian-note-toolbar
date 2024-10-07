@@ -291,7 +291,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
                         icon = getIcon('lucide-' + iconImported) ? 'lucide-' + iconImported : (getIcon(iconImported) ? iconImported : '');
-                        errorLog += icon ? '' : `Item ${index + 1}: Icon not found: ${iconImported}`;
+                        errorLog += icon ? '' : `Item ${index + 1}: Icon not found: ${iconImported}\n`;
                     }
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
@@ -327,7 +327,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
                             itemType = ItemType.Menu;
                             let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : '';
-                            errorLog += menuToolbar ? '' : `Item ${index + 1}: Menu not found: ${dataUriValue}`;
+                            errorLog += menuToolbar ? '' : `Item ${index + 1}: Menu not found: ${dataUriValue}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                     }
@@ -339,7 +339,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
         }
 
         debugLog(`=> ${itemType?.toUpperCase()}`);
-        !itemType ? debugLog('importFromCallout: Unknown type') : undefined;
+        errorLog += itemType ? '' : `Item ${index + 1}: Invalid format: ${line}\n`;
 
         // create the toolbar item and add it to the toolbar
         if (itemType) {
