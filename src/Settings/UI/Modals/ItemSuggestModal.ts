@@ -98,51 +98,59 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             });
         });
 
-        // remove duplicates (+ redundant item-suggester items)
-        let uniqueItemSuggestions = 
-            Array.from(
-                new Set(
-                    itemSuggestions
-                        .filter(item => item.linkAttr.commandId !== 'note-toolbar:open-item-suggester')
-                        .map(item => 
-                            `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
+        let sortedItemSuggestions: ToolbarItemSettings[] = [];
+
+        // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
+        if (!this.toolbarId) {
+
+            // remove duplicates (+ redundant item-suggester items)
+            sortedItemSuggestions = 
+                Array.from(
+                    new Set(
+                        itemSuggestions
+                            .filter(item => item.linkAttr.commandId !== 'note-toolbar:open-item-suggester')
+                            .map(item => 
+                                `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
+                        )
                     )
-                )
-            ).map(uniqueKey => {
-                const [labelOrTooltip, link] = uniqueKey.split('|');
-                return itemSuggestions.find(item =>
-                    (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
-                    item.link === link
-                )!;
+                ).map(uniqueKey => {
+                    const [labelOrTooltip, link] = uniqueKey.split('|');
+                    return itemSuggestions.find(item =>
+                        (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
+                        item.link === link
+                    )!;
+                });
+
+            const recentItems: string[] = [];
+
+            // sort the results
+            sortedItemSuggestions.sort((a, b) => {
+                // remove non-alphanumeric characters including emojis
+                const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
+                const aItemNameRaw = cleanString(a.label || a.tooltip || a.link || '');
+                const bItemNameRaw = cleanString(b.label || b.tooltip || a.link || '');
+                const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : '') || (!hasVars(a.link) ? a.link : ''));
+                const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : '') || (!hasVars(b.link) ? b.link : ''));
+
+                // prioritize recent items
+                const isARecent = recentItems.includes(aItemNameRaw);
+                const isBRecent = recentItems.includes(bItemNameRaw);
+                if (isARecent && !isBRecent) return -1;
+                if (!isARecent && isBRecent) return 1;
+
+                // check if primary contains the search string, and prioritize primary matches
+                const aPrimaryMatch = aItemName.includes(lowerCaseInputStr);
+                const bPrimaryMatch = bItemName.includes(lowerCaseInputStr);
+                if (aPrimaryMatch && !bPrimaryMatch) return -1;
+                if (!aPrimaryMatch && bPrimaryMatch) return 1;
+
+                return aItemNameRaw.localeCompare(bItemNameRaw);
             });
 
-        const recentItems: string[] = [];
+        }
 
-        // sort the results
-        uniqueItemSuggestions.sort((a, b) => {
-            // remove non-alphanumeric characters including emojis
-            const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
-            const aItemNameRaw = cleanString(a.label || a.tooltip || a.link || '');
-            const bItemNameRaw = cleanString(b.label || b.tooltip || a.link || '');
-            const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : '') || (!hasVars(a.link) ? a.link : ''));
-            const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : '') || (!hasVars(b.link) ? b.link : ''));
+        return this.toolbarId ? itemSuggestions : sortedItemSuggestions;
 
-            // prioritize recent items
-            const isARecent = recentItems.includes(aItemNameRaw);
-            const isBRecent = recentItems.includes(bItemNameRaw);
-            if (isARecent && !isBRecent) return -1;
-            if (!isARecent && isBRecent) return 1;
-
-            // check if primary contains the search string, and prioritize primary matches
-            const aPrimaryMatch = aItemName.includes(lowerCaseInputStr);
-            const bPrimaryMatch = bItemName.includes(lowerCaseInputStr);
-            if (aPrimaryMatch && !bPrimaryMatch) return -1;
-            if (!aPrimaryMatch && bPrimaryMatch) return 1;
-
-            return aItemNameRaw.localeCompare(bItemNameRaw);
-        });
-
-        return uniqueItemSuggestions;
     }
 
     /**
