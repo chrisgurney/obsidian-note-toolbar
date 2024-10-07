@@ -256,7 +256,7 @@
             "name-with-count": "Toolbars ({{count}})",
             "description": "Define the toolbars you want to add to your notes.",
             "button-collapse-tbars-tooltip": "Collapse all toolbars",
-            "button-duplicate-tbar-tooltip": "Duplicate this toolbar",
+            "button-duplicate-tbar-tooltip": "Duplicate toolbar",
             "button-edit-tbar": "Edit",
             "button-expand-tbars-tooltip": "Expand all toolbars",
             "button-edit-tbar-tooltip": "Update this toolbar",
@@ -280,7 +280,7 @@
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
             "label-roadmap": "Roadmap",
-            "label-roadmap-description": "Wondering what's ahead for Note Toolbar? Preview the new features ahead."
+            "label-roadmap-description": "Wondering what's ahead for Note Toolbar? Preview the features under consideration."
         }
     },
     "toolbar": {
