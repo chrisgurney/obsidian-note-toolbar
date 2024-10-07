@@ -29,9 +29,10 @@ declare module "obsidian" {
 		dom: HTMLDivElement
 	}
 
-    // allows access to sub-menus
+    // allows access to sub-menus, and setting warning style
     interface MenuItem {
         setSubmenu: () => Menu;
+        setWarning(warning: boolean): void;
     }
 
 	// interface Workspace {

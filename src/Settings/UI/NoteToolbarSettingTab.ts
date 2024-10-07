@@ -9,6 +9,7 @@ import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
 import Sortable from 'sortablejs';
 import { exportToCallout } from 'Utils/ImportExport';
+import { confirmWithModal } from './Modals/ConfirmModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -194,6 +195,31 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 												new Notice(learnMoreFr(t('export.notice-shared'), 'Importing-and-exporting'));
 											});
 									});
+									menu.addSeparator();
+									menu.addItem((menuItem: MenuItem) => {
+										menuItem
+											.setTitle(t('setting.delete-toolbar.button-delete'))
+											.setIcon('minus-circle')
+											.onClick(async () => {
+												confirmWithModal(
+													this.plugin.app, 
+													{ 
+														title: t('setting.delete-toolbar.title', { toolbar: toolbar.name }),
+														questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
+														approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
+														denyLabel: t('setting.button-cancel'),
+														warning: true
+													}
+												).then((isConfirmed: boolean) => {
+													if (isConfirmed) {
+														this.plugin.settingsManager.deleteToolbar(toolbar.uuid);
+														this.plugin.settingsManager.save();
+														this.display();
+													}
+												});
+											})
+											.setWarning(true);
+									});									
 									menu.showAtPosition(getElementPosition(button.buttonEl));
 								});
 						})
