@@ -840,7 +840,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		const calloutRegex = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/;
 		const selection = editor.getSelection().trim();
 		const line = editor.getLine(editor.getCursor().line).trim();
-		if (calloutRegex.test(selection) || calloutRegex.test(line)) {
+		if (selection.includes('[!note-toolbar') || line.includes('[!note-toolbar')) {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setIcon('info')
@@ -850,7 +850,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 			});
 		}
-		if (calloutRegex.test(selection)) {
+		if (selection.includes('[!note-toolbar')) {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setIcon('import')
