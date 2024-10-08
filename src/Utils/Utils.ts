@@ -1,7 +1,8 @@
+import NoteToolbarPlugin from "main";
 import { App, PaneType, Platform, TFile } from "obsidian";
-import { ComponentType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, ItemType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
-const DEBUG: boolean = false;
+const DEBUG: boolean = true;
 
 /**
  * Adds the given component to the given visibility prop.
@@ -264,6 +265,17 @@ export function replaceVars(app: App, s: string, file: TFile | null, encode: boo
 	});
 	return s;
 
+}
+
+/**
+ * Checks if the given toolbar uses commands at all.
+ * @param toolbar ToolbarSettings to check for command usage
+ * @returns true if commands are used in the toolbar; false otherwise
+ */
+export function toolbarHasInvalidCommands(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): boolean {
+	return toolbar.items.some(item =>
+		((item.linkAttr.type === ItemType.Command) && !(item.linkAttr.commandId in this.app.commands.commands))
+    );
 }
 
 /**

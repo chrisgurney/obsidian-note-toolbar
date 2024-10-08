@@ -185,8 +185,9 @@ export function learnMoreFr(message: string, page: string): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
-		messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: t('setting.button-learn-more') })
 	);
+	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: t('setting.button-learn-more') });
+	learnMoreLink.addClass('note-toolbar-setting-learn-more');
 	return messageFr;
 }
 

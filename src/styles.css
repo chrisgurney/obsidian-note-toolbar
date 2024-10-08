@@ -1160,6 +1160,12 @@ input[type="text"].note-toolbar-setting-error {
 }
 */
 
+.note-toolbar-setting-learn-more {
+    &:focus-within {
+        box-shadow: 0 0 0 2px;
+    }
+}
+
 .note-toolbar-setting-field-help,
 .note-toolbar-setting-field-error {
     color: var(--text-muted);
