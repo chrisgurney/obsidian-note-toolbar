@@ -38,9 +38,9 @@ export class ImportConfirmModal extends Modal {
 
         new Promise((resolve) => {
 
-            this.setTitle("Import Note Toolbar: " + toolbar.name);
+            this.setTitle(t('import.title-import', { toolbar: toolbar.name }));
 
-            this.contentEl.createEl("p", { text: "Confirm you would like to import this toolbar:" });
+            this.contentEl.createEl("p", { text: t('import.label-import-confirmation') });
 
             let previewFr = toolbar ? createToolbarPreviewFr(toolbar, undefined) : '';
 
@@ -60,10 +60,10 @@ export class ImportConfirmModal extends Modal {
 
                 let disclaimers = this.contentEl.createDiv();
                 disclaimers.addClass('note-toolbar-setting-field-help')
-                let disclaimersList = disclaimers.createEl('ol');
+                let disclaimersList = disclaimers.createEl('ul');
 
                 if (importInvalidCommands.length > 0) {
-                    let commandDisclaimer = disclaimersList.createEl('li', { text: `This toolbar uses plugins you do not have installed and enabled:` });
+                    let commandDisclaimer = disclaimersList.createEl('li', { text: t('import.warning-invalid-plugins') });
                     let commandsList = commandDisclaimer.createEl('ul');
                     importInvalidCommands.map((id, index) => {
                         let commandsListItem = commandsList.createEl('li');
@@ -72,7 +72,7 @@ export class ImportConfirmModal extends Modal {
                 }
     
                 if (importHasVars) {
-                    disclaimersList.createEl('li', { text: learnMoreFr("This toolbar uses variables, which you can modify to work with your vault.", 'Variables') });
+                    disclaimersList.createEl('li', { text: learnMoreFr(t('import.warning-vars'), 'Variables') });
                 }
     
             }

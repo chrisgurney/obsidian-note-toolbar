@@ -23,9 +23,12 @@
         "confirm-vars-title": "Variables are used in this toolbar",
         "confirm-vars-question": "Do you want to replace these variables in the callout?",
         "confirm-vars-approve": "Replace",
-        "confirm-vars-deny": "Leave as-is"
+        "confirm-vars-deny": "Leave as-is",
+        "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive."
     },
     "import": {
+        "title-import": "Import Note Toolbar: {{toolbar}}",
+        "label-import-confirmation": "Confirm you would like to import this toolbar:",
         "option-create": "Create Note Toolbar from callout...",
         "option-help": "About Note Toolbar Callouts",
         "error-invalid-uri-content": "Note Toolbar: It looks like there's an issue with this link. Check the URI is correct, or review the user guide.",
@@ -35,7 +38,9 @@
         "errorlog-icon-not-found": "Icon not found: {{icon}}",
         "errorlog-invalid-format": "Invalid format: {{line}}",
         "errorlog-invalid-styles": "Ignored invalid style(s): {{styles}}",
-        "errorlog-menu-not-found": "Menu not found: {{menu}}"
+        "errorlog-menu-not-found": "Menu not found: {{menu}}",
+        "warning-invalid-plugins": "This toolbar uses plugins you do not have installed and enabled:",
+        "warning-vars": "This toolbar uses variables, which you can modify to work with your vault."
     },
     "notice": {
         "error-command-not-found": "Check Note Toolbar setting or URI for this command. Command not found: {{command}}",

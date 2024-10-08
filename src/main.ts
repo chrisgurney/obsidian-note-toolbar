@@ -1308,7 +1308,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					.onClick(async () => {
 						if (toolbarSettings) {
 							const shareUri = await this.protocolManager.getShareUri(toolbarSettings);
-							let shareModal = new ShareModal(this, shareUri, toolbarSettings.name);
+							let shareModal = new ShareModal(this, shareUri, toolbarSettings);
 							shareModal.open();
 						}
 					});

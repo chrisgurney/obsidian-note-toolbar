@@ -1,28 +1,44 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal, Notice, Setting } from "obsidian";
-import { t } from "Settings/NoteToolbarSettings";
+import { ItemType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
 export class ShareModal extends Modal {
 
     shareUri: string;
-    toolbarName: string;
+    toolbar: ToolbarSettings;
 
-	constructor(plugin: NoteToolbarPlugin, shareUri: string, toolbarName: string) {
+	constructor(plugin: NoteToolbarPlugin, shareUri: string, toolbar: ToolbarSettings) {
         super(plugin.app);
         this.shareUri = shareUri;
-        this.toolbarName = toolbarName;
+        this.toolbar = toolbar;
         this.modalEl.addClass('note-toolbar-share-dialog');
     }
 
     public onOpen() {
 
-        this.setTitle(t('export.title-share', { toolbar: this.toolbarName }));
+        this.setTitle(t('export.title-share', { toolbar: this.toolbar.name }));
 
         this.contentEl.createEl(
             "p", 
             { text: learnMoreFr(t('export.label-share-description'), 'Importing-and-exporting') }
         );
+
+        //
+        // disclaimers, if any
+        //
+
+        let hasMenu = this.toolbar.items.some(item => (item.linkAttr.type === ItemType.Menu) && (item.link));
+        if (hasMenu) {
+            let disclaimers = this.contentEl.createDiv();
+            disclaimers.addClass('note-toolbar-setting-field-help')
+            let disclaimersList = disclaimers.createEl('ul');
+            disclaimersList.createEl('li', { text: t('export.warning-share-menu') });
+        }
+
+        //
+        // share link
+        //
 
 		new Setting(this.modalEl)
 			.setName(this.shareUri)
