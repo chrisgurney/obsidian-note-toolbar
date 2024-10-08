@@ -190,9 +190,6 @@ export async function importFromCallout(
 
     debugLog('importFromCallout()', callout);
 
-    // TODO? double-check provided text is a Note Toolbar Callout; may not have this line in import
-    //const isNoteToolbarCallout = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(callout);
-
     const lines = callout.trim().split('\n');
     var errorLog = '';
 
@@ -232,7 +229,7 @@ export async function importFromCallout(
             debugLog('• styles?', validStyles);
             if (invalidStyles.length > 0) {
                 debugLog('  • invalid:', invalidStyles);
-                errorLog += `Ignored invalid styles: ${invalidStyles}\n`;
+                errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
             }
         
             // TODO: if there are styles and toolbar is provided, prompt to ignore styles
@@ -296,7 +293,7 @@ export async function importFromCallout(
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
                         icon = getIcon('lucide-' + iconImported) ? 'lucide-' + iconImported : (getIcon(iconImported) ? iconImported : '');
-                        errorLog += icon ? '' : `Item ${index + 1}: Icon not found: ${iconImported}\n`;
+                        errorLog += icon ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
                     }
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
@@ -321,7 +318,7 @@ export async function importFromCallout(
                             const commandName = getCommandNameById(commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
-                            errorLog += commandName ? '' : `Item ${index + 1}: Command not recognized: ${commandId}\n`;
+                            errorLog += commandName ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                         case 'folder':
@@ -332,7 +329,7 @@ export async function importFromCallout(
                             itemType = ItemType.Menu;
                             let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : '';
-                            errorLog += menuToolbar ? '' : `Item ${index + 1}: Menu not found: ${dataUriValue}\n`;
+                            errorLog += menuToolbar ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                     }
@@ -344,7 +341,7 @@ export async function importFromCallout(
         }
 
         debugLog(`=> ${itemType?.toUpperCase()}`);
-        errorLog += itemType ? '' : `Item ${index + 1}: Invalid format: ${line}\n`;
+        errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
         // create the toolbar item and add it to the toolbar
         if (itemType) {
@@ -372,7 +369,7 @@ export async function importFromCallout(
 
     // show errors to the user
     if (!fromShareUri && errorLog) {
-        errorLog = `Errors found during toolbar import:\n` + errorLog;
+        errorLog = `${t('import.errorlog-heading')}\n${errorLog}`;
         new Notice(errorLog, 0);
     }
 

@@ -54,7 +54,7 @@ export class ProtocolManager {
 				});
 			}
 			else {
-				new Notice("Note Toolbar: It looks like there's an issue with this link. Check the URI is correct, or review the user guide.");
+				new Notice(t('import.error-invalid-uri-content'));
 			}
         }
 		else if (data.menu) {
