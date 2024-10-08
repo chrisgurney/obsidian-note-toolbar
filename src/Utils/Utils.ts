@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { App, PaneType, Platform, TFile } from "obsidian";
 import { ComponentType, ItemType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
-const DEBUG: boolean = true;
+const DEBUG: boolean = false;
 
 /**
  * Adds the given component to the given visibility prop.
