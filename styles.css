@@ -1965,7 +1965,7 @@ input[type="text"].note-toolbar-setting-error {
 }
 */
 
-.note-toolbar-setting-learn-more {
+.note-toolbar-setting-focussable-link {
     &:focus-within {
         box-shadow: 0 0 0 2px;
     }

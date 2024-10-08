@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -1009,6 +1009,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		var status: Status = Status.Valid;
 		var statusMessage: string = '';
+		var statusLink: DocumentFragment | undefined = undefined;
 		var isValid = true;
 
 		if (itemValue) {
@@ -1017,6 +1018,7 @@ export default class ToolbarSettingsModal extends Modal {
 					if (!(itemValue in this.app.commands.commands)) {
 						status = Status.Invalid;
 						statusMessage = t('setting.item.option-command-error-does-not-exist');
+						statusLink = pluginLinkFr(itemValue);
 					}
 					break;
 				case ItemType.File:
@@ -1052,7 +1054,7 @@ export default class ToolbarSettingsModal extends Modal {
 				isValid = false;
 				break;
 			case Status.Invalid:
-				this.setFieldError(componentEl, statusMessage);
+				this.setFieldError(componentEl, statusMessage, statusLink);
 				isValid = false;
 				break;
 		}
@@ -1658,9 +1660,10 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Updates the given element with an error border and text.
 	 * @param fieldEl HTMLElement to update
-	 * @param errorText Error text to display
+	 * @param errorText Optional error text to display
+	 * @param errorLink Optional link to display after error text
 	 */
-	setFieldError(fieldEl: HTMLElement | null, errorText?: string) {
+	setFieldError(fieldEl: HTMLElement | null, errorText?: string, errorLink?: DocumentFragment) {
 		if (fieldEl) {
 			let fieldContainerEl = fieldEl.closest('.setting-item-control');
 			if (!fieldContainerEl) {
@@ -1672,6 +1675,9 @@ export default class ToolbarSettingsModal extends Modal {
 					let errorDiv = createEl('div', { 
 						text: errorText, 
 						cls: 'note-toolbar-setting-field-error' });
+					if (errorLink) {
+						errorDiv.append(' ', errorLink);	
+					}
 					fieldEl.insertAdjacentElement('afterend', errorDiv);
 				}
 				fieldEl.addClass('note-toolbar-setting-error');

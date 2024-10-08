@@ -187,8 +187,21 @@ export function learnMoreFr(message: string, page: string): DocumentFragment {
 		message, ' ',
 	);
 	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: t('setting.button-learn-more') });
-	learnMoreLink.addClass('note-toolbar-setting-learn-more');
+	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
+}
+
+/**
+ * Creates a text fragment with a link to install/enable a plugin used by a given command.
+ * @param commandId ID of command to get the plugin ID from.
+ * @returns DocumentFragement containing the link to open the plugin within Obsidian.
+ */
+export function pluginLinkFr(commandId: string): DocumentFragment {
+	let pluginLinkFr = document.createDocumentFragment();
+	let pluginId = commandId.split(':')[0].trim();
+	let pluginLink = pluginLinkFr.createEl('a', { href: `obsidian://show-plugin?id=${pluginId}`, text: "Review\u00A0plugin" });
+	pluginLink.addClass('note-toolbar-setting-focussable-link');
+	return pluginLinkFr;
 }
 
 /**
