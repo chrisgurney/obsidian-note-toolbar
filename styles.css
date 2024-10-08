@@ -2226,6 +2226,25 @@ input[type="text"].note-toolbar-setting-error {
     width: calc(var(--dialog-width) / 1.5);
 }
 
+.note-toolbar-setting-small-heading {
+    color: var(--color-base-50);
+    font-size: var(--font-ui-smaller);
+    font-variant: small-caps;
+    line-height: 1em;
+    margin-block-end: 0.5em;
+}
+
+.note-toolbar-setting-spacer {
+    margin-block-start: 1em;    
+}
+
+.note-toolbar-setting-import-confirm-preview {
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    margin: 0em 0em 1em 0em;
+    padding: 0em 1em 1em 1em;
+}
+
 .note-toolbar-setting-confirm-dialog-buttons {
     column-gap: 0.5em;
     display: flex;

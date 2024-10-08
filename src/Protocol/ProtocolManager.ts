@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Notice, ObsidianProtocolData } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { HelpModal } from "Settings/UI/Modals/HelpModal";
+import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { WhatsNewModal } from "Settings/UI/Modals/WhatsNewModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
@@ -35,9 +36,20 @@ export class ProtocolManager {
 		}
         else if (data.import) {
             const content = decodeURIComponent(data.import);
-            const toolbar = await importFromCallout(this.plugin, content);
-            await this.plugin.settingsManager.addToolbar(toolbar);
-            await this.plugin.commands.openToolbarSettingsForId(toolbar.uuid);
+			confirmImportWithModal(
+				this.plugin, 
+				content
+			).then((isConfirmed: boolean) => {
+				if (isConfirmed) {
+					importFromCallout(this.plugin, content, undefined, true)
+						.then(toolbar => {
+							this.plugin.settingsManager.addToolbar(toolbar)
+								.then(res => {
+									this.plugin.commands.openToolbarSettingsForId(toolbar.uuid);
+								});
+						});
+				}
+			});
         }
 		else if (data.menu) {
 			let activeFile = this.plugin.app.workspace.getActiveFile();

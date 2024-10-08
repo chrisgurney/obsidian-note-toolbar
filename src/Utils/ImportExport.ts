@@ -181,7 +181,12 @@ function encodeTextForCallout(str: string): string {
  * @param toolbar optional ToolbarSettings for existing toolbar to import into
  * @returns ToolbarSettings
  */
-export async function importFromCallout(plugin: NoteToolbarPlugin, callout: string, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
+export async function importFromCallout(
+    plugin: NoteToolbarPlugin, 
+    callout: string, 
+    toolbar?: ToolbarSettings, 
+    fromShareUri: boolean = false
+): Promise<ToolbarSettings> {
 
     debugLog('importFromCallout()', callout);
 
@@ -366,7 +371,7 @@ export async function importFromCallout(plugin: NoteToolbarPlugin, callout: stri
     });
 
     // show errors to the user
-    if (errorLog) {
+    if (!fromShareUri && errorLog) {
         errorLog = `Errors found during toolbar import:\n` + errorLog;
         new Notice(errorLog, 0);
     }
