@@ -40,13 +40,13 @@ export class ImportConfirmModal extends Modal {
 
             this.setTitle(t('import.title-import', { toolbar: toolbar.name }));
 
-            this.contentEl.createEl("p", { text: t('import.label-import-confirmation') });
+            this.contentEl.createEl('p', { text: t('import.label-import-confirmation') });
 
             let previewFr = toolbar ? createToolbarPreviewFr(toolbar, undefined) : '';
 
             let previewContainerEl = this.contentEl.createDiv();
             previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');
-            previewContainerEl.createEl("p", { text: "preview", cls: 'note-toolbar-setting-small-heading' });
+            previewContainerEl.createEl('p', { text: t('export.label-share-preview'), cls: 'note-toolbar-setting-small-heading' });
             previewContainerEl.createDiv().append(previewFr);
 
             //
@@ -85,14 +85,14 @@ export class ImportConfirmModal extends Modal {
             let btnContainerEl = this.contentEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
             new ButtonComponent(btnContainerEl)
-                .setButtonText("Confirm")
+                .setButtonText(t('import.label-confirm'))
                 .setCta()
                 .onClick(() => {
                     this.isConfirmed = true;
                     this.close();
                 });
             new ButtonComponent(btnContainerEl)
-                .setButtonText("Cancel")
+                .setButtonText(t('import.label-cancel'))
                 .onClick(() => {
                     this.close();
                 });

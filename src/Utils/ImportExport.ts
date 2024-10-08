@@ -42,8 +42,8 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
         resolveVars = await confirmWithModal(plugin.app, { 
             title: t('export.confirm-vars-title'),
             questionLabel: t('export.confirm-vars-question'),
-            approveLabel: t('export.confirm-vars-approve'),
-            denyLabel: t('export.confirm-vars-deny')
+            approveLabel: t('export.label-vars-approve'),
+            denyLabel: t('export.label-vars-deny')
         });
     }
 
