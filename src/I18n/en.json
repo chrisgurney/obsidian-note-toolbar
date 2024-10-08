@@ -121,6 +121,7 @@
             "option-command": "Command",
             "option-command-error-does-not-exist": "This command does not exist.",
             "option-command-error-not-available": "This command is not available. Plugin must be installed and enabled.",
+            "option-command-error-refresh": "Refresh",
             "option-command-placeholder": "Search for command",
             "option-component-icon": "icon",
             "option-component-label": "label",

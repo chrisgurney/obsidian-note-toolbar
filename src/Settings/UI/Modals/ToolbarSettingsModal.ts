@@ -1009,7 +1009,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		var status: Status = Status.Valid;
 		var statusMessage: string = '';
-		var statusLink: DocumentFragment | undefined = undefined;
+		var statusLink: HTMLAnchorElement | undefined = undefined;
 		var isValid = true;
 
 		if (itemValue) {
@@ -1022,7 +1022,13 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 						else {
 							statusMessage = t('setting.item.option-command-error-not-available');
-							statusLink = pluginLinkFr(itemValue);
+
+							let pluginLinkFr = document.createDocumentFragment();
+							let pluginId = itemValue.split(':')[0].trim();
+							let pluginLink = pluginLinkFr.createEl('a', { href: `obsidian://show-plugin?id=${pluginId}`, text: "Review\u00A0plugin" });
+							pluginLink.addClass('note-toolbar-setting-focussable-link');
+						
+							statusLink = pluginLink;
 						}
 					}
 					break;
@@ -1668,7 +1674,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param errorText Optional error text to display
 	 * @param errorLink Optional link to display after error text
 	 */
-	setFieldError(fieldEl: HTMLElement | null, errorText?: string, errorLink?: DocumentFragment) {
+	setFieldError(fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
 		if (fieldEl) {
 			let fieldContainerEl = fieldEl.closest('.setting-item-control');
 			if (!fieldContainerEl) {
@@ -1681,7 +1687,17 @@ export default class ToolbarSettingsModal extends Modal {
 						text: errorText, 
 						cls: 'note-toolbar-setting-field-error' });
 					if (errorLink) {
-						errorDiv.append(' ', errorLink);	
+						// as it's not easy to listen for plugins being enabled,
+						// user will have to click a refresh link to dismiss the error
+						this.plugin.registerDomEvent(errorLink, 'click', event => {
+							let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh') } );
+							let oldLink = event.currentTarget as HTMLElement;
+							oldLink?.replaceWith(refreshLink);
+							this.plugin.registerDomEvent(refreshLink, 'click', event => {
+								this.display();
+							});
+						});
+						errorDiv.append(' ', errorLink);
 					}
 					fieldEl.insertAdjacentElement('afterend', errorDiv);
 				}
