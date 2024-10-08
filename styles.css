@@ -2257,7 +2257,6 @@ input[type="text"].note-toolbar-setting-error {
 .note-toolbar-setting-import-confirm-preview {
     border: 1px solid var(--background-modifier-border);
     border-radius: 8px;
-    margin: 0em 0em 1em 0em;
     padding: 0em 1em 1em 1em;
 }
 
