@@ -2,7 +2,7 @@ import { App, ButtonComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, 
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS } from 'Settings/NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -851,7 +851,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-command-placeholder'))
 							.setValue(value)
 							.onChange(debounce(async (command) => {
-								let commandId = command ? (cb.inputEl?.getAttribute('data-command-id') ?? 'COMMAND_DOES_NOT_EXIST') : '';
+								let commandId = command ? (cb.inputEl?.getAttribute('data-command-id') ?? COMMAND_DOES_NOT_EXIST) : '';
 								let isValid = this.updateItemComponentStatus(commandId, type, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? command : '';
 								toolbarItem.linkAttr.commandId = isValid ? commandId : '';
@@ -1017,8 +1017,13 @@ export default class ToolbarSettingsModal extends Modal {
 				case ItemType.Command:
 					if (!(itemValue in this.app.commands.commands)) {
 						status = Status.Invalid;
-						statusMessage = t('setting.item.option-command-error-does-not-exist');
-						statusLink = pluginLinkFr(itemValue);
+						if (itemValue === COMMAND_DOES_NOT_EXIST) {
+							statusMessage = t('setting.item.option-command-error-does-not-exist');
+						}
+						else {
+							statusMessage = t('setting.item.option-command-error-not-available');
+							statusLink = pluginLinkFr(itemValue);
+						}
 					}
 					break;
 				case ItemType.File:

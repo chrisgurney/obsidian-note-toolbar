@@ -229,6 +229,7 @@ export interface ToolbarItemLinkAttr {
 
 export const USER_GUIDE_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
 export const RELEASES_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
+export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
 
 export const LINK_OPTIONS = {
 	[ItemType.Command]: t('setting.item.option-command'),
