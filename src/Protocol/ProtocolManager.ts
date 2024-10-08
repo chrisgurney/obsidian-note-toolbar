@@ -36,20 +36,26 @@ export class ProtocolManager {
 		}
         else if (data.import) {
             const content = decodeURIComponent(data.import);
-			confirmImportWithModal(
-				this.plugin, 
-				content
-			).then((isConfirmed: boolean) => {
-				if (isConfirmed) {
-					importFromCallout(this.plugin, content, undefined, true)
-						.then(toolbar => {
-							this.plugin.settingsManager.addToolbar(toolbar)
-								.then(res => {
-									this.plugin.commands.openToolbarSettingsForId(toolbar.uuid);
-								});
-						});
-				}
-			});
+			// double-check provided text is a Note Toolbar Callout
+			if (/^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(data.import)) {
+				confirmImportWithModal(
+					this.plugin, 
+					content
+				).then((isConfirmed: boolean) => {
+					if (isConfirmed) {
+						importFromCallout(this.plugin, content, undefined, true)
+							.then(toolbar => {
+								this.plugin.settingsManager.addToolbar(toolbar)
+									.then(res => {
+										this.plugin.commands.openToolbarSettingsForId(toolbar.uuid);
+									});
+							});
+					}
+				});
+			}
+			else {
+				new Notice("Note Toolbar: It looks like there's an issue with this link. Check the URI is correct, or review the user guide.");
+			}
         }
 		else if (data.menu) {
 			let activeFile = this.plugin.app.workspace.getActiveFile();
