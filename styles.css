@@ -1982,6 +1982,12 @@ input[type="text"].note-toolbar-setting-error {
     & a:focus-within {
         box-shadow: 0 0 0 2px;
     }
+    & svg {
+        height: var(--font-ui-smaller);
+        margin-inline-start: 0.25em;
+        width: var(--font-ui-smaller);
+        vertical-align: middle;
+    }
 }
 
 .note-toolbar-setting-tbar-preview {

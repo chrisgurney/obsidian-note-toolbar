@@ -1690,7 +1690,9 @@ export default class ToolbarSettingsModal extends Modal {
 						// as it's not easy to listen for plugins being enabled,
 						// user will have to click a refresh link to dismiss the error
 						this.plugin.registerDomEvent(errorLink, 'click', event => {
-							let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh') } );
+							let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
+							let refreshIcon = refreshLink.createSpan();
+							setIcon(refreshIcon, 'refresh-cw');
 							let oldLink = event.currentTarget as HTMLElement;
 							oldLink?.replaceWith(refreshLink);
 							this.plugin.registerDomEvent(refreshLink, 'click', event => {
