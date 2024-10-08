@@ -268,14 +268,16 @@ export function replaceVars(app: App, s: string, file: TFile | null, encode: boo
 }
 
 /**
- * Checks if the given toolbar uses commands at all.
+ * Returns a list of plugin IDs for any commands not recognized in the given toolbar.
  * @param toolbar ToolbarSettings to check for command usage
- * @returns true if commands are used in the toolbar; false otherwise
+ * @returns an array of plugin IDs that are invalid, or an empty array otherwise
  */
-export function toolbarHasInvalidCommands(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): boolean {
-	return toolbar.items.some(item =>
-		((item.linkAttr.type === ItemType.Command) && !(item.linkAttr.commandId in this.app.commands.commands))
-    );
+export function toolbarInvalidCommands(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): string[] {
+	return toolbar.items
+		.filter(item =>
+			item.linkAttr.type === ItemType.Command && !(item.linkAttr.commandId in plugin.app.commands.commands)
+		)
+		.map(item => item.linkAttr.commandId.split(':')[0].trim());
 }
 
 /**

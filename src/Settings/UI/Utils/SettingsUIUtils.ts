@@ -194,12 +194,16 @@ export function learnMoreFr(message: string, page: string): DocumentFragment {
 /**
  * Creates a text fragment with a link to install/enable a plugin used by a given command.
  * @param commandId ID of command to get the plugin ID from.
+ * @param linkText text to show as the link instead of the default "Review plugin"
  * @returns DocumentFragement containing the link to open the plugin within Obsidian.
  */
-export function pluginLinkFr(commandId: string): DocumentFragment {
+export function pluginLinkFr(commandId: string, linkText?: string): DocumentFragment {
 	let pluginLinkFr = document.createDocumentFragment();
 	let pluginId = commandId.split(':')[0].trim();
-	let pluginLink = pluginLinkFr.createEl('a', { href: `obsidian://show-plugin?id=${pluginId}`, text: "Review\u00A0plugin" });
+	let pluginLink = pluginLinkFr.createEl('a', { 
+		href: `obsidian://show-plugin?id=${pluginId}`, 
+		text: linkText ? linkText : "Review\u00A0plugin" 
+	});
 	pluginLink.addClass('note-toolbar-setting-focussable-link');
 	return pluginLinkFr;
 }

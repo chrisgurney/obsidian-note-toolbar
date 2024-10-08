@@ -1177,6 +1177,10 @@ input[type="text"].note-toolbar-setting-error {
     & a:focus-within {
         box-shadow: 0 0 0 2px;
     }
+    & ol, ul {
+        margin-block-end: var(--font-ui-smaller);
+        padding-inline-start: 1em;
+    }
     & svg {
         height: var(--font-ui-smaller);
         margin-inline-start: 0.25em;
@@ -1442,7 +1446,7 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-spacer {
-    margin-block-start: 1em;    
+    margin-block-start: 2em;    
 }
 
 .note-toolbar-setting-import-confirm-preview {
