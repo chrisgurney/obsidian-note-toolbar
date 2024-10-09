@@ -10,7 +10,7 @@ import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal';
 import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
-import { ImportModal } from './ImportModal';
+import { importFromModal } from './ImportModal';
 
 enum ItemFormComponent {
 	Delete = 'delete',
@@ -190,8 +190,15 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setIcon('import')
 				.setTooltip(t('import.button-import-tooltip'))
 				.onClick(async () => {
-					let modal = new ImportModal(this.plugin, this.toolbar);
-					modal.open();
+					importFromModal(
+						this.plugin, 
+						this.toolbar
+					).then(async (isCompleted: boolean) => {
+						if (isCompleted) {
+							await this.plugin.settingsManager.save();
+							this.display();
+						}
+					});
 				})
 				.extraSettingsEl.tabIndex = 0;
 				this.plugin.registerDomEvent(
