@@ -162,6 +162,7 @@ function exportToCalloutList(
 function encodeLinkForCallout(str: string): string {
     return encodeURIComponent(str)
         .replace(/%20/g, ' ')
+        .replace(/%2C/g, ',')
         .replace(/%2F/g, '/')
         .replace(/%3A/g, ':')
         .replace(/%3F/g, '?')
@@ -179,6 +180,7 @@ function encodeLinkForCallout(str: string): string {
 function encodeTextForCallout(str: string): string {
     return encodeURIComponent(str)
         .replace(/%20/g, ' ')
+        .replace(/%2C/g, ',')
         .replace(/%2F/g, '/')
         .replace(/%3A/g, ':')
         .replace(/%3F/g, '?')
