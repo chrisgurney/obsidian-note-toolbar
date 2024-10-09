@@ -46,12 +46,15 @@ export class ShareModal extends Modal {
         // disclaimers, if any
         //
 
-        let hasMenu = this.toolbar.items.some(item => (item.linkAttr.type === ItemType.Menu) && (item.link));
-        if (hasMenu) {
+        const isLongUri = this.shareUri.length > 2048;
+        const hasMenu = this.toolbar.items.some(item => (item.linkAttr.type === ItemType.Menu) && (item.link));
+
+        if (isLongUri || hasMenu) {
             let disclaimers = this.modalEl.createDiv();
-            disclaimers.addClass('note-toolbar-setting-field-help')
+            disclaimers.addClass('note-toolbar-setting-field-help');
             let disclaimersList = disclaimers.createEl('ul');
-            disclaimersList.createEl('li', { text: t('export.warning-share-menu') });
+            isLongUri ? disclaimersList.createEl('li', { text: t('export.error-share-length') }) : undefined;
+            hasMenu ? disclaimersList.createEl('li', { text: t('export.warning-share-menu') }) : undefined;
         }
 
     }
