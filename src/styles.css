@@ -1455,6 +1455,17 @@ input[type="text"].note-toolbar-setting-error {
     padding: 0em 1em 1em 1em;
 }
 
+.note-toolbar-setting-import-text-area {
+    border-top: none;
+    .setting-item-info {
+        display: none;
+    }
+    textarea {
+        flex: 1 1 auto;
+        min-height: 16em !important;
+    }
+}
+
 .note-toolbar-setting-confirm-dialog-buttons {
     column-gap: 0.5em;
     display: flex;

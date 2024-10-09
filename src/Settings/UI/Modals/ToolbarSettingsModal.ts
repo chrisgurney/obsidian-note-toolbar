@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
@@ -10,6 +10,7 @@ import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal';
 import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
+import { ImportModal } from './ImportModal';
 
 enum ItemFormComponent {
 	Delete = 'delete',
@@ -184,6 +185,26 @@ export default class ToolbarSettingsModal extends Modal {
 			.setHeading()
 			.setDesc(learnMoreFr(t('setting.items.description'), 'Creating-toolbar-items'));
 		
+		itemsSetting
+			.addExtraButton((cb) => {
+				cb.setIcon('import')
+				.setTooltip(t('import.button-import-tooltip'))
+				.onClick(async () => {
+					let modal = new ImportModal(this.plugin, this.toolbar);
+					modal.open();
+				})
+				.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								e.preventDefault();
+								cb.extraSettingsEl.click();
+						}
+					});
+			});
+
 		if (this.toolbar.items.length > 0) {
 			itemsSetting
 				.addExtraButton((cb) => {

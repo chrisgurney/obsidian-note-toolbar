@@ -34,6 +34,7 @@
         "label-cancel": "Cancel",
         "option-create": "Create Note Toolbar from callout...",
         "option-help": "About Note Toolbar Callouts",
+        "button-import-tooltip": "Import items from callout",
         "error-invalid-uri-content": "Note Toolbar: It looks like there's an issue with this link. Check the URI is correct, or review the user guide.",
         "errorlog-heading": "Errors found during toolbar import:",
         "errorlog-item": "Item {{number}}:",
