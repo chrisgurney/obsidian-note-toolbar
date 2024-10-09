@@ -102,10 +102,11 @@ export class ProtocolManager {
      * @param toolbar ToolbarSettings to share
      * @returns URI to share as a string
      */
-    async getShareUri(toolbar: ToolbarSettings): Promise<string> {
+    async getShareUri(toolbar: ToolbarSettings, useHttpsPrefix: boolean = false): Promise<string> {
         let callout = await exportToCallout(this.plugin, toolbar, true);
-        let shareUri = `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`;
-        // TODO: check length of URI
+		const shareUri = useHttpsPrefix 
+			? `https://chrisgurney.github.io/obsidian-note-toolbar/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
+			: `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`;	
         return shareUri;
     }
 

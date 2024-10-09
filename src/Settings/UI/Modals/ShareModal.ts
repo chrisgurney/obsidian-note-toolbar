@@ -1,25 +1,34 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, Modal, Notice, Setting } from "obsidian";
+import { ButtonComponent, Modal, Notice, Setting, ToggleComponent } from "obsidian";
 import { ItemType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
 export class ShareModal extends Modal {
 
+    plugin: NoteToolbarPlugin;
     shareUri: string;
     toolbar: ToolbarSettings;
 
+    private useHttpsPrefix = false;
+
 	constructor(plugin: NoteToolbarPlugin, shareUri: string, toolbar: ToolbarSettings) {
         super(plugin.app);
+        this.plugin = plugin;
         this.shareUri = shareUri;
         this.toolbar = toolbar;
         this.modalEl.addClass('note-toolbar-share-dialog');
     }
 
     public onOpen() {
-
         this.setTitle(t('export.title-share', { toolbar: this.toolbar.name }));
+        this.display();
+    }
 
-        this.modalEl.createEl(
+    public display() {
+
+        this.contentEl.empty();
+
+        this.contentEl.createEl(
             "p", 
             { text: learnMoreFr(t('export.label-share-description'), 'Importing-and-exporting') }
         );
@@ -28,12 +37,12 @@ export class ShareModal extends Modal {
         // share link
         //
 
-		new Setting(this.modalEl)
+		let shareSetting = new Setting(this.contentEl)
 			.setName(this.shareUri)
 			.addButton((button: ButtonComponent) => {
 				button
-					.setButtonText(t('export.button-copy-uri'))
-					.setTooltip(t('export.button-copy-uri-description'))
+					.setButtonText(t('export.button-copy-link'))
+					.setTooltip(t('export.button-copy-link-description'))
 					.setCta()
 					.onClick(() => {
                         navigator.clipboard.writeText(this.shareUri);
@@ -41,6 +50,19 @@ export class ShareModal extends Modal {
                         this.close();
 					});
 			});
+
+        new Setting(this.contentEl)
+            .setName(t('export.option-url'))
+            .setDesc(t('export.option-url-description'))
+            .addToggle((cb: ToggleComponent) => {
+                cb
+                    .setValue(this.useHttpsPrefix)
+                    .onChange(async (value) => {
+                        this.useHttpsPrefix = value;
+                        this.shareUri = await this.plugin.protocolManager.getShareUri(this.toolbar, this.useHttpsPrefix);
+                        this.display();
+                    });
+            });
 
         //
         // disclaimers, if any

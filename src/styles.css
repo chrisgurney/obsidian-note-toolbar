@@ -1472,7 +1472,7 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-share-dialog {
-    .setting-item {
+    .setting-item:first-of-type {
         border-top: none;
         .setting-item-info {
             overflow: auto;
