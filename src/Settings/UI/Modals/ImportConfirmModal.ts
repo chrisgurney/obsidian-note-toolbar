@@ -59,7 +59,7 @@ export class ImportConfirmModal extends Modal {
             if (importInvalidCommands.length > 0 || importHasVars) {
 
                 let disclaimers = this.modalEl.createDiv();
-                disclaimers.addClass('note-toolbar-setting-field-help')
+                disclaimers.addClass('note-toolbar-setting-field-help');
                 let disclaimersList = disclaimers.createEl('ul');
 
                 if (importInvalidCommands.length > 0) {
