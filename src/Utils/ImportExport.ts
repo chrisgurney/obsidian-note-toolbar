@@ -162,6 +162,7 @@ function exportToCalloutList(
 function encodeLinkForCallout(str: string): string {
     return encodeURIComponent(str)
         .replace(/%20/g, ' ')
+        .replace(/%2C/g, ',')
         .replace(/%2F/g, '/')
         .replace(/%3A/g, ':')
         .replace(/%3F/g, '?')
@@ -179,6 +180,7 @@ function encodeLinkForCallout(str: string): string {
 function encodeTextForCallout(str: string): string {
     return encodeURIComponent(str)
         .replace(/%20/g, ' ')
+        .replace(/%2C/g, ',')
         .replace(/%2F/g, '/')
         .replace(/%3A/g, ':')
         .replace(/%3F/g, '?')
@@ -321,7 +323,7 @@ export async function importFromCallout(
         
                 if (dataUriMatch) {
                     const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
-                    const dataUriValue = dataUriMatch[2] || dataUriMatch[4] || '';
+                    const dataUriValue = dataUriMatch[2] || decodeURIComponent(dataUriMatch[4]) || '';
                     debugLog('• data?', dataUriType, link);
         
                     switch (dataUriType) {
@@ -341,7 +343,7 @@ export async function importFromCallout(
                         case 'menu':
                             itemType = ItemType.Menu;
                             let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
-                            link = menuToolbar ? menuToolbar.uuid : '';
+                            link = menuToolbar ? menuToolbar.uuid : dataUriValue;
                             errorLog += menuToolbar ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;

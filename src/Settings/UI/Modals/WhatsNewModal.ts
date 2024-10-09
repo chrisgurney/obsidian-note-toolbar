@@ -20,7 +20,7 @@ export class WhatsNewModal extends Modal {
 		this.setTitle(t('setting.whats-new.title'));
 		this.titleEl.addClass('note-toolbar-setting-whatsnew-banner');
 
-		let releaseEl = this.contentEl.createDiv();
+		let releaseEl = this.modalEl.createDiv();
 		releaseEl.addClass('note-toolbar-setting-whatsnew-notes');
 		new Setting(releaseEl)
 			.setName(iconTextFr('book-text', t('setting.whats-new.label-release-notes')))
@@ -35,10 +35,10 @@ export class WhatsNewModal extends Modal {
 					});
 			});
 
-		let markdownEl = this.contentEl.createDiv();
+		let markdownEl = this.modalEl.createDiv();
 		markdownEl.addClass('note-toolbar-setting-whatsnew-content', 'note-toolbar-setting-whatsnew-section');
 
-		let roadmapEl = this.contentEl.createDiv();
+		let roadmapEl = this.modalEl.createDiv();
 		roadmapEl.addClass('note-toolbar-setting-whatsnew-notes', 'note-toolbar-setting-whatsnew-section');
 		new Setting(roadmapEl)
 			.setName(iconTextFr('signpost', t('setting.whats-new.label-roadmap')))

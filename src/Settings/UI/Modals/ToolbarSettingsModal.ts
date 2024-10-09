@@ -498,6 +498,7 @@ export default class ToolbarSettingsModal extends Modal {
 						const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
 						if (modifierPressed) {
 							const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+							this.plugin.settingsManager.save();
 							this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
 						}
 						break;
@@ -683,8 +684,9 @@ export default class ToolbarSettingsModal extends Modal {
 				button
 					.setIcon('copy-plus')
 					.setTooltip(t('setting.item.button-duplicate-tooltip'))
-					.onClick(() => {
+					.onClick(async () => {
 						const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+						await this.plugin.settingsManager.save();
 						this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
 					});
 		})
@@ -941,8 +943,9 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
 						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+						const defaultValue = this.plugin.settingsManager.getToolbarName(toolbarItem.link);
 						cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
-							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
+							.setValue(defaultValue ? defaultValue : toolbarItem.link)
 							.onChange(debounce(async (name) => {
 								this.updateItemComponentStatus(name, type, cb.inputEl.parentElement);
 								// TODO? return an ID from the suggester vs. the name

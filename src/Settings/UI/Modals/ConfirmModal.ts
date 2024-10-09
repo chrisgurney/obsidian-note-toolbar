@@ -38,9 +38,9 @@ export class ConfirmModal extends Modal {
 
             this.setTitle(this.uiSettings.title);
 
-            this.contentEl.createEl("p", { text: this.uiSettings.questionLabel });
+            this.modalEl.createEl("p", { text: this.uiSettings.questionLabel });
     
-            let btnContainerEl = this.contentEl.createDiv();
+            let btnContainerEl = this.modalEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
     
             let btn1 = new ButtonComponent(btnContainerEl)

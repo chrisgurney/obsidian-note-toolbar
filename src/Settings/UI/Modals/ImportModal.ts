@@ -30,20 +30,37 @@ export class ImportModal extends Modal {
 
         new Promise((resolve) => {
 
-            this.setTitle("Import callout into toolbar: " + this.toolbar.name);
+            this.setTitle(t('import.title-import-into', { toolbar: this.toolbar.name }));
 
-            this.modalEl.createEl('p', { text: "Paste a Note Toolbar Callout below and its items will be imported into this toolbar. Its heading is optional." });
+            this.modalEl.createEl('p', { text: t('import.label-import-into') });
+
+            //
+            // text area
+            //
 
             new Setting(this.modalEl)
                 .addTextArea((textArea: TextAreaComponent) => {
                     textArea
-                        .setPlaceholder("> Note Toolbar Callout...")
+                        .setPlaceholder(t('import.placeholder-import-into'))
                         .onChange((value) => {
                             this.callout = value;
                         });
                 })
                 .setClass('note-toolbar-setting-import-text-area');
 
+            //
+            // help
+            //
+
+            let help = this.modalEl.createDiv();
+            help.addClass('note-toolbar-setting-field-help');
+            help.setText(t('import.label-import-into-help'));
+
+            //
+            // buttons
+            //
+
+            this.modalEl.createDiv().addClass('note-toolbar-setting-spacer');            
             let btnContainerEl = this.modalEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
             new ButtonComponent(btnContainerEl)

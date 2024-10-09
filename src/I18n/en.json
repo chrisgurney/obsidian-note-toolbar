@@ -25,11 +25,15 @@
         "confirm-vars-question": "Do you want to replace these variables in the callout?",
         "label-vars-approve": "Replace",
         "label-vars-deny": "Leave as-is",
-        "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive."
+        "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive.",
+        "error-share-length": "Some web browsers may not load a URL that is longer than 2,048 characters."
     },
     "import": {
         "title-import": "Import Note Toolbar: {{toolbar}}",
+        "title-import-into": "Import callout items into toolbar: {{toolbar}}",
         "label-import-confirmation": "Confirm you would like to import this toolbar:",
+        "label-import-into": "Paste a Note Toolbar Callout below and its items will be imported into this toolbar.",
+        "label-import-into-help": "The callout heading is not needed, or will be ignored if provided.",
         "label-confirm": "Confirm",
         "label-cancel": "Cancel",
         "option-create": "Create Note Toolbar from callout...",
@@ -43,6 +47,7 @@
         "errorlog-invalid-format": "Invalid format: {{line}}",
         "errorlog-invalid-styles": "Ignored invalid style(s): {{styles}}",
         "errorlog-menu-not-found": "Menu not found: {{menu}}",
+        "placeholder-import-into": "> Note Toolbar Callout markdown...",
         "warning-invalid-plugins": "This toolbar uses plugins you do not have installed and enabled:",
         "warning-vars": "This toolbar uses variables, which you can modify to work with your vault."
     },
