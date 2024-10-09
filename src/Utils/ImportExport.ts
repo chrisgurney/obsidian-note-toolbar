@@ -191,6 +191,7 @@ export async function importFromCallout(
     debugLog('importFromCallout()', callout);
 
     const lines = callout.trim().split('\n');
+    const isToolbarProvided = toolbar ? true : false;
     var errorLog = '';
 
     // create a new toolbar to return, if one wasn't provided
@@ -211,30 +212,33 @@ export async function importFromCallout(
 
     // parse the callout type and styles if present
     if (lines[0].includes('[!note-toolbar')) {
-        const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\](.*)/);
-        if (metadataMatch) {
-            let styles = metadataMatch[2].split(/[^a-zA-Z0-9]+/);
-            let name = metadataMatch[3].trim();
-
-            const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
-            const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
-            const validStyles = styles.filter(style => 
-                DEFAULT_STYLE_KEYS.includes(style) || MOBILE_STYLE_KEYS.includes(style)
-            );
-            const invalidStyles = styles.filter(style => 
-                !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
-            );
-
-            debugLog('• name?', name);
-            debugLog('• styles?', validStyles);
-            if (invalidStyles.length > 0) {
-                debugLog('  • invalid:', invalidStyles);
-                errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
+        // don't create a toolbar if we're importing into one
+        if (!isToolbarProvided) {
+            const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\](.*)/);
+            if (metadataMatch) {
+                let styles = metadataMatch[2].split(/[^a-zA-Z0-9]+/);
+                let name = metadataMatch[3].trim();
+    
+                const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
+                const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
+                const validStyles = styles.filter(style => 
+                    DEFAULT_STYLE_KEYS.includes(style) || MOBILE_STYLE_KEYS.includes(style)
+                );
+                const invalidStyles = styles.filter(style => 
+                    !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
+                );
+    
+                debugLog('• name?', name);
+                debugLog('• styles?', validStyles);
+                if (invalidStyles.length > 0) {
+                    debugLog('  • invalid:', invalidStyles);
+                    errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
+                }
+            
+                // TODO: if there are styles and toolbar is provided, prompt to ignore styles
+                toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.imported-tbar-name'), false);
+                toolbar.defaultStyles = validStyles;
             }
-        
-            // TODO: if there are styles and toolbar is provided, prompt to ignore styles
-            toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.imported-tbar-name'), false);
-            toolbar.defaultStyles = validStyles;
         }
         // remove line from the list to process next
         lines.shift();
