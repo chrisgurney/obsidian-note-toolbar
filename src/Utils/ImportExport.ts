@@ -10,6 +10,12 @@ const toIconizeFormat = (s: string) =>
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join('')}:`;
 
+type ExportOptions = {
+    includeIcons: boolean;
+    resolveVars: boolean;
+    useMenuIds: boolean;
+}
+
 /**
  * Exports the given toolbar as a Note Toolbar Callout
  * @param plugin NoteToolbarPlugin
@@ -30,16 +36,19 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     // get the active file to provide context, and to replace vars if requested
     let activeFile = plugin.app.workspace.getActiveFile();
 
-    let includeIcons = false;
-    let resolveVars = false;
+    let options = {
+        includeIcons: false,
+        resolveVars: false,
+        useMenuIds: forShareUri ? false : true
+    } as ExportOptions
 
     // Iconize - check if plugin is enabled to output icons
     const hasIconize = (plugin.app as any).plugins.plugins['obsidian-icon-folder'];
-    includeIcons = (hasIconize || forShareUri) ? true : false;
+    options.includeIcons = (hasIconize || forShareUri) ? true : false;
 
     // if there are variables, as user if they should be replaced
     if (!forShareUri && toolbarHasVars(toolbar)) {
-        resolveVars = await confirmWithModal(plugin.app, { 
+        options.resolveVars = await confirmWithModal(plugin.app, { 
             title: t('export.confirm-vars-title'),
             questionLabel: t('export.confirm-vars-question'),
             approveLabel: t('export.label-vars-approve'),
@@ -47,7 +56,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
         });
     }
 
-    calloutExport += exportToCalloutList(plugin, toolbar, activeFile, includeIcons, resolveVars) + '\n';
+    calloutExport += exportToCalloutList(plugin, toolbar, activeFile, options) + '\n';
 
     return calloutExport;
 
@@ -58,8 +67,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
  * @param plugin NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
  * @param activeFile TFile this export is being run from, for context if needed
- * @param includeIcons true if icons should be included in Iconize format
- * @param resolveVars true if variables should be resolved, based on the activeFile
+ * @param options ExportOptions
  * @param recursions tracks how deep we are to stop recursion
  * @returns Note Toolbar Callout items as a bulleted list string
  */
@@ -67,8 +75,7 @@ function exportToCalloutList(
     plugin: NoteToolbarPlugin,
     toolbar: ToolbarSettings,
     activeFile: TFile | null,
-    includeIcons: boolean,
-    resolveVars: boolean,
+    options: ExportOptions,
     recursions: number = 0
 ): string {
 
@@ -82,12 +89,12 @@ function exportToCalloutList(
     toolbar.items.forEach((item, index) => {
 
         // if Iconize is enabled, add icons; otherwise don't output
-        let itemIcon = (includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
+        let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
-        let itemLink = resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
-        let itemTooltip = resolveVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
+        let itemText = options.resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
+        let itemLink = options.resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
+        let itemTooltip = options.resolveVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
 
         itemText = encodeTextForCallout(itemText);
         itemLink = encodeLinkForCallout(itemLink);
@@ -117,12 +124,19 @@ function exportToCalloutList(
                 }
                 break;
             case ItemType.Group:
-                let groupToolbar = plugin.settingsManager.getToolbarById(item.link);
-                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, resolveVars, includeIcons, recursions + 1) : '';
+                let groupToolbar = plugin.settingsManager.getToolbar(item.link);
+                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, options, recursions + 1) : '';
+                // TODO: skipped/ignored message if toolbar not found
                 break;
             case ItemType.Menu:
-                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
-                // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${itemLink}>)`;
+                if (options.useMenuIds) {
+                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
+                }
+                else {
+                    let menuToolbar = plugin.settingsManager.getToolbar(item.link);
+                    itemsExport += menuToolbar ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuToolbar.name}"/>` : '';
+                    // TODO: skipped/ignored message if toolbar not found
+                }
                 break;
             case ItemType.Separator:
                 itemsExport += `${BULLET} <hr/>`;
