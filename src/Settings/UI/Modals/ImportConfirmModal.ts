@@ -40,11 +40,11 @@ export class ImportConfirmModal extends Modal {
 
             this.setTitle(t('import.title-import', { toolbar: toolbar.name }));
 
-            this.contentEl.createEl('p', { text: t('import.label-import-confirmation') });
+            this.modalEl.createEl('p', { text: t('import.label-import-confirmation') });
 
             let previewFr = toolbar ? createToolbarPreviewFr(toolbar, undefined) : '';
 
-            let previewContainerEl = this.contentEl.createDiv();
+            let previewContainerEl = this.modalEl.createDiv();
             previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');
             previewContainerEl.createEl('p', { text: t('export.label-share-preview'), cls: 'note-toolbar-setting-small-heading' });
             previewContainerEl.createDiv().append(previewFr);
@@ -58,7 +58,7 @@ export class ImportConfirmModal extends Modal {
 
             if (importInvalidCommands.length > 0 || importHasVars) {
 
-                let disclaimers = this.contentEl.createDiv();
+                let disclaimers = this.modalEl.createDiv();
                 disclaimers.addClass('note-toolbar-setting-field-help')
                 let disclaimersList = disclaimers.createEl('ul');
 
@@ -82,8 +82,8 @@ export class ImportConfirmModal extends Modal {
             // buttons
             //
 
-            this.contentEl.createDiv().addClass('note-toolbar-setting-spacer');
-            let btnContainerEl = this.contentEl.createDiv();
+            this.modalEl.createDiv().addClass('note-toolbar-setting-spacer');
+            let btnContainerEl = this.modalEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
             new ButtonComponent(btnContainerEl)
                 .setButtonText(t('import.label-confirm'))
