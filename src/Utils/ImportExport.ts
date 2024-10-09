@@ -341,7 +341,7 @@ export async function importFromCallout(
                         case 'menu':
                             itemType = ItemType.Menu;
                             let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
-                            link = menuToolbar ? menuToolbar.uuid : '';
+                            link = menuToolbar ? menuToolbar.uuid : dataUriValue;
                             errorLog += menuToolbar ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
