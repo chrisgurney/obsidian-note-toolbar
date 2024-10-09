@@ -2283,6 +2283,7 @@ input[type="text"].note-toolbar-setting-error {
             overflow: auto;
             .setting-item-name {
                 font-family: var(--font-monospace);
+                font-size: var(--font-ui-smaller);
                 text-wrap: nowrap;
             }
         }

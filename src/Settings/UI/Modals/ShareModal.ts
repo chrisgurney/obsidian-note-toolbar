@@ -19,22 +19,10 @@ export class ShareModal extends Modal {
 
         this.setTitle(t('export.title-share', { toolbar: this.toolbar.name }));
 
-        this.contentEl.createEl(
+        this.modalEl.createEl(
             "p", 
             { text: learnMoreFr(t('export.label-share-description'), 'Importing-and-exporting') }
         );
-
-        //
-        // disclaimers, if any
-        //
-
-        let hasMenu = this.toolbar.items.some(item => (item.linkAttr.type === ItemType.Menu) && (item.link));
-        if (hasMenu) {
-            let disclaimers = this.contentEl.createDiv();
-            disclaimers.addClass('note-toolbar-setting-field-help')
-            let disclaimersList = disclaimers.createEl('ul');
-            disclaimersList.createEl('li', { text: t('export.warning-share-menu') });
-        }
 
         //
         // share link
@@ -53,6 +41,18 @@ export class ShareModal extends Modal {
                         this.close();
 					});
 			});
+
+        //
+        // disclaimers, if any
+        //
+
+        let hasMenu = this.toolbar.items.some(item => (item.linkAttr.type === ItemType.Menu) && (item.link));
+        if (hasMenu) {
+            let disclaimers = this.modalEl.createDiv();
+            disclaimers.addClass('note-toolbar-setting-field-help')
+            let disclaimersList = disclaimers.createEl('ul');
+            disclaimersList.createEl('li', { text: t('export.warning-share-menu') });
+        }
 
     }
 
