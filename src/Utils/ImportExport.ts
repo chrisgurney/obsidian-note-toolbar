@@ -375,7 +375,7 @@ export async function importFromCallout(
     // show errors to the user
     if (!fromShareUri && errorLog) {
         errorLog = `${t('import.errorlog-heading')}\n${errorLog}`;
-        new Notice(errorLog, 0);
+        new Notice(errorLog, 10000);
     }
 
     return toolbar;
