@@ -18,7 +18,7 @@ export class SettingsManager {
 	public async addToolbar(toolbar: ToolbarSettings): Promise<void> {
 		this.plugin.settings.toolbars.push(toolbar);
 		this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
-		await this.plugin.settingsManager.save();	
+		await this.save();	
 	}
 
 	/**
@@ -59,7 +59,7 @@ export class SettingsManager {
 	 * @param item ToolbarItemSettings to duplicate.
 	 * @returns string UUID of the new item.
 	 */
-	public duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false): string {
+	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false): Promise<string> {
 		debugLog('duplicateToolbarItem', item);
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
 		newItem.uuid = getUUID();

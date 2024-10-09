@@ -498,6 +498,7 @@ export default class ToolbarSettingsModal extends Modal {
 						const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
 						if (modifierPressed) {
 							const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+							this.plugin.settingsManager.save();
 							this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
 						}
 						break;
@@ -683,8 +684,9 @@ export default class ToolbarSettingsModal extends Modal {
 				button
 					.setIcon('copy-plus')
 					.setTooltip(t('setting.item.button-duplicate-tooltip'))
-					.onClick(() => {
+					.onClick(async () => {
 						const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+						await this.plugin.settingsManager.save();
 						this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
 					});
 		})
