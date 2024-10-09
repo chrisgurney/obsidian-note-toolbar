@@ -25,11 +25,15 @@
         "confirm-vars-question": "Ви хочете замінити ці змінні у виносці?",
         "label-vars-approve": "Замінити",
         "label-vars-deny": "Залишити як є",
-        "warning-share-menu": "Ця панель посилається принаймні на одну іншу панель, яку одержувач не отримає."
+        "warning-share-menu": "Ця панель посилається принаймні на одну іншу панель, яку одержувач не отримає.",
+        "error-share-length": "Деякі браузери можуть не завантажити URL-адреси з довжиною більше ніж 2048 символів."
     },
     "import": {
         "title-import": "Імпортувати до Note Toolbar: {{toolbar}}",
+        "title-import-into": "Імпортувати елементи виноски у панель: {{toolbar}}",
         "label-import-confirmation": "Підтвердить, що ви бажаєте імпортувати цю панель:",
+        "label-import-into": "Вставте виноску Note Toolbar нижче, і ці елементи будуть імпортовані до цієї панелі.",
+        "label-import-into-help": "Заголовок виноски не потрібен, або буде проігнорований, якщо вказаний.",
         "label-confirm": "Підтвердити",
         "label-cancel": "Скасувати",
         "option-create": "Створити Note Toolbar із виноски...",
@@ -43,6 +47,7 @@
         "errorlog-invalid-format": "Невірний формат: {{line}}",
         "errorlog-invalid-styles": "Проігноровані недійсні стилі: {{styles}}",
         "errorlog-menu-not-found": "Меню не знайдено: {{menu}}",
+        "placeholder-import-into": "> Markdown Виноски Note Toolbar...",
         "warning-invalid-plugins": "Ця панель використовує додаток, який не встановлено, або вимкнуто:",
         "warning-vars": "Ця панель використовує змінні, які ви можете редагувати для роботи з вашим сховищем."
     },
