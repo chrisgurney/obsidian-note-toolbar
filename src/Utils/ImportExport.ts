@@ -300,11 +300,6 @@ export async function importFromCallout(
                 }
 
                 tooltip = tooltipMatch ? tooltipMatch[1] : '';
-    
-                debugLog('• icon?', icon);
-                debugLog('• label?', label);
-                debugLog('• link?', link);
-                debugLog('• tooltip?', tooltip);
         
                 if (dataUriMatch) {
                     const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
@@ -340,7 +335,13 @@ export async function importFromCallout(
 
         }
 
+        debugLog('• icon?', icon);
+        debugLog('• label?', label);
+        debugLog('• tooltip?', tooltip);
+        debugLog('• link?', link);
+        debugLog('• commandId?', commandId);
         debugLog(`=> ${itemType?.toUpperCase()}`);
+
         errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
         // create the toolbar item and add it to the toolbar
