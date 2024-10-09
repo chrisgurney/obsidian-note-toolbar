@@ -941,8 +941,9 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addSearch((cb) => {
 						new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+						const defaultValue = this.plugin.settingsManager.getToolbarName(toolbarItem.link);
 						cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
-							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
+							.setValue(defaultValue ? defaultValue : toolbarItem.link)
 							.onChange(debounce(async (name) => {
 								this.updateItemComponentStatus(name, type, cb.inputEl.parentElement);
 								// TODO? return an ID from the suggester vs. the name
