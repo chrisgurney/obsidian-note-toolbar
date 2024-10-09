@@ -323,7 +323,7 @@ export async function importFromCallout(
         
                 if (dataUriMatch) {
                     const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
-                    const dataUriValue = dataUriMatch[2] || dataUriMatch[4] || '';
+                    const dataUriValue = dataUriMatch[2] || decodeURIComponent(dataUriMatch[4]) || '';
                     debugLog('• data?', dataUriType, link);
         
                     switch (dataUriType) {
