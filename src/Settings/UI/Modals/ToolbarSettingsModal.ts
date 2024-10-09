@@ -1042,14 +1042,14 @@ export default class ToolbarSettingsModal extends Modal {
 							statusMessage = t('setting.item.option-command-error-does-not-exist');
 						}
 						else {
-							statusMessage = t('setting.item.option-command-error-not-available');
-
-							let pluginLinkFr = document.createDocumentFragment();
-							let pluginId = itemValue.split(':')[0].trim();
-							let pluginLink = pluginLinkFr.createEl('a', { href: `obsidian://show-plugin?id=${pluginId}`, text: "Review\u00A0plugin" });
-							pluginLink.addClass('note-toolbar-setting-focussable-link');
-						
-							statusLink = pluginLink;
+							statusMessage = t('setting.item.option-command-error-not-available-search');
+							let pluginLinkFragment = pluginLinkFr(itemValue);
+							let pluginLink = pluginLinkFragment?.querySelector('a');
+							if (pluginLink) {
+								statusMessage = t('setting.item.option-command-error-not-available-install');
+								pluginLink.addClass('note-toolbar-setting-focussable-link');
+								statusLink = pluginLink;
+							}
 						}
 					}
 					break;

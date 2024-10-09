@@ -197,14 +197,18 @@ export function learnMoreFr(message: string, page: string): DocumentFragment {
  * @param linkText text to show as the link instead of the default "Review plugin"
  * @returns DocumentFragement containing the link to open the plugin within Obsidian.
  */
-export function pluginLinkFr(commandId: string, linkText?: string): DocumentFragment {
-	let pluginLinkFr = document.createDocumentFragment();
-	let pluginId = commandId.split(':')[0].trim();
-	let pluginLink = pluginLinkFr.createEl('a', { 
-		href: `obsidian://show-plugin?id=${pluginId}`, 
-		text: linkText ? linkText : "Review\u00A0plugin" 
-	});
-	pluginLink.addClass('note-toolbar-setting-focussable-link');
+export function pluginLinkFr(commandId: string, linkText?: string): DocumentFragment | undefined {
+	let pluginLinkFr = undefined;
+	let pluginId = commandId.includes(':') ? commandId.split(':')[0].trim() : undefined;
+	// don't show Community Plugins link for Obsidian's built-in commands
+	if (pluginId && pluginId !== 'workspace') {
+		pluginLinkFr = document.createDocumentFragment();
+		let pluginLink = pluginLinkFr.createEl('a', { 
+			href: `obsidian://show-plugin?id=${pluginId}`, 
+			text: linkText ? linkText : "Review\u00A0plugin" 
+		});
+		pluginLink.addClass('note-toolbar-setting-focussable-link');
+	}
 	return pluginLinkFr;
 }
 

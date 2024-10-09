@@ -67,7 +67,8 @@ export class ImportConfirmModal extends Modal {
                     let commandsList = commandDisclaimer.createEl('ul');
                     importInvalidCommands.map((id, index) => {
                         let commandsListItem = commandsList.createEl('li');
-                        commandsListItem.appendChild(pluginLinkFr(id, id));
+                        let pluginLink = pluginLinkFr(id, id);
+                        pluginLink ? commandsListItem.appendChild(pluginLink) : undefined;
                     });
                 }
     
