@@ -25,7 +25,7 @@ export class ConfirmModal extends Modal {
 
 	constructor(app: App, uiSettings: UiSettings) {
         super(app);
-        this.modalEl.addClass('note-toolbar-setting-mini-dialog'); 
+        this.modalEl.addClass('note-toolbar-setting-mini-dialog', 'note-toolbar-setting-dialog-phonefix'); 
         this.uiSettings = uiSettings;
     }
 

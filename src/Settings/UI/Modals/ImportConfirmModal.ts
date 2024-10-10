@@ -23,6 +23,7 @@ export class ImportConfirmModal extends Modal {
 
 	constructor(plugin: NoteToolbarPlugin, callout: string) {
         super(plugin.app);
+        this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
         this.plugin = plugin;
         this.callout = callout;
     }

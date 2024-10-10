@@ -22,6 +22,7 @@ export class ImportModal extends Modal {
 
 	constructor(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings) {
         super(plugin.app);
+        this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
         this.plugin = plugin;
         this.toolbar = toolbar;
     }

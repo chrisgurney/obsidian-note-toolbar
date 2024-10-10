@@ -16,7 +16,7 @@ export class ShareModal extends Modal {
         this.plugin = plugin;
         this.shareUri = shareUri;
         this.toolbar = toolbar;
-        this.modalEl.addClass('note-toolbar-share-dialog');
+        this.modalEl.addClass('note-toolbar-share-dialog', 'note-toolbar-setting-dialog-phonefix');
     }
 
     public onOpen() {
