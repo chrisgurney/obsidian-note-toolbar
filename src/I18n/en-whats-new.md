@@ -9,6 +9,10 @@ Share toolbars with a link that you can send to other users.
 
 → Learn more about [how sharing works](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars).
 
+<a href="https://github.com/user-attachments/assets/a1d59acb-729c-4017-83d9-99985a920cf9">
+  <img src="https://github.com/user-attachments/assets/a1d59acb-729c-4017-83d9-99985a920cf9" width="700"/>
+</a>
+
 ---
 
 # Import toolbars and items from Note Toolbar Callouts
