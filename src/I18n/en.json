@@ -27,8 +27,8 @@
         "label-vars-deny": "Leave as-is",
         "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive.",
         "error-share-length": "Some web browsers may not load a URL that is longer than 2,048 characters.",
-        "option-url": "Use HTTP URL",
-        "option-url-description": "Modifies the URL so it can be used in places that don't support obsidian:// links."
+        "option-uri": "Use Obsidian URI",
+        "option-uri-description": "Provides an obsidian:// link instead of an https:// URL."
     },
     "import": {
         "title-import": "Import Note Toolbar: {{toolbar}}",
@@ -310,8 +310,8 @@
             "button-read-tooltip": "Open github.com",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
-            "label-roadmap": "Roadmap",
-            "label-roadmap-description": "Wondering what's ahead for Note Toolbar? Preview the features under consideration."
+            "label-roadmap": "What's ahead for Note Toolbar?",
+            "label-roadmap-description": "Check out the Roadmap to preview the features under consideration."
         }
     },
     "toolbar": {

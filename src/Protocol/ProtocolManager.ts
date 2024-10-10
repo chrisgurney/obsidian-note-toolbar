@@ -100,13 +100,14 @@ export class ProtocolManager {
     /**
      * Returns a URI which can be shared with other users, that imports the provided toolbar's callout markdown.
      * @param toolbar ToolbarSettings to share
+	 * @param useObsidianUri true if an obsidian:// URI should be generated versus an HTTP URL (default)
      * @returns URI to share as a string
      */
-    async getShareUri(toolbar: ToolbarSettings, useHttpsPrefix: boolean = false): Promise<string> {
+    async getShareUri(toolbar: ToolbarSettings, useObsidianUri: boolean = false): Promise<string> {
         let callout = await exportToCallout(this.plugin, toolbar, true);
-		const shareUri = useHttpsPrefix 
-			? `https://chrisgurney.github.io/obsidian-note-toolbar/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
-			: `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`;	
+		const shareUri = useObsidianUri 
+			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
+			: `https://chrisgurney.github.io/obsidian-note-toolbar/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
         return shareUri;
     }
 

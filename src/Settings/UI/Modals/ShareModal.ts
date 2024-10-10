@@ -9,7 +9,7 @@ export class ShareModal extends Modal {
     shareUri: string;
     toolbar: ToolbarSettings;
 
-    private useHttpsPrefix = false;
+    private useObsidianUri = false;
 
 	constructor(plugin: NoteToolbarPlugin, shareUri: string, toolbar: ToolbarSettings) {
         super(plugin.app);
@@ -52,14 +52,14 @@ export class ShareModal extends Modal {
 			});
 
         new Setting(this.contentEl)
-            .setName(t('export.option-url'))
-            .setDesc(t('export.option-url-description'))
+            .setName(t('export.option-uri'))
+            .setDesc(t('export.option-uri-description'))
             .addToggle((cb: ToggleComponent) => {
                 cb
-                    .setValue(this.useHttpsPrefix)
+                    .setValue(this.useObsidianUri)
                     .onChange(async (value) => {
-                        this.useHttpsPrefix = value;
-                        this.shareUri = await this.plugin.protocolManager.getShareUri(this.toolbar, this.useHttpsPrefix);
+                        this.useObsidianUri = value;
+                        this.shareUri = await this.plugin.protocolManager.getShareUri(this.toolbar, this.useObsidianUri);
                         this.display();
                     });
             });
