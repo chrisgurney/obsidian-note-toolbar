@@ -194,7 +194,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 											.onClick(async () => {
 												let calloutExport = await exportToCallout(this.plugin, toolbar);
 												navigator.clipboard.writeText(calloutExport);
-												new Notice(learnMoreFr(t('export.notice-completed'), 'Copy-as-callout'));
+												new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
 											});
 									});
 									menu.addSeparator();
