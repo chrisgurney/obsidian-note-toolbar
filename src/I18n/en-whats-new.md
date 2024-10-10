@@ -18,6 +18,10 @@ Create toolbars from [Note Toolbar Callouts](https://github.com/chrisgurney/obsi
 1. import callout items directly into an existing toolbar in settings; or
 2. select some Note Toolbar Callout markdown in a note, then right-click and _Create Note Toolbar from callout_.
 
+<a href="https://github.com/user-attachments/assets/0b82104e-f5f4-40f9-9880-3e9425c5f908">
+  <img src="https://github.com/user-attachments/assets/0b82104e-f5f4-40f9-9880-3e9425c5f908" width="700"/>
+</a>
+
 → Learn more about [importing toolbars and items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars-from-callouts).
 
 ---
@@ -26,9 +30,11 @@ Create toolbars from [Note Toolbar Callouts](https://github.com/chrisgurney/obsi
 
 Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard.
 
-→ Learn more about [copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars), including what's supported and what's not.
+<a href="https://github.com/user-attachments/assets/f69ad45f-2b52-4c0d-a332-92c68e736c5d">
+  <img src="https://github.com/user-attachments/assets/f69ad45f-2b52-4c0d-a332-92c68e736c5d" width="700"/>
+</a>
 
-<img src="https://github.com/user-attachments/assets/91bfa3d8-d8d3-41ff-baa9-e70cf192b0be" width="700"/>
+→ Learn more about [copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars), including what's supported and what's not.
 
 ---
 
