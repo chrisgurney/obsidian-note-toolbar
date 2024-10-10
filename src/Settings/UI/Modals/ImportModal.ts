@@ -34,7 +34,7 @@ export class ImportModal extends Modal {
 
             this.setTitle(t('import.title-import-into', { toolbar: this.toolbar.name }));
 
-            this.modalEl.createEl('p', { text: learnMoreFr(t('import.label-import-into'), 'Create-toolbars-from-callouts') });
+            this.modalEl.createEl('p', { text: learnMoreFr(t('import.label-import-into'), 'Creating-toolbars-from-callouts') });
 
             //
             // text area
