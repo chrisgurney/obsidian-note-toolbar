@@ -44,7 +44,7 @@ Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard
 
 # Other improvements
 
-- In Settings, in the toolbar list, look for a new "More" (...) menu, where "Duplicate" used to be where you can now onveniently access _Duplicate_, _Share_, _Copy as callout_, and _Delete_ options.
+- In Settings, in the toolbar list, look for a new "More" (...) menu (where "Duplicate" used to be) where you can now conveniently access _Duplicate_, _Share_, _Copy as callout_, and _Delete_ options.
 - Most plugin startup tasks are now done after the layout's ready, and after initial toolbar rendering, which may help with startup performance. `#ObsidianOctober`
 - An error message is now shown if a [Note Toolbar URI](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) contains invalid parameters.
 - Quick Toolbars: Items are kept in order they're displayed in the toolbar, when browsing by toolbar. Thanks to @Glint-Eye for the suggestion.
