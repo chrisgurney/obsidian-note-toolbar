@@ -2,7 +2,8 @@ import { App, ButtonComponent, Modal } from "obsidian";
 
 interface UiSettings {
     title: string,
-    questionLabel: string,
+    questionLabel?: string,
+    questionFragment?: DocumentFragment,
     approveLabel: string,
     denyLabel: string,
     warning?: boolean
@@ -38,7 +39,12 @@ export class ConfirmModal extends Modal {
 
             this.setTitle(this.uiSettings.title);
 
-            this.modalEl.createEl("p", { text: this.uiSettings.questionLabel });
+            if (this.uiSettings.questionLabel) {
+                this.modalEl.createEl('p', { text: this.uiSettings.questionLabel });
+            }
+            else if (this.uiSettings.questionFragment) {
+                this.modalEl.createEl('p').append(this.uiSettings.questionFragment);
+            }
     
             let btnContainerEl = this.modalEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');

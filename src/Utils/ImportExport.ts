@@ -3,6 +3,7 @@ import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ItemType, MOBI
 import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
 import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
 const toIconizeFormat = (s: string) => 
     `:Li${s.replace(/^lucide-/, '')
@@ -50,7 +51,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     if (!forShareUri && toolbarHasVars(toolbar)) {
         options.resolveVars = await confirmWithModal(plugin.app, { 
             title: t('export.confirm-vars-title'),
-            questionLabel: t('export.confirm-vars-question'),
+            questionFragment: learnMoreFr(t('export.confirm-vars-question'), 'Variables'),
             approveLabel: t('export.label-vars-approve'),
             denyLabel: t('export.label-vars-deny')
         });

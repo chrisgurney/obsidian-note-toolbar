@@ -1321,7 +1321,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						if (toolbarSettings) {
 							let calloutExport = await exportToCallout(this, toolbarSettings);
 							navigator.clipboard.writeText(calloutExport);
-							new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+							new Notice(learnMoreFr(t('export.notice-completed'), 'Copy-as-callout'));
 						}
 					})
 				});

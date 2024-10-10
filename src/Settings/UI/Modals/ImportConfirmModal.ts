@@ -41,7 +41,7 @@ export class ImportConfirmModal extends Modal {
 
             this.setTitle(t('import.title-import', { toolbar: toolbar.name }));
 
-            this.modalEl.createEl('p', { text: t('import.label-import-confirmation') });
+            this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
 
             let previewFr = toolbar ? createToolbarPreviewFr(toolbar, undefined) : '';
 

@@ -30,7 +30,7 @@ export class ShareModal extends Modal {
 
         this.contentEl.createEl(
             "p", 
-            { text: learnMoreFr(t('export.label-share-description'), 'Importing-and-exporting') }
+            { text: learnMoreFr(t('export.label-share-description'), 'Sharing-toolbars') }
         );
 
         //

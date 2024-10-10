@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal, Setting, TextAreaComponent } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
+import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
 export async function importFromModal(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -33,7 +34,7 @@ export class ImportModal extends Modal {
 
             this.setTitle(t('import.title-import-into', { toolbar: this.toolbar.name }));
 
-            this.modalEl.createEl('p', { text: t('import.label-import-into') });
+            this.modalEl.createEl('p', { text: learnMoreFr(t('import.label-import-into'), 'Create-toolbars-from-callouts') });
 
             //
             // text area

@@ -33,9 +33,9 @@
     "import": {
         "title-import": "Import Note Toolbar: {{toolbar}}",
         "title-import-into": "Import callout items into toolbar: {{toolbar}}",
-        "label-import-confirmation": "Confirm you would like to import this toolbar:",
+        "label-import-confirmation": "Confirm you would like to add this toolbar. Once added, this toolbar will need to be mapped to one or more notes.",
         "label-import-into": "Paste a Note Toolbar Callout below and its items will be imported into this toolbar.",
-        "label-import-into-help": "The callout heading is not needed, or will be ignored if provided.",
+        "label-import-into-help": "The callout heading is not needed, and will be ignored if provided.",
         "label-confirm": "Confirm",
         "label-cancel": "Cancel",
         "option-create": "Create Note Toolbar from callout...",
