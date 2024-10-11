@@ -3,6 +3,9 @@
         "name-focus": "Focus",
         "name-item-suggester": "Open quick tools",
         "name-toolbar-suggester": "Open quick toolbars",
+        "name-copy-command-uri": "Copy URI for command",
+        "name-copy-command-as-data-element": "Copy callout item for command",
+        "copy-command-notice": "Command copied to clipboard",
         "name-settings": "Open plugin settings",
         "name-toolbar-settings": "Open toolbar settings",
         "name-show-properties": "Show Properties",
@@ -84,6 +87,12 @@
         "option-platform-mobile": "Mobile",
         "title-edit-toolbar": "Edit Toolbar: {{toolbar}}",
         "title-edit-toolbar_none": "Edit Toolbar",
+        "command-suggest-modal": {
+            "placeholder": "Search for a command...",
+            "instruction-navigate": "to navigate",
+            "instruction-use": "to select command",
+            "instruction-dismiss": "to dismiss"
+        },
         "delete-toolbar": {
             "name": "Delete this toolbar",
             "description": "This action cannot be undone.",

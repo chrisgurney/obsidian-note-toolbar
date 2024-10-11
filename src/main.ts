@@ -78,6 +78,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// add commands
 			this.commands = new CommandsManager(this);
+			this.addCommand({ id: 'copy-command-uri', name: t('command.name-copy-command-uri'), callback: async () => this.commands.copyCommand(false) });
+			this.addCommand({ id: 'copy-command-as-data-element', name: t('command.name-copy-command-as-data-element'), callback: async () => this.commands.copyCommand(true) });
 			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
 			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openItemSuggester() });
 			this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
@@ -837,7 +839,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On opening of the editor menu, check what was selected and add relevant menu options.
 	 */
 	editorMenuHandler = (menu: Menu, editor: Editor, info: MarkdownView | MarkdownFileInfo) => {
-		const calloutRegex = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/;
 		const selection = editor.getSelection().trim();
 		const line = editor.getLine(editor.getCursor().line).trim();
 		if (selection.includes('[!note-toolbar') || line.includes('[!note-toolbar')) {
