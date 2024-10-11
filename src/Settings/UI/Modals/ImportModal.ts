@@ -75,14 +75,14 @@ export class ImportModal extends Modal {
             let btnContainerEl = this.modalEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
             new ButtonComponent(btnContainerEl)
-                .setButtonText(t('import.label-confirm'))
+                .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))
                 .setCta()
                 .onClick(async () => {
                     this.importedToolbar = await importFromCallout(this.plugin, this.callout, this.toolbar);
                     this.close();
                 });
             new ButtonComponent(btnContainerEl)
-                .setButtonText(t('import.label-cancel'))
+                .setButtonText(t('import.button-cancel'))
                 .onClick(() => {
                     this.close();
                 });
