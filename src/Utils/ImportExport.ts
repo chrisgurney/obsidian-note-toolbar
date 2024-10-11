@@ -240,7 +240,7 @@ export async function importFromCallout(
                     DEFAULT_STYLE_KEYS.includes(style) || MOBILE_STYLE_KEYS.includes(style)
                 );
                 const invalidStyles = styles.filter(style => 
-                    !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
+                    style && !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
                 );
     
                 debugLog('• name?', name);
