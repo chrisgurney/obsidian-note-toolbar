@@ -69,7 +69,7 @@ Lets you select a command, and then copies a Note Toolbar Callout line to the cl
 - In Settings, in the toolbar list, look for a new "More" (...) menu (where "Duplicate" used to be) containing _Duplicate_, _Share_, _Copy as callout_, and _Delete_ options.
 - Most plugin startup tasks are now done after the layout's ready, and after initial toolbar rendering, which may help with startup performance. `#ObsidianOctober`
 - An error message is now shown if a [Note Toolbar URI](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) contains invalid parameters.
-- Quick Toolbars: Items are kept in order they're displayed in the toolbar, when browsing by toolbar. Thanks to @Glint-Eye for the suggestion.
+- Quick Toolbars: Items are kept in order they're displayed in the toolbar, when browsing by toolbar. _Thanks to @Glint-Eye for the suggestion._
 - Updated the _Help_ window with a link to a bug report Google form, removing the pre-requisite for a GitHub account.
 - Updated the _What's New_ window with a permanent link to the Roadmap, at the bottom.
 
