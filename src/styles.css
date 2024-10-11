@@ -1584,6 +1584,9 @@ input[type="text"].note-toolbar-setting-error {
     ul {
         padding-inline-start: 2em;
     }
+    button.copy-code-button {
+        display: none;
+    }
 }
 
 .note-toolbar-setting-whatsnew-notes {

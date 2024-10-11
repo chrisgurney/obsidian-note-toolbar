@@ -19,7 +19,7 @@ Share toolbars with a link that you can send to other users.
 
 Create toolbars from [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) in one of two ways:
 
-1. import a callout into a new or existing toolbar in settings; or
+1. import a callout into a new, or existing toolbar in Settings; or
 2. select some Note Toolbar Callout markdown in a note, then right-click and _Create Note Toolbar from callout_.
 
 <a href="https://github.com/user-attachments/assets/0b82104e-f5f4-40f9-9880-3e9425c5f908">
@@ -39,6 +39,28 @@ Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard
 </a>
 
 → Learn more about [copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars), including what's supported and what's not.
+
+---
+
+# Commands to make building callouts easier
+
+`Note Toolbar: Copy URI for command`
+
+Lets you select a command and then copies its URI to the clipboard.
+
+```markdown
+obsidian://note-toolbar?command=workspace:toggle-pin
+```
+
+`Note Toolbar: Copy callout item for command`
+
+Lets you select a command, and then copies a Note Toolbar Callout line to the clipboard.
+
+```markdown
+[]()<data data-ntb-command="workspace:toggle-pin"/> <!-- Toggle pin -->
+```
+
+...then all you need to do is choose what the item should look like in the link's text (`[]`).
 
 ---
 
