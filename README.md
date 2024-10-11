@@ -113,7 +113,7 @@ If you want your toolbar to show without using a property, try mapping a folder 
 
 📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
 
-Once installed, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New toolbar_.
+Once installed and enabled, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New toolbar_.
 
 ![Example of settings configuration](./docs/settings.png)
 
