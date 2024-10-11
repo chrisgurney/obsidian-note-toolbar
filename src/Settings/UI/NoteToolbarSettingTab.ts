@@ -11,6 +11,7 @@ import Sortable from 'sortablejs';
 import { exportToCallout } from 'Utils/ImportExport';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { ShareModal } from './Modals/ShareModal';
+import { importFromModal } from './Modals/ImportModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -114,6 +115,34 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.toolbars.name'))
 			.setDesc(t('setting.toolbars.description'))
 			.setHeading();
+
+		toolbarListSetting
+			.addExtraButton((cb) => {
+				cb.setIcon('import')
+				.setTooltip(t('import.button-import-tooltip'))
+				.onClick(async () => {
+					importFromModal(
+						this.plugin
+					).then(async (importedToolbar: ToolbarSettings) => {
+						if (importedToolbar) {
+							await this.plugin.settingsManager.addToolbar(importedToolbar);
+							await this.plugin.settingsManager.save();
+							await this.plugin.commands.openToolbarSettingsForId(importedToolbar.uuid);
+							this.display();
+						}
+					});
+				})
+				.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								e.preventDefault();
+								cb.extraSettingsEl.click();
+						}
+					});
+			});
 
 		if (this.plugin.settings.toolbars.length > 0) {
 			toolbarListSetting

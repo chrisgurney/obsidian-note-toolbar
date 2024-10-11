@@ -4,11 +4,11 @@ import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
-export async function importFromModal(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): Promise<boolean> {
+export async function importFromModal(plugin: NoteToolbarPlugin, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
     return new Promise((resolve, reject) => {
         const modal = new ImportModal(plugin, toolbar);
         modal.onClose = () => {
-            resolve(modal.isCompleted);
+            resolve(modal.importedToolbar);
         };
         modal.open();
     });
@@ -16,12 +16,13 @@ export async function importFromModal(plugin: NoteToolbarPlugin, toolbar: Toolba
 
 export class ImportModal extends Modal {
 
-    public isCompleted: boolean = false;
+    public importedToolbar: ToolbarSettings;
+
     plugin: NoteToolbarPlugin;
-    toolbar: ToolbarSettings;
+    toolbar?: ToolbarSettings;
     callout: string = '';
 
-	constructor(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings) {
+	constructor(plugin: NoteToolbarPlugin, toolbar?: ToolbarSettings) {
         super(plugin.app);
         this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
         this.plugin = plugin;
@@ -32,9 +33,15 @@ export class ImportModal extends Modal {
 
         new Promise((resolve) => {
 
-            this.setTitle(t('import.title-import-into', { toolbar: this.toolbar.name }));
+            this.setTitle(this.toolbar
+                ? t('import.title-import-into', { toolbar: this.toolbar.name })
+                : t('import.title-import')
+            );
 
-            this.modalEl.createEl('p', { text: learnMoreFr(t('import.label-import-into'), 'Creating-toolbars-from-callouts') });
+            this.modalEl.createEl('p', { text: this.toolbar
+                ? learnMoreFr(t('import.label-import-into'), 'Creating-toolbars-from-callouts') 
+                : learnMoreFr(t('import.label-import'), 'Creating-toolbars-from-callouts') 
+            });
 
             //
             // text area
@@ -54,9 +61,11 @@ export class ImportModal extends Modal {
             // help
             //
 
-            let help = this.modalEl.createDiv();
-            help.addClass('note-toolbar-setting-field-help');
-            help.setText(t('import.label-import-into-help'));
+            if (this.toolbar) {
+                let help = this.modalEl.createDiv();
+                help.addClass('note-toolbar-setting-field-help');
+                help.setText(t('import.label-import-into-help'));
+            }
 
             //
             // buttons
@@ -69,8 +78,7 @@ export class ImportModal extends Modal {
                 .setButtonText(t('import.label-confirm'))
                 .setCta()
                 .onClick(async () => {
-                    await importFromCallout(this.plugin, this.callout, this.toolbar);
-                    this.isCompleted = true;
+                    this.importedToolbar = await importFromCallout(this.plugin, this.callout, this.toolbar);
                     this.close();
                 });
             new ButtonComponent(btnContainerEl)

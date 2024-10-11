@@ -188,13 +188,13 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsSetting
 			.addExtraButton((cb) => {
 				cb.setIcon('import')
-				.setTooltip(t('import.button-import-tooltip'))
+				.setTooltip(t('import.button-import-into-tooltip'))
 				.onClick(async () => {
 					importFromModal(
 						this.plugin, 
 						this.toolbar
-					).then(async (isCompleted: boolean) => {
-						if (isCompleted) {
+					).then(async (importedToolbar: ToolbarSettings) => {
+						if (importedToolbar) {
 							await this.plugin.settingsManager.save();
 							this.display();
 						}

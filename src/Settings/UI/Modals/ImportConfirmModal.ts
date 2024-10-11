@@ -39,7 +39,7 @@ export class ImportConfirmModal extends Modal {
 
         new Promise((resolve) => {
 
-            this.setTitle(t('import.title-import', { toolbar: toolbar.name }));
+            this.setTitle(t('import.title-import-confirmation', { toolbar: toolbar.name }));
 
             this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
 

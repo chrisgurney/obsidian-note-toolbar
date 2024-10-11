@@ -205,8 +205,6 @@ export async function importFromCallout(
     fromShareUri: boolean = false
 ): Promise<ToolbarSettings> {
 
-    debugLog('importFromCallout()', callout);
-
     const lines = callout.trim().split('\n');
     const isToolbarProvided = toolbar ? true : false;
     var errorLog = '';
@@ -252,7 +250,6 @@ export async function importFromCallout(
                     errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
-                // TODO: if there are styles and toolbar is provided, prompt to ignore styles
                 toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.imported-tbar-name'), false);
                 toolbar.defaultStyles = validStyles;
             }
