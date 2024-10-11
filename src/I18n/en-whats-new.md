@@ -46,7 +46,7 @@ Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard
 
 `Note Toolbar: Copy URI for command`
 
-Lets you select a command and then copies its URI to the clipboard.
+Lets you select a command and then copies its URI to the clipboard. Example output:
 
 ```markdown
 obsidian://note-toolbar?command=workspace:toggle-pin
@@ -54,7 +54,7 @@ obsidian://note-toolbar?command=workspace:toggle-pin
 
 `Note Toolbar: Copy callout item for command`
 
-Lets you select a command, and then copies a Note Toolbar Callout line to the clipboard.
+Lets you select a command, and then copies a Note Toolbar Callout line to the clipboard. Example output:
 
 ```markdown
 []()<data data-ntb-command="workspace:toggle-pin"/> <!-- Toggle pin -->
