@@ -19,7 +19,7 @@ Share toolbars with a link that you can send to other users.
 
 Create toolbars from [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) in one of two ways:
 
-1. import callout items directly into an existing toolbar in settings; or
+1. import a callout into a new or existing toolbar in settings; or
 2. select some Note Toolbar Callout markdown in a note, then right-click and _Create Note Toolbar from callout_.
 
 <a href="https://github.com/user-attachments/assets/0b82104e-f5f4-40f9-9880-3e9425c5f908">
@@ -44,7 +44,7 @@ Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard
 
 # Other improvements
 
-- In Settings, in the toolbar list, look for a new "More" (...) menu (where "Duplicate" used to be) where you can now conveniently access _Duplicate_, _Share_, _Copy as callout_, and _Delete_ options.
+- In Settings, in the toolbar list, look for a new "More" (...) menu (where "Duplicate" used to be) containing _Duplicate_, _Share_, _Copy as callout_, and _Delete_ options.
 - Most plugin startup tasks are now done after the layout's ready, and after initial toolbar rendering, which may help with startup performance. `#ObsidianOctober`
 - An error message is now shown if a [Note Toolbar URI](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) contains invalid parameters.
 - Quick Toolbars: Items are kept in order they're displayed in the toolbar, when browsing by toolbar. Thanks to @Glint-Eye for the suggestion.
