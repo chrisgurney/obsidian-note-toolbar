@@ -229,10 +229,10 @@ export async function importFromCallout(
     if (lines[0].includes('[!note-toolbar')) {
         // don't create a toolbar if we're importing into one
         if (!isToolbarProvided) {
-            const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\](.*)/);
+            const metadataMatch = lines[0].match(/\[!note-toolbar\|?\s*([^\]]*)\](.*)/);
             if (metadataMatch) {
-                let styles = metadataMatch[2].split(/[^a-zA-Z0-9]+/);
-                let name = metadataMatch[3].trim();
+                let styles = metadataMatch[1].split(/[^a-zA-Z0-9]+/);
+                let name = metadataMatch[2].trim();
     
                 const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
                 const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
