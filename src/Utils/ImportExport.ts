@@ -314,7 +314,7 @@ export async function importFromCallout(
                     const iconName = label?.match(/:Li(\w+):/);
                     if (iconName) {
                         let iconImported = iconName[1]
-                            .replace(/([a-z])([A-Z])/g, '$1-$2')
+                            .replace(/([a-z])([A-Z0-9])/g, '$1-$2')
                             .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
