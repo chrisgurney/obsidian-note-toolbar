@@ -209,6 +209,9 @@ export async function importFromCallout(
     const isToolbarProvided = toolbar ? true : false;
     var errorLog = '';
 
+    // get the active file to provide context
+    let activeFile = plugin.app.workspace.getActiveFile();
+
     // create a new toolbar to return, if one wasn't provided
     if (!toolbar) {
         toolbar = {
@@ -298,6 +301,11 @@ export async function importFromCallout(
                     itemType = ItemType.File;
                     label = linkMatch[4] || linkMatch[3];
                     link = linkMatch[3];
+                    // resolve the filename provided to one in this vault, if it exists
+                    if (activeFile) {
+                        const linkFile = plugin.app.metadataCache.getFirstLinkpathDest(link, activeFile?.path);
+                        link = linkFile ? linkFile.path : link;
+                    }
                 }
     
                 const iconMatch = label?.match(/(:Li\w+:)/);
