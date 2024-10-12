@@ -97,9 +97,9 @@ function exportToCalloutList(
         let itemLink = options.resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
         let itemTooltip = options.resolveVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
 
-        itemText = encodeTextForCallout(itemText);
-        itemLink = encodeLinkForCallout(itemLink);
-        itemTooltip = encodeTextForCallout(itemTooltip);
+        itemText = escapeTextForCallout(itemText);
+        itemLink = escapeLinkForCallout(itemLink);
+        itemTooltip = escapeTextForCallout(itemTooltip);
 
         // fallback if no icon or label = tooltip; otherwise use a generic name
         itemText = itemIcon ? itemText : (itemText ? itemText : (itemTooltip ? itemTooltip : t('export.item-generic', { number: index + 1 })));
@@ -157,38 +157,26 @@ function exportToCalloutList(
 
 /**
  * Returns a string that shouldn't break URL portion of a callout markdown link.
- * @param str string to encode
- * @returns URI encoded string with certain characters preserved
+ * @param str string to escape
+ * @returns escaped string
  */
-function encodeLinkForCallout(str: string): string {
-    return encodeURIComponent(str)
-        .replace(/%20/g, ' ')
-        .replace(/%2C/g, ',')
-        .replace(/%2F/g, '/')
-        .replace(/%3A/g, ':')
-        .replace(/%3F/g, '?')
-        .replace(/%5B/g, '\\[')
-        .replace(/%5D/g, '\\]')
-        .replace(/%7B/g, '{')
-        .replace(/%7D/g, '}');
+function escapeLinkForCallout(str: string): string {
+    return str
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]')
+        .replace(/\)/g, '\\)')
+        .replace(/\(/g, '\\(');
 }
 
 /**
  * Returns a string that shouldn't break the text portion of a callout markdown link.
- * @param str string to encode
- * @returns URI encoded string with certain characters preserved
+ * @param str string to escape
+ * @returns escaped string
  */
-function encodeTextForCallout(str: string): string {
-    return encodeURIComponent(str)
-        .replace(/%20/g, ' ')
-        .replace(/%2C/g, ',')
-        .replace(/%2F/g, '/')
-        .replace(/%3A/g, ':')
-        .replace(/%3F/g, '?')
-        .replace(/%5B/g, '\\[')
-        .replace(/%5D/g, '\\]')
-        .replace(/%7B/g, '{')
-        .replace(/%7D/g, '}');
+function escapeTextForCallout(str: string): string {
+    return str
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]');
 }
 
 /**
