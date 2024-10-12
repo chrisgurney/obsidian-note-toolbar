@@ -1481,9 +1481,9 @@ input[type="text"].note-toolbar-setting-error {
         .setting-item-info {
             overflow: auto;
             .setting-item-name {
-                font-family: var(--font-monospace);
-                font-size: var(--font-ui-smaller);
-                text-wrap: nowrap;
+                font-family: var(--font-monospace) !important;
+                font-size: var(--font-ui-smaller) !important;
+                text-wrap: nowrap !important;
             }
         }
     }
