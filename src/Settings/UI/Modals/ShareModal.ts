@@ -76,7 +76,7 @@ export class ShareModal extends Modal {
             let disclaimers = this.contentEl.createDiv();
             disclaimers.addClass('note-toolbar-setting-field-help');
             let disclaimersList = disclaimers.createEl('ul');
-            isLongUri ? disclaimersList.createEl('li', { text: t('export.error-share-length') }) : undefined;
+            isLongUri ? disclaimersList.createEl('li', { text: t('export.warning-share-length') }) : undefined;
             hasMenu ? disclaimersList.createEl('li', { text: t('export.warning-share-menu') }) : undefined;
         }
 

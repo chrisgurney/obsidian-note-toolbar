@@ -81,7 +81,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayFolderMap(containerEl);
 
 		// other global settings
-		this.displayExportSettings(containerEl);
+		this.displayCopyAsCalloutSettings(containerEl);
 		this.displayOtherSettings(containerEl);
 
 		if (focusSelector) {
@@ -526,15 +526,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * Displays settings for exporting/copying to markdown.
 	 * @param containerEl 
 	 */	
-	displayExportSettings(containerEl: HTMLElement): void {
+	displayCopyAsCalloutSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName("Copy as callout")
+			.setName(t('setting.copy-as-callout.title'))
 			.setHeading();
 
 		let iconSetting = new Setting(containerEl)
-			.setName("Include icons")
-			.setDesc("Output icons in output. Install Iconize to see icons.")
+			.setName(t('setting.copy-as-callout.option-icons'))
+			.setDesc(t('setting.copy-as-callout.option-icons-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.export.includeIcons)
@@ -544,8 +544,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl)
-			.setName("Use menu IDs")
-			.setDesc("If this is for personal use, keep this on; if you're going to share this callout, turn this off.")
+			.setName(t('setting.copy-as-callout.option-menu-ids'))
+			.setDesc(t('setting.copy-as-callout.option-menu-ids-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.export.useMenuIds)
@@ -555,8 +555,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl)
-			.setName("Replace variables")
-			.setDesc("If this is for personal use, keep this on; if you're going to share this callout, it's recommended to turn this off.")
+			.setName(t('setting.copy-as-callout.option-vars'))
+			.setDesc(t('setting.copy-as-callout.option-vars-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.export.resolveVars)

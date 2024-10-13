@@ -24,12 +24,8 @@
         "button-copy-link-description": "Copy this link to your clipboard",
         "notice-completed": "Toolbar copied to clipboard as callout",
         "notice-shared": "Note Toolbar link copied to clipboard",
-        "confirm-vars-title": "Variables are used in this toolbar",
-        "confirm-vars-question": "Do you want to replace these variables in the callout?",
-        "label-vars-approve": "Replace",
-        "label-vars-deny": "Leave as-is",
         "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive.",
-        "error-share-length": "Some web browsers may not load a URL that is longer than 2,048 characters.",
+        "warning-share-length": "Some web browsers may not load a URL that is longer than 2,048 characters.",
         "option-uri": "Use Obsidian URI",
         "option-uri-description": "Provides an obsidian:// link instead of an https:// URL."
     },
@@ -92,6 +88,15 @@
             "instruction-navigate": "to navigate",
             "instruction-use": "to select command",
             "instruction-dismiss": "to dismiss"
+        },
+        "copy-as-callout": {
+            "title": "Copy as callout",
+            "option-icons": "Include icons",
+            "option-icons-description": "Output icons in output. Install Iconize to see icons.",
+            "option-menu-ids": "Use menu IDs",
+            "option-menu-ids-description": "If this is for personal use, keep this on; if you're going to share this callout, turn this off.",
+            "option-vars": "Replace variables",
+            "option-vars-description": "If this is for personal use, keep this on; if you're going to share this callout, it's recommended to turn this off."
         },
         "delete-toolbar": {
             "name": "Delete this toolbar",
