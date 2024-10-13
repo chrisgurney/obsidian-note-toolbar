@@ -82,7 +82,7 @@ function exportToCalloutList(
                 break;
             case ItemType.Command:
                 itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`;
-                // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
+                // itemsExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
                 break;
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
@@ -90,7 +90,7 @@ function exportToCalloutList(
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
                     itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`;
-                    // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
+                    // itemsExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
                 }
                 else {
                     itemsExport += `${BULLET} [[${itemLink}|${itemIcon}${itemText}]]`;
@@ -102,14 +102,14 @@ function exportToCalloutList(
                 // TODO: skipped/ignored message if toolbar not found
                 break;
             case ItemType.Menu:
-                if (options.useMenuIds) {
-                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
-                }
-                else {
+                let menuLink = itemLink;
+                if (!options.useMenuIds) {
                     let menuToolbar = plugin.settingsManager.getToolbar(item.link);
-                    itemsExport += menuToolbar ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuToolbar.name}"/>` : '';
-                    // TODO: skipped/ignored message if toolbar not found
+                    menuLink = menuToolbar ? menuToolbar.name : menuLink;
+                    // TODO: skipped/ignored message if toolbar not found?
                 }
+                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuLink}"/>`;
+                // itemsExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${menuLink}>)`;
                 break;
             case ItemType.Separator:
                 itemsExport += `${BULLET} <hr/>`;
