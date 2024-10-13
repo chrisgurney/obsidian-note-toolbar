@@ -145,7 +145,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		if (this.plugin.settings.toolbars.length > 0) {
+		if (this.plugin.settings.toolbars.length > 4) {
 			toolbarListSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
