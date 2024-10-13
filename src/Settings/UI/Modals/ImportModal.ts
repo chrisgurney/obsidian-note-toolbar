@@ -87,6 +87,12 @@ export class ImportModal extends Modal {
                     this.close();
                 });
 
+            // set focus in the textarea
+            setTimeout(() => {
+                const textArea = this.containerEl.querySelector('textarea') as HTMLElement;
+                textArea?.focus();
+            }, 50);
+
         });
 
     }
