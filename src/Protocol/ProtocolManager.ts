@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice, ObsidianProtocolData } from "obsidian";
-import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ExportSettings, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { HelpModal } from "Settings/UI/Modals/HelpModal";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -104,7 +104,12 @@ export class ProtocolManager {
      * @returns URI to share as a string
      */
     async getShareUri(toolbar: ToolbarSettings, useObsidianUri: boolean = false): Promise<string> {
-        let callout = await exportToCallout(this.plugin, toolbar, true);
+		const options = {
+			includeIcons: true,
+			resolveVars: false,
+			useMenuIds: false
+		} as ExportSettings;
+        let callout = await exportToCallout(this.plugin, toolbar, options);
 		const shareUri = useObsidianUri 
 			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
 			: `https://chrisgurney.github.io/obsidian-note-toolbar/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`

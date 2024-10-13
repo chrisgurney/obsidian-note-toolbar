@@ -86,6 +86,7 @@ export enum ToolbarStyle {
 }
 
 export interface NoteToolbarSettings {
+	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
 	icon: string;
 	ribbonAction: RibbonAction;
@@ -97,6 +98,11 @@ export interface NoteToolbarSettings {
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+	export: {
+		includeIcons: true,
+		resolveVars: false,
+		useMenuIds: true
+	},
 	folderMappings: [],
 	icon: "circle-ellipsis",
 	ribbonAction: RibbonAction.Toolbar,
@@ -105,6 +111,12 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	toolbars: [],
 	version: SETTINGS_VERSION,
 	whatsnew_version: 0
+}
+
+export interface ExportSettings {
+    includeIcons: boolean;
+    resolveVars: boolean;
+    useMenuIds: boolean;
 }
 
 export interface ToolbarSettings {

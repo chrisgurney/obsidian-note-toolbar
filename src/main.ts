@@ -1320,7 +1320,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					.setIcon('copy')
 					.onClick(async (menuEvent) => {
 						if (toolbarSettings) {
-							let calloutExport = await exportToCallout(this, toolbarSettings);
+							let calloutExport = await exportToCallout(this, toolbarSettings, this.settings.export);
 							navigator.clipboard.writeText(calloutExport);
 							new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
 						}

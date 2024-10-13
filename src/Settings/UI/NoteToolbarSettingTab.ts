@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getElementPosition, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -81,6 +81,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayFolderMap(containerEl);
 
 		// other global settings
+		this.displayExportSettings(containerEl);
 		this.displayOtherSettings(containerEl);
 
 		if (focusSelector) {
@@ -221,7 +222,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 											.setTitle(t('export.label-callout'))
 											.setIcon('copy')
 											.onClick(async () => {
-												let calloutExport = await exportToCallout(this.plugin, toolbar);
+												let calloutExport = await exportToCallout(this.plugin, toolbar, this.plugin.settings.export);
 												navigator.clipboard.writeText(calloutExport);
 												new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
 											});
@@ -518,6 +519,51 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		toolbarFolderListItemDiv.append(itemHandleDiv);
 
 		return toolbarFolderListItemDiv;
+
+	}
+
+	/**
+	 * Displays settings for exporting/copying to markdown.
+	 * @param containerEl 
+	 */	
+	displayExportSettings(containerEl: HTMLElement): void {
+
+		new Setting(containerEl)
+			.setName("Copy as callout")
+			.setHeading();
+
+		let iconSetting = new Setting(containerEl)
+			.setName("Include icons")
+			.setDesc("Output icons in output. Install Iconize to see icons.")
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.includeIcons)
+					.onChange(async (value) => {
+						this.plugin.settings.export.includeIcons = value;
+					});
+			});
+
+		new Setting(containerEl)
+			.setName("Use menu IDs")
+			.setDesc("If this is for personal use, keep this on; if you're going to share this callout, turn this off.")
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.useMenuIds)
+					.onChange(async (value) => {
+						this.plugin.settings.export.useMenuIds = value;
+					});
+			});
+
+		new Setting(containerEl)
+			.setName("Replace variables")
+			.setDesc("If this is for personal use, keep this on; if you're going to share this callout, it's recommended to turn this off.")
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.resolveVars)
+					.onChange(async (value) => {
+						this.plugin.settings.export.resolveVars = value;
+					});
+			});
 
 	}
 
