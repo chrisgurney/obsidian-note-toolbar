@@ -281,6 +281,17 @@ export function toolbarInvalidCommands(plugin: NoteToolbarPlugin, toolbar: Toolb
 }
 
 /**
+ * Checks if the given toolbar has a menu (which refers to another toolbar).
+ * @param toolbar ToolbarSettings to check for menu usage
+ * @returns true if a menu is used in the toolbar; false otherwise
+ */
+export function toolbarHasMenu(toolbar: ToolbarSettings): boolean {
+	return toolbar.items.some(item => 
+		(item.linkAttr.type === ItemType.Menu) && (item.link)
+	);
+}
+
+/**
  * Checks if the given toolbar uses variables at all.
  * @param toolbar ToolbarSettings to check for variable usage
  * @returns true if variables are used in the toolbar; false otherwise
