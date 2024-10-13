@@ -530,6 +530,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName(t('setting.copy-as-callout.title'))
+			.setDesc(learnMoreFr(t('setting.copy-as-callout.description'), 'Creating-callouts-from-toolbars'))
 			.setHeading();
 
 		let iconSetting = new Setting(containerEl)

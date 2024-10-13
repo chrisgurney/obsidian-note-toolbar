@@ -100,8 +100,8 @@ export interface NoteToolbarSettings {
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	export: {
 		includeIcons: true,
+		useMenuIds: true,
 		resolveVars: false,
-		useMenuIds: true
 	},
 	folderMappings: [],
 	icon: "circle-ellipsis",
@@ -115,8 +115,8 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 
 export interface ExportSettings {
     includeIcons: boolean;
-    resolveVars: boolean;
     useMenuIds: boolean;
+    resolveVars: boolean;
 }
 
 export interface ToolbarSettings {

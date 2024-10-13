@@ -91,12 +91,13 @@
         },
         "copy-as-callout": {
             "title": "Copy as callout",
+            "description": "Define what's included when toolbars are converted to callouts.",
             "option-icons": "Include icons",
-            "option-icons-description": "Output icons in output. Install Iconize to see icons.",
+            "option-icons-description": "Output icons in Iconize format. The Iconize plugin must be installed and enabled to see icons.",
             "option-menu-ids": "Use menu IDs",
-            "option-menu-ids-description": "If this is for personal use, keep this on; if you're going to share this callout, turn this off.",
+            "option-menu-ids-description": "Use the ID of the menu's toolbar instead of its name. Turn this off, if you want to share this callout.",
             "option-vars": "Replace variables",
-            "option-vars-description": "If this is for personal use, keep this on; if you're going to share this callout, it's recommended to turn this off."
+            "option-vars-description": "Replace any variables used in this toolbar with their values in the note you're exporting from."
         },
         "delete-toolbar": {
             "name": "Delete this toolbar",
