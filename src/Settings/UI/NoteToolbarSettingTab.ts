@@ -602,17 +602,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.export.includeIcons)
 					.onChange(async (value) => {
 						this.plugin.settings.export.includeIcons = value;
-					});
-			});
-
-		new Setting(collapsibleContainer)
-			.setName(t('setting.copy-as-callout.option-menu-ids'))
-			.setDesc(t('setting.copy-as-callout.option-menu-ids-description'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(this.plugin.settings.export.useMenuIds)
-					.onChange(async (value) => {
-						this.plugin.settings.export.useMenuIds = value;
+						await this.plugin.settingsManager.save();
 					});
 			});
 
@@ -621,9 +611,34 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setDesc(t('setting.copy-as-callout.option-vars-description', {interpolation: { skipOnVariables: true }} ))
 			.addToggle((cb: ToggleComponent) => {
 				cb
-					.setValue(this.plugin.settings.export.resolveVars)
+					.setValue(this.plugin.settings.export.replaceVars)
 					.onChange(async (value) => {
-						this.plugin.settings.export.resolveVars = value;
+						this.plugin.settings.export.replaceVars = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.copy-as-callout.option-ids'))
+			.setDesc(t('setting.copy-as-callout.option-ids-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.useIds)
+					.onChange(async (value) => {
+						this.plugin.settings.export.useIds = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.copy-as-callout.option-data'))
+			.setDesc(t('setting.copy-as-callout.option-data-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.useDataEls)
+					.onChange(async (value) => {
+						this.plugin.settings.export.useDataEls = value;
+						await this.plugin.settingsManager.save();
 					});
 			});
 

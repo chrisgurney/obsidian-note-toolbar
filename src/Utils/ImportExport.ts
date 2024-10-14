@@ -65,9 +65,9 @@ function exportToCalloutList(
         let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = options.resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
-        let itemLink = options.resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
-        let itemTooltip = options.resolveVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
+        let itemText = options.replaceVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
+        let itemLink = options.replaceVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
+        let itemTooltip = options.replaceVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
 
         itemText = escapeTextForCallout(itemText);
         itemLink = escapeLinkForCallout(itemLink);
@@ -81,16 +81,18 @@ function exportToCalloutList(
                 itemsExport += `${BULLET} <br/>`;
                 break;
             case ItemType.Command:
-                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`;
-                // itemsExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
+                itemsExport += options.useDataEls 
+                    ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`
+                    : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
                 break;
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = replaceVars(plugin.app, itemLink, activeFile, false);
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
-                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`;
-                    // itemsExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
+                    itemsExport += options.useDataEls
+                        ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`
+                        : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
                 }
                 else {
                     itemsExport += `${BULLET} [[${itemLink}|${itemIcon}${itemText}]]`;
@@ -103,13 +105,14 @@ function exportToCalloutList(
                 break;
             case ItemType.Menu:
                 let menuLink = itemLink;
-                if (!options.useMenuIds) {
+                if (!options.useIds) {
                     let menuToolbar = plugin.settingsManager.getToolbar(item.link);
                     menuLink = menuToolbar ? menuToolbar.name : menuLink;
                     // TODO: skipped/ignored message if toolbar not found?
                 }
-                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuLink}"/>`;
-                // itemsExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${menuLink}>)`;
+                itemsExport += options.useDataEls
+                    ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuLink}"/>`
+                    : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${menuLink}>)`;
                 break;
             case ItemType.Separator:
                 itemsExport += `${BULLET} <hr/>`;

@@ -106,8 +106,9 @@ export class ProtocolManager {
     async getShareUri(toolbar: ToolbarSettings, useObsidianUri: boolean = false): Promise<string> {
 		const options = {
 			includeIcons: true,
-			resolveVars: false,
-			useMenuIds: false
+			replaceVars: false,
+			useDataEls: true,
+			useIds: false
 		} as ExportSettings;
         let callout = await exportToCallout(this.plugin, toolbar, options);
 		const shareUri = useObsidianUri 
