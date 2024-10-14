@@ -212,7 +212,7 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			});
 
-		if (this.toolbar.items.length > 4) {
+		if (this.toolbar.items.length > 8) {
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')

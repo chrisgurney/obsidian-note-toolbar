@@ -113,17 +113,7 @@
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
-            "option-property-placeholder": "Property",
-            "option-folder-all": "all folders",
-            "option-folder-root": "root folder only",
-            "option-folder-mappings": "Folder mappings",
-            "option-folder-mappings-description": "Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.",
-            "option-folder-mappings-empty": "Click the button to create a mapping.",
-            "placeholder-mapping-folder": "Folder",
-            "placeholder-mapping-toolbar": "Toolbar",
-            "button-new-mapping": "+ New mapping",
-            "button-new-mapping-tooltip": "Add a new mapping",
-            "error-folder-already-mapped": "This folder already has a toolbar associated with it."
+            "option-property-placeholder": "Property"
         },
         "help": {
             "title": "Help using Note Toolbar 🛟",
@@ -223,6 +213,21 @@
             "option-edit-item-group-tooltip_none": "Edit item group",
             "option-edit-item-tooltip": "Edit toolbar item",
             "option-edit-item-type-tooltip": "Edit {{itemType}}"
+        },
+        "mappings": {
+            "name": "Folder mappings",
+            "name-with-count": "Folder mappings ({{count}})",
+            "description": "Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.",
+            "label-empty": "Click the button to create a mapping.",
+            "placeholder-folder": "Folder",
+            "placeholder-toolbar": "Toolbar",
+            "button-collapse-tooltip": "Collapse all mappings",
+            "button-expand-tooltip": "Expand all mappings",
+            "button-new": "+ New mapping",
+            "button-new-tooltip": "Add a new mapping",
+            "option-folder-all": "all folders",
+            "option-folder-root": "root folder only",
+            "error-folder-already-mapped": "This folder already has a toolbar associated with it."
         },
         "name": {
             "name": "Name",

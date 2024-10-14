@@ -13,8 +13,8 @@ export class FolderSuggester extends AbstractInputSuggest<string> {
 
     private inputEl: HTMLInputElement;
 
-    private PATTERN_ALL_FILES: FolderSuggester.Pattern = { pattern: '*', label: '*', desc: t('setting.display-rules.option-folder-all') };
-    private PATTERN_ROOT_ONLY: FolderSuggester.Pattern = { pattern: '/', label: '/', desc: t('setting.display-rules.option-folder-root') };
+    private PATTERN_ALL_FILES: FolderSuggester.Pattern = { pattern: '*', label: '*', desc: t('setting.mappings.option-folder-all') };
+    private PATTERN_ROOT_ONLY: FolderSuggester.Pattern = { pattern: '/', label: '/', desc: t('setting.mappings.option-folder-root') };
 
     constructor(app: App, inputEl: HTMLInputElement) {
         super(app, inputEl);

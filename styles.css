@@ -1715,7 +1715,8 @@ input[type="text"].note-toolbar-setting-error {
     margin-bottom: 1em;
 }
 
-.note-toolbar-setting-items-container {
+.note-toolbar-setting-items-container,
+.note-toolbar-setting-mappings-container {
     padding-top: 0.75em;
     &[data-active="true"] {
         & .note-toolbar-setting-items-list-container {
