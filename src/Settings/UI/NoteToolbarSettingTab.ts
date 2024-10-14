@@ -584,7 +584,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName(t('setting.copy-as-callout.option-vars'))
-			.setDesc(t('setting.copy-as-callout.option-vars-description'))
+			.setDesc(t('setting.copy-as-callout.option-vars-description', {interpolation: { skipOnVariables: true }} ))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.export.resolveVars)

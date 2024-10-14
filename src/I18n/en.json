@@ -93,13 +93,13 @@
         },
         "copy-as-callout": {
             "title": "Copy as callout",
-            "description": "Define what's included when toolbars are converted to callouts.",
+            "description": "Define what happens when toolbars are converted to callouts.",
             "option-icons": "Include icons",
-            "option-icons-description": "Output icons in the callout. The Iconize plugin must be installed and enabled to see icons.",
+            "option-icons-description": "Output icon placeholders in the callout. (Example: :LiHome:) The Iconize plugin must be installed and enabled to see icons.",
             "option-menu-ids": "Use menu IDs",
             "option-menu-ids-description": "Use the ID of the menu's toolbar instead of its name. If you want to share this callout, turn this off.",
             "option-vars": "Replace variables",
-            "option-vars-description": "Replace any variables used in this toolbar with values from the note you're exporting from."
+            "option-vars-description": "Replace any variables used in this toolbar with values from the note you're exporting from. Example: {{note_title}} → My Note"
         },
         "delete-toolbar": {
             "name": "Delete this toolbar",
