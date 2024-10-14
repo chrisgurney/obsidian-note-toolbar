@@ -22,7 +22,7 @@
         "title-share": "Share toolbar: {{toolbar}}",
         "button-copy-link": "Copy link",
         "button-copy-link-description": "Copy this link to your clipboard",
-        "notice-completed": "Toolbar copied to clipboard as callout",
+        "notice-completed": "Toolbar copied to clipboard as callout. Open settings to adjust formatting.",
         "notice-shared": "Note Toolbar link copied to clipboard",
         "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive.",
         "warning-share-length": "Some web browsers may not load a URL that is longer than 2,048 characters.",
@@ -95,13 +95,13 @@
             "title": "Copy as callout",
             "description": "Define what happens when toolbars are converted to callouts.",
             "option-icons": "Include icons",
-            "option-icons-description": "Output icon placeholders in the callout. (Example: :LiHome:) The Iconize plugin must be installed and enabled to see icons.",
-            "option-data": "Use Data Elements",
-            "option-data-description": "If disabled, Note Toolbar URIs will be used instead of data elements.",
-            "option-ids": "Use IDs",
-            "option-ids-description": "Use the ID of an item's toolbar instead of its name. For example, this ensures menu items still work for you if the menu toolbar's renamed. If you want to share this callout, turn this off.",
+            "option-icons-description": "Add icon placeholders to callouts. (Example: :LiHome:) The Iconize plugin must be installed and enabled to see icons. Icons can be imported by other users.",
             "option-vars": "Replace variables",
-            "option-vars-description": "Any variables used in the toolbar will be replaced with values from the note you're currently viewing. Example: {{note_title}} → My Note"
+            "option-vars-description": "Any variables used in the toolbar will be replaced with values from the note you're currently viewing. Example: {{note_title}} → My Note",
+            "option-ids": "Use IDs",
+            "option-ids-description": "Use the ID of an item's toolbar instead of its name. For example, this ensures menu items still work for you if the menu toolbar's renamed. If you want to share callouts, turn this off.",
+            "option-data": "Use Data Elements",
+            "option-data-description": "Data elements allow toolbars opened in new windows to still work. If disabled, Note Toolbar URIs will be used instead of data elements, and also provide cleaner-looking markdown."
         },
         "delete-toolbar": {
             "name": "Delete this toolbar",
