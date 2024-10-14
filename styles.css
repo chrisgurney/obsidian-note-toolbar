@@ -1739,6 +1739,15 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
+.note-toolbar-setting-callout-container {
+    & .note-toolbar-setting-items-list-container {
+        .setting-item:first-child {
+            padding: 0.75em 0;
+            border-top: 1px solid var(--background-modifier-border);
+        }
+    }
+}
+
 .note-toolbar-setting-items-button-container {
     align-items: center !important;
     display: flex;
