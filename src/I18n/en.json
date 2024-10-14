@@ -100,7 +100,7 @@
             "option-vars-description": "Any variables used in the toolbar will be replaced with values from the note you're currently viewing. Example: {{note_title}} → My Note",
             "option-ids": "Use IDs in menu items",
             "option-ids-description": "This ensures menu items still work for you if the menu toolbar's renamed. If you want to share callouts, turn this off, and the toolbar's name will be used instead.",
-            "option-data": "Use Data Elements",
+            "option-data": "Use data elements",
             "option-data-description": "Data elements allow toolbars opened in new windows to still work. If disabled, Note Toolbar URIs will be used instead of data elements, and also provide cleaner-looking markdown."
         },
         "delete-toolbar": {
