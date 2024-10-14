@@ -2277,6 +2277,12 @@ input[type="text"].note-toolbar-setting-error {
     border: 1px solid var(--background-modifier-border);
     border-radius: 8px;
     padding: 0em 1em 1em 1em;
+    & .note-toolbar-setting-tbar-preview {
+        & svg {
+            height: var(--font-ui-medium);
+            width: var(--font-ui-medium);            
+        }
+    }
 }
 
 .note-toolbar-setting-import-text-area {
