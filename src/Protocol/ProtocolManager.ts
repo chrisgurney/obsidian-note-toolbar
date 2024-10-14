@@ -37,7 +37,7 @@ export class ProtocolManager {
         else if (data.import) {
             const content = decodeURIComponent(data.import);
 			// double-check provided text is a Note Toolbar Callout
-			if (/^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(data.import)) {
+			if (data.import.includes('[!note-toolbar')) {
 				confirmImportWithModal(
 					this.plugin, 
 					content
