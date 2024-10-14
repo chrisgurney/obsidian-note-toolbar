@@ -1575,6 +1575,9 @@ input[type="text"].note-toolbar-setting-error {
 
 .note-toolbar-setting-whatsnew-content {
     padding-inline: 1em;
+    code {
+        font-size: calc(var(--font-ui-small) + 1px);
+    }
     h1 {
         font-size: var(--font-ui-large);
     }
@@ -1590,7 +1593,7 @@ input[type="text"].note-toolbar-setting-error {
         width: 100%;
     }
     p {
-        font-size: var(--font-ui-medium);
+        font-size: calc(var(--font-ui-small) + 1px);
     }
     ul {
         padding-inline-start: 2em;
