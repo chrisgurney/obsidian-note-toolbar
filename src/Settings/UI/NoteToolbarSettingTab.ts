@@ -18,8 +18,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	plugin: NoteToolbarPlugin;
 	app: App;
 
-	private itemListOpen: boolean = true;
 	private itemListIdCounter: number = 0;
+
+	private calloutSettingsOpen: boolean = false;
+	private itemListOpen: boolean = true;
 	private mappingListOpen: boolean = true;
 
 	constructor(app: App, plugin: NoteToolbarPlugin) {
@@ -555,12 +557,44 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */	
 	displayCopyAsCalloutSettings(containerEl: HTMLElement): void {
 
-		new Setting(containerEl)
+		let collapsibleEl = createDiv();
+		collapsibleEl.addClass('note-toolbar-setting-callout-container');
+		collapsibleEl.setAttribute('data-active', this.calloutSettingsOpen.toString());
+
+		let copyAsCalloutSetting = new Setting(collapsibleEl)
 			.setName(t('setting.copy-as-callout.title'))
 			.setDesc(learnMoreFr(t('setting.copy-as-callout.description'), 'Creating-callouts-from-toolbars'))
 			.setHeading();
 
-		let iconSetting = new Setting(containerEl)
+		copyAsCalloutSetting
+			.addExtraButton((cb) => {
+				cb.setIcon('right-triangle')
+				.setTooltip(t('setting.button-collapse-tooltip'))
+				.onClick(async () => {
+					let itemsContainer = containerEl.querySelector('.note-toolbar-setting-callout-container');
+					if (itemsContainer) {
+						this.calloutSettingsOpen = !this.calloutSettingsOpen;
+						itemsContainer.setAttribute('data-active', this.calloutSettingsOpen.toString());
+						cb.setTooltip(this.calloutSettingsOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
+					}
+				})
+				.extraSettingsEl.tabIndex = 0;
+				cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								e.preventDefault();
+								cb.extraSettingsEl.click();
+						}
+					});
+			});
+
+		let collapsibleContainer = createDiv();
+		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+
+		new Setting(collapsibleContainer)
 			.setName(t('setting.copy-as-callout.option-icons'))
 			.setDesc(t('setting.copy-as-callout.option-icons-description'))
 			.addToggle((cb: ToggleComponent) => {
@@ -571,7 +605,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		new Setting(containerEl)
+		new Setting(collapsibleContainer)
 			.setName(t('setting.copy-as-callout.option-menu-ids'))
 			.setDesc(t('setting.copy-as-callout.option-menu-ids-description'))
 			.addToggle((cb: ToggleComponent) => {
@@ -582,7 +616,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		new Setting(containerEl)
+		new Setting(collapsibleContainer)
 			.setName(t('setting.copy-as-callout.option-vars'))
 			.setDesc(t('setting.copy-as-callout.option-vars-description', {interpolation: { skipOnVariables: true }} ))
 			.addToggle((cb: ToggleComponent) => {
@@ -592,6 +626,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.plugin.settings.export.resolveVars = value;
 					});
 			});
+
+		collapsibleEl.appendChild(collapsibleContainer);
+		containerEl.appendChild(collapsibleEl);
 
 	}
 
