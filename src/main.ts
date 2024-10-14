@@ -245,7 +245,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
-		debugLog("metadata-changed: " + file.name);
+		// debugLog("metadata-changed: " + file.name);
 		if (this.app.workspace.getActiveFile() === file) {
 			this.checkAndRenderToolbar(file, cache.frontmatter);
 		}
@@ -917,7 +917,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
 
-		debugLog("handleLink()", linkHref, type, hasVars, commandId, event);
+		// debugLog("handleLink()", linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
@@ -997,7 +997,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param commandId encoded command string, or null if nothing to do.
 	 */
 	async handleLinkCommand(commandId: string | null) {
-		debugLog("handleLinkCommand()", commandId);
+		// debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
 
@@ -1024,7 +1024,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @link https://github.com/platers/obsidian-linter/blob/cc23589d778fb56b95fe53b499e9f35683a2b129/src/main.ts#L699
 	 */
 	private async handleLinkCommandInSidebar(file: TFile, commandId: string | null) {
-		debugLog('handleLinkCommandInSidebar()', file, commandId);
+		// debugLog('handleLinkCommandInSidebar()', file, commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
 				new Notice(t('notice.error-command-not-found', { command: commandId }));
@@ -1053,7 +1053,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param folder folder to highlight, or null if nothing to do.
 	 */
 	async handleLinkFolder(folder: string | null) {
-		debugLog("handleLinkFolder()", folder);
+		// debugLog("handleLinkFolder()", folder);
 		let tFileOrFolder = folder ? this.app.vault.getAbstractFileByPath(folder) : undefined;
 		if (tFileOrFolder instanceof TFolder) {
 			// @ts-ignore
@@ -1227,7 +1227,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarClickHandler(event: MouseEvent) {
 
-		debugLog('toolbarClickHandler()', event);
+		// debugLog('toolbarClickHandler()', event);
 
 		// allow standard and middle clicks through
 		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
@@ -1240,7 +1240,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
 				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
 	
-				debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
+				// debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
 	
 				// default to true if it doesn't exist, treating the url as though it is a URI with vars
 				let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
