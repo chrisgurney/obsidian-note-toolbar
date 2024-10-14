@@ -150,7 +150,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarListSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.toolbars.button-collapse-tbars-tooltip'))
+					.setTooltip(t('setting.button-collapse-tooltip'))
 					.onClick(async () => {
 						let itemsContainer = containerEl.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
@@ -158,7 +158,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
 							this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
-							cb.setTooltip(this.itemListOpen ? t('setting.toolbars.button-collapse-tbars-tooltip') : t('setting.toolbars.button-expand-tbars-tooltip'));
+							cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
@@ -357,7 +357,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarMapSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip("Collapse all mappings")
+					.setTooltip(t('setting.button-collapse-tooltip'))
 					.onClick(async () => {
 						let mappingsContainer = containerEl.querySelector('.note-toolbar-setting-mappings-container');
 						if (mappingsContainer) {
@@ -365,7 +365,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							mappingsContainer.setAttribute('data-active', this.mappingListOpen.toString());
 							let heading = mappingsContainer.querySelector('.setting-item-info .setting-item-name');
 							this.mappingListOpen ? heading?.setText(t('setting.mappings.name')) : heading?.setText(t('setting.mappings.name-with-count', { count: this.plugin.settings.folderMappings.length }));
-							cb.setTooltip(this.mappingListOpen ? t('setting.mappings.button-collapse-tooltip') : t('setting.mappings.button-expand-tooltip'));
+							cb.setTooltip(this.mappingListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;

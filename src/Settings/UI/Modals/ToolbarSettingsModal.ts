@@ -216,7 +216,7 @@ export default class ToolbarSettingsModal extends Modal {
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.items.button-collapse-items-tooltip'))
+					.setTooltip(t('setting.button-collapse-tooltip'))
 					.onClick(async () => {
 						let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
@@ -224,7 +224,7 @@ export default class ToolbarSettingsModal extends Modal {
 							itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
 							this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
-							cb.setTooltip(this.itemListOpen ? t('setting.items.button-collapse-items-tooltip') : t('setting.items.button-expand-items-tooltip'));
+							cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
