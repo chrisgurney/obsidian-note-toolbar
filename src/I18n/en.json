@@ -95,7 +95,7 @@
             "title": "Copy as callout",
             "description": "Define what happens when toolbars are converted to callouts.",
             "option-icons": "Include icons",
-            "option-icons-description": "Add icon placeholders to callouts. (Example: :LiHome:) The Iconize plugin must be installed and enabled to see icons. Icons can be imported by other users.",
+            "option-icons-description": "Add icon placeholders to callouts. (Example: :LiHome:) The Iconize plugin must be installed and enabled to see icons. Icons can be imported by other users. If disabled, tooltips will be used if labels are not set.",
             "option-vars": "Replace variables",
             "option-vars-description": "Any variables used in the toolbar will be replaced with values from the note you're currently viewing. Example: {{note_title}} → My Note",
             "option-ids": "Use IDs",
