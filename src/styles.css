@@ -754,6 +754,10 @@ body {
     }
     & .note-toolbar-setting-tbar-preview {
         color: var(--color-base-60);
+        & svg {
+            height: var(--font-ui-medium);
+            width: var(--font-ui-medium);            
+        }
     }
     &:focus-within {
         border-radius: var(--input-radius);
