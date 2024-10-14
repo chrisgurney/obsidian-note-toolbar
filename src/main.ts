@@ -798,7 +798,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
 
 		if (clickedItemEl) {
-			debugLog('calloutLinkHandler()', target, clickedItemEl);
+			// debugLog('calloutLinkHandler()', target, clickedItemEl);
 			this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
 			let dataEl = clickedItemEl?.nextElementSibling;
 			if (dataEl) {
@@ -806,7 +806,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
 				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
 				let value = attribute ? dataEl?.getAttribute(attribute) : null;
-				debugLog('🟡 EXTERNAL LINK', attribute, value);
+				
 				switch (attribute) {
 					case CalloutAttr.Command:
 						this.handleLinkCommand(value);

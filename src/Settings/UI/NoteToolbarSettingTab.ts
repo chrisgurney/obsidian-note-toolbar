@@ -778,7 +778,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	*/
     private rememberLastPosition(containerEl: HTMLElement) {
 
-		debugLog("rememberLastPosition:", containerEl);
+		// debugLog("rememberLastPosition:", containerEl);
 
         // go to the last position
 		containerEl.scrollTo({

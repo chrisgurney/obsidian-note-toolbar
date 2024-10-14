@@ -1528,7 +1528,7 @@ export default class ToolbarSettingsModal extends Modal {
 	*/
     private rememberLastPosition(containerEl: HTMLElement) {
 
-		debugLog("rememberLastPosition:", containerEl);
+		// debugLog("rememberLastPosition:", containerEl);
 
         // go to the last position
 		containerEl.scrollTo({
