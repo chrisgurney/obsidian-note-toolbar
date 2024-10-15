@@ -118,7 +118,7 @@ function exportToCalloutList(
                 itemsExport += `${BULLET} <hr/>`;
                 break;
             case ItemType.Uri:
-                itemsExport += `${BULLET} [${itemIcon}${itemText}](<${itemLink}>)`;
+                itemsExport += itemLink ? `${BULLET} [${itemIcon}${itemText}](<${itemLink}>)` : '';
                 break;
         }
 
