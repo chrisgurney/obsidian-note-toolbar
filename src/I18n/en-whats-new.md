@@ -1,6 +1,6 @@
 Here's what's new in v1.14:
 
-# Share toolbars with users
+# Share toolbars
 
 Share toolbars with a link that you can send to other users.
 
@@ -61,6 +61,12 @@ Lets you select a command, and then copies a Note Toolbar Callout line to the cl
 ```
 
 ...then all you need to do is choose what the item should look like in the link's text (`[]`).
+
+---
+
+# Updated toolbar examples
+
+Check out the [expanded Examples page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples) with numerous use cases and now easier-to-add toolbars. [Share your own examples!](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell).
 
 ---
 
