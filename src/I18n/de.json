@@ -2,6 +2,10 @@
     "command": {
         "name-focus": "Fokus",
         "name-item-suggester": "Schnellwahl öffen",
+		"name-toolbar-suggester": "Öffne Schnellwahl",
+        "name-copy-command-uri": "URI für Befehl kopieren",
+        "name-copy-command-as-data-element": "Callout Element für Befehl kopieren",
+        "copy-command-notice": "Befehl in Zwischenablage kopiert",
         "name-settings": "Plugin-Einstellungen öffnen",
         "name-toolbar-settings": "Toolbar-Einstellungen öffnen",
         "name-show-properties": "Eigenschaften anzeigen",
@@ -9,27 +13,96 @@
         "name-fold-properties": "Eigenschaften einklappen",
         "name-toggle-properties": "Eigenschaften-Anzeige umschalten"
     },
+    "export": {
+        "item-generic": "Element{{number}}",
+        "label-callout": "Als Hinweis kopieren",
+        "label-share": "Teilen...",
+        "label-share-description": "Teile diesen Link mit einem anderen Note Toolbar-Nutzer, um deine Toolbar zu seinem Vault hinzuzufügen.",
+        "label-share-preview": "Vorschau",
+        "title-share": "Toolbar teilen: {{toolbar}}",
+        "button-copy-link": "Link kopieren",
+        "button-copy-link-description": "Kopiere diesen Link in die Zwischenablage",
+        "notice-completed": "Toolbar als Hinweis in die Zwischenablage kopiert. Öffne die Einstellungen, um das Format anzupassen.",
+        "notice-shared": "Note Toolbar-Link in die Zwischenablage kopiert",
+        "warning-share-menu": "Diese Toolbar verweist auf mindestens eine andere Toolbar, die der Empfänger nicht erhalten wird.",
+        "warning-share-length": "Einige Webbrowser können möglicherweise keine URLs laden, die länger als 2.048 Zeichen sind.",
+        "option-uri": "Obsidian URI verwenden",
+        "option-uri-description": "Bietet einen obsidian://-Link anstelle einer https://-URL."
+    },
+    "import": {
+        "title-import": "Toolbar aus Hinweis erstellen",
+        "title-import-confirmation": "Note Toolbar erstellen: {{toolbar}}",
+        "title-import-into": "Hinweis-Elemente zu Toolbar hinzufügen: {{toolbar}}",
+        "label-import-confirmation": "Bestätige, dass du diese Toolbar hinzufügen möchtest. Sobald sie hinzugefügt ist, muss diese Toolbar einem oder mehreren Notizen zugeordnet werden.",
+        "label-import": "Füge unten einen Note Toolbar-Hinweis ein, und er wird als neue Toolbar hinzugefügt.",
+        "label-import-into": "Füge unten einen Note Toolbar-Hinweis ein, und seine Elemente werden zu dieser Toolbar hinzugefügt.",
+        "label-import-into-help": "Die Überschrift des Hinweises ist nicht erforderlich und wird ignoriert, falls vorhanden.",
+        "button-add-items": "Elemente hinzufügen",
+        "button-cancel": "Abbrechen",
+        "button-create": "Erstellen",
+        "button-confirm": "Bestätigen",
+        "option-create": "Note Toolbar aus Hinweis erstellen...",
+        "option-help": "Über Note Toolbar-Hinweise",
+        "button-import-tooltip": "Toolbar aus Hinweis erstellen",
+        "button-import-into-tooltip": "Toolbarelemente aus Hinweis hinzufügen",
+        "error-invalid-uri-content": "Note Toolbar: Es scheint ein Problem mit diesem Link zu geben. Überprüfe, ob die URI korrekt ist, oder schaue im Benutzerhandbuch nach.",
+        "errorlog-heading": "Fehler während des Toolbar-Imports gefunden:",
+        "errorlog-item": "Element {{number}}:",
+        "errorlog-command-not-recognized": "Befehl nicht erkannt: {{command}}",
+        "errorlog-icon-not-found": "Icon nicht gefunden: {{icon}}",
+        "errorlog-invalid-format": "Ungültiges Format: {{line}}",
+        "errorlog-invalid-styles": "Ungültige(r) Stil(e) ignoriert: {{styles}}",
+        "errorlog-menu-not-found": "Menü nicht gefunden: {{menu}}",
+        "placeholder-import-into": "> Note Toolbar-Hinweis-Markdown...",
+        "warning-invalid-plugins": "Diese Toolbar verwendet Plugins, die bei dir nicht installiert und aktiviert sind:",
+        "warning-vars": "Diese Toolbar verwendet Variablen, die du anpassen kannst, um sie mit deinem Vault zu verwenden."
+    },
     "notice": {
         "error-command-not-found": "Überprüfung der Note Toolbar Einstellungen auf diesen Befehl. Befehl nicht gefunden: {{command}}",
         "error-folder-not-found": "Überprüfung der Note Toolbar Einstellungen auf diesen Ordner. Ordner nicht gefunden: {{folder}}",
         "error-item-menu-not-found": "Überprüfung der Note Toolbar Einstellungen auf diesen Menü-Punkt. Toolbar nicht gefunden: {{toolbar}}",
         "error-toolbar-not-found": "Überprüfung der Note Toolbar Einstellungen auf diese Toolbar. Toolbar nicht gefunden: {{folder}}"
-    },
+   		"error-uri-params-not-supported": "Einer oder mehrere dieser Note Toolbar-URI-Parameter werden nicht unterstützt: {{params}}"
+	},
     "plugin": {
         "name": "Note Toolbar"
     },
     "setting": {
         "button-cancel": "Abbrechen",
+		"button-collapse-tooltip": "Abschnitt schließen",
         "button-delete-tooltip": "Löschen",
         "button-drag-tooltip": "Ziehen zum Umsortieren",
+		"button-expand-tooltip": "Abschnitt erweitern",
+        "button-help": "Hilfe",
+        "button-help-tooltip": "Hilfe-Fenster öffnen",
         "button-learn-more": "Mehr\u00A0erfahren",
         "button-user-guide": "Benutzer\u00A0Handbuch",
+		"button-whats-new": "Was ist\u00A0neu?",
+		"button-whats-new-tooltip": "Was ist neu-Fenster öffnen",
         "error-old-settings-name": "⚠️ Fehler: Bitte Note Toolbar deaktivieren und reaktivieren, oder Obsidian neustarten.",
         "error-old-settings-description": "Alte Einstellungsdatei geladen ({{oldVersion}}), aber aktuellste ist {{currentVersion}}",
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
         "title-edit-toolbar": "Toolbar bearbeiten: {{toolbar}}",
         "title-edit-toolbar_none": "Toolbar bearbeiten",
+    	"command-suggest-modal": {
+	        "placeholder": "Nach einem Befehl suchen...",
+	        "instruction-navigate": "zum Navigieren",
+	        "instruction-use": "zum Auswählen des Befehls",
+	        "instruction-dismiss": "zum Schließen"
+    	},
+    	"copy-as-callout": {
+	        "title": "Als Hinweis kopieren",
+	        "description": "Definiere, was passiert, wenn Toolbars in Callouts umgewandelt werden.",
+	        "option-icons": "Symbole einbeziehen",
+	        "option-icons-description": "Füge Symbol-Platzhalter zu Callouts hinzu. (Beispiel: :LiHome:) Das Iconize-Plugin muss installiert und aktiviert sein, um Symbole anzuzeigen. Wenn es deaktiviert ist, werden Tooltips verwendet, falls keine Beschriftungen gesetzt sind. Symbole können von anderen Benutzern importiert werden.",
+	        "option-vars": "Variablen ersetzen",
+	        "option-vars-description": "Alle im Toolbar verwendeten Variablen werden durch Werte aus der aktuell geöffneten Notiz ersetzt. Beispiel: {{note_title}} → Meine Notiz",
+	        "option-ids": "IDs in Menüpunkten verwenden",
+	        "option-ids-description": "Dies stellt sicher, dass Menüpunkte weiterhin funktionieren, wenn die Menü-Toolbar umbenannt wird. Wenn du Hinweise teilen möchtest, schalte dies aus und der Name der Toolbar wird verwendet.",
+	        "option-data": "Daten-Elemente verwenden",
+	        "option-data-description": "Daten-Elemente ermöglichen es, dass Toolbars in neuen Fenstern weiterhin funktionieren. Wenn deaktiviert, werden Note Toolbar-URIs anstelle von Daten-Elementen verwendet, was auch für saubereres Markdown sorgt."
+  		}
         "delete-toolbar": {
             "name": "Diese Toolbar löschen",
             "description": "Dies kann nicht rückgängig gemacht werden.",
@@ -44,18 +117,32 @@
             "description": "Einstellung bei welchen Notizen eine Toolbar angezeigt wird.",
             "option-property": "Eigenschaft",
             "option-property-description": "Wenn in dieser Eigenschaft ein Symbolleistenname gefunden wird, wird die Symbolleiste in der Notiz angezeigt. Sie hat Vorrang vor allen Ordnerzuordnungen. Setzen Sie sie auf „none“, um die Symbolleiste auszublenden.",
-            "option-property-placeholder": "Eigenschaft",
-            "option-folder-all": "Alle Ordner",
-            "option-folder-root": "Nur Hauptordner",
-            "option-folder-mappings": "Ordnerzuordnung",
-            "option-folder-mappings-description": "Notizen in den nachfolgenden Ordnern zeigen die ihnen zugeordnete Symbolleiste an. Die Rangfolge ist von oben nach unten.",
-            "option-folder-mappings-empty": "Knopf drücken um eine Zuordnung zu erstellen.",
-            "placeholder-mapping-folder": "Ordner",
-            "placeholder-mapping-toolbar": "Toolbar",
-            "button-new-mapping": "+ Neue Zuordnung",
-            "button-new-mapping-tooltip": "Neue Zuordnung erstellen",
-            "error-folder-already-mapped": "Diesem Ordner ist bereits eine Toolbar zugeordnet."
+            "option-property-placeholder": "Eigenschaft"
         },
+	    "help": {
+	        "title": "Hilfe zur Verwendung der Note Toolbar 🛟",
+	        "description": "Erstelle kontextabhängige Toolbars für deine Notizen.",
+	        "button-donate": "Spenden ↗",
+	        "button-donate-tooltip": "buymeacoffee.com öffnen",
+	        "button-open": "Öffnen ↗",
+	        "button-open-github": "github.com öffnen",
+	        "button-open-google": "google.com öffnen",
+	        "button-read": "Lesen ↗",
+	        "label-article-1": "Erstellen von Toolbarelementen",
+	        "label-article-1-description": "Lerne die verschiedenen Typen von Elementen kennen.",
+	        "label-article-2": "Note Toolbar-Hinweise",
+	        "label-article-2-description": "Lerne, wie du Toolbars in deinen Notizen erstellst.",
+	        "label-bug": "Einen Fehler melden",
+	        "label-bug-description": "Ein Problem gefunden? Bitte logge einen Fehler in GitHub oder fülle dieses Google-Formular aus.",
+	        "label-donate": "Kauf mir einen Kaffee",
+	        "label-donate-description": "Wenn du dieses Plugin nützlich findest und mich finanziell unterstützen möchtest, kannst du eine Spende in Betracht ziehen. Vielen Dank!",
+	        "label-feedback": "Feedback geben",
+	        "label-feedback-description": "Nutze dieses Google-Formular für Feedback, Fragen, Probleme oder Ideen, die du hast.",
+	        "label-support": "Unterstützung erhalten",
+	        "label-support-description": "Besuche die Foren auf GitHub, um der Community Fragen zu stellen.",
+	        "label-user-guide": "Benutzerhandbuch lesen",
+	        "label-user-guide-description": "Erfahre, wie du das Plugin optimal nutzen kannst, inklusive Tipps und Beispielen."
+	    }		
         "icon-suggester": {
             "option-no-icon": "Kein Symbol",
             "placeholder": "Symbol suchen",
@@ -70,6 +157,10 @@
             "label-preview-empty-no-items": "Keine Elemente. Toolbar bearbeiten, um Elemente hinzuzufügen.",
             "option-break": "Umbruch",
             "option-command": "Befehl",
+		    "option-command-error-does-not-exist": "Dieser Befehl existiert nicht.",
+		    "option-command-error-not-available-install": "Dieser Befehl ist nicht verfügbar. Das Plugin muss installiert und aktiviert sein.",
+		    "option-command-error-not-available-search": "Dieser Befehl kann nicht gefunden werden. Versuche es erneut zu suchen.",
+		    "option-command-error-refresh": "Aktualisieren"
             "option-command-placeholder": "Befehl suchen",
             "option-component-icon": "Symbol",
             "option-component-label": "Bezeichnung",
@@ -80,6 +171,7 @@
             "option-item-group-placeholder": "Toolbar",
             "option-item-group-help": "Symbolleiste auswählen, um sie in diese einzufügen.",
             "option-item-group-error-does-not-exist": "Toolbar exisitert nicht.",
+			"option-item-group-error-invalid": "⚠️ Ungültige Elementgruppe"
             "option-item-menu": "Element-Menü",
             "option-item-menu-placeholder": "Toolbar",
             "option-item-menu-help": "Toolbar wählen, um sie als Menü zu öffnen.",
@@ -98,11 +190,16 @@
             "option-visibility-platform-desktop": "Desktop",
             "option-visibility-platform-mobile": "Mobile"
         },
-        "item-suggester": {
+        "item-suggest-modal": {
             "placeholder": "Element suchen...",
-			"instruction-navigate": "zum Navigieren",
-			"instruction-use": "zur Verwendung",
-			"instruction-dismiss": "zum Verwerfen"
+		    "instruction-back": "zum Zurückgehen",
+		    "instruction-navigate": "zum Navigieren",
+		    "instruction-use": "zum Verwenden des Elements",
+		    "instruction-dismiss": "zum Schließen",
+		    "key-back": "⌫ oder ←",
+		    "key-navigate": "↑↓",
+		    "key-use": "↵",
+		    "key-dismiss": "Esc"
         },
         "items": {
             "name": "Elemente",
@@ -111,8 +208,6 @@
             "label-empty-no-items": "Keine Toolbar-Elemente.",
             "button-add-break-tooltip": "Zeilenumbruch zur Toolbar hinzufügen.",
             "button-add-separator-tooltip": "Trenner zur Toolbar hinzufügen",
-            "button-collapse-items-tooltip": "Alle Elemente zusammenklappen.",
-            "button-expand-items-tooltip": "Alle Elemente ausklappen.",
             "button-new-item": "+ Toolbar-Element hinzufügen",
             "button-new-item-tooltip": "Neues Element der Toolbar hinzufügen",
             "option-item-empty-label": "Keine Bezeichnung festgelegt",
@@ -121,6 +216,21 @@
             "option-edit-item-tooltip": "Toolbar-Element bearbeiten",
             "option-edit-item-type-tooltip": "Bearbeiten {{itemType}}"
         },
+		"mappings": {
+	        "name": "Ordnerzuweisungen",
+	        "name-with-count": "Ordnerzuweisungen ({{count}})",
+	        "description": "Notizen in den unten aufgeführten Ordnern zeigen die zugewiesene Toolbar an. Die Reihenfolge wird von oben nach unten priorisiert.",
+	        "label-empty": "Klicke auf die Schaltfläche, um eine Zuweisung zu erstellen.",
+	        "placeholder-folder": "Ordner",
+	        "placeholder-toolbar": "Toolbar",
+	        "button-collapse-tooltip": "Alle Zuweisungen einklappen",
+	        "button-expand-tooltip": "Alle Zuweisungen ausklappen",
+	        "button-new": "+ Neue Zuweisung",
+	        "button-new-tooltip": "Eine neue Zuweisung hinzufügen",
+            "option-folder-all": "Alle Ordner",
+            "option-folder-root": "Nur Hauptordner",
+	        "error-folder-already-mapped": "Dieser Ordner hat bereits eine zugewiesene Toolbar."
+  		}
         "name": {
             "name": "Name",
             "description": "Dieser Toolbar einen eindeutigen Namen geben.",
@@ -132,6 +242,13 @@
                 "name": "Symbol",
                 "description": "Legt das Symbol für die schwebende Schaltfläche und die Navigationsleiste (mobil) fest. Erfordert einen Neustart.",
                 "tooltip": "Symbol wählen"
+			},
+			"ribbon-action": {
+		        "name": "Aktion des Ribbon-Icons 📱",
+		        "description": "Aktion, die ausgeführt wird, wenn das Ribbon-Icon (auf Mobilgeräten) verwendet wird.",
+		        "option-toolbar": "Aktuelle Toolbar anzeigen",
+		        "option-item-suggester": "Alle Werkzeuge anzeigen",
+		        "option-toolbar-suggester": "Alle Toolbars anzeigen"
             },
             "show-edit-tbar": {
                 "name": "Zeige 'Toolbar bearbeiten' in Toolbar-Menüs",
@@ -186,6 +303,12 @@
 		    "style-tooltip-use-class": "In Callout oder CSS verwenden: {{class}}",
 		    "style-remove-tooltip": "Entfernen"
         },
+		"toolbar-suggest-modal": {
+	        "placeholder": "Nach einer Toolbar suchen...",
+	        "instruction-navigate": "zum Navigieren",
+	        "instruction-use": "zum Öffnen der Toolbar",
+	        "instruction-dismiss": "zum Schließen"
+    	}
         "toolbars": {
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
@@ -205,7 +328,16 @@
             "name": "Verwendung",
             "description": "Diese Toolbar wird in {{mappingCount}} Zuordnung(en) und {{itemCount}} Toolbar-Element(en) verwendet..",
             "description-search": "Nach der Verwendung von Eigenschaften suchen"
-        }
+        },
+		"whats-new": {
+	        "title": "Was gibt es Neues in Note Toolbar?",
+	        "button-read": "Lesen ↗",
+	        "button-read-tooltip": "github.com öffnen",
+	        "label-release-notes": "Versionshinweise",
+	        "label-release-notes-description": "Detaillierte Hinweise zu den neuesten Versionen findest du auf GitHub.",
+	        "label-roadmap": "Was steht für Note Toolbar an?",
+	        "label-roadmap-description": "Sieh dir die Roadmap an, um einen Blick auf die in Betracht gezogenen Funktionen zu werfen."
+    }
     },
     "toolbar": {
         "button-floating-tooltip": "Note Toolbar öffnen",
