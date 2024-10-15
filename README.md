@@ -6,7 +6,12 @@ The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create cont
 
 With this plugin, you also get [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) which you can add anywhere within your notes.
 
-📖 **How to use this plugin: [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)**
+**Jump to:**
+
+- [Installation](#installation)
+- [Getting Started](#getting-started-)
+- [Examples](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples)
+- [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
 ![Demo of a sticky toolbar](./docs/note_toolbar_demo.gif)
 
