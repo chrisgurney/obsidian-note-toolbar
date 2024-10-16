@@ -19,6 +19,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 	
+	lastFileOpenedOnLayoutChange: TFile | null | undefined;
 	lastCalloutLink: Element | null = null; // track the last used callout link, for the menu URI
 
 	/**
@@ -184,7 +185,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	layoutChangeListener = () => {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let viewMode = currentView?.getMode();
-		// debugLog('===== LAYOUT-CHANGE ===== ', viewMode);
+		debugLog('===== LAYOUT-CHANGE ===== ', currentView?.file?.name, currentView, viewMode);
+		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
+		if (this.lastFileOpenedOnLayoutChange !== currentView?.file) {
+			this.lastFileOpenedOnLayoutChange = currentView?.file;
+		}
+		else {
+			return; // this isn't a new file, so do nothing
+		}
 		// check for editing or reading mode
 		switch(viewMode) {
 			case "source":
@@ -193,10 +201,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				let toolbarEl = this.getToolbarEl();
 				let toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
 				// debugLog("layout-change: position: ", toolbarPos);
-				// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
-				toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
 				this.app.workspace.onLayoutReady(debounce(() => {
-					// debugLog("LAYOUT READY");
+					// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
+					toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
 					this.renderToolbarForActiveFile();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
@@ -209,9 +216,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On leaf changes, delete, check and render toolbar if necessary. 
 	 */
 	leafChangeListener = (event: any) => {
-		// debugLog('===== LEAF-CHANGE ===== ', event);
 		let renderToolbar = false;
 		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+		debugLog('===== LEAF-CHANGE ===== ', event);
 		if (currentView) {
 			// check for editing or reading mode
 			renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
