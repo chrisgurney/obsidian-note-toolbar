@@ -222,7 +222,7 @@
             "name": "Folder mappings",
             "name-with-count": "Folder mappings ({{count}})",
             "description": "Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.",
-            "label-empty": "Click the button to create a mapping.",
+            "label-empty": "Use the button to create a mapping.",
             "placeholder-folder": "Folder",
             "placeholder-toolbar": "Toolbar",
             "button-collapse-tooltip": "Collapse all mappings",
@@ -323,7 +323,7 @@
             "button-new-tbar-tooltip": "Add a new toolbar",
             "duplicated-tbar-suffix": "copy",
             "imported-tbar-name": "New toolbar",
-            "label-empty-create-tbar": "Click the button to create a toolbar.",
+            "label-empty-create-tbar": "Use the button to create a toolbar.",
             "label-tbar-name-not-set": "⚠️ Toolbar name not set"
         },
         "usage": {
