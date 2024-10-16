@@ -1,6 +1,6 @@
 Here's what's new in v1.14:
 
-# Share toolbars
+## Share toolbars
 
 Share toolbars with a link that you can send to other users.
 
@@ -13,9 +13,7 @@ Share toolbars with a link that you can send to other users.
   <img src="https://github.com/user-attachments/assets/a1d59acb-729c-4017-83d9-99985a920cf9" width="700"/>
 </a>
 
----
-
-# Import toolbars and items from Note Toolbar Callouts
+## Import toolbars and items from Note Toolbar Callouts
 
 Create toolbars from [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) in one of two ways:
 
@@ -28,9 +26,7 @@ Create toolbars from [Note Toolbar Callouts](https://github.com/chrisgurney/obsi
 
 → Learn more about [importing toolbars and items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars-from-callouts).
 
----
-
-# Copy toolbars as callouts
+## Copy toolbars as callouts
 
 Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard.
 
@@ -40,9 +36,7 @@ Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard
 
 → Learn more about [copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars), including what's supported and what's not.
 
----
-
-# Commands to make building callouts easier
+## Commands to make building callouts easier
 
 `Note Toolbar: Copy URI for command`
 
@@ -62,15 +56,11 @@ Lets you select a command, and then copies a Note Toolbar Callout line to the cl
 
 ...then all you need to do is choose what the item should look like in the link's text (`[]`).
 
----
-
-# Updated toolbar examples
+## Updated toolbar examples
 
 Check out the [expanded Examples page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples) with numerous use cases and now easier-to-add toolbars. [Share your own examples!](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell).
 
----
-
-# Other improvements
+## Other improvements
 
 - In Settings, in the toolbar list, look for a new "More" (...) menu (where "Duplicate" used to be) containing _Duplicate_, _Share_, _Copy as callout_, and _Delete_ options.
 - Most plugin startup tasks are now done after the layout's ready, and after initial toolbar rendering, which may help with startup performance. `#ObsidianOctober`
@@ -79,16 +69,12 @@ Check out the [expanded Examples page](https://github.com/chrisgurney/obsidian-n
 - Updated the _Help_ window with a link to a bug report Google form, removing the pre-requisite for a GitHub account.
 - Updated the _What's New_ window with a permanent link to the Roadmap, at the bottom.
 
----
-
-# Fixes
+## Fixes
 
 - Duplicated toolbar items without changes now update the settings UI, save the change, and re-render the toolbar.
 - Toolbar icons/text weren't being vertically centered by a few pixels, due to a line-height being added.
 
----
-
-# And in case you missed it...
+## And in case you missed it...
 
 - [v1.13 release](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.13): _What's New_ + _Help_ windows, and access to toolbars for linked notes from the file menu.
 - [v1.12 release](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.12.1): Translations, and Quick Tools (fast access to all of your tools).

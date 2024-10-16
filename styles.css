@@ -2394,11 +2394,10 @@ input[type="text"].note-toolbar-setting-error {
     code {
         font-size: calc(var(--font-ui-small) + 1px);
     }
-    h1 {
-        font-size: var(--font-ui-large);
-    }
     h2 {
-        font-size: var(--font-ui-medium);
+        font-size: var(--font-ui-large);
+        border-bottom: solid 1px var(--background-modifier-border);
+        padding-bottom: 0.3em;
     }
     hr {
         margin: 1rem 0;
