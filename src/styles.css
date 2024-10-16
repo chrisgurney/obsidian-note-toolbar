@@ -1499,6 +1499,7 @@ input[type="text"].note-toolbar-setting-error {
 .note-toolbar-share-dialog {
     .setting-item:first-of-type {
         border-top: none;
+        overflow: hidden;
         .setting-item-info {
             overflow: auto;
             .setting-item-name {
