@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, PaneType, Platform, TFile } from "obsidian";
+import { App, MarkdownView, PaneType, Platform, TFile } from "obsidian";
 import { ComponentType, ItemType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
@@ -143,6 +143,21 @@ export function hasVars(s: string): boolean {
  */
 function hasVisibleComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
     return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
+}
+
+/**
+ * Inserts a string at the current cursor position.
+ * @param app App
+ * @param textToInsert string to insert
+ */
+export function insertTextAtCursor(app: App, textToInsert: string) {
+	const activeLeaf = app.workspace.getActiveViewOfType(MarkdownView);
+	const editor = activeLeaf ? activeLeaf.editor : null;
+	if (editor) {
+		const cursor = editor?.getCursor();
+		editor.replaceRange(textToInsert, cursor);
+		editor.setCursor(cursor.line, cursor.ch + textToInsert.length);
+	}
 }
 
 /**
