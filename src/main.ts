@@ -19,8 +19,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 	
+	// track the last opened file, to reduce unneccessary re-renders 
 	lastFileOpenedOnLayoutChange: TFile | null | undefined;
-	lastCalloutLink: Element | null = null; // track the last used callout link, for the menu URI
+	// track the last used callout link, for the menu URI
+	lastCalloutLink: Element | null = null;
+	// track the plugins available, to help with rendering edge cases
+	hasPlugin: {[key: string]: boolean} = {
+		"make-md": false
+	}
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -105,6 +111,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
 				(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
 			}
+
+			// for edge cases, check what other plugins are enabled that we need to know about
+			Object.keys(this.hasPlugin).forEach(pluginKey => {
+				if (pluginKey in (this.app as any).plugins.plugins) {
+					debugLog(`${pluginKey} present`);
+					this.hasPlugin[pluginKey] = true;
+				}
+			});
 
 		});
 
@@ -1007,16 +1021,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		// debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
-
-				// TODO: check if the plugin is installed
-					// if so, show message: enable the plugin + link
-					// if not, show message: install the plugin + link
-					// "try searching for this plugin" because not all plugins use their ID for the URI
-				// const [pluginPart, commandPart] = commandId.split(":");
-				// const plugin = (this.app as any).plugins.plugins[pluginPart];
-				// debugLog(pluginPart, commandPart, plugin);
-				// (pluginPart && (pluginPart !== "workspace")) ? debugLog(`obsidian://show-plugin?id=${pluginPart}`) : undefined;
-
 				new Notice(t('notice.error-command-not-found', { command: commandId }));
 				return;
 			}
@@ -1371,6 +1375,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let propertiesContainer = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
 		// debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
+		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
+		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
+			return null;
+		}
 		return propertiesContainer;
 	}
 
