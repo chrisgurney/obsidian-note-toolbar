@@ -1412,7 +1412,7 @@ export default class ToolbarSettingsModal extends Modal {
 					type: itemType
 				},
 				tooltip: "",
-				visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS,
+				visibility: {...DEFAULT_ITEM_VISIBILITY_SETTINGS},
 			};
 		this.toolbar.items.push(newToolbarItem);
 		this.toolbar.updated = new Date().toISOString();
