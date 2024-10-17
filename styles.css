@@ -1229,6 +1229,10 @@ body {
             background-color: unset;
             border-radius: unset;
         }
+        /* fix for bold Iconize icons #162 */
+        & .cm-iconize-icon svg svg[stroke-width='16px'] {
+            stroke-width: 2;
+        }
         &:hover {
             /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
             background-color: unset;
