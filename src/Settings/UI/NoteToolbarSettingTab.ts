@@ -100,7 +100,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// scroll to the position when the modal was last open
 		this.rememberLastPosition(this.containerEl);
 
-		// show the What's New dialog once, if the user hasn't seen it yet
+		// show the What's New view once, if the user hasn't seen it yet
 		showWhatsNewIfNeeded(this.plugin);
 
 	}

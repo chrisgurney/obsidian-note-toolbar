@@ -1,7 +1,6 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting } from "obsidian";
 import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
-import { WhatsNewModal } from "../Modals/WhatsNewModal";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
 import { debugLog } from "Utils/Utils";
@@ -230,8 +229,10 @@ export function showWhatsNewIfNeeded(plugin: NoteToolbarPlugin) {
 	if (plugin.settings.whatsnew_version !== WHATSNEW_VERSION) {
 		plugin.settings.whatsnew_version = WHATSNEW_VERSION;
 		plugin.settingsManager.save().then(() => {
-			const whatsnew = new WhatsNewModal(plugin);
-			whatsnew.open();
+			plugin.app.workspace.getLeaf(true).setViewState({
+				type: VIEW_TYPE_WHATS_NEW,
+				active: true
+			});
 		});
 	}
 

@@ -4,7 +4,6 @@ import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_WHATS_NEW } from "Setting
 import { HelpModal } from "Settings/UI/Modals/HelpModal";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { WhatsNewModal } from "Settings/UI/Modals/WhatsNewModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 import { debugLog } from "Utils/Utils";
 
