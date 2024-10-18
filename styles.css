@@ -2380,6 +2380,7 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-whatsnew-content {
+    user-select: text;
     code {
         font-size: calc(var(--font-ui-small) + 1px);
     }
@@ -2387,9 +2388,6 @@ input[type="text"].note-toolbar-setting-error {
         border: 1px solid var(--background-modifier-border);
         border-radius: 0.5rem;
         width: 100%;
-    }
-    button.copy-code-button {
-        display: none;
     }
 }
 
