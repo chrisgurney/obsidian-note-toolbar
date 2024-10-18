@@ -48,19 +48,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		// TODO: playing with Dataview support
-		// new Setting(containerEl)
-		// 	.addButton((button: ButtonComponent) => {
-		// 		button
-		// 			.setButtonText("dv test")
-		// 			.onClick(async () => {
-		// 				debugLog("Trying dataview...");
-		// 				let dv = new DataviewAdapter();
-		// 				const result = await dv.evaluate("dv.current().file.mtime");
-		// 				debugLog("result: " + result);
-		// 			});
-		// 	});
-
 		if (this.plugin.settings.version !== SETTINGS_VERSION) {
 			new Setting(containerEl)
 				.setName(t('setting.error-old-settings-name'))
