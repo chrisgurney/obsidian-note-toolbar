@@ -1,4 +1,4 @@
-Here's what's new in v1.14:
+# What's new in Note Toolbar v1.14
 
 ## Share toolbars
 

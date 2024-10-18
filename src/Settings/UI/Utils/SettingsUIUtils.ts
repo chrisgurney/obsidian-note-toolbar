@@ -1,9 +1,10 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting } from "obsidian";
-import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { WhatsNewModal } from "../Modals/WhatsNewModal";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
+import { debugLog } from "Utils/Utils";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
@@ -106,13 +107,17 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 		let helpContainerEl = settingsDiv.createDiv();
 		helpContainerEl.addClass('note-toolbar-setting-help-section');
 		const helpDesc = document.createDocumentFragment();
-		helpDesc.append(
-			"v" + plugin.manifest.version,
-			" • ",
-			helpDesc.createEl("a", { href: "obsidian://note-toolbar?whatsnew", text: t('setting.button-whats-new') }),
-			" • ",
-			helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }),
-		);
+		helpDesc.append("v" + plugin.manifest.version, " • ");
+		let whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
+		plugin.registerDomEvent(whatsNewLink, 'click', (event) => { 
+			plugin.app.workspace.getLeaf(true).setViewState({
+				type: VIEW_TYPE_WHATS_NEW,
+				active: true
+			});
+			// @ts-ignore
+			plugin.app.setting.close();
+		});
+		helpDesc.append(" • ", helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }));
 		helpContainerEl.append(helpDesc);
 
 	}
@@ -130,8 +135,12 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 				button
 					.setTooltip(t('setting.button-whats-new-tooltip'))
 					.onClick(() => {
-						let whatsnew = new WhatsNewModal(plugin);
-						whatsnew.open();
+						plugin.app.workspace.getLeaf(true).setViewState({
+							type: VIEW_TYPE_WHATS_NEW,
+							active: true
+						});
+						// @ts-ignore
+						plugin.app.setting.close();
 					})
 					.buttonEl.setText(t('setting.button-whats-new'));
 			})

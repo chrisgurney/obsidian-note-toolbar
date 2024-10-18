@@ -35,6 +35,8 @@ export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); 
  TYPES
  ******************************************************************************/
 
+ export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
+
 export enum ComponentType {
 	Icon = 'icon',
 	Label = 'label'

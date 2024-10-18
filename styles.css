@@ -2355,41 +2355,18 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
-.is-phone .note-toolbar-setting-whatsnew-dialog {
-    .modal-header {
-        padding-top: 0;
-        .modal-title {
-            max-width: unset;
-        }
-    }
+.note-toolbar-setting-whatsnew-view .is-readable-line-width {
+    max-width: var(--file-line-width);
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.note-toolbar-setting-whatsnew-dialog {
-    padding: 0;
-    padding-bottom: 0.75em;
-    .modal-close-button {
-        color: #dadada;
-    }
+.note-toolbar-setting-whatsnew-cta {
+    border-top: 1px solid var(--background-modifier-border);
+    padding-top: 0.75em;
 }
 
-.note-toolbar-setting-whatsnew-banner {
-    background-color:hsla(268,51%,21%,1);
-    background-image:
-        radial-gradient(at 4% 92%, hsla(255,48%,30%,0.85) 0px, transparent 50%),
-        radial-gradient(at 95% 7%, hsla(277,80%,6%,1) 0px, transparent 50%),
-        radial-gradient(at 95% 91%, hsla(287,88%,66%,0.32) 0px, transparent 50%),
-        radial-gradient(at 61% 56%, hsla(281,44%,13%,1) 0px, transparent 50%),
-        radial-gradient(at 4% 7%, hsla(47,100%,50%,0.35) 0px, transparent 50%);
-    color: #dadada;
-    font-weight: var(--h2-weight);
-    padding: 1.75em !important;
-    margin-bottom: 0;
-    text-align: center;
-    text-shadow: 1px 1px black;
-    vertical-align: middle;
-}
-
-.is-phone .note-toolbar-setting-whatsnew-notes {
+.is-phone .note-toolbar-setting-whatsnew-cta {
     .setting-item {
         flex-direction: row !important;
         padding-top: 0 !important;
@@ -2403,43 +2380,17 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-whatsnew-content {
-    padding-inline: 1em;
     code {
         font-size: calc(var(--font-ui-small) + 1px);
-    }
-    h2 {
-        font-size: var(--font-ui-large);
-        border-bottom: solid 1px var(--background-modifier-border);
-        padding-bottom: 0.3em;
-    }
-    hr {
-        margin: 1rem 0;
     }
     img {
         border: 1px solid var(--background-modifier-border);
         border-radius: 0.5rem;
         width: 100%;
     }
-    p {
-        font-size: calc(var(--font-ui-small) + 1px);
-    }
-    ul {
-        padding-inline-start: 2em;
-    }
     button.copy-code-button {
         display: none;
     }
-}
-
-.note-toolbar-setting-whatsnew-notes {
-    padding: 1em;
-    .setting-item {
-        padding-bottom: 0;
-    }
-}
-
-.note-toolbar-setting-whatsnew-section {
-    border-top: 1px solid var(--background-modifier-border);
 }
 
 .note-toolbar-setting-modal-container {
