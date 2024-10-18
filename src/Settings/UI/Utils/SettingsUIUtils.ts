@@ -98,8 +98,9 @@ export function createToolbarPreviewFr(
  * Displays the help section.
  * @param containerEl HTMLElement to add the content to.
  * @param useTextVersion set to true to just use the small text version.
+ * @param closeCallback function to close the settings window, which will depend on where it was launched from
  */
-export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLElement, useTextVersion: boolean = false) {
+export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLElement, useTextVersion: boolean = false, closeCallback: () => void) {
 	
 	if (Platform.isPhone || useTextVersion) {
 
@@ -113,8 +114,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 				type: VIEW_TYPE_WHATS_NEW,
 				active: true
 			});
-			// @ts-ignore
-			plugin.app.setting.close();
+			closeCallback();
 		});
 		helpDesc.append(" • ", helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }));
 		helpContainerEl.append(helpDesc);
@@ -138,8 +138,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 							type: VIEW_TYPE_WHATS_NEW,
 							active: true
 						});
-						// @ts-ignore
-						plugin.app.setting.close();
+						closeCallback();
 					})
 					.buttonEl.setText(t('setting.button-whats-new'));
 			})

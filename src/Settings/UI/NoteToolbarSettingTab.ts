@@ -70,7 +70,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 
 		// help
-		displayHelpSection(this.plugin, containerEl);
+		displayHelpSection(this.plugin, containerEl, undefined, () => {
+			// @ts-ignore
+			this.plugin.app.setting.close();
+		});
 
 		// toolbar list
 		this.displayToolbarList(containerEl);
