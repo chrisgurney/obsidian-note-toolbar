@@ -233,12 +233,15 @@ export default class DataviewAdapter {
     async query(expression?: string, container?: HTMLElement): Promise<string> {
 
         let result = '';
+        const activeFile = this.plugin.app.workspace.getActiveFile();
 
         if (!expression) {
             return '';
         }
-
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+        if (!activeFile) {
+            debugLog("view: We're not in a file");
+            return '';
+        }
 
         const component = new Component();
         component.load();
@@ -247,12 +250,19 @@ export default class DataviewAdapter {
                 debugLog("query: " + expression);
                 // returns a Promise<Result<QueryResult, string>>
                 let dvResult = await (this.dataviewApi as any).queryMarkdown(expression, activeFile, this.dataviewApi.settings);
+                // TODO: is there a chance result is empty/undefined?
                 debugLog("query: result: ", dvResult);
-                if (dvResult && container && activeFile) {
+                if (container) {
                     container.empty();
-                    MarkdownRenderer.render(this.plugin.app, dvResult.value, container, activeFile.path, component);
+                    MarkdownRenderer.render(
+                        this.plugin.app,
+                        dvResult.successful ? dvResult.value : dvResult.error,
+                        container,
+                        activeFile.path,
+                        component
+                    );
                 }
-                result = dvResult.value;
+                result = dvResult.successful ? dvResult.value : '```' + dvResult.error + '```';
             }
         }
         catch (error) {
