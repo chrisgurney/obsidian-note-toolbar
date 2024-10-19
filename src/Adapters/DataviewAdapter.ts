@@ -37,47 +37,55 @@ export default class DataviewAdapter implements Adapter {
     async useFunction(config: ScriptConfig): Promise<string | undefined> {
         
         let result;
+
         let containerEl;
         if (config.outputContainer) {
             containerEl = this.plugin.getScriptOutputEl(config.outputContainer);
             if (!containerEl) {
-                debugLog('Could not find container:', config.outputContainer);
-                return;
+                result = `Could not find container in current note: ${config.outputContainer}`;
+                return result;
             }
         }
 
         switch (config.pluginFunction) {
             case 'evaluate':
-                result = await this.evaluate(config.expression);
+                config.expression
+                    ? result = await this.evaluate(config.expression)
+                    : result = `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             case 'evaluateInline':
-                result = await this.evaluateInline(config.expression);
-                break;
-            case 'executeJs':
-                await this.executeJs(config.expression, containerEl);
-                break;
-            case 'query':
-                result = await this.query(config.expression, containerEl);
+                config.expression
+                    ? result = await this.evaluateInline(config.expression)
+                    : result = `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             case 'exec':
-                await this.exec(config.sourceFile, config.sourceArgs, containerEl);
+                config.sourceFile
+                    ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
+                    : result = `Error: ${config.pluginFunction}: Script file is required`;
+                break;
+            case 'executeJs':
+                config.expression
+                    ? await this.executeJs(config.expression, containerEl)
+                    : result = `Error: ${config.pluginFunction}: Expression is required`;
+                break;
+            case 'query':
+                config.expression
+                    ? result = await this.query(config.expression, containerEl)
+                    : result = `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             default:
-                debugLog('Unsupported function');
+                result = `Unsupported function: ${config.pluginFunction}`;
                 break;
         }
+        
         return result;
 
     }
 
     // TODO: is there a need for both of these functions? with evaluateInline? (would require an active file)
-    async evaluate(expression?: string): Promise<string> {
+    async evaluate(expression: string): Promise<string> {
 
         let result = '';
-
-        if (!expression) {
-            return '';
-        }
 
         const activeFile = this.plugin.app.workspace.getActiveFile();    
         try {
@@ -97,14 +105,10 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
-    async evaluateInline(expression?: string): Promise<string> {
+    async evaluateInline(expression: string): Promise<string> {
 
         let result = '';
         
-        if (!expression) {
-            return '';
-        }
-
         const activeFile = this.plugin.app.workspace.getActiveFile();
         try {
             if (this.dataviewApi) {
@@ -131,42 +135,13 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
-    async executeJs(expression?: string, container?: HTMLElement): Promise<void> {
-
-        let resultEl: HTMLElement = container ? container : document.createElement('div');
-
-        if (!expression) {
-            return;
-        }
-        
-        const activeFile = this.plugin.app.workspace.getActiveFile();
-
-        const component = new Component();
-        component.load();
-        try {
-            if (this.dataviewApi) {
-                debugLog("executeJs: ", expression);
-                // e.g., add a code block, get the element, then pass it
-                await (this.dataviewApi as any).executeJs(expression, resultEl, component, activeFile?.path);
-                debugLog("executeJs: result: ", resultEl);
-            }
-        }
-        catch (error) {
-            debugLog("Caught error:", error);
-        }
-        finally {
-            component.unload();
-        }
-
-    }
-
     /**
      * Adaptation of dv.view(). This version does not support CSS.
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
-    async exec(script?: string, input: any = null, container?: HTMLElement) {
+    async exec(filename: string, input: any = null, container?: HTMLElement) {
 
-        if (!script) {
+        if (!filename) {
             return;
         }
 
@@ -186,12 +161,12 @@ export default class DataviewAdapter implements Adapter {
         
         const currentFilePath = activeFile.path;
 
-        let viewFile = this.plugin.app.metadataCache.getFirstLinkpathDest(script, currentFilePath);
+        let viewFile = this.plugin.app.metadataCache.getFirstLinkpathDest(filename, currentFilePath);
 
         if (!viewFile) {
             // TODO: render messages into the container
             // debugLog(container, `view: custom view not found for '${simpleViewPath}' or '${complexViewPath}'.`);
-            debugLog(`view: script file not found: ${script}`);
+            debugLog(`view: script file not found: ${filename}`);
             return;
         }
 
@@ -233,14 +208,36 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
-    async query(expression?: string, container?: HTMLElement): Promise<string> {
+    async executeJs(expression: string, container?: HTMLElement): Promise<void> {
+
+        let resultEl: HTMLElement = container ? container : document.createElement('div');
+
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+
+        const component = new Component();
+        component.load();
+        try {
+            if (this.dataviewApi) {
+                debugLog("executeJs: ", expression);
+                // e.g., add a code block, get the element, then pass it
+                await (this.dataviewApi as any).executeJs(expression, resultEl, component, activeFile?.path);
+                debugLog("executeJs: result: ", resultEl);
+            }
+        }
+        catch (error) {
+            debugLog("Caught error:", error);
+        }
+        finally {
+            component.unload();
+        }
+
+    }
+
+    async query(expression: string, container?: HTMLElement): Promise<string> {
 
         let result = '';
         const activeFile = this.plugin.app.workspace.getActiveFile();
 
-        if (!expression) {
-            return '';
-        }
         if (!activeFile) {
             debugLog("view: We're not in a file");
             return '';
