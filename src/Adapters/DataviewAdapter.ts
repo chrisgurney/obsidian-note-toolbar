@@ -43,7 +43,7 @@ export default class DataviewAdapter {
             case 'query':
                 result = await this.query(config.expression, containerEl);
                 break;
-            case 'view':
+            case 'exec':
                 await this.exec(config.sourceFile, config.sourceArgs, containerEl);
                 break;
             default:
@@ -170,8 +170,6 @@ export default class DataviewAdapter {
         
         const currentFilePath = activeFile.path;
 
-        // let checkForCss = false;
-        // let cssElement = undefined;
         let viewFile = this.plugin.app.metadataCache.getFirstLinkpathDest(script, currentFilePath);
 
         if (!viewFile) {
@@ -180,16 +178,6 @@ export default class DataviewAdapter {
             debugLog(`view: script file not found: ${script}`);
             return;
         }
-
-        // if (checkForCss) {
-        //     // Check for optional CSS.
-        //     let cssFile = this.plugin.app.metadataCache.getFirstLinkpathDest(`${viewName}/view.css`, this.currentFilePath);
-        //     if (cssFile) {
-        //         let cssContents = await this.plugin.app.vault.read(cssFile);
-        //         cssContents += `\n/*# sourceURL=${location.origin}/${cssFile.path} */`;
-        //         cssElement = this.container.createEl("style", { text: cssContents, attr: { scope: " " } });
-        //     }
-        // }
 
         let contents = await this.plugin.app.vault.read(viewFile);
         if (contents.contains("await")) contents = "(async () => { " + contents + " })()";
@@ -219,8 +207,7 @@ export default class DataviewAdapter {
             }
         }
         catch (error) {
-            // if (cssElement) this.container.removeChild(cssElement);
-            // TODO: render messages into the container?
+            // TODO: render messages into container, if provided
             // debugLog(container, `view: Failed to execute '${viewFile.path}'.\n\n${ex}`);
             debugLog(`view: Failed to execute '${viewFile.path}'.\n\n${error}`);
         }
