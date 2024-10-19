@@ -1392,6 +1392,13 @@ export default class NoteToolbarPlugin extends Plugin {
 		return propertiesContainer;
 	}
 
+	getScriptOutputEl(calloutMeta: string): HTMLElement | null {
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
+		debugLog("getScriptOutputEl()", containerEl);
+		return containerEl;
+	}
+
 	/**
 	 * Get the toolbar element, in the current view.
 	 * @param positionsToCheck 

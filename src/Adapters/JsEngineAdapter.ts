@@ -15,25 +15,38 @@ export default class JsEngineAdapter {
         this.engine = (plugin.app as any).plugins.plugins["js-engine"].api;
     }
 
-    async importJs(script: string, functionName?: string, ...args: any[]) {
-
+    async import(script: string): Promise<void> {
         if (this.engine) {
             let module = await this.engine.importJs(script);
             debugLog("importJs", module);
-            if (functionName) {
-                if (module[functionName] && typeof module[functionName] === 'function') {
+        }
+    }
+
+    async exec(script: string, functionName: string, ...args: any[]): Promise<string> {
+
+        let result = '';
+        if (this.engine) {
+            let module = await this.engine.importJs(script);
+            debugLog("execute", module);
+            if (module[functionName] && typeof module[functionName] === 'function') {
+                try {
                     if (args) {
-                        module[functionName](...args);
+                        result = module[functionName](this.engine, ...args);
                     }
                     else {
-                        module[functionName]();
+                        result = module[functionName](this.engine);
                     }
+                    debugLog('execute: result:', result);
                 }
-                else {
-                    debugLog('Function not found:', script, functionName);
+                catch (error) {
+                    debugLog('Caught error:', error);
                 }
             }
+            else {
+                debugLog('Function not found:', script, functionName);
+            }
         }
+        return result;
 
     }
 

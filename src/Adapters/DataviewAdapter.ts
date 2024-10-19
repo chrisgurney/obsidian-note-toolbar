@@ -1,5 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
+import { ScriptConfig } from "Settings/NoteToolbarSettings";
 import { debugLog } from "Utils/Utils";
 
 /**
@@ -17,11 +18,141 @@ export default class DataviewAdapter {
         this.dataviewApi = (plugin.app as any).plugins.plugins["dataview"].api;
     }
 
+    async use(config: ScriptConfig): Promise<string | undefined> {
+        
+        let containerEl;
+        if (config.outputContainer) {
+            containerEl = this.plugin.getScriptOutputEl(config.outputContainer);
+            if (!containerEl) {
+                debugLog('Could not find container:', config.outputContainer);
+                return;
+            }
+        }
+
+        let result;
+        switch (config.pluginFunction) {
+            case 'evaluate':
+                result = await this.evaluate(config.expression);
+                break;
+            case 'evaluateInline':
+                result = await this.evaluateInline(config.expression);
+                break;
+            case 'executeJs':
+                await this.executeJs(config.expression, containerEl);
+                break;
+            case 'query':
+                result = await this.query(config.expression, containerEl);
+                break;
+            case 'view':
+                await this.exec(config.sourceFile, config.sourceArgs, containerEl);
+                break;
+            default:
+                debugLog('Unsupported function');
+                break;
+        }
+        return result;
+
+    }
+
+    // TODO: is there a need for both of these functions? with evaluateInline? (would require an active file)
+    async evaluate(expression?: string): Promise<string> {
+
+        let result = '';
+
+        if (!expression) {
+            return '';
+        }
+
+        const activeFile = this.plugin.app.workspace.getActiveFile();    
+        try {
+            if (this.dataviewApi) {
+                debugLog("evaluate: " + expression);
+                // Result<Literal, string>
+                let dvResult = await (this.dataviewApi as any).evaluate(expression, activeFile);
+                debugLog("evaluate: result: ", dvResult.value);
+                result = dvResult.value;
+            }
+        }
+        catch (error) {
+            debugLog("Caught error:", error);
+        }
+
+        return result;
+
+    }
+
+    async evaluateInline(expression?: string): Promise<string> {
+
+        let result = '';
+        
+        if (!expression) {
+            return '';
+        }
+
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+        try {
+            if (this.dataviewApi) {
+                debugLog("evaluate: " + expression);
+                // Result<Literal, string>
+                let dvResult = await (this.dataviewApi as any).evaluateInline(expression, activeFile?.path);
+                debugLog("evaluate: result:", dvResult);
+                result = dvResult.value instanceof Object ? dvResult.value.constructor.name : dvResult.value.toString();
+                // TODO? render into provided container?
+                // await this.dataviewApi.enderValue(
+                //     value: any,
+                //     container: HTMLElement,
+                //     component: Component,
+                //     filePath: string,
+                //     inline: boolean = false
+                // )
+            }
+        }
+        catch (error) {
+            debugLog("Caught error:", error);
+        }
+
+        return result;
+
+    }
+
+    async executeJs(expression?: string, container?: HTMLElement): Promise<void> {
+
+        let resultEl: HTMLElement = container ? container : document.createElement('div');
+
+        if (!expression) {
+            return;
+        }
+        
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+
+        const component = new Component();
+        component.load();
+        try {
+            if (this.dataviewApi) {
+                debugLog("executeJs: ", expression);
+                // e.g., add a code block, get the element, then pass it
+                await (this.dataviewApi as any).executeJs(expression, resultEl, component, activeFile?.path);
+                debugLog("executeJs: result: ", resultEl);
+            }
+        }
+        catch (error) {
+            debugLog("Caught error:", error);
+        }
+        finally {
+            component.unload();
+        }
+
+    }
+
     /**
-     * This version does not support CSS.
+     * Adaptation of dv.view(). This version does not support CSS.
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
-    async view(script: string, input: any = null, container?: HTMLElement) {
+    async exec(script?: string, input: any = null, container?: HTMLElement) {
+
+        if (!script) {
+            return;
+        }
 
         const activeFile = this.plugin.app.workspace.getActiveFile();
 
@@ -87,11 +218,11 @@ export default class DataviewAdapter {
                 );
             }
         }
-        catch (ex) {
+        catch (error) {
             // if (cssElement) this.container.removeChild(cssElement);
-            // TODO: render messages into the container
-            // debugLog(container, `view: Failed to execute view '${viewFile.path}'.\n\n${ex}`);
-            debugLog(`view: Failed to execute view '${viewFile.path}'.\n\n${ex}`);
+            // TODO: render messages into the container?
+            // debugLog(container, `view: Failed to execute '${viewFile.path}'.\n\n${ex}`);
+            debugLog(`view: Failed to execute '${viewFile.path}'.\n\n${error}`);
         }
         finally {
 			component.unload();
@@ -99,88 +230,14 @@ export default class DataviewAdapter {
 
     }
 
-    // TODO: is there a need for both of these functions? with evaluateInline?
-    async evaluate(expression: string): Promise<string> {
+    async query(expression?: string, container?: HTMLElement): Promise<string> {
 
-        let result = "";
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+        let result = '';
 
-        try {
-            if (this.dataviewApi) {
-                debugLog("evaluate: " + expression);
-                // Result<Literal, string>
-                let dvResult = await (this.dataviewApi as any).evaluate(expression, activeFile);
-                debugLog("evaluate: result: ", dvResult.value);
-                result = dvResult.value;
-            }
-        }
-        catch (error) {
-            debugLog("obsidian-dataview:", error);
+        if (!expression) {
+            return '';
         }
 
-        return result;
-
-    }
-
-    async evaluateInline(expression: string): Promise<string> {
-
-        let result = "";
-        const activeFile = this.plugin.app.workspace.getActiveFile();
-
-        try {
-            if (this.dataviewApi) {
-                debugLog("evaluate: " + expression);
-                // Result<Literal, string>
-                let dvResult = await (this.dataviewApi as any).evaluateInline(expression, activeFile?.path);
-                debugLog("evaluate: result:", dvResult);
-                result = dvResult.value instanceof Object ? dvResult.value.constructor.name : dvResult.value.toString();
-                // TODO? render into provided container?
-                // await this.dataviewApi.enderValue(
-                //     value: any,
-                //     container: HTMLElement,
-                //     component: Component,
-                //     filePath: string,
-                //     inline: boolean = false
-                // )
-            }
-        }
-        catch (error) {
-            debugLog("obsidian-dataview:", error);
-        }
-
-        return result;
-
-    }
-
-    async executeJs(code: string, container?: HTMLElement): Promise<HTMLElement> {
-
-        let resultEl: HTMLElement = container ? container : document.createElement('div');
-        const activeFile = this.plugin.app.workspace.getActiveFile();
-
-        const component = new Component();
-        component.load();
-        try {
-            if (this.dataviewApi) {
-                debugLog("executeJs: ", code);
-                // e.g., add a code block, get the element, then pass it
-                await (this.dataviewApi as any).executeJs(code, resultEl, component, activeFile?.path);
-                debugLog("executeJs: result: ", resultEl);
-            }
-        }
-        catch (error) {
-            debugLog("obsidian-dataview:", error);
-        }
-        finally {
-			component.unload();
-		}
-
-        return resultEl;
-
-    }
-
-    async query(expression: string, container?: HTMLElement): Promise<string> {
-
-        let result = "";
         const activeFile = this.plugin.app.workspace.getActiveFile();
 
         const component = new Component();

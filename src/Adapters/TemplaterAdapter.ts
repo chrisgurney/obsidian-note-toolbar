@@ -14,11 +14,11 @@ export default class TemplaterAdapter {
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
         this.templater = (plugin.app as any).plugins.plugins["templater-obsidian"].templater;
-        debugLog((plugin.app as any).plugins.plugins["templater-obsidian"]);
+        // debugLog((plugin.app as any).plugins.plugins["templater-obsidian"]);
         // this.tp = this.templater.current_functions_object;
     }
 
-    async appendTemplateToActiveFile(filename: string): Promise<void> {
+    async append(filename: string): Promise<void> {
 
         if (this.templater) {
             let templateFile = this.plugin.app.vault.getFileByPath(filename);
@@ -26,13 +26,13 @@ export default class TemplaterAdapter {
                 await this.templater.append_template_to_active_file(templateFile);
             }
             else {
-                debugLog("appendTemplateToActiveFile: file not found:", filename);
+                debugLog("append: file not found:", filename);
             }
         }
 
     }
 
-    async createNewNoteFromTemplate(filename: string): Promise<void> {
+    async createFrom(filename: string): Promise<void> {
 
         if (this.templater) {
             let templateFile = this.plugin.app.vault.getFileByPath(filename);
@@ -41,30 +41,57 @@ export default class TemplaterAdapter {
                 let newFile = await this.templater.create_new_note_from_template(templateFile);
             }
             else {
-                debugLog("createNewNoteFromTemplate: file not found:", filename);
+                debugLog("createFrom: file not found:", filename);
             }
         }
 
     }
 
-    // TODO? try again some other time, perhaps can use for a dynamic output filename?
-    // example: const result = await tp.parseTemplate("tp.file.creation_date()"); insertTextAtCursor(this.app, result);
-    // async parseTemplate(templateString: string): Promise<string> {
+    async parseTemplate(expression: string): Promise<string> {
 
-    //     const activeFile = this.plugin.app.workspace.getActiveFile();
-    //     const config = { 
-    //         undefined,
-    //         activeFile, 
-    //         this.templater.RunMode.DynamicProcessor,
-    //         activeFile
-    //     };
-    //     let result = '';
-    //     if (this.templater) {
-    //         result = await this.templater.parse_template(config, templateString);
-    //         debugLog("parseTemplate:", result);
-    //     }
-    //     return result;
+        // debugger;
+        let result = '';
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+        if (activeFile) {
+            const activeFilePath = activeFile.path;
+            const config = {
+                target_file: activeFile,
+                run_mode: 'DynamicProcessor',
+                active_file: activeFile
+            };
+            debugLog(config);
+            if (this.templater) {
+                // result = await this.templater.read_and_parse_template(config);
+                result = await this.templater.parse_template(config, expression);
+                debugLog("parseTemplate:", result);
+            }
+        }
+        return result;
 
-    // }
+    }
 
+    async parseTemplateFile(filename: string): Promise<string> {
+
+        // debugger;
+        let result = '';
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+        let templateFile = this.plugin.app.vault.getFileByPath(filename);
+        if (activeFile) {
+            const activeFilePath = activeFile.path;
+            const config = { 
+                template_file: templateFile,
+                target_file: activeFile,
+                run_mode: 'DynamicProcessor',
+                active_file: activeFile
+            };
+            debugLog(config);
+            if (this.templater) {
+                result = await this.templater.read_and_parse_template(config);
+                debugLog("parseTemplateFile:", result);
+            }
+        }
+        return result;
+
+    }
+    
 }
