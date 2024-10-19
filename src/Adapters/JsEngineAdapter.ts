@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Component } from "obsidian";
+import { Component, MarkdownRenderer } from "obsidian";
 import { debugLog } from "Utils/Utils";
 
 /**
@@ -47,6 +47,43 @@ export default class JsEngineAdapter {
             }
         }
         return result;
+
+    }
+
+    // TODO? version that also accepts: functionName: string, ...args: any[]
+    async execContainer(script: string, container: HTMLElement | null): Promise<void> {
+
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+        if (!activeFile) {
+            debugLog("no active file");
+            return;
+        }
+
+        if (!container) {
+            debugLog('No container provided');
+            return;
+        }
+
+        // const component = new Component();
+        // component.load();
+        try {
+            // container?.empty();
+            const activeFilePath = activeFile?.path;
+            const execution = await this.engine.internal.executeFile(script, {
+                container: container,
+                component: this.plugin,
+            });
+            debugLog(execution.result);
+            const renderer = this.engine.internal.createRenderer(container, activeFilePath, this.plugin);
+            // renderer.render(execution.result);
+            await MarkdownRenderer.render(this.plugin.app, execution.result, container, activeFilePath, this.plugin);
+        }
+        catch (error) {
+            debugLog("execContainer: error:", error);
+        }
+        finally {
+            // component.unload();
+        }
 
     }
 
