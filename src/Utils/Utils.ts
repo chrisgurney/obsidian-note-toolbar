@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { App, MarkdownView, PaneType, Platform, TFile } from "obsidian";
 import { ComponentType, ItemType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
-const DEBUG: boolean = false;
+const DEBUG: boolean = true;
 
 /**
  * Adds the given component to the given visibility prop.
@@ -150,7 +150,10 @@ function hasVisibleComponents(platform: { allViews?: { components: ComponentType
  * @param app App
  * @param textToInsert string to insert
  */
-export function insertTextAtCursor(app: App, textToInsert: string) {
+export function insertTextAtCursor(app: App, textToInsert?: string) {
+	if (!textToInsert) {
+		return;
+	}
 	const activeLeaf = app.workspace.getActiveViewOfType(MarkdownView);
 	const editor = activeLeaf ? activeLeaf.editor : null;
 	if (editor) {
