@@ -1,16 +1,28 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { Adapter, AdapterFunction } from "Types/interfaces";
 import { debugLog } from "Utils/Utils";
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
  */
-export default class DataviewAdapter {
+export default class DataviewAdapter implements Adapter {
 
-    plugin: NoteToolbarPlugin;
-    dataviewPlugin: any | undefined;
-    dataviewApi: any | undefined;
+    private plugin: NoteToolbarPlugin;
+    private dataviewPlugin: any | undefined;
+    private dataviewApi: any | undefined;
+
+    private functions: AdapterFunction[] = [
+        {
+            functionName: 'query',
+            friendlyName: 'Query',
+            parameters: [
+                { name: 'expression', type: 'string', required: true },
+                { name: 'outputContainer', type: 'string', required: false }
+            ]
+        }
+    ];
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
@@ -18,8 +30,13 @@ export default class DataviewAdapter {
         this.dataviewApi = (plugin.app as any).plugins.plugins["dataview"].api;
     }
 
-    async use(config: ScriptConfig): Promise<string | undefined> {
+    getFunctions(): AdapterFunction[] {
+        return this.functions;
+    }
+
+    async useFunction(config: ScriptConfig): Promise<string | undefined> {
         
+        let result;
         let containerEl;
         if (config.outputContainer) {
             containerEl = this.plugin.getScriptOutputEl(config.outputContainer);
@@ -29,7 +46,6 @@ export default class DataviewAdapter {
             }
         }
 
-        let result;
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = await this.evaluate(config.expression);

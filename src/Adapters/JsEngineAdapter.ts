@@ -1,18 +1,33 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
+import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { Adapter, AdapterFunction } from "Types/interfaces";
 import { debugLog } from "Utils/Utils";
 
 /**
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/API.ts
  */
-export default class JsEngineAdapter {
+export default class JsEngineAdapter implements Adapter {
 
-    plugin: NoteToolbarPlugin;
-    engine: any | undefined;
+    private plugin: NoteToolbarPlugin;
+    private engine: any | undefined;
+
+    private functions: AdapterFunction[] = [
+    ];
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
         this.engine = (plugin.app as any).plugins.plugins["js-engine"].api;
+    }
+
+    getFunctions(): AdapterFunction[] {
+        return this.functions;
+    }
+
+    async useFunction(config: ScriptConfig): Promise<string | undefined> {
+        let result;
+        
+        return result;
     }
 
     async import(script: string): Promise<void> {

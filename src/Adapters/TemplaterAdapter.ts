@@ -1,21 +1,35 @@
 import NoteToolbarPlugin from "main";
 import { TFile } from "obsidian";
+import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { Adapter, AdapterFunction } from "Types/interfaces";
 import { debugLog } from "Utils/Utils";
 
 /**
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/Templater.ts
  */
-export default class TemplaterAdapter {
+export default class TemplaterAdapter implements Adapter {
 
-    plugin: NoteToolbarPlugin;
-    templater: any;
-    tp: any | undefined;
+    private plugin: NoteToolbarPlugin;
+    private templater: any;
+
+    private functions: AdapterFunction[] = [
+    ];
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
         this.templater = (plugin.app as any).plugins.plugins["templater-obsidian"].templater;
         // debugLog((plugin.app as any).plugins.plugins["templater-obsidian"]);
         // this.tp = this.templater.current_functions_object;
+    }
+
+    getFunctions(): AdapterFunction[] {
+        return this.functions;
+    }
+
+    async useFunction(config: ScriptConfig): Promise<string | undefined> {
+        let result;
+        
+        return result;
     }
 
     async append(filename: string): Promise<void> {
