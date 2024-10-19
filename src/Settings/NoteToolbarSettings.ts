@@ -44,10 +44,13 @@ export enum ComponentType {
 export enum ItemType {
 	Break = 'break',
 	Command = 'command',
+	Dataview = 'dataview',
 	File = 'file',
 	Group = 'group',
+	JavaScript = 'javascript',
 	Menu = 'menu',
 	Separator = 'separator',
+	Templater = 'templater',
 	Uri = 'uri'
 }
 export enum PlatformType {
@@ -226,6 +229,7 @@ export interface ToolbarItemSettings {
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
+	scriptConfig?: ScriptConfig;
 	tooltip: string;
 	visibility: Visibility;
 }
@@ -237,6 +241,18 @@ export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
 	type: ItemType;
+};
+
+/**
+ * Describes the configuration for various script-type items. 
+ */
+export interface ScriptConfig {
+	pluginFunction: string;
+	expression?: string;
+	sourceFile?: string;
+	sourceFunction?: string;
+	sourceArgs?: any[];
+	outputContainer?: string;
 };
 
 /******************************************************************************
