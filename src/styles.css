@@ -1125,7 +1125,8 @@ input[type="text"].note-toolbar-setting-error {
     }
 }
 
-.note-toolbar-setting-item-link-field {
+.note-toolbar-setting-item-link-field,
+.note-toolbar-setting-item-link-subfield {
     display: flex;
     flex-grow: 1;
     flex-wrap: wrap;
