@@ -19,7 +19,7 @@ export default class DataviewAdapter implements Adapter {
             label: "Evaluate",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Expression", type: 'string', required: true }
+                { parameter: 'expression', label: "Expression", type: 'text', required: true }
             ]
         },
         {
@@ -27,7 +27,7 @@ export default class DataviewAdapter implements Adapter {
             label: "Evaluate inline",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Expression", type: 'string', required: true }
+                { parameter: 'expression', label: "Expression", type: 'text', required: true }
             ]
         },
         {
@@ -36,8 +36,8 @@ export default class DataviewAdapter implements Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "Source file", type: 'file', required: true },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", type: 'string', required: false },
-                { parameter: 'outputContainer', label: "Container (optional)", type: 'string', required: false }
+                { parameter: 'sourceArgs', label: "Arguments (optional)", type: 'text', required: false },
+                { parameter: 'outputContainer', label: "Container (optional)", type: 'text', required: false }
             ]
         },
         {
@@ -45,8 +45,8 @@ export default class DataviewAdapter implements Adapter {
             label: "Execute JavaScript expression",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Expression", type: 'string', required: true },
-                { parameter: 'outputContainer', label: "Container (optional)", type: 'string', required: false }
+                { parameter: 'expression', label: "Expression", type: 'text', required: true },
+                { parameter: 'outputContainer', label: "Container (optional)", type: 'text', required: false }
             ]
         },
         {
@@ -54,8 +54,8 @@ export default class DataviewAdapter implements Adapter {
             label: "Query",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Expression", type: 'string', required: true },
-                { parameter: 'outputContainer', label: "Container (optional)", type: 'string', required: false }
+                { parameter: 'expression', label: "Expression", type: 'text', required: true },
+                { parameter: 'outputContainer', label: "Container (optional)", type: 'text', required: false }
             ]
         }
     ];

@@ -16,6 +16,6 @@ export interface AdapterFunctionParameter {
     parameter: keyof ScriptConfig; // the parameter key in ScriptConfig
     label: string; // label for the field in the UI
     description?: string; // optional description for UI hints
-    type: 'string' | 'file'; // parameter type
+    type: 'file' | 'text'; // parameter type
     required: boolean; // is this parameter required?
 }
