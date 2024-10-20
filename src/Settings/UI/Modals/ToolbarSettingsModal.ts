@@ -867,8 +867,7 @@ export default class ToolbarSettingsModal extends Modal {
 	getLinkSetting(
 		type: ItemType, 
 		fieldDiv: HTMLDivElement, 
-		toolbarItem: ToolbarItemSettings, 
-		value: string,
+		toolbarItem: ToolbarItemSettings,
 		helpTextFr?: DocumentFragment)
 	{
 
@@ -886,7 +885,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.addSearch((cb) => {
 						new CommandSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder(t('setting.item.option-command-placeholder'))
-							.setValue(value)
+							.setValue(toolbarItem.link)
 							.onChange(debounce(async (command) => {
 								let commandId = command ? (cb.inputEl?.getAttribute('data-command-id') ?? COMMAND_DOES_NOT_EXIST) : '';
 								let isValid = this.updateItemComponentStatus(commandId, type, cb.inputEl.parentElement);
@@ -906,7 +905,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.addSearch((cb) => {
 						new FileSuggester(this.app, cb.inputEl);
 						cb.setPlaceholder(t('setting.item.option-file-placeholder'))
-							.setValue(value)
+							.setValue(toolbarItem.link)
 							.onChange(debounce(async (value) => {
 								let isValid = this.updateItemComponentStatus(value, type, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? normalizePath(value) : '';
@@ -978,7 +977,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setClass("note-toolbar-setting-item-field-link")
 					.addText(cb => {
 						cb.setPlaceholder(t('setting.item.option-uri-placehoder'))
-							.setValue(value)
+							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
 									this.updateItemComponentStatus(value, type, cb.inputEl.parentElement);
@@ -1005,10 +1004,10 @@ export default class ToolbarSettingsModal extends Modal {
 	) {
 		switch (type) {
 			case ItemType.Command:
-				this.getLinkSetting(ItemType.Command, fieldDiv, toolbarItem, toolbarItem.link);
+				this.getLinkSetting(type, fieldDiv, toolbarItem);
 				break;
 			case ItemType.File:
-				this.getLinkSetting(ItemType.File, fieldDiv, toolbarItem, toolbarItem.link);
+				this.getLinkSetting(type, fieldDiv, toolbarItem);
 				break;
 			case ItemType.Group:
 			case ItemType.Menu:
@@ -1021,11 +1020,10 @@ export default class ToolbarSettingsModal extends Modal {
 							type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
 							'Creating-toolbar-items')
 					);
-				this.getLinkSetting(type, fieldDiv, toolbarItem, toolbarItem.link, fieldHelp);
+				this.getLinkSetting(type, fieldDiv, toolbarItem, fieldHelp);
 				break;
 			case ItemType.Uri:
-				this.getLinkSetting(ItemType.Uri, fieldDiv, toolbarItem, toolbarItem.link, 
-					learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));
+				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));
 				break;
 		}
 	}
