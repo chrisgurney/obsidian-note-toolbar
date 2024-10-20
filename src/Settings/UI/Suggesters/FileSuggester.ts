@@ -3,10 +3,12 @@ import { AbstractInputSuggest, App, TAbstractFile, TFile, TFolder } from "obsidi
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
     private inputEl: HTMLInputElement;
+    private showFilesOnly: boolean;
 
-    constructor(app: App, inputEl: HTMLInputElement) {
+    constructor(app: App, inputEl: HTMLInputElement, showFilesOnly: boolean = false) {
         super(app, inputEl);
         this.inputEl = inputEl;
+        this.showFilesOnly = showFilesOnly;
     }
 
     getSuggestions(inputStr: string): TAbstractFile[] {
@@ -14,9 +16,9 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        // also include folders in the list of files
         files = abstractFiles.filter((file: TAbstractFile) =>
-            (file instanceof TFile || file instanceof TFolder) && file.path.toLowerCase().includes(lowerCaseInputStr)
+            (file instanceof TFile || (!this.showFilesOnly && file instanceof TFolder)) && 
+            file.path.toLowerCase().includes(lowerCaseInputStr)
         );
 
         return files;
