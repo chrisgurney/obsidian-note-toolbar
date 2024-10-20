@@ -150,10 +150,7 @@ function hasVisibleComponents(platform: { allViews?: { components: ComponentType
  * @param app App
  * @param textToInsert string to insert
  */
-export function insertTextAtCursor(app: App, textToInsert?: string) {
-	if (!textToInsert) {
-		return;
-	}
+export function insertTextAtCursor(app: App, textToInsert: string) {
 	const activeLeaf = app.workspace.getActiveViewOfType(MarkdownView);
 	const editor = activeLeaf ? activeLeaf.editor : null;
 	if (editor) {

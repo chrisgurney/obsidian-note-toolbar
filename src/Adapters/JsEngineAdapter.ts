@@ -24,7 +24,7 @@ export default class JsEngineAdapter implements Adapter {
         return this.functions;
     }
 
-    async useFunction(config: ScriptConfig): Promise<string | undefined> {
+    async use(config: ScriptConfig): Promise<string | undefined> {
         let result;
         
         return result;

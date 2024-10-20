@@ -251,7 +251,7 @@ export interface ScriptConfig {
 	expression?: string;
 	sourceFile?: string;
 	sourceFunction?: string;
-	sourceArgs?: any[];
+	sourceArgs?: string;
 	outputContainer?: string;
 };
 

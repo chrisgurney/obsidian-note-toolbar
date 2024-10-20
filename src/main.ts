@@ -948,21 +948,22 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file optional TFile if handling links outside of the active file
 	 */
 	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile) {
-		await this.handleLink(item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event, file);
+		await this.handleLink(item.uuid, item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event, file);
 	}
 
 	/**
 	 * Handles the link provided.
-	 * @param linkHref What the link is for.
+	 * @param uuid ID of the item
+	 * @param linkHref what the link is for
 	 * @param type: ItemType
 	 * @param hasVars: boolean
 	 * @param commandId: string or null
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+	async handleLink(uuid: string, linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
 
-		// debugLog("handleLink()", linkHref, type, hasVars, commandId, event);
+		// debugLog("handleLink", uuid, linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
@@ -1272,6 +1273,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 			if (linkHref != null) {
 				
+				const itemUuid = clickedEl.id;
+
 				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
 				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
 	
@@ -1289,7 +1292,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					await this.removeFocusStyle();
 				}
 
-				await this.handleLink(linkHref, linkType, linkHasVars, linkCommandId, event);
+				await this.handleLink(itemUuid, linkHref, linkType, linkHasVars, linkCommandId, event);
 	
 			}
 

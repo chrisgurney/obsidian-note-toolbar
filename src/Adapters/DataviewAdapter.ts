@@ -70,7 +70,7 @@ export default class DataviewAdapter implements Adapter {
         return this.functions;
     }
 
-    async useFunction(config: ScriptConfig): Promise<string | undefined> {
+    async use(config: ScriptConfig): Promise<string | undefined> {
         
         let result;
 
@@ -114,7 +114,7 @@ export default class DataviewAdapter implements Adapter {
                 break;
         }
 
-        return result ? result : `Nothing to return`;
+        return result ? result : '';
 
     }
 
@@ -222,6 +222,7 @@ export default class DataviewAdapter implements Adapter {
             container.empty();
             let dataviewLocalApi = this.dataviewPlugin.localApi(activeFile.path, this.plugin, container);    
             // from dv.view: may directly render, in which case it will likely return undefined or null
+            // TODO: try: input should be provided as a string that's read in as JSON; note other script types need to support this as well
             let result = await Promise.resolve(func(dataviewLocalApi, input));
             if (result) {
                 await this.dataviewApi.renderValue(
