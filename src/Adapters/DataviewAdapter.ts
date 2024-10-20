@@ -15,8 +15,25 @@ export default class DataviewAdapter implements Adapter {
 
     private functions: AdapterFunction[] = [
         {
-            functionName: 'query',
-            friendlyName: 'Query',
+            name: "Evaluate",
+            description: "",
+            function: this.evaluate,
+            parameters: [
+                { name: 'expression', type: 'string', required: true }
+            ]
+        },
+        {
+            name: "Evaluate inline",
+            description: "",
+            function: this.evaluateInline,
+            parameters: [
+                { name: 'expression', type: 'string', required: true }
+            ]
+        },
+        {
+            name: "Query",
+            description: "",
+            function: this.query,
             parameters: [
                 { name: 'expression', type: 'string', required: true },
                 { name: 'outputContainer', type: 'string', required: false }
@@ -77,7 +94,7 @@ export default class DataviewAdapter implements Adapter {
                 result = `Unsupported function: ${config.pluginFunction}`;
                 break;
         }
-        
+
         return result;
 
     }

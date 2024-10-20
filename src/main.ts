@@ -26,12 +26,21 @@ export default class NoteToolbarPlugin extends Plugin {
 	// track the last opened layout state, to reduce unneccessary re-renders 
 	lastFileOpenedOnLayoutChange: TFile | null | undefined;
 	lastViewModeOnLayoutChange: MarkdownViewModeType | undefined;
+
 	// track the last used callout link, for the menu URI
 	lastCalloutLink: Element | null = null;
+
 	// track the plugins available, to help with rendering edge cases
-	hasPlugin: {[key: string]: boolean} = {
-		"make-md": false
+	hasPlugin: { [key: string]: boolean } = {
+		'dataview': false,
+		'js-engine': false,
+		'make-md': false,
+		'templater-obsidian': false,
 	}
+
+	dv: DataviewAdapter | undefined;
+	jse: JsEngineAdapter | undefined;
+	tp: TemplaterAdapter | undefined;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -117,18 +126,20 @@ export default class NoteToolbarPlugin extends Plugin {
 				(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
 			}
 
-			this.registerView(
-				VIEW_TYPE_WHATS_NEW,
-				(leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf)
-			);
+			// register custom view: What's New
+			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
 
-			// for edge cases, check what other plugins are enabled that we need to know about
+			// check what other plugins are enabled that we need to know about
 			Object.keys(this.hasPlugin).forEach(pluginKey => {
 				if (pluginKey in (this.app as any).plugins.plugins) {
 					debugLog(`${pluginKey} present`);
 					this.hasPlugin[pluginKey] = true;
 				}
 			});
+
+			this.dv = this.hasPlugin['dataview'] ? new DataviewAdapter(this) : undefined;
+			this.jse = this.hasPlugin['js-engine'] ? new JsEngineAdapter(this) : undefined;
+			this.tp = this.hasPlugin['templater-obsidian'] ? new TemplaterAdapter(this) : undefined;
 
 		});
 
