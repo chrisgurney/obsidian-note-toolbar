@@ -6,15 +6,16 @@ export interface Adapter {
 }
 
 export interface AdapterFunction {
-    name: string; // the name shown in the UI
-    description: string; // field help text shown in the UI
     function: Function; // the actual function in the adapter
+    label: string; // the name shown in the UI
+    description: string; // field help text shown in the UI
     parameters: AdapterFunctionParameter[]; // parameters for the function
 }
 
 export interface AdapterFunctionParameter {
-    name: keyof ScriptConfig; // the parameter key in ScriptConfig
-    type: 'string'; // parameter type
-    required: boolean; // is this parameter required?
+    parameter: keyof ScriptConfig; // the parameter key in ScriptConfig
+    label: string; // label for the field in the UI
     description?: string; // optional description for UI hints
+    type: 'string' | 'file'; // parameter type
+    required: boolean; // is this parameter required?
 }

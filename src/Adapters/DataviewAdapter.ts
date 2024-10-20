@@ -15,28 +15,47 @@ export default class DataviewAdapter implements Adapter {
 
     private functions: AdapterFunction[] = [
         {
-            name: "Evaluate",
-            description: "",
             function: this.evaluate,
+            label: "Evaluate",
+            description: "",
             parameters: [
-                { name: 'expression', type: 'string', required: true }
+                { parameter: 'expression', label: "Expression", type: 'string', required: true }
             ]
         },
         {
-            name: "Evaluate inline",
-            description: "",
             function: this.evaluateInline,
+            label: "Evaluate inline",
+            description: "",
             parameters: [
-                { name: 'expression', type: 'string', required: true }
+                { parameter: 'expression', label: "Expression", type: 'string', required: true }
             ]
         },
         {
-            name: "Query",
+            function: this.exec,
+            label: "Execute script file",
             description: "",
-            function: this.query,
             parameters: [
-                { name: 'expression', type: 'string', required: true },
-                { name: 'outputContainer', type: 'string', required: false }
+                { parameter: 'sourceFile', label: "Source file", type: 'file', required: true },
+                { parameter: 'sourceArgs', label: "Arguments (optional)", type: 'string', required: false },
+                { parameter: 'outputContainer', label: "Container (optional)", type: 'string', required: false }
+            ]
+        },
+        {
+            function: this.executeJs,
+            label: "Execute JavaScript expression",
+            description: "",
+            parameters: [
+                { parameter: 'expression', label: "Expression", type: 'string', required: true },
+                { parameter: 'outputContainer', label: "Container (optional)", type: 'string', required: false }
+            ]
+        },
+        {
+            function: this.query,
+            label: "Query",
+            description: "",
+            parameters: [
+                { parameter: 'expression', label: "Expression", type: 'string', required: true },
+                { parameter: 'outputContainer', label: "Container (optional)", type: 'string', required: false }
             ]
         }
     ];
@@ -66,36 +85,36 @@ export default class DataviewAdapter implements Adapter {
 
         switch (config.pluginFunction) {
             case 'evaluate':
-                config.expression
-                    ? result = await this.evaluate(config.expression)
-                    : result = `Error: ${config.pluginFunction}: Expression is required`;
+                result = config.expression 
+                    ? await this.evaluate(config.expression)
+                    : `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             case 'evaluateInline':
-                config.expression
-                    ? result = await this.evaluateInline(config.expression)
-                    : result = `Error: ${config.pluginFunction}: Expression is required`;
+                result = config.expression
+                    ? await this.evaluateInline(config.expression)
+                    : `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             case 'exec':
-                config.sourceFile
+                result = config.sourceFile
                     ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
-                    : result = `Error: ${config.pluginFunction}: Script file is required`;
+                    : `Error: ${config.pluginFunction}: Script file is required`;
                 break;
             case 'executeJs':
-                config.expression
+                result = config.expression
                     ? await this.executeJs(config.expression, containerEl)
-                    : result = `Error: ${config.pluginFunction}: Expression is required`;
+                    : `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             case 'query':
-                config.expression
-                    ? result = await this.query(config.expression, containerEl)
-                    : result = `Error: ${config.pluginFunction}: Expression is required`;
+                result = config.expression
+                    ? await this.query(config.expression, containerEl)
+                    : `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             default:
                 result = `Unsupported function: ${config.pluginFunction}`;
                 break;
         }
 
-        return result;
+        return result ? result : `Nothing to return`;
 
     }
 
@@ -116,6 +135,7 @@ export default class DataviewAdapter implements Adapter {
         }
         catch (error) {
             debugLog("Caught error:", error);
+            result = `Caught error: ${error}`;
         }
 
         return result;
@@ -146,6 +166,7 @@ export default class DataviewAdapter implements Adapter {
         }
         catch (error) {
             debugLog("Caught error:", error);
+            result = `Caught error: ${error}`;
         }
 
         return result;
@@ -257,7 +278,8 @@ export default class DataviewAdapter implements Adapter {
 
         if (!activeFile) {
             debugLog("view: We're not in a file");
-            return '';
+            result = `A file must be open to execute this query`;
+            return result;
         }
 
         const component = new Component();
@@ -284,6 +306,7 @@ export default class DataviewAdapter implements Adapter {
         }
         catch (error) {
             console.error("obsidian-dataview:", error);
+            result = `Caught error: ${error}`;
         }
         finally {
 			component.unload();
