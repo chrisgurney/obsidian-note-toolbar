@@ -70,7 +70,7 @@ export default class DataviewAdapter implements Adapter {
         return this.functions;
     }
 
-    async use(config: ScriptConfig): Promise<string | undefined> {
+    async use(config: ScriptConfig): Promise<string | void> {
         
         let result;
 
@@ -78,8 +78,7 @@ export default class DataviewAdapter implements Adapter {
         if (config.outputContainer) {
             containerEl = this.plugin.getScriptOutputEl(config.outputContainer);
             if (!containerEl) {
-                result = `Could not find container in current note: ${config.outputContainer}`;
-                return result;
+                return `Could not find container in current note: ${config.outputContainer}`;
             }
         }
 
@@ -114,7 +113,7 @@ export default class DataviewAdapter implements Adapter {
                 break;
         }
 
-        return result ? result : '';
+        return result;
 
     }
 

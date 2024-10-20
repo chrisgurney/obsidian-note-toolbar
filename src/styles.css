@@ -109,6 +109,11 @@ body {
     }
 }
 
+.callout[data-callout="note-toolbar"][data-callout-metadata*="script"]:has(> .callout-title) {
+    border: 4px dashed var(--background-secondary);
+    padding: 1em;
+}
+
 .callout[data-callout="note-toolbar"] {
 
     background-color: var(--cg-nt-tbar-bg-color) !important;
