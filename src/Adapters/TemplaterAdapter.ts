@@ -13,6 +13,7 @@ export default class TemplaterAdapter implements Adapter {
     private templater: any;
 
     private functions: AdapterFunction[] = [
+        // TODO: description: "Enter the name of the file to create from the provided template."
     ];
 
     constructor(plugin: NoteToolbarPlugin) {

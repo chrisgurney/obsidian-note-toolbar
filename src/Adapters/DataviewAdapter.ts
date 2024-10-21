@@ -16,46 +16,39 @@ export default class DataviewAdapter implements Adapter {
     private functions: AdapterFunction[] = [
         {
             function: this.evaluate,
-            label: "Evaluate",
-            description: "",
+            label: "Dataview expression",
+            description: "Equivalent to running evaluateInline()",
             parameters: [
-                { parameter: 'expression', label: "Expression", type: 'text', required: true }
-            ]
-        },
-        {
-            function: this.evaluateInline,
-            label: "Evaluate inline",
-            description: "",
-            parameters: [
-                { parameter: 'expression', label: "Expression", type: 'text', required: true }
-            ]
-        },
-        {
-            function: this.exec,
-            label: "Execute script file",
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: "Source file", type: 'file', required: true },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", type: 'text', required: false },
-                { parameter: 'outputContainer', label: "Container (optional)", type: 'text', required: false }
+                { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: 'text', required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Use a Note Toolbar Callout with a unique meta field (in place of styles) to put text output. This will be empty if your script does not return a value.", type: 'text', required: false }
             ]
         },
         {
             function: this.executeJs,
-            label: "Execute JavaScript expression",
-            description: "",
+            label: "Dataview JS expression",
+            description: "Execute a JavaScript expression",
             parameters: [
-                { parameter: 'expression', label: "Expression", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Container (optional)", type: 'text', required: false }
+                { parameter: 'expression', label: "Dataview JS expression",  description: "Dataview JS expression to evaluate.", type: 'text', required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
+            ]
+        },
+        {
+            function: this.exec,
+            label: "Script",
+            description: "This is similar to running dv.view()",
+            parameters: [
+                { parameter: 'sourceFile', label: "Script file", description: "Dataview JS file to execute.", type: 'file', required: true },
+                { parameter: 'sourceArgs', label: "Arguments (optional)", type: 'text', description: "Parameters for your script in JSON format.", required: false },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
             ]
         },
         {
             function: this.query,
             label: "Query",
-            description: "",
+            description: "Run a Dataview query",
             parameters: [
-                { parameter: 'expression', label: "Expression", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Container (optional)", type: 'text', required: false }
+                { parameter: 'expression', label: "Query", type: 'text', description: "Dataview query to evaluate.", required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
             ]
         }
     ];
@@ -84,13 +77,8 @@ export default class DataviewAdapter implements Adapter {
 
         switch (config.pluginFunction) {
             case 'evaluate':
-                result = config.expression 
-                    ? await this.evaluate(config.expression)
-                    : `Error: ${config.pluginFunction}: Expression is required`;
-                break;
-            case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluateInline(config.expression)
+                    ? await this.evaluate(config.expression, containerEl)
                     : `Error: ${config.pluginFunction}: Expression is required`;
                 break;
             case 'exec':
@@ -117,55 +105,42 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
-    // TODO: is there a need for both of these functions? with evaluateInline? (would require an active file)
-    async evaluate(expression: string): Promise<string> {
-
-        let result = '';
-
-        const activeFile = this.plugin.app.workspace.getActiveFile();    
-        try {
-            if (this.dataviewApi) {
-                debugLog("evaluate: " + expression);
-                // Result<Literal, string>
-                let dvResult = await (this.dataviewApi as any).evaluate(expression, activeFile);
-                debugLog("evaluate: result: ", dvResult.value);
-                result = dvResult.value;
-            }
-        }
-        catch (error) {
-            debugLog("Caught error:", error);
-            result = `Caught error: ${error}`;
-        }
-
-        return result;
-
-    }
-
-    async evaluateInline(expression: string): Promise<string> {
+    private async evaluate(expression: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
         
         const activeFile = this.plugin.app.workspace.getActiveFile();
+        const activeFilePath = activeFile?.path;
+
+        const component = new Component();
+		component.load();
         try {
             if (this.dataviewApi) {
                 debugLog("evaluate: " + expression);
                 // Result<Literal, string>
+                // let dvResult = await (this.dataviewApi as any).evaluate(expression, activeFile);
                 let dvResult = await (this.dataviewApi as any).evaluateInline(expression, activeFile?.path);
                 debugLog("evaluate: result:", dvResult);
-                result = dvResult.value instanceof Object ? dvResult.value.constructor.name : dvResult.value.toString();
-                // TODO? render into provided container?
-                // await this.dataviewApi.enderValue(
-                //     value: any,
-                //     container: HTMLElement,
-                //     component: Component,
-                //     filePath: string,
-                //     inline: boolean = false
-                // )
+                if (containerEl) {
+                    containerEl.empty();
+                    await this.dataviewApi.renderValue(
+                        dvResult.value,
+                        containerEl,
+                        component,
+                        activeFilePath
+                    );
+                }
+                else {
+                    result = dvResult.successful ? dvResult.value : '```' + dvResult.error + '```';
+                }
             }
         }
         catch (error) {
-            debugLog("Caught error:", error);
-            result = `Caught error: ${error}`;
+            console.error(error);
+            result = 'Dataview error: Check console for more details.\n```' + error + '```';
+        }
+        finally {
+            component.unload();
         }
 
         return result;
@@ -176,7 +151,7 @@ export default class DataviewAdapter implements Adapter {
      * Adaptation of dv.view(). This version does not support CSS.
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
-    async exec(filename: string, input: any = null, container?: HTMLElement) {
+    private async exec(filename: string, args: any = null, containerEl?: HTMLElement) {
 
         if (!filename) {
             return;
@@ -185,23 +160,19 @@ export default class DataviewAdapter implements Adapter {
         const activeFile = this.plugin.app.workspace.getActiveFile();
 
         // TODO: this works if the script doesn't need a container... but where does this span go?
-        container = container ? container : createSpan();
+        containerEl = containerEl ? containerEl : createSpan();
 
         if (!activeFile) {
             debugLog("view: We're not in a file");
             return;
         }
-        if (!container) {
-            debugLog("view: no output component found");
-            return;
-        }
         
-        const currentFilePath = activeFile.path;
+        const activeFilePath = activeFile.path;
 
-        let viewFile = this.plugin.app.metadataCache.getFirstLinkpathDest(filename, currentFilePath);
+        let viewFile = this.plugin.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
 
         if (!viewFile) {
-            // TODO: render messages into the container
+            // TODO: render messages into the container, if provided
             // debugLog(container, `view: custom view not found for '${simpleViewPath}' or '${complexViewPath}'.`);
             debugLog(`view: script file not found: ${filename}`);
             return;
@@ -218,19 +189,19 @@ export default class DataviewAdapter implements Adapter {
 		const component = new Component();
 		component.load();
         try {
-            container.empty();
-            let dataviewLocalApi = this.dataviewPlugin.localApi(activeFile.path, this.plugin, container);    
+            containerEl.empty();
+            let dataviewLocalApi = this.dataviewPlugin.localApi(activeFile.path, this.plugin, containerEl);    
             // from dv.view: may directly render, in which case it will likely return undefined or null
             // TODO: try: input should be provided as a string that's read in as JSON; note other script types need to support this as well
-            let result = await Promise.resolve(func(dataviewLocalApi, input));
+            let result = await Promise.resolve(func(dataviewLocalApi, args));
             if (result) {
                 await this.dataviewApi.renderValue(
                     this.plugin.app,
                     result as any,
-                    container,
-                    currentFilePath,
-                    this.plugin,
-                    this.dataviewApi.settings, // this.settings
+                    containerEl,
+                    activeFilePath,
+                    component,
+                    this.dataviewApi.settings,
                     true
                 );
             }
@@ -246,9 +217,9 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
-    async executeJs(expression: string, container?: HTMLElement): Promise<void> {
+    private async executeJs(expression: string, containerEl?: HTMLElement): Promise<void> {
 
-        let resultEl: HTMLElement = container ? container : document.createElement('div');
+        let resultEl: HTMLElement = containerEl ? containerEl : document.createElement('div');
 
         const activeFile = this.plugin.app.workspace.getActiveFile();
 
@@ -271,15 +242,23 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
-    async query(expression: string, container?: HTMLElement): Promise<string> {
+    /**
+     * Runs the given Dataview query, returning the output from the Dataview API: queryMarkdown
+     * If a container is provided, it renders the resulting markdown to the given container.
+     * Example:
+     * - expression = TABLE file.mtime AS "Last Modified" FROM "Demos" SORT file.mtime DESC
+     * - container (optional) = source#SOMEID
+     * @param expression 
+     * @param containerEl 
+     * @returns 
+     */
+    private async query(expression: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
         const activeFile = this.plugin.app.workspace.getActiveFile();
 
         if (!activeFile) {
-            debugLog("view: We're not in a file");
-            result = `A file must be open to execute this query`;
-            return result;
+            return `Dataview Adapter (query): A file must be open to run this query.`;
         }
 
         const component = new Component();
@@ -289,24 +268,25 @@ export default class DataviewAdapter implements Adapter {
                 debugLog("query: " + expression);
                 // returns a Promise<Result<QueryResult, string>>
                 let dvResult = await (this.dataviewApi as any).queryMarkdown(expression, activeFile, this.dataviewApi.settings);
-                // TODO: is there a chance result is empty/undefined?
+                // TODO: is there a chance result is empty/undefined? what to do in that case?
                 debugLog("query: result: ", dvResult);
-                if (container) {
-                    container.empty();
+                if (containerEl) {
+                    containerEl.empty();
                     MarkdownRenderer.render(
                         this.plugin.app,
                         dvResult.successful ? dvResult.value : dvResult.error,
-                        container,
+                        containerEl,
                         activeFile.path,
                         component
                     );
                 }
-                result = dvResult.successful ? dvResult.value : '```' + dvResult.error + '```';
+                else {
+                    result = dvResult.successful ? dvResult.value : '```' + dvResult.error + '```';
+                }
             }
         }
         catch (error) {
-            console.error("obsidian-dataview:", error);
-            result = `Caught error: ${error}`;
+            result = `Dataview error: ${error}`;
         }
         finally {
 			component.unload();
