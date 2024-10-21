@@ -148,15 +148,16 @@ function hasVisibleComponents(platform: { allViews?: { components: ComponentType
 /**
  * Inserts a string at the current cursor position.
  * @param app App
- * @param textToInsert string to insert
+ * @param textToInsert thing to insert
  */
-export function insertTextAtCursor(app: App, textToInsert: string) {
+export function insertTextAtCursor(app: App, textToInsert: any) {
 	const activeLeaf = app.workspace.getActiveViewOfType(MarkdownView);
 	const editor = activeLeaf ? activeLeaf.editor : null;
 	if (editor) {
 		const cursor = editor?.getCursor();
-		editor.replaceRange(textToInsert, cursor);
-		editor.setCursor(cursor.line, cursor.ch + textToInsert.length);
+		const text = String(textToInsert);
+		editor.replaceRange(text, cursor);
+		editor.setCursor(cursor.line, cursor.ch + text.length);
 	}
 }
 

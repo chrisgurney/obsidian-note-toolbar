@@ -10,7 +10,8 @@ import { debugLog } from "Utils/Utils";
 export default class TemplaterAdapter implements Adapter {
 
     private plugin: NoteToolbarPlugin;
-    private templater: any;
+    private templaterApi: any;
+    private templaterPlugin: any;
 
     private functions: AdapterFunction[] = [
         // TODO: description: "Enter the name of the file to create from the provided template."
@@ -18,9 +19,8 @@ export default class TemplaterAdapter implements Adapter {
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
-        this.templater = (plugin.app as any).plugins.plugins["templater-obsidian"].templater;
-        // debugLog((plugin.app as any).plugins.plugins["templater-obsidian"]);
-        // this.tp = this.templater.current_functions_object;
+        this.templaterPlugin = (plugin.app as any).plugins.plugins["templater-obsidian"];
+        this.templaterApi = this.templaterPlugin.templater;
     }
 
     getFunctions(): AdapterFunction[] {
@@ -33,12 +33,12 @@ export default class TemplaterAdapter implements Adapter {
         return result;
     }
 
-    async append(filename: string): Promise<void> {
+    async appendTemplate(filename: string): Promise<void> {
 
-        if (this.templater) {
+        if (this.templaterApi) {
             let templateFile = this.plugin.app.vault.getFileByPath(filename);
             if (templateFile) {
-                await this.templater.append_template_to_active_file(templateFile);
+                await this.templaterApi.append_template_to_active_file(templateFile);
             }
             else {
                 debugLog("append: file not found:", filename);
@@ -49,11 +49,11 @@ export default class TemplaterAdapter implements Adapter {
 
     async createFrom(filename: string): Promise<void> {
 
-        if (this.templater) {
+        if (this.templaterApi) {
             let templateFile = this.plugin.app.vault.getFileByPath(filename);
             if (templateFile) {
                 // TODO? future: support for other parms? template: TFile | string, folder?: TFolder | string, filename?: string, open_new_note = true
-                let newFile = await this.templater.create_new_note_from_template(templateFile);
+                let newFile = await this.templaterApi.create_new_note_from_template(templateFile);
             }
             else {
                 debugLog("createFrom: file not found:", filename);
@@ -75,9 +75,9 @@ export default class TemplaterAdapter implements Adapter {
                 active_file: activeFile
             };
             debugLog(config);
-            if (this.templater) {
+            if (this.templaterApi) {
                 // result = await this.templater.read_and_parse_template(config);
-                result = await this.templater.parse_template(config, expression);
+                result = await this.templaterApi.parse_template(config, expression);
                 debugLog("parseTemplate:", result);
             }
         }
@@ -100,8 +100,8 @@ export default class TemplaterAdapter implements Adapter {
                 active_file: activeFile
             };
             debugLog(config);
-            if (this.templater) {
-                result = await this.templater.read_and_parse_template(config);
+            if (this.templaterApi) {
+                result = await this.templaterApi.read_and_parse_template(config);
                 debugLog("parseTemplateFile:", result);
             }
         }

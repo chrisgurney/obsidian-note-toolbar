@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Component, MarkdownRenderer } from "obsidian";
+import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
 import { Adapter, AdapterFunction } from "Types/interfaces";
 import { debugLog } from "Utils/Utils";
@@ -8,10 +8,6 @@ import { debugLog } from "Utils/Utils";
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
  */
 export default class DataviewAdapter implements Adapter {
-
-    private plugin: NoteToolbarPlugin;
-    private dataviewPlugin: any | undefined;
-    private dataviewApi: any | undefined;
 
     private functions: AdapterFunction[] = [
         {
@@ -53,10 +49,14 @@ export default class DataviewAdapter implements Adapter {
         }
     ];
 
+    private plugin: NoteToolbarPlugin;
+    private dataviewPlugin: any | undefined;
+    private dataviewApi: any | undefined;
+
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
         this.dataviewPlugin = (plugin.app as any).plugins.plugins["dataview"];
-        this.dataviewApi = (plugin.app as any).plugins.plugins["dataview"].api;
+        this.dataviewApi = this.dataviewPlugin.api;
     }
 
     getFunctions(): AdapterFunction[] {
@@ -71,7 +71,8 @@ export default class DataviewAdapter implements Adapter {
         if (config.outputContainer) {
             containerEl = this.plugin.getScriptOutputEl(config.outputContainer);
             if (!containerEl) {
-                return `Could not find container in current note: ${config.outputContainer}`;
+                new Notice(`Error: Could not find callout in current note with ID: ${config.outputContainer}`, 5000);
+                return;
             }
         }
 
@@ -105,6 +106,17 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
+    /**
+     * @example
+     * 2 + 6
+     * @example
+	 * date(today)
+     * @example
+	 * dateformat(this.file.mtime, "yyyy.MM.dd - HH:mm")
+     * @param expression 
+     * @param containerEl 
+     * @returns 
+     */
     private async evaluate(expression: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
@@ -117,8 +129,6 @@ export default class DataviewAdapter implements Adapter {
         try {
             if (this.dataviewApi) {
                 debugLog("evaluate: " + expression);
-                // Result<Literal, string>
-                // let dvResult = await (this.dataviewApi as any).evaluate(expression, activeFile);
                 let dvResult = await (this.dataviewApi as any).evaluateInline(expression, activeFile?.path);
                 debugLog("evaluate: result:", dvResult);
                 if (containerEl) {
@@ -131,13 +141,13 @@ export default class DataviewAdapter implements Adapter {
                     );
                 }
                 else {
-                    result = dvResult.successful ? dvResult.value : '```' + dvResult.error + '```';
+                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '```';
                 }
             }
         }
         catch (error) {
-            console.error(error);
-            result = 'Dataview error: Check console for more details.\n```' + error + '```';
+            this.displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
+            result = "Dataview error: Check console for more details.\n```\n' + error + '```";
         }
         finally {
             component.unload();
@@ -149,28 +159,36 @@ export default class DataviewAdapter implements Adapter {
 
     /**
      * Adaptation of dv.view(). This version does not support CSS.
+     * @example
+     * Scripts/HelloWorld.js // script has no function
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
-    private async exec(filename: string, args: any = null, containerEl?: HTMLElement) {
+    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement) {
 
         if (!filename) {
             return;
         }
 
-        const activeFile = this.plugin.app.workspace.getActiveFile();
-
+        let args;
+        try {
+            args = argsJson ? JSON.parse(argsJson) : {};
+        }
+        catch (error) {
+            this.displayError(`Failed to parse arguments for script: ${filename}\nError:`, error, containerEl);
+            return;
+        }
+        
         // TODO: this works if the script doesn't need a container... but where does this span go?
         containerEl = containerEl ? containerEl : createSpan();
 
+        const activeFile = this.plugin.app.workspace.getActiveFile();
         if (!activeFile) {
             debugLog("view: We're not in a file");
             return;
         }
-        
         const activeFilePath = activeFile.path;
 
         let viewFile = this.plugin.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
-
         if (!viewFile) {
             // TODO: render messages into the container, if provided
             // debugLog(container, `view: custom view not found for '${simpleViewPath}' or '${complexViewPath}'.`);
@@ -192,7 +210,7 @@ export default class DataviewAdapter implements Adapter {
             containerEl.empty();
             let dataviewLocalApi = this.dataviewPlugin.localApi(activeFile.path, this.plugin, containerEl);    
             // from dv.view: may directly render, in which case it will likely return undefined or null
-            // TODO: try: input should be provided as a string that's read in as JSON; note other script types need to support this as well
+            // TODO: try: args should be provided as a string that's read in as JSON; note other script types need to support this as well
             let result = await Promise.resolve(func(dataviewLocalApi, args));
             if (result) {
                 await this.dataviewApi.renderValue(
@@ -207,9 +225,7 @@ export default class DataviewAdapter implements Adapter {
             }
         }
         catch (error) {
-            // TODO: render messages into container, if provided
-            // debugLog(container, `view: Failed to execute '${viewFile.path}'.\n\n${ex}`);
-            debugLog(`view: Failed to execute '${viewFile.path}'.\n\n${error}`);
+            this.displayError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
         }
         finally {
 			component.unload();
@@ -217,9 +233,19 @@ export default class DataviewAdapter implements Adapter {
 
     }
 
-    private async executeJs(expression: string, containerEl?: HTMLElement): Promise<void> {
+    /**
+     * @example
+     * dv.el('p', dv.current().file.mtime)
+     * @example
+	 * console.log(dv.current().file.mtime)
+     * @param expression 
+     * @param containerEl 
+     * @returns 
+     */
+    private async executeJs(expression: string, containerEl?: HTMLElement): Promise<string> {
 
-        let resultEl: HTMLElement = containerEl ? containerEl : document.createElement('div');
+        let result = '';
+        let resultEl = containerEl ? containerEl : document.createElement('div');
 
         const activeFile = this.plugin.app.workspace.getActiveFile();
 
@@ -228,26 +254,40 @@ export default class DataviewAdapter implements Adapter {
         try {
             if (this.dataviewApi) {
                 debugLog("executeJs: ", expression);
-                // e.g., add a code block, get the element, then pass it
                 await (this.dataviewApi as any).executeJs(expression, resultEl, component, activeFile?.path);
-                debugLog("executeJs: result: ", resultEl);
+                debugLog("executeJs: result:", resultEl);
+                if (!containerEl) {
+                    const errorEl = resultEl.querySelector('.dataview-error');
+                    if (errorEl) {
+                        throw new Error(errorEl.textContent ?? undefined);
+                    }
+                    else if (resultEl.children.length === 0 && resultEl.textContent?.trim() === '') {
+                        // nothing was returned; do nothing? may depend on what user wants to do
+                        debugLog('executeJs: no result');
+                        result = '';
+                    }
+                    else {
+                        result = resultEl.textContent ? resultEl.textContent : '';
+                    }
+                }
             }
         }
         catch (error) {
-            debugLog("Caught error:", error);
+            this.displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
         }
         finally {
             component.unload();
         }
+
+        return result;
 
     }
 
     /**
      * Runs the given Dataview query, returning the output from the Dataview API: queryMarkdown
      * If a container is provided, it renders the resulting markdown to the given container.
-     * Example:
-     * - expression = TABLE file.mtime AS "Last Modified" FROM "Demos" SORT file.mtime DESC
-     * - container (optional) = source#SOMEID
+     * @example
+     * TABLE file.mtime AS "Last Modified" FROM "Demos" SORT file.mtime DESC
      * @param expression 
      * @param containerEl 
      * @returns 
@@ -281,12 +321,13 @@ export default class DataviewAdapter implements Adapter {
                     );
                 }
                 else {
-                    result = dvResult.successful ? dvResult.value : '```' + dvResult.error + '```';
+                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '```';
                 }
             }
         }
         catch (error) {
-            result = `Dataview error: ${error}`;
+            this.displayError(`Failed to evaluate query: ${expression}\nDataview error:`, error, containerEl);
+            result = 'Dataview error: Check console for more details.\n```\n' + error + '```';
         }
         finally {
 			component.unload();
@@ -294,6 +335,15 @@ export default class DataviewAdapter implements Adapter {
 
         return result;
 
+    }
+
+    private displayError(message: string, error?: any, containerEl?: HTMLElement) {
+        console.error(message, error);
+        if (containerEl) {
+            let errorEl = containerEl.createEl('pre');
+            errorEl.addClass('dataview', 'dataview-error');
+            errorEl.setText(message + '\n' + error);
+        }
     }
 
 }

@@ -1022,19 +1022,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 		}
-	
-		// archiving for later
-		if (false) {
-			// if it's a js function that exists, call it without any parameters
-			// @ts-ignore
-			if (href.toLowerCase().startsWith('onclick:')) {
-				// @ts-ignore
-				let functionName = href.slice(8); // remove 'onclick:'
-				if (typeof (window as any)[functionName] === 'function') {
-					(window as any)[functionName]();
-				}
-			}
-		}
 		
 	}
 
@@ -1409,7 +1396,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		return propertiesContainer;
 	}
 
-	getScriptOutputEl(calloutMeta: string): HTMLElement | null {
+	getScriptOutputEl(calloutMeta: string): HTMLElement | undefined {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
 		debugLog("getScriptOutputEl()", containerEl);
