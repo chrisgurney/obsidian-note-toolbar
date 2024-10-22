@@ -11,6 +11,7 @@ import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { importFromModal } from './ImportModal';
+import { Adapter } from 'Types/interfaces';
 
 enum ItemFormComponent {
 	Delete = 'delete',
@@ -900,42 +901,72 @@ export default class ToolbarSettingsModal extends Modal {
 					});	
 				break;
 			case ItemType.Dataview:
-				if (this.plugin.dv) {
-					const functions = this.plugin.dv.getFunctions();
-					const functionOptions = functions.reduce((acc, func) => {
-						acc[func.function.name] = func.label;
-						return acc;
-					}, {} as Record<string, string>);
-					const selectedFunction = toolbarItem.scriptConfig?.pluginFunction
-						? toolbarItem.scriptConfig?.pluginFunction
-						: 'Select a function...';
-					const scriptSetting = new Setting(fieldDiv)
-						.setClass("note-toolbar-setting-item-field-link")
-						.addDropdown((dropdown: DropdownComponent) => {
-							dropdown
-								.addOptions(functionOptions)
-								.setValue(selectedFunction)
-								.onChange(async (value) => {
-									let itemLinkSubfieldDiv = fieldDiv.querySelector('.note-toolbar-setting-item-link-subfield') as HTMLDivElement;
-									itemLinkSubfieldDiv?.remove();
-									// create the setting if it doesn't exist or was removed
-									toolbarItem.scriptConfig ??= { pluginFunction: value };
-									toolbarItem.scriptConfig.pluginFunction = value;
-									this.toolbar.updated = new Date().toISOString();
-									let subfieldsDiv = createDiv();
-									subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
-									this.getScriptFunctionSettings(toolbarItem, subfieldsDiv);
-									fieldDiv.append(subfieldsDiv);
-									await this.plugin.settingsManager.save();
-									// TODO? this.renderPreview(toolbarItem);
+			case ItemType.JavaScript:
+			case ItemType.Templater:
+				if (this.plugin.settings.scriptingEnabled) {
+					let adapter;
+					switch (type) {
+						case ItemType.Dataview:
+							adapter = this.plugin.dv;
+							break;
+						case ItemType.JavaScript:
+							adapter = this.plugin.jse;
+							break;
+						case ItemType.Templater:
+							adapter = this.plugin.tp;
+							break;
+					}
+					if (adapter) {
+						const functionOptions = adapter?.getFunctions().reduce((acc, func) => {
+							acc[func.function.name] = func.label;
+							return acc;
+						}, {} as Record<string, string>);
+						const selectedFunction = toolbarItem.scriptConfig?.pluginFunction
+							? toolbarItem.scriptConfig?.pluginFunction
+							: 'Select a function...';
+						const scriptSetting = new Setting(fieldDiv)
+							.setClass("note-toolbar-setting-item-field-link")
+							.addDropdown((dropdown: DropdownComponent) => {
+								dropdown
+									.addOptions(functionOptions)
+									.setValue(selectedFunction)
+									.onChange(async (value) => {
+										let itemLinkSubfieldDiv = fieldDiv.querySelector('.note-toolbar-setting-item-link-subfield') as HTMLDivElement;
+										itemLinkSubfieldDiv?.remove();
+										// create the setting if it doesn't exist or was removed
+										toolbarItem.scriptConfig ??= { pluginFunction: value };
+										toolbarItem.scriptConfig.pluginFunction = value;
+										this.toolbar.updated = new Date().toISOString();
+										let subfieldsDiv = createDiv();
+										subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
+										this.getScriptFunctionSettings(adapter, toolbarItem, subfieldsDiv);
+										fieldDiv.append(subfieldsDiv);
+										await this.plugin.settingsManager.save();
+										// TODO? this.renderPreview(toolbarItem);
+									});
 								});
-							});
-					fieldHelp ? scriptSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+						fieldHelp ? scriptSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 
-					let subfieldsDiv = createDiv();
-					subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
-					this.getScriptFunctionSettings(toolbarItem, subfieldsDiv);
-					fieldDiv.append(subfieldsDiv);
+						let subfieldsDiv = createDiv();
+						subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
+						this.getScriptFunctionSettings(adapter, toolbarItem, subfieldsDiv);
+						fieldDiv.append(subfieldsDiv);
+					}
+					else {
+						const pluginName = (type === ItemType.JavaScript) ? "JS Engine" : type.charAt(0).toUpperCase() + type.slice(1);
+						fieldDiv.removeClass('note-toolbar-setting-item-link-field');
+						fieldDiv.setText("Restart after installing and enabling plugin: ");
+						let pluginLinkFr = document.createDocumentFragment();
+						let pluginLink = pluginLinkFr.createEl('a', { 
+							href: `obsidian://show-plugin?id=${type}`, 
+							text: pluginName
+						});
+						pluginLink.addClass('note-toolbar-setting-focussable-link');
+						fieldDiv.append(pluginLink);
+					}
+				}
+				else {
+					fieldDiv.setText("Enable scripting in Note Toolbar settings to use this item.");
 				}
 				break;
 			case ItemType.File:
@@ -1037,13 +1068,14 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	getScriptFunctionSettings(
+		adapter: Adapter,
 		toolbarItem: ToolbarItemSettings,
 		fieldDiv: HTMLDivElement)
 	{
-		if (this.plugin.dv && toolbarItem.scriptConfig) {
+		if (toolbarItem.scriptConfig) {
 			const config = toolbarItem.scriptConfig;
 			const functionMap = new Map(
-				this.plugin.dv.getFunctions().map(func => [func.function.name, func])
+				adapter.getFunctions().map(func => [func.function.name, func])
 			);
 			const selectedFunction = functionMap.get(toolbarItem.scriptConfig.pluginFunction);
 			selectedFunction?.parameters.forEach(param => {
