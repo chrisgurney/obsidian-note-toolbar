@@ -907,22 +907,22 @@ export default class ToolbarSettingsModal extends Modal {
 					let adapter;
 					switch (type) {
 						case ItemType.Dataview:
-							adapter = this.plugin.dv;
+							adapter = this.plugin.dvAdapter;
 							break;
 						case ItemType.JavaScript:
-							adapter = this.plugin.jse;
+							adapter = this.plugin.jsAdapter;
 							break;
 						case ItemType.Templater:
-							adapter = this.plugin.tp;
+							adapter = this.plugin.tpAdapter;
 							break;
 					}
 					if (adapter) {
 						const functionOptions = {
 							'': 'Select a function...',
 							...adapter?.getFunctions().reduce((acc, func) => {
-							acc[func.function.name] = func.label;
-							return acc;
-						}, {} as Record<string, string>)
+								acc[func.function.name] = func.label;
+								return acc;
+							}, {} as Record<string, string>)
 						}
 						const selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
 						const scriptSetting = new Setting(fieldDiv)
@@ -948,7 +948,7 @@ export default class ToolbarSettingsModal extends Modal {
 									});
 								});
 						fieldHelp ? scriptSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
-
+						toolbarItem.scriptConfig ??= { pluginFunction: '' };
 						let subfieldsDiv = createDiv();
 						subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
 						this.getScriptFunctionSettings(adapter, toolbarItem, subfieldsDiv);
@@ -1088,7 +1088,8 @@ export default class ToolbarSettingsModal extends Modal {
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addSearch((cb) => {
-								new FileSuggester(this.app, cb.inputEl, true, '.js');
+								new FileSuggester(this.app, cb.inputEl, true, 
+									(toolbarItem.linkAttr.type === ItemType.Templater) ? undefined : '.js');
 								cb.setPlaceholder(param.label)
 									.setValue(initialValue ? initialValue : '')
 									.onChange(debounce(async (value) => {
@@ -1158,6 +1159,9 @@ export default class ToolbarSettingsModal extends Modal {
 			case ItemType.File:
 				this.getLinkSetting(type, fieldDiv, toolbarItem);
 				break;
+			case ItemType.JavaScript:
+				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use this.", ''));
+				break;
 			case ItemType.Group:
 			case ItemType.Menu:
 				let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
@@ -1170,6 +1174,9 @@ export default class ToolbarSettingsModal extends Modal {
 							'Creating-toolbar-items')
 					);
 				this.getLinkSetting(type, fieldDiv, toolbarItem, fieldHelp);
+				break;
+			case ItemType.Templater:
+				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Templater.", ''));
 				break;
 			case ItemType.Uri:
 				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));

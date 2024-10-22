@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
 import { Adapter, AdapterFunction } from "Types/interfaces";
-import { debugLog } from "Utils/Utils";
+import { debugLog, displayError } from "Utils/Utils";
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
@@ -101,7 +101,7 @@ export default class DataviewAdapter implements Adapter {
             case 'query':
                 result = config.expression
                     ? await this.query(config.expression, containerEl)
-                    : `Error: A Dataivew query is required`;
+                    : `Error: A Dataview query is required`;
                 break;
             case '':
                 // do nothing
@@ -150,13 +150,13 @@ export default class DataviewAdapter implements Adapter {
                     );
                 }
                 else {
-                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '```';
+                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '\n```';
                 }
             }
         }
         catch (error) {
-            this.displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
-            result = "Dataview error: Check console for more details.\n```\n' + error + '```";
+            displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
+            result = "Dataview error: Check console for more details.\n```\n" + error + "\n```";
         }
         finally {
             component.unload();
@@ -170,6 +170,7 @@ export default class DataviewAdapter implements Adapter {
      * Adaptation of dv.view(). This version does not support CSS.
      * @example
      * Scripts/HelloWorld.js // script has no function
+     * Arguments = { "fileFolder": "Demos" }
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
     private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement) {
@@ -183,7 +184,7 @@ export default class DataviewAdapter implements Adapter {
             args = argsJson ? JSON.parse(argsJson) : {};
         }
         catch (error) {
-            this.displayError(`Failed to parse arguments for script: ${filename}\nError:`, error, containerEl);
+            displayError(`Failed to parse arguments for script: ${filename}\nError:`, error, containerEl);
             return;
         }
         
@@ -234,7 +235,7 @@ export default class DataviewAdapter implements Adapter {
              }
          }
          catch (error) {
-             this.displayError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
+             displayError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
          }
          finally {
              component.unload();
@@ -284,7 +285,7 @@ export default class DataviewAdapter implements Adapter {
             }
         }
         catch (error) {
-            this.displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
+            displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
         }
         finally {
             component.unload();
@@ -334,13 +335,13 @@ export default class DataviewAdapter implements Adapter {
                     }
                 }
                 else {
-                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '```';
+                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '\n```';
                 }
             }
         }
         catch (error) {
-            this.displayError(`Failed to evaluate query: ${expression}\nDataview error:`, error, containerEl);
-            result = 'Dataview error: Check console for more details.\n```\n' + error + '```';
+            displayError(`Failed to evaluate query: ${expression}\nDataview error:`, error, containerEl);
+            result = "Dataview error: Check console for more details.\n```\n" + error + "\n```";
         }
         finally {
 			component.unload();
@@ -348,15 +349,6 @@ export default class DataviewAdapter implements Adapter {
 
         return result;
 
-    }
-
-    private displayError(message: string, error?: any, containerEl?: HTMLElement) {
-        console.error(message, error);
-        if (containerEl) {
-            let errorEl = containerEl.createEl('pre');
-            errorEl.addClass('dataview', 'dataview-error');
-            errorEl.setText(message + '\n' + error);
-        }
     }
 
 }
