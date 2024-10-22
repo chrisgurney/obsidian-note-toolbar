@@ -22,11 +22,12 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
         files = abstractFiles.filter((file: TAbstractFile) => {
             const isFile = file instanceof TFile;
-            let matchesInput = file.path.toLowerCase().includes(lowerCaseInputStr);
+            const lowerCaseFilePath = file.path.toLowerCase();
+            let matchesInput = lowerCaseFilePath.includes(lowerCaseInputStr);
             if (!matchesInput) return false;
             if (this.showFilesOnly && !isFile) return false;
-            if (this.fileExtension && isFile && !file.path.endsWith(this.fileExtension)) return false;
-            if (this.folderPath && !file.path.startsWith(this.folderPath)) return false;
+            if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
+            if (this.folderPath && !file.path.startsWith(this.folderPath.toLowerCase())) return false;
             return true;
         });
 

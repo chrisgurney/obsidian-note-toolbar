@@ -59,6 +59,10 @@ export default class TemplaterAdapter implements Adapter {
         return this.functions;
     }
 
+    getTemplatesFolder(): string {
+        return this.templaterPlugin.settings.templates_folder;
+    }
+
     async use(config: ScriptConfig): Promise<string | void> {
         let result;
         

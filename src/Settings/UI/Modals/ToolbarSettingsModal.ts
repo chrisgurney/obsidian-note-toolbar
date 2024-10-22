@@ -1088,8 +1088,15 @@ export default class ToolbarSettingsModal extends Modal {
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addSearch((cb) => {
-								new FileSuggester(this.app, cb.inputEl, true, 
-									(toolbarItem.linkAttr.type === ItemType.Templater) ? undefined : '.js');
+								switch (toolbarItem.linkAttr.type) {
+									case ItemType.Templater:
+										const templatesFolder = this.plugin.tpAdapter?.getTemplatesFolder();
+										new FileSuggester(this.app, cb.inputEl, true, undefined, templatesFolder);
+										break;
+									default:
+										new FileSuggester(this.app, cb.inputEl, true, '.js');
+										break;
+								}
 								cb.setPlaceholder(param.label)
 									.setValue(initialValue ? initialValue : '')
 									.onChange(debounce(async (value) => {
