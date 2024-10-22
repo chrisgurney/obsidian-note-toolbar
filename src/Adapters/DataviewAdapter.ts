@@ -77,7 +77,7 @@ export default class DataviewAdapter implements Adapter {
         if (config.outputContainer) {
             containerEl = this.plugin?.getScriptOutputEl(config.outputContainer);
             if (!containerEl) {
-                new Notice(`Error: Could not find callout in current note with ID: ${config.outputContainer}`, 5000);
+                new Notice(`Error: Could not find note-toolbar-script callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
             }
         }

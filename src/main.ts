@@ -1019,6 +1019,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
 					// debugLog(`${type} type item:`, toolbarItem);
 					if (toolbarItem?.scriptConfig) {
+						const pluginName = (type === ItemType.JavaScript) ? "JS Engine" : type.charAt(0).toUpperCase() + type.slice(1);
 						let result;
 						switch (type) {
 							case ItemType.Dataview:
@@ -1026,7 +1027,7 @@ export default class NoteToolbarPlugin extends Plugin {
 									result = await this.dv?.use(toolbarItem?.scriptConfig);
 								}
 								else {
-									new Notice("Dataview must be installed and enabled.");
+									new Notice("Restart after installing and enabling plugin: " + pluginName);
 								}
 								break;
 							case ItemType.JavaScript:
@@ -1445,7 +1446,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	getScriptOutputEl(calloutMeta: string): HTMLElement | undefined {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
+		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar-script"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
 		debugLog("getScriptOutputEl()", containerEl);
 		return containerEl;
 	}

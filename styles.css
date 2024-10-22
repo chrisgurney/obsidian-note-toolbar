@@ -914,9 +914,25 @@ body {
     }
 }
 
-.callout[data-callout="note-toolbar"][data-callout-metadata*="script"]:has(> .callout-title) {
-    border: 4px dashed var(--background-secondary);
-    padding: 1em;
+.callout[data-callout="note-toolbar-script"] {
+    background-color: var(--background-primary) !important;
+    margin: 0em !important;
+    padding: 0em;
+    &:has(> .callout-title) {
+        border: 4px dashed var(--background-secondary);
+        padding: 1em;
+    }
+    & .callout-content {
+        color: var(--background-secondary);       
+    }
+    & .callout-title {
+        color: var(--background-secondary);
+        display: inherit;
+        text-transform: uppercase;
+        & .callout-icon {
+            display: none;
+        }
+    }
 }
 
 .callout[data-callout="note-toolbar"] {
