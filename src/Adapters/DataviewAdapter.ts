@@ -16,7 +16,7 @@ export default class DataviewAdapter implements Adapter {
             description: "Equivalent to running evaluateInline()",
             parameters: [
                 { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Use a Note Toolbar Callout with a unique meta field (in place of styles) to put text output. This will be empty if your script does not return a value.", type: 'text', required: false }
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Use a note-toolbar-script callout with a unique meta field to put text output. Callout will be empty if the script does not return a value.", type: 'text', required: false }
             ]
         },
         {
@@ -43,7 +43,7 @@ export default class DataviewAdapter implements Adapter {
             label: "Query",
             description: "Run a Dataview query",
             parameters: [
-                { parameter: 'expression', label: "Query", type: 'text', description: "Dataview query to evaluate.", required: true },
+                { parameter: 'expression', label: "Query", type: 'textarea', description: "Dataview query to evaluate.", required: true },
                 { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
             ]
         }
@@ -86,22 +86,25 @@ export default class DataviewAdapter implements Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, containerEl)
-                    : `Error: ${config.pluginFunction}: Expression is required`;
+                    : `Error: A Dataview expression is required`;
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
-                    : `Error: ${config.pluginFunction}: Script file is required`;
+                    : `Error: A script file is required`;
                 break;
             case 'executeJs':
                 result = config.expression
                     ? await this.executeJs(config.expression, containerEl)
-                    : `Error: ${config.pluginFunction}: Expression is required`;
+                    : `Error: A Dataview JS expression is required`;
                 break;
             case 'query':
                 result = config.expression
                     ? await this.query(config.expression, containerEl)
-                    : `Error: ${config.pluginFunction}: Expression is required`;
+                    : `Error: A Dataivew query is required`;
+                break;
+            case '':
+                // do nothing
                 break;
             default:
                 result = `Unsupported function: ${config.pluginFunction}`;

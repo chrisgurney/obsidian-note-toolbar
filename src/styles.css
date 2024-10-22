@@ -1187,6 +1187,10 @@ input[type="text"].note-toolbar-setting-error {
             width: 100%;
         }
     }
+    & textarea {
+        height: 4rem;
+        width: 100%;
+    }
 }
 
 /* hides the field help text while keeping it tabbable, if the container does not have focus within it

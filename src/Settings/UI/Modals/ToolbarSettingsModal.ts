@@ -917,13 +917,14 @@ export default class ToolbarSettingsModal extends Modal {
 							break;
 					}
 					if (adapter) {
-						const functionOptions = adapter?.getFunctions().reduce((acc, func) => {
+						const functionOptions = {
+							'': 'Select a function...',
+							...adapter?.getFunctions().reduce((acc, func) => {
 							acc[func.function.name] = func.label;
 							return acc;
-						}, {} as Record<string, string>);
-						const selectedFunction = toolbarItem.scriptConfig?.pluginFunction
-							? toolbarItem.scriptConfig?.pluginFunction
-							: 'Select a function...';
+						}, {} as Record<string, string>)
+						}
+						const selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
 						const scriptSetting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addDropdown((dropdown: DropdownComponent) => {
@@ -931,6 +932,7 @@ export default class ToolbarSettingsModal extends Modal {
 									.addOptions(functionOptions)
 									.setValue(selectedFunction)
 									.onChange(async (value) => {
+										// remove existing subfields
 										let itemLinkSubfieldDiv = fieldDiv.querySelector('.note-toolbar-setting-item-link-subfield') as HTMLDivElement;
 										itemLinkSubfieldDiv?.remove();
 										// create the setting if it doesn't exist or was removed
@@ -1113,6 +1115,21 @@ export default class ToolbarSettingsModal extends Modal {
 										}, 500));
 							});
 						// fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+						break;
+					case 'textarea':
+						setting = new Setting(fieldDiv)
+							.setClass("note-toolbar-setting-item-field-link")
+							.addTextArea(cb => {
+								cb.setPlaceholder(param.label)
+									.setValue(initialValue ? initialValue : '')
+									.onChange(
+										debounce(async (value) => {
+											config[param.parameter as keyof ScriptConfig] = value;
+											this.toolbar.updated = new Date().toISOString();
+											await this.plugin.settingsManager.save();
+											// TODO? this.renderPreview(toolbarItem);
+										}, 500));					
+							});
 						break;
 				}
 				if (setting && param.description) {

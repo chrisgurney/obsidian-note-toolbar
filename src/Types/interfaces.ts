@@ -28,7 +28,7 @@ export interface AdapterFunctionParameter {
     /** Optional description used for help text. */
     description?: string;
     /** Field type to display. */
-    type: 'file' | 'text';
+    type: 'file' | 'text' | 'textarea';
     /** Is this parameter required? */
     required: boolean;
 }
