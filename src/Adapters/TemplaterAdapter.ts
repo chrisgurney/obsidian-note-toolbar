@@ -9,9 +9,9 @@ import { debugLog } from "Utils/Utils";
  */
 export default class TemplaterAdapter implements Adapter {
 
-    private plugin: NoteToolbarPlugin;
-    private templaterApi: any;
-    private templaterPlugin: any;
+    private plugin: NoteToolbarPlugin | null;
+    private templaterApi: any | null;
+    private templaterPlugin: any | null;
 
     private functions: AdapterFunction[] = [
         // TODO: description: "Enter the name of the file to create from the provided template."
@@ -33,10 +33,16 @@ export default class TemplaterAdapter implements Adapter {
         return result;
     }
 
+    disable() {
+        this.templaterApi = null;
+        this.templaterPlugin = null;
+        this.plugin = null;
+    }
+
     async appendTemplate(filename: string): Promise<void> {
 
         if (this.templaterApi) {
-            let templateFile = this.plugin.app.vault.getFileByPath(filename);
+            let templateFile = this.plugin?.app.vault.getFileByPath(filename);
             if (templateFile) {
                 await this.templaterApi.append_template_to_active_file(templateFile);
             }
@@ -50,7 +56,7 @@ export default class TemplaterAdapter implements Adapter {
     async createFrom(filename: string): Promise<void> {
 
         if (this.templaterApi) {
-            let templateFile = this.plugin.app.vault.getFileByPath(filename);
+            let templateFile = this.plugin?.app.vault.getFileByPath(filename);
             if (templateFile) {
                 // TODO? future: support for other parms? template: TFile | string, folder?: TFolder | string, filename?: string, open_new_note = true
                 let newFile = await this.templaterApi.create_new_note_from_template(templateFile);
@@ -66,7 +72,7 @@ export default class TemplaterAdapter implements Adapter {
 
         // debugger;
         let result = '';
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+        const activeFile = this.plugin?.app.workspace.getActiveFile();
         if (activeFile) {
             const activeFilePath = activeFile.path;
             const config = {
@@ -89,8 +95,8 @@ export default class TemplaterAdapter implements Adapter {
 
         // debugger;
         let result = '';
-        const activeFile = this.plugin.app.workspace.getActiveFile();
-        let templateFile = this.plugin.app.vault.getFileByPath(filename);
+        const activeFile = this.plugin?.app.workspace.getActiveFile();
+        let templateFile = this.plugin?.app.vault.getFileByPath(filename);
         if (activeFile) {
             const activeFilePath = activeFile.path;
             const config = { 

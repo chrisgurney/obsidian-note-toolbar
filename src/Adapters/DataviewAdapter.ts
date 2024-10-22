@@ -49,14 +49,20 @@ export default class DataviewAdapter implements Adapter {
         }
     ];
 
-    private plugin: NoteToolbarPlugin;
-    private dataviewPlugin: any | undefined;
-    private dataviewApi: any | undefined;
+    private plugin: NoteToolbarPlugin | null;
+    private dataviewPlugin: any | null;
+    private dataviewApi: any | null;
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
         this.dataviewPlugin = (plugin.app as any).plugins.plugins["dataview"];
         this.dataviewApi = this.dataviewPlugin.api;
+    }
+
+    disable() {
+        this.dataviewApi = null;
+        this.dataviewPlugin = null;
+        this.plugin = null;
     }
 
     getFunctions(): AdapterFunction[] {
@@ -69,7 +75,7 @@ export default class DataviewAdapter implements Adapter {
 
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.plugin.getScriptOutputEl(config.outputContainer);
+            containerEl = this.plugin?.getScriptOutputEl(config.outputContainer);
             if (!containerEl) {
                 new Notice(`Error: Could not find callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
@@ -121,7 +127,7 @@ export default class DataviewAdapter implements Adapter {
 
         let result = '';
         
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+        const activeFile = this.plugin?.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path;
 
         const component = new Component();
@@ -181,14 +187,14 @@ export default class DataviewAdapter implements Adapter {
         // TODO: this works if the script doesn't need a container... but where does this span go?
         containerEl = containerEl ? containerEl : createSpan();
 
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+        const activeFile = this.plugin?.app.workspace.getActiveFile();
         if (!activeFile) {
             debugLog("view: We're not in a file");
             return;
         }
         const activeFilePath = activeFile.path;
 
-        let viewFile = this.plugin.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
+        let viewFile = this.plugin?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
             // debugLog(container, `view: custom view not found for '${simpleViewPath}' or '${complexViewPath}'.`);
@@ -196,40 +202,42 @@ export default class DataviewAdapter implements Adapter {
             return;
         }
 
-        let contents = await this.plugin.app.vault.read(viewFile);
-        if (contents.contains("await")) contents = "(async () => { " + contents + " })()";
-        contents += `\n//# sourceURL=${viewFile.path}`;
-        let func = new Function("dv", "input", contents);
-
+        let contents = await this.plugin?.app.vault.read(viewFile);
+        if (contents) {
+            if (contents.contains("await")) contents = "(async () => { " + contents + " })()";
+            contents += `\n//# sourceURL=${viewFile.path}`;
+            let func = new Function("dv", "input", contents);
          // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
          // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
          // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
-		const component = new Component();
-		component.load();
-        try {
-            containerEl.empty();
-            let dataviewLocalApi = this.dataviewPlugin.localApi(activeFile.path, this.plugin, containerEl);    
-            // from dv.view: may directly render, in which case it will likely return undefined or null
-            // TODO: try: args should be provided as a string that's read in as JSON; note other script types need to support this as well
-            let result = await Promise.resolve(func(dataviewLocalApi, args));
-            if (result) {
-                await this.dataviewApi.renderValue(
-                    this.plugin.app,
-                    result as any,
-                    containerEl,
-                    activeFilePath,
-                    component,
-                    this.dataviewApi.settings,
-                    true
-                );
-            }
+         const component = new Component();
+         component.load();
+         try {
+             containerEl.empty();
+             let dataviewLocalApi = this.dataviewPlugin.localApi(activeFile.path, this.plugin, containerEl);    
+             // from dv.view: may directly render, in which case it will likely return undefined or null
+             // TODO: try: args should be provided as a string that's read in as JSON; note other script types need to support this as well
+             let result = await Promise.resolve(func(dataviewLocalApi, args));
+             if (result && this.plugin) {
+                 await this.dataviewApi.renderValue(
+                     this.plugin.app,
+                     result as any,
+                     containerEl,
+                     activeFilePath,
+                     component,
+                     this.dataviewApi.settings,
+                     true
+                 );
+             }
+         }
+         catch (error) {
+             this.displayError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
+         }
+         finally {
+             component.unload();
+         }
+
         }
-        catch (error) {
-            this.displayError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
-        }
-        finally {
-			component.unload();
-		}
 
     }
 
@@ -247,7 +255,7 @@ export default class DataviewAdapter implements Adapter {
         let result = '';
         let resultEl = containerEl ? containerEl : document.createElement('div');
 
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+        const activeFile = this.plugin?.app.workspace.getActiveFile();
 
         const component = new Component();
         component.load();
@@ -295,7 +303,7 @@ export default class DataviewAdapter implements Adapter {
     private async query(expression: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+        const activeFile = this.plugin?.app.workspace.getActiveFile();
 
         if (!activeFile) {
             return `Dataview Adapter (query): A file must be open to run this query.`;
@@ -312,13 +320,15 @@ export default class DataviewAdapter implements Adapter {
                 debugLog("query: result: ", dvResult);
                 if (containerEl) {
                     containerEl.empty();
-                    MarkdownRenderer.render(
-                        this.plugin.app,
-                        dvResult.successful ? dvResult.value : dvResult.error,
-                        containerEl,
-                        activeFile.path,
-                        component
-                    );
+                    if (this.plugin) {
+                        MarkdownRenderer.render(
+                            this.plugin.app,
+                            dvResult.successful ? dvResult.value : dvResult.error,
+                            containerEl,
+                            activeFile.path,
+                            component
+                        );
+                    }
                 }
                 else {
                     result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '```';

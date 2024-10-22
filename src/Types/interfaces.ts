@@ -1,21 +1,34 @@
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
 
 export interface Adapter {
-    getFunctions(): AdapterFunction[]; // returns all functions for this adapter
-    use(config: ScriptConfig): Promise<string | void>; // executes the function with provided config
+    /** Returns all functions for this adapter. */
+    getFunctions(): AdapterFunction[];
+    /** Executes the function with provided config. */
+    use(config: ScriptConfig): Promise<string | void>; 
+    /** Cleans up the adapter when it's no longer needed. */
+    disable(): void; 
 }
 
 export interface AdapterFunction {
-    function: Function; // the actual function in the adapter
-    label: string; // the name shown in the UI
-    description: string; // field help text shown in the UI
-    parameters: AdapterFunctionParameter[]; // parameters for the function
+    /** The actual function in the adapter. */
+    function: Function;
+    /** The name shown in the selection UI. */
+    label: string;
+    /** Field help text shown in the UI. */
+    description: string;
+    /** Parameters for the function. */
+    parameters: AdapterFunctionParameter[]; 
 }
 
 export interface AdapterFunctionParameter {
-    parameter: keyof ScriptConfig; // the parameter key in ScriptConfig
-    label: string; // label for the field in the UI
-    description?: string; // optional description for UI hints
-    type: 'file' | 'text'; // parameter type
-    required: boolean; // is this parameter required?
+    /** The parameter key in {@link ScriptConfig}. */
+    parameter: keyof ScriptConfig;
+    /** Label/Placeholder for the field in the UI. */
+    label: string;
+    /** Optional description used for help text. */
+    description?: string;
+    /** Field type to display. */
+    type: 'file' | 'text';
+    /** Is this parameter required? */
+    required: boolean;
 }

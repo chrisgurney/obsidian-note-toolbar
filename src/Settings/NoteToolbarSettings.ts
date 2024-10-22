@@ -95,6 +95,7 @@ export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
 	icon: string;
 	ribbonAction: RibbonAction;
+	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
@@ -112,6 +113,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	folderMappings: [],
 	icon: "circle-ellipsis",
 	ribbonAction: RibbonAction.Toolbar,
+	scriptingEnabled: false,
 	showEditInFabMenu: false,
 	toolbarProp: "notetoolbar",
 	toolbars: [],

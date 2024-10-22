@@ -137,7 +137,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			});
 
-			if (false) {
+			if (this.settings.scriptingEnabled) {
 				this.dv = this.hasPlugin['dataview'] ? new DataviewAdapter(this) : undefined;
 				this.jse = this.hasPlugin['js-engine'] ? new JsEngineAdapter(this) : undefined;
 				this.tp = this.hasPlugin['templater-obsidian'] ? new TemplaterAdapter(this) : undefined;
@@ -1013,34 +1013,49 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 			case ItemType.Dataview:
-				const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
-				// debugLog(`${type} type item:`, toolbarItem);
-				if (toolbarItem?.scriptConfig) {
-					const result = await this.dv?.use(toolbarItem?.scriptConfig);
-					result ? insertTextAtCursor(this.app, result) : undefined;
-				}
-				// await dv.exec("Scripts/HelloWorld.js"); // ✅✅ (script has no function)
-				// await dv.exec("Scripts/Neko.js"); // ✅✅ (script has no function)
-				// await dv.exec("Scripts/HelloArgs.js", { name: 'Person!' }); // ✅ (script has no function)
-				// await dv.exec("Scripts/Dataview/FileList.js", { fileFolder: 'Demos' }, container ); // ✅ (creates dv output)
-				break;
 			case ItemType.JavaScript:
-				debugLog('JavaScript Item');
-				// let jseContainer = this.getScriptOutputEl('dataview#asf');
-				// this.jse?.import("Scripts/Neko.js"); // ✅ (script has no function)
-				// this.jse?.exec("Scripts/NekoFunction.js", "Neko"); // ✅
-				// this.jse?.exec("Scripts/JsEngine/HelloFunctionArgs.js", "Hello", { name: 'Person!' }); // ✅
-				// const jseResult = await this.jse?.exec("Scripts/JsEngine/RenderMd.js", "Render"); // ✅
-				// await this.jse?.execContainer("Scripts/JsEngine/ReturnMdBasic.js", jseContainer); // ✅
-				// jseResult ? insertTextAtCursor(this.app, jseResult) : undefined;
-				break;
 			case ItemType.Templater:
-				debugLog('Templater Item');
-				// this.tp?.appendTemplate("Templater/Basic Template.md"); // ✅
-				// this.tp?.createFrom("Templater/Basic Template.md"); // ✅
-				// const tpResult = await this.tp?.parseTemplate("<%tp.file.creation_date()%>");
-				// const tpResult = await this.tp?.parseTemplateFile("Templater/Creation Date.md"); // ✅
-				// tpResult ? insertTextAtCursor(this.app, tpResult) : undefined;
+				if (this.settings.scriptingEnabled) {
+					const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
+					// debugLog(`${type} type item:`, toolbarItem);
+					if (toolbarItem?.scriptConfig) {
+						let result;
+						switch (type) {
+							case ItemType.Dataview:
+								if (this.dv) {
+									result = await this.dv?.use(toolbarItem?.scriptConfig);
+								}
+								else {
+									new Notice("Dataview must be installed and enabled.");
+								}
+								break;
+							case ItemType.JavaScript:
+								break;
+							case ItemType.Templater:
+								break;
+						}
+						result ? insertTextAtCursor(this.app, result) : undefined;
+					}
+					// DATAVIEW
+					// await dv.exec("Scripts/HelloWorld.js"); // ✅✅ (script has no function)
+					// await dv.exec("Scripts/Neko.js"); // ✅✅ (script has no function)
+					// await dv.exec("Scripts/HelloArgs.js", { name: 'Person!' }); // ✅ (script has no function)
+					// await dv.exec("Scripts/Dataview/FileList.js", { fileFolder: 'Demos' }, container ); // ✅ (creates dv output)	
+					// JS ENGINE
+					// this.jse?.import("Scripts/Neko.js"); // ✅ (script has no function)
+					// this.jse?.exec("Scripts/NekoFunction.js", "Neko"); // ✅
+					// this.jse?.exec("Scripts/JsEngine/HelloFunctionArgs.js", "Hello", { name: 'Person!' }); // ✅
+					// const jseResult = await this.jse?.exec("Scripts/JsEngine/RenderMd.js", "Render"); // ✅
+					// await this.jse?.execContainer("Scripts/JsEngine/ReturnMdBasic.js", jseContainer); // ✅
+					// TEMPLATER
+					// this.tp?.appendTemplate("Templater/Basic Template.md"); // ✅
+					// this.tp?.createFrom("Templater/Basic Template.md"); // ✅
+					// const tpResult = await this.tp?.parseTemplate("<%tp.file.creation_date()%>");
+					// const tpResult = await this.tp?.parseTemplateFile("Templater/Creation Date.md"); // ✅
+				}
+				else {
+					new Notice("Enable scripting in Note Toolbar settings to use this item.");
+				}
 				break;
 			case ItemType.Uri:
 				if (isValidUri(linkHref)) {
