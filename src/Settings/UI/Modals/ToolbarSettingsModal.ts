@@ -899,6 +899,45 @@ export default class ToolbarSettingsModal extends Modal {
 						this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, type, cb.inputEl.parentElement);
 					});	
 				break;
+			case ItemType.Dataview:
+				if (this.plugin.dv) {
+					const functions = this.plugin.dv.getFunctions();
+					const functionOptions = functions.reduce((acc, func) => {
+						acc[func.function.name] = func.label;
+						return acc;
+					}, {} as Record<string, string>);
+					const selectedFunction = toolbarItem.scriptConfig?.pluginFunction
+						? toolbarItem.scriptConfig?.pluginFunction
+						: 'Select a function...';
+					const scriptSetting = new Setting(fieldDiv)
+						.setClass("note-toolbar-setting-item-field-link")
+						.addDropdown((dropdown: DropdownComponent) => {
+							dropdown
+								.addOptions(functionOptions)
+								.setValue(selectedFunction)
+								.onChange(async (value) => {
+									let itemLinkSubfieldDiv = fieldDiv.querySelector('.note-toolbar-setting-item-link-subfield') as HTMLDivElement;
+									itemLinkSubfieldDiv?.remove();
+									// create the setting if it doesn't exist or was removed
+									toolbarItem.scriptConfig ??= { pluginFunction: value };
+									toolbarItem.scriptConfig.pluginFunction = value;
+									this.toolbar.updated = new Date().toISOString();
+									let subfieldsDiv = createDiv();
+									subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
+									this.getScriptFunctionSettings(toolbarItem, subfieldsDiv);
+									fieldDiv.append(subfieldsDiv);
+									await this.plugin.settingsManager.save();
+									// TODO? this.renderPreview(toolbarItem);
+								});
+							});
+					fieldHelp ? scriptSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+
+					let subfieldsDiv = createDiv();
+					subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
+					this.getScriptFunctionSettings(toolbarItem, subfieldsDiv);
+					fieldDiv.append(subfieldsDiv);
+				}
+				break;
 			case ItemType.File:
 				new Setting(fieldDiv)
 					.setClass("note-toolbar-setting-item-field-link")
@@ -997,6 +1036,64 @@ export default class ToolbarSettingsModal extends Modal {
 
 	}
 
+	getScriptFunctionSettings(
+		toolbarItem: ToolbarItemSettings,
+		fieldDiv: HTMLDivElement)
+	{
+		if (this.plugin.dv && toolbarItem.scriptConfig) {
+			const config = toolbarItem.scriptConfig;
+			const functionMap = new Map(
+				this.plugin.dv.getFunctions().map(func => [func.function.name, func])
+			);
+			const selectedFunction = functionMap.get(toolbarItem.scriptConfig.pluginFunction);
+			selectedFunction?.parameters.forEach(param => {
+				let initialValue = config[param.parameter as keyof ScriptConfig];
+				let setting;
+				switch (param.type) {
+					case 'file':
+						setting = new Setting(fieldDiv)
+							.setClass("note-toolbar-setting-item-field-link")
+							.addSearch((cb) => {
+								new FileSuggester(this.app, cb.inputEl, true, '.js');
+								cb.setPlaceholder(param.label)
+									.setValue(initialValue ? initialValue : '')
+									.onChange(debounce(async (value) => {
+										let isValid = this.updateItemComponentStatus(value, ItemType.File, cb.inputEl.parentElement);
+										config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
+										this.toolbar.updated = new Date().toISOString();
+										await this.plugin.settingsManager.save();
+										// TODO? this.renderPreview(toolbarItem);
+									}, 500));
+								});
+						break;
+					case 'text':
+						setting = new Setting(fieldDiv)
+							.setClass("note-toolbar-setting-item-field-link")
+							.addText(cb => {
+								cb.setPlaceholder(param.label)
+									.setValue(initialValue ? initialValue : '')
+									.onChange(
+										debounce(async (value) => {
+											config[param.parameter as keyof ScriptConfig] = value;
+											this.toolbar.updated = new Date().toISOString();
+											await this.plugin.settingsManager.save();
+											// TODO? this.renderPreview(toolbarItem);
+										}, 500));
+							});
+						// fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+						break;
+				}
+				if (setting && param.description) {
+					const fieldHelp = createDiv();
+					fieldHelp.setText(param.description);
+					fieldHelp.addClass('note-toolbar-setting-field-help');
+					setting.controlEl.insertAdjacentElement('beforeend', fieldHelp);
+				}
+			});
+
+		}
+	}
+
 	getLinkSettingForType(
 		type: ItemType, 
 		fieldDiv: HTMLDivElement, 
@@ -1005,6 +1102,9 @@ export default class ToolbarSettingsModal extends Modal {
 		switch (type) {
 			case ItemType.Command:
 				this.getLinkSetting(type, fieldDiv, toolbarItem);
+				break;
+			case ItemType.Dataview:
+				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Dataview.", ''));
 				break;
 			case ItemType.File:
 				this.getLinkSetting(type, fieldDiv, toolbarItem);
