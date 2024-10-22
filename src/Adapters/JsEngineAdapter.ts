@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
 import { Adapter, AdapterFunction } from "Types/interfaces";
-import { debugLog, displayError } from "Utils/Utils";
+import { debugLog, displayScriptError } from "Utils/Utils";
 
 /**
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/API.ts
@@ -98,7 +98,7 @@ export default class JsEngineAdapter implements Adapter {
             args = argsJson ? JSON.parse(argsJson) : {};
         }
         catch (error) {
-            displayError(`Failed to parse arguments for script: ${filename}\nError:`, error);
+            displayScriptError(`Failed to parse arguments for script: ${filename}\nError:`, error);
             return "Failed to parse arguments:\n```\n" + error + "\n```";
         }
         debugLog(args);

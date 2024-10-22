@@ -64,6 +64,21 @@ export function debugLog(message?: any, ...optionalParams: any[]): void {
 }
 
 /**
+ * Displays the provided scripting error as a console message, and is output to a container, if provided. 
+ * @param message 
+ * @param error 
+ * @param containerEl 
+ */
+export function displayScriptError(message: string, error?: any, containerEl?: HTMLElement) {
+	console.error(message, error);
+	if (containerEl) {
+		let errorEl = containerEl.createEl('pre');
+		errorEl.addClass('dataview', 'dataview-error');
+		errorEl.setText(message + '\n' + error);
+	}
+}
+
+/**
  * Gets a new UUID.
  * @returns string UUID
  */

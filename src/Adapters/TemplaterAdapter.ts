@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Notice, TFile } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
 import { Adapter, AdapterFunction } from "Types/interfaces";
-import { debugLog, displayError } from "Utils/Utils";
+import { debugLog, displayScriptError } from "Utils/Utils";
 
 /**
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/Templater.ts
@@ -121,7 +121,7 @@ export default class TemplaterAdapter implements Adapter {
                 await this.templaterApi.append_template_to_active_file(templateFile);
             }
             else {
-                displayError("File not found: " + filename);
+                displayScriptError("File not found: " + filename);
             }
         }
 
@@ -140,7 +140,7 @@ export default class TemplaterAdapter implements Adapter {
                 let newFile = await this.templaterApi.create_new_note_from_template(templateFile);
             }
             else {
-                displayError("File not found: " + filename);
+                displayScriptError("File not found: " + filename);
             }
         }
 

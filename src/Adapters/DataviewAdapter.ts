@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
 import { Adapter, AdapterFunction } from "Types/interfaces";
-import { debugLog, displayError } from "Utils/Utils";
+import { debugLog, displayScriptError } from "Utils/Utils";
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
@@ -155,7 +155,7 @@ export default class DataviewAdapter implements Adapter {
             }
         }
         catch (error) {
-            displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
+            displayScriptError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
             result = "Dataview error: Check console for more details.\n```\n" + error + "\n```";
         }
         finally {
@@ -184,7 +184,7 @@ export default class DataviewAdapter implements Adapter {
             args = argsJson ? JSON.parse(argsJson) : {};
         }
         catch (error) {
-            displayError(`Failed to parse arguments for script: ${filename}\nError:`, error, containerEl);
+            displayScriptError(`Failed to parse arguments for script: ${filename}\nError:`, error, containerEl);
             return;
         }
         
@@ -235,7 +235,7 @@ export default class DataviewAdapter implements Adapter {
              }
          }
          catch (error) {
-             displayError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
+             displayScriptError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
          }
          finally {
              component.unload();
@@ -285,7 +285,7 @@ export default class DataviewAdapter implements Adapter {
             }
         }
         catch (error) {
-            displayError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
+            displayScriptError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
         }
         finally {
             component.unload();
@@ -340,7 +340,7 @@ export default class DataviewAdapter implements Adapter {
             }
         }
         catch (error) {
-            displayError(`Failed to evaluate query: ${expression}\nDataview error:`, error, containerEl);
+            displayScriptError(`Failed to evaluate query: ${expression}\nDataview error:`, error, containerEl);
             result = "Dataview error: Check console for more details.\n```\n" + error + "\n```";
         }
         finally {
