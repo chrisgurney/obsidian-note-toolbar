@@ -6,6 +6,7 @@ import { debugLog, displayScriptError } from "Utils/Utils";
 
 /**
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/API.ts
+ * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/Internal.ts
  */
 export default class JsEngineAdapter implements Adapter {
 
@@ -17,6 +18,15 @@ export default class JsEngineAdapter implements Adapter {
         {
             function: this.exec,
             label: "Execute JavaScript",
+            description: "",
+            parameters: [
+                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: 'file', required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
+            ]
+        },
+        {
+            function: this.importExec,
+            label: "Import and execute JavaScript",
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: 'file', required: true },
@@ -51,7 +61,12 @@ export default class JsEngineAdapter implements Adapter {
         switch (config.pluginFunction) {
             case 'exec':
                 result = config.sourceFile
-                    ? await this.exec(config.sourceFile, config.sourceFunction, config.sourceArgs)
+                    ? await this.exec(config.sourceFile, containerEl)
+                    : `Error: A JavaScript file is required`;
+                break;
+            case 'importExec':
+                result = config.sourceFile
+                    ? await this.importExec(config.sourceFile, config.sourceFunction, config.sourceArgs)
                     : `Error: A JavaScript file is required`;
                 break;
             case '':
@@ -71,7 +86,7 @@ export default class JsEngineAdapter implements Adapter {
     }
 
     /**
-     * Wrapper for importJs(). 
+     * Wrapper for importJs(), and then executes the provided function.
      * @example
      * Script without function will only execute once?
      * console.log("👋 HelloWorld");
@@ -87,7 +102,7 @@ export default class JsEngineAdapter implements Adapter {
      * @param argsJson 
      * @returns 
      */
-    async exec(filename: string, functionName?: string, argsJson?: string): Promise<string> {
+    async importExec(filename: string, functionName?: string, argsJson?: string): Promise<string> {
 
         let result = '';
 
@@ -114,11 +129,11 @@ export default class JsEngineAdapter implements Adapter {
                         debugLog('execute: result:', result);
                     }
                     catch (error) {
-                        debugLog('Caught error:', error);
+                        displayScriptError(`Failed to execute script: ${filename}\nError:`, error);
                     }
                 }
                 else {
-                    debugLog('Function not found:', filename, functionName);
+                    displayScriptError(`Function not found: ${filename} ${functionName}`);
                 }
             }
         }
@@ -126,41 +141,45 @@ export default class JsEngineAdapter implements Adapter {
 
     }
 
-    // TODO? version that also accepts: functionName: string, ...args: any[]
-    async execContainer(script: string, container: HTMLElement | null): Promise<void> {
+    /**
+     * 
+     * @param filename 
+     * @param containerEl 
+     * @returns 
+     */
+    async exec(filename: string, containerEl?: HTMLElement): Promise<void> {
+        // TODO? version that also accepts: functionName: string, ...args: any[]
+
+        containerEl = containerEl ? containerEl : createSpan();
 
         const activeFile = this.plugin?.app.workspace.getActiveFile();
         if (!activeFile) {
-            debugLog("no active file");
+            displayScriptError("This script must be executed from an open note.");
             return;
         }
 
-        if (!container) {
-            debugLog('No container provided');
-            return;
-        }
-
-        // const component = new Component();
-        // component.load();
+        const component = new Component();
+        component.load();
         try {
-            // container?.empty();
+            containerEl?.empty();
             const activeFilePath = activeFile?.path;
-            const execution = await this.engineApi.internal.executeFile(script, {
-                container: container,
+            const execution = await this.engineApi.internal.executeFile(filename, {
+                container: containerEl,
                 component: this.plugin,
             });
-            debugLog(execution.result);
-            const renderer = this.engineApi.internal.createRenderer(container, activeFilePath, this.plugin);
+            const renderer = this.engineApi.internal.createRenderer(containerEl, activeFilePath, this.plugin);
             // renderer.render(execution.result);
             if (this.plugin) {
-                await MarkdownRenderer.render(this.plugin.app, execution.result, container, activeFilePath, this.plugin);
+                if (containerEl) {
+                    await MarkdownRenderer.render(this.plugin.app, execution.result, containerEl, activeFilePath, this.plugin);
+                }
             }
         }
         catch (error) {
-            debugLog("execContainer: error:", error);
+            displayScriptError(`Failed to execute script: ${filename}\nError:`, error, containerEl);
         }
         finally {
-            // component.unload();
+            component.unload();
         }
 
     }

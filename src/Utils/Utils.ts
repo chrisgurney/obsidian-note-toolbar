@@ -60,7 +60,7 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
  * @param message Message to output for debugging.
  */
 export function debugLog(message?: any, ...optionalParams: any[]): void {
-	DEBUG && console.log(message, ...optionalParams);
+	DEBUG && console.debug(message, ...optionalParams);
 }
 
 /**

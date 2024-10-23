@@ -194,7 +194,7 @@ export default class DataviewAdapter implements Adapter {
 
         const activeFile = this.plugin?.app.workspace.getActiveFile();
         if (!activeFile) {
-            debugLog("view: We're not in a file");
+            displayScriptError("This script must be executed from an open note.");
             return;
         }
         const activeFilePath = activeFile.path;
@@ -202,8 +202,7 @@ export default class DataviewAdapter implements Adapter {
         let viewFile = this.plugin?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
-            // debugLog(container, `view: custom view not found for '${simpleViewPath}' or '${complexViewPath}'.`);
-            debugLog(`view: script file not found: ${filename}`);
+            displayScriptError(`Script file not found: ${filename}`);
             return;
         }
 
@@ -311,7 +310,8 @@ export default class DataviewAdapter implements Adapter {
         const activeFile = this.plugin?.app.workspace.getActiveFile();
 
         if (!activeFile) {
-            return `Dataview Adapter (query): A file must be open to run this query.`;
+            displayScriptError("This query must be run from an open note.");
+            return "This query must be run from an open note.";
         }
 
         const component = new Component();

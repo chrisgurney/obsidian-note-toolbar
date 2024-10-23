@@ -1012,8 +1012,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Templater:
 				if (this.settings.scriptingEnabled) {
 					const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
-					debugLog(`${type} type item:`, toolbarItem);
-					debugLog('Adapters:', this.dvAdapter, this.jsAdapter, this.tpAdapter);
+					// debugLog(`${type} type item:`, toolbarItem);
 					if (toolbarItem?.scriptConfig) {
 						if ((type === ItemType.Dataview && !this.dvAdapter) || 
 							(type === ItemType.JsEngine && !this.jsAdapter) || 
