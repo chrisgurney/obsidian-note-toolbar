@@ -148,7 +148,6 @@ export default class JsEngineAdapter implements Adapter {
      * @returns 
      */
     async exec(filename: string, containerEl?: HTMLElement): Promise<string> {
-        // TODO? version that also accepts: functionName: string, ...args: any[]
 
         let result = '';
         let resultEl = containerEl ? containerEl : createSpan();
@@ -172,7 +171,8 @@ export default class JsEngineAdapter implements Adapter {
             debugLog('exec() result:', execution.result);
             if (this.plugin) {
                 if (containerEl) {
-                    await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
+                    renderer.render(execution.result);
+                    // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
                 }
                 else {
                     result = execution.result ? execution.result : '';

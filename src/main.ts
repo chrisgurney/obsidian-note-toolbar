@@ -1037,12 +1037,11 @@ export default class NoteToolbarPlugin extends Plugin {
 						await this.app.commands.executeCommandById('editor:focus');
 					}
 					// JS ENGINE
-					// this.jse?.import("Scripts/Neko.js"); // ✅ (script has no function)
-					// this.jse?.exec("Scripts/NekoFunction.js", "Neko"); // ✅
-					// this.jse?.exec("Scripts/JsEngine/HelloFunctionArgs.js", "Hello", { name: 'Person!' }); // ✅
-					
-					// const jseResult = await this.jse?.exec("Scripts/JsEngine/RenderMd.js", "Render"); // ✅
-					// await this.jse?.execContainer("Scripts/JsEngine/ReturnMdBasic.js", jseContainer); // ✅
+					// import("Scripts/Neko.js"); // ✅ (script has no function)
+					// exec("Scripts/NekoFunction.js", "Neko"); // ✅
+					// exec("Scripts/JsEngine/HelloFunctionArgs.js", "Hello", { name: 'Person!' }); // ✅
+					// exec("Scripts/JsEngine/RenderMd.js", "Render") ✅
+					// execContainer("Scripts/JsEngine/ReturnMdBasic.js", jseContainer) ✅
 				}
 				else {
 					new Notice("Enable Scripting in Note Toolbar settings to use this item.");
