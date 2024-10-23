@@ -948,7 +948,7 @@ export default class ToolbarSettingsModal extends Modal {
 										this.toolbar.updated = new Date().toISOString();
 										let subfieldsDiv = createDiv();
 										subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
-										this.getScriptFunctionSettings(adapter, toolbarItem, subfieldsDiv);
+										this.getScriptSubfields(adapter, toolbarItem, subfieldsDiv);
 										fieldDiv.append(subfieldsDiv);
 										await this.plugin.settingsManager.save();
 										// TODO? this.renderPreview(toolbarItem);
@@ -958,7 +958,7 @@ export default class ToolbarSettingsModal extends Modal {
 						toolbarItem.scriptConfig ??= { pluginFunction: '' };
 						let subfieldsDiv = createDiv();
 						subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
-						this.getScriptFunctionSettings(adapter, toolbarItem, subfieldsDiv);
+						this.getScriptSubfields(adapter, toolbarItem, subfieldsDiv);
 						fieldDiv.append(subfieldsDiv);
 					}
 					else {
@@ -1078,7 +1078,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 	}
 
-	getScriptFunctionSettings(
+	getScriptSubfields(
 		adapter: Adapter,
 		toolbarItem: ToolbarItemSettings,
 		fieldDiv: HTMLDivElement)
@@ -1115,7 +1115,8 @@ export default class ToolbarSettingsModal extends Modal {
 										await this.plugin.settingsManager.save();
 										// TODO? this.renderPreview(toolbarItem);
 									}, 500));
-								});
+								this.updateItemComponentStatus(initialValue ? initialValue : '', ItemType.File, cb.inputEl.parentElement);
+							});
 						break;
 					case 'text':
 						setting = new Setting(fieldDiv)

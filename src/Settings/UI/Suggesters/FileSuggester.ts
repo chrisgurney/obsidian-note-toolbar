@@ -1,4 +1,5 @@
 import { AbstractInputSuggest, App, TAbstractFile, TFile, TFolder } from "obsidian";
+import { debugLog } from "Utils/Utils";
 
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
@@ -27,7 +28,7 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
             if (!matchesInput) return false;
             if (this.showFilesOnly && !isFile) return false;
             if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
-            if (this.folderPath && !file.path.startsWith(this.folderPath.toLowerCase())) return false;
+            if (this.folderPath && !lowerCaseFilePath.startsWith(this.folderPath.toLowerCase())) return false;
             return true;
         });
 

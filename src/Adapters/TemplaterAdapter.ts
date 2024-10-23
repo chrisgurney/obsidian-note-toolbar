@@ -14,7 +14,6 @@ export default class TemplaterAdapter implements Adapter {
     private templaterPlugin: any | null;
 
     private functions: AdapterFunction[] = [
-        // TODO: description: "Enter the name of the file to create from the provided template."
         {
             function: this.appendTemplate,
             label: "Append template",
@@ -29,6 +28,7 @@ export default class TemplaterAdapter implements Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "Template", description: "Template file to create a new file from.", type: 'file', required: true },
+                // TODO: 'outputFile', description: "Enter the name of the file to create from the provided template."
             ]
         },
         {

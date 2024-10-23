@@ -7,6 +7,7 @@ import { debugLog, displayScriptError } from "Utils/Utils";
 /**
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/API.ts
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/Internal.ts
+ * @link Discord thread: https://discord.com/channels/686053708261228577/1286803892549713921
  */
 export default class JsEngineAdapter implements Adapter {
 
