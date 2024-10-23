@@ -383,7 +383,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemForm = itemPreviewContainer.nextElementSibling;
 		let itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type');
-		debugLog("toggleItemView", itemPreviewContainer, itemForm, itemType, focusOn);
+		// debugLog("toggleItemView", itemPreviewContainer, itemForm, itemType, focusOn);
 		
 		let previewState: string;
 		let formState: string;
@@ -520,7 +520,7 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreview, 'click', (e) => {
 				const target = e.target as Element;
 				const currentTarget = e.currentTarget as Element;
-				debugLog("clicked on: ", currentTarget, target);
+				// debugLog("clicked on: ", currentTarget, target);
 				let focusOn: ItemFormComponent = ItemFormComponent.Label;
 				if (currentTarget.querySelector('.note-toolbar-setting-tbar-preview')) {
 					focusOn = ItemFormComponent.Link;
@@ -955,13 +955,12 @@ export default class ToolbarSettingsModal extends Modal {
 						fieldDiv.append(subfieldsDiv);
 					}
 					else {
-						const pluginName = (type === ItemType.JavaScript) ? "JS Engine" : type.charAt(0).toUpperCase() + type.slice(1);
 						fieldDiv.removeClass('note-toolbar-setting-item-link-field');
-						fieldDiv.setText("Restart after installing and enabling plugin: ");
+						fieldDiv.setText("Restart after installing and enabling plugin:");
 						let pluginLinkFr = document.createDocumentFragment();
 						let pluginLink = pluginLinkFr.createEl('a', { 
 							href: `obsidian://show-plugin?id=${type}`, 
-							text: pluginName
+							text: LINK_OPTIONS[type]
 						});
 						pluginLink.addClass('note-toolbar-setting-focussable-link');
 						fieldDiv.append(pluginLink);
@@ -1166,7 +1165,7 @@ export default class ToolbarSettingsModal extends Modal {
 			case ItemType.File:
 				this.getLinkSetting(type, fieldDiv, toolbarItem);
 				break;
-			case ItemType.JavaScript:
+			case ItemType.JsEngine:
 				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use this.", ''));
 				break;
 			case ItemType.Group:

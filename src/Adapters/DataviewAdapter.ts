@@ -116,6 +116,7 @@ export default class DataviewAdapter implements Adapter {
     }
 
     /**
+     * Wrapper of evaluateInline().
      * @example
      * 2 + 6
      * @example

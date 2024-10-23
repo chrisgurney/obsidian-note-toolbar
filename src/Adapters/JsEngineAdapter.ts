@@ -20,7 +20,7 @@ export default class JsEngineAdapter implements Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: 'file', required: true },
-                { parameter: 'sourceFunction', label: "Function", description: "Script function to execute.", type: 'text', required: true },
+                { parameter: 'sourceFunction', label: "Function (optional)", description: "If script has functions, function name to execute.", type: 'text', required: false },
                 { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by function in JSON format.", type: 'text', required: false },
             ]
         },
@@ -50,9 +50,9 @@ export default class JsEngineAdapter implements Adapter {
 
         switch (config.pluginFunction) {
             case 'exec':
-                result = (config.sourceFile && config.sourceFunction)
+                result = config.sourceFile
                     ? await this.exec(config.sourceFile, config.sourceFunction, config.sourceArgs)
-                    : `Error: A JavaScript file and function is required`;
+                    : `Error: A JavaScript file is required`;
                 break;
             case '':
                 // do nothing
@@ -70,16 +70,14 @@ export default class JsEngineAdapter implements Adapter {
         this.plugin = null;
     }
 
-    async import(script: string): Promise<void> {
-        if (this.engineApi) {
-            let module = await this.engineApi.importJs(script);
-            debugLog("importJs", module);
-        }
-    }
-
     /**
+     * Wrapper for importJs(). 
      * @example
-     * parameters = { "name": "Chris "}
+     * Script without function will only execute once?
+     * console.log("👋 HelloWorld");
+     * @example
+     * Script with function and parameters:
+     * parameters = { "name": "Chris " }
      * Script being executed:
      * export function Hello(engine, args) {
      *   console.log(`👋 Hello ${args['name']}`);
@@ -89,7 +87,7 @@ export default class JsEngineAdapter implements Adapter {
      * @param argsJson 
      * @returns 
      */
-    async exec(filename: string, functionName: string, argsJson?: string): Promise<string> {
+    async exec(filename: string, functionName?: string, argsJson?: string): Promise<string> {
 
         let result = '';
 
@@ -101,27 +99,27 @@ export default class JsEngineAdapter implements Adapter {
             displayScriptError(`Failed to parse arguments for script: ${filename}\nError:`, error);
             return "Failed to parse arguments:\n```\n" + error + "\n```";
         }
-        debugLog(args);
         
         if (this.engineApi) {
             let module = await this.engineApi.importJs(filename);
-            debugLog("execute", module);
-            if (module[functionName] && typeof module[functionName] === 'function') {
-                try {
-                    if (args) {
-                        result = module[functionName](this.engineApi, args);
+            if (functionName) {
+                if (module[functionName] && (typeof module[functionName] === 'function')) {
+                    try {
+                        if (args) {
+                            result = module[functionName](this.engineApi, args);
+                        }
+                        else {
+                            result = module[functionName](this.engineApi);
+                        }
+                        debugLog('execute: result:', result);
                     }
-                    else {
-                        result = module[functionName](this.engineApi);
+                    catch (error) {
+                        debugLog('Caught error:', error);
                     }
-                    debugLog('execute: result:', result);
                 }
-                catch (error) {
-                    debugLog('Caught error:', error);
+                else {
+                    debugLog('Function not found:', filename, functionName);
                 }
-            }
-            else {
-                debugLog('Function not found:', filename, functionName);
             }
         }
         return result;

@@ -47,7 +47,7 @@ export enum ItemType {
 	Dataview = 'dataview',
 	File = 'file',
 	Group = 'group',
-	JavaScript = 'javascript',
+	JsEngine = 'jsengine',
 	Menu = 'menu',
 	Separator = 'separator',
 	Templater = 'templater',
@@ -267,9 +267,12 @@ export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
 
 export const LINK_OPTIONS = {
 	[ItemType.Command]: t('setting.item.option-command'),
+	[ItemType.Dataview]: "Dataview",
 	[ItemType.File]: t('setting.item.option-file'),
 	[ItemType.Group]: t('setting.item.option-item-group'),
 	[ItemType.Menu]: t('setting.item.option-item-menu'),
+	[ItemType.JsEngine]: "JS Engine",
+	[ItemType.Templater]: "Templater",
 	[ItemType.Uri]: t('setting.item.option-uri')
 }
 

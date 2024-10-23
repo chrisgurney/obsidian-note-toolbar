@@ -1,6 +1,6 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas, insertTextAtCursor } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
@@ -1013,16 +1013,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 			case ItemType.Dataview:
-			case ItemType.JavaScript:
+			case ItemType.JsEngine:
 			case ItemType.Templater:
 				if (this.settings.scriptingEnabled) {
 					const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
 					// debugLog(`${type} type item:`, toolbarItem);
 					if (toolbarItem?.scriptConfig) {
-						const pluginName = (type === ItemType.JavaScript) ? "JS Engine" : type.charAt(0).toUpperCase() + type.slice(1);
-						debugLog(pluginName);
-						if (ItemType.Dataview && !this.dvAdapter || ItemType.JavaScript && !this.jsAdapter || ItemType.Templater && !this.tpAdapter) {
-							new Notice("Restart after installing and enabling plugin: " + pluginName);
+						if (ItemType.Dataview && !this.dvAdapter || ItemType.JsEngine && !this.jsAdapter || ItemType.Templater && !this.tpAdapter) {
+							new Notice("Restart after installing and enabling plugin:" + LINK_OPTIONS[type]);
 							return;
 						}
 						let result;
@@ -1030,7 +1028,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							case ItemType.Dataview:
 								result = await this.dvAdapter?.use(toolbarItem?.scriptConfig);
 								break;
-							case ItemType.JavaScript:
+							case ItemType.JsEngine:
 								result = await this.jsAdapter?.use(toolbarItem?.scriptConfig);
 								break;
 							case ItemType.Templater:
