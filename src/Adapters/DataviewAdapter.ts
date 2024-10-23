@@ -138,9 +138,9 @@ export default class DataviewAdapter implements Adapter {
 		component.load();
         try {
             if (this.dataviewApi) {
-                debugLog("evaluate: " + expression);
+                debugLog("evaluate() " + expression);
                 let dvResult = await (this.dataviewApi as any).evaluateInline(expression, activeFile?.path);
-                debugLog("evaluate: result:", dvResult);
+                debugLog("evaluate() result:", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     await this.dataviewApi.renderValue(
@@ -257,7 +257,7 @@ export default class DataviewAdapter implements Adapter {
     private async executeJs(expression: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
-        let resultEl = containerEl ? containerEl : document.createElement('div');
+        let resultEl = containerEl ? containerEl : createSpan();
 
         const activeFile = this.plugin?.app.workspace.getActiveFile();
 
@@ -265,9 +265,9 @@ export default class DataviewAdapter implements Adapter {
         component.load();
         try {
             if (this.dataviewApi) {
-                debugLog("executeJs: ", expression);
+                debugLog("executeJs() ", expression);
                 await (this.dataviewApi as any).executeJs(expression, resultEl, component, activeFile?.path);
-                debugLog("executeJs: result:", resultEl);
+                debugLog("executeJs() result:", resultEl);
                 if (!containerEl) {
                     const errorEl = resultEl.querySelector('.dataview-error');
                     if (errorEl) {
@@ -275,7 +275,7 @@ export default class DataviewAdapter implements Adapter {
                     }
                     else if (resultEl.children.length === 0 && resultEl.textContent?.trim() === '') {
                         // nothing was returned; do nothing? may depend on what user wants to do
-                        debugLog('executeJs: no result');
+                        debugLog('executeJs() no result');
                         result = '';
                     }
                     else {
@@ -318,11 +318,11 @@ export default class DataviewAdapter implements Adapter {
         component.load();
         try {
             if (this.dataviewApi) {
-                debugLog("query: " + expression);
+                debugLog("query() " + expression);
                 // returns a Promise<Result<QueryResult, string>>
                 let dvResult = await (this.dataviewApi as any).queryMarkdown(expression, activeFile, this.dataviewApi.settings);
                 // TODO: is there a chance result is empty/undefined? what to do in that case?
-                debugLog("query: result: ", dvResult);
+                debugLog("query() result: ", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     if (this.plugin) {

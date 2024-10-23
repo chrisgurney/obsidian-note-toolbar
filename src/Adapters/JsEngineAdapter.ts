@@ -126,7 +126,7 @@ export default class JsEngineAdapter implements Adapter {
                         else {
                             result = module[functionName](this.engineApi);
                         }
-                        debugLog('execute: result:', result);
+                        debugLog('importExec() result:', result);
                     }
                     catch (error) {
                         displayScriptError(`Failed to execute script: ${filename}\nError:`, error);
@@ -147,15 +147,16 @@ export default class JsEngineAdapter implements Adapter {
      * @param containerEl 
      * @returns 
      */
-    async exec(filename: string, containerEl?: HTMLElement): Promise<void> {
+    async exec(filename: string, containerEl?: HTMLElement): Promise<string> {
         // TODO? version that also accepts: functionName: string, ...args: any[]
 
-        containerEl = containerEl ? containerEl : createSpan();
+        let result = '';
+        let resultEl = containerEl ? containerEl : createSpan();
 
         const activeFile = this.plugin?.app.workspace.getActiveFile();
         if (!activeFile) {
             displayScriptError("This script must be executed from an open note.");
-            return;
+            return "This script must be executed from an open note.";
         }
 
         const component = new Component();
@@ -164,14 +165,17 @@ export default class JsEngineAdapter implements Adapter {
             containerEl?.empty();
             const activeFilePath = activeFile?.path;
             const execution = await this.engineApi.internal.executeFile(filename, {
-                container: containerEl,
+                container: resultEl,
                 component: this.plugin,
             });
-            const renderer = this.engineApi.internal.createRenderer(containerEl, activeFilePath, this.plugin);
-            // renderer.render(execution.result);
+            const renderer = this.engineApi.internal.createRenderer(resultEl, activeFilePath, this.plugin);
+            debugLog('exec() result:', execution.result);
             if (this.plugin) {
                 if (containerEl) {
-                    await MarkdownRenderer.render(this.plugin.app, execution.result, containerEl, activeFilePath, this.plugin);
+                    await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
+                }
+                else {
+                    result = execution.result ? execution.result : '';
                 }
             }
         }
@@ -181,6 +185,8 @@ export default class JsEngineAdapter implements Adapter {
         finally {
             component.unload();
         }
+
+        return result;
 
     }
 

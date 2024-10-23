@@ -171,7 +171,7 @@ export default class TemplaterAdapter implements Adapter {
             if (this.templaterApi) {
                 // result = await this.templater.read_and_parse_template(config);
                 result = await this.templaterApi.parse_template(config, expression);
-                debugLog("parseTemplate:", result);
+                debugLog("parseTemplate() result:", result);
             }
         }
         return result;
@@ -203,7 +203,7 @@ export default class TemplaterAdapter implements Adapter {
             };
             if (this.templaterApi) {
                 result = await this.templaterApi.read_and_parse_template(config);
-                debugLog("parseTemplateFile:", result);
+                debugLog("parseTemplateFile() result:", result);
             }
         }
         return result;
