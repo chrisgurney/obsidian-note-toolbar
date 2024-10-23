@@ -799,6 +799,10 @@ body {
     }
 }
 
+.note-toolbar-setting-disabled {
+    color: var(--text-muted);
+}
+
 .note-toolbar-setting-item-preview-edit-mobile {
     display: flex;
     column-gap: 0.5em;

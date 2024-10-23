@@ -47,10 +47,10 @@ export enum ItemType {
 	Dataview = 'dataview',
 	File = 'file',
 	Group = 'group',
-	JsEngine = 'jsengine',
+	JsEngine = 'js-engine',
 	Menu = 'menu',
 	Separator = 'separator',
-	Templater = 'templater',
+	Templater = 'templater-obsidian',
 	Uri = 'uri'
 }
 export enum PlatformType {

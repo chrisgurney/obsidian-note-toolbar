@@ -1045,7 +1045,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// await this.jse?.execContainer("Scripts/JsEngine/ReturnMdBasic.js", jseContainer); // ✅
 				}
 				else {
-					new Notice("Enable scripting in Note Toolbar settings to use this item.");
+					new Notice("Enable Scripting in Note Toolbar settings to use this item.");
 				}
 				break;
 			case ItemType.Uri:

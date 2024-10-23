@@ -628,7 +628,14 @@ export default class ToolbarSettingsModal extends Modal {
 			const s1t = new Setting(linkSelector)
 				.addDropdown((dropdown) =>
 					dropdown
-						.addOptions(LINK_OPTIONS)
+						.addOptions(
+							// show enabled plugins and all other options
+							Object.fromEntries(
+								Object.entries(LINK_OPTIONS).filter(
+									([key]) => this.plugin.hasPlugin[key] || !['dataview', 'js-engine', 'templater-obsidian'].includes(key)
+								)
+							)
+						)
 						.setValue(toolbarItem.linkAttr.type)
 						.onChange(async (value) => {
 							let itemRow = this.getItemRowEl(toolbarItem.uuid);
@@ -956,7 +963,8 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					else {
 						fieldDiv.removeClass('note-toolbar-setting-item-link-field');
-						fieldDiv.setText("Toggle the Scripting setting after installing and enabling plugin:");
+						fieldDiv.addClass('note-toolbar-setting-disabled');
+						fieldDiv.setText("Toggle the Scripting setting after installing and enabling plugin: ");
 						let pluginLinkFr = document.createDocumentFragment();
 						let pluginLink = pluginLinkFr.createEl('a', { 
 							href: `obsidian://show-plugin?id=${type}`, 
@@ -967,7 +975,9 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 				}
 				else {
-					fieldDiv.setText("Enable scripting in Note Toolbar settings to use this item.");
+					fieldDiv.removeClass('note-toolbar-setting-item-link-field');
+					fieldDiv.addClass('note-toolbar-setting-disabled');
+					fieldDiv.setText("Enable Scripting in Note Toolbar settings to use this item.");
 				}
 				break;
 			case ItemType.File:
