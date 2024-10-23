@@ -901,7 +901,7 @@ export default class ToolbarSettingsModal extends Modal {
 					});	
 				break;
 			case ItemType.Dataview:
-			case ItemType.JavaScript:
+			case ItemType.JsEngine:
 			case ItemType.Templater:
 				if (this.plugin.settings.scriptingEnabled) {
 					let adapter;
@@ -909,7 +909,7 @@ export default class ToolbarSettingsModal extends Modal {
 						case ItemType.Dataview:
 							adapter = this.plugin.dvAdapter;
 							break;
-						case ItemType.JavaScript:
+						case ItemType.JsEngine:
 							adapter = this.plugin.jsAdapter;
 							break;
 						case ItemType.Templater:
@@ -956,7 +956,7 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					else {
 						fieldDiv.removeClass('note-toolbar-setting-item-link-field');
-						fieldDiv.setText("Restart after installing and enabling plugin:");
+						fieldDiv.setText("Toggle the Scripting setting after installing and enabling plugin:");
 						let pluginLinkFr = document.createDocumentFragment();
 						let pluginLink = pluginLinkFr.createEl('a', { 
 							href: `obsidian://show-plugin?id=${type}`, 

@@ -130,12 +130,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
 
 			// check what other plugins are enabled that we need to know about
-			Object.keys(this.hasPlugin).forEach(pluginKey => {
-				if (pluginKey in (this.app as any).plugins.plugins) {
-					debugLog(`${pluginKey} present`);
-					this.hasPlugin[pluginKey] = true;
-				}
-			});
+			this.checkPlugins();
 
 			if (this.settings.scriptingEnabled) {
 				this.dvAdapter = this.hasPlugin['dataview'] ? new DataviewAdapter(this) : undefined;
@@ -1017,10 +1012,14 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Templater:
 				if (this.settings.scriptingEnabled) {
 					const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
-					// debugLog(`${type} type item:`, toolbarItem);
+					debugLog(`${type} type item:`, toolbarItem);
+					debugLog('Adapters:', this.dvAdapter, this.jsAdapter, this.tpAdapter);
 					if (toolbarItem?.scriptConfig) {
-						if (ItemType.Dataview && !this.dvAdapter || ItemType.JsEngine && !this.jsAdapter || ItemType.Templater && !this.tpAdapter) {
-							new Notice("Restart after installing and enabling plugin:" + LINK_OPTIONS[type]);
+						if ((type === ItemType.Dataview && !this.dvAdapter) || 
+							(type === ItemType.JsEngine && !this.jsAdapter) || 
+							(type === ItemType.Templater && !this.tpAdapter)
+						) {
+							new Notice("Toggle the Scripting setting after installing and enabling plugin: " + LINK_OPTIONS[type]);
 							return;
 						}
 						let result;
@@ -1559,6 +1558,19 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		return toolbarRemoved;
 
+	}
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+	/** 
+	 * Updates status of other installed plugins we're interested in.
+	 */
+	checkPlugins() {
+		Object.keys(this.hasPlugin).forEach(pluginKey => {
+			this.hasPlugin[pluginKey] = pluginKey in (this.app as any).plugins.plugins;
+		});
 	}
 
 }

@@ -188,12 +188,12 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
  * @param page Documentation page (i.e., URL after `.../wiki/`).
  * @returns DocumentFragment containing the message and styling.
  */
-export function learnMoreFr(message: string, page: string): DocumentFragment {
+export function learnMoreFr(message: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
 	);
-	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: t('setting.button-learn-more') });
+	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
 }

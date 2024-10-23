@@ -12,6 +12,9 @@ import { exportToCallout } from 'Utils/ImportExport';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { ShareModal } from './Modals/ShareModal';
 import { importFromModal } from './Modals/ImportModal';
+import DataviewAdapter from 'Adapters/DataviewAdapter';
+import JsEngineAdapter from 'Adapters/JsEngineAdapter';
+import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
@@ -457,7 +460,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		textFieldsDiv.id = "note-toolbar-setting-item-field-" + this.itemListIdCounter;
 		textFieldsDiv.className = "note-toolbar-setting-item-fields";
 
-		let ds = new Setting(toolbarFolderListItemDiv)
+		new Setting(toolbarFolderListItemDiv)
 			.setClass("note-toolbar-setting-item-delete")
 			.addButton((cb) => {
 				cb.setIcon("minus-circle")
@@ -469,7 +472,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.buttonEl.setAttribute('data-row-id', rowId);
 			});
 
-		const fs = new Setting(textFieldsDiv)
+		new Setting(textFieldsDiv)
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
 				new FolderSuggester(this.app, cb.inputEl);
@@ -500,7 +503,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					}, 250));
 			});
-		const ts = new Setting(textFieldsDiv)
+		new Setting(textFieldsDiv)
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
@@ -518,7 +521,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		let itemHandleDiv = createDiv();
 		itemHandleDiv.addClass("note-toolbar-setting-item-controls");
-		const s1d = new Setting(itemHandleDiv)
+		new Setting(itemHandleDiv)
 			.addExtraButton((cb) => {
 				cb.setIcon('grip-horizontal')
 					.setTooltip(t('setting.button-drag-tooltip'))
@@ -646,6 +649,32 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName(t('setting.other.name'))
 			.setHeading();
+
+		new Setting(containerEl)
+			.setName("Scripting")
+			.setDesc(learnMoreFr("Adds item types for Dataview, JS Engine, and Templater. Turn off and on again to restart.", ''))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.scriptingEnabled)
+					.onChange(async (value) => {
+						this.plugin.settings.scriptingEnabled = value;
+						if (this.plugin.settings.scriptingEnabled) {
+							this.plugin.checkPlugins(); // update status of enabled plugins
+							this.plugin.dvAdapter = this.plugin.hasPlugin['dataview'] ? new DataviewAdapter(this.plugin) : undefined;
+							this.plugin.jsAdapter = this.plugin.hasPlugin['js-engine'] ? new JsEngineAdapter(this.plugin) : undefined;
+							this.plugin.tpAdapter = this.plugin.hasPlugin['templater-obsidian'] ? new TemplaterAdapter(this.plugin) : undefined;
+						}
+						else {
+							this.plugin.dvAdapter?.disable();
+							this.plugin.jsAdapter?.disable();
+							this.plugin.tpAdapter?.disable();
+							this.plugin.dvAdapter = undefined;
+							this.plugin.jsAdapter = undefined;
+							this.plugin.tpAdapter = undefined;
+						}
+						await this.plugin.settingsManager.save();
+					});
+			});
 
 		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
