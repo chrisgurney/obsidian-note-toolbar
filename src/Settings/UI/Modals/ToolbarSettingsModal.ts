@@ -2,7 +2,7 @@ import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Notice,
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig } from 'Settings/NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingFieldType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -896,7 +896,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.setValue(toolbarItem.link)
 							.onChange(debounce(async (command) => {
 								let commandId = command ? (cb.inputEl?.getAttribute('data-command-id') ?? COMMAND_DOES_NOT_EXIST) : '';
-								let isValid = this.updateItemComponentStatus(commandId, type, cb.inputEl.parentElement);
+								let isValid = this.updateItemComponentStatus(commandId, SettingFieldType.Command, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? command : '';
 								toolbarItem.linkAttr.commandId = isValid ? commandId : '';
 								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
@@ -904,7 +904,7 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, type, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, SettingFieldType.Command, cb.inputEl.parentElement);
 					});	
 				break;
 			case ItemType.Dataview:
@@ -988,7 +988,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-file-placeholder'))
 							.setValue(toolbarItem.link)
 							.onChange(debounce(async (value) => {
-								let isValid = this.updateItemComponentStatus(value, type, cb.inputEl.parentElement);
+								let isValid = this.updateItemComponentStatus(value, SettingFieldType.File, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? normalizePath(value) : '';
 								toolbarItem.linkAttr.commandId = '';
 								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
@@ -996,7 +996,7 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.File, cb.inputEl.parentElement);
 					});
 				break;
 			case ItemType.Group:
@@ -1007,7 +1007,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
-								let isValid = this.updateItemComponentStatus(name, type, cb.inputEl.parentElement);
+								let isValid = this.updateItemComponentStatus(name, SettingFieldType.Toolbar, cb.inputEl.parentElement);
 								let groupToolbar = isValid ? this.plugin.settingsManager.getToolbarByName(name) : undefined;
 								toolbarItem.link = groupToolbar ? groupToolbar.uuid : '';
 								toolbarItem.linkAttr.commandId = '';
@@ -1021,7 +1021,7 @@ export default class ToolbarSettingsModal extends Modal {
 									: learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Toolbar, cb.inputEl.parentElement);
 					});
 				fieldHelp ? groupSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
@@ -1034,7 +1034,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
 							.setValue(defaultValue ? defaultValue : toolbarItem.link)
 							.onChange(debounce(async (name) => {
-								this.updateItemComponentStatus(name, type, cb.inputEl.parentElement);
+								this.updateItemComponentStatus(name, SettingFieldType.Toolbar, cb.inputEl.parentElement);
 								// TODO? return an ID from the suggester vs. the name
 								let menuToolbar = this.plugin.settingsManager.getToolbarByName(name);
 								toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
@@ -1049,7 +1049,7 @@ export default class ToolbarSettingsModal extends Modal {
 									: learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Toolbar, cb.inputEl.parentElement);
 					});
 				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
@@ -1061,7 +1061,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
-									this.updateItemComponentStatus(value, type, cb.inputEl.parentElement);
+									this.updateItemComponentStatus(value, SettingFieldType.Text, cb.inputEl.parentElement);
 									toolbarItem.link = value;
 									toolbarItem.linkAttr.commandId = '';
 									toolbarItem.linkAttr.hasVars = hasVars(value);
@@ -1070,7 +1070,7 @@ export default class ToolbarSettingsModal extends Modal {
 									await this.plugin.settingsManager.save();
 									this.renderPreview(toolbarItem);
 								}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, type, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Text, cb.inputEl.parentElement);
 					});
 				fieldHelp ? uriSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 				break;
@@ -1109,13 +1109,13 @@ export default class ToolbarSettingsModal extends Modal {
 								cb.setPlaceholder(param.label)
 									.setValue(initialValue ? initialValue : '')
 									.onChange(debounce(async (value) => {
-										let isValid = this.updateItemComponentStatus(value, ItemType.File, cb.inputEl.parentElement);
+										let isValid = this.updateItemComponentStatus(value, SettingFieldType.File, cb.inputEl.parentElement);
 										config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
 										this.toolbar.updated = new Date().toISOString();
 										await this.plugin.settingsManager.save();
 										// TODO? this.renderPreview(toolbarItem);
 									}, 500));
-								this.updateItemComponentStatus(initialValue ? initialValue : '', ItemType.File, cb.inputEl.parentElement);
+								this.updateItemComponentStatus(initialValue ? initialValue : '', SettingFieldType.File, cb.inputEl.parentElement);
 							});
 						break;
 					case 'text':
@@ -1131,6 +1131,7 @@ export default class ToolbarSettingsModal extends Modal {
 											await this.plugin.settingsManager.save();
 											// TODO? this.renderPreview(toolbarItem);
 										}, 500));
+								// this.updateItemComponentStatus(initialValue ? initialValue : '', ItemType., cb.inputEl.parentElement);
 							});
 						// fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 						break;
@@ -1204,11 +1205,11 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Updates the UI state of the given component if the value is invalid.
 	 * @param itemValue string value to check
-	 * @param itemType ItemType to check against
+	 * @param fieldType SettingFieldType to check against
 	 * @param componentEl HTMLElement to update
 	 * @returns true if the item is valid; false otherwise
 	 */
-	updateItemComponentStatus(itemValue: string, itemType: ItemType, componentEl: HTMLElement | null): boolean {
+	updateItemComponentStatus(itemValue: string, fieldType: SettingFieldType, componentEl: HTMLElement | null): boolean {
 
 		enum Status {
 			Empty = 'empty',
@@ -1222,8 +1223,8 @@ export default class ToolbarSettingsModal extends Modal {
 		var isValid = true;
 
 		if (itemValue) {
-			switch(itemType) {
-				case ItemType.Command:
+			switch(fieldType) {
+				case SettingFieldType.Command:
 					if (!(itemValue in this.app.commands.commands)) {
 						status = Status.Invalid;
 						if (itemValue === COMMAND_DOES_NOT_EXIST) {
@@ -1241,15 +1242,21 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 					}
 					break;
-				case ItemType.File:
+				case SettingFieldType.File:
 					const file = this.app.vault.getAbstractFileByPath(itemValue);
 					if (!(file instanceof TFile) && !(file instanceof TFolder)) {
 						status = Status.Invalid;
 						statusMessage = t('setting.item.option-file-error-does-not-exist');
 					}
 					break;
-				case ItemType.Group:
-				case ItemType.Menu:
+				// case SettingFieldType.Text:
+				// 	debugLog("'" + itemValue + "'");
+				// 	if (itemValue === '') {
+				// 		status = Status.Invalid;
+				// 		statusMessage = "Field is required.";
+				// 	}
+				// 	break;
+				case SettingFieldType.Toolbar:
 					let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
 					if (!toolbar) {
 						// toolbars are stored by IDs for previews
@@ -2015,7 +2022,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// check if items are valid (non-empty + valid), and highlight if not
 		this.updateItemComponentStatus(
 			(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
-			toolbarItem.linkAttr.type, 
+			SettingFieldItemMap[toolbarItem.linkAttr.type], 
 			itemPreview);
 
 	}

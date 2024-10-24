@@ -72,6 +72,25 @@ export enum RibbonAction {
 	ToolbarSuggester = 'toolbar-suggester',
 	Toolbar = 'toolbar'
 }
+export enum SettingFieldType {
+	Command = 'command',
+	File = 'file',
+	Ignore = 'ignore',
+	Text = 'text',
+	Toolbar = 'toolbar'
+}
+export const SettingFieldItemMap: Record<ItemType, SettingFieldType> = {
+	[ItemType.Break]: SettingFieldType.Ignore,
+	[ItemType.Command]: SettingFieldType.Command,
+	[ItemType.Dataview]: SettingFieldType.Ignore,
+	[ItemType.File]: SettingFieldType.File,
+	[ItemType.Group]: SettingFieldType.Toolbar,
+	[ItemType.JsEngine]: SettingFieldType.Ignore,
+	[ItemType.Menu]: SettingFieldType.Toolbar,
+	[ItemType.Separator]: SettingFieldType.Ignore,
+	[ItemType.Uri]: SettingFieldType.Text,
+	[ItemType.Templater]: SettingFieldType.Ignore
+}
 export enum ViewType {
 	All = 'all',
 	Preview = 'preview',
