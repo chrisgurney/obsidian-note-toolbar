@@ -11,26 +11,17 @@ export default class DataviewAdapter implements Adapter {
 
     private functions: AdapterFunction[] = [
         {
-            function: this.evaluate,
-            label: "Dataview expression",
-            description: "Equivalent to running evaluateInline()",
+            function: this.query,
+            label: "Execute query",
+            description: "Run a Dataview query",
             parameters: [
-                { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Use a note-toolbar-script callout with a unique meta field to put text output. Callout will be empty if the script does not return a value.", type: 'text', required: false }
-            ]
-        },
-        {
-            function: this.executeJs,
-            label: "Dataview JS expression",
-            description: "Execute a JavaScript expression",
-            parameters: [
-                { parameter: 'expression', label: "Dataview JS expression",  description: "Dataview JS expression to evaluate.", type: 'text', required: true },
+                { parameter: 'expression', label: "Query", type: 'textarea', description: "Dataview query to evaluate.", required: true },
                 { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
             ]
         },
         {
             function: this.exec,
-            label: "Script",
+            label: "Execute script",
             description: "This is similar to running dv.view()",
             parameters: [
                 { parameter: 'sourceFile', label: "Script file", description: "Dataview JS file to execute.", type: 'file', required: true },
@@ -39,14 +30,23 @@ export default class DataviewAdapter implements Adapter {
             ]
         },
         {
-            function: this.query,
-            label: "Query",
-            description: "Run a Dataview query",
+            function: this.evaluate,
+            label: "Evaluate Dataview expression",
+            description: "Equivalent to running evaluateInline()",
             parameters: [
-                { parameter: 'expression', label: "Query", type: 'textarea', description: "Dataview query to evaluate.", required: true },
+                { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: 'text', required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Use a note-toolbar-script callout with a unique meta field to put text output. Callout will be empty if the script does not return a value.", type: 'text', required: false }
+            ]
+        },
+        {
+            function: this.executeJs,
+            label: "Evaluate Dataview JS expression",
+            description: "Execute a JavaScript expression",
+            parameters: [
+                { parameter: 'expression', label: "Dataview JS expression",  description: "Dataview JS expression to evaluate.", type: 'text', required: true },
                 { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
             ]
-        }
+        },
     ];
 
     private plugin: NoteToolbarPlugin | null;
@@ -190,7 +190,7 @@ export default class DataviewAdapter implements Adapter {
         }
         
         // TODO: this works if the script doesn't need a container... but where does this span go?
-        containerEl = containerEl ? containerEl : createSpan();
+        containerEl = containerEl || createSpan();
 
         const activeFile = this.plugin?.app.workspace.getActiveFile();
         if (!activeFile) {
@@ -257,7 +257,7 @@ export default class DataviewAdapter implements Adapter {
     private async executeJs(expression: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
-        let resultEl = containerEl ? containerEl : createSpan();
+        let resultEl = containerEl || createSpan();
 
         const activeFile = this.plugin?.app.workspace.getActiveFile();
 
@@ -279,7 +279,7 @@ export default class DataviewAdapter implements Adapter {
                         result = '';
                     }
                     else {
-                        result = resultEl.textContent ? resultEl.textContent : '';
+                        result = resultEl.textContent || '';
                     }
                 }
             }

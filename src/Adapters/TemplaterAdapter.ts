@@ -16,15 +16,15 @@ export default class TemplaterAdapter implements Adapter {
     private functions: AdapterFunction[] = [
         {
             function: this.appendTemplate,
-            label: "Append template",
+            label: "Insert template",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template", description: "Template file to append.", type: 'file', required: true },
+                { parameter: 'sourceFile', label: "Template", description: "Template file to insert.", type: 'file', required: true },
             ]
         },
         {
             function: this.createFrom,
-            label: "Create from template",
+            label: "Create new note from template",
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "Template", description: "Template file to create a new file from.", type: 'file', required: true },
@@ -41,7 +41,7 @@ export default class TemplaterAdapter implements Adapter {
         },
         {
             function: this.parseTemplateFile,
-            label: "Evalaute Templater file",
+            label: "Evaluate Templater file",
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "Template file", description: "Evaluates the contents of the file and returns.", type: 'file', required: true },
@@ -189,7 +189,6 @@ export default class TemplaterAdapter implements Adapter {
      */
     async parseTemplateFile(filename: string): Promise<string> {
 
-        // debugger;
         let result = '';
         const activeFile = this.plugin?.app.workspace.getActiveFile();
         let templateFile = this.plugin?.app.vault.getFileByPath(filename);

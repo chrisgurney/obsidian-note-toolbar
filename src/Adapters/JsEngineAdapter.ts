@@ -151,7 +151,7 @@ export default class JsEngineAdapter implements Adapter {
     async exec(filename: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
-        let resultEl = containerEl ? containerEl : createSpan();
+        let resultEl = containerEl || createSpan();
 
         const activeFile = this.plugin?.app.workspace.getActiveFile();
         if (!activeFile) {
@@ -176,7 +176,7 @@ export default class JsEngineAdapter implements Adapter {
                     // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
                 }
                 else {
-                    result = execution.result ? execution.result : '';
+                    result = execution.result || '';
                 }
             }
         }
