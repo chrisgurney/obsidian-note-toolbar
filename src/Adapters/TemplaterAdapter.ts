@@ -55,8 +55,8 @@ export default class TemplaterAdapter implements Adapter {
         this.templaterApi = this.templaterPlugin.templater;
     }
 
-    getFunctions(): AdapterFunction[] {
-        return this.functions;
+    getFunctions(): Map<string, AdapterFunction> {
+        return new Map(this.functions.map(func => [func.function.name, func]));
     }
 
     getTemplatesFolder(): string {

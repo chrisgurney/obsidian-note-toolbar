@@ -2,7 +2,7 @@ import { ScriptConfig } from "Settings/NoteToolbarSettings";
 
 export interface Adapter {
     /** Returns all functions for this adapter. */
-    getFunctions(): AdapterFunction[];
+    getFunctions(): Map<string, AdapterFunction>;
     /** Executes the function with provided config. */
     use(config: ScriptConfig): Promise<string | void>; 
     /** Cleans up the adapter when it's no longer needed. */

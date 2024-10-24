@@ -926,8 +926,8 @@ export default class ToolbarSettingsModal extends Modal {
 					if (adapter) {
 						const functionOptions = {
 							'': 'Select a function...',
-							...adapter?.getFunctions().reduce((acc, func) => {
-								acc[func.function.name] = func.label;
+							...Array.from(adapter?.getFunctions().entries()).reduce((acc, [name, func]) => {
+								acc[name] = func.label;
 								return acc;
 							}, {} as Record<string, string>)
 						}
@@ -1085,9 +1085,7 @@ export default class ToolbarSettingsModal extends Modal {
 	{
 		if (toolbarItem.scriptConfig) {
 			const config = toolbarItem.scriptConfig;
-			const functionMap = new Map(
-				adapter.getFunctions().map(func => [func.function.name, func])
-			);
+			const functionMap = adapter.getFunctions();
 			const selectedFunction = functionMap.get(toolbarItem.scriptConfig.pluginFunction);
 			selectedFunction?.parameters.forEach(param => {
 				let initialValue = config[param.parameter as keyof ScriptConfig];

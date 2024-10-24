@@ -43,8 +43,8 @@ export default class JsEngineAdapter implements Adapter {
         this.engineApi = this.enginePlugin.api;
     }
 
-    getFunctions(): AdapterFunction[] {
-        return this.functions;
+    getFunctions(): Map<string, AdapterFunction> {
+        return new Map(this.functions.map(func => [func.function.name, func]));
     }
 
     async use(config: ScriptConfig): Promise<string | void> {

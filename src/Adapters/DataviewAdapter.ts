@@ -65,8 +65,8 @@ export default class DataviewAdapter implements Adapter {
         this.plugin = null;
     }
 
-    getFunctions(): AdapterFunction[] {
-        return this.functions;
+    getFunctions(): Map<string, AdapterFunction> {
+        return new Map(this.functions.map(func => [func.function.name, func]));
     }
 
     async use(config: ScriptConfig): Promise<string | void> {
