@@ -652,7 +652,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Scripting")
-			.setDesc(learnMoreFr("Adds item types for Dataview, JS Engine, and Templater, which must be installed and enabled. Turn this setting off and on again to reload available plugins.", ''))
+			.setDesc(learnMoreFr("Adds item types for Dataview, JS Engine, and Templater, which must be installed and enabled. Turn this setting off and on again to reload available plugins.", 'Executing-scripts'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.scriptingEnabled)

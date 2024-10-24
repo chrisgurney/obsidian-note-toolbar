@@ -945,9 +945,12 @@ export default class ToolbarSettingsModal extends Modal {
 										fieldDiv.append(subfieldsDiv);
 										await this.plugin.settingsManager.save();
 										// TODO? this.renderPreview(toolbarItem);
-										// if (toolbarItem.scriptConfig.pluginFunction)
-										// let scriptHelpFr = create
-										// this.setFieldHelp((scriptSetting.controlEl, );
+										const selectedFunction = adapter.getFunctions().get(value);
+										if (selectedFunction?.description) {
+											let scriptHelpFr = document.createDocumentFragment();
+											scriptHelpFr.appendText(selectedFunction.description);
+											this.setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
+										}
 									});
 								});
 						this.setFieldHelp(scriptSetting.controlEl, helpTextFr);
@@ -1081,8 +1084,7 @@ export default class ToolbarSettingsModal extends Modal {
 	{
 		if (toolbarItem.scriptConfig) {
 			const config = toolbarItem.scriptConfig;
-			const functionMap = adapter.getFunctions();
-			const selectedFunction = functionMap.get(toolbarItem.scriptConfig.pluginFunction);
+			const selectedFunction = adapter.getFunctions().get(toolbarItem.scriptConfig.pluginFunction);
 			selectedFunction?.parameters.forEach(param => {
 				let initialValue = config[param.parameter as keyof ScriptConfig];
 				let setting;
@@ -1166,13 +1168,13 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting(type, fieldDiv, toolbarItem);
 				break;
 			case ItemType.Dataview:
-				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Dataview.", ''));
+				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Dataview.", 'Dataview'));
 				break;
 			case ItemType.File:
 				this.getLinkSetting(type, fieldDiv, toolbarItem);
 				break;
 			case ItemType.JsEngine:
-				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use this.", ''));
+				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use this.", 'JS-Engine'));
 				break;
 			case ItemType.Group:
 			case ItemType.Menu:
@@ -1188,7 +1190,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.getLinkSetting(type, fieldDiv, toolbarItem, fieldHelp);
 				break;
 			case ItemType.Templater:
-				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Templater.", ''));
+				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Templater.", 'Templater'));
 				break;
 			case ItemType.Uri:
 				this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));
