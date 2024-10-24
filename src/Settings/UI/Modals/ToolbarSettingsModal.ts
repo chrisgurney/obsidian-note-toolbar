@@ -879,13 +879,6 @@ export default class ToolbarSettingsModal extends Modal {
 		helpTextFr?: DocumentFragment)
 	{
 
-		let fieldHelp = undefined;
-		if (helpTextFr) {
-			fieldHelp = createDiv();
-			fieldHelp.addClass("note-toolbar-setting-field-help");
-			fieldHelp.append(helpTextFr);
-		}
-
 		switch(type) {
 			case ItemType.Command: 
 				new Setting(fieldDiv)
@@ -952,9 +945,12 @@ export default class ToolbarSettingsModal extends Modal {
 										fieldDiv.append(subfieldsDiv);
 										await this.plugin.settingsManager.save();
 										// TODO? this.renderPreview(toolbarItem);
+										// if (toolbarItem.scriptConfig.pluginFunction)
+										// let scriptHelpFr = create
+										// this.setFieldHelp((scriptSetting.controlEl, );
 									});
 								});
-						fieldHelp ? scriptSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+						this.setFieldHelp(scriptSetting.controlEl, helpTextFr);
 						toolbarItem.scriptConfig ??= { pluginFunction: '' };
 						let subfieldsDiv = createDiv();
 						subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
@@ -1023,7 +1019,7 @@ export default class ToolbarSettingsModal extends Modal {
 							}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Toolbar, cb.inputEl.parentElement);
 					});
-				fieldHelp ? groupSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+				this.setFieldHelp(groupSetting.controlEl, helpTextFr);
 				break;
 			case ItemType.Menu:
 				const menuSetting = new Setting(fieldDiv)
@@ -1051,7 +1047,7 @@ export default class ToolbarSettingsModal extends Modal {
 							}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Toolbar, cb.inputEl.parentElement);
 					});
-				fieldHelp ? menuSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+				this.setFieldHelp(menuSetting.controlEl, helpTextFr);
 				break;
 			case ItemType.Uri: 
 				const uriSetting = new Setting(fieldDiv)
@@ -1072,7 +1068,7 @@ export default class ToolbarSettingsModal extends Modal {
 								}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Text, cb.inputEl.parentElement);
 					});
-				fieldHelp ? uriSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+				this.setFieldHelp(uriSetting.controlEl, helpTextFr);
 				break;
 		}
 
@@ -1927,14 +1923,13 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param fieldEl HTMLElement to update
 	 * @param helpFr DocumentFragment of the help text
 	 */
-	setFieldHelp(fieldEl: HTMLElement, helpFr: DocumentFragment) {
-		let helpTextFr = document.createDocumentFragment();
-		helpTextFr.append(helpFr);
-		let fieldHelp = createDiv();
-		fieldHelp.addClass('note-toolbar-setting-field-help');
-		fieldHelp.append(helpTextFr);
+	setFieldHelp(fieldEl: HTMLElement, helpFr?: DocumentFragment) {
+		if (!helpFr) return;
 		let existingHelp = fieldEl.querySelector('.note-toolbar-setting-field-help');
 		existingHelp?.remove();
+		let fieldHelp = createDiv();
+		fieldHelp.addClass('note-toolbar-setting-field-help');
+		fieldHelp.append(helpFr);
 		fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 	}
 
