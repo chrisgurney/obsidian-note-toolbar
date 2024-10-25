@@ -203,6 +203,15 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 setIcon(itemMeta, 'globe');
                 setTooltip(itemMeta, t('setting.item.option-uri'));
                 break;
+            case ItemType.Dataview:
+            case ItemType.JsEngine:
+                setIcon(itemMeta, 'scroll');
+                setTooltip(itemMeta, "Script");
+                break;
+            case ItemType.Templater:
+                setIcon(itemMeta, 'templater-icon');
+                setTooltip(itemMeta, "Templater");
+                break;
         }
         
         itemLabel.setText(title);
