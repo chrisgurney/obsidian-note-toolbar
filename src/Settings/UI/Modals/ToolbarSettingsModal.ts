@@ -924,7 +924,8 @@ export default class ToolbarSettingsModal extends Modal {
 								return acc;
 							}, {} as Record<string, string>)
 						}
-						const selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
+						let selectedFunction = toolbarItem.scriptConfig?.pluginFunction;
+						selectedFunction = (selectedFunction && adapter?.getFunctions().has(selectedFunction)) ? selectedFunction : '';
 						const scriptSetting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addDropdown((dropdown: DropdownComponent) => {
