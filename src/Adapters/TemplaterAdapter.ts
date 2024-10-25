@@ -59,8 +59,8 @@ export default class TemplaterAdapter implements Adapter {
         return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
     }
 
-    getTemplatesFolder(): string {
-        return this.templaterPlugin.settings.templates_folder;
+    getSetting(settingName: string): string {
+        return this.templaterPlugin.settings[settingName] ?? '';
     }
 
     async use(config: ScriptConfig): Promise<string | void> {

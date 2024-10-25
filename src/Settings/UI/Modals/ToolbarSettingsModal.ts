@@ -1098,7 +1098,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.addSearch((cb) => {
 								switch (toolbarItem.linkAttr.type) {
 									case ItemType.Templater:
-										const templatesFolder = this.plugin.tpAdapter?.getTemplatesFolder();
+										const templatesFolder = this.plugin.tpAdapter?.getSetting('templates_folder');
 										new FileSuggester(this.app, cb.inputEl, true, undefined, templatesFolder);
 										break;
 									default:
