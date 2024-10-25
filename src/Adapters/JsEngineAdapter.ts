@@ -15,7 +15,7 @@ export default class JsEngineAdapter implements Adapter {
     private engineApi: any | null;
     private enginePlugin: any | null;
 
-    private functions: AdapterFunction[] = [
+    private readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.exec,
             label: "Execute JavaScript",
@@ -44,7 +44,7 @@ export default class JsEngineAdapter implements Adapter {
     }
 
     getFunctions(): Map<string, AdapterFunction> {
-        return new Map(this.functions.map(func => [func.function.name, func]));
+        return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
     }
 
     async use(config: ScriptConfig): Promise<string | void> {

@@ -9,7 +9,11 @@ import { debugLog, displayScriptError } from "Utils/Utils";
  */
 export default class DataviewAdapter implements Adapter {
 
-    private functions: AdapterFunction[] = [
+    private plugin: NoteToolbarPlugin | null;
+    private dataviewPlugin: any | null;
+    private dataviewApi: any | null;
+
+    private readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.query,
             label: "Execute query",
@@ -49,10 +53,6 @@ export default class DataviewAdapter implements Adapter {
         },
     ];
 
-    private plugin: NoteToolbarPlugin | null;
-    private dataviewPlugin: any | null;
-    private dataviewApi: any | null;
-
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
         this.dataviewPlugin = (plugin.app as any).plugins.plugins["dataview"];
@@ -66,7 +66,7 @@ export default class DataviewAdapter implements Adapter {
     }
 
     getFunctions(): Map<string, AdapterFunction> {
-        return new Map(this.functions.map(func => [func.function.name, func]));
+        return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
     }
 
     async use(config: ScriptConfig): Promise<string | void> {

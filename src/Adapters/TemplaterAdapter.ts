@@ -13,7 +13,7 @@ export default class TemplaterAdapter implements Adapter {
     private templaterApi: any | null;
     private templaterPlugin: any | null;
 
-    private functions: AdapterFunction[] = [
+    private readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.appendTemplate,
             label: "Insert template",
@@ -56,7 +56,7 @@ export default class TemplaterAdapter implements Adapter {
     }
 
     getFunctions(): Map<string, AdapterFunction> {
-        return new Map(this.functions.map(func => [func.function.name, func]));
+        return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
     }
 
     getTemplatesFolder(): string {
