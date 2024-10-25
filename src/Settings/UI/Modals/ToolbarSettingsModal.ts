@@ -11,7 +11,7 @@ import { FileSuggester } from 'Settings/UI/Suggesters/FileSuggester';
 import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { importFromModal } from './ImportModal';
-import { Adapter } from 'Types/interfaces';
+import { Adapter } from 'Adapters/Adapter';
 
 enum ItemFormComponent {
 	Delete = 'delete',

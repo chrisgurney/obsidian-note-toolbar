@@ -1,19 +1,16 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
-import { Adapter, AdapterFunction } from "Types/interfaces";
+import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
+import { Adapter } from "./Adapter";
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
  */
-export default class DataviewAdapter implements Adapter {
+export default class DataviewAdapter extends Adapter {
 
-    private plugin: NoteToolbarPlugin | null;
-    private dataviewPlugin: any | null;
-    private dataviewApi: any | null;
-
-    private readonly FUNCTIONS: AdapterFunction[] = [
+    readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.query,
             label: "Execute query",
@@ -53,20 +50,9 @@ export default class DataviewAdapter implements Adapter {
         },
     ];
 
-    constructor(plugin: NoteToolbarPlugin) {
-        this.plugin = plugin;
-        this.dataviewPlugin = (plugin.app as any).plugins.plugins["dataview"];
-        this.dataviewApi = this.dataviewPlugin.api;
-    }
-
-    disable() {
-        this.dataviewApi = null;
-        this.dataviewPlugin = null;
-        this.plugin = null;
-    }
-
-    getFunctions(): Map<string, AdapterFunction> {
-        return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
+    constructor(noteToolbar: NoteToolbarPlugin) {
+        const plugin = (noteToolbar.app as any).plugins.plugins["dataview"];
+        super(noteToolbar, plugin, plugin.api);
     }
 
     async use(config: ScriptConfig): Promise<string | void> {
@@ -75,7 +61,7 @@ export default class DataviewAdapter implements Adapter {
 
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.plugin?.getOutputEl(config.outputContainer);
+            containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
@@ -131,19 +117,19 @@ export default class DataviewAdapter implements Adapter {
 
         let result = '';
         
-        const activeFile = this.plugin?.app.workspace.getActiveFile();
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path;
 
         const component = new Component();
 		component.load();
         try {
-            if (this.dataviewApi) {
+            if (this.adapterApi) {
                 debugLog("evaluate() " + expression);
-                let dvResult = await (this.dataviewApi as any).evaluateInline(expression, activeFile?.path);
+                let dvResult = await (this.adapterApi as any).evaluateInline(expression, activeFile?.path);
                 debugLog("evaluate() result:", dvResult);
                 if (containerEl) {
                     containerEl.empty();
-                    await this.dataviewApi.renderValue(
+                    await this.adapterApi.renderValue(
                         dvResult.value,
                         containerEl,
                         component,
@@ -192,21 +178,21 @@ export default class DataviewAdapter implements Adapter {
         // TODO: this works if the script doesn't need a container... but where does this span go?
         containerEl = containerEl || createSpan();
 
-        const activeFile = this.plugin?.app.workspace.getActiveFile();
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         if (!activeFile) {
             displayScriptError("This script must be executed from an open note.");
             return;
         }
         const activeFilePath = activeFile.path;
 
-        let viewFile = this.plugin?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
+        let viewFile = this.noteToolbar?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
             displayScriptError(`Script file not found: ${filename}`);
             return;
         }
 
-        let contents = await this.plugin?.app.vault.read(viewFile);
+        let contents = await this.noteToolbar?.app.vault.read(viewFile);
         if (contents) {
             if (contents.contains("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
@@ -218,18 +204,18 @@ export default class DataviewAdapter implements Adapter {
          component.load();
          try {
              containerEl.empty();
-             let dataviewLocalApi = this.dataviewPlugin.localApi(activeFile.path, this.plugin, containerEl);    
+             let dataviewLocalApi = this.adapterPlugin.localApi(activeFile.path, this.noteToolbar, containerEl);    
              // from dv.view: may directly render, in which case it will likely return undefined or null
              // TODO: try: args should be provided as a string that's read in as JSON; note other script types need to support this as well
              let result = await Promise.resolve(func(dataviewLocalApi, args));
-             if (result && this.plugin) {
-                 await this.dataviewApi.renderValue(
-                     this.plugin.app,
+             if (result && this.noteToolbar) {
+                 await this.adapterApi.renderValue(
+                     this.noteToolbar.app,
                      result as any,
                      containerEl,
                      activeFilePath,
                      component,
-                     this.dataviewApi.settings,
+                     this.adapterApi.settings,
                      true
                  );
              }
@@ -259,14 +245,14 @@ export default class DataviewAdapter implements Adapter {
         let result = '';
         let resultEl = containerEl || createSpan();
 
-        const activeFile = this.plugin?.app.workspace.getActiveFile();
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
 
         const component = new Component();
         component.load();
         try {
-            if (this.dataviewApi) {
+            if (this.adapterApi) {
                 debugLog("executeJs() ", expression);
-                await (this.dataviewApi as any).executeJs(expression, resultEl, component, activeFile?.path);
+                await (this.adapterApi as any).executeJs(expression, resultEl, component, activeFile?.path);
                 debugLog("executeJs() result:", resultEl);
                 if (!containerEl) {
                     const errorEl = resultEl.querySelector('.dataview-error');
@@ -307,7 +293,7 @@ export default class DataviewAdapter implements Adapter {
     private async query(expression: string, containerEl?: HTMLElement): Promise<string> {
 
         let result = '';
-        const activeFile = this.plugin?.app.workspace.getActiveFile();
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
 
         if (!activeFile) {
             displayScriptError("This query must be run from an open note.");
@@ -317,17 +303,16 @@ export default class DataviewAdapter implements Adapter {
         const component = new Component();
         component.load();
         try {
-            if (this.dataviewApi) {
+            if (this.adapterApi) {
                 debugLog("query() " + expression);
                 // returns a Promise<Result<QueryResult, string>>
-                let dvResult = await (this.dataviewApi as any).queryMarkdown(expression, activeFile, this.dataviewApi.settings);
-                // TODO: is there a chance result is empty/undefined? what to do in that case?
+                let dvResult = await (this.adapterApi as any).queryMarkdown(expression, activeFile, this.adapterApi.settings);
                 debugLog("query() result: ", dvResult);
                 if (containerEl) {
                     containerEl.empty();
-                    if (this.plugin) {
+                    if (this.noteToolbar) {
                         MarkdownRenderer.render(
-                            this.plugin.app,
+                            this.noteToolbar.app,
                             dvResult.successful ? dvResult.value : dvResult.error,
                             containerEl,
                             activeFile.path,

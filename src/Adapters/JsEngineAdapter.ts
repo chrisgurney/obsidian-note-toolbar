@@ -1,21 +1,18 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
-import { Adapter, AdapterFunction } from "Types/interfaces";
+import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
+import { Adapter } from "./Adapter";
 
 /**
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/API.ts
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/Internal.ts
  * @link Discord thread: https://discord.com/channels/686053708261228577/1286803892549713921
  */
-export default class JsEngineAdapter implements Adapter {
+export default class JsEngineAdapter extends Adapter {
 
-    private plugin: NoteToolbarPlugin | null;
-    private engineApi: any | null;
-    private enginePlugin: any | null;
-
-    private readonly FUNCTIONS: AdapterFunction[] = [
+    readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.exec,
             label: "Execute JavaScript",
@@ -37,14 +34,9 @@ export default class JsEngineAdapter implements Adapter {
         },
     ];
 
-    constructor(plugin: NoteToolbarPlugin) {
-        this.plugin = plugin;
-        this.enginePlugin = (plugin.app as any).plugins.plugins["js-engine"];
-        this.engineApi = this.enginePlugin.api;
-    }
-
-    getFunctions(): Map<string, AdapterFunction> {
-        return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
+    constructor(noteToolbar: NoteToolbarPlugin) {
+        const plugin = (noteToolbar.app as any).plugins.plugins["js-engine"];
+        super(noteToolbar, plugin, plugin.api);
     }
 
     async use(config: ScriptConfig): Promise<string | void> {
@@ -52,7 +44,7 @@ export default class JsEngineAdapter implements Adapter {
         
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.plugin?.getOutputEl(config.outputContainer);
+            containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
@@ -79,11 +71,6 @@ export default class JsEngineAdapter implements Adapter {
         }
 
         return result;
-    }
-
-    disable() {
-        this.engineApi = null;
-        this.plugin = null;
     }
 
     /**
@@ -116,16 +103,16 @@ export default class JsEngineAdapter implements Adapter {
             return "Failed to parse arguments:\n```\n" + error + "\n```";
         }
         
-        if (this.engineApi) {
-            let module = await this.engineApi.importJs(filename);
+        if (this.adapterApi) {
+            let module = await this.adapterApi.importJs(filename);
             if (functionName) {
                 if (module[functionName] && (typeof module[functionName] === 'function')) {
                     try {
                         if (args) {
-                            result = module[functionName](this.engineApi, args);
+                            result = module[functionName](this.adapterApi, args);
                         }
                         else {
-                            result = module[functionName](this.engineApi);
+                            result = module[functionName](this.adapterApi);
                         }
                         debugLog('importExec() result:', result);
                     }
@@ -153,7 +140,7 @@ export default class JsEngineAdapter implements Adapter {
         let result = '';
         let resultEl = containerEl || createSpan();
 
-        const activeFile = this.plugin?.app.workspace.getActiveFile();
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         if (!activeFile) {
             displayScriptError("This script must be executed from an open note.");
             return "This script must be executed from an open note.";
@@ -164,14 +151,14 @@ export default class JsEngineAdapter implements Adapter {
         try {
             containerEl?.empty();
             const activeFilePath = activeFile?.path;
-            const execution = await this.engineApi.internal.executeFile(filename, {
+            const execution = await this.adapterApi.internal.executeFile(filename, {
                 container: resultEl,
-                component: this.plugin,
+                component: this.noteToolbar,
             });
             debugLog('exec() result:', execution.result);
-            if (this.plugin) {
+            if (this.noteToolbar) {
                 if (containerEl) {
-                    const renderer = this.engineApi.internal.createRenderer(resultEl, activeFilePath, this.plugin);
+                    const renderer = this.adapterApi.internal.createRenderer(resultEl, activeFilePath, this.noteToolbar);
                     renderer.render(execution.result);
                     // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
                 }

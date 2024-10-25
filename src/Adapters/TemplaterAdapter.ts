@@ -1,19 +1,16 @@
 import NoteToolbarPlugin from "main";
 import { Notice, TFile } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
-import { Adapter, AdapterFunction } from "Types/interfaces";
+import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
+import { Adapter } from "./Adapter";
 
 /**
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/Templater.ts
  */
-export default class TemplaterAdapter implements Adapter {
+export default class TemplaterAdapter extends Adapter {
 
-    private plugin: NoteToolbarPlugin | null;
-    private templaterApi: any | null;
-    private templaterPlugin: any | null;
-
-    private readonly FUNCTIONS: AdapterFunction[] = [
+    readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.appendTemplate,
             label: "Insert template",
@@ -49,18 +46,9 @@ export default class TemplaterAdapter implements Adapter {
         },        
     ];
 
-    constructor(plugin: NoteToolbarPlugin) {
-        this.plugin = plugin;
-        this.templaterPlugin = (plugin.app as any).plugins.plugins["templater-obsidian"];
-        this.templaterApi = this.templaterPlugin.templater;
-    }
-
-    getFunctions(): Map<string, AdapterFunction> {
-        return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
-    }
-
-    getSetting(settingName: string): string {
-        return this.templaterPlugin.settings[settingName] ?? '';
+    constructor(noteToolbar: NoteToolbarPlugin) {
+        const plugin = (noteToolbar.app as any).plugins.plugins["templater-obsidian"];
+        super(noteToolbar, plugin, plugin.templater);
     }
 
     async use(config: ScriptConfig): Promise<string | void> {
@@ -68,7 +56,7 @@ export default class TemplaterAdapter implements Adapter {
         
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.plugin?.getOutputEl(config.outputContainer);
+            containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
@@ -106,23 +94,17 @@ export default class TemplaterAdapter implements Adapter {
 
         return result;
     }
-
-    disable() {
-        this.templaterApi = null;
-        this.templaterPlugin = null;
-        this.plugin = null;
-    }
-
+    
     /**
      * Calls append_template_to_active_file.
      * @param filename 
      */
     async appendTemplate(filename: string): Promise<void> {
 
-        if (this.templaterApi) {
-            let templateFile = this.plugin?.app.vault.getFileByPath(filename);
+        if (this.adapterApi) {
+            let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
             if (templateFile) {
-                await this.templaterApi.append_template_to_active_file(templateFile);
+                await this.adapterApi.append_template_to_active_file(templateFile);
             }
             else {
                 displayScriptError("File not found: " + filename);
@@ -137,11 +119,11 @@ export default class TemplaterAdapter implements Adapter {
      */
     async createFrom(filename: string): Promise<void> {
 
-        if (this.templaterApi) {
-            let templateFile = this.plugin?.app.vault.getFileByPath(filename);
+        if (this.adapterApi) {
+            let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
             if (templateFile) {
                 // TODO? future: support for other parms? template: TFile | string, folder?: TFolder | string, filename?: string, open_new_note = true
-                let newFile = await this.templaterApi.create_new_note_from_template(templateFile);
+                let newFile = await this.adapterApi.create_new_note_from_template(templateFile);
             }
             else {
                 displayScriptError("File not found: " + filename);
@@ -160,7 +142,7 @@ export default class TemplaterAdapter implements Adapter {
 
         // debugger;
         let result = '';
-        const activeFile = this.plugin?.app.workspace.getActiveFile();
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         if (activeFile) {
             const activeFilePath = activeFile.path;
             const config = {
@@ -168,9 +150,9 @@ export default class TemplaterAdapter implements Adapter {
                 run_mode: 'DynamicProcessor',
                 active_file: activeFile
             };
-            if (this.templaterApi) {
+            if (this.adapterApi) {
                 // result = await this.templater.read_and_parse_template(config);
-                result = await this.templaterApi.parse_template(config, expression);
+                result = await this.adapterApi.parse_template(config, expression);
                 debugLog("parseTemplate() result:", result);
             }
         }
@@ -190,8 +172,8 @@ export default class TemplaterAdapter implements Adapter {
     async parseTemplateFile(filename: string): Promise<string> {
 
         let result = '';
-        const activeFile = this.plugin?.app.workspace.getActiveFile();
-        let templateFile = this.plugin?.app.vault.getFileByPath(filename);
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+        let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
         if (activeFile) {
             const activeFilePath = activeFile.path;
             const config = { 
@@ -200,8 +182,8 @@ export default class TemplaterAdapter implements Adapter {
                 run_mode: 'DynamicProcessor',
                 active_file: activeFile
             };
-            if (this.templaterApi) {
-                result = await this.templaterApi.read_and_parse_template(config);
+            if (this.adapterApi) {
+                result = await this.adapterApi.read_and_parse_template(config);
                 debugLog("parseTemplateFile() result:", result);
             }
         }
