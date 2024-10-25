@@ -30,7 +30,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	// track the last used callout link, for the menu URI
 	lastCalloutLink: Element | null = null;
 
-	// track the plugins available, to help with rendering edge cases
+	// for tracking other plugins available (for adapters and rendering edge cases)
 	hasPlugin: { [key: string]: boolean } = {
 		'dataview': false,
 		'js-engine': false,
