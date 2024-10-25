@@ -68,9 +68,9 @@ export default class TemplaterAdapter implements Adapter {
         
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.plugin?.getScriptOutputEl(config.outputContainer);
+            containerEl = this.plugin?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                new Notice(`Error: Could not find note-toolbar-script callout in current note with ID: ${config.outputContainer}`, 5000);
+                new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
             }
         }

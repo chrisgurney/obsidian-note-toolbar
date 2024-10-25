@@ -1434,15 +1434,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Gets the note-toolbar-script callout container in the current view, matching the provided metadata string.
+	 * Gets the note-toolbar-output callout container in the current view, matching the provided metadata string.
 	 * @example
-	 * > [!note-toolbar-script|META]
+	 * > [!note-toolbar-output|META]
 	 * @param calloutMeta string to match
 	 * @returns HTMLElement or undefined
 	 */
-	getScriptOutputEl(calloutMeta: string): HTMLElement | undefined {
+	getOutputEl(calloutMeta: string): HTMLElement | undefined {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar-script"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
+		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar-output"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
 		// debugLog("getScriptOutputEl()", containerEl);
 		return containerEl;
 	}

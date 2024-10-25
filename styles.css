@@ -914,7 +914,7 @@ body {
     }
 }
 
-.callout[data-callout="note-toolbar-script"] {
+.callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
     margin: 0em !important;
     padding: 0em;

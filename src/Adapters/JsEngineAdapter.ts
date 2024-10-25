@@ -22,7 +22,7 @@ export default class JsEngineAdapter implements Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: 'file', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
             ]
         },
         {
@@ -30,7 +30,7 @@ export default class JsEngineAdapter implements Adapter {
             label: "Import and execute JavaScript",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: 'file', required: true },
+                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to import. Note that this file is only imported once. You may have to restart Obsidian in order to pick up changes.", type: 'file', required: true },
                 { parameter: 'sourceFunction', label: "Function (optional)", description: "If script has functions, function name to execute.", type: 'text', required: false },
                 { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by function in JSON format.", type: 'text', required: false },
             ]
@@ -52,9 +52,9 @@ export default class JsEngineAdapter implements Adapter {
         
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.plugin?.getScriptOutputEl(config.outputContainer);
+            containerEl = this.plugin?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                new Notice(`Error: Could not find note-toolbar-script callout in current note with ID: ${config.outputContainer}`, 5000);
+                new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
             }
         }
@@ -143,7 +143,7 @@ export default class JsEngineAdapter implements Adapter {
     }
 
     /**
-     * 
+     * Wraps internal.executeFile()  
      * @param filename 
      * @param containerEl 
      * @returns 
@@ -168,10 +168,10 @@ export default class JsEngineAdapter implements Adapter {
                 container: resultEl,
                 component: this.plugin,
             });
-            const renderer = this.engineApi.internal.createRenderer(resultEl, activeFilePath, this.plugin);
             debugLog('exec() result:', execution.result);
             if (this.plugin) {
                 if (containerEl) {
+                    const renderer = this.engineApi.internal.createRenderer(resultEl, activeFilePath, this.plugin);
                     renderer.render(execution.result);
                     // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
                 }

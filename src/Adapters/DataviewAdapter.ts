@@ -17,38 +17,38 @@ export default class DataviewAdapter implements Adapter {
         {
             function: this.query,
             label: "Execute query",
-            description: "Run a Dataview query",
+            description: "",
             parameters: [
                 { parameter: 'expression', label: "Query", type: 'textarea', description: "Dataview query to evaluate.", required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
             ]
         },
         {
             function: this.exec,
-            label: "Execute script",
-            description: "This is similar to running dv.view()",
+            label: "Execute JavaScript",
+            description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Script file", description: "Dataview JS file to execute.", type: 'file', required: true },
+                { parameter: 'sourceFile', label: "JavaScript file", description: "Dataview JS file to execute.", type: 'file', required: true },
                 { parameter: 'sourceArgs', label: "Arguments (optional)", type: 'text', description: "Parameters for your script in JSON format.", required: false },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
             ]
         },
         {
             function: this.evaluate,
             label: "Evaluate Dataview expression",
-            description: "Equivalent to running evaluateInline()",
+            description: "",
             parameters: [
                 { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Use a note-toolbar-script callout with a unique meta field to put text output. Callout will be empty if the script does not return a value.", type: 'text', required: false }
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
             ]
         },
         {
             function: this.executeJs,
             label: "Evaluate Dataview JS expression",
-            description: "Execute a JavaScript expression",
+            description: "",
             parameters: [
                 { parameter: 'expression', label: "Dataview JS expression",  description: "Dataview JS expression to evaluate.", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", type: 'text', required: false }
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
             ]
         },
     ];
@@ -75,9 +75,9 @@ export default class DataviewAdapter implements Adapter {
 
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.plugin?.getScriptOutputEl(config.outputContainer);
+            containerEl = this.plugin?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                new Notice(`Error: Could not find note-toolbar-script callout in current note with ID: ${config.outputContainer}`, 5000);
+                new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
                 return;
             }
         }
