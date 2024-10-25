@@ -207,6 +207,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					debugLog('fileRenameListener: changing', item.link, 'to', file.path);
 					item.link = file.path;
 				}
+				if (item.scriptConfig?.sourceFile === oldPath) {
+					debugLog('fileRenameListener: changing', item.scriptConfig?.sourceFile, 'to', file.path);
+					item.scriptConfig.sourceFile = file.path;
+				}
 			});
 		});
 	}
