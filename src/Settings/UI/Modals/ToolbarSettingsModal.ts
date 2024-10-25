@@ -939,18 +939,20 @@ export default class ToolbarSettingsModal extends Modal {
 										toolbarItem.scriptConfig ??= { pluginFunction: value };
 										toolbarItem.scriptConfig.pluginFunction = value;
 										this.toolbar.updated = new Date().toISOString();
-										let subfieldsDiv = createDiv();
-										subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
-										this.getScriptSubfields(adapter, toolbarItem, subfieldsDiv);
-										fieldDiv.append(subfieldsDiv);
 										await this.plugin.settingsManager.save();
-										// TODO? this.renderPreview(toolbarItem);
-										const selectedFunction = adapter.getFunctions().get(value);
-										if (selectedFunction?.description) {
-											let scriptHelpFr = document.createDocumentFragment();
-											scriptHelpFr.appendText(selectedFunction.description);
-											this.setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
+										if (adapter) {
+											let subfieldsDiv = createDiv();
+											subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
+											this.getScriptSubfields(adapter, toolbarItem, subfieldsDiv);
+											fieldDiv.append(subfieldsDiv);
+											const selectedFunction = adapter.getFunctions().get(value);
+											if (selectedFunction?.description) {
+												let scriptHelpFr = document.createDocumentFragment();
+												scriptHelpFr.appendText(selectedFunction.description);
+												this.setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
+											}
 										}
+										// TODO? this.renderPreview(toolbarItem);
 									});
 								});
 						this.setFieldHelp(scriptSetting.controlEl, helpTextFr);
