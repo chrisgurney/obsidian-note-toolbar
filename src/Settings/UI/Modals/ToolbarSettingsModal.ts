@@ -904,7 +904,7 @@ export default class ToolbarSettingsModal extends Modal {
 			case ItemType.JsEngine:
 			case ItemType.Templater:
 				if (this.plugin.settings.scriptingEnabled) {
-					let adapter;
+					let adapter: Adapter | undefined;
 					switch (type) {
 						case ItemType.Dataview:
 							adapter = this.plugin.dvAdapter;
