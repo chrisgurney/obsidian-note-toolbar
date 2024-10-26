@@ -942,7 +942,7 @@ export default class ToolbarSettingsModal extends Modal {
 												this.setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
 											}
 										}
-										// TODO? this.renderPreview(toolbarItem);
+										this.renderPreview(toolbarItem); // to make sure error state is refreshed
 									});
 								});
 						this.setFieldHelp(scriptSetting.controlEl, helpTextFr);
@@ -1101,7 +1101,7 @@ export default class ToolbarSettingsModal extends Modal {
 										config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
 										this.toolbar.updated = new Date().toISOString();
 										await this.plugin.settingsManager.save();
-										// TODO? this.renderPreview(toolbarItem);
+										this.renderPreview(toolbarItem); // to make sure error state is refreshed
 									}, 500));
 								this.updateItemComponentStatus(initialValue ? initialValue : '', SettingType.File, cb.inputEl.parentElement);
 							});
@@ -1117,7 +1117,7 @@ export default class ToolbarSettingsModal extends Modal {
 											config[param.parameter as keyof ScriptConfig] = value;
 											this.toolbar.updated = new Date().toISOString();
 											await this.plugin.settingsManager.save();
-											// TODO? this.renderPreview(toolbarItem);
+											this.renderPreview(toolbarItem); // to make sure error state is refreshed
 										}, 500));
 								// this.updateItemComponentStatus(initialValue ? initialValue : '', ItemType., cb.inputEl.parentElement);
 							});
@@ -1134,7 +1134,7 @@ export default class ToolbarSettingsModal extends Modal {
 											config[param.parameter as keyof ScriptConfig] = value;
 											this.toolbar.updated = new Date().toISOString();
 											await this.plugin.settingsManager.save();
-											// TODO? this.renderPreview(toolbarItem);
+											this.renderPreview(toolbarItem); // to make sure error state is refreshed
 										}, 500));					
 							});
 						break;
@@ -1195,9 +1195,10 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param itemValue string value to check
 	 * @param fieldType SettingFieldType to check against
 	 * @param componentEl HTMLElement to update
+	 * @param toolbarItem ToolbarItemSettings for the item if needed to provide more context
 	 * @returns true if the item is valid; false otherwise
 	 */
-	updateItemComponentStatus(itemValue: string, fieldType: SettingFieldType, componentEl: HTMLElement | null): boolean {
+	updateItemComponentStatus(itemValue: string, fieldType: SettingType, componentEl: HTMLElement | null, toolbarItem?: ToolbarItemSettings): boolean {
 
 		enum Status {
 			Empty = 'empty',
@@ -1250,15 +1251,40 @@ export default class ToolbarSettingsModal extends Modal {
 					break;
 			}
 		}
+		// empty fields and script items (which don't have values)
 		else {
-			status = Status.Empty;
-			statusMessage = '';
+			switch (fieldType) {
+				case SettingType.Script:
+					if (toolbarItem) {
+						// validate what the selected function for the adapter for this item requires
+						let adapter = this.getAdapterForItemType(toolbarItem.linkAttr.type);
+						let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
+						const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
+						const requiredParams = params?.filter((param) => param.required);
+						requiredParams?.forEach((param, index) => {
+							if (toolbarItem?.scriptConfig) {
+								const value = toolbarItem.scriptConfig[param.parameter];
+								debugLog("checking:", value);
+								if (value) {
+									const subfieldValid = this.updateItemComponentStatus(value, param.type, componentEl);
+									status = subfieldValid ? Status.Valid : Status.Invalid;
+									debugLog("- valid?", status);
+								}
+							}
+						});
+					}
+					break;
+				default:
+					status = Status.Empty;
+					statusMessage = '';
+					break;
+			}
 		}
 
 		this.removeFieldError(componentEl);
 		switch (status) {
 			case Status.Empty:
-				// TODO: flag for whether empty should show as an error or not
+				// TODO? flag for whether empty should show as an error or not
 				isValid = false;
 				break;
 			case Status.Invalid:
@@ -2015,11 +2041,12 @@ export default class ToolbarSettingsModal extends Modal {
 			itemPreview.appendChild(itemPreviewContent);
 		}
 
-		// check if items are valid (non-empty + valid), and highlight if not
+		// check if item previews are valid (non-empty + valid), and highlight if not
 		this.updateItemComponentStatus(
 			(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
 			SettingFieldItemMap[toolbarItem.linkAttr.type], 
-			itemPreview);
+			itemPreview,
+			toolbarItem);
 
 	}
 
