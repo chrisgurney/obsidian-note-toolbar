@@ -133,9 +133,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.checkPlugins();
 
 			if (this.settings.scriptingEnabled) {
-				this.dvAdapter = this.hasPlugin['dataview'] ? new DataviewAdapter(this) : undefined;
-				this.jsAdapter = this.hasPlugin['js-engine'] ? new JsEngineAdapter(this) : undefined;
-				this.tpAdapter = this.hasPlugin['templater-obsidian'] ? new TemplaterAdapter(this) : undefined;
+				this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? new DataviewAdapter(this) : undefined;
+				this.jsAdapter = this.hasPlugin[ItemType.JsEngine] ? new JsEngineAdapter(this) : undefined;
+				this.tpAdapter = this.hasPlugin[ItemType.Templater] ? new TemplaterAdapter(this) : undefined;
 			}
 
 		});

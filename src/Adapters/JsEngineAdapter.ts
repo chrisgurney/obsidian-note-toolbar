@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
-import { ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -35,7 +35,7 @@ export default class JsEngineAdapter extends Adapter {
     ];
 
     constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = (noteToolbar.app as any).plugins.plugins["js-engine"];
+        const plugin = (noteToolbar.app as any).plugins.plugins[ItemType.JsEngine];
         super(noteToolbar, plugin, plugin.api);
     }
 

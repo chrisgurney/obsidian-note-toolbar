@@ -632,7 +632,8 @@ export default class ToolbarSettingsModal extends Modal {
 							// show enabled plugins and all other options
 							Object.fromEntries(
 								Object.entries(LINK_OPTIONS).filter(
-									([key]) => this.plugin.hasPlugin[key] || !['dataview', 'js-engine', 'templater-obsidian'].includes(key)
+									([key]) => this.plugin.hasPlugin[key] || 
+									![ItemType.Dataview as string, ItemType.JsEngine as string, ItemType.Templater as string].includes(key)
 								)
 							)
 						)

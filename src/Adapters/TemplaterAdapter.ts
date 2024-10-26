@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice, TFile } from "obsidian";
-import { ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -47,7 +47,7 @@ export default class TemplaterAdapter extends Adapter {
     ];
 
     constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = (noteToolbar.app as any).plugins.plugins["templater-obsidian"];
+        const plugin = (noteToolbar.app as any).plugins.plugins[ItemType.Templater];
         super(noteToolbar, plugin, plugin.templater);
     }
 
