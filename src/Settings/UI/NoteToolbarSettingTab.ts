@@ -658,20 +658,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.scriptingEnabled)
 					.onChange(async (value) => {
 						this.plugin.settings.scriptingEnabled = value;
-						if (this.plugin.settings.scriptingEnabled) {
-							this.plugin.checkPlugins(); // update status of enabled plugins
-							this.plugin.dvAdapter = this.plugin.hasPlugin[ItemType.Dataview] ? new DataviewAdapter(this.plugin) : undefined;
-							this.plugin.jsAdapter = this.plugin.hasPlugin[ItemType.JsEngine] ? new JsEngineAdapter(this.plugin) : undefined;
-							this.plugin.tpAdapter = this.plugin.hasPlugin[ItemType.Templater] ? new TemplaterAdapter(this.plugin) : undefined;
-						}
-						else {
-							this.plugin.dvAdapter?.disable();
-							this.plugin.jsAdapter?.disable();
-							this.plugin.tpAdapter?.disable();
-							this.plugin.dvAdapter = undefined;
-							this.plugin.jsAdapter = undefined;
-							this.plugin.tpAdapter = undefined;
-						}
+						this.plugin.updateAdapters();
 						await this.plugin.settingsManager.save();
 					});
 			});

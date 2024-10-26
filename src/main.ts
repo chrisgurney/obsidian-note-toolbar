@@ -14,6 +14,7 @@ import { ShareModal } from 'Settings/UI/Modals/ShareModal';
 import DataviewAdapter from 'Adapters/DataviewAdapter';
 import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 import JsEngineAdapter from 'Adapters/JsEngineAdapter';
+import { Adapter } from 'Adapters/Adapter';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -132,11 +133,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// check what other plugins are enabled that we need to know about
 			this.checkPlugins();
 
-			if (this.settings.scriptingEnabled) {
-				this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? new DataviewAdapter(this) : undefined;
-				this.jsAdapter = this.hasPlugin[ItemType.JsEngine] ? new JsEngineAdapter(this) : undefined;
-				this.tpAdapter = this.hasPlugin[ItemType.Templater] ? new TemplaterAdapter(this) : undefined;
-			}
+			this.updateAdapters();
 
 		});
 
@@ -1018,10 +1015,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
 					// debugLog(`${type} type item:`, toolbarItem);
 					if (toolbarItem?.scriptConfig) {
-						if ((type === ItemType.Dataview && !this.dvAdapter) || 
-							(type === ItemType.JsEngine && !this.jsAdapter) || 
-							(type === ItemType.Templater && !this.tpAdapter)
-						) {
+						const adapter = this.getAdapterForItemType(type);
+						if (!adapter) {
 							new Notice("Toggle the Scripting setting after installing and enabling plugin: " + LINK_OPTIONS[type]);
 							return;
 						}
@@ -1574,6 +1569,47 @@ export default class NoteToolbarPlugin extends Plugin {
 		Object.keys(this.hasPlugin).forEach(pluginKey => {
 			this.hasPlugin[pluginKey] = pluginKey in (this.app as any).plugins.plugins;
 		});
+	}
+
+	/**
+	 * Returns the Adapter for the provided item type, if the plugin is available and the adapter instance exists.
+	 * @param type ItemType to get the Adapter for
+	 * @returns the Adapter or undefined
+	 */
+	getAdapterForItemType(type: ItemType): Adapter | undefined {
+		let adapter: Adapter | undefined;
+		switch (type) {
+			case ItemType.Dataview:
+				adapter = this.hasPlugin[ItemType.Dataview] ? this.dvAdapter : undefined;
+				break;
+			case ItemType.JsEngine:
+				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jsAdapter : undefined;
+				break;
+			case ItemType.Templater:
+				adapter = this.hasPlugin[ItemType.Templater] ? this.tpAdapter : undefined;
+				break;
+		}
+		return adapter;
+	}
+
+	/**
+	 * Creates the adapters if scripting and the plugins are enabled; disables all adapters if the setting is disabled.
+	 */
+	updateAdapters() {
+		if (this.settings.scriptingEnabled) {
+			this.checkPlugins(); // update status of enabled plugins
+			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? new DataviewAdapter(this) : undefined;
+			this.jsAdapter = this.hasPlugin[ItemType.JsEngine] ? new JsEngineAdapter(this) : undefined;
+			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? new TemplaterAdapter(this) : undefined;
+		}
+		else {
+			this.dvAdapter?.disable();
+			this.jsAdapter?.disable();
+			this.tpAdapter?.disable();
+			this.dvAdapter = undefined;
+			this.jsAdapter = undefined;
+			this.tpAdapter = undefined;
+		}
 	}
 
 }

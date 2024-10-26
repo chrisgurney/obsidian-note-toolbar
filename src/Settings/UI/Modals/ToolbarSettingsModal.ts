@@ -96,7 +96,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
 		this.contentEl.empty();
-		
+
 		// update status of installed plugins so we can display errors if needed
 		this.plugin.checkPlugins();
 
@@ -908,7 +908,7 @@ export default class ToolbarSettingsModal extends Modal {
 			case ItemType.JsEngine:
 			case ItemType.Templater:
 				if (this.plugin.settings.scriptingEnabled) {
-					let adapter = this.getAdapterForItemType(type);
+					let adapter = this.plugin.getAdapterForItemType(type);
 					if (adapter) {
 						const functionOptions = {
 							'': 'Select a function...',
@@ -1261,7 +1261,7 @@ export default class ToolbarSettingsModal extends Modal {
 				case SettingType.Script:
 					if (toolbarItem && toolbarItem.scriptConfig) {
 						// validate what the selected function for the adapter for this item requires
-						let adapter = this.getAdapterForItemType(toolbarItem.linkAttr.type);
+						let adapter = this.plugin.getAdapterForItemType(toolbarItem.linkAttr.type);
 						if (adapter) {
 							let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
 							const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
@@ -1758,27 +1758,6 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
-
-	/**
-	 * Returns the Adapter for the provided item type, if the plugin is available and the adapter instance exists.
-	 * @param type ItemType to get the Adapter for
-	 * @returns the Adapter or undefined
-	 */
-	getAdapterForItemType(type: ItemType): Adapter | undefined {
-		let adapter: Adapter | undefined;
-		switch (type) {
-			case ItemType.Dataview:
-				adapter = this.plugin.hasPlugin[ItemType.Dataview] ? this.plugin.dvAdapter : undefined;
-				break;
-			case ItemType.JsEngine:
-				adapter = this.plugin.hasPlugin[ItemType.JsEngine] ? this.plugin.jsAdapter : undefined;
-				break;
-			case ItemType.Templater:
-				adapter = this.plugin.hasPlugin[ItemType.Templater] ? this.plugin.tpAdapter : undefined;
-				break;
-		}
-		return adapter;
-	}
 
 	/**
 	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
