@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
-import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -18,8 +18,8 @@ export default class JsEngineAdapter extends Adapter {
             label: "Execute JavaScript",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: 'file', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
+                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: SettingType.File, required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
             ]
         },
         {
@@ -27,9 +27,9 @@ export default class JsEngineAdapter extends Adapter {
             label: "Import and execute JavaScript",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to import. Note that this file is only imported once. You may have to restart Obsidian in order to pick up changes.", type: 'file', required: true },
-                { parameter: 'sourceFunction', label: "Function (optional)", description: "If script has functions, function name to execute.", type: 'text', required: false },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by function in JSON format.", type: 'text', required: false },
+                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to import. Note that this file is only imported once. You may have to restart Obsidian in order to pick up changes.", type: SettingType.File, required: true },
+                { parameter: 'sourceFunction', label: "Function (optional)", description: "If script has functions, function name to execute.", type: SettingType.Text, required: false },
+                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by function in JSON format.", type: SettingType.Text, required: false },
             ]
         },
     ];

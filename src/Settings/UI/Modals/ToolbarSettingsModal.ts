@@ -2,7 +2,7 @@ import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Notice,
 import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingFieldType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
+import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -889,7 +889,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.setValue(toolbarItem.link)
 							.onChange(debounce(async (command) => {
 								let commandId = command ? (cb.inputEl?.getAttribute('data-command-id') ?? COMMAND_DOES_NOT_EXIST) : '';
-								let isValid = this.updateItemComponentStatus(commandId, SettingFieldType.Command, cb.inputEl.parentElement);
+								let isValid = this.updateItemComponentStatus(commandId, SettingType.Command, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? command : '';
 								toolbarItem.linkAttr.commandId = isValid ? commandId : '';
 								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
@@ -897,25 +897,14 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, SettingFieldType.Command, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
 					});	
 				break;
 			case ItemType.Dataview:
 			case ItemType.JsEngine:
 			case ItemType.Templater:
 				if (this.plugin.settings.scriptingEnabled) {
-					let adapter: Adapter | undefined;
-					switch (type) {
-						case ItemType.Dataview:
-							adapter = this.plugin.dvAdapter;
-							break;
-						case ItemType.JsEngine:
-							adapter = this.plugin.jsAdapter;
-							break;
-						case ItemType.Templater:
-							adapter = this.plugin.tpAdapter;
-							break;
-					}
+					let adapter = this.getAdapterForItemType(type);
 					if (adapter) {
 						const functionOptions = {
 							'': 'Select a function...',
@@ -990,7 +979,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-file-placeholder'))
 							.setValue(toolbarItem.link)
 							.onChange(debounce(async (value) => {
-								let isValid = this.updateItemComponentStatus(value, SettingFieldType.File, cb.inputEl.parentElement);
+								let isValid = this.updateItemComponentStatus(value, SettingType.File, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? normalizePath(value) : '';
 								toolbarItem.linkAttr.commandId = '';
 								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
@@ -998,7 +987,7 @@ export default class ToolbarSettingsModal extends Modal {
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.File, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
 					});
 				break;
 			case ItemType.Group:
@@ -1009,7 +998,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
 							.setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
 							.onChange(debounce(async (name) => {
-								let isValid = this.updateItemComponentStatus(name, SettingFieldType.Toolbar, cb.inputEl.parentElement);
+								let isValid = this.updateItemComponentStatus(name, SettingType.Toolbar, cb.inputEl.parentElement);
 								let groupToolbar = isValid ? this.plugin.settingsManager.getToolbarByName(name) : undefined;
 								toolbarItem.link = groupToolbar ? groupToolbar.uuid : '';
 								toolbarItem.linkAttr.commandId = '';
@@ -1023,7 +1012,7 @@ export default class ToolbarSettingsModal extends Modal {
 									: learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Toolbar, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
 					});
 				this.setFieldHelp(groupSetting.controlEl, helpTextFr);
 				break;
@@ -1036,7 +1025,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
 							.setValue(defaultValue ? defaultValue : toolbarItem.link)
 							.onChange(debounce(async (name) => {
-								this.updateItemComponentStatus(name, SettingFieldType.Toolbar, cb.inputEl.parentElement);
+								this.updateItemComponentStatus(name, SettingType.Toolbar, cb.inputEl.parentElement);
 								// TODO? return an ID from the suggester vs. the name
 								let menuToolbar = this.plugin.settingsManager.getToolbarByName(name);
 								toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
@@ -1051,7 +1040,7 @@ export default class ToolbarSettingsModal extends Modal {
 									: learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Toolbar, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
 					});
 				this.setFieldHelp(menuSetting.controlEl, helpTextFr);
 				break;
@@ -1063,7 +1052,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.setValue(toolbarItem.link)
 							.onChange(
 								debounce(async (value) => {
-									this.updateItemComponentStatus(value, SettingFieldType.Text, cb.inputEl.parentElement);
+									this.updateItemComponentStatus(value, SettingType.Text, cb.inputEl.parentElement);
 									toolbarItem.link = value;
 									toolbarItem.linkAttr.commandId = '';
 									toolbarItem.linkAttr.hasVars = hasVars(value);
@@ -1072,7 +1061,7 @@ export default class ToolbarSettingsModal extends Modal {
 									await this.plugin.settingsManager.save();
 									this.renderPreview(toolbarItem);
 								}, 500));
-						this.updateItemComponentStatus(toolbarItem.link, SettingFieldType.Text, cb.inputEl.parentElement);
+						this.updateItemComponentStatus(toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
 					});
 				this.setFieldHelp(uriSetting.controlEl, helpTextFr);
 				break;
@@ -1108,13 +1097,13 @@ export default class ToolbarSettingsModal extends Modal {
 								cb.setPlaceholder(param.label)
 									.setValue(initialValue ? initialValue : '')
 									.onChange(debounce(async (value) => {
-										let isValid = this.updateItemComponentStatus(value, SettingFieldType.File, cb.inputEl.parentElement);
+										let isValid = this.updateItemComponentStatus(value, SettingType.File, cb.inputEl.parentElement);
 										config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
 										this.toolbar.updated = new Date().toISOString();
 										await this.plugin.settingsManager.save();
 										// TODO? this.renderPreview(toolbarItem);
 									}, 500));
-								this.updateItemComponentStatus(initialValue ? initialValue : '', SettingFieldType.File, cb.inputEl.parentElement);
+								this.updateItemComponentStatus(initialValue ? initialValue : '', SettingType.File, cb.inputEl.parentElement);
 							});
 						break;
 					case 'text':
@@ -1223,7 +1212,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		if (itemValue) {
 			switch(fieldType) {
-				case SettingFieldType.Command:
+				case SettingType.Command:
 					if (!(itemValue in this.app.commands.commands)) {
 						status = Status.Invalid;
 						if (itemValue === COMMAND_DOES_NOT_EXIST) {
@@ -1241,21 +1230,14 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 					}
 					break;
-				case SettingFieldType.File:
+				case SettingType.File:
 					const file = this.app.vault.getAbstractFileByPath(itemValue);
 					if (!(file instanceof TFile) && !(file instanceof TFolder)) {
 						status = Status.Invalid;
 						statusMessage = t('setting.item.option-file-error-does-not-exist');
 					}
 					break;
-				// case SettingFieldType.Text:
-				// 	debugLog("'" + itemValue + "'");
-				// 	if (itemValue === '') {
-				// 		status = Status.Invalid;
-				// 		statusMessage = "Field is required.";
-				// 	}
-				// 	break;
-				case SettingFieldType.Toolbar:
+				case SettingType.Toolbar:
 					let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
 					if (!toolbar) {
 						// toolbars are stored by IDs for previews
@@ -1744,6 +1726,22 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
+
+	getAdapterForItemType(type: ItemType): Adapter | undefined {
+		let adapter: Adapter | undefined;
+		switch (type) {
+			case ItemType.Dataview:
+				adapter = this.plugin.dvAdapter;
+				break;
+			case ItemType.JsEngine:
+				adapter = this.plugin.jsAdapter;
+				break;
+			case ItemType.Templater:
+				adapter = this.plugin.tpAdapter;
+				break;
+		}
+		return adapter;
+	}
 
 	/**
 	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.

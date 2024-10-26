@@ -72,24 +72,26 @@ export enum RibbonAction {
 	ToolbarSuggester = 'toolbar-suggester',
 	Toolbar = 'toolbar'
 }
-export enum SettingFieldType {
+export enum SettingType {
 	Command = 'command',
 	File = 'file',
 	Ignore = 'ignore',
+	Script = 'script',
 	Text = 'text',
-	Toolbar = 'toolbar'
+	TextArea = 'textarea',
+	Toolbar = 'toolbar',
 }
-export const SettingFieldItemMap: Record<ItemType, SettingFieldType> = {
-	[ItemType.Break]: SettingFieldType.Ignore,
-	[ItemType.Command]: SettingFieldType.Command,
-	[ItemType.Dataview]: SettingFieldType.Ignore,
-	[ItemType.File]: SettingFieldType.File,
-	[ItemType.Group]: SettingFieldType.Toolbar,
-	[ItemType.JsEngine]: SettingFieldType.Ignore,
-	[ItemType.Menu]: SettingFieldType.Toolbar,
-	[ItemType.Separator]: SettingFieldType.Ignore,
-	[ItemType.Uri]: SettingFieldType.Text,
-	[ItemType.Templater]: SettingFieldType.Ignore
+export const SettingFieldItemMap: Record<ItemType, SettingType> = {
+	[ItemType.Break]: SettingType.Ignore,
+	[ItemType.Command]: SettingType.Command,
+	[ItemType.Dataview]: SettingType.Script,
+	[ItemType.File]: SettingType.File,
+	[ItemType.Group]: SettingType.Toolbar,
+	[ItemType.JsEngine]: SettingType.Script,
+	[ItemType.Menu]: SettingType.Toolbar,
+	[ItemType.Separator]: SettingType.Ignore,
+	[ItemType.Uri]: SettingType.Text,
+	[ItemType.Templater]: SettingType.Script
 }
 export enum ViewType {
 	All = 'all',

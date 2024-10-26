@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice, TFile } from "obsidian";
-import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -16,7 +16,7 @@ export default class TemplaterAdapter extends Adapter {
             label: "Insert template",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template", description: "Template file to insert.", type: 'file', required: true },
+                { parameter: 'sourceFile', label: "Template", description: "Template file to insert.", type: SettingType.File, required: true },
             ]
         },
         {
@@ -24,7 +24,7 @@ export default class TemplaterAdapter extends Adapter {
             label: "Create new note from template",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template", description: "Template file to create a new file from.", type: 'file', required: true },
+                { parameter: 'sourceFile', label: "Template", description: "Template file to create a new file from.", type: SettingType.File, required: true },
                 // TODO: 'outputFile', description: "Enter the name of the file to create from the provided template."
             ]
         },
@@ -33,7 +33,7 @@ export default class TemplaterAdapter extends Adapter {
             label: "Evaluate Templater expression",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Templater expression", description: "Templater expression to evaluate.", type: 'text', required: true },
+                { parameter: 'expression', label: "Templater expression", description: "Templater expression to evaluate.", type: SettingType.Text, required: true },
             ]
         },
         {
@@ -41,7 +41,7 @@ export default class TemplaterAdapter extends Adapter {
             label: "Evaluate Templater file",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template file", description: "Evaluates the contents of the file and returns.", type: 'file', required: true },
+                { parameter: 'sourceFile', label: "Template file", description: "Evaluates the contents of the file and returns.", type: SettingType.File, required: true },
             ]
         },        
     ];

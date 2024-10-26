@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
-import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -16,8 +16,8 @@ export default class DataviewAdapter extends Adapter {
             label: "Execute query",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Query", type: 'textarea', description: "Dataview query to evaluate.", required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
+                { parameter: 'expression', label: "Query", description: "Dataview query to evaluate.", type: SettingType.TextArea, required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
             ]
         },
         {
@@ -25,9 +25,9 @@ export default class DataviewAdapter extends Adapter {
             label: "Execute JavaScript",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "JavaScript file", description: "Dataview JS file to execute.", type: 'file', required: true },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", type: 'text', description: "Parameters for your script in JSON format.", required: false },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
+                { parameter: 'sourceFile', label: "JavaScript file", description: "Dataview JS file to execute.", type: SettingType.File, required: true },
+                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Parameters for your script in JSON format.", type: SettingType.Text, required: false },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
             ]
         },
         {
@@ -35,8 +35,8 @@ export default class DataviewAdapter extends Adapter {
             label: "Evaluate Dataview expression",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
+                { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: SettingType.Text, required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
             ]
         },
         {
@@ -44,8 +44,8 @@ export default class DataviewAdapter extends Adapter {
             label: "Evaluate Dataview JS expression",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Dataview JS expression",  description: "Dataview JS expression to evaluate.", type: 'text', required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: 'text', required: false }
+                { parameter: 'expression', label: "Dataview JS expression",  description: "Dataview JS expression to evaluate.", type: SettingType.Text, required: true },
+                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
             ]
         },
     ];

@@ -1,4 +1,4 @@
-import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 
 export interface AdapterFunction {
     /** The actual function in the adapter. */
@@ -19,7 +19,7 @@ export interface AdapterFunctionParameter {
     /** Optional description used for help text. */
     description?: string;
     /** Field type to display. */
-    type: 'file' | 'text' | 'textarea';
+    type: SettingType;
     /** Is this parameter required? */
     required: boolean;
 }
