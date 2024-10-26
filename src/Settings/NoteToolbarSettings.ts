@@ -73,6 +73,7 @@ export enum RibbonAction {
 	Toolbar = 'toolbar'
 }
 export enum SettingType {
+	Args = 'args',
 	Command = 'command',
 	File = 'file',
 	Ignore = 'ignore',

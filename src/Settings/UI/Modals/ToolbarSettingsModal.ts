@@ -1,5 +1,5 @@
 import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID } from 'Utils/Utils';
+import { arraymove, debugLog, getElementPosition, hasVars, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
@@ -1085,7 +1085,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let initialValue = config[param.parameter as keyof ScriptConfig];
 				let setting;
 				switch (param.type) {
-					case 'file':
+					case SettingType.File:
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addSearch((cb) => {
@@ -1101,16 +1101,17 @@ export default class ToolbarSettingsModal extends Modal {
 								cb.setPlaceholder(param.label)
 									.setValue(initialValue ? initialValue : '')
 									.onChange(debounce(async (value) => {
-										let isValid = this.updateItemComponentStatus(value, SettingType.File, cb.inputEl.parentElement);
+										let isValid = this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
 										config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
 										this.toolbar.updated = new Date().toISOString();
 										await this.plugin.settingsManager.save();
 										this.renderPreview(toolbarItem); // to make sure error state is refreshed
 									}, 500));
-								this.updateItemComponentStatus(initialValue ? initialValue : '', SettingType.File, cb.inputEl.parentElement);
+								this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
 							});
 						break;
-					case 'text':
+					case SettingType.Args:
+					case SettingType.Text:
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addText(cb => {
@@ -1118,16 +1119,17 @@ export default class ToolbarSettingsModal extends Modal {
 									.setValue(initialValue ? initialValue : '')
 									.onChange(
 										debounce(async (value) => {
-											config[param.parameter as keyof ScriptConfig] = value;
+											let isValid = this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
+											config[param.parameter as keyof ScriptConfig] = isValid ? value : '';
 											this.toolbar.updated = new Date().toISOString();
 											await this.plugin.settingsManager.save();
 											this.renderPreview(toolbarItem); // to make sure error state is refreshed
 										}, 500));
-								// this.updateItemComponentStatus(initialValue ? initialValue : '', ItemType., cb.inputEl.parentElement);
+								this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
 							});
 						// fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 						break;
-					case 'textarea':
+					case SettingType.TextArea:
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addTextArea(cb => {
@@ -1217,6 +1219,13 @@ export default class ToolbarSettingsModal extends Modal {
 
 		if (itemValue) {
 			switch(fieldType) {
+				case SettingType.Args:
+					const parsedArgs = importArgs(itemValue);
+					if (!parsedArgs) {
+						status = Status.Invalid;
+						statusMessage = "Invalid argument format.";
+					}
+					break;
 				case SettingType.Command:
 					if (!(itemValue in this.app.commands.commands)) {
 						status = Status.Invalid;
@@ -1265,8 +1274,8 @@ export default class ToolbarSettingsModal extends Modal {
 						if (adapter) {
 							let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
 							const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
-							const requiredParams = params?.filter((param) => param.required);
-							requiredParams?.forEach((param, index) => {
+							params?.forEach((param, index) => {
+								// TODO? error if required parameter is empty?
 								const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
 								if (value) {
 									const subfieldValid = this.updateItemComponentStatus(value, param.type, componentEl);
@@ -1930,7 +1939,7 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 						errorDiv.append(' ', errorLink);
 					}
-					fieldEl.insertAdjacentElement('afterend', errorDiv);
+					fieldContainerEl.insertAdjacentElement('beforeend', errorDiv);
 				}
 				fieldEl.addClass('note-toolbar-setting-error');
 			}

@@ -26,7 +26,7 @@ export default class DataviewAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "JavaScript file", description: "Dataview JS file to execute.", type: SettingType.File, required: true },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Parameters for your script in JSON format.", type: SettingType.Text, required: false },
+                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by function in comma-separated 'name: value' format.", type: SettingType.Args, required: false },
                 { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
             ]
         },
