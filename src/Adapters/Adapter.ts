@@ -23,6 +23,15 @@ export abstract class Adapter {
     }
 
     /**
+     * Cleans up the adapter when it's no longer needed.
+     */ 
+    disable() {
+        this.adapterApi = null;
+        this.adapterPlugin = null;
+        this.noteToolbar = null;
+    }
+
+    /**
      * Returns all functions for this adapter.
      */
     getFunctions(): Map<string, AdapterFunction> {
@@ -37,17 +46,8 @@ export abstract class Adapter {
     }
 
     /**
-     * Cleans up the adapter when it's no longer needed.
-     */ 
-    disable() {
-        this.adapterApi = null;
-        this.adapterPlugin = null;
-        this.noteToolbar = null;
-    }
-    
-    /**
      * Executes the function with provided config.
      */
     abstract use(config: ScriptConfig): Promise<string | void>; 
-    
+
 }

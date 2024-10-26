@@ -96,7 +96,7 @@ export default class JsEngineAdapter extends Adapter {
 
         let args;
         try {
-            args = argsJson ? JSON.parse(argsJson) : {};
+            args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
             displayScriptError(`Failed to parse arguments for script: ${filename}\nError:`, error);
@@ -178,4 +178,8 @@ export default class JsEngineAdapter extends Adapter {
 
     }
 
+}
+
+function importArgs(argsJson: string): any {
+    throw new Error("Function not implemented.");
 }
