@@ -955,7 +955,7 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					else {
 						fieldDiv.removeClass('note-toolbar-setting-item-link-field');
-						fieldDiv.addClass('note-toolbar-setting-disabled');
+						fieldDiv.addClass('note-toolbar-setting-error-message');
 						fieldDiv.setText("Toggle the Scripting setting after installing and enabling plugin: ");
 						let pluginLinkFr = document.createDocumentFragment();
 						let pluginLink = pluginLinkFr.createEl('a', { 
@@ -968,7 +968,7 @@ export default class ToolbarSettingsModal extends Modal {
 				}
 				else {
 					fieldDiv.removeClass('note-toolbar-setting-item-link-field');
-					fieldDiv.addClass('note-toolbar-setting-disabled');
+					fieldDiv.addClass('note-toolbar-setting-error-message');
 					fieldDiv.setText("Enable Scripting in Note Toolbar settings to use this item.");
 				}
 				break;
