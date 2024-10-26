@@ -96,6 +96,9 @@ export default class ToolbarSettingsModal extends Modal {
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
 		this.contentEl.empty();
+		
+		// update status of installed plugins so we can display errors if needed
+		this.plugin.checkPlugins();
 
 		let settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
