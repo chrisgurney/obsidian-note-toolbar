@@ -1256,23 +1256,25 @@ export default class ToolbarSettingsModal extends Modal {
 		else {
 			switch (fieldType) {
 				case SettingType.Script:
-					if (toolbarItem) {
+					if (toolbarItem && toolbarItem.scriptConfig) {
 						// validate what the selected function for the adapter for this item requires
 						let adapter = this.getAdapterForItemType(toolbarItem.linkAttr.type);
-						let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
-						const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
-						const requiredParams = params?.filter((param) => param.required);
-						requiredParams?.forEach((param, index) => {
-							if (toolbarItem?.scriptConfig) {
-								const value = toolbarItem.scriptConfig[param.parameter];
-								debugLog("checking:", value);
+						if (adapter) {
+							let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
+							const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
+							const requiredParams = params?.filter((param) => param.required);
+							requiredParams?.forEach((param, index) => {
+								const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
 								if (value) {
 									const subfieldValid = this.updateItemComponentStatus(value, param.type, componentEl);
 									status = subfieldValid ? Status.Valid : Status.Invalid;
-									debugLog("- valid?", status);
 								}
-							}
-						});
+							});
+						}
+						else {
+							status = Status.Invalid;
+							statusMessage = "Plugin not installed and enabled.";
+						}
 					}
 					break;
 				default:
@@ -1754,17 +1756,22 @@ export default class ToolbarSettingsModal extends Modal {
 	 * UTILITIES
 	 *************************************************************************/
 
+	/**
+	 * Returns the Adapter for the provided item type, if the plugin is available and the adapter instance exists.
+	 * @param type ItemType to get the Adapter for
+	 * @returns the Adapter or undefined
+	 */
 	getAdapterForItemType(type: ItemType): Adapter | undefined {
 		let adapter: Adapter | undefined;
 		switch (type) {
 			case ItemType.Dataview:
-				adapter = this.plugin.dvAdapter;
+				adapter = this.plugin.hasPlugin[ItemType.Dataview] ? this.plugin.dvAdapter : undefined;
 				break;
 			case ItemType.JsEngine:
-				adapter = this.plugin.jsAdapter;
+				adapter = this.plugin.hasPlugin[ItemType.JsEngine] ? this.plugin.jsAdapter : undefined;
 				break;
 			case ItemType.Templater:
-				adapter = this.plugin.tpAdapter;
+				adapter = this.plugin.hasPlugin[ItemType.Templater] ? this.plugin.tpAdapter : undefined;
 				break;
 		}
 		return adapter;
