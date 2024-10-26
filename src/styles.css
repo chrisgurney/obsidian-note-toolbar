@@ -646,6 +646,10 @@ body {
     border-radius: 8px;
 }
 
+.note-toolbar-setting-item-link-container > .note-toolbar-setting-plugin-error {
+    font-size: var(--font-ui-small);
+}
+
 .note-toolbar-setting-toolbar-list {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
