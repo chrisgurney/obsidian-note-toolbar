@@ -1593,14 +1593,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Creates the adapters if scripting and the plugins are enabled; disables all adapters if the setting is disabled.
+	 * Creates the adapters if scripting, and the plugins, are enabled; otherwise disables all adapters.
 	 */
 	updateAdapters() {
 		if (this.settings.scriptingEnabled) {
 			this.checkPlugins(); // update status of enabled plugins
-			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? new DataviewAdapter(this) : undefined;
-			this.jsAdapter = this.hasPlugin[ItemType.JsEngine] ? new JsEngineAdapter(this) : undefined;
-			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? new TemplaterAdapter(this) : undefined;
+			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? (this.dvAdapter || new DataviewAdapter(this)) : undefined;
+			this.jsAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jsAdapter || new JsEngineAdapter(this)) : undefined;
+			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? (this.tpAdapter || new TemplaterAdapter(this)) : undefined;
 		}
 		else {
 			this.dvAdapter?.disable();
