@@ -160,13 +160,12 @@ function hasVisibleComponents(platform: { allViews?: { components: ComponentType
     return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
 }
 
-    
 /**
  * Imports the given arguments string as if it were JSON, but allows for missing parens and quotes.
  * @param args JSON-formatted string
  * @returns parsed arguments, or null if parsing fails
  */
-function importArgs(args: string): Record<string, any> | null {
+export function importArgs(args: string): Record<string, any> | null {
 	try {
 		// remove spaces between keys and colons
 		args = args.replace(/(\w+)\s*:/g, '"$1":');

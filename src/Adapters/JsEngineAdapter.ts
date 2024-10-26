@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { debugLog, displayScriptError } from "Utils/Utils";
+import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -178,8 +178,4 @@ export default class JsEngineAdapter extends Adapter {
 
     }
 
-}
-
-function importArgs(argsJson: string): any {
-    throw new Error("Function not implemented.");
 }
