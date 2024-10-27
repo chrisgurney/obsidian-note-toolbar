@@ -29,7 +29,7 @@ export default class JsEngineAdapter extends Adapter {
             parameters: [
                 { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to import. Note that this file is only imported once. You may have to restart Obsidian in order to pick up changes.", type: SettingType.File, required: true },
                 { parameter: 'sourceFunction', label: "Function (optional)", description: "If script has functions, function name to execute.", type: SettingType.Text, required: false },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by function in comma-separated 'name: value' format.", type: SettingType.Args, required: false },
+                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by your script function, in comma-separated 'name: value' format.", type: SettingType.Args, required: false },
             ]
         },
     ];
