@@ -206,7 +206,6 @@ export default class DataviewAdapter extends Adapter {
              containerEl.empty();
              let dataviewLocalApi = this.adapterPlugin.localApi(activeFile.path, this.noteToolbar, containerEl);    
              // from dv.view: may directly render, in which case it will likely return undefined or null
-             // TODO: try: args should be provided as a string that's read in as JSON; note other script types need to support this as well
              let result = await Promise.resolve(func(dataviewLocalApi, args));
              if (result && this.noteToolbar) {
                  await this.adapterApi.renderValue(
