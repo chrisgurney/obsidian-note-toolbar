@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, MarkdownView, PaneType, Platform, TFile } from "obsidian";
+import { App, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
 import { ComponentType, ItemType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
@@ -76,6 +76,10 @@ export function displayScriptError(message: string, error?: any, containerEl?: H
 		errorEl.addClass('dataview', 'dataview-error');
 		errorEl.setText(message + '\n' + error);
 	}
+	let errorFr = createFragment();
+	errorFr.append(message);
+	error ? errorFr.append('\n', error) : undefined;
+	new Notice(errorFr, 5000);
 }
 
 /**
