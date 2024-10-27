@@ -4,6 +4,7 @@ import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSetting
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
+import path from "path";
 
 /**
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/Templater.ts
@@ -25,7 +26,7 @@ export default class TemplaterAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: "Template", description: "Template file to create a new file from.", type: SettingType.File, required: true },
-                // TODO: 'outputFile', description: "Enter the name of the file to create from the provided template."
+                { parameter: 'outputFile', label: "(Optional) Output filename", description: "Name of the file (without file extension) and folder(s) to create, from the provided template.", type: SettingType.Text, required: false }
             ]
         },
         {
@@ -71,7 +72,7 @@ export default class TemplaterAdapter extends Adapter {
                 break;
             case 'createFrom':
                 result = config.sourceFile
-                    ? await this.createFrom(config.sourceFile)
+                    ? await this.createFrom(config.sourceFile, config.outputFile)
                     : `Error: A template file is required`;
                 break;
             case 'parseTemplate':
@@ -103,11 +104,17 @@ export default class TemplaterAdapter extends Adapter {
 
         if (this.adapterApi) {
             let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
-            if (templateFile) {
-                await this.adapterApi.append_template_to_active_file(templateFile);
+            try {
+                if (templateFile) {
+                    await this.adapterApi.append_template_to_active_file(templateFile);
+                }
+                else {
+                    throw new Error("File not found: " + filename);
+                }
             }
-            else {
-                displayScriptError("File not found: " + filename);
+            catch (error) {
+                displayScriptError(error);
+                new Notice(error);
             }
         }
 
@@ -117,16 +124,24 @@ export default class TemplaterAdapter extends Adapter {
      * Calls create_new_note_from_template.
      * @param filename 
      */
-    async createFrom(filename: string): Promise<void> {
+    async createFrom(filename: string, outputFile?: string): Promise<void> {
+
+        let outputFolder = outputFile ? path.dirname(outputFile) : '';
+        let outputFilename = outputFile ? path.basename(outputFile) : '';
 
         if (this.adapterApi) {
             let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
-            if (templateFile) {
-                // TODO? future: support for other parms? template: TFile | string, folder?: TFolder | string, filename?: string, open_new_note = true
-                let newFile = await this.adapterApi.create_new_note_from_template(templateFile);
+            try {
+                if (templateFile) {
+                    await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
+                }
+                else {
+                    throw new Error("File not found: " + filename);
+                }
             }
-            else {
-                displayScriptError("File not found: " + filename);
+            catch (error) {
+                displayScriptError(error);
+                new Notice(error);
             }
         }
 

@@ -277,6 +277,7 @@ export interface ScriptConfig {
 	sourceFunction?: string;
 	sourceArgs?: string;
 	outputContainer?: string;
+	outputFile?: string;
 };
 
 /******************************************************************************
