@@ -59,7 +59,7 @@ export default class TemplaterAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
+                displayScriptError(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`);
                 return;
             }
         }
@@ -114,7 +114,6 @@ export default class TemplaterAdapter extends Adapter {
             }
             catch (error) {
                 displayScriptError(error);
-                new Notice(error);
             }
         }
 
@@ -141,7 +140,6 @@ export default class TemplaterAdapter extends Adapter {
             }
             catch (error) {
                 displayScriptError(error);
-                new Notice(error);
             }
         }
 
@@ -155,11 +153,15 @@ export default class TemplaterAdapter extends Adapter {
      */
     async parseTemplate(expression: string): Promise<string> {
 
-        // debugger;
         let result = '';
+
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
-        if (activeFile) {
-            const activeFilePath = activeFile.path;
+        if (!activeFile) {
+            displayScriptError("This expression must be executed from an open note.");
+            return "This expression must be executed from an open note.";
+        }
+
+        try {
             const config = {
                 target_file: activeFile,
                 run_mode: 'DynamicProcessor',
@@ -171,6 +173,10 @@ export default class TemplaterAdapter extends Adapter {
                 debugLog("parseTemplate() result:", result);
             }
         }
+        catch (error) {
+            displayScriptError(error);
+        }
+
         return result;
 
     }
@@ -187,21 +193,35 @@ export default class TemplaterAdapter extends Adapter {
     async parseTemplateFile(filename: string): Promise<string> {
 
         let result = '';
+
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+        if (!activeFile) {
+            displayScriptError("This function must be executed from an open note.");
+            return "This function must be executed from an open note.";
+        }
+
         let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
-        if (activeFile) {
-            const activeFilePath = activeFile.path;
-            const config = { 
-                template_file: templateFile,
-                target_file: activeFile,
-                run_mode: 'DynamicProcessor',
-                active_file: activeFile
-            };
-            if (this.adapterApi) {
-                result = await this.adapterApi.read_and_parse_template(config);
-                debugLog("parseTemplateFile() result:", result);
+        try {
+            if (templateFile) {
+                const config = { 
+                    template_file: templateFile,
+                    target_file: activeFile,
+                    run_mode: 'DynamicProcessor',
+                    active_file: activeFile
+                };
+                if (this.adapterApi) {
+                    result = await this.adapterApi.read_and_parse_template(config);
+                    debugLog("parseTemplateFile() result:", result);
+                }    
+            }
+            else {
+                throw new Error("File not found: " + filename);
             }
         }
+        catch (error) {
+            displayScriptError(`Failed to execute script: ${filename}`, error);
+        }
+
         return result;
 
     }

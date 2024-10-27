@@ -46,7 +46,7 @@ export default class JsEngineAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                new Notice(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`, 5000);
+                displayScriptError(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`);
                 return;
             }
         }
