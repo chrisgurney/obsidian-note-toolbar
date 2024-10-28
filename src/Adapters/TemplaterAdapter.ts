@@ -4,7 +4,6 @@ import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSetting
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import path from "path";
 
 /**
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/Templater.ts
@@ -125,8 +124,9 @@ export default class TemplaterAdapter extends Adapter {
      */
     async createFrom(filename: string, outputFile?: string): Promise<void> {
 
-        let outputFolder = outputFile ? path.dirname(outputFile) : '';
-        let outputFilename = outputFile ? path.basename(outputFile) : '';
+        const { parsedFolder, parsedFilename } = this.parseOutputFile(outputFile);
+        let outputFolder = outputFile ? parsedFolder : '';
+        let outputFilename = outputFile ? parsedFilename : '';
 
         if (this.adapterApi) {
             let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
@@ -143,6 +143,15 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
 
+    }
+
+    parseOutputFile(outputFile?: string): { parsedFolder: string; parsedFilename: string } {
+        if (!outputFile) return { parsedFolder: '', parsedFilename: '' };
+        const normalizedPath = outputFile.replace(/\\/g, '/'); // normalize Windows paths
+        const lastSlashIndex = normalizedPath.lastIndexOf('/');
+        const folder = normalizedPath.slice(0, lastSlashIndex + 1);
+        const filename = normalizedPath.slice(lastSlashIndex + 1);
+        return { parsedFolder: folder, parsedFilename: filename };
     }
 
     /**
