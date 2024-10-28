@@ -177,9 +177,8 @@ export default class TemplaterAdapter extends Adapter {
                 active_file: activeFile
             };
             if (this.adapterApi) {
-                // result = await this.templater.read_and_parse_template(config);
                 result = await this.adapterApi.parse_template(config, expression);
-                debugLog("parseTemplate() result:", result);
+                result = (result === 'undefined') ? '' : result;
             }
         }
         catch (error) {
