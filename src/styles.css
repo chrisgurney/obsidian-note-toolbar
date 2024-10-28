@@ -1220,7 +1220,6 @@ input[type="text"].note-toolbar-setting-error {
 .note-toolbar-setting-field-error {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
-    padding-top: var(--size-4-1);
     line-height: var(--line-height-tight);
     display: block;
     text-align: start;
