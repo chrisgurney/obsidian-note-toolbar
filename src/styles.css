@@ -1606,9 +1606,14 @@ input[type="text"].note-toolbar-setting-error {
 }
 
 .note-toolbar-setting-whatsnew-content {
+    margin-bottom: 2rem;
     user-select: text;
     code {
         font-size: calc(var(--font-ui-small) + 1px);
+    }
+    hr {
+        border-top: 1px solid;
+        border-color: var(--hr-color);
     }
     img {
         border: 1px solid var(--background-modifier-border);
