@@ -290,20 +290,20 @@ export function removeComponentVisibility(platform: { allViews?: { components: C
 
 /**
  * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
- * @param app App
+ * @param plugin NoteToolbarPlugin
  * @param s String to replace the variables in.
  * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
  * @param encode True if we should encode the variables (recommended if part of external URL).
  * @returns String with the variables replaced.
  */
-export function replaceVars(app: App, s: string, file: TFile | null, encode: boolean): string {
+export function replaceVars(plugin: NoteToolbarPlugin, s: string, file: TFile | null, encode: boolean): string {
 
 	let noteTitle = file?.basename;
 	if (noteTitle != null) {
 		s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
 	}
 	// have to get this at run/click-time, as file or metadata may not have changed
-	let frontmatter = file ? app.metadataCache.getFileCache(file)?.frontmatter : undefined;
+	let frontmatter = file ? plugin.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
 	// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
 	s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
 		const key = p1.trim();

@@ -65,9 +65,9 @@ function exportToCalloutList(
         let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = options.replaceVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
-        let itemLink = options.replaceVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
-        let itemTooltip = options.replaceVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
+        let itemText = options.replaceVars ? replaceVars(plugin, item.label, activeFile, false) : item.label;
+        let itemLink = options.replaceVars ? replaceVars(plugin, item.link, activeFile, false) : item.link;
+        let itemTooltip = options.replaceVars ? replaceVars(plugin, item.tooltip, activeFile, false) : item.tooltip;
 
         itemText = escapeTextForCallout(itemText);
         itemLink = escapeLinkForCallout(itemLink);
@@ -87,7 +87,7 @@ function exportToCalloutList(
                 break;
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
-                let resolvedItemLink = replaceVars(plugin.app, itemLink, activeFile, false);
+                let resolvedItemLink = replaceVars(plugin, itemLink, activeFile, false);
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
                     itemsExport += options.useDataEls

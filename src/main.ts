@@ -635,8 +635,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
 				let title = toolbarItem.label ? 
-					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, file, false) : toolbarItem.label) : 
-					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, file, false) : toolbarItem.tooltip);
+					(hasVars(toolbarItem.label) ? replaceVars(this, toolbarItem.label, file, false) : toolbarItem.label) : 
+					(hasVars(toolbarItem.tooltip) ? replaceVars(this, toolbarItem.tooltip, file, false) : toolbarItem.tooltip);
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -664,7 +664,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					default:
 						// don't show the item if the link has variables and resolves to nothing
-						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, file, false) === "") {
+						if (hasVars(toolbarItem.link) && replaceVars(this, toolbarItem.link, file, false) === "") {
 							break;
 						}
 						menu.addItem((item: MenuItem) => {
@@ -793,7 +793,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 				// if link resolves to nothing, there's no need to display the item
 				if (hasVars(itemSetting.link)) {
-					if (replaceVars(this.app, itemSetting.link, activeFile, false) === "") {
+					if (replaceVars(this, itemSetting.link, activeFile, false) === "") {
 						itemEl.addClass('hide'); // hide the containing li element
 						return;
 					}
@@ -804,11 +804,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 				// update tooltip + label
 				if (hasVars(itemSetting.tooltip)) {
-					let newTooltip = replaceVars(this.app, itemSetting.tooltip, activeFile, false);
+					let newTooltip = replaceVars(this, itemSetting.tooltip, activeFile, false);
 					setTooltip(itemSpanEl, newTooltip, { placement: "top" });
 				}
 				if (hasVars(itemSetting.label)) {
-					let newLabel = replaceVars(this.app, itemSetting.label, activeFile, false);
+					let newLabel = replaceVars(this, itemSetting.label, activeFile, false);
 					let itemElLabel = itemEl.querySelector('.cg-note-toolbar-item-label');
 					if (newLabel) {
 						itemElLabel?.removeClass('hide');
@@ -968,7 +968,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (hasVars) {
 			// TODO: expand to also replace vars in labels + tooltips
-			linkHref = replaceVars(this.app, linkHref, activeFile, false);
+			linkHref = replaceVars(this, linkHref, activeFile, false);
 			debugLog('- uri vars replaced: ', linkHref);
 		}
 

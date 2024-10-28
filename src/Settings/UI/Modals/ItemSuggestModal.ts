@@ -89,8 +89,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     // ...and is visible on this platform
                     if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                         // ...and does not have a var link and label/tooltip that resolves to nothing
-                        if (!(hasVars(item.link) && replaceVars(this.app, item.link, this.activeFile, false) === "") &&
-                            !(hasVars(itemName) && replaceVars(this.app, itemName, this.activeFile, false) === "")) {
+                        if (!(hasVars(item.link) && replaceVars(this.plugin, item.link, this.activeFile, false) === "") &&
+                            !(hasVars(itemName) && replaceVars(this.plugin, itemName, this.activeFile, false) === "")) {
                             itemSuggestions.push(item);
                         }
                     }
@@ -188,7 +188,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
         let itemMeta = itemNameEl.createSpan();
         // replace variables in labels (or tooltip, if no label set)
-        let title = hasVars(itemName) ? replaceVars(this.app, itemName, this.activeFile, false) : itemName;
+        let title = hasVars(itemName) ? replaceVars(this.plugin, itemName, this.activeFile, false) : itemName;
 
         itemMeta.addClass("note-toolbar-item-suggester-type");
         switch (item.linkAttr.type) {
