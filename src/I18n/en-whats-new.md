@@ -1,80 +1,36 @@
-# What's new in Note Toolbar v1.14
+What's new in Note Toolbar v1.15?
 
-## Share toolbars
+## Scripting!
 
-Share toolbars with a link that you can send to other users.
+Note Toolbar can now execute Dataview, JavaScript (via [JS Engine ↗](https://obsidian.md/plugins?id=js-engine)), and Templater queries, expressions, and scripts from Note Toolbar buttons!
 
-- Right-click on a toolbar in a note to see the _Share..._ option, or use the new "More" (...) menu for toolbars in Settings.
-- When the recipient clicks on the link, they will be prompted for confirmation and see a preview of the toolbar.
-
-→ Learn more about [how sharing works](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars).
-
-<a href="https://github.com/user-attachments/assets/a1d59acb-729c-4017-83d9-99985a920cf9">
-  <img src="https://github.com/user-attachments/assets/a1d59acb-729c-4017-83d9-99985a920cf9" width="700"/>
+<a href="https://github.com/user-attachments/assets/56225123-145d-4500-aaf1-7b438d299a52">
+  <img src="https://github.com/user-attachments/assets/56225123-145d-4500-aaf1-7b438d299a52" width="700"/>
 </a>
 
-## Import toolbars and items from Note Toolbar Callouts
+### Read the documentation
 
-Create toolbars from [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) in one of two ways:
+- [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts)
+- [Example scripts](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
 
-1. import a callout into a new, or existing toolbar in Settings; or
-2. select some Note Toolbar Callout markdown in a note, then right-click and _Create Note Toolbar from callout_.
+### What's _not_ supported
 
-<a href="https://github.com/user-attachments/assets/0b82104e-f5f4-40f9-9880-3e9425c5f908">
-  <img src="https://github.com/user-attachments/assets/0b82104e-f5f4-40f9-9880-3e9425c5f908" width="700"/>
-</a>
+- Ability to share, copy as callout, or import callouts with script items.
+- Ability to execute script items from callouts.
 
-→ Learn more about [importing toolbars and items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars-from-callouts).
+## I really could use feedback on:
 
-## Copy toolbars as callouts
+I would really appreciate your questions or feedback in the [discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/171), or in the [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
 
-Right-click on a toolbar to copy it as a Note Toolbar Callout, to your clipboard.
+1. Do your existing scripts work as expected? (If not, what changes did you have to make?)
+2. Does configuration make sense? (Should I add or change anything?)
+3. Try out the Note Toolbar Script components for output, and let me know what you think.
+4. Does the documentation and help text make sense? (Should I add or change anything?)
 
-<a href="https://github.com/user-attachments/assets/f69ad45f-2b52-4c0d-a332-92c68e736c5d">
-  <img src="https://github.com/user-attachments/assets/f69ad45f-2b52-4c0d-a332-92c68e736c5d" width="700"/>
-</a>
-
-→ Learn more about [copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars), including what's supported and what's not.
-
-## Commands to make building callouts easier
-
-`Note Toolbar: Copy URI for command`
-
-Lets you select a command and then copies its URI to the clipboard. Example output:
-
-```markdown
-obsidian://note-toolbar?command=workspace:toggle-pin
-```
-
-`Note Toolbar: Copy callout item for command`
-
-Lets you select a command, and then copies a Note Toolbar Callout line to the clipboard. Example output:
-
-```markdown
-[]()<data data-ntb-command="workspace:toggle-pin"/> <!-- Toggle pin -->
-```
-
-...then all you need to do is choose what the item should look like in the link's text (`[]`).
-
-## Updated toolbar examples
-
-Check out the [expanded Examples page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples) with numerous use cases and now easier-to-add toolbars. [Share your own examples!](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell).
-
-## Other improvements
-
-- In Settings, in the toolbar list, look for a new "More" (...) menu (where "Duplicate" used to be) containing _Duplicate_, _Share_, _Copy as callout_, and _Delete_ options.
-- Most plugin startup tasks are now done after the layout's ready, and after initial toolbar rendering, which may help with startup performance. `#ObsidianOctober`
-- An error message is now shown if a [Note Toolbar URI](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) contains invalid parameters.
-- Quick Toolbars: Items are kept in order they're displayed in the toolbar, when browsing by toolbar. _Thanks to @Glint-Eye for the suggestion._
-- Updated the _Help_ window with a link to a bug report Google form, removing the pre-requisite for a GitHub account.
-- Updated the _What's New_ window with a permanent link to the Roadmap, at the bottom.
-
-## Fixes
-
-- Duplicated toolbar items without changes now update the settings UI, save the change, and re-render the toolbar.
-- Toolbar icons/text weren't being vertically centered by a few pixels, due to a line-height being added.
+_Thanks for trying this out!_
 
 ## And in case you missed it...
 
+- [v1.14 release](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.14.0): Share toolbars, and import/export as callouts
 - [v1.13 release](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.13): _What's New_ + _Help_ windows, and access to toolbars for linked notes from the file menu.
 - [v1.12 release](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.12.1): Translations, and Quick Tools (fast access to all of your tools).
