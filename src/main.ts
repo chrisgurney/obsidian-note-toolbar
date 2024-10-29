@@ -1593,12 +1593,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	hasVars(s: string): boolean {
 		let hasVars = /{{.*?}}/g.test(s);
 
-		// if (!hasVars) {
-		// 	if (plugin.hasPlugin[ItemType.Dataview]) {
-		// 	}
-		// }
-		// const prefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix');
-		// 	if (prefix && s.trim().startsWith(prefix))
+		if (!hasVars && this.hasPlugin[ItemType.Dataview]) {
+			const prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+			hasVars = !!prefix && s.trim().startsWith(prefix);
+			// TODO? can we also support $= JS inline queries? inlineJsQueryPrefix
+		}
 
 		return hasVars;
 	}
@@ -1635,7 +1634,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		});
 
 		if (this.hasPlugin[ItemType.Dataview]) {
-			// TODO? can we also support $= JS inline queries?
+			// TODO? can we also support $= JS inline queries? inlineJsQueryPrefix
 			const prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			if (prefix && s.trim().startsWith(prefix)) {
 				const regex = new RegExp(`^${prefix}`);
