@@ -13,7 +13,7 @@ Note Toolbar can now execute Dataview, JavaScript (via [JS Engine ↗](https://o
 If these plugins are installed and enabled you can:
 
 - Dataview: Run queries, evaluate expressions, and execute scripts (like with `dv.view`).
-- JS Engine: Execute scripts.
+- JS Engine: Execute JavaScript.
 - Templater: Insert templates, and create new notes from templates.
 
 If these generate output, they're output to the cursor position, or to a `note-toolbar-output` callout that you provide an ID for. 
