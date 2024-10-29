@@ -30,18 +30,18 @@ export default class TemplaterAdapter extends Adapter {
         },
         {
             function: this.parseTemplate,
-            label: "Evaluate Templater expression",
+            label: "Execute Templater command",
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Templater expression", description: "Templater expression to evaluate.", type: SettingType.Text, required: true },
+                { parameter: 'expression', label: "Templater command", description: "Templater command to execute.", type: SettingType.Text, required: true },
             ]
         },
         {
             function: this.parseTemplateFile,
-            label: "Evaluate Templater file",
+            label: "Execute Templater file",
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template file", description: "Evaluates the contents of the file and returns.", type: SettingType.File, required: true },
+                { parameter: 'sourceFile', label: "Template file", description: "Executes the contents of the file and returns.", type: SettingType.File, required: true },
             ]
         },        
     ];
