@@ -1095,7 +1095,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						await this.app.commands.executeCommandById(commandId);
 					} 
 					catch (error) {
-						debugLog(error);
+						new Notice(error);
 					}
 					break;
 			}
