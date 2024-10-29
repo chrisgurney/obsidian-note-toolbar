@@ -145,23 +145,6 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
 }
 
 /**
- * Check if a string has vars, defined as {{variablename}}
- * @param s The string to check.
- */
-export function hasVars(s: string): boolean {
-	let hasVars = /{{.*?}}/g.test(s);
-
-	// if (!hasVars) {
-	// 	if (plugin.hasPlugin[ItemType.Dataview]) {
-	// 	}
-	// }
-	// const prefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix');
-	// 	if (prefix && s.trim().startsWith(prefix))
-
-	return hasVars;
-}
-
-/**
  * Local function to check if given visibility has any components or not, for use in determining whether or not 
  * we should show it on a given platform.
  * @param platform platform visibility to check
@@ -296,53 +279,6 @@ export function removeComponentVisibility(platform: { allViews?: { components: C
 }
 
 /**
- * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
- * @param plugin NoteToolbarPlugin
- * @param s String to replace the variables in.
- * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
- * @param encode True if we should encode the variables (recommended if part of external URL).
- * @returns String with the variables replaced.
- */
-export async function replaceVars(plugin: NoteToolbarPlugin, s: string, file: TFile | null, encode: boolean): Promise<string> {
-
-	let noteTitle = file?.basename;
-	if (noteTitle != null) {
-		s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
-	}
-	// have to get this at run/click-time, as file or metadata may not have changed
-	let frontmatter = file ? plugin.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
-	// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-	s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
-		const key = p1.trim();
-		if (frontmatter && frontmatter[key] !== undefined) {
-			// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
-			const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
-			// handle the case where the prop might be a list
-			let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-			// FIXME: does not work with number properties
-			return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
-		}
-		else {
-			return '';
-		}
-	});
-
-	if (plugin.hasPlugin[ItemType.Dataview]) {
-		// TODO? can we also support $= JS inline queries?
-		const prefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix');
-		if (prefix && s.trim().startsWith(prefix)) {
-			const regex = new RegExp(`^${prefix}`);
-			s = s.replace(regex, ''); // strip prefix before evaluation
-			let result = await plugin.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
-			s = result ? result : '';
-		}
-	}
-
-	return s;
-
-}
-
-/**
  * Returns a list of plugin IDs for any commands not recognized in the given toolbar.
  * @param toolbar ToolbarSettings to check for command usage
  * @returns an array of plugin IDs that are invalid, or an empty array otherwise
@@ -364,15 +300,4 @@ export function toolbarHasMenu(toolbar: ToolbarSettings): boolean {
 	return toolbar.items.some(item => 
 		(item.linkAttr.type === ItemType.Menu) && (item.link)
 	);
-}
-
-/**
- * Checks if the given toolbar uses variables at all.
- * @param toolbar ToolbarSettings to check for variable usage
- * @returns true if variables are used in the toolbar; false otherwise
- */
-export function toolbarHasVars(toolbar: ToolbarSettings): boolean {
-    return toolbar.items.some(item =>
-        hasVars([item.label, item.tooltip, item.link].join(' '))
-    );
 }

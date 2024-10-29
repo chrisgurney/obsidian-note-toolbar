@@ -1587,18 +1587,19 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Check if a string has vars, defined as {{variablename}}
+	 * Check if a string has vars {{ }} or expressions (Dataview or Templater)
 	 * @param s The string to check.
 	 */
 	hasVars(s: string): boolean {
 		let hasVars = /{{.*?}}/g.test(s);
-
 		if (!hasVars && this.hasPlugin[ItemType.Dataview]) {
 			const prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			hasVars = !!prefix && s.trim().startsWith(prefix);
 			// TODO? can we also support $= JS inline queries? inlineJsQueryPrefix
 		}
-
+		if (!hasVars && this.hasPlugin[ItemType.Templater]) {
+			hasVars = s.trim().startsWith('<%');
+		}
 		return hasVars;
 	}
 
@@ -1640,6 +1641,16 @@ export default class NoteToolbarPlugin extends Plugin {
 				const regex = new RegExp(`^${prefix}`);
 				s = s.replace(regex, ''); // strip prefix before evaluation
 				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
+				s = result ? result : '';
+			}
+		}
+
+		if (this.hasPlugin[ItemType.Templater]) {
+			if (s.trim().startsWith('<%')) {
+				s = s.trim();
+				if (!s.startsWith('<%')) s = '<%' + s;
+				if (!s.endsWith('%>')) s += '%>';
+				let result = await this.tpAdapter?.use({ pluginFunction: 'parseTemplate', expression: s });
 				s = result ? result : '';
 			}
 		}
