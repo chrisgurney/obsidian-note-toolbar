@@ -170,6 +170,11 @@ export default class TemplaterAdapter extends Adapter {
             return "This expression must be executed from an open note.";
         }
 
+        // make sure the opening and closing tags are present, in case they're omitted
+        expression = expression.trim();
+        if (!expression.startsWith('<%')) expression = '<%' + expression;
+        if (!expression.endsWith('%>')) expression += '%>';
+
         try {
             const config = {
                 target_file: activeFile,
