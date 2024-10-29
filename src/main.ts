@@ -1038,7 +1038,13 @@ export default class NoteToolbarPlugin extends Plugin {
 				new Notice(t('notice.error-command-not-found', { command: commandId }));
 				return;
 			}
-			await this.app.commands.executeCommandById(commandId);
+			try {
+				await this.app.commands.executeCommandById(commandId);
+			} 
+			catch (error) {
+				console.error(error);
+				new Notice(error);
+			}
 		}
 	}
 
@@ -1096,6 +1102,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						await this.app.commands.executeCommandById(commandId);
 					} 
 					catch (error) {
+						console.error(error);
 						new Notice(error);
 					}
 					break;
