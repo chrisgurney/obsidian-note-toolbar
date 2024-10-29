@@ -2005,6 +2005,9 @@ export default class ToolbarSettingsModal extends Modal {
 				itemPreviewContent.addClass('note-toolbar-setting-item-preview-label');
 				if (toolbarItem.label) {
 					itemPreviewContent.setText(toolbarItem.label);
+					if (this.plugin.hasVars(toolbarItem.label)) {
+						itemPreviewContent.addClass('note-toolbar-setting-item-preview-code');
+					}
 				}
 				else if (toolbarItem.tooltip) {
 					itemPreviewContent.setText(toolbarItem.tooltip);

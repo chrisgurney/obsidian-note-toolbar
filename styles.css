@@ -1533,6 +1533,11 @@ body {
     }
 }
 
+.note-toolbar-setting-item-preview-code {
+    font-family: var(--font-monospace);
+    font-size: var(--font-ui-small);
+}
+
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
