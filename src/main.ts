@@ -963,6 +963,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
+		const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
 
 		if (this.hasVars(linkHref)) {
 			// TODO: expand to also replace vars in labels + tooltips
@@ -972,12 +973,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				if (file && (file !== activeFile)) {
-					this.handleLinkCommandInSidebar(file, commandId);
-				}
-				else {
-					this.handleLinkCommand(commandId);
-				}
+				(file && (file !== activeFile)) ? this.handleLinkInSidebar(toolbarItem, file) : this.handleLinkCommand(commandId);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -1075,34 +1071,40 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Opens the provided file in a sidebar and executes the given command.
+	 * Opens the provided file in a sidebar and executes handles the item.
+	 * Supports Commands.
+	 * @param toolbarItem ToolbarItemSettings to handle 
 	 * @param file TFile to open in a sidebar
-	 * @param commandId command to execute on the given file 
 	 * @link https://github.com/platers/obsidian-linter/blob/cc23589d778fb56b95fe53b499e9f35683a2b129/src/main.ts#L699
 	 */
-	private async handleLinkCommandInSidebar(file: TFile, commandId: string | null) {
-		// debugLog('handleLinkCommandInSidebar()', file, commandId);
-		if (commandId) {
-			if (!(commandId in this.app.commands.commands)) {
-				new Notice(t('notice.error-command-not-found', { command: commandId }));
-				return;
+	private async handleLinkInSidebar(toolbarItem: ToolbarItemSettings | undefined, file: TFile) {
+
+		const sidebarTab = this.app.workspace.getRightLeaf(false);
+		const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const activeEditor = activeLeaf ? activeLeaf.editor : null;
+		if (sidebarTab) {
+			await sidebarTab.openFile(file);
+			switch (toolbarItem?.linkAttr.type) {
+				case ItemType.Command:
+					const commandId = toolbarItem?.linkAttr.commandId;
+					if (!(commandId in this.app.commands.commands)) {
+						new Notice(t('notice.error-command-not-found', { command: commandId }));
+						return;
+					}
+					try {
+						await this.app.commands.executeCommandById(commandId);
+					} 
+					catch (error) {
+						debugLog(error);
+					}
+					break;
 			}
-			const sidebarTab = this.app.workspace.getRightLeaf(false);
-			const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-			const activeEditor = activeLeaf ? activeLeaf.editor : null;
-			if (sidebarTab) {
-				await sidebarTab.openFile(file);
-				try {
-					await this.app.commands.executeCommandById(commandId);
-				} catch (error) {
-					debugLog(error);
-				}
-				sidebarTab.detach();
-				if (activeEditor) {
-					activeEditor.focus();
-				}
+			sidebarTab.detach();
+			if (activeEditor) {
+				activeEditor.focus();
 			}
 		}
+
 	}
 
 	/**
