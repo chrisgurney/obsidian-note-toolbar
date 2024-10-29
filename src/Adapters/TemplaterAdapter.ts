@@ -138,6 +138,7 @@ export default class TemplaterAdapter extends Adapter {
             try {
                 if (templateFile) {
                     await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
+                    await this.noteToolbar?.app.commands.executeCommandById('file-explorer:reveal-active-file');
                 }
                 else {
                     throw new Error("File not found: " + filename);
