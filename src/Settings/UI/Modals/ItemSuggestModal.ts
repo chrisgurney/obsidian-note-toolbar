@@ -62,7 +62,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param inputStr string to search
      * @returns array of ToolbarItemSettings
      */
-    getSuggestions(inputStr: string): ToolbarItemSettings[] {
+    async getSuggestions(inputStr: string): Promise<ToolbarItemSettings[]> {
 
         let pluginToolbars = [];
         if (this.toolbarId) {
@@ -78,8 +78,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         // get list of items
-        pluginToolbars.forEach((toolbar: ToolbarSettings) => {
-            toolbar.items.forEach((item: ToolbarItemSettings) => {
+        for (const toolbar of pluginToolbars) {
+            for (const item of toolbar.items) {
                 let itemName = item.label || item.tooltip;
                 if (!itemName) itemName = item.icon ? item.link : '';
                 let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
@@ -89,14 +89,14 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     // ...and is visible on this platform
                     if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                         // ...and does not have a var link and label/tooltip that resolves to nothing
-                        if (!(hasVars(item.link) && replaceVars(this.plugin, item.link, this.activeFile, false) === "") &&
-                            !(hasVars(itemName) && replaceVars(this.plugin, itemName, this.activeFile, false) === "")) {
+                        if (!(hasVars(item.link) && await replaceVars(this.plugin, item.link, this.activeFile, false) === "") &&
+                            !(hasVars(itemName) && await replaceVars(this.plugin, itemName, this.activeFile, false) === "")) {
                             itemSuggestions.push(item);
                         }
                     }
                 }
-            });
-        });
+            }
+        }
 
         let sortedItemSuggestions: ToolbarItemSettings[] = [];
 
@@ -159,6 +159,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
+        if (!item) { return }
         el.addClass("note-toolbar-item-suggestion");
         el.setAttribute('id', item.uuid);
         if (item.icon) {
@@ -187,8 +188,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let itemLabel = itemNameEl.createSpan();
 
         let itemMeta = itemNameEl.createSpan();
+        let title = itemName;
         // replace variables in labels (or tooltip, if no label set)
-        let title = hasVars(itemName) ? replaceVars(this.plugin, itemName, this.activeFile, false) : itemName;
+        replaceVars(this.plugin, itemName, this.activeFile, false).then((resolvedName) => {
+            itemLabel.setText(resolvedName);
+        });
 
         itemMeta.addClass("note-toolbar-item-suggester-type");
         switch (item.linkAttr.type) {
@@ -214,8 +218,6 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 break;
         }
         
-        itemLabel.setText(title);
-
         const inputStrLower = this.inputEl.value.toLowerCase();
         // if what's shown doesn't already contain the searched string, show it below
         if (!title.toLowerCase().includes(inputStrLower)) {

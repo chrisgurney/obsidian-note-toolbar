@@ -149,7 +149,6 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
  * @param s The string to check.
  */
 export function hasVars(s: string): boolean {
-	// TODO: check for vars in item labels & tooltips as well
 	const urlVariableRegex = /{{.*?}}/g;
 	return urlVariableRegex.test(s);
 }
@@ -296,7 +295,7 @@ export function removeComponentVisibility(platform: { allViews?: { components: C
  * @param encode True if we should encode the variables (recommended if part of external URL).
  * @returns String with the variables replaced.
  */
-export function replaceVars(plugin: NoteToolbarPlugin, s: string, file: TFile | null, encode: boolean): string {
+export async function replaceVars(plugin: NoteToolbarPlugin, s: string, file: TFile | null, encode: boolean): Promise<string> {
 
 	let noteTitle = file?.basename;
 	if (noteTitle != null) {

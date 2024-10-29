@@ -29,7 +29,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     // get the active file to provide context, and to replace vars if requested
     let activeFile = plugin.app.workspace.getActiveFile();
 
-    calloutExport += exportToCalloutList(plugin, toolbar, activeFile, options) + '\n';
+    calloutExport += await exportToCalloutList(plugin, toolbar, activeFile, options) + '\n';
 
     return calloutExport;
 
@@ -44,13 +44,13 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
  * @param recursions tracks how deep we are to stop recursion
  * @returns Note Toolbar Callout items as a bulleted list string
  */
-function exportToCalloutList(
+async function exportToCalloutList(
     plugin: NoteToolbarPlugin,
     toolbar: ToolbarSettings,
     activeFile: TFile | null,
     options: ExportSettings,
     recursions: number = 0
-): string {
+): Promise<string> {
 
     if (recursions >= 2) {
         return ''; // stop recursion
@@ -59,15 +59,15 @@ function exportToCalloutList(
     let itemsExport = '';
 
     const BULLET = '\n> -';
-    toolbar.items.forEach((item, index) => {
+    for (const [index, item] of toolbar.items.entries()) {
 
         // if Iconize is enabled, add icons; otherwise don't output
         let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = options.replaceVars ? replaceVars(plugin, item.label, activeFile, false) : item.label;
-        let itemLink = options.replaceVars ? replaceVars(plugin, item.link, activeFile, false) : item.link;
-        let itemTooltip = options.replaceVars ? replaceVars(plugin, item.tooltip, activeFile, false) : item.tooltip;
+        let itemText = options.replaceVars ? await replaceVars(plugin, item.label, activeFile, false) : item.label;
+        let itemLink = options.replaceVars ? await replaceVars(plugin, item.link, activeFile, false) : item.link;
+        let itemTooltip = options.replaceVars ? await replaceVars(plugin, item.tooltip, activeFile, false) : item.tooltip;
 
         itemText = escapeTextForCallout(itemText);
         itemLink = escapeLinkForCallout(itemLink);
@@ -87,7 +87,10 @@ function exportToCalloutList(
                 break;
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
-                let resolvedItemLink = replaceVars(plugin, itemLink, activeFile, false);
+                let resolvedItemLink = itemLink;
+                replaceVars(plugin, itemLink, activeFile, false).then((resolvedLink) => {
+                    resolvedItemLink = resolvedLink;
+                });
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
                     itemsExport += options.useDataEls
@@ -100,7 +103,7 @@ function exportToCalloutList(
                 break;
             case ItemType.Group:
                 let groupToolbar = plugin.settingsManager.getToolbar(item.link);
-                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, options, recursions + 1) : '';
+                itemsExport += groupToolbar ? await exportToCalloutList(plugin, groupToolbar, activeFile, options, recursions + 1) : '';
                 // TODO: skipped/ignored message if toolbar not found
                 break;
             case ItemType.Menu:
@@ -124,7 +127,7 @@ function exportToCalloutList(
 
         itemsExport += (itemTooltip && (itemText !== itemTooltip)) ? ` <!-- ${itemTooltip} -->` : '';
 
-    });
+    }
 
     return itemsExport;
 
