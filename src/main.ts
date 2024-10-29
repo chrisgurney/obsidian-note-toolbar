@@ -946,7 +946,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file optional TFile if handling links outside of the active file
 	 */
 	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile) {
-		await this.handleLink(item.uuid, item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event, file);
+		await this.handleLink(item.uuid, item.link, item.linkAttr.type, item.linkAttr.commandId, event, file);
 	}
 
 	/**
@@ -954,19 +954,18 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param uuid ID of the item
 	 * @param linkHref what the link is for
 	 * @param type: ItemType
-	 * @param hasVars: boolean
 	 * @param commandId: string or null
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleLink(uuid: string, linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+	async handleLink(uuid: string, linkHref: string, type: ItemType, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
 
 		// debugLog("handleLink", uuid, linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
 
-		if (hasVars) {
+		if (hasVars(linkHref)) {
 			// TODO: expand to also replace vars in labels + tooltips
 			linkHref = replaceVars(this, linkHref, activeFile, false);
 			debugLog('- uri vars replaced: ', linkHref);
@@ -1315,7 +1314,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					await this.removeFocusStyle();
 				}
 
-				await this.handleLink(itemUuid, linkHref, linkType, linkHasVars, linkCommandId, event);
+				await this.handleLink(itemUuid, linkHref, linkType, linkCommandId, event);
 	
 			}
 

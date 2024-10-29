@@ -896,7 +896,6 @@ export default class ToolbarSettingsModal extends Modal {
 								let isValid = this.updateItemComponentStatus(commandId, SettingType.Command, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? command : '';
 								toolbarItem.linkAttr.commandId = isValid ? commandId : '';
-								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
@@ -986,7 +985,6 @@ export default class ToolbarSettingsModal extends Modal {
 								let isValid = this.updateItemComponentStatus(value, SettingType.File, cb.inputEl.parentElement);
 								toolbarItem.link = isValid ? normalizePath(value) : '';
 								toolbarItem.linkAttr.commandId = '';
-								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
@@ -1006,7 +1004,6 @@ export default class ToolbarSettingsModal extends Modal {
 								let groupToolbar = isValid ? this.plugin.settingsManager.getToolbarByName(name) : undefined;
 								toolbarItem.link = groupToolbar ? groupToolbar.uuid : '';
 								toolbarItem.linkAttr.commandId = '';
-								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
@@ -1034,7 +1031,6 @@ export default class ToolbarSettingsModal extends Modal {
 								let menuToolbar = this.plugin.settingsManager.getToolbarByName(name);
 								toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
 								toolbarItem.linkAttr.commandId = '';
-								toolbarItem.linkAttr.hasVars = false; // TODO: check for vars in labels & tooltips
 								toolbarItem.linkAttr.type = type;
 								await this.plugin.settingsManager.save();
 								this.renderPreview(toolbarItem);
@@ -1059,7 +1055,6 @@ export default class ToolbarSettingsModal extends Modal {
 									this.updateItemComponentStatus(value, SettingType.Text, cb.inputEl.parentElement);
 									toolbarItem.link = value;
 									toolbarItem.linkAttr.commandId = '';
-									toolbarItem.linkAttr.hasVars = hasVars(value);
 									toolbarItem.linkAttr.type = type;
 									this.toolbar.updated = new Date().toISOString();
 									await this.plugin.settingsManager.save();
