@@ -3,7 +3,7 @@ import { ButtonComponent, Modal, Setting } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import { importFromCallout } from "Utils/ImportExport";
-import { toolbarHasVars, toolbarInvalidCommands } from "Utils/Utils";
+import { toolbarInvalidCommands } from "Utils/Utils";
 
 export async function confirmImportWithModal(plugin: NoteToolbarPlugin, callout: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -55,7 +55,7 @@ export class ImportConfirmModal extends Modal {
             //
 
             let importInvalidCommands = toolbarInvalidCommands(this.plugin, toolbar);
-            let importHasVars = toolbarHasVars(toolbar);
+            let importHasVars = this.plugin.toolbarHasVars(toolbar);
 
             if (importInvalidCommands.length > 0 || importHasVars) {
 

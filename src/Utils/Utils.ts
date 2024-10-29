@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { App, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
-import { ComponentType, ItemType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { ComponentType, ItemType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -149,8 +149,16 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
  * @param s The string to check.
  */
 export function hasVars(s: string): boolean {
-	const urlVariableRegex = /{{.*?}}/g;
-	return urlVariableRegex.test(s);
+	let hasVars = /{{.*?}}/g.test(s);
+
+	// if (!hasVars) {
+	// 	if (plugin.hasPlugin[ItemType.Dataview]) {
+	// 	}
+	// }
+	// const prefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix');
+	// 	if (prefix && s.trim().startsWith(prefix))
+
+	return hasVars;
 }
 
 /**
@@ -318,6 +326,18 @@ export async function replaceVars(plugin: NoteToolbarPlugin, s: string, file: TF
 			return '';
 		}
 	});
+
+	if (plugin.hasPlugin[ItemType.Dataview]) {
+		// TODO? can we also support $= JS inline queries?
+		const prefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix');
+		if (prefix && s.trim().startsWith(prefix)) {
+			const regex = new RegExp(`^${prefix}`);
+			s = s.replace(regex, ''); // strip prefix before evaluation
+			let result = await plugin.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
+			s = result ? result : '';
+		}
+	}
+
 	return s;
 
 }

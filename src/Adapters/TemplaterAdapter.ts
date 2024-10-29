@@ -157,6 +157,7 @@ export default class TemplaterAdapter extends Adapter {
     /**
      * @example
      * <%tp.file.creation_date()%>
+     * (Open and close tags are optional.)
      * @param expression 
      * @returns 
      */

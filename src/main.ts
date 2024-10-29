@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas, insertTextAtCursor } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -635,8 +635,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
 				let title = toolbarItem.label ? 
-					(hasVars(toolbarItem.label) ? await replaceVars(this, toolbarItem.label, file, false) : toolbarItem.label) : 
-					(hasVars(toolbarItem.tooltip) ? await replaceVars(this, toolbarItem.tooltip, file, false) : toolbarItem.tooltip);
+					(this.hasVars(toolbarItem.label) ? await this.replaceVars(toolbarItem.label, file, false) : toolbarItem.label) : 
+					(this.hasVars(toolbarItem.tooltip) ? await this.replaceVars(toolbarItem.tooltip, file, false) : toolbarItem.tooltip);
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -664,7 +664,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					default:
 						// don't show the item if the link has variables and resolves to nothing
-						if (hasVars(toolbarItem.link) && await replaceVars(this, toolbarItem.link, file, false) === "") {
+						if (this.hasVars(toolbarItem.link) && await this.replaceVars(toolbarItem.link, file, false) === "") {
 							break;
 						}
 						menu.addItem((item: MenuItem) => {
@@ -792,8 +792,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 
 				// if link resolves to nothing, there's no need to display the item
-				if (hasVars(itemSetting.link)) {
-					if (await replaceVars(this, itemSetting.link, activeFile, false) === "") {
+				if (this.hasVars(itemSetting.link)) {
+					if (await this.replaceVars(itemSetting.link, activeFile, false) === "") {
 						itemEl.addClass('hide'); // hide the containing li element
 						continue;
 					}
@@ -803,12 +803,12 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 
 				// update tooltip + label
-				if (hasVars(itemSetting.tooltip)) {
-					let newTooltip = await replaceVars(this, itemSetting.tooltip, activeFile, false);
+				if (this.hasVars(itemSetting.tooltip)) {
+					let newTooltip = await this.replaceVars(itemSetting.tooltip, activeFile, false);
 					setTooltip(itemSpanEl, newTooltip, { placement: "top" });
 				}
-				if (hasVars(itemSetting.label)) {
-					let newLabel = await replaceVars(this, itemSetting.label, activeFile, false);
+				if (this.hasVars(itemSetting.label)) {
+					let newLabel = await this.replaceVars(itemSetting.label, activeFile, false);
 					let itemElLabel = itemEl.querySelector('.cg-note-toolbar-item-label');
 					if (newLabel) {
 						itemElLabel?.removeClass('hide');
@@ -960,14 +960,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async handleLink(uuid: string, linkHref: string, type: ItemType, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
 
-		// debugLog("handleLink", uuid, linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
 
-		if (hasVars(linkHref)) {
+		if (this.hasVars(linkHref)) {
 			// TODO: expand to also replace vars in labels + tooltips
-			linkHref = await replaceVars(this, linkHref, activeFile, false);
+			linkHref = await this.replaceVars(linkHref, activeFile, false);
 			debugLog('- uri vars replaced: ', linkHref);
 		}
 
@@ -1302,10 +1301,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 				// debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
 	
-				// default to true if it doesn't exist, treating the url as though it is a URI with vars
-				let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
-								 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
-	
 				let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
 				
 				// remove the focus effect if clicked with a mouse
@@ -1589,6 +1584,80 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 		return adapter;
+	}
+
+	/**
+	 * Check if a string has vars, defined as {{variablename}}
+	 * @param s The string to check.
+	 */
+	hasVars(s: string): boolean {
+		let hasVars = /{{.*?}}/g.test(s);
+
+		// if (!hasVars) {
+		// 	if (plugin.hasPlugin[ItemType.Dataview]) {
+		// 	}
+		// }
+		// const prefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix');
+		// 	if (prefix && s.trim().startsWith(prefix))
+
+		return hasVars;
+	}
+
+	/**
+	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
+	 * @param s String to replace the variables in.
+	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
+	 * @param encode True if we should encode the variables (recommended if part of external URL).
+	 * @returns String with the variables replaced.
+	 */
+	async replaceVars(s: string, file: TFile | null, encode: boolean): Promise<string> {
+
+		let noteTitle = file?.basename;
+		if (noteTitle != null) {
+			s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
+		}
+		// have to get this at run/click-time, as file or metadata may not have changed
+		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
+		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
+		s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
+			const key = p1.trim();
+			if (frontmatter && frontmatter[key] !== undefined) {
+				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
+				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
+				// handle the case where the prop might be a list
+				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
+				// FIXME: does not work with number properties
+				return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
+			}
+			else {
+				return '';
+			}
+		});
+
+		if (this.hasPlugin[ItemType.Dataview]) {
+			// TODO? can we also support $= JS inline queries?
+			const prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+			if (prefix && s.trim().startsWith(prefix)) {
+				const regex = new RegExp(`^${prefix}`);
+				s = s.replace(regex, ''); // strip prefix before evaluation
+				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
+				s = result ? result : '';
+			}
+		}
+
+		return s;
+
+	}
+
+	/**
+	 * Checks if the given toolbar uses variables at all.
+	 * @param toolbar ToolbarSettings to check for variable usage
+	 * @returns true if variables are used in the toolbar; false otherwise
+	 */
+	toolbarHasVars(toolbar: ToolbarSettings): boolean {
+		return toolbar.items.some(item =>
+			this.hasVars([item.label, item.tooltip, item.link].join(' '))
+		);
 	}
 
 	/**

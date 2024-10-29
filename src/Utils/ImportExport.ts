@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog, getUUID, replaceVars } from "./Utils";
+import { debugLog, getUUID } from "./Utils";
 import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
 
 const toIconizeFormat = (s: string) => 
@@ -65,9 +65,9 @@ async function exportToCalloutList(
         let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = options.replaceVars ? await replaceVars(plugin, item.label, activeFile, false) : item.label;
-        let itemLink = options.replaceVars ? await replaceVars(plugin, item.link, activeFile, false) : item.link;
-        let itemTooltip = options.replaceVars ? await replaceVars(plugin, item.tooltip, activeFile, false) : item.tooltip;
+        let itemText = options.replaceVars ? await plugin.replaceVars(item.label, activeFile, false) : item.label;
+        let itemLink = options.replaceVars ? await plugin.replaceVars(item.link, activeFile, false) : item.link;
+        let itemTooltip = options.replaceVars ? await plugin.replaceVars(item.tooltip, activeFile, false) : item.tooltip;
 
         itemText = escapeTextForCallout(itemText);
         itemLink = escapeLinkForCallout(itemLink);
@@ -88,7 +88,7 @@ async function exportToCalloutList(
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = itemLink;
-                replaceVars(plugin, itemLink, activeFile, false).then((resolvedLink) => {
+                plugin.replaceVars(itemLink, activeFile, false).then((resolvedLink) => {
                     resolvedItemLink = resolvedLink;
                 });
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);

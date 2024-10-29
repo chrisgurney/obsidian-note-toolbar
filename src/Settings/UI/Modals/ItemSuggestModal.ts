@@ -1,7 +1,7 @@
 import { Platform, SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obsidian";
 import NoteToolbarPlugin from "main";
-import { calcItemVisToggles, debugLog, hasVars, replaceVars } from "Utils/Utils";
-import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { calcItemVisToggles, debugLog } from "Utils/Utils";
+import { ItemType, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
@@ -89,8 +89,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     // ...and is visible on this platform
                     if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                         // ...and does not have a var link and label/tooltip that resolves to nothing
-                        if (!(hasVars(item.link) && await replaceVars(this.plugin, item.link, this.activeFile, false) === "") &&
-                            !(hasVars(itemName) && await replaceVars(this.plugin, itemName, this.activeFile, false) === "")) {
+                        if (!(this.plugin.hasVars(item.link) && await this.plugin.replaceVars(item.link, this.activeFile, false) === "") &&
+                            !(this.plugin.hasVars(itemName) && await this.plugin.replaceVars(itemName, this.activeFile, false) === "")) {
                             itemSuggestions.push(item);
                         }
                     }
@@ -129,8 +129,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
                 const aItemNameRaw = cleanString(a.label || a.tooltip || a.link || '');
                 const bItemNameRaw = cleanString(b.label || b.tooltip || a.link || '');
-                const aItemName = cleanString((!hasVars(a.label) ? a.label : '') || (!hasVars(a.tooltip) ? a.tooltip : '') || (!hasVars(a.link) ? a.link : ''));
-                const bItemName = cleanString((!hasVars(b.label) ? b.label : '') || (!hasVars(b.tooltip) ? b.tooltip : '') || (!hasVars(b.link) ? b.link : ''));
+                const aItemName = cleanString((!this.plugin.hasVars(a.label) ? a.label : '') || 
+                    (!this.plugin.hasVars(a.tooltip) ? a.tooltip : '') || (!this.plugin.hasVars(a.link) ? a.link : ''));
+                const bItemName = cleanString((!this.plugin.hasVars(b.label) ? b.label : '') || 
+                    (!this.plugin.hasVars(b.tooltip) ? b.tooltip : '') || (!this.plugin.hasVars(b.link) ? b.link : ''));
 
                 // prioritize recent items
                 const isARecent = recentItems.includes(aItemNameRaw);
@@ -190,7 +192,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let itemMeta = itemNameEl.createSpan();
         let title = itemName;
         // replace variables in labels (or tooltip, if no label set)
-        replaceVars(this.plugin, itemName, this.activeFile, false).then((resolvedName) => {
+        this.plugin.replaceVars(itemName, this.activeFile, false).then((resolvedName) => {
             itemLabel.setText(resolvedName);
         });
 
