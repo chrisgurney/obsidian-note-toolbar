@@ -12,9 +12,6 @@ import { exportToCallout } from 'Utils/ImportExport';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { ShareModal } from './Modals/ShareModal';
 import { importFromModal } from './Modals/ImportModal';
-import DataviewAdapter from 'Adapters/DataviewAdapter';
-import JsEngineAdapter from 'Adapters/JsEngineAdapter';
-import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
