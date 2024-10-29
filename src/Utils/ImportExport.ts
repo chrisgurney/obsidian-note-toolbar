@@ -65,9 +65,9 @@ async function exportToCalloutList(
         let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = options.replaceVars ? await plugin.replaceVars(item.label, activeFile, false) : item.label;
-        let itemLink = options.replaceVars ? await plugin.replaceVars(item.link, activeFile, false) : item.link;
-        let itemTooltip = options.replaceVars ? await plugin.replaceVars(item.tooltip, activeFile, false) : item.tooltip;
+        let itemText = options.replaceVars ? await plugin.replaceVars(item.label, activeFile) : item.label;
+        let itemLink = options.replaceVars ? await plugin.replaceVars(item.link, activeFile) : item.link;
+        let itemTooltip = options.replaceVars ? await plugin.replaceVars(item.tooltip, activeFile) : item.tooltip;
 
         itemText = escapeTextForCallout(itemText);
         itemLink = escapeLinkForCallout(itemLink);
@@ -88,7 +88,7 @@ async function exportToCalloutList(
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = itemLink;
-                plugin.replaceVars(itemLink, activeFile, false).then((resolvedLink) => {
+                plugin.replaceVars(itemLink, activeFile).then((resolvedLink) => {
                     resolvedItemLink = resolvedLink;
                 });
                 let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);

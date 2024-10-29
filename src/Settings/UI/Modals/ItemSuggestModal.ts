@@ -89,8 +89,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     // ...and is visible on this platform
                     if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                         // ...and does not have a var link and label/tooltip that resolves to nothing
-                        if (!(this.plugin.hasVars(item.link) && await this.plugin.replaceVars(item.link, this.activeFile, false) === "") &&
-                            !(this.plugin.hasVars(itemName) && await this.plugin.replaceVars(itemName, this.activeFile, false) === "")) {
+                        if (!(this.plugin.hasVars(item.link) && await this.plugin.replaceVars(item.link, this.activeFile) === "") &&
+                            !(this.plugin.hasVars(itemName) && await this.plugin.replaceVars(itemName, this.activeFile) === "")) {
                             itemSuggestions.push(item);
                         }
                     }
@@ -192,7 +192,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let itemMeta = itemNameEl.createSpan();
         let title = itemName;
         // replace variables in labels (or tooltip, if no label set)
-        this.plugin.replaceVars(itemName, this.activeFile, false).then((resolvedName) => {
+        this.plugin.replaceVars(itemName, this.activeFile).then((resolvedName) => {
             itemLabel.setText(resolvedName);
         });
 
