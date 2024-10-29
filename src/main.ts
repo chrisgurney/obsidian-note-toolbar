@@ -1006,35 +1006,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.JsEngine:
 			case ItemType.Templater:
 				if (this.settings.scriptingEnabled) {
-					const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
-					// debugLog(`${type} type item:`, toolbarItem);
-					if (toolbarItem?.scriptConfig) {
-						const adapter = this.getAdapterForItemType(type);
-						if (!adapter) {
-							new Notice("Toggle the Scripting setting after installing and enabling plugin: " + LINK_OPTIONS[type]);
-							return;
-						}
-						let result;
-						switch (type) {
-							case ItemType.Dataview:
-								result = await this.dvAdapter?.use(toolbarItem?.scriptConfig);
-								break;
-							case ItemType.JsEngine:
-								result = await this.jsAdapter?.use(toolbarItem?.scriptConfig);
-								break;
-							case ItemType.Templater:
-								result = await this.tpAdapter?.use(toolbarItem?.scriptConfig);
-								break;
-						}
-						result ? insertTextAtCursor(this.app, result) : undefined;
-						await this.app.commands.executeCommandById('editor:focus');
-					}
-					// JS ENGINE
-					// import("Scripts/Neko.js"); // ✅ (script has no function)
-					// exec("Scripts/NekoFunction.js", "Neko"); // ✅
-					// exec("Scripts/JsEngine/HelloFunctionArgs.js", "Hello", { name: 'Person!' }); // ✅
-					// exec("Scripts/JsEngine/RenderMd.js", "Render") ✅
-					// execContainer("Scripts/JsEngine/ReturnMdBasic.js", jseContainer) ✅
+					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleScriptCommand(toolbarItem);
 				}
 				else {
 					new Notice("Enable Scripting in Note Toolbar settings to use this item.");
@@ -1071,8 +1043,37 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Opens the provided file in a sidebar and executes handles the item.
-	 * Supports Commands.
+	 * Executes the provided script.
+	 */
+	async handleScriptCommand(toolbarItem: ToolbarItemSettings | undefined) {
+		if (toolbarItem) {
+			type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JsEngine | ItemType.Templater>;  
+			if (toolbarItem?.scriptConfig) {
+				const adapter = this.getAdapterForItemType(toolbarItem.linkAttr.type);
+				if (!adapter) {
+					new Notice("Toggle the Scripting setting after installing and enabling plugin: " + LINK_OPTIONS[toolbarItem.linkAttr.type as ScriptType]);
+					return;
+				}
+				let result;
+				switch (toolbarItem.linkAttr.type) {
+					case ItemType.Dataview:
+						result = await this.dvAdapter?.use(toolbarItem?.scriptConfig);
+						break;
+					case ItemType.JsEngine:
+						result = await this.jsAdapter?.use(toolbarItem?.scriptConfig);
+						break;
+					case ItemType.Templater:
+						result = await this.tpAdapter?.use(toolbarItem?.scriptConfig);
+						break;
+				}
+				result ? insertTextAtCursor(this.app, result) : undefined;
+				await this.app.commands.executeCommandById('editor:focus');
+			}
+		}
+	}
+
+	/**
+	 * Opens the provided file in a sidebar and executes handles the item. Supports Commands.
 	 * @param toolbarItem ToolbarItemSettings to handle 
 	 * @param file TFile to open in a sidebar
 	 * @link https://github.com/platers/obsidian-linter/blob/cc23589d778fb56b95fe53b499e9f35683a2b129/src/main.ts#L699
@@ -1097,6 +1098,11 @@ export default class NoteToolbarPlugin extends Plugin {
 					catch (error) {
 						new Notice(error);
 					}
+					break;
+				case ItemType.Dataview:
+				case ItemType.JsEngine:
+				case ItemType.Templater:
+					await this.handleScriptCommand(toolbarItem);
 					break;
 			}
 			sidebarTab.detach();
