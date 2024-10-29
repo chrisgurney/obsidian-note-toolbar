@@ -124,6 +124,11 @@ export default class TemplaterAdapter extends Adapter {
      */
     async createFrom(filename: string, outputFile?: string): Promise<void> {
 
+		if (outputFile && this.noteToolbar?.hasVars(outputFile)) {
+            const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+			outputFile = await this.noteToolbar?.replaceVars(outputFile, activeFile, false);
+        }
+
         const { parsedFolder, parsedFilename } = this.parseOutputFile(outputFile);
         let outputFolder = outputFile ? parsedFolder : '';
         let outputFilename = outputFile ? parsedFilename : '';
