@@ -1643,4 +1643,7 @@ input[type="text"].note-toolbar-setting-error {
     padding-bottom: var(--size-4-5);
     padding-inline-start: var(--size-4-5);
     padding-inline-end: var(--size-4-5);
+    .is-phone & {
+        padding-bottom: var(--size-4-12);
+    }
 }
