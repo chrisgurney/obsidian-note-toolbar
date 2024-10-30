@@ -11,11 +11,11 @@ The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create cont
 - [Examples](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples)
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
-![Demo of a sticky toolbar](./docs/note_toolbar_demo.gif)
+![Demo of a sticky toolbar](./docs/images/note_toolbar_demo.gif)
 
 More options on mobile:
 
-![Mobile options for accessing the toolbar](./docs/mobile_options.png)
+![Mobile options for accessing the toolbar](./docs/images/mobile_options.png)
 
 # Features
 
@@ -107,7 +107,7 @@ If you want your toolbar to show without using a property, try mapping a folder 
 
 # Example
 
-![Example Daily Notes toolbar including Daily Notes navigation, and multiple command shortcuts](./docs/example_toolbar_daily_notes.png)
+![Example Daily Notes toolbar including Daily Notes navigation, and multiple command shortcuts](./docs/images/example_toolbar_daily_notes.png)
 
 📖 [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and for more [examples](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples).
 
@@ -119,9 +119,9 @@ If you want your toolbar to show without using a property, try mapping a folder 
 
 Once installed and enabled, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New toolbar_.
 
-![Example of settings configuration](./docs/settings.png)
+![Example of settings configuration](./docs/images/settings.png)
 
-![Example of settings for a toolbar](./docs/settings_edit_toolbar_example.png)
+![Example of settings for a toolbar](./docs/images/settings_edit_toolbar_example.png)
 
 # License
 
