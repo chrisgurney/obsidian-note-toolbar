@@ -1403,18 +1403,19 @@ export default class ToolbarSettingsModal extends Modal {
 
 		}
 
+		const excludeFromDefault: string[] = this.getExcludedDefaultStyles();
+		const defaultStyleOptions = [{ placeholder: t('setting.styles.option-placeholder') }, ...DEFAULT_STYLE_OPTIONS]
+			.filter((option) => {
+				const key = Object.keys(option)[0];
+				return !this.toolbar.defaultStyles.includes(key) && !excludeFromDefault.includes(key);
+			})
+			.reduce((acc, option) => ({ ...acc, ...option }), {});
+
 		new Setting(defaultStyleDiv)
 			.addDropdown((dropdown) =>
 				dropdown
-					.addOptions(
-						DEFAULT_STYLE_OPTIONS
-							.filter((option) => {
-								return !this.toolbar.defaultStyles.includes(Object.keys(option)[0]);
-							})
-							.reduce((acc, option) => {
-								return { ...acc, ...option };
-							}, {}))
-					.setValue("")
+					.addOptions(defaultStyleOptions)
+					.setValue('placeholder')
 					.onChange(async (val) => {
 						if (this.toolbar.defaultStyles.includes(val)) {
 							this.toolbar.defaultStyles =
@@ -1471,18 +1472,19 @@ export default class ToolbarSettingsModal extends Modal {
 
 		}
 
+		const excludeFromMobile: string[] = this.getExcludedMobileStyles();
+		const mobileStyleOptions = [{ placeholder: t('setting.styles.option-placeholder') }, ...MOBILE_STYLE_OPTIONS]
+			.filter((option) => {
+				const key = Object.keys(option)[0];
+				return !this.toolbar.mobileStyles.includes(key) && !excludeFromMobile.includes(key);
+			})
+			.reduce((acc, option) => ({ ...acc, ...option }), {});
+
 		new Setting(mobileStyleDiv)
 			.addDropdown((dropdown) =>
 				dropdown
-					.addOptions(
-						MOBILE_STYLE_OPTIONS
-							.filter((option) => {
-								return !this.toolbar.mobileStyles.includes(Object.keys(option)[0]);
-							})
-							.reduce((acc, option) => {
-								return {...acc, ...option};
-							}, {}))
-					.setValue(this.toolbar.mobileStyles.join(", ") || "")
+					.addOptions(mobileStyleOptions)
+					.setValue('placeholder')
 					.onChange(async (val) => {
 						if (this.toolbar.mobileStyles.includes(val)) {
 							this.toolbar.mobileStyles =
@@ -1510,6 +1512,54 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(settingsDiv)
 			.setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
 
+	}
+
+	/**
+	 * Figures out list of default styles not to show, based on toolbar position and other styles set.
+	 * @returns list of styles to exclude
+	 */
+	getExcludedDefaultStyles(): string[] {
+		const excludedStyles: string[] = [];
+
+		if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Props) excludedStyles.push('sticky');
+		if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Top) excludedStyles.push('wide');
+
+		const { defaultStyles } = this.toolbar;
+		if (defaultStyles.includes('left')) excludedStyles.push('right', 'center');
+		if (defaultStyles.includes('right')) excludedStyles.push('left', 'center');
+		if (defaultStyles.includes('center')) excludedStyles.push('left', 'right');
+		if (defaultStyles.includes('between')) excludedStyles.push('even');
+		if (defaultStyles.includes('even')) excludedStyles.push('between');
+
+		return excludedStyles;
+	}
+
+	/**
+	 * Figures out list of mobile styles not to show, based on toolbar position and other styles set.
+	 * @returns list of styles to exclude
+	 */
+	getExcludedMobileStyles(): string[] {
+		const excludedStyles: string[] = [];
+		
+		if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Top) excludedStyles.push('mnwd', 'mwd');
+		if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Props) excludedStyles.push('mstcky', 'mnstcky');
+
+		const { mobileStyles } = this.toolbar;
+		if (mobileStyles.includes('mlft')) excludedStyles.push('mrght', 'mctr');
+		if (mobileStyles.includes('mrght')) excludedStyles.push('mlft', 'mctr');
+		if (mobileStyles.includes('mctr')) excludedStyles.push('mlft', 'mrght');
+		if (mobileStyles.includes('mbtwn')) excludedStyles.push('mevn');
+		if (mobileStyles.includes('mevn')) excludedStyles.push('mbtwn');
+		if (mobileStyles.includes('mnwd')) excludedStyles.push('mwd');
+		if (mobileStyles.includes('mwd')) excludedStyles.push('mnwd');
+
+		const { defaultStyles } = this.toolbar;
+		if (defaultStyles.includes('border')) excludedStyles.push('mbrder');
+		if (!defaultStyles.includes('border')) excludedStyles.push('mnbrder');
+		if (defaultStyles.includes('button')) excludedStyles.push('mbtn');
+		if (defaultStyles.includes('wide')) excludedStyles.push('mwd');
+
+		return excludedStyles;
 	}
 
 	/**
