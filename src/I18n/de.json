@@ -61,7 +61,7 @@
         "error-command-not-found": "Überprüfung der Note Toolbar Einstellungen auf diesen Befehl. Befehl nicht gefunden: {{command}}",
         "error-folder-not-found": "Überprüfung der Note Toolbar Einstellungen auf diesen Ordner. Ordner nicht gefunden: {{folder}}",
         "error-item-menu-not-found": "Überprüfung der Note Toolbar Einstellungen auf diesen Menü-Punkt. Toolbar nicht gefunden: {{toolbar}}",
-        "error-toolbar-not-found": "Überprüfung der Note Toolbar Einstellungen auf diese Toolbar. Toolbar nicht gefunden: {{folder}}"
+        "error-toolbar-not-found": "Überprüfung der Note Toolbar Einstellungen auf diese Toolbar. Toolbar nicht gefunden: {{folder}}",
    		"error-uri-params-not-supported": "Einer oder mehrere dieser Note Toolbar-URI-Parameter werden nicht unterstützt: {{params}}"
 	},
     "plugin": {
@@ -102,7 +102,7 @@
 	        "option-ids-description": "Dies stellt sicher, dass Menüpunkte weiterhin funktionieren, wenn die Menü-Toolbar umbenannt wird. Wenn du Hinweise teilen möchtest, schalte dies aus und der Name der Toolbar wird verwendet.",
 	        "option-data": "Daten-Elemente verwenden",
 	        "option-data-description": "Daten-Elemente ermöglichen es, dass Toolbars in neuen Fenstern weiterhin funktionieren. Wenn deaktiviert, werden Note Toolbar-URIs anstelle von Daten-Elementen verwendet, was auch für saubereres Markdown sorgt."
-  		}
+  		},
         "delete-toolbar": {
             "name": "Diese Toolbar löschen",
             "description": "Dies kann nicht rückgängig gemacht werden.",
@@ -142,7 +142,7 @@
 	        "label-support-description": "Besuche die Foren auf GitHub, um der Community Fragen zu stellen.",
 	        "label-user-guide": "Benutzerhandbuch lesen",
 	        "label-user-guide-description": "Erfahre, wie du das Plugin optimal nutzen kannst, inklusive Tipps und Beispielen."
-	    }		
+        },	
         "icon-suggester": {
             "option-no-icon": "Kein Symbol",
             "placeholder": "Symbol suchen",
@@ -160,7 +160,7 @@
 		    "option-command-error-does-not-exist": "Dieser Befehl existiert nicht.",
 		    "option-command-error-not-available-install": "Dieser Befehl ist nicht verfügbar. Das Plugin muss installiert und aktiviert sein.",
 		    "option-command-error-not-available-search": "Dieser Befehl kann nicht gefunden werden. Versuche es erneut zu suchen.",
-		    "option-command-error-refresh": "Aktualisieren"
+		    "option-command-error-refresh": "Aktualisieren",
             "option-command-placeholder": "Befehl suchen",
             "option-component-icon": "Symbol",
             "option-component-label": "Bezeichnung",
@@ -171,7 +171,7 @@
             "option-item-group-placeholder": "Toolbar",
             "option-item-group-help": "Symbolleiste auswählen, um sie in diese einzufügen.",
             "option-item-group-error-does-not-exist": "Toolbar exisitert nicht.",
-			"option-item-group-error-invalid": "⚠️ Ungültige Elementgruppe"
+			"option-item-group-error-invalid": "⚠️ Ungültige Elementgruppe",
             "option-item-menu": "Element-Menü",
             "option-item-menu-placeholder": "Toolbar",
             "option-item-menu-help": "Toolbar wählen, um sie als Menü zu öffnen.",
@@ -230,7 +230,7 @@
             "option-folder-all": "Alle Ordner",
             "option-folder-root": "Nur Hauptordner",
 	        "error-folder-already-mapped": "Dieser Ordner hat bereits eine zugewiesene Toolbar."
-  		}
+  		},
         "name": {
             "name": "Name",
             "description": "Dieser Toolbar einen eindeutigen Namen geben.",
@@ -308,7 +308,7 @@
 	        "instruction-navigate": "zum Navigieren",
 	        "instruction-use": "zum Öffnen der Toolbar",
 	        "instruction-dismiss": "zum Schließen"
-    	}
+    	},
         "toolbars": {
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
