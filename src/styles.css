@@ -420,10 +420,12 @@ body {
     }
 
     &[data-callout-metadata*="mbtn"] ul {
-        gap: var(--size-4-2);
-        & a, span.external-link {
-            background-color: var(--cg-nt-item-button-bg-color);
-            box-shadow: var(--input-shadow);
+        .is-mobile & {
+            gap: var(--size-4-2);
+            & a, span.external-link {
+                background-color: var(--cg-nt-item-button-bg-color);
+                box-shadow: var(--input-shadow);
+            }
         }
     }
 
