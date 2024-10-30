@@ -32,7 +32,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
     public openSettingsModal(toolbar: ToolbarSettings) {
         const modal = new ToolbarSettingsModal(this.app, this.plugin, this, toolbar);
-		modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name }));
+		modal.setTitle( toolbar.name ? t('setting.title-edit-toolbar', { toolbar: toolbar.name }) : t('setting.title-edit-toolbar_none'));
         modal.open();
     }
 
