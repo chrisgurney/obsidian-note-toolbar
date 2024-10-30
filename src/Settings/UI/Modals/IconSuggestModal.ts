@@ -56,6 +56,7 @@ export class IconSuggestModal extends SuggestModal<IconName> {
     onChooseSuggestion(selectedIcon: string, evt: MouseEvent | KeyboardEvent) {
         debugLog("onChooseSuggestion: ", this.settingsWithIcon);
         this.settingsWithIcon.icon = (selectedIcon === t('setting.icon-suggester.option-no-icon') ? "" : selectedIcon);
+        // TODO: make below a callback instead (see CommandSuggestModal)
         this.plugin.settingsManager.save();
         debugLog("this.parentEl:", this.parentEl);
         if (this.parentEl.hasClass('note-toolbar-setting-items-container-row')) {
