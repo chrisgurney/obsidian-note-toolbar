@@ -1461,6 +1461,10 @@ input[type="text"].note-toolbar-setting-error {
                 border-radius: 2em;
                 font-size: var(--metadata-input-font-size);
                 max-width: 8em;
+                width: 100%;
+            }
+            & select[class="dropdown"]:focus {
+                max-width: 8em;
             }
         }
     }
