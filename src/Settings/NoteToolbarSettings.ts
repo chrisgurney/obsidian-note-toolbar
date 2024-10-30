@@ -331,8 +331,6 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ button: t('setting.styles.option-button') },
     { center: t('setting.styles.option-center') },
 	{ wide: t('setting.styles.option-wide') },
-    { floatl: t('setting.styles.option-floatl') },
-    { floatr: t('setting.styles.option-floatr') },
     { left: t('setting.styles.option-left') },
     { right: t('setting.styles.option-right') },
 	{ between: t('setting.styles.option-between') },
@@ -342,8 +340,6 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ autohide: t('setting.styles.option-autohide-disclaimer') },
-	{ floatl: t('setting.styles.option-floatl-disclaimer') },
-	{ floatr: t('setting.styles.option-floatr-disclaimer') },
 	{ sticky: t('setting.styles.option-sticky-disclaimer') },
 	{ wide: t('setting.styles.option-wide-disclaimer') },
 ];
@@ -359,8 +355,6 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ mnwd: t('setting.styles.option-nowide') },
 	{ mnwrp: t('setting.styles.option-nowrap') },
 	{ mwd: t('setting.styles.option-wide') },
-    { mfltl: t('setting.styles.option-floatl') },
-    { mfltr: t('setting.styles.option-floatr') },
     { mnflt: t('setting.styles.option-nofloat') },
     { mlft: t('setting.styles.option-left') },
     { mrght: t('setting.styles.option-right') },
@@ -371,8 +365,6 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
-	{ mfltl: t('setting.styles.option-floatl-disclaimer') },
-	{ mfltr: t('setting.styles.option-floatr-disclaimer') },
 	{ mnwrp: t('setting.styles.option-nowrap-disclaimer') },
 	{ mstcky: t('setting.styles.option-sticky-disclaimer') },
 	{ mnwd:  t('setting.styles.option-nowide-disclaimer') },
