@@ -592,32 +592,40 @@ export default class ToolbarSettingsModal extends Modal {
 
 			let labelField = new Setting(textFieldsContainer)
 				.setClass("note-toolbar-setting-item-field")
-				.addText(text => text
+				.addText(text => {
+					text
 					.setPlaceholder(t('setting.item.option-label-placeholder'))
 					.setValue(toolbarItem.label)
 					.onChange(
 						debounce(async (value) => {
+							let isValid = this.updateItemComponentStatus(value, SettingType.Text, text.inputEl.parentElement);
 							toolbarItem.label = value;
 							// TODO: if the label contains vars, set the flag to always rerender this toolbar
 							// however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
 							this.renderPreview(toolbarItem);
-						}, 750)));
+						}, 750));
+					this.updateItemComponentStatus(toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
+				});	
 			labelField.settingEl.id = 'note-toolbar-item-field-label';
 
 			let tooltipField = new Setting(textFieldsContainer)
 				.setClass("note-toolbar-setting-item-field")
-				.addText(text => text
+				.addText(text => {
+					text
 					.setPlaceholder(t('setting.item.option-tooltip-placeholder'))
 					.setValue(toolbarItem.tooltip)
 					.onChange(
 						debounce(async (value) => {
+							let isValid = this.updateItemComponentStatus(value, SettingType.Text, text.inputEl.parentElement);
 							toolbarItem.tooltip = value;
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
 							this.renderPreview(toolbarItem);
-						}, 750)));
+						}, 750));
+					this.updateItemComponentStatus(toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
+				});
 			tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
 			
 			//
@@ -1199,7 +1207,12 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param toolbarItem ToolbarItemSettings for the item if needed to provide more context
 	 * @returns true if the item is valid; false otherwise
 	 */
-	updateItemComponentStatus(itemValue: string, fieldType: SettingType, componentEl: HTMLElement | null, toolbarItem?: ToolbarItemSettings): boolean {
+	updateItemComponentStatus(
+		itemValue: string, 
+		fieldType: SettingType, 
+		componentEl: HTMLElement | null, 
+		toolbarItem?: ToolbarItemSettings): boolean 
+	{
 
 		enum Status {
 			Empty = 'empty',
@@ -1245,6 +1258,8 @@ export default class ToolbarSettingsModal extends Modal {
 						status = Status.Invalid;
 						statusMessage = t('setting.item.option-file-error-does-not-exist');
 					}
+					break;
+				case SettingType.Text:
 					break;
 				case SettingType.Toolbar:
 					let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
