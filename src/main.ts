@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor, getUUID } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -291,6 +291,20 @@ export default class NoteToolbarPlugin extends Plugin {
 		// debugLog("metadata-changed: " + file.name);
 		if (this.app.workspace.getActiveFile() === file) {
 			this.checkAndRenderToolbar(file, cache.frontmatter);
+		}
+
+		// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
+		const notetoolbarProp: string[] = cache.frontmatter?.[this.settings.toolbarProp] ?? [];
+		if (notetoolbarProp.length > 0) {
+			const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
+			const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarFromProps(notetoolbarProp);
+			if (!matchingToolbar && !ignoreToolbar) {
+				const notice = new Notice(`No matching toolbar: ${notetoolbarProp[0]}\nClick/Tap here to create it.`, 7500);
+				this.registerDomEvent(notice.noticeEl, 'click', async () => {
+					const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp[0]);
+					this.settingsManager.openToolbarSettings(newToolbar);
+				});
+			}
 		}
 	};
 
