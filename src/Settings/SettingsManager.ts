@@ -239,6 +239,11 @@ export class SettingsManager {
 		return uniqueName;
 	}
 
+	/**
+	 * Creates a new toolbar with default settings, with an optional name.
+	 * @param name name of the toolbar
+	 * @returns ToolbarSettings for the new toolbar
+	 */
 	public async newToolbar(name: string = ""): Promise<ToolbarSettings> {
 		let newToolbar = {
 			uuid: getUUID(),
@@ -257,11 +262,20 @@ export class SettingsManager {
 		return newToolbar;
 	}
 
+	/**
+	 * Opens the toolbar settings modal for the provided toolbar.
+	 * @param toolbar ToolbarSettings to open
+	 * @param parent provide the NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
+	 */
     public openToolbarSettings(toolbar: ToolbarSettings, parent: NoteToolbarSettingTab | null | undefined = null) {
         const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, parent, toolbar);
 		modal.setTitle( toolbar.name ? t('setting.title-edit-toolbar', { toolbar: toolbar.name }) : t('setting.title-edit-toolbar_none'));
         modal.open();
     }
+
+	/*************************************************************************
+	 * SAVE / LOAD / MIGRATION
+	 *************************************************************************/
 
 	/**
 	 * Loads settings, and migrates from old versions if needed.
