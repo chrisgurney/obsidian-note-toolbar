@@ -30,12 +30,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.plugin = plugin;
 	}
 
-    public openSettingsModal(toolbar: ToolbarSettings) {
-        const modal = new ToolbarSettingsModal(this.app, this.plugin, this, toolbar);
-		modal.setTitle( toolbar.name ? t('setting.title-edit-toolbar', { toolbar: toolbar.name }) : t('setting.title-edit-toolbar_none'));
-        modal.open();
-    }
-
 	/*************************************************************************
 	 * SETTINGS DISPLAY
 	 *************************************************************************/
@@ -253,7 +247,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								.setTooltip(t('setting.toolbars.button-edit-tbar-tooltip'))
 								.setButtonText(t('setting.toolbars.button-edit-tbar'))
 								.onClick(() => {
-									this.openSettingsModal(toolbar);
+									this.plugin.settingsManager.openToolbarSettings(toolbar, this);
 								});
 							});
 					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
@@ -286,21 +280,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setButtonText(t('setting.toolbars.button-new-tbar'))
 					.setCta()
 					.onClick(async () => {
-						let newToolbar = {
-							uuid: getUUID(),
-							defaultStyles: ["border", "even", "sticky"],
-							items: [],
-							mobileStyles: [],
-							name: "",
-							position: { 
-								desktop: { allViews: { position: 'props' } }, 
-								mobile: { allViews: { position: 'props' } }, 
-								tablet: { allViews: { position: 'props' } } },
-							updated: new Date().toISOString(),
-						} as ToolbarSettings;
-						this.plugin.settings.toolbars.push(newToolbar);
-						await this.plugin.settingsManager.save();
-						this.openSettingsModal(newToolbar);
+						const newToolbar = await this.plugin.settingsManager.newToolbar();
+						this.plugin.settingsManager.openToolbarSettings(newToolbar, this);
 					});
 			});
 
