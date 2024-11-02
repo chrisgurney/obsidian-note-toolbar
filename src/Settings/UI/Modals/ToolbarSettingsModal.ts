@@ -571,7 +571,11 @@ export default class ToolbarSettingsModal extends Modal {
 						.setTooltip(t('setting.item.button-icon-tooltip'))
 						.onClick(async () => {
 							let itemRow = this.getItemRowEl(toolbarItem.uuid);
-							const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
+							const modal = new IconSuggestModal(this.plugin, (icon) => {
+								toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
+								this.plugin.settingsManager.save();
+								this.updateItemIcon(itemRow, icon)
+							});
 							modal.open();
 						});
 					cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -583,7 +587,11 @@ export default class ToolbarSettingsModal extends Modal {
 								case " ":
 									e.preventDefault();
 									let itemRow = this.getItemRowEl(toolbarItem.uuid);
-									const modal = new IconSuggestModal(this.plugin, toolbarItem, itemRow);
+									const modal = new IconSuggestModal(this.plugin, (icon) => {
+										toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
+										this.plugin.settingsManager.save();
+										this.updateItemIcon(itemRow, icon)
+									});
 									modal.open();
 							}
 						});
@@ -840,6 +848,19 @@ export default class ToolbarSettingsModal extends Modal {
 
 		return itemDiv;
 
+	}
+
+	/**
+	 * Updates the icon for the preview and form
+	 * @param settingEl 
+	 * @param selectedIcon 
+	 */
+	private updateItemIcon(settingEl: HTMLElement, selectedIcon: string) {
+		let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
+		formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
+		formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
+		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview > span') as HTMLElement;
+		previewIconEl ? setIcon(previewIconEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'note-toolbar-none' : selectedIcon) : undefined;
 	}
 
 	/**

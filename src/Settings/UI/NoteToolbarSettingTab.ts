@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getElementPosition, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -649,7 +649,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip(t('setting.other.icon.tooltip'))
 					.onClick(async (e) => {
 						e.preventDefault();
-						const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+						const modal = new IconSuggestModal(this.plugin, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 						modal.open();
 					});
 				cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.plugin.settings.icon ? "true" : "false");
@@ -660,7 +660,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							case "Enter":
 							case " ":
 								e.preventDefault();					
-								const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+								const modal = new IconSuggestModal(this.plugin, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 								modal.open();
 						}
 					});
@@ -691,6 +691,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 			});
 
+	}
+
+	/**
+	 * Updates the Note Toolbar Settings > Icon setting.
+	 * @param settingEl 
+	 * @param selectedIcon 
+	 */
+	updateNoteToolbarIcon(settingEl: HTMLElement, selectedIcon: string) {
+		this.plugin.settings.icon = (selectedIcon === t('setting.icon-suggester.option-no-icon') ? "" : selectedIcon);
+		this.plugin.settingsManager.save();
+		setIcon(settingEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
+		settingEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
 	}
 
 	/*************************************************************************
