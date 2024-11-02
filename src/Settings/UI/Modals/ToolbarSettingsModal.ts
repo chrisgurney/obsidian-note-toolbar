@@ -1281,6 +1281,13 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 					break;
 				case SettingType.Text:
+					// if (this.plugin.hasVars(itemValue)) {
+					// 	debugLog('VALIDATING TEXT', itemValue);
+					// 	const activeFile = this.app.workspace.getActiveFile();
+					// 	this.plugin.replaceVars(itemValue, activeFile).then((resolvedText) => {
+							
+					// 	});
+					// }
 					break;
 				case SettingType.Toolbar:
 					let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
