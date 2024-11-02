@@ -856,11 +856,13 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param selectedIcon 
 	 */
 	private updateItemIcon(settingEl: HTMLElement, selectedIcon: string) {
+		// update item form
 		let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
 		formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
 		formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
-		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview > span') as HTMLElement;
-		previewIconEl ? setIcon(previewIconEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'note-toolbar-none' : selectedIcon) : undefined;
+		// update item preview
+		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
+		(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
 	}
 
 	/**
@@ -2094,7 +2096,8 @@ export default class ToolbarSettingsModal extends Modal {
 				setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
 				let itemPreviewIcon = createSpan();
 				itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
-				setIcon(itemPreviewIcon, toolbarItem.icon ? toolbarItem.icon : 'note-toolbar-none');
+				toolbarItem.icon ? setIcon(itemPreviewIcon, toolbarItem.icon) : undefined;
+				itemPreview.appendChild(itemPreviewIcon);
 				itemPreviewContent.addClass('note-toolbar-setting-item-preview-label');
 				if (toolbarItem.label) {
 					itemPreviewContent.setText(toolbarItem.label);
@@ -2110,7 +2113,6 @@ export default class ToolbarSettingsModal extends Modal {
 					itemPreviewContent.setText(t('setting.items.option-item-empty-label'));
 					itemPreviewContent.addClass("note-toolbar-setting-item-preview-empty");
 				}
-				getIcon(toolbarItem.icon) ? itemPreview.appendChild(itemPreviewIcon) : undefined;
 				break;
 		}
 

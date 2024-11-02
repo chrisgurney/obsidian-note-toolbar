@@ -823,6 +823,10 @@ body {
     }
 }
 
+.note-toolbar-setting-item-preview-icon:empty {
+    display: none;
+}
+
 .note-toolbar-setting-item-preview-empty,
 .note-toolbar-setting-item-preview-tooltip {
     color: var(--color-base-60);
