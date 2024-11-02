@@ -28,7 +28,7 @@ export class CommandSuggestModal extends SuggestModal<Command> {
         this.inputEl.removeAttribute("data-command-id");
 
         this.commands.forEach((command: Command) => {
-            if (command.name.toLowerCase().contains(lowerCaseInputStr)) {
+            if (command.name.toLowerCase().includes(lowerCaseInputStr)) {
                 suggestions.push(command);
             }
         });

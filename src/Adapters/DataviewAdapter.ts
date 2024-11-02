@@ -194,7 +194,7 @@ export default class DataviewAdapter extends Adapter {
 
         let contents = await this.noteToolbar?.app.vault.read(viewFile);
         if (contents) {
-            if (contents.contains("await")) contents = "(async () => { " + contents + " })()";
+            if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
             let func = new Function("dv", "input", contents);
          // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:

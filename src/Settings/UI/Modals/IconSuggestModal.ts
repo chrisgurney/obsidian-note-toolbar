@@ -29,7 +29,7 @@ export class IconSuggestModal extends SuggestModal<IconName> {
         const lowerCaseInputStr = inputStr.toLowerCase();
         iconSuggestions.push(t('setting.icon-suggester.option-no-icon'));
         iconIds.forEach((icon: IconName) => {
-            if (icon.toLowerCase().contains(lowerCaseInputStr)) {
+            if (icon.toLowerCase().includes(lowerCaseInputStr)) {
                 iconSuggestions.push(icon);
             }
         });

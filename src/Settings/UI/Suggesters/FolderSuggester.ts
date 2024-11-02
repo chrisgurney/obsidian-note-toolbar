@@ -30,7 +30,7 @@ export class FolderSuggester extends AbstractInputSuggest<string> {
         // no need to add PATTERN_ROOT as it's included below
 
         abstractFiles.forEach((folder: TAbstractFile) => {
-            if (folder instanceof TFolder && folder.path.toLowerCase().contains(lowerCaseInputStr)) {
+            if (folder instanceof TFolder && folder.path.toLowerCase().includes(lowerCaseInputStr)) {
                 folders.push(folder.path);
             }
         });
