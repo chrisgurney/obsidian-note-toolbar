@@ -299,7 +299,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
 			const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarFromProps(notetoolbarProp);
 			if (!matchingToolbar && !ignoreToolbar) {
-				const notice = new Notice(`No matching toolbar: ${notetoolbarProp[0]}\nClick/Tap here to create it.`, 7500);
+				const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp[0] }), 7500);
 				this.registerDomEvent(notice.noticeEl, 'click', async () => {
 					const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp[0]);
 					this.settingsManager.openToolbarSettings(newToolbar);

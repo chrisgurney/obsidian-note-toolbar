@@ -62,7 +62,8 @@
         "error-folder-not-found": "Check Note Toolbar setting or URI for this folder. Folder not found: {{folder}}",
         "error-item-menu-not-found": "Check Note Toolbar setting or URI for this menu item. Toolbar not found: {{toolbar}}",
         "error-toolbar-not-found": "Check Note Toolbar setting or URI for this toolbar. Toolbar not found: {{toolbar}}",
-        "error-uri-params-not-supported": "One or more of these Note Toolbar URI parameters is not supported: {{params}}"
+        "error-uri-params-not-supported": "One or more of these Note Toolbar URI parameters is not supported: {{params}}",
+        "warning-no-matching-toolbar": "No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
     },
     "plugin": {
         "name": "Note Toolbar"
