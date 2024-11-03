@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { App, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
 import { ComponentType, ItemType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
-const DEBUG: boolean = false;
+const DEBUG: boolean = true;
 
 /**
  * Adds the given component to the given visibility prop.
@@ -73,7 +73,6 @@ export function displayScriptError(message: string, error?: any, containerEl?: H
 	console.error(message, error);
 	if (containerEl) {
 		let errorEl = containerEl.createEl('pre');
-		errorEl.addClass('dataview', 'dataview-error');
 		errorEl.setText(message + '\n' + error);
 	}
 	let errorFr = createFragment();
