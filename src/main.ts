@@ -1622,9 +1622,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	hasVars(s: string): boolean {
 		let hasVars = /{{.*?}}/g.test(s);
 		if (!hasVars && this.hasPlugin[ItemType.Dataview]) {
-			const prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			hasVars = !!prefix && s.trim().startsWith(prefix);
-			// TODO? can we also support $= JS inline queries? inlineJsQueryPrefix
+			// TODO? support dvjs? check for $= JS inline queries
+			// if (!hasVars) {
+			// 	prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
+			// 	hasVars = !!prefix && s.trim().startsWith(prefix);
+			// }
 		}
 		if (!hasVars && this.hasPlugin[ItemType.Templater]) {
 			hasVars = s.trim().startsWith('<%');
@@ -1664,14 +1668,19 @@ export default class NoteToolbarPlugin extends Plugin {
 		});
 
 		if (this.hasPlugin[ItemType.Dataview]) {
-			// TODO? can we also support $= JS inline queries? inlineJsQueryPrefix
-			const prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			if (prefix && s.trim().startsWith(prefix)) {
-				const regex = new RegExp(`^${prefix}`);
-				s = s.replace(regex, ''); // strip prefix before evaluation
+				s = s.trim().slice(prefix.length); // strip prefix before evaluation
 				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
 				s = result ? result : '';
 			}
+			// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
+			// prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
+			// if (prefix && s.trim().startsWith(prefix)) {
+			// 	s = s.trim().slice(prefix.length); // strip prefix before evaluation
+			// 	let result = await this.dvAdapter?.use({ pluginFunction: 'executeJs', expression: s });
+			// 	s = result ? result : '';
+			// }
 		}
 
 		if (this.hasPlugin[ItemType.Templater]) {
