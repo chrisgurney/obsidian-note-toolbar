@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
-import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -13,39 +13,39 @@ export default class DataviewAdapter extends Adapter {
     readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.query,
-            label: "Execute query",
+            label: t('adapter.dataview.query-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Query", description: "Dataview query to evaluate.", type: SettingType.TextArea, required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
+                { parameter: 'expression', label: t('adapter.dataview.query-expr'), description: t('adapter.dataview.query-expr-description'), type: SettingType.TextArea, required: true },
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
         {
             function: this.exec,
-            label: "Execute JavaScript",
+            label: t('adapter.dataview.exec-function'),
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "JavaScript file", description: "Dataview JS file to execute.", type: SettingType.File, required: true },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by your script function, in comma-separated 'name: value' format.", type: SettingType.Args, required: false },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
+                { parameter: 'sourceFile', label: t('adapter.dataview.exec-sourcefile'), description: t('adapter.dataview.exec-sourcefile-description'), type: SettingType.File, required: true },
+                { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
         {
             function: this.evaluate,
-            label: "Evaluate Dataview expression",
+            label: t('adapter.dataview.eval-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Dataview expression", description: "Dataview expression to evaluate.", type: SettingType.Text, required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
+                { parameter: 'expression', label: t('adapter.dataview.eval-expr'), description: t('adapter.dataview.eval-expr-description'), type: SettingType.Text, required: true },
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
         {
             function: this.executeJs,
-            label: "Evaluate Dataview JS expression",
+            label: t('adapter.dataview.dvjs-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Dataview JS expression",  description: "Dataview JS expression to evaluate.", type: SettingType.Text, required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
+                { parameter: 'expression', label: t('adapter.dataview.dvjs-expr'),  description: t('adapter.dataview.dvjs-expr-description'), type: SettingType.Text, required: true },
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
     ];
@@ -63,7 +63,7 @@ export default class DataviewAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                displayScriptError(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`);
+                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -72,28 +72,28 @@ export default class DataviewAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, containerEl)
-                    : `Error: A Dataview expression is required`;
+                    : t('adapter.dataview.eval-expr-error-required');
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
-                    : `Error: A script file is required`;
+                    : t('adapter.dataview.exec-error-required');
                 break;
             case 'executeJs':
                 result = config.expression
                     ? await this.executeJs(config.expression, containerEl)
-                    : `Error: A Dataview JS expression is required`;
+                    : t('adapter.dataview.dvjs-expr-error-required');
                 break;
             case 'query':
                 result = config.expression
                     ? await this.query(config.expression, containerEl)
-                    : `Error: A Dataview query is required`;
+                    : t('adapter.dataview.query-expr-error-required');
                 break;
             case '':
                 // do nothing
                 break;
             default:
-                result = `Unsupported function: ${config.pluginFunction}`;
+                result = t('adapter.error.function-invalid', { function: config.pluginFunction });
                 break;
         }
 
@@ -142,8 +142,8 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
-            result = "Dataview error: Check console for more details.\n```\n" + error + "\n```";
+            displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+            result = t('adapter.dataview.error-general', { error: error });;
         }
         finally {
             component.unload();
@@ -171,7 +171,7 @@ export default class DataviewAdapter extends Adapter {
             args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
-            displayScriptError(`Failed to parse arguments for script: ${filename}\nError:`, error, containerEl);
+            displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error, containerEl);
             return;
         }
         
@@ -180,7 +180,7 @@ export default class DataviewAdapter extends Adapter {
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         if (!activeFile) {
-            displayScriptError("This script must be executed from an open note.");
+            displayScriptError(t('adapter.error.exec-note-not-open'));
             return;
         }
         const activeFilePath = activeFile.path;
@@ -188,7 +188,7 @@ export default class DataviewAdapter extends Adapter {
         let viewFile = this.noteToolbar?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
-            displayScriptError(`Script file not found: ${filename}`);
+            displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
 
@@ -220,7 +220,7 @@ export default class DataviewAdapter extends Adapter {
              }
          }
          catch (error) {
-             displayScriptError(`Failed to execute script: ${viewFile.path}\nError:`, error, containerEl);
+             displayScriptError(t('adapter.error.exec-failed', { filename: viewFile.path }), error, containerEl);
          }
          finally {
              component.unload();
@@ -270,7 +270,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(`Failed to evaluate expression: ${expression}\nDataview error:`, error, containerEl);
+            displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
         }
         finally {
             component.unload();
@@ -295,8 +295,8 @@ export default class DataviewAdapter extends Adapter {
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
 
         if (!activeFile) {
-            displayScriptError("This query must be run from an open note.");
-            return "This query must be run from an open note.";
+            displayScriptError(t('adapter.error.query-note-not-open'));
+            return t('adapter.error.query-note-not-open');
         }
 
         const component = new Component();
@@ -325,8 +325,8 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(`Failed to evaluate query: ${expression}\nDataview error:`, error, containerEl);
-            result = "Dataview error: Check console for more details.\n```\n" + error + "\n```";
+            displayScriptError(t('adapter.error.query-failed', { expression: expression }), error, containerEl);
+            result = t('adapter.dataview.error-general', { error: error });
         }
         finally {
 			component.unload();

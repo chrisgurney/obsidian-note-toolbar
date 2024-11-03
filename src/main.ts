@@ -1023,7 +1023,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleScriptCommand(toolbarItem);
 				}
 				else {
-					new Notice("Enable Scripting in Note Toolbar settings to use this item.");
+					new Notice(t('notice.error-scripting-not-enabled'));
 				}
 				break;
 			case ItemType.Uri:
@@ -1071,7 +1071,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (toolbarItem?.scriptConfig) {
 				const adapter = this.getAdapterForItemType(toolbarItem.linkAttr.type);
 				if (!adapter) {
-					new Notice("Toggle the Scripting setting after installing and enabling plugin: " + LINK_OPTIONS[toolbarItem.linkAttr.type as ScriptType]);
+					new Notice(t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[toolbarItem.linkAttr.type as ScriptType] }));
 					return;
 				}
 				let result;

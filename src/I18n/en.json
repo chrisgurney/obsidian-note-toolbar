@@ -1,8 +1,8 @@
 {
     "adapter": {
-        "args-label": "Arguments (optional)",
+        "args": "Arguments (optional)",
         "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format.",
-        "outputcontainer-label": "Output callout ID (optional)",
+        "outputcontainer": "Output callout ID (optional)",
         "outputcontainer-description": "Add a note-toolbar-output callout with a unique meta field to your note to put text output.",
         "dataview": {
             "error-general": "Dataview error: Check console for more details.\n```\n{{error}}\n```",
@@ -10,9 +10,9 @@
             "dvjs-expr": "Dataview JS expression",
             "dvjs-expr-description": "Dataview JS expression to evaluate.",
             "dvjs-expr-error-required": "Error: A Dataview JS expression is required",
-            "dvjs-sourcefile": "JavaScript file",
-            "dvjs-sourcefile-description": "Dataview JS file to execute.",
             "exec-function": "Execute JavaScript",
+            "exec-sourcefile": "JavaScript file",
+            "exec-sourcefile-description": "Dataview JS file to execute.",
             "exec-error-required": "Error: A script file is required",
             "eval-function": "Evaluate Dataview expression",
             "eval-expr": "Dataview expression",
@@ -20,7 +20,8 @@
             "eval-expr-error-required": "Error: A Dataview expression is required",
             "query-function": "Execute query",
             "query-expr": "Query",
-            "query-expr-description": "Dataview query to evaluate."
+            "query-expr-description": "Dataview query to evaluate.",
+            "query-expr-error-required": "Error: A Dataview query is required"
         },
         "js-engine": {
             "exec-function": "Execute JavaScript",
@@ -50,21 +51,25 @@
             "eval-function": "Execute Templater command",
             "eval-expr": "Templater command",
             "eval-expr-description": "Templater command to execute.",
+            "eval-expr-error-required": "Error: A Templater expression is required",
             "exec-function": "Execute Templater file",
             "exec-sourcefile": "Template file",
             "exec-sourcefile-description": "Executes the contents of the file and returns.",
-            "exec-sourcefile-error-required": "Error: A Templater expression is required"
+            "exec-sourcefile-error-required": "Error: A Templater file is required"
         },
         "error": {
-            "args-parsing": "Failed to parse arguments for script: {{filename}}\nError: {{error}}",
+            "args-parsing": "Failed to parse arguments for script: {{filename}}",
+            "args-parsing-error": "Failed to parse arguments for script: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
-            "exec-error": "Failed to execute script: {{filename}}\nError: {{error}}",
+            "exec-failed": "Failed to execute script: {{filename}}",
             "exec-note-not-open": "This script must be executed from an open note.",
-            "expr-error": "Failed to evaluate expression: {{expression}}\nError: {{error}}",
+            "expr-failed": "Failed to evaluate expression: {{expression}}",
             "expr-note-not-open": "This expression must be executed from an open note.",
             "file-not-found": "File not found: {{filename}}",
+            "function-invalid": "Unsupported function: {{function}}",
             "function-not-found": "Function not found: {{function}}",
-            "invalid-function": "Unsupported function: {{function}}",
+            "function-note-not-open": "This function must be executed from an open note.",
+            "query-failed": "Failed to evaluate query: {{expression}}",
             "query-note-not-open": "This query must be run from an open note."
         }
     },
@@ -130,6 +135,8 @@
         "error-command-not-found": "Check Note Toolbar setting or URI for this command. Command not found: {{command}}",
         "error-folder-not-found": "Check Note Toolbar setting or URI for this folder. Folder not found: {{folder}}",
         "error-item-menu-not-found": "Check Note Toolbar setting or URI for this menu item. Toolbar not found: {{toolbar}}",
+        "error-scripting-not-enabled": "Enable Scripting in Note Toolbar settings to use this item.",
+        "error-scripting-plugin-not-enabled": "Toggle the Scripting setting after installing and enabling plugin: {{plugin}}",
         "error-toolbar-not-found": "Check Note Toolbar setting or URI for this toolbar. Toolbar not found: {{toolbar}}",
         "error-uri-params-not-supported": "One or more of these Note Toolbar URI parameters is not supported: {{params}}",
         "warning-no-matching-toolbar": "No matching toolbar: {{toolbar}}\nClick/Tap here to create it."

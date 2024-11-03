@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
-import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -15,21 +15,21 @@ export default class JsEngineAdapter extends Adapter {
     readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.exec,
-            label: "Execute JavaScript",
+            label: t('adapter.js-engine.exec-function'),
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to execute.", type: SettingType.File, required: true },
-                { parameter: 'outputContainer', label: "Output callout ID (optional)", description: "Add a note-toolbar-output callout with a unique meta field to your note to put text output.", type: SettingType.Text, required: false }
+                { parameter: 'sourceFile', label: t('adapter.js-engine.exec-sourcefile'), description: t('adapter.js-engine.exec-sourcefile-description'), type: SettingType.File, required: true },
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
         {
             function: this.importExec,
-            label: "Import and execute JavaScript",
+            label: t('adapter.js-engine.importexec-function'),
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "JavaScript file", description: "JavaScript to import. Note that this file is only imported once. You may have to restart Obsidian in order to pick up changes.", type: SettingType.File, required: true },
-                { parameter: 'sourceFunction', label: "Function (optional)", description: "If script has functions, function name to execute.", type: SettingType.Text, required: false },
-                { parameter: 'sourceArgs', label: "Arguments (optional)", description: "Arguments accepted by your script function, in comma-separated 'name: value' format.", type: SettingType.Args, required: false },
+                { parameter: 'sourceFile', label: t('adapter.js-engine.importexec-sourcefile'), description: t('adapter.js-engine.importexec-sourcefile-description'), type: SettingType.File, required: true },
+                { parameter: 'sourceFunction', label: t('adapter.js-engine.importexec-sourcefunction'), description: t('adapter.js-engine.importexec-sourcefunction-description'), type: SettingType.Text, required: false },
+                { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
             ]
         },
     ];
@@ -46,7 +46,7 @@ export default class JsEngineAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                displayScriptError(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`);
+                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -55,18 +55,18 @@ export default class JsEngineAdapter extends Adapter {
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, containerEl)
-                    : `Error: A JavaScript file is required`;
+                    : t('adapter.js-engine.exec-sourcefile-error-required');
                 break;
             case 'importExec':
                 result = config.sourceFile
                     ? await this.importExec(config.sourceFile, config.sourceFunction, config.sourceArgs)
-                    : `Error: A JavaScript file is required`;
+                    : t('adapter.js-engine.importexec-sourcefile-error-required');
                 break;
             case '':
                 // do nothing
                 break;
             default:
-                result = `Unsupported function: ${config.pluginFunction}`;
+                result = t('adapter.error.function-invalid', { function: config.pluginFunction });
                 break;
         }
 
@@ -99,8 +99,8 @@ export default class JsEngineAdapter extends Adapter {
             args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
-            displayScriptError(`Failed to parse arguments for script: ${filename}\nError:`, error);
-            return "Failed to parse arguments:\n```\n" + error + "\n```";
+            displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error);
+            return t('adapter.error.args-parsing-error', { filename: filename, error: error });
         }
         
         if (this.adapterApi) {
@@ -117,11 +117,11 @@ export default class JsEngineAdapter extends Adapter {
                         debugLog('importExec() result:', result);
                     }
                     catch (error) {
-                        displayScriptError(`Failed to execute script: ${filename}\nError:`, error);
+                        displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
                     }
                 }
                 else {
-                    displayScriptError(`Function not found: ${filename} ${functionName}`);
+                    displayScriptError(t('adapter.error.function-not-found', { function: functionName }));
                 }
             }
         }
@@ -142,8 +142,8 @@ export default class JsEngineAdapter extends Adapter {
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         if (!activeFile) {
-            displayScriptError("This script must be executed from an open note.");
-            return "This script must be executed from an open note.";
+            displayScriptError(t('adapter.error.exec-note-not-open'));
+            return t('adapter.error.exec-note-not-open');
         }
 
         const component = new Component();
@@ -168,7 +168,7 @@ export default class JsEngineAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(`Failed to execute script: ${filename}\nError:`, error, containerEl);
+            displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error, containerEl);
         }
         finally {
             component.unload();

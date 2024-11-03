@@ -1,6 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Notice, TFile } from "obsidian";
-import { ItemType, ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -13,35 +12,35 @@ export default class TemplaterAdapter extends Adapter {
     readonly FUNCTIONS: AdapterFunction[] = [
         {
             function: this.appendTemplate,
-            label: "Insert template",
+            label: t('adapter.templater.append-function'),
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template", description: "Template file to insert.", type: SettingType.File, required: true },
+                { parameter: 'sourceFile', label: t('adapter.templater.append-sourcefile'), description: t('adapter.templater.append-sourcefile-description'), type: SettingType.File, required: true },
             ]
         },
         {
             function: this.createFrom,
-            label: "Create new note from template",
+            label: t('adapter.templater.create-function'),
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template", description: "Template file to create a new file from.", type: SettingType.File, required: true },
-                { parameter: 'outputFile', label: "(Optional) Output filename", description: "Name of the file (without file extension) and folder(s) to create, from the provided template.", type: SettingType.Text, required: false }
+                { parameter: 'sourceFile', label: t('adapter.templater.create-sourcefile'), description: t('adapter.templater.create-sourcefile-description'), type: SettingType.File, required: true },
+                { parameter: 'outputFile', label: t('adapter.templater.create-outputfile'), description: t('adapter.templater.create-outputfile-description'), type: SettingType.Text, required: false }
             ]
         },
         {
             function: this.parseTemplate,
-            label: "Execute Templater command",
+            label: t('adapter.templater.eval-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: "Templater command", description: "Templater command to execute.", type: SettingType.Text, required: true },
+                { parameter: 'expression', label: t('adapter.templater.eval-expr'), description: t('adapter.templater.eval-expr-description'), type: SettingType.Text, required: true },
             ]
         },
         {
             function: this.parseTemplateFile,
-            label: "Execute Templater file",
+            label: t('adapter.templater.exec-function'),
             description: "",
             parameters: [
-                { parameter: 'sourceFile', label: "Template file", description: "Executes the contents of the file and returns.", type: SettingType.File, required: true },
+                { parameter: 'sourceFile', label: t('adapter.templater.exec-sourcefile'), description: t('adapter.templater.exec-sourcefile-description'), type: SettingType.File, required: true },
             ]
         },        
     ];
@@ -58,7 +57,7 @@ export default class TemplaterAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                displayScriptError(`Error: Could not find note-toolbar-output callout in current note with ID: ${config.outputContainer}`);
+                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -67,28 +66,28 @@ export default class TemplaterAdapter extends Adapter {
             case 'appendTemplate':
                 result = config.sourceFile
                     ? await this.appendTemplate(config.sourceFile)
-                    : `Error: A template file is required`;
+                    : t('adapter.templater.append-sourcefile-error-required');
                 break;
             case 'createFrom':
                 result = config.sourceFile
                     ? await this.createFrom(config.sourceFile, config.outputFile)
-                    : `Error: A template file is required`;
+                    : t('adapter.templater.create-sourcefile-error-required');
                 break;
             case 'parseTemplate':
                 result = config.expression
                     ? await this.parseTemplate(config.expression)
-                    : `Error: A Templater expression is required`;
+                    : t('adapter.templater.eval-expr-error-required');
                 break;
             case 'parseTemplateFile':
                 result = config.sourceFile
                     ? await this.parseTemplateFile(config.sourceFile)
-                    : `Error: A Templater file is required`;
+                    : t('adapter.templater.exec-sourcefile-error-required');
                 break;
             case '':
                 // do nothing
                 break;
             default:
-                result = `Unsupported function: ${config.pluginFunction}`;
+                result = t('adapter.error.function-invalid', { function: config.pluginFunction });
                 break;
         }
 
@@ -108,7 +107,7 @@ export default class TemplaterAdapter extends Adapter {
                     await this.adapterApi.append_template_to_active_file(templateFile);
                 }
                 else {
-                    throw new Error("File not found: " + filename);
+                    throw new Error(t('adapter.error.file-not-found', { filename: filename }));
                 }
             }
             catch (error) {
@@ -141,7 +140,7 @@ export default class TemplaterAdapter extends Adapter {
                     await this.noteToolbar?.app.commands.executeCommandById('file-explorer:reveal-active-file');
                 }
                 else {
-                    throw new Error("File not found: " + filename);
+                    throw new Error(t('adapter.error.file-not-found', { filename: filename }));
                 }
             }
             catch (error) {
@@ -173,8 +172,8 @@ export default class TemplaterAdapter extends Adapter {
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         if (!activeFile) {
-            displayScriptError("This expression must be executed from an open note.");
-            return "This expression must be executed from an open note.";
+            displayScriptError(t('adapter.error.expr-note-not-open'));
+            return t('adapter.error.expr-note-not-open');
         }
 
         // make sure the opening and closing tags are present, in case they're omitted
@@ -216,8 +215,8 @@ export default class TemplaterAdapter extends Adapter {
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         if (!activeFile) {
-            displayScriptError("This function must be executed from an open note.");
-            return "This function must be executed from an open note.";
+            displayScriptError(t('adapter.error.function-note-not-open'));
+            return t('adapter.error.function-note-not-open');
         }
 
         let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
@@ -235,11 +234,11 @@ export default class TemplaterAdapter extends Adapter {
                 }    
             }
             else {
-                throw new Error("File not found: " + filename);
+                throw new Error(t('adapter.error.file-not-found', { filename: filename }));
             }
         }
         catch (error) {
-            displayScriptError(`Failed to execute script: ${filename}`, error);
+            displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
         }
 
         return result;
