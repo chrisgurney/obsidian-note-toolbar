@@ -329,6 +329,10 @@
                 "option-item-suggester": "Show all tools",
                 "option-toolbar-suggester": "Show all toolbars"
             },
+            "scripting": {
+                "name": "Scripting",
+                "description": "Adds item types for Dataview, JS Engine, and Templater, which must be installed and enabled."
+            },
             "show-edit-tbar": {
                 "name": "Show 'Edit toolbar' link in toolbar menus 📱",
                 "description": "Adds an item to access the toolbar's settings in toolbars that are displayed as menus at the bottom of the screen on phones."
