@@ -1019,8 +1019,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Dataview:
 			case ItemType.JsEngine:
 			case ItemType.Templater:
+				this.updateAdapters();
 				if (this.settings.scriptingEnabled) {
-					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleScriptCommand(toolbarItem);
+					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleScriptItem(toolbarItem);
 				}
 				else {
 					new Notice(t('notice.error-scripting-not-enabled'));
@@ -1063,9 +1064,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Executes the provided script.
+	 * Handles the provided script item, based on the provided configuration.
 	 */
-	async handleScriptCommand(toolbarItem: ToolbarItemSettings | undefined) {
+	async handleScriptItem(toolbarItem: ToolbarItemSettings | undefined) {
 		if (toolbarItem) {
 			type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JsEngine | ItemType.Templater>;  
 			if (toolbarItem?.scriptConfig) {
@@ -1123,7 +1124,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ItemType.Dataview:
 				case ItemType.JsEngine:
 				case ItemType.Templater:
-					await this.handleScriptCommand(toolbarItem);
+					await this.handleScriptItem(toolbarItem);
 					break;
 			}
 			sidebarTab.detach();
