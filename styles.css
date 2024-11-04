@@ -1063,10 +1063,15 @@ body {
             }
         }
 
-        & span.cm-iconize-icon {
+        & span.cm-iconize-icon, span.iconize-icon-in-link {
             transform: unset !important;
             align-items: center;
             vertical-align: middle;
+            margin-right: unset;
+            /* fix for bold Iconize icons #162 */
+            & svg svg[stroke-width='16px'] {
+                stroke-width: 2;
+            }
         }
 
     }
@@ -1251,10 +1256,6 @@ body {
             box-shadow: none;
             background-color: unset;
             border-radius: unset;
-        }
-        /* fix for bold Iconize icons #162 */
-        & .cm-iconize-icon svg svg[stroke-width='16px'] {
-            stroke-width: 2;
         }
         &:hover {
             /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
