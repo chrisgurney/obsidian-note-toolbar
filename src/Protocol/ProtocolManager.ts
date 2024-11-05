@@ -1,10 +1,9 @@
 import NoteToolbarPlugin from "main";
 import { Notice, ObsidianProtocolData } from "obsidian";
-import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { HelpModal } from "Settings/UI/Modals/HelpModal";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { WhatsNewModal } from "Settings/UI/Modals/WhatsNewModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 import { debugLog } from "Utils/Utils";
 
@@ -37,7 +36,7 @@ export class ProtocolManager {
         else if (data.import) {
             const content = decodeURIComponent(data.import);
 			// double-check provided text is a Note Toolbar Callout
-			if (/^[>\s]*\[\!\s*note-toolbar\s*\|\s*/.test(data.import)) {
+			if (data.import.includes('[!note-toolbar')) {
 				confirmImportWithModal(
 					this.plugin, 
 					content
@@ -89,8 +88,10 @@ export class ProtocolManager {
 			}
 		}
 		else if (data.whatsnew) {
-			const whatsNewModal = new WhatsNewModal(this.plugin);
-			whatsNewModal.open();
+			this.plugin.app.workspace.getLeaf(true).setViewState({
+				type: VIEW_TYPE_WHATS_NEW,
+				active: true
+			});
 		}
 		else {
 			new Notice(t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')}));
@@ -100,12 +101,20 @@ export class ProtocolManager {
     /**
      * Returns a URI which can be shared with other users, that imports the provided toolbar's callout markdown.
      * @param toolbar ToolbarSettings to share
+	 * @param useObsidianUri true if an obsidian:// URI should be generated versus an HTTP URL (default)
      * @returns URI to share as a string
      */
-    async getShareUri(toolbar: ToolbarSettings): Promise<string> {
-        let callout = await exportToCallout(this.plugin, toolbar, true);
-        let shareUri = `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`;
-        // TODO: check length of URI
+    async getShareUri(toolbar: ToolbarSettings, useObsidianUri: boolean = false): Promise<string> {
+		const options = {
+			includeIcons: true,
+			replaceVars: false,
+			useDataEls: true,
+			useIds: false
+		} as ExportSettings;
+        let callout = await exportToCallout(this.plugin, toolbar, options);
+		const shareUri = useObsidianUri 
+			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
+			: `https://chrisgurney.github.io/obsidian-note-toolbar/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
         return shareUri;
     }
 

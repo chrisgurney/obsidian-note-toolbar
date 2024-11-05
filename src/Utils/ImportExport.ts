@@ -1,8 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog, getUUID, replaceVars, toolbarHasVars } from "./Utils";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { debugLog, getUUID } from "./Utils";
 import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
-import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 
 const toIconizeFormat = (s: string) => 
     `:Li${s.replace(/^lucide-/, '')
@@ -10,22 +9,16 @@ const toIconizeFormat = (s: string) =>
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join('')}:`;
 
-type ExportOptions = {
-    includeIcons: boolean;
-    resolveVars: boolean;
-    useMenuIds: boolean;
-}
-
 /**
  * Exports the given toolbar as a Note Toolbar Callout
  * @param plugin NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
- * @param forShareUri set to true if export is triggered from share
+ * @param options ExportSettings
  * @returns Note Toolbar Callout as a string
  */
-export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, forShareUri: boolean = false): Promise<string> {
+export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, options: ExportSettings): Promise<string> {
     
-    debugLog('exportToCallout()', 'enabled plugins', (plugin.app as any).plugins.plugins);
+    debugLog('exportToCallout()');
 
     // write out callout type + styles
     const defaultStyles = toolbar.defaultStyles.length ? toolbar.defaultStyles.join('-') : '';
@@ -36,27 +29,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     // get the active file to provide context, and to replace vars if requested
     let activeFile = plugin.app.workspace.getActiveFile();
 
-    let options = {
-        includeIcons: false,
-        resolveVars: false,
-        useMenuIds: forShareUri ? false : true
-    } as ExportOptions
-
-    // Iconize - check if plugin is enabled to output icons
-    const hasIconize = (plugin.app as any).plugins.plugins['obsidian-icon-folder'];
-    options.includeIcons = (hasIconize || forShareUri) ? true : false;
-
-    // if there are variables, as user if they should be replaced
-    if (!forShareUri && toolbarHasVars(toolbar)) {
-        options.resolveVars = await confirmWithModal(plugin.app, { 
-            title: t('export.confirm-vars-title'),
-            questionLabel: t('export.confirm-vars-question'),
-            approveLabel: t('export.label-vars-approve'),
-            denyLabel: t('export.label-vars-deny')
-        });
-    }
-
-    calloutExport += exportToCalloutList(plugin, toolbar, activeFile, options) + '\n';
+    calloutExport += await exportToCalloutList(plugin, toolbar, activeFile, options) + '\n';
 
     return calloutExport;
 
@@ -67,17 +40,17 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
  * @param plugin NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
  * @param activeFile TFile this export is being run from, for context if needed
- * @param options ExportOptions
+ * @param options ExportSettings
  * @param recursions tracks how deep we are to stop recursion
  * @returns Note Toolbar Callout items as a bulleted list string
  */
-function exportToCalloutList(
+async function exportToCalloutList(
     plugin: NoteToolbarPlugin,
     toolbar: ToolbarSettings,
     activeFile: TFile | null,
-    options: ExportOptions,
+    options: ExportSettings,
     recursions: number = 0
-): string {
+): Promise<string> {
 
     if (recursions >= 2) {
         return ''; // stop recursion
@@ -86,19 +59,19 @@ function exportToCalloutList(
     let itemsExport = '';
 
     const BULLET = '\n> -';
-    toolbar.items.forEach((item, index) => {
+    for (const [index, item] of toolbar.items.entries()) {
 
         // if Iconize is enabled, add icons; otherwise don't output
         let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = options.resolveVars ? replaceVars(plugin.app, item.label, activeFile, false) : item.label;
-        let itemLink = options.resolveVars ? replaceVars(plugin.app, item.link, activeFile, false) : item.link;
-        let itemTooltip = options.resolveVars ? replaceVars(plugin.app, item.tooltip, activeFile, false) : item.tooltip;
+        let itemText = options.replaceVars ? await plugin.replaceVars(item.label, activeFile) : item.label;
+        let itemLink = options.replaceVars ? await plugin.replaceVars(item.link, activeFile) : item.link;
+        let itemTooltip = options.replaceVars ? await plugin.replaceVars(item.tooltip, activeFile) : item.tooltip;
 
-        itemText = encodeTextForCallout(itemText);
-        itemLink = encodeLinkForCallout(itemLink);
-        itemTooltip = encodeTextForCallout(itemTooltip);
+        itemText = escapeTextForCallout(itemText);
+        itemLink = escapeLinkForCallout(itemLink);
+        itemTooltip = escapeTextForCallout(itemTooltip);
 
         // fallback if no icon or label = tooltip; otherwise use a generic name
         itemText = itemIcon ? itemText : (itemText ? itemText : (itemTooltip ? itemTooltip : t('export.item-generic', { number: index + 1 })));
@@ -108,16 +81,21 @@ function exportToCalloutList(
                 itemsExport += `${BULLET} <br/>`;
                 break;
             case ItemType.Command:
-                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`;
-                // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
+                itemsExport += options.useDataEls 
+                    ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`
+                    : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
                 break;
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
-                let resolvedItemLink = replaceVars(plugin.app, itemLink, activeFile, false);
-                let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
+                let resolvedItemLink = itemLink;
+                plugin.replaceVars(itemLink, activeFile).then((resolvedLink) => {
+                    resolvedItemLink = resolvedLink;
+                });
+                let fileOrFolder = this.plugin.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
-                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`;
-                    // calloutExport += `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
+                    itemsExport += options.useDataEls
+                        ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`
+                        : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
                 }
                 else {
                     itemsExport += `${BULLET} [[${itemLink}|${itemIcon}${itemText}]]`;
@@ -125,30 +103,31 @@ function exportToCalloutList(
                 break;
             case ItemType.Group:
                 let groupToolbar = plugin.settingsManager.getToolbar(item.link);
-                itemsExport += groupToolbar ? exportToCalloutList(plugin, groupToolbar, activeFile, options, recursions + 1) : '';
+                itemsExport += groupToolbar ? await exportToCalloutList(plugin, groupToolbar, activeFile, options, recursions + 1) : '';
                 // TODO: skipped/ignored message if toolbar not found
                 break;
             case ItemType.Menu:
-                if (options.useMenuIds) {
-                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${itemLink}"/>`;
-                }
-                else {
+                let menuLink = itemLink;
+                if (!options.useIds) {
                     let menuToolbar = plugin.settingsManager.getToolbar(item.link);
-                    itemsExport += menuToolbar ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuToolbar.name}"/>` : '';
-                    // TODO: skipped/ignored message if toolbar not found
+                    menuLink = menuToolbar ? menuToolbar.name : menuLink;
+                    // TODO: skipped/ignored message if toolbar not found?
                 }
+                itemsExport += options.useDataEls
+                    ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuLink}"/>`
+                    : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${menuLink}>)`;
                 break;
             case ItemType.Separator:
                 itemsExport += `${BULLET} <hr/>`;
                 break;
             case ItemType.Uri:
-                itemsExport += `${BULLET} [${itemIcon}${itemText}](<${itemLink}>)`;
+                itemsExport += itemLink ? `${BULLET} [${itemIcon}${itemText}](<${itemLink}>)` : '';
                 break;
         }
 
         itemsExport += (itemTooltip && (itemText !== itemTooltip)) ? ` <!-- ${itemTooltip} -->` : '';
 
-    });
+    }
 
     return itemsExport;
 
@@ -156,38 +135,26 @@ function exportToCalloutList(
 
 /**
  * Returns a string that shouldn't break URL portion of a callout markdown link.
- * @param str string to encode
- * @returns URI encoded string with certain characters preserved
+ * @param str string to escape
+ * @returns escaped string
  */
-function encodeLinkForCallout(str: string): string {
-    return encodeURIComponent(str)
-        .replace(/%20/g, ' ')
-        .replace(/%2C/g, ',')
-        .replace(/%2F/g, '/')
-        .replace(/%3A/g, ':')
-        .replace(/%3F/g, '?')
-        .replace(/%5B/g, '\\[')
-        .replace(/%5D/g, '\\]')
-        .replace(/%7B/g, '{')
-        .replace(/%7D/g, '}');
+function escapeLinkForCallout(str: string): string {
+    return str
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]')
+        .replace(/\)/g, '\\)')
+        .replace(/\(/g, '\\(');
 }
 
 /**
  * Returns a string that shouldn't break the text portion of a callout markdown link.
- * @param str string to encode
- * @returns URI encoded string with certain characters preserved
+ * @param str string to escape
+ * @returns escaped string
  */
-function encodeTextForCallout(str: string): string {
-    return encodeURIComponent(str)
-        .replace(/%20/g, ' ')
-        .replace(/%2C/g, ',')
-        .replace(/%2F/g, '/')
-        .replace(/%3A/g, ':')
-        .replace(/%3F/g, '?')
-        .replace(/%5B/g, '\\[')
-        .replace(/%5D/g, '\\]')
-        .replace(/%7B/g, '{')
-        .replace(/%7D/g, '}');
+function escapeTextForCallout(str: string): string {
+    return str
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]');
 }
 
 /**
@@ -204,11 +171,12 @@ export async function importFromCallout(
     fromShareUri: boolean = false
 ): Promise<ToolbarSettings> {
 
-    debugLog('importFromCallout()', callout);
-
     const lines = callout.trim().split('\n');
     const isToolbarProvided = toolbar ? true : false;
     var errorLog = '';
+
+    // get the active file to provide context
+    let activeFile = plugin.app.workspace.getActiveFile();
 
     // create a new toolbar to return, if one wasn't provided
     if (!toolbar) {
@@ -230,10 +198,10 @@ export async function importFromCallout(
     if (lines[0].includes('[!note-toolbar')) {
         // don't create a toolbar if we're importing into one
         if (!isToolbarProvided) {
-            const metadataMatch = lines[0].match(/\[!(.*?)\|\s*(.*?)\](.*)/);
+            const metadataMatch = lines[0].match(/\[!note-toolbar\|?\s*([^\]]*)\](.*)/);
             if (metadataMatch) {
-                let styles = metadataMatch[2].split(/[^a-zA-Z0-9]+/);
-                let name = metadataMatch[3].trim();
+                let styles = metadataMatch[1].split(/[^a-zA-Z0-9]+/);
+                let name = metadataMatch[2].trim();
     
                 const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
                 const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
@@ -241,7 +209,7 @@ export async function importFromCallout(
                     DEFAULT_STYLE_KEYS.includes(style) || MOBILE_STYLE_KEYS.includes(style)
                 );
                 const invalidStyles = styles.filter(style => 
-                    !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
+                    style && !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
                 );
     
                 debugLog('• name?', name);
@@ -251,7 +219,6 @@ export async function importFromCallout(
                     errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
-                // TODO: if there are styles and toolbar is provided, prompt to ignore styles
                 toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.imported-tbar-name'), false);
                 toolbar.defaultStyles = validStyles;
             }
@@ -300,6 +267,11 @@ export async function importFromCallout(
                     itemType = ItemType.File;
                     label = linkMatch[4] || linkMatch[3];
                     link = linkMatch[3];
+                    // resolve the filename provided to one in this vault, if it exists
+                    if (activeFile) {
+                        const linkFile = plugin.app.metadataCache.getFirstLinkpathDest(link, activeFile?.path);
+                        link = linkFile ? linkFile.path : link;
+                    }
                 }
     
                 const iconMatch = label?.match(/(:Li\w+:)/);
@@ -308,7 +280,7 @@ export async function importFromCallout(
                     const iconName = label?.match(/:Li(\w+):/);
                     if (iconName) {
                         let iconImported = iconName[1]
-                            .replace(/([a-z])([A-Z])/g, '$1-$2')
+                            .replace(/([a-z])([A-Z0-9])/g, '$1-$2')
                             .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
@@ -404,9 +376,7 @@ export async function importFromCallout(
  * @returns name of command; undefined otherwise
  */
 function getCommandNameById(commandId: string): string | undefined {
-
-    const availableCommands: Command[] = Object.values(this.app.commands.commands);
+    const availableCommands: Command[] = Object.values(this.plugin.app.commands.commands);
     const matchedCommand = availableCommands.find(command => command.id === commandId);
     return matchedCommand ? matchedCommand.name : undefined;
-
 }

@@ -2,7 +2,7 @@ import { getUUID } from "Utils/Utils";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20240727.1;
-export const WHATSNEW_VERSION = 1.13;
+export const WHATSNEW_VERSION = 1.14;
 
 /******************************************************************************
  * TRANSLATIONS
@@ -35,6 +35,8 @@ export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); 
  TYPES
  ******************************************************************************/
 
+ export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
+
 export enum ComponentType {
 	Icon = 'icon',
 	Label = 'label'
@@ -42,10 +44,13 @@ export enum ComponentType {
 export enum ItemType {
 	Break = 'break',
 	Command = 'command',
+	Dataview = 'dataview',
 	File = 'file',
 	Group = 'group',
+	JsEngine = 'js-engine',
 	Menu = 'menu',
 	Separator = 'separator',
+	Templater = 'templater-obsidian',
 	Uri = 'uri'
 }
 export enum PlatformType {
@@ -67,6 +72,28 @@ export enum RibbonAction {
 	ToolbarSuggester = 'toolbar-suggester',
 	Toolbar = 'toolbar'
 }
+export enum SettingType {
+	Args = 'args',
+	Command = 'command',
+	File = 'file',
+	Ignore = 'ignore',
+	Script = 'script',
+	Text = 'text',
+	TextArea = 'textarea',
+	Toolbar = 'toolbar',
+}
+export const SettingFieldItemMap: Record<ItemType, SettingType> = {
+	[ItemType.Break]: SettingType.Ignore,
+	[ItemType.Command]: SettingType.Command,
+	[ItemType.Dataview]: SettingType.Script,
+	[ItemType.File]: SettingType.File,
+	[ItemType.Group]: SettingType.Toolbar,
+	[ItemType.JsEngine]: SettingType.Script,
+	[ItemType.Menu]: SettingType.Toolbar,
+	[ItemType.Separator]: SettingType.Ignore,
+	[ItemType.Uri]: SettingType.Text,
+	[ItemType.Templater]: SettingType.Script
+}
 export enum ViewType {
 	All = 'all',
 	Preview = 'preview',
@@ -86,9 +113,11 @@ export enum ToolbarStyle {
 }
 
 export interface NoteToolbarSettings {
+	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
 	icon: string;
 	ribbonAction: RibbonAction;
+	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
@@ -97,14 +126,28 @@ export interface NoteToolbarSettings {
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+	export: {
+		includeIcons: true,
+		replaceVars: true,
+		useDataEls: true,
+		useIds: true,
+	},
 	folderMappings: [],
 	icon: "circle-ellipsis",
 	ribbonAction: RibbonAction.Toolbar,
+	scriptingEnabled: false,
 	showEditInFabMenu: false,
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
 	whatsnew_version: 0
+}
+
+export interface ExportSettings {
+    includeIcons: boolean;
+    replaceVars: boolean;
+	useDataEls: boolean;
+    useIds: boolean;
 }
 
 export interface ToolbarSettings {
@@ -210,6 +253,7 @@ export interface ToolbarItemSettings {
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
+	scriptConfig?: ScriptConfig;
 	tooltip: string;
 	visibility: Visibility;
 }
@@ -223,6 +267,19 @@ export interface ToolbarItemLinkAttr {
 	type: ItemType;
 };
 
+/**
+ * Describes the configuration for various script-type items. 
+ */
+export interface ScriptConfig {
+	pluginFunction: string;
+	expression?: string;
+	sourceFile?: string;
+	sourceFunction?: string;
+	sourceArgs?: string;
+	outputContainer?: string;
+	outputFile?: string;
+};
+
 /******************************************************************************
  UI STRINGS
  ******************************************************************************/
@@ -233,9 +290,12 @@ export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
 
 export const LINK_OPTIONS = {
 	[ItemType.Command]: t('setting.item.option-command'),
+	[ItemType.Dataview]: "Dataview",
 	[ItemType.File]: t('setting.item.option-file'),
 	[ItemType.Group]: t('setting.item.option-item-group'),
 	[ItemType.Menu]: t('setting.item.option-item-menu'),
+	[ItemType.JsEngine]: "JS Engine",
+	[ItemType.Templater]: "Templater",
 	[ItemType.Uri]: t('setting.item.option-uri')
 }
 
@@ -271,8 +331,6 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ button: t('setting.styles.option-button') },
     { center: t('setting.styles.option-center') },
 	{ wide: t('setting.styles.option-wide') },
-    { floatl: t('setting.styles.option-floatl') },
-    { floatr: t('setting.styles.option-floatr') },
     { left: t('setting.styles.option-left') },
     { right: t('setting.styles.option-right') },
 	{ between: t('setting.styles.option-between') },
@@ -282,10 +340,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ autohide: t('setting.styles.option-autohide-disclaimer') },
-	{ floatl: t('setting.styles.option-floatl-disclaimer') },
-	{ floatr: t('setting.styles.option-floatr-disclaimer') },
 	{ sticky: t('setting.styles.option-sticky-disclaimer') },
-	{ wide: t('setting.styles.option-wide-disclaimer') },
 ];
 
 /**
@@ -299,9 +354,6 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ mnwd: t('setting.styles.option-nowide') },
 	{ mnwrp: t('setting.styles.option-nowrap') },
 	{ mwd: t('setting.styles.option-wide') },
-    { mfltl: t('setting.styles.option-floatl') },
-    { mfltr: t('setting.styles.option-floatr') },
-    { mnflt: t('setting.styles.option-nofloat') },
     { mlft: t('setting.styles.option-left') },
     { mrght: t('setting.styles.option-right') },
 	{ mbtwn: t('setting.styles.option-between') },
@@ -311,10 +363,6 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
-	{ mfltl: t('setting.styles.option-floatl-disclaimer') },
-	{ mfltr: t('setting.styles.option-floatr-disclaimer') },
 	{ mnwrp: t('setting.styles.option-nowrap-disclaimer') },
 	{ mstcky: t('setting.styles.option-sticky-disclaimer') },
-	{ mnwd:  t('setting.styles.option-nowide-disclaimer') },
-	{ mwd: t('setting.styles.option-wide-disclaimer') },
 ];

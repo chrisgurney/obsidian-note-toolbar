@@ -1,9 +1,9 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting } from "obsidian";
-import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
-import { WhatsNewModal } from "../Modals/WhatsNewModal";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
+import { debugLog } from "Utils/Utils";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
@@ -98,21 +98,25 @@ export function createToolbarPreviewFr(
  * Displays the help section.
  * @param containerEl HTMLElement to add the content to.
  * @param useTextVersion set to true to just use the small text version.
+ * @param closeCallback function to close the settings window, which will depend on where it was launched from
  */
-export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLElement, useTextVersion: boolean = false) {
+export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLElement, useTextVersion: boolean = false, closeCallback: () => void) {
 	
 	if (Platform.isPhone || useTextVersion) {
 
 		let helpContainerEl = settingsDiv.createDiv();
 		helpContainerEl.addClass('note-toolbar-setting-help-section');
 		const helpDesc = document.createDocumentFragment();
-		helpDesc.append(
-			"v" + plugin.manifest.version,
-			" • ",
-			helpDesc.createEl("a", { href: "obsidian://note-toolbar?whatsnew", text: t('setting.button-whats-new') }),
-			" • ",
-			helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }),
-		);
+		helpDesc.append("v" + plugin.manifest.version, " • ");
+		let whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
+		plugin.registerDomEvent(whatsNewLink, 'click', (event) => { 
+			plugin.app.workspace.getLeaf(true).setViewState({
+				type: VIEW_TYPE_WHATS_NEW,
+				active: true
+			});
+			closeCallback();
+		});
+		helpDesc.append(" • ", helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }));
 		helpContainerEl.append(helpDesc);
 
 	}
@@ -130,8 +134,11 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 				button
 					.setTooltip(t('setting.button-whats-new-tooltip'))
 					.onClick(() => {
-						let whatsnew = new WhatsNewModal(plugin);
-						whatsnew.open();
+						plugin.app.workspace.getLeaf(true).setViewState({
+							type: VIEW_TYPE_WHATS_NEW,
+							active: true
+						});
+						closeCallback();
 					})
 					.buttonEl.setText(t('setting.button-whats-new'));
 			})
@@ -181,12 +188,12 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
  * @param page Documentation page (i.e., URL after `.../wiki/`).
  * @returns DocumentFragment containing the message and styling.
  */
-export function learnMoreFr(message: string, page: string): DocumentFragment {
+export function learnMoreFr(message: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
 	let messageFr = document.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
 	);
-	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: t('setting.button-learn-more') });
+	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
 }
@@ -221,8 +228,10 @@ export function showWhatsNewIfNeeded(plugin: NoteToolbarPlugin) {
 	if (plugin.settings.whatsnew_version !== WHATSNEW_VERSION) {
 		plugin.settings.whatsnew_version = WHATSNEW_VERSION;
 		plugin.settingsManager.save().then(() => {
-			const whatsnew = new WhatsNewModal(plugin);
-			whatsnew.open();
+			plugin.app.workspace.getLeaf(true).setViewState({
+				type: VIEW_TYPE_WHATS_NEW,
+				active: true
+			});
 		});
 	}
 

@@ -1,9 +1,9 @@
-import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, debounce, normalizePath } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getElementPosition, getUUID, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
-import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, ItemType, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
@@ -11,26 +11,24 @@ import Sortable from 'sortablejs';
 import { exportToCallout } from 'Utils/ImportExport';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { ShareModal } from './Modals/ShareModal';
+import { importFromModal } from './Modals/ImportModal';
 
 export class NoteToolbarSettingTab extends PluginSettingTab {
 
 	plugin: NoteToolbarPlugin;
 	app: App;
 
-	private itemListOpen: boolean = true;
 	private itemListIdCounter: number = 0;
+
+	private calloutSettingsOpen: boolean = false;
+	private itemListOpen: boolean = true;
+	private mappingListOpen: boolean = true;
 
 	constructor(app: App, plugin: NoteToolbarPlugin) {
 		super(app, plugin);
 		this.app = app;
 		this.plugin = plugin;
 	}
-
-    public openSettingsModal(toolbar: ToolbarSettings) {
-        const modal = new ToolbarSettingsModal(this.app, this.plugin, this, toolbar);
-		modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name }));
-        modal.open();
-    }
 
 	/*************************************************************************
 	 * SETTINGS DISPLAY
@@ -44,19 +42,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		// TODO: playing with Dataview support
-		// new Setting(containerEl)
-		// 	.addButton((button: ButtonComponent) => {
-		// 		button
-		// 			.setButtonText("dv test")
-		// 			.onClick(async () => {
-		// 				debugLog("Trying dataview...");
-		// 				let dv = new DataviewAdapter();
-		// 				const result = await dv.evaluate("dv.current().file.mtime");
-		// 				debugLog("result: " + result);
-		// 			});
-		// 	});
-
 		if (this.plugin.settings.version !== SETTINGS_VERSION) {
 			new Setting(containerEl)
 				.setName(t('setting.error-old-settings-name'))
@@ -66,7 +51,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 
 		// help
-		displayHelpSection(this.plugin, containerEl);
+		displayHelpSection(this.plugin, containerEl, undefined, () => {
+			// @ts-ignore
+			this.plugin.app.setting.close();
+		});
 
 		// toolbar list
 		this.displayToolbarList(containerEl);
@@ -80,6 +68,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayFolderMap(containerEl);
 
 		// other global settings
+		this.displayCopyAsCalloutSettings(containerEl);
 		this.displayOtherSettings(containerEl);
 
 		if (focusSelector) {
@@ -95,7 +84,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// scroll to the position when the modal was last open
 		this.rememberLastPosition(this.containerEl);
 
-		// show the What's New dialog once, if the user hasn't seen it yet
+		// show the What's New view once, if the user hasn't seen it yet
 		showWhatsNewIfNeeded(this.plugin);
 
 	}
@@ -115,11 +104,39 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setDesc(t('setting.toolbars.description'))
 			.setHeading();
 
-		if (this.plugin.settings.toolbars.length > 0) {
+		toolbarListSetting
+			.addExtraButton((cb) => {
+				cb.setIcon('import')
+				.setTooltip(t('import.button-import-tooltip'))
+				.onClick(async () => {
+					importFromModal(
+						this.plugin
+					).then(async (importedToolbar: ToolbarSettings) => {
+						if (importedToolbar) {
+							await this.plugin.settingsManager.addToolbar(importedToolbar);
+							await this.plugin.settingsManager.save();
+							await this.plugin.commands.openToolbarSettingsForId(importedToolbar.uuid);
+							this.display();
+						}
+					});
+				})
+				.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								e.preventDefault();
+								cb.extraSettingsEl.click();
+						}
+					});
+			});
+
+		if (this.plugin.settings.toolbars.length > 4) {
 			toolbarListSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.toolbars.button-collapse-tbars-tooltip'))
+					.setTooltip(t('setting.button-collapse-tooltip'))
 					.onClick(async () => {
 						let itemsContainer = containerEl.querySelector('.note-toolbar-setting-items-container');
 						if (itemsContainer) {
@@ -127,7 +144,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 							let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
 							this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
-							cb.setTooltip(this.itemListOpen ? t('setting.toolbars.button-collapse-tbars-tooltip') : t('setting.toolbars.button-expand-tbars-tooltip'));
+							cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 						}
 					})
 					.extraSettingsEl.tabIndex = 0;
@@ -192,9 +209,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 											.setTitle(t('export.label-callout'))
 											.setIcon('copy')
 											.onClick(async () => {
-												let calloutExport = await exportToCallout(this.plugin, toolbar);
+												let calloutExport = await exportToCallout(this.plugin, toolbar, this.plugin.settings.export);
 												navigator.clipboard.writeText(calloutExport);
-												new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+												new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
 											});
 									});
 									menu.addSeparator();
@@ -230,7 +247,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								.setTooltip(t('setting.toolbars.button-edit-tbar-tooltip'))
 								.setButtonText(t('setting.toolbars.button-edit-tbar'))
 								.onClick(() => {
-									this.openSettingsModal(toolbar);
+									this.plugin.settingsManager.openToolbarSettings(toolbar, this);
 								});
 							});
 					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
@@ -263,21 +280,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setButtonText(t('setting.toolbars.button-new-tbar'))
 					.setCta()
 					.onClick(async () => {
-						let newToolbar = {
-							uuid: getUUID(),
-							defaultStyles: ["border", "even", "sticky"],
-							items: [],
-							mobileStyles: [],
-							name: "",
-							position: { 
-								desktop: { allViews: { position: 'props' } }, 
-								mobile: { allViews: { position: 'props' } }, 
-								tablet: { allViews: { position: 'props' } } },
-							updated: new Date().toISOString(),
-						} as ToolbarSettings;
-						this.plugin.settings.toolbars.push(newToolbar);
-						await this.plugin.settingsManager.save();
-						this.openSettingsModal(newToolbar);
+						const newToolbar = await this.plugin.settingsManager.newToolbar();
+						this.plugin.settingsManager.openToolbarSettings(newToolbar, this);
 					});
 			});
 
@@ -313,14 +317,50 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayFolderMap(containerEl: HTMLElement): void {
 
-		new Setting(containerEl)
-			.setName(t('setting.display-rules.option-folder-mappings'))
-			.setDesc(t('setting.display-rules.option-folder-mappings-description'))
+		let mappingsContainer = createDiv();
+		mappingsContainer.addClass('note-toolbar-setting-mappings-container');
+		mappingsContainer.setAttribute('data-active', this.mappingListOpen.toString());
+
+		let toolbarMapSetting = new Setting(mappingsContainer)
+			.setName(t('setting.mappings.name'))
+			.setDesc(t('setting.mappings.description'))
 			.setClass("note-toolbar-setting-no-border");
 
+		if (this.plugin.settings.folderMappings.length > 4) {
+			toolbarMapSetting
+				.addExtraButton((cb) => {
+					cb.setIcon('right-triangle')
+					.setTooltip(t('setting.button-collapse-tooltip'))
+					.onClick(async () => {
+						let mappingsContainer = containerEl.querySelector('.note-toolbar-setting-mappings-container');
+						if (mappingsContainer) {
+							this.mappingListOpen = !this.mappingListOpen;
+							mappingsContainer.setAttribute('data-active', this.mappingListOpen.toString());
+							let heading = mappingsContainer.querySelector('.setting-item-info .setting-item-name');
+							this.mappingListOpen ? heading?.setText(t('setting.mappings.name')) : heading?.setText(t('setting.mappings.name-with-count', { count: this.plugin.settings.folderMappings.length }));
+							cb.setTooltip(this.mappingListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
+						}
+					})
+					.extraSettingsEl.tabIndex = 0;
+					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ":
+									e.preventDefault();
+									cb.extraSettingsEl.click();
+							}
+						});
+				});
+		}
+
+		let collapsibleContainer = createDiv();
+		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+
 		if (this.plugin.settings.folderMappings.length == 0) {
-			containerEl
-				.createEl("div", { text: emptyMessageFr(t('setting.display-rules.option-folder-mappings-empty')) })
+			mappingsContainer
+				.createEl("div", { text: emptyMessageFr(t('setting.mappings.label-empty')) })
 				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
@@ -349,7 +389,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				}
 			});
 
-			containerEl.append(toolbarFolderListDiv);
+			collapsibleContainer.appendChild(toolbarFolderListDiv)
 
 		}
 
@@ -357,12 +397,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// "Add a new mapping" button
 		//
 
-		new Setting(containerEl)
+		new Setting(collapsibleContainer)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
-					.setTooltip(t('setting.display-rules.button-new-mapping-tooltip'))
-					.setButtonText(t('setting.display-rules.button-new-mapping'))
+					.setButtonText(t('setting.mappings.button-new'))
+					.setTooltip(t('setting.mappings.button-new-tooltip'))
 					.setCta()
 					.onClick(async () => {
 						let newMapping = {
@@ -377,6 +417,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
 					});
 			});
+
+		mappingsContainer.appendChild(collapsibleContainer);
+		containerEl.append(mappingsContainer);
 
 	}
 
@@ -395,7 +438,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		textFieldsDiv.id = "note-toolbar-setting-item-field-" + this.itemListIdCounter;
 		textFieldsDiv.className = "note-toolbar-setting-item-fields";
 
-		let ds = new Setting(toolbarFolderListItemDiv)
+		new Setting(toolbarFolderListItemDiv)
 			.setClass("note-toolbar-setting-item-delete")
 			.addButton((cb) => {
 				cb.setIcon("minus-circle")
@@ -407,24 +450,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.buttonEl.setAttribute('data-row-id', rowId);
 			});
 
-		// FUTURE: dropdown for mapping types, such as for tags and file patterns
-		//
-		// new Setting(textFieldsDiv)
-		// 	.setClass("note-toolbar-setting-mapping-field")
-		// 	.addDropdown((dropdown) => 
-		// 		dropdown
-		// 			.addOptions({folder: "Folder"})
-		// 			.setValue('folder')
-		// 			.onChange(async (value) => {
-
-		// 			})
-		// );
-
-		const fs = new Setting(textFieldsDiv)
+		new Setting(textFieldsDiv)
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
 				new FolderSuggester(this.app, cb.inputEl);
-				cb.setPlaceholder(t('setting.display-rules.placeholder-mapping-folder'))
+				cb.setPlaceholder(t('setting.mappings.placeholder-folder'))
 					.setValue(mapping.folder)
 					.onChange(debounce(async (newFolder) => {
 						if (
@@ -437,7 +467,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						) {
 							if (document.getElementById("note-toolbar-name-error") === null) {
 								let errorDiv = createEl("div", { 
-									text: t('setting.display-rules.error-folder-already-mapped'), 
+									text: t('setting.mappings.error-folder-already-mapped'), 
 									attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
 								toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
 								toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
@@ -451,11 +481,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					}, 250));
 			});
-		const ts = new Setting(textFieldsDiv)
+		new Setting(textFieldsDiv)
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder(t('setting.display-rules.placeholder-mapping-toolbar'))
+				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
 					.setValue(this.plugin.settingsManager.getToolbarName(mapping.toolbar))
 					.onChange(debounce(async (name) => {
 						let mappedToolbar = this.plugin.settingsManager.getToolbarByName(name);
@@ -469,7 +499,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		let itemHandleDiv = createDiv();
 		itemHandleDiv.addClass("note-toolbar-setting-item-controls");
-		const s1d = new Setting(itemHandleDiv)
+		new Setting(itemHandleDiv)
 			.addExtraButton((cb) => {
 				cb.setIcon('grip-horizontal')
 					.setTooltip(t('setting.button-drag-tooltip'))
@@ -493,6 +523,102 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
+	 * Displays settings for exporting/copying to markdown.
+	 * @param containerEl 
+	 */	
+	displayCopyAsCalloutSettings(containerEl: HTMLElement): void {
+
+		let collapsibleEl = createDiv();
+		collapsibleEl.addClass('note-toolbar-setting-callout-container');
+		collapsibleEl.setAttribute('data-active', this.calloutSettingsOpen.toString());
+
+		let copyAsCalloutSetting = new Setting(collapsibleEl)
+			.setName(t('setting.copy-as-callout.title'))
+			.setDesc(learnMoreFr(t('setting.copy-as-callout.description'), 'Creating-callouts-from-toolbars'))
+			.setHeading();
+
+		copyAsCalloutSetting
+			.addExtraButton((cb) => {
+				cb.setIcon('right-triangle')
+				.setTooltip(t('setting.button-collapse-tooltip'))
+				.onClick(async () => {
+					let itemsContainer = containerEl.querySelector('.note-toolbar-setting-callout-container');
+					if (itemsContainer) {
+						this.calloutSettingsOpen = !this.calloutSettingsOpen;
+						itemsContainer.setAttribute('data-active', this.calloutSettingsOpen.toString());
+						cb.setTooltip(this.calloutSettingsOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
+					}
+				})
+				.extraSettingsEl.tabIndex = 0;
+				cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
+				this.plugin.registerDomEvent(
+					cb.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								e.preventDefault();
+								cb.extraSettingsEl.click();
+						}
+					});
+			});
+
+		let collapsibleContainer = createDiv();
+		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.copy-as-callout.option-icons'))
+			.setDesc(t('setting.copy-as-callout.option-icons-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.includeIcons)
+					.onChange(async (value) => {
+						this.plugin.settings.export.includeIcons = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.copy-as-callout.option-vars'))
+			.setDesc(t('setting.copy-as-callout.option-vars-description', {interpolation: { skipOnVariables: true }} ))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.replaceVars)
+					.onChange(async (value) => {
+						this.plugin.settings.export.replaceVars = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.copy-as-callout.option-ids'))
+			.setDesc(t('setting.copy-as-callout.option-ids-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.useIds)
+					.onChange(async (value) => {
+						this.plugin.settings.export.useIds = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.copy-as-callout.option-data'))
+			.setDesc(t('setting.copy-as-callout.option-data-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.export.useDataEls)
+					.onChange(async (value) => {
+						this.plugin.settings.export.useDataEls = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		collapsibleEl.appendChild(collapsibleContainer);
+		containerEl.appendChild(collapsibleEl);
+
+	}
+
+	/**
 	 * Displays other global settings.
 	 * @param containerEl 
 	 */
@@ -503,6 +629,19 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		new Setting(containerEl)
+			.setName(t('setting.other.scripting.name'))
+			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.scriptingEnabled)
+					.onChange(async (value) => {
+						this.plugin.settings.scriptingEnabled = value;
+						this.plugin.updateAdapters();
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
 			.setDesc(t('setting.other.icon.description'))
 			.addButton((cb) => {
@@ -510,7 +649,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip(t('setting.other.icon.tooltip'))
 					.onClick(async (e) => {
 						e.preventDefault();
-						const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+						const modal = new IconSuggestModal(this.plugin, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 						modal.open();
 					});
 				cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.plugin.settings.icon ? "true" : "false");
@@ -521,7 +660,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							case "Enter":
 							case " ":
 								e.preventDefault();					
-								const modal = new IconSuggestModal(this.plugin, this.plugin.settings, cb.buttonEl);
+								const modal = new IconSuggestModal(this.plugin, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 								modal.open();
 						}
 					});
@@ -552,6 +691,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 			});
 
+	}
+
+	/**
+	 * Updates the Note Toolbar Settings > Icon setting.
+	 * @param settingEl 
+	 * @param selectedIcon 
+	 */
+	updateNoteToolbarIcon(settingEl: HTMLElement, selectedIcon: string) {
+		this.plugin.settings.icon = (selectedIcon === t('setting.icon-suggester.option-no-icon') ? "" : selectedIcon);
+		this.plugin.settingsManager.save();
+		setIcon(settingEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
+		settingEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
 	}
 
 	/*************************************************************************
@@ -623,7 +774,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	*/
     private rememberLastPosition(containerEl: HTMLElement) {
 
-		debugLog("rememberLastPosition:", containerEl);
+		// debugLog("rememberLastPosition:", containerEl);
 
         // go to the last position
 		containerEl.scrollTo({

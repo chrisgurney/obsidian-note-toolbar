@@ -1,12 +1,19 @@
 import { AbstractInputSuggest, App, TAbstractFile, TFile, TFolder } from "obsidian";
+import { debugLog } from "Utils/Utils";
 
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
     private inputEl: HTMLInputElement;
+    private showFilesOnly: boolean;
+    private fileExtension: string | undefined;
+    private folderPath: string | undefined;
 
-    constructor(app: App, inputEl: HTMLInputElement) {
+    constructor(app: App, inputEl: HTMLInputElement, showFilesOnly: boolean = false, fileExtension?: string, folderPath?: string) {
         super(app, inputEl);
         this.inputEl = inputEl;
+        this.showFilesOnly = showFilesOnly;
+        this.fileExtension = fileExtension;
+        this.folderPath = folderPath;
     }
 
     getSuggestions(inputStr: string): TAbstractFile[] {
@@ -14,10 +21,16 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        // also include folders in the list of files
-        files = abstractFiles.filter((file: TAbstractFile) =>
-            (file instanceof TFile || file instanceof TFolder) && file.path.toLowerCase().includes(lowerCaseInputStr)
-        );
+        files = abstractFiles.filter((file: TAbstractFile) => {
+            const isFile = file instanceof TFile;
+            const lowerCaseFilePath = file.path.toLowerCase();
+            let matchesInput = lowerCaseFilePath.includes(lowerCaseInputStr);
+            if (!matchesInput) return false;
+            if (this.showFilesOnly && !isFile) return false;
+            if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
+            if (this.folderPath && !lowerCaseFilePath.startsWith(this.folderPath.toLowerCase())) return false;
+            return true;
+        });
 
         return files;
     }

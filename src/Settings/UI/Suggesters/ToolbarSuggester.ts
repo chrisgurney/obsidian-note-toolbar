@@ -19,7 +19,7 @@ export class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettings> {
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
-            if (toolbar.name !== "" && toolbar.name.toLowerCase().contains(lowerCaseInputStr)) {
+            if (toolbar.name !== "" && toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
                 toolbarSuggestions.push(toolbar);
             }
         });

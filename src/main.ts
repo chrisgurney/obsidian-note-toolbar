@@ -1,8 +1,9 @@
-import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, ObsidianProtocolData, Platform, Plugin, TFile, TFolder, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, hasVars, putFocusInMenu, replaceVars, getLinkUiDest, isViewCanvas } from 'Utils/Utils';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor, getUUID } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
+import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
 import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
@@ -10,6 +11,10 @@ import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
 import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ProtocolManager } from 'Protocol/ProtocolManager';
 import { ShareModal } from 'Settings/UI/Modals/ShareModal';
+import DataviewAdapter from 'Adapters/DataviewAdapter';
+import TemplaterAdapter from 'Adapters/TemplaterAdapter';
+import JsEngineAdapter from 'Adapters/JsEngineAdapter';
+import { Adapter } from 'Adapters/Adapter';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -19,7 +24,24 @@ export default class NoteToolbarPlugin extends Plugin {
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 	
-	lastCalloutLink: Element | null = null; // track the last used callout link, for the menu URI
+	// track the last opened layout state, to reduce unneccessary re-renders 
+	lastFileOpenedOnLayoutChange: TFile | null | undefined;
+	lastViewModeOnLayoutChange: MarkdownViewModeType | undefined;
+
+	// track the last used callout link, for the menu URI
+	lastCalloutLink: Element | null = null;
+
+	// for tracking other plugins available (for adapters and rendering edge cases)
+	hasPlugin: { [key: string]: boolean } = {
+		'dataview': false,
+		'js-engine': false,
+		'make-md': false,
+		'templater-obsidian': false,
+	}
+
+	dvAdapter: DataviewAdapter | undefined;
+	jsAdapter: JsEngineAdapter | undefined;
+	tpAdapter: TemplaterAdapter | undefined;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -39,7 +61,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			addIcon('note-toolbar-separator', '<path d="M23.4444 35.417H13.7222C8.35279 35.417 4 41.6988 4 44V55.5C4 57.8012 8.35279 64.5837 13.7222 64.5837H23.4444C28.8139 64.5837 33.1667 57.8012 33.1667 55.5L33.1667 44C33.1667 41.6988 28.8139 35.417 23.4444 35.417Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M86.4444 35.417H76.7222C71.3528 35.417 67 41.6988 67 44V55.5C67 57.8012 71.3528 64.5837 76.7222 64.5837H86.4444C91.8139 64.5837 96.1667 57.8012 96.1667 55.5L96.1667 44C96.1667 41.6988 91.8139 35.417 86.4444 35.417Z" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M49.8333 8.33301V91.6663" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>');	
 
 			// render the initial toolbar
-			debugLog('onload: rendering initial toolbar');
+			// debugLog('onload: rendering initial toolbar');
 			this.renderToolbarForActiveFile();
 
 			// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
@@ -78,6 +100,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// add commands
 			this.commands = new CommandsManager(this);
+			this.addCommand({ id: 'copy-command-uri', name: t('command.name-copy-command-uri'), callback: async () => this.commands.copyCommand(false) });
+			this.addCommand({ id: 'copy-command-as-data-element', name: t('command.name-copy-command-as-data-element'), callback: async () => this.commands.copyCommand(true) });
 			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
 			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openItemSuggester() });
 			this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
@@ -102,6 +126,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
 				(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
 			}
+
+			// register custom view: What's New
+			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
+
+			// check what other plugins are enabled that we need to know about
+			this.checkPlugins();
+
+			this.updateAdapters();
 
 		});
 
@@ -172,6 +204,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					debugLog('fileRenameListener: changing', item.link, 'to', file.path);
 					item.link = file.path;
 				}
+				if (item.scriptConfig?.sourceFile === oldPath) {
+					debugLog('fileRenameListener: changing', item.scriptConfig?.sourceFile, 'to', file.path);
+					item.scriptConfig.sourceFile = file.path;
+				}
 			});
 		});
 	}
@@ -182,19 +218,28 @@ export default class NoteToolbarPlugin extends Plugin {
 	layoutChangeListener = () => {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let viewMode = currentView?.getMode();
-		debugLog('===== LAYOUT-CHANGE ===== ', viewMode);
+		debugLog('===== LAYOUT-CHANGE ===== ', currentView?.file?.name, currentView, viewMode);
+		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
+		const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
+		const viewModeChanged = this.lastViewModeOnLayoutChange !== viewMode;
+		if (fileChanged || viewModeChanged) {
+			this.lastFileOpenedOnLayoutChange = fileChanged ? currentView?.file : this.lastFileOpenedOnLayoutChange;
+			this.lastViewModeOnLayoutChange = viewModeChanged ? viewMode : this.lastViewModeOnLayoutChange;
+		}
+		else {
+			return; // no changes, so do nothing
+		}
 		// check for editing or reading mode
 		switch(viewMode) {
 			case "source":
 			case "preview":
-				debugLog("layout-change: ", viewMode, " -> re-rendering toolbar");
+				// debugLog("layout-change: ", viewMode, " -> re-rendering toolbar");
 				let toolbarEl = this.getToolbarEl();
 				let toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
-				debugLog("layout-change: position: ", toolbarPos);
-				// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
-				toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
+				// debugLog("layout-change: position: ", toolbarPos);
 				this.app.workspace.onLayoutReady(debounce(() => {
-					debugLog("LAYOUT READY");
+					// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
+					toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
 					this.renderToolbarForActiveFile();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
@@ -207,9 +252,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On leaf changes, delete, check and render toolbar if necessary. 
 	 */
 	leafChangeListener = (event: any) => {
-		debugLog('===== LEAF-CHANGE ===== ', event);
 		let renderToolbar = false;
 		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+		debugLog('===== LEAF-CHANGE ===== ', event);
 		if (currentView) {
 			// check for editing or reading mode
 			renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
@@ -227,7 +272,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 		// @ts-ignore - TODO: if I need an identifier for the leaf + file, I think I can use this:
-		debugLog(currentView?.file?.path, currentView?.leaf.id);
+		// debugLog(currentView?.file?.path, currentView?.leaf.id);
 
 		if (renderToolbar) {
 			this.removeActiveToolbar();
@@ -243,9 +288,23 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
-		debugLog("metadata-changed: " + file.name);
+		// debugLog("metadata-changed: " + file.name);
 		if (this.app.workspace.getActiveFile() === file) {
 			this.checkAndRenderToolbar(file, cache.frontmatter);
+		}
+
+		// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
+		const notetoolbarProp: string[] = cache.frontmatter?.[this.settings.toolbarProp] ?? [];
+		if (notetoolbarProp.length > 0) {
+			const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
+			const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarFromProps(notetoolbarProp);
+			if (!matchingToolbar && !ignoreToolbar) {
+				const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp[0] }), 7500);
+				this.registerDomEvent(notice.noticeEl, 'click', async () => {
+					const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp[0]);
+					this.settingsManager.openToolbarSettings(newToolbar);
+				});
+			}
 		}
 	};
 
@@ -261,7 +320,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined): Promise<void> {
 
-		debugLog('checkAndRenderToolbar()');
+		// debugLog('checkAndRenderToolbar()');
 
 		// get matching toolbar for this note, if there is one		
 		let matchingToolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, file);
@@ -272,7 +331,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (matchingToolbar) {
 			// render the toolbar if we have one, and we don't have an existing toolbar to keep
 			if (toolbarRemoved) {
-				debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
+				// debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
 				await this.renderToolbar(matchingToolbar);	
 			}
 			await this.updateToolbar(matchingToolbar, file);
@@ -286,7 +345,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbar(toolbar: ToolbarSettings): Promise<void> {
 
-		debugLog("renderToolbar()", toolbar);
+		// debugLog("renderToolbar()", toolbar);
 
 		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
 		let position;
@@ -590,8 +649,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
 				let title = toolbarItem.label ? 
-					(hasVars(toolbarItem.label) ? replaceVars(this.app, toolbarItem.label, file, false) : toolbarItem.label) : 
-					(hasVars(toolbarItem.tooltip) ? replaceVars(this.app, toolbarItem.tooltip, file, false) : toolbarItem.tooltip);
+					(this.hasVars(toolbarItem.label) ? await this.replaceVars(toolbarItem.label, file) : toolbarItem.label) : 
+					(this.hasVars(toolbarItem.tooltip) ? await this.replaceVars(toolbarItem.tooltip, file) : toolbarItem.tooltip);
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -619,7 +678,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					default:
 						// don't show the item if the link has variables and resolves to nothing
-						if (hasVars(toolbarItem.link) && replaceVars(this.app, toolbarItem.link, file, false) === "") {
+						if (this.hasVars(toolbarItem.link) && await this.replaceVars(toolbarItem.link, file) === "") {
 							break;
 						}
 						menu.addItem((item: MenuItem) => {
@@ -632,7 +691,7 @@ export default class NoteToolbarPlugin extends Plugin {
 									// fixes issue where focus sticks on executing commands
 									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
 										await this.removeFocusStyle();
-										this.app.commands.executeCommandById('editor:focus');
+										await this.app.commands.executeCommandById('editor:focus');
 									}
 								});
 							});
@@ -724,7 +783,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile) {
 
 		let toolbarEl = this.getToolbarEl();
-		debugLog("updateToolbar()", toolbarEl);
+		// debugLog("updateToolbar()", toolbarEl);
 
 		// if we have a toolbarEl, double-check toolbar's name and updated stamp are as provided
 		let toolbarElName = toolbarEl?.getAttribute("data-name");
@@ -735,22 +794,22 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// iterate over the item elements of this toolbarEl
 		// TODO: use the hasvars attribute to further filter this down
-		let toolbarItemEls = toolbarEl.querySelectorAll('.callout-content > ul > li');
-		toolbarItemEls.forEach((itemEl: HTMLElement, index) => {
+		let toolbarItemEls = Array.from(toolbarEl.querySelectorAll('.callout-content > ul > li') as NodeListOf<HTMLElement>);
+		for (const itemEl of toolbarItemEls) {
 
 			let itemSpanEl = itemEl.querySelector('span.external-link') as HTMLSpanElement;
 
 			// skip separators
-			if (!itemSpanEl) { return }
+			if (!itemSpanEl) { continue }
 
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 
 				// if link resolves to nothing, there's no need to display the item
-				if (hasVars(itemSetting.link)) {
-					if (replaceVars(this.app, itemSetting.link, activeFile, false) === "") {
+				if (this.hasVars(itemSetting.link)) {
+					if (await this.replaceVars(itemSetting.link, activeFile) === "") {
 						itemEl.addClass('hide'); // hide the containing li element
-						return;
+						continue;
 					}
 					else {
 						itemEl.removeClass('hide'); // unhide the containing li element
@@ -758,12 +817,12 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 
 				// update tooltip + label
-				if (hasVars(itemSetting.tooltip)) {
-					let newTooltip = replaceVars(this.app, itemSetting.tooltip, activeFile, false);
+				if (this.hasVars(itemSetting.tooltip)) {
+					let newTooltip = await this.replaceVars(itemSetting.tooltip, activeFile);
 					setTooltip(itemSpanEl, newTooltip, { placement: "top" });
 				}
-				if (hasVars(itemSetting.label)) {
-					let newLabel = replaceVars(this.app, itemSetting.label, activeFile, false);
+				if (this.hasVars(itemSetting.label)) {
+					let newLabel = await this.replaceVars(itemSetting.label, activeFile);
 					let itemElLabel = itemEl.querySelector('.cg-note-toolbar-item-label');
 					if (newLabel) {
 						itemElLabel?.removeClass('hide');
@@ -777,7 +836,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			}
 
-		});
+		}
 
 	}
 
@@ -796,7 +855,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
 
 		if (clickedItemEl) {
-			debugLog('calloutLinkHandler()', target, clickedItemEl);
+			// debugLog('calloutLinkHandler()', target, clickedItemEl);
 			this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
 			let dataEl = clickedItemEl?.nextElementSibling;
 			if (dataEl) {
@@ -804,7 +863,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
 				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
 				let value = attribute ? dataEl?.getAttribute(attribute) : null;
-				debugLog('🟡 EXTERNAL LINK', attribute, value);
+				
 				switch (attribute) {
 					case CalloutAttr.Command:
 						this.handleLinkCommand(value);
@@ -837,7 +896,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On opening of the editor menu, check what was selected and add relevant menu options.
 	 */
 	editorMenuHandler = (menu: Menu, editor: Editor, info: MarkdownView | MarkdownFileInfo) => {
-		const calloutRegex = /^[>\s]*\[\!\s*note-toolbar\s*\|\s*/;
 		const selection = editor.getSelection().trim();
 		const line = editor.getLine(editor.getCursor().line).trim();
 		if (selection.includes('[!note-toolbar') || line.includes('[!note-toolbar')) {
@@ -902,39 +960,34 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file optional TFile if handling links outside of the active file
 	 */
 	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile) {
-		await this.handleLink(item.link, item.linkAttr.type, item.linkAttr.hasVars, item.linkAttr.commandId, event, file);
+		await this.handleLink(item.uuid, item.link, item.linkAttr.type, item.linkAttr.commandId, event, file);
 	}
 
 	/**
 	 * Handles the link provided.
-	 * @param linkHref What the link is for.
+	 * @param uuid ID of the item
+	 * @param linkHref what the link is for
 	 * @param type: ItemType
-	 * @param hasVars: boolean
 	 * @param commandId: string or null
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleLink(linkHref: string, type: ItemType, hasVars: boolean, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+	async handleLink(uuid: string, linkHref: string, type: ItemType, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
 
-		debugLog("handleLink()", linkHref, type, hasVars, commandId, event);
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
+		const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
 
-		if (hasVars) {
+		if (this.hasVars(linkHref)) {
 			// TODO: expand to also replace vars in labels + tooltips
-			linkHref = replaceVars(this.app, linkHref, activeFile, false);
+			linkHref = await this.replaceVars(linkHref, activeFile);
 			debugLog('- uri vars replaced: ', linkHref);
 		}
 
 		switch (type) {
 			case ItemType.Command:
-				if (file && (file !== activeFile)) {
-					this.handleLinkCommandInSidebar(file, commandId);
-				}
-				else {
-					this.handleLinkCommand(commandId);
-				}
+				(file && (file !== activeFile)) ? this.handleLinkInSidebar(toolbarItem, file) : this.handleLinkCommand(commandId);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -963,6 +1016,17 @@ export default class NoteToolbarPlugin extends Plugin {
 					new Notice(t('notice.error-item-menu-not-found', { toolbar: linkHref }));
 				}
 				break;
+			case ItemType.Dataview:
+			case ItemType.JsEngine:
+			case ItemType.Templater:
+				this.updateAdapters();
+				if (this.settings.scriptingEnabled) {
+					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleScriptItem(toolbarItem);
+				}
+				else {
+					new Notice(t('notice.error-scripting-not-enabled'));
+				}
+				break;
 			case ItemType.Uri:
 				if (isValidUri(linkHref)) {
 					// if actually a url, just open the url
@@ -975,19 +1039,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 		}
-	
-		// archiving for later
-		if (false) {
-			// if it's a js function that exists, call it without any parameters
-			// @ts-ignore
-			if (href.toLowerCase().startsWith('onclick:')) {
-				// @ts-ignore
-				let functionName = href.slice(8); // remove 'onclick:'
-				if (typeof (window as any)[functionName] === 'function') {
-					(window as any)[functionName]();
-				}
-			}
-		}
 		
 	}
 
@@ -996,55 +1047,92 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param commandId encoded command string, or null if nothing to do.
 	 */
 	async handleLinkCommand(commandId: string | null) {
-		debugLog("handleLinkCommand()", commandId);
+		// debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
-
-				// TODO: check if the plugin is installed
-					// if so, show message: enable the plugin + link
-					// if not, show message: install the plugin + link
-					// "try searching for this plugin" because not all plugins use their ID for the URI
-				// const [pluginPart, commandPart] = commandId.split(":");
-				// const plugin = (this.app as any).plugins.plugins[pluginPart];
-				// debugLog(pluginPart, commandPart, plugin);
-				// (pluginPart && (pluginPart !== "workspace")) ? debugLog(`obsidian://show-plugin?id=${pluginPart}`) : undefined;
-
 				new Notice(t('notice.error-command-not-found', { command: commandId }));
 				return;
 			}
-			this.app.commands.executeCommandById(commandId);
+			try {
+				await this.app.commands.executeCommandById(commandId);
+			} 
+			catch (error) {
+				console.error(error);
+				new Notice(error);
+			}
 		}
 	}
 
 	/**
-	 * Opens the provided file in a sidebar and executes the given command.
-	 * @param file TFile to open in a sidebar
-	 * @param commandId command to execute on the given file 
-	 * @link https://github.com/platers/obsidian-linter/blob/cc23589d778fb56b95fe53b499e9f35683a2b129/src/main.ts#L699
+	 * Handles the provided script item, based on the provided configuration.
 	 */
-	private async handleLinkCommandInSidebar(file: TFile, commandId: string | null) {
-		debugLog('handleLinkCommandInSidebar()', file, commandId);
-		if (commandId) {
-			if (!(commandId in this.app.commands.commands)) {
-				new Notice(t('notice.error-command-not-found', { command: commandId }));
-				return;
-			}
-			const sidebarTab = this.app.workspace.getRightLeaf(false);
-			const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-			const activeEditor = activeLeaf ? activeLeaf.editor : null;
-			if (sidebarTab) {
-				await sidebarTab.openFile(file);
-				try {
-					this.app.commands.executeCommandById(commandId);
-				} catch (error) {
-					debugLog(error);
+	async handleScriptItem(toolbarItem: ToolbarItemSettings | undefined) {
+		if (toolbarItem) {
+			type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JsEngine | ItemType.Templater>;  
+			if (toolbarItem?.scriptConfig) {
+				const adapter = this.getAdapterForItemType(toolbarItem.linkAttr.type);
+				if (!adapter) {
+					new Notice(t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[toolbarItem.linkAttr.type as ScriptType] }));
+					return;
 				}
-				sidebarTab.detach();
-				if (activeEditor) {
-					activeEditor.focus();
+				let result;
+				switch (toolbarItem.linkAttr.type) {
+					case ItemType.Dataview:
+						result = await this.dvAdapter?.use(toolbarItem?.scriptConfig);
+						break;
+					case ItemType.JsEngine:
+						result = await this.jsAdapter?.use(toolbarItem?.scriptConfig);
+						break;
+					case ItemType.Templater:
+						result = await this.tpAdapter?.use(toolbarItem?.scriptConfig);
+						break;
 				}
+				result ? insertTextAtCursor(this.app, result) : undefined;
+				await this.app.commands.executeCommandById('editor:focus');
 			}
 		}
+	}
+
+	/**
+	 * Opens the provided file in a sidebar and executes handles the item. Supports Commands.
+	 * @param toolbarItem ToolbarItemSettings to handle 
+	 * @param file TFile to open in a sidebar
+	 * @link https://github.com/platers/obsidian-linter/blob/cc23589d778fb56b95fe53b499e9f35683a2b129/src/main.ts#L699
+	 */
+	private async handleLinkInSidebar(toolbarItem: ToolbarItemSettings | undefined, file: TFile) {
+
+		const sidebarTab = this.app.workspace.getRightLeaf(false);
+		const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const activeEditor = activeLeaf ? activeLeaf.editor : null;
+		if (sidebarTab) {
+			await sidebarTab.openFile(file);
+			switch (toolbarItem?.linkAttr.type) {
+				case ItemType.Command:
+					const commandId = toolbarItem?.linkAttr.commandId;
+					if (!(commandId in this.app.commands.commands)) {
+						new Notice(t('notice.error-command-not-found', { command: commandId }));
+						return;
+					}
+					try {
+						await this.app.commands.executeCommandById(commandId);
+					} 
+					catch (error) {
+						console.error(error);
+						new Notice(error);
+					}
+					break;
+				case ItemType.Dataview:
+				case ItemType.JsEngine:
+				case ItemType.Templater:
+					await this.handleScriptItem(toolbarItem);
+					break;
+			}
+			sidebarTab.detach();
+			if (activeEditor) {
+				activeEditor.focus();
+			}
+		}
+
 	}
 
 	/**
@@ -1052,7 +1140,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param folder folder to highlight, or null if nothing to do.
 	 */
 	async handleLinkFolder(folder: string | null) {
-		debugLog("handleLinkFolder()", folder);
+		// debugLog("handleLinkFolder()", folder);
 		let tFileOrFolder = folder ? this.app.vault.getAbstractFileByPath(folder) : undefined;
 		if (tFileOrFolder instanceof TFolder) {
 			// @ts-ignore
@@ -1210,7 +1298,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Removes the focus class from all items in the toolbar.
 	 */
 	async removeFocusStyle() {
-		debugLog('removeFocusStyle()');
 		// remove focus effect from all toolbar items
 		let toolbarListEl = this.getToolbarListEl();
 		if (toolbarListEl) {
@@ -1227,7 +1314,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarClickHandler(event: MouseEvent) {
 
-		debugLog('toolbarClickHandler()', event);
+		// debugLog('toolbarClickHandler()', event);
 
 		// allow standard and middle clicks through
 		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
@@ -1237,14 +1324,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 			if (linkHref != null) {
 				
+				const itemUuid = clickedEl.id;
+
 				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
 				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
 	
-				debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
-	
-				// default to true if it doesn't exist, treating the url as though it is a URI with vars
-				let linkHasVars = clickedEl.getAttribute("data-toolbar-link-attr-hasVars") ? 
-								 clickedEl.getAttribute("data-toolbar-link-attr-hasVars") === "true" : true;
+				// debugLog('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
 	
 				let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
 				
@@ -1254,7 +1339,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					await this.removeFocusStyle();
 				}
 
-				await this.handleLink(linkHref, linkType, linkHasVars, linkCommandId, event);
+				await this.handleLink(itemUuid, linkHref, linkType, linkCommandId, event);
 	
 			}
 
@@ -1319,9 +1404,9 @@ export default class NoteToolbarPlugin extends Plugin {
 					.setIcon('copy')
 					.onClick(async (menuEvent) => {
 						if (toolbarSettings) {
-							let calloutExport = await exportToCallout(this, toolbarSettings);
+							let calloutExport = await exportToCallout(this, toolbarSettings, this.settings.export);
 							navigator.clipboard.writeText(calloutExport);
-							new Notice(learnMoreFr(t('export.notice-completed'), 'Importing-and-exporting'));
+							new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
 						}
 					})
 				});
@@ -1363,8 +1448,26 @@ export default class NoteToolbarPlugin extends Plugin {
 	getPropsEl(): HTMLElement | null {
 		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		let propertiesContainer = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
-		debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
+		// debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
+		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
+		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
+			return null;
+		}
 		return propertiesContainer;
+	}
+
+	/**
+	 * Gets the note-toolbar-output callout container in the current view, matching the provided metadata string.
+	 * @example
+	 * > [!note-toolbar-output|META]
+	 * @param calloutMeta string to match
+	 * @returns HTMLElement or undefined
+	 */
+	getOutputEl(calloutMeta: string): HTMLElement | undefined {
+		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar-output"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
+		// debugLog("getScriptOutputEl()", containerEl);
+		return containerEl;
 	}
 
 	/**
@@ -1374,7 +1477,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	getToolbarEl(): HTMLElement | null {
 		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
-		debugLog("getToolbarEl()", existingToolbarEl);
+		// debugLog("getToolbarEl()", existingToolbarEl);
 		return existingToolbarEl;
 	}
 
@@ -1405,7 +1508,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async removeActiveToolbar(): Promise<void> {
 		let existingToolbar = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
-		debugLog("removeActiveToolbar: existingToolbar: ", existingToolbar);
+		// debugLog("removeActiveToolbar: existingToolbar: ", existingToolbar);
 		existingToolbar?.remove();
 	}
 
@@ -1430,7 +1533,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let toolbarRemoved: boolean = false;
 		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
 
-		debugLog("removeToolbarIfNeeded() correct:", correctToolbar, "existing:", existingToolbarEl);
+		// debugLog("removeToolbarIfNeeded() correct:", correctToolbar, "existing:", existingToolbarEl);
 
 		if (existingToolbarEl) {
 
@@ -1467,16 +1570,163 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 		else {
-			debugLog("- no existing toolbar");
+			// debugLog("- no existing toolbar");
 			toolbarRemoved = true;
 		}
 
 		if (!toolbarRemoved) {
-			debugLog("removeToolbarIfNeeded: nothing done");
+			// debugLog("removeToolbarIfNeeded: nothing done");
 		}
 
 		return toolbarRemoved;
 
+	}
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+	/** 
+	 * Updates status of other installed plugins we're interested in.
+	 */
+	checkPlugins() {
+		Object.keys(this.hasPlugin).forEach(pluginKey => {
+			this.hasPlugin[pluginKey] = pluginKey in (this.app as any).plugins.plugins;
+		});
+	}
+
+	/**
+	 * Returns the Adapter for the provided item type, if the plugin is available and the adapter instance exists.
+	 * @param type ItemType to get the Adapter for
+	 * @returns the Adapter or undefined
+	 */
+	getAdapterForItemType(type: ItemType): Adapter | undefined {
+		let adapter: Adapter | undefined;
+		switch (type) {
+			case ItemType.Dataview:
+				adapter = this.hasPlugin[ItemType.Dataview] ? this.dvAdapter : undefined;
+				break;
+			case ItemType.JsEngine:
+				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jsAdapter : undefined;
+				break;
+			case ItemType.Templater:
+				adapter = this.hasPlugin[ItemType.Templater] ? this.tpAdapter : undefined;
+				break;
+		}
+		return adapter;
+	}
+
+	/**
+	 * Check if a string has vars {{ }} or expressions (Dataview or Templater)
+	 * @param s The string to check.
+	 */
+	hasVars(s: string): boolean {
+		let hasVars = /{{.*?}}/g.test(s);
+		if (!hasVars && this.hasPlugin[ItemType.Dataview]) {
+			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+			hasVars = !!prefix && s.trim().startsWith(prefix);
+			// TODO? support dvjs? check for $= JS inline queries
+			// if (!hasVars) {
+			// 	prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
+			// 	hasVars = !!prefix && s.trim().startsWith(prefix);
+			// }
+		}
+		if (!hasVars && this.hasPlugin[ItemType.Templater]) {
+			hasVars = s.trim().startsWith('<%');
+		}
+		return hasVars;
+	}
+
+	/**
+	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
+	 * @param s String to replace the variables in.
+	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
+	 * @param encode True if we should encode the variables (recommended if part of external URL).
+	 * @returns String with the variables replaced.
+	 */
+	async replaceVars(s: string, file: TFile | null, encode: boolean = false): Promise<string> {
+
+		let noteTitle = file?.basename;
+		if (noteTitle != null) {
+			s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
+		}
+		// have to get this at run/click-time, as file or metadata may not have changed
+		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
+		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
+		s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
+			const key = p1.trim();
+			if (frontmatter && frontmatter[key] !== undefined) {
+				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
+				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
+				// handle the case where the prop might be a list
+				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
+				// FIXME: does not work with number properties
+				return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
+			}
+			else {
+				return '';
+			}
+		});
+
+		if (this.hasPlugin[ItemType.Dataview]) {
+			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+			if (prefix && s.trim().startsWith(prefix)) {
+				s = s.trim().slice(prefix.length); // strip prefix before evaluation
+				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
+				s = result ? result : '';
+			}
+			// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
+			// prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
+			// if (prefix && s.trim().startsWith(prefix)) {
+			// 	s = s.trim().slice(prefix.length); // strip prefix before evaluation
+			// 	let result = await this.dvAdapter?.use({ pluginFunction: 'executeJs', expression: s });
+			// 	s = result ? result : '';
+			// }
+		}
+
+		if (this.hasPlugin[ItemType.Templater]) {
+			if (s.trim().startsWith('<%')) {
+				s = s.trim();
+				if (!s.startsWith('<%')) s = '<%' + s;
+				if (!s.endsWith('%>')) s += '%>';
+				let result = await this.tpAdapter?.use({ pluginFunction: 'parseTemplate', expression: s });
+				s = result ? result : '';
+			}
+		}
+
+		return s;
+
+	}
+
+	/**
+	 * Checks if the given toolbar uses variables at all.
+	 * @param toolbar ToolbarSettings to check for variable usage
+	 * @returns true if variables are used in the toolbar; false otherwise
+	 */
+	toolbarHasVars(toolbar: ToolbarSettings): boolean {
+		return toolbar.items.some(item =>
+			this.hasVars([item.label, item.tooltip, item.link].join(' '))
+		);
+	}
+
+	/**
+	 * Creates the adapters if scripting, and the plugins, are enabled; otherwise disables all adapters.
+	 */
+	updateAdapters() {
+		if (this.settings.scriptingEnabled) {
+			this.checkPlugins(); // update status of enabled plugins
+			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? (this.dvAdapter || new DataviewAdapter(this)) : undefined;
+			this.jsAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jsAdapter || new JsEngineAdapter(this)) : undefined;
+			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? (this.tpAdapter || new TemplaterAdapter(this)) : undefined;
+		}
+		else {
+			this.dvAdapter?.disable();
+			this.jsAdapter?.disable();
+			this.tpAdapter?.disable();
+			this.dvAdapter = undefined;
+			this.jsAdapter = undefined;
+			this.tpAdapter = undefined;
+		}
 	}
 
 }

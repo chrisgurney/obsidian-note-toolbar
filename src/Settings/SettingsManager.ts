@@ -2,6 +2,8 @@ import NoteToolbarPlugin from "main";
 import { ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
 import { FrontMatterCache, Platform, TFile } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
+import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
+import { NoteToolbarSettingTab } from "./UI/NoteToolbarSettingTab";
 
 export class SettingsManager {
 
@@ -84,7 +86,7 @@ export class SettingsManager {
 	 */
 	public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
 
-		debugLog('getMappedToolbar()');
+		// debugLog('getMappedToolbar()');
 
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
@@ -236,6 +238,44 @@ export class SettingsManager {
 	
 		return uniqueName;
 	}
+
+	/**
+	 * Creates a new toolbar with default settings, with an optional name.
+	 * @param name name of the toolbar
+	 * @returns ToolbarSettings for the new toolbar
+	 */
+	public async newToolbar(name: string = ""): Promise<ToolbarSettings> {
+		let newToolbar = {
+			uuid: getUUID(),
+			defaultStyles: ["border", "even", "sticky"],
+			items: [],
+			mobileStyles: [],
+			name: name,
+			position: { 
+				desktop: { allViews: { position: 'props' } }, 
+				mobile: { allViews: { position: 'props' } }, 
+				tablet: { allViews: { position: 'props' } } },
+			updated: new Date().toISOString(),
+		} as ToolbarSettings;
+		this.plugin.settings.toolbars.push(newToolbar);
+		await this.save();
+		return newToolbar;
+	}
+
+	/**
+	 * Opens the toolbar settings modal for the provided toolbar.
+	 * @param toolbar ToolbarSettings to open
+	 * @param parent provide the NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
+	 */
+    public openToolbarSettings(toolbar: ToolbarSettings, parent: NoteToolbarSettingTab | null | undefined = null) {
+        const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, parent, toolbar);
+		modal.setTitle( toolbar.name ? t('setting.title-edit-toolbar', { toolbar: toolbar.name }) : t('setting.title-edit-toolbar_none'));
+        modal.open();
+    }
+
+	/*************************************************************************
+	 * SAVE / LOAD / MIGRATION
+	 *************************************************************************/
 
 	/**
 	 * Loads settings, and migrates from old versions if needed.

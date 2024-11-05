@@ -1,10 +1,11 @@
 import { t, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { debugLog } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { MarkdownView } from "obsidian";
+import { MarkdownView, Notice } from "obsidian";
 
 export class CommandsManager {
 
@@ -55,6 +56,20 @@ export class CommandsManager {
                 break;
         }
 
+    }
+
+    /**
+     * Copies the selected command to the clipboard as a NTB URI or callout data element.
+     */
+    async copyCommand(returnDataElement: boolean = false): Promise<void> {
+        const modal = new CommandSuggestModal(this.plugin, (command) => {
+            const commandText = returnDataElement
+                ? `[]()<data data-ntb-command="${command.id}"/> <!-- ${command.name} -->`
+                : `obsidian://note-toolbar?command=${command.id}`;
+            navigator.clipboard.writeText(commandText);
+            new Notice(t('command.copy-command-notice'));
+        });
+        modal.open();
     }
 
     /**

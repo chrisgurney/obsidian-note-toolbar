@@ -8,13 +8,13 @@ export class IconSuggestModal extends SuggestModal<IconName> {
     private parentEl: HTMLElement;
     public plugin: NoteToolbarPlugin;
     private settingsWithIcon: ToolbarItemSettings | NoteToolbarSettings;
+    private callback: (icon: string) => void;
 
-	constructor(plugin: NoteToolbarPlugin, settingsWithIcon: ToolbarItemSettings | NoteToolbarSettings, parentEl: HTMLElement) {
+	constructor(plugin: NoteToolbarPlugin, callback: (icon: string) => void) {
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-mini-dialog");
-        this.parentEl = parentEl;
         this.plugin = plugin;
-        this.settingsWithIcon = settingsWithIcon;
+        this.callback = callback;
         this.setPlaceholder(t('setting.icon-suggester.placeholder'));
         this.setInstructions([
             {command: '↑↓', purpose: t('setting.icon-suggester.instruction-navigate')},
@@ -29,7 +29,7 @@ export class IconSuggestModal extends SuggestModal<IconName> {
         const lowerCaseInputStr = inputStr.toLowerCase();
         iconSuggestions.push(t('setting.icon-suggester.option-no-icon'));
         iconIds.forEach((icon: IconName) => {
-            if (icon.toLowerCase().contains(lowerCaseInputStr)) {
+            if (icon.toLowerCase().includes(lowerCaseInputStr)) {
                 iconSuggestions.push(icon);
             }
         });
@@ -54,23 +54,7 @@ export class IconSuggestModal extends SuggestModal<IconName> {
      * @param selectedIcon Icon to save.
      */
     onChooseSuggestion(selectedIcon: string, evt: MouseEvent | KeyboardEvent) {
-        debugLog("onChooseSuggestion: ", this.settingsWithIcon);
-        this.settingsWithIcon.icon = (selectedIcon === t('setting.icon-suggester.option-no-icon') ? "" : selectedIcon);
-        this.plugin.settingsManager.save();
-        debugLog("this.parentEl:", this.parentEl);
-        if (this.parentEl.hasClass('note-toolbar-setting-items-container-row')) {
-            // update the icon for the preview and form
-            let formEl = this.parentEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
-            formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
-            formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
-            let previewIconEl = this.parentEl.querySelector('.note-toolbar-setting-item-preview > span') as HTMLElement;
-            previewIconEl ? setIcon(previewIconEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'note-toolbar-none' : selectedIcon) : undefined;
-        }
-        else {
-            // update Mobile Settings > Mobile icon
-            setIcon(this.parentEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
-            this.parentEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
-        }
+        this.callback(selectedIcon);
         this.close();
     }
 
