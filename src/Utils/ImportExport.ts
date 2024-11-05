@@ -91,7 +91,7 @@ async function exportToCalloutList(
                 plugin.replaceVars(itemLink, activeFile).then((resolvedLink) => {
                     resolvedItemLink = resolvedLink;
                 });
-                let fileOrFolder = this.app.vault.getAbstractFileByPath(resolvedItemLink);
+                let fileOrFolder = this.plugin.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
                     itemsExport += options.useDataEls
                         ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`
@@ -376,9 +376,7 @@ export async function importFromCallout(
  * @returns name of command; undefined otherwise
  */
 function getCommandNameById(commandId: string): string | undefined {
-
-    const availableCommands: Command[] = Object.values(this.app.commands.commands);
+    const availableCommands: Command[] = Object.values(this.plugin.app.commands.commands);
     const matchedCommand = availableCommands.find(command => command.id === commandId);
     return matchedCommand ? matchedCommand.name : undefined;
-
 }
