@@ -302,7 +302,7 @@ export async function importFromCallout(
                         case 'command':
                             itemType = ItemType.Command;
                             commandId = dataUriValue;
-                            const commandName = getCommandNameById(commandId);
+                            const commandName = getCommandNameById(plugin, commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
                             errorLog += commandName ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
@@ -375,8 +375,8 @@ export async function importFromCallout(
  * @param commandId command ID to look up
  * @returns name of command; undefined otherwise
  */
-function getCommandNameById(commandId: string): string | undefined {
-    const availableCommands: Command[] = Object.values(this.plugin.app.commands.commands);
+function getCommandNameById(plugin: NoteToolbarPlugin, commandId: string): string | undefined {
+    const availableCommands: Command[] = Object.values(plugin.app.commands.commands);
     const matchedCommand = availableCommands.find(command => command.id === commandId);
     return matchedCommand ? matchedCommand.name : undefined;
 }
