@@ -1673,7 +1673,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (prefix && s.trim().startsWith(prefix)) {
 				s = s.trim().slice(prefix.length); // strip prefix before evaluation
 				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
-				s = result ? result : '';
+				s = (result && typeof result === 'string') ? result : '';
 			}
 			// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
 			// prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
@@ -1690,7 +1690,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (!s.startsWith('<%')) s = '<%' + s;
 				if (!s.endsWith('%>')) s += '%>';
 				let result = await this.tpAdapter?.use({ pluginFunction: 'parseTemplate', expression: s });
-				s = result ? result : '';
+				s = (result && typeof result === 'string') ? result : '';
 			}
 		}
 
