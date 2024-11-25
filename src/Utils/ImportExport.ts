@@ -91,7 +91,7 @@ async function exportToCalloutList(
                 plugin.replaceVars(itemLink, activeFile).then((resolvedLink) => {
                     resolvedItemLink = resolvedLink;
                 });
-                let fileOrFolder = this.plugin.app.vault.getAbstractFileByPath(resolvedItemLink);
+                let fileOrFolder = plugin.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
                     itemsExport += options.useDataEls
                         ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`

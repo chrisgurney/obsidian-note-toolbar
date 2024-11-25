@@ -137,7 +137,8 @@ export default class DataviewAdapter extends Adapter {
                     );
                 }
                 else {
-                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '\n```';
+                    if (dvResult.error) throw dvResult.error;
+                    result = dvResult.value;
                 }
             }
         }
@@ -320,7 +321,8 @@ export default class DataviewAdapter extends Adapter {
                     }
                 }
                 else {
-                    result = dvResult.successful ? dvResult.value : '```\n' + dvResult.error + '\n```';
+                    if (dvResult.error) throw dvResult.error;
+                    result = dvResult.value;
                 }
             }
         }
