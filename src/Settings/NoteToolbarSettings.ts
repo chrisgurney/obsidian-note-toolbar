@@ -103,11 +103,15 @@ export enum ViewType {
 }
 
 export enum CalloutAttr {
-	Break = 'data-ntb-break',
-    Command = 'data-ntb-command',
-    Folder = 'data-ntb-folder',
-    Menu = 'data-ntb-menu',
-	Separator = 'data-ntb-sep'
+    Command = 'data-command',
+    CommandNtb = 'data-ntb-command', // for backwards-compatibility
+	Dataview = 'data-dataview',
+    Folder = 'data-folder',
+    FolderNtb = 'data-ntb-folder', // for backwards-compatibility
+	JsEngine = 'data-js-engine',
+    Menu = 'data-menu',
+    MenuNtb = 'data-ntb-menu', // for backwards-compatibility
+	Templater = 'data-templater-obsidian',
 }
 
 export enum ToolbarStyle {

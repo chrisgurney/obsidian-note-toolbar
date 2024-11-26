@@ -506,7 +506,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ItemType.Separator:
 					toolbarItem = activeDocument.createElement('data');
 					toolbarItem.setAttribute(
-						item.linkAttr.type === ItemType.Break ? 'data-ntb-break' : 'data-ntb-sep', '');
+						item.linkAttr.type === ItemType.Break ? 'data-break' : 'data-sep', '');
 					toolbarItem.setAttribute('role', 'separator');
 					break;
 				case ItemType.Group:
@@ -866,12 +866,15 @@ export default class NoteToolbarPlugin extends Plugin {
 				
 				switch (attribute) {
 					case CalloutAttr.Command:
+					case CalloutAttr.CommandNtb:
 						this.handleLinkCommand(value);
 						break;
 					case CalloutAttr.Folder:
+					case CalloutAttr.FolderNtb:
 						this.handleLinkFolder(value);
 						break;
 					case CalloutAttr.Menu:
+					case CalloutAttr.MenuNtb:
 						let activeFile = this.app.workspace.getActiveFile();
 						let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
 						toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
