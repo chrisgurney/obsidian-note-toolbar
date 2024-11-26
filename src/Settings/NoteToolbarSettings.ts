@@ -295,18 +295,12 @@ export const RELEASES_URL = 'https://github.com/chrisgurney/obsidian-note-toolba
 export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
 
 export const SCRIPT_ATTRIBUTE_MAP: Record<string, string> = {
-    'expression': 'expr',
-    'sourceFile': 'src',
-    'sourceFunction': 'func',
-    'sourceArgs': 'args',
-    'outputContainer': 'callout',
-    'outputFile': 'dest',
-    'expr': 'expression',
-    'src': 'sourceFile',
-    'func': 'sourceFunction',
-    'args': 'sourceArgs',
-    'callout': 'outputContainer',
-    'dest': 'outputFile',
+    'expression': 'data-expr',
+    'sourceFile': 'data-src',
+    'sourceFunction': 'data-func',
+    'sourceArgs': 'data-args',
+    'outputContainer': 'data-callout',
+    'outputFile': 'data-dest'
 };
 
 export const LINK_OPTIONS = {

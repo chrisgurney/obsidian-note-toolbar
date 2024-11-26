@@ -98,7 +98,7 @@ async function exportToCalloutList(
                             }
                             else {
                                 const encodedValue = escapeAttribute(String(value));
-                                return encodedValue ? `data-${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"` : '';
+                                return encodedValue ? `${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"` : '';
                             }
                         })
                         .join(' ');
@@ -351,12 +351,12 @@ export async function importFromCallout(
                                 const element = doc.body.firstElementChild;
                                 scriptConfig = {
                                     pluginFunction: dataUriValue,
-                                    expression: element?.getAttribute(`data-${SCRIPT_ATTRIBUTE_MAP['expression']}`) ?? undefined,
-                                    sourceFile: element?.getAttribute(`data-${SCRIPT_ATTRIBUTE_MAP['sourceFile']}`) ?? undefined,
-                                    sourceFunction: element?.getAttribute(`data-${SCRIPT_ATTRIBUTE_MAP['sourceFunction']}`) ?? undefined,
-                                    sourceArgs: element?.getAttribute(`data-${SCRIPT_ATTRIBUTE_MAP['sourceArgs']}`) ?? undefined,
-                                    outputContainer: element?.getAttribute(`data-${SCRIPT_ATTRIBUTE_MAP['outputContainer']}`) ?? undefined,
-                                    outputFile: element?.getAttribute(`data-${SCRIPT_ATTRIBUTE_MAP['outputFile']}`) ?? undefined,
+                                    expression: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['expression']) ?? undefined,
+                                    sourceFile: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFile']) ?? undefined,
+                                    sourceFunction: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFunction']) ?? undefined,
+                                    sourceArgs: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceArgs']) ?? undefined,
+                                    outputContainer: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputContainer']) ?? undefined,
+                                    outputFile: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputFile']) ?? undefined,
                                 } as ScriptConfig;
                             }
                             break;
