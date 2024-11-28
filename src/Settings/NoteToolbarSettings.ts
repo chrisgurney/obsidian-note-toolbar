@@ -46,6 +46,7 @@ export enum ItemType {
 	Command = 'command',
 	Dataview = 'dataview',
 	File = 'file',
+	Folder = 'folder',
 	Group = 'group',
 	JsEngine = 'js-engine',
 	Menu = 'menu',
@@ -87,6 +88,7 @@ export const SettingFieldItemMap: Record<ItemType, SettingType> = {
 	[ItemType.Command]: SettingType.Command,
 	[ItemType.Dataview]: SettingType.Script,
 	[ItemType.File]: SettingType.File,
+	[ItemType.Folder]: SettingType.File,
 	[ItemType.Group]: SettingType.Toolbar,
 	[ItemType.JsEngine]: SettingType.Script,
 	[ItemType.Menu]: SettingType.Toolbar,
@@ -101,11 +103,15 @@ export enum ViewType {
 }
 
 export enum CalloutAttr {
-	Break = 'data-ntb-break',
-    Command = 'data-ntb-command',
-    Folder = 'data-ntb-folder',
-    Menu = 'data-ntb-menu',
-	Separator = 'data-ntb-sep'
+    Command = 'data-command',
+    CommandNtb = 'data-ntb-command', // for backwards-compatibility
+	Dataview = 'data-dataview',
+    Folder = 'data-folder',
+    FolderNtb = 'data-ntb-folder', // for backwards-compatibility
+	JsEngine = 'data-js-engine',
+    Menu = 'data-menu',
+    MenuNtb = 'data-ntb-menu', // for backwards-compatibility
+	Templater = 'data-templater-obsidian',
 }
 
 export enum ToolbarStyle {
@@ -287,6 +293,15 @@ export interface ScriptConfig {
 export const USER_GUIDE_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
 export const RELEASES_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
 export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
+
+export const SCRIPT_ATTRIBUTE_MAP: Record<string, string> = {
+    'expression': 'data-expr',
+    'sourceFile': 'data-src',
+    'sourceFunction': 'data-func',
+    'sourceArgs': 'data-args',
+    'outputContainer': 'data-callout',
+    'outputFile': 'data-dest'
+};
 
 export const LINK_OPTIONS = {
 	[ItemType.Command]: t('setting.item.option-command'),

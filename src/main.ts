@@ -1,6 +1,6 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor, getUUID } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
@@ -506,7 +506,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ItemType.Separator:
 					toolbarItem = activeDocument.createElement('data');
 					toolbarItem.setAttribute(
-						item.linkAttr.type === ItemType.Break ? 'data-ntb-break' : 'data-ntb-sep', '');
+						item.linkAttr.type === ItemType.Break ? 'data-break' : 'data-sep', '');
 					toolbarItem.setAttribute('role', 'separator');
 					break;
 				case ItemType.Group:
@@ -860,18 +860,45 @@ export default class NoteToolbarPlugin extends Plugin {
 			let dataEl = clickedItemEl?.nextElementSibling;
 			if (dataEl) {
 				// make sure it's a valid attribute, and get its value
-				let attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
+				const attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
 				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
-				let value = attribute ? dataEl?.getAttribute(attribute) : null;
+				const value = attribute ? dataEl?.getAttribute(attribute) : null;
 				
 				switch (attribute) {
 					case CalloutAttr.Command:
+					case CalloutAttr.CommandNtb:
 						this.handleLinkCommand(value);
 						break;
+					case CalloutAttr.Dataview:
+					case CalloutAttr.JsEngine:
+					case CalloutAttr.Templater:
+						const scriptConfig = {
+							pluginFunction: value,
+							expression: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['expression']) ?? undefined,
+							sourceFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFile']) ?? undefined,
+							sourceFunction: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFunction']) ?? undefined,
+							sourceArgs: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceArgs']) ?? undefined,
+							outputContainer: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputContainer']) ?? undefined,
+							outputFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputFile']) ?? undefined,
+						} as ScriptConfig;
+						switch (attribute) {
+							case CalloutAttr.Dataview:
+								this.handleLinkScript(ItemType.Dataview, scriptConfig);
+								break;
+							case CalloutAttr.JsEngine:
+								this.handleLinkScript(ItemType.JsEngine, scriptConfig);
+								break;
+							case CalloutAttr.Templater:
+								this.handleLinkScript(ItemType.Templater, scriptConfig);
+								break;	
+						}
+						break;
 					case CalloutAttr.Folder:
+					case CalloutAttr.FolderNtb:
 						this.handleLinkFolder(value);
 						break;
 					case CalloutAttr.Menu:
+					case CalloutAttr.MenuNtb:
 						let activeFile = this.app.workspace.getActiveFile();
 						let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
 						toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
@@ -964,6 +991,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
+	 * Handles the provided script item, based on the provided configuration.
+	 */
+	async handleItemScript(toolbarItem: ToolbarItemSettings | undefined) {
+		if (toolbarItem && toolbarItem?.scriptConfig) {
+			await this.handleLinkScript(toolbarItem.linkAttr.type, toolbarItem.scriptConfig);
+		}
+	}
+
+	/**
 	 * Handles the link provided.
 	 * @param uuid ID of the item
 	 * @param linkHref what the link is for
@@ -1021,7 +1057,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Templater:
 				this.updateAdapters();
 				if (this.settings.scriptingEnabled) {
-					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleScriptItem(toolbarItem);
+					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleItemScript(toolbarItem);
 				}
 				else {
 					new Notice(t('notice.error-scripting-not-enabled'));
@@ -1064,33 +1100,31 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Handles the provided script item, based on the provided configuration.
+	 * Executes the provided script using the provided configuration.
+	 * @param type type of script.
+	 * @param scriptConfig ScriptConfig to execute.
 	 */
-	async handleScriptItem(toolbarItem: ToolbarItemSettings | undefined) {
-		if (toolbarItem) {
-			type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JsEngine | ItemType.Templater>;  
-			if (toolbarItem?.scriptConfig) {
-				const adapter = this.getAdapterForItemType(toolbarItem.linkAttr.type);
-				if (!adapter) {
-					new Notice(t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[toolbarItem.linkAttr.type as ScriptType] }));
-					return;
-				}
-				let result;
-				switch (toolbarItem.linkAttr.type) {
-					case ItemType.Dataview:
-						result = await this.dvAdapter?.use(toolbarItem?.scriptConfig);
-						break;
-					case ItemType.JsEngine:
-						result = await this.jsAdapter?.use(toolbarItem?.scriptConfig);
-						break;
-					case ItemType.Templater:
-						result = await this.tpAdapter?.use(toolbarItem?.scriptConfig);
-						break;
-				}
-				result ? insertTextAtCursor(this.app, result) : undefined;
-				await this.app.commands.executeCommandById('editor:focus');
-			}
+	async handleLinkScript(type: ItemType, scriptConfig: ScriptConfig) {
+		type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JsEngine | ItemType.Templater>;
+		const adapter = this.getAdapterForItemType(type);
+		if (!adapter) {
+			new Notice(t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[type as ScriptType] }));
+			return;
 		}
+		let result;
+		switch (type) {
+			case ItemType.Dataview:
+				result = await this.dvAdapter?.use(scriptConfig);
+				break;
+			case ItemType.JsEngine:
+				result = await this.jsAdapter?.use(scriptConfig);
+				break;
+			case ItemType.Templater:
+				result = await this.tpAdapter?.use(scriptConfig);
+				break;
+		}
+		result ? insertTextAtCursor(this.app, result) : undefined;
+		await this.app.commands.executeCommandById('editor:focus');
 	}
 
 	/**
@@ -1124,7 +1158,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				case ItemType.Dataview:
 				case ItemType.JsEngine:
 				case ItemType.Templater:
-					await this.handleScriptItem(toolbarItem);
+					await this.handleItemScript(toolbarItem);
 					break;
 			}
 			sidebarTab.detach();

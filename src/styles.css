@@ -198,8 +198,8 @@ body {
         }
 
         & li:has(> hr),
-        & li:has(> data[data-ntb-sep]),
-        & li:has(> a.external-link + data[data-ntb-sep]) {
+        & li:has(> data[data-sep]),
+        & li:has(> a.external-link + data[data-sep]) {
             border-left: var(--cg-nt-item-sep-width) solid var(--cg-nt-item-sep-color);
             margin: var(--cg-nt-item-sep-margin-y) var(--cg-nt-item-sep-margin-x);
             width: 1px;
@@ -211,8 +211,8 @@ body {
             }
         }
         & li:has(> br),
-        & li:has(> data[data-ntb-break]),
-        & li:has(> a.external-link + data[data-ntb-break]) {
+        & li:has(> data[data-break]),
+        & li:has(> a.external-link + data[data-break]) {
             flex-basis: 100%;
             height: 0;
         }

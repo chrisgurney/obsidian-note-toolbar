@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { debugLog, getUUID } from "./Utils";
 import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
 
@@ -85,6 +85,26 @@ async function exportToCalloutList(
                     ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`
                     : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
                 break;
+            case ItemType.Dataview:
+            case ItemType.JsEngine:
+            case ItemType.Templater:
+                if (item.scriptConfig) {
+                    // write out each script data attribute separately
+                    const scriptAttributes = Object.entries(item.scriptConfig)
+                        .filter(([_, value]) => value !== undefined && value !== null)
+                        .map(([key, value]) => {
+                            if (key === 'pluginFunction') {
+                                return `data-${item.linkAttr.type}="${String(value)}"`;
+                            }
+                            else {
+                                const encodedValue = escapeAttribute(String(value));
+                                return encodedValue ? `${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"` : '';
+                            }
+                        })
+                        .join(' ');
+                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data ${scriptAttributes}/>`;
+                }
+                break;
             case ItemType.File:
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = itemLink;
@@ -131,6 +151,17 @@ async function exportToCalloutList(
 
     return itemsExport;
 
+}
+
+/**
+ * Returns a string that shouldn't break an attribute value portion.
+ */
+function escapeAttribute(str: string): string {
+    return str
+        .replace(/\"/g, '&quot;')
+        .replace(/\>/g, '&gt;')
+        .replace(/\</g, '&lt;')
+        .replace(/\s+/g, ' '); // replace newlines with spaces
 }
 
 /**
@@ -239,6 +270,7 @@ export async function importFromCallout(
         let link = '';
         let tooltip = '';
         let commandId = '';
+        let scriptConfig;
 
         if (/<br\s*\/?>/.test(line)) {
             itemType = ItemType.Break;
@@ -251,7 +283,7 @@ export async function importFromCallout(
             // FIXME? decode URLs not in angle brackets <>
             const linkMatch = line.match(/\[(.*?)\]\(<?(.*?)>?\)|\[\[(.*?)(?:\|(.*?))?\]\]/);
             const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
-            const dataUriMatch = line.match(/data-ntb-(command|folder|menu)="(.*?)"|obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
+            const dataUriMatch = line.match(/data-(ntb-)?(command|dataview|folder|js-engine|menu|templater-obsidian)="(.*?)"(.*?)(\/?>|$)|obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
 
             if (linkMatch) {
 
@@ -294,12 +326,12 @@ export async function importFromCallout(
                 tooltip = tooltipMatch ? tooltipMatch[1] : '';
         
                 if (dataUriMatch) {
-                    const dataUriType = dataUriMatch[1] || dataUriMatch[3] || '';
-                    const dataUriValue = dataUriMatch[2] || decodeURIComponent(dataUriMatch[4]) || '';
+                    const dataUriType = dataUriMatch[2] || dataUriMatch[6] || '';
+                    const dataUriValue = dataUriMatch[3] || decodeURIComponent(dataUriMatch[7]) || '';
                     debugLog('• data?', dataUriType, link);
         
                     switch (dataUriType) {
-                        case 'command':
+                        case ItemType.Command:
                             itemType = ItemType.Command;
                             commandId = dataUriValue;
                             const commandName = getCommandNameById(plugin, commandId);
@@ -308,11 +340,31 @@ export async function importFromCallout(
                             errorLog += commandName ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
-                        case 'folder':
+                        case ItemType.Dataview:
+                        case ItemType.JsEngine:
+                        case ItemType.Templater:
+                            itemType = dataUriType;
+                            const dataEl = line.match(/<data\s[^>]*\/?>/);
+                            if (dataEl) {
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(dataEl[0], 'text/html');
+                                const element = doc.body.firstElementChild;
+                                scriptConfig = {
+                                    pluginFunction: dataUriValue,
+                                    expression: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['expression']) ?? undefined,
+                                    sourceFile: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFile']) ?? undefined,
+                                    sourceFunction: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFunction']) ?? undefined,
+                                    sourceArgs: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceArgs']) ?? undefined,
+                                    outputContainer: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputContainer']) ?? undefined,
+                                    outputFile: element?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputFile']) ?? undefined,
+                                } as ScriptConfig;
+                            }
+                            break;
+                        case ItemType.Folder:
                             itemType = ItemType.File;
                             link = dataUriValue;
                             break;
-                        case 'menu':
+                        case ItemType.Menu:
                             itemType = ItemType.Menu;
                             let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : dataUriValue;
@@ -332,6 +384,7 @@ export async function importFromCallout(
         debugLog('• tooltip?', tooltip);
         debugLog('• link?', link);
         debugLog('• commandId?', commandId);
+        debugLog('• scriptConfig?', scriptConfig);
         debugLog(`=> ${itemType?.toUpperCase()}`);
 
         errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
@@ -350,6 +403,7 @@ export async function importFromCallout(
 					hasVars: false,
 					type: itemType
 				},
+                scriptConfig: scriptConfig,
 				tooltip: tooltip,
 				visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS,
 			};
