@@ -4,6 +4,7 @@ import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSett
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
@@ -17,7 +18,7 @@ export default class DataviewAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'expression', label: t('adapter.dataview.query-expr'), description: t('adapter.dataview.query-expr-description'), type: SettingType.TextArea, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: learnMoreFr(t('adapter.outputcontainer-description'), '/Executing-scripts#output-callout'), type: SettingType.Text, required: false }
             ]
         },
         {
@@ -27,7 +28,7 @@ export default class DataviewAdapter extends Adapter {
             parameters: [
                 { parameter: 'sourceFile', label: t('adapter.dataview.exec-sourcefile'), description: t('adapter.dataview.exec-sourcefile-description'), type: SettingType.File, required: true },
                 { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: learnMoreFr(t('adapter.outputcontainer-description'), '/Executing-scripts#output-callout'), type: SettingType.Text, required: false }
             ]
         },
         {
@@ -36,7 +37,7 @@ export default class DataviewAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'expression', label: t('adapter.dataview.eval-expr'), description: t('adapter.dataview.eval-expr-description'), type: SettingType.Text, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: learnMoreFr(t('adapter.outputcontainer-description'), '/Executing-scripts#output-callout'), type: SettingType.Text, required: false }
             ]
         },
         {
@@ -45,7 +46,7 @@ export default class DataviewAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'expression', label: t('adapter.dataview.dvjs-expr'),  description: t('adapter.dataview.dvjs-expr-description'), type: SettingType.Text, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: learnMoreFr(t('adapter.outputcontainer-description'), '/Executing-scripts#output-callout'), type: SettingType.Text, required: false }
             ]
         },
     ];

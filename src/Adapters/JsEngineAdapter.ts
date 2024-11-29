@@ -4,6 +4,7 @@ import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSett
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
 /**
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/API.ts
@@ -19,7 +20,7 @@ export default class JsEngineAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: t('adapter.js-engine.exec-sourcefile'), description: t('adapter.js-engine.exec-sourcefile-description'), type: SettingType.File, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: learnMoreFr(t('adapter.outputcontainer-description'), '/Executing-scripts#output-callout'), type: SettingType.Text, required: false }
             ]
         },
         {

@@ -979,9 +979,14 @@ export default class ToolbarSettingsModal extends Modal {
 											fieldDiv.append(subfieldsDiv);
 											const selectedFunction = adapter.getFunctions().get(value);
 											if (selectedFunction?.description) {
-												let scriptHelpFr = document.createDocumentFragment();
-												scriptHelpFr.appendText(selectedFunction.description);
-												this.setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
+												if (typeof selectedFunction.description === 'string') {
+													let scriptHelpFr = document.createDocumentFragment();
+													scriptHelpFr.appendText(selectedFunction.description);
+													this.setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
+												}
+												else {
+													this.setFieldHelp(scriptSetting.controlEl, selectedFunction.description);
+												}
 											}
 										}
 										this.renderPreview(toolbarItem); // to make sure error state is refreshed

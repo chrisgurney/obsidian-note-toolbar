@@ -6,7 +6,7 @@ export interface AdapterFunction {
     /** The name shown in the selection UI. */
     label: string;
     /** Field help text shown in the UI. */
-    description: string;
+    description: string | DocumentFragment;
     /** Parameters for the function. */
     parameters: AdapterFunctionParameter[]; 
 }
@@ -17,7 +17,7 @@ export interface AdapterFunctionParameter {
     /** Label/Placeholder for the field in the UI. */
     label: string;
     /** Optional description used for help text. */
-    description?: string;
+    description?: string | DocumentFragment;
     /** Field type to display. */
     type: SettingType;
     /** Is this parameter required? */
