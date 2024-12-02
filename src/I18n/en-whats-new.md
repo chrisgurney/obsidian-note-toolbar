@@ -12,20 +12,32 @@ Note Toolbar can now execute Dataview, JavaScript (via [JS Engine ↗](https://o
 
 If these plugins are installed and enabled you can:
 
-- Dataview: Run queries, evaluate expressions, and execute scripts (like with `dv.view`).
-- JS Engine: Execute JavaScript.
-- Templater: Insert templates, create new notes from templates, execute commands (including running user scripts), and execute template files.
+- **Dataview** → Run queries, evaluate expressions, and execute scripts (like `dv.view`). [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview)
+- **JS Engine** → Execute JavaScript. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JS-Engine)
+- **Templater** → Insert templates, create new notes from templates, execute commands (including running user scripts), and execute template files. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)
 
-If these generate output, they're output to the cursor position, or to a `note-toolbar-output` callout that you provide an ID for. 
+If these generate output, they're output to the cursor position, or optionally to a `note-toolbar-output` callout that you provide an ID for. 
 
-You can also now use Dataview expressions and Templater commands in labels, tooltips, and URIs.
+You can also use Dataview expressions and Templater commands in labels, tooltips, and URIs:
 
-### What's _not_ supported?
+<a href="https://github.com/user-attachments/assets/0946d703-743e-4a1a-9f10-452531f7eec7">
+  <img src="https://github.com/user-attachments/assets/0946d703-743e-4a1a-9f10-452531f7eec7" width="700"/>
+</a>
 
-- Ability to share, copy as callout, or import callouts with script items.
-- Ability to execute script items from callouts.
+### Note Toolbar Callouts
 
-### Read the documentation 📖
+Share toolbars with script items as links, and export/import to/from Note Toolbar Callouts.
+
+Script items can also be used in Note Toolbar Callouts. See below for some examples; copy some toolbars with script items as callouts to see more attributes/examples.
+
+```markdown
+> [!note-toolbar|right-mnbrder] Script Nav
+> - [Create from Template]()<data data-templater-obsidian="createFrom" data-src="Templater/Basic Template.md" data-dest="&lt;%&quot;Basic &quot; + tp.file.last_modified_date(&quot;yyyy-MM-dd&quot;)%&gt;"/>
+> - [Dataview Query Example]()<data data-dataview="query" data-expr="TABLE file.mtime AS &quot;Last Modified&quot; FROM &quot;Templater&quot; SORT file.mtime DESC" data-callout="asf"/>
+> - [Hello World with JS Engine]()<data data-js-engine="exec" data-src="Scripts/JsEngine/HelloWorld.js"/>
+```
+
+### Documentation 📖
 
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts)
 - [Example scripts](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
@@ -40,6 +52,25 @@ I would really appreciate your questions or feedback in the [discussion thread](
 4. Does the documentation and help text make sense? (Should I add or change anything?)
 
 _Thank you!_
+
+## Improvements 🎉
+
+- In a Note Toolbar property, if you've entered the name of a toolbar that doesn't exist, a message now appears with a prompt to click/tap on it to create the toolbar.
+- Quick Tools: Added a scroll icon for JS + Dataview items, and the Templater icon for Templater items.
+- All commands now show a notice if there's an error executing it, if the command provides an error.
+- Note Toolbar Callouts: Data attributes in callouts no longer require the `ntb-` portion of the attribute name, though they're still supported in everything but the above new attributes for backwards compatibility.
+- Settings: The _Style_ drop-downs now only show relevant styles based on other selected styles, and the toolbar's position. Also removed `float` styles, which don't work with standard toolbars. Thanks @laktiv for the suggestion!
+- Settings: Added a placeholder in the _Style_ dropdown when nothing's selected to make it clearer what action the user should take with it; made the dropdown wider to accommodate localization of that text.
+- Settings: Moved field help text closer to fields.
+- Translations have been updated, thanks to @hartimd and @laktiv!
+
+## Fixes
+
+- Settings: Item preview labels were disappearing when an icon was set, when there was no previous icon.
+- Some commands existed but appeared unavailable. #170 Thanks @likemuuxi and @Moyf!
+- Iconize icons in bookmarks had a thicker stroke width. #162 Thanks @laktiv!
+- Editing a toolbar with no name set an incorrect modal title.
+- If the button style was set for mobile, it was also applying to desktop as well, when it shouldn't have been.
 
 ---
 
