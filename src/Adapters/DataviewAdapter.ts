@@ -4,6 +4,7 @@ import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSett
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
