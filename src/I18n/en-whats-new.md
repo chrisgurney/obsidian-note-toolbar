@@ -8,15 +8,15 @@ Note Toolbar can now execute Dataview, JavaScript (via [JS Engine ↗](https://o
   <img src="https://github.com/user-attachments/assets/56225123-145d-4500-aaf1-7b438d299a52" width="700"/>
 </a>
 
-### What's supported?
+**What's supported?**
 
 If these plugins are installed and enabled you can:
 
-- **Dataview** → Run queries, evaluate expressions, and execute scripts (like `dv.view`). [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview)
-- **JS Engine** → Execute JavaScript. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JS-Engine)
-- **Templater** → Insert templates, create new notes from templates, execute commands (including running user scripts), and execute template files. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)
+- *Dataview* → Run queries, evaluate expressions, and execute scripts (like `dv.view`). [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview)
+- *JS Engine* → Execute JavaScript. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JS-Engine)
+- *Templater* → Insert templates, create new notes from templates, execute commands (including running user scripts), and execute template files. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)
 
-If these generate output, they're output to the cursor position, or optionally to a `note-toolbar-output` callout that you provide an ID for. 
+If any of these return a value, they're output to the cursor position, or optionally to a `note-toolbar-output` callout that you provide an ID for. 
 
 You can also use Dataview expressions and Templater commands in labels, tooltips, and URIs:
 
@@ -24,7 +24,7 @@ You can also use Dataview expressions and Templater commands in labels, tooltips
   <img src="https://github.com/user-attachments/assets/0946d703-743e-4a1a-9f10-452531f7eec7" width="700"/>
 </a>
 
-### Note Toolbar Callouts
+**Note Toolbar Callouts**
 
 Share toolbars with script items as links, and export/import to/from Note Toolbar Callouts.
 
@@ -37,12 +37,12 @@ Script items can also be used in Note Toolbar Callouts. See below for some examp
 > - [Hello World with JS Engine]()<data data-js-engine="exec" data-src="Scripts/JsEngine/HelloWorld.js"/>
 ```
 
-### Documentation 📖
+**Documentation 📖**
 
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts)
 - [Example scripts](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
 
-### Feedback wanted 💬
+**Feedback wanted 💬**
 
 I would really appreciate your questions or feedback in the [discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/171), or in the [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
 
