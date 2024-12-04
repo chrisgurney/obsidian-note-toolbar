@@ -24,11 +24,11 @@ You can also use Dataview expressions and Templater commands in labels, tooltips
   <img src="https://github.com/user-attachments/assets/0946d703-743e-4a1a-9f10-452531f7eec7" width="700"/>
 </a>
 
-**Note Toolbar Callouts**
+**Note Toolbar Callouts + Scripting**
 
-Share toolbars with script items as links, and export/import to/from Note Toolbar Callouts.
+You can share toolbars that include script items as links, and export/import to/from Note Toolbar Callouts.
 
-Script items can also be used in Note Toolbar Callouts. See below for some examples; copy some toolbars with script items as callouts to see more attributes/examples.
+Script items can also be used directly from Note Toolbar Callouts. See below for some examples; copy some toolbars with script items as callouts to see more attributes/examples.
 
 ```markdown
 > [!note-toolbar|right-mnbrder] Script Nav
@@ -37,14 +37,14 @@ Script items can also be used in Note Toolbar Callouts. See below for some examp
 > - [Hello World with JS Engine]()<data data-js-engine="exec" data-src="Scripts/JsEngine/HelloWorld.js"/>
 ```
 
-**Documentation 📖**
+**Learn more 📖**
 
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts)
 - [Example scripts](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
 
 **Feedback wanted 💬**
 
-I would really appreciate your questions or feedback in the [discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/171), or in the [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
+I would really appreciate your questions or feedback about scripting in [this discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/171), or using [this Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
 
 1. Do your existing scripts work as expected? (If not, what changes did you have to make?)
 2. Does configuration make sense? (Should I add or change anything?)
