@@ -293,19 +293,20 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.checkAndRenderToolbar(file, cache.frontmatter);
 		}
 
+		// FIXME: Temporarily commented out until can monitor for property and filename change
 		// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
-		const notetoolbarProp: string[] = cache.frontmatter?.[this.settings.toolbarProp] ?? [];
-		if (notetoolbarProp.length > 0) {
-			const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
-			const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarFromProps(notetoolbarProp);
-			if (!matchingToolbar && !ignoreToolbar) {
-				const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp[0] }), 7500);
-				this.registerDomEvent(notice.noticeEl, 'click', async () => {
-					const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp[0]);
-					this.settingsManager.openToolbarSettings(newToolbar);
-				});
-			}
-		}
+		// const notetoolbarProp: string[] = cache.frontmatter?.[this.settings.toolbarProp] ?? [];
+		// if (notetoolbarProp.length > 0) {
+		// 	const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
+		// 	const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarFromProps(notetoolbarProp);
+		// 	if (!matchingToolbar && !ignoreToolbar) {
+		// 		const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp[0] }), 7500);
+		// 		this.registerDomEvent(notice.noticeEl, 'click', async () => {
+		// 			const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp[0]);
+		// 			this.settingsManager.openToolbarSettings(newToolbar);
+		// 		});
+		// 	}
+		// }
 	};
 
 	/*************************************************************************
