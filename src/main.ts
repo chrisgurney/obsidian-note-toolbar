@@ -344,7 +344,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// render the toolbar if we have one, and we don't have an existing toolbar to keep
 			if (toolbarRemoved) {
 				// debugLog("-- RENDERING TOOLBAR: ", matchingToolbar, " for file: ", file);
-				await this.renderToolbar(matchingToolbar);	
+				await this.renderToolbar(matchingToolbar, file);	
 			}
 			await this.updateToolbar(matchingToolbar, file);
 		}
@@ -354,8 +354,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Renders the toolbar for the provided toolbar settings.
 	 * @param toolbar ToolbarSettings
+	 * @param file TFile for the note that the toolbar is being rendered for
 	 */
-	async renderToolbar(toolbar: ToolbarSettings): Promise<void> {
+	async renderToolbar(toolbar: ToolbarSettings, file: TFile): Promise<void> {
 
 		// debugLog("renderToolbar()", toolbar);
 
@@ -406,7 +407,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 			case 'props':
 			case 'top':
-				noteToolbarElement = await this.renderToolbarAsCallout(toolbar);
+				noteToolbarElement = await this.renderToolbarAsCallout(toolbar, file);
 				// extra div workaround to emulate callout-in-content structure, to use same sticky css
 				let div = activeDocument.createElement("div");
 				div.append(noteToolbarElement);
@@ -455,15 +456,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Renders the given toolbar as a callout (to add to the container) and returns it.
 	 * @param toolbar ToolbarSettings to render
+	 * @param file TFile of the note to render the toolbar for
 	 * @returns HTMLElement cg-note-toolbar-callout
 	 */
-	async renderToolbarAsCallout(toolbar: ToolbarSettings): Promise<HTMLElement> {
+	async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile): Promise<HTMLElement> {
 
 		/* create the unordered list of menu items */
 		let noteToolbarUl = activeDocument.createElement("ul");
 		noteToolbarUl.setAttribute("role", "menu");
 
-		let noteToolbarLiArray = await this.renderToolbarLItems(toolbar);
+		let noteToolbarLiArray = await this.renderToolbarLItems(toolbar, file);
 		noteToolbarUl.append(...noteToolbarLiArray);
 
 		let noteToolbarCallout = activeDocument.createElement("div");
@@ -490,10 +492,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Returns the callout LIs for the items in the given toolbar.
 	 * @param toolbar ToolbarSettings to render
+	 * @param file TFile to render the toolbar for
 	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderToolbarLItems(toolbar: ToolbarSettings, recursions: number = 0): Promise<HTMLLIElement[]> {
+	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile, recursions: number = 0): Promise<HTMLLIElement[]> {
 
 		if (recursions >= 2) {
 			return []; // stop recursion
@@ -525,7 +528,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					let groupToolbar = this.settingsManager.getToolbarById(item.link);
 					if (groupToolbar) {
 						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-							let groupLItems = await this.renderToolbarLItems(groupToolbar, recursions + 1);
+							let groupLItems = await this.renderToolbarLItems(groupToolbar, file, recursions + 1);
 							noteToolbarLiArray.push(...groupLItems);
 						}
 					}
@@ -555,14 +558,18 @@ export default class NoteToolbarPlugin extends Plugin {
 							this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
 							setIcon(itemIcon, item.icon);
 		
-							let itemLabel = toolbarItem.createSpan();
-							this.setComponentDisplayClass(itemLabel, dkHasLabel, mbHasLabel);
-							itemLabel.innerText = item.label;
-							itemLabel.addClass('cg-note-toolbar-item-label');
+							let itemLabelEl = toolbarItem.createSpan();
+							this.setComponentDisplayClass(itemLabelEl, dkHasLabel, mbHasLabel);
+							this.replaceVars(item.label, file).then(resolvedLabel => {
+								itemLabelEl.innerText = resolvedLabel;
+							});
+							itemLabelEl.addClass('cg-note-toolbar-item-label');
 						}
 						else {
 							this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
-							toolbarItem.innerText = item.label;
+							this.replaceVars(item.label, file).then(resolvedLabel => {
+								if (toolbarItem) toolbarItem.innerText = resolvedLabel;
+							});
 							toolbarItem.addClass('cg-note-toolbar-item-label');
 						}
 					}
