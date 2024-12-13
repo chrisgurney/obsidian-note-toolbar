@@ -125,9 +125,9 @@ export default class DataviewAdapter extends Adapter {
 		component.load();
         try {
             if (this.adapterApi) {
-                debugLog("evaluate() " + expression);
+                // debugLog("evaluate() " + expression);
                 let dvResult = await (this.adapterApi as any).evaluateInline(expression, activeFile?.path);
-                debugLog("evaluate() result:", dvResult);
+                // debugLog("evaluate() result:", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     await this.adapterApi.renderValue(

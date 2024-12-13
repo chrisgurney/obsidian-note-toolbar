@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
+import { App, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
 import { ComponentType, ItemType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
@@ -124,6 +124,15 @@ export function getLinkUiDest(event: MouseEvent | KeyboardEvent | undefined): Pa
 		}
 	}
 	return linkDest;
+}
+
+/**
+ * Gets a unique ID for the current view.
+ * @param view to get the identifer for
+ * @returns ID string, consisting of the leaf's ID and the view's file path
+ */
+export function getViewId(view: MarkdownView | ItemView | null): string | undefined {
+	return (view && view instanceof MarkdownView) ? `${view.leaf.id} ${view.file?.path} ${view.getMode()}` : undefined;
 }
 
 /**
