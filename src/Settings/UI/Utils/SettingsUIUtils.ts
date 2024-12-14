@@ -7,13 +7,18 @@ import { debugLog } from "Utils/Utils";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
+ * @param plugin NoteToolbarPlugin reference
  * @param toolbar ToolbarSettings to display in the preview.
  * @param settingsManager Optional SettingsManager if Groups need to be expanded within previews. 
  * @param showEditLink set to true to add a link to edit the toolbar, after the preview; default is false.
  * @returns DocumentFragment
  */
 export function createToolbarPreviewFr(
-	toolbar: ToolbarSettings, settingsManager?: SettingsManager, showEditLink: boolean = false): DocumentFragment {
+	plugin: NoteToolbarPlugin, 
+	toolbar: ToolbarSettings, 
+	settingsManager?: SettingsManager, 
+	showEditLink: boolean = false
+): DocumentFragment {
 
 	let toolbarFr: DocumentFragment = document.createDocumentFragment();
 	let previewContainer = toolbarFr.createDiv();
@@ -64,6 +69,9 @@ export function createToolbarPreviewFr(
 							if (item.label) {
 								let labelFr = createSpan();
 								labelFr.textContent = item.label;
+								if (item.label && plugin.hasVars(item.label)) {
+									labelFr.addClass('note-toolbar-setting-item-preview-code');
+								}
 								itemsFr.append(labelFr);
 								defaultItemFr.append(labelFr);
 							}

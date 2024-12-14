@@ -43,7 +43,7 @@ export class ImportConfirmModal extends Modal {
 
             this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
 
-            let previewFr = toolbar ? createToolbarPreviewFr(toolbar, undefined) : '';
+            let previewFr = toolbar ? createToolbarPreviewFr(this.plugin, toolbar, undefined) : '';
 
             let previewContainerEl = this.modalEl.createDiv();
             previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');

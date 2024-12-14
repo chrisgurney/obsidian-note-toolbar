@@ -733,7 +733,11 @@ body {
 
 .note-toolbar-setting-item-preview-code {
     font-family: var(--font-monospace);
-    font-size: var(--font-ui-small);
+    white-space: normal !important;
+}
+
+.note-toolbar-setting-item-preview-label.note-toolbar-setting-item-preview-code {
+    font-size: var(--font-ui-small); 
 }
 
 .note-toolbar-setting-item-preview {

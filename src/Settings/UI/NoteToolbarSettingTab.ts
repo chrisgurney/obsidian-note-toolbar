@@ -176,7 +176,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				(toolbar) => {
 					let toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'))
-						.setDesc(createToolbarPreviewFr(toolbar, this.plugin.settingsManager))
+						.setDesc(createToolbarPreviewFr(this.plugin, toolbar, this.plugin.settingsManager))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setIcon('more-horizontal')

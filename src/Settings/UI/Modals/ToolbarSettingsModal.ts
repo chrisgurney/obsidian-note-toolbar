@@ -1053,7 +1053,7 @@ export default class ToolbarSettingsModal extends Modal {
 								this.renderPreview(toolbarItem);
 								// update help text with toolbar preview or default if none selected
 								let groupPreviewFr = groupToolbar 
-									? createToolbarPreviewFr(groupToolbar, undefined, true) 
+									? createToolbarPreviewFr(this.plugin, groupToolbar, undefined, true) 
 									: learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 500));
@@ -1080,7 +1080,7 @@ export default class ToolbarSettingsModal extends Modal {
 								this.renderPreview(toolbarItem);
 								// update help text with toolbar preview or default if none selected
 								let menuPreviewFr = menuToolbar 
-									? createToolbarPreviewFr(menuToolbar, undefined, true)
+									? createToolbarPreviewFr(this.plugin, menuToolbar, undefined, true)
 									: learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
 								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 500));
@@ -1218,7 +1218,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
 				let fieldHelp = document.createDocumentFragment();
 				menuGroupToolbar
-					? fieldHelp.append(createToolbarPreviewFr(menuGroupToolbar, undefined, true))
+					? fieldHelp.append(createToolbarPreviewFr(this.plugin, menuGroupToolbar, undefined, true))
 					: fieldHelp.append(
 						learnMoreFr(
 							type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
@@ -2114,7 +2114,7 @@ export default class ToolbarSettingsModal extends Modal {
 				let groupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
+				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.plugin, groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
 				break;
 			default:
 				setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
