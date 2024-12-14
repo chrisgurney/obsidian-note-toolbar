@@ -1541,7 +1541,7 @@ body {
     white-space: normal !important;
 }
 
-.note-toolbar-setting-item-preview-label.note-toolbar-setting-item-preview-code {
+.note-toolbar-setting-item-preview .note-toolbar-setting-item-preview-code {
     font-size: var(--font-ui-small); 
 }
 
