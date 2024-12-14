@@ -141,7 +141,8 @@ async function exportToCalloutList(
                 itemsExport += `${BULLET} <hr/>`;
                 break;
             case ItemType.Uri:
-                itemsExport += itemLink ? `${BULLET} [${itemIcon}${itemText}](<${itemLink}>)` : '';
+                // item links that start with < such as Templater expressions are left alone
+                itemsExport += itemLink ? `${BULLET} [${itemIcon}${itemText}](${itemLink.startsWith('<') ? itemLink : `<${itemLink}>`})` : '';
                 break;
         }
 
