@@ -1537,7 +1537,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 
-	async setPosition(toolbarSettings: ToolbarSettings, newPosition: PositionType) {
+	async setPosition(toolbarSettings: ToolbarSettings | undefined, newPosition: PositionType) {
 		if (toolbarSettings?.position) {
 			Platform.isDesktop ?
 				toolbarSettings.position.desktop = { allViews: { position: newPosition } }
