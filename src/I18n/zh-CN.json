@@ -215,8 +215,7 @@
     "toolbar": {
         "button-floating-tooltip": "打开笔记工具栏",
         "menu-edit-toolbar": "编辑工具栏：{{toolbar}}...",
-        "menu-position-props": "设置位置：属性下方",
-        "menu-position-top": "设置位置：置顶（固定位置）",
+        "menu-position": "设置位置",
         "menu-toolbar-settings": "笔记工具栏设置..."
     }
 }

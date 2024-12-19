@@ -419,8 +419,7 @@
     "toolbar": {
         "button-floating-tooltip": "Open Note Toolbar",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
-        "menu-position-props": "Set position: Below Properties",
-        "menu-position-top": "Set position: Top (fixed)",
+        "menu-position": "Set position",
         "menu-toolbar-settings": "Note Toolbar settings..."
     }
 }
