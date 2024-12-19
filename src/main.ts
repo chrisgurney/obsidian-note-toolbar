@@ -1789,7 +1789,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			if (prefix && s.trim().startsWith(prefix)) {
 				s = s.trim().slice(prefix.length); // strip prefix before evaluation
-				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluate', expression: s });
+				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluateInline', expression: s });
 				s = (result && typeof result === 'string') ? result : '';
 			}
 			// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
@@ -1806,7 +1806,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				s = s.trim();
 				if (!s.startsWith('<%')) s = '<%' + s;
 				if (!s.endsWith('%>')) s += '%>';
-				let result = await this.tpAdapter?.use({ pluginFunction: 'parseTemplate', expression: s });
+				let result = await this.tpAdapter?.use({ pluginFunction: 'parseTemplateInline', expression: s });
 				s = (result && typeof result === 'string') ? result : '';
 			}
 		}

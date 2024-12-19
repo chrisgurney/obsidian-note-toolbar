@@ -78,6 +78,12 @@ export default class TemplaterAdapter extends Adapter {
                     ? await this.parseTemplate(config.expression)
                     : t('adapter.templater.eval-expr-error-required');
                 break;
+            // internal function for inline evaluations in which errors can be ignored
+            case 'parseTemplateInline':
+                result = config.expression
+                    ? await this.parseTemplate(config.expression, false)
+                    : t('adapter.templater.eval-expr-error-required');
+                break;
             case 'parseTemplateFile':
                 result = config.sourceFile
                     ? await this.parseTemplateFile(config.sourceFile)
@@ -164,9 +170,10 @@ export default class TemplaterAdapter extends Adapter {
      * <%tp.file.creation_date()%>
      * (Open and close tags are optional.)
      * @param expression 
+     * @param displayErrors
      * @returns 
      */
-    async parseTemplate(expression: string): Promise<string> {
+    async parseTemplate(expression: string, displayErrors: boolean = true): Promise<string> {
 
         let result = '';
 
@@ -177,9 +184,9 @@ export default class TemplaterAdapter extends Adapter {
         }
 
         // make sure the opening and closing tags are present, in case they're omitted
-        expression = expression.trim();
-        if (!expression.startsWith('<%')) expression = '<%' + expression;
-        if (!expression.endsWith('%>')) expression += '%>';
+        let expressionToEval = expression.trim();
+        if (!expressionToEval.startsWith('<%')) expressionToEval = '<%' + expressionToEval;
+        if (!expressionToEval.endsWith('%>')) expressionToEval += '%>';
 
         try {
             const config = {
@@ -188,12 +195,17 @@ export default class TemplaterAdapter extends Adapter {
                 active_file: activeFile
             };
             if (this.adapterApi) {
-                result = await this.adapterApi.parse_template(config, expression);
+                result = await this.adapterApi.parse_template(config, expressionToEval);
                 result = (result === 'undefined') ? '' : result;
             }
         }
         catch (error) {
-            displayScriptError(error);
+            if (displayErrors) {
+                displayScriptError(error);
+            }
+            else {
+                result = expression;
+            }
         }
 
         return result;

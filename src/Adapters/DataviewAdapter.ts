@@ -75,6 +75,12 @@ export default class DataviewAdapter extends Adapter {
                     ? await this.evaluate(config.expression, containerEl)
                     : t('adapter.dataview.eval-expr-error-required');
                 break;
+            // internal function for inline evaluations in which errors can be ignored
+            case 'evaluateInline':
+                result = config.expression
+                    ? await this.evaluate(config.expression, containerEl, false)
+                    : t('adapter.dataview.eval-expr-error-required');
+                break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
@@ -112,9 +118,10 @@ export default class DataviewAdapter extends Adapter {
 	 * dateformat(this.file.mtime, "yyyy.MM.dd - HH:mm")
      * @param expression 
      * @param containerEl 
+     * @param displayErrors
      * @returns 
      */
-    private async evaluate(expression: string, containerEl?: HTMLElement): Promise<string> {
+    private async evaluate(expression: string, containerEl?: HTMLElement, displayErrors: boolean = true): Promise<string> {
 
         let result = '';
         
@@ -144,8 +151,13 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
-            result = t('adapter.dataview.error-general', { error: error });;
+            if (displayErrors) {
+                displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+                result = t('adapter.dataview.error-general', { error: error });;
+            }
+            else {
+                result = expression;
+            }
         }
         finally {
             component.unload();
