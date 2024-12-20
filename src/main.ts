@@ -1533,6 +1533,26 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		}
 
+		// show/hide properties
+		const propsEl = this.getPropsEl();
+		if (propsEl) {
+			const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
+			if (propsDisplayStyle === 'none') {
+				contextMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('command.name-show-properties'))
+						.setIcon('table-properties')
+						.onClick(async (menuEvent) => this.commands.toggleProps('show'));
+				});
+			}
+			else {
+				contextMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('command.name-hide-properties'))
+						.setIcon('table-properties')
+						.onClick(async (menuEvent) => this.commands.toggleProps('hide'));
+				});
+			}
+		}
+
 		contextMenu.showAtPosition(e);
 
 	}
