@@ -305,9 +305,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
-		// debugLog("metadata-changed: " + file.name);
+		debugLog('===== METADATA-CHANGE ===== ', file.name);
 		const activeFile = this.app.workspace.getActiveFile();
 		if (activeFile === file) {
+			const currentView: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+			this.lastViewIdOpened = getViewId(currentView) ?? this.lastViewIdOpened;
 			this.checkAndRenderToolbar(file, cache.frontmatter);
 		}
 
