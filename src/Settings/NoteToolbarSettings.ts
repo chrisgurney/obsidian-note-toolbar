@@ -284,6 +284,7 @@ export interface ScriptConfig {
 	sourceArgs?: string;
 	outputContainer?: string;
 	outputFile?: string;
+	postCommand?: string;
 };
 
 /******************************************************************************

@@ -4,6 +4,8 @@
         "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format.",
         "outputcontainer": "Output callout ID (optional)",
         "outputcontainer-description": "Add a note-toolbar-output callout with a unique meta field to your note to put text output.",
+        "postCommand": "Command (optional)",
+        "postCommand-description": "Command to run after execution.",
         "dataview": {
             "error-general": "Dataview error: Check console for more details.\n```\n{{error}}\n```",
             "dvjs-function": "Evaluate Dataview JS expression",
@@ -46,7 +48,7 @@
             "create-sourcefile": "Template",
             "create-sourcefile-description": "Template file to create a new file from.",
             "create-sourcefile-error-required": "Error: A template file is required",
-            "create-outputfile": "(Optional) Output filename",
+            "create-outputfile": "Output filename (optional)",
             "create-outputfile-description": "Name of the file (without file extension) and folder(s) to create, from the provided template.",
             "eval-function": "Execute Templater command",
             "eval-expr": "Templater command",

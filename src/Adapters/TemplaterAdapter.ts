@@ -24,7 +24,8 @@ export default class TemplaterAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: t('adapter.templater.create-sourcefile'), description: t('adapter.templater.create-sourcefile-description'), type: SettingType.File, required: true },
-                { parameter: 'outputFile', label: t('adapter.templater.create-outputfile'), description: t('adapter.templater.create-outputfile-description'), type: SettingType.Text, required: false }
+                { parameter: 'outputFile', label: t('adapter.templater.create-outputfile'), description: t('adapter.templater.create-outputfile-description'), type: SettingType.Text, required: false },
+                { parameter: 'postCommand', label: t('adapter.postCommand'), description: t('adapter.postCommand-description'), type: SettingType.Command, required: false }
             ]
         },
         {
@@ -97,6 +98,15 @@ export default class TemplaterAdapter extends Adapter {
                 break;
         }
 
+        if (config.postCommand) {
+            try {
+                await this.noteToolbar?.app.commands.executeCommandById(config.postCommand);
+            } 
+            catch (error) {
+                throw new Error(error);
+            }
+        }
+
         return result;
     }
     
@@ -126,6 +136,7 @@ export default class TemplaterAdapter extends Adapter {
     /**
      * Calls create_new_note_from_template.
      * @param filename 
+     * @param outputFile 
      */
     async createFrom(filename: string, outputFile?: string): Promise<void> {
 
@@ -143,7 +154,6 @@ export default class TemplaterAdapter extends Adapter {
             try {
                 if (templateFile) {
                     await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
-                    await this.noteToolbar?.app.commands.executeCommandById('file-explorer:reveal-active-file');
                 }
                 else {
                     throw new Error(t('adapter.error.file-not-found', { filename: filename }));
