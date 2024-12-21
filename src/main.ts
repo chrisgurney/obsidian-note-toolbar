@@ -195,7 +195,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	fileOpenListener = (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
-			debugLog('file-open: ' + file.name);
+			debugLog('===== FILE-OPEN ===== ', file.name);
 			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 		}
 	};

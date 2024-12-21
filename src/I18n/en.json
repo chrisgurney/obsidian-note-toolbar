@@ -4,8 +4,8 @@
         "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format.",
         "outputcontainer": "Output callout ID (optional)",
         "outputcontainer-description": "Add a note-toolbar-output callout with a unique meta field to your note to put text output.",
-        "postCommand": "Command (optional)",
-        "postCommand-description": "Command to run after execution.",
+        "postCommand": "Command after execution (optional)",
+        "postCommand-description": "Command to run after the script completes.",
         "dataview": {
             "error-general": "Dataview error: Check console for more details.\n```\n{{error}}\n```",
             "dvjs-function": "Evaluate Dataview JS expression",
