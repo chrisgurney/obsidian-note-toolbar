@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
-import { App, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
-import { ComponentType, ItemType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { App, Command, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -79,6 +79,28 @@ export function displayScriptError(message: string, error?: any, containerEl?: H
 	errorFr.append(message);
 	error ? errorFr.append('\n', error) : undefined;
 	new Notice(errorFr, 5000);
+}
+
+/**
+ * Returns the name of a command based on its ID, if known.
+ * @param commandId command ID to look up
+ * @returns name of command; undefined otherwise
+ */
+export function getCommandNameById(plugin: NoteToolbarPlugin, commandId: string): string | undefined {
+	const availableCommands: Command[] = Object.values(plugin.app.commands.commands);
+	const matchedCommand = availableCommands.find(command => command.id === commandId);
+	return matchedCommand ? matchedCommand.name : undefined;
+}
+
+/**
+ * Get command ID by name.
+ * @param commandName name of the command to look for.
+ * @returns command ID or undefined.
+ */
+export function getCommandIdByName(plugin: NoteToolbarPlugin, commandName: string): string {
+	const availableCommands: Command[] = Object.values(plugin.app.commands.commands);
+	const matchedCommand = availableCommands.find(command => command.name === commandName);
+	return matchedCommand ? matchedCommand.id : COMMAND_DOES_NOT_EXIST;
 }
 
 /**

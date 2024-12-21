@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog, getUUID } from "./Utils";
+import { debugLog, getCommandNameById, getUUID } from "./Utils";
 import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
 
 const toIconizeFormat = (s: string) => 
@@ -426,15 +426,4 @@ export async function importFromCallout(
 
     return toolbar;
 
-}
-
-/**
- * Returns the name of a command based on its ID, if known.
- * @param commandId command ID to look up
- * @returns name of command; undefined otherwise
- */
-function getCommandNameById(plugin: NoteToolbarPlugin, commandId: string): string | undefined {
-    const availableCommands: Command[] = Object.values(plugin.app.commands.commands);
-    const matchedCommand = availableCommands.find(command => command.id === commandId);
-    return matchedCommand ? matchedCommand.name : undefined;
 }

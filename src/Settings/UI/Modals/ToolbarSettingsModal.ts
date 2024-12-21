@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Command, DropdownComponent, Menu, MenuItem, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs } from 'Utils/Utils';
+import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
@@ -931,7 +931,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setPlaceholder(t('setting.item.option-command-placeholder'))
 							.setValue(toolbarItem.link)
 							.onChange(debounce(async (commandName) => {
-								const commandId = commandName ? this.getCommandIdByName(commandName) : '';
+								const commandId = commandName ? getCommandIdByName(this.plugin, commandName) : '';
 								const isValid = this.updateItemComponentStatus(commandId, SettingType.Command, cb.inputEl.parentElement);
 								toolbarItem.link = isValid && commandName ? commandName : '';
 								toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
@@ -1870,17 +1870,6 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
-
-	/**
-	 * Get command ID by name.
-	 * @param commandName name of the command to look for.
-	 * @returns command ID or undefined.
-	 */
-	getCommandIdByName(commandName: string): string {
-		const availableCommands: Command[] = Object.values(this.plugin.app.commands.commands);
-		const matchedCommand = availableCommands.find(command => command.name === commandName);
-		return matchedCommand ? matchedCommand.id : COMMAND_DOES_NOT_EXIST;
-	}
 
 	/**
 	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
