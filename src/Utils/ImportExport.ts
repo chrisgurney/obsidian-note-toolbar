@@ -237,22 +237,22 @@ export async function importFromCallout(
     
                 const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
                 const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
-                const validStyles = styles.filter(style => 
-                    DEFAULT_STYLE_KEYS.includes(style) || MOBILE_STYLE_KEYS.includes(style)
-                );
+                const validDefaultStyles = styles.filter(style => DEFAULT_STYLE_KEYS.includes(style));
+                const validMobileStyles = styles.filter(style => MOBILE_STYLE_KEYS.includes(style));
                 const invalidStyles = styles.filter(style => 
                     style && !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
                 );
     
                 debugLog('• name?', name);
-                debugLog('• styles?', validStyles);
+                debugLog('• styles?', validDefaultStyles, validMobileStyles);
                 if (invalidStyles.length > 0) {
                     debugLog('  • invalid:', invalidStyles);
                     errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
                 toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.imported-tbar-name'), false);
-                toolbar.defaultStyles = validStyles;
+                toolbar.defaultStyles = validDefaultStyles;
+                toolbar.mobileStyles = validMobileStyles;
             }
         }
         // remove line from the list to process next

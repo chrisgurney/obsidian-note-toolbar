@@ -111,7 +111,7 @@
         "title-import-into": "Add callout items to toolbar: {{toolbar}}",
         "label-import-confirmation": "Confirm you would like to add this toolbar. Once added, this toolbar will need to be mapped to one or more notes.",
         "label-import": "Paste a Note Toolbar Callout below and it will be added as a new toolbar.",
-        "label-import-into": "Paste a Note Toolbar Callout below and its items will be added to this toolbar.",
+        "label-import-into": "Paste a Note Toolbar Callout below and its items will be added to this toolbar. Styles will be ignored if provided.",
         "label-import-into-help": "The callout heading is not needed, and will be ignored if provided.",
         "button-add-items": "Add items",
         "button-cancel": "Cancel",
