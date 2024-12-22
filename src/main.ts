@@ -404,7 +404,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			'data-name': toolbar.name,
 			'data-tbar-position': position,
 			'data-updated': toolbar.updated,
-			'data-view-mode': viewMode
+			'data-view-mode': viewMode,
+			'data-csstheme': this.app.vault.getConfig('cssTheme')
 		});
 
 		// render the toolbar based on its position

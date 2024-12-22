@@ -35,6 +35,10 @@ declare module "obsidian" {
         setWarning(warning: boolean): void;
     }
 
+    interface Vault {
+        getConfig(setting: string): string;
+    }
+
 	// interface Workspace {
     //     on(name: "note-toolbar:item-activated", callback: () => void, ctx?: any): EventRef;
     // }
