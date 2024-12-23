@@ -1588,6 +1588,16 @@ export default class ToolbarSettingsModal extends Modal {
 			.setClass("note-toolbar-setting-item-styles")
 			.settingEl.append(mobileStyleDiv);
 
+		new Setting(settingsDiv)
+			.setName(t('setting.styles.option-custom-name'))
+			.setDesc(learnMoreFr(t('setting.styles.option-custom-description'), 'Custom-styling'))
+			.addText(text => text
+				.setPlaceholder(t('setting.styles.option-custom-empty'))
+				.setValue(this.toolbar.customClasses)
+				.onChange(debounce(async (value) => {
+					this.toolbar.customClasses = value.trim();
+					await this.plugin.settingsManager.save();
+				}, 750)));
 
 		new Setting(settingsDiv)
 			.setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));

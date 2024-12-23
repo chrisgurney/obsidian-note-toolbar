@@ -158,6 +158,7 @@ export interface ExportSettings {
 
 export interface ToolbarSettings {
 	uuid: string;
+	customClasses: string;
 	defaultStyles: string[];
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
@@ -173,6 +174,7 @@ export interface ToolbarSettings {
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	uuid: getUUID(),
+	customClasses: "",
 	defaultStyles: ["border","even","sticky"],
 	items: [],
 	mobileStyles: [],

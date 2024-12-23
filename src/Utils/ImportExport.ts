@@ -214,6 +214,7 @@ export async function importFromCallout(
     if (!toolbar) {
         toolbar = {
             uuid: getUUID(),
+            customClasses: "",
             defaultStyles: ["border", "even", "sticky"],
             items: [],
             mobileStyles: [],

@@ -40,6 +40,7 @@ export class SettingsManager {
 		debugLog('duplicateToolbar', toolbar);
 		let newToolbar = {
 			uuid: getUUID(),
+			customClasses: "",
 			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)),
 			items: [],
 			mobileStyles: JSON.parse(JSON.stringify(toolbar.mobileStyles)),
@@ -247,6 +248,7 @@ export class SettingsManager {
 	public async newToolbar(name: string = ""): Promise<ToolbarSettings> {
 		let newToolbar = {
 			uuid: getUUID(),
+			customClasses: "",
 			defaultStyles: ["border", "even", "sticky"],
 			items: [],
 			mobileStyles: [],

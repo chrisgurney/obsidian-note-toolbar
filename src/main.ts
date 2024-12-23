@@ -497,7 +497,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			noteToolbarCalloutContent.className = "callout-content";
 			noteToolbarCalloutContent.append(noteToolbarUl);
 
-			noteToolbarCallout.className = "callout cg-note-toolbar-callout";
+			noteToolbarCallout.addClasses(["callout", "cg-note-toolbar-callout"]);
+			toolbar.customClasses && noteToolbarCallout.addClasses([...toolbar.customClasses.split(' ')]);
 			noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
 			noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 			noteToolbarCallout.append(noteToolbarCalloutContent);
