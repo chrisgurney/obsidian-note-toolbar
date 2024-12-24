@@ -1,5 +1,9 @@
 <%*
 // Opens the next file in the current folder, according to the File explorer's default sorting ("File name (A to Z)").
+//
+// Usage:
+// - Place in Templater's templates folder and use "Execute Templater file".
+//
 // Adapted from: https://gist.github.com/thomasvs/343c740825407f0a84f350e4e40bedd0
 
 // get a sorted list of file names in the current path
