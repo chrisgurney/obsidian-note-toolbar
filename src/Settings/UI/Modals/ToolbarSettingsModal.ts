@@ -1154,9 +1154,7 @@ export default class ToolbarSettingsModal extends Modal {
 								let fileSuggesterFolder: string | undefined = undefined;
 								let fileSuggesterExt: string | undefined = '.js';
 								if (toolbarItem.linkAttr.type === ItemType.Templater) {
-									if (['appendTemplate', 'createFrom'].contains(selectedFunction.function.name)) {
-										fileSuggesterFolder = this.plugin.tpAdapter?.getSetting('templates_folder');
-									}
+									fileSuggesterFolder = this.plugin.tpAdapter?.getSetting('templates_folder');
 									fileSuggesterExt = undefined;
 								}
 								new FileSuggester(this.app, cb.inputEl, true, fileSuggesterExt, fileSuggesterFolder);
