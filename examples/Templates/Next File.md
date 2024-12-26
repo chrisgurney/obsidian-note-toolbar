@@ -1,5 +1,6 @@
 <%*
-// Opens the next file in the current folder, according to the File explorer's default sorting ("File name (A to Z)").
+// Templater template that opens the next file in the current folder, 
+// according to the File explorer's default sorting ("File name (A to Z)").
 //
 // Usage:
 // - Place in Templater's templates folder and use "Execute Templater file".

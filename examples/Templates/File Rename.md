@@ -1,5 +1,5 @@
 <%
-// Adds a date stamp to the filename of the current file.
+// Tempater template that adds a date stamp to the filename of the current file.
 //
 // Usage:
 // - Place in Templater's templates folder and use "Execute Templater file"
