@@ -254,7 +254,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// debugLog("layout-change: position: ", toolbarPos);
 				this.app.workspace.onLayoutReady(debounce(() => {
 					// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
-					toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
+					// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
 					this.lastViewIdOpened = getViewId(currentView);
 					this.renderToolbarForActiveFile();
 				}, (viewMode === "preview" ? 200 : 0)));
@@ -291,7 +291,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		if (renderToolbar) {
-			this.removeActiveToolbar();
+			// this.removeActiveToolbar();
 			this.lastViewIdOpened = viewId;
 			// don't seem to need a delay before rendering for leaf changes
 			this.renderToolbarForActiveFile();
