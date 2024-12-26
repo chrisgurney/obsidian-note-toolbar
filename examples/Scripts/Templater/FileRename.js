@@ -3,7 +3,8 @@
  * 
  * Usage:
  * - In the Templater plugin's settings, add the folder this script is in under "User script functions".
- * - Use tp.user.FileRename(tp) in "Execute Templater command".
+ * - Add a Templater item to your toolbar and select "Execute Temlpater command".
+ * - In the "Templater command" field: tp.user.FileRename(tp)
  */
 
 module.exports = async function FileRename(tp) {

@@ -2,15 +2,17 @@
  * Creates a new note from the provided templates (user selects if >1), and 
  * puts it in one of the provided output folders (user selects if >1).
  * 
- * To Use:
+ * Usage:
  * - In the Templater plugin's settings, add the folder this script is in under "User script functions".
- * - Use tp.user.NewNoteFromTemplates in an expression, and provide it three parameters:
+ * - Add a Templater item to your toolbar and select "Execute Temlpater command".
+ * - In the "Templater command" field use "tp.user.NewNoteFromTemplates" and provide it these parameters:
+ *    - A reference to the "tp" object.
  *    - A list of templates for the user to choose from.
  *    - An output filename, or "" to use the template name as the filename.
  *    - (Optional) Provide a list of output folders for the user to select from: ["Folder1", "Folder2"]
  * 
  * Examples:
- * tp.user.NewNoteFromTemplates(tp, ["[[Template1]]", "[[Template2]]"]
+ * tp.user.NewNoteFromTemplates(tp, ["[[Template1]]", "[[Template2]]"])
  * tp.user.NewNoteFromTemplates(tp, ["[[Design Effort Template]]", "[[Effort Template]]"], "New Effort", ["Efforts", "Portfolio/Efforts"])
  */
 

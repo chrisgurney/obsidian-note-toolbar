@@ -5,10 +5,11 @@
  *
  * Usage: 
  * - In the Templater plugin's settings, add the folder this script is in under "User script functions".
- * - Use tp.user.NextNote() in "Execute Templater command".
+ * - Add a Templater item to your toolbar and select "Execute Temlpater command".
+ * - In the "Templater command" field: tp.user.NextFile()
  */
 
-module.exports = async function NextNote() {
+module.exports = async function NextFile() {
 
 	// get a sorted list of file names in the current path
 	const currentFile = app.workspace.getActiveFile();
