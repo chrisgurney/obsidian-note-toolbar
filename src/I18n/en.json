@@ -28,14 +28,14 @@
         "js-engine": {
             "exec-function": "Execute JavaScript",
             "exec-sourcefile": "JavaScript file",
-            "exec-sourcefile-description": "JavaScript to execute.",
+            "exec-sourcefile-description": "JavaScript file to execute.",
             "exec-sourcefile-error-required": "Error: A JavaScript file is required",
             "importexec-function": "Import and execute JavaScript",
             "importexec-sourcefile": "JavaScript file",
-            "importexec-sourcefile-description": "JavaScript to import. Note that this file is only imported once. You may have to restart Obsidian in order to pick up changes.",
+            "importexec-sourcefile-description": "JavaScript file to import. Note that this file is only imported once. You may have to restart Obsidian in order to pick up changes.",
             "importexec-sourcefile-error-required": "Error: A JavaScript file is required",
             "importexec-sourcefunction": "Function (optional)",
-            "importexec-sourcefunction-description": "If script has functions, function name to execute.",
+            "importexec-sourcefunction-description": "If the script has functions, function name to execute.",
             "importexec-args": "Arguments (optional)",
             "importexec-args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format."
         },
