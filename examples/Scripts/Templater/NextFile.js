@@ -5,7 +5,7 @@
  *
  * Usage: 
  * - In the Templater plugin's settings, add the folder this script is in under "User script functions".
- * - Add a Templater item to your toolbar and select "Execute Temlpater command".
+ * - Add a Templater item to your toolbar and select "Execute Templater command".
  * - In the "Templater command" field: tp.user.NextFile()
  */
 
