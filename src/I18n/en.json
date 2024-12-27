@@ -1,7 +1,7 @@
 {
     "adapter": {
         "args": "Arguments (optional)",
-        "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format.",
+        "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format, with string values in quotes.",
         "outputcontainer": "Output callout ID (optional)",
         "outputcontainer-description": "Add a note-toolbar-output callout with a unique meta field to your note to put text output.",
         "postCommand": "Command after execution (optional)",
@@ -37,7 +37,7 @@
             "importexec-sourcefunction": "Function (optional)",
             "importexec-sourcefunction-description": "If the script has functions, function name to execute.",
             "importexec-args": "Arguments (optional)",
-            "importexec-args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format."
+            "importexec-args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format, with string values in quotes."
         },
         "templater": {
             "append-function": "Insert template",
