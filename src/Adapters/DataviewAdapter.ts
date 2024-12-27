@@ -36,7 +36,7 @@ export default class DataviewAdapter extends Adapter {
             label: t('adapter.dataview.eval-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: t('adapter.dataview.eval-expr'), description: t('adapter.dataview.eval-expr-description'), type: SettingType.Text, required: true },
+                { parameter: 'expression', label: t('adapter.dataview.eval-expr'), description: t('adapter.dataview.eval-expr-description'), type: SettingType.TextArea, required: true },
                 { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
@@ -45,7 +45,7 @@ export default class DataviewAdapter extends Adapter {
             label: t('adapter.dataview.dvjs-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: t('adapter.dataview.dvjs-expr'),  description: t('adapter.dataview.dvjs-expr-description'), type: SettingType.Text, required: true },
+                { parameter: 'expression', label: t('adapter.dataview.dvjs-expr'),  description: t('adapter.dataview.dvjs-expr-description'), type: SettingType.TextArea, required: true },
                 { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },

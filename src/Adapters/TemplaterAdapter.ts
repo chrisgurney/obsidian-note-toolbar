@@ -33,7 +33,7 @@ export default class TemplaterAdapter extends Adapter {
             label: t('adapter.templater.eval-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: t('adapter.templater.eval-expr'), description: t('adapter.templater.eval-expr-description'), type: SettingType.Text, required: true },
+                { parameter: 'expression', label: t('adapter.templater.eval-expr'), description: t('adapter.templater.eval-expr-description'), type: SettingType.TextArea, required: true },
             ]
         },
         {

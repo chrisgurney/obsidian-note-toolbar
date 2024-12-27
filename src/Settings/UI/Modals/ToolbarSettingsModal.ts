@@ -1170,7 +1170,6 @@ export default class ToolbarSettingsModal extends Modal {
 								this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
 							});
 						break;
-					case SettingType.Args:
 					case SettingType.Text:
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
@@ -1189,6 +1188,7 @@ export default class ToolbarSettingsModal extends Modal {
 							});
 						// fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 						break;
+					case SettingType.Args:
 					case SettingType.TextArea:
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
