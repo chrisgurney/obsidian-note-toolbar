@@ -64,7 +64,7 @@ export class NoteToolbarApi {
                 if (throw_on_cancel) {
                     throw error;
                 }
-                return null as T;
+                return null as unknown as T;
             }
         };
     }
