@@ -4,7 +4,7 @@ import NoteToolbar from "main";
 declare global {
     
     interface Window {
-        NoteToolbarApi?: INoteToolbarApi;
+        NoteToolbarApi?: INoteToolbarApi<any>;
         NoteToolbar?: NoteToolbar;
     }
 

@@ -18,7 +18,7 @@ import { Adapter } from 'Adapters/Adapter';
 
 export default class NoteToolbarPlugin extends Plugin {
 
-	api: INoteToolbarApi;
+	api: INoteToolbarApi<any>;
 	commands: CommandsManager;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
@@ -130,11 +130,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// make API available
 			this.api = new NoteToolbarApi(this).initialize();
+			(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
 			// TODO: remove once API has been implemented
-			if (false) {
-				(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
-				(window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
-			}
+			// if (false) {
+				// (window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
+			// }
 
 			// register custom view: What's New
 			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
