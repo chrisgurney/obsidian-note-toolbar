@@ -131,9 +131,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			// make API available
 			this.api = new NoteToolbarApi(this).initialize();
 			(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
-			// TODO: remove once API has been implemented
-			// if (false) {
-				// (window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
+			// TODO: consider how exposing the current toolbar is going to work
+			// (window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
 			// }
 
 			// register custom view: What's New
