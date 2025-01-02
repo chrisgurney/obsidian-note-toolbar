@@ -45,6 +45,7 @@ export class NoteToolbarApi {
      * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts
      */
     private generate_suggester() {
+
         return async <T>(
             text_items: string[] | ((item: T) => string),
             items: T[],
@@ -52,28 +53,21 @@ export class NoteToolbarApi {
             placeholder = '',
             limit?: number
         ): Promise<T> => {
-            const suggester = new SuggesterModal(
-                this.noteToolbar.app,
-                text_items,
-                items,
-                placeholder,
-                limit
-            );
 
-            const promise = new Promise(
-                (resolve: (value: T) => void, reject: (reason?: Error) => void) => 
-                    suggester.openAndGetValue(resolve, reject)
+            const suggester = new SuggesterModal(this.noteToolbar.app, text_items, items, placeholder, limit);
+
+            const promise = new Promise((resolve: (value: T) => void, reject: (reason?: Error) => void) => 
+                suggester.openAndGetValue(resolve, reject)
             );
 
             try {
                 return await promise;
             } 
             catch (error) {
-                if (throw_on_cancel) {
-                    throw error;
-                }
+                if (throw_on_cancel) throw error;
                 return null as unknown as T;
             }
+
         };
     }
 
