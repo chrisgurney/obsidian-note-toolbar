@@ -103,6 +103,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
 
+            // TODO? refactor as function to return item suggestions, for search?
+
             // remove duplicates (+ redundant item-suggester items)
             sortedItemSuggestions = 
                 Array.from(

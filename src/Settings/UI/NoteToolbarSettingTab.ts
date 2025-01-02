@@ -98,6 +98,21 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 
+		// TODO: toolbar search
+		// if (this.plugin.settings.toolbars.length > 4) {
+		// 	let toolbarSearchSetting = new Setting(itemsContainer)
+		// 		.setName('Search toolbars')
+		// 		.setDesc('Filter toolbars by name or item.');
+
+		// 	toolbarSearchSetting
+		// 	.addSearch((cb) => {
+		// 		cb.setPlaceholder('Search')
+		// 		.onChange((value: string) => {
+		// 			// TODO: dynamically filter list items (display: none), based on toolbar position/ID
+		// 		});
+		// 	});
+		// }
+
 		let toolbarListSetting = new Setting(itemsContainer)
 			.setName(t('setting.toolbars.name'))
 			.setDesc(t('setting.toolbars.description'))

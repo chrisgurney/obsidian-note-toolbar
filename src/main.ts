@@ -133,7 +133,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			(window["NoteToolbarApi"] = this.api) && this.register(() => delete window["NoteToolbarApi"]);
 			// TODO: consider how exposing the current toolbar is going to work
 			// (window["NoteToolbar"] = this) && this.register(() => delete window["NoteToolbar"]);	
-			// }
 
 			// register custom view: What's New
 			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
@@ -1098,6 +1097,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
 						this.showMenuAtElement(menu, clickedItemEl);
+						// TODO: need reference to parent toolbar (not item) to get custom classes to apply here
+						// toolbar.customClasses && menu.dom.addClasses([...toolbar.customClasses.split(' ')]);
 						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
 					});
 				}
