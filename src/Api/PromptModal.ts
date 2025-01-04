@@ -36,14 +36,14 @@ export class PromptModal extends Modal {
 
     createForm(): void {
         const div = this.contentEl.createDiv();
-        div.addClass("templater-prompt-div");
+        div.addClass('note-toolbar-comp-div');
         let textInput;
         if (this.multi_line) {
             textInput = new TextAreaComponent(div);
 
             // Add submit button since enter needed for multiline input on mobile
             const buttonDiv = this.contentEl.createDiv();
-            buttonDiv.addClass("templater-button-div");
+            buttonDiv.addClass('note-toolbar-comp-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
             submitButton.setButtonText("Submit").onClick((evt: Event) => {
@@ -54,7 +54,7 @@ export class PromptModal extends Modal {
         }
 
         this.value = this.default_value ?? "";
-        textInput.inputEl.addClass("templater-prompt-input");
+        textInput.inputEl.addClass('note-toolbar-comp-input');
         textInput.setPlaceholder("Type text here");
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));

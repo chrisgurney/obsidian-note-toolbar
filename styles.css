@@ -2477,3 +2477,28 @@ input[type="text"].note-toolbar-setting-error,
         padding-bottom: var(--size-4-12);
     }
 }
+
+/*************************************************************************
+ * Components (Note Toolbar API)
+ *************************************************************************/
+
+.note-toolbar-comp-button-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.note-toolbar-comp-div {
+    display: flex;
+}
+
+.note-toolbar-comp-form {
+    display: flex;
+    flex-grow: 1;
+}
+
+.note-toolbar-comp-input {
+    flex-grow: 1;
+}
+
