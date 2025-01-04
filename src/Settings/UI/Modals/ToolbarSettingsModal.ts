@@ -1592,6 +1592,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(settingsDiv)
 			.setName(t('setting.styles.option-custom-name'))
 			.setDesc(learnMoreFr(t('setting.styles.option-custom-description'), 'Custom-styling'))
+			.setClass('note-toolbar-setting-item-full-width')
 			.addText(text => text
 				.setPlaceholder(t('setting.styles.option-custom-empty'))
 				.setValue(this.toolbar.customClasses)

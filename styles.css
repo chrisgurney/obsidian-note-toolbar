@@ -1746,6 +1746,19 @@ input[type="text"].note-toolbar-setting-error,
     margin-bottom: 2em !important;
 }
 
+.note-toolbar-setting-item-full-width {
+    align-items: flex-start;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: var(--size-4-2);
+    & .setting-item-control {
+        width: 100%;
+        & input[type="text"] {
+            width: 100%;
+        }
+    }
+}
+
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
     border-top: 1px solid var(--background-modifier-border);
