@@ -8,7 +8,8 @@ type Callback = (arg: string) => void;
 export interface INoteToolbarApi<T> {
     testCallback: (buttonId: string, callback: Callback) => Promise<void>;
     /**
-     * https://silentvoid13.github.io/Templater/internal-functions/internal-modules/system-module.html#tpsystemclipboard
+     * @returns The clipboard's text content.
+     * @link https://silentvoid13.github.io/Templater/internal-functions/internal-modules/system-module.html
      */
     clipboard: () => Promise<string | null>;
     /**
@@ -18,10 +19,16 @@ export interface INoteToolbarApi<T> {
      * @param placeholder Placeholder string of the prompt.
      * @param limit Limit the number of items rendered at once (useful to improve performance when displaying large lists).
      * @returns The user's chosen item.
+     * @link https://silentvoid13.github.io/Templater/internal-functions/internal-modules/system-module.html
      */
     suggester: (text_items: string[] | ((item: T) => string), items: T[], throw_on_cancel: boolean, placeholder: string, limit?: number) => Promise<T | null>;
     /**
-     * https://silentvoid13.github.io/Templater/internal-functions/internal-modules/system-module.html#tpsystempromptprompt_text-string-default_value-string-throw_on_cancel-boolean--false-multiline-boolean--false
+     * @param prompt_text: Text placed above the input field.
+     * @param default_value: A default value for the input field.
+     * @param throw_on_cancel: Throws an error if the prompt is canceled, instead of returning a null value.
+     * @param multiline: If set to true, the input field will be a multiline textarea. Defaults to false.
+     * @returns The user's input.
+     * @link https://silentvoid13.github.io/Templater/internal-functions/internal-modules/system-module.html
      */
     prompt: (prompt_text: string, default_value: string, throw_on_cancel: boolean, multiline?: boolean) => Promise<string | null>;
 }
