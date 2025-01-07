@@ -1447,55 +1447,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let contextMenu = new Menu();
 
-		if (toolbarSettings) {
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name }))
-					.setIcon("lucide-pen-box")
-					.onClick((menuEvent) => {
-						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name }));
-						modal.open();
-					});
-			  });
-		}
-
-		contextMenu.addItem((item: MenuItem) => {
-			item
-			  .setTitle(t('toolbar.menu-toolbar-settings'))
-			  .setIcon("lucide-wrench")
-			  .onClick((menuEvent) => {
-				  this.commands.openSettings();
-			  });
-		  });
-  
 		if (toolbarSettings !== undefined) {
-
-			contextMenu.addSeparator();
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('share')
-					.setTitle(t('export.label-share'))
-					.onClick(async () => {
-						if (toolbarSettings) {
-							const shareUri = await this.protocolManager.getShareUri(toolbarSettings);
-							let shareModal = new ShareModal(this, shareUri, toolbarSettings);
-							shareModal.open();
-						}
-					});
-			});
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setTitle(t('export.label-callout'))
-					.setIcon('copy')
-					.onClick(async (menuEvent) => {
-						if (toolbarSettings) {
-							let calloutExport = await exportToCallout(this, toolbarSettings, this.settings.export);
-							navigator.clipboard.writeText(calloutExport);
-							new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
-						}
-					})
-				});
 
 			// position menu
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
@@ -1533,27 +1485,82 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 				}
 			});
+
+			// show/hide properties
+			const propsEl = this.getPropsEl();
+			if (propsEl) {
+				const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
+				if (propsDisplayStyle === 'none') {
+					contextMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('toolbar.menu-show-properties'))
+							.setIcon('table-properties')
+							.onClick(async (menuEvent) => this.commands.toggleProps('show'));
+					});
+				}
+				else {
+					contextMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('toolbar.menu-hide-properties'))
+							.setIcon('table-properties')
+							.onClick(async (menuEvent) => this.commands.toggleProps('hide'));
+					});
+				}
+			}
+
+			// share
+			contextMenu.addSeparator();
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('share')
+					.setTitle(t('export.label-share'))
+					.onClick(async () => {
+						if (toolbarSettings) {
+							const shareUri = await this.protocolManager.getShareUri(toolbarSettings);
+							let shareModal = new ShareModal(this, shareUri, toolbarSettings);
+							shareModal.open();
+						}
+					});
+			});
+
+			// copy as callout
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setTitle(t('export.label-callout'))
+					.setIcon('copy')
+					.onClick(async (menuEvent) => {
+						if (toolbarSettings) {
+							let calloutExport = await exportToCallout(this, toolbarSettings, this.settings.export);
+							navigator.clipboard.writeText(calloutExport);
+							new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
+						}
+					})
+				});
+
+		}
+		
+		contextMenu.addSeparator();
+
+		// edit toolbar
+		if (toolbarSettings !== undefined) {
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name }))
+					.setIcon("lucide-pen-box")
+					.onClick((menuEvent) => {
+						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
+						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name }));
+						modal.open();
+					});
+			  });
 		}
 
-		// show/hide properties
-		const propsEl = this.getPropsEl();
-		if (propsEl) {
-			const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
-			if (propsDisplayStyle === 'none') {
-				contextMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('toolbar.menu-show-properties'))
-						.setIcon('table-properties')
-						.onClick(async (menuEvent) => this.commands.toggleProps('show'));
-				});
-			}
-			else {
-				contextMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('toolbar.menu-hide-properties'))
-						.setIcon('table-properties')
-						.onClick(async (menuEvent) => this.commands.toggleProps('hide'));
-				});
-			}
-		}
+		contextMenu.addItem((item: MenuItem) => {
+			item
+			  .setTitle(t('toolbar.menu-toolbar-settings'))
+			  .setIcon("lucide-wrench")
+			  .onClick((menuEvent) => {
+				  this.commands.openSettings();
+			  });
+		  });
 
 		contextMenu.showAtPosition(e);
 
