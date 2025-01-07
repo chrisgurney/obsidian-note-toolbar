@@ -726,6 +726,10 @@ export default class NoteToolbarPlugin extends Plugin {
 									.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
 									.setTitle(title);
 								let subMenu = item.setSubmenu() as Menu;
+								// add class so we can style the menu
+								subMenu.dom.addClass('note-toolbar-menu');
+								// FIXME: this is not the parent toolbar
+								// toolbar.customClasses && subMenu.dom.addClasses([...toolbar.customClasses.split(' ')]);
 								let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
 								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
 							});
@@ -1097,8 +1101,6 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
 						this.showMenuAtElement(menu, clickedItemEl);
-						// TODO: need reference to parent toolbar (not item) to get custom classes to apply here
-						// toolbar.customClasses && menu.dom.addClasses([...toolbar.customClasses.split(' ')]);
 						event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
 					});
 				}
