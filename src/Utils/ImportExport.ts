@@ -178,6 +178,16 @@ function escapeLinkForCallout(str: string): string {
         .replace(/\(/g, '\\(');
 }
 
+function unescapeLinkForCallout(str: string): string {
+    return str
+        .replace(/\\\[/g, '[')
+        .replace(/\\\]/g, '[')
+        .replace(/\\\)/g, ')')
+        .replace(/\\\(/g, '(')
+        .replace(/^<(?!%)/g, '')   // replace < but not <%
+        .replace(/(?<!%)>$/g, ''); // replace > but not %>
+}
+
 /**
  * Returns a string that shouldn't break the text portion of a callout markdown link.
  * @param str string to escape
@@ -187,6 +197,12 @@ function escapeTextForCallout(str: string): string {
     return str
         .replace(/\[/g, '\\[')
         .replace(/\]/g, '\\]');
+}
+
+function unescapeTextForCallout(str: string): string {
+    return str
+        .replace(/\\\[/g, '[')
+        .replace(/\\\]/g, ']');
 }
 
 /**
@@ -282,13 +298,15 @@ export async function importFromCallout(
         }
         else {
 
-            const dataUriMatch = line.match(/<data data-(ntb-)?(command|dataview|folder|js-engine|menu|templater-obsidian)="(.*?)"(.*?)(\/?>|$)|obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
+            const dataMatch = line.match(/<data data-(ntb-)?(command|dataview|folder|js-engine|menu|templater-obsidian)="(.*?)"(.*?)(\/?>|$)/);
+            const uriMatch = line.match(/obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
             const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
 
             // remove the data element and tooltip to ensure the whole link is included in the match
-            let linkText = dataUriMatch ? line.replace(dataUriMatch[0], '').trim() : line;
+            let linkText = dataMatch ? line.replace(dataMatch[0], '').trim() : line;
             linkText = tooltipMatch ? linkText.replace(tooltipMatch[0], '').trim() : linkText;
-            const linkMatch = linkText.match(/\[(.*?)\]\(<?(.*?)>?\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
+            // get the components of the external or internal link
+            const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
             if (linkMatch) {
 
@@ -296,14 +314,15 @@ export async function importFromCallout(
                 if (linkMatch[1]) {
                     // default to URI, but change if data elements or Note Toolbar URI is used
                     itemType = ItemType.Uri;
-                    label = linkMatch[1];
-                    link = linkMatch[2];
+                    label = unescapeTextForCallout(linkMatch[1]);
+                    link = unescapeLinkForCallout(linkMatch[2]);
                 }
                 // for wikilinks
                 else if (linkMatch[3]) {
                     itemType = ItemType.File;
-                    label = linkMatch[4] || linkMatch[3];
-                    link = linkMatch[3];
+
+                    label = unescapeTextForCallout(linkMatch[4] || linkMatch[3]);
+                    link = unescapeLinkForCallout(linkMatch[3]);
                     // resolve the filename provided to one in this vault, if it exists
                     if (activeFile) {
                         const linkFile = plugin.app.metadataCache.getFirstLinkpathDest(link, activeFile?.path);
@@ -329,10 +348,10 @@ export async function importFromCallout(
                 }
 
                 tooltip = tooltipMatch ? tooltipMatch[1] : '';
-        
-                if (dataUriMatch) {
-                    const dataUriType = dataUriMatch[2] || dataUriMatch[6] || '';
-                    const dataUriValue = dataUriMatch[3] || decodeURIComponent(dataUriMatch[7]) || '';
+
+                if (dataMatch || uriMatch) {
+                    const dataUriType = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[1] : '');
+                    const dataUriValue = dataMatch ? dataMatch[3] : (uriMatch ? uriMatch[2] : '');
                     debugLog('• data?', dataUriType, link);
         
                     switch (dataUriType) {
