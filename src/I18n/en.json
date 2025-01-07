@@ -262,7 +262,7 @@
             "option-tooltip-placeholder": "Tooltip (optional)",
             "option-uri": "URI",
             "option-uri-placehoder": "Website, URI, or note title",
-            "option-uri-help": "Tip: Use note properties in URIs.",
+            "option-uri-help": "Tip: Use note properties and expressions in URIs.",
             "option-visibility-component-hidden-platform": "{{component}} hidden on {{platform}}",
             "option-visibility-component-visible-platform": "{{component}} visible on {{platform}}",
             "option-visibility-hidden": "hidden",
