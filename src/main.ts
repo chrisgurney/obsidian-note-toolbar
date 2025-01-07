@@ -681,6 +681,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		// add class so we can style the menu
 		menu.dom.addClass('note-toolbar-menu');
 
+		// apply custom classes to the sub-menu by getting the note's toolbar 
+		const activeToolbar = this.getCurrentToolbar();
+		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+
 		return menu;
 
 	}
@@ -728,8 +732,10 @@ export default class NoteToolbarPlugin extends Plugin {
 								let subMenu = item.setSubmenu() as Menu;
 								// add class so we can style the menu
 								subMenu.dom.addClass('note-toolbar-menu');
-								// FIXME: this is not the parent toolbar
-								// toolbar.customClasses && subMenu.dom.addClasses([...toolbar.customClasses.split(' ')]);
+								// apply custom classes to the sub-menu by getting the note's toolbar 
+								const activeToolbar = this.getCurrentToolbar();
+								if (activeToolbar && activeToolbar.customClasses) subMenu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+								// render the sub-menu items
 								let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
 								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
 							});
@@ -1611,7 +1617,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	/**
 	 * Get the toolbar element, in the current view.
-	 * @param positionsToCheck 
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	getToolbarEl(): HTMLElement | null {
@@ -1760,6 +1765,16 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 		return adapter;
+	}
+
+	/**
+	 * Gets the settings for the toolbar in the current view.
+	 * @returns ToolbarSettings for the current toolbar, or undefined if it doesn't exist.
+	 */
+	getCurrentToolbar(): ToolbarSettings | undefined {
+		const noteToolbarEl = this.getToolbarEl();
+		const noteToolbarSettings = noteToolbarEl ? this.settingsManager.getToolbarById(noteToolbarEl?.id) : undefined;
+		return noteToolbarSettings;
 	}
 
 	/**
