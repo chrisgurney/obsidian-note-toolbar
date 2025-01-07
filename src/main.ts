@@ -678,6 +678,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 		}
 
+		// add class so we can style the menu
+		menu.dom.addClass('note-toolbar-menu');
+
 		return menu;
 
 	}
@@ -805,9 +808,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			let previousPosData = localStorage.getItem('note-toolbar-menu-pos');
 			menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
 		}
-
-		// add class so we can style the menu
-		menu.dom.addClass('note-toolbar-menu');
 
 		// position (and potentially offset) the menu, and then set focus in it if necessary
 		if (menuPos) {
@@ -1258,8 +1258,6 @@ export default class NoteToolbarPlugin extends Plugin {
 					let toolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
 					if (toolbar) {
 						this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-							// add class so we can style the menu
-							menu.dom.addClass('note-toolbar-menu');
 							menu.showAtPosition(event); 
 						});
 					}
@@ -1297,8 +1295,6 @@ export default class NoteToolbarPlugin extends Plugin {
 						};
 						// store menu position for sub-menu positioning
 						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
-						// add class so we can style the menu
-						menu.dom.addClass('note-toolbar-menu');
 						menu.showAtPosition(menuPos);
 					}
 				});
