@@ -141,7 +141,7 @@
         "error-scripting-plugin-not-enabled": "Toggle the Scripting setting after installing and enabling plugin: {{plugin}}",
         "error-toolbar-not-found": "Check Note Toolbar setting or URI for this toolbar. Toolbar not found: {{toolbar}}",
         "error-uri-params-not-supported": "One or more of these Note Toolbar URI parameters is not supported: {{params}}",
-        "warning-no-matching-toolbar": "No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
+        "warning-no-matching-toolbar": "Note Toolbar: No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
     },
     "plugin": {
         "name": "Note Toolbar"
