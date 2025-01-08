@@ -1641,6 +1641,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-whatsnew-content {
+    line-height: var(--line-height-normal);
     margin-bottom: 2rem;
     user-select: text;
     code {
