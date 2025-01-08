@@ -1,80 +1,66 @@
-What's new in Note Toolbar v1.15?
+What's new in Note Toolbar v1.16?
 
-## Scripting
+## New Features 🎉
 
-Note Toolbar can now execute Dataview, JavaScript (via [JS Engine ↗](https://obsidian.md/plugins?id=js-engine)), and Templater queries, expressions, and scripts from Note Toolbar buttons.
+### Custom styles
 
-<a href="https://github.com/user-attachments/assets/56225123-145d-4500-aaf1-7b438d299a52">
-  <img src="https://github.com/user-attachments/assets/56225123-145d-4500-aaf1-7b438d299a52" width="700"/>
-</a>
+Using the new _Custom_ styles section with a CSS snippet, you can now define custom classes that you can apply to one or more specific toolbars.
 
-**What's supported?**
+Read more about it on the new [Custom styling](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Custom-styling) page.
 
-If these plugins are installed and enabled you can:
+_Thank you @Moyf for the idea, and to @laktiv for the feedback._
 
-- *Dataview* → Run queries, evaluate expressions, and execute scripts (like `dv.view`). [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview)
-- *JS Engine* → Execute JavaScript. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JS-Engine)
-- *Templater* → Insert templates, create new notes from templates, execute commands (including running user scripts), and execute template files. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/styles_settings_custom.png" width="700"/>
 
-If any of these return a value, they're output to the cursor position, or optionally to a `note-toolbar-output` callout that you provide an ID for. 
+### Execute a command after creating a file from a template (Templater)
 
-You can also use Dataview expressions and Templater commands in labels, tooltips, and URIs:
+<img src="https://github.com/user-attachments/assets/7ae7628f-24e6-4721-9f31-2a3b6fb008d0" width="700"/>
 
-<a href="https://github.com/user-attachments/assets/0946d703-743e-4a1a-9f10-452531f7eec7">
-  <img src="https://github.com/user-attachments/assets/0946d703-743e-4a1a-9f10-452531f7eec7" width="700"/>
-</a>
+Notes:
 
-**Note Toolbar Callouts + Scripting**
+- Depending on your feedback, this can be added easily to other script functions/types.
+- Creating a file from template will now no longer focus the file explorer on the new file, but you now can explicitly do that by selecting the `Files: Reveal current file in navigation` command.
+  - _Though I couldn't get this command to work reliably in my own testing, while other commands seem to work fine. I'm open to getting help to figure out why. I'm wondering if I have to wait for the `file-open` event explicitly first, before execution._
+- Thank you @pdelre for inspiring the idea for this one in [#203](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/203)
 
-You can share toolbars that include script items as links, and export/import to/from Note Toolbar Callouts.
+### (BETA) Note Toolbar API
 
-Script items can also be used directly from Note Toolbar Callouts. See below for some examples; copy some toolbars with script items as callouts to see more attributes/examples.
+The first Note Toolbar APIs allow you to show suggester and prompt modals, enabling Dataview JS or JS Engine scripts to prompt the user for information.
 
-```markdown
-> [!note-toolbar|right-mnbrder] Script Nav
-> - [Create from Template]()<data data-templater-obsidian="createFrom" data-src="Templater/Basic Template.md" data-dest="&lt;%&quot;Basic &quot; + tp.file.last_modified_date(&quot;yyyy-MM-dd&quot;)%&gt;"/>
-> - [Dataview Query Example]()<data data-dataview="query" data-expr="TABLE file.mtime AS &quot;Last Modified&quot; FROM &quot;Templater&quot; SORT file.mtime DESC" data-callout="asf"/>
-> - [Hello World with JS Engine]()<data data-js-engine="exec" data-src="Scripts/JsEngine/HelloWorld.js"/>
-```
+>[!note]
+> The API is considered BETA beyond this release, until more functions are added in the future (e.g., manipulating toolbars, and other UI components) and I consider naming and organization of the methods available. Functions may change. Provide feedback on the [release announcement](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/207).
 
-**Learn more 📖**
+Read more about it on the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
 
-- [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts)
-- [Example scripts](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
+## Improvements 🚀
 
-**Feedback wanted 💬**
-
-I would really appreciate your questions or feedback about scripting in [this discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/171), or using [this Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
-
-1. Do your existing scripts work as expected? (If not, what changes did you have to make?)
-2. Does configuration make sense? (Should I add or change anything?)
-3. Try out the Note Toolbar Script components for output, and let me know what you think.
-4. Does the documentation and help text make sense? (Should I add or change anything?)
-
-_Thank you!_
-
-## Improvements 🎉
-
-- In a Note Toolbar property, if you've entered the name of a toolbar that doesn't exist, a message now appears with a prompt to click/tap on it to create the toolbar.
-- Quick Tools: Added a scroll icon for JS + Dataview items, and the Templater icon for Templater items.
-- All commands now show a notice if there's an error executing it, if the command provides an error.
-- Note Toolbar Callouts: Data attributes in callouts no longer require the `ntb-` portion of the attribute name, though they're still supported in everything but the above new attributes for backwards compatibility.
-- Settings: The _Style_ drop-downs now only show relevant styles based on other selected styles, and the toolbar's position. Also removed `float` styles, which don't work with standard toolbars. Thanks @laktiv for the suggestion!
-- Settings: Added a placeholder in the _Style_ dropdown when nothing's selected to make it clearer what action the user should take with it; made the dropdown wider to accommodate localization of that text.
-- Settings: Moved field help text closer to fields.
-- Translations have been updated, thanks to @hartimd and @laktiv!
+- Improved upon how toolbars are rendered to:
+  - remove unneeded removal of existing toolbars (reduce flickering, speed up display);
+  - evaluate Templater/Dataview expressions used in the toolbar before displaying it ([#198](https://github.com/chrisgurney/obsidian-note-toolbar/issues/198)); and
+  - ensure the toolbar is shown if the view is switched between view modes (i.e., reading ←→ editing)
+- Changes to the right-click menu:
+  - Choose positions, including floating button positions, via the _Set position_ menu.
+  - Show/Hide note properties.
+  - Reordered items to put settings at the bottom.
+- Settings: Increased the size of the arguments and expressions fields for script items. _Thanks @laktiv_
 
 ## Fixes
 
-- Settings: Item preview labels were disappearing when an icon was set, when there was no previous icon.
-- Some commands existed but appeared unavailable. #170 Thanks @likemuuxi and @Moyf!
-- Iconize icons in bookmarks had a thicker stroke width. #162 Thanks @laktiv!
-- Editing a toolbar with no name set an incorrect modal title.
-- If the button style was set for mobile, it was also applying to desktop as well, when it shouldn't have been.
+- Importing callouts from Settings now also transfers mobile styles properly [#189](https://github.com/chrisgurney/obsidian-note-toolbar/issues/189) _Thanks @laktiv!_
+- Minimal theme: Width of toolbar below props too wide [#204](https://github.com/chrisgurney/obsidian-note-toolbar/issues/204)
+- The menu CSS class is now added to sub-menus, so CSS snippets can be applied to them as well.
+- Quick Tools: Items with invalid item expressions showing multiple error messages.
+- Settings: Preview tooltips with vars not using monospace font.
+- Export/Share: URIs with a Templater expression as a link were having extra brackets added.
+- Export/Share: Link is cut off at first close bracket.
+- Settings: Long expressions in previews pushing Edit button to the right.
+- Settings: Font size for expressions too large for item group previews.
 
 ---
 
-## In case you missed it...
+## Previous releases
+
+[v1.15 release](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.15.0): Dataview, JS Engine, and Templater support
 
 [v1.14 release](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.14.0): Share toolbars, and import/export as callouts
 
