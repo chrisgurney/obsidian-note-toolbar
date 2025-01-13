@@ -1150,7 +1150,6 @@ export default class ToolbarSettingsModal extends Modal {
 						setting = new Setting(fieldDiv)
 							.setClass("note-toolbar-setting-item-field-link")
 							.addSearch((cb) => {
-								debugLog('🚀', selectedFunction.function.name);
 								let fileSuggesterFolder: string | undefined = undefined;
 								let fileSuggesterExt: string | undefined = '.js';
 								if (toolbarItem.linkAttr.type === ItemType.Templater) {
