@@ -2,7 +2,7 @@ import { getUUID } from "Utils/Utils";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20240727.1;
-export const WHATSNEW_VERSION = 1.15;
+export const WHATSNEW_VERSION = 1.16;
 
 /******************************************************************************
  * TRANSLATIONS
