@@ -1,5 +1,5 @@
 /**
- * Opens a suggester to allow the user to make a selection.
+ * Opens a prompt to allow the user to enter information.
  * Uses the BETA Note Toolbar API:
  * https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API
  * 
@@ -9,7 +9,6 @@
  */
 
 (async () => {
-    const options = ["option 1", "option 2"];
-    let option = await NoteToolbar.suggester((item) => item, options, true, "Select an option:");
-    console.log(option, "selected");
+    const result = await NoteToolbar.prompt("Enter something:", null, false, false);
+    console.log(result);
 })();

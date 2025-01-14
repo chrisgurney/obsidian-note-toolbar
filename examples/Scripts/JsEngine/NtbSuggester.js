@@ -1,6 +1,7 @@
 /**
  * Opens a suggester to allow the user to make a selection.
- * Uses the BETA Note Toolbar API.
+ * Uses the BETA Note Toolbar API:
+ * https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API
  * 
  * Usage:
  * - Add a JS Engine item to your toolbar and select "Execute JavaScript".
@@ -8,5 +9,5 @@
  */
 
 const options = ["option 1", "option 2"];
-let option = await NoteToolbarApi.suggester((item) => item, options, true, "Select an option:");
+let option = await NoteToolbar.suggester((item) => item, options, true, "Select an option:");
 console.log(option, "selected");
