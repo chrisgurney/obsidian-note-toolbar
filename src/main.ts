@@ -76,6 +76,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			
 			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 			this.updateActiveViewIds();
+			// TODO: for fix: initial rendering of toolbars across all views #94
+			// this.renderToolbarForLeaves();
 			this.renderToolbarForActiveFile();
 
 			// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
@@ -836,6 +838,20 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.checkAndRenderToolbar(activeFile, frontmatter);
 		}	
 	}
+
+	// TODO: for fix: initial rendering of toolbars across all views #94
+	// async renderToolbarForLeaves() {
+	// 	this.app.workspace.iterateAllLeaves((leaf) => {
+	// 		if (leaf.view instanceof MarkdownView) {
+	// 			debugLog('💡', leaf.view.file?.name);
+	// 			const file = leaf.view.file;
+	// 			if (file) {
+	// 				const frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
+	// 				this.checkAndRenderToolbar(file, frontmatter);
+	// 			}
+	// 		}
+	// 	});
+	// }
 
 	/**
 	 * Sets the appropriate class on the given component, based on its visibility settings.
