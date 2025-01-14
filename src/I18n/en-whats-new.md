@@ -47,6 +47,7 @@ Read more about it on the [Note Toolbar API](https://github.com/chrisgurney/obsi
 ## Fixes
 
 - Importing callouts from Settings now also transfers mobile styles properly [#189](https://github.com/chrisgurney/obsidian-note-toolbar/issues/189) _Thanks @laktiv!_
+- Better importing of brackets, escaped characters from callouts.
 - Minimal theme: Width of toolbar below props too wide [#204](https://github.com/chrisgurney/obsidian-note-toolbar/issues/204)
 - The menu CSS class is now added to sub-menus, so CSS snippets can be applied to them as well.
 - Quick Tools: Items with invalid item expressions showing multiple error messages.
