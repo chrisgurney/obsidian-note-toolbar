@@ -24,8 +24,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 	
-	// track the last opened view, to reduce unneccesary re-renders
-	lastViewIdOpened: string | undefined;
+	// track opened views, to reduce unneccesary toolbar re-renders
+	activeViewIds: string[] = [];
 
 	// track the last opened layout state, to reduce unneccessary re-renders 
 	lastFileOpenedOnLayoutChange: TFile | null | undefined;
@@ -50,6 +50,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	jsAdapter: JsEngineAdapter | undefined;
 	tpAdapter: TemplaterAdapter | undefined;
 
+	// TODO: remove if not needed
+	// __onNoteChange__leafFiles: { [id: string]: TFile | null } = {};
+	// __onNoteChange__leafCallbacks: { [id: string]: (oldFile: TFile | null, newFile: TFile) => void } = {};
+	// __onNoteChange__eventCreated: boolean = false;
+
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
 	 * adds listeners, settings, and renders the toolbar for the active file.
@@ -70,7 +75,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// render the initial toolbar
 			
 			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-			this.lastViewIdOpened = getViewId(currentView);
+			this.updateActiveViewIds();
 			this.renderToolbarForActiveFile();
 
 			// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
@@ -231,7 +236,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		const viewId = getViewId(currentView);
 		debugLog('===== LAYOUT-CHANGE ===== ', viewId, currentView, viewMode);
-		if (viewId === this.lastViewIdOpened) return;
+		if (viewId && this.activeViewIds.contains(viewId)) return;
+
 		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
 		const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
 		const viewModeChanged = this.lastViewModeOnLayoutChange !== viewMode;
@@ -253,7 +259,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.app.workspace.onLayoutReady(debounce(() => {
 					// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
 					// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
-					this.lastViewIdOpened = getViewId(currentView);
+					this.updateActiveViewIds();
 					this.renderToolbarForActiveFile();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
@@ -266,12 +272,19 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On leaf changes, delete, check and render toolbar if necessary. 
 	 */
 	leafChangeListener = (leaf: any) => {
+		// TODO: remove if not needed
+		// this.onMarkdownViewFileChange(leaf.view, (oldFile, newFile) => {
+		// 	debugLog('===== onMarkdownViewFileChange =====');
+		// });
 		let renderToolbar = false;
 		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-		const viewId = getViewId(currentView) ?? this.lastViewIdOpened;
-		const viewChanged = viewId !== this.lastViewIdOpened;
-		if (currentView && viewChanged) {
-			debugLog('===== LEAF-CHANGE ===== ', viewId);
+
+		const viewId = getViewId(currentView);
+		debugLog('===== LEAF-CHANGE ===== ', viewId);
+		if (viewId && this.activeViewIds.contains(viewId)) return;
+		this.updateActiveViewIds();
+
+		if (currentView) {
 			// check for editing or reading mode
 			renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
 		}
@@ -290,7 +303,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (renderToolbar) {
 			// this.removeActiveToolbar();
-			this.lastViewIdOpened = viewId;
 			// don't seem to need a delay before rendering for leaf changes
 			this.renderToolbarForActiveFile();
 		}
@@ -307,7 +319,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		const activeFile = this.app.workspace.getActiveFile();
 		if (activeFile === file) {
 			const currentView: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-			this.lastViewIdOpened = getViewId(currentView) ?? this.lastViewIdOpened;
 			this.checkAndRenderToolbar(file, cache.frontmatter);
 		}
 
@@ -332,6 +343,56 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.lastNtbProperty = notetoolbarProp[0];
 		this.lastFileOpenedOnCacheChange = activeFile;
 	};
+
+	// TODO: remove if not needed
+	// onMarkdownViewFileChange(view: MarkdownView, callback: (oldFile: TFile, newFile: TFile) => void) {
+	// 	if (!(view.leaf.id in this.__onNoteChange__leafFiles)) {
+	// 		this.__onNoteChange__leafFiles[view.leaf.id] = view.file;
+	// 		this.__onNoteChange__leafCallbacks[view.leaf.id] = callback;
+	// 		debugLog('⭐️⭐️⭐️', this.__onNoteChange__leafFiles);
+	// 	}
+	//
+	// 	if (!this.__onNoteChange__eventCreated) {
+	// 		this.registerEvent(
+	// 			this.app.workspace.on('layout-change', () => {
+	// 				for (const leafId of Object.keys(this.__onNoteChange__leafFiles)) {
+	// 					const leaf: WorkspaceLeaf | null = this.app.workspace.getLeafById(leafId);
+	// 					// @ts-ignore
+	// 					if (leaf && leaf?.view?.file?.path !== this.__onNoteChange__leafFiles[leafId]?.path) {
+	// 						// @ts-ignore
+	// 						this.__onNoteChange__leafCallbacks[leafId](this.__onNoteChange__leafFiles[leafId], leaf.view.file);
+	// 						// @ts-ignore
+	// 						this.__onNoteChange__leafFiles[leafId] = leaf.view.file;
+	// 					}
+	// 				}
+	// 			})
+	// 		)
+	// 		this.__onNoteChange__eventCreated = true;
+	// 	}
+	// }
+
+	/**
+	 * Updates the list of currently active views.
+	 */
+	updateActiveViewIds() {
+		const currentView: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const currentViewId = getViewId(currentView);
+
+		// if not in the list, add it
+		if (currentViewId && !(currentViewId in this.activeViewIds)) this.activeViewIds.push(currentViewId);
+
+		// update list of open views and remove any views that are not currently open
+		let openViewIds: string[] = [];
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof MarkdownView) {
+				// debugLog('🚚', leaf);
+				const openViewId = getViewId(leaf.view);
+				if (openViewId) openViewIds.push(openViewId);
+			}
+		});
+		this.activeViewIds = this.activeViewIds.filter(item => openViewIds.includes(item));
+		// debugLog('🚗', this.activeViewIds);
+	}
 
 	/*************************************************************************
 	 * TOOLBAR RENDERERS
