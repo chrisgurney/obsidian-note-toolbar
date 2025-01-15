@@ -499,12 +499,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// add the toolbar to the editor UI
 		switch(position) {
-			case 'fabl':
-			case 'fabr':
+			case PositionType.FabLeft:
+			case PositionType.FabRight:
 				currentView?.containerEl.appendChild(embedBlock);
 				// activeDocument ? activeDocument.querySelector('.app-container')?.appendChild(embedBlock) : undefined
 				break;
-			case 'top':
+			case PositionType.Top:
 				embedBlock.addClass('cg-note-toolbar-position-top');
 				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
 				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
@@ -513,9 +513,9 @@ export default class NoteToolbarPlugin extends Plugin {
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
 					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
 				break;
-			case 'hidden':
+			case PositionType.Hidden:
 				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
-			case 'props':
+			case PositionType.Props:
 			default:
 				// inject it between the properties and content divs
 				let propsEl = this.getPropsEl();
