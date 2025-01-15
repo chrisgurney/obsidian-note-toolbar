@@ -468,8 +468,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// render the toolbar based on its position
 		switch (position) {
-			case 'fabl':
-			case 'fabr':
+			case PositionType.FabLeft:
+			case PositionType.FabRight:
 				noteToolbarElement = await this.renderToolbarAsFab(position);
 				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
@@ -480,8 +480,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
 				// this.registerDomEvent(embedBlock, 'focusin', (e) => this.toolbarFabHandler(e));			
 				break;
-			case 'props':
-			case 'top':
+			case PositionType.Props:
+			case PositionType.Top:
 				noteToolbarElement = await this.renderToolbarAsCallout(toolbar, file);
 				// extra div workaround to emulate callout-in-content structure, to use same sticky css
 				let div = activeDocument.createElement("div");
@@ -491,7 +491,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.registerDomEvent(embedBlock, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
 				this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));	
 				break;
-			case 'hidden':
+			case PositionType.Hidden:
 			default:
 				// we're not rendering it
 				break;
