@@ -571,11 +571,13 @@ body {
     /* width: var(--var-max-width);
     max-width: var(--var-max-width); */
 
-    /* width fix for Minimal theme in props position #204 */
+    /* width fix for Minimal theme in props position #204 #216 */
     &[data-csstheme="Minimal"][data-tbar-position="props"] {
-        max-width: var(--max-width);
-        width: var(--line-width);
-        margin-inline: var(--content-margin)!important;
+        .is-readable-line-width & {
+            max-width: var(--max-width);
+            width: var(--line-width);
+            margin-inline: var(--content-margin) !important;
+        }
     }
 }
 
