@@ -344,6 +344,7 @@
             "name": "Position",
             "description": "Where to position this toolbar.",
             "option-mobile-help": "Tip: Access toolbars from the navigation bar.",
+            "option-bottom": "Bottom",
             "option-fabl": "Floating button: left",
             "option-fabr": "Floating button: right",
             "option-hidden": "Hidden (do not display)",
