@@ -62,6 +62,7 @@ export enum PlatformType {
 	None = 'none'
 }
 export enum PositionType {
+	Bottom = 'bottom',
 	FabLeft = 'fabl',
 	FabRight = 'fabr',
 	Hidden = 'hidden',
@@ -321,6 +322,7 @@ export const POSITION_OPTIONS = {
 	desktop: [
 		{ top: t('setting.position.option-top') },
 		{ props: t('setting.position.option-props') },
+		{ bottom: t('setting.position.option-bottom') },
 		{ fabl: t('setting.position.option-fabl') },
 		{ fabr: t('setting.position.option-fabr') },
 		{ hidden: t('setting.position.option-hidden') },
@@ -328,6 +330,7 @@ export const POSITION_OPTIONS = {
 	mobile: [
 		{ top: t('setting.position.option-top') },
 		{ props: t('setting.position.option-props') },
+		{ bottom: t('setting.position.option-bottom') },
 		{ fabl: t('setting.position.option-fabl') },
 		{ fabr: t('setting.position.option-fabr') },
 		{ hidden: t('setting.position.option-hidden-mobile') },
