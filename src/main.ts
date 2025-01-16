@@ -480,6 +480,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
 				// this.registerDomEvent(embedBlock, 'focusin', (e) => this.toolbarFabHandler(e));			
 				break;
+			case PositionType.Bottom:
 			case PositionType.Props:
 			case PositionType.Top:
 				noteToolbarElement = await this.renderToolbarAsCallout(toolbar, file);
@@ -499,19 +500,28 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// add the toolbar to the editor UI
 		switch(position) {
+			case PositionType.Bottom:
+				let activeLeafEl = activeDocument.querySelector('.workspace-leaf.mod-active') as HTMLElement;
+				activeLeafEl
+					? activeLeafEl.insertAdjacentElement('afterbegin', embedBlock)
+					: debugLog("🛑 renderToolbar(): Unable to find .workspace-leaf.mod-active to insert toolbar");
+				// if the toolbar is editor width, omit the left rule and set width to 100%
+				toolbar.defaultStyles.includes('wide')
+					? embedBlock.setAttr('style', `width: 100%`)
+					: embedBlock.setAttr('style', `left: max(0%, calc(50% - calc(${embedBlock.offsetWidth}px / 2)))`);
+				break;
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
 				currentView?.containerEl.appendChild(embedBlock);
 				// activeDocument ? activeDocument.querySelector('.app-container')?.appendChild(embedBlock) : undefined
 				break;
 			case PositionType.Top:
-				embedBlock.addClass('cg-note-toolbar-position-top');
 				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
 				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
 				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
 				viewHeader 
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
-					: debugLog("🛑 renderToolbarFromSettings: Unable to find .view-header to insert toolbar");
+					: debugLog("🛑 renderToolbar(): Unable to find .view-header to insert toolbar");
 				break;
 			case PositionType.Hidden:
 				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
@@ -520,7 +530,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// inject it between the properties and content divs
 				let propsEl = this.getPropsEl();
 				if (!propsEl) {
-					debugLog("🛑 renderToolbarFromSettings: Unable to find .metadata-container to insert toolbar");
+					debugLog("🛑 renderToolbar(): Unable to find .metadata-container to insert toolbar");
 				}
 				propsEl?.insertAdjacentElement("afterend", embedBlock);
 				break;
@@ -1548,6 +1558,13 @@ export default class NoteToolbarPlugin extends Plugin {
 						item.setTitle(t('setting.position.option-props'))
 							.setIcon('arrow-down-narrow-wide')
 							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
+					});
+				}
+				if (currentPosition !== PositionType.Bottom) {
+					subMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('setting.position.option-bottom'))
+							.setIcon('arrow-down-to-line')
+							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
 					});
 				}
 				if (currentPosition !== PositionType.FabLeft) {

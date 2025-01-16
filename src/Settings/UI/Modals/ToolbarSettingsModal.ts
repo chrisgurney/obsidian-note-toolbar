@@ -1613,7 +1613,8 @@ export default class ToolbarSettingsModal extends Modal {
 		const excludedStyles: string[] = [];
 
 		if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Props) excludedStyles.push('sticky');
-		if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Top) excludedStyles.push('wide');
+		if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Top &&
+			this.toolbar.position.desktop?.allViews?.position !== PositionType.Bottom) excludedStyles.push('wide');
 
 		const { defaultStyles } = this.toolbar;
 		if (defaultStyles.includes('left')) excludedStyles.push('right', 'center');
