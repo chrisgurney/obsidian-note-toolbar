@@ -6,12 +6,33 @@ name: Note Toolbar
 id: note-toolbar
 settings:
     -
+        id: toolbar-bottom-tbar
+        title: 'Bottom toolbar'
+        description: 'Styles for the "bottom" position'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-tbar-bottom-border-radius
+        title: 'Toolbar border radius (in px units)'
+        description: 'How rounded the toolbar is. The higher the number the more rounded.'
+        type: variable-number
+        default: 5
+        format: px
+    -
+        id: cg-nt-tbar-bottom-pos-y
+        title: 'Y position (in em units)'
+        description: "Distance from bottom edge."
+        type: variable-number
+        default: 4.25
+        format: em
+    -
         id: toolbar-fab-styles
         title: 'Floating Button'
         title.uk: 'Плаваюча кнопка'
         title.de: 'Schwebende Schaltfläche'
         title.zh: '浮动按钮'
-        description: 'Styles for floating buttons (set toolbar position to "floating button")'
+        description: 'Styles for the "floating button" position'
         description.uk: 'Стилі  плаваючих кнопок (встановіть позицію панелі «Плаваюча кнопка»)'
         description.de: 'Stile für schwebende Schaltflächen (Position der Symbolleiste auf „schwebende Schaltfläche" setzen)'
         description.zh: '浮动按钮的样式（工具栏位置为「浮动按钮」时）'
@@ -814,6 +835,8 @@ body {
     --cg-nt-tbar-inactive-opacity: 0.8;
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
+    --cg-nt-tbar-bottom-border-radius: 5px;
+    --cg-nt-tbar-bottom-pos-y: 4.25em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
     --cg-nt-fab-bg-color: var(--interactive-normal);
@@ -883,11 +906,13 @@ body {
 }
 
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
-    position: sticky;
-    top: var(--cg-nt-tbar-top-sticky-pos-desktop);
-    z-index: 2;
-    .is-mobile &, .is-phone & {
-        top: var(--cg-nt-tbar-top-sticky-pos-mobile);
+    &:not([data-tbar-position="bottom"]) {
+        position: sticky;
+        top: var(--cg-nt-tbar-top-sticky-pos-desktop);
+        z-index: 2;
+        .is-mobile &, .is-phone & {
+            top: var(--cg-nt-tbar-top-sticky-pos-mobile);
+        }
     }
 }
 
@@ -957,6 +982,9 @@ body {
             gap: 0rem;
             margin: var(--cg-nt-tbar-margin-y) 0;
             padding-inline-start: 0;
+            [data-tbar-position="bottom"] & {
+                margin: var(--cg-nt-tbar-margin-y);
+            }
         }
     
         & li {
@@ -1102,9 +1130,15 @@ body {
     }
 
     &[data-callout-metadata*="border"] {
-        border-top: solid 1px var(--cg-nt-tbar-border-color);
         border-bottom: solid 1px var(--cg-nt-tbar-border-color);
         border-radius: 0;
+        [data-tbar-position="props"] & {
+            border-top: solid 1px var(--cg-nt-tbar-border-color);
+        }
+        [data-tbar-position="bottom"] & {
+            border: solid 1px var(--cg-nt-tbar-border-color);
+            border-radius: var(--cg-nt-tbar-bottom-border-radius);
+        }
     }
 
     &[data-callout-metadata*="mbrder"] {
@@ -1376,6 +1410,34 @@ body {
     /* width: var(--var-max-width);
     max-width: var(--var-max-width); */
 
+    &[data-tbar-position="bottom"],
+    &[data-tbar-position="top"] {
+        background-color: var(--cg-nt-tbar-bg-color);
+        font-size: var(--font-text-size);
+        margin-bottom: 0;
+        padding: var(--file-margins);
+        padding-bottom: 0;
+        padding-top: 0;
+        &:hover {
+            /* undoes fix (#14) which causes a layout shift on hover */
+            overflow: visible !important;
+        }
+        & .cg-note-toolbar-callout {
+            margin-bottom: 0;
+            margin-inline: auto auto !important;
+            transition: border-top 0.5s ease-out;
+        }
+    }
+    
+    &[data-tbar-position="bottom"] {
+        background-color: unset; /* fixes issue with padding color; but when tbar not in focus it's transparent */
+        border-radius: var(--cg-nt-tbar-bottom-border-radius);
+        bottom: var(--cg-nt-tbar-bottom-pos-y);
+        position: absolute;
+        padding: 0 var(--file-margins);
+        z-index: var(--layer-status-bar);
+    }
+
     /* width fix for Minimal theme in props position #204 #216 */
     &[data-csstheme="Minimal"][data-tbar-position="props"] {
         .is-readable-line-width & {
@@ -1383,27 +1445,6 @@ body {
             width: var(--line-width);
             margin-inline: var(--content-margin) !important;
         }
-    }
-}
-
-.cg-note-toolbar-position-top,
-.cg-note-toolbar-reading-sticky {
-    background-color: var(--cg-nt-tbar-bg-color);
-    font-size: var(--font-text-size);
-    margin-bottom: 0;
-    padding: var(--file-margins);
-    padding-bottom: 0;
-    padding-top: 0;
-    &:hover {
-        /* undoes fix (#14) which causes a layout shift on hover */
-        overflow: visible !important;
-    }
-    & .cg-note-toolbar-callout {
-        border-top: none !important;
-        margin-bottom: 0;
-        margin-inline: auto auto !important;
-        max-width: var(--file-line-width);
-        transition: border-top 0.5s ease-out;
     }
 }
 
