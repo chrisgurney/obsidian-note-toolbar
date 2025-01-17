@@ -1,4 +1,4 @@
-import { t, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { PositionType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -25,15 +25,16 @@ export class CommandsManager {
         let toolbarEl = this.plugin.getToolbarEl();
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
         switch (toolbarPosition) {
-            case 'fabr':
-            case 'fabl':
+            case PositionType.FabRight:
+            case PositionType.FabLeft:
                 // trigger the menu
                 let toolbarFab = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
                 debugLog("focusCommand: button: ", toolbarFab);
                 toolbarFab.click();
                 break;
-            case 'props':
-            case 'top':
+            case PositionType.Bottom:
+            case PositionType.Props:
+            case PositionType.Top:
                 // get the list and set focus on the first visible item
                 let itemsUl: HTMLElement | null = this.plugin.getToolbarListEl();
                 if (itemsUl) {
@@ -50,7 +51,7 @@ export class CommandsManager {
                     linkEl?.focus();
                 }
                 break;
-            case 'hidden':
+            case PositionType.Hidden:
             default:
                 // do nothing
                 break;
