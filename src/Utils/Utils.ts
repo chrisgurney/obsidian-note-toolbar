@@ -149,6 +149,17 @@ export function getLinkUiDest(event: MouseEvent | KeyboardEvent | undefined): Pa
 }
 
 /**
+ * Returns the value for the provided key from the provided dictionary.
+ * @param dict key-value dictionary
+ * @param key string key
+ * @returns value from the dictionary
+ */
+export function getValueForKey(dict: {[key: string]: string}[], key: string): string {
+	const option = dict.find(option => key in option);
+	return option ? Object.values(option)[0] : '';
+}
+
+/**
  * Gets a unique ID for the current view.
  * @param view to get the identifer for
  * @returns ID string, consisting of the leaf's ID and the view's file path

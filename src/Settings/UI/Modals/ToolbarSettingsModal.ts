@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Command, DropdownComponent, Menu, MenuItem, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName, getCommandNameById } from 'Utils/Utils';
+import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName, getCommandNameById, getValueForKey } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
@@ -2026,21 +2026,10 @@ export default class ToolbarSettingsModal extends Modal {
 		let disclaimersFr = document.createDocumentFragment();
 		stylesToCheck.forEach(style => {
 			disclaimers.find(disclaimer => style in disclaimer)
-				? disclaimersFr.append( disclaimersFr.createEl("br"), "* ", this.getValueForKey(disclaimers, style) )
+				? disclaimersFr.append( disclaimersFr.createEl("br"), "* ", getValueForKey(disclaimers, style) )
 				: undefined;
 		});
 		return disclaimersFr;
-	}
-
-	/**
-	 * Returns the value for the provided key from the provided dictionary.
-	 * @param dict key-value dictionary
-	 * @param key string key
-	 * @returns value from the dictionary
-	 */
-	getValueForKey(dict: {[key: string]: string}[], key: string): string {
-		const option = dict.find(option => key in option);
-		return option ? Object.values(option)[0] : '';
 	}
 
 	/**
