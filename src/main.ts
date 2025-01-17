@@ -15,6 +15,7 @@ import DataviewAdapter from 'Adapters/DataviewAdapter';
 import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 import JsEngineAdapter from 'Adapters/JsEngineAdapter';
 import { Adapter } from 'Adapters/Adapter';
+import StyleModal from 'Settings/UI/Modals/StyleModal';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -1581,6 +1582,19 @@ export default class NoteToolbarPlugin extends Plugin {
 							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabRight));
 					});
 				}
+			});
+
+			// style
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('palette')
+					.setTitle(t('toolbar.menu-style'))
+					.onClick(async () => {
+						if (toolbarSettings) {
+							let styleModal = new StyleModal(this.app, this, toolbarSettings);
+							styleModal.open();
+						}
+					});
 			});
 
 			// show/hide properties

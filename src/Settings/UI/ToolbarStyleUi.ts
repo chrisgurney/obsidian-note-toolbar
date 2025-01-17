@@ -4,14 +4,15 @@ import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_DISCLAIM
 import { arraymove } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import ToolbarSettingsModal from "./Modals/ToolbarSettingsModal";
+import StyleModal from "./Modals/StyleModal";
 
 export default class ToolbarStyleUi {
 
     public plugin: NoteToolbarPlugin;
     public toolbar: ToolbarSettings;
-    private parent: ToolbarSettingsModal;
+    private parent: ToolbarSettingsModal | StyleModal;
 
-    constructor(plugin: NoteToolbarPlugin, parent: ToolbarSettingsModal, toolbar: ToolbarSettings) {
+    constructor(plugin: NoteToolbarPlugin, parent: ToolbarSettingsModal | StyleModal, toolbar: ToolbarSettings) {
         this.parent = parent;
 		this.plugin = plugin;
 		this.toolbar = toolbar;
@@ -23,10 +24,12 @@ export default class ToolbarStyleUi {
      */
     public displayStyleSetting(settingsDiv: HTMLElement) {
 
-        new Setting(settingsDiv)
-            .setName(t('setting.styles.name'))
-            .setDesc(learnMoreFr(t('setting.styles.description'), 'Styling-toolbars'))
-            .setHeading();
+        let heading = new Setting(settingsDiv)
+            .setDesc(learnMoreFr(t('setting.styles.description'), 'Styling-toolbars'));
+        
+        if (this.parent instanceof ToolbarSettingsModal) {
+            heading.setName(t('setting.styles.name')).setHeading();
+        }
 
         //
         // Default

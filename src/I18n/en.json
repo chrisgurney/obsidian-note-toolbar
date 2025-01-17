@@ -354,6 +354,7 @@
         },
         "styles": {
             "name": "Styles",
+            "title": "Style toolbar: {{toolbar}}",
             "description": "List of styles to apply to the toolbar.",
             "help": "Customize even more with the Style Settings plugin.",
             "option-placeholder": "Add style...",
@@ -428,6 +429,7 @@
         "menu-hide-properties": "Hide note properties",
         "menu-position": "Set position",
         "menu-show-properties": "Show note properties",
+        "menu-style": "Style...",
         "menu-toolbar-settings": "Note Toolbar settings..."
     }
 }
