@@ -113,6 +113,12 @@ body {
     }
 }
 
+.cm-embed-block[data-tbar-position="top"] {
+    & .callout[data-callout="note-toolbar"] {
+        max-width: var(--file-line-width);
+    }
+}
+
 .callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
     margin: 0em !important;
@@ -142,7 +148,6 @@ body {
     padding: 0;
     padding-inline: var(--cg-nt-tbar-padding-inline);
     width: 100%;
-    /* max-width: var(--file-line-width); */
 
     & .callout-title {
         display: none;
@@ -414,7 +419,7 @@ body {
     }
 
     &[data-callout-metadata*="wide"] {
-        max-width: none;
+        max-width: none !important;
     }
 
     &[data-callout-metadata*="mwd"] {
@@ -602,7 +607,7 @@ body {
             transition: border-top 0.5s ease-out;
         }
     }
-    
+
     &[data-tbar-position="bottom"] {
         background-color: unset; /* fixes issue with padding color; but when tbar not in focus it's transparent */
         border-radius: var(--cg-nt-tbar-bottom-border-radius);
