@@ -177,6 +177,32 @@ export function emptyMessageFr(message: string): DocumentFragment {
 	return messageFr;
 }
 
+/**
+ * Returns a fragment containing any applicable style disclaimers to show, for the provided styles.
+ * @param disclaimers List of disclaimers, corresponds with DEFAULT and MOBILE _STYLE_DISCLAIMERS
+ * @param stylesToCheck styles that have been applied by the user, to check for applicable disclaimers
+ * @returns DocumentFragment with disclaimers to show in settings UI
+ */
+export function getStyleDisclaimersFr(disclaimers: {[key: string]: string}[], stylesToCheck: string[]): DocumentFragment {
+	let disclaimersFr = document.createDocumentFragment();
+	stylesToCheck.forEach(style => {
+		disclaimers.find(disclaimer => style in disclaimer)
+			? disclaimersFr.append( disclaimersFr.createEl("br"), "* ", getValueForKey(disclaimers, style) )
+			: undefined;
+	});
+	return disclaimersFr;
+}
+
+/**
+ * Returns the value for the provided key from the provided dictionary.
+ * @param dict key-value dictionary
+ * @param key string key
+ * @returns value from the dictionary
+ */
+export function getValueForKey(dict: {[key: string]: string}[], key: string): string {
+	const option = dict.find(option => key in option);
+	return option ? Object.values(option)[0] : '';
+}
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {
 	let headingFr = document.createDocumentFragment();

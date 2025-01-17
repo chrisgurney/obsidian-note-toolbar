@@ -1,8 +1,8 @@
-import { App, ButtonComponent, Command, DropdownComponent, Menu, MenuItem, Modal, Notice, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName, getCommandNameById, getValueForKey } from 'Utils/Utils';
+import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
+import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName, getCommandNameById } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { DEFAULT_STYLE_OPTIONS, ItemType, MOBILE_STYLE_OPTIONS, POSITION_OPTIONS, PositionType, DEFAULT_STYLE_DISCLAIMERS, ToolbarItemSettings, ToolbarSettings, MOBILE_STYLE_DISCLAIMERS, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
+import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -12,6 +12,7 @@ import Sortable from 'sortablejs';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { importFromModal } from './ImportModal';
 import { Adapter } from 'Adapters/Adapter';
+import ToolbarStyleUi from '../ToolbarStyleUi';
 
 enum ItemFormComponent {
 	Delete = 'delete',
@@ -106,7 +107,8 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayNameSetting(settingsDiv);
 		this.displayItemList(settingsDiv);
 		this.displayPositionSetting(settingsDiv);
-		this.displayStyleSetting(settingsDiv);
+		let toolbarStyle = new ToolbarStyleUi(this.plugin, this, this.toolbar);
+		toolbarStyle.displayStyleSetting(settingsDiv);
 		this.displayUsageSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
@@ -1440,221 +1442,6 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
-	 * Displays the Style settings.
-	 * @param settingsDiv HTMLElement to add the settings to.
-	 */
-	displayStyleSetting(settingsDiv: HTMLElement) {
-
-		new Setting(settingsDiv)
-			.setName(t('setting.styles.name'))
-			.setDesc(learnMoreFr(t('setting.styles.description'), 'Styling-toolbars'))
-			.setHeading();
-
-		//
-		// Default
-		//
-
-		let defaultStyleDiv = createDiv();
-		defaultStyleDiv.className = "note-toolbar-setting-item-style";
-
-		if (this.toolbar.defaultStyles.length == 0) {
-			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr(t('setting.styles.option-default-empty')) });
-			emptyMsg.className = "note-toolbar-setting-empty-message";
-			defaultStyleDiv.append(emptyMsg);
-		}
-		else {
-
-			this.toolbar.defaultStyles.forEach(
-				(style, index) => {
-					let styleDisclaimer = this.getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
-					new Setting(defaultStyleDiv)
-						.setName(this.getValueForKey(DEFAULT_STYLE_OPTIONS, style))
-						.setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
-						.addExtraButton((cb) => {
-							cb.setIcon("cross")
-								.setTooltip(t('setting.styles.style-remove-tooltip'))
-								.onClick(async () => this.listMoveHandler(null, this.toolbar.defaultStyles, index, "delete"));
-							cb.extraSettingsEl.setAttribute("tabindex", "0");
-							this.plugin.registerDomEvent(
-								cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.defaultStyles, index, "delete"));
-						});
-			});
-
-		}
-
-		const excludeFromDefault: string[] = this.getExcludedDefaultStyles();
-		const defaultStyleOptions = [{ placeholder: t('setting.styles.option-placeholder') }, ...DEFAULT_STYLE_OPTIONS]
-			.filter((option) => {
-				const key = Object.keys(option)[0];
-				return !this.toolbar.defaultStyles.includes(key) && !excludeFromDefault.includes(key);
-			})
-			.reduce((acc, option) => ({ ...acc, ...option }), {});
-
-		new Setting(defaultStyleDiv)
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOptions(defaultStyleOptions)
-					.setValue('placeholder')
-					.onChange(async (val) => {
-						if (this.toolbar.defaultStyles.includes(val)) {
-							this.toolbar.defaultStyles =
-								this.toolbar.defaultStyles.filter((i) => i !== val);
-						} 
-						else {
-							this.toolbar.defaultStyles.push(val);
-						}
-						await this.plugin.settingsManager.save();
-						this.display();
-					})
-		);
-
-		const defaultDesc = document.createDocumentFragment();
-		defaultDesc.append(t('setting.styles.option-default-description'));
-		defaultDesc.append(this.getStyleDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
-
-		new Setting(settingsDiv)
-			.setName(t('setting.styles.option-default-name'))
-			.setDesc(defaultDesc)
-			.setClass("note-toolbar-setting-item-styles")
-			.settingEl.append(defaultStyleDiv);
-
-		//
-		// Mobile
-		//
-
-		let mobileStyleDiv = createDiv();
-		mobileStyleDiv.className = "note-toolbar-setting-item-style";
-
-		if (this.toolbar.mobileStyles.length == 0) {
-			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr(t('setting.styles.option-mobile-empty')) });
-			emptyMsg.className = "note-toolbar-setting-empty-message";
-			mobileStyleDiv.append(emptyMsg);
-		}
-		else {
-
-			this.toolbar.mobileStyles.forEach(
-				(style, index) => {
-					let styleDisclaimer = this.getValueForKey(MOBILE_STYLE_DISCLAIMERS, style);
-					new Setting(mobileStyleDiv)
-						.setName(this.getValueForKey(MOBILE_STYLE_OPTIONS, style))
-						.setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + 'Use in Callout or CSS: ' + style)
-						.addExtraButton((cb) => {
-							cb.setIcon("cross")
-								.setTooltip("Remove")
-								.onClick(async () => this.listMoveHandler(null, this.toolbar.mobileStyles, index, "delete"));
-							cb.extraSettingsEl.setAttribute("tabindex", "0");
-							this.plugin.registerDomEvent(
-								cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.mobileStyles, index, "delete"));
-						});
-			});
-
-		}
-
-		const excludeFromMobile: string[] = this.getExcludedMobileStyles();
-		const mobileStyleOptions = [{ placeholder: t('setting.styles.option-placeholder') }, ...MOBILE_STYLE_OPTIONS]
-			.filter((option) => {
-				const key = Object.keys(option)[0];
-				return !this.toolbar.mobileStyles.includes(key) && !excludeFromMobile.includes(key);
-			})
-			.reduce((acc, option) => ({ ...acc, ...option }), {});
-
-		new Setting(mobileStyleDiv)
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOptions(mobileStyleOptions)
-					.setValue('placeholder')
-					.onChange(async (val) => {
-						if (this.toolbar.mobileStyles.includes(val)) {
-							this.toolbar.mobileStyles =
-								this.toolbar.mobileStyles.filter((i) => i !== val);
-						} 
-						else {
-							this.toolbar.mobileStyles.push(val);
-						}
-						await this.plugin.settingsManager.save();
-						this.display();
-					})
-		);
-
-		const mobileDesc = document.createDocumentFragment();
-		mobileDesc.append(t('setting.styles.option-mobile-description'));
-		mobileDesc.append(this.getStyleDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
-
-		new Setting(settingsDiv)
-			.setName(t('setting.styles.option-mobile-name'))
-			.setDesc(mobileDesc)
-			.setClass("note-toolbar-setting-item-styles")
-			.settingEl.append(mobileStyleDiv);
-
-		new Setting(settingsDiv)
-			.setName(t('setting.styles.option-custom-name'))
-			.setDesc(learnMoreFr(t('setting.styles.option-custom-description'), 'Custom-styling'))
-			.setClass('note-toolbar-setting-item-full-width')
-			.addText(text => text
-				.setPlaceholder(t('setting.styles.option-custom-empty'))
-				.setValue(this.toolbar.customClasses)
-				.onChange(debounce(async (value) => {
-					this.toolbar.customClasses = value.trim();
-					await this.plugin.settingsManager.save();
-				}, 750)));
-
-		new Setting(settingsDiv)
-			.setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
-
-	}
-
-	/**
-	 * Figures out list of default styles not to show, based on toolbar position and other styles set.
-	 * @returns list of styles to exclude
-	 */
-	getExcludedDefaultStyles(): string[] {
-		const excludedStyles: string[] = [];
-
-		if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Props) excludedStyles.push('sticky');
-		if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Top &&
-			this.toolbar.position.desktop?.allViews?.position !== PositionType.Bottom) excludedStyles.push('wide');
-
-		const { defaultStyles } = this.toolbar;
-		if (defaultStyles.includes('left')) excludedStyles.push('right', 'center');
-		if (defaultStyles.includes('right')) excludedStyles.push('left', 'center');
-		if (defaultStyles.includes('center')) excludedStyles.push('left', 'right');
-		if (defaultStyles.includes('between')) excludedStyles.push('even');
-		if (defaultStyles.includes('even')) excludedStyles.push('between');
-
-		return excludedStyles;
-	}
-
-	/**
-	 * Figures out list of mobile styles not to show, based on toolbar position and other styles set.
-	 * @returns list of styles to exclude
-	 */
-	getExcludedMobileStyles(): string[] {
-		const excludedStyles: string[] = [];
-		
-		if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Top) excludedStyles.push('mnwd', 'mwd');
-		if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Props) excludedStyles.push('mstcky', 'mnstcky');
-
-		const { mobileStyles } = this.toolbar;
-		if (mobileStyles.includes('mlft')) excludedStyles.push('mrght', 'mctr');
-		if (mobileStyles.includes('mrght')) excludedStyles.push('mlft', 'mctr');
-		if (mobileStyles.includes('mctr')) excludedStyles.push('mlft', 'mrght');
-		if (mobileStyles.includes('mbtwn')) excludedStyles.push('mevn');
-		if (mobileStyles.includes('mevn')) excludedStyles.push('mbtwn');
-		if (mobileStyles.includes('mnwd')) excludedStyles.push('mwd');
-		if (mobileStyles.includes('mwd')) excludedStyles.push('mnwd');
-
-		const { defaultStyles } = this.toolbar;
-		if (defaultStyles.includes('border')) excludedStyles.push('mbrder');
-		if (!defaultStyles.includes('border')) excludedStyles.push('mnbrder');
-		if (defaultStyles.includes('button')) excludedStyles.push('mbtn');
-		if (defaultStyles.includes('wide')) excludedStyles.push('mwd');
-
-		return excludedStyles;
-	}
-
-	/**
 	 * Displays the Usage setting section.
 	 * @param settingsDiv HTMLElement to add the setting to.
 	 */
@@ -2014,22 +1801,6 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 		return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
 
-	}
-
-	/**
-	 * Returns a fragment containing any applicable style disclaimers to show, for the provided styles.
-	 * @param disclaimers List of disclaimers, corresponds with DEFAULT and MOBILE _STYLE_DISCLAIMERS
-	 * @param stylesToCheck styles that have been applied by the user, to check for applicable disclaimers
-	 * @returns DocumentFragment with disclaimers to show in settings UI
-	 */
-	getStyleDisclaimersFr(disclaimers: {[key: string]: string}[], stylesToCheck: string[]): DocumentFragment {
-		let disclaimersFr = document.createDocumentFragment();
-		stylesToCheck.forEach(style => {
-			disclaimers.find(disclaimer => style in disclaimer)
-				? disclaimersFr.append( disclaimersFr.createEl("br"), "* ", getValueForKey(disclaimers, style) )
-				: undefined;
-		});
-		return disclaimersFr;
 	}
 
 	/**

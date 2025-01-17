@@ -1,0 +1,292 @@
+import { debounce, Setting } from "obsidian";
+import { emptyMessageFr, getStyleDisclaimersFr, getValueForKey, learnMoreFr } from "./Utils/SettingsUIUtils";
+import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { arraymove } from "Utils/Utils";
+import NoteToolbarPlugin from "main";
+import ToolbarSettingsModal from "./Modals/ToolbarSettingsModal";
+
+export default class ToolbarStyleUi {
+
+    public plugin: NoteToolbarPlugin;
+    public toolbar: ToolbarSettings;
+    private parent: ToolbarSettingsModal;
+
+    constructor(plugin: NoteToolbarPlugin, parent: ToolbarSettingsModal, toolbar: ToolbarSettings) {
+        this.parent = parent;
+		this.plugin = plugin;
+		this.toolbar = toolbar;
+	}
+
+    /**
+     * Displays the Style settings.
+     * @param settingsDiv HTMLElement to add the settings to.
+     */
+    public displayStyleSetting(settingsDiv: HTMLElement) {
+
+        new Setting(settingsDiv)
+            .setName(t('setting.styles.name'))
+            .setDesc(learnMoreFr(t('setting.styles.description'), 'Styling-toolbars'))
+            .setHeading();
+
+        //
+        // Default
+        //
+
+        let defaultStyleDiv = createDiv();
+        defaultStyleDiv.className = "note-toolbar-setting-item-style";
+
+        if (this.toolbar.defaultStyles.length == 0) {
+            let emptyMsg = this.parent.containerEl.createEl("div", 
+                { text: emptyMessageFr(t('setting.styles.option-default-empty')) });
+            emptyMsg.className = "note-toolbar-setting-empty-message";
+            defaultStyleDiv.append(emptyMsg);
+        }
+        else {
+
+            this.toolbar.defaultStyles.forEach(
+                (style, index) => {
+                    let styleDisclaimer = getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
+                    new Setting(defaultStyleDiv)
+                        .setName(getValueForKey(DEFAULT_STYLE_OPTIONS, style))
+                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
+                        .addExtraButton((cb) => {
+                            cb.setIcon("cross")
+                                .setTooltip(t('setting.styles.style-remove-tooltip'))
+                                .onClick(async () => this.listMoveHandler(null, this.toolbar.defaultStyles, index, "delete"));
+                            cb.extraSettingsEl.setAttribute("tabindex", "0");
+                            this.plugin.registerDomEvent(
+                                cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.defaultStyles, index, "delete"));
+                        });
+            });
+
+        }
+
+        const excludeFromDefault: string[] = this.getExcludedDefaultStyles();
+        const defaultStyleOptions = [{ placeholder: t('setting.styles.option-placeholder') }, ...DEFAULT_STYLE_OPTIONS]
+            .filter((option) => {
+                const key = Object.keys(option)[0];
+                return !this.toolbar.defaultStyles.includes(key) && !excludeFromDefault.includes(key);
+            })
+            .reduce((acc, option) => ({ ...acc, ...option }), {});
+
+        new Setting(defaultStyleDiv)
+            .addDropdown((dropdown) =>
+                dropdown
+                    .addOptions(defaultStyleOptions)
+                    .setValue('placeholder')
+                    .onChange(async (val) => {
+                        if (this.toolbar.defaultStyles.includes(val)) {
+                            this.toolbar.defaultStyles =
+                                this.toolbar.defaultStyles.filter((i) => i !== val);
+                        } 
+                        else {
+                            this.toolbar.defaultStyles.push(val);
+                        }
+                        await this.plugin.settingsManager.save();
+                        this.parent.display();
+                    })
+        );
+
+        const defaultDesc = document.createDocumentFragment();
+        defaultDesc.append(t('setting.styles.option-default-description'));
+        defaultDesc.append(getStyleDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
+
+        new Setting(settingsDiv)
+            .setName(t('setting.styles.option-default-name'))
+            .setDesc(defaultDesc)
+            .setClass("note-toolbar-setting-item-styles")
+            .settingEl.append(defaultStyleDiv);
+
+        //
+        // Mobile
+        //
+
+        let mobileStyleDiv = createDiv();
+        mobileStyleDiv.className = "note-toolbar-setting-item-style";
+
+        if (this.toolbar.mobileStyles.length == 0) {
+            let emptyMsg = this.parent.containerEl.createEl("div", 
+                { text: emptyMessageFr(t('setting.styles.option-mobile-empty')) });
+            emptyMsg.className = "note-toolbar-setting-empty-message";
+            mobileStyleDiv.append(emptyMsg);
+        }
+        else {
+
+            this.toolbar.mobileStyles.forEach(
+                (style, index) => {
+                    let styleDisclaimer = getValueForKey(MOBILE_STYLE_DISCLAIMERS, style);
+                    new Setting(mobileStyleDiv)
+                        .setName(getValueForKey(MOBILE_STYLE_OPTIONS, style))
+                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + 'Use in Callout or CSS: ' + style)
+                        .addExtraButton((cb) => {
+                            cb.setIcon("cross")
+                                .setTooltip("Remove")
+                                .onClick(async () => this.listMoveHandler(null, this.toolbar.mobileStyles, index, "delete"));
+                            cb.extraSettingsEl.setAttribute("tabindex", "0");
+                            this.plugin.registerDomEvent(
+                                cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.mobileStyles, index, "delete"));
+                        });
+            });
+
+        }
+
+        const excludeFromMobile: string[] = this.getExcludedMobileStyles();
+        const mobileStyleOptions = [{ placeholder: t('setting.styles.option-placeholder') }, ...MOBILE_STYLE_OPTIONS]
+            .filter((option) => {
+                const key = Object.keys(option)[0];
+                return !this.toolbar.mobileStyles.includes(key) && !excludeFromMobile.includes(key);
+            })
+            .reduce((acc, option) => ({ ...acc, ...option }), {});
+
+        new Setting(mobileStyleDiv)
+            .addDropdown((dropdown) =>
+                dropdown
+                    .addOptions(mobileStyleOptions)
+                    .setValue('placeholder')
+                    .onChange(async (val) => {
+                        if (this.toolbar.mobileStyles.includes(val)) {
+                            this.toolbar.mobileStyles =
+                                this.toolbar.mobileStyles.filter((i) => i !== val);
+                        } 
+                        else {
+                            this.toolbar.mobileStyles.push(val);
+                        }
+                        await this.plugin.settingsManager.save();
+                        this.parent.display();
+                    })
+        );
+
+        const mobileDesc = document.createDocumentFragment();
+        mobileDesc.append(t('setting.styles.option-mobile-description'));
+        mobileDesc.append(getStyleDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
+
+        new Setting(settingsDiv)
+            .setName(t('setting.styles.option-mobile-name'))
+            .setDesc(mobileDesc)
+            .setClass("note-toolbar-setting-item-styles")
+            .settingEl.append(mobileStyleDiv);
+
+        new Setting(settingsDiv)
+            .setName(t('setting.styles.option-custom-name'))
+            .setDesc(learnMoreFr(t('setting.styles.option-custom-description'), 'Custom-styling'))
+            .setClass('note-toolbar-setting-item-full-width')
+            .addText(text => text
+                .setPlaceholder(t('setting.styles.option-custom-empty'))
+                .setValue(this.toolbar.customClasses)
+                .onChange(debounce(async (value) => {
+                    this.toolbar.customClasses = value.trim();
+                    await this.plugin.settingsManager.save();
+                }, 750)));
+
+        new Setting(settingsDiv)
+            .setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
+
+    }
+    getStyleDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS: any, defaultStyles: any): string | Node {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * Figures out list of default styles not to show, based on toolbar position and other styles set.
+     * @returns list of styles to exclude
+     */
+    getExcludedDefaultStyles(): string[] {
+        const excludedStyles: string[] = [];
+
+        if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Props) excludedStyles.push('sticky');
+        if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Top &&
+            this.toolbar.position.desktop?.allViews?.position !== PositionType.Bottom) excludedStyles.push('wide');
+
+        const { defaultStyles } = this.toolbar;
+        if (defaultStyles.includes('left')) excludedStyles.push('right', 'center');
+        if (defaultStyles.includes('right')) excludedStyles.push('left', 'center');
+        if (defaultStyles.includes('center')) excludedStyles.push('left', 'right');
+        if (defaultStyles.includes('between')) excludedStyles.push('even');
+        if (defaultStyles.includes('even')) excludedStyles.push('between');
+
+        return excludedStyles;
+    }
+
+    /**
+     * Figures out list of mobile styles not to show, based on toolbar position and other styles set.
+     * @returns list of styles to exclude
+     */
+    getExcludedMobileStyles(): string[] {
+        const excludedStyles: string[] = [];
+        
+        if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Top) excludedStyles.push('mnwd', 'mwd');
+        if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Props) excludedStyles.push('mstcky', 'mnstcky');
+
+        const { mobileStyles } = this.toolbar;
+        if (mobileStyles.includes('mlft')) excludedStyles.push('mrght', 'mctr');
+        if (mobileStyles.includes('mrght')) excludedStyles.push('mlft', 'mctr');
+        if (mobileStyles.includes('mctr')) excludedStyles.push('mlft', 'mrght');
+        if (mobileStyles.includes('mbtwn')) excludedStyles.push('mevn');
+        if (mobileStyles.includes('mevn')) excludedStyles.push('mbtwn');
+        if (mobileStyles.includes('mnwd')) excludedStyles.push('mwd');
+        if (mobileStyles.includes('mwd')) excludedStyles.push('mnwd');
+
+        const { defaultStyles } = this.toolbar;
+        if (defaultStyles.includes('border')) excludedStyles.push('mbrder');
+        if (!defaultStyles.includes('border')) excludedStyles.push('mnbrder');
+        if (defaultStyles.includes('button')) excludedStyles.push('mbtn');
+        if (defaultStyles.includes('wide')) excludedStyles.push('mwd');
+
+        return excludedStyles;
+    }
+
+    /**
+     * Handles moving items within a list, and deletion, based on click or keyboard event.
+     * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
+     * @param itemArray Array that we're operating on.
+     * @param index Number of the item in the list we're moving/deleting.
+     * @param action Direction of the move, or "delete".
+     */
+    async listMoveHandler(
+        keyEvent: KeyboardEvent | null, 
+        itemArray: ToolbarItemSettings[] | string[],
+        index: number, 
+        action?: 'up' | 'down' | 'delete'
+    ): Promise<void> {
+        if (keyEvent) {
+            switch (keyEvent.key) {
+                case 'ArrowUp':
+                    keyEvent.preventDefault();
+                    action = 'up';
+                    break;
+                case 'ArrowDown':
+                    keyEvent.preventDefault();
+                    action = 'down';
+                    break;
+                case 'Delete':
+                case 'Backspace':
+                    keyEvent.preventDefault();
+                    action = 'delete';
+                    break;
+                case 'Enter':
+                case ' ':
+                    keyEvent.preventDefault();
+                    break;
+                default:
+                    return;
+            }
+        }
+        switch (action) {
+            case 'up':
+                arraymove(itemArray, index, index - 1);
+                this.toolbar.updated = new Date().toISOString();
+                break;
+            case 'down':
+                arraymove(itemArray, index, index + 1);
+                this.toolbar.updated = new Date().toISOString();
+                break;
+            case 'delete':
+                itemArray.splice(index, 1);
+                this.toolbar.updated = new Date().toISOString();
+                break;
+        }
+        await this.plugin.settingsManager.save();
+        this.parent.display();
+    }
+
+}
