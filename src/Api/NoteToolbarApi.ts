@@ -130,6 +130,4 @@ export class NoteToolbarApi {
         };
     }
 
-    // TODO: add APIs to allow updating item’s label, tooltip (e.g., to show previous/next date)
-
 }

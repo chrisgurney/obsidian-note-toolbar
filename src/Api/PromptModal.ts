@@ -15,12 +15,7 @@ export class PromptModal extends Modal {
     private submitted = false;
     private value: string;
 
-    constructor(
-        app: App,
-        private prompt_text: string,
-        private default_value: string,
-        private multi_line: boolean
-    ) {
+    constructor(app: App, private prompt_text: string, private default_value: string, private multi_line: boolean) {
         super(app);
     }
 
@@ -37,11 +32,11 @@ export class PromptModal extends Modal {
     createForm(): void {
         const div = this.contentEl.createDiv();
         div.addClass('note-toolbar-comp-div');
-        let textInput;
+        let textInput: TextComponent | TextAreaComponent;
         if (this.multi_line) {
             textInput = new TextAreaComponent(div);
 
-            // Add submit button since enter needed for multiline input on mobile
+            // add submit button since enter needed for multiline input on mobile
             const buttonDiv = this.contentEl.createDiv();
             buttonDiv.addClass('note-toolbar-comp-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
@@ -86,10 +81,7 @@ export class PromptModal extends Modal {
         this.close();
     }
 
-    async openAndGetValue(
-        resolve: (value: string) => void,
-        reject: (reason?: Error) => void
-    ): Promise<void> {
+    async openAndGetValue(resolve: (value: string) => void, reject: (reason?: Error) => void): Promise<void> {
         this.resolve = resolve;
         this.reject = reject;
         this.open();
