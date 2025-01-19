@@ -17,6 +17,7 @@ export class PromptModal extends Modal {
 
     constructor(app: App, private prompt_text: string, private default_value: string, private multi_line: boolean) {
         super(app);
+        this.modalEl.addClasses(['prompt', 'note-toolbar-ui-modal']);
     }
 
     onOpen(): void {
@@ -31,14 +32,14 @@ export class PromptModal extends Modal {
 
     createForm(): void {
         const div = this.contentEl.createDiv();
-        div.addClass('note-toolbar-comp-div');
+        div.addClass('note-toolbar-ui-div');
         let textInput: TextComponent | TextAreaComponent;
         if (this.multi_line) {
             textInput = new TextAreaComponent(div);
 
             // add submit button since enter needed for multiline input on mobile
             const buttonDiv = this.contentEl.createDiv();
-            buttonDiv.addClass('note-toolbar-comp-button-div');
+            buttonDiv.addClass('note-toolbar-ui-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
             submitButton.setButtonText("Submit").onClick((evt: Event) => {
@@ -49,7 +50,7 @@ export class PromptModal extends Modal {
         }
 
         this.value = this.default_value ?? "";
-        textInput.inputEl.addClass('note-toolbar-comp-input');
+        textInput.inputEl.addClass('note-toolbar-ui-input');
         textInput.setPlaceholder("Type text here");
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));

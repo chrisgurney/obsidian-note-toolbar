@@ -20,6 +20,7 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     ) {
         super(app);
         this.setPlaceholder(placeholder);
+        this.modalEl.addClass("note-toolbar-ui-modal");
         limit && (this.limit = limit);
     }
 
