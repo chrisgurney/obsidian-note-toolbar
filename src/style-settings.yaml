@@ -2,27 +2,6 @@ name: Note Toolbar
 id: note-toolbar
 settings:
     -
-        id: toolbar-bottom-tbar
-        title: 'Bottom toolbar'
-        description: 'Styles for the "bottom" position'
-        type: heading
-        level: 1
-        collapsed: true
-    -
-        id: cg-nt-tbar-bottom-border-radius
-        title: 'Toolbar border radius (in px units)'
-        description: 'How rounded the toolbar is. The higher the number the more rounded.'
-        type: variable-number
-        default: 5
-        format: px
-    -
-        id: cg-nt-tbar-bottom-pos-y
-        title: 'Y position (in em units)'
-        description: "Distance from bottom edge."
-        type: variable-number
-        default: 4.25
-        format: em
-    -
         id: toolbar-fab-styles
         title: 'Floating Button'
         title.uk: 'Плаваюча кнопка'
@@ -849,3 +828,24 @@ settings:
         min: 0
         max: 1
         step: 0.05
+    -
+        id: toolbar-bottom-tbar
+        title: 'Toolbars (bottom)'
+        description: 'Styles for toolbars in the "bottom" position'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-tbar-bottom-border-radius
+        title: 'Toolbar border radius (in px units)'
+        description: 'How rounded the toolbar is. The higher the number the more rounded.'
+        type: variable-number
+        default: 5
+        format: px
+    -
+        id: cg-nt-tbar-bottom-pos-y
+        title: 'Y position (in em units)'
+        description: "Distance from bottom edge."
+        type: variable-number
+        default: 4.25
+        format: em
