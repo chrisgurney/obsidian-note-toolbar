@@ -1540,49 +1540,58 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (toolbarSettings !== undefined) {
 
-			// position menu
+			//
+			// position
+			//
+
+			// workaround: sub-menus only work on non-tablet devices
+			let positionMenu = contextMenu;
+			if (!Platform.isTablet) {
+				contextMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('toolbar.menu-position'));
+					item.setIcon('move');
+					positionMenu = item.setSubmenu() as Menu;
+				});
+			}
+
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
-			contextMenu.addSeparator();
-			contextMenu.addItem((item: MenuItem) => {
-				item.setTitle(t('toolbar.menu-position'));
-				item.setIcon('move');
-				let subMenu = item.setSubmenu() as Menu;
-				if (currentPosition !== PositionType.Top) {
-					subMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-top'))
-							.setIcon('arrow-up-to-line')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
-					});
-				}
-				if (currentPosition !== PositionType.Props) {
-					subMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-props'))
-							.setIcon('arrow-down-narrow-wide')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
-					});
-				}
-				if (currentPosition !== PositionType.Bottom) {
-					subMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-bottom'))
-							.setIcon('arrow-down-to-line')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
-					});
-				}
-				if (currentPosition !== PositionType.FabLeft) {
-					subMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-fabl'))
-							.setIcon('circle-chevron-left')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabLeft));
-					});
-				}
-				if (currentPosition !== PositionType.FabRight) {
-					subMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-fabr'))
-							.setIcon('circle-chevron-right')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabRight));
-					});
-				}
-			});
+			if (currentPosition !== PositionType.Top) {
+				positionMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('setting.position.option-top'))
+						.setIcon('arrow-up-to-line')
+						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
+				});
+			}
+			if (currentPosition !== PositionType.Props) {
+				positionMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('setting.position.option-props'))
+						.setIcon('arrow-down-narrow-wide')
+						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
+				});
+			}
+			if (currentPosition !== PositionType.Bottom) {
+				positionMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('setting.position.option-bottom'))
+						.setIcon('arrow-down-to-line')
+						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
+				});
+			}
+			if (currentPosition !== PositionType.FabLeft) {
+				positionMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('setting.position.option-fabl'))
+						.setIcon('circle-chevron-left')
+						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabLeft));
+				});
+			}
+			if (currentPosition !== PositionType.FabRight) {
+				positionMenu.addItem((item: MenuItem) => {
+					item.setTitle(t('setting.position.option-fabr'))
+						.setIcon('circle-chevron-right')
+						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabRight));
+				});
+			}
+
+			if (Platform.isTablet) contextMenu.addSeparator();
 
 			// style
 			contextMenu.addItem((item: MenuItem) => {
