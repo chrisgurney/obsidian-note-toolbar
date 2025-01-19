@@ -260,6 +260,15 @@ settings:
         level: 2
         collapsed: true
     -
+        id: cg-nt-fab-autohide-opacity
+        title: 'Autohide opacity'
+        description: 'When autohide style is enabled, how transparent the button is when hidden'
+        type: variable-number-slider
+        default: 0
+        min: 0
+        max: 1
+        step: 0.05
+    -
         id: cg-nt-fab-border-radius-desktop
         title: 'Border radius on desktop (in px units)'
         title.uk: 'Радіус рамки на робочому столі (пікселі)'
@@ -808,6 +817,15 @@ settings:
         level: 2
         collapsed: true
     -    
+        id: cg-nt-tbar-autohide-opacity
+        title: 'Autohide opacity'
+        description: 'When autohide style is enabled, how transparent the toolbar is when hidden'
+        type: variable-number-slider
+        default: 0
+        min: 0
+        max: 1
+        step: 0.05
+    -
         id: cg-nt-tbar-border-radius
         title: 'Border radius (in px units)'
         title.uk: 'Закруглення рамок (пікселі)'

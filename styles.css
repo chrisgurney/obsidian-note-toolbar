@@ -264,6 +264,15 @@ settings:
         level: 2
         collapsed: true
     -
+        id: cg-nt-fab-autohide-opacity
+        title: 'Autohide opacity'
+        description: 'When autohide style is enabled, how transparent the button is when hidden'
+        type: variable-number-slider
+        default: 0
+        min: 0
+        max: 1
+        step: 0.05
+    -
         id: cg-nt-fab-border-radius-desktop
         title: 'Border radius on desktop (in px units)'
         title.uk: 'Радіус рамки на робочому столі (пікселі)'
@@ -812,6 +821,15 @@ settings:
         level: 2
         collapsed: true
     -    
+        id: cg-nt-tbar-autohide-opacity
+        title: 'Autohide opacity'
+        description: 'When autohide style is enabled, how transparent the toolbar is when hidden'
+        type: variable-number-slider
+        default: 0
+        min: 0
+        max: 1
+        step: 0.05
+    -
         id: cg-nt-tbar-border-radius
         title: 'Border radius (in px units)'
         title.uk: 'Закруглення рамок (пікселі)'
@@ -838,6 +856,7 @@ settings:
  */
 
 body {
+    --cg-nt-tbar-autohide-opacity: 0;
     --cg-nt-tbar-bg-color: var(--background-primary);
     --cg-nt-tbar-border-color: var(--hr-color);
     --cg-nt-tbar-border-radius: 0px;
@@ -848,6 +867,7 @@ body {
     --cg-nt-tbar-bottom-pos-y: 4.25em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
+    --cg-nt-fab-autohide-opacity: 0;
     --cg-nt-fab-bg-color: var(--interactive-normal);
     --cg-nt-fab-bg-color-desktop: var(--interactive-normal);
     --cg-nt-fab-bg-color-hover: var(--interactive-hover);
@@ -1125,7 +1145,7 @@ body {
 
     &[data-callout-metadata*="autohide"] {
         &:not(.is-mobile &) {
-            opacity: 0;
+            opacity: var(--cg-nt-tbar-autohide-opacity);
             transition: all 0.2s ease-in-out;
             -webkit-transition: all 0.2s ease-in-out;
             &:hover {
@@ -1322,7 +1342,7 @@ body {
     & button[data-fab-metadata*="autohide"] {
         box-shadow: none;
         &:not(.is-mobile &) {
-            opacity: 0;
+            opacity: var(--cg-nt-fab-autohide-opacity);
             transition: all 0.2s ease-in-out;
             -webkit-transition: all 0.2s ease-in-out;
             &:hover {
