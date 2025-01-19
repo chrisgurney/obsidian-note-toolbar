@@ -502,10 +502,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		// add the toolbar to the editor UI
 		switch(position) {
 			case PositionType.Bottom:
-				let activeLeafEl = activeDocument.querySelector('.workspace-leaf.mod-active') as HTMLElement;
+				// on mobile put the toolbar higher in the DOM so the edit toolbar doesn't push it up
+				let containerClass = Platform.isMobile ? '.app-container' : '.workspace-leaf.mod-active';
+				let activeLeafEl = activeDocument.querySelector(containerClass) as HTMLElement;
 				activeLeafEl
-					? activeLeafEl.insertAdjacentElement('afterbegin', embedBlock)
-					: debugLog("🛑 renderToolbar(): Unable to find .workspace-leaf.mod-active to insert toolbar");
+					? activeLeafEl.insertAdjacentElement(Platform.isMobile ? 'beforeend' : 'afterbegin', embedBlock)
+					: debugLog(`🛑 renderToolbar(): Unable to find ${containerClass} to insert toolbar`);
 				// if the toolbar is editor width, omit the left rule and set width to 100%
 				toolbar.defaultStyles.includes('wide')
 					? embedBlock.setAttr('style', `width: 100%`)
