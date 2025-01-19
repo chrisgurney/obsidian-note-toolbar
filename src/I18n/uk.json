@@ -344,6 +344,7 @@
             "name": "Розташування",
             "description": "Параметри розташовування панелі.",
             "option-mobile-help": "ℹ️ Доступ через Панель навігації.",
+            "option-bottom": "Bottom",
             "option-fabl": "Плаваюча кнопка: ліворуч",
             "option-fabr": "Плаваюча кнопка: праворуч",
             "option-hidden": "Прихована / Не відображати",
@@ -353,6 +354,7 @@
         },
         "styles": {
             "name": "Стилі",
+            "title": "Style toolbar: {{toolbar}}",
             "description": "Параметри застосування стилів панелі.",
             "help": "Налаштуйте ще більше з додатком Style Settings.",
             "option-placeholder": "Додати стиль...",
@@ -427,6 +429,7 @@
         "menu-hide-properties": "Приховати властивості нотатки",
         "menu-position": "Розташування",
         "menu-show-properties": "Показати властивості нотатки",
+        "menu-style": "Style...",
         "menu-toolbar-settings": "Налаштування Note Toolbar..."
     }
 }
