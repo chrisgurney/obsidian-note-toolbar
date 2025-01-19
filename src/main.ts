@@ -471,7 +471,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		switch (position) {
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
-				noteToolbarElement = await this.renderToolbarAsFab(position);
+				noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
 				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
@@ -703,7 +703,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param position button position (i.e., 'fabl' or 'fabr') 
 	 * @returns HTMLElement cg-note-toolbar-fab
 	 */
-	async renderToolbarAsFab(position: string): Promise<HTMLElement> {
+	async renderToolbarAsFab(toolbar: ToolbarSettings, position: string): Promise<HTMLElement> {
 
 		let noteToolbarFabContainer = activeDocument.createElement('div');
 		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
@@ -715,6 +715,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let noteToolbarFabButton = activeDocument.createElement('button');
 		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
 		noteToolbarFabButton.setAttribute('aria-label', t('toolbar.button-floating-tooltip'));
+		noteToolbarFabButton.setAttribute("data-fab-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 		setIcon(noteToolbarFabButton, this.settings.icon);
 		
 		noteToolbarFabContainer.append(noteToolbarFabButton);

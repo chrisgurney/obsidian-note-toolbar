@@ -17,6 +17,7 @@ body {
     --cg-nt-fab-bg-color-desktop: var(--interactive-normal);
     --cg-nt-fab-bg-color-hover: var(--interactive-hover);
     --cg-nt-fab-bg-color-hover-desktop: var(--interactive-hover);
+    --cg-nt-fab-border-color: var(--icon-color);
     --cg-nt-fab-inactive-opacity: 0.7;
     --cg-nt-fab-pos-x: 82vw;
     --cg-nt-fab-pos-y: 90vh;
@@ -480,6 +481,23 @@ body {
         }
     }
     
+}
+
+.cg-note-toolbar-fab-container {
+    & button[data-fab-metadata*="autohide"] {
+        box-shadow: none;
+        &:not(.is-mobile &) {
+            opacity: 0;
+            transition: all 0.2s ease-in-out;
+            -webkit-transition: all 0.2s ease-in-out;
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+    & button[data-fab-metadata*="border"] {
+        border: solid 1px var(--cg-nt-fab-border-color);
+    }
 }
 
 /*************************************************************************
