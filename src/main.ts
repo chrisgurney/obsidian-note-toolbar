@@ -1738,6 +1738,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	getToolbarEl(): HTMLElement | null {
 		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
+		// if we didn't find one, check for a bottom toolbar
+		if (!existingToolbarEl && Platform.isMobile) {
+			existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container') as HTMLElement;
+		}
 		// debugLog("getToolbarEl()", existingToolbarEl);
 		return existingToolbarEl;
 	}
@@ -1748,6 +1752,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	getToolbarListEl(): HTMLElement | null {
 		let itemsUl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
+		// if we didn't find the toolbar, check for a bottom toolbar
+		if (!itemsUl && Platform.isMobile) {
+			itemsUl = activeDocument.querySelector('.app-container .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
+		}
 		return itemsUl;
 	}
 
@@ -1768,9 +1776,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Remove the toolbar on the active file.
 	 */
 	async removeActiveToolbar(): Promise<void> {
-		let existingToolbar = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
-		// debugLog("removeActiveToolbar: existingToolbar: ", existingToolbar);
-		existingToolbar?.remove();
+		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
+		// if we didn't find one, check for a bottom toolbar
+		if (!existingToolbarEl && Platform.isMobile) {
+			existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container');
+		}
+		// debugLog("removeActiveToolbar: existingToolbar: ", existingToolbarEl);
+		existingToolbarEl?.remove();
 	}
 
 	/**
