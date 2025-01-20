@@ -192,7 +192,7 @@ function hasVisibleComponents(platform: { allViews?: { components: ComponentType
  * @returns true if the toolbar has the given style; false otherwise 
  */
 export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleType, mobileStyle: MobileStyleType): boolean {
-	return (toolbar.defaultStyles.includes(defaultStyle) || Platform.isMobile && toolbar.mobileStyles.includes(mobileStyle));
+	return (toolbar.defaultStyles.includes(defaultStyle) || (Platform.isMobile && toolbar.mobileStyles.includes(mobileStyle)));
 }
 
 /**
