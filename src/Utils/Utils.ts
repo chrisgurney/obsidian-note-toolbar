@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { App, Command, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MobileStyleType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -182,6 +182,22 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
  */
 function hasVisibleComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
     return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
+}
+
+/**
+ * Checks if the given toolbar has the given style.
+ * @param toolbar toolbar to check if it has the given style.
+ * @param defaultStyle default style string to check
+ * @param mobileStyle mobile style string to check for, if the current platform is mobile (supercedes defaultStyle)
+ * @returns true if the toolbar has the given style; false otherwise 
+ */
+export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleType, mobileStyle: MobileStyleType): boolean {
+	if (toolbar.defaultStyles.includes(defaultStyle) || Platform.isMobile && toolbar.mobileStyles.includes(mobileStyle)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 /**

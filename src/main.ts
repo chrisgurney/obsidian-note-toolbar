@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor, getViewId } from 'Utils/Utils';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType } from 'Settings/NoteToolbarSettings';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor, getViewId, hasStyle } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -508,10 +508,19 @@ export default class NoteToolbarPlugin extends Plugin {
 				activeLeafEl
 					? activeLeafEl.insertAdjacentElement(Platform.isPhone ? 'beforeend' : 'afterbegin', embedBlock)
 					: debugLog(`🛑 renderToolbar(): Unable to find ${containerClass} to insert toolbar`);
-				// if the toolbar is editor width, omit the left rule and set width to 100%
-				toolbar.defaultStyles.includes('wide')
-					? embedBlock.setAttr('style', `width: 100%`)
-					: embedBlock.setAttr('style', `left: max(0%, calc(50% - calc(${embedBlock.offsetWidth}px / 2)))`);
+				// styling for bottom toolbar
+				let bottomStyles: string[] = [];
+				if (hasStyle(toolbar, DefaultStyleType.Wide, MobileStyleType.Wide)) {
+					bottomStyles.push(`width: 100%`);
+				}
+				else {
+					hasStyle(toolbar, DefaultStyleType.Right, MobileStyleType.Right)
+						? bottomStyles.push(`right: 0`)
+						: hasStyle(toolbar, DefaultStyleType.Left, MobileStyleType.Left)
+							? bottomStyles.push(`left: 0`)
+							: bottomStyles.push('style', `left: max(0%, calc(50% - calc(${embedBlock.offsetWidth}px / 2)))`);
+				}
+				embedBlock.setAttribute('style', bottomStyles.join(';'));
 				break;
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
