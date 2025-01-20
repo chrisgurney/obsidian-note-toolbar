@@ -84,6 +84,33 @@ export enum SettingType {
 	TextArea = 'textarea',
 	Toolbar = 'toolbar',
 }
+export enum DefaultStyleType {
+	Autohide = 'autohide',
+	Border = 'border',
+	Button = 'button',
+	Center = 'center',
+	Wide = 'wide',
+	Left = 'left',
+	Right = 'right',
+	Between = 'between',
+	Even = 'even',
+	Sticky = 'sticky'
+}
+export enum MobileStyleType {
+	Border = 'mbrder',
+	NoBorder = 'mnbrder',
+	Button = 'mbtn',
+	Center = 'mctr',
+	NoWide = 'mnwd',
+	NoWrap = 'mnwrp',
+	Wide = 'mwd',
+	Left = 'mlft',
+	Right = 'mrght',
+	Between = 'mbtwn',
+	Even = 'mevn',
+	Sticky = 'mstcky',
+	NoSticky = 'mnstcky'
+}
 export const SettingFieldItemMap: Record<ItemType, SettingType> = {
 	[ItemType.Break]: SettingType.Ignore,
 	[ItemType.Command]: SettingType.Command,
@@ -176,7 +203,7 @@ export interface ToolbarSettings {
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	uuid: getUUID(),
 	customClasses: "",
-	defaultStyles: ["border","even","sticky"],
+	defaultStyles: [DefaultStyleType.Border, DefaultStyleType.Even, DefaultStyleType.Sticky],
 	items: [],
 	mobileStyles: [],
 	name: "",
@@ -347,43 +374,43 @@ export const RIBBON_ACTION_OPTIONS = {
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
 export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
-	{ autohide: t('setting.styles.option-autohide') },
-    { border: t('setting.styles.option-border') },
-	{ button: t('setting.styles.option-button') },
-    { center: t('setting.styles.option-center') },
-	{ wide: t('setting.styles.option-wide') },
-    { left: t('setting.styles.option-left') },
-    { right: t('setting.styles.option-right') },
-	{ between: t('setting.styles.option-between') },
-    { even: t('setting.styles.option-even') },
-    { sticky: t('setting.styles.option-sticky') },
+	{ [DefaultStyleType.Autohide]: t('setting.styles.option-autohide') },
+    { [DefaultStyleType.Border]: t('setting.styles.option-border') },
+	{ [DefaultStyleType.Button]: t('setting.styles.option-button') },
+    { [DefaultStyleType.Center]: t('setting.styles.option-center') },
+	{ [DefaultStyleType.Wide]: t('setting.styles.option-wide') },
+    { [DefaultStyleType.Left]: t('setting.styles.option-left') },
+    { [DefaultStyleType.Right]: t('setting.styles.option-right') },
+	{ [DefaultStyleType.Between]: t('setting.styles.option-between') },
+    { [DefaultStyleType.Even]: t('setting.styles.option-even') },
+    { [DefaultStyleType.Sticky]: t('setting.styles.option-sticky') },
 ];
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
-	{ autohide: t('setting.styles.option-autohide-disclaimer') },
-	{ sticky: t('setting.styles.option-sticky-disclaimer') },
+	{ [DefaultStyleType.Autohide]: t('setting.styles.option-autohide-disclaimer') },
+	{ [DefaultStyleType.Sticky]: t('setting.styles.option-sticky-disclaimer') },
 ];
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
 export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
-    { mbrder: t('setting.styles.option-border') },
-    { mnbrder: t('setting.styles.option-noborder') },
-	{ mbtn: t('setting.styles.option-button') },
-    { mctr: t('setting.styles.option-center') },
-	{ mnwd: t('setting.styles.option-nowide') },
-	{ mnwrp: t('setting.styles.option-nowrap') },
-	{ mwd: t('setting.styles.option-wide') },
-    { mlft: t('setting.styles.option-left') },
-    { mrght: t('setting.styles.option-right') },
-	{ mbtwn: t('setting.styles.option-between') },
-    { mevn: t('setting.styles.option-even') },
-    { mstcky: t('setting.styles.option-sticky') },
-    { mnstcky: t('setting.styles.option-notsticky') },
+    { [MobileStyleType.Border]: t('setting.styles.option-border') },
+    { [MobileStyleType.NoBorder]: t('setting.styles.option-noborder') },
+	{ [MobileStyleType.Button]: t('setting.styles.option-button') },
+    { [MobileStyleType.Center]: t('setting.styles.option-center') },
+	{ [MobileStyleType.NoWide]: t('setting.styles.option-nowide') },
+	{ [MobileStyleType.NoWrap]: t('setting.styles.option-nowrap') },
+	{ [MobileStyleType.Wide]: t('setting.styles.option-wide') },
+    { [MobileStyleType.Left]: t('setting.styles.option-left') },
+    { [MobileStyleType.Right]: t('setting.styles.option-right') },
+	{ [MobileStyleType.Between]: t('setting.styles.option-between') },
+    { [MobileStyleType.Even]: t('setting.styles.option-even') },
+    { [MobileStyleType.Sticky]: t('setting.styles.option-sticky') },
+    { [MobileStyleType.NoSticky]: t('setting.styles.option-notsticky') },
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
-	{ mnwrp: t('setting.styles.option-nowrap-disclaimer') },
-	{ mstcky: t('setting.styles.option-sticky-disclaimer') },
+	{ [MobileStyleType.NoWrap]: t('setting.styles.option-nowrap-disclaimer') },
+	{ [MobileStyleType.Sticky]: t('setting.styles.option-sticky-disclaimer') },
 ];
