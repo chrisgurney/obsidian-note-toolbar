@@ -347,20 +347,20 @@ export const LINK_OPTIONS = {
 
 export const POSITION_OPTIONS = {
 	desktop: [
-		{ top: t('setting.position.option-top') },
-		{ props: t('setting.position.option-props') },
-		{ bottom: t('setting.position.option-bottom') },
-		{ fabl: t('setting.position.option-fabl') },
-		{ fabr: t('setting.position.option-fabr') },
-		{ hidden: t('setting.position.option-hidden') },
+		{ [PositionType.Top]: t('setting.position.option-top') },
+		{ [PositionType.Props]: t('setting.position.option-props') },
+		{ [PositionType.Bottom]: t('setting.position.option-bottom') },
+		{ [PositionType.FabLeft]: t('setting.position.option-fabl') },
+		{ [PositionType.FabRight]: t('setting.position.option-fabr') },
+		{ [PositionType.Hidden]: t('setting.position.option-hidden') },
 	],
 	mobile: [
-		{ top: t('setting.position.option-top') },
-		{ props: t('setting.position.option-props') },
-		{ bottom: t('setting.position.option-bottom') },
-		{ fabl: t('setting.position.option-fabl') },
-		{ fabr: t('setting.position.option-fabr') },
-		{ hidden: t('setting.position.option-hidden-mobile') },
+		{ [PositionType.Top]: t('setting.position.option-top') },
+		{ [PositionType.Props]: t('setting.position.option-props') },
+		{ [PositionType.Bottom]: t('setting.position.option-bottom') },
+		{ [PositionType.FabLeft]: t('setting.position.option-fabl') },
+		{ [PositionType.FabRight]: t('setting.position.option-fabr') },
+		{ [PositionType.Hidden]: t('setting.position.option-hidden-mobile') },
 	]
 }
 
