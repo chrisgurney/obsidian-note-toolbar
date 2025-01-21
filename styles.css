@@ -1330,12 +1330,15 @@ body {
             /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
             background-color: unset;
         }
-        /* user feedback that toolbar interaction is not available; workaround for #69 */
-        &:not(.is-focused &), &:not(.mod-active &) {
-            opacity: var(--cg-nt-tbar-inactive-opacity);
-        }
     }
     
+}
+
+/* user feedback that toolbar interaction is not available; workaround for #69 */
+body:not(.is-focused), .workspace-leaf:not(.mod-active) {
+    & .cg-note-toolbar-callout[data-callout="note-toolbar"] {
+        opacity: var(--cg-nt-tbar-inactive-opacity);
+    }
 }
 
 .cg-note-toolbar-fab-container {
