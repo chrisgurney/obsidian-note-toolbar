@@ -1391,8 +1391,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             right: var(--cg-nt-fab-pos-x);
         }
     }
-    /* user feedback that toolbar interaction is not available; workaround for #69 */
-    &:not(.is-focused &), &:not(.mod-active &) {
+}
+
+/* user feedback that toolbar interaction is not available; workaround for #69 */
+body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
+    & .cg-note-toolbar-fab-container {
         opacity: var(--cg-nt-fab-inactive-opacity);
     }
 }
