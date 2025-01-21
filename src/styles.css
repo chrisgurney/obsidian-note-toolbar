@@ -482,7 +482,7 @@ body {
 }
 
 /* user feedback that toolbar interaction is not available; workaround for #69 */
-body:not(.is-focused), .workspace-leaf:not(.mod-active) {
+body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .cg-note-toolbar-callout[data-callout="note-toolbar"] {
         opacity: var(--cg-nt-tbar-inactive-opacity);
     }
