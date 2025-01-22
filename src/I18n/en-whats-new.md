@@ -21,7 +21,9 @@ Get to the Style section of settings for the active toolbar by right-clicking on
 
 - Floating buttons: Support for the `autohide` and `border` styles.
   - The border color defaults to the button's icon color, but can be overridden with [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
-- Override the `autohide` style opacity for toolbars and buttons separately via [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
+- [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support):
+  - Override the `autohide` style opacity for toolbars and buttons separately.
+  - Inactive opacity settings for mobile and desktop are now separate.
 - Beta API UI components:
   - Added `modal` class to Suggester. _Thanks @FelipeRearden_
   - Updated class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
