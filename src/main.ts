@@ -281,7 +281,18 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		const viewId = getViewId(currentView);
 		debugLog('===== LEAF-CHANGE ===== ', viewId);
-		if (viewId && this.activeViewIds.contains(viewId)) return;
+
+		// update the active toolbar if its configuration changed
+		let activeToolbarEl = this.getToolbarEl();
+		if (activeToolbarEl) {
+			let activeToolbar = this.settingsManager.getToolbarById(activeToolbarEl.id);
+			if (activeToolbar && (activeToolbar.updated !== activeToolbarEl.getAttribute('data-updated'))) {
+				renderToolbar = true;
+			}
+		}
+
+		// exit if the view has already been handled
+		if (!renderToolbar && viewId && this.activeViewIds.contains(viewId)) return;
 		this.updateActiveViewIds();
 
 		if (currentView) {
