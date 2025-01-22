@@ -483,7 +483,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
-				position === 'fabl' ? noteToolbarElement.setAttribute('data-fab-position', 'left') : undefined;
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
 				this.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));

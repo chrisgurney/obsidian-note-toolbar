@@ -109,56 +109,56 @@ settings:
         collapsed: true
     -
         id: cg-nt-fab-pos-x-desktop
-        title: 'X position on desktop (in em units)'
+        title: 'X position on desktop (in px units)'
         title.uk: 'Позиція X на робочому столі (em)'
-        title.de: 'X-Position am PC (in vw-Einheiten)'
-        title.zh: '桌面端X轴位置（单位：em）'
+        title.de: 'X-Position am PC (in px-Einheiten)'
+        title.zh: '桌面端X轴位置（单位：px）'
         description: 'Distance from the edge of the editor view.'
         description.uk: 'Відстань від краю вікна редактора'
         description.de: 'Abstand vom Rand der Editoransicht.'
         description.zh: '距编辑器视图边缘的距离'
         type: variable-number
-        default: 4
-        format: em
+        default: 32
+        format: px
     -
-        id: cg-nt-fab-pos-x
-        title: 'X position on mobile (in vw units) 📱'
+        id: cg-nt-fab-pos-x-mobile
+        title: 'X position on mobile (in px units) 📱'
         title.uk: 'Позиція X на мобільному (% ширини) 📱'
-        title.de: 'X-Position am Handy (in vw-Einheiten) 📱'
-        title.zh: '移动端X轴位置（单位：vw）📱'
-        description: "As a percentage of the editor's width, from the left edge (reversed when button is on right)."
+        title.de: 'X-Position am Handy (in px-Einheiten) 📱'
+        title.zh: '移动端X轴位置（单位：px）📱'
+        description: "Distance from the edge of the editor view."
         description.uk: 'У відсотках від ширини редактора, від лівого краю (у зворотному порядку, коли кнопка знаходиться праворуч)'
         description.de: 'Als Prozentsatz der Breite des Editors, ausgehend vom linken Rand (umgekehrt, wenn sich die Schaltfläche rechts befindet).'
         description.zh: '基于左侧边缘，占编辑器宽度的百分比（当按钮在右侧时则相反）'
         type: variable-number
-        default: 82
-        format: vw
+        default: 24
+        format: px
     -
         id: cg-nt-fab-pos-y-desktop
-        title: 'Y position on desktop (in vh units)'
+        title: 'Y position on desktop (in px units)'
         title.uk: 'Позиція Y на робочому столі (% висоти)'
-        title.de: 'Y-Position am PC (in vh-Einheiten)'
-        title.zh: '桌面端Y轴位置（单位：vh）'
-        description: "As a percentage of the editor's height, from the top edge."
+        title.de: 'Y-Position am PC (in px-Einheiten)'
+        title.zh: '桌面端Y轴位置（单位：px）'
+        description: "Distance from the bottom of the editor view."
         description.uk: 'У відсотках від висоти редактора, від верхнього краю'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '基于顶部边缘，占编辑器高度的百分比'
         type: variable-number
-        default: 90
-        format: vh
+        default: 50
+        format: px
     -
-        id: cg-nt-fab-pos-y
-        title: 'Y position on mobile (in vh units) 📱'
+        id: cg-nt-fab-pos-y-mobile
+        title: 'Y position on mobile (in px units) 📱'
         title.uk: 'Позиція Y на мобільному пристрої (% висоти) 📱'
-        title.de: 'Y-Position am Handy (in vh-Einheiten) 📱'
-        title.zh: '移动端Y轴位置（单位：vh）📱'
-        description: "As a percentage of the editor's height, from the top edge."
+        title.de: 'Y-Position am Handy (in px-Einheiten) 📱'
+        title.zh: '移动端Y轴位置（单位：px）📱'
+        description: "Distance from the bottom of the editor view."
         description.uk: 'У відсотках від висоти редактора, від верхнього краю'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '基于顶部边缘，占编辑器高度的百分比'
         type: variable-number
-        default: 90
-        format: vh
+        default: 24
+        format: px
     -
         id: toolbar-fab-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
