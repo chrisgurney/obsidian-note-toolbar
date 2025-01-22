@@ -818,17 +818,32 @@ settings:
         default: 0
         format: px
     -
-        id: cg-nt-tbar-inactive-opacity
-        title: 'Inactive opacity'
+        id: cg-nt-tbar-inactive-opacity-desktop
+        title: 'Inactive opacity on desktop'
         title.uk: 'Прозорість у неактивному режимі'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
-        description: 'When focus is in another tab, dim the toolbar'
+        description: 'When focus is in another view, dim the toolbar'
         description.uk: 'Затемняє панель інструментів, коли фокус знаходиться на іншій вкладці'
         description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
         description.zh: '当焦点在其他标签页时，使工具栏变暗'
         type: variable-number-slider
         default: 0.8
+        min: 0
+        max: 1
+        step: 0.05
+    -
+        id: cg-nt-tbar-inactive-opacity-mobile
+        title: 'Inactive opacity on mobile'
+        title.uk: 'Прозорість у неактивному режимі'
+        title.de: 'Inaktive Deckkraft'
+        title.zh: '非活动状态透明度'
+        description: 'When focus is in another view, dim the toolbar'
+        description.uk: 'Затемняє панель інструментів, коли фокус знаходиться на іншій вкладці'
+        description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
+        description.zh: '当焦点在其他标签页时，使工具栏变暗'
+        type: variable-number-slider
+        default: 0.5
         min: 0
         max: 1
         step: 0.05
@@ -860,7 +875,8 @@ body {
     --cg-nt-tbar-bg-color: var(--background-primary);
     --cg-nt-tbar-border-color: var(--hr-color);
     --cg-nt-tbar-border-radius: 0px;
-    --cg-nt-tbar-inactive-opacity: 0.8;
+    --cg-nt-tbar-inactive-opacity-desktop: 0.8;
+    --cg-nt-tbar-inactive-opacity-mobile: 0.5;
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
@@ -1337,7 +1353,10 @@ body {
 /* user feedback that toolbar interaction is not available; workaround for #69 */
 body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .cg-note-toolbar-callout[data-callout="note-toolbar"] {
-        opacity: var(--cg-nt-tbar-inactive-opacity);
+        opacity: var(--cg-nt-tbar-inactive-opacity-desktop);
+        .is-mobile & {
+            opacity: var(--cg-nt-tbar-inactive-opacity-mobile);
+        }
     }
 }
 

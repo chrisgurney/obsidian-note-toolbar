@@ -814,17 +814,32 @@ settings:
         default: 0
         format: px
     -
-        id: cg-nt-tbar-inactive-opacity
-        title: 'Inactive opacity'
+        id: cg-nt-tbar-inactive-opacity-desktop
+        title: 'Inactive opacity on desktop'
         title.uk: 'Прозорість у неактивному режимі'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
-        description: 'When focus is in another tab, dim the toolbar'
+        description: 'When focus is in another view, dim the toolbar'
         description.uk: 'Затемняє панель інструментів, коли фокус знаходиться на іншій вкладці'
         description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
         description.zh: '当焦点在其他标签页时，使工具栏变暗'
         type: variable-number-slider
         default: 0.8
+        min: 0
+        max: 1
+        step: 0.05
+    -
+        id: cg-nt-tbar-inactive-opacity-mobile
+        title: 'Inactive opacity on mobile'
+        title.uk: 'Прозорість у неактивному режимі'
+        title.de: 'Inaktive Deckkraft'
+        title.zh: '非活动状态透明度'
+        description: 'When focus is in another view, dim the toolbar'
+        description.uk: 'Затемняє панель інструментів, коли фокус знаходиться на іншій вкладці'
+        description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
+        description.zh: '当焦点在其他标签页时，使工具栏变暗'
+        type: variable-number-slider
+        default: 0.5
         min: 0
         max: 1
         step: 0.05
