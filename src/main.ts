@@ -1404,10 +1404,10 @@ export default class NoteToolbarPlugin extends Plugin {
 						// determine menu orientation based on button position
 						let elemRect = posAtElement.getBoundingClientRect();
 						let menuPos = { 
-							x: (fabPos === 'fabl' ? elemRect.x : elemRect.x + elemRect.width), 
+							x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
 							y: (elemRect.top - 4),
 							overlap: true,
-							left: (fabPos === 'fabl' ? false : true)
+							left: (fabPos === PositionType.FabLeft ? false : true)
 						};
 						// store menu position for sub-menu positioning
 						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
