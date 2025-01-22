@@ -1,20 +1,34 @@
 What's new in Note Toolbar v1.17?
 
-## New Feature 🎉
+## New Features 🎉
 
 ### Bottom toolbar position
 
-By popular demand, there is now a Bottom toolbar position, which floats the toolbar at the bottom of your note.
+By popular demand, there is now a _Bottom_ toolbar position, which floats the toolbar at the bottom of your note.
 
 - Set the position using _right-click → Set position → Bottom_, or via the toolbar's settings.
-- Styling:
-  - By default the toolbar is centered and only uses as much room as needed. If you would like it wider, or want to align it, try the `editor width` style (then you can use `left align` or `right align`).
+- Styling notes:
   - If the `border` style is enabled, the border surrounds the toolbar.
-- Adjust position and border radius using [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
+  - Adjust position and border radius using [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
 
-**💬 Let me know what you think!**
+**💬 Let me know how well it works for you** in the [discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/218), or use the [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
 
-Please leave feedback in the [discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/218), or use the [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
+### Quickly access styles from the toolbar's context menu
+
+Get to the Style section of settings for the active toolbar by right-clicking on it (or long-press on mobile) and select _Style..._
+
+## Improvements 🚀
+
+- Floating buttons: Support for the `autohide` and `border` styles.
+  - The border color defaults to the button's icon color, but can be overridden with [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
+- Override the `autohide` style opacity for toolbars and buttons separately via [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
+- Beta API UI components:
+  - Added `modal` class to Suggester. _Thanks @FelipeRearden_
+  - Updated class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
+
+## Changes
+
+- Updated Ukranian tranlations thanks to @laktiv
 
 ---
 
