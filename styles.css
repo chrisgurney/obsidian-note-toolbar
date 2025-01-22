@@ -834,7 +834,7 @@ settings:
         step: 0.05
     -
         id: cg-nt-tbar-inactive-opacity-mobile
-        title: 'Inactive opacity on mobile'
+        title: 'Inactive opacity on mobile 📱'
         title.uk: 'Прозорість у неактивному режимі'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
@@ -862,6 +862,20 @@ settings:
         default: 5
         format: px
     -
+        id: cg-nt-tbar-bottom-padding-x-desktop
+        title: 'Left + Right toolbar padding on desktop (in px units)'
+        description: 'Spacing around the toolbar.'
+        type: variable-number
+        default: 32
+        format: px
+    -
+        id: cg-nt-tbar-bottom-padding-x-mobile
+        title: 'Left + Right toolbar padding on mobile (in px units) 📱'
+        description: 'Spacing around the toolbar.'
+        type: variable-number
+        default: 24
+        format: px
+    -
         id: cg-nt-tbar-bottom-pos-y
         title: 'Y position (in em units)'
         description: "Distance from bottom edge."
@@ -880,6 +894,8 @@ body {
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
+    --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
+    --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y: 4.25em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
@@ -1511,7 +1527,10 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         border-radius: var(--cg-nt-tbar-bottom-border-radius);
         bottom: var(--cg-nt-tbar-bottom-pos-y);
         position: absolute;
-        padding: 0 var(--file-margins);
+        padding: 0 var(--cg-nt-tbar-bottom-padding-x-desktop);
+        .is-mobile & {
+            padding: 0 var(--cg-nt-tbar-bottom-padding-x-mobile);
+        }
         z-index: var(--layer-status-bar);
     }
 

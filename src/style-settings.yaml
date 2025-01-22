@@ -830,7 +830,7 @@ settings:
         step: 0.05
     -
         id: cg-nt-tbar-inactive-opacity-mobile
-        title: 'Inactive opacity on mobile'
+        title: 'Inactive opacity on mobile 📱'
         title.uk: 'Прозорість у неактивному режимі'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
@@ -856,6 +856,20 @@ settings:
         description: 'How rounded the toolbar is. The higher the number the more rounded.'
         type: variable-number
         default: 5
+        format: px
+    -
+        id: cg-nt-tbar-bottom-padding-x-desktop
+        title: 'Left + Right toolbar padding on desktop (in px units)'
+        description: 'Spacing around the toolbar.'
+        type: variable-number
+        default: 32
+        format: px
+    -
+        id: cg-nt-tbar-bottom-padding-x-mobile
+        title: 'Left + Right toolbar padding on mobile (in px units) 📱'
+        description: 'Spacing around the toolbar.'
+        type: variable-number
+        default: 24
         format: px
     -
         id: cg-nt-tbar-bottom-pos-y
