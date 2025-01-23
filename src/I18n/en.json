@@ -78,6 +78,7 @@
     "command": {
         "name-focus": "Focus",
         "name-item-suggester": "Open quick tools",
+        "name-item-suggester-current": "Open quick tools (for current toolbar)",
         "name-toolbar-suggester": "Open quick toolbars",
         "name-copy-command-uri": "Copy URI for command",
         "name-copy-command-as-data-element": "Copy callout item for command",
