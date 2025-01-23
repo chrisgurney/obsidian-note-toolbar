@@ -28,6 +28,10 @@ Get to the Style section of settings for the active toolbar by right-clicking on
   - Added `modal` class to Suggester. _Thanks @FelipeRearden_
   - Updated class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
 
+## Fixes
+
+- Toolbars in split views are now updated on leaf change, if its config was updated.
+
 ## Changes
 
 - Updated Ukranian tranlations thanks to @laktiv
