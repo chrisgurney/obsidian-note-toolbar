@@ -17,6 +17,10 @@ By popular demand, there is now a _Bottom_ toolbar position, which floats the to
 
 Get to the Style section of settings for the active toolbar by right-clicking on it (or long-press on mobile) and select _Style..._
 
+### Command to access Quick Tools for the current toolbar
+
+Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to open a [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools) window that shows the items in the toolbar associated with the current note.
+
 ## Improvements 🚀
 
 - Floating buttons: Support for the `autohide` and `border` styles.
