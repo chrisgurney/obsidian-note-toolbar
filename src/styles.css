@@ -519,7 +519,6 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     visibility: hidden;
 }
 
-/* FAB styles adapted from: https://web.dev/articles/building/a-fab-component */
 .cg-note-toolbar-fab-container {
     bottom: var(--cg-nt-fab-pos-y-desktop);
     position: absolute;
