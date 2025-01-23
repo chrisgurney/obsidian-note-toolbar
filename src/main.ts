@@ -512,11 +512,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		// add the toolbar to the editor UI
 		switch(position) {
 			case PositionType.Bottom:
-				// on phone put the toolbar higher in the DOM so the edit toolbar doesn't push it up
-				let containerClass = Platform.isPhone ? '.app-container' : '.workspace-leaf.mod-active';
+				let containerClass = '.workspace-leaf.mod-active';
 				let activeLeafEl = activeDocument.querySelector(containerClass) as HTMLElement;
 				activeLeafEl
-					? activeLeafEl.insertAdjacentElement(Platform.isPhone ? 'beforeend' : 'afterbegin', embedBlock)
+					? activeLeafEl.insertAdjacentElement('afterbegin', embedBlock)
 					: debugLog(`🛑 renderToolbar(): Unable to find ${containerClass} to insert toolbar`);
 				// styling for bottom toolbar
 				let bottomStyles: string[] = [];
@@ -1758,9 +1757,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	getToolbarEl(): HTMLElement | null {
 		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
 		// if we didn't find one, check for a bottom toolbar
-		if (!existingToolbarEl && Platform.isPhone) {
-			existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container') as HTMLElement;
-		}
+		// if (!existingToolbarEl && Platform.isPhone) {
+		// 	existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container') as HTMLElement;
+		// }
 		// debugLog("getToolbarEl()", existingToolbarEl);
 		return existingToolbarEl;
 	}
@@ -1772,9 +1771,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	getToolbarListEl(): HTMLElement | null {
 		let itemsUl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
 		// if we didn't find the toolbar, check for a bottom toolbar
-		if (!itemsUl && Platform.isPhone) {
-			itemsUl = activeDocument.querySelector('.app-container .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
-		}
+		// if (!itemsUl && Platform.isPhone) {
+		// 	itemsUl = activeDocument.querySelector('.app-container .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
+		// }
 		return itemsUl;
 	}
 
@@ -1797,9 +1796,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	async removeActiveToolbar(): Promise<void> {
 		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
 		// if we didn't find one, check for a bottom toolbar
-		if (!existingToolbarEl && Platform.isPhone) {
-			existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container');
-		}
+		// if (!existingToolbarEl && Platform.isPhone) {
+		// 	existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container');
+		// }
 		// debugLog("removeActiveToolbar: existingToolbar: ", existingToolbarEl);
 		existingToolbarEl?.remove();
 	}
