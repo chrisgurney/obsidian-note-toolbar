@@ -694,6 +694,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				);
 
 		new Setting(containerEl)
+			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
+			.setDesc(t('setting.other.show-toolbar-in-file-menu.description'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showToolbarInFileMenu = value;
+					await this.plugin.settingsManager.save();
+					// TODO? force the re-rendering of the current toolbar to update the menu
+				});
+			});
+
+		new Setting(containerEl)
 			.setName(t('setting.other.show-edit-tbar.name'))
 			.setDesc(t('setting.other.show-edit-tbar.description'))
 			.addToggle((cb) => {
