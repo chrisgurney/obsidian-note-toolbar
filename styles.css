@@ -2646,3 +2646,8 @@ input[type="text"].note-toolbar-setting-error,
     flex-grow: 1;
 }
 
+.note-toolbar-ui-modal {
+    & .suggestion-item > p {
+        margin: 0;
+    }
+}

@@ -1,4 +1,4 @@
-import { App, FuzzyMatch, FuzzySuggestModal } from "obsidian";
+import { App, Component, FuzzyMatch, FuzzySuggestModal, MarkdownRenderer } from "obsidian";
 
 /**
  * Provides a SuggesterModal that can be accessed from the Note Toolbar API.
@@ -36,6 +36,11 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
         this.submitted = true;
         this.close();
         this.onChooseSuggestion(value, evt);
+    }
+
+    renderSuggestion(item: FuzzyMatch<T>, el: HTMLElement): void {
+        // renders text markdown, if provided (which could include Iconize icons, for example)
+        MarkdownRenderer.render(this.app, item.item as string, el, '', new Component());
     }
 
     getItemText(item: T): string {
