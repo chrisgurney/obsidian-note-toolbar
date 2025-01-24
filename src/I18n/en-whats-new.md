@@ -9,7 +9,7 @@ By popular demand, there is now a _Bottom_ toolbar position, which floats the to
 - Set the position using _right-click → Set position → Bottom_, or via the toolbar's settings.
 - Styling notes:
   - If the `border` style is enabled, the border surrounds the toolbar.
-  - Adjust position and border radius using [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
+  - Adjust distance from the bottom and border radius using [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
 
 **💬 Let me know how well it works for you** in the [discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/218), or use the [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
 
@@ -20,9 +20,11 @@ Get to the Style section of settings for the active toolbar by right-clicking on
 ### Command to access Quick Tools for the current toolbar
 
 Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to open a [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools) window that shows the items in the toolbar associated with the current note.
+> 💡 Tip: On mobile, consider adding this command to the editor toolbar: _Settings → Toolbar → scroll to the bottom of Manage toolbar options → Add global command_
 
 ## Improvements 🚀
 
+- New setting: _Show toolbar for the linked note in the File menu_, under _Note Toolbar Settings → Other_, which is defaulted to off. Allows you to selectively enable this feature, which was introduced in [`1.13`](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.13). _Thanks @Moyf and @FelipeRearden_
 - Floating buttons: Support for the `autohide` and `border` styles.
   - The border color defaults to the button's icon color, but can be overridden with [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
 - [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support):
