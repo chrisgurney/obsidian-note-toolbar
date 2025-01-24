@@ -3,6 +3,7 @@ import {App, ButtonComponent, Modal,
     TextAreaComponent,
     TextComponent,
 } from "obsidian";
+import { t } from "Settings/NoteToolbarSettings";
 
 /**
  * Adapted from Templater:
@@ -27,7 +28,7 @@ export class PromptModal extends Modal {
 
     onClose(): void {
         this.contentEl.empty();
-        if (!this.submitted) this.reject(new Error("Cancelled prompt"));
+        if (!this.submitted) this.reject(new Error(t('api.ui.error-cancelled')));
     }
 
     createForm(): void {
@@ -42,7 +43,7 @@ export class PromptModal extends Modal {
             buttonDiv.addClass('note-toolbar-ui-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
-            submitButton.setButtonText("Submit").onClick((evt: Event) => {
+            submitButton.setButtonText(t('api.ui.button-submit')).onClick((evt: Event) => {
                 this.resolveAndClose(evt);
             });
         } else {
@@ -51,7 +52,7 @@ export class PromptModal extends Modal {
 
         this.value = this.default_value ?? "";
         textInput.inputEl.addClass('note-toolbar-ui-input');
-        textInput.setPlaceholder("Type text here");
+        textInput.setPlaceholder(t('api.ui.prompt-placeholder'));
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));
         textInput.inputEl.focus();

@@ -1,4 +1,5 @@
 import { App, Component, FuzzyMatch, FuzzySuggestModal, MarkdownRenderer } from "obsidian";
+import { t } from "Settings/NoteToolbarSettings";
 
 /**
  * Provides a SuggesterModal that can be accessed from the Note Toolbar API.
@@ -15,7 +16,7 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
         app: App,
         private text_items: string[] | ((item: T) => string),
         private items: T[],
-        placeholder: string = '',
+        placeholder: string = t('api.ui.suggester-placeholder'),
         limit?: number
     ) {
         super(app);
@@ -29,7 +30,7 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     }
 
     onClose(): void {
-        if (!this.submitted) this.reject(new Error("Cancelled prompt"));
+        if (!this.submitted) this.reject(new Error(t('api.ui.error-cancelled')));
     }
 
     selectSuggestion(value: FuzzyMatch<T>, evt: MouseEvent | KeyboardEvent): void {
@@ -47,7 +48,7 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
         if (this.text_items instanceof Function) {
             return this.text_items(item);
         }
-        return (this.text_items[this.items.indexOf(item)] || "Undefined text item");
+        return (this.text_items[this.items.indexOf(item)] || t('api.ui.error-undefined'));
     }
 
     onChooseItem(item: T): void {

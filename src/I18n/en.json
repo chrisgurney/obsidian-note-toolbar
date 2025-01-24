@@ -75,6 +75,15 @@
             "query-note-not-open": "This query must be run from an open note."
         }
     },
+    "api": {
+        "ui": {
+            "button-submit": "Submit",
+            "error-cancelled": "Cancelled prompt",
+            "error-undefined": "Undefined item",
+            "prompt-placeholder": "Type text here",
+            "suggester-placeholder": "Select an option..."
+        }
+    },
     "command": {
         "name-focus": "Focus",
         "name-item-suggester": "Open quick tools",
