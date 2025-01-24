@@ -872,9 +872,16 @@ settings:
         default: 24
         format: px
     -
-        id: cg-nt-tbar-bottom-pos-y
-        title: 'Y position (in em units)'
+        id: cg-nt-tbar-bottom-pos-y-desktop
+        title: 'Y position on desktop (in em units)'
         description: "Distance from bottom edge."
         type: variable-number
         default: 4.25
+        format: em
+    -
+        id: cg-nt-tbar-bottom-pos-y-mobile
+        title: 'Y position on mobile (in em units) 📱'
+        description: "Distance from bottom edge."
+        type: variable-number
+        default: 0
         format: em
