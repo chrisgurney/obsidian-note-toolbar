@@ -33,6 +33,7 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 - Beta API UI components:
   - Added `modal` class to Suggester. _Thanks @FelipeRearden_
   - Updated class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
+  - Suggester options are now rendered as markdown, so they can include markdown and things like Iconize icons. _Thanks @FelipeRearden_
 
 ## Fixes
 
