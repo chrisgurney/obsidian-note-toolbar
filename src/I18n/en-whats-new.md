@@ -12,7 +12,7 @@ Styling notes:
 - If the `border` style is enabled, the border surrounds the toolbar.
 - Adjust distance from the bottom, left/right padding, and border radius using [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
 
-Known issues:
+Limitations / Known issues:
 1. Toolbars with breaks have a gap on the right side (equivalent to the size of the wrapped items).
 2. Bottom toolbars + Floating buttons: On mobile, the built-in toolbar disappearing makes it hard to use certain toolbar items (e.g., select text → bold).
     - As a bit of a workaround, consider adding the new `Note Toolbar: Open Quick Tools (for current toolbar)` to the editor toolbar: _Settings → Toolbar → scroll to the bottom of Manage toolbar options → Add global command_
