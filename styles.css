@@ -2655,4 +2655,9 @@ input[type="text"].note-toolbar-setting-error,
     & .suggestion-item > p {
         margin: 0;
     }
+    &[data-ntb-ui-mode="compact"] {
+        & .modal-close-button, .modal-header {
+            display: none;
+        }
+    }
 }

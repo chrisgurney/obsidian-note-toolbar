@@ -19,6 +19,7 @@ export class PromptModal extends Modal {
     constructor(app: App, private prompt_text: string, private default_value: string, private multi_line: boolean) {
         super(app);
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui-modal']);
+        if (!this.prompt_text) this.modalEl.setAttr('data-ntb-ui-mode', 'compact');
     }
 
     onOpen(): void {
