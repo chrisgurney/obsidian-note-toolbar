@@ -54,8 +54,8 @@ export class NoteToolbarApi {
         return async (
             prompt_text: string,
             multi_line = false,
-            placeholder: string,
-            default_value: string,
+            placeholder?: string,
+            default_value?: string,
         ): Promise<string | null> => {
 
             const prompt = new PromptModal(this.plugin.app, prompt_text, multi_line, placeholder, default_value);
