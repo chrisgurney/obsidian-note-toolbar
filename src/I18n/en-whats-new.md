@@ -23,11 +23,15 @@ Limitations / Known issues:
 
 Get to the Style section of settings for the active toolbar by right-clicking on it (or long-press on mobile) and select _Style..._
 
+<img src="https://github.com/user-attachments/assets/891db591-89b6-4fca-a76b-8bb10b820938" width="800"/>
+
 ### New command: Access Quick Tools for the current toolbar
 
 Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to open a [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools) window that shows the items in the toolbar associated with the current note.
 
 > 💡 Tip: On mobile, consider adding this command to the editor toolbar: _Settings → Toolbar → scroll to the bottom of Manage toolbar options → Add global command_
+
+<img src="https://github.com/user-attachments/assets/32423bd2-ee46-4d14-9c71-73435261c416" width="600"/>
 
 ## Improvements 🚀
 
