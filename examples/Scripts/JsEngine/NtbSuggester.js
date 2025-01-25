@@ -8,7 +8,17 @@
  * - Add the path to this JavaScript file.
  */
 
-const options = [":LiActivity: option 1 **bold**", ":LiHome: option 2 _italics_"];
-// (text_items: string[] | ((item: T) => string), items: T[], placeholder?: string, limit?: number) => Promise<T | null>;
-let option = await NoteToolbar.suggester((item) => item, options, "Select an option:");
-console.log(option, "selected");
+const keys = ["key1", "key2"];
+// mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered in the suggester
+const values = [":LiHome: value1", ":LiActivity: value2"];
+
+// suggester(text_items: string[] | ((item: T) => string), items?: T[], placeholder?: string, limit?: number)
+// all of these work:
+const selected1 = await NoteToolbar.suggester(values); // returns value of selection
+console.log(selected1);
+const selected2 = await NoteToolbar.suggester(values, keys); // returns key corresponding to selection
+console.log(selected2);
+const selected3 = await NoteToolbar.suggester(values, keys, "Placeholder"); // overrides placeholder text
+console.log(selected3);
+const selected4 = await NoteToolbar.suggester(values, null, "Placeholder"); // overrides placeholder text (without keys)
+console.log(selected4);
