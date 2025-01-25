@@ -6,10 +6,16 @@ What's new in Note Toolbar v1.17?
 
 By popular demand, there is now a _Bottom_ toolbar position, which floats the toolbar at the bottom of your note.
 
-- Set the position using _right-click → Set position → Bottom_, or via the toolbar's settings.
-- Styling notes:
-  - If the `border` style is enabled, the border surrounds the toolbar.
-  - Adjust distance from the bottom and border radius using [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
+Change to this position using _right-click → Set position → Bottom_, or via the toolbar's settings.
+
+Styling notes:
+- If the `border` style is enabled, the border surrounds the toolbar.
+- Adjust distance from the bottom, left/right padding, and border radius using [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
+
+Known issues:
+1. Toolbars with breaks have a gap on the right side (equivalent to the size of the wrapped items).
+2. Bottom toolbars + Floating buttons: On mobile, the built-in toolbar disappearing makes it hard to use certain toolbar items (e.g., select text → bold).
+    - As a bit of a workaround, consider adding the new `Note Toolbar: Open Quick Tools (for current toolbar)` to the editor toolbar: _Settings → Toolbar → scroll to the bottom of Manage toolbar options → Add global command_
 
 **💬 Let me know how well it works for you** in the [discussion thread](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/218), or use the [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform?usp=sf_link).
 
@@ -17,9 +23,10 @@ By popular demand, there is now a _Bottom_ toolbar position, which floats the to
 
 Get to the Style section of settings for the active toolbar by right-clicking on it (or long-press on mobile) and select _Style..._
 
-### Command to access Quick Tools for the current toolbar
+### New command: Access Quick Tools for the current toolbar
 
 Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to open a [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools) window that shows the items in the toolbar associated with the current note.
+
 > 💡 Tip: On mobile, consider adding this command to the editor toolbar: _Settings → Toolbar → scroll to the bottom of Manage toolbar options → Add global command_
 
 ## Improvements 🚀
