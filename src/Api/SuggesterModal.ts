@@ -21,18 +21,24 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     constructor(
         app: App,
         private text_items: string[] | ((item: T) => string),
-        private items: T[],
-        placeholder: string = t('api.ui.suggester-placeholder'),
+        private items?: T[],
+        private placeholder?: string,
         limit?: number
     ) {
         super(app);
-        this.setPlaceholder(placeholder);
+        this.setPlaceholder(this.placeholder ? this.placeholder : t('api.ui.suggester-placeholder'));
         this.modalEl.addClass("note-toolbar-ui-modal");
+        if (!items) {
+            if (Array.isArray(text_items)) {
+                // if text_items is a string array, convert it to T[] (if possible)
+                this.items = text_items as unknown as T[];
+            }
+        }
         limit && (this.limit = limit);
     }
 
     getItems(): T[] {
-        return this.items;
+        return this.items ? this.items : [];
     }
 
     onClose(): void {
@@ -48,7 +54,7 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     renderSuggestion(item: FuzzyMatch<T>, el: HTMLElement): void {
         if (typeof item.item === 'string') {
             // renders text markdown, if provided
-            MarkdownRenderer.render(this.app, item.item, el, '', new Component());
+            MarkdownRenderer.render(this.app, this.getItemText(item.item), el, '', new Component());
         }
         else {
             super.renderSuggestion(item, el);
@@ -59,7 +65,12 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
         if (this.text_items instanceof Function) {
             return this.text_items(item);
         }
-        return (this.text_items[this.items.indexOf(item)] || t('api.ui.error-undefined'));
+        if (this.items) {
+            return (this.text_items[this.items.indexOf(item)] || t('api.ui.error-undefined'));
+        }
+        else {
+            return t('api.ui.error-undefined');
+        }
     }
 
     onChooseItem(item: T): void {

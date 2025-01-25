@@ -9,7 +9,7 @@ export interface INoteToolbarApi<T> {
     testCallback: (buttonId: string, callback: Callback) => Promise<void>;
     clipboard: () => Promise<string | null>;
     prompt: (prompt_text: string, multiline?: boolean, placeholder?: string, default_value?: string) => Promise<string | null>;
-    suggester: (text_items: string[] | ((item: T) => string), items: T[], placeholder?: string, limit?: number) => Promise<T | null>;
+    suggester: (text_items: string[] | ((item: T) => string), items?: T[], placeholder?: string, limit?: number) => Promise<T | null>;
 }
 
 export class NoteToolbarApi {
@@ -86,7 +86,7 @@ export class NoteToolbarApi {
 
         return async <T>(
             text_items: string[] | ((item: T) => string),
-            items: T[],
+            items?: T[],
             placeholder = '',
             limit?: number
         ): Promise<T> => {
