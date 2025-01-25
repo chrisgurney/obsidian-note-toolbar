@@ -46,8 +46,13 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     }
 
     renderSuggestion(item: FuzzyMatch<T>, el: HTMLElement): void {
-        // renders text markdown, if provided (which could include Iconize icons, for example)
-        MarkdownRenderer.render(this.app, item.item as string, el, '', new Component());
+        if (typeof item.item === 'string') {
+            // renders text markdown, if provided
+            MarkdownRenderer.render(this.app, item.item, el, '', new Component());
+        }
+        else {
+            super.renderSuggestion(item, el);
+        }
     }
 
     getItemText(item: T): string {
