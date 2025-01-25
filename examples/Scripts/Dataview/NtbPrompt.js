@@ -9,6 +9,7 @@
  */
 
 (async () => {
-    const result = await NoteToolbar.prompt("Enter something:", null, false, false);
+    // (prompt_text: string, multiline?: boolean, placeholder?: string, default_value?: string) => Promise<string | null>;
+    const result = await NoteToolbar.prompt("Enter some text:", false, "Example: text", "Default value");
     console.log(result);
 })();

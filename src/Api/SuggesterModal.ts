@@ -12,6 +12,12 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     private reject: (reason?: Error) => void;
     private submitted = false;
 
+    /**
+     * @param text_items Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation.
+     * @param items Array containing the values of each item in the correct order.
+     * @param placeholder Placeholder string of the prompt.
+     * @param limit Limit the number of items rendered at once (useful to improve performance when displaying large lists).
+     */
     constructor(
         app: App,
         private text_items: string[] | ((item: T) => string),

@@ -16,14 +16,27 @@ export class PromptModal extends Modal {
     private submitted = false;
     private value: string;
 
-    constructor(app: App, private prompt_text: string, private default_value: string, private multi_line: boolean) {
+    /**
+     * @param prompt_text: Text placed above the input field.
+     * @param multi_line: If set to true, the input field will be a multiline textarea. Defaults to false.
+     * @param placeholder Placeholder string of the prompt.
+     * @param default_value: A default value for the input field.
+     * @returns The user's input.
+     */
+    constructor (
+        app: App,
+        private prompt_text: string = '',
+        private multi_line: boolean = false,
+        private placeholder: string = t('api.ui.prompt-placeholder'),
+        private default_value: string = ''
+    ) {
         super(app);
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui-modal']);
         if (!this.prompt_text) this.modalEl.setAttr('data-ntb-ui-mode', 'compact');
     }
 
     onOpen(): void {
-        this.titleEl.setText(this.prompt_text);
+        if (this.prompt_text) this.titleEl.setText(this.prompt_text);
         this.createForm();
     }
 
@@ -51,9 +64,9 @@ export class PromptModal extends Modal {
             textInput = new TextComponent(div);
         }
 
-        this.value = this.default_value ?? "";
+        this.value = this.default_value ?? '';
         textInput.inputEl.addClass('note-toolbar-ui-input');
-        textInput.setPlaceholder(t('api.ui.prompt-placeholder'));
+        textInput.setPlaceholder(this.placeholder);
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));
         textInput.inputEl.focus();

@@ -9,7 +9,8 @@
  */
 
 (async () => {
-    const options = ["option 1", "option 2"];
-    let option = await NoteToolbar.suggester((item) => item, options, true, "Select an option:");
+    const options = [":LiActivity: option 1 **bold**", ":LiHome: option 2 _italics_"];
+    // (text_items: string[] | ((item: T) => string), items: T[], placeholder?: string, limit?: number) => Promise<T | null>;
+    let option = await NoteToolbar.suggester((item) => item, options, "Select an option:");
     console.log(option, "selected");
 })();
