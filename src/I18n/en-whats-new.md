@@ -34,8 +34,11 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
   - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
   - Suggester: Added `modal` class. _Thanks @FelipeRearden_
   - Suggester: Options are now rendered as markdown, so they can include markdown and things like Iconize icons. _Thanks @FelipeRearden_
-  - Prompt: Now accepts an optional input placeholder text parameter. _Thanks @FelipeRearden_
-  - Prompt: Made function easier to use with optional params and more sensible defaults.
+  - Prompt: Now accepts an optional input placeholder text parameter: _Thanks @FelipeRearden_
+    - `suggester(text_items: string[] | ((item: T) => string), items: T[], placeholder?: string, limit?: number)`
+  - Prompt: Made function easier to use with optional params and more sensible defaults:
+    - `prompt(prompt_text: string, multiline?: boolean, placeholder?: string, default_value?: string)`
+  - Examples folder in repo has been updated to use the updated functions.
 
 ## Fixes
 
