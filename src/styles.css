@@ -14,7 +14,8 @@ body {
     --cg-nt-tbar-bottom-border-radius: 5px;
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
-    --cg-nt-tbar-bottom-pos-y: 4.25em;
+    --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
+    --cg-nt-tbar-bottom-pos-y-mobile: 0em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
     --cg-nt-fab-autohide-opacity: 0;
@@ -638,10 +639,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     &[data-tbar-position="bottom"] {
         background-color: unset; /* fixes issue with padding color; but when tbar not in focus it's transparent */
         border-radius: var(--cg-nt-tbar-bottom-border-radius);
-        bottom: var(--cg-nt-tbar-bottom-pos-y);
+        bottom: var(--cg-nt-tbar-bottom-pos-y-desktop);
         position: absolute;
         padding: 0 var(--cg-nt-tbar-bottom-padding-x-desktop);
         .is-mobile & {
+            bottom: var(--cg-nt-tbar-bottom-pos-y-mobile);
             padding: 0 var(--cg-nt-tbar-bottom-padding-x-mobile);
         }
         z-index: var(--layer-status-bar);
@@ -1738,7 +1740,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-ui-button-div {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: end;
     margin-top: 1rem;
 }
 
@@ -1755,3 +1757,18 @@ input[type="text"].note-toolbar-setting-error,
     flex-grow: 1;
 }
 
+.note-toolbar-ui-modal {
+    min-height: unset;
+    & .modal-header > .modal-title {
+        font-size: var(--font-ui-medium);
+        font-weight: var(--font-normal);
+    }
+    & .suggestion-item > p {
+        margin: 0;
+    }
+    &[data-ntb-ui-mode="compact"] {
+        & .modal-close-button, .modal-header {
+            display: none;
+        }
+    }
+}

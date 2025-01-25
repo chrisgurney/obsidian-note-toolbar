@@ -75,6 +75,15 @@
             "query-note-not-open": "This query must be run from an open note."
         }
     },
+    "api": {
+        "ui": {
+            "button-submit": "Submit",
+            "error-cancelled": "Cancelled prompt",
+            "error-undefined": "Undefined item",
+            "prompt-placeholder": "Type text here",
+            "suggester-placeholder": "Select an option..."
+        }
+    },
     "command": {
         "name-focus": "Focus",
         "name-item-suggester": "Open quick tools",
@@ -335,6 +344,10 @@
             "scripting": {
                 "name": "Scripting",
                 "description": "Adds item types for Dataview, JS Engine, and Templater, which must be installed and enabled."
+            },
+            "show-toolbar-in-file-menu": {
+                "name": "Show toolbar for the linked note in the File menu",
+                "description": "Adds an item to access the toolbar in the linked note from the File menu."
             },
             "show-edit-tbar": {
                 "name": "Show 'Edit toolbar' link in toolbar menus 📱",

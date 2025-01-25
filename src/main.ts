@@ -1127,25 +1127,27 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile for link that was clicked on
 	 */
 	fileMenuHandler = (menu: Menu, file: TFile) => {
-		// don't bother showing in the file menu for the active file
-		let activeFile = this.app.workspace.getActiveFile();
-		if (activeFile && file !== activeFile) {
-			let cache = this.app.metadataCache.getFileCache(file);
-			if (cache) {
-				let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
-				if (toolbar) {
-					// the submenu UI doesn't appear to work on mobile, render items in menu
-					if (Platform.isMobile) {
-						toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
-					}
-					else {
-						menu.addItem((item: MenuItem) => {
-							item
-								.setIcon(this.settings.icon)
-								.setTitle(toolbar ? toolbar.name : '');
-							let subMenu = item.setSubmenu() as Menu;
-							toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
-						});
+		if (this.settings.showToolbarInFileMenu) {
+			// don't bother showing in the file menu for the active file
+			let activeFile = this.app.workspace.getActiveFile();
+			if (activeFile && file !== activeFile) {
+				let cache = this.app.metadataCache.getFileCache(file);
+				if (cache) {
+					let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
+					if (toolbar) {
+						// the submenu UI doesn't appear to work on mobile, render items in menu
+						if (Platform.isMobile) {
+							toolbar ? this.renderMenuItems(menu, toolbar, file, 1) : undefined;
+						}
+						else {
+							menu.addItem((item: MenuItem) => {
+								item
+									.setIcon(this.settings.icon)
+									.setTitle(toolbar ? toolbar.name : '');
+								let subMenu = item.setSubmenu() as Menu;
+								toolbar ? this.renderMenuItems(subMenu, toolbar, file) : undefined;
+							});
+						}
 					}
 				}
 			}

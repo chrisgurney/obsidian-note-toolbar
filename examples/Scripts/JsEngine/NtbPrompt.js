@@ -8,5 +8,17 @@
  * - Add the path to this JavaScript file.
  */
 
-const result = await NoteToolbar.prompt("Enter something:", null, false, false);
-console.log(result);
+// (prompt_text: string, multiline?: boolean, placeholder?: string, default_value?: string) => Promise<string | null>;
+// all of these work:
+const result1 = await NoteToolbar.prompt();
+new Notice(result1);
+const result2 = await NoteToolbar.prompt("Enter some text:");
+new Notice(result2);
+const result3 = await NoteToolbar.prompt("", true);
+new Notice(result3);
+const result4 = await NoteToolbar.prompt("Enter lots of text:", true);
+new Notice(result4);
+const result5 = await NoteToolbar.prompt("Enter some text:", false, "Placeholder");
+new Notice(result5);
+const result6 = await NoteToolbar.prompt("Enter some text:", false, "Placeholder", "Default value");
+new Notice(result6);

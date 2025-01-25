@@ -9,7 +9,18 @@
  */
 
 (async () => {
-    const options = ["option 1", "option 2"];
-    let option = await NoteToolbar.suggester((item) => item, options, true, "Select an option:");
-    console.log(option, "selected");
+    const keys = ["key1", "key2"];
+    // mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered in the suggester
+    const values = [":LiHome: value1", ":LiActivity: value2"];
+    
+    // suggester(text_items: string[] | ((item: T) => string), items?: T[], placeholder?: string, limit?: number)
+    // all of these work:
+    const selected1 = await NoteToolbar.suggester(values); // returns value of selection
+    new Notice(selected1);
+    const selected2 = await NoteToolbar.suggester(values, null, "Placeholder"); // overrides placeholder text (without keys)
+    new Notice(selected2);
+    const selected3 = await NoteToolbar.suggester(values, keys); // returns key corresponding to selection
+    new Notice(selected3);
+    const selected4 = await NoteToolbar.suggester(values, keys, "Placeholder"); // overrides placeholder text
+    new Notice(selected4);
 })();
