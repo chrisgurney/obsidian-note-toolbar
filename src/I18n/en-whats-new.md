@@ -24,16 +24,18 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 
 ## Improvements 🚀
 
-- New setting: _Show toolbar for the linked note in the File menu_, under _Note Toolbar Settings → Other_, which is defaulted to off. Allows you to selectively enable this feature, which was introduced in [`1.13`](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.13). _Thanks @Moyf and @FelipeRearden_
+- New plugin setting: _Show toolbar for the linked note in the File menu_, under _Note Toolbar Settings → Other_, which is defaulted to off. Allows you to selectively enable this feature, which was introduced in [`1.13`](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.13). _Thanks @Moyf and @FelipeRearden_
 - Floating buttons: Support for the `autohide` and `border` styles.
   - The border color defaults to the button's icon color, but can be overridden with [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
 - [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support):
   - Override the `autohide` style opacity for toolbars and buttons separately.
   - Inactive opacity settings for mobile and desktop are now separate.
 - Beta API UI components:
-  - Added `modal` class to Suggester. _Thanks @FelipeRearden_
-  - Updated class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
-  - Suggester options are now rendered as markdown, so they can include markdown and things like Iconize icons. _Thanks @FelipeRearden_
+  - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
+  - Suggester: Added `modal` class. _Thanks @FelipeRearden_
+  - Suggester: Options are now rendered as markdown, so they can include markdown and things like Iconize icons. _Thanks @FelipeRearden_
+  - Prompt: Now accepts an optional input placeholder text parameter. _Thanks @FelipeRearden_
+  - Prompt: Made function easier to use with optional params and more sensible defaults.
 
 ## Fixes
 
