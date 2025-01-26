@@ -55,10 +55,10 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts
      */
     async suggester<T>(
-        text_items: string[] | ((item: T) => string), items?: T[], options?: NtbSuggesterOptions
+        values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions
     ): Promise<T> {
 
-        const suggester = new SuggesterModal(this.noteToolbar.app, text_items, items, options);
+        const suggester = new SuggesterModal(this.noteToolbar.app, values, keys, options);
 
         const promise = new Promise((resolve: (value: T) => void, reject: (reason?: Error) => void) => 
             suggester.openAndGetValue(resolve, reject)
