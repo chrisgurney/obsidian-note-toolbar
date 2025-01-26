@@ -8,17 +8,42 @@
  * - Add the path to this JavaScript file.
  */
 
-// (prompt_text: string, multiline?: boolean, placeholder?: string, default_value?: string) => Promise<string | null>;
-// all of these work:
+// https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#notetoolbarprompt
+
+// default (one-line) prompt with default placeholder message
 const result1 = await NoteToolbar.prompt();
 new Notice(result1);
-const result2 = await NoteToolbar.prompt("Enter some text:");
+
+// same as previous, with text above input field added
+const result2 = await NoteToolbar.prompt({
+    prompt_text: "Enter some text"
+});
 new Notice(result2);
-const result3 = await NoteToolbar.prompt("", true);
+
+// same as previous, with default placeholder text overridden 
+const result3 = await NoteToolbar.prompt({
+    prompt_text: "Enter some text",
+    placeholder: ""
+});
 new Notice(result3);
-const result4 = await NoteToolbar.prompt("Enter lots of text:", true);
+
+// default (one-line) prompt with message, overridden placeholder, and default value 
+const result4 = await NoteToolbar.prompt({
+    prompt_text: "Enter some text",
+    placeholder: "Placeholder",
+    default_value: "Default"
+});
 new Notice(result4);
-const result5 = await NoteToolbar.prompt("Enter some text:", false, "Placeholder");
+
+// multi-line prompt
+const result5 = await NoteToolbar.prompt({
+    multi_line: true
+});
 new Notice(result5);
-const result6 = await NoteToolbar.prompt("Enter some text:", false, "Placeholder", "Default value");
+
+// same as previous, but with text above input field (markdown is supported)
+const result6 = await NoteToolbar.prompt({
+    multi_line: true,
+    prompt_text: "Enter _lots_ of text:"
+});
 new Notice(result6);

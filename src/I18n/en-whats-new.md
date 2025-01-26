@@ -35,21 +35,41 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 
 ## Improvements 🚀
 
+### Beta API UI components improvements
+_Thanks @FelipeRearden for feedback_
+
+- Suggester (`values`) and Prompt text (`options.prompt_text`) is now rendered as markdown, so they can include markdown and things like Iconize icons.
+- Prompt: All options are now passed via an optional `options` object parameter, with defaults for each:
+  ```typescript
+  prompt(options?: {
+    prompt_text?: string,  // shown above the text field, rendered as markdown; default none
+    multi_line?: boolean,  // set true if text box should be larger; default false
+    placeholder?: string,  // text inside text field; defaults to message
+    default_value?: string // default value for text field; default none
+  })
+  ```
+- Suggester: Made function easier to use with optional `keys` (if not provided, returned value is the selected option), also via an optional `options` parameter:
+  ```typescript
+  suggester(
+      values: string[] | ((value: T) => string), // renamed from text_items; rendered as markdown
+      keys?: T[], // renamed from items; if not provided, values are returned on selection
+      options?: {
+        placeholder?: string, // shown in the input field; defaults to message
+        limit?: number        // how many options to show; defaults to no limit 
+      })
+  ```
+- Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
+- Suggester: Added `modal` class. _Thanks @FelipeRearden_
+- Examples folder in repo has been updated to use the updated functions.
+
+### Other improvements
+
 - New plugin setting: _Show toolbar for the linked note in the File menu_, under _Note Toolbar Settings → Other_, which is defaulted to off. Allows you to selectively enable this feature, which was introduced in [`1.13`](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.13). _Thanks @Moyf and @FelipeRearden_
 - Floating buttons: Support for the `autohide` and `border` styles.
   - The border color defaults to the button's icon color, but can be overridden with [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
 - [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support):
   - Override the `autohide` style opacity for toolbars and buttons separately.
   - Inactive opacity settings for mobile and desktop are now separate.
-- Beta API UI components:
-  - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
-  - Suggester: Added `modal` class. _Thanks @FelipeRearden_
-  - Suggester: Options are now rendered as markdown, so they can include markdown and things like Iconize icons. _Thanks @FelipeRearden_
-  - Prompt: Now accepts an optional input placeholder text parameter: _Thanks @FelipeRearden_
-    - `prompt(prompt_text: string, multiline?: boolean, placeholder?: string, default_value?: string)`
-  - Suggester: Made function easier to use with optional params and more sensible defaults:
-    - `suggester(text_items: string[] | ((item: T) => string), items?: T[], placeholder?: string, limit?: number)`
-  - Examples folder in repo has been updated to use the updated functions.
 
 ## Fixes
 
