@@ -1,5 +1,6 @@
 import { App, Component, FuzzyMatch, FuzzySuggestModal, MarkdownRenderer } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
+import { NtbSuggesterOptions } from "./INoteToolbarApi";
 
 /**
  * Provides a SuggesterModal that can be accessed from the Note Toolbar API.
@@ -8,8 +9,10 @@ import { t } from "Settings/NoteToolbarSettings";
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/SuggesterModal.ts
  */
 export class SuggesterModal<T> extends FuzzySuggestModal<T> {
+
     private resolve: (value: T) => void;
     private reject: (reason?: Error) => void;
+
     private submitted = false;
 
     /**
@@ -22,11 +25,17 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
         app: App,
         private text_items: string[] | ((item: T) => string),
         private items?: T[],
-        private placeholder?: string,
-        limit?: number
+        options?: NtbSuggesterOptions 
     ) {
+
         super(app);
-        this.setPlaceholder(this.placeholder ? this.placeholder : t('api.ui.suggester-placeholder'));
+
+        const { 
+            placeholder, 
+            limit 
+        } = options || {};
+
+        this.setPlaceholder(placeholder ? placeholder : t('api.ui.suggester-placeholder'));
         this.modalEl.addClass("note-toolbar-ui-modal");
         if (!items) {
             if (Array.isArray(text_items)) {
@@ -34,7 +43,9 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
                 this.items = text_items as unknown as T[];
             }
         }
+
         limit && (this.limit = limit);
+
     }
 
     getItems(): T[] {

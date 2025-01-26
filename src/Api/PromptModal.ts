@@ -1,9 +1,10 @@
-import {App, ButtonComponent, Modal,
+import {App, ButtonComponent, Component, MarkdownRenderer, Modal,
     Platform,
     TextAreaComponent,
     TextComponent,
 } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
+import { NtbPromptOptions } from "./INoteToolbarApi";
 
 /**
  * Adapted from Templater:
@@ -11,26 +12,41 @@ import { t } from "Settings/NoteToolbarSettings";
  */
 
 export class PromptModal extends Modal {
+
     private resolve: (value: string) => void;
     private reject: (reason?: Error) => void;
+
     private submitted = false;
     private value: string;
 
+    private prompt_text: string;
+    private multi_line: boolean;
+    private placeholder: string;
+    private default_value: string;
+
     /**
-     * @param prompt_text: Text placed above the input field.
-     * @param multi_line: If set to true, the input field will be a multiline textarea. Defaults to false.
-     * @param placeholder Placeholder string of the prompt.
-     * @param default_value: A default value for the input field.
+     * @param options.prompt_text: Text placed above the input field.
+     * @param options.multi_line: If set to true, the input field will be a multiline textarea. Defaults to false.
+     * @param options.placeholder Placeholder string of the prompt.
+     * @param options.default_value: A default value for the input field.
      * @returns The user's input.
      */
-    constructor (
-        app: App,
-        private prompt_text: string = '',
-        private multi_line: boolean = false,
-        private placeholder: string = t('api.ui.prompt-placeholder'),
-        private default_value: string = ''
-    ) {
+    constructor (app: App, private options?: NtbPromptOptions) {
+
         super(app);
+
+        const {
+            prompt_text = '',
+            multi_line = false,
+            placeholder = t('api.ui.prompt-placeholder'),
+            default_value = ''
+        } = this.options || {};
+
+        this.prompt_text = prompt_text;
+        this.multi_line = multi_line;
+        this.placeholder = placeholder;
+        this.default_value = default_value;
+
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui-modal']);
         if (!this.prompt_text) this.modalEl.setAttr('data-ntb-ui-mode', 'compact');
     }
