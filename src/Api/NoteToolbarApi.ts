@@ -9,9 +9,13 @@ export interface INoteToolbarApi<T> {
 
     testCallback: (buttonId: string, callback: Callback) => Promise<void>;
 
+    /**
+     * Gets the clipboard value. 
+     */
     clipboard: () => Promise<string | null>;
 
     /**
+     * Shows the prompt modal and waits for the user's input.
      * @param prompt_text: Text placed above the input field.
      * @param multi_line: If set to true, the input field will be a multiline textarea. Defaults to false.
      * @param placeholder Placeholder string of the prompt.
@@ -21,6 +25,7 @@ export interface INoteToolbarApi<T> {
     prompt: (prompt_text: string, multi_line?: boolean, placeholder?: string, default_value?: string) => Promise<string | null>;
 
     /**
+     * Shows a suggester modal and waits for the user's selection.
      * @param text_items Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation.
      * @param items Array containing the values of each item in the correct order.
      * @param placeholder Placeholder string of the prompt.
@@ -51,7 +56,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
-     * Generates a prompt modal.
+     * Shows the prompt modal and waits for the user's input. 
      * 
      * Adapted from Templater:
      * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts
@@ -76,7 +81,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     };
 
     /**
-     * Generates a suggester modal.
+     * Shows a suggester modal and waits for the user's selection. 
      * 
      * Adapted from Templater:
      * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts
