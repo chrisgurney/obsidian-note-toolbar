@@ -18,7 +18,7 @@ export interface INoteToolbarApi<T> {
      * @param default_value: A default value for the input field.
      * @returns The user's input.
      */
-    prompt: (prompt_text: string, multiline?: boolean, placeholder?: string, default_value?: string) => Promise<string | null>;
+    prompt: (prompt_text: string, multi_line?: boolean, placeholder?: string, default_value?: string) => Promise<string | null>;
 
     /**
      * @param text_items Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation.
@@ -28,7 +28,7 @@ export interface INoteToolbarApi<T> {
      * @returns The selected item.
      */
     suggester: (text_items: string[] | ((item: T) => string), items?: T[], placeholder?: string, limit?: number) => Promise<T | null>;
-    
+
 }
 
 export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
