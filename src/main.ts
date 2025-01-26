@@ -140,7 +140,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.app.workspace.trigger("parse-style-settings");
 
 			// make API available
-			this.api = new NoteToolbarApi(this).initialize();
+			this.api = new NoteToolbarApi(this);
 			(window["NoteToolbar"] = this.api) && this.register(() => delete window["NoteToolbar"]);
 
 			// register custom view: What's New
