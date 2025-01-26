@@ -1763,7 +1763,7 @@ input[type="text"].note-toolbar-setting-error,
         font-size: var(--font-ui-medium);
         font-weight: var(--font-normal);
     }
-    & .suggestion-item > p {
+    & .suggestion-item > p, .modal-title > p {
         margin: 0;
     }
     &[data-ntb-ui-mode="compact"] {

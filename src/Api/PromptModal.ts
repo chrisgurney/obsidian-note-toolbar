@@ -36,7 +36,9 @@ export class PromptModal extends Modal {
     }
 
     onOpen(): void {
-        if (this.prompt_text) this.titleEl.setText(this.prompt_text);
+        if (this.prompt_text) {
+            MarkdownRenderer.render(this.app, this.prompt_text, this.titleEl, "", new Component());
+        }
         this.createForm();
     }
 
