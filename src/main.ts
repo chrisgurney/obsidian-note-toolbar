@@ -332,7 +332,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
 		debugLog('===== METADATA-CHANGE ===== ', file.name);
 		const activeFile = this.app.workspace.getActiveFile();
-		if (activeFile === file) {
+		// if the active file is the one that changed,
+		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
+		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
 			const currentView: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
 			this.checkAndRenderToolbar(file, cache.frontmatter);
 		}
@@ -1874,7 +1876,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 		else {
-			debugLog("- no existing toolbar");
+			debugLog("⛔️ no existing toolbar");
 			toolbarRemoved = true;
 		}
 
