@@ -92,7 +92,7 @@ settings:
     -
         id: cg-nt-fab-icon-color
         title: 'Icon color on mobile 📱'
-        title.uk: "Колір іконки на мобільному 📱"
+        title.uk: "Колір іконок на мобільному 📱"
         title.de: 'Symbolfarbe am Handy 📱'
         title.zh: '移动端图标颜色 📱'
         type: variable-themed-color
@@ -479,7 +479,7 @@ settings:
     -
         id: cg-nt-menu-icon-color
         title: 'Icon color'
-        title.uk: "Колір іконки"
+        title.uk: "Колір іконок"
         title.de: 'Symbolfarbe'
         title.zh: '图标颜色'
         type: variable-themed-color
