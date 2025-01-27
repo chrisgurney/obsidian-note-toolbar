@@ -6,7 +6,8 @@ import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandsManager } from 'Commands/CommandsManager';
-import { INoteToolbarApi, NoteToolbarApi } from 'Api/NoteToolbarApi';
+import { NoteToolbarApi } from 'Api/NoteToolbarApi';
+import { INoteToolbarApi } from "Api/INoteToolbarApi";
 import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
 import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ProtocolManager } from 'Protocol/ProtocolManager';
@@ -140,7 +141,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.app.workspace.trigger("parse-style-settings");
 
 			// make API available
-			this.api = new NoteToolbarApi(this).initialize();
+			this.api = new NoteToolbarApi(this);
 			(window["NoteToolbar"] = this.api) && this.register(() => delete window["NoteToolbar"]);
 
 			// register custom view: What's New
@@ -332,7 +333,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
 		debugLog('===== METADATA-CHANGE ===== ', file.name);
 		const activeFile = this.app.workspace.getActiveFile();
-		if (activeFile === file) {
+		// if the active file is the one that changed,
+		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
+		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
 			const currentView: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
 			this.checkAndRenderToolbar(file, cache.frontmatter);
 		}
@@ -1874,7 +1877,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 		else {
-			debugLog("- no existing toolbar");
+			debugLog("⛔️ no existing toolbar");
 			toolbarRemoved = true;
 		}
 

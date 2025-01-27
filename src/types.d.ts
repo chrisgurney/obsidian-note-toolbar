@@ -1,4 +1,4 @@
-import { INoteToolbarApi } from "Api/NoteToolbarApi";
+import { INoteToolbarApi } from "Api/INoteToolbarApi";
 import NoteToolbar from "main";
 
 declare global {

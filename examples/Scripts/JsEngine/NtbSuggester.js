@@ -8,17 +8,31 @@
  * - Add the path to this JavaScript file.
  */
 
-const keys = ["key1", "key2"];
-// mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered in the suggester
-const values = [":LiHome: value1", ":LiActivity: value2"];
+// https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#notetoolbarsuggester
 
-// suggester(text_items: string[] | ((item: T) => string), items?: T[], placeholder?: string, limit?: number)
-// all of these work:
-const selected1 = await NoteToolbar.suggester(values); // returns value of selection
+// values are shown in the selector; optionally mix in Obsidian and 
+// plugin markdown (e.g., Iconize) to have it rendered
+const values = ["value `1`", "value `2`"];
+// keys are optional, but can be used to return a key corresponding to the selected value
+const keys = ["key1", "key2"];
+
+// returns value of selection
+const selected1 = await NoteToolbar.suggester(values);
 new Notice(selected1);
-const selected2 = await NoteToolbar.suggester(values, null, "Placeholder"); // overrides placeholder text (without keys)
+
+// same as previous, but also overrides the default placeholder text (note that keys = null)
+const selected2 = await NoteToolbar.suggester(values, null, {
+    placeholder: "Your placeholder"
+}); 
 new Notice(selected2);
-const selected3 = await NoteToolbar.suggester(values, keys); // returns key corresponding to selection
+
+// returns a key corresponding to the selected value
+const selected3 = await NoteToolbar.suggester(values, keys);
 new Notice(selected3);
-const selected4 = await NoteToolbar.suggester(values, keys, "Placeholder"); // overrides placeholder text
+
+// same as previous, but also overrides placeholder text, and adds a limit
+const selected4 = await NoteToolbar.suggester(values, keys, {
+    placeholder: "Your placeholder", 
+    limit: 1
+});
 new Notice(selected4);

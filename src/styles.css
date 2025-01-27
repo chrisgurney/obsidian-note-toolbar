@@ -1705,6 +1705,8 @@ input[type="text"].note-toolbar-setting-error,
     user-select: text;
     code {
         font-size: calc(var(--font-ui-small) + 1px);
+        overflow: scroll;
+        white-space: pre;
     }
     hr {
         border-top: 1px solid;
@@ -1763,7 +1765,7 @@ input[type="text"].note-toolbar-setting-error,
         font-size: var(--font-ui-medium);
         font-weight: var(--font-normal);
     }
-    & .suggestion-item > p {
+    & .suggestion-item > p, .modal-title > p {
         margin: 0;
     }
     &[data-ntb-ui-mode="compact"] {
