@@ -2651,6 +2651,11 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-ui-modal {
     min-height: unset;
+    &.prompt {
+        .is-mobile & {
+            height: unset;
+        }
+    }
     & .modal-header > .modal-title {
         font-size: var(--font-ui-medium);
         font-weight: var(--font-normal);
