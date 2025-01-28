@@ -74,13 +74,24 @@ export class PromptModal extends Modal {
         if (this.large) {
             textInput = new TextAreaComponent(div);
 
+            // listen for submit on enter with modifier key
+            this.plugin.registerDomEvent(
+                textInput.inputEl, 'keydown', (e: KeyboardEvent) => {
+                    if (e.key === 'enter') {
+                        const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+                        console.log('enter', modifierPressed);
+                        this.resolveAndClose(e);
+                    }
+                }
+            );
+
             // add submit button since enter needed for multiline input on mobile
             const buttonDiv = this.contentEl.createDiv();
             buttonDiv.addClass('note-toolbar-ui-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
-            submitButton.setButtonText(t('api.ui.button-submit')).onClick((evt: Event) => {
-                this.resolveAndClose(evt);
+            submitButton.setButtonText(t('api.ui.button-submit')).onClick((e: Event) => {
+                this.resolveAndClose(e);
             });
         } else {
             textInput = new TextComponent(div);
