@@ -2,10 +2,10 @@ import { Callback } from "./NoteToolbarApi";
 
 
 export interface NtbPromptOptions {
-    prompt_text: string;
-    multi_line?: boolean;
+    label?: string;
+    large?: boolean;
     placeholder?: string;
-    default_value?: string;
+    default?: string;
 }
 
 export interface NtbSuggesterOptions {
@@ -24,10 +24,10 @@ export interface INoteToolbarApi<T> {
 
     /**
      * Shows the prompt modal and waits for the user's input.
-     * @param options.prompt_text: Text placed above the input field.
-     * @param options.multi_line: If set to true, the input field will be a multiline textarea. Defaults to false.
+     * @param options.label: Text placed above the input field.
+     * @param options.large: If set to true, the input field will be a multiline textarea. Defaults to false.
      * @param options.placeholder Placeholder string of the prompt.
-     * @param options.default_value: A default value for the input field.
+     * @param options.default: A default value for the input field.
      * @returns The user's input.
      */
     prompt: (options?: NtbPromptOptions) => Promise<string | null>;
