@@ -63,17 +63,17 @@ _Thanks @FelipeRearden for feedback_
     label?: string,        // shown above the text field, rendered as markdown; default none
     large?: boolean,       // set true if text box should be larger; default false
     placeholder?: string,  // text inside text field; defaults to message
-  })
+  });
   ```
 - Suggester: Made function easier to use with optional `keys` (if not provided, returned value is the selected option), also via an optional `options` parameter:
   ```typescript
   let result = await suggester(
-      values: string[] | ((value: T) => string),  // renamed from text_items; rendered as markdown
-      keys?: T[],  // renamed from items; if not provided, values are returned on selection
-      options?: {
-        placeholder?: string,  // shown in the input field; defaults to message
-        limit?: number         // how many options to show; defaults to no limit 
-      })
+    values: string[] | ((value: T) => string),  // renamed from text_items; rendered as markdown
+    keys?: T[],  // renamed from items; if not provided, values are returned on selection
+    options?: {
+      placeholder?: string,  // shown in the input field; defaults to message
+      limit?: number         // how many options to show; defaults to no limit 
+    });
   ```
 - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
 - Suggester: Added `modal` class. _Thanks @FelipeRearden_
