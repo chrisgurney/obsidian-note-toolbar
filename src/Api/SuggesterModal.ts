@@ -17,10 +17,7 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     private submitted = false;
 
     /**
-     * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation.
-     * @param keys Array containing the values of each item in the correct order.
-     * @param placeholder Placeholder string of the prompt.
-     * @param limit Limit the number of items rendered at once (useful to improve performance when displaying large lists).
+     * @see INoteToolbarApi.suggester
      */
     constructor(
         private plugin: NoteToolbarPlugin,

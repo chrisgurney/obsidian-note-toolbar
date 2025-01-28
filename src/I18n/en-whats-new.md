@@ -57,22 +57,22 @@ _Thanks @FelipeRearden for feedback_
 
 - Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
 - Prompt: All options are now passed via an optional `options` object parameter, with defaults for each:
-  ```typescript
+  ```javascript
   let result = await prompt(options?: {
-    default?: string,      // default value for text field; default none
-    label?: string,        // shown above the text field, rendered as markdown; default none
-    large?: boolean,       // set true if text box should be larger; default false
-    placeholder?: string,  // text inside text field; defaults to message
+    default?: string,      // Optional default value for text field; if not provided, no default value is set
+    label?: string,        // Optional text shown above the text field, rendered as markdown; default none
+    large?: boolean,       // Set true if text box should be larger; if not provided, defaults to false
+    placeholder?: string,  // Optional text inside text field; defaults to preset message
   });
   ```
 - Suggester: Made function easier to use with optional `keys` (if not provided, returned value is the selected option), also via an optional `options` parameter:
-  ```typescript
+  ```javascript
   let result = await suggester(
-    values: string[] | ((value: T) => string),  // renamed from text_items; rendered as markdown
-    keys?: T[],  // renamed from items; if not provided, values are returned on selection
+    values: string[] | ((value: T) => string),  // Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown.
+    keys?: T[],  // Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection.
     options?: {
       placeholder?: string,  // shown in the input field; defaults to message
-      limit?: number         // how many options to show; defaults to no limit 
+      limit?: number         // Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). Defaults to no limit.
     });
   ```
 - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.

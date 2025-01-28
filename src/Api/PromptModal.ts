@@ -26,11 +26,7 @@ export class PromptModal extends Modal {
     private default: string;
 
     /**
-     * @param options.label: Text placed above the input field.
-     * @param options.large: If set to true, the input field will be a multiline textarea. Defaults to false.
-     * @param options.placeholder Placeholder string of the prompt.
-     * @param options.default: A default value for the input field.
-     * @returns The user's input.
+     * @see INoteToolbarApi.prompt
      */
     constructor(
         private plugin: NoteToolbarPlugin,
