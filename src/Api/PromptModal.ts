@@ -70,17 +70,6 @@ export class PromptModal extends Modal {
         if (this.large) {
             textInput = new TextAreaComponent(div);
 
-            // listen for submit on enter with modifier key
-            this.plugin.registerDomEvent(
-                textInput.inputEl, 'keydown', (e: KeyboardEvent) => {
-                    if (e.key === 'enter') {
-                        const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
-                        console.log('enter', modifierPressed);
-                        this.resolveAndClose(e);
-                    }
-                }
-            );
-
             // add submit button since enter needed for multiline input on mobile
             const buttonDiv = this.contentEl.createDiv();
             buttonDiv.addClass('note-toolbar-ui-button-div');
@@ -104,17 +93,20 @@ export class PromptModal extends Modal {
         );
     }
 
-    private enterCallback(evt: KeyboardEvent) {
+    private enterCallback(e: KeyboardEvent) {
         // fix for Korean inputs from Templater: https://github.com/SilentVoid13/Templater/issues/1284
-        if (evt.isComposing || evt.keyCode === 229) return;
+        if (e.isComposing || e.keyCode === 229) return;
 
         if (this.large) {
-            if (Platform.isDesktop && evt.key === "Enter" && !evt.shiftKey) {
-                this.resolveAndClose(evt);
+            const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+            console.log('enter', modifierPressed);
+            if (e.key === "Enter" && ((Platform.isDesktop && !e.shiftKey) || modifierPressed)) {
+                this.resolveAndClose(e);
             }
-        } else {
-            if (evt.key === "Enter") {
-                this.resolveAndClose(evt);
+        }
+        else {
+            if (e.key === "Enter") {
+                this.resolveAndClose(e);
             }
         }
     }
