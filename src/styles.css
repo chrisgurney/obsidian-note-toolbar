@@ -1704,7 +1704,7 @@ input[type="text"].note-toolbar-setting-error,
     line-height: var(--line-height-normal);
     margin-bottom: 2rem;
     user-select: text;
-    code {
+    pre > code {
         font-size: calc(var(--font-ui-small) + 1px);
         overflow: scroll;
         white-space: pre;
