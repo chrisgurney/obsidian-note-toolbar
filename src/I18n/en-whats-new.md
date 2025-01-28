@@ -55,24 +55,24 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 ## API Beta: Updates
 _Thanks @FelipeRearden for feedback_
 
-- Suggester (`values`) and Prompt text (`options.prompt_text`) is now rendered as markdown, so they can include markdown and things like Iconize icons.
+- Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
 - Prompt: All options are now passed via an optional `options` object parameter, with defaults for each:
   ```typescript
   let result = await prompt(options?: {
-    prompt_text?: string,  // shown above the text field, rendered as markdown; default none
-    multi_line?: boolean,  // set true if text box should be larger; default false
+    default?: string,      // default value for text field; default none
+    label?: string,        // shown above the text field, rendered as markdown; default none
+    large?: boolean,       // set true if text box should be larger; default false
     placeholder?: string,  // text inside text field; defaults to message
-    default_value?: string // default value for text field; default none
   })
   ```
 - Suggester: Made function easier to use with optional `keys` (if not provided, returned value is the selected option), also via an optional `options` parameter:
   ```typescript
   let result = await suggester(
-      values: string[] | ((value: T) => string), // renamed from text_items; rendered as markdown
-      keys?: T[], // renamed from items; if not provided, values are returned on selection
+      values: string[] | ((value: T) => string),  // renamed from text_items; rendered as markdown
+      keys?: T[],  // renamed from items; if not provided, values are returned on selection
       options?: {
-        placeholder?: string, // shown in the input field; defaults to message
-        limit?: number        // how many options to show; defaults to no limit 
+        placeholder?: string,  // shown in the input field; defaults to message
+        limit?: number         // how many options to show; defaults to no limit 
       })
   ```
 - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
