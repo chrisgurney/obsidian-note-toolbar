@@ -55,6 +55,7 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 ## API Beta: Updates
 _Thanks @FelipeRearden for feedback_
 
+- The API class name has been shortened from `NoteToolbar` to `ntb`.
 - Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
 - Prompt: All options are now passed via an optional `options` object parameter, with defaults for each:
   ```javascript
