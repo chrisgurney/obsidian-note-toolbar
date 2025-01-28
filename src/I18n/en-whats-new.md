@@ -76,6 +76,8 @@ _Thanks @FelipeRearden for feedback_
     });
   ```
 - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
+- Prompt: Reduced size of modal when using the simple prompt, including on mobile.
+- Prompt: When using the `large` option, a modifier key (e.g., `cmd`) and `enter` now submits.
 - Suggester: Added `modal` class. _Thanks @FelipeRearden_
 - Examples folder in repo has been updated to use the updated functions.
   - For Dataview: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbSuggester.js)
