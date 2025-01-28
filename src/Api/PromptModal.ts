@@ -5,6 +5,7 @@ import {App, ButtonComponent, Component, MarkdownRenderer, Modal,
 } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbPromptOptions } from "./INoteToolbarApi";
+import NoteToolbarPlugin from "main";
 
 /**
  * Adapted from Templater:
@@ -31,9 +32,12 @@ export class PromptModal extends Modal {
      * @param options.default: A default value for the input field.
      * @returns The user's input.
      */
-    constructor (app: App, private options?: NtbPromptOptions) {
+    constructor(
+        private plugin: NoteToolbarPlugin,
+        private options?: NtbPromptOptions
+    ) {
 
-        super(app);
+        super(plugin.app);
 
         const {
             label: prompt_text = '',
@@ -53,7 +57,7 @@ export class PromptModal extends Modal {
 
     onOpen(): void {
         if (this.label) {
-            MarkdownRenderer.render(this.app, this.label, this.titleEl, "", new Component());
+            MarkdownRenderer.render(this.plugin.app, this.label, this.titleEl, "", new Component());
         }
         this.createForm();
     }
