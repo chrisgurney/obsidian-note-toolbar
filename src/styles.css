@@ -1764,6 +1764,7 @@ input[type="text"].note-toolbar-setting-error,
     min-height: unset;
     &.prompt {
         .is-mobile & {
+            border-radius: var(--radius-l);
             height: unset;
         }
     }
