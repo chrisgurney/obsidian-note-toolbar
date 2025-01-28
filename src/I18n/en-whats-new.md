@@ -58,7 +58,7 @@ _Thanks @FelipeRearden for feedback_
 - Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
 - Prompt: All options are now passed via an optional `options` object parameter, with defaults for each:
   ```javascript
-  let result = await prompt(options?: {
+  let result = await ntb.prompt(options?: {
     default?: string,      // Optional default value for text field; if not provided, no default value is set
     label?: string,        // Optional text shown above the text field, rendered as markdown; default none
     large?: boolean,       // Set true if text box should be larger; if not provided, defaults to false
@@ -67,7 +67,7 @@ _Thanks @FelipeRearden for feedback_
   ```
 - Suggester: Made function easier to use with optional `keys` (if not provided, returned value is the selected option), also via an optional `options` parameter:
   ```javascript
-  let result = await suggester(
+  let result = await ntb.suggester(
     values: string[] | ((value: T) => string),  // Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown.
     keys?: T[],  // Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection.
     options?: {
