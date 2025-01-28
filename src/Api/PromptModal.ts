@@ -5,6 +5,7 @@ import {App, ButtonComponent, Component, MarkdownRenderer, Modal,
 } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbPromptOptions } from "./INoteToolbarApi";
+import NoteToolbarPlugin from "main";
 
 /**
  * Adapted from Templater:
@@ -19,41 +20,40 @@ export class PromptModal extends Modal {
     private submitted = false;
     private value: string;
 
-    private prompt_text: string;
-    private multi_line: boolean;
+    private label: string;
+    private large: boolean;
     private placeholder: string;
-    private default_value: string;
+    private default: string;
 
     /**
-     * @param options.prompt_text: Text placed above the input field.
-     * @param options.multi_line: If set to true, the input field will be a multiline textarea. Defaults to false.
-     * @param options.placeholder Placeholder string of the prompt.
-     * @param options.default_value: A default value for the input field.
-     * @returns The user's input.
+     * @see INoteToolbarApi.prompt
      */
-    constructor (app: App, private options?: NtbPromptOptions) {
+    constructor(
+        private plugin: NoteToolbarPlugin,
+        private options?: NtbPromptOptions
+    ) {
 
-        super(app);
+        super(plugin.app);
 
         const {
-            prompt_text = '',
-            multi_line = false,
+            label: prompt_text = '',
+            large: multi_line = false,
             placeholder = t('api.ui.prompt-placeholder'),
-            default_value = ''
+            default: default_value = ''
         } = this.options || {};
 
-        this.prompt_text = prompt_text;
-        this.multi_line = multi_line;
+        this.label = prompt_text;
+        this.large = multi_line;
         this.placeholder = placeholder;
-        this.default_value = default_value;
+        this.default = default_value;
 
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui-modal']);
-        if (!this.prompt_text) this.modalEl.setAttr('data-ntb-ui-mode', 'compact');
+        if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'compact');
     }
 
     onOpen(): void {
-        if (this.prompt_text) {
-            MarkdownRenderer.render(this.app, this.prompt_text, this.titleEl, "", new Component());
+        if (this.label) {
+            MarkdownRenderer.render(this.plugin.app, this.label, this.titleEl, "", new Component());
         }
         this.createForm();
     }
@@ -67,7 +67,7 @@ export class PromptModal extends Modal {
         const div = this.contentEl.createDiv();
         div.addClass('note-toolbar-ui-div');
         let textInput: TextComponent | TextAreaComponent;
-        if (this.multi_line) {
+        if (this.large) {
             textInput = new TextAreaComponent(div);
 
             // add submit button since enter needed for multiline input on mobile
@@ -75,14 +75,14 @@ export class PromptModal extends Modal {
             buttonDiv.addClass('note-toolbar-ui-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
-            submitButton.setButtonText(t('api.ui.button-submit')).onClick((evt: Event) => {
-                this.resolveAndClose(evt);
+            submitButton.setButtonText(t('api.ui.button-submit')).onClick((e: Event) => {
+                this.resolveAndClose(e);
             });
         } else {
             textInput = new TextComponent(div);
         }
 
-        this.value = this.default_value ?? '';
+        this.value = this.default ?? '';
         textInput.inputEl.addClass('note-toolbar-ui-input');
         textInput.setPlaceholder(this.placeholder);
         textInput.setValue(this.value);
@@ -93,17 +93,19 @@ export class PromptModal extends Modal {
         );
     }
 
-    private enterCallback(evt: KeyboardEvent) {
-        // Fix for Korean inputs https://github.com/SilentVoid13/Templater/issues/1284
-        if (evt.isComposing || evt.keyCode === 229) return;
+    private enterCallback(e: KeyboardEvent) {
+        // fix for Korean inputs from Templater: https://github.com/SilentVoid13/Templater/issues/1284
+        if (e.isComposing || e.keyCode === 229) return;
 
-        if (this.multi_line) {
-            if (Platform.isDesktop && evt.key === "Enter" && !evt.shiftKey) {
-                this.resolveAndClose(evt);
+        if (this.large) {
+            const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+            if (e.key === "Enter" && ((Platform.isDesktop && !e.shiftKey) || modifierPressed)) {
+                this.resolveAndClose(e);
             }
-        } else {
-            if (evt.key === "Enter") {
-                this.resolveAndClose(evt);
+        }
+        else {
+            if (e.key === "Enter") {
+                this.resolveAndClose(e);
             }
         }
     }

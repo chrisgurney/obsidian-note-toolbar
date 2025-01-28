@@ -17,21 +17,21 @@ const values = ["value `1`", "value `2`"];
 const keys = ["key1", "key2"];
 
 // returns value of selection
-const selected1 = await NoteToolbar.suggester(values);
+const selected1 = await ntb.suggester(values);
 new Notice(selected1);
 
 // same as previous, but also overrides the default placeholder text (note that keys = null)
-const selected2 = await NoteToolbar.suggester(values, null, {
+const selected2 = await ntb.suggester(values, null, {
     placeholder: "Your placeholder"
 }); 
 new Notice(selected2);
 
 // returns a key corresponding to the selected value
-const selected3 = await NoteToolbar.suggester(values, keys);
+const selected3 = await ntb.suggester(values, keys);
 new Notice(selected3);
 
 // same as previous, but also overrides placeholder text, and adds a limit
-const selected4 = await NoteToolbar.suggester(values, keys, {
+const selected4 = await ntb.suggester(values, keys, {
     placeholder: "Your placeholder", 
     limit: 1
 });

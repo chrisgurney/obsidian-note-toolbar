@@ -4,7 +4,7 @@ import NoteToolbar from "main";
 declare global {
     
     interface Window {
-        NoteToolbar?: INoteToolbarApi<any>;
+        ntb?: INoteToolbarApi<any>;
     }
 
     // provides access to Obsidian's translation framework

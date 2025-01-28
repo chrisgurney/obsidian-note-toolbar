@@ -31,7 +31,7 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 
 > 💡 Tip: On mobile, consider adding this command to the editor toolbar: _Settings → Toolbar → scroll to the bottom of Manage toolbar options → Add global command_
 
-<img src="https://github.com/user-attachments/assets/32423bd2-ee46-4d14-9c71-73435261c416" width="600"/>
+<img src="https://github.com/user-attachments/assets/6a801ce2-62a8-4930-a880-e1f36f5ee3b7" width="600"/>
 
 ## Improvements 🚀
 
@@ -55,27 +55,30 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 ## API Beta: Updates
 _Thanks @FelipeRearden for feedback_
 
-- Suggester (`values`) and Prompt text (`options.prompt_text`) is now rendered as markdown, so they can include markdown and things like Iconize icons.
+- The API class name has been shortened from `NoteToolbar` to `ntb`.
+- Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
 - Prompt: All options are now passed via an optional `options` object parameter, with defaults for each:
-  ```typescript
-  let result = await prompt(options?: {
-    prompt_text?: string,  // shown above the text field, rendered as markdown; default none
-    multi_line?: boolean,  // set true if text box should be larger; default false
-    placeholder?: string,  // text inside text field; defaults to message
-    default_value?: string // default value for text field; default none
-  })
+  ```javascript
+  let result = await ntb.prompt(options?: {
+    default?: string,      // Optional default value for text field; if not provided, no default value is set
+    label?: string,        // Optional text shown above the text field, rendered as markdown; default none
+    large?: boolean,       // Set true if text box should be larger; if not provided, defaults to false
+    placeholder?: string,  // Optional text inside text field; defaults to preset message
+  });
   ```
 - Suggester: Made function easier to use with optional `keys` (if not provided, returned value is the selected option), also via an optional `options` parameter:
-  ```typescript
-  let result = await suggester(
-      values: string[] | ((value: T) => string), // renamed from text_items; rendered as markdown
-      keys?: T[], // renamed from items; if not provided, values are returned on selection
-      options?: {
-        placeholder?: string, // shown in the input field; defaults to message
-        limit?: number        // how many options to show; defaults to no limit 
-      })
+  ```javascript
+  let result = await ntb.suggester(
+    values: string[] | ((value: T) => string),  // Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown.
+    keys?: T[],  // Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection.
+    options?: {
+      placeholder?: string,  // shown in the input field; defaults to message
+      limit?: number         // Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). Defaults to no limit.
+    });
   ```
 - Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
+- Prompt: Reduced size of modal when using the simple prompt, including on mobile.
+- Prompt: When using the `large` option, a modifier key (e.g., `cmd`) and `enter` now submits.
 - Suggester: Added `modal` class. _Thanks @FelipeRearden_
 - Examples folder in repo has been updated to use the updated functions.
   - For Dataview: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbSuggester.js)

@@ -904,7 +904,7 @@ body {
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
-    --cg-nt-tbar-bottom-pos-y-mobile: 0em;
+    --cg-nt-tbar-bottom-pos-y-mobile: 1em;
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
     --cg-nt-fab-autohide-opacity: 0;
@@ -1039,8 +1039,8 @@ body {
 .callout[data-callout="note-toolbar"] {
 
     background-color: var(--cg-nt-tbar-bg-color) !important;
-    
     border-radius: var(--cg-nt-tbar-border-radius);
+    border-style: none;
     padding: 0;
     padding-inline: var(--cg-nt-tbar-padding-inline);
     width: 100%;
@@ -1206,9 +1206,10 @@ body {
 
     &[data-callout-metadata*="border"] {
         border-bottom: solid 1px var(--cg-nt-tbar-border-color);
+        border-top: solid 1px var(--cg-nt-tbar-border-color);
         border-radius: 0;
-        [data-tbar-position="props"] & {
-            border-top: solid 1px var(--cg-nt-tbar-border-color);
+        [data-tbar-position="top"] & {
+            border-top: none;
         }
         [data-tbar-position="bottom"] & {
             border: solid 1px var(--cg-nt-tbar-border-color);
@@ -2592,7 +2593,7 @@ input[type="text"].note-toolbar-setting-error,
     line-height: var(--line-height-normal);
     margin-bottom: 2rem;
     user-select: text;
-    code {
+    pre > code {
         font-size: calc(var(--font-ui-small) + 1px);
         overflow: scroll;
         white-space: pre;
@@ -2650,6 +2651,12 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-ui-modal {
     min-height: unset;
+    &.prompt {
+        .is-mobile & {
+            border-radius: var(--radius-l);
+            height: unset;
+        }
+    }
     & .modal-header > .modal-title {
         font-size: var(--font-ui-medium);
         font-weight: var(--font-normal);

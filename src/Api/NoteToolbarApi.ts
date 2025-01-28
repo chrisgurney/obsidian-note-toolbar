@@ -8,10 +8,7 @@ export type Callback = (arg: string) => void;
 
 export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
-    private noteToolbar: NoteToolbarPlugin;
-
     constructor(private plugin: NoteToolbarPlugin) {
-        this.noteToolbar = plugin;
     }
 
     async testCallback(buttonId: string, callback: Callback) {
@@ -33,7 +30,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     async prompt(options?: NtbPromptOptions): Promise<string | null> {
 
-        const prompt = new PromptModal(this.plugin.app, options);
+        const prompt = new PromptModal(this.plugin, options);
 
         const promise = new Promise((resolve: (value: string) => void, reject: (reason?: Error) => void) => 
             prompt.openAndGetValue(resolve, reject)
@@ -58,7 +55,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions
     ): Promise<T> {
 
-        const suggester = new SuggesterModal(this.noteToolbar.app, values, keys, options);
+        const suggester = new SuggesterModal(this.plugin, values, keys, options);
 
         const promise = new Promise((resolve: (value: T) => void, reject: (reason?: Error) => void) => 
             suggester.openAndGetValue(resolve, reject)

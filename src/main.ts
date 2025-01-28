@@ -142,7 +142,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// make API available
 			this.api = new NoteToolbarApi(this);
-			(window["NoteToolbar"] = this.api) && this.register(() => delete window["NoteToolbar"]);
+			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
 
 			// register custom view: What's New
 			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));

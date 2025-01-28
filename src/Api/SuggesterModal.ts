@@ -1,6 +1,7 @@
 import { App, Component, FuzzyMatch, FuzzySuggestModal, MarkdownRenderer } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSuggesterOptions } from "./INoteToolbarApi";
+import NoteToolbarPlugin from "main";
 
 /**
  * Provides a SuggesterModal that can be accessed from the Note Toolbar API.
@@ -16,19 +17,16 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     private submitted = false;
 
     /**
-     * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation.
-     * @param keys Array containing the values of each item in the correct order.
-     * @param placeholder Placeholder string of the prompt.
-     * @param limit Limit the number of items rendered at once (useful to improve performance when displaying large lists).
+     * @see INoteToolbarApi.suggester
      */
     constructor(
-        app: App,
+        private plugin: NoteToolbarPlugin,
         private values: string[] | ((item: T) => string),
         private keys?: T[],
         options?: NtbSuggesterOptions 
     ) {
 
-        super(app);
+        super(plugin.app);
 
         const { 
             placeholder, 
@@ -65,7 +63,7 @@ export class SuggesterModal<T> extends FuzzySuggestModal<T> {
     renderSuggestion(item: FuzzyMatch<T>, el: HTMLElement): void {
         if (typeof item.item === 'string') {
             // renders text markdown, if provided
-            MarkdownRenderer.render(this.app, this.getItemText(item.item), el, '', new Component());
+            MarkdownRenderer.render(this.plugin.app, this.getItemText(item.item), el, '', new Component());
         }
         else {
             super.renderSuggestion(item, el);
