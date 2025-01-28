@@ -31,7 +31,7 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 
 > 💡 Tip: On mobile, consider adding this command to the editor toolbar: _Settings → Toolbar → scroll to the bottom of Manage toolbar options → Add global command_
 
-<img src="https://github.com/user-attachments/assets/32423bd2-ee46-4d14-9c71-73435261c416" width="600"/>
+<img src="https://github.com/user-attachments/assets/6a801ce2-62a8-4930-a880-e1f36f5ee3b7" width="600"/>
 
 ## Improvements 🚀
 
