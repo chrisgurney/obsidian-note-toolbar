@@ -99,7 +99,6 @@ export class PromptModal extends Modal {
 
         if (this.large) {
             const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
-            console.log('enter', modifierPressed);
             if (e.key === "Enter" && ((Platform.isDesktop && !e.shiftKey) || modifierPressed)) {
                 this.resolveAndClose(e);
             }
