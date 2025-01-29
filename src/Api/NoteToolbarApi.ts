@@ -11,9 +11,9 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     constructor(private plugin: NoteToolbarPlugin) {
     }
 
-    async testCallback(buttonId: string, callback: Callback) {
-        return await testCallback(this.plugin, buttonId, callback);
-    }
+    // async testCallback(buttonId: string, callback: Callback) {
+    //     return await testCallback(this.plugin, buttonId, callback);
+    // }
 
     /**
      * Gets the clipboard value. 
