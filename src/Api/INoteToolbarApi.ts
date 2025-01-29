@@ -10,7 +10,7 @@ export interface NtbPromptOptions {
      */
     label?: string;
     /**
-     * If set to true, the input field will be multi line. If not provided, defaults to false.
+     * If set to `true`, the input field will be multi line. If not provided, defaults to `false`.
      */
     large?: boolean;
     /**

@@ -35,7 +35,7 @@ Shows the prompt modal and waits for the user's input.
 | `options`? | \{ `default`: `string`; `label`: `string`; `large`: `boolean`; `placeholder`: `string`; \} | Optional display options. |
 | `options.default`? | `string` | Optional default value for text field. If not provided, no default value is set. |
 | `options.label`? | `string` | Optional text shown above the text field, rendered as markdown. Default is no label. |
-| `options.large`? | `boolean` | If set to true, the input field will be multi line. If not provided, defaults to false. |
+| `options.large`? | `boolean` | If set to `true`, the input field will be multi line. If not provided, defaults to `false`. |
 | `options.placeholder`? | `string` | Optional text inside text field. Defaults to a preset message. |
 
 #### Returns
