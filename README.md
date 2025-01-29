@@ -41,7 +41,8 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
 - [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, to quickly access all of your tools with [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools), to get command URIs and Note Toolbar Callout markdown, and to access toolbar settings. 
 - [Note Toolbar URIs](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) let you execute commands, focus on folders, open menus (within Note Toolbar Callouts), and open toolbar settings, from mostly anywhere within your notes
 - [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
-- Right-click toolbars to quickly change the position, or to access configuration
+- Right-click toolbars to quickly change the position, style, or to access configuration
+- The [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) which, to start, includes enhanced prompt and suggester UI that you can trigger from script items, including from Dataview and JavaScript.
 
 # Translations 🌐
 
