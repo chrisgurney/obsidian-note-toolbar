@@ -49,7 +49,9 @@ export interface INoteToolbarApi<T> {
      * Gets the clipboard value.
      * 
      * @example
-     * const clipboard = await ntb.clipboard();
+     * const value = await ntb.clipboard();
+     * 
+     * new Notice(value);
      */
     clipboard: () => Promise<string | null>;
 

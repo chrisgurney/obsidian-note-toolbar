@@ -23,7 +23,9 @@ Gets the clipboard value.
 #### Example
 
 ```ts
-const clipboard = await ntb.clipboard();
+const value = await ntb.clipboard();
+
+new Notice(value);
 ```
 
 ***
