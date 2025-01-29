@@ -8,7 +8,7 @@
  * - Add the path to this JavaScript file.
  */
 
-// https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#notetoolbarsuggester
+// https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#suggester
 
 // values are shown in the selector; optionally mix in Obsidian and 
 // plugin markdown (e.g., Iconize) to have it rendered

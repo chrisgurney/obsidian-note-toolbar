@@ -8,7 +8,7 @@
  * - Add the path to this JavaScript file.
  */
 
-// https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#notetoolbarprompt
+// https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#prompt
 
 // default (one-line) prompt with default placeholder message
 const result1 = await ntb.prompt();
