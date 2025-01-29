@@ -6,6 +6,7 @@ The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create cont
 
 **Jump to:**
 
+- [Features](#features)
 - [Installation](#installation)
 - [Getting Started](#getting-started-)
 - [Examples](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples)
@@ -44,7 +45,7 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
 - Right-click toolbars to quickly change the position, style, or to access configuration
 - The [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) which, to start, includes enhanced prompt and suggester UI that you can trigger from script items, including from Dataview and JavaScript.
 
-# Translations 🌐
+## Translations 🌐
 
 Note Toolbar is also available in:
 
