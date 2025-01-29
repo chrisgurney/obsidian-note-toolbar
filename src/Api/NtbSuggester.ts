@@ -4,12 +4,12 @@ import { NtbSuggesterOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";
 
 /**
- * Provides a SuggesterModal that can be accessed from the Note Toolbar API.
+ * Provides a Suggester modal that can be accessed from the Note Toolbar API.
  * 
  * Adapted from Templater:
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/SuggesterModal.ts
  */
-export class SuggesterModal<T> extends FuzzySuggestModal<T> {
+export class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     private resolve: (value: T) => void;
     private reject: (reason?: Error) => void;

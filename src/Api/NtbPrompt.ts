@@ -8,11 +8,12 @@ import { NtbPromptOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";
 
 /**
+ * Provides a prompt modal that can be accessed from the Note Toolbar API.
+ * 
  * Adapted from Templater:
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/PromptModal.ts
  */
-
-export class PromptModal extends Modal {
+export class NtbPrompt extends Modal {
 
     private resolve: (value: string) => void;
     private reject: (reason?: Error) => void;
