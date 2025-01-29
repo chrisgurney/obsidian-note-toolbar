@@ -1,7 +1,12 @@
 {
+    "disableSources": true,
     "entryFileName": "index",
     "flattenOutputFiles": true,
-    "outputFileStrategy": "modules",
+    "hideGroupHeadings": true,
+    "hidePageHeader": true,
+    "hidePageTitle": true,
+    "parametersFormat": "table",
+    "outputFileStrategy": "members",
     "plugin": ["typedoc-plugin-markdown"],
     "out": "./docs_api"
 }
