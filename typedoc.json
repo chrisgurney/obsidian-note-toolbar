@@ -1,0 +1,7 @@
+{
+    "entryFileName": "index",
+    "flattenOutputFiles": true,
+    "outputFileStrategy": "modules",
+    "plugin": ["typedoc-plugin-markdown"],
+    "out": "./docs_api"
+}
