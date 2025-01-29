@@ -67,7 +67,7 @@ export interface INoteToolbarApi<T> {
      * 
      * new Notice(result);
      * 
-     * @see [Script examples](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
+     * @see `NtbPrompt.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
     prompt: (options?: NtbPromptOptions) => Promise<string | null>;
 
@@ -94,7 +94,7 @@ export interface INoteToolbarApi<T> {
      * 
      * new Notice(result);
      * 
-     * @see [Script examples](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
+     * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
     suggester: (values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
 

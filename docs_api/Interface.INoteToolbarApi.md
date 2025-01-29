@@ -59,7 +59,7 @@ new Notice(result);
 
 #### See
 
-[Script examples](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
+`NtbPrompt.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
 
 ***
 
@@ -104,4 +104,4 @@ new Notice(result);
 
 #### See
 
-[Script examples](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts)
+`NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
