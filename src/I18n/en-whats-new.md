@@ -84,6 +84,8 @@ _Thanks @FelipeRearden for feedback and testing!_
   - For Dataview: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbSuggester.js)
   -   For JS Engine: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/JsEngine/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/JsEngine/NtbSuggester.js)
 
+See the [updated documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) in the User Guide to learn more.
+
 ---
 
 ## Previous releases
