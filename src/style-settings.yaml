@@ -901,5 +901,5 @@ settings:
         description: "Distance from bottom edge."
         description.uk: "Відстань від нижнього краю."
         type: variable-number
-        default: 0
+        default: 1
         format: em

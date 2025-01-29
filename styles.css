@@ -887,7 +887,7 @@ settings:
         title: 'Y position on mobile (in em units) 📱'
         description: "Distance from bottom edge."
         type: variable-number
-        default: 0
+        default: 1
         format: em
  */
 
@@ -1009,6 +1009,7 @@ body {
     }
 }
 
+.cm-embed-block[data-tbar-position="bottom"],
 .cm-embed-block[data-tbar-position="top"] {
     & .callout[data-callout="note-toolbar"] {
         max-width: var(--file-line-width);

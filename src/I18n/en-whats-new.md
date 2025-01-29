@@ -53,7 +53,8 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 ---
 
 ## API Beta: Updates
-_Thanks @FelipeRearden for feedback_
+
+_Thanks @FelipeRearden for feedback and testing!_
 
 - The API class name has been shortened from `NoteToolbar` to `ntb`.
 - Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
@@ -76,11 +77,10 @@ _Thanks @FelipeRearden for feedback_
       limit?: number         // Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). Defaults to no limit.
     });
   ```
-- Updated all CSS class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`.
 - Prompt: Reduced size of modal when using the simple prompt, including on mobile.
 - Prompt: When using the `large` option, a modifier key (e.g., `cmd`) and `enter` now submits.
-- Suggester: Added `modal` class. _Thanks @FelipeRearden_
-- Examples folder in repo has been updated to use the updated functions.
+- CSS: Updated all class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`; add `modal` class for Suggester. _Thanks @FelipeRearden_
+- Examples of the above in the repo have been updated:
   - For Dataview: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbSuggester.js)
   -   For JS Engine: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/JsEngine/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/JsEngine/NtbSuggester.js)
 
