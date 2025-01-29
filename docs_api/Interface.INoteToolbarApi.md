@@ -20,6 +20,12 @@ Gets the clipboard value.
 
 `Promise`\<`null` \| `string`\>
 
+#### Example
+
+```ts
+const clipboard = await ntb.clipboard();
+```
+
 ***
 
 ### prompt()
