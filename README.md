@@ -20,6 +20,8 @@ More options on mobile:
 
 # Features
 
+_🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
+
 Wondering what's new? See the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 
 Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Roadmap)
