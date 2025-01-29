@@ -120,6 +120,7 @@ body {
     }
 }
 
+.cm-embed-block[data-tbar-position="bottom"],
 .cm-embed-block[data-tbar-position="top"] {
     & .callout[data-callout="note-toolbar"] {
         max-width: var(--file-line-width);
