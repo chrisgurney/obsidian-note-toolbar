@@ -34,7 +34,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
         } = options || {};
 
         this.setPlaceholder(placeholder ? placeholder : t('api.ui.suggester-placeholder'));
-        this.modalEl.addClass("note-toolbar-ui-modal");
+        this.modalEl.addClass("note-toolbar-ui");
         if (!keys) {
             if (Array.isArray(values)) {
                 // if it's a string array, convert it to T[] (if possible)

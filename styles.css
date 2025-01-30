@@ -2630,27 +2630,7 @@ input[type="text"].note-toolbar-setting-error,
  * Components (Note Toolbar API)
  *************************************************************************/
 
-.note-toolbar-ui-button-div {
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    margin-top: 1rem;
-}
-
-.note-toolbar-ui-div {
-    display: flex;
-}
-
-.note-toolbar-ui-form {
-    display: flex;
-    flex-grow: 1;
-}
-
-.note-toolbar-ui-input {
-    flex-grow: 1;
-}
-
-.note-toolbar-ui-modal {
+ .note-toolbar-ui {
     min-height: unset;
     &.prompt {
         .is-mobile & {
@@ -2670,4 +2650,24 @@ input[type="text"].note-toolbar-setting-error,
             display: none;
         }
     }
+}
+
+.note-toolbar-ui-button-div {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-top: 1rem;
+}
+
+.note-toolbar-ui-div {
+    display: flex;
+}
+
+.note-toolbar-ui-form {
+    display: flex;
+    flex-grow: 1;
+}
+
+.note-toolbar-ui-input {
+    flex-grow: 1;
 }

@@ -48,7 +48,7 @@ export class NtbPrompt extends Modal {
         this.placeholder = placeholder;
         this.default = default_value;
 
-        this.modalEl.addClasses(['prompt', 'note-toolbar-ui-modal']);
+        this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
         if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'compact');
     }
 
