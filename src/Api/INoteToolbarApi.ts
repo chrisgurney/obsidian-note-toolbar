@@ -40,6 +40,8 @@ export interface NtbSuggesterOptions {
 
 /**
  * Defines the functions that can be accessed from scripts (Dataview, Templater, JavaScript via JS Engine) -- that are executed from Note Toolbar items -- using the `ntb` object.
+ * 
+ * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
  */
 export interface INoteToolbarApi<T> {
 
