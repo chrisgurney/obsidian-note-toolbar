@@ -76,9 +76,10 @@ export class NtbPrompt extends Modal {
             buttonDiv.addClass('note-toolbar-ui-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
-            submitButton.setButtonText(t('api.ui.button-submit')).onClick((e: Event) => {
-                this.resolveAndClose(e);
-            });
+            submitButton.setButtonText(t('api.ui.button-submit'));
+            this.plugin.registerDomEvent(submitButton.buttonEl, 'click', (e: Event) =>
+                this.resolveAndClose(e)
+            );
         } else {
             textInput = new TextComponent(div);
         }
@@ -89,7 +90,7 @@ export class NtbPrompt extends Modal {
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));
         textInput.inputEl.focus();
-        textInput.inputEl.addEventListener("keydown", (evt: KeyboardEvent) =>
+        this.plugin.registerDomEvent(textInput.inputEl, 'keydown', (evt: KeyboardEvent) =>
             this.enterCallback(evt)
         );
     }
