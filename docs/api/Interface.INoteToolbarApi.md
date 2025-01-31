@@ -75,6 +75,10 @@ else {
 }
 ```
 
+#### See
+
+`NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+
 ***
 
 ### prompt()

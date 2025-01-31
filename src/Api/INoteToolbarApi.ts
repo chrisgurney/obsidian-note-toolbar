@@ -95,6 +95,8 @@ export interface INoteToolbarApi<T> {
      * else {
      *   new Notice(`File not found: ${filename}`);
      * }
+     * 
+     * @see `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
     modal: (content: string | TFile, options?: NtbModalOptions) => Promise<void>;
 
