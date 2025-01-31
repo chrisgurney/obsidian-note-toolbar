@@ -76,6 +76,19 @@ export interface INoteToolbarApi<T> {
      * 
      * @param content Content to display in the modal, either as a string or a file within the vault.
      * @param options Optional display options.
+     * 
+     * @example
+     * // shows a modal with the content of a file
+     * const filename = "Welcome.md";
+     * const file = app.vault.getAbstractFileByPath(filename);
+     * if (file) {
+     *   await ntb.modal(file, {
+     *     title: `**${file.basename}**`
+     *   });
+     * }
+     * else {
+     *     new Notice(`File not found: ${filename}`);
+     * }
      */
     modal: (content: string | TFile, options?: NtbModalOptions) => Promise<void>;
 

@@ -52,6 +52,22 @@ Shows a modal with the provided content.
 
 `Promise`\<`void`\>
 
+#### Example
+
+```ts
+// shows a modal with the content of a file
+const filename = "Welcome.md";
+const file = app.vault.getAbstractFileByPath(filename);
+if (file) {
+  await ntb.modal(file, {
+    title: `**${file.basename}**`
+  });
+}
+else {
+    new Notice(`File not found: ${filename}`);
+}
+```
+
 ***
 
 ### prompt()
