@@ -2632,6 +2632,9 @@ input[type="text"].note-toolbar-setting-error,
 
  .note-toolbar-ui {
     min-height: unset;
+    & .modal-close-button {
+        z-index: 2; /* fix for modal title overlapping close button */
+    }
     &.prompt {
         .is-mobile & {
             border-radius: var(--radius-l);
