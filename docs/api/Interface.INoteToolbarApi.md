@@ -22,6 +22,8 @@ Gets the clipboard value.
 
 `Promise`\<`null` \| `string`\>
 
+The clipboard value or null.
+
 #### Example
 
 ```ts

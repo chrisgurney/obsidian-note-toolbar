@@ -23,10 +23,10 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
-     * Shows the prompt modal and waits for the user's input. 
+     * Shows the prompt modal and waits for the user's input.
      * 
-     * Adapted from Templater:
-     * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts
+     * @see INoteToolbarApi.prompt
+     * @see Adapted from [Templater](https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts)
      */
     async prompt(options?: NtbPromptOptions): Promise<string | null> {
 
@@ -48,8 +48,8 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     /**
      * Shows a suggester modal and waits for the user's selection. 
      * 
-     * Adapted from Templater:
-     * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts
+     * @see INoteToolbarApi.suggester
+     * @see Adapted from [Templater](https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts)
      */
     async suggester<T>(
         values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions

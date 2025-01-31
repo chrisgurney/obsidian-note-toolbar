@@ -50,6 +50,8 @@ export interface INoteToolbarApi<T> {
     /**
      * Gets the clipboard value.
      * 
+     * @returns The clipboard value or null.
+     * 
      * @example
      * const value = await ntb.clipboard();
      * 
@@ -61,7 +63,6 @@ export interface INoteToolbarApi<T> {
      * Shows the prompt modal and waits for the user's input.
      * 
      * @param options Optional display options.
-     * 
      * @returns The user's input.
      * 
      * @example
@@ -84,7 +85,6 @@ export interface INoteToolbarApi<T> {
      * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown.
      * @param keys Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection.
      * @param options Optional display options.
-     *  
      * @returns The selected value, or corresponding key if keys are provided.
      * 
      * @example
