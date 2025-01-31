@@ -22,11 +22,12 @@ Gets the clipboard value.
 
 `Promise`\<`null` \| `string`\>
 
-The clipboard value or null.
+The clipboard value or `null`.
 
 #### Example
 
 ```ts
+// gets the clipboard value
 const value = await ntb.clipboard();
 
 new Notice(value);

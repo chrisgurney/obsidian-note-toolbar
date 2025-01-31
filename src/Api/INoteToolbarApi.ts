@@ -62,9 +62,10 @@ export interface INoteToolbarApi<T> {
     /**
      * Gets the clipboard value.
      * 
-     * @returns The clipboard value or null.
+     * @returns The clipboard value or `null`.
      * 
      * @example
+     * // gets the clipboard value
      * const value = await ntb.clipboard();
      * 
      * new Notice(value);
