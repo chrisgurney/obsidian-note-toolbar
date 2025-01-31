@@ -2,7 +2,9 @@ import NoteToolbarPlugin from "main";
 import { testCallback } from "Api/TestCallback";
 import { NtbSuggester } from "./NtbSuggester";
 import { NtbPrompt } from "./NtbPrompt";
-import { INoteToolbarApi, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
+import { INoteToolbarApi, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
+import { NtbModal } from "./NtbModal";
+import { TFile } from "obsidian";
 
 export type Callback = (arg: string) => void;
 
@@ -20,6 +22,26 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     async clipboard(): Promise<string | null> {
         return await navigator.clipboard.readText();
+    }
+
+    /**
+     * Shows a modal containing the provided content.
+     * 
+     * @see INoteToolbarApi.modal
+     */
+    async modal(content: string | TFile, options?: NtbModalOptions): Promise<void> {
+        const modal = new NtbModal(this.plugin, content, options);
+        const promise = new Promise((resolve: (value: string) => void, reject: (reason?: Error) => void) => 
+            modal.openWithContent(resolve, reject)
+        );
+
+        try {
+            await promise;
+        }
+        catch (error) {
+            // do nothing
+            // TODO: throw error in future if option provided?
+        }
     }
 
     /**

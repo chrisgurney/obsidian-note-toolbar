@@ -34,6 +34,26 @@ new Notice(value);
 
 ***
 
+### modal()
+
+> **modal**: (`content`, `options`?) => `Promise`\<`void`\>
+
+Shows a modal with the provided content.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
+| `options`? | \{ `title`: `string`; \} | Optional display options. |
+| `options.title`? | `string` | Optional title for the modal, rendered as markdown. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
 ### prompt()
 
 > **prompt**: (`options`?) => `Promise`\<`null` \| `string`\>

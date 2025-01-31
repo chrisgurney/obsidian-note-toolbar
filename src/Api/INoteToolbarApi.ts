@@ -1,4 +1,16 @@
+import { TFile } from "obsidian";
 import { Callback } from "./NoteToolbarApi";
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbModalOptions {
+    /**
+     * Optional title for the modal, rendered as markdown.
+     */
+    title?: string;
+}
 
 /**
  * @inline
@@ -58,6 +70,14 @@ export interface INoteToolbarApi<T> {
      * new Notice(value);
      */
     clipboard: () => Promise<string | null>;
+
+    /**
+     * Shows a modal with the provided content.
+     * 
+     * @param content Content to display in the modal, either as a string or a file within the vault.
+     * @param options Optional display options.
+     */
+    modal: (content: string | TFile, options?: NtbModalOptions) => Promise<void>;
 
     /**
      * Shows the prompt modal and waits for the user's input.
