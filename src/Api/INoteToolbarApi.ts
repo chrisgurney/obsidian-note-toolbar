@@ -78,6 +78,10 @@ export interface INoteToolbarApi<T> {
      * @param options Optional display options.
      * 
      * @example
+     * // shows a modal with the provided string
+     * await ntb.modal("_Hello_ world!");
+     * 
+     * @example
      * // shows a modal with the content of a file
      * const filename = "Welcome.md";
      * const file = app.vault.getAbstractFileByPath(filename);
@@ -99,9 +103,16 @@ export interface INoteToolbarApi<T> {
      * @returns The user's input.
      * 
      * @example
-     * // default (one-line) prompt with message, overridden placeholder, and default value 
+     * // default (one-line) prompt with default placeholder message
+     * const result = await ntb.prompt();
+     * 
+     * new Notice(result);
+     * 
+     * @example
+     * // large prompt with message, overridden placeholder, and default value 
      * const result = await ntb.prompt({
      *   label: "Enter some text",
+     *   large: true,
      *   placeholder: "Placeholder",
      *   default: "Default"
      * });
@@ -121,13 +132,18 @@ export interface INoteToolbarApi<T> {
      * @returns The selected value, or corresponding key if keys are provided.
      * 
      * @example
-     * // values are shown in the selector; optionally mix in Obsidian 
-     * // and plugin markdown (e.g., Iconize) to have it rendered
+     * // values are shown in the selector; optionally mix in Obsidian and 
+     * // plugin markdown (e.g., Iconize) to have it rendered
      * const values = ["value `1`", "value `2`"];
-     * // keys are optional, but can be used to return a key corresponding to the selected value
+     * const selected = await ntb.suggester(values);
+     * 
+     * new Notice(selected1;
+     * 
+     * @example
+     * const values = ["value `1`", "value `2`"];
      * const keys = ["key1", "key2"];
      * 
-     * // returns a key corresponding to the selected value, overrides placeholder text
+     * // returns a key corresponding to the selected value, and overrides placeholder text
      * const result = await ntb.suggester(values, keys, {
      *   placeholder: "Pick something"
      * });

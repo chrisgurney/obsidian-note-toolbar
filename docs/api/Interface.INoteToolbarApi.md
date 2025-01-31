@@ -52,7 +52,12 @@ Shows a modal with the provided content.
 
 `Promise`\<`void`\>
 
-#### Example
+#### Examples
+
+```ts
+// shows a modal with the provided string
+await ntb.modal("_Hello_ world!");
+```
 
 ```ts
 // shows a modal with the content of a file
@@ -92,12 +97,20 @@ Shows the prompt modal and waits for the user's input.
 
 The user's input.
 
-#### Example
+#### Examples
 
 ```ts
-// default (one-line) prompt with message, overridden placeholder, and default value 
+// default (one-line) prompt with default placeholder message
+const result = await ntb.prompt();
+
+new Notice(result);
+```
+
+```ts
+// large prompt with message, overridden placeholder, and default value 
 const result = await ntb.prompt({
   label: "Enter some text",
+  large: true,
   placeholder: "Placeholder",
   default: "Default"
 });
@@ -133,16 +146,22 @@ Shows a suggester modal and waits for the user's selection.
 
 The selected value, or corresponding key if keys are provided.
 
-#### Example
+#### Examples
 
 ```ts
-// values are shown in the selector; optionally mix in Obsidian 
-// and plugin markdown (e.g., Iconize) to have it rendered
+// values are shown in the selector; optionally mix in Obsidian and 
+// plugin markdown (e.g., Iconize) to have it rendered
 const values = ["value `1`", "value `2`"];
-// keys are optional, but can be used to return a key corresponding to the selected value
+const selected = await ntb.suggester(values);
+
+new Notice(selected1;
+```
+
+```ts
+const values = ["value `1`", "value `2`"];
 const keys = ["key1", "key2"];
 
-// returns a key corresponding to the selected value, overrides placeholder text
+// returns a key corresponding to the selected value, and overrides placeholder text
 const result = await ntb.suggester(values, keys, {
   placeholder: "Pick something"
 });
