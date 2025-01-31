@@ -82,9 +82,10 @@ export interface INoteToolbarApi<T> {
      * await ntb.modal("_Hello_ world!");
      * 
      * @example
-     * // shows a modal with the content of a file
+     * // shows a modal with the rendered contents of a file
      * const filename = "Welcome.md";
      * const file = app.vault.getAbstractFileByPath(filename);
+     * 
      * if (file) {
      *   await ntb.modal(file, {
      *     title: `**${file.basename}**`
@@ -126,29 +127,29 @@ export interface INoteToolbarApi<T> {
     /**
      * Shows a suggester modal and waits for the user's selection.
      * 
-     * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown.
+     * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered
      * @param keys Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection.
      * @param options Optional display options.
      * @returns The selected value, or corresponding key if keys are provided.
      * 
      * @example
-     * // values are shown in the selector; optionally mix in Obsidian and 
-     * // plugin markdown (e.g., Iconize) to have it rendered
+     * // shows a suggester that returns the selected value 
      * const values = ["value `1`", "value `2`"];
-     * const selected = await ntb.suggester(values);
      * 
-     * new Notice(selected1;
+     * const selectedValue = await ntb.suggester(values);
+     * 
+     * new Notice(selectedValue);
      * 
      * @example
+     * // shows a suggester that returns a key corresponding to the selected value, and overrides placeholder text
      * const values = ["value `1`", "value `2`"];
      * const keys = ["key1", "key2"];
      * 
-     * // returns a key corresponding to the selected value, and overrides placeholder text
-     * const result = await ntb.suggester(values, keys, {
+     * const selectedKey = await ntb.suggester(values, keys, {
      *   placeholder: "Pick something"
      * });
      * 
-     * new Notice(result);
+     * new Notice(selectedKey);
      * 
      * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */

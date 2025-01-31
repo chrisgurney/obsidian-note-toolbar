@@ -60,9 +60,10 @@ await ntb.modal("_Hello_ world!");
 ```
 
 ```ts
-// shows a modal with the content of a file
+// shows a modal with the rendered contents of a file
 const filename = "Welcome.md";
 const file = app.vault.getAbstractFileByPath(filename);
+
 if (file) {
   await ntb.modal(file, {
     title: `**${file.basename}**`
@@ -134,7 +135,7 @@ Shows a suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown. |
+| `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys`? | `T`[] | Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection. |
 | `options`? | \{ `limit`: `number`; `placeholder`: `string`; \} | Optional display options. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
@@ -149,24 +150,24 @@ The selected value, or corresponding key if keys are provided.
 #### Examples
 
 ```ts
-// values are shown in the selector; optionally mix in Obsidian and 
-// plugin markdown (e.g., Iconize) to have it rendered
+// shows a suggester that returns the selected value 
 const values = ["value `1`", "value `2`"];
-const selected = await ntb.suggester(values);
 
-new Notice(selected1;
+const selectedValue = await ntb.suggester(values);
+
+new Notice(selectedValue);
 ```
 
 ```ts
+// shows a suggester that returns a key corresponding to the selected value, and overrides placeholder text
 const values = ["value `1`", "value `2`"];
 const keys = ["key1", "key2"];
 
-// returns a key corresponding to the selected value, and overrides placeholder text
-const result = await ntb.suggester(values, keys, {
+const selectedKey = await ntb.suggester(values, keys, {
   placeholder: "Pick something"
 });
 
-new Notice(result);
+new Notice(selectedKey);
 ```
 
 #### See
