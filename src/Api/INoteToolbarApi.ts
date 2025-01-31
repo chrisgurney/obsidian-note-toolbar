@@ -87,7 +87,7 @@ export interface INoteToolbarApi<T> {
      *   });
      * }
      * else {
-     *     new Notice(`File not found: ${filename}`);
+     *   new Notice(`File not found: ${filename}`);
      * }
      */
     modal: (content: string | TFile, options?: NtbModalOptions) => Promise<void>;

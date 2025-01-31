@@ -64,7 +64,7 @@ if (file) {
   });
 }
 else {
-    new Notice(`File not found: ${filename}`);
+  new Notice(`File not found: ${filename}`);
 }
 ```
 
