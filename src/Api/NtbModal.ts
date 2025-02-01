@@ -53,12 +53,12 @@ export class NtbModal extends Modal {
     async openWithContent(resolve: (value: string) => void, reject: (reason?: Error) => void): Promise<void> {
         let containerEl = this.contentEl.createEl('div', {cls: 'markdown-preview-view'});
         if (typeof this.content === 'string') {
-            MarkdownRenderer.render(this.plugin.app, this.content, containerEl, "", new Component());
+            await MarkdownRenderer.render(this.plugin.app, this.content, containerEl, "", new Component());
         } 
         else {
             try {
                 const fileContent = await this.app.vault.read(this.content);
-                MarkdownRenderer.render(this.plugin.app, fileContent, containerEl, "", new Component());
+                await MarkdownRenderer.render(this.plugin.app, fileContent, containerEl, "", new Component());
             }
             catch (error) {
                 new Notice(error);
@@ -71,6 +71,11 @@ export class NtbModal extends Modal {
                 if (target) this.plugin.app.workspace.openLinkText(target, '', true);
             });
         });
+
+        setTimeout(() => {
+            this.contentEl.focus();
+        }, 50);
+
         this.resolve = resolve;
         this.reject = reject;
         this.open();
