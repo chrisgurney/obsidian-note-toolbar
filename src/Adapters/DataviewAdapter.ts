@@ -193,11 +193,7 @@ export default class DataviewAdapter extends Adapter {
         containerEl = containerEl || createSpan();
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
-        if (!activeFile) {
-            displayScriptError(t('adapter.error.exec-note-not-open'));
-            return;
-        }
-        const activeFilePath = activeFile.path;
+        const activeFilePath = activeFile?.path || '';
 
         let viewFile = this.noteToolbar?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
@@ -218,7 +214,7 @@ export default class DataviewAdapter extends Adapter {
          component.load();
          try {
              containerEl.empty();
-             let dataviewLocalApi = this.adapterPlugin.localApi(activeFile.path, this.noteToolbar, containerEl);    
+             let dataviewLocalApi = this.adapterPlugin.localApi(activeFilePath, this.noteToolbar, containerEl);    
              // from dv.view: may directly render, in which case it will likely return undefined or null
              let result = await Promise.resolve(func(dataviewLocalApi, args));
              if (result && this.noteToolbar) {

@@ -64,7 +64,6 @@
             "args-parsing-error": "Не вдалося розібрати аргументи скрипта: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "⚠️ Помилка: Не вдалося знайти виноску note-toolbar-output у поточній нотатці з ID: {{id}}",
             "exec-failed": "Помилка виконання скрипта: {{filename}}",
-            "exec-note-not-open": "Цей скрипт повинен виконуватися з відкритої нотатки.",
             "expr-failed": "Не вдалося обчислити вираз: {{expression}}",
             "expr-note-not-open": "Цей вираз повинен виконуватися з відкритої нотатки.",
             "file-not-found": "Файл не знайдено: {{filename}}",
