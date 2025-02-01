@@ -2648,6 +2648,13 @@ input[type="text"].note-toolbar-setting-error,
     & .suggestion-item > p, .modal-title > p {
         margin: 0;
     }
+    & a.internal-link, a.external-link {
+        &:is(:focus-visible) {
+            border-radius: var(--input-radius);
+            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
+    }
     &[data-ntb-ui-mode*="noclose"] {
         & .modal-close-button {
             display: none;
