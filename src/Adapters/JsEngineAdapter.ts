@@ -142,16 +142,12 @@ export default class JsEngineAdapter extends Adapter {
         let resultEl = containerEl || createSpan();
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
-        if (!activeFile) {
-            displayScriptError(t('adapter.error.exec-note-not-open'));
-            return t('adapter.error.exec-note-not-open');
-        }
+        const activeFilePath = activeFile?.path ?? '';
 
         const component = new Component();
         component.load();
         try {
             containerEl?.empty();
-            const activeFilePath = activeFile?.path;
             const execution = await this.adapterApi.internal.executeFile(filename, {
                 container: resultEl,
                 component: this.noteToolbar,

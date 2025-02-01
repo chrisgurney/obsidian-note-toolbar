@@ -64,7 +64,6 @@
             "args-parsing-error": "Failed to parse arguments for script: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
             "exec-failed": "Failed to execute script: {{filename}}",
-            "exec-note-not-open": "This script must be executed from an open note.",
             "expr-failed": "Failed to evaluate expression: {{expression}}",
             "expr-note-not-open": "This expression must be executed from an open note.",
             "file-not-found": "File not found: {{filename}}",
@@ -204,6 +203,8 @@
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
+            "option-emptyview": "Empty view toolbar",
+            "option-emptyview-description": "Toolbar to display in the empty view.",
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property"

@@ -8,11 +8,12 @@ import { NtbPromptOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";
 
 /**
+ * Provides a prompt modal that can be accessed from the Note Toolbar API.
+ * 
  * Adapted from Templater:
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/PromptModal.ts
  */
-
-export class PromptModal extends Modal {
+export class NtbPrompt extends Modal {
 
     private resolve: (value: string) => void;
     private reject: (reason?: Error) => void;
@@ -47,8 +48,8 @@ export class PromptModal extends Modal {
         this.placeholder = placeholder;
         this.default = default_value;
 
-        this.modalEl.addClasses(['prompt', 'note-toolbar-ui-modal']);
-        if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'compact');
+        this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
+        if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'noclose-noheader');
     }
 
     onOpen(): void {
@@ -75,9 +76,10 @@ export class PromptModal extends Modal {
             buttonDiv.addClass('note-toolbar-ui-button-div');
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
-            submitButton.setButtonText(t('api.ui.button-submit')).onClick((e: Event) => {
-                this.resolveAndClose(e);
-            });
+            submitButton.setButtonText(t('api.ui.button-submit'));
+            this.plugin.registerDomEvent(submitButton.buttonEl, 'click', (e: Event) =>
+                this.resolveAndClose(e)
+            );
         } else {
             textInput = new TextComponent(div);
         }
@@ -88,7 +90,7 @@ export class PromptModal extends Modal {
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));
         textInput.inputEl.focus();
-        textInput.inputEl.addEventListener("keydown", (evt: KeyboardEvent) =>
+        this.plugin.registerDomEvent(textInput.inputEl, 'keydown', (evt: KeyboardEvent) =>
             this.enterCallback(evt)
         );
     }

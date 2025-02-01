@@ -4,6 +4,7 @@
 	"description": "TODO: Note Toolbar Description",
 	"main": "main.js",
 	"scripts": {
+		"apidocs": "typedoc src/Api/INoteToolbarApi.ts --readme none",
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
@@ -22,7 +23,9 @@
 		"obsidian": "latest",
 		"postcss": "^8.4.45",
 		"tslib": "2.4.0",
-		"typescript": "4.7.4"
+		"typedoc": "^0.27.6",
+		"typedoc-plugin-markdown": "^4.4.1",
+		"typescript": "^5.7.3"
 	},
 	"dependencies": {
 		"sortablejs": "^1.15.2"

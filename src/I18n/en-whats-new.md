@@ -38,7 +38,7 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 - New plugin setting: _Show toolbar for the linked note in the File menu_, under _Note Toolbar Settings → Other_, which is defaulted to off. Allows you to selectively enable this feature, which was introduced in [`1.13`](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.13). _Thanks @Moyf and @FelipeRearden_
 - Floating buttons: Support for the `autohide` and `border` styles.
   - The border color defaults to the button's icon color, but can be overridden with [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support).
-- [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support):
+- Additional [Style Settings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support):
   - Override the `autohide` style opacity for toolbars and buttons separately.
   - Inactive opacity settings for mobile and desktop are now separate.
 
@@ -56,8 +56,12 @@ Use the new `Note Toolbar: Open Quick Tools (for current toolbar)` command to op
 
 _Thanks @FelipeRearden for feedback and testing!_
 
-- The API class name has been shortened from `NoteToolbar` to `ntb`.
-- Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
+### New Features 🎉
+
+- Added `ntb.modal()`. See [`1.17.1`](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.17.1)
+
+### Improvements 🚀
+
 - Prompt: All options are now passed via an optional `options` object parameter, with defaults for each:
   ```javascript
   let result = await ntb.prompt(options?: {
@@ -77,12 +81,19 @@ _Thanks @FelipeRearden for feedback and testing!_
       limit?: number         // Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). Defaults to no limit.
     });
   ```
+- Suggester values and Prompt label (`options.label`) are now rendered as markdown, so they can include markdown and things like Iconize icons.
 - Prompt: Reduced size of modal when using the simple prompt, including on mobile.
 - Prompt: When using the `large` option, a modifier key (e.g., `cmd`) and `enter` now submits.
-- CSS: Updated all class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`; add `modal` class for Suggester. _Thanks @FelipeRearden_
+
+### Changes
+
+- The API class name has been shortened from `NoteToolbar` to `ntb`.
+- CSS: Updated all class names from `note-toolbar-comp-*` to `note-toolbar-ui-*`; add `-ui` class for Suggester. _Thanks @FelipeRearden_
 - Examples of the above in the repo have been updated:
   - For Dataview: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/Dataview/NtbSuggester.js)
   -   For JS Engine: [`NtbPrompt.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/JsEngine/NtbPrompt.js) and [`NtbSuggester.js`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/examples/Scripts/JsEngine/NtbSuggester.js)
+
+See the [updated documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) in the User Guide to learn more.
 
 ---
 

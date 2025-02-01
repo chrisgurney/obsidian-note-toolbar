@@ -1741,6 +1741,56 @@ input[type="text"].note-toolbar-setting-error,
  * Components (Note Toolbar API)
  *************************************************************************/
 
+ .note-toolbar-ui {
+    min-height: unset;
+    & .modal-close-button {
+        z-index: 2; /* fix for modal title overlapping close button */
+    }
+    &.prompt {
+        .is-mobile & {
+            border-radius: var(--radius-l);
+            height: unset;
+        }
+    }
+    & .modal-header > .modal-title {
+        font-size: var(--font-ui-medium);
+        font-weight: var(--font-normal);
+    }
+    & .suggestion-item > p, .modal-title > p {
+        margin: 0;
+    }
+    & a.internal-link, a.external-link {
+        &:is(:focus-visible) {
+            border-radius: var(--input-radius);
+            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
+    }
+    &[data-ntb-ui-mode*="noclose"] {
+        & .modal-close-button {
+            display: none;
+        }
+    }
+    &[data-ntb-ui-mode*="noheader"] {
+        & .modal-header {
+            display: none;
+        }
+    }
+    &[data-ntb-ui-type="modal"] {
+        & .modal-content {
+            overflow-y: auto;
+        }
+        & .modal-title > .markdown-preview-view > * {
+            margin: unset;
+        }
+        & .modal-header, .modal-content {
+            & .markdown-preview-view {
+                padding: unset;
+            }
+        }
+    }
+}
+
 .note-toolbar-ui-button-div {
     display: flex;
     flex-direction: column;
@@ -1759,26 +1809,4 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-ui-input {
     flex-grow: 1;
-}
-
-.note-toolbar-ui-modal {
-    min-height: unset;
-    &.prompt {
-        .is-mobile & {
-            border-radius: var(--radius-l);
-            height: unset;
-        }
-    }
-    & .modal-header > .modal-title {
-        font-size: var(--font-ui-medium);
-        font-weight: var(--font-normal);
-    }
-    & .suggestion-item > p, .modal-title > p {
-        margin: 0;
-    }
-    &[data-ntb-ui-mode="compact"] {
-        & .modal-close-button, .modal-header {
-            display: none;
-        }
-    }
 }
