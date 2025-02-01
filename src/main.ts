@@ -79,7 +79,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.updateActiveViewIds();
 			// TODO: for fix: initial rendering of toolbars across all views #94
 			// this.renderToolbarForLeaves();
-			this.renderToolbarForActiveFile();
+			this.renderActiveToolbar();
 
 			// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 			if (Platform.isPhone) {
@@ -265,7 +265,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
 					// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
 					this.updateActiveViewIds();
-					this.renderToolbarForActiveFile();
+					this.renderActiveToolbar();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
 			default:
@@ -320,7 +320,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (renderToolbar) {
 			// this.removeActiveToolbar();
 			// don't seem to need a delay before rendering for leaf changes
-			this.renderToolbarForActiveFile();
+			this.renderActiveToolbar();
 		}
 	}
 
@@ -459,6 +459,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
 		const viewMode = (currentView instanceof MarkdownView) ? currentView.getMode() : '';
+
 		if (!currentView) {
 			// render on canvas: disabled until granular mappings are in place
 			if (false) {
@@ -869,7 +870,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Creates the toolbar in the active file (assuming it needs one).
 	 */
-	async renderToolbarForActiveFile() {
+	async renderActiveToolbar() {
 		let activeFile = this.app.workspace.getActiveFile();
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
