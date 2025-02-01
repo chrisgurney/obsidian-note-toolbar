@@ -58,7 +58,7 @@ _Thanks @FelipeRearden for feedback and testing!_
 
 ### New Features 🎉
 
-- Added `ntb.modal()`. See ['1.17.1'](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.17.1)
+- Added `ntb.modal()`. See [`1.17.1`](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.17.1)
 
 ### Improvements 🚀
 
