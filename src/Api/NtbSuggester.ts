@@ -41,9 +41,11 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 this.keys = values as unknown as T[];
             }
         }
-
+        
         limit && (this.limit = limit);
-
+        
+        this.modalEl.addClass("note-toolbar-ui");
+        this.modalEl.setAttr('data-ntb-ui-type', 'suggester');
     }
 
     getItems(): T[] {
