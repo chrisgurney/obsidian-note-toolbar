@@ -72,9 +72,15 @@ export class NtbModal extends Modal {
             });
         });
 
+        this.contentEl.tabIndex = 1;
         setTimeout(() => {
             this.contentEl.focus();
         }, 50);
+
+        // TODO: try if above doesn't work
+        // this.plugin.registerDomEvent(this.contentEl, 'touchend', () => {
+        //     setTimeout(() => this.contentEl.focus(), 0);
+        // }, { once: true });
 
         this.resolve = resolve;
         this.reject = reject;
