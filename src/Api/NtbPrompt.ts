@@ -49,6 +49,7 @@ export class NtbPrompt extends Modal {
         this.default = default_value;
 
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
+        this.modalEl.setAttr('data-ntb-ui-type', 'prompt');
         if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'noclose-noheader');
     }
 

@@ -538,7 +538,7 @@ export class SettingsManager {
 		await this.plugin.saveData(this.plugin.settings);
 
 		await this.plugin.removeActiveToolbar();
-		await this.plugin.renderToolbarForActiveFile();
+		await this.plugin.renderActiveToolbar();
 
 		debugLog("SETTINGS SAVED: " + new Date().getTime());
 	}
