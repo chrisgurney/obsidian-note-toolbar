@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
 import { FrontMatterCache, Platform, TFile } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
@@ -20,7 +20,7 @@ export class SettingsManager {
 	public async addToolbar(toolbar: ToolbarSettings): Promise<void> {
 		this.plugin.settings.toolbars.push(toolbar);
 		this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
-		await this.save();	
+		await this.save();
 	}
 
 	/**
@@ -28,6 +28,7 @@ export class SettingsManager {
 	 * @param id UUID of the toolbar to remove.
 	 */
 	public deleteToolbar(id: string) {
+		this.plugin.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.plugin.settings.toolbars = this.plugin.settings.toolbars.filter(tbar => tbar.uuid !== id);
 	}
 
@@ -539,6 +540,8 @@ export class SettingsManager {
 
 		await this.plugin.removeActiveToolbar();
 		await this.plugin.renderActiveToolbar();
+
+		this.plugin.commands.updateToolbarCommands();
 
 		debugLog("SETTINGS SAVED: " + new Date().getTime());
 	}
