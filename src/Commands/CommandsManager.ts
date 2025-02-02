@@ -19,11 +19,12 @@ export class CommandsManager {
      * Adds commands to open each toolbar in a Quick Tools window.
      */
     updateToolbarCommands() {
-        this.plugin.settings.toolbars.forEach(toolbar => {
-            this.plugin.addCommand({ id: COMMAND_PREFIX_TBAR + toolbar.uuid, name: t('command.name-open-toolbar', {toolbar: toolbar.name}), icon: this.plugin.settings.icon, callback: async () => {
-                this.plugin.commands.openItemSuggester(toolbar.uuid);
-            }});
-        });
+        // TODO: enable in next beta
+        // this.plugin.settings.toolbars.forEach(toolbar => {
+        //     this.plugin.addCommand({ id: COMMAND_PREFIX_TBAR + toolbar.uuid, name: t('command.name-open-toolbar', {toolbar: toolbar.name}), icon: this.plugin.settings.icon, callback: async () => {
+        //         this.plugin.commands.openItemSuggester(toolbar.uuid);
+        //     }});
+        // });
     }
 
     /******************************************************************************
