@@ -1,4 +1,4 @@
-import { PositionType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_TBAR, PositionType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -14,6 +14,22 @@ export class CommandsManager {
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
     }
+
+    /**
+     * Adds commands to open each toolbar in a Quick Tools window.
+     */
+    updateToolbarCommands() {
+        // TODO: enable in next beta
+        // this.plugin.settings.toolbars.forEach(toolbar => {
+        //     this.plugin.addCommand({ id: COMMAND_PREFIX_TBAR + toolbar.uuid, name: t('command.name-open-toolbar', {toolbar: toolbar.name}), icon: this.plugin.settings.icon, callback: async () => {
+        //         this.plugin.commands.openItemSuggester(toolbar.uuid);
+        //     }});
+        // });
+    }
+
+    /******************************************************************************
+     COMMANDS
+    ******************************************************************************/
 
     /**
      * Sets the keyboard's focus on the first visible item in the toolbar.

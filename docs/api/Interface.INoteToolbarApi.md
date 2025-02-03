@@ -46,7 +46,8 @@ Shows a modal with the provided content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
-| `options`? | \{ `title`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `title`: `string`; \} | Optional display options. |
+| `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.title`? | `string` | Optional title for the modal, rendered as markdown. |
 
 #### Returns
@@ -91,7 +92,8 @@ Shows the prompt modal and waits for the user's input.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options`? | \{ `default`: `string`; `label`: `string`; `large`: `boolean`; `placeholder`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `default`: `string`; `label`: `string`; `large`: `boolean`; `placeholder`: `string`; \} | Optional display options. |
+| `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.default`? | `string` | Optional default value for text field. If not provided, no default value is set. |
 | `options.label`? | `string` | Optional text shown above the text field, rendered as markdown. Default is no label. |
 | `options.large`? | `boolean` | If set to `true`, the input field will be multi line. If not provided, defaults to `false`. |
@@ -142,7 +144,8 @@ Shows a suggester modal and waits for the user's selection.
 | ------ | ------ | ------ |
 | `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys`? | `T`[] | Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection. |
-| `options`? | \{ `limit`: `number`; `placeholder`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `limit`: `number`; `placeholder`: `string`; \} | Optional display options. |
+| `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder`? | `string` | Optional text inside text field; defaults to preset message. |
 

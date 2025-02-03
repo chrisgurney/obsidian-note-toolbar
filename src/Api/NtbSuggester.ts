@@ -15,6 +15,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private reject: (reason?: Error) => void;
 
     private submitted = false;
+    private class = '';
 
     /**
      * @see INoteToolbarApi.suggester
@@ -30,9 +31,11 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         const { 
             placeholder, 
-            limit 
+            limit,
+            class: css_classes = ''
         } = options || {};
 
+        this.class = css_classes;
         this.setPlaceholder(placeholder ? placeholder : t('api.ui.suggester-placeholder'));
         if (!keys) {
             if (Array.isArray(values)) {
@@ -44,6 +47,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
         limit && (this.limit = limit);
         
         this.modalEl.addClass("note-toolbar-ui");
+        this.class && this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'suggester');
     }
 

@@ -10,6 +10,10 @@ export interface NtbModalOptions {
      * Optional title for the modal, rendered as markdown.
      */
     title?: string;
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
 }
 
 /**
@@ -33,6 +37,10 @@ export interface NtbPromptOptions {
      * Optional default value for text field. If not provided, no default value is set.
      */
     default?: string;
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
 }
 
 /**
@@ -48,6 +56,10 @@ export interface NtbSuggesterOptions {
      * Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists).
      */
     limit?: number;
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
 }
 
 /**

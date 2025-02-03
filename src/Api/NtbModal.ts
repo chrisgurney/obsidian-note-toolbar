@@ -11,6 +11,7 @@ export class NtbModal extends Modal {
     private reject: (reason?: Error) => void;
 
     private title: string;
+    private class: string;
 
     /**
      * @see INoteToolbarApi.modal
@@ -24,10 +25,14 @@ export class NtbModal extends Modal {
 
         const {
             title: title = '',
+            class: css_classes = ''
         } = this.options || {};
 
         this.title = title;
+        this.class = css_classes;
+
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
+        this.class && this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'modal');
         if (!this.title) this.modalEl.setAttr('data-ntb-ui-mode', 'noheader');
     }

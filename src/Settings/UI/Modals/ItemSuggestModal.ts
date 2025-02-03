@@ -24,9 +24,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // this.parentEl = parentEl;
         this.plugin = plugin;
         this.activeFile = activeFile;
-        this.toolbarId = toolbarId;
 
-        this.setPlaceholder(t('setting.item-suggest-modal.placeholder'));
+        this.toolbarId = toolbarId;
+        let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
+
+        this.setPlaceholder(toolbar ? t('setting.item-suggest-modal.placeholder-toolbar', {toolbar: toolbar.name}) : t('setting.item-suggest-modal.placeholder'));
         let instructions = [];
         if (toolbarId) {
             instructions.push(

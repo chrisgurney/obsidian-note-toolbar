@@ -25,6 +25,7 @@ export class NtbPrompt extends Modal {
     private large: boolean;
     private placeholder: string;
     private default: string;
+    private class: string;
 
     /**
      * @see INoteToolbarApi.prompt
@@ -40,15 +41,18 @@ export class NtbPrompt extends Modal {
             label: prompt_text = '',
             large: multi_line = false,
             placeholder = t('api.ui.prompt-placeholder'),
-            default: default_value = ''
+            default: default_value = '',
+            class: css_classes = ''
         } = this.options || {};
 
         this.label = prompt_text;
         this.large = multi_line;
         this.placeholder = placeholder;
         this.default = default_value;
+        this.class = css_classes;
 
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
+        this.class && this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'prompt');
         if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'noclose-noheader');
     }
