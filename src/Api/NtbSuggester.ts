@@ -66,13 +66,8 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
     }
 
     renderSuggestion(item: FuzzyMatch<T>, el: HTMLElement): void {
-        if (typeof item.item === 'string') {
-            // renders text markdown, if provided
-            MarkdownRenderer.render(this.plugin.app, this.getItemText(item.item), el, '', new Component());
-        }
-        else {
-            super.renderSuggestion(item, el);
-        }
+        // renders text markdown, if provided
+        MarkdownRenderer.render(this.plugin.app, this.getItemText(item.item), el, '', new Component());
     }
 
     getItemText(item: T): string {
