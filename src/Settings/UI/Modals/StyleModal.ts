@@ -41,11 +41,12 @@ export default class StyleModal extends Modal {
         toolbarStyle.displayStyleSetting(this.contentEl);
 
 		// set initial keyboard focus on the relvant dropdown
-		setTimeout(() => {
-			const platform = Platform.isMobile ? 'mobile' : 'default';
-			let dropdown = this.contentEl.querySelector(`#${platform}-style-dropdown > select`) as HTMLElement;
-			dropdown.focus();
-		}, 50);
+		if (Platform.isDesktop) {
+			setTimeout(() => {
+				let dropdown = this.contentEl.querySelector(`#default-style-dropdown > select`) as HTMLElement;
+				dropdown.focus();
+			}, 50);
+		}
     }
 
 }

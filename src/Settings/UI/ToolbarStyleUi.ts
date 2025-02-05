@@ -159,7 +159,6 @@ export default class ToolbarStyleUi {
                         this.parent.display();
                     })
         );
-        mobileStyleDropdown.controlEl.id = 'mobile-style-dropdown';
 
         const mobileDesc = document.createDocumentFragment();
         mobileDesc.append(t('setting.styles.option-mobile-description'));
