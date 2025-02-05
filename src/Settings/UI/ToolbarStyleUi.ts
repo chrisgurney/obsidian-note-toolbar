@@ -72,7 +72,7 @@ export default class ToolbarStyleUi {
             })
             .reduce((acc, option) => ({ ...acc, ...option }), {});
 
-        new Setting(defaultStyleDiv)
+        let defaultStyleDropdown = new Setting(defaultStyleDiv)
             .addDropdown((dropdown) =>
                 dropdown
                     .addOptions(defaultStyleOptions)
@@ -89,6 +89,7 @@ export default class ToolbarStyleUi {
                         this.parent.display();
                     })
         );
+        defaultStyleDropdown.controlEl.id = 'default-style-dropdown';
 
         const defaultDesc = document.createDocumentFragment();
         defaultDesc.append(t('setting.styles.option-default-description'));
@@ -141,7 +142,7 @@ export default class ToolbarStyleUi {
             })
             .reduce((acc, option) => ({ ...acc, ...option }), {});
 
-        new Setting(mobileStyleDiv)
+        let mobileStyleDropdown = new Setting(mobileStyleDiv)
             .addDropdown((dropdown) =>
                 dropdown
                     .addOptions(mobileStyleOptions)
@@ -158,6 +159,7 @@ export default class ToolbarStyleUi {
                         this.parent.display();
                     })
         );
+        mobileStyleDropdown.controlEl.id = 'mobile-style-dropdown';
 
         const mobileDesc = document.createDocumentFragment();
         mobileDesc.append(t('setting.styles.option-mobile-description'));
