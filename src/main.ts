@@ -236,6 +236,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	layoutChangeListener = () => {
 		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+		// show empty view toolbar
+		if (!currentView) {
+			this.renderActiveToolbar();
+			return;
+		}
+
 		const viewMode = currentView?.getMode();
 		
 		// if we're in a popover, do nothing
@@ -307,15 +314,17 @@ export default class NoteToolbarPlugin extends Plugin {
 			renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
 		}
 		else {
-			// render on canvas: disabled until granular mappings are in place
-			if (false) {
-				currentView = this.app.workspace.getActiveViewOfType(ItemView);
-				if (isViewCanvas(currentView)) {
+			currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			const currentViewType = currentView?.containerEl.getAttribute('data-type');
+			switch (currentViewType) {
+				case 'canvas':
+					// TODO: add canvas support in future (when granular mappings are in place)
+					break;
+				case 'empty':
 					renderToolbar = true;
-				}
-				else {
+					break;
+				default:
 					return;
-				}
 			}
 		}
 
@@ -449,7 +458,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar ToolbarSettings
 	 * @param file TFile for the note that the toolbar is being rendered for
 	 */
-	async renderToolbar(toolbar: ToolbarSettings, file: TFile): Promise<void> {
+	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null): Promise<void> {
 
 		// debugLog("renderToolbar()", toolbar);
 
@@ -463,16 +472,18 @@ export default class NoteToolbarPlugin extends Plugin {
 		const viewMode = (currentView instanceof MarkdownView) ? currentView.getMode() : '';
 
 		if (!currentView) {
-			// render on canvas: disabled until granular mappings are in place
-			if (false) {
-				currentView = this.app.workspace.getActiveViewOfType(ItemView);
-				if (isViewCanvas(currentView)) {
-					// it's a canvas: move to 'top' if the position is set to 'props'
-					position === 'props' ? position = 'top' : undefined;
-				}
-				else {
+			currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			const currentViewType = currentView?.containerEl.getAttribute('data-type');
+			switch (currentViewType) {
+				case 'canvas':
+					// TODO: it's a canvas: move to 'top' if the position is set to 'props'
+					// position === 'props' ? position = 'top' : undefined;
+					break;
+				case 'empty':
+					position = 'bottom';
+					break;
+				default:
 					return;
-				}
 			}
 		}
 
@@ -577,7 +588,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile of the note to render the toolbar for
 	 * @returns HTMLElement cg-note-toolbar-callout
 	 */
-	async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile): Promise<HTMLElement> {
+	async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile | null): Promise<HTMLElement> {
 
 		/* create the unordered list of menu items */
 		let noteToolbarUl = activeDocument.createElement("ul");
@@ -615,7 +626,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile, recursions: number = 0): Promise<HTMLLIElement[]> {
+	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0): Promise<HTMLLIElement[]> {
 
 		if (recursions >= 2) {
 			return []; // stop recursion
@@ -719,7 +730,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile to render the toolbar within (for context to resolve variables and expressions)
 	 * @returns string array of labels with resolved values 
 	 */
-	async resolveLabels(toolbar: ToolbarSettings, file: TFile): Promise<string[]> {
+	async resolveLabels(toolbar: ToolbarSettings, file: TFile | null): Promise<string[]> {
 		let resolvedLabels: string[] = [];
 		for (const item of toolbar.items) {
 			const resolvedLabel = await this.replaceVars(item.label, file);
@@ -870,14 +881,25 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Creates the toolbar in the active file (assuming it needs one).
+	 * Creates the toolbar in the active file/view, assuming it needs one.
 	 */
 	async renderActiveToolbar() {
 		let activeFile = this.app.workspace.getActiveFile();
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			this.checkAndRenderToolbar(activeFile, frontmatter);
-		}	
+		}
+		else {
+			if (this.settings.emptyViewToolbar) {
+				// TODO: remove existing toolbar, if there is one?
+				let toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				if (toolbar) {
+					await this.renderToolbar(toolbar, null);
+					// TODO?
+					// await this.updateToolbar(emptyToolbar, file);
+				}
+			}
+		}
 	}
 
 	// TODO: for fix: initial rendering of toolbars across all views #94
