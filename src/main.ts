@@ -476,11 +476,12 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
-					// TODO: it's a canvas: move to 'top' if the position is set to 'props'
+					// move to 'top' if the position is set to 'props'
 					// position === 'props' ? position = 'top' : undefined;
 					break;
 				case 'empty':
-					position = 'bottom';
+					// move to 'top' if the position is set to 'props'
+					position === 'props' ? position = 'top' : undefined;
 					break;
 				default:
 					return;
