@@ -197,6 +197,7 @@ export interface ToolbarSettings {
 	uuid: string;
 	customClasses: string;
 	defaultStyles: string[];
+	hasCommand: boolean;
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
 	name: string;
@@ -213,6 +214,7 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	uuid: getUUID(),
 	customClasses: "",
 	defaultStyles: [DefaultStyleType.Border, DefaultStyleType.Even, DefaultStyleType.Sticky],
+	hasCommand: false,
 	items: [],
 	mobileStyles: [],
 	name: "",

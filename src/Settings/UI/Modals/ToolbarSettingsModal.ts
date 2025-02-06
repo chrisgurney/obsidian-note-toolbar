@@ -1,8 +1,8 @@
-import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, ToggleComponent, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName, getCommandNameById } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap } from 'Settings/NoteToolbarSettings';
+import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap, COMMAND_PREFIX_TBAR } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import { CommandSuggester } from 'Settings/UI/Suggesters/CommandSuggester';
@@ -109,6 +109,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayPositionSetting(settingsDiv);
 		let toolbarStyle = new ToolbarStyleUi(this.plugin, this, this.toolbar);
 		toolbarStyle.displayStyleSetting(settingsDiv);
+		this.displayCommandButton(settingsDiv);
 		this.displayUsageSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
@@ -1439,6 +1440,40 @@ export default class ToolbarSettingsModal extends Modal {
 					})
 				);
 
+	}
+
+	/**
+	 * Displays option to add a command for this toolbar.
+	 * @param settingsDiv HTMLElement to add the setting to.
+	 */
+	displayCommandButton(settingsDiv: HTMLElement) {
+
+		new Setting(settingsDiv)
+			.setName(t('setting.open-command.name'))
+			.setHeading()
+			.setDesc(learnMoreFr(t('setting.open-command.description'), 'Quick-Tools'))
+			.addToggle((toggle: ToggleComponent) => {
+				toggle
+					.setValue(this.toolbar.hasCommand)
+					.onChange(async (value) => {
+						this.toolbar.hasCommand = value;
+						await this.plugin.settingsManager.save();
+						// add or remove the command
+						if (value) {
+							this.plugin.addCommand({ 
+								id: COMMAND_PREFIX_TBAR + this.toolbar.uuid, 
+								name: t('command.name-open-toolbar', {toolbar: this.toolbar.name}), 
+								icon: this.plugin.settings.icon, 
+								callback: async () => {
+									this.plugin.commands.openItemSuggester(this.toolbar.uuid);
+								}
+							});
+						}
+						else {
+							this.plugin.removeCommand(COMMAND_PREFIX_TBAR + this.toolbar.uuid);
+						}
+					});
+			});
 	}
 
 	/**

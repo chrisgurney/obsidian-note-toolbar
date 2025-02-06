@@ -330,6 +330,10 @@
             "description": "Give this toolbar a unique name.",
             "error-toolbar-already-exists": "A toolbar already exists with this name."
         },
+        "open-command": {
+            "name": "Add toolbar command",
+            "description": "Add a command that opens this toolbar in a Quick Tools window."
+        },
         "other": {
             "name": "Other",
             "icon": {
