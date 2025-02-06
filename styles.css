@@ -1935,6 +1935,11 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-items-container,
 .note-toolbar-setting-mappings-container {
     padding-top: 0.75em;
+    & .setting-item {
+        .is-phone & {
+            flex-direction: unset !important;
+        }
+    }
     &[data-active="true"] {
         & .note-toolbar-setting-items-list-container {
             display: inherit !important;

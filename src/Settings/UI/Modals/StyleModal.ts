@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, Modal } from "obsidian";
+import { App, Modal, Platform } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarStyleUi from "../ToolbarStyleUi";
 
@@ -39,6 +39,14 @@ export default class StyleModal extends Modal {
         this.contentEl.empty();
         let toolbarStyle = new ToolbarStyleUi(this.plugin, this, this.toolbar);
         toolbarStyle.displayStyleSetting(this.contentEl);
+
+		// set initial keyboard focus on the relvant dropdown
+		if (Platform.isDesktop) {
+			setTimeout(() => {
+				let dropdown = this.contentEl.querySelector(`#default-style-dropdown > select`) as HTMLElement;
+				dropdown.focus();
+			}, 50);
+		}
     }
 
 }
