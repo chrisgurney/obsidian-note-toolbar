@@ -65,6 +65,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
+		this.displayEmptyViewSetting(containerEl);
 
 		// other global settings
 		this.displayCopyAsCalloutSettings(containerEl);
@@ -301,6 +302,51 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		itemsContainer.appendChild(itemsListContainer);
 		containerEl.append(itemsContainer);
+
+	}
+
+	/**
+	 * Displays the empty view toolbar setting.
+	 * @param containerEl HTMLElement to add the settings to.
+	 */
+	displayEmptyViewSetting(containerEl: HTMLElement): void {
+
+		let hasEmptyViewToolbar = this.plugin.settings.emptyViewToolbar ? true : false;
+
+		new Setting(containerEl)
+			.setName(t('setting.display-rules.toggle-emptyview'))
+			.setDesc(t('setting.display-rules.toggle-emptyview-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(hasEmptyViewToolbar)
+					.onChange(async (value: boolean) => {
+						if (!value) this.plugin.settings.emptyViewToolbar = null;
+						await this.plugin.settingsManager.save();
+						let emptyViewToolbarContainer = containerEl.querySelector('#empty-view-tbar');
+						if (emptyViewToolbarContainer) {
+							emptyViewToolbarContainer.setAttribute('data-active', value.toString());
+						}
+					});
+			});
+
+		let emptyViewTbarSetting = new Setting(containerEl)
+			.setName(t('setting.display-rules.option-emptyview'))
+			.setDesc(t('setting.display-rules.option-emptyview-description'))
+			.setClass('note-toolbar-setting-no-border')
+			.addSearch((cb) => {
+				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
+					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
+					.onChange(debounce(async (name) => {
+						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
+						if (newToolbar) {
+							this.plugin.settings.emptyViewToolbar = newToolbar.uuid;
+							await this.plugin.settingsManager.save();
+						}
+					}, 250));
+			});
+		emptyViewTbarSetting.settingEl.id = 'empty-view-tbar';
+		emptyViewTbarSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
 
 	}
 

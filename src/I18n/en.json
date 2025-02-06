@@ -206,6 +206,8 @@
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
             "option-emptyview": "Empty view toolbar",
             "option-emptyview-description": "Toolbar to display in the empty view.",
+            "toggle-emptyview": "Show toolbar in empty view",
+            "toggle-emptyview-description": "Choose a toolbar to display when no note is open.",
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property"

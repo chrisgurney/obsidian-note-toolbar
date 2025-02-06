@@ -799,6 +799,15 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 }
 
+.setting-item {
+    &[data-active="true"] {
+        display: flex !important;
+    }
+    &[data-active="false"] {
+        display: none !important;
+    }
+}
+
 .note-toolbar-setting-item-preview-code {
     font-family: var(--font-monospace);
     white-space: normal !important;
