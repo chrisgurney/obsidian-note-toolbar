@@ -895,8 +895,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
 				if (toolbar) {
 					await this.renderToolbar(toolbar, null);
-					// TODO?
-					// await this.updateToolbar(emptyToolbar, file);
+					await this.updateToolbar(toolbar, null);
 				}
 			}
 		}
@@ -980,7 +979,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar ToolbarSettings to get values from.
 	 * @param activeFile TFile to update toolbar for.
 	 */
-	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile) {
+	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null) {
 
 		let toolbarEl = this.getToolbarEl();
 		// debugLog("updateToolbar()", toolbarEl);
