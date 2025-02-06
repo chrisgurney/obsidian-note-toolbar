@@ -772,7 +772,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param showEditToolbar set true to show Edit Toolbar link in menu.
 	 * @returns Menu with toolbar's items
 	 */
-	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile, showEditToolbar: boolean = false): Promise<Menu> {
+	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile | null, showEditToolbar: boolean = false): Promise<Menu> {
 
 		let menu = new Menu();
 		await this.renderMenuItems(menu, toolbar, activeFile);
@@ -810,7 +810,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param recursions tracks how deep we are to stop recursion.
 	 * @returns 
 	 */
-	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile, recursions: number = 0): Promise<void> {
+	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0): Promise<void> {
 
 		if (recursions >= 2) {
 			return; // stop recursion
@@ -1188,7 +1188,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile | null) {
 		await this.handleLink(item.uuid, item.link, item.linkAttr.type, item.linkAttr.commandId, event, file);
 	}
 
@@ -1210,7 +1210,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleLink(uuid: string, linkHref: string, type: ItemType, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+	async handleLink(uuid: string, linkHref: string, type: ItemType, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile | null) {
 
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
@@ -1243,7 +1243,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Menu:
 				let toolbar = this.settingsManager.getToolbarById(linkHref);
 				debugLog("- menu item for toolbar", toolbar, activeFile);
-				if (toolbar && activeFile) {
+				if (toolbar) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
 						this.showMenuAtElement(menu, clickedItemEl);
