@@ -1425,28 +1425,47 @@ export default class NoteToolbarPlugin extends Plugin {
 		event.preventDefault();
 
 		let activeFile = this.app.workspace.getActiveFile();
+		let toolbar: ToolbarSettings | undefined;
+		
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			let toolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
-			if (toolbar) {
-				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-					let fabEl = this.getToolbarFabEl();
-					if (fabEl) {
-						let fabPos = fabEl.getAttribute('data-tbar-position');
-						// determine menu orientation based on button position
-						let elemRect = posAtElement.getBoundingClientRect();
-						let menuPos = { 
-							x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
-							y: (elemRect.top - 4),
-							overlap: true,
-							left: (fabPos === PositionType.FabLeft ? false : true)
-						};
-						// store menu position for sub-menu positioning
-						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
-						menu.showAtPosition(menuPos);
+			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
+		}
+		else {
+			let currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			const currentViewType = currentView?.containerEl.getAttribute('data-type');
+			switch (currentViewType) {
+				case 'canvas':
+					// TODO: add canvas support in future (when granular mappings are in place)
+					break;
+				case 'empty':
+					if (this.settings.emptyViewToolbar) {
+						toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
 					}
-				});
+					break;
+				default:
+					return;
 			}
+		}
+
+		if (toolbar) {
+			this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
+				let fabEl = this.getToolbarFabEl();
+				if (fabEl) {
+					let fabPos = fabEl.getAttribute('data-tbar-position');
+					// determine menu orientation based on button position
+					let elemRect = posAtElement.getBoundingClientRect();
+					let menuPos = { 
+						x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
+						y: (elemRect.top - 4),
+						overlap: true,
+						left: (fabPos === PositionType.FabLeft ? false : true)
+					};
+					// store menu position for sub-menu positioning
+					localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+					menu.showAtPosition(menuPos);
+				}
+			});
 		}
 
 	}
