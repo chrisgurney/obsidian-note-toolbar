@@ -97,7 +97,7 @@
         "name-hide-properties": "Hide Properties",
         "name-fold-properties": "Fold Properties",
         "name-toggle-properties": "Toggle Properties",
-        "name-open-toolbar": "Open {{toolbar}}"
+        "name-open-toolbar": "Open: {{toolbar}}"
     },
     "export": {
         "item-generic": "Item{{number}}",
