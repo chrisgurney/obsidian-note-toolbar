@@ -891,8 +891,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		else {
 			if (this.settings.emptyViewToolbar) {
-				// TODO: remove existing toolbar, if there is one?
 				let toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				this.removeToolbarIfNeeded(toolbar);
 				if (toolbar) {
 					await this.renderToolbar(toolbar, null);
 					await this.updateToolbar(toolbar, null);
