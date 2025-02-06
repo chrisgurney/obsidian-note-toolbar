@@ -112,6 +112,12 @@ export enum MobileStyleType {
 	Sticky = 'mstcky',
 	NoSticky = 'mnstcky'
 }
+export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
+	[MobileStyleType.Left, MobileStyleType.Center, MobileStyleType.Right],
+	[MobileStyleType.Wide, MobileStyleType.NoWide],
+	[MobileStyleType.Between, MobileStyleType.Even]
+];
+
 export const SettingFieldItemMap: Record<ItemType, SettingType> = {
 	[ItemType.Break]: SettingType.Ignore,
 	[ItemType.Command]: SettingType.Command,

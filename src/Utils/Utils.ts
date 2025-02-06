@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { App, Command, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MobileStyleType, ScriptConfig, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -192,7 +192,19 @@ function hasVisibleComponents(platform: { allViews?: { components: ComponentType
  * @returns true if the toolbar has the given style; false otherwise 
  */
 export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleType, mobileStyle: MobileStyleType): boolean {
-	return (toolbar.defaultStyles.includes(defaultStyle) || (Platform.isMobile && toolbar.mobileStyles.includes(mobileStyle)));
+	const isDefaultStyle = toolbar.defaultStyles.includes(defaultStyle);
+	if (Platform.isDesktop) return isDefaultStyle;
+
+	const isMobileStyle = toolbar.mobileStyles.includes(mobileStyle);
+	if (isMobileStyle) return true;
+
+	// get other styles that could override out the one provided (e.g., left -> right)
+	const mobileCompliments = MOBILE_STYLE_COMPLIMENTS.find(list => list.includes(mobileStyle));
+	// check for mobile styles in that list
+	const hasMobileCompliment = mobileCompliments?.some(el => toolbar.mobileStyles.includes(el));
+
+	// either there's a mobile style, otherwise use the default
+	return hasMobileCompliment ? isMobileStyle : isDefaultStyle;
 }
 
 /**
