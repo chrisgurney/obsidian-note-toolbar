@@ -550,7 +550,7 @@ settings:
         format: px
     -
         id: quick-tools
-        title: 'Quick tools'
+        title: 'Quick Tools'
         title.uk: 'Швидкі інструменти'
         title.de: 'Schnellwahl'
         title.zh: '快速工具'
