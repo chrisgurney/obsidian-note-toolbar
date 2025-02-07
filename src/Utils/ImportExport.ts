@@ -232,6 +232,7 @@ export async function importFromCallout(
             uuid: getUUID(),
             customClasses: "",
             defaultStyles: ["border", "even", "sticky"],
+            hasCommand: false,
             items: [],
             mobileStyles: [],
             name: "",
