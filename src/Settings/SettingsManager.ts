@@ -43,6 +43,7 @@ export class SettingsManager {
 			uuid: getUUID(),
 			customClasses: "",
 			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)),
+			hasCommand: false,
 			items: [],
 			mobileStyles: JSON.parse(JSON.stringify(toolbar.mobileStyles)),
 			name: this.getUniqueToolbarName(toolbar.name, true),
@@ -251,6 +252,7 @@ export class SettingsManager {
 			uuid: getUUID(),
 			customClasses: "",
 			defaultStyles: ["border", "even", "sticky"],
+			hasCommand: false,
 			items: [],
 			mobileStyles: [],
 			name: name,
@@ -540,8 +542,6 @@ export class SettingsManager {
 
 		await this.plugin.removeActiveToolbar();
 		await this.plugin.renderActiveToolbar();
-
-		this.plugin.commands.updateToolbarCommands();
 
 		debugLog("SETTINGS SAVED: " + new Date().getTime());
 	}

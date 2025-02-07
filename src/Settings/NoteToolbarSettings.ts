@@ -154,6 +154,7 @@ export enum ToolbarStyle {
 }
 
 export interface NoteToolbarSettings {
+	emptyViewToolbar: string | null;
 	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
 	icon: string;
@@ -168,6 +169,7 @@ export interface NoteToolbarSettings {
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+	emptyViewToolbar: null,
 	export: {
 		includeIcons: true,
 		replaceVars: true,
@@ -197,6 +199,7 @@ export interface ToolbarSettings {
 	uuid: string;
 	customClasses: string;
 	defaultStyles: string[];
+	hasCommand: boolean;
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
 	name: string;
@@ -213,6 +216,7 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	uuid: getUUID(),
 	customClasses: "",
 	defaultStyles: [DefaultStyleType.Border, DefaultStyleType.Even, DefaultStyleType.Sticky],
+	hasCommand: false,
 	items: [],
 	mobileStyles: [],
 	name: "",

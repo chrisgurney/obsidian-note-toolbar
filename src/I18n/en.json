@@ -97,7 +97,7 @@
         "name-hide-properties": "Hide Properties",
         "name-fold-properties": "Fold Properties",
         "name-toggle-properties": "Toggle Properties",
-        "name-open-toolbar": "Open {{toolbar}}"
+        "name-open-toolbar": "Open: {{toolbar}}"
     },
     "export": {
         "item-generic": "Item{{number}}",
@@ -204,8 +204,10 @@
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
-            "option-emptyview": "Empty view toolbar",
-            "option-emptyview-description": "Toolbar to display in the empty view.",
+            "option-emptyview": "New tab toolbar",
+            "option-emptyview-description": "Toolbar to display in the New tab view.",
+            "toggle-emptyview": "Show toolbar in New tab view",
+            "toggle-emptyview-description": "Choose a toolbar to display when no note is open.",
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property"
@@ -285,7 +287,7 @@
         },
         "item-suggest-modal": {
             "placeholder": "Search for an item...",
-            "placeholder-toolbar": "Search in {{toolbar}}",
+            "placeholder-toolbar": "{{toolbar}}: Search items...",
             "instruction-back": "to go back",
 			"instruction-navigate": "to navigate",
 			"instruction-use": "to use item",
@@ -329,6 +331,10 @@
             "name": "Name",
             "description": "Give this toolbar a unique name.",
             "error-toolbar-already-exists": "A toolbar already exists with this name."
+        },
+        "open-command": {
+            "name": "Add toolbar command",
+            "description": "Add a command that opens this toolbar in a Quick Tools window."
         },
         "other": {
             "name": "Other",

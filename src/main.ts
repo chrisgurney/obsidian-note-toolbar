@@ -133,7 +133,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.commands.toggleProps('fold') });
 			this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
 	
-			this.commands.updateToolbarCommands();
+			this.commands.setupToolbarCommands();
 
 			// prototcol handler
 			this.protocolManager = new ProtocolManager(this);
@@ -236,6 +236,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	layoutChangeListener = () => {
 		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+		// show empty view toolbar
+		if (!currentView) {
+			this.renderActiveToolbar();
+			return;
+		}
+
 		const viewMode = currentView?.getMode();
 		
 		// if we're in a popover, do nothing
@@ -307,15 +314,17 @@ export default class NoteToolbarPlugin extends Plugin {
 			renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
 		}
 		else {
-			// render on canvas: disabled until granular mappings are in place
-			if (false) {
-				currentView = this.app.workspace.getActiveViewOfType(ItemView);
-				if (isViewCanvas(currentView)) {
+			currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			const currentViewType = currentView?.containerEl.getAttribute('data-type');
+			switch (currentViewType) {
+				case 'canvas':
+					// TODO: add canvas support in future (when granular mappings are in place)
+					break;
+				case 'empty':
 					renderToolbar = true;
-				}
-				else {
+					break;
+				default:
 					return;
-				}
 			}
 		}
 
@@ -449,7 +458,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar ToolbarSettings
 	 * @param file TFile for the note that the toolbar is being rendered for
 	 */
-	async renderToolbar(toolbar: ToolbarSettings, file: TFile): Promise<void> {
+	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null): Promise<void> {
 
 		// debugLog("renderToolbar()", toolbar);
 
@@ -463,16 +472,19 @@ export default class NoteToolbarPlugin extends Plugin {
 		const viewMode = (currentView instanceof MarkdownView) ? currentView.getMode() : '';
 
 		if (!currentView) {
-			// render on canvas: disabled until granular mappings are in place
-			if (false) {
-				currentView = this.app.workspace.getActiveViewOfType(ItemView);
-				if (isViewCanvas(currentView)) {
-					// it's a canvas: move to 'top' if the position is set to 'props'
+			currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			const currentViewType = currentView?.containerEl.getAttribute('data-type');
+			switch (currentViewType) {
+				case 'canvas':
+					// move to 'top' if the position is set to 'props'
+					// position === 'props' ? position = 'top' : undefined;
+					break;
+				case 'empty':
+					// move to 'top' if the position is set to 'props'
 					position === 'props' ? position = 'top' : undefined;
-				}
-				else {
+					break;
+				default:
 					return;
-				}
 			}
 		}
 
@@ -577,7 +589,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile of the note to render the toolbar for
 	 * @returns HTMLElement cg-note-toolbar-callout
 	 */
-	async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile): Promise<HTMLElement> {
+	async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile | null): Promise<HTMLElement> {
 
 		/* create the unordered list of menu items */
 		let noteToolbarUl = activeDocument.createElement("ul");
@@ -615,7 +627,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile, recursions: number = 0): Promise<HTMLLIElement[]> {
+	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0): Promise<HTMLLIElement[]> {
 
 		if (recursions >= 2) {
 			return []; // stop recursion
@@ -719,7 +731,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile to render the toolbar within (for context to resolve variables and expressions)
 	 * @returns string array of labels with resolved values 
 	 */
-	async resolveLabels(toolbar: ToolbarSettings, file: TFile): Promise<string[]> {
+	async resolveLabels(toolbar: ToolbarSettings, file: TFile | null): Promise<string[]> {
 		let resolvedLabels: string[] = [];
 		for (const item of toolbar.items) {
 			const resolvedLabel = await this.replaceVars(item.label, file);
@@ -761,7 +773,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param showEditToolbar set true to show Edit Toolbar link in menu.
 	 * @returns Menu with toolbar's items
 	 */
-	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile, showEditToolbar: boolean = false): Promise<Menu> {
+	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile | null, showEditToolbar: boolean = false): Promise<Menu> {
 
 		let menu = new Menu();
 		await this.renderMenuItems(menu, toolbar, activeFile);
@@ -799,7 +811,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param recursions tracks how deep we are to stop recursion.
 	 * @returns 
 	 */
-	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile, recursions: number = 0): Promise<void> {
+	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0): Promise<void> {
 
 		if (recursions >= 2) {
 			return; // stop recursion
@@ -870,14 +882,24 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Creates the toolbar in the active file (assuming it needs one).
+	 * Creates the toolbar in the active file/view, assuming it needs one.
 	 */
 	async renderActiveToolbar() {
 		let activeFile = this.app.workspace.getActiveFile();
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			this.checkAndRenderToolbar(activeFile, frontmatter);
-		}	
+		}
+		else {
+			if (this.settings.emptyViewToolbar) {
+				let toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				this.removeToolbarIfNeeded(toolbar);
+				if (toolbar) {
+					await this.renderToolbar(toolbar, null);
+					await this.updateToolbar(toolbar, null);
+				}
+			}
+		}
 	}
 
 	// TODO: for fix: initial rendering of toolbars across all views #94
@@ -958,7 +980,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar ToolbarSettings to get values from.
 	 * @param activeFile TFile to update toolbar for.
 	 */
-	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile) {
+	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null) {
 
 		let toolbarEl = this.getToolbarEl();
 		// debugLog("updateToolbar()", toolbarEl);
@@ -1166,7 +1188,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+	async handleItemLink(item: ToolbarItemSettings, event?: MouseEvent | KeyboardEvent, file?: TFile | null) {
 		await this.handleLink(item.uuid, item.link, item.linkAttr.type, item.linkAttr.commandId, event, file);
 	}
 
@@ -1188,7 +1210,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param event MouseEvent or KeyboardEvent from where link is activated
 	 * @param file optional TFile if handling links outside of the active file
 	 */
-	async handleLink(uuid: string, linkHref: string, type: ItemType, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile) {
+	async handleLink(uuid: string, linkHref: string, type: ItemType, commandId: string | null, event?: MouseEvent | KeyboardEvent, file?: TFile | null) {
 
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
@@ -1221,7 +1243,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Menu:
 				let toolbar = this.settingsManager.getToolbarById(linkHref);
 				debugLog("- menu item for toolbar", toolbar, activeFile);
-				if (toolbar && activeFile) {
+				if (toolbar) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
 						this.showMenuAtElement(menu, clickedItemEl);
@@ -1403,28 +1425,47 @@ export default class NoteToolbarPlugin extends Plugin {
 		event.preventDefault();
 
 		let activeFile = this.app.workspace.getActiveFile();
+		let toolbar: ToolbarSettings | undefined;
+		
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			let toolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
-			if (toolbar) {
-				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-					let fabEl = this.getToolbarFabEl();
-					if (fabEl) {
-						let fabPos = fabEl.getAttribute('data-tbar-position');
-						// determine menu orientation based on button position
-						let elemRect = posAtElement.getBoundingClientRect();
-						let menuPos = { 
-							x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
-							y: (elemRect.top - 4),
-							overlap: true,
-							left: (fabPos === PositionType.FabLeft ? false : true)
-						};
-						// store menu position for sub-menu positioning
-						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
-						menu.showAtPosition(menuPos);
+			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
+		}
+		else {
+			let currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			const currentViewType = currentView?.containerEl.getAttribute('data-type');
+			switch (currentViewType) {
+				case 'canvas':
+					// TODO: add canvas support in future (when granular mappings are in place)
+					break;
+				case 'empty':
+					if (this.settings.emptyViewToolbar) {
+						toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
 					}
-				});
+					break;
+				default:
+					return;
 			}
+		}
+
+		if (toolbar) {
+			this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
+				let fabEl = this.getToolbarFabEl();
+				if (fabEl) {
+					let fabPos = fabEl.getAttribute('data-tbar-position');
+					// determine menu orientation based on button position
+					let elemRect = posAtElement.getBoundingClientRect();
+					let menuPos = { 
+						x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
+						y: (elemRect.top - 4),
+						overlap: true,
+						left: (fabPos === PositionType.FabLeft ? false : true)
+					};
+					// store menu position for sub-menu positioning
+					localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+					menu.showAtPosition(menuPos);
+				}
+			});
 		}
 
 	}
