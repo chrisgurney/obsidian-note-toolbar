@@ -480,6 +480,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// position === 'props' ? position = 'top' : undefined;
 					break;
 				case 'empty':
+				case 'home-tab-view':
 					// move to 'top' if the position is set to 'props'
 					position === 'props' ? position = 'top' : undefined;
 					break;
@@ -1439,6 +1440,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// TODO: add canvas support in future (when granular mappings are in place)
 					break;
 				case 'empty':
+				case 'home-tab-view':
 					if (this.settings.emptyViewToolbar) {
 						toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
 					}
