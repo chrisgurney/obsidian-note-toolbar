@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, isViewCanvas, insertTextAtCursor, getViewId, hasStyle } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, getBottomLeftStyle as getBottomLeftStyle } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -549,7 +549,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						? bottomStyles.push(`right: 0`)
 						: hasStyle(toolbar, DefaultStyleType.Left, MobileStyleType.Left)
 							? bottomStyles.push(`left: 0`)
-							: bottomStyles.push('style', `left: max(0%, calc(50% - calc(${embedBlock.offsetWidth}px / 2)))`);
+							: bottomStyles.push('style', getBottomLeftStyle(embedBlock));
 				}
 				embedBlock.setAttribute('style', bottomStyles.join(';'));
 				break;
