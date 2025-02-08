@@ -556,6 +556,8 @@ settings:
         id: quick-tools
         title: 'Quick tools'
         title.uk: "Швидкі інструменти"
+        title: 'Quick Tools'
+        title.uk: 'Швидкі інструменти'
         title.de: 'Schnellwahl'
         title.zh: '快速工具'
         description: 'Styles for the Quick Tools window'
