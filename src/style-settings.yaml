@@ -554,14 +554,12 @@ settings:
         format: px
     -
         id: quick-tools
-        title: 'Quick tools'
-        title.uk: "Швидкі інструменти"
         title: 'Quick Tools'
-        title.uk: 'Швидкі інструменти'
+        title.uk: "Швидкі Інструменти"
         title.de: 'Schnellwahl'
         title.zh: '快速工具'
         description: 'Styles for the Quick Tools window'
-        description.uk: "Стилі вікна Швидких інструментів"
+        description.uk: "Стиль вікна Швидких Іструментів"
         description.de: 'Stile für das Schnellwahlfenster'
         description.zh: '快速工具窗口的样式'
         type: heading
