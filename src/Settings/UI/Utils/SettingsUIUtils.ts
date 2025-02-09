@@ -339,3 +339,18 @@ export function showWhatsNewIfNeeded(plugin: NoteToolbarPlugin) {
 	}
 
 }
+
+/**
+ * Updates the icon for the preview and form
+ * @param settingEl 
+ * @param selectedIcon 
+ */
+export function updateItemIcon(settingEl: HTMLElement, selectedIcon: string) {
+	// update item form
+	let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
+	formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
+	formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
+	// update item preview
+	let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
+	(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
+}

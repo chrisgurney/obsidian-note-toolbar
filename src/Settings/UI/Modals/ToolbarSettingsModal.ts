@@ -1,6 +1,6 @@
 import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, ToggleComponent, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName, getCommandNameById } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr, setFieldHelp, removeFieldError, setFieldError } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr, setFieldHelp, removeFieldError, setFieldError, updateItemIcon } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap, COMMAND_PREFIX_TBAR } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -577,7 +577,7 @@ export default class ToolbarSettingsModal extends Modal {
 							const modal = new IconSuggestModal(this.plugin, (icon) => {
 								toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
 								this.plugin.settingsManager.save();
-								this.updateItemIcon(itemRow, icon)
+								updateItemIcon(itemRow, icon)
 							});
 							modal.open();
 						});
@@ -593,7 +593,7 @@ export default class ToolbarSettingsModal extends Modal {
 									const modal = new IconSuggestModal(this.plugin, (icon) => {
 										toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
 										this.plugin.settingsManager.save();
-										this.updateItemIcon(itemRow, icon)
+										updateItemIcon(itemRow, icon)
 									});
 									modal.open();
 							}
@@ -851,21 +851,6 @@ export default class ToolbarSettingsModal extends Modal {
 
 		return itemDiv;
 
-	}
-
-	/**
-	 * Updates the icon for the preview and form
-	 * @param settingEl 
-	 * @param selectedIcon 
-	 */
-	private updateItemIcon(settingEl: HTMLElement, selectedIcon: string) {
-		// update item form
-		let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
-		formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
-		formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
-		// update item preview
-		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
-		(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
 	}
 
 	/**
