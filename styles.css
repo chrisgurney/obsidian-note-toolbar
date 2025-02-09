@@ -2700,6 +2700,9 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
     &[data-ntb-ui-type="modal"] {
+        .is-phone & {
+            padding-bottom: var(--size-4-6);
+        }
         & .modal-content {
             overflow-y: auto;
         }
