@@ -104,23 +104,6 @@ export function getCommandIdByName(plugin: NoteToolbarPlugin, commandName: strin
 }
 
 /**
- * Gets the `left` property needed to position bottom toolbars.
- * @param el embedBlock to check for width.
- * @returns string
- */
-export function getBottomLeftStyle(el: HTMLElement): string {
-	let viewPaddingOffset = 0;
-	let activeLeaf: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-	if (!activeLeaf) activeLeaf = this.app.workspace.getActiveViewOfType(ItemView);
-	if (activeLeaf) {
-		const style = getComputedStyle(activeLeaf?.contentEl);
-		const padding = parseFloat(style.paddingLeft) || 0;
-		viewPaddingOffset = padding * 2;
-	}
-	return `left: max(0%, calc(50% - calc(${el.offsetWidth}px / 2) + ${viewPaddingOffset}px))`;
-}
-
-/**
  * Gets a new UUID.
  * @returns string UUID
  */
