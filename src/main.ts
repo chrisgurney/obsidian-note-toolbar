@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, getBottomLeftStyle as getBottomLeftStyle } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -480,6 +480,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// position === 'props' ? position = 'top' : undefined;
 					break;
 				case 'empty':
+				case 'beautitab-react-view':
 				case 'home-tab-view':
 					// move to 'top' if the position is set to 'props'
 					position === 'props' ? position = 'top' : undefined;
@@ -540,19 +541,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				activeLeafEl
 					? activeLeafEl.insertAdjacentElement('afterbegin', embedBlock)
 					: debugLog(`🛑 renderToolbar(): Unable to find ${containerClass} to insert toolbar`);
-				// styling for bottom toolbar
-				let bottomStyles: string[] = [];
-				if (hasStyle(toolbar, DefaultStyleType.Wide, MobileStyleType.Wide)) {
-					bottomStyles.push(`width: 100%`);
-				}
-				else {
-					hasStyle(toolbar, DefaultStyleType.Right, MobileStyleType.Right)
-						? bottomStyles.push(`right: 0`)
-						: hasStyle(toolbar, DefaultStyleType.Left, MobileStyleType.Left)
-							? bottomStyles.push(`left: 0`)
-							: bottomStyles.push('style', getBottomLeftStyle(embedBlock));
-				}
-				embedBlock.setAttribute('style', bottomStyles.join(';'));
 				break;
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
@@ -584,6 +572,42 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 	
+	/**
+	 * Adds the styles to the bottom toolbar.
+	 * @param toolbar toolbar to check for style settings.
+	 * @param toolbarEl toolbar element.
+	 */
+	renderBottomToolbarStyles(toolbar: ToolbarSettings, toolbarEl: HTMLElement) {
+		let bottomStyles: string[] = [];
+		if (hasStyle(toolbar, DefaultStyleType.Wide, MobileStyleType.Wide)) {
+			bottomStyles.push(`width: 100%`);
+		}
+		else {
+			hasStyle(toolbar, DefaultStyleType.Right, MobileStyleType.Right)
+				? bottomStyles.push(`right: 0`)
+				: hasStyle(toolbar, DefaultStyleType.Left, MobileStyleType.Left)
+					? bottomStyles.push(`left: 0`)
+					: bottomStyles.push(this.renderBottomLeftStyle(toolbarEl));
+		}
+		toolbarEl.setAttribute('style', bottomStyles.join(';'));
+	}
+
+	/**
+	 * Calculates the left position for bottom toolbars.
+	 * @param toolbarEl toolbar element.
+	 * @returns CSS style string.
+	 */
+	renderBottomLeftStyle(toolbarEl: HTMLElement): string {
+		let viewPaddingOffset = 0;
+		let activeLeaf: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (!activeLeaf) activeLeaf = this.app.workspace.getActiveViewOfType(ItemView);
+		// if (activeLeaf) {
+		// 	const contentElStyle = getComputedStyle(activeLeaf?.contentEl);
+		// 	viewPaddingOffset = parseFloat(contentElStyle.paddingLeft) || 0;
+		// }
+		return `left: max(0%, calc(50% - calc(${toolbarEl.offsetWidth}px / 2) + ${viewPaddingOffset}px))`;
+	}
+
 	/**
 	 * Renders the given toolbar as a callout (to add to the container) and returns it.
 	 * @param toolbar ToolbarSettings to render
@@ -1039,6 +1063,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 
+		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
+		if (currentPosition === PositionType.Bottom) {
+			this.renderBottomToolbarStyles(toolbar, toolbarEl);
+		}
+
 	}
 
 	/*************************************************************************
@@ -1440,6 +1469,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// TODO: add canvas support in future (when granular mappings are in place)
 					break;
 				case 'empty':
+				case 'beautitab-react-view':
 				case 'home-tab-view':
 					if (this.settings.emptyViewToolbar) {
 						toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
