@@ -817,6 +817,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 .note-toolbar-setting-item-preview-code {
     font-family: var(--font-monospace);
     white-space: normal !important;
+    overflow-wrap: anywhere;
 }
 
 .note-toolbar-setting-item-preview .note-toolbar-setting-item-preview-code {
