@@ -32,6 +32,8 @@ _Thank you Hydra (on the Obsidian Discord) for the idea._
 - Settings: Toolbar edit buttons varying widths on phones.
 - Settings: Code lines not wrapping in toolbars list.
 - Settings: Mappings heading not full width on phones.
+- API UI: modal: `:focus-visible` effect not showing links on mobile
+- API UI: modal: bottom of modal cropped on phone
 
 ---
 
