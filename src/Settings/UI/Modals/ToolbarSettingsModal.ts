@@ -1,6 +1,6 @@
 import { App, ButtonComponent, DropdownComponent, Menu, MenuItem, Modal, Platform, Setting, TFile, TFolder, ToggleComponent, debounce, getIcon, normalizePath, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, getElementPosition, removeComponentVisibility, addComponentVisibility, moveElement, getUUID, importArgs, getCommandIdByName, getCommandNameById } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, pluginLinkFr, setFieldHelp, removeFieldError, setFieldError, updateItemIcon } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, LINK_OPTIONS, ComponentType, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, COMMAND_DOES_NOT_EXIST, ScriptConfig, SettingType, SettingFieldItemMap, COMMAND_PREFIX_TBAR } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -165,10 +165,10 @@ export default class ToolbarSettingsModal extends Modal {
 					// check for existing toolbar with this name
 					let existingToolbar = this.plugin.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
-						this.setFieldError(cb.inputEl, t('setting.name.error-toolbar-already-exists'));
+						setFieldError(this, cb.inputEl, t('setting.name.error-toolbar-already-exists'));
 					}
 					else {
-						this.removeFieldError(cb.inputEl);
+						removeFieldError(cb.inputEl);
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
@@ -577,7 +577,7 @@ export default class ToolbarSettingsModal extends Modal {
 							const modal = new IconSuggestModal(this.plugin, (icon) => {
 								toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
 								this.plugin.settingsManager.save();
-								this.updateItemIcon(itemRow, icon)
+								updateItemIcon(itemRow, icon)
 							});
 							modal.open();
 						});
@@ -593,7 +593,7 @@ export default class ToolbarSettingsModal extends Modal {
 									const modal = new IconSuggestModal(this.plugin, (icon) => {
 										toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
 										this.plugin.settingsManager.save();
-										this.updateItemIcon(itemRow, icon)
+										updateItemIcon(itemRow, icon)
 									});
 									modal.open();
 							}
@@ -854,21 +854,6 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
-	 * Updates the icon for the preview and form
-	 * @param settingEl 
-	 * @param selectedIcon 
-	 */
-	private updateItemIcon(settingEl: HTMLElement, selectedIcon: string) {
-		// update item form
-		let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
-		formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
-		formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
-		// update item preview
-		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
-		(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
-	}
-
-	/**
 	 * Updates the appearance of the provided item form visibility button.
 	 * @param button ButtonComponent for the visibility button
 	 * @param label string label to add to the button (i.e., the visibility state, or none)
@@ -985,17 +970,17 @@ export default class ToolbarSettingsModal extends Modal {
 												if (typeof selectedFunction.description === 'string') {
 													let scriptHelpFr = document.createDocumentFragment();
 													scriptHelpFr.appendText(selectedFunction.description);
-													this.setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
+													setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
 												}
 												else {
-													this.setFieldHelp(scriptSetting.controlEl, selectedFunction.description);
+													setFieldHelp(scriptSetting.controlEl, selectedFunction.description);
 												}
 											}
 										}
 										this.renderPreview(toolbarItem); // to make sure error state is refreshed
 									});
 								});
-						this.setFieldHelp(scriptSetting.controlEl, helpTextFr);
+						setFieldHelp(scriptSetting.controlEl, helpTextFr);
 						toolbarItem.scriptConfig ??= { pluginFunction: '' };
 						let subfieldsDiv = createDiv();
 						subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
@@ -1058,11 +1043,11 @@ export default class ToolbarSettingsModal extends Modal {
 								let groupPreviewFr = groupToolbar 
 									? createToolbarPreviewFr(this.plugin, groupToolbar, undefined, true) 
 									: learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
-								this.setFieldHelp(groupSetting.controlEl, groupPreviewFr);
+								setFieldHelp(groupSetting.controlEl, groupPreviewFr);
 							}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
 					});
-				this.setFieldHelp(groupSetting.controlEl, helpTextFr);
+				setFieldHelp(groupSetting.controlEl, helpTextFr);
 				break;
 			case ItemType.Menu:
 				const menuSetting = new Setting(fieldDiv)
@@ -1085,11 +1070,11 @@ export default class ToolbarSettingsModal extends Modal {
 								let menuPreviewFr = menuToolbar 
 									? createToolbarPreviewFr(this.plugin, menuToolbar, undefined, true)
 									: learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
-								this.setFieldHelp(menuSetting.controlEl, menuPreviewFr);
+								setFieldHelp(menuSetting.controlEl, menuPreviewFr);
 							}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
 					});
-				this.setFieldHelp(menuSetting.controlEl, helpTextFr);
+				setFieldHelp(menuSetting.controlEl, helpTextFr);
 				break;
 			case ItemType.Uri: 
 				const uriSetting = new Setting(fieldDiv)
@@ -1109,7 +1094,7 @@ export default class ToolbarSettingsModal extends Modal {
 								}, 500));
 						this.updateItemComponentStatus(toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
 					});
-				this.setFieldHelp(uriSetting.controlEl, helpTextFr);
+				setFieldHelp(uriSetting.controlEl, helpTextFr);
 				break;
 		}
 
@@ -1374,14 +1359,14 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 		}
 
-		this.removeFieldError(componentEl);
+		removeFieldError(componentEl);
 		switch (status) {
 			case Status.Empty:
 				// TODO? flag for whether empty should show as an error or not
 				isValid = false;
 				break;
 			case Status.Invalid:
-				this.setFieldError(componentEl, statusMessage, statusLink);
+				setFieldError(this, componentEl, statusMessage, statusLink);
 				isValid = false;
 				break;
 		}
@@ -1836,73 +1821,6 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 		return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
 
-	}
-
-	/**
-	 * Updates the given element with an error border and text.
-	 * @param fieldEl HTMLElement to update
-	 * @param errorText Optional error text to display
-	 * @param errorLink Optional link to display after error text
-	 */
-	setFieldError(fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
-		if (fieldEl) {
-			let fieldContainerEl = fieldEl.closest('.setting-item-control');
-			if (!fieldContainerEl) {
-				fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview');
-				errorText = ''; // no need to show errorText for item previews
-			}
-			if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
-				if (errorText) {
-					let errorDiv = createEl('div', { 
-						text: errorText, 
-						cls: 'note-toolbar-setting-field-error' });
-					if (errorLink) {
-						// as it's not easy to listen for plugins being enabled,
-						// user will have to click a refresh link to dismiss the error
-						this.plugin.registerDomEvent(errorLink, 'click', event => {
-							let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
-							let refreshIcon = refreshLink.createSpan();
-							setIcon(refreshIcon, 'refresh-cw');
-							let oldLink = event.currentTarget as HTMLElement;
-							oldLink?.replaceWith(refreshLink);
-							this.plugin.registerDomEvent(refreshLink, 'click', event => {
-								this.display();
-							});
-						});
-						errorDiv.append(' ', errorLink);
-					}
-					fieldContainerEl.insertAdjacentElement('beforeend', errorDiv);
-				}
-				fieldEl.addClass('note-toolbar-setting-error');
-			}
-		}
-	}
-
-	/**
-	 * Updates the given element with the given help text.
-	 * @param fieldEl HTMLElement to update
-	 * @param helpFr DocumentFragment of the help text
-	 */
-	setFieldHelp(fieldEl: HTMLElement, helpFr?: DocumentFragment) {
-		if (!helpFr) return;
-		let existingHelp = fieldEl.querySelector('.note-toolbar-setting-field-help');
-		existingHelp?.remove();
-		let fieldHelp = createDiv();
-		fieldHelp.addClass('note-toolbar-setting-field-help');
-		fieldHelp.append(helpFr);
-		fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
-	}
-
-	/**
-	 * Removes the error on the field.
-	 * @param fieldEl HTMLElement to update
-	 */
-	removeFieldError(fieldEl: HTMLElement | null) {
-		if (fieldEl) {
-			let fieldContainerEl = fieldEl.closest('.setting-item-control');
-			fieldContainerEl?.querySelector('.note-toolbar-setting-field-error')?.remove();
-			fieldEl?.removeClass('note-toolbar-setting-error');
-		}
 	}
 
 	/**

@@ -741,7 +741,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
-			.setDesc(t('setting.other.show-toolbar-in-file-menu.description'))
+			.setDesc(learnMoreFr(t('setting.other.show-toolbar-in-file-menu.description'), 'Other-settings'))
 			.addToggle((cb) => {
 				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
 				cb.onChange(async (value) => {
