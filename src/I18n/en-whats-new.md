@@ -10,6 +10,7 @@ Notes:
 
 - Any references to files or properties in variables or script commands won't work.
 - If the toolbar is in the `Below Properties` position, it will be shown at the top instead.
+- Supports the [Home Tab ↗](https://github.com/olrenso/obsidian-home-tab) and [Beautitab ↗](https://github.com/andrewmcgivery/obsidian-beautitab) plugins.
 
 _Thank you @mardybardy for the idea in [#78](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/78)._
 
@@ -22,6 +23,10 @@ A new command will be added (`Note Toolbar: Open: YOURTOOLBARNAME`) that will le
 > 💡 Tip: Assign a hot key to that command for convenient access to that toolbar.
 
 _Thank you Hydra (on the Obsidian Discord) for the idea._
+
+## Fixes
+
+- Bottom toolbars: Adjustments to toolbar positioning/centering, to try to account for changing Dataview expressions.
 
 ---
 
