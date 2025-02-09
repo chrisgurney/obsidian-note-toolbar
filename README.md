@@ -29,6 +29,7 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
 - [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to commands, files/folders, URIs/URLs, menus, and scripts (Dataview, Templater, and JavaScript).
 - [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property
   - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) below the Properties section, at the top of notes, as a floating button
+  - Add a toolbar to the _New tab_ view
   - Access the toolbar from the navigation bar (on mobile)
   - Toolbar items can use Obsidian's built-in icons, labels (which can include emojis), or a mix of both
   - Set optional tooltips for each item
@@ -41,7 +42,7 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
   - Change or override these styles on mobile (i.e, phone and tablet)
   - Use any icon for the floating button or [nav bar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bar) (on mobile)
   - Or use the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support) for even more options (colors, positioning, sizing, etc.)
-- [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, to quickly access all of your tools with [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools), to get command URIs and Note Toolbar Callout markdown, and to access toolbar settings. 
+- [Commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to _completely_ toggle hiding of note properties, to quickly access toolbars with [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools), to get command URIs, and more.
 - [Note Toolbar URIs](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) let you execute commands, focus on folders, open menus (within Note Toolbar Callouts), and open toolbar settings, from mostly anywhere within your notes
 - [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
 - Right-click toolbars to quickly change the position, style, or to access configuration
