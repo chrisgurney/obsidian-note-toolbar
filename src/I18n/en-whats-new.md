@@ -24,6 +24,8 @@ A new command will be added (`Note Toolbar: Open: YOURTOOLBARNAME`) that will le
 
 _Thank you Hydra (on the Obsidian Discord) for the idea._
 
+---
+
 ## Fixes
 
 - Bottom toolbars: Adjustments to toolbar positioning/centering, to try to account for changing Dataview expressions.
