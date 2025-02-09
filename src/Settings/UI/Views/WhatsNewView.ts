@@ -30,8 +30,8 @@ export class WhatsNewView extends ItemView {
         contentDiv.addClass('note-toolbar-setting-whatsnew-view');
 
 		let markdownEl = contentDiv.createDiv();
-		markdownEl.addClass('note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
-        
+		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
+
 		let releaseEl = contentDiv.createDiv();
 		releaseEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
 		new Setting(releaseEl)

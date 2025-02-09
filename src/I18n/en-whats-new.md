@@ -24,9 +24,16 @@ A new command will be added (`Note Toolbar: Open: YOURTOOLBARNAME`) that will le
 
 _Thank you Hydra (on the Obsidian Discord) for the idea._
 
+---
+
 ## Fixes
 
 - Bottom toolbars: Adjustments to toolbar positioning/centering, to try to account for changing Dataview expressions.
+- Settings: Toolbar edit buttons varying widths on phones.
+- Settings: Code lines not wrapping in toolbars list.
+- Settings: Mappings heading not full width on phones.
+- API UI: modal: `:focus-visible` effect not showing links on mobile
+- API UI: modal: bottom of modal cropped on phone
 
 ---
 
