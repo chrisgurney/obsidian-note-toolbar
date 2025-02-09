@@ -29,6 +29,9 @@ _Thank you Hydra (on the Obsidian Discord) for the idea._
 ## Fixes
 
 - Bottom toolbars: Adjustments to toolbar positioning/centering, to try to account for changing Dataview expressions.
+- Settings: Toolbar edit buttons varying widths on phones.
+- Settings: Code lines not wrapping in toolbars list.
+- Settings: Mappings heading not full width on phones.
 
 ---
 
