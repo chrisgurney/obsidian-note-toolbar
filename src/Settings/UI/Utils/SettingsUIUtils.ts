@@ -4,6 +4,7 @@ import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
 import { debugLog } from "Utils/Utils";
+import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
@@ -251,6 +252,74 @@ export function pluginLinkFr(commandId: string, linkText?: string): DocumentFrag
 		pluginLink.addClass('note-toolbar-setting-focussable-link');
 	}
 	return pluginLinkFr;
+}
+
+/**
+ * Removes the error on the field.
+ * @param fieldEl HTMLElement to update
+ */
+export function removeFieldError(fieldEl: HTMLElement | null) {
+	if (fieldEl) {
+		let fieldContainerEl = fieldEl.closest('.setting-item-control');
+		fieldContainerEl?.querySelector('.note-toolbar-setting-field-error')?.remove();
+		fieldEl?.removeClass('note-toolbar-setting-error');
+	}
+}
+
+/**
+ * Updates the given element with an error border and text.
+ * @param parent ToolbarSettingsModal
+ * @param fieldEl HTMLElement to update
+ * @param errorText Optional error text to display
+ * @param errorLink Optional link to display after error text
+ */
+export function setFieldError(parent: ToolbarSettingsModal, fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
+	if (fieldEl) {
+		let fieldContainerEl = fieldEl.closest('.setting-item-control');
+		if (!fieldContainerEl) {
+			fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview');
+			errorText = ''; // no need to show errorText for item previews
+		}
+		if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
+			if (errorText) {
+				let errorDiv = createEl('div', { 
+					text: errorText, 
+					cls: 'note-toolbar-setting-field-error' });
+				if (errorLink) {
+					// as it's not easy to listen for plugins being enabled,
+					// user will have to click a refresh link to dismiss the error
+					parent.plugin.registerDomEvent(errorLink, 'click', event => {
+						let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
+						let refreshIcon = refreshLink.createSpan();
+						setIcon(refreshIcon, 'refresh-cw');
+						let oldLink = event.currentTarget as HTMLElement;
+						oldLink?.replaceWith(refreshLink);
+						parent.plugin.registerDomEvent(refreshLink, 'click', event => {
+							parent.display();
+						});
+					});
+					errorDiv.append(' ', errorLink);
+				}
+				fieldContainerEl.insertAdjacentElement('beforeend', errorDiv);
+			}
+			fieldEl.addClass('note-toolbar-setting-error');
+		}
+	}
+}
+
+/**
+ * Updates the given element with the given help text.
+ * @param fieldEl HTMLElement to update
+ * @param helpFr DocumentFragment of the help text
+ */
+export function setFieldHelp(fieldEl: HTMLElement, helpFr?: DocumentFragment) {
+	if (!helpFr) return;
+	let existingHelp = fieldEl.querySelector('.note-toolbar-setting-field-help');
+	existingHelp?.remove();
+	let fieldHelp = createDiv();
+	fieldHelp.addClass('note-toolbar-setting-field-help');
+	fieldHelp.append(helpFr);
+	fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 }
 
 /**
