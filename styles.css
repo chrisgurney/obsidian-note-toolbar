@@ -1621,11 +1621,17 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .setting-item {
         padding: 0.5em;
         margin: 0.25em;
-        /* duplicate toolbar button */
+        /* options button */
         & button:first-child {
             opacity: 0;
             .is-mobile & {
                 opacity: 1;
+                width: auto;
+            }
+        }
+        /* edit button */
+        & button:last-child {
+            .is-mobile & {
                 width: auto;
             }
         }
