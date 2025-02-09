@@ -56,7 +56,10 @@ export class NtbModal extends Modal {
     // }
 
     async openWithContent(resolve: (value: string) => void, reject: (reason?: Error) => void): Promise<void> {
+
         let containerEl = this.contentEl.createEl('div', {cls: 'markdown-preview-view'});
+
+        // render content as markdown
         if (typeof this.content === 'string') {
             await MarkdownRenderer.render(this.plugin.app, this.content, containerEl, "", new Component());
         } 
@@ -69,26 +72,28 @@ export class NtbModal extends Modal {
                 new Notice(error);
             }
         }
-        containerEl.querySelectorAll('a.internal-link').forEach((link) => {
-            this.plugin.registerDomEvent(link as HTMLElement, 'click', (event) => {
-                event.preventDefault();
-                const target = link.getAttribute('href');
-                if (target) this.plugin.app.workspace.openLinkText(target, '', true);
-            });
+
+        // make links tabbable
+        containerEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
+            (link as HTMLElement).tabIndex = 1;
+            if (link.hasClass('internal-link')) {
+                this.plugin.registerDomEvent(link as HTMLElement, 'click', (event) => {
+                    event.preventDefault();
+                    const target = link.getAttribute('href');
+                    if (target) this.plugin.app.workspace.openLinkText(target, '', true);
+                });
+            }
         });
 
+        // set focus in modal
         this.contentEl.tabIndex = 1;
         setTimeout(() => {
             this.contentEl.focus();
         }, 50);
 
-        // TODO: try if above doesn't work
-        // this.plugin.registerDomEvent(this.contentEl, 'touchend', () => {
-        //     setTimeout(() => this.contentEl.focus(), 0);
-        // }, { once: true });
-
         this.resolve = resolve;
         this.reject = reject;
         this.open();
+        
     }
 }
