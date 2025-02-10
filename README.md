@@ -4,6 +4,10 @@
 
 The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create context-aware toolbars for your notes, which can include commands, links to vault files and folders, websites/URIs, menus, and scripts (Dataview, Templater, and JavaScript).
 
+Wondering what's new? See the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
+
+Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Roadmap)
+
 **Jump to:**
 
 - [Features](#features)
@@ -21,10 +25,6 @@ More options on mobile:
 # Features
 
 _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
-
-Wondering what's new? See the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
-
-Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Roadmap)
 
 - [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to commands, files/folders, URIs/URLs, menus, and scripts (Dataview, Templater, and JavaScript).
 - [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property
