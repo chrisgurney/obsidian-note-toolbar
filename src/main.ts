@@ -17,6 +17,7 @@ import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 import JsEngineAdapter from 'Adapters/JsEngineAdapter';
 import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
+import ItemModal from 'Settings/UI/Modals/ItemModal';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -712,6 +713,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
 		
 					const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
+					toolbarItem.addClass('cg-note-toolbar-item');
 					if (item.label) {
 						if (item.icon) {
 							let itemIcon = toolbarItem.createSpan();
@@ -1641,6 +1643,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		// figure out what toolbar we're in
 		let toolbarEl = (e.target as Element).closest('.cg-note-toolbar-container');
 		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbarById(toolbarEl.id) : undefined;
+		
+		let toolbarItemEl = (e.target as Element).closest('.cg-note-toolbar-item');
+		let toolbarItem = toolbarItemEl?.id ? this.settingsManager.getToolbarItemById(toolbarItemEl.id) : undefined;
 
 		let contextMenu = new Menu();
 
@@ -1764,6 +1769,21 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		
 		contextMenu.addSeparator();
+
+		// edit item
+		if (toolbarItem) {
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('pencil')
+					.setTitle(t('toolbar.menu-edit-item'))
+					.onClick(async () => {
+						if (toolbarSettings) {
+							const itemModal = new ItemModal(this.app, this, toolbarSettings, toolbarItem);
+							itemModal.open();
+						}
+					});
+			});				
+		}
 
 		// edit toolbar
 		if (toolbarSettings !== undefined) {

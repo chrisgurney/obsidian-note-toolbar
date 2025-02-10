@@ -2,7 +2,6 @@ import NoteToolbarPlugin from "main";
 import { App, Modal } from "obsidian";
 import { t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarItemUi from "../ToolbarItemUi";
-import { SettingsAttr } from "./ToolbarSettingsModal";
 
 export default class ItemModal extends Modal {
 
@@ -46,7 +45,7 @@ export default class ItemModal extends Modal {
     }
 
     getItemRowEl(uuid: string): HTMLElement {
-        return this.contentEl.querySelector('div[' + SettingsAttr.ItemUuid + '="' + uuid + '"]') as HTMLElement;
+        return this.contentEl;
     }
 
 }
