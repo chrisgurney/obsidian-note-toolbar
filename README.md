@@ -50,13 +50,13 @@ Wondering what's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidia
 
 ## Translations 🌐
 
-Note Toolbar is also available in:
+Note Toolbar's UI, and Style Settings options, are also available in:
 
-|Language name|Native name|What's translated|Contributors|
-|---|---|---|---|
-|Chinese (Simplified)|简体中文|Plugin UI, Style Settings|[@Moyf](https://github.com/Moyf)|
-|German|Deutsch|Plugin UI, Style Settings|[@hartimd](https://github.com/hartimd)|
-|Ukrainian|Український|Plugin UI, Style Settings|[@Laktiv](https://github.com/laktiv)|
+|Language name|Native name|Contributors|
+|---|---|---|
+|Chinese (Simplified)|简体中文|[@Moyf](https://github.com/Moyf)|
+|German|Deutsch|[@hartimd](https://github.com/hartimd)|
+|Ukrainian|Український|[@Laktiv](https://github.com/laktiv)|
 
 [Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
