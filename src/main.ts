@@ -1774,7 +1774,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const itemText = await this.getItemText(toolbarItem, activeFile);
 			contextMenu.addItem((item: MenuItem) => {
 				item
-					.setIcon('pencil')
+					.setIcon('lucide-pen-box')
 					.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
 					.onClick(async () => {
 						if (toolbarSettings) {
@@ -1790,7 +1790,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name }))
-					.setIcon('lucide-pen-box')
+					.setIcon('rectangle-ellipsis')
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
 						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name }));
