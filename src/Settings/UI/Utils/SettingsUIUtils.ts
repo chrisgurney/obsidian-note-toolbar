@@ -5,6 +5,7 @@ import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
 import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
+import ItemModal from "../Modals/ItemModal";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
@@ -273,7 +274,7 @@ export function removeFieldError(fieldEl: HTMLElement | null) {
  * @param errorText Optional error text to display
  * @param errorLink Optional link to display after error text
  */
-export function setFieldError(parent: ToolbarSettingsModal, fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
+export function setFieldError(parent: ToolbarSettingsModal | ItemModal, fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
 	if (fieldEl) {
 		let fieldContainerEl = fieldEl.closest('.setting-item-control');
 		if (!fieldContainerEl) {

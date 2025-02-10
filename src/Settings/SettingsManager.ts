@@ -32,6 +32,19 @@ export class SettingsManager {
 		this.plugin.settings.toolbars = this.plugin.settings.toolbars.filter(tbar => tbar.uuid !== id);
 	}
 
+	/** 
+	 * Removes the provided item from the toolbar; does nothing if it does not exist.
+	 */
+	public deleteToolbarItemById(uuid: string): void {
+		for (const toolbar of this.plugin.settings.toolbars) {
+			const index = toolbar.items.findIndex(item => item.uuid === uuid);
+			if (index !== -1) {
+				toolbar.items.splice(index, 1);
+				return;
+			}
+		}
+	}
+
 	/**
 	 * Duplicates the given toolbar and adds it to the plugin settings.
 	 * @param toolbar ToolbarSettings to duplicate.

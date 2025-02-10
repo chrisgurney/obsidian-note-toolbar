@@ -15,11 +15,9 @@ export default class ToolbarItemUi {
 
     public plugin: NoteToolbarPlugin;
     public toolbar: ToolbarSettings;
-    private parent: ToolbarSettingsModal;
-    // private parent: ToolbarSettingsModal | ItemModal;
+    private parent: ToolbarSettingsModal | ItemModal;
 
-    // constructor(plugin: NoteToolbarPlugin, parent: ToolbarSettingsModal | ItemModal, toolbar: ToolbarSettings) {
-    constructor(plugin: NoteToolbarPlugin, parent: ToolbarSettingsModal, toolbar: ToolbarSettings) {
+    constructor(plugin: NoteToolbarPlugin, parent: ToolbarSettingsModal | ItemModal, toolbar: ToolbarSettings) {
         this.parent = parent;
         this.plugin = plugin;
         this.toolbar = toolbar;
@@ -94,7 +92,7 @@ export default class ToolbarItemUi {
                             // however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
                             this.toolbar.updated = new Date().toISOString();
                             await this.plugin.settingsManager.save();
-                            this.parent.renderPreview(toolbarItem);
+                            this.renderPreview(toolbarItem);
                         }, 750));
                     this.updateItemComponentStatus(toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
                 });	
@@ -112,7 +110,7 @@ export default class ToolbarItemUi {
                             toolbarItem.tooltip = value;
                             this.toolbar.updated = new Date().toISOString();
                             await this.plugin.settingsManager.save();
-                            this.parent.renderPreview(toolbarItem);
+                            this.renderPreview(toolbarItem);
                         }, 750));
                     this.updateItemComponentStatus(toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
                 });
@@ -148,7 +146,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.link = '';
                                 this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
                                 await this.plugin.settingsManager.save();
-                                this.parent.renderPreview(toolbarItem);
+                                this.renderPreview(toolbarItem);
                                 // for case where icon/label/tooltip fields are not used, disable them
                                 const disableFields = toolbarItem.linkAttr.type === ItemType.Group;
                                 iconField.setDisabled(disableFields);
@@ -226,7 +224,7 @@ export default class ToolbarItemUi {
         let visibilityControlsContainer = createDiv();
         visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
 
-        const visButtons = new Setting(visibilityControlsContainer)
+        let visButtons = new Setting(visibilityControlsContainer)
             .setClass("note-toolbar-setting-item-visibility")
             .addButton((cb) => {
                 let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'));
@@ -307,8 +305,10 @@ export default class ToolbarItemUi {
                             visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
                         }
                     });
-            })
-            .addExtraButton((cb) => {
+            });
+
+        if (this.parent instanceof ToolbarSettingsModal) {
+            visButtons.addExtraButton((cb) => {
                 cb.setIcon('grip-horizontal')
                     .setTooltip(t('setting.button-drag-tooltip'))
                     .extraSettingsEl.addClass('sortable-handle');
@@ -316,9 +316,10 @@ export default class ToolbarItemUi {
                 cb.extraSettingsEl.tabIndex = 0;
                 this.plugin.registerDomEvent(
                     cb.extraSettingsEl,	'keydown', (e) => {
-                        this.parent.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
+                        if (this.parent instanceof ToolbarSettingsModal) this.parent.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
                     } );
             });
+        }
 
         let itemVisilityAndControlsContainer = createDiv();
         itemVisilityAndControlsContainer.className = "note-toolbar-setting-item-visibility-and-controls";
@@ -344,7 +345,15 @@ export default class ToolbarItemUi {
 				cb.setIcon("minus-circle")
 					.setTooltip(t('setting.button-delete-tooltip'))
 					.onClick(async () => {
-						this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');
+                        if (this.parent instanceof ToolbarSettingsModal) {
+                            this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
+                        }
+                        else {
+                            this.plugin.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
+                            this.toolbar.updated = new Date().toISOString();
+                            await this.plugin.settingsManager.save();
+                            this.parent.close();
+                        }
 					});
 				cb.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 			});
@@ -433,7 +442,7 @@ export default class ToolbarItemUi {
                             toolbarItem.linkAttr.commandId = command.id;
                             toolbarItem.linkAttr.type = type;
                             await this.plugin.settingsManager.save();
-                            this.parent.renderPreview(toolbarItem);
+                            this.renderPreview(toolbarItem);
                         });
                         cb.setPlaceholder(t('setting.item.option-command-placeholder'))
                             .setValue(toolbarItem.link)
@@ -444,7 +453,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
                                 toolbarItem.linkAttr.type = type;
                                 await this.plugin.settingsManager.save();
-                                this.parent.renderPreview(toolbarItem);
+                                this.renderPreview(toolbarItem);
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
                     });	
@@ -496,7 +505,7 @@ export default class ToolbarItemUi {
                                                 }
                                             }
                                         }
-                                        this.parent.renderPreview(toolbarItem); // to make sure error state is refreshed
+                                        this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     });
                                 });
                         setFieldHelp(scriptSetting.controlEl, helpTextFr);
@@ -538,7 +547,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
                                 await this.plugin.settingsManager.save();
-                                this.parent.renderPreview(toolbarItem);
+                                this.renderPreview(toolbarItem);
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
                     });
@@ -557,7 +566,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
                                 await this.plugin.settingsManager.save();
-                                this.parent.renderPreview(toolbarItem);
+                                this.renderPreview(toolbarItem);
                                 // update help text with toolbar preview or default if none selected
                                 let groupPreviewFr = groupToolbar 
                                     ? createToolbarPreviewFr(this.plugin, groupToolbar, undefined, true) 
@@ -584,7 +593,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
                                 await this.plugin.settingsManager.save();
-                                this.parent.renderPreview(toolbarItem);
+                                this.renderPreview(toolbarItem);
                                 // update help text with toolbar preview or default if none selected
                                 let menuPreviewFr = menuToolbar 
                                     ? createToolbarPreviewFr(this.plugin, menuToolbar, undefined, true)
@@ -609,7 +618,7 @@ export default class ToolbarItemUi {
                                     toolbarItem.linkAttr.type = type;
                                     this.toolbar.updated = new Date().toISOString();
                                     await this.plugin.settingsManager.save();
-                                    this.parent.renderPreview(toolbarItem);
+                                    this.renderPreview(toolbarItem);
                                 }, 500));
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
                     });
@@ -648,7 +657,7 @@ export default class ToolbarItemUi {
                                         const isValid = this.updateItemComponentStatus(commandId, param.type, cb.inputEl.parentElement);
                                         config[param.parameter as keyof ScriptConfig] = isValid && commandId ? commandId : '';
                                         await this.plugin.settingsManager.save();
-                                        this.parent.renderPreview(toolbarItem); // to make sure error state is refreshed
+                                        this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
                                 this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
@@ -671,7 +680,7 @@ export default class ToolbarItemUi {
                                         config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
                                         this.toolbar.updated = new Date().toISOString();
                                         await this.plugin.settingsManager.save();
-                                        this.parent.renderPreview(toolbarItem); // to make sure error state is refreshed
+                                        this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
                                 this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
@@ -688,7 +697,7 @@ export default class ToolbarItemUi {
                                             config[param.parameter as keyof ScriptConfig] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
                                             await this.plugin.settingsManager.save();
-                                            this.parent.renderPreview(toolbarItem); // to make sure error state is refreshed
+                                            this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
                                 this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
@@ -707,7 +716,7 @@ export default class ToolbarItemUi {
                                             config[param.parameter as keyof ScriptConfig] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
                                             await this.plugin.settingsManager.save();
-                                            this.parent.renderPreview(toolbarItem); // to make sure error state is refreshed
+                                            this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
                                 this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);					
                             });
@@ -791,6 +800,10 @@ export default class ToolbarItemUi {
 		return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
 
 	}
+
+    renderPreview(toolbarItem: ToolbarItemSettings) {
+        if (this.parent instanceof ToolbarSettingsModal) this.parent.renderPreview(toolbarItem);
+    }
 
     /**
      * Updates the UI state of the given component if the value is invalid.
