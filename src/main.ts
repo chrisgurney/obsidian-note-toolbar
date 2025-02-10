@@ -848,9 +848,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
-				let title = toolbarItem.label ? 
-					(this.hasVars(toolbarItem.label) ? await this.replaceVars(toolbarItem.label, file) : toolbarItem.label) : 
-					(this.hasVars(toolbarItem.tooltip) ? await this.replaceVars(toolbarItem.tooltip, file) : toolbarItem.tooltip);
+				const title = await this.getItemText(toolbarItem, file);
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -1772,17 +1770,19 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// edit item
 		if (toolbarItem) {
+			const activeFile = this.app.workspace.getActiveFile();
+			const itemText = await this.getItemText(toolbarItem, activeFile);
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('pencil')
-					.setTitle(t('toolbar.menu-edit-item'))
+					.setTitle(t('toolbar.menu-edit-item', { text: itemText }))
 					.onClick(async () => {
 						if (toolbarSettings) {
 							const itemModal = new ItemModal(this.app, this, toolbarSettings, toolbarItem);
 							itemModal.open();
 						}
 					});
-			});				
+			});
 		}
 
 		// edit toolbar
@@ -1790,7 +1790,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name }))
-					.setIcon("lucide-pen-box")
+					.setIcon('lucide-pen-box')
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
 						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name }));
@@ -1802,7 +1802,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		contextMenu.addItem((item: MenuItem) => {
 			item
 			  .setTitle(t('toolbar.menu-toolbar-settings'))
-			  .setIcon("lucide-wrench")
+			  .setIcon('gear')
 			  .onClick((menuEvent) => {
 				  this.commands.openSettings();
 			  });
@@ -2027,6 +2027,18 @@ export default class NoteToolbarPlugin extends Plugin {
 		const noteToolbarEl = this.getToolbarEl();
 		const noteToolbarSettings = noteToolbarEl ? this.settingsManager.getToolbarById(noteToolbarEl?.id) : undefined;
 		return noteToolbarSettings;
+	}
+
+	/**
+	 * Gets the text to display on the toolbar item, taking into account title, tooltip, vars, and expressions.
+	 * @param toolbarItem ToolbarItemSettings to get the text for.
+	 * @param file TFile of the note that the toolbar is being rendered within, or null.
+	 * @returns string to display on the toolbar
+	 */
+	async getItemText(toolbarItem: ToolbarItemSettings, file: TFile | null): Promise<string> {
+		return toolbarItem.label ? 
+			(this.hasVars(toolbarItem.label) ? await this.replaceVars(toolbarItem.label, file) : toolbarItem.label) : 
+			(this.hasVars(toolbarItem.tooltip) ? await this.replaceVars(toolbarItem.tooltip, file) : toolbarItem.tooltip);
 	}
 
 	/**
