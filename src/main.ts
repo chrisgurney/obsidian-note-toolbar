@@ -1699,14 +1699,14 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			if (Platform.isTablet) contextMenu.addSeparator();
 
-			// style
+			// style toolbar
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('palette')
 					.setTitle(t('toolbar.menu-style'))
 					.onClick(async () => {
 						if (toolbarSettings) {
-							let styleModal = new StyleModal(this.app, this, toolbarSettings);
+							const styleModal = new StyleModal(this.app, this, toolbarSettings);
 							styleModal.open();
 						}
 					});
