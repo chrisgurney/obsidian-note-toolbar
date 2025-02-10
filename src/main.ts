@@ -1775,7 +1775,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('pencil')
-					.setTitle(t('toolbar.menu-edit-item', { text: itemText }))
+					.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
 					.onClick(async () => {
 						if (toolbarSettings) {
 							const itemModal = new ItemModal(this.app, this, toolbarSettings, toolbarItem);
