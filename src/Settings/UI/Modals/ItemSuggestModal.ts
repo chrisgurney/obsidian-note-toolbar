@@ -3,6 +3,7 @@ import NoteToolbarPlugin from "main";
 import { calcItemVisToggles, debugLog } from "Utils/Utils";
 import { ItemType, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
+import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
@@ -165,79 +166,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
-        if (!item) { return }
-        el.addClass("note-toolbar-item-suggestion");
-        el.setAttribute('id', item.uuid);
-        if (item.icon) {
-            let svgExists = getIcon(item.icon);
-            if (svgExists) {
-                let iconGlyph = el.createSpan();
-                setIcon(iconGlyph, item.icon);
-            }
-        }
-        let itemNameEl = el.createSpan();
-        let itemName = item.label || item.tooltip;
-
-        // fallback if no label or tooltip
-        let isItemNameLink = false;
-        if (!itemName) {
-            if (item.icon) {
-                isItemNameLink = true;
-                itemName = item.link;
-            }
-            else {
-                itemName = '';
-            }
-        }
-
-        itemNameEl.addClass("note-toolbar-item-suggester-name");
-        let itemLabel = itemNameEl.createSpan();
-
-        let itemMeta = itemNameEl.createSpan();
-        let title = itemName;
-        // replace variables in labels (or tooltip, if no label set)
-        this.plugin.replaceVars(itemName, this.activeFile).then((resolvedName) => {
-            itemLabel.setText(resolvedName);
-        });
-
-        itemMeta.addClass("note-toolbar-item-suggester-type");
-        switch (item.linkAttr.type) {
-            case ItemType.Command:
-                setTooltip(itemMeta, t('setting.item.option-command'));
-                break;
-            case ItemType.File:
-                setIcon(itemMeta, 'file');
-                setTooltip(itemMeta, t('setting.item.option-file'));
-                break;
-            case ItemType.Uri:
-                setIcon(itemMeta, 'globe');
-                setTooltip(itemMeta, t('setting.item.option-uri'));
-                break;
-            case ItemType.Dataview:
-            case ItemType.JsEngine:
-                setIcon(itemMeta, 'scroll');
-                setTooltip(itemMeta, "Script");
-                break;
-            case ItemType.Templater:
-                setIcon(itemMeta, 'templater-icon');
-                setTooltip(itemMeta, "Templater");
-                break;
-        }
-        
-        const inputStrLower = this.inputEl.value.toLowerCase();
-        // if what's shown doesn't already contain the searched string, show it below
-        if (!title.toLowerCase().includes(inputStrLower)) {
-            let inputMatch = 
-                item.label.toLowerCase().includes(inputStrLower)
-                    ? item.label
-                    : item.tooltip.toLowerCase().includes(inputStrLower) 
-                        ? item.tooltip 
-                        : item.link;
-            let itemNoteEl = itemLabel.createDiv();
-            itemNoteEl.addClass('note-toolbar-item-suggester-note');
-            itemNoteEl.setText(inputMatch);
-        }
-
+        renderItemSuggestion(this.plugin, item, el, this.inputEl.value);
     }
 
     /**

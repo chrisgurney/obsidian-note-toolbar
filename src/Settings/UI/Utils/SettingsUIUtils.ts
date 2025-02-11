@@ -1,4 +1,4 @@
-import { ButtonComponent, getIcon, Platform, setIcon, Setting } from "obsidian";
+import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
 import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
@@ -264,6 +264,89 @@ export function removeFieldError(fieldEl: HTMLElement | null) {
 		let fieldContainerEl = fieldEl.closest('.setting-item-control');
 		fieldContainerEl?.querySelector('.note-toolbar-setting-field-error')?.remove();
 		fieldEl?.removeClass('note-toolbar-setting-error');
+	}
+}
+
+/**
+ * Renders the item suggestion into the given element, for use in item suggesters and Quick Tools.
+ * @param plugin NoteToolbarPlugin
+ * @param item ToolbarItemSettings to render
+ * @param el HEMLElement to render suggestion into
+ * @param inputStr string that was used to search for this item
+ */
+export function renderItemSuggestion(plugin: NoteToolbarPlugin, item: ToolbarItemSettings, el: HTMLElement, inputStr: string) {
+	if (!item) { return }
+	el.addClass("note-toolbar-item-suggestion");
+	el.setAttribute('id', item.uuid);
+	if (item.icon) {
+		let svgExists = getIcon(item.icon);
+		if (svgExists) {
+			let iconGlyph = el.createSpan();
+			setIcon(iconGlyph, item.icon);
+		}
+	}
+	let itemNameEl = el.createSpan();
+	let itemName = item.label || item.tooltip;
+
+	// fallback if no label or tooltip
+	let isItemNameLink = false;
+	if (!itemName) {
+		if (item.icon) {
+			isItemNameLink = true;
+			itemName = item.link;
+		}
+		else {
+			itemName = '';
+		}
+	}
+
+	itemNameEl.addClass("note-toolbar-item-suggester-name");
+	let itemLabel = itemNameEl.createSpan();
+
+	let itemMeta = itemNameEl.createSpan();
+	let title = itemName;
+	// replace variables in labels (or tooltip, if no label set)
+	const activeFile = plugin.app.workspace.getActiveFile();
+	plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+		itemLabel.setText(resolvedName);
+	});
+
+	itemMeta.addClass("note-toolbar-item-suggester-type");
+	switch (item.linkAttr.type) {
+		case ItemType.Command:
+			setTooltip(itemMeta, t('setting.item.option-command'));
+			break;
+		case ItemType.File:
+			setIcon(itemMeta, 'file');
+			setTooltip(itemMeta, t('setting.item.option-file'));
+			break;
+		case ItemType.Uri:
+			setIcon(itemMeta, 'globe');
+			setTooltip(itemMeta, t('setting.item.option-uri'));
+			break;
+		case ItemType.Dataview:
+		case ItemType.JsEngine:
+			setIcon(itemMeta, 'scroll');
+			setTooltip(itemMeta, "Script");
+			break;
+		case ItemType.Templater:
+			setIcon(itemMeta, 'templater-icon');
+			setTooltip(itemMeta, "Templater");
+			break;
+	}
+	
+	const inputStrLower = inputStr.toLowerCase();
+	// if what's shown doesn't already contain the searched string, show it below
+	if (!title.toLowerCase().includes(inputStrLower)) {
+		let inputMatch = 
+			item.label.toLowerCase().includes(inputStrLower)
+				? item.label
+				: item.tooltip.toLowerCase().includes(inputStrLower) 
+					? item.tooltip 
+					: item.link;
+		let itemNoteEl = itemLabel.createDiv();
+		itemNoteEl.addClass('note-toolbar-item-suggester-note');
+		itemNoteEl.setText(inputMatch);
 	}
 }
 
