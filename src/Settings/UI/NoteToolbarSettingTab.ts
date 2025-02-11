@@ -332,7 +332,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		let emptyViewTbarSetting = new Setting(containerEl)
 			.setName(t('setting.display-rules.option-emptyview'))
 			.setDesc(t('setting.display-rules.option-emptyview-description'))
-			.setClass('note-toolbar-setting-no-border')
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
@@ -378,13 +377,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayFolderMap(containerEl: HTMLElement): void {
 
 		let mappingsContainer = createDiv();
-		mappingsContainer.addClass('note-toolbar-setting-mappings-container');
+		mappingsContainer.addClasses(['note-toolbar-setting-mappings-container', 'note-toolbar-setting-top-border']);
 		mappingsContainer.setAttribute('data-active', this.mappingListOpen.toString());
 
 		let toolbarMapSetting = new Setting(mappingsContainer)
 			.setName(t('setting.mappings.name'))
-			.setDesc(t('setting.mappings.description'))
-			.setClass("note-toolbar-setting-no-border");
+			.setDesc(t('setting.mappings.description'));
 
 		if (this.plugin.settings.folderMappings.length > 4) {
 			toolbarMapSetting
