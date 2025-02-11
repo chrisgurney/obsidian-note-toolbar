@@ -166,7 +166,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
-        renderItemSuggestion(this.plugin, item, el, this.inputEl.value);
+        renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true);
     }
 
     /**

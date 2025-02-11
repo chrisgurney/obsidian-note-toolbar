@@ -273,8 +273,15 @@ export function removeFieldError(fieldEl: HTMLElement | null) {
  * @param item ToolbarItemSettings to render
  * @param el HEMLElement to render suggestion into
  * @param inputStr string that was used to search for this item
+ * @param showMeta boolean to set true if the meta icon should be shown (for Quick Tools)
  */
-export function renderItemSuggestion(plugin: NoteToolbarPlugin, item: ToolbarItemSettings, el: HTMLElement, inputStr: string) {
+export function renderItemSuggestion(
+	plugin: NoteToolbarPlugin, 
+	item: ToolbarItemSettings, 
+	el: HTMLElement, 
+	inputStr: string, 
+	showMeta: boolean = false
+) {
 	if (!item) { return }
 	el.addClass("note-toolbar-item-suggestion");
 	el.setAttribute('id', item.uuid);
@@ -303,36 +310,38 @@ export function renderItemSuggestion(plugin: NoteToolbarPlugin, item: ToolbarIte
 	itemNameEl.addClass("note-toolbar-item-suggester-name");
 	let itemLabel = itemNameEl.createSpan();
 
-	let itemMeta = itemNameEl.createSpan();
 	let title = itemName;
 	// replace variables in labels (or tooltip, if no label set)
 	const activeFile = plugin.app.workspace.getActiveFile();
 	plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
 		itemLabel.setText(resolvedName);
 	});
-
-	itemMeta.addClass("note-toolbar-item-suggester-type");
-	switch (item.linkAttr.type) {
-		case ItemType.Command:
-			setTooltip(itemMeta, t('setting.item.option-command'));
-			break;
-		case ItemType.File:
-			setIcon(itemMeta, 'file');
-			setTooltip(itemMeta, t('setting.item.option-file'));
-			break;
-		case ItemType.Uri:
-			setIcon(itemMeta, 'globe');
-			setTooltip(itemMeta, t('setting.item.option-uri'));
-			break;
-		case ItemType.Dataview:
-		case ItemType.JsEngine:
-			setIcon(itemMeta, 'scroll');
-			setTooltip(itemMeta, "Script");
-			break;
-		case ItemType.Templater:
-			setIcon(itemMeta, 'templater-icon');
-			setTooltip(itemMeta, "Templater");
-			break;
+	
+	if (showMeta) {
+		let itemMeta = itemNameEl.createSpan();
+		itemMeta.addClass("note-toolbar-item-suggester-type");
+		switch (item.linkAttr.type) {
+			case ItemType.Command:
+				setTooltip(itemMeta, t('setting.item.option-command'));
+				break;
+			case ItemType.File:
+				setIcon(itemMeta, 'file');
+				setTooltip(itemMeta, t('setting.item.option-file'));
+				break;
+			case ItemType.Uri:
+				setIcon(itemMeta, 'globe');
+				setTooltip(itemMeta, t('setting.item.option-uri'));
+				break;
+			case ItemType.Dataview:
+			case ItemType.JsEngine:
+				setIcon(itemMeta, 'scroll');
+				setTooltip(itemMeta, "Script");
+				break;
+			case ItemType.Templater:
+				setIcon(itemMeta, 'templater-icon');
+				setTooltip(itemMeta, "Templater");
+				break;
+		}
 	}
 	
 	const inputStrLower = inputStr.toLowerCase();
