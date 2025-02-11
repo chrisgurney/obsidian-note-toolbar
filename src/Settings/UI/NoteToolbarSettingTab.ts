@@ -689,19 +689,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		new Setting(containerEl)
-			.setName(t('setting.other.scripting.name'))
-			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(this.plugin.settings.scriptingEnabled)
-					.onChange(async (value) => {
-						this.plugin.settings.scriptingEnabled = value;
-						this.plugin.updateAdapters();
-						await this.plugin.settingsManager.save();
-					});
-			});
-
-		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
 			.setDesc(t('setting.other.icon.description'))
 			.addButton((cb) => {
@@ -725,7 +712,32 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					});
 			});
+
+		new Setting(containerEl)
+			.setName(t('setting.other.scripting.name'))
+			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.scriptingEnabled)
+					.onChange(async (value) => {
+						this.plugin.settings.scriptingEnabled = value;
+						this.plugin.updateAdapters();
+						await this.plugin.settingsManager.save();
+					});
+			});
 		
+		new Setting(containerEl)
+			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
+			.setDesc(learnMoreFr(t('setting.other.show-toolbar-in-file-menu.description'), 'Other-settings'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showToolbarInFileMenu = value;
+					await this.plugin.settingsManager.save();
+					// TODO? force the re-rendering of the current toolbar to update the menu
+				});
+			});
+
 		new Setting(containerEl)
 			.setName(t('setting.other.ribbon-action.name'))
 			.setDesc(learnMoreFr(t('setting.other.ribbon-action.description'), 'Navigation-bar'))
@@ -738,18 +750,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						await this.plugin.settingsManager.save();
 					})
 				);
-
-		new Setting(containerEl)
-			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
-			.setDesc(learnMoreFr(t('setting.other.show-toolbar-in-file-menu.description'), 'Other-settings'))
-			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
-				cb.onChange(async (value) => {
-					this.plugin.settings.showToolbarInFileMenu = value;
-					await this.plugin.settingsManager.save();
-					// TODO? force the re-rendering of the current toolbar to update the menu
-				});
-			});
 
 		new Setting(containerEl)
 			.setName(t('setting.other.show-edit-tbar.name'))
