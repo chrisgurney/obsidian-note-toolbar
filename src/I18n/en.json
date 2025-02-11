@@ -335,7 +335,9 @@
         },
         "open-command": {
             "name": "Add toolbar command",
-            "description": "Add a command that opens this toolbar in a Quick Tools window."
+            "description": "Add a command that opens this toolbar in a Quick Tools window.",
+            "notice-command-added": "Command now available:\n{{command}}",
+            "notice-command-removed": "Command removed:\n{{command}}"
         },
         "other": {
             "name": "Other",
