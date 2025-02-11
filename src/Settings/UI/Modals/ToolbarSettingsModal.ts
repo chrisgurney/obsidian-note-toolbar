@@ -9,6 +9,7 @@ import Sortable from 'sortablejs';
 import { importFromModal } from './ImportModal';
 import ToolbarStyleUi from '../ToolbarStyleUi';
 import ToolbarItemUi from '../ToolbarItemUi';
+import { ItemSuggester } from '../Suggesters/ItemSuggester';
 
 enum ItemFormComponent {
 	Delete = 'delete',
@@ -572,6 +573,21 @@ export default class ToolbarSettingsModal extends Modal {
 					})
 				);
 
+
+		// TODO: if position is fabl or fabr, display this setting:
+		// new Setting(settingsDiv)
+		// 	.addSearch((cb) => {
+		// 		new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl);
+		// 		cb.setPlaceholder("Choose an item...")
+		// 			.setValue("adsfasdfasdf")
+		// 			.onChange(debounce(async (item) => {
+		// 				// TODO: update setting
+		// 				// await this.plugin.settingsManager.save();
+		// 				// TODO: if not valid show error/warning
+		// 			}, 250));
+		// 	});
+		// TODO: set an ID on this setting so it can be used by the selector code
+
 		new Setting(settingsDiv)
 			.setName(t('setting.option-platform-mobile'))
 			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden'
@@ -593,6 +609,8 @@ export default class ToolbarSettingsModal extends Modal {
 						this.display();
 					})
 				);
+
+		// TODO: repeat ItemSuggester setting code here
 
 	}
 
