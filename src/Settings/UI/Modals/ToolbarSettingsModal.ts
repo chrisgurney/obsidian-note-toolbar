@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Modal, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
@@ -640,9 +640,17 @@ export default class ToolbarSettingsModal extends Modal {
 									this.plugin.commands.openItemSuggester(this.toolbar.uuid);
 								}
 							});
+							new Notice(t(
+								'setting.open-command.notice-command-added', 
+								{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
+							));
 						}
 						else {
 							this.plugin.removeCommand(COMMAND_PREFIX_TBAR + this.toolbar.uuid);
+							new Notice(t(
+								'setting.open-command.notice-command-removed', 
+								{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
+							));
 						}
 					});
 			});
