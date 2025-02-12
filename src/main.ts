@@ -829,7 +829,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbar.name }))
-					.setIcon("lucide-pen-box")
+					.setIcon('rectangle-ellipsis')
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
 						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name }));
