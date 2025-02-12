@@ -42,4 +42,11 @@ export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
         renderItemSuggestion(this.plugin, item, el, this.inputEl.value);
     }
 
+    selectSuggestion(item: ToolbarItemSettings): void {
+        this.inputEl.value = item.label || item.tooltip;
+        this.inputEl.trigger("input");
+        this.inputEl.blur();
+        this.close();
+    }    
+
 }

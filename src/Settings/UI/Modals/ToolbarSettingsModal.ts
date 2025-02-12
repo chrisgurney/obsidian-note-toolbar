@@ -30,8 +30,11 @@ export default class ToolbarSettingsModal extends Modal {
 	public plugin: NoteToolbarPlugin;
 	public toolbar: ToolbarSettings;
 	private parent: NoteToolbarSettingTab | null;
-	private itemListOpen: boolean = true; 
+	
+	private hasDesktopFabPosition: boolean = false;
+	private hasMobileFabPosition: boolean = false;
 	private itemListIdCounter: number = 0;
+	private itemListOpen: boolean = true; 
 	private toolbarItemUi: ToolbarItemUi;
 
 	/**
@@ -556,6 +559,11 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(learnMoreFr(t('setting.position.description'), 'Positioning-toolbars'))
 			.setHeading();
 
+		const initialDesktopPosition = this.toolbar.position.desktop?.allViews?.position ?? PositionType.Props;
+		const initialMobilePosition = this.toolbar.position.mobile?.allViews?.position ?? PositionType.Props;
+		this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialMobilePosition);
+		this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialDesktopPosition);
+
 		new Setting(settingsDiv)
 			.setName(t('setting.option-platform-desktop'))
 			.addDropdown((dropdown) =>
@@ -564,29 +572,19 @@ export default class ToolbarSettingsModal extends Modal {
 						POSITION_OPTIONS.desktop.reduce((acc, option) => {
 							return { ...acc, ...option };
 						}, {}))
-					.setValue(this.toolbar.position.desktop?.allViews?.position ?? 'props')
+					.setValue(initialDesktopPosition)
 					.onChange(async (val: PositionType) => {
 						this.toolbar.position.desktop = { allViews: { position: val } };
 						this.toolbar.updated = new Date().toISOString();
+						this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+						let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
+						if (!this.hasMobileFabPosition) {
+							defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
+						}
 						await this.plugin.settingsManager.save();
 						this.display();
 					})
 				);
-
-
-		// TODO: if position is fabl or fabr, display this setting:
-		// new Setting(settingsDiv)
-		// 	.addSearch((cb) => {
-		// 		new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl);
-		// 		cb.setPlaceholder("Choose an item...")
-		// 			.setValue("adsfasdfasdf")
-		// 			.onChange(debounce(async (item) => {
-		// 				// TODO: update setting
-		// 				// await this.plugin.settingsManager.save();
-		// 				// TODO: if not valid show error/warning
-		// 			}, 250));
-		// 	});
-		// TODO: set an ID on this setting so it can be used by the selector code
 
 		new Setting(settingsDiv)
 			.setName(t('setting.option-platform-mobile'))
@@ -600,17 +598,36 @@ export default class ToolbarSettingsModal extends Modal {
 						POSITION_OPTIONS.mobile.reduce((acc, option) => {
 							return { ...acc, ...option };
 						}, {}))
-					.setValue(this.toolbar.position.mobile?.allViews?.position ?? 'props')
+					.setValue(initialMobilePosition)
 					.onChange(async (val: PositionType) => {
 						this.toolbar.position.mobile = { allViews: { position: val } };
 						this.toolbar.position.tablet = { allViews: { position: val } };
 						this.toolbar.updated = new Date().toISOString();
+						this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+						let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
+						if (!this.hasDesktopFabPosition) {
+							defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
+						}
 						await this.plugin.settingsManager.save();
 						this.display();
 					})
 				);
 
-		// TODO: repeat ItemSuggester setting code here
+		let defaultItemSetting = new Setting(settingsDiv)
+			.setName("Floating button default item")
+			.setDesc("Show this item as the button. Open the menu with right-click (long-press on mobile).")
+			.addSearch((cb) => {
+				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl);
+				cb.setPlaceholder("Item...")
+					.setValue(this.toolbar.defaultItem ?? '')
+					.onChange(debounce(async (item) => {
+						this.toolbar.defaultItem = item;
+						await this.plugin.settingsManager.save();
+					}, 250));
+			});
+		defaultItemSetting.settingEl.id = 'note-toolbar-default-item';
+		defaultItemSetting.settingEl.setAttribute('data-active', 
+			(this.hasMobileFabPosition || this.hasDesktopFabPosition) ? 'true' : 'false');
 
 	}
 
