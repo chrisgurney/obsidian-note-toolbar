@@ -183,7 +183,7 @@ settings:
         description.de: 'Abstand um das Symbol herum'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
-        default: 12
+        default: 13
         format: px
     -
         id: cg-nt-fab-padding
@@ -204,7 +204,7 @@ settings:
         title.de: 'Symbolgröße am PC (in px) 📱'
         title.zh: '桌面端图标大小（单位：像素）'
         type: variable-number
-        default: 24
+        default: 20
         format: px
     -
         id: cg-nt-fab-icon-size
@@ -921,13 +921,13 @@ body {
     --cg-nt-fab-icon-color: var(--icon-color);
     --cg-nt-fab-icon-color-desktop: var(--icon-color);
     --cg-nt-fab-icon-size: var(--icon-l);
-    --cg-nt-fab-icon-size-desktop: 24px;
+    --cg-nt-fab-icon-size-desktop: 20px;
     --cg-nt-fab-icon-stroke-width: var(--icon-l-stroke-width);
     --cg-nt-fab-icon-stroke-width-desktop: var(--icon-l-stroke-width);
     --cg-nt-fab-border-radius: 999px;
     --cg-nt-fab-border-radius-desktop: 999px;
     --cg-nt-fab-padding: calc(var(--icon-l) / 2);
-    --cg-nt-fab-padding-desktop: calc(var(--icon-l) / 1.5);
+    --cg-nt-fab-padding-desktop: calc(var(--cg-nt-fab-icon-size-desktop) / 1.5);
     --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-item-border-radius: var(--button-radius);
     --cg-nt-item-button-bg-color: var(--interactive-normal);

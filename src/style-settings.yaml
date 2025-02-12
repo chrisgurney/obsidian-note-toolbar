@@ -179,7 +179,7 @@ settings:
         description.de: 'Abstand um das Symbol herum'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
-        default: 12
+        default: 13
         format: px
     -
         id: cg-nt-fab-padding
@@ -200,7 +200,7 @@ settings:
         title.de: 'Symbolgröße am PC (in px) 📱'
         title.zh: '桌面端图标大小（单位：像素）'
         type: variable-number
-        default: 24
+        default: 20
         format: px
     -
         id: cg-nt-fab-icon-size
