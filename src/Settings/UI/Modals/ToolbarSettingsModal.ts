@@ -617,12 +617,21 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName("Floating button default item")
 			.setDesc("Show this item as the button. Open the menu with right-click (long-press on mobile).")
 			.addSearch((cb) => {
-				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl);
-				cb.setPlaceholder("Item...")
-					.setValue(this.toolbar.defaultItem ?? '')
-					.onChange(debounce(async (item) => {
-						this.toolbar.defaultItem = item;
-						await this.plugin.settingsManager.save();
+				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
+					cb.inputEl.setText(item.label || item.tooltip);
+					this.toolbar.defaultItem = item.uuid;
+					await this.plugin.settingsManager.save();
+				});
+				const initialItem = this.plugin.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
+				cb.setPlaceholder("Select item...")
+					.setValue(initialItem ? (initialItem.label || initialItem.tooltip) : '')
+					.onChange(debounce(async (itemText) => {
+						// TODO: if not valid show error/warning
+						cb.inputEl.setText(itemText);
+						if (!itemText) {
+							this.toolbar.defaultItem = null;
+							await this.plugin.settingsManager.save();
+						}
 					}, 250));
 			});
 		defaultItemSetting.settingEl.id = 'note-toolbar-default-item';

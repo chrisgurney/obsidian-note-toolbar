@@ -8,12 +8,20 @@ export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
     private plugin: NoteToolbarPlugin;
     private toolbar: ToolbarSettings;
     private inputEl: HTMLInputElement;
+    private callback: (item: ToolbarItemSettings) => void
 
-    constructor(app: App, plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, inputEl: HTMLInputElement) {
+    constructor(
+        app: App, 
+        plugin: NoteToolbarPlugin, 
+        toolbar: ToolbarSettings, 
+        inputEl: HTMLInputElement, 
+        callback: (item: ToolbarItemSettings) => void
+    ) {
         super(app, inputEl);
         this.plugin = plugin;
         this.toolbar = toolbar;
         this.inputEl = inputEl;
+        this.callback = callback;
     }
 
     getSuggestions(inputStr: string): ToolbarItemSettings[] {
@@ -43,9 +51,7 @@ export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
     }
 
     selectSuggestion(item: ToolbarItemSettings): void {
-        this.inputEl.value = item.label || item.tooltip;
-        this.inputEl.trigger("input");
-        this.inputEl.blur();
+        this.callback(item);
         this.close();
     }    
 
