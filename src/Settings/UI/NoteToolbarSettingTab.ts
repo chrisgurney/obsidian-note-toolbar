@@ -723,7 +723,19 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						await this.plugin.settingsManager.save();
 					});
 			});
-		
+
+		new Setting(containerEl)
+			.setName(t('setting.other.show-edit-tbar.name'))
+			.setDesc(t('setting.other.show-edit-tbar.description'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showEditInFabMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showEditInFabMenu = value;
+					await this.plugin.settingsManager.save();
+					// TODO? force the re-rendering of the current toolbar to update the menu
+				});
+			});
+			
 		new Setting(containerEl)
 			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
 			.setDesc(learnMoreFr(t('setting.other.show-toolbar-in-file-menu.description'), 'Other-settings'))
@@ -748,18 +760,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						await this.plugin.settingsManager.save();
 					})
 				);
-
-		new Setting(containerEl)
-			.setName(t('setting.other.show-edit-tbar.name'))
-			.setDesc(t('setting.other.show-edit-tbar.description'))
-			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.showEditInFabMenu)
-				cb.onChange(async (value) => {
-					this.plugin.settings.showEditInFabMenu = value;
-					await this.plugin.settingsManager.save();
-					// TODO? force the re-rendering of the current toolbar to update the menu
-				});
-			});
 
 	}
 

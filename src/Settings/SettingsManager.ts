@@ -55,6 +55,7 @@ export class SettingsManager {
 		let newToolbar = {
 			uuid: getUUID(),
 			customClasses: "",
+			defaultItem: toolbar.defaultItem,
 			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)),
 			hasCommand: false,
 			items: [],
@@ -264,6 +265,7 @@ export class SettingsManager {
 		let newToolbar = {
 			uuid: getUUID(),
 			customClasses: "",
+			defaultItem: null,
 			defaultStyles: ["border", "even", "sticky"],
 			hasCommand: false,
 			items: [],
