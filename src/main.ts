@@ -510,9 +510,18 @@ export default class NoteToolbarPlugin extends Plugin {
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
-				// TODO: change to render toolbar as menu if default FAB item is set
-				
-				this.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));		
+				// render toolbar as menu if a default item is set
+				if (toolbar.defaultItem) {
+					this.registerDomEvent(noteToolbarElement, 'contextmenu', (event) => {
+						this.renderToolbarAsMenu(toolbar, file, this.settings.showEditInFabMenu).then(menu => {
+							menu.showAtPosition(event);
+							event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
+						});
+					});
+				}
+				else {
+					this.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
+				}
 				break;
 			case PositionType.Bottom:
 			case PositionType.Props:
@@ -781,9 +790,21 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let noteToolbarFabButton = activeDocument.createElement('button');
 		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
-		noteToolbarFabButton.setAttribute('aria-label', t('toolbar.button-floating-tooltip'));
 		noteToolbarFabButton.setAttribute("data-fab-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
-		setIcon(noteToolbarFabButton, this.settings.icon);
+
+		const defaultItem = toolbar.defaultItem ? this.settingsManager.getToolbarItemById(toolbar.defaultItem) : undefined;
+		// show default item if set
+		if (defaultItem) {
+			let activeFile = this.app.workspace.getActiveFile();
+			let defaultItemText = defaultItem.label || defaultItem.tooltip;
+			if (this.hasVars(defaultItemText)) defaultItemText = await this.replaceVars(defaultItemText, activeFile);
+			noteToolbarFabButton.setAttribute('aria-label', defaultItemText);
+			setIcon(noteToolbarFabButton, defaultItem.icon);
+		}
+		else {
+			noteToolbarFabButton.setAttribute('aria-label', t('toolbar.button-floating-tooltip'));
+			setIcon(noteToolbarFabButton, this.settings.icon);
+		}
 		
 		noteToolbarFabContainer.append(noteToolbarFabButton);
 
@@ -1486,23 +1507,33 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		if (toolbar) {
-			this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-				let fabEl = this.getToolbarFabEl();
-				if (fabEl) {
-					let fabPos = fabEl.getAttribute('data-tbar-position');
-					// determine menu orientation based on button position
-					let elemRect = posAtElement.getBoundingClientRect();
-					let menuPos = { 
-						x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
-						y: (elemRect.top - 4),
-						overlap: true,
-						left: (fabPos === PositionType.FabLeft ? false : true)
-					};
-					// store menu position for sub-menu positioning
-					localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
-					menu.showAtPosition(menuPos);
+			// if the default option is set, handle the item
+			if (toolbar.defaultItem) {
+				const toolbarItem = this.settingsManager.getToolbarItemById(toolbar.defaultItem);
+				if (toolbarItem) {
+					await this.handleItemLink(toolbarItem, event, activeFile);
 				}
-			});
+				// TODO: else report error: invalid item?
+			}
+			else {
+				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
+					let fabEl = this.getToolbarFabEl();
+					if (fabEl) {
+						let fabPos = fabEl.getAttribute('data-tbar-position');
+						// determine menu orientation based on button position
+						let elemRect = posAtElement.getBoundingClientRect();
+						let menuPos = { 
+							x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
+							y: (elemRect.top - 4),
+							overlap: true,
+							left: (fabPos === PositionType.FabLeft ? false : true)
+						};
+						// store menu position for sub-menu positioning
+						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+						menu.showAtPosition(menuPos);
+					}
+				});
+			}
 		}
 
 	}
