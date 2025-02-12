@@ -1,7 +1,7 @@
 {
     "adapter": {
         "args": "Аргументи (за бажанням)",
-        "args-description": "Аргументи, що приймаються вашою функцією, у форматі 'name: value' через кому, зі строковими значеннями в лапках.",
+        "args-description": "Аргументи, що приймаються функцією, у форматі {\"name\": \"value\", ...} через кому, зі строковими значеннями в лапках.",
         "outputcontainer": "ID виводу виноски (за бажанням)",
         "outputcontainer-description": "Додайте до нотатки виноску note-toolbar-output з унікальним метаполем для вивода результату.",
         "postCommand": "Команда після виконання (за бажанням)",
@@ -32,12 +32,12 @@
             "exec-sourcefile-error-required": "⚠️ Помилка: Потрібен JavaScript файл",
             "importexec-function": "Імпортувати та виконати JavaScript",
             "importexec-sourcefile": "Файл JavaScript",
-            "importexec-sourcefile-description": "Файл JavaScript для імпорту. Зверніть увагу, що файл імпортується лише один раз. Можливо доведеться перезапустити Obsidian для збереження змін.",
+            "importexec-sourcefile-description": "Файл JavaScript для імпорту. Увага! Файл імпортується лише один раз. Можливо, треба перезапустити Obsidian для отримання змін.",
             "importexec-sourcefile-error-required": "⚠️ Помилка: Потрібен JavaScript файл",
             "importexec-sourcefunction": "Функція (за бажанням)",
-            "importexec-sourcefunction-description": "Якщо скрипт має функції, назва функції для виконання.",
+            "importexec-sourcefunction-description": "Якщо скрипт має функції, вкажіть ім'я функції для виконання.",
             "importexec-args": "Аргументи (за бажанням)",
-            "importexec-args-description": "Аргументи, що приймаються функцією, у форматі 'name: value' через кому, зі строковими значеннями в лапках."
+            "importexec-args-description": "Аргументи, що приймаються функцією, у форматі {\"name\": \"value\", ...} через кому, зі строковими значеннями в лапках."
         },
         "templater": {
             "append-function": "Вставити шаблон",
@@ -86,7 +86,7 @@
     "command": {
         "name-focus": "Фокусування",
         "name-item-suggester": "Швидкі інструменти",
-        "name-item-suggester-current": "Швидкі інструменти (ця панель)",
+        "name-item-suggester-current": "Швидкі інструменти (поточна панель)",
         "name-toolbar-suggester": "Швидко панелі",
         "name-copy-command-uri": "Копіювати URI команди",
         "name-copy-command-as-data-element": "Копіювати елемент виноски для команди",
@@ -96,7 +96,7 @@
         "name-show-properties": "Показати властивості",
         "name-hide-properties": "Приховати властивості",
         "name-fold-properties": "Згорнути властивості",
-        "name-toggle-properties": "Змінити Властивості",
+        "name-toggle-properties": "Перемкнути властивості",
         "name-open-toolbar": "Відкрити {{toolbar}}"
     },
     "export": {
@@ -206,7 +206,7 @@
             "description": "Параметри відображення панелей у нотатках, використовуючи: Властивість, Зіставлені теки, або обидва засоби.",
             "option-emptyview": "Панель пустого відображення",
             "option-emptyview-description": "Панель для відображення в пустому відображенні.",
-            "toggle-emptyview": "Показати панель у новій вкладці",
+            "toggle-emptyview": "Показувати панель у новий вкладці",
             "toggle-emptyview-description": "Оберіть панель для відображення, коли нотатка не відкрита.",            
             "option-property": "Властивість",
             "option-property-description": "Вказана у Властивості панель буде відображатися у нотатці. Виконується з перевагою над будь-якими зіставленнями тек. Для приховання панелі вкажіть 'none'.",
@@ -246,6 +246,7 @@
             "instruction-dismiss": "скасувати"
         },
         "item": {
+            "title": "Редагування елемента",
             "button-duplicate-tooltip": "Дублювати елемент",
             "button-icon-tooltip": "Обрати іконку (за бажанням)",
             "label-preview-edit": "Редагувати панель: {{toolbar}}",
@@ -334,7 +335,9 @@
         },
         "open-command": {
             "name": "Додайти команду до панелі",
-            "description": "Додайте команду, яка відкриває цю панель у вікні швидких інструментів."
+            "description": "Додайте команду, яка відкриває цю панель у вікні швидких інструментів.",
+            "notice-command-added": "Команда зараз доступна:\n{{command}}",
+            "notice-command-removed": "Команда видалена:\n{{command}}"
         },
         "other": {
             "name": "Інше",
@@ -448,6 +451,8 @@
     },
     "toolbar": {
         "button-floating-tooltip": "Відкрити Note Toolbar",
+        "menu-edit-item": "Редагувати елемент: {{text}}...",
+        "menu-edit-item_none": "Редагувати елемент...",
         "menu-edit-toolbar": "Редагувати панель: {{toolbar}}...",
         "menu-hide-properties": "Приховати властивості нотатки",
         "menu-position": "Розташування",
