@@ -30,7 +30,7 @@ export default class ToolbarSettingsModal extends Modal {
 	public plugin: NoteToolbarPlugin;
 	public toolbar: ToolbarSettings;
 	private parent: NoteToolbarSettingTab | null;
-	
+
 	private hasDesktopFabPosition: boolean = false;
 	private hasMobileFabPosition: boolean = false;
 	private itemListIdCounter: number = 0;

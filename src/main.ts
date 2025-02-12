@@ -510,11 +510,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
-				this.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
-				// this.registerDomEvent(embedBlock, 'touchstart', (e) => this.toolbarFabHandler(e));
-				// this.registerDomEvent(embedBlock, 'focusin', (e) => { e.preventDefault() });
-				// this.registerDomEvent(embedBlock, 'click', (e) => { e.preventDefault() });
-				// this.registerDomEvent(embedBlock, 'focusin', (e) => this.toolbarFabHandler(e));			
+				// TODO: change to render toolbar as menu if default FAB item is set
+				
+				this.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));		
 				break;
 			case PositionType.Bottom:
 			case PositionType.Props:
@@ -1463,6 +1461,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let activeFile = this.app.workspace.getActiveFile();
 		let toolbar: ToolbarSettings | undefined;
 		
+		// get toolbar to show
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
