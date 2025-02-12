@@ -246,6 +246,7 @@
 			"instruction-dismiss": "to dismiss"
         },
         "item": {
+            "title": "Edit item",
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
@@ -334,7 +335,9 @@
         },
         "open-command": {
             "name": "Add toolbar command",
-            "description": "Add a command that opens this toolbar in a Quick Tools window."
+            "description": "Add a command that opens this toolbar in a Quick Tools window.",
+            "notice-command-added": "Command now available:\n{{command}}",
+            "notice-command-removed": "Command removed:\n{{command}}"
         },
         "other": {
             "name": "Other",
@@ -448,6 +451,8 @@
     },
     "toolbar": {
         "button-floating-tooltip": "Open Note Toolbar",
+        "menu-edit-item": "Edit item: {{text}}...",
+        "menu-edit-item_none": "Edit item...",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
         "menu-hide-properties": "Hide note properties",
         "menu-position": "Set position",

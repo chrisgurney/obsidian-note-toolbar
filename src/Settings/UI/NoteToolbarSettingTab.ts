@@ -332,7 +332,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		let emptyViewTbarSetting = new Setting(containerEl)
 			.setName(t('setting.display-rules.option-emptyview'))
 			.setDesc(t('setting.display-rules.option-emptyview-description'))
-			.setClass('note-toolbar-setting-no-border')
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
@@ -378,13 +377,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayFolderMap(containerEl: HTMLElement): void {
 
 		let mappingsContainer = createDiv();
-		mappingsContainer.addClass('note-toolbar-setting-mappings-container');
+		mappingsContainer.addClasses(['note-toolbar-setting-mappings-container', 'note-toolbar-setting-top-border']);
 		mappingsContainer.setAttribute('data-active', this.mappingListOpen.toString());
 
 		let toolbarMapSetting = new Setting(mappingsContainer)
 			.setName(t('setting.mappings.name'))
-			.setDesc(t('setting.mappings.description'))
-			.setClass("note-toolbar-setting-no-border");
+			.setDesc(t('setting.mappings.description'));
 
 		if (this.plugin.settings.folderMappings.length > 4) {
 			toolbarMapSetting
@@ -689,19 +687,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		new Setting(containerEl)
-			.setName(t('setting.other.scripting.name'))
-			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(this.plugin.settings.scriptingEnabled)
-					.onChange(async (value) => {
-						this.plugin.settings.scriptingEnabled = value;
-						this.plugin.updateAdapters();
-						await this.plugin.settingsManager.save();
-					});
-			});
-
-		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
 			.setDesc(t('setting.other.icon.description'))
 			.addButton((cb) => {
@@ -725,7 +710,32 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					});
 			});
+
+		new Setting(containerEl)
+			.setName(t('setting.other.scripting.name'))
+			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.scriptingEnabled)
+					.onChange(async (value) => {
+						this.plugin.settings.scriptingEnabled = value;
+						this.plugin.updateAdapters();
+						await this.plugin.settingsManager.save();
+					});
+			});
 		
+		new Setting(containerEl)
+			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
+			.setDesc(learnMoreFr(t('setting.other.show-toolbar-in-file-menu.description'), 'Other-settings'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showToolbarInFileMenu = value;
+					await this.plugin.settingsManager.save();
+					// TODO? force the re-rendering of the current toolbar to update the menu
+				});
+			});
+
 		new Setting(containerEl)
 			.setName(t('setting.other.ribbon-action.name'))
 			.setDesc(learnMoreFr(t('setting.other.ribbon-action.description'), 'Navigation-bar'))
@@ -738,18 +748,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						await this.plugin.settingsManager.save();
 					})
 				);
-
-		new Setting(containerEl)
-			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
-			.setDesc(learnMoreFr(t('setting.other.show-toolbar-in-file-menu.description'), 'Other-settings'))
-			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
-				cb.onChange(async (value) => {
-					this.plugin.settings.showToolbarInFileMenu = value;
-					await this.plugin.settingsManager.save();
-					// TODO? force the re-rendering of the current toolbar to update the menu
-				});
-			});
 
 		new Setting(containerEl)
 			.setName(t('setting.other.show-edit-tbar.name'))

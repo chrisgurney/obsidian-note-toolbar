@@ -1010,6 +1010,10 @@ input[type="text"].note-toolbar-setting-error,
     border-top: none !important;
 }
 
+.note-toolbar-setting-top-border {
+    border-top: solid 1px var(--background-modifier-border) !important;
+}
+
 .note-toolbar-setting-top-spacing {
     margin-top: 2em !important;
 }
@@ -1083,6 +1087,10 @@ input[type="text"].note-toolbar-setting-error,
         & .setting-item .note-toolbar-setting-item-expand svg {
             transform: rotate(-90deg);
             transition: 0.1s;
+        }
+        & .setting-item-heading {
+            border-bottom: solid 1px var(--background-modifier-border);
+            margin-bottom: 0.75em;
         }
     }
 }

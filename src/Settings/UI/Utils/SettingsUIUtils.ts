@@ -1,10 +1,11 @@
-import { ButtonComponent, getIcon, Platform, setIcon, Setting } from "obsidian";
+import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
 import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
 import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
+import ItemModal from "../Modals/ItemModal";
 
 /**
  * Constructs a preview of the given toolbar, including the icons used.
@@ -267,13 +268,105 @@ export function removeFieldError(fieldEl: HTMLElement | null) {
 }
 
 /**
+ * Renders the item suggestion into the given element, for use in item suggesters and Quick Tools.
+ * @param plugin NoteToolbarPlugin
+ * @param item ToolbarItemSettings to render
+ * @param el HEMLElement to render suggestion into
+ * @param inputStr string that was used to search for this item
+ * @param showMeta boolean to set true if the meta icon should be shown (for Quick Tools)
+ */
+export function renderItemSuggestion(
+	plugin: NoteToolbarPlugin, 
+	item: ToolbarItemSettings, 
+	el: HTMLElement, 
+	inputStr: string, 
+	showMeta: boolean = false
+) {
+	if (!item) { return }
+	el.addClass("note-toolbar-item-suggestion");
+	el.setAttribute('id', item.uuid);
+	if (item.icon) {
+		let svgExists = getIcon(item.icon);
+		if (svgExists) {
+			let iconGlyph = el.createSpan();
+			setIcon(iconGlyph, item.icon);
+		}
+	}
+	let itemNameEl = el.createSpan();
+	let itemName = item.label || item.tooltip;
+
+	// fallback if no label or tooltip
+	let isItemNameLink = false;
+	if (!itemName) {
+		if (item.icon) {
+			isItemNameLink = true;
+			itemName = item.link;
+		}
+		else {
+			itemName = '';
+		}
+	}
+
+	itemNameEl.addClass("note-toolbar-item-suggester-name");
+	let itemLabel = itemNameEl.createSpan();
+
+	let title = itemName;
+	// replace variables in labels (or tooltip, if no label set)
+	const activeFile = plugin.app.workspace.getActiveFile();
+	plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+		itemLabel.setText(resolvedName);
+	});
+	
+	if (showMeta) {
+		let itemMeta = itemNameEl.createSpan();
+		itemMeta.addClass("note-toolbar-item-suggester-type");
+		switch (item.linkAttr.type) {
+			case ItemType.Command:
+				setTooltip(itemMeta, t('setting.item.option-command'));
+				break;
+			case ItemType.File:
+				setIcon(itemMeta, 'file');
+				setTooltip(itemMeta, t('setting.item.option-file'));
+				break;
+			case ItemType.Uri:
+				setIcon(itemMeta, 'globe');
+				setTooltip(itemMeta, t('setting.item.option-uri'));
+				break;
+			case ItemType.Dataview:
+			case ItemType.JsEngine:
+				setIcon(itemMeta, 'scroll');
+				setTooltip(itemMeta, "Script");
+				break;
+			case ItemType.Templater:
+				setIcon(itemMeta, 'templater-icon');
+				setTooltip(itemMeta, "Templater");
+				break;
+		}
+	}
+	
+	const inputStrLower = inputStr.toLowerCase();
+	// if what's shown doesn't already contain the searched string, show it below
+	if (!title.toLowerCase().includes(inputStrLower)) {
+		let inputMatch = 
+			item.label.toLowerCase().includes(inputStrLower)
+				? item.label
+				: item.tooltip.toLowerCase().includes(inputStrLower) 
+					? item.tooltip 
+					: item.link;
+		let itemNoteEl = itemLabel.createDiv();
+		itemNoteEl.addClass('note-toolbar-item-suggester-note');
+		itemNoteEl.setText(inputMatch);
+	}
+}
+
+/**
  * Updates the given element with an error border and text.
  * @param parent ToolbarSettingsModal
  * @param fieldEl HTMLElement to update
  * @param errorText Optional error text to display
  * @param errorLink Optional link to display after error text
  */
-export function setFieldError(parent: ToolbarSettingsModal, fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
+export function setFieldError(parent: ToolbarSettingsModal | ItemModal, fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
 	if (fieldEl) {
 		let fieldContainerEl = fieldEl.closest('.setting-item-control');
 		if (!fieldContainerEl) {
@@ -350,7 +443,9 @@ export function updateItemIcon(settingEl: HTMLElement, selectedIcon: string) {
 	let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
 	formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
 	formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
-	// update item preview
-	let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
-	(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
+	if (this.parent instanceof ToolbarSettingsModal) {
+		// update item preview
+		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
+		(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
+	}
 }

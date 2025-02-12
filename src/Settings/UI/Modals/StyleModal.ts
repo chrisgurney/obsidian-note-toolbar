@@ -29,7 +29,6 @@ export default class StyleModal extends Modal {
 	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
-		// this.parent ? this.parent.display() : undefined;
 	}
 
 	/**
@@ -37,13 +36,13 @@ export default class StyleModal extends Modal {
 	 */
 	public display() {
         this.contentEl.empty();
-        let toolbarStyle = new ToolbarStyleUi(this.plugin, this, this.toolbar);
-        toolbarStyle.displayStyleSetting(this.contentEl);
+        const toolbarStyleUi = new ToolbarStyleUi(this.plugin, this, this.toolbar);
+        toolbarStyleUi.displayStyleSetting(this.contentEl);
 
 		// set initial keyboard focus on the relvant dropdown
 		if (Platform.isDesktop) {
 			setTimeout(() => {
-				let dropdown = this.contentEl.querySelector(`#default-style-dropdown > select`) as HTMLElement;
+				const dropdown = this.contentEl.querySelector(`#default-style-dropdown > select`) as HTMLElement;
 				dropdown.focus();
 			}, 50);
 		}
