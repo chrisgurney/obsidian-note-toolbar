@@ -362,8 +362,8 @@
                 "description": "Adds an item to access the toolbar in the linked note from the File menu."
             },
             "show-edit-tbar": {
-                "name": "Show 'Edit toolbar' link in toolbar menus 📱",
-                "description": "Adds an item to access the toolbar's settings in toolbars that are displayed as menus at the bottom of the screen on phones."
+                "name": "Show \"Edit toolbar\" link in toolbar menus",
+                "description": "Adds an item to access the toolbar's settings in toolbars that are displayed as menus."
             }
         },
         "position": {
