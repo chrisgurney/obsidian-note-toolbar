@@ -1008,7 +1008,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null) {
 
 		let toolbarEl = this.getToolbarEl();
+		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
 		// debugLog("updateToolbar()", toolbarEl);
+
+		// no need to run update for certain positions
+		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, undefined].contains(currentPosition)) {
+			return;
+		}
 
 		// if we have a toolbarEl, double-check toolbar's name and updated stamp are as provided
 		let toolbarElName = toolbarEl?.getAttribute("data-name");
@@ -1063,7 +1069,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 
-		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
+		// re-align bottom toolbar in case width changed 
 		if (currentPosition === PositionType.Bottom) {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
