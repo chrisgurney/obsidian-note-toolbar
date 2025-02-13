@@ -25,7 +25,7 @@ Notes:
 - Floating buttons: Slightly decreased the size of icons on desktop. (Override in the Style Settings plugin, if you'd prefer.)
 - Changed settings icons in context menus, to accommodate _Edit item_.
 - Settings:
-  - Use up/down arrow keys to navigate the toolbar list.
+  - Use up/down arrow keys to navigate the toolbar and item lists.
   - Better visual separation of settings sections.
   - Notice displayed when the toolbar's open command is added or removed.
   - Reorganized _Other_ settings section.
