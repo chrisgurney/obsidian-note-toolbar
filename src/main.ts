@@ -799,7 +799,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let defaultItemText = defaultItem.label || defaultItem.tooltip;
 			if (this.hasVars(defaultItemText)) defaultItemText = await this.replaceVars(defaultItemText, activeFile);
 			noteToolbarFabButton.setAttribute('aria-label', defaultItemText);
-			setIcon(noteToolbarFabButton, defaultItem.icon);
+			setIcon(noteToolbarFabButton, defaultItem.icon ? defaultItem.icon : this.settings.icon);
 		}
 		else {
 			noteToolbarFabButton.setAttribute('aria-label', t('toolbar.button-floating-tooltip'));
