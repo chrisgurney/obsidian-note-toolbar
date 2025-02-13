@@ -1476,7 +1476,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarFabHandler(event: MouseEvent, posAtElement: HTMLElement) {
 
-		debugLog("toolbarFabHandler: ", event);
+		// debugLog("toolbarFabHandler: ", event);
 		event.preventDefault();
 
 		let activeFile = this.app.workspace.getActiveFile();
