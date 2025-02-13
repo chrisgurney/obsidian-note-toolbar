@@ -23,10 +23,11 @@ Notes:
 ## Improvements 🚀
 
 - Floating buttons: Slightly decreased the size of icons on desktop. (Override in the Style Settings plugin, if you'd prefer.)
+- Changed settings icons in context menus, to accommodate _Edit item_.
 - Settings:
-  - Separated settings sections more visually.
-  - Tweaked settings icons in context menus, to accomodate _Edit item_.
-  - Notice displayed when the toolbar open command is added or removed.
+  - Use up/down arrow keys to navigate the toolbar list.
+  - Better visual separation of settings sections.
+  - Notice displayed when the toolbar's open command is added or removed.
   - Reorganized _Other_ settings section.
 
 ---
