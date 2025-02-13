@@ -599,7 +599,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.extraSettingsEl,	'keydown', (e) => {
 						let currentEl = e.target as HTMLElement;
 						let rowId = currentEl.getAttribute('data-row-id');
-						debugLog("rowId", rowId);
+						// debugLog("rowId", rowId);
 						rowId ? this.listMoveHandlerById(e, rowId) : undefined;
 					});
 			});
@@ -862,7 +862,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {	
 		let itemIndex = this.getIndexByRowId(rowId);
-		debugLog("listMoveHandlerById: moving index:", itemIndex);
+		// debugLog("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemIndex, action);
 	}
 
