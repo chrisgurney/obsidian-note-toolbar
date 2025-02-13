@@ -614,8 +614,8 @@ export default class ToolbarSettingsModal extends Modal {
 				);
 
 		let defaultItemSetting = new Setting(settingsDiv)
-			.setName("Floating button default item")
-			.setDesc("Show this item as the button. Open the menu with right-click (long-press on mobile).")
+			.setName(t('setting.position.option-defaultitem'))
+			.setDesc(t('setting.position.option-defaultitem-description'))
 			.addSearch((cb) => {
 				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
 					cb.inputEl.value = item.label || item.tooltip;
@@ -623,7 +623,7 @@ export default class ToolbarSettingsModal extends Modal {
 					await this.plugin.settingsManager.save();
 				});
 				const initialItem = this.plugin.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
-				cb.setPlaceholder("Select item...")
+				cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
 					.setValue(initialItem ? (initialItem.label || initialItem.tooltip) : '')
 					.onChange(debounce(async (itemText) => {
 						// TODO: if not valid show error/warning

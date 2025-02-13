@@ -376,7 +376,10 @@
             "option-hidden": "Hidden (do not display)",
             "option-hidden-mobile": "Hidden / Navigation bar",
             "option-props": "Below Properties",
-            "option-top": "Top (fixed)"
+            "option-top": "Top (fixed)",
+            "option-defaultitem": "Floating button default item",
+            "option-defaultitem-description": "Show this item as the button. Open the menu with right-click (long-press on mobile).",
+            "option-defaultitem-placeholder": "Select item..."
         },
         "styles": {
             "name": "Styles",
