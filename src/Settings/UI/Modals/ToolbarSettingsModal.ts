@@ -862,13 +862,16 @@ export default class ToolbarSettingsModal extends Modal {
 		index: number, 
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {
+		const modifierPressed = (Platform.isWin || Platform.isLinux) ? keyEvent?.ctrlKey : keyEvent?.metaKey;
 		if (keyEvent) {
 			switch (keyEvent.key) {
 				case 'ArrowUp':
+					if (!modifierPressed) return;
 					keyEvent.preventDefault();
 					action = 'up';
 					break;
 				case 'ArrowDown':
+					if (!modifierPressed) return;
 					keyEvent.preventDefault();
 					action = 'down';
 					break;
