@@ -22,7 +22,9 @@ Notes:
 
 ## Improvements 🚀
 
-- Floating buttons: Slightly decreased the size of icons on desktop. (Override in the Style Settings plugin, if you'd prefer.)
+- Floating buttons:
+  - Slightly decreased the size of icons on desktop. (Override in the Style Settings plugin, if you'd prefer.)
+  - The button's tooltip is now just the toolbar's name.
 - Changed settings icons in context menus, to accommodate _Edit item_.
 - Settings:
   - Use up/down arrow keys to navigate the toolbar and item lists.
