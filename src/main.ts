@@ -802,7 +802,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			setIcon(noteToolbarFabButton, defaultItem.icon ? defaultItem.icon : this.settings.icon);
 		}
 		else {
-			noteToolbarFabButton.setAttribute('aria-label', t('toolbar.button-floating-tooltip'));
+			noteToolbarFabButton.setAttribute('aria-label', toolbar.name);
 			setIcon(noteToolbarFabButton, this.settings.icon);
 		}
 		

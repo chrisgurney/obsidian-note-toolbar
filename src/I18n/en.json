@@ -454,7 +454,6 @@
         }
     },
     "toolbar": {
-        "button-floating-tooltip": "Open Note Toolbar",
         "menu-edit-item": "Edit item: {{text}}...",
         "menu-edit-item_none": "Edit item...",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
