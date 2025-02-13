@@ -302,7 +302,6 @@ export default class ToolbarSettingsModal extends Modal {
 				itemsSortableContainer, 'keydown', (keyEvent) => {
 					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
 					const currentFocussed = activeDocument.activeElement as HTMLElement;
-					debugLog(currentFocussed);
 					if (currentFocussed) {
 						const itemSelector = 
 							currentFocussed.hasClass('sortable-handle') ? '.note-toolbar-setting-item-preview-container .sortable-handle' : '.note-toolbar-setting-item-preview';
