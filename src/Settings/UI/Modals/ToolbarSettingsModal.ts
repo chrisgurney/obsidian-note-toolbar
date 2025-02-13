@@ -297,6 +297,36 @@ export default class ToolbarSettingsModal extends Modal {
 
 			});
 
+			// support up/down arrow keys
+			this.plugin.registerDomEvent(
+				itemsSortableContainer, 'keydown', (keyEvent) => {
+					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
+					const currentFocussed = activeDocument.activeElement as HTMLElement;
+					debugLog(currentFocussed);
+					if (currentFocussed) {
+						const itemSelector = 
+							currentFocussed.hasClass('sortable-handle') ? '.note-toolbar-setting-item-preview-container .sortable-handle' : '.note-toolbar-setting-item-preview';
+						const itemEls = Array.from(itemsSortableContainer.querySelectorAll<HTMLElement>(itemSelector));
+						const currentIndex = itemEls.indexOf(currentFocussed);
+						switch (keyEvent.key) {
+							case 'ArrowUp':
+								if (currentIndex > 0) {
+									itemEls[currentIndex - 1].focus();
+									keyEvent.preventDefault();
+								}
+								break;
+							case 'ArrowDown':
+								if (currentIndex < itemEls.length - 1) {
+									itemEls[currentIndex + 1].focus();
+									keyEvent.preventDefault();
+								}
+								break;
+						}
+					}
+				}
+			);
+
+
 		}
 
 		//
