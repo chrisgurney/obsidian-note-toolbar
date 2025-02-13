@@ -54,7 +54,7 @@ export default class ToolbarItemUi {
                             const modal = new IconSuggestModal(this.plugin, (icon) => {
                                 toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                 this.plugin.settingsManager.save();
-                                updateItemIcon(itemRow, icon)
+                                updateItemIcon(this.parent, itemRow, icon);
                             });
                             modal.open();
                         });
@@ -70,7 +70,7 @@ export default class ToolbarItemUi {
                                     const modal = new IconSuggestModal(this.plugin, (icon) => {
                                         toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                         this.plugin.settingsManager.save();
-                                        updateItemIcon(itemRow, icon)
+                                        updateItemIcon(this.parent, itemRow, icon);
                                     });
                                     modal.open();
                             }

@@ -438,12 +438,12 @@ export function showWhatsNewIfNeeded(plugin: NoteToolbarPlugin) {
  * @param settingEl 
  * @param selectedIcon 
  */
-export function updateItemIcon(settingEl: HTMLElement, selectedIcon: string) {
+export function updateItemIcon(parent: ToolbarSettingsModal | ItemModal, settingEl: HTMLElement, selectedIcon: string) {
 	// update item form
 	let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
 	formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
 	formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
-	if (this.parent instanceof ToolbarSettingsModal) {
+	if (parent instanceof ToolbarSettingsModal) {
 		// update item preview
 		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
 		(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
