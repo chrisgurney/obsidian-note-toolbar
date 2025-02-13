@@ -647,6 +647,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(t('setting.position.option-defaultitem-description'))
 			.addSearch((cb) => {
 				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
+					removeFieldError(cb.inputEl);
 					cb.inputEl.value = item.label || item.tooltip;
 					this.toolbar.defaultItem = item.uuid;
 					await this.plugin.settingsManager.save();
@@ -655,7 +656,7 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
 					.setValue(initialItem ? (initialItem.label || initialItem.tooltip) : '')
 					.onChange(debounce(async (itemText) => {
-						// TODO: if not valid show error/warning
+						setFieldError(this, cb.inputEl, t('setting.position.option-defaultitem-error-invalid'));
 						cb.inputEl.value = itemText;
 						if (!itemText) {
 							this.toolbar.defaultItem = null;

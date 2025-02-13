@@ -1849,13 +1849,17 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     padding-bottom: 1em;
 }
 
+.setting-item-control:has(input[type="search"].note-toolbar-setting-error),
 .setting-item-control:has(input[type="text"].note-toolbar-setting-error) {
     flex-wrap: wrap;
 }
+
+input[type="search"].note-toolbar-setting-error,
 input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-error textarea {
     box-shadow: 0 0 0 1px var(--text-error);
 }
+
 .note-toolbar-setting-error {
     &.note-toolbar-setting-item-preview {
         border-radius: var(--input-radius);

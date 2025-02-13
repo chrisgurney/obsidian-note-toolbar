@@ -379,7 +379,8 @@
             "option-top": "Top (fixed)",
             "option-defaultitem": "Floating button default item",
             "option-defaultitem-description": "Instead of the toolbar menu, show this item as the button. Other items appear in right-click menu (long-press on mobile).",
-            "option-defaultitem-placeholder": "Select item..."
+            "option-defaultitem-placeholder": "Item...",
+            "option-defaultitem-error-invalid": "Invalid toolbar item"
         },
         "styles": {
             "name": "Styles",
