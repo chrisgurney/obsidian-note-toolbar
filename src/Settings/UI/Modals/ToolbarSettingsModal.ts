@@ -618,7 +618,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc("Show this item as the button. Open the menu with right-click (long-press on mobile).")
 			.addSearch((cb) => {
 				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
-					cb.inputEl.setText(item.label || item.tooltip);
+					cb.inputEl.value = item.label || item.tooltip;
 					this.toolbar.defaultItem = item.uuid;
 					await this.plugin.settingsManager.save();
 				});
@@ -627,7 +627,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setValue(initialItem ? (initialItem.label || initialItem.tooltip) : '')
 					.onChange(debounce(async (itemText) => {
 						// TODO: if not valid show error/warning
-						cb.inputEl.setText(itemText);
+						cb.inputEl.value = itemText;
 						if (!itemText) {
 							this.toolbar.defaultItem = null;
 							await this.plugin.settingsManager.save();
