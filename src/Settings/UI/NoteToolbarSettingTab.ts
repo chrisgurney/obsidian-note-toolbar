@@ -256,6 +256,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									});									
 									menu.showAtPosition(getElementPosition(button.buttonEl));
 								});
+							// used to distinguish buttons for keyboard navigation
+							button.buttonEl.addClass('ntb-tbar-more');
 						})
 						.addButton((button: ButtonComponent) => {
 							button
@@ -264,7 +266,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								.onClick(() => {
 									this.plugin.settingsManager.openToolbarSettings(toolbar, this);
 								});
-							});
+							// used to distinguish buttons for keyboard navigation
+							button.buttonEl.addClass('ntb-tbar-edit');
+						});
 					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
 					toolbar.name ? undefined : toolbarListItemSetting.nameEl.addClass('mod-warning');
 			
@@ -280,6 +284,33 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 									}
 								}
 					});
+				}
+			);
+
+			// support up/down arrow keys
+			this.plugin.registerDomEvent(
+				toolbarListDiv, 'keydown', (keyEvent) => {
+					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
+					const currentFocussed = activeDocument.activeElement as HTMLElement;
+					if (currentFocussed) {
+						const buttonSelector = `.setting-item-control > button.${currentFocussed.className}`;
+						const toolbarButtonEls = Array.from(toolbarListDiv.querySelectorAll<HTMLElement>(buttonSelector));
+						const currentIndex = toolbarButtonEls.indexOf(currentFocussed);
+						switch (keyEvent.key) {
+							case 'ArrowUp':
+								if (currentIndex > 0) {
+									toolbarButtonEls[currentIndex - 1].focus();
+									keyEvent.preventDefault();
+								}
+								break;
+							case 'ArrowDown':
+								if (currentIndex < toolbarButtonEls.length - 1) {
+									toolbarButtonEls[currentIndex + 1].focus();
+									keyEvent.preventDefault();
+								}
+								break;
+						}
+					}
 				}
 			);
 
@@ -568,7 +599,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.extraSettingsEl,	'keydown', (e) => {
 						let currentEl = e.target as HTMLElement;
 						let rowId = currentEl.getAttribute('data-row-id');
-						debugLog("rowId", rowId);
+						// debugLog("rowId", rowId);
 						rowId ? this.listMoveHandlerById(e, rowId) : undefined;
 					});
 			});
@@ -831,7 +862,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {	
 		let itemIndex = this.getIndexByRowId(rowId);
-		debugLog("listMoveHandlerById: moving index:", itemIndex);
+		// debugLog("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemIndex, action);
 	}
 

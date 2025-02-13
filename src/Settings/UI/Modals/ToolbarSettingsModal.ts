@@ -297,6 +297,35 @@ export default class ToolbarSettingsModal extends Modal {
 
 			});
 
+			// support up/down arrow keys
+			this.plugin.registerDomEvent(
+				itemsSortableContainer, 'keydown', (keyEvent) => {
+					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
+					const currentFocussed = activeDocument.activeElement as HTMLElement;
+					if (currentFocussed) {
+						const itemSelector = 
+							currentFocussed.hasClass('sortable-handle') ? '.note-toolbar-setting-item-preview-container .sortable-handle' : '.note-toolbar-setting-item-preview';
+						const itemEls = Array.from(itemsSortableContainer.querySelectorAll<HTMLElement>(itemSelector));
+						const currentIndex = itemEls.indexOf(currentFocussed);
+						switch (keyEvent.key) {
+							case 'ArrowUp':
+								if (currentIndex > 0) {
+									itemEls[currentIndex - 1].focus();
+									keyEvent.preventDefault();
+								}
+								break;
+							case 'ArrowDown':
+								if (currentIndex < itemEls.length - 1) {
+									itemEls[currentIndex + 1].focus();
+									keyEvent.preventDefault();
+								}
+								break;
+						}
+					}
+				}
+			);
+
+
 		}
 
 		//
@@ -614,21 +643,25 @@ export default class ToolbarSettingsModal extends Modal {
 				);
 
 		let defaultItemSetting = new Setting(settingsDiv)
-			.setName("Floating button default item")
-			.setDesc("Show this item as the button. Open the menu with right-click (long-press on mobile).")
+			.setName(t('setting.position.option-defaultitem'))
+			.setDesc(t('setting.position.option-defaultitem-description'))
 			.addSearch((cb) => {
 				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
-					cb.inputEl.setText(item.label || item.tooltip);
+					removeFieldError(cb.inputEl);
+					cb.inputEl.value = item.label || item.tooltip;
 					this.toolbar.defaultItem = item.uuid;
 					await this.plugin.settingsManager.save();
 				});
 				const initialItem = this.plugin.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
-				cb.setPlaceholder("Select item...")
+				cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
 					.setValue(initialItem ? (initialItem.label || initialItem.tooltip) : '')
 					.onChange(debounce(async (itemText) => {
-						// TODO: if not valid show error/warning
-						cb.inputEl.setText(itemText);
-						if (!itemText) {
+						if (itemText) {
+							cb.inputEl.value = itemText;
+							setFieldError(this, cb.inputEl, t('setting.position.option-defaultitem-error-invalid'));
+						}
+						else {
+							removeFieldError(cb.inputEl);
 							this.toolbar.defaultItem = null;
 							await this.plugin.settingsManager.save();
 						}
@@ -833,13 +866,16 @@ export default class ToolbarSettingsModal extends Modal {
 		index: number, 
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {
+		const modifierPressed = (Platform.isWin || Platform.isLinux) ? keyEvent?.ctrlKey : keyEvent?.metaKey;
 		if (keyEvent) {
 			switch (keyEvent.key) {
 				case 'ArrowUp':
+					if (!modifierPressed) return;
 					keyEvent.preventDefault();
 					action = 'up';
 					break;
 				case 'ArrowDown':
+					if (!modifierPressed) return;
 					keyEvent.preventDefault();
 					action = 'down';
 					break;

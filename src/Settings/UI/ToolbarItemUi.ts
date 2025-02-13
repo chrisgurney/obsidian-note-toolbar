@@ -54,7 +54,7 @@ export default class ToolbarItemUi {
                             const modal = new IconSuggestModal(this.plugin, (icon) => {
                                 toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                 this.plugin.settingsManager.save();
-                                updateItemIcon(itemRow, icon)
+                                updateItemIcon(this.parent, itemRow, icon);
                             });
                             modal.open();
                         });
@@ -70,7 +70,7 @@ export default class ToolbarItemUi {
                                     const modal = new IconSuggestModal(this.plugin, (icon) => {
                                         toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                         this.plugin.settingsManager.save();
-                                        updateItemIcon(itemRow, icon)
+                                        updateItemIcon(this.parent, itemRow, icon);
                                     });
                                     modal.open();
                             }
@@ -200,9 +200,19 @@ export default class ToolbarItemUi {
                     .setIcon('copy-plus')
                     .setTooltip(t('setting.item.button-duplicate-tooltip'))
                     .onClick(async () => {
-                        const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+                        const newItemUuid = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
                         await this.plugin.settingsManager.save();
-                        this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+                        if (this.parent instanceof ItemModal) {
+                            let newItem = this.plugin.settingsManager.getToolbarItemById(newItemUuid);
+                            if (newItem) {
+                                let newItemModal = new ItemModal(this.plugin.app, this.plugin, this.toolbar, newItem);
+                                this.parent.close();
+                                newItemModal.open();
+                            }
+                        }
+                        else {
+                            this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+                        }
                     });
         })
 
