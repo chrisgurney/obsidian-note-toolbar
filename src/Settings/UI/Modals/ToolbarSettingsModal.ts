@@ -656,9 +656,12 @@ export default class ToolbarSettingsModal extends Modal {
 				cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
 					.setValue(initialItem ? (initialItem.label || initialItem.tooltip) : '')
 					.onChange(debounce(async (itemText) => {
-						setFieldError(this, cb.inputEl, t('setting.position.option-defaultitem-error-invalid'));
-						cb.inputEl.value = itemText;
-						if (!itemText) {
+						if (itemText) {
+							cb.inputEl.value = itemText;
+							setFieldError(this, cb.inputEl, t('setting.position.option-defaultitem-error-invalid'));
+						}
+						else {
+							removeFieldError(cb.inputEl);
 							this.toolbar.defaultItem = null;
 							await this.plugin.settingsManager.save();
 						}
