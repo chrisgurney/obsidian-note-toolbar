@@ -179,7 +179,7 @@ settings:
         description.de: 'Abstand um das Symbol herum'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
-        default: 13
+        default: 15
         format: px
     -
         id: cg-nt-fab-padding
