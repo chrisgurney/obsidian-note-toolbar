@@ -290,10 +290,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			// support up/down arrow keys
 			this.plugin.registerDomEvent(
 				toolbarListDiv, 'keydown', (keyEvent) => {
+					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
 					const currentFocussed = activeDocument.activeElement as HTMLElement;
-					const buttonSelector = `.setting-item-control > button.${currentFocussed.className}`;
-					const toolbarButtonEls = Array.from(toolbarListDiv.querySelectorAll<HTMLElement>(buttonSelector));
 					if (currentFocussed) {
+						const buttonSelector = `.setting-item-control > button.${currentFocussed.className}`;
+						const toolbarButtonEls = Array.from(toolbarListDiv.querySelectorAll<HTMLElement>(buttonSelector));
 						const currentIndex = toolbarButtonEls.indexOf(currentFocussed);
 						switch (keyEvent.key) {
 							case 'ArrowUp':
