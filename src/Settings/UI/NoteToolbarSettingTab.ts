@@ -179,14 +179,20 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.setPlaceholder(t('setting.search.field-placeholder'))
 					.onChange((search: string) => {
 						const query = search.toLowerCase();
-						let hasResults = false;
+						let firstVisibleSet = false;
 						this.containerEl
 							.querySelectorAll<HTMLElement>('.note-toolbar-setting-toolbar-list .setting-item')
 							.forEach((toolbarEl) => {
 								const text = toolbarEl.querySelector('.setting-item-name')?.textContent?.toLowerCase() ?? '';
 								const matches = text.includes(query);
 								toolbarEl.style.display = matches ? '' : 'none';
-								if (matches) hasResults = true;
+
+								if (matches && !firstVisibleSet) {
+									toolbarEl.classList.add('note-toolbar-setting-no-border');
+									firstVisibleSet = true;
+								} else {
+									toolbarEl.classList.remove('note-toolbar-setting-no-border');
+								}
 							});
 					});
 				});
