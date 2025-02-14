@@ -188,7 +188,7 @@ export default class TemplaterAdapter extends Adapter {
         let result = '';
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
-        if (!activeFile) {
+        if (!activeFile && displayErrors) {
             displayScriptError(t('adapter.error.expr-note-not-open'));
             return t('adapter.error.expr-note-not-open');
         }

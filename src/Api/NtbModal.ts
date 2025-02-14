@@ -74,7 +74,7 @@ export class NtbModal extends Modal {
         }
 
         // make links tabbable
-        containerEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
+        this.modalEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
             (link as HTMLElement).tabIndex = 1;
             if (link.hasClass('internal-link')) {
                 this.plugin.registerDomEvent(link as HTMLElement, 'click', (event) => {
@@ -94,6 +94,6 @@ export class NtbModal extends Modal {
         this.resolve = resolve;
         this.reject = reject;
         this.open();
-        
+
     }
 }

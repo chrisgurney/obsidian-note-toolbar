@@ -22,15 +22,30 @@ Notes:
 
 ## Improvements 🚀
 
-- Settings:
-  - Use up/down arrow keys to navigate the toolbar and item lists.
-  - Better visual separation of settings sections.
-  - Notice displayed when the toolbar's open command is added or removed.
-  - Reorganized _Other_ settings section.
-- Floating buttons:
-  - Slightly decreased the size of icons on desktop. (Override in the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support), if you'd prefer.)
-  - The button's tooltip is now just the toolbar's name.
+### Search toolbars in settings
+
+In Settings, you can now search toolbars by name, to get to them quicker. Navigate the results with up/down arrow keys.
+
+- The search option appears when there's enough toolbars to show the collapse button.
+
+### Settings improvements
+
+- Use up/down arrow keys to navigate the toolbar list.
+- Use up/down arrow keys to navigate the item list.
+- Better visual separation of settings sections.
+- A notice is now displayed when the toolbar's open command is added or removed.
 - Changed settings icons in context menus, to accommodate _Edit item_.
+- Small reorganization of the _Other_ settings section.
+
+### Floating buttons
+
+- Slightly decreased the size of icons on desktop. (Override in the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support), if you'd prefer.)
+- The button's tooltip is now just the toolbar's name.
+
+## Fixes
+
+- Fixed case where opening Quick Tools in an Empty tab shows Templater error notices, if Templater expressions are used.
+- API: modal(): Markdown and wiki links used in the title are now tabbable.
 
 ---
 
