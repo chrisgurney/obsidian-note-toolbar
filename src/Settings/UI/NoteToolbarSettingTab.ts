@@ -345,7 +345,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					const currentFocussed = activeDocument.activeElement as HTMLElement;
 					if (currentFocussed) {
 						const buttonSelector = `.setting-item-control > button.${currentFocussed.className}`;
-						const toolbarButtonEls = Array.from(toolbarListDiv.querySelectorAll<HTMLElement>(buttonSelector));
+						const toolbarButtonEls = Array.from(toolbarListDiv.querySelectorAll<HTMLElement>(buttonSelector))
+							.filter((btn) => getComputedStyle(btn.closest('.setting-item')!).display !== 'none');
 						const currentIndex = toolbarButtonEls.indexOf(currentFocussed);
 						switch (keyEvent.key) {
 							case 'ArrowUp':
