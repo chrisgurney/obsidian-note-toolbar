@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon } from 'obsidian';
+import { App, ButtonComponent, ExtraButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getElementPosition, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -71,8 +71,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayCopyAsCalloutSettings(containerEl);
 		this.displayOtherSettings(containerEl);
 
+		// if search is enabled (>4 toolbars), focus on search icon by default
+		if (!focusSelector && (this.plugin.settings.toolbars.length > 4)) {
+			focusSelector = '#ntb-tbar-search-button';
+		}
+
 		if (focusSelector) {
 			let focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
+			// TODO: does this focus() need a setTimeout? 
 			focusEl?.focus();
 			if (scrollToFocus) {
 				setTimeout(() => { 
@@ -95,30 +101,47 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayToolbarList(containerEl: HTMLElement): void {
 
+		let itemsListContainer = createDiv();
+		itemsListContainer.addClass('note-toolbar-setting-items-list-container');
+
 		let itemsContainer = createDiv();
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
-
-		// TODO: toolbar search
-		// if (this.plugin.settings.toolbars.length > 4) {
-		// 	let toolbarSearchSetting = new Setting(itemsContainer)
-		// 		.setName('Search toolbars')
-		// 		.setDesc('Filter toolbars by name or item.');
-
-		// 	toolbarSearchSetting
-		// 	.addSearch((cb) => {
-		// 		cb.setPlaceholder('Search')
-		// 		.onChange((value: string) => {
-		// 			// TODO: dynamically filter list items (display: none), based on toolbar position/ID
-		// 		});
-		// 	});
-		// }
 
 		let toolbarListSetting = new Setting(itemsContainer)
 			.setName(t('setting.toolbars.name'))
 			.setDesc(t('setting.toolbars.description'))
 			.setHeading();
 
+		// search button
+		if (this.plugin.settings.toolbars.length > 4) {
+			const searchButton = toolbarListSetting
+				.addExtraButton((cb) => {
+					cb.setIcon('search')
+					.setTooltip(t('setting.search.button-tooltip'))
+					.onClick(async () => {
+						this.toggleSearch(containerEl, true);
+						// un-collapse list container if it's collapsed
+						if (!this.itemListOpen) {
+							this.toggleToolbarList(containerEl);
+						}
+					})
+					.extraSettingsEl.tabIndex = 0;
+					this.plugin.registerDomEvent(
+						cb.extraSettingsEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ":
+									e.preventDefault();
+									cb.extraSettingsEl.click();
+							}
+						});
+					// used to set focus on settings display
+					cb.extraSettingsEl.id = 'ntb-tbar-search-button';
+				});
+		}
+
+		// import button
 		toolbarListSetting
 			.addExtraButton((cb) => {
 				cb.setIcon('import')
@@ -147,20 +170,51 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+		// search field
+		if (this.plugin.settings.toolbars.length > 4) {
+			const toolbarSearchSetting = new Setting(itemsContainer);
+			toolbarSearchSetting
+				.setClass('note-toolbar-setting-no-border')
+				.addSearch((cb) => {
+					cb.setPlaceholder(t('setting.search.field-placeholder'))
+					.onChange((search: string) => {
+						const query = search.toLowerCase();
+						let hasResults = false;
+						this.containerEl
+							.querySelectorAll<HTMLElement>('.note-toolbar-setting-toolbar-list .setting-item')
+							.forEach((toolbarEl) => {
+								const text = toolbarEl.querySelector('.setting-item-name')?.textContent?.toLowerCase() ?? '';
+								const matches = text.includes(query);
+								toolbarEl.style.display = matches ? '' : 'none';
+								if (matches) hasResults = true;
+							});
+					});
+				});
+			toolbarSearchSetting.settingEl.id = 'tbar-search';
+			toolbarSearchSetting.settingEl.setAttribute('data-active', 'false');
+
+			// search field: remove if it's empty and loses focus
+			const searchInputEl = toolbarSearchSetting.settingEl.querySelector('input');
+			if (searchInputEl) {
+				this.plugin.registerDomEvent(
+					searchInputEl, 'blur', (e) => {
+						if (!searchInputEl.value) {
+							let searchEl = containerEl.querySelector('#tbar-search') as HTMLElement;
+							searchEl?.setAttribute('data-active', 'false');
+						}
+					}
+				);
+			}
+		}
+
+		// collapse button
 		if (this.plugin.settings.toolbars.length > 4) {
 			toolbarListSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
 					.setTooltip(t('setting.button-collapse-tooltip'))
 					.onClick(async () => {
-						let itemsContainer = containerEl.querySelector('.note-toolbar-setting-items-container');
-						if (itemsContainer) {
-							this.itemListOpen = !this.itemListOpen;
-							itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
-							let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
-							this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
-							cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
-						}
+						this.toggleToolbarList(containerEl, cb);
 					})
 					.extraSettingsEl.tabIndex = 0;
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
@@ -175,9 +229,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						});
 				});
 		}
-
-		let itemsListContainer = createDiv();
-		itemsListContainer.addClass('note-toolbar-setting-items-list-container');
 
 		if (this.plugin.settings.toolbars.length == 0) {
 			itemsListContainer
@@ -334,6 +385,43 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		itemsContainer.appendChild(itemsListContainer);
 		containerEl.append(itemsContainer);
 
+	}
+
+	/**
+	 * Toggles the search box, based on the provided flag.
+	 * @param containerEl HTMLElement for the settings container
+	 * @param isVisible true if search should be visible; false otherwise
+	 */
+	toggleSearch(containerEl: HTMLElement, isVisible: boolean) {
+		const toolbarSearchEl = containerEl.querySelector('#tbar-search') as HTMLElement;
+		if (toolbarSearchEl) {
+			toolbarSearchEl.setAttribute('data-active', isVisible.toString());
+			// set focus in search field
+			const searchInputEl = toolbarSearchEl?.querySelector('input');
+			setTimeout(() => {
+				searchInputEl?.focus();
+			}, 50);
+		}
+	}
+
+	/**
+	 * Toggles the toolbar list between hidden or not.
+	 * @param containerEl HTMLElement for the settings container
+	 * @param button optional ExtraButtonComponent to update (tooltip)
+	 */
+	toggleToolbarList(containerEl: HTMLElement, button?: ExtraButtonComponent) {
+		let itemsContainer = containerEl.querySelector('.note-toolbar-setting-items-container');
+		if (itemsContainer) {
+			this.itemListOpen = !this.itemListOpen;
+			itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+			// hide search field
+			this.toggleSearch(containerEl, this.itemListOpen);
+			// update heading (with toolbar count)
+			let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
+			this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
+			// set button tooltip
+			button?.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
+		}
 	}
 
 	/**

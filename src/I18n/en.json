@@ -383,6 +383,10 @@
             "option-defaultitem-error-invalid": "Invalid toolbar item",
             "notice-defaultitem-invalid": "Invalid default item for floating button. Check toolbar configuration."
         },
+        "search": {
+            "button-tooltip": "Search toolbars",
+            "field-placeholder": "Search toolbars..."
+        },
         "styles": {
             "name": "Styles",
             "title": "Style toolbar: {{toolbar}}",
