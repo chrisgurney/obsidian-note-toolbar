@@ -1513,7 +1513,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (toolbarItem) {
 					await this.handleItemLink(toolbarItem, event, activeFile);
 				}
-				// TODO: else report error: invalid item?
+				else {
+					new Notice(t('setting.position.notice-defaultitem-invalid'));
+				}
 			}
 			else {
 				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 

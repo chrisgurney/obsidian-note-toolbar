@@ -380,7 +380,8 @@
             "option-defaultitem": "Floating button default item",
             "option-defaultitem-description": "Instead of the toolbar menu, show this item as the button. Other items appear in right-click menu (long-press on mobile).",
             "option-defaultitem-placeholder": "Item...",
-            "option-defaultitem-error-invalid": "Invalid toolbar item"
+            "option-defaultitem-error-invalid": "Invalid toolbar item",
+            "notice-defaultitem-invalid": "Invalid default item for floating button. Check toolbar configuration."
         },
         "styles": {
             "name": "Styles",
