@@ -50,9 +50,33 @@ export class CommandsManager {
             case PositionType.FabRight:
             case PositionType.FabLeft:
                 // trigger the menu
-                let toolbarFab = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
-                debugLog("focusCommand: button: ", toolbarFab);
-                toolbarFab.click();
+                let toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
+                debugLog("focusCommand: button: ", toolbarFabEl);
+                if (toolbarEl) {
+                    const toolbar = this.plugin.settingsManager.getToolbarById(toolbarEl.id);
+                    // show the toolbar's menu if it has a default item set
+                    if (toolbar?.defaultItem) {
+                        // TODO: this is a copy of toolbarFabHandler() -- put in a function?
+                        let activeFile = this.plugin.app.workspace.getActiveFile();
+                        this.plugin.renderToolbarAsMenu(toolbar, activeFile, this.plugin.settings.showEditInFabMenu).then(menu => { 
+                            let fabPos = toolbarFabEl.getAttribute('data-tbar-position');
+                            // determine menu orientation based on button position
+                            let elemRect = toolbarFabEl.getBoundingClientRect();
+                            let menuPos = { 
+                                x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
+                                y: (elemRect.top - 4),
+                                overlap: true,
+                                left: (fabPos === PositionType.FabLeft ? false : true)
+                            };
+                            // store menu position for sub-menu positioning
+                            localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+                            menu.showAtPosition(menuPos);
+                        });
+                    }
+                    else {
+                        toolbarFabEl.click();
+                    }
+                }
                 break;
             case PositionType.Bottom:
             case PositionType.Props:

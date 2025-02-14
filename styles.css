@@ -183,7 +183,7 @@ settings:
         description.de: 'Abstand um das Symbol herum'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
-        default: 13
+        default: 15
         format: px
     -
         id: cg-nt-fab-padding
@@ -927,7 +927,7 @@ body {
     --cg-nt-fab-border-radius: 999px;
     --cg-nt-fab-border-radius-desktop: 999px;
     --cg-nt-fab-padding: calc(var(--icon-l) / 2);
-    --cg-nt-fab-padding-desktop: calc(var(--cg-nt-fab-icon-size-desktop) / 1.5);
+    --cg-nt-fab-padding-desktop: calc(var(--cg-nt-fab-icon-size-desktop) / 1.3);
     --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-item-border-radius: var(--button-radius);
     --cg-nt-item-button-bg-color: var(--interactive-normal);

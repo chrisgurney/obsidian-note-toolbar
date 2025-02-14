@@ -642,6 +642,7 @@ export default class ToolbarSettingsModal extends Modal {
 					})
 				);
 
+		const initialDefaultItem = this.plugin.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
 		let defaultItemSetting = new Setting(settingsDiv)
 			.setName(t('setting.position.option-defaultitem'))
 			.setDesc(t('setting.position.option-defaultitem-description'))
@@ -652,9 +653,8 @@ export default class ToolbarSettingsModal extends Modal {
 					this.toolbar.defaultItem = item.uuid;
 					await this.plugin.settingsManager.save();
 				});
-				const initialItem = this.plugin.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
 				cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
-					.setValue(initialItem ? (initialItem.label || initialItem.tooltip) : '')
+					.setValue(initialDefaultItem ? (initialDefaultItem.label || initialDefaultItem.tooltip) : '')
 					.onChange(debounce(async (itemText) => {
 						if (itemText) {
 							cb.inputEl.value = itemText;
@@ -670,6 +670,11 @@ export default class ToolbarSettingsModal extends Modal {
 		defaultItemSetting.settingEl.id = 'note-toolbar-default-item';
 		defaultItemSetting.settingEl.setAttribute('data-active', 
 			(this.hasMobileFabPosition || this.hasDesktopFabPosition) ? 'true' : 'false');
+
+		// fallback if item is invalid
+		if (this.toolbar.defaultItem && !initialDefaultItem) {
+			this.toolbar.defaultItem = null;
+		}
 
 	}
 
