@@ -45,6 +45,7 @@ In Settings, you can now search toolbars by name, to get to them quicker. Naviga
 ## Fixes
 
 - Fixed case where opening Quick Tools in an Empty tab shows Templater error notices, if Templater expressions are used.
+- API: modal(): Markdown and wiki links used in the title are now tabbable.
 
 ---
 
