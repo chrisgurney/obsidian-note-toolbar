@@ -1928,6 +1928,14 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-item-full-width-phone {
+    & .setting-item-control > div {
+        .is-mobile & {
+            width: 100%;
+        }
+    }
+}
+
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
     border-top: 1px solid var(--background-modifier-border);
