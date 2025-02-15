@@ -646,6 +646,7 @@ export default class ToolbarSettingsModal extends Modal {
 		let defaultItemSetting = new Setting(settingsDiv)
 			.setName(t('setting.position.option-defaultitem'))
 			.setDesc(t('setting.position.option-defaultitem-description'))
+			.setClass('note-toolbar-setting-item-full-width-phone')
 			.addSearch((cb) => {
 				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
 					removeFieldError(cb.inputEl);

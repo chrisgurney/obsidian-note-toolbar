@@ -120,7 +120,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.setIcon('search')
 					.setTooltip(t('setting.search.button-tooltip'))
 					.onClick(async () => {
-						this.toggleSearch(containerEl, true);
+						this.toggleSearch(containerEl);
 						// un-collapse list container if it's collapsed
 						if (!this.itemListOpen) {
 							this.toggleToolbarList(containerEl);
@@ -204,7 +204,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			if (searchInputEl) {
 				this.plugin.registerDomEvent(
 					searchInputEl, 'blur', (e) => {
-						if (!searchInputEl.value) {
+						const searchButtonClicked = (e.relatedTarget as HTMLElement)?.id === 'ntb-tbar-search-button';
+						if (!searchInputEl.value && !searchButtonClicked) {
 							let searchEl = containerEl.querySelector('#tbar-search') as HTMLElement;
 							searchEl?.setAttribute('data-active', 'false');
 						}
@@ -399,15 +400,29 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 * @param containerEl HTMLElement for the settings container
 	 * @param isVisible true if search should be visible; false otherwise
 	 */
-	toggleSearch(containerEl: HTMLElement, isVisible: boolean) {
+	toggleSearch(containerEl: HTMLElement, isVisible?: boolean) {
 		const toolbarSearchEl = containerEl.querySelector('#tbar-search') as HTMLElement;
 		if (toolbarSearchEl) {
-			toolbarSearchEl.setAttribute('data-active', isVisible.toString());
-			// set focus in search field
-			const searchInputEl = toolbarSearchEl?.querySelector('input');
-			setTimeout(() => {
-				searchInputEl?.focus();
-			}, 50);
+			const searchActive = 
+				(isVisible !== undefined) ? (!isVisible).toString() : toolbarSearchEl.getAttribute('data-active');
+			if (searchActive === 'true') {
+				toolbarSearchEl.setAttribute('data-active', 'false');
+				// clear search value
+				let searchInputEl = toolbarSearchEl.querySelector('input');
+				if (searchInputEl) {
+					searchInputEl.value = '';
+					searchInputEl.trigger('input');
+					searchInputEl.blur();
+				}
+			}
+			else {
+				toolbarSearchEl.setAttribute('data-active', 'true');
+				// set focus in search field
+				const searchInputEl = toolbarSearchEl?.querySelector('input');
+				setTimeout(() => {
+					searchInputEl?.focus();
+				}, 50);
+			}
 		}
 	}
 
@@ -421,8 +436,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		if (itemsContainer) {
 			this.itemListOpen = !this.itemListOpen;
 			itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
-			// hide search field
-			this.toggleSearch(containerEl, this.itemListOpen);
+			// hide search field, if needed
+			if (!this.itemListOpen) this.toggleSearch(containerEl, false);
 			// update heading (with toolbar count)
 			let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
 			this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
