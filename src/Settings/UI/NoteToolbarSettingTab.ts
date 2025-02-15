@@ -407,6 +407,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				(isVisible !== undefined) ? (!isVisible).toString() : toolbarSearchEl.getAttribute('data-active');
 			if (searchActive === 'true') {
 				toolbarSearchEl.setAttribute('data-active', 'false');
+				// clear search value
+				let searchInputEl = toolbarSearchEl.querySelector('input');
+				if (searchInputEl) {
+					searchInputEl.value = '';
+					searchInputEl.trigger('input');
+					searchInputEl.blur();
+				}
 			}
 			else {
 				toolbarSearchEl.setAttribute('data-active', 'true');
