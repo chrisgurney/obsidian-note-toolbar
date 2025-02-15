@@ -1964,6 +1964,12 @@ input[type="text"].note-toolbar-setting-error,
             flex-direction: unset !important;
         }
     }
+    & #tbar-search {
+        padding-top: 0;
+        & .setting-item-info {
+            display: none;
+        }
+    }
     &[data-active="true"] {
         & .note-toolbar-setting-items-list-container {
             display: inherit !important;
