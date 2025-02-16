@@ -70,7 +70,9 @@ settings:
     -
         id: cg-nt-fab-border-color
         title: 'Border color'
+        title.uk: 'Колір рамки'
         description: 'Border around button'
+        description.uk: 'Рамка навколо кнопки'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -241,7 +243,9 @@ settings:
     -
         id: cg-nt-fab-autohide-opacity
         title: 'Autohide opacity'
+        title.uk: 'Прозорість автоприховування'
         description: 'When autohide style is enabled, how transparent the button is when hidden'
+        description.uk: 'Якщо стиль автоприховування увімкнено, наскільки прозорою буде кнопка, коли її приховано'
         type: variable-number-slider
         default: 0
         min: 0
@@ -798,7 +802,9 @@ settings:
     -    
         id: cg-nt-tbar-autohide-opacity
         title: 'Autohide opacity'
+        title.uk: 'Прозорість автоприховування'
         description: 'When autohide style is enabled, how transparent the toolbar is when hidden'
+        description.uk: 'Якщо автоприховування увімкнено, наскільки прозорою буде панель, коли її приховано'
         type: variable-number-slider
         default: 0
         min: 0
@@ -846,42 +852,54 @@ settings:
     -
         id: toolbar-bottom-tbar
         title: 'Toolbars (bottom)'
+        title.uk: 'Панелі (внизу)'
         description: 'Styles for toolbars in the "bottom" position'
+        description.uk: 'Стиль панелей у положенні «Внизу»'
         type: heading
         level: 1
         collapsed: true
     -
         id: cg-nt-tbar-bottom-border-radius
         title: 'Toolbar border radius (in px units)'
+        title.uk: 'Радіус закруглення рамки панелі (px)'
         description: 'How rounded the toolbar is. The higher the number the more rounded.'
+        description.uk: 'Наскільки закруглена панель. Більше число - більше заокруглення.'
         type: variable-number
         default: 5
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-desktop
         title: 'Left + Right toolbar padding on desktop (in px units)'
+        title.uk: "Лівий та правий відступи на комп'ютері (px)"
         description: 'Spacing around the toolbar.'
+        description.uk: 'Проміжки навколо панелей.'
         type: variable-number
         default: 32
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-mobile
         title: 'Left + Right toolbar padding on mobile (in px units) 📱'
+        title.uk: 'Лівий та правий відступи на мобільному (px)'
         description: 'Spacing around the toolbar.'
+        description.uk: 'Проміжки навколо панелей.'
         type: variable-number
         default: 24
         format: px
     -
         id: cg-nt-tbar-bottom-pos-y-desktop
         title: 'Y position on desktop (in em units)'
-        description: "Distance from bottom edge."
+        title.uk: "Позиція Y на комп'ютері (em) 📱"
+        description: 'Distance from bottom edge.'
+        description.uk: 'Відстань від нижнього краю.'
         type: variable-number
         default: 4.25
         format: em
     -
         id: cg-nt-tbar-bottom-pos-y-mobile
         title: 'Y position on mobile (in em units) 📱'
+        title.uk: 'Позиція Y на мобільному (em) 📱'
         description: "Distance from bottom edge."
+        description.uk: 'Відстань від нижнього краю.'
         type: variable-number
         default: 1
         format: em
