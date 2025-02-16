@@ -1846,6 +1846,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			  });
 		  });
 
+		navigator.vibrate(50);
 		contextMenu.showAtPosition(e);
 
 	}
