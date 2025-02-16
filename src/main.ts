@@ -510,10 +510,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
-				// render toolbar as menu if a default item is set
+				// render toolbar in context menu if a default item is set
 				if (toolbar.defaultItem) {
 					this.registerDomEvent(noteToolbarElement, 'contextmenu', (event) => {
 						this.renderToolbarAsMenu(toolbar, file, this.settings.showEditInFabMenu).then(menu => {
+							navigator.vibrate(50);
 							menu.showAtPosition(event);
 							event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
 						});
