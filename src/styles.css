@@ -552,20 +552,23 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 }
 
 .cg-note-toolbar-fab {
-    padding: var(--cg-nt-fab-padding-desktop) !important;
-    border-radius: var(--cg-nt-fab-border-radius-desktop);
-    .is-mobile & {
-        padding: var(--cg-nt-fab-padding) !important;
-        border-radius: var(--cg-nt-fab-border-radius);
-    }
-    height: auto !important;
     aspect-ratio: 1;
-    /* box-shadow: var(--input-shadow) !important; */
     background-color: var(--cg-nt-fab-bg-color-desktop) !important;
     color: var(--cg-nt-fab-icon-color-desktop);
+    border-radius: var(--cg-nt-fab-border-radius-desktop);
+    height: auto !important;
+    padding: var(--cg-nt-fab-padding-desktop) !important;
     .is-mobile & {
         background-color: var(--cg-nt-fab-bg-color) !important;
-        color: var(--cg-nt-fab-icon-color);        
+        border-radius: var(--cg-nt-fab-border-radius);
+        color: var(--cg-nt-fab-icon-color);
+        padding: var(--cg-nt-fab-padding) !important;
+        transition: transform 0.2s ease-out;
+        &:active {
+            @media (prefers-reduced-motion: no-preference) {
+                transform: scale(1.5);
+            }
+        }
     }
     -webkit-tap-highlight-color: transparent;
     &:is(:active, :hover, :focus-visible) {
