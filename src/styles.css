@@ -634,6 +634,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         padding: var(--file-margins);
         padding-bottom: 0;
         padding-top: 0;
+        z-index: var(--layer-status-bar);
         &:hover {
             /* undoes fix (#14) which causes a layout shift on hover */
             overflow: visible !important;
@@ -655,7 +656,6 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             bottom: var(--cg-nt-tbar-bottom-pos-y-mobile);
             padding: 0 var(--cg-nt-tbar-bottom-padding-x-mobile);
         }
-        z-index: var(--layer-status-bar);
     }
 
     /* width fix for Minimal theme in props position #204 #216 */
