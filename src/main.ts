@@ -813,11 +813,27 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param toolbar ToolbarSettings to show menu for.
 	 * @param activeFile TFile to show menu for.
 	 * @param showEditToolbar set true to show Edit Toolbar link in menu.
+	 * @param showToolbarName set true to show the menu toolbar's name in menu.
 	 * @returns Menu with toolbar's items
 	 */
-	async renderToolbarAsMenu(toolbar: ToolbarSettings, activeFile: TFile | null, showEditToolbar: boolean = false): Promise<Menu> {
+	async renderToolbarAsMenu(
+		toolbar: ToolbarSettings, 
+		activeFile: TFile | null, 
+		showEditToolbar: boolean = false, 
+		showToolbarName: boolean = false
+	): Promise<Menu> {
 
 		let menu = new Menu();
+
+		if (showToolbarName) {
+			menu.addItem((item: MenuItem) => {
+				item
+					.setTitle(toolbar.name)
+					.setIsLabel(true)
+			});
+			menu.addSeparator();
+		}
+
 		await this.renderMenuItems(menu, toolbar, activeFile);
 
 		if (showEditToolbar) {
