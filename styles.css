@@ -74,7 +74,9 @@ settings:
     -
         id: cg-nt-fab-border-color
         title: 'Border color'
+        title.uk: 'Колір рамки'
         description: 'Border around button'
+        description.uk: 'Рамка навколо кнопки'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -245,7 +247,9 @@ settings:
     -
         id: cg-nt-fab-autohide-opacity
         title: 'Autohide opacity'
+        title.uk: 'Прозорість автоприховування'
         description: 'When autohide style is enabled, how transparent the button is when hidden'
+        description.uk: 'Якщо стиль автоприховування увімкнено, наскільки прозорою буде кнопка, коли її приховано'
         type: variable-number-slider
         default: 0
         min: 0
@@ -802,7 +806,9 @@ settings:
     -    
         id: cg-nt-tbar-autohide-opacity
         title: 'Autohide opacity'
+        title.uk: 'Прозорість автоприховування'
         description: 'When autohide style is enabled, how transparent the toolbar is when hidden'
+        description.uk: 'Якщо автоприховування увімкнено, наскільки прозорою буде панель, коли її приховано'
         type: variable-number-slider
         default: 0
         min: 0
@@ -850,42 +856,54 @@ settings:
     -
         id: toolbar-bottom-tbar
         title: 'Toolbars (bottom)'
+        title.uk: 'Панелі (внизу)'
         description: 'Styles for toolbars in the "bottom" position'
+        description.uk: 'Стиль панелей у положенні «Внизу»'
         type: heading
         level: 1
         collapsed: true
     -
         id: cg-nt-tbar-bottom-border-radius
         title: 'Toolbar border radius (in px units)'
+        title.uk: 'Радіус закруглення рамки панелі (px)'
         description: 'How rounded the toolbar is. The higher the number the more rounded.'
+        description.uk: 'Наскільки закруглена панель. Більше число - більше заокруглення.'
         type: variable-number
         default: 5
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-desktop
         title: 'Left + Right toolbar padding on desktop (in px units)'
+        title.uk: "Лівий та правий відступи на комп'ютері (px)"
         description: 'Spacing around the toolbar.'
+        description.uk: 'Проміжки навколо панелей.'
         type: variable-number
         default: 32
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-mobile
         title: 'Left + Right toolbar padding on mobile (in px units) 📱'
+        title.uk: 'Лівий та правий відступи на мобільному (px)'
         description: 'Spacing around the toolbar.'
+        description.uk: 'Проміжки навколо панелей.'
         type: variable-number
         default: 24
         format: px
     -
         id: cg-nt-tbar-bottom-pos-y-desktop
         title: 'Y position on desktop (in em units)'
-        description: "Distance from bottom edge."
+        title.uk: "Позиція Y на комп'ютері (em) 📱"
+        description: 'Distance from bottom edge.'
+        description.uk: 'Відстань від нижнього краю.'
         type: variable-number
         default: 4.25
         format: em
     -
         id: cg-nt-tbar-bottom-pos-y-mobile
         title: 'Y position on mobile (in em units) 📱'
+        title.uk: 'Позиція Y на мобільному (em) 📱'
         description: "Distance from bottom edge."
+        description.uk: 'Відстань від нижнього краю.'
         type: variable-number
         default: 1
         format: em
@@ -908,9 +926,9 @@ body {
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
     --cg-nt-fab-autohide-opacity: 0;
-    --cg-nt-fab-bg-color: var(--interactive-normal);
+    --cg-nt-fab-bg-color: var(--background-primary-alt);
     --cg-nt-fab-bg-color-desktop: var(--interactive-normal);
-    --cg-nt-fab-bg-color-hover: var(--interactive-hover);
+    --cg-nt-fab-bg-color-hover: var(--interactive-accent);
     --cg-nt-fab-bg-color-hover-desktop: var(--interactive-hover);
     --cg-nt-fab-border-color: var(--icon-color);
     --cg-nt-fab-inactive-opacity: 0.7;
@@ -918,7 +936,7 @@ body {
     --cg-nt-fab-pos-y-desktop: calc(var(--size-4-8) + 18px);
     --cg-nt-fab-pos-x-mobile: var(--size-4-6);
     --cg-nt-fab-pos-y-mobile: var(--size-4-6);
-    --cg-nt-fab-icon-color: var(--icon-color);
+    --cg-nt-fab-icon-color: var(--interactive-accent);
     --cg-nt-fab-icon-color-desktop: var(--icon-color);
     --cg-nt-fab-icon-size: var(--icon-l);
     --cg-nt-fab-icon-size-desktop: 20px;
@@ -1440,31 +1458,38 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 }
 
+@keyframes cg-note-toolbar-fab-anim {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.75); }
+    100% { transform: scale(1.5); }
+}
+
 .cg-note-toolbar-fab {
-    padding: var(--cg-nt-fab-padding-desktop) !important;
-    border-radius: var(--cg-nt-fab-border-radius-desktop);
-    .is-mobile & {
-        padding: var(--cg-nt-fab-padding) !important;
-        border-radius: var(--cg-nt-fab-border-radius);
-    }
-    height: auto !important;
     aspect-ratio: 1;
-    /* box-shadow: var(--input-shadow) !important; */
     background-color: var(--cg-nt-fab-bg-color-desktop) !important;
     color: var(--cg-nt-fab-icon-color-desktop);
-    .is-mobile & {
-        background-color: var(--cg-nt-fab-bg-color) !important;
-        color: var(--cg-nt-fab-icon-color);        
-    }
-    -webkit-tap-highlight-color: transparent;
+    border-radius: var(--cg-nt-fab-border-radius-desktop);
+    height: auto !important;
+    padding: var(--cg-nt-fab-padding-desktop) !important;
     &:is(:active, :hover, :focus-visible) {
         color: var(--cg-nt-fab-icon-color-desktop) !important;
         background-color: var(--cg-nt-fab-bg-color-hover-desktop) !important;
-        .is-mobile & {
+    }
+    .is-mobile & {
+        background-color: var(--cg-nt-fab-bg-color) !important;
+        border-radius: var(--cg-nt-fab-border-radius);
+        color: var(--cg-nt-fab-icon-color);
+        padding: var(--cg-nt-fab-padding) !important;
+        transition: transform 0.2s ease-out;
+        &:is(:active, :hover, :focus-visible) {
+            background-color: var(--cg-nt-fab-bg-color) !important;
             color: var(--cg-nt-fab-icon-color) !important;
-            background-color: var(--cg-nt-fab-bg-color-hover) !important;
+            @media (prefers-reduced-motion: no-preference) {
+                animation: cg-note-toolbar-fab-anim 0.25s ease-out forwards;
+            }
         }
     }
+    -webkit-tap-highlight-color: transparent;
     & > svg {
         inline-size: var(--cg-nt-fab-icon-size-desktop);
         block-size: var(--cg-nt-fab-icon-size-desktop);

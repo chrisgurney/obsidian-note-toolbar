@@ -319,8 +319,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
-					// TODO: add canvas support in future (when granular mappings are in place)
-					break;
 				case 'empty':
 					renderToolbar = true;
 					break;
@@ -477,9 +475,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
-					// move to 'top' if the position is set to 'props'
-					// position === 'props' ? position = 'top' : undefined;
-					break;
 				case 'empty':
 				case 'beautitab-react-view':
 				case 'home-tab-view':
@@ -510,10 +505,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
 				embedBlock.append(noteToolbarElement);
 				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
-				// render toolbar as menu if a default item is set
+				// render toolbar in context menu if a default item is set
 				if (toolbar.defaultItem) {
 					this.registerDomEvent(noteToolbarElement, 'contextmenu', (event) => {
 						this.renderToolbarAsMenu(toolbar, file, this.settings.showEditInFabMenu).then(menu => {
+							navigator.vibrate(50);
 							menu.showAtPosition(event);
 							event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
 						});
@@ -1492,8 +1488,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
-					// TODO: add canvas support in future (when granular mappings are in place)
-					break;
 				case 'empty':
 				case 'beautitab-react-view':
 				case 'home-tab-view':
@@ -1846,6 +1840,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			  });
 		  });
 
+		navigator.vibrate(50);
 		contextMenu.showAtPosition(e);
 
 	}
