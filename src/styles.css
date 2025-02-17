@@ -676,6 +676,13 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         border-radius: var(--cg-nt-menu-item-border-radius);
         color: var(--cg-nt-menu-item-text-color);
         font-size: var(--cg-nt-menu-item-font-size);
+        &.is-label {
+            font-size: var(--font-ui-small);
+            color: var(--text-muted);
+            & .menu-item-icon {
+                display: none;
+            }
+        }
         & .menu-item-icon {
             color: var(--cg-nt-menu-icon-color);
             & svg {
