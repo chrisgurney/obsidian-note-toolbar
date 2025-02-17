@@ -18,7 +18,7 @@ const toIconizeFormat = (s: string) =>
  */
 export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, options: ExportSettings): Promise<string> {
     
-    debugLog('exportToCallout()');
+    // debugLog('exportToCallout()');
 
     // write out callout type + styles
     const defaultStyles = toolbar.defaultStyles.length ? toolbar.defaultStyles.join('-') : '';
