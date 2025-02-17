@@ -319,8 +319,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
-					// TODO: add canvas support in future (when granular mappings are in place)
-					break;
 				case 'empty':
 					renderToolbar = true;
 					break;
@@ -477,9 +475,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
-					// move to 'top' if the position is set to 'props'
-					// position === 'props' ? position = 'top' : undefined;
-					break;
 				case 'empty':
 				case 'beautitab-react-view':
 				case 'home-tab-view':
@@ -1493,8 +1488,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
-					// TODO: add canvas support in future (when granular mappings are in place)
-					break;
 				case 'empty':
 				case 'beautitab-react-view':
 				case 'home-tab-view':
