@@ -60,6 +60,16 @@ In Settings, you can now search toolbars by name, to get to them quicker. Naviga
 - Fixed case where opening Quick Tools in an Empty tab shows Templater error notices, if Templater expressions are used.
 - API: modal(): Markdown and wiki links used in the title are now tabbable.
 
+## API Beta
+
+### New Features 🎉
+
+- API to get all toolbars (`ntb.getToolbars()`) and a new Toolbar API (`IToolbar`) to:
+  - get the toolbar's name (`IToolbar.getName()`)
+  - export the toolbar as a callout (`IToolbar.export()`)
+
+See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
+
 ---
 
 ## Previous releases
