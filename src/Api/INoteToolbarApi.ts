@@ -1,5 +1,7 @@
 import { TFile } from "obsidian";
 import { Callback } from "./NoteToolbarApi";
+import { Toolbar } from "./Toolbar";
+import { IToolbar } from "./IToolbar";
 
 /**
  * @inline
@@ -83,6 +85,13 @@ export interface INoteToolbarApi<T> {
      * new Notice(value);
      */
     clipboard: () => Promise<string | null>;
+
+    /**
+     * Gets all toolbars.
+     * 
+     * @returns All toolbars.
+     */
+    getToolbars: () => IToolbar[];
 
     /**
      * Shows a modal with the provided content.
