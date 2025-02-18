@@ -22,6 +22,8 @@ export interface IToolbar {
      * Exports this toolbar to a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
      * 
      * @returns Toolbar as a callout or `null` if the toolbar is undefined.
+     * 
+     * @see `NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
     export(): Promise<string | null>;
     
