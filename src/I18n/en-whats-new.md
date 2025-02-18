@@ -33,7 +33,9 @@ Generic delimiters for expressions provide for more portable [Note Toolbar Callo
 
 ### Canvas support
 
-Support for toolbars in canvases was added by accident in 1.18 but I decided to leave it in, and get it working.
+Toolbars now show in canvases.
+
+_Support was partially enabled by accident in 1.18, but I decided to leave it in and get it fully working. Let me know what you think._
 
 ### Search toolbars in settings
 
