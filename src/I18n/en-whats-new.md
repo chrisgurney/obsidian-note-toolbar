@@ -20,6 +20,15 @@ Notes:
 - The icon for the item will be shown if one is set, otherwise it will use the toolbar's icon.
 - Remember that the **Show "Edit toolbar" link in toolbar menus** setting can be enabled to add an item to edit the toolbar, if needed.
 
+### Generic expression delimiters
+
+Generic delimiters for expressions provide for more portable [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts), and will help support other expression types in the future. Use this new notation in item label, tooltip, and URI fields.
+
+- For Dataview, instead of `=` (or whatever your prefix is configured as) expressions can alternately use `{{dv: ... }}`
+- For Templater, instead of `<% ... %>` expressions can alternately use `{{tp: ... }}`.
+
+[Copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars) now uses this notation, if Note Toolbar's **Copy as callout → Replace variables and expressions** option is disabled.
+
 ## Improvements 🚀
 
 ### Canvas support
@@ -59,6 +68,27 @@ In Settings, you can now search toolbars by name, to get to them quicker. Naviga
 - Mobile: Toolbars in the _New tab_ view in the top/props position are now usable/tappable.
 - Fixed case where opening Quick Tools in an Empty tab shows Templater error notices, if Templater expressions are used.
 - API: modal(): Markdown and wiki links used in the title are now tabbable.
+
+## API Beta
+
+### New Features 🎉
+
+API to get all toolbars (`ntb.getToolbars()`) and a new Toolbar API (`IToolbar`) to:
+
+- get the toolbar's name (`IToolbar.getName()`)
+- export the toolbar as a callout (`IToolbar.export()`)
+
+As an example, here's a script that writes out callouts for each configured toolbar:
+
+```js
+const toolbars = ntb.getToolbars();
+for (let toolbar of toolbars) {
+    console.log(`\n## ${toolbar.getName()}\n\n`);
+    console.log(await toolbar.export());
+}
+```
+
+See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
 
 ---
 

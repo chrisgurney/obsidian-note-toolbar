@@ -5,6 +5,7 @@ import { NtbPrompt } from "./NtbPrompt";
 import { INoteToolbarApi, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
 import { NtbModal } from "./NtbModal";
 import { TFile } from "obsidian";
+import { Toolbar } from "./Toolbar";
 
 export type Callback = (arg: string) => void;
 
@@ -19,9 +20,20 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
     /**
      * Gets the clipboard value. 
+     * 
+     * @see INoteToolbarApi.clipboard
      */
     async clipboard(): Promise<string | null> {
         return await navigator.clipboard.readText();
+    }
+
+    /**
+     * Gets all toolbars (as {@link Toolbar} objects).
+     * 
+     * @see INoteToolbarApi.getToolbars
+     */
+    getToolbars(): Toolbar[] {
+        return this.plugin.settings.toolbars.map(toolbar => new Toolbar(this.plugin, toolbar.uuid));
     }
 
     /**

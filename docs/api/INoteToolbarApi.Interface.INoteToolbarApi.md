@@ -1,8 +1,12 @@
-[obsidian-note-toolbar](index.md) / INoteToolbarApi
+[obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / INoteToolbarApi
 
-Defines the functions that can be accessed from scripts (Dataview, Templater, JavaScript via JS Engine) -- that are executed from Note Toolbar items -- using the `ntb` object.
+The first Note Toolbar APIs allow you basic toolbar access, and to show UI (suggesters, prompts, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
 
-This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
+Using the `ntb` object, below are the functions that can be called in scripts that are [executed from Note Toolbar items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts).
+
+> [!warning]
+> This API is considered BETA, until more functions are added in the future (e.g., manipulating toolbars, and other UI components) and I consider naming and organization of the methods available. Functions may change.
+> I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions).
 
 ## Type Parameters
 
@@ -32,6 +36,20 @@ const value = await ntb.clipboard();
 
 new Notice(value);
 ```
+
+***
+
+### getToolbars()
+
+> **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+Gets all toolbars.
+
+#### Returns
+
+[`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+All toolbars.
 
 ***
 
