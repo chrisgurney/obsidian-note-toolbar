@@ -24,8 +24,8 @@ Notes:
 
 Generic delimiters for expressions provide for more portable [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts), and will help support other expression types in the future. Use this new notation in item label, tooltip, and URI fields.
 
-- For Dataview, instead of `=` (or whatever your prefix is configured as) expressions can alternately use `{{dv: ... }}`
-- For Templater, instead of `<% ... %>` expressions can alternately use `{{tp: ... }}`.
+- For Dataview, instead of `=` (or whatever your prefix is configured as) expressions can alternately use <code>\{\{dv: ... \}\}</code>
+- For Templater, instead of `<% ... %>` expressions can alternately use <code>\{\{tp: ... \}\}</code>.
 
 [Copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars) now uses this notation, if Note Toolbar's **Copy as callout → Replace variables and expressions** option is OFF.
 
