@@ -2099,6 +2099,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (!hasVars && this.hasPlugin[ItemType.Dataview]) {
 			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			hasVars = !!prefix && s.trim().startsWith(prefix);
+			if (!hasVars) hasVars = s.trim().startsWith('{{dv:');
 			// TODO? support dvjs? check for $= JS inline queries
 			// if (!hasVars) {
 			// 	prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
@@ -2107,6 +2108,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		if (!hasVars && this.hasPlugin[ItemType.Templater]) {
 			hasVars = s.trim().startsWith('<%');
+			if (!hasVars) hasVars = s.trim().startsWith('{{tp:');
 		}
 		return hasVars;
 	}
@@ -2144,8 +2146,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (this.hasPlugin[ItemType.Dataview]) {
 			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
-			if (prefix && s.trim().startsWith(prefix)) {
-				s = s.trim().slice(prefix.length); // strip prefix before evaluation
+			if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
+				// strip prefix before evaluation
+				if (s.trim().startsWith('{{dv:')) s = s.replace(/^{{dv:\s*|\s*}}$/g, '');
+				if (prefix) s = s.trim().slice(prefix.length);
 				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluateInline', expression: s });
 				s = (result && typeof result === 'string') ? result : '';
 			}
@@ -2159,8 +2163,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		if (this.hasPlugin[ItemType.Templater]) {
-			if (s.trim().startsWith('<%')) {
+			if (s.trim().startsWith('<%') || s.trim().startsWith('{{tp:')) {
+				// strip all prefixes
+				if (s.trim().startsWith('{{tp:')) s = s.replace(/^{{tp:\s*|\s*}}$/g, '');
 				s = s.trim();
+				// add Templater's prefix back in for evaluation
 				if (!s.startsWith('<%')) s = '<%' + s;
 				if (!s.endsWith('%>')) s += '%>';
 				let result = await this.tpAdapter?.use({ pluginFunction: 'parseTemplateInline', expression: s });

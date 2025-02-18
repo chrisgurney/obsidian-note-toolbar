@@ -65,9 +65,15 @@ async function exportToCalloutList(
         let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
-        let itemText = options.replaceVars ? await plugin.replaceVars(item.label, activeFile) : item.label;
-        let itemLink = options.replaceVars ? await plugin.replaceVars(item.link, activeFile) : item.link;
-        let itemTooltip = options.replaceVars ? await plugin.replaceVars(item.tooltip, activeFile) : item.tooltip;
+        let itemText = options.replaceVars 
+            ? await plugin.replaceVars(item.label, activeFile) 
+            : replaceScriptDelimiters(plugin, item.label);
+        let itemLink = options.replaceVars 
+            ? await plugin.replaceVars(item.link, activeFile) 
+            : replaceScriptDelimiters(plugin, item.link);
+        let itemTooltip = options.replaceVars 
+            ? await plugin.replaceVars(item.tooltip, activeFile) 
+            : replaceScriptDelimiters(plugin, item.tooltip);
 
         itemText = escapeTextForCallout(itemText);
         itemLink = escapeLinkForCallout(itemLink);
@@ -97,7 +103,11 @@ async function exportToCalloutList(
                                 return `data-${item.linkAttr.type}="${String(value)}"`;
                             }
                             else {
-                                const encodedValue = escapeAttribute(String(value));
+                                let encodedValue = String(value);
+                                if (key === 'outputFile') {
+                                    encodedValue = replaceScriptDelimiters(plugin, encodedValue);
+                                }
+                                encodedValue = escapeAttribute(String(encodedValue));
                                 return encodedValue ? `${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"` : '';
                             }
                         })
@@ -186,6 +196,22 @@ function unescapeLinkForCallout(str: string): string {
         .replace(/\\\(/g, '(')
         .replace(/^<(?!%)/g, '')   // replace < but not <%
         .replace(/(?<!%)>$/g, ''); // replace > but not %>
+}
+
+/**
+ * Returns a string that replaces Dataview + Templater delimeters with
+ * Note Toolbar's agnostic {{ }} script delimiters.
+ */
+function replaceScriptDelimiters(plugin: NoteToolbarPlugin, input: string): string {
+    if (plugin.hasPlugin[ItemType.Templater]) {
+        input = input.replace(/<%\s*(.*?)\s*%?>/g, '{{tp: $1}}');
+    }
+    if (plugin.hasPlugin[ItemType.Dataview]) {
+        const dvPrefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix') || '=';
+        const regex = new RegExp(`^${dvPrefix}\\s*(.*)`, 'gm');
+        input = input.replace(regex, '{{dv: $1}}');
+    }
+    return input;
 }
 
 /**
