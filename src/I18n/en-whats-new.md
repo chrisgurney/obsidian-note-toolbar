@@ -22,6 +22,10 @@ Notes:
 
 ## Improvements 🚀
 
+### Canvas support
+
+Support for toolbars in canvases was added by accident in 1.18 but I decided to leave it in, and get it working.
+
 ### Search toolbars in settings
 
 In Settings, you can now search toolbars by name, to get to them quicker. Navigate the results with up/down arrow keys.
@@ -39,11 +43,20 @@ In Settings, you can now search toolbars by name, to get to them quicker. Naviga
 
 ### Floating buttons
 
+- Mobile: Set mobile FAB color defaults to match Obsidian's colors.
+- Mobile: Active FAB buttons now enlarge on tap, to provide feedback.
+- Mobile: The phone now vibrates when opening the toolbar's context menu for default items.
 - Slightly decreased the size of icons on desktop. (Override in the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support), if you'd prefer.)
 - The button's tooltip is now just the toolbar's name.
 
+### Localization updates
+
+- Ukrainian localization updated by [@laktiv](https://github.com/laktiv)
+- Chinese (Simplified) localization updated by [@Moyf](https://github.com/Moyf)
+
 ## Fixes
 
+- Mobile: Toolbars in the _New tab_ view in the top/props position are now usable/tappable.
 - Fixed case where opening Quick Tools in an Empty tab shows Templater error notices, if Templater expressions are used.
 - API: modal(): Markdown and wiki links used in the title are now tabbable.
 
