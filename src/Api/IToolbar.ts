@@ -9,7 +9,14 @@ export interface IToolbar {
     /**
      * Unique identifier for the toolbar.
      */
-    id: string;
+    id?: string;
+
+    /**
+     * Gets the name of this toolbar.
+     * 
+     * @returns Name of the toolbar or `undefined` if the toolbar is invalid.
+     */
+    getName(): string | undefined;
 
     /**
      * Exports this toolbar to a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).

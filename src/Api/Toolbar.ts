@@ -5,13 +5,22 @@ import { IToolbar } from "./IToolbar";
 
 export class Toolbar implements IToolbar {
 
-    public readonly id: string;
+    public readonly id?: string;
 
     private toolbar: ToolbarSettings | undefined;
 
     constructor(private plugin: NoteToolbarPlugin, id: string) {
-        this.id = id;
         this.toolbar = this.plugin.settingsManager.getToolbarById(id);
+        this.id = this.toolbar?.uuid;
+    }
+
+    /**
+     * Gets the name of this toolbar.
+     * 
+     * @see IToolbar.getName
+     */
+    getName(): string | undefined {
+        return this.toolbar?.name;
     }
 
     /**
