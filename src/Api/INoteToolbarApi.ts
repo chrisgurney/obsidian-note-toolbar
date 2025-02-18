@@ -4,69 +4,15 @@ import { Toolbar } from "./Toolbar";
 import { IToolbar } from "./IToolbar";
 
 /**
- * @inline
- * @hidden
- */
-export interface NtbModalOptions {
-    /**
-     * Optional title for the modal, rendered as markdown.
-     */
-    title?: string;
-    /**
-     * Optional CSS class(es) to add to the component.
-     */
-    class?: string;
-}
-
-/**
- * @inline
- * @hidden
- */
-export interface NtbPromptOptions {
-    /**
-     * Optional text shown above the text field, rendered as markdown. Default is no label.
-     */
-    label?: string;
-    /**
-     * If set to `true`, the input field will be multi line. If not provided, defaults to `false`.
-     */
-    large?: boolean;
-    /**
-     * Optional text inside text field. Defaults to a preset message.
-     */
-    placeholder?: string;
-    /**
-     * Optional default value for text field. If not provided, no default value is set.
-     */
-    default?: string;
-    /**
-     * Optional CSS class(es) to add to the component.
-     */
-    class?: string;
-}
-
-/**
- * @inline
- * @hidden
- */
-export interface NtbSuggesterOptions {
-    /**
-     * Optional text inside text field; defaults to preset message.
-     */
-    placeholder?: string;
-    /**
-     * Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists).
-     */
-    limit?: number;
-    /**
-     * Optional CSS class(es) to add to the component.
-     */
-    class?: string;
-}
-
-/**
- * Defines the functions that can be accessed from scripts (Dataview, Templater, JavaScript via JS Engine) -- that are executed from Note Toolbar items -- using the `ntb` object.
+ * The first Note Toolbar APIs allow you basic toolbar access, and to show UI (suggesters, prompts, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
  * 
+ * Using the `ntb` object, below are the functions that can be called in scripts that are [executed from Note Toolbar items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts).
+ * 
+ * > [!warning]
+ * > This API is considered BETA, until more functions are added in the future (e.g., manipulating toolbars, and other UI components) and I consider naming and organization of the methods available. Functions may change.
+ * > I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions).
+ * 
+ * @privateRemarks
  * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
  */
 export interface INoteToolbarApi<T> {
@@ -179,4 +125,65 @@ export interface INoteToolbarApi<T> {
      */
     suggester: (values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
 
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbModalOptions {
+    /**
+     * Optional title for the modal, rendered as markdown.
+     */
+    title?: string;
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbPromptOptions {
+    /**
+     * Optional text shown above the text field, rendered as markdown. Default is no label.
+     */
+    label?: string;
+    /**
+     * If set to `true`, the input field will be multi line. If not provided, defaults to `false`.
+     */
+    large?: boolean;
+    /**
+     * Optional text inside text field. Defaults to a preset message.
+     */
+    placeholder?: string;
+    /**
+     * Optional default value for text field. If not provided, no default value is set.
+     */
+    default?: string;
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbSuggesterOptions {
+    /**
+     * Optional text inside text field; defaults to preset message.
+     */
+    placeholder?: string;
+    /**
+     * Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists).
+     */
+    limit?: number;
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
 }
