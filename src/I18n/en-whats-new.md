@@ -73,9 +73,20 @@ In Settings, you can now search toolbars by name, to get to them quicker. Naviga
 
 ### New Features 🎉
 
-- API to get all toolbars (`ntb.getToolbars()`) and a new Toolbar API (`IToolbar`) to:
-  - get the toolbar's name (`IToolbar.getName()`)
-  - export the toolbar as a callout (`IToolbar.export()`)
+API to get all toolbars (`ntb.getToolbars()`) and a new Toolbar API (`IToolbar`) to:
+
+- get the toolbar's name (`IToolbar.getName()`)
+- export the toolbar as a callout (`IToolbar.export()`)
+
+As an example, here's a script that writes out callouts for each configured toolbar:
+
+```js
+const toolbars = ntb.getToolbars();
+for (let toolbar of toolbars) {
+    console.log(`\n## ${toolbar.getName()}\n\n`);
+    console.log(await toolbar.export());
+}
+```
 
 See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
 
