@@ -1,5 +1,5 @@
 /**
- * Toolbar API.
+ * The `IToolbar` interface provides basic API access to toolbars, with more functions to be added.
  * 
  * @privateRemarks
  * API wrapper for ToolbarSettings methods.

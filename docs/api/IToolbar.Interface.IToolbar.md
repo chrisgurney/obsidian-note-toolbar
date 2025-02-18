@@ -1,6 +1,6 @@
 [obsidian-note-toolbar](index.md) / [IToolbar](IToolbar.md) / IToolbar
 
-Toolbar API.
+The `IToolbar` interface provides basic API access to toolbars, with more functions to be added.
 
 ## Properties
 
