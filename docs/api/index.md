@@ -1,3 +1,4 @@
-## Interfaces
+## Modules
 
-- [INoteToolbarApi](Interface.INoteToolbarApi.md)
+- [INoteToolbarApi](INoteToolbarApi.md)
+- [IToolbar](IToolbar.md)

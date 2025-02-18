@@ -1,4 +1,4 @@
-[obsidian-note-toolbar](index.md) / INoteToolbarApi
+[obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / INoteToolbarApi
 
 Defines the functions that can be accessed from scripts (Dataview, Templater, JavaScript via JS Engine) -- that are executed from Note Toolbar items -- using the `ntb` object.
 
@@ -32,6 +32,20 @@ const value = await ntb.clipboard();
 
 new Notice(value);
 ```
+
+***
+
+### getToolbars()
+
+> **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+Gets all toolbars.
+
+#### Returns
+
+[`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+All toolbars.
 
 ***
 
