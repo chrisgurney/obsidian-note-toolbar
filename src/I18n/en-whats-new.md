@@ -27,13 +27,15 @@ Generic delimiters for expressions provide for more portable [Note Toolbar Callo
 - For Dataview, instead of `=` (or whatever your prefix is configured as) expressions can alternately use `{{dv: ... }}`
 - For Templater, instead of `<% ... %>` expressions can alternately use `{{tp: ... }}`.
 
-[Copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars) now uses this notation, if Note Toolbar's **Copy as callout → Replace variables and expressions** option is disabled.
+[Copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars) now uses this notation, if Note Toolbar's **Copy as callout → Replace variables and expressions** option is OFF.
 
 ## Improvements 🚀
 
 ### Canvas support
 
-Support for toolbars in canvases was added by accident in 1.18 but I decided to leave it in, and get it working.
+Toolbars now show in canvases.
+
+_Support was partially enabled by accident in 1.18, but I decided to leave it in and get it fully working. Let me know what you think._
 
 ### Search toolbars in settings
 
