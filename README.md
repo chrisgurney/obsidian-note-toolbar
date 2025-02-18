@@ -28,7 +28,7 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
 
 - [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to commands, files/folders, URIs/URLs, menus, and scripts (Dataview, Templater, and JavaScript).
 - [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property
-  - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) below the Properties section, at the top of notes, as a floating button
+  - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) below the Properties section, at the top or bottom of notes, or as a floating button
   - Add a toolbar to the _New tab_ view
   - Access the toolbar from the navigation bar (on mobile)
   - Toolbar items can use Obsidian's built-in icons, labels (which can include emojis), or a mix of both
