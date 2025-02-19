@@ -2106,6 +2106,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			// 	hasVars = !!prefix && s.trim().startsWith(prefix);
 			// }
 		}
+		if (!hasVars && this.hasPlugin[ItemType.JsEngine]) {
+			hasVars = s.trim().startsWith('{{jse:');
+		}
 		if (!hasVars && this.hasPlugin[ItemType.Templater]) {
 			hasVars = s.trim().startsWith('<%');
 			if (!hasVars) hasVars = s.trim().startsWith('{{tp:');
@@ -2160,6 +2163,14 @@ export default class NoteToolbarPlugin extends Plugin {
 			// 	let result = await this.dvAdapter?.use({ pluginFunction: 'executeJs', expression: s });
 			// 	s = result ? result : '';
 			// }
+		}
+
+		if (this.hasPlugin[ItemType.JsEngine]) {
+			if (s.trim().startsWith('{{jse:')) {
+				s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
+				let result = await this.jsAdapter?.use({ pluginFunction: 'evaluateInline', expression: s });
+				s = (result && typeof result === 'string') ? result : '';
+			}
 		}
 
 		if (this.hasPlugin[ItemType.Templater]) {
