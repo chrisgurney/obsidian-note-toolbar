@@ -14,6 +14,16 @@ import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 export default class JsEngineAdapter extends Adapter {
 
     readonly FUNCTIONS: AdapterFunction[] = [
+        // TODO: for possible future use
+        // {
+        //     function: this.evaluate,
+        //     label: "Evaluate JavaScript",
+        //     description: "",
+        //     parameters: [
+        //         { parameter: 'expression', label: "JavaScript expression", description: "JavaScript expression to evaluate", type: SettingType.TextArea, required: true },
+        //         { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+        //     ]
+        // },
         {
             function: this.exec,
             label: t('adapter.js-engine.exec-function'),
@@ -53,6 +63,12 @@ export default class JsEngineAdapter extends Adapter {
         }
 
         switch (config.pluginFunction) {
+            // internal function for inline evaluations in which errors can be ignored
+            case 'evaluateInline':
+                result = config.expression
+                    ? await this.evaluate(config.expression, containerEl, false)
+                    : "Error: A JavaScript expression is required";
+                break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, containerEl)
@@ -72,6 +88,60 @@ export default class JsEngineAdapter extends Adapter {
         }
 
         return result;
+    }
+
+    /**
+     * Wrapper for execute() with a provided code string.
+     * @example
+     * return app.workspace.activeEditor.file.basename
+     * @param expression
+     * @param containerEl
+     * @param displayErrors
+     * @returns
+     */
+    async evaluate(expression: string, containerEl?: HTMLElement, displayErrors: boolean = true): Promise<string> {
+
+        let result = '';
+        let resultEl = containerEl || createSpan();
+
+        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+
+        const component = new Component();
+		component.load();
+        try {
+            containerEl?.empty();
+            let context = {};
+            if (activeFile) {
+                context = {
+                    executionSource: 'markdown-other',
+                    file: activeFile
+                }
+            }
+            const execution = await this.adapterApi.internal.execute({
+                code: expression,
+                container: resultEl,
+                component: component,
+                context: context
+            });
+            if (execution.functionBuildError) throw execution.functionBuildError;
+            if (execution.functionRunError) throw execution.functionRunError;
+            result = execution.result;
+        }
+        catch (error) {
+            if (displayErrors) {
+                displayScriptError(error);
+            }
+            else {
+                // result = expression;
+                console.error(error);
+            }
+        } 
+        finally {
+            component.unload();
+        }
+
+        return result;
+
     }
 
     /**
