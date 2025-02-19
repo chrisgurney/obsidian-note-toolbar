@@ -72,7 +72,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayOtherSettings(containerEl);
 
 		// if search is enabled (>4 toolbars), focus on search icon by default
-		if (!focusSelector && (this.plugin.settings.toolbars.length > 4)) {
+		if (!Platform.isPhone && !focusSelector && (this.plugin.settings.toolbars.length > 4)) {
 			focusSelector = '#ntb-tbar-search-button';
 		}
 
