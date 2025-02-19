@@ -157,6 +157,7 @@ export default class DataviewAdapter extends Adapter {
             }
             else {
                 result = expression;
+                console.error(error);
             }
         }
         finally {

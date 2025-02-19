@@ -215,6 +215,7 @@ export default class TemplaterAdapter extends Adapter {
             }
             else {
                 result = expression;
+                console.error(error);
             }
         }
 
