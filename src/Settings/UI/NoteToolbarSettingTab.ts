@@ -462,11 +462,13 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(hasEmptyViewToolbar)
 					.onChange(async (value: boolean) => {
 						if (!value) this.plugin.settings.emptyViewToolbar = null;
-						await this.plugin.settingsManager.save();
 						let emptyViewToolbarContainer = containerEl.querySelector('#empty-view-tbar');
 						if (emptyViewToolbarContainer) {
 							emptyViewToolbarContainer.setAttribute('data-active', value.toString());
+							let inputEl = emptyViewToolbarContainer.querySelector('input');
+							if (inputEl && !value) inputEl.value = '';
 						}
+						await this.plugin.settingsManager.save();
 					});
 			});
 
