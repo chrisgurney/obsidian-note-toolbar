@@ -204,11 +204,11 @@
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
-            "option-canvas": "Show toolbar in canvas files",
+            "option-canvas": "Show toolbars in canvas files",
             "option-canvas-description": "Enable to show mapped toolbars in canvas files.",
             "option-emptyview": "New tab toolbar",
             "option-emptyview-description": "Toolbar to display in the New tab view.",
-            "toggle-emptyview": "Show toolbar in New tab view",
+            "toggle-emptyview": "Show a toolbar in New tab view",
             "toggle-emptyview-description": "Choose a toolbar to display when no note is open.",
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
