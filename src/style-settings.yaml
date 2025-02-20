@@ -8,7 +8,7 @@ settings:
         title.de: 'Schwebende Schaltfläche'
         title.zh: '浮动按钮'
         description: 'Styles for the "floating button" position'
-        description.uk: 'Стилі  плаваючих кнопок (встановіть позицію панелі «Плаваюча кнопка»)'
+        description.uk: 'Стилі плаваючих кнопок (встановіть позицію панелі "Плаваюча кнопка")'
         description.de: 'Stile für schwebende Schaltflächen (Position der Symbolleiste auf „schwebende Schaltfläche" setzen)'
         description.zh: '浮动按钮的样式（工具栏位置为「浮动按钮」时）'
         type: heading
@@ -112,11 +112,11 @@ settings:
     -
         id: cg-nt-fab-pos-x-desktop
         title: 'X position on desktop (in px units)'
-        title.uk: 'Позиція X на робочому столі (em)'
+        title.uk: 'Позиція X на робочому столі (пікселі)'
         title.de: 'X-Position am PC (in px-Einheiten)'
         title.zh: '桌面端X轴位置（单位：px）'
         description: 'Distance from the edge of the editor view.'
-        description.uk: 'Відстань від краю вікна редактора'
+        description.uk: 'Відстань від краю вікна редактора.'
         description.de: 'Abstand vom Rand der Editoransicht.'
         description.zh: '距编辑器视图边缘的距离'
         type: variable-number
@@ -125,11 +125,11 @@ settings:
     -
         id: cg-nt-fab-pos-x-mobile
         title: 'X position on mobile (in px units) 📱'
-        title.uk: 'Позиція X на мобільному (% ширини) 📱'
+        title.uk: 'Позиція X на мобільному (пікселі) 📱'
         title.de: 'X-Position am Handy (in px-Einheiten) 📱'
         title.zh: '移动端X轴位置（单位：px）📱'
         description: "Distance from the edge of the editor view."
-        description.uk: 'У відсотках від ширини редактора, від лівого краю (у зворотному порядку, коли кнопка знаходиться праворуч)'
+        description.uk: 'Відстань від краю вікна редактора.'
         description.de: 'Als Prozentsatz der Breite des Editors, ausgehend vom linken Rand (umgekehrt, wenn sich die Schaltfläche rechts befindet).'
         description.zh: '基于左侧边缘，占编辑器宽度的百分比（当按钮在右侧时则相反）'
         type: variable-number
@@ -138,11 +138,11 @@ settings:
     -
         id: cg-nt-fab-pos-y-desktop
         title: 'Y position on desktop (in px units)'
-        title.uk: 'Позиція Y на робочому столі (% висоти)'
+        title.uk: 'Позиція Y на робочому столі (пікселі)'
         title.de: 'Y-Position am PC (in px-Einheiten)'
         title.zh: '桌面端Y轴位置（单位：px）'
         description: "Distance from the bottom of the editor view."
-        description.uk: 'У відсотках від висоти редактора, від верхнього краю'
+        description.uk: 'Відстань від нижнього краю вікна редактора.'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '基于顶部边缘，占编辑器高度的百分比'
         type: variable-number
@@ -151,11 +151,11 @@ settings:
     -
         id: cg-nt-fab-pos-y-mobile
         title: 'Y position on mobile (in px units) 📱'
-        title.uk: 'Позиція Y на мобільному пристрої (% висоти) 📱'
+        title.uk: 'Позиція Y на мобільному пристрої (пікселі) 📱'
         title.de: 'Y-Position am Handy (in px-Einheiten) 📱'
         title.zh: '移动端Y轴位置（单位：px）📱'
         description: "Distance from the bottom of the editor view."
-        description.uk: 'У відсотках від висоти редактора, від верхнього краю'
+        description.uk: 'Відстань від нижнього краю вікна редактора.'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '基于顶部边缘，占编辑器高度的百分比'
         type: variable-number
@@ -177,7 +177,7 @@ settings:
         title.de: 'Abstand am PC (in px)'
         title.zh: '桌面端内边距（单位：像素）'
         description: 'Spacing around the icon.'
-        description.uk: 'Відступи навколо іконок'
+        description.uk: 'Відстань навколо іконки.'
         description.de: 'Abstand um das Symbol herum'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
@@ -190,7 +190,7 @@ settings:
         title.de: 'Abstand am Handy (in px) 📱'
         title.zh: '移动端内边距（单位：像素）📱'
         description: 'Spacing around the icon.'
-        description.uk: 'Відступи навколо іконок'
+        description.uk: 'Відстань навколо іконки.'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
         default: 12
@@ -216,7 +216,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width-desktop
         title: 'Icon stroke width on desktop (in px units)'
-        title.uk: 'Ширина рамки іконки на робочому столі (пікселі)'
+        title.uk: 'Ширина контуру іконки на робочому столі (пікселі)'
         title.de: 'Symbol-Strichstärke am PC (in px)'
         title.zh: '桌面端图标描边宽度（单位：像素）'
         type: variable-number
@@ -225,7 +225,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width
         title: 'Icon stroke width on mobile (in px units) 📱'
-        title.uk: 'Ширина рамки іконки на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Ширина контуру іконки на мобільному пристрої (пікселі) 📱'
         title.de: 'Symbol-Strichstärke am Handy (in px) 📱'
         title.zh: '移动端图标描边宽度（单位：像素）📱'
         type: variable-number
@@ -243,9 +243,9 @@ settings:
     -
         id: cg-nt-fab-autohide-opacity
         title: 'Autohide opacity'
-        title.uk: 'Прозорість автоприховування'
+        title.uk: 'Прозорість при автоприховуванні'
         description: 'When autohide style is enabled, how transparent the button is when hidden'
-        description.uk: 'Якщо стиль автоприховування увімкнено, наскільки прозорою буде кнопка, коли її приховано'
+        description.uk: 'Якщо увімкнено автоприховування, наскільки прозорою буде кнопка, коли вона прихована'
         type: variable-number-slider
         default: 0
         min: 0
@@ -254,11 +254,11 @@ settings:
     -
         id: cg-nt-fab-border-radius-desktop
         title: 'Border radius on desktop (in px units)'
-        title.uk: 'Радіус рамки на робочому столі (пікселі)'
+        title.uk: 'Круглість рамки на робочому столі (пікселі)'
         title.de: 'Rahmenabrundung am PC (in px)'
         title.zh: '桌面端边框圆角（单位：像素）'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
-        description.uk: 'Наскільки округла кнопка. Чим більше число, тим більше округлення. (Додаток за замовчуванням Android = 16, iOS = 999)'
+        description.uk: 'Наскільки круглою є кнопка. Як більше число, тим більше округлення.'
         description.de: 'Wie abgerundet die Schaltfläche ist. Je höher die Zahl, desto runder.'
         description.zh: '按钮的圆角设置；数值越大，圆角越明显（默认值：Android = 16，iOS = 999）'
         type: variable-number
@@ -267,11 +267,11 @@ settings:
     -
         id: cg-nt-fab-border-radius
         title: 'Border radius on mobile (in px units) 📱'
-        title.uk: 'Радіус рамки на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Круглість рамки на мобільному пристрої (пікселі) 📱'
         title.de: 'Rahmenabrundung am Handy (in px) 📱'
         title.zh: '移动端边框圆角（单位：像素）📱'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
-        description.uk: 'Наскільки округла кнопка. Чим більше число, тим більше округлення. (Додаток за замовчуванням Android = 16, iOS = 999)'
+        description.uk: 'Наскільки круглою є кнопка. Чим більше число, тим більше округлення.'
         description.de: 'Wie abgerundet die Schaltfläche ist. Je höher die Zahl, desto runder. (Plugin-Standardwerte: Android = 16, iOS = 999)'
         description.zh: '按钮的圆角设置；数值越大，圆角越明显（默认值：Android = 16，iOS = 999）'
         type: variable-number
@@ -284,7 +284,7 @@ settings:
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
         description: 'When focus is in another tab, dim the floating button'
-        description.uk: 'Зменшіть плаваючу кнопку, коли фокус знаходиться на іншій вкладці'
+        description.uk: 'Коли фокус знаходиться на іншій вкладці, затемніть плаваючу кнопку'
         description.de: 'Wenn der Fokus auf einer anderen Registerkarte liegt, wird die schwebende Schaltfläche abgeblendet'
         description.zh: '当焦点在其他标签页时，降低浮动按钮的亮度'
         type: variable-number-slider
@@ -299,7 +299,7 @@ settings:
         title.de: 'Elemente'
         title.zh: '项目'
         description: 'Styles for items within toolbars'
-        description.uk: 'Стилі Елементів вне панелей'
+        description.uk: 'Стилі елементів у панелях'
         description.de: 'Stile für Elemente von Toolbars'
         description.zh: '工具栏内项目的样式'
         type: heading
@@ -428,7 +428,7 @@ settings:
         title.de: 'Menüs'
         title.zh: '菜单'
         description: 'Styles for Item Menu type items'
-        description.uk: 'Стилі Елементів меню'
+        description.uk: 'Стилі елементів меню'
         description.de: 'Stile für Element-Menüs'
         description.zh: '项目菜单类型的样式'
         type: heading
@@ -510,7 +510,7 @@ settings:
     -
         id: cg-nt-menu-item-font-size
         title: 'Font size (in em units)'
-        title.uk: 'Розмір текста (em)'
+        title.uk: 'Розмір тексту (em)'
         title.de: 'Schriftgröße (in em)'
         title.zh: '字体大小（单位：em）'
         type: variable-number
@@ -559,7 +559,7 @@ settings:
         title.de: 'Schnellwahl'
         title.zh: '快速工具'
         description: 'Styles for the Quick Tools window'
-        description.uk: 'Стилі вікна Швидких інструментів'
+        description.uk: 'Стилі вікна швидкого доступу'
         description.de: 'Stile für das Schnellwahlfenster'
         description.zh: '快速工具窗口的样式'
         type: heading
@@ -579,7 +579,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-text-color
         title: '🎨 Text + Icon color'
-        title.uk: '🎨 Кольори текста та іконки'
+        title.uk: '🎨 Кольори тексту та іконки'
         title.de: '🎨 Text + Symbol-Farbe'
         title.zh: '🎨 文本和图标颜色'
         type: variable-themed-color
@@ -590,7 +590,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-text-color-hover
         title: '🎨 Text + Icon color (on hover)'
-        title.uk: '🎨 Кольори текста та іконки (при наведенні)'
+        title.uk: '🎨 Кольори тексту та іконки (при наведенні)'
         title.de: '🎨 Text + Symbol-Farbe (beim Überfahren mit der Maus)'
         title.zh: '🎨 文字 + 图标颜色（悬停时）'
         type: variable-themed-color
@@ -632,7 +632,7 @@ settings:
         title.de: 'Trenner'
         title.zh: '分隔符'
         description: 'Styles for toolbar separators'
-        description.uk: 'Стилі Роздільників'
+        description.uk: 'Стилі роздільників у панелях'
         description.de: 'Stile für Toolbar-Trenner'
         description.zh: '工具栏分隔符的样式'
         type: heading
@@ -683,7 +683,7 @@ settings:
         title.de: 'Toolbars'
         title.zh: '工具栏'
         description: 'Styles for standard toolbars'
-        description.uk: 'Стилі Панелей'
+        description.uk: 'Стилі стандартних панелей'
         description.de: 'Stile für die Standard-Toolbars'
         description.zh: '标准工具栏的样式'
         type: heading
@@ -740,7 +740,7 @@ settings:
         title.de: 'Oberer Sticky-Offset am PC (in rem-Einheiten) 📱'
         title.zh: '桌面端顶部 Sticky 附着的偏移量（单位：像素）'
         description: "For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed)."
-        description.uk: 'З деякими темами панель не приліпає зверху (більше = далі від верху). Це не буде застосовано, якщо позиція = Зверху (фіксовано)'
+        description.uk: 'У деяких темах панель не прилипає до верху (чим більше значення, тим далі від верху). Це не застосовується, якщо позиція = Зверху (фіксовано).'
         description.de: 'Bei einigen Themes klebt die Symbolleiste nicht ganz oben (größer = weiter von oben). Beachten Sie, dass dies nicht gilt, wenn Position = Oben (fixiert)'
         description.zh: '对于某些主题，工具栏并不能完全贴在顶部（数值越大，离顶部越远）。注意，当位置为「置顶（固定）」时，此设置不适用。'
         type: variable-number
@@ -784,7 +784,7 @@ settings:
         title.de: 'Linker + rechter Abstand (in em-Einheiten)'
         title.zh: '左右内边距（单位：em）'
         description: "Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented."
-        description.uk: 'Корисно, коли встановлен колір фону панелі та використовуються кнопки. Більший = більше відступів'
+        description.uk: 'Корисно, якщо встановлено колір фону для панелі або використовуються кнопки. Чим більше значення, тим більше відступ.'
         description.de: 'Hilfreich, wenn Sie eine Hintergrundfarbe für die Symbolleiste festgelegt haben oder Schaltflächen verwenden. Größer = mehr eingerückt.'
         description.zh: '当您为工具栏设置了背景色、或者使用按钮时会很有用。数值越大，缩进越多。'
         type: variable-number
@@ -822,11 +822,11 @@ settings:
     -
         id: cg-nt-tbar-inactive-opacity-desktop
         title: 'Inactive opacity on desktop'
-        title.uk: 'Прозорість у неактивному режимі'
+        title.uk: 'Прозорість у неактивному режимі на ПК'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
         description: 'When focus is in another view, dim the toolbar'
-        description.uk: 'Затемняє панель інструментів, коли фокус знаходиться на іншій вкладці'
+        description.uk: 'Коли фокус знаходиться на іншій вкладці, затемнення панелі'
         description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
         description.zh: '当焦点在其他标签页时，使工具栏变暗'
         type: variable-number-slider
@@ -837,11 +837,11 @@ settings:
     -
         id: cg-nt-tbar-inactive-opacity-mobile
         title: 'Inactive opacity on mobile 📱'
-        title.uk: 'Прозорість у неактивному режимі'
+        title.uk: 'Прозорість у неактивному режимі на мобільному 📱'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
         description: 'When focus is in another view, dim the toolbar'
-        description.uk: 'Затемняє панель інструментів, коли фокус знаходиться на іншій вкладці'
+        description.uk: 'Коли фокус знаходиться на іншій вкладці, затемнення панелі'
         description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
         description.zh: '当焦点在其他标签页时，使工具栏变暗'
         type: variable-number-slider
@@ -854,41 +854,41 @@ settings:
         title: 'Toolbars (bottom)'
         title.uk: 'Панелі (внизу)'
         description: 'Styles for toolbars in the "bottom" position'
-        description.uk: 'Стиль панелей у положенні «Внизу»'
+        description.uk: 'Стилі панелей у положенні "Внизу"'
         type: heading
         level: 1
         collapsed: true
     -
         id: cg-nt-tbar-bottom-border-radius
         title: 'Toolbar border radius (in px units)'
-        title.uk: 'Радіус закруглення рамки панелі (px)'
-        description: 'How rounded the toolbar is. The higher the number the more rounded.'
-        description.uk: 'Наскільки закруглена панель. Більше число - більше заокруглення.'
+        title.uk: 'Радіус закруглення рамки панелі (пікселі)'
+        description: 'How rounded the toolbar is. The higher the number, the more rounded.'
+        description.uk: 'Наскільки закруглена панель. Чим більше число, тим більше заокруглення.'
         type: variable-number
         default: 5
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-desktop
         title: 'Left + Right toolbar padding on desktop (in px units)'
-        title.uk: "Лівий та правий відступи на комп'ютері (px)"
+        title.uk: "Лівий та правий відступи на комп'ютері (пікселі)"
         description: 'Spacing around the toolbar.'
-        description.uk: 'Проміжки навколо панелей.'
+        description.uk: 'Проміжки навколо панелі.'
         type: variable-number
         default: 32
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-mobile
         title: 'Left + Right toolbar padding on mobile (in px units) 📱'
-        title.uk: 'Лівий та правий відступи на мобільному (px)'
+        title.uk: 'Лівий та правий відступи на мобільному (пікселі) 📱'
         description: 'Spacing around the toolbar.'
-        description.uk: 'Проміжки навколо панелей.'
+        description.uk: 'Проміжки навколо панелі.'
         type: variable-number
         default: 24
         format: px
     -
         id: cg-nt-tbar-bottom-pos-y-desktop
         title: 'Y position on desktop (in em units)'
-        title.uk: "Позиція Y на комп'ютері (em) 📱"
+        title.uk: "Позиція Y на комп'ютері (em)"
         description: 'Distance from bottom edge.'
         description.uk: 'Відстань від нижнього краю.'
         type: variable-number
