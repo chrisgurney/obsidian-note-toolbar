@@ -686,8 +686,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		let hasEmptyViewToolbar = this.plugin.settings.emptyViewToolbar ? true : false;
 
 		new Setting(containerEl)
-			.setName("Show toolbar in canvas files")
-			.setDesc("Enable to show mapped toolbars in canvas files.")
+			.setName(t('setting.display-rules.option-canvas'))
+			.setDesc(t('setting.display-rules.option-canvas-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.showToolbarInCanvas)
