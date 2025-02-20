@@ -246,7 +246,7 @@
 			"instruction-dismiss": "to dismiss"
         },
         "item": {
-            "title": "Edit item",
+            "title": "Edit toolbar item",
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
