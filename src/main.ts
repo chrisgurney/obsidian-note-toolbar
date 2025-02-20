@@ -812,8 +812,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Renders the given toolbar as a menu and returns it.
 	 * @param toolbar ToolbarSettings to show menu for.
 	 * @param activeFile TFile to show menu for.
-	 * @param showEditToolbar set true to show Edit Toolbar link in menu.
-	 * @param showToolbarName set true to show the menu toolbar's name in menu.
+	 * @param showEditToolbar set true to show Edit Toolbar link at bottom of menu.
+	 * @param showToolbarName set true to show the menu toolbar's name at top of menu.
 	 * @returns Menu with toolbar's items
 	 */
 	async renderToolbarAsMenu(
