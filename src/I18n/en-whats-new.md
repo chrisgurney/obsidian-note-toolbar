@@ -4,7 +4,10 @@ What's new in Note Toolbar v1.19?
 
 ### Canvas support
 
-Enable the **Show toolbar in canvas files** setting to show toolbars in canvases. Disabled by default.
+Enable the **Show toolbar in canvas files** setting to show mapped toolbars in canvases. Disabled by default.
+
+- Any references to properties in variables or script expressions won't work.
+- Toolbars in the `Below Properties` position are shown at the Top instead.
 
 _Support was partially enabled by accident in 1.18, but I decided to leave it in and get it fully working. Let me know what you think._
 
