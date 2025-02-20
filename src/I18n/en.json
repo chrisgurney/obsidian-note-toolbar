@@ -204,6 +204,8 @@
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
+            "option-canvas": "Show toolbar in canvas files",
+            "option-canvas-description": "Enable to show mapped toolbars in canvas files.",
             "option-emptyview": "New tab toolbar",
             "option-emptyview-description": "Toolbar to display in the New tab view.",
             "toggle-emptyview": "Show toolbar in New tab view",

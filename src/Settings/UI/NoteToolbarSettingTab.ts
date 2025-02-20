@@ -65,7 +65,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
-		this.displayEmptyViewSetting(containerEl);
+		this.displayOtherMappings(containerEl);
 
 		// other global settings
 		this.displayCopyAsCalloutSettings(containerEl);
@@ -447,52 +447,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
-	 * Displays the empty view toolbar setting.
-	 * @param containerEl HTMLElement to add the settings to.
-	 */
-	displayEmptyViewSetting(containerEl: HTMLElement): void {
-
-		let hasEmptyViewToolbar = this.plugin.settings.emptyViewToolbar ? true : false;
-
-		new Setting(containerEl)
-			.setName(t('setting.display-rules.toggle-emptyview'))
-			.setDesc(t('setting.display-rules.toggle-emptyview-description'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(hasEmptyViewToolbar)
-					.onChange(async (value: boolean) => {
-						if (!value) this.plugin.settings.emptyViewToolbar = null;
-						let emptyViewToolbarContainer = containerEl.querySelector('#empty-view-tbar');
-						if (emptyViewToolbarContainer) {
-							emptyViewToolbarContainer.setAttribute('data-active', value.toString());
-							let inputEl = emptyViewToolbarContainer.querySelector('input');
-							if (inputEl && !value) inputEl.value = '';
-						}
-						await this.plugin.settingsManager.save();
-					});
-			});
-
-		let emptyViewTbarSetting = new Setting(containerEl)
-			.setName(t('setting.display-rules.option-emptyview'))
-			.setDesc(t('setting.display-rules.option-emptyview-description'))
-			.addSearch((cb) => {
-				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
-					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
-					.onChange(debounce(async (name) => {
-						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
-						if (newToolbar) {
-							this.plugin.settings.emptyViewToolbar = newToolbar.uuid;
-							await this.plugin.settingsManager.save();
-						}
-					}, 250));
-			});
-		emptyViewTbarSetting.settingEl.id = 'empty-view-tbar';
-		emptyViewTbarSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
-
-	}
-
-	/**
 	 * Displays the property setting.
 	 * @param containerEl HTMLElement to add the settings to.
 	 */
@@ -720,6 +674,64 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		toolbarFolderListItemDiv.append(itemHandleDiv);
 
 		return toolbarFolderListItemDiv;
+
+	}
+
+	/**
+	 * Displays the canvas and empty view toolbar settings.
+	 * @param containerEl HTMLElement to add the settings to.
+	 */
+	displayOtherMappings(containerEl: HTMLElement): void {
+
+		let hasEmptyViewToolbar = this.plugin.settings.emptyViewToolbar ? true : false;
+
+		new Setting(containerEl)
+			.setName("Show toolbar in canvas files")
+			.setDesc("Enable to show mapped toolbars in canvas files.")
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarInCanvas)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarInCanvas = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(containerEl)
+			.setName(t('setting.display-rules.toggle-emptyview'))
+			.setDesc(t('setting.display-rules.toggle-emptyview-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(hasEmptyViewToolbar)
+					.onChange(async (value: boolean) => {
+						if (!value) this.plugin.settings.emptyViewToolbar = null;
+						let emptyViewToolbarContainer = containerEl.querySelector('#empty-view-tbar');
+						if (emptyViewToolbarContainer) {
+							emptyViewToolbarContainer.setAttribute('data-active', value.toString());
+							let inputEl = emptyViewToolbarContainer.querySelector('input');
+							if (inputEl && !value) inputEl.value = '';
+						}
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		let emptyViewTbarSetting = new Setting(containerEl)
+			.setName(t('setting.display-rules.option-emptyview'))
+			.setDesc(t('setting.display-rules.option-emptyview-description'))
+			.addSearch((cb) => {
+				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
+					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
+					.onChange(debounce(async (name) => {
+						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
+						if (newToolbar) {
+							this.plugin.settings.emptyViewToolbar = newToolbar.uuid;
+							await this.plugin.settingsManager.save();
+						}
+					}, 250));
+			});
+		emptyViewTbarSetting.settingEl.id = 'empty-view-tbar';
+		emptyViewTbarSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
 
 	}
 

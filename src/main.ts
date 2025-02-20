@@ -319,6 +319,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
+					if (!this.settings.showToolbarInCanvas) return;
 				case 'empty':
 					renderToolbar = true;
 					break;
@@ -475,6 +476,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
+					if (!this.settings.showToolbarInCanvas) return;
 				case 'empty':
 				case 'beautitab-react-view':
 				case 'home-tab-view':
@@ -1504,6 +1506,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
 			switch (currentViewType) {
 				case 'canvas':
+					if (!this.settings.showToolbarInCanvas) return;
 				case 'empty':
 				case 'beautitab-react-view':
 				case 'home-tab-view':
