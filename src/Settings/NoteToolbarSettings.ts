@@ -161,6 +161,7 @@ export interface NoteToolbarSettings {
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
+	showToolbarInCanvas: boolean;
 	showToolbarInFileMenu: boolean;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
@@ -181,6 +182,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
+	showToolbarInCanvas: false,
 	showToolbarInFileMenu: false,
 	toolbarProp: "notetoolbar",
 	toolbars: [],

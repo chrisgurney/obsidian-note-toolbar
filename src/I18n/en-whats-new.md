@@ -2,6 +2,12 @@ What's new in Note Toolbar v1.19?
 
 ## New Features 🎉
 
+### Canvas support
+
+Enable the **Show toolbar in canvas files** setting to show toolbars in canvases. Disabled by default.
+
+_Support was partially enabled by accident in 1.18, but I decided to leave it in and get it fully working. Let me know what you think._
+
 ### Right-click on an item to edit it
 
 Right-clicking on any item in a toolbar (long-pressing on mobile), will show an option in the menu to edit the item directly.
@@ -30,12 +36,6 @@ Generic delimiters for expressions provide for more portable [Note Toolbar Callo
 [Copying toolbars as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars) now uses this notation, if Note Toolbar's **Copy as callout → Replace variables and expressions** option is OFF.
 
 ## Improvements 🚀
-
-### Canvas support
-
-Toolbars now show in canvases.
-
-_Support was partially enabled by accident in 1.18, but I decided to leave it in and get it fully working. Let me know what you think._
 
 ### Search toolbars in settings
 
