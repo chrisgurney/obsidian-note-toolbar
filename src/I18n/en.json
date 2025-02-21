@@ -206,10 +206,8 @@
             "description": "Enable toolbars in additional locations.",
             "option-canvas": "Canvas files",
             "option-canvas-description": "Show mapped toolbars in canvas files.",
-            "toggle-emptyview": "New tab view",
-            "toggle-emptyview-description": "Select a toolbar to show when no note is open.",
-            "option-emptyview": "Toolbar in New tab view",
-            "option-emptyview-description": "Toolbar to display in the New tab view.",
+            "option-emptyview": "New tab view",
+            "option-emptyview-description": "Select a toolbar to show when no note is open.",
             "option-filemenu": "Linked note toolbar in File menu",
             "option-filemenu-description": "Adds an item to access the toolbar in the linked note from the File menu."
         },

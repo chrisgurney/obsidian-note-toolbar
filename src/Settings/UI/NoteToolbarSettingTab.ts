@@ -782,24 +782,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(collapsibleContainer)
-			.setName(t('setting.display-contexts.toggle-emptyview'))
-			.setDesc(t('setting.display-contexts.toggle-emptyview-description'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(hasEmptyViewToolbar)
-					.onChange(async (value: boolean) => {
-						if (!value) this.plugin.settings.emptyViewToolbar = null;
-						let emptyViewToolbarContainer = containerEl.querySelector('#empty-view-tbar');
-						if (emptyViewToolbarContainer) {
-							emptyViewToolbarContainer.setAttribute('data-active', value.toString());
-							let inputEl = emptyViewToolbarContainer.querySelector('input');
-							if (inputEl && !value) inputEl.value = '';
-						}
-						await this.plugin.settingsManager.save();
-					});
-			});
-
-		let emptyViewTbarSetting = new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-emptyview'))
 			.setDesc(t('setting.display-contexts.option-emptyview-description'))
 			.addSearch((cb) => {
@@ -814,8 +796,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					}, 250));
 			});
-		emptyViewTbarSetting.settingEl.id = 'empty-view-tbar';
-		emptyViewTbarSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-filemenu'))
