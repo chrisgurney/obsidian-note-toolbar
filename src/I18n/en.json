@@ -433,7 +433,6 @@
         "toolbars": {
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
-            "description": "Define the toolbars you want to add to your notes.",
             "button-duplicate-tbar-tooltip": "Duplicate",
             "button-edit-tbar": "Edit",
             "button-edit-tbar-tooltip": "Update this toolbar",

@@ -2011,6 +2011,9 @@ input[type="text"].note-toolbar-setting-error,
         & .setting-item-info {
             display: none;
         }
+        & .setting-item-control {
+            margin-top: unset;
+        }
     }
     &[data-active="true"] {
         & .note-toolbar-setting-items-list-container {
