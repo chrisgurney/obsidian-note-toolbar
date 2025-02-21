@@ -716,6 +716,38 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
+	 * Renders a setting that can be toggled open or closed.
+	 * @param setting Setting to add the toggle button to.
+	 * @param containerSelector CSS selector for the container to toggle.
+	 * @param context Object containing the state variable to change.
+	 * @param stateKey key in the context object that holds the toggle state.
+	 */
+	renderSettingToggle(setting: Setting, containerSelector: string, context: Record<string, any>, stateKey: string): void {
+		setting.addExtraButton((cb) => {
+			cb.setIcon('right-triangle')
+				.setTooltip(t('setting.button-collapse-tooltip'))
+				.onClick(async () => {
+					let itemsContainer = this.containerEl.querySelector(containerSelector);
+					if (itemsContainer) {
+						context[stateKey] = !context[stateKey];
+						itemsContainer.setAttribute('data-active', context[stateKey].toString());
+						cb.setTooltip(context[stateKey] ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
+					}
+				});
+	
+			cb.extraSettingsEl.tabIndex = 0;
+			cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
+	
+			this.plugin.registerDomEvent(cb.extraSettingsEl, 'keydown', (e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					cb.extraSettingsEl.click();
+				}
+			});
+		});
+	}
+
+	/**
 	 * Displays the canvas and empty view toolbar settings.
 	 * @param containerEl HTMLElement to add the settings to.
 	 */
@@ -788,30 +820,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setDesc(learnMoreFr(t('setting.copy-as-callout.description'), 'Creating-callouts-from-toolbars'))
 			.setHeading();
 
-		copyAsCalloutSetting
-			.addExtraButton((cb) => {
-				cb.setIcon('right-triangle')
-				.setTooltip(t('setting.button-collapse-tooltip'))
-				.onClick(async () => {
-					let itemsContainer = containerEl.querySelector('.note-toolbar-setting-callout-container');
-					if (itemsContainer) {
-						this.calloutSettingsOpen = !this.calloutSettingsOpen;
-						itemsContainer.setAttribute('data-active', this.calloutSettingsOpen.toString());
-						cb.setTooltip(this.calloutSettingsOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
-					}
-				})
-				.extraSettingsEl.tabIndex = 0;
-				cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ":
-								e.preventDefault();
-								cb.extraSettingsEl.click();
-						}
-					});
-			});
+		this.renderSettingToggle(copyAsCalloutSetting, '.note-toolbar-setting-callout-container', this, 'calloutSettingsOpen');
 
 		let collapsibleContainer = createDiv();
 		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
