@@ -755,7 +755,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayOtherMappings(containerEl: HTMLElement): void {
 
 		let collapsibleEl = createDiv();
-		collapsibleEl.addClass('note-toolbar-setting-contexts-container');
+		collapsibleEl.addClasses(['note-toolbar-setting-contexts-container', 'note-toolbar-setting-top-border']);
 		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
 
 		let otherContextSettings = new Setting(collapsibleEl)
@@ -766,8 +766,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		let collapsibleContainer = createDiv();
 		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
-
-		let hasEmptyViewToolbar = this.plugin.settings.emptyViewToolbar ? true : false;
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-canvas'))
