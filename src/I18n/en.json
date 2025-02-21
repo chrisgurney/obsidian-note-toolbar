@@ -201,15 +201,21 @@
             "button-delete-tooltip": "Delete this toolbar",
             "label-delete-confirm": "Are you sure you want to delete this toolbar?"
         },
+        "display-contexts": {
+            "name": "Show toolbars in other views",
+            "description": "Enable toolbars in additional locations.",
+            "option-canvas": "Canvas files",
+            "option-canvas-description": "Show mapped toolbars in canvas files.",
+            "toggle-emptyview": "New tab view",
+            "toggle-emptyview-description": "Select a toolbar to show when no note is open.",
+            "option-emptyview": "Toolbar in New tab view",
+            "option-emptyview-description": "Toolbar to display in the New tab view.",
+            "option-filemenu": "Linked note toolbar in File menu",
+            "option-filemenu-description": "Adds an item to access the toolbar in the linked note from the File menu."
+        },
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
-            "option-canvas": "Show toolbars in canvas files",
-            "option-canvas-description": "Enable to show mapped toolbars in canvas files.",
-            "option-emptyview": "New tab toolbar",
-            "option-emptyview-description": "Toolbar to display in the New tab view.",
-            "toggle-emptyview": "Show a toolbar in New tab view",
-            "toggle-emptyview-description": "Choose a toolbar to display when no note is open.",
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property"
@@ -358,10 +364,6 @@
             "scripting": {
                 "name": "Scripting",
                 "description": "Adds item types for Dataview, JS Engine, and Templater, which must be installed and enabled."
-            },
-            "show-toolbar-in-file-menu": {
-                "name": "Show toolbar for the linked note in the File menu",
-                "description": "Adds an item to access the toolbar in the linked note from the File menu."
             },
             "show-edit-tbar": {
                 "name": "Show \"Edit toolbar\" link in toolbar menus",

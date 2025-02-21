@@ -20,6 +20,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	private itemListIdCounter: number = 0;
 
 	private calloutSettingsOpen: boolean = false;
+	private contextSettingsOpen: boolean = false;
 	private itemListOpen: boolean = true;
 	private mappingListOpen: boolean = true;
 
@@ -753,11 +754,24 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayOtherMappings(containerEl: HTMLElement): void {
 
+		let collapsibleEl = createDiv();
+		collapsibleEl.addClass('note-toolbar-setting-contexts-container');
+		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
+
+		let otherContextSettings = new Setting(collapsibleEl)
+			.setName(t('setting.display-contexts.name'))
+			.setDesc(t('setting.display-contexts.description'));
+
+		this.renderSettingToggle(otherContextSettings, '.note-toolbar-setting-contexts-container', this, 'contextSettingsOpen');
+
+		let collapsibleContainer = createDiv();
+		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+
 		let hasEmptyViewToolbar = this.plugin.settings.emptyViewToolbar ? true : false;
 
-		new Setting(containerEl)
-			.setName(t('setting.display-rules.option-canvas'))
-			.setDesc(t('setting.display-rules.option-canvas-description'))
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-canvas'))
+			.setDesc(t('setting.display-contexts.option-canvas-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.showToolbarInCanvas)
@@ -767,9 +781,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		new Setting(containerEl)
-			.setName(t('setting.display-rules.toggle-emptyview'))
-			.setDesc(t('setting.display-rules.toggle-emptyview-description'))
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.toggle-emptyview'))
+			.setDesc(t('setting.display-contexts.toggle-emptyview-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(hasEmptyViewToolbar)
@@ -785,9 +799,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		let emptyViewTbarSetting = new Setting(containerEl)
-			.setName(t('setting.display-rules.option-emptyview'))
-			.setDesc(t('setting.display-rules.option-emptyview-description'))
+		let emptyViewTbarSetting = new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-emptyview'))
+			.setDesc(t('setting.display-contexts.option-emptyview-description'))
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
@@ -802,6 +816,21 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 		emptyViewTbarSetting.settingEl.id = 'empty-view-tbar';
 		emptyViewTbarSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-filemenu'))
+			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Other-settings'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showToolbarInFileMenu = value;
+					await this.plugin.settingsManager.save();
+					// TODO? force the re-rendering of the current toolbar to update the menu
+				});
+			});
+
+		collapsibleEl.appendChild(collapsibleContainer);
+		containerEl.appendChild(collapsibleEl);
 
 	}
 
@@ -933,18 +962,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setValue(this.plugin.settings.showEditInFabMenu)
 				cb.onChange(async (value) => {
 					this.plugin.settings.showEditInFabMenu = value;
-					await this.plugin.settingsManager.save();
-					// TODO? force the re-rendering of the current toolbar to update the menu
-				});
-			});
-			
-		new Setting(containerEl)
-			.setName(t('setting.other.show-toolbar-in-file-menu.name'))
-			.setDesc(learnMoreFr(t('setting.other.show-toolbar-in-file-menu.description'), 'Other-settings'))
-			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
-				cb.onChange(async (value) => {
-					this.plugin.settings.showToolbarInFileMenu = value;
 					await this.plugin.settingsManager.save();
 					// TODO? force the re-rendering of the current toolbar to update the menu
 				});
