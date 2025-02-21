@@ -73,9 +73,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// if search is enabled (>4 toolbars), focus on search icon by default
 		if (!focusSelector && (this.plugin.settings.toolbars.length > 4)) {
-			focusSelector = !Platform.isPhone 
-				? (Platform.isDesktop ? '#tbar-search input' : '#ntb-tbar-search-button') 
-				: focusSelector;
+			focusSelector = Platform.isPhone ? focusSelector : '#tbar-search input';
 		}
 
 		if (focusSelector) {
@@ -116,8 +114,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// search button (or field on desktop)
 		if (this.plugin.settings.toolbars.length > 4) {
-			if (Platform.isDesktop) {
-				// search button (desktop)
+			if (!Platform.isPhone) {
+				// search field
 				this.renderSearchField(toolbarListSetting.controlEl);
 			}
 			else {
@@ -177,9 +175,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		// search field (mobile)
+		// search field (phone)
 		if (this.plugin.settings.toolbars.length > 4) {
-			if (!Platform.isDesktop) this.renderSearchField(itemsContainer);
+			if (Platform.isPhone) this.renderSearchField(itemsContainer);
 		}
 
 		// collapse button
@@ -375,7 +373,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.addSearch((cb) => {
 				cb.setPlaceholder(t('setting.search.field-placeholder'))
 				.onChange((search: string) => {
-					if (Platform.isDesktop && !this.itemListOpen) {
+					if (!Platform.isPhone && !this.itemListOpen) {
 						this.toggleToolbarList();
 					}
 					const query = search.toLowerCase();
@@ -397,31 +395,28 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 			});
 		toolbarSearchSetting.settingEl.id = 'tbar-search';
-		toolbarSearchSetting.settingEl.setAttribute('data-active', Platform.isDesktop.toString());
-
+		
 		const searchInputEl = toolbarSearchSetting.settingEl.querySelector('input');
 
-		if (Platform.isDesktop) {
-			toolbarSearchSetting.settingEl.setCssProps({'padding-bottom': 'unset'});
-			// allow keyboard navigation down to first search result
-			if (searchInputEl) {
-				this.plugin.registerDomEvent(
-					searchInputEl, 'keydown', (e) => {
-						switch (e.key) {
-							case 'ArrowDown':
-								const selector = '.note-toolbar-setting-toolbar-list .ntb-tbar-edit';
-								const toolbarButtonEls = Array.from(this.containerEl.querySelectorAll<HTMLElement>(selector))
-									.filter((btn) => getComputedStyle(btn.closest('.setting-item')!).display !== 'none');
-								if (toolbarButtonEls.length > 0) toolbarButtonEls[0].focus();
-								e.preventDefault();
-								break;
-						}
+		// allow keyboard navigation down to first search result
+		if (searchInputEl) {
+			this.plugin.registerDomEvent(
+				searchInputEl, 'keydown', (e) => {
+					switch (e.key) {
+						case 'ArrowDown':
+							const selector = '.note-toolbar-setting-toolbar-list .ntb-tbar-edit';
+							const toolbarButtonEls = Array.from(this.containerEl.querySelectorAll<HTMLElement>(selector))
+								.filter((btn) => getComputedStyle(btn.closest('.setting-item')!).display !== 'none');
+							if (toolbarButtonEls.length > 0) toolbarButtonEls[0].focus();
+							e.preventDefault();
+							break;
 					}
-				)
-			}
+				}
+			)
 		}
 
-		if (!Platform.isDesktop) {
+		if (Platform.isPhone) {
+			toolbarSearchSetting.settingEl.setAttribute('data-active', 'false');
 			// search field: remove if it's empty and loses focus
 			if (searchInputEl) {
 				this.plugin.registerDomEvent(
@@ -434,6 +429,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					}
 				);
 			}
+		}
+		else {
+			toolbarSearchSetting.settingEl.setCssProps({'padding-bottom': 'unset'});
 		}
 	}
 
