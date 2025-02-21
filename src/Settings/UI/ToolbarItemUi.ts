@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, COMMAND_PREFIX_ITEM, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
 import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice } from "obsidian";
 import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
@@ -235,6 +235,35 @@ export default class ToolbarItemUi {
             });
     
         }
+
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.use-item-command.name'))
+                .setIcon('terminal')
+                .setChecked(toolbarItem.hasCommand)
+                .onClick(async (menuEvent) => {
+                    toolbarItem.hasCommand = !toolbarItem.hasCommand;
+                    const itemText = toolbarItem.label || toolbarItem.tooltip;
+                    const commandName = t('command.name-use-item', {item: itemText});
+                    // add or remove the command
+                    if (toolbarItem.hasCommand) {
+                        this.plugin.addCommand({ 
+                            id: COMMAND_PREFIX_ITEM + this.toolbar.uuid, 
+                            name: commandName, 
+                            icon: this.plugin.settings.icon, 
+                            callback: async () => {
+                                // TODO
+                            }
+                        });
+                        new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
+                    }
+                    else {
+                        this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
+                        new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }));
+                    }
+                    await this.plugin.settingsManager.save();
+                });
+        });
 
         menu.addItem((menuItem: MenuItem) => {
             menuItem

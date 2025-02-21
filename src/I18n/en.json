@@ -97,7 +97,8 @@
         "name-hide-properties": "Hide Properties",
         "name-fold-properties": "Fold Properties",
         "name-toggle-properties": "Toggle Properties",
-        "name-open-toolbar": "Open: {{toolbar}}"
+        "name-open-toolbar": "Open: {{toolbar}}",
+        "name-use-item": "Use: {{item}}"
     },
     "export": {
         "item-generic": "Item{{number}}",
@@ -345,6 +346,11 @@
         "open-command": {
             "name": "Add toolbar command",
             "description": "Add a command that opens this toolbar in a Quick Tools window.",
+            "notice-command-added": "Command now available:\n{{command}}",
+            "notice-command-removed": "Command removed:\n{{command}}"
+        },
+        "use-item-command": {
+            "name": "Add command for item",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}"
         },

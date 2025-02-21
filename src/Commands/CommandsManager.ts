@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_TBAR, PositionType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -13,6 +13,27 @@ export class CommandsManager {
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Adds commands to use each toolbar item.
+     */
+    setupItemCommands() {
+        this.plugin.settings.toolbars.forEach(toolbar => {
+            toolbar.items.forEach(item => {
+                if (item.hasCommand) {
+                    this.plugin.addCommand({
+                        id: COMMAND_PREFIX_ITEM + item.uuid,
+                        name: t('command.name-use-item', {item: item.label || item.tooltip}),
+                        icon: this.plugin.settings.icon,
+                        callback: async () => {
+                            let activeFile = this.plugin.app.workspace.getActiveFile();
+                            await this.plugin.handleItemLink(item, undefined, activeFile);
+                        }
+                    });
+                }
+            });
+        });
     }
 
     /**
