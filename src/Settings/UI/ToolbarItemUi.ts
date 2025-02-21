@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
-import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform } from "obsidian";
+import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice } from "obsidian";
 import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
 import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
@@ -214,11 +214,11 @@ export default class ToolbarItemUi {
         //
         // actions menu
         //
-		
+
+        let menu = new Menu();
+
         if (Platform.isPhone) {
            
-            let menu = new Menu();
-
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
                     .setTitle(t('setting.item.button-duplicate-tooltip'))
@@ -234,16 +234,26 @@ export default class ToolbarItemUi {
                     .setWarning(true);
             });
     
-            new Setting(itemControlsContainer)
-                .addButton((cb) => {
-                    cb.setIcon("ellipsis")
-                        .setTooltip(t('setting.toolbars.button-more-tooltip'))
-                        .onClick(async (event) => {
-                            menu.showAtMouseEvent(event);
-                        });
-            });
-
         }
+
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.menu-copy-id'))
+                .setIcon('code')
+                .onClick(async (menuEvent) => {
+                    navigator.clipboard.writeText(toolbarItem.uuid);
+                    new Notice(t('setting.item.menu-copy-id-notice'));
+                });
+        });
+
+        new Setting(itemControlsContainer)
+            .addButton((cb) => {
+                cb.setIcon("ellipsis")
+                    .setTooltip(t('setting.item.menu-more-actions'))
+                    .onClick(async (event) => {
+                        menu.showAtMouseEvent(event);
+                    });
+            });
 
         //
         // separators + breaks: show these types after the buttons, to keep the UI minimal
