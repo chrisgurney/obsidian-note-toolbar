@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
-import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent } from "obsidian";
+import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform } from "obsidian";
 import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
 import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
@@ -181,40 +181,69 @@ export default class ToolbarItemUi {
 
         }
 
-        //
-        // delete button
-        // 
-
         let itemControlsContainer = createDiv();
         itemControlsContainer.className = "note-toolbar-setting-item-controls";
-        this.getDeleteButton(itemControlsContainer, toolbarItem);
+
+        // 
+        // action buttons (desktop + tablet)
+        //
+
+        if (!Platform.isPhone) {
+
+            new Setting(itemControlsContainer)
+			.setClass("note-toolbar-setting-item-delete")
+			.addButton((button: ButtonComponent) => {
+				button
+                    .setIcon("minus-circle")
+					.setTooltip(t('setting.button-delete-tooltip'))
+					.onClick(async () => this.handleItemDelete(toolbarItem));
+				button.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
+			});
+
+            new Setting(itemControlsContainer)
+                .setClass('note-toolbar-setting-item-visibility-and-controls')
+                .addButton((button: ButtonComponent) => {
+                    button
+                        .setIcon('copy-plus')
+                        .setTooltip(t('setting.item.button-duplicate-tooltip'))
+                        .onClick(async () => this.handleItemDuplicate(toolbarItem));
+            });
+
+        }
 
         //
-        // duplicate button
+        // actions menu
         //
+		
+        if (Platform.isPhone) {
+           
+            let menu = new Menu();
 
-        new Setting(itemControlsContainer)
-            .setClass('note-toolbar-setting-item-visibility-and-controls')
-            .addButton((button: ButtonComponent) => {
-                button
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.item.button-duplicate-tooltip'))
                     .setIcon('copy-plus')
-                    .setTooltip(t('setting.item.button-duplicate-tooltip'))
-                    .onClick(async () => {
-                        const newItemUuid = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
-                        await this.plugin.settingsManager.save();
-                        if (this.parent instanceof ItemModal) {
-                            let newItem = this.plugin.settingsManager.getToolbarItemById(newItemUuid);
-                            if (newItem) {
-                                let newItemModal = new ItemModal(this.plugin.app, this.plugin, this.toolbar, newItem);
-                                this.parent.close();
-                                newItemModal.open();
-                            }
-                        }
-                        else {
-                            this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
-                        }
-                    });
-        })
+                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
+            });
+    
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.button-delete-tooltip'))
+                    .setIcon('minus-circle')
+                    .onClick(async (menuEvent) => this.handleItemDelete(toolbarItem))
+                    .setWarning(true);
+            });
+    
+            new Setting(itemControlsContainer)
+                .addButton((cb) => {
+                    cb.setIcon("ellipsis")
+                        .setTooltip(t('setting.toolbars.button-more-tooltip'))
+                        .onClick(async (event) => {
+                            menu.showAtMouseEvent(event);
+                        });
+            });
+
+        }
 
         //
         // separators + breaks: show these types after the buttons, to keep the UI minimal
@@ -343,32 +372,33 @@ export default class ToolbarItemUi {
 
     }
 
-	/**
-	 * Generates the item delete button.
-	 * @param el HTMLElement to put the delete button in.
-	 */
-	getDeleteButton(el: HTMLElement, toolbarItem: ToolbarItemSettings) {
+    async handleItemDelete(toolbarItem: ToolbarItemSettings) {
+        if (this.parent instanceof ToolbarSettingsModal) {
+            this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
+        }
+        else {
+            this.plugin.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
+            this.toolbar.updated = new Date().toISOString();
+            await this.plugin.settingsManager.save();
+            this.parent.close();
+        }
+    }
 
-		new Setting(el)
-			.setClass("note-toolbar-setting-item-delete")
-			.addButton((cb) => {
-				cb.setIcon("minus-circle")
-					.setTooltip(t('setting.button-delete-tooltip'))
-					.onClick(async () => {
-                        if (this.parent instanceof ToolbarSettingsModal) {
-                            this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
-                        }
-                        else {
-                            this.plugin.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
-                            this.toolbar.updated = new Date().toISOString();
-                            await this.plugin.settingsManager.save();
-                            this.parent.close();
-                        }
-					});
-				cb.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
-			});
-
-	}
+    async handleItemDuplicate(toolbarItem: ToolbarItemSettings) {
+        const newItemUuid = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+        await this.plugin.settingsManager.save();
+        if (this.parent instanceof ItemModal) {
+            let newItem = this.plugin.settingsManager.getToolbarItemById(newItemUuid);
+            if (newItem) {
+                let newItemModal = new ItemModal(this.plugin.app, this.plugin, this.toolbar, newItem);
+                this.parent.close();
+                newItemModal.open();
+            }
+        }
+        else {
+            this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+        }
+    }
 
 	/**
 	 * Returns the visibility menu to display, for the given platform.
