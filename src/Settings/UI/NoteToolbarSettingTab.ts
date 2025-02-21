@@ -780,6 +780,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-filemenu'))
+			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Other-settings'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showToolbarInFileMenu = value;
+					await this.plugin.settingsManager.save();
+					// TODO? force the re-rendering of the current toolbar to update the menu
+				});
+			});
+
+		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-emptyview'))
 			.setDesc(t('setting.display-contexts.option-emptyview-description'))
 			.addSearch((cb) => {
@@ -793,18 +805,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							await this.plugin.settingsManager.save();
 						}
 					}, 250));
-			});
-
-		new Setting(collapsibleContainer)
-			.setName(t('setting.display-contexts.option-filemenu'))
-			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Other-settings'))
-			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
-				cb.onChange(async (value) => {
-					this.plugin.settings.showToolbarInFileMenu = value;
-					await this.plugin.settingsManager.save();
-					// TODO? force the re-rendering of the current toolbar to update the menu
-				});
 			});
 
 		collapsibleEl.appendChild(collapsibleContainer);
