@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
 import { FrontMatterCache, Platform, TFile } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
@@ -28,6 +28,10 @@ export class SettingsManager {
 	 * @param id UUID of the toolbar to remove.
 	 */
 	public deleteToolbar(id: string) {
+		let toolbarToDelete = this.plugin.settingsManager.getToolbarById(id);
+		toolbarToDelete?.items.forEach((item) => {
+			if (item.hasCommand) this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
+		});
 		this.plugin.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.plugin.settings.toolbars = this.plugin.settings.toolbars.filter(tbar => tbar.uuid !== id);
 	}
@@ -36,6 +40,7 @@ export class SettingsManager {
 	 * Removes the provided item from the toolbar; does nothing if it does not exist.
 	 */
 	public deleteToolbarItemById(uuid: string): void {
+		this.plugin.removeCommand(COMMAND_PREFIX_ITEM + uuid);
 		for (const toolbar of this.plugin.settings.toolbars) {
 			const index = toolbar.items.findIndex(item => item.uuid === uuid);
 			if (index !== -1) {
@@ -82,6 +87,7 @@ export class SettingsManager {
 		debugLog('duplicateToolbarItem', item);
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
 		newItem.uuid = getUUID();
+		newItem.hasCommand = false;
 		debugLog('duplicateToolbarItem: duplicated', newItem);
 		if (insertAfter) {
 			const index = toolbar.items.indexOf(item);

@@ -1,8 +1,8 @@
 import NoteToolbarPlugin from "main";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, COMMAND_PREFIX_ITEM, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
-import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent } from "obsidian";
-import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
+import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice } from "obsidian";
+import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById, getItemText } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
 import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
 import { FileSuggester } from "./Suggesters/FileSuggester";
@@ -181,40 +181,50 @@ export default class ToolbarItemUi {
 
         }
 
-        //
-        // delete button
-        // 
-
         let itemControlsContainer = createDiv();
         itemControlsContainer.className = "note-toolbar-setting-item-controls";
-        this.getDeleteButton(itemControlsContainer, toolbarItem);
+
+        // 
+        // action buttons (desktop + tablet)
+        //
+
+        if (!Platform.isPhone) {
+
+            new Setting(itemControlsContainer)
+			.setClass("note-toolbar-setting-item-delete")
+			.addButton((button: ButtonComponent) => {
+				button
+                    .setIcon("minus-circle")
+					.setTooltip(t('setting.button-delete-tooltip'))
+					.onClick(async () => this.handleItemDelete(toolbarItem));
+				button.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
+			});
+
+            new Setting(itemControlsContainer)
+                .setClass('note-toolbar-setting-item-visibility-and-controls')
+                .addButton((button: ButtonComponent) => {
+                    button
+                        .setIcon('copy-plus')
+                        .setTooltip(t('setting.item.button-duplicate-tooltip'))
+                        .onClick(async () => this.handleItemDuplicate(toolbarItem));
+            });
+
+        }
 
         //
-        // duplicate button
+        // actions menu
         //
 
         new Setting(itemControlsContainer)
             .setClass('note-toolbar-setting-item-visibility-and-controls')
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setIcon('copy-plus')
-                    .setTooltip(t('setting.item.button-duplicate-tooltip'))
-                    .onClick(async () => {
-                        const newItemUuid = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
-                        await this.plugin.settingsManager.save();
-                        if (this.parent instanceof ItemModal) {
-                            let newItem = this.plugin.settingsManager.getToolbarItemById(newItemUuid);
-                            if (newItem) {
-                                let newItemModal = new ItemModal(this.plugin.app, this.plugin, this.toolbar, newItem);
-                                this.parent.close();
-                                newItemModal.open();
-                            }
-                        }
-                        else {
-                            this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
-                        }
+            .addButton((cb) => {
+                cb.setIcon("ellipsis")
+                    .setTooltip(t('setting.item.menu-more-actions'))
+                    .onClick(async (event) => {
+                        let menu = this.generateItemActionMenu(toolbarItem);
+                        menu.showAtMouseEvent(event);
                     });
-        })
+            });
 
         //
         // separators + breaks: show these types after the buttons, to keep the UI minimal
@@ -343,32 +353,112 @@ export default class ToolbarItemUi {
 
     }
 
-	/**
-	 * Generates the item delete button.
-	 * @param el HTMLElement to put the delete button in.
-	 */
-	getDeleteButton(el: HTMLElement, toolbarItem: ToolbarItemSettings) {
+    /**
+     * Creates the actions menu for the item.
+     * @param toolbarItem Item to generate a menu for.
+     * @returns the menu.
+     */
+    generateItemActionMenu(toolbarItem: ToolbarItemSettings): Menu {
 
-		new Setting(el)
-			.setClass("note-toolbar-setting-item-delete")
-			.addButton((cb) => {
-				cb.setIcon("minus-circle")
-					.setTooltip(t('setting.button-delete-tooltip'))
-					.onClick(async () => {
-                        if (this.parent instanceof ToolbarSettingsModal) {
-                            this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
+        let menu = new Menu();
+
+        if (Platform.isPhone) {
+           
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.item.button-duplicate-tooltip'))
+                    .setIcon('copy-plus')
+                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
+            });
+    
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.button-delete-tooltip'))
+                    .setIcon('minus-circle')
+                    .onClick(async (menuEvent) => this.handleItemDelete(toolbarItem))
+                    .setWarning(true);
+            });
+    
+        }
+
+        if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator].contains(toolbarItem.linkAttr.type)) {
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(toolbarItem.hasCommand ? t('setting.use-item-command.name-remove') : t('setting.use-item-command.name-add'))
+                    .setIcon('terminal')
+                    .onClick(async (menuEvent) => {
+                        toolbarItem.hasCommand = !toolbarItem.hasCommand;
+                        const itemText = getItemText(this.plugin, toolbarItem, true);
+                        const commandName = t('command.name-use-item', {item: itemText});
+                        // add or remove the command
+                        if (toolbarItem.hasCommand) {
+                            if (itemText) {
+                                this.plugin.addCommand({ 
+                                    id: COMMAND_PREFIX_ITEM + this.toolbar.uuid, 
+                                    name: commandName, 
+                                    icon: toolbarItem.icon ? toolbarItem.icon : this.plugin.settings.icon, 
+                                    callback: async () => {
+                                        let activeFile = this.plugin.app.workspace.getActiveFile();
+                                        await this.plugin.handleItemLink(toolbarItem, undefined, activeFile);
+                                    }
+                                });
+                                new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
+                            }
+                            else {
+                                toolbarItem.hasCommand = false;
+                                new Notice(t('setting.use-item-command.notice-command-error-noname'));
+                            }
                         }
                         else {
-                            this.plugin.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
-                            this.toolbar.updated = new Date().toISOString();
-                            await this.plugin.settingsManager.save();
-                            this.parent.close();
+                            this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
+                            new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }));
                         }
-					});
-				cb.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
-			});
+                        await this.plugin.settingsManager.save();
+                    });
+            });
+        }
 
-	}
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.menu-copy-id'))
+                .setIcon('code')
+                .onClick(async (menuEvent) => {
+                    navigator.clipboard.writeText(toolbarItem.uuid);
+                    new Notice(t('setting.item.menu-copy-id-notice'));
+                });
+        });
+
+        return menu;
+
+    }
+
+    async handleItemDelete(toolbarItem: ToolbarItemSettings) {
+        if (this.parent instanceof ToolbarSettingsModal) {
+            this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
+        }
+        else {
+            this.plugin.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
+            this.toolbar.updated = new Date().toISOString();
+            await this.plugin.settingsManager.save();
+            this.parent.close();
+        }
+    }
+
+    async handleItemDuplicate(toolbarItem: ToolbarItemSettings) {
+        const newItemUuid = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+        await this.plugin.settingsManager.save();
+        if (this.parent instanceof ItemModal) {
+            let newItem = this.plugin.settingsManager.getToolbarItemById(newItemUuid);
+            if (newItem) {
+                let newItemModal = new ItemModal(this.plugin.app, this.plugin, this.toolbar, newItem);
+                this.parent.close();
+                newItemModal.open();
+            }
+        }
+        else {
+            this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+        }
+    }
 
 	/**
 	 * Returns the visibility menu to display, for the given platform.

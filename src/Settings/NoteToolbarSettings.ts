@@ -36,6 +36,7 @@ export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); 
  ******************************************************************************/
 
 export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
+export const COMMAND_PREFIX_ITEM = 'use-toolbar-item-';
 export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
 
 export enum ComponentType {
@@ -302,6 +303,7 @@ export interface ToolbarItemSettings {
 	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration)
 	 */
 	contexts?: ViewContext[];
+	hasCommand: boolean;	
 	icon: string;
 	label: string;
 	link: string;

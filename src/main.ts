@@ -134,6 +134,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.commands.toggleProps('fold') });
 			this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
 	
+			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
 			// prototcol handler

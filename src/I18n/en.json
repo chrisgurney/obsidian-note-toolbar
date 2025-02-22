@@ -97,7 +97,8 @@
         "name-hide-properties": "Hide Properties",
         "name-fold-properties": "Fold Properties",
         "name-toggle-properties": "Toggle Properties",
-        "name-open-toolbar": "Open: {{toolbar}}"
+        "name-open-toolbar": "Open: {{toolbar}}",
+        "name-use-item": "Use: {{item}}"
     },
     "export": {
         "item-generic": "Item{{number}}",
@@ -201,15 +202,19 @@
             "button-delete-tooltip": "Delete this toolbar",
             "label-delete-confirm": "Are you sure you want to delete this toolbar?"
         },
+        "display-contexts": {
+            "name": "Show toolbars in other views",
+            "description": "Enable toolbars in canvases and the New tab view.",
+            "option-canvas": "Canvas files",
+            "option-canvas-description": "Show mapped toolbars in canvas files.",
+            "option-filemenu": "File menu",
+            "option-filemenu-description": "Adds an item to the File menu to access the toolbar in the linked note.",
+            "option-emptyview": "New tab view",
+            "option-emptyview-description": "Select a toolbar to show when no note is open."
+        },
         "display-rules": {
             "name": "Display rules",
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
-            "option-canvas": "Show toolbars in canvas files",
-            "option-canvas-description": "Enable to show mapped toolbars in canvas files.",
-            "option-emptyview": "New tab toolbar",
-            "option-emptyview-description": "Toolbar to display in the New tab view.",
-            "toggle-emptyview": "Show a toolbar in New tab view",
-            "toggle-emptyview-description": "Choose a toolbar to display when no note is open.",
             "option-property": "Property",
             "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property"
@@ -251,6 +256,9 @@
             "title": "Edit toolbar item",
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
+            "menu-copy-id": "Copy item ID",
+            "menu-copy-id-notice": "Toolbar item ID copied to clipboard.",
+            "menu-more-actions": "More actions...",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
             "label-preview-empty-no-items": "No items. Edit this toolbar to add items.",
             "option-break": "break",
@@ -341,6 +349,14 @@
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}"
         },
+        "use-item-command": {
+            "name-add": "Add command for item",
+            "name-remove": "Remove command for item",
+            "notice-command-added": "Command now available:\n{{command}}",
+            "notice-command-removed": "Command removed:\n{{command}}",
+            "notice-command-error-noname": "Unable to add command. Ensure item has a name or label set.",
+            "notice-command-error-startup-noname": "Note Toolbar: One or more item commands was not enabled due to an empty label and tooltip."
+        },
         "other": {
             "name": "Other",
             "icon": {
@@ -358,10 +374,6 @@
             "scripting": {
                 "name": "Scripting",
                 "description": "Adds item types for Dataview, JS Engine, and Templater, which must be installed and enabled."
-            },
-            "show-toolbar-in-file-menu": {
-                "name": "Show toolbar for the linked note in the File menu",
-                "description": "Adds an item to access the toolbar in the linked note from the File menu."
             },
             "show-edit-tbar": {
                 "name": "Show \"Edit toolbar\" link in toolbar menus",
@@ -433,7 +445,6 @@
         "toolbars": {
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
-            "description": "Define the toolbars you want to add to your notes.",
             "button-duplicate-tbar-tooltip": "Duplicate",
             "button-edit-tbar": "Edit",
             "button-edit-tbar-tooltip": "Update this toolbar",

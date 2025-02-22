@@ -815,6 +815,7 @@ export default class ToolbarSettingsModal extends Modal {
 			{
 				uuid: getUUID(),
 				label: "",
+				hasCommand: false,
 				icon: "",
 				link: "",
 				linkAttr: {

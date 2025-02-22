@@ -448,6 +448,7 @@ export async function importFromCallout(
 			{
 				uuid: getUUID(),
 				label: label.trim(),
+                hasCommand: false,
 				icon: icon.trim(),
 				link: link.trim(),
 				linkAttr: {
