@@ -3,7 +3,7 @@ import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
-import { debugLog } from "Utils/Utils";
+import { debugLog, getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { MarkdownView, Notice } from "obsidian";
 
@@ -20,19 +20,29 @@ export class CommandsManager {
      */
     setupItemCommands() {
         this.plugin.settings.toolbars.forEach(toolbar => {
+            let hasIgnoredCommands: boolean = false;
             toolbar.items.forEach(item => {
                 if (item.hasCommand) {
-                    this.plugin.addCommand({
-                        id: COMMAND_PREFIX_ITEM + item.uuid,
-                        name: t('command.name-use-item', {item: item.label || item.tooltip}),
-                        icon: this.plugin.settings.icon,
-                        callback: async () => {
-                            let activeFile = this.plugin.app.workspace.getActiveFile();
-                            await this.plugin.handleItemLink(item, undefined, activeFile);
-                        }
-                    });
+                    const itemText = getItemText(this.plugin, item, true);
+                    if (itemText) {
+                        this.plugin.addCommand({
+                            id: COMMAND_PREFIX_ITEM + item.uuid,
+                            name: t('command.name-use-item', itemText),
+                            icon: item.icon ? item.icon : this.plugin.settings.icon,
+                            callback: async () => {
+                                let activeFile = this.plugin.app.workspace.getActiveFile();
+                                await this.plugin.handleItemLink(item, undefined, activeFile);
+                            }
+                        });
+                    }
+                    else {
+                        hasIgnoredCommands = true;
+                    }
                 }
             });
+            if (hasIgnoredCommands) {
+                new Notice(t('setting.use-item-command.notice-command-error-startup-noname'));
+            }
         });
     }
 

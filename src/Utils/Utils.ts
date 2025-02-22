@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { App, Command, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
 
@@ -101,6 +101,22 @@ export function getCommandIdByName(plugin: NoteToolbarPlugin, commandName: strin
 	const availableCommands: Command[] = Object.values(plugin.app.commands.commands);
 	const matchedCommand = availableCommands.find(command => command.name === commandName);
 	return matchedCommand ? matchedCommand.id : COMMAND_DOES_NOT_EXIST;
+}
+
+/**
+ * Returns the text for a toolbar item.
+ * @param plugin Plugin instance.
+ * @param toolbarItem Item to return text for.
+ * @param ignoreVars If true, function tries to return any text that does not include vars/expressions.
+ * @returns The resolved text for the toolbar item.
+ */
+export function getItemText(plugin: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, ignoreVars: boolean = false): string {
+	if (ignoreVars) {
+		if (plugin.hasVars(toolbarItem.label)) {
+			return plugin.hasVars(toolbarItem.tooltip) ? '' : toolbarItem.tooltip ?? '';
+		}
+	}
+    return toolbarItem.label || toolbarItem.tooltip || '';
 }
 
 /**

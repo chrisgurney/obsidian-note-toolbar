@@ -350,9 +350,12 @@
             "notice-command-removed": "Command removed:\n{{command}}"
         },
         "use-item-command": {
-            "name": "Add command for item",
+            "name-add": "Add command for item",
+            "name-remove": "Remove command for item",
             "notice-command-added": "Command now available:\n{{command}}",
-            "notice-command-removed": "Command removed:\n{{command}}"
+            "notice-command-removed": "Command removed:\n{{command}}",
+            "notice-command-error-noname": "Unable to add command. Ensure item has a name or label set.",
+            "notice-command-error-startup-noname": "Note Toolbar: One or more item commands was not enabled due to an empty label and tooltip."
         },
         "other": {
             "name": "Other",

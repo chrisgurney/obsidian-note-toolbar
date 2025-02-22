@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { COMMAND_DOES_NOT_EXIST, COMMAND_PREFIX_ITEM, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
 import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice } from "obsidian";
-import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
+import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById, getItemText } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
 import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
 import { FileSuggester } from "./Suggesters/FileSuggester";
@@ -215,71 +215,13 @@ export default class ToolbarItemUi {
         // actions menu
         //
 
-        let menu = new Menu();
-
-        if (Platform.isPhone) {
-           
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('setting.item.button-duplicate-tooltip'))
-                    .setIcon('copy-plus')
-                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
-            });
-    
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('setting.button-delete-tooltip'))
-                    .setIcon('minus-circle')
-                    .onClick(async (menuEvent) => this.handleItemDelete(toolbarItem))
-                    .setWarning(true);
-            });
-    
-        }
-
-        menu.addItem((menuItem: MenuItem) => {
-            menuItem
-                .setTitle(t('setting.use-item-command.name'))
-                .setIcon('terminal')
-                .setChecked(toolbarItem.hasCommand)
-                .onClick(async (menuEvent) => {
-                    toolbarItem.hasCommand = !toolbarItem.hasCommand;
-                    const itemText = toolbarItem.label || toolbarItem.tooltip;
-                    const commandName = t('command.name-use-item', {item: itemText});
-                    // add or remove the command
-                    if (toolbarItem.hasCommand) {
-                        this.plugin.addCommand({ 
-                            id: COMMAND_PREFIX_ITEM + this.toolbar.uuid, 
-                            name: commandName, 
-                            icon: this.plugin.settings.icon, 
-                            callback: async () => {
-                                // TODO
-                            }
-                        });
-                        new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
-                    }
-                    else {
-                        this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
-                        new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }));
-                    }
-                    await this.plugin.settingsManager.save();
-                });
-        });
-
-        menu.addItem((menuItem: MenuItem) => {
-            menuItem
-                .setTitle(t('setting.item.menu-copy-id'))
-                .setIcon('code')
-                .onClick(async (menuEvent) => {
-                    navigator.clipboard.writeText(toolbarItem.uuid);
-                    new Notice(t('setting.item.menu-copy-id-notice'));
-                });
-        });
-
         new Setting(itemControlsContainer)
+            .setClass('note-toolbar-setting-item-visibility-and-controls')
             .addButton((cb) => {
                 cb.setIcon("ellipsis")
                     .setTooltip(t('setting.item.menu-more-actions'))
                     .onClick(async (event) => {
+                        let menu = this.generateItemActionMenu(toolbarItem);
                         menu.showAtMouseEvent(event);
                     });
             });
@@ -408,6 +350,85 @@ export default class ToolbarItemUi {
         itemDiv.appendChild(itemVisilityAndControlsContainer);
 
         return itemDiv;
+
+    }
+
+    /**
+     * Creates the actions menu for the item.
+     * @param toolbarItem Item to generate a menu for.
+     * @returns the menu.
+     */
+    generateItemActionMenu(toolbarItem: ToolbarItemSettings): Menu {
+
+        let menu = new Menu();
+
+        if (Platform.isPhone) {
+           
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.item.button-duplicate-tooltip'))
+                    .setIcon('copy-plus')
+                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
+            });
+    
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.button-delete-tooltip'))
+                    .setIcon('minus-circle')
+                    .onClick(async (menuEvent) => this.handleItemDelete(toolbarItem))
+                    .setWarning(true);
+            });
+    
+        }
+
+        if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator].contains(toolbarItem.linkAttr.type)) {
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(toolbarItem.hasCommand ? t('setting.use-item-command.name-remove') : t('setting.use-item-command.name-add'))
+                    .setIcon('terminal')
+                    .onClick(async (menuEvent) => {
+                        toolbarItem.hasCommand = !toolbarItem.hasCommand;
+                        const itemText = getItemText(this.plugin, toolbarItem, true);
+                        const commandName = t('command.name-use-item', {item: itemText});
+                        // add or remove the command
+                        if (toolbarItem.hasCommand) {
+                            if (itemText) {
+                                this.plugin.addCommand({ 
+                                    id: COMMAND_PREFIX_ITEM + this.toolbar.uuid, 
+                                    name: commandName, 
+                                    icon: toolbarItem.icon ? toolbarItem.icon : this.plugin.settings.icon, 
+                                    callback: async () => {
+                                        let activeFile = this.plugin.app.workspace.getActiveFile();
+                                        await this.plugin.handleItemLink(toolbarItem, undefined, activeFile);
+                                    }
+                                });
+                                new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
+                            }
+                            else {
+                                toolbarItem.hasCommand = false;
+                                new Notice(t('setting.use-item-command.notice-command-error-noname'));
+                            }
+                        }
+                        else {
+                            this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
+                            new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }));
+                        }
+                        await this.plugin.settingsManager.save();
+                    });
+            });
+        }
+
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.menu-copy-id'))
+                .setIcon('code')
+                .onClick(async (menuEvent) => {
+                    navigator.clipboard.writeText(toolbarItem.uuid);
+                    new Notice(t('setting.item.menu-copy-id-notice'));
+                });
+        });
+
+        return menu;
 
     }
 

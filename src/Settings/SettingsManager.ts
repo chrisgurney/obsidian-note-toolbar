@@ -29,7 +29,9 @@ export class SettingsManager {
 	 */
 	public deleteToolbar(id: string) {
 		let toolbarToDelete = this.plugin.settingsManager.getToolbarById(id);
-		toolbarToDelete?.items.forEach((item) => this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid));
+		toolbarToDelete?.items.forEach((item) => {
+			if (item.hasCommand) this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
+		});
 		this.plugin.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.plugin.settings.toolbars = this.plugin.settings.toolbars.filter(tbar => tbar.uuid !== id);
 	}
