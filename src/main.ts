@@ -322,6 +322,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				case 'canvas':
 					if (!this.settings.showToolbarInCanvas) return;
 				case 'empty':
+				case 'beautitab-react-view':
+				case 'home-tab-view':
 					renderToolbar = true;
 					break;
 				default:
