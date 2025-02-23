@@ -406,7 +406,7 @@ export default class ToolbarItemUi {
                             }
                             else {
                                 toolbarItem.hasCommand = false;
-                                new Notice(t('setting.use-item-command.notice-command-error-noname'));
+                                new Notice(t('setting.use-item-command.notice-command-error-noname'), 1000);
                             }
                         }
                         else {
