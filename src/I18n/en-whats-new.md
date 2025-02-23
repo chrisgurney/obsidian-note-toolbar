@@ -8,11 +8,13 @@ Open the **Show toolbars in other views** heading to add mapped toolbars to audi
 
 Support for canvases, the File menu, and New tab view are now also grouped under this heading.
 
+<img src="https://github.com/user-attachments/assets/ac6a5066-e46e-4794-801b-db9cd5c62073" width="600"/>
+
 ### Add a command for any item
 
-Add a command for any toolbar item you would like to execute from the command palette or a hot key.
+Add a command for any toolbar item you would like to execute from the command palette or a hot key. Use the new item action menu to add the command.
 
-Use the new item action menu to add the command.
+<img src="https://github.com/user-attachments/assets/ddcf0e37-c5ec-4f66-bdc9-71979e8ae92f" width="600"/>
 
 Notes
 
