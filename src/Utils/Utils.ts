@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, Command, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
+import { App, Command, FileView, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
