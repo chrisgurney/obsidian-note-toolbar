@@ -203,14 +203,17 @@
             "label-delete-confirm": "Are you sure you want to delete this toolbar?"
         },
         "display-contexts": {
-            "name": "Show toolbars in other views",
-            "description": "Enable toolbars in canvases and the New tab view.",
+            "name": "Show toolbars in other files and views",
+            "description": "Enable toolbars in canvases, the New tab view, and other file types.",
+            "option-audio": "Audio",
             "option-canvas": "Canvas files",
-            "option-canvas-description": "Show mapped toolbars in canvas files.",
+            "option-emptyview": "New tab view",
+            "option-emptyview-description": "Select a toolbar to show when no note is open.",
             "option-filemenu": "File menu",
             "option-filemenu-description": "Adds an item to the File menu to access the toolbar in the linked note.",
-            "option-emptyview": "New tab view",
-            "option-emptyview-description": "Select a toolbar to show when no note is open."
+            "option-image": "Images",
+            "option-pdf": "PDFs",
+            "option-video": "Videos"
         },
         "display-rules": {
             "name": "Display rules",

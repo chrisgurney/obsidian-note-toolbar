@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -293,7 +293,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// 	debugLog('===== onMarkdownViewFileChange =====');
 		// });
 		let renderToolbar = false;
-		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+		let currentView = getActiveView();
 
 		const viewId = getViewId(currentView);
 		debugLog('===== LEAF-CHANGE ===== ', viewId);
@@ -313,21 +313,16 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (currentView) {
 			// check for editing or reading mode
-			renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
+			if (currentView instanceof MarkdownView) {
+				renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
+			}
 		}
 		else {
 			currentView = this.app.workspace.getActiveViewOfType(ItemView);
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
-			switch (currentViewType) {
-				case 'canvas':
-					if (!this.settings.showToolbarInCanvas) return;
-				case 'empty':
-				case 'beautitab-react-view':
-				case 'home-tab-view':
-					renderToolbar = true;
-					break;
-				default:
-					return;
+			if (currentViewType) {
+				renderToolbar = checkToolbarForViewType(this, currentViewType);
+				if (!renderToolbar) return;
 			}
 		}
 
@@ -476,18 +471,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (!currentView) {
 			currentView = this.app.workspace.getActiveViewOfType(ItemView);
-			const currentViewType = currentView?.containerEl.getAttribute('data-type');
-			switch (currentViewType) {
-				case 'canvas':
-					if (!this.settings.showToolbarInCanvas) return;
-				case 'empty':
-				case 'beautitab-react-view':
-				case 'home-tab-view':
-					// move to 'top' if the position is set to 'props'
-					position === 'props' ? position = 'top' : undefined;
-					break;
-				default:
-					return;
+			const otherViewType = currentView?.containerEl.getAttribute('data-type');
+			if (otherViewType) {
+				const isToolbarVisible = checkToolbarForViewType(this, otherViewType);
+				if (!isToolbarVisible) return;
+				// for most other views, move to 'top' if the position is set to 'props'
+				if (position === 'props') position = 'top';
 			}
 		}
 
@@ -947,16 +936,21 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderActiveToolbar() {
 		let activeFile = this.app.workspace.getActiveFile();
+		// for notes and other file types
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			this.checkAndRenderToolbar(activeFile, frontmatter);
 		}
+		// for New tab view
 		else {
 			if (this.settings.emptyViewToolbar) {
-				let toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
-				this.removeToolbarIfNeeded(toolbar);
+				const toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				const toolbarRemoved = this.removeToolbarIfNeeded(toolbar);
 				if (toolbar) {
-					await this.renderToolbar(toolbar, null);
+					// render the toolbar if we have one, and we don't have an existing toolbar to keep
+					if (toolbarRemoved) {
+						await this.renderToolbar(toolbar, null);	
+					}
 					await this.updateToolbar(toolbar, null);
 				}
 			}
@@ -1505,20 +1499,20 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
 		}
 		else {
-			let currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			const currentView = this.app.workspace.getActiveViewOfType(ItemView);
 			const currentViewType = currentView?.containerEl.getAttribute('data-type');
-			switch (currentViewType) {
-				case 'canvas':
-					if (!this.settings.showToolbarInCanvas) return;
-				case 'empty':
-				case 'beautitab-react-view':
-				case 'home-tab-view':
-					if (this.settings.emptyViewToolbar) {
-						toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
-					}
-					break;
-				default:
-					return;
+			if (currentViewType) {
+				let renderToolbar = checkToolbarForViewType(this, currentViewType);
+				if (!renderToolbar) return;
+				switch (currentViewType) {
+					case 'empty':
+					case 'beautitab-react-view':
+					case 'home-tab-view':
+						if (this.settings.emptyViewToolbar) {
+							toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+						}
+						break;
+				}
 			}
 		}
 

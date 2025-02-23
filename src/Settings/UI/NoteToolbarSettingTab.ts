@@ -768,8 +768,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
 
 		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-audio'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarInAudio)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarInAudio = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-canvas'))
-			.setDesc(t('setting.display-contexts.option-canvas-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
 					.setValue(this.plugin.settings.showToolbarInCanvas)
@@ -792,6 +802,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-image'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarInImage)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarInImage = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-emptyview'))
 			.setDesc(t('setting.display-contexts.option-emptyview-description'))
 			.addSearch((cb) => {
@@ -805,6 +826,28 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							await this.plugin.settingsManager.save();
 						}
 					}, 250));
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-pdf'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarInPdf)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarInPdf = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-video'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarInVideo)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarInVideo = value;
+						await this.plugin.settingsManager.save();
+					});
 			});
 
 		collapsibleEl.appendChild(collapsibleContainer);
