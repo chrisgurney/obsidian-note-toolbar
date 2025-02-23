@@ -4,7 +4,7 @@ What's new in Note Toolbar v1.20?
 
 ### Support for Audio, Images, PDF, and Video
 
-Open the **Show toolbars in other views** heading to add mapped toolbars to audio, images, PDF, and video files.
+Open the **Show toolbars in other views** heading (under **Folder mappings**) to add mapped toolbars to audio, images, PDF, and video files.
 
 Support for canvases, the File menu, and New tab view are now also grouped under this heading.
 
