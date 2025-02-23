@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, Command, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
+import { App, Command, FileView, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
 const DEBUG: boolean = false;
@@ -56,6 +56,29 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
 }
 
 /**
+ * Determines whether the toolbar should be visible for the given view type.
+ * @param plugin NoteToolbarPlugin instance containing toolbar visibility settings.
+ * @param currentViewType Type of the current view.
+ * @returns `true` if the toolbar should be visible, otherwise `false`.
+ */
+export function checkToolbarForViewType(plugin: NoteToolbarPlugin, currentViewType: string): boolean {
+    const viewSettings: Record<string, boolean | undefined> = {
+        audio: plugin.settings.showToolbarInAudio,
+        canvas: plugin.settings.showToolbarInCanvas,
+        image: plugin.settings.showToolbarInImage,
+        pdf: plugin.settings.showToolbarInPdf,
+        video: plugin.settings.showToolbarInVideo,
+        empty: (plugin.settings.emptyViewToolbar !== undefined),
+        'beautitab-react-view': (plugin.settings.emptyViewToolbar !== undefined),
+        'home-tab-view': (plugin.settings.emptyViewToolbar !== undefined)
+    };
+
+    if (viewSettings[currentViewType] === false) return false;
+    if (!(currentViewType in viewSettings)) return false;
+    return true;
+}
+
+/**
  * Utility for debug logging.
  * @param message Message to output for debugging.
  */
@@ -79,6 +102,17 @@ export function displayScriptError(message: string, error?: any, containerEl?: H
 	errorFr.append(message);
 	error ? errorFr.append('\n', error) : undefined;
 	new Notice(errorFr, 5000);
+}
+
+/**
+ * Returns the active view for markdown, empty tab, and other file types.
+ * @returns FileView, MarkdownView, ItemView, or `null`.
+ */
+export function getActiveView(): FileView | MarkdownView | ItemView | null {
+	let activeView: FileView | MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
+	if (!activeView) activeView = this.app.workspace.getActiveViewOfType(ItemView);
+	if (!activeView) activeView = this.app.workspace.getActiveViewOfType(FileView);
+	return activeView;
 }
 
 /**
@@ -169,8 +203,13 @@ export function getLinkUiDest(event: MouseEvent | KeyboardEvent | undefined): Pa
  * @param view to get the identifer for
  * @returns ID string, consisting of the leaf's ID and the view's file path
  */
-export function getViewId(view: MarkdownView | ItemView | null): string | undefined {
-	return (view && view instanceof MarkdownView) ? `${view.leaf.id} ${view.file?.path} ${view.getMode()}` : undefined;
+export function getViewId(view: FileView | ItemView | MarkdownView | null): string | undefined {
+	let viewId = undefined;
+	if (view instanceof FileView || view instanceof MarkdownView) {
+		viewId = `${view.leaf.id} ${view.file?.path}`;
+		if (view instanceof MarkdownView) viewId += ` ${view.getMode()}`;
+	}
+	return viewId;
 }
 
 /**
