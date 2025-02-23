@@ -362,25 +362,6 @@ export default class ToolbarItemUi {
 
         let menu = new Menu();
 
-        if (Platform.isPhone) {
-           
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('setting.item.button-duplicate-tooltip'))
-                    .setIcon('copy-plus')
-                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
-            });
-    
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('setting.button-delete-tooltip'))
-                    .setIcon('minus-circle')
-                    .onClick(async (menuEvent) => this.handleItemDelete(toolbarItem))
-                    .setWarning(true);
-            });
-    
-        }
-
         if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator].contains(toolbarItem.linkAttr.type)) {
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
@@ -427,6 +408,27 @@ export default class ToolbarItemUi {
                     new Notice(t('setting.item.menu-copy-id-notice'));
                 });
         });
+
+        if (Platform.isPhone) {
+
+            menu.addSeparator();
+
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.item.button-duplicate-tooltip'))
+                    .setIcon('copy-plus')
+                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
+            });
+    
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.button-delete-tooltip'))
+                    .setIcon('minus-circle')
+                    .onClick(async (menuEvent) => this.handleItemDelete(toolbarItem))
+                    .setWarning(true);
+            });
+    
+        }
 
         return menu;
 

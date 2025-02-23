@@ -259,7 +259,7 @@
             "title": "Edit toolbar item",
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
-            "menu-copy-id": "Copy item ID",
+            "menu-copy-id": "Copy developer ID",
             "menu-copy-id-notice": "Toolbar item ID copied to clipboard.",
             "menu-more-actions": "More actions...",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
