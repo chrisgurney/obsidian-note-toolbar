@@ -216,6 +216,7 @@ export default class ToolbarItemUi {
         //
 
         new Setting(itemControlsContainer)
+            .setClass('note-toolbar-setting-item-actions') // so it can be focussed on if needed
             .setClass('note-toolbar-setting-item-visibility-and-controls')
             .addButton((cb) => {
                 cb.setIcon("ellipsis")
