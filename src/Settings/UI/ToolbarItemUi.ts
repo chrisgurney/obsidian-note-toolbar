@@ -223,7 +223,7 @@ export default class ToolbarItemUi {
                     .setTooltip(t('setting.item.menu-more-actions'))
                     .onClick(async (event) => {
                         let menu = this.generateItemActionMenu(toolbarItem);
-                        menu.showAtMouseEvent(event);
+                        menu.showAtPosition(getElementPosition(cb.buttonEl));
                     });
             });
 
