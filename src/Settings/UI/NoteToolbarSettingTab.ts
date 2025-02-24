@@ -382,11 +382,22 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					this.containerEl
 						.querySelectorAll<HTMLElement>('.note-toolbar-setting-toolbar-list .setting-item')
 						.forEach((toolbarEl) => {
-							const text = toolbarEl.querySelector('.setting-item-name')?.textContent?.toLowerCase() ?? '';
-							const matches = text.includes(query);
-							toolbarEl.style.display = matches ? '' : 'none';
+							// search contents of name and item text
+							const toolbarName = toolbarEl.querySelector('.setting-item-name')?.textContent?.toLowerCase() ?? '';
+							const toolbarItemText = Array.from(toolbarEl.querySelectorAll('*:not(svg)'))
+								.flatMap(el => Array.from(el.childNodes))
+								.filter(node => node.nodeType === Node.TEXT_NODE)
+								.map(node => node.textContent?.trim())
+								.filter(text => text)
+								.join(' ')
+								.toLowerCase();
+							const toolbarNameMatches = toolbarName.includes(query);
+							const toolbarItemTextMatches = toolbarItemText.includes(query);
 
-							if (matches && !firstVisibleSet) {
+							toolbarEl.style.display = (toolbarNameMatches || toolbarItemTextMatches) ? '' : 'none';
+
+							// remove the top border on the first search result
+							if ((toolbarNameMatches || toolbarItemTextMatches) && !firstVisibleSet) {
 								toolbarEl.classList.add('note-toolbar-setting-no-border');
 								firstVisibleSet = true;
 							} else {

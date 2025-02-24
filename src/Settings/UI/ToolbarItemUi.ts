@@ -216,13 +216,14 @@ export default class ToolbarItemUi {
         //
 
         new Setting(itemControlsContainer)
+            .setClass('note-toolbar-setting-item-actions') // so it can be focussed on if needed
             .setClass('note-toolbar-setting-item-visibility-and-controls')
             .addButton((cb) => {
                 cb.setIcon("ellipsis")
                     .setTooltip(t('setting.item.menu-more-actions'))
                     .onClick(async (event) => {
                         let menu = this.generateItemActionMenu(toolbarItem);
-                        menu.showAtMouseEvent(event);
+                        menu.showAtPosition(getElementPosition(cb.buttonEl));
                     });
             });
 
@@ -387,7 +388,7 @@ export default class ToolbarItemUi {
                             }
                             else {
                                 toolbarItem.hasCommand = false;
-                                new Notice(t('setting.use-item-command.notice-command-error-noname'), 1000);
+                                new Notice(t('setting.use-item-command.notice-command-error-noname'), 5000);
                             }
                         }
                         else {

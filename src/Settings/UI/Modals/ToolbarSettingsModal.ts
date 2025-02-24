@@ -12,6 +12,7 @@ import ToolbarItemUi from '../ToolbarItemUi';
 import { ItemSuggester } from '../Suggesters/ItemSuggester';
 
 enum ItemFormComponent {
+	Actions = 'actions',
 	Delete = 'delete',
 	Icon = 'icon',
 	Label = 'label',
@@ -453,7 +454,7 @@ export default class ToolbarSettingsModal extends Modal {
 				switch (itemType) {
 					case ItemType.Break:
 					case ItemType.Separator:
-						focusOn = ItemFormComponent.Delete;
+						focusOn = Platform.isPhone ? ItemFormComponent.Actions : ItemFormComponent.Delete;
 						break;
 					case ItemType.Group:
 						focusOn = ItemFormComponent.Link;
@@ -464,6 +465,9 @@ export default class ToolbarSettingsModal extends Modal {
 				}
 			}
 			switch (focusOn) {
+				case ItemFormComponent.Actions:
+					focusSelector = ".note-toolbar-setting-item-actions button";
+					break;
 				case ItemFormComponent.Delete:
 					focusSelector = ".note-toolbar-setting-item-delete button";
 					break;
