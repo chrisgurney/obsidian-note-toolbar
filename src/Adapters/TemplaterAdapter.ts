@@ -51,6 +51,9 @@ export default class TemplaterAdapter extends Adapter {
         super(noteToolbar, plugin, plugin.templater);
     }
 
+    /**
+     * @see Adapter.use
+     */    
     async use(config: ScriptConfig): Promise<string | void> {
         let result;
         

@@ -56,6 +56,9 @@ export default class DataviewAdapter extends Adapter {
         super(noteToolbar, plugin, plugin.api);
     }
 
+    /**
+     * @see Adapter.use
+     */
     async use(config: ScriptConfig): Promise<string | void> {
         
         let result;

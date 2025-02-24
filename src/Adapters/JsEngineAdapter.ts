@@ -50,6 +50,9 @@ export default class JsEngineAdapter extends Adapter {
         super(noteToolbar, plugin, plugin.api);
     }
 
+    /**
+     * @see Adapter.use
+     */    
     async use(config: ScriptConfig): Promise<string | void> {
         let result;
         
