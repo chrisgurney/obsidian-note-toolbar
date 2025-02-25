@@ -264,9 +264,9 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                debugLog("executeJs() ", expression);
+                // debugLog("executeJs() ", expression);
                 await (this.adapterApi as any).executeJs(expression, resultEl, component, activeFile?.path);
-                debugLog("executeJs() result:", resultEl);
+                // debugLog("executeJs() result:", resultEl);
                 if (!containerEl) {
                     const errorEl = resultEl.querySelector('.dataview-error');
                     if (errorEl) {
@@ -274,7 +274,7 @@ export default class DataviewAdapter extends Adapter {
                     }
                     else if (resultEl.children.length === 0 && resultEl.textContent?.trim() === '') {
                         // nothing was returned; do nothing? may depend on what user wants to do
-                        debugLog('executeJs() no result');
+                        // debugLog('executeJs() no result');
                         result = '';
                     }
                     else {
