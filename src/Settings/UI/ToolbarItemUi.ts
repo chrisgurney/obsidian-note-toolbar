@@ -614,7 +614,7 @@ export default class ToolbarItemUi {
                     else {
                         fieldDiv.removeClass('note-toolbar-setting-item-link-field');
                         fieldDiv.addClass('note-toolbar-setting-plugin-error');
-                        fieldDiv.setText(t('adapter.error-plugin-disabled'));
+                        fieldDiv.setText(t('adapter.error.plugin-disabled'));
                         let pluginLinkFr = document.createDocumentFragment();
                         let pluginLink = pluginLinkFr.createEl('a', { 
                             href: `obsidian://show-plugin?id=${type}`, 
@@ -627,7 +627,7 @@ export default class ToolbarItemUi {
                 else {
                     fieldDiv.removeClass('note-toolbar-setting-item-link-field');
                     fieldDiv.addClass('note-toolbar-setting-plugin-error');
-                    fieldDiv.setText(t('adapter.error-scripting-disabled'));
+                    fieldDiv.setText(t('adapter.error.scripting-disabled'));
                 }
                 break;
             case ItemType.File:
