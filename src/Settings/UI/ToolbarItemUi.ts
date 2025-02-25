@@ -568,7 +568,7 @@ export default class ToolbarItemUi {
                     let adapter = this.plugin.getAdapterForItemType(type);
                     if (adapter) {
                         const functionOptions = {
-                            '': 'Select a function...',
+                            '': t('adapter.option-function-default'),
                             ...Array.from(adapter?.getFunctions().entries()).reduce((acc, [name, func]) => {
                                 acc[name] = func.label;
                                 return acc;
@@ -621,7 +621,7 @@ export default class ToolbarItemUi {
                     else {
                         fieldDiv.removeClass('note-toolbar-setting-item-link-field');
                         fieldDiv.addClass('note-toolbar-setting-plugin-error');
-                        fieldDiv.setText("Toggle the Scripting setting after installing and enabling plugin: ");
+                        fieldDiv.setText(t('adapter.error-plugin-disabled'));
                         let pluginLinkFr = document.createDocumentFragment();
                         let pluginLink = pluginLinkFr.createEl('a', { 
                             href: `obsidian://show-plugin?id=${type}`, 
@@ -634,7 +634,7 @@ export default class ToolbarItemUi {
                 else {
                     fieldDiv.removeClass('note-toolbar-setting-item-link-field');
                     fieldDiv.addClass('note-toolbar-setting-plugin-error');
-                    fieldDiv.setText("Enable Scripting in Note Toolbar settings to use this item.");
+                    fieldDiv.setText(t('adapter.error-scripting-disabled'));
                 }
                 break;
             case ItemType.File:

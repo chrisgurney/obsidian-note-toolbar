@@ -2,6 +2,9 @@
     "adapter": {
         "args": "Arguments (optional)",
         "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format, with string values in quotes.",
+        "error-plugin-disabled": "Toggle the Scripting setting after installing and enabling plugin: ",
+        "error-scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item.",
+        "option-function-default": "Select a function...",
         "outputcontainer": "Output callout ID (optional)",
         "outputcontainer-description": "Add a note-toolbar-output callout with a unique meta field to your note to put text output.",
         "postCommand": "Command after execution (optional)",
