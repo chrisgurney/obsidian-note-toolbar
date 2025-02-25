@@ -12,6 +12,14 @@ import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 export default class DataviewAdapter extends Adapter {
 
     readonly FUNCTIONS: AdapterFunction[] = [
+        // {
+        //     function: this.useLibraryScript,
+        //     label: t('library.script-function'),
+        //     description: "",
+        //     parameters: [
+        //         { parameter: 'libraryScriptId', label: t('library.script'), description: t('library.script-description'), type: SettingType.LibraryScript, required: true }
+        //     ]
+        // },
         {
             function: this.query,
             label: t('adapter.dataview.query-function'),
@@ -93,6 +101,11 @@ export default class DataviewAdapter extends Adapter {
                 result = config.expression
                     ? await this.executeJs(config.expression, containerEl)
                     : t('adapter.dataview.dvjs-expr-error-required');
+                break;
+            case 'useLibraryScript':
+                result = config.libraryScriptId
+                    ? await this.useLibraryScript(config.libraryScriptId)
+                    : t('library.error-script-required');
                 break;
             case 'query':
                 result = config.expression
@@ -349,6 +362,20 @@ export default class DataviewAdapter extends Adapter {
 
         return result;
 
+    }
+
+    private async useLibraryScript(libraryScriptId: string): Promise<string> {
+        let result = '';
+        const scriptEntry = this.noteToolbar?.libraryManager.getScriptEntry(ItemType.Dataview, libraryScriptId);
+        if (scriptEntry) {
+            result = await this.executeJs(scriptEntry.code);
+        }
+        else {
+            displayScriptError(
+                t('library.error-invalid-script-id', { scriptId: libraryScriptId, pluginId: ItemType.Dataview})
+            );
+        }
+        return result;
     }
 
 }

@@ -18,11 +18,13 @@ import JsEngineAdapter from 'Adapters/JsEngineAdapter';
 import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
+import LibraryManager from 'Settings/LibraryManager';
 
 export default class NoteToolbarPlugin extends Plugin {
 
 	api: INoteToolbarApi<any>;
 	commands: CommandsManager;
+	libraryManager: LibraryManager;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
@@ -155,6 +157,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.checkPlugins();
 
 			this.updateAdapters();
+
+			// this.libraryManager = new LibraryManager(this);
+			// this.libraryManager.load();
 
 		});
 

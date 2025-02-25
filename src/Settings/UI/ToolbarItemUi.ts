@@ -781,6 +781,29 @@ export default class ToolbarItemUi {
                                 this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         break;
+                    case SettingType.LibraryScript:
+                        const scriptOptions = {
+                            '': t('library.script-option-default'),
+                            ...this.plugin.libraryManager.getScriptOptions(toolbarItem.linkAttr.type)
+                        }
+                        let selectedScript = toolbarItem.scriptConfig?.libraryScriptId || '';
+                        setting = new Setting(fieldDiv)
+                            .setClass("note-toolbar-setting-item-field-link")
+                            .addDropdown((dropdown) =>
+                                dropdown
+                                    .addOptions(scriptOptions)
+                                    .setValue(selectedScript)
+                                    .onChange(async (scriptId) => {
+                                        let selectedScriptEntry = this.plugin.libraryManager.getScriptEntry(toolbarItem.linkAttr.type, scriptId);
+                                        if (setting) setFieldHelp(setting.controlEl, selectedScriptEntry?.description || param.description);
+                                        // config[param.parameter as keyof ScriptConfig] = isValid ? scriptId : '';
+                                        config[param.parameter as keyof ScriptConfig] = scriptId;
+                                        this.toolbar.updated = new Date().toISOString();
+                                        await this.plugin.settingsManager.save();
+                                        this.renderPreview(toolbarItem); // to make sure error state is refreshed
+                                    })
+                            );
+                        break;
                     case SettingType.Text:
                         setting = new Setting(fieldDiv)
                             .setClass("note-toolbar-setting-item-field-link")
