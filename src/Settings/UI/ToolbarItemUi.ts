@@ -734,7 +734,7 @@ export default class ToolbarItemUi {
             const selectedFunction = adapter.getFunctions().get(toolbarItem.scriptConfig.pluginFunction);
             selectedFunction?.parameters.forEach(param => {
                 let initialValue = config[param.parameter as keyof ScriptConfig];
-                let setting: Setting;
+                let setting: Setting | undefined;
                 switch (param.type) {
                     case SettingType.Command:
                         setting = new Setting(fieldDiv)
