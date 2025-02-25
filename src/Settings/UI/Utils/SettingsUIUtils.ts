@@ -403,15 +403,15 @@ export function setFieldError(parent: ToolbarSettingsModal | ItemModal, fieldEl:
 /**
  * Updates the given element with the given help text.
  * @param fieldEl HTMLElement to update
- * @param helpFr DocumentFragment of the help text
+ * @param helpText DocumentFragment or string of the help text
  */
-export function setFieldHelp(fieldEl: HTMLElement, helpFr?: DocumentFragment) {
-	if (!helpFr) return;
+export function setFieldHelp(fieldEl: HTMLElement, helpText: DocumentFragment | string | undefined) {
+	if (!helpText) return;
 	let existingHelp = fieldEl.querySelector('.note-toolbar-setting-field-help');
 	existingHelp?.remove();
 	let fieldHelp = createDiv();
 	fieldHelp.addClass('note-toolbar-setting-field-help');
-	fieldHelp.append(helpFr);
+	(helpText instanceof DocumentFragment) ? fieldHelp.append(helpText) : fieldHelp.setText(helpText);
 	fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
 }
 

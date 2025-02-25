@@ -598,14 +598,7 @@ export default class ToolbarItemUi {
                                             fieldDiv.append(subfieldsDiv);
                                             const selectedFunction = adapter.getFunctions().get(value);
                                             if (selectedFunction?.description) {
-                                                if (typeof selectedFunction.description === 'string') {
-                                                    let scriptHelpFr = document.createDocumentFragment();
-                                                    scriptHelpFr.appendText(selectedFunction.description);
-                                                    setFieldHelp(scriptSetting.controlEl, scriptHelpFr);
-                                                }
-                                                else {
-                                                    setFieldHelp(scriptSetting.controlEl, selectedFunction.description);
-                                                }
+                                                setFieldHelp(scriptSetting.controlEl, selectedFunction.description);
                                             }
                                         }
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
@@ -741,7 +734,7 @@ export default class ToolbarItemUi {
             const selectedFunction = adapter.getFunctions().get(toolbarItem.scriptConfig.pluginFunction);
             selectedFunction?.parameters.forEach(param => {
                 let initialValue = config[param.parameter as keyof ScriptConfig];
-                let setting;
+                let setting: Setting;
                 switch (param.type) {
                     case SettingType.Command:
                         setting = new Setting(fieldDiv)
