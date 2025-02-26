@@ -173,7 +173,7 @@ export default class DataviewAdapter extends Adapter {
             }
             else {
                 result = expression;
-                console.error(error);
+                console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
             }
         }
         finally {
