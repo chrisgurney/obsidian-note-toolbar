@@ -21,6 +21,9 @@ declare module "obsidian" {
             // listCommands: () => [{ id: string; name: string }];
             commands: Record<string, { name: string; id: string }>;
         };
+        hotkeyManager: {
+            getHotkeys(command: string): KeymapInfo[];
+        };
     }
 
     // allows access to Menu DOM, to add a class for styling

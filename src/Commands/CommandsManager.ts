@@ -25,15 +25,17 @@ export class CommandsManager {
                 if (item.hasCommand) {
                     const itemText = getItemText(this.plugin, item, true);
                     if (itemText) {
-                        this.plugin.addCommand({
+                        const command = this.plugin.addCommand({
                             id: COMMAND_PREFIX_ITEM + item.uuid,
-                            name: t('command.name-use-item', itemText),
+                            name: t('command.name-use-item', { item: itemText }),
                             icon: item.icon ? item.icon : this.plugin.settings.icon,
                             callback: async () => {
                                 let activeFile = this.plugin.app.workspace.getActiveFile();
                                 await this.plugin.handleItemLink(item, undefined, activeFile);
                             }
                         });
+                        // TODO: adopt Hotkeys helper class from @mProjectsCode and test here:
+                        // debugLog(command.name, ...);
                     }
                     else {
                         hasIgnoredCommands = true;
