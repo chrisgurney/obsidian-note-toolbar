@@ -41,7 +41,7 @@ export class CommandsManager {
                 }
             });
             if (hasIgnoredCommands) {
-                new Notice(t('setting.use-item-command.notice-command-error-startup-noname'));
+                new Notice(t('setting.use-item-command.notice-command-error-startup-noname'), 4000);
             }
         });
     }
