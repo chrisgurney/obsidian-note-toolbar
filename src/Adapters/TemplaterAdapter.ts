@@ -218,7 +218,7 @@ export default class TemplaterAdapter extends Adapter {
             }
             else {
                 result = expression;
-                console.error(error);
+                console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
             }
         }
 

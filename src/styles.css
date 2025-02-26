@@ -1785,10 +1785,16 @@ input[type="text"].note-toolbar-setting-error,
     &.markdown-preview-view {
         padding: unset;
     }
-    pre > code {
-        font-size: calc(var(--font-ui-small) + 1px);
-        overflow: scroll;
-        white-space: pre;
+    pre {
+        & code {
+            font-size: calc(var(--font-ui-small) + 1px);
+            overflow: scroll;
+            white-space: pre;
+        }
+        & button.copy-code-button {
+            cursor: pointer;
+            margin: 1em;
+        }
     }
     hr {
         border-top: 1px solid;

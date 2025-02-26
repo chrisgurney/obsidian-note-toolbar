@@ -75,7 +75,7 @@ settings:
         id: cg-nt-fab-border-color
         title: 'Border color'
         title.uk: 'Колір рамки'
-        description: 'Border around button'
+        description: 'Border around button. The "border" style must be added to the toolbar first.'
         description.uk: 'Рамка навколо кнопки'
         type: variable-themed-color
         opacity: true
@@ -431,7 +431,7 @@ settings:
         title.uk: 'Меню'
         title.de: 'Menüs'
         title.zh: '菜单'
-        description: 'Styles for Item Menu type items'
+        description: "Styles for toolbars shown as menus. (In Obsidian's settings, first disable: Appearance → Native menus)"
         description.uk: 'Стилі елементів меню'
         description.de: 'Stile für Element-Menüs'
         description.zh: '项目菜单类型的样式'
@@ -719,7 +719,7 @@ settings:
         title.uk: 'Колір рамки'
         title.de: 'Rand-Farbe'
         title.zh: '边框颜色'
-        description: 'Top + Bottom borders'
+        description: 'Top + Bottom borders. The "border" style must be added to the toolbar first.'
         description.uk: 'Верхня та нижня рамки'
         description.de: 'Obere + untere Ränder'
         description.zh: '上下边框'
@@ -2692,10 +2692,16 @@ input[type="text"].note-toolbar-setting-error,
     &.markdown-preview-view {
         padding: unset;
     }
-    pre > code {
-        font-size: calc(var(--font-ui-small) + 1px);
-        overflow: scroll;
-        white-space: pre;
+    pre {
+        & code {
+            font-size: calc(var(--font-ui-small) + 1px);
+            overflow: scroll;
+            white-space: pre;
+        }
+        & button.copy-code-button {
+            cursor: pointer;
+            margin: 1em;
+        }
     }
     hr {
         border-top: 1px solid;

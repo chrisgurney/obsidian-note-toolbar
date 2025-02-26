@@ -2,6 +2,7 @@
     "adapter": {
         "args": "Arguments (optional)",
         "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format, with string values in quotes.",
+        "option-function-default": "Select a function...",
         "outputcontainer": "Output callout ID (optional)",
         "outputcontainer-description": "Add a note-toolbar-output callout with a unique meta field to your note to put text output.",
         "postCommand": "Command after execution (optional)",
@@ -70,8 +71,10 @@
             "function-invalid": "Unsupported function: {{function}}",
             "function-not-found": "Function not found: {{function}}",
             "function-note-not-open": "This function must be executed from an open note.",
+            "plugin-disabled": "Toggle the Scripting setting after installing and enabling plugin: ",
             "query-failed": "Failed to evaluate query: {{expression}}",
-            "query-note-not-open": "This query must be run from an open note."
+            "query-note-not-open": "This query must be run from an open note.",
+            "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
         }
     },
     "api": {
@@ -143,6 +146,14 @@
         "placeholder-import-into": "> Note Toolbar Callout markdown...",
         "warning-invalid-plugins": "This toolbar uses plugins you do not have installed and enabled:",
         "warning-vars": "This toolbar uses variables, which you can modify to work with your vault."
+    },
+    "library": {
+        "script": "Library script",
+        "script-description": "Choose a script from the library.",
+        "script-function": "Use script from library",
+        "script-option-default": "Select a script...",
+        "error-invalid-script-id": "Script does not exist for ID: {{scriptId}} ({{pluginId}})",
+        "error-script-required": "Error: A script was not selected."
     },
     "notice": {
         "error-command-not-found": "Check Note Toolbar setting or URI for this command. Command not found: {{command}}",

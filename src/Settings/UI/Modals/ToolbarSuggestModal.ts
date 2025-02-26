@@ -1,25 +1,25 @@
 import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog } from "Utils/Utils";
-import { createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
 
 export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     public plugin: NoteToolbarPlugin;
     public activeFile: TFile | null;
+    private callback: (toolbar: ToolbarSettings) => void;
 
     /**
      * Creates a new modal.
      * @param plugin NoteToolbarPlugin
      * @param activeFile TFile for the active file (so vars can be replaced)
      */
-	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null) {
+	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, callback: (toolbar: ToolbarSettings) => void) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         this.plugin = plugin;
         this.activeFile = activeFile;
+        this.callback = callback;
 
         this.setPlaceholder(t('setting.toolbar-suggest-modal.placeholder'));
         this.setInstructions([
@@ -61,12 +61,11 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     /**
      * Closes the modal and executes the given item.
-     * @param selectedTbar ToolbarSettings to use.
+     * @param toolbar ToolbarSettings to use.
      */
-    async onChooseSuggestion(selectedTbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
-        debugLog("onChooseSuggestion: ", selectedTbar, event);
+    async onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
+        this.callback(toolbar);
         this.close();
-        this.plugin.commands.openItemSuggester(selectedTbar.uuid);
     }
 
 }

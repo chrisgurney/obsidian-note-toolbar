@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -25,15 +25,17 @@ export class CommandsManager {
                 if (item.hasCommand) {
                     const itemText = getItemText(this.plugin, item, true);
                     if (itemText) {
-                        this.plugin.addCommand({
+                        const command = this.plugin.addCommand({
                             id: COMMAND_PREFIX_ITEM + item.uuid,
-                            name: t('command.name-use-item', itemText),
+                            name: t('command.name-use-item', { item: itemText }),
                             icon: item.icon ? item.icon : this.plugin.settings.icon,
                             callback: async () => {
                                 let activeFile = this.plugin.app.workspace.getActiveFile();
                                 await this.plugin.handleItemLink(item, undefined, activeFile);
                             }
                         });
+                        // TODO: adopt Hotkeys helper class from @mProjectsCode and test here:
+                        // debugLog(command.name, ...);
                     }
                     else {
                         hasIgnoredCommands = true;
@@ -41,7 +43,7 @@ export class CommandsManager {
                 }
             });
             if (hasIgnoredCommands) {
-                new Notice(t('setting.use-item-command.notice-command-error-startup-noname'));
+                new Notice(t('setting.use-item-command.notice-command-error-startup-noname'), 4000);
             }
         });
     }
@@ -196,7 +198,9 @@ export class CommandsManager {
      */
     async openToolbarSuggester(): Promise<void> {
         let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ToolbarSuggestModal(this.plugin, activeFile);
+        const modal = new ToolbarSuggestModal(this.plugin, activeFile, (toolbar: ToolbarSettings) => {
+            this.plugin.commands.openItemSuggester(toolbar.uuid);
+        });
         modal.open();
     }
 

@@ -81,6 +81,7 @@ export enum SettingType {
 	Command = 'command',
 	File = 'file',
 	Ignore = 'ignore',
+	LibraryScript = 'library-script',
 	Script = 'script',
 	Text = 'text',
 	TextArea = 'textarea',
@@ -335,6 +336,7 @@ export interface ToolbarItemLinkAttr {
  */
 export interface ScriptConfig {
 	pluginFunction: string;
+	libraryScriptId?: string;
 	expression?: string;
 	sourceFile?: string;
 	sourceFunction?: string;
