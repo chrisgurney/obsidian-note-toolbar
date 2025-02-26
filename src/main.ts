@@ -2156,8 +2156,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
 				// strip prefix before evaluation
-				if (s.trim().startsWith('{{dv:')) s = s.replace(/^{{dv:\s*|\s*}}$/g, '');
-				if (prefix) s = s.trim().slice(prefix.length);
+				if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
+				if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
+				s = s.trim();
 				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluateInline', expression: s });
 				s = (result && typeof result === 'string') ? result : '';
 			}
