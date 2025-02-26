@@ -39,6 +39,7 @@ _Thank you @laktiv for the idea._
 ### Settings improvements
 
 - Toolbar search
+  - Results now include any matches with toolbar item text (labels, tooltips).
   - Search field is now shown by default on desktop and tablet.
   - Arrow down out of the search field to navigate search results.
 - The new item actions menu (on phones) now contains the **Duplicate item** and **Delete** options, which helps give more room in the UI for visibility settings on smaller phones.
