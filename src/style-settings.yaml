@@ -427,7 +427,7 @@ settings:
         title.uk: 'Меню'
         title.de: 'Menüs'
         title.zh: '菜单'
-        description: 'Styles for Item Menu type items'
+        description: "Styles for toolbars shown as menus. (In Obsidian's settings, first disable: Appearance → Native menus)"
         description.uk: 'Стилі елементів меню'
         description.de: 'Stile für Element-Menüs'
         description.zh: '项目菜单类型的样式'
