@@ -135,9 +135,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.commands.toggleProps('hide') });
 			this.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.commands.toggleProps('fold') });
 			this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
-	
-			this.commands.setupItemCommands();
-			this.commands.setupToolbarCommands();
 
 			// prototcol handler
 			this.protocolManager = new ProtocolManager(this);
@@ -155,8 +152,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// check what other plugins are enabled that we need to know about
 			this.checkPlugins();
-
 			this.updateAdapters();
+
+			// needs to be done after plugins are setup so that string variable checks work
+			this.commands.setupItemCommands();
+			this.commands.setupToolbarCommands();
 
 			// this.libraryManager = new LibraryManager(this);
 			// this.libraryManager.load();
