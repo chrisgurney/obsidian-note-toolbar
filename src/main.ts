@@ -1824,7 +1824,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// edit item
 		if (toolbarItem) {
 			const activeFile = this.app.workspace.getActiveFile();
-			const itemText = await this.getItemText(toolbarItem, activeFile);
+			let itemText = await this.getItemText(toolbarItem, activeFile, true);
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('lucide-pen-box')
@@ -2087,12 +2087,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Gets the text to display on the toolbar item, taking into account title, tooltip, vars, and expressions.
 	 * @param toolbarItem ToolbarItemSettings to get the text for.
 	 * @param file TFile of the note that the toolbar is being rendered within, or null.
+	 * @param truncate if true, truncate the text; defaults to false.
 	 * @returns string to display on the toolbar
 	 */
-	async getItemText(toolbarItem: ToolbarItemSettings, file: TFile | null): Promise<string> {
-		return toolbarItem.label ? 
+	async getItemText(toolbarItem: ToolbarItemSettings, file: TFile | null, truncate: boolean = false): Promise<string> {
+		let itemText = toolbarItem.label ? 
 			(this.hasVars(toolbarItem.label) ? await this.replaceVars(toolbarItem.label, file) : toolbarItem.label) : 
 			(this.hasVars(toolbarItem.tooltip) ? await this.replaceVars(toolbarItem.tooltip, file) : toolbarItem.tooltip);
+		if (truncate) itemText = itemText.slice(0, 24);
+		return itemText;
 	}
 
 	/**
