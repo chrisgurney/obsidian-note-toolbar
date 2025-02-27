@@ -222,7 +222,6 @@ export interface ToolbarSettings {
 	positions?: Array<Position>;
 	position: Position;
 	updated: string;
-	// TODO: add setting to force rerender of toolbar? (for label variables)
 }
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
