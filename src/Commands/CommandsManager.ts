@@ -198,7 +198,7 @@ export class CommandsManager {
      */
     async openToolbarSuggester(): Promise<void> {
         let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ToolbarSuggestModal(this.plugin, activeFile, (toolbar: ToolbarSettings) => {
+        const modal = new ToolbarSuggestModal(this.plugin, activeFile, false, (toolbar: ToolbarSettings) => {
             this.plugin.commands.openItemSuggester(toolbar.uuid);
         });
         modal.open();

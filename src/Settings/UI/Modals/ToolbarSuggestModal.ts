@@ -1,24 +1,27 @@
 import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
 
 export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     public plugin: NoteToolbarPlugin;
     public activeFile: TFile | null;
     private callback: (toolbar: ToolbarSettings) => void;
+    private showPreviews: boolean = false;
 
     /**
      * Creates a new modal.
      * @param plugin NoteToolbarPlugin
      * @param activeFile TFile for the active file (so vars can be replaced)
      */
-	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, callback: (toolbar: ToolbarSettings) => void) {
+	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, showPreviews: boolean = false, callback: (toolbar: ToolbarSettings) => void) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         this.plugin = plugin;
         this.activeFile = activeFile;
+        this.showPreviews = showPreviews;
         this.callback = callback;
 
         this.setPlaceholder(t('setting.toolbar-suggest-modal.placeholder'));
@@ -57,6 +60,15 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
         let toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
+        if (this.showPreviews) {
+            let previewContainerEl = el.createDiv();
+            previewContainerEl.addClass('setting-item-description');
+            let previewEl = previewContainerEl.createDiv();
+            previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
+            let previewFr = createToolbarPreviewFr(this.plugin, toolbar, undefined);
+            previewEl.append(previewFr);
+            el.append(previewContainerEl);
+        }
     }
 
     /**
