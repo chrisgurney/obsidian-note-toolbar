@@ -1848,6 +1848,9 @@ input[type="text"].note-toolbar-setting-error,
     .is-phone & {
         padding-bottom: var(--size-4-12);
     }
+    & .note-toolbar-setting-plugin-onboarding {
+        margin-bottom: 0.75em;
+    }
 }
 
 /*************************************************************************

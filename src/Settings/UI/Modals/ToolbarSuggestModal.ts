@@ -47,8 +47,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
                     let messageEl = createOnboardingMessageEl(this.plugin, 
                         onboardingId, 
                         t('onboarding.swap-toolbar-title'), 
-                        t('onboarding.swap-toolbar-description', { property: this.plugin.settings.toolbarProp }));
-                    // messageEl.setCssProps({margin: 'var(--size-4-3)'});
+                        t('onboarding.swap-toolbar-content', { property: this.plugin.settings.toolbarProp }));
                     resultsEl.insertAdjacentElement('beforebegin', messageEl);
                 }    
             }

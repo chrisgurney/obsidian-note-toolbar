@@ -166,8 +166,10 @@
         "warning-no-matching-toolbar": "Note Toolbar: No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
     },
     "onboarding": {
-        "swap-toolbar-title": "Warning",
-        "swap-toolbar-description": "This will update your note by changing or removing the value of the property: {{property}}"
+        "new-toolbar-mapping-title": "How to use this toolbar", 
+        "new-toolbar-mapping-content": "To see this toolbar in your note, add a property ({{property}}) with the name of this toolbar. Or, map this toolbar to the folder the note is in (Note Toolbar Settings → Folder mappings).",
+        "swap-toolbar-title": "This note will be changed",
+        "swap-toolbar-content": "Selecting an option below will update this note by changing or removing the value of a property ({{property}})."
     },
     "plugin": {
         "name": "Note Toolbar"
