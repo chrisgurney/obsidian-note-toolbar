@@ -1823,9 +1823,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 		contextMenu.addSeparator();
 
-		// swap toolbar
+		// swap toolbar (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
 		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		if (currentView?.getViewType() === 'markdown') {
+		if (currentView?.getViewType() === 'markdown' && this.settings.toolbarProp !== 'tags') {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('repeat')
