@@ -158,6 +158,10 @@ export enum CalloutAttr {
 	Templater = 'data-templater-obsidian',
 }
 
+export interface OnboardingState {
+    [id: string]: boolean;
+}
+
 export enum ToolbarStyle {
 	ItemFocused = 'tbar-item-focused'
 }
@@ -167,6 +171,7 @@ export interface NoteToolbarSettings {
 	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
 	icon: string;
+	onboarding: OnboardingState;
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
@@ -188,6 +193,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	},
 	folderMappings: [],
 	icon: "circle-ellipsis",
+	onboarding: {},
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,

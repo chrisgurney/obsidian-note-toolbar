@@ -7,6 +7,31 @@ import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
 
+export function createOnboardingMessageEl(
+	plugin: NoteToolbarPlugin,
+	messageId: string,
+	name: string,
+	description: string,
+): HTMLElement {
+	let containerEl = createDiv();
+	let setting = new Setting(containerEl)
+		.setName(name)
+		.setDesc(description)
+		.setClass('note-toolbar-setting-plugin-onboarding')
+		.addExtraButton((button) => {
+			button
+				.setIcon('cross')
+				.setTooltip("Dismiss")
+				.onClick(() => {
+					setting.settingEl.remove();
+					plugin.settings.onboarding[messageId] = true;
+					plugin.settingsManager.save();
+				});
+			button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
+		});
+	return setting.settingEl;
+}
+
 /**
  * Constructs a preview of the given toolbar, including the icons used.
  * @param plugin NoteToolbarPlugin reference

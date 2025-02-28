@@ -165,6 +165,10 @@
         "error-uri-params-not-supported": "One or more of these Note Toolbar URI parameters is not supported: {{params}}",
         "warning-no-matching-toolbar": "Note Toolbar: No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
     },
+    "onboarding": {
+        "swap-toolbar-title": "Warning",
+        "swap-toolbar-description": "This will update your note by changing or removing the value of the property: {{property}}"
+    },
     "plugin": {
         "name": "Note Toolbar"
     },

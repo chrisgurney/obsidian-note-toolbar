@@ -1,33 +1,34 @@
 import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
 import { EMPTY_TOOLBAR_SETTINGS, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
+import { createOnboardingMessageEl, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
+import { debugLog } from "Utils/Utils";
 
 export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     public plugin: NoteToolbarPlugin;
     private callback: (toolbar: ToolbarSettings) => void;
     private showPreviews: boolean;
-    private showRemove: boolean;
+    private showSwapUi: boolean;
 
     /**
      * Creates a new modal.
      * @param plugin NoteToolbarPlugin
      * @param showPreviews true if toolbar previews should be shown
-     * @param showRemove true if the default toolbar option should be shown
+     * @param showSwapUi true if UI for swap toolbars should be shown (e.g., default toolbar option)
      * @param callback function to call when a toolbar is selected
      */
 	constructor(
         plugin: NoteToolbarPlugin,
         showPreviews: boolean, 
-        showRemove: boolean,
+        showSwapUi: boolean,
         callback: (toolbar: ToolbarSettings) => void) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         this.plugin = plugin;
         this.showPreviews = showPreviews;
-        this.showRemove = showRemove;
+        this.showSwapUi = showSwapUi;
         this.callback = callback;
 
         this.setPlaceholder(t('setting.toolbar-suggest-modal.placeholder'));
@@ -36,6 +37,22 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             {command: '↵', purpose: t('setting.toolbar-suggest-modal.instruction-use')},
             {command: 'esc', purpose: t('setting.toolbar-suggest-modal.instruction-dismiss')},
         ]);
+
+        if (this.showSwapUi) {
+            // show warning message about properties being changed
+            const onboardingId = 'swap-toolbars-replace-prop';
+            if (!this.plugin.settings.onboarding[onboardingId]) {
+                let resultsEl = this.modalEl.querySelector('.prompt-results');
+                if (resultsEl) {
+                    let messageEl = createOnboardingMessageEl(this.plugin, 
+                        onboardingId, 
+                        t('onboarding.swap-toolbar-title'), 
+                        t('onboarding.swap-toolbar-description', { property: this.plugin.settings.toolbarProp }));
+                    // messageEl.setCssProps({margin: 'var(--size-4-3)'});
+                    resultsEl.insertAdjacentElement('beforebegin', messageEl);
+                }    
+            }
+        }
 
     }
 
@@ -49,7 +66,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         const tbarSuggestions: ToolbarSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        if (this.showRemove) {
+        if (this.showSwapUi) {
             let emptyToolbar = EMPTY_TOOLBAR_SETTINGS;
             emptyToolbar.name = "Default (use toolbar mapping)";
             tbarSuggestions.push(emptyToolbar);
