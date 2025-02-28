@@ -40,7 +40,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
         if (this.showSwapUi) {
             // show warning message about properties being changed
-            const onboardingId = 'swap-toolbars-replace-prop';
+            const onboardingId = 'swap-toolbars-prop';
             if (!this.plugin.settings.onboarding[onboardingId]) {
                 let resultsEl = this.modalEl.querySelector('.prompt-results');
                 if (resultsEl) {

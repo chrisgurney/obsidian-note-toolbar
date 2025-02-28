@@ -7,16 +7,24 @@ import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
 
+/**
+ * Returns an element contianing a dismissable onboarding message.
+ * @param plugin NoteToolbarPlugin
+ * @param messageId unique identifier for the message, so it's not shown again
+ * @param title title of the message
+ * @param content content of the message
+ * @returns 
+ */
 export function createOnboardingMessageEl(
 	plugin: NoteToolbarPlugin,
 	messageId: string,
-	name: string,
-	description: string,
+	title: string,
+	content: string,
 ): HTMLElement {
 	let containerEl = createDiv();
 	let setting = new Setting(containerEl)
-		.setName(name)
-		.setDesc(description)
+		.setName(title)
+		.setDesc(content)
 		.setClass('note-toolbar-setting-plugin-onboarding')
 		.addExtraButton((button) => {
 			button
