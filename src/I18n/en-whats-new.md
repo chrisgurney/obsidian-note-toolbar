@@ -2,6 +2,15 @@ What's new in Note Toolbar v1.20?
 
 ## New Features 🎉
 
+### Easily swap toolbars
+
+While a note is open, right-click on a toolbar (long-press on mobile) to show an option to swap the toolbar with another you can then choose.
+
+- This will override the default mapping for the toolbar by updating the Note Toolbar property/frontmatter (`notetoolbar` by default) in your note.
+- Select the "Default" option to remove the property, which reverting to default (folder) mapping.
+
+_Thanks to @FeralFlora for the original idea._
+
 ### Support for Audio, Images, PDF, and Video
 
 Open the **Show toolbars in other views** heading (under **Folder mappings**) to add mapped toolbars to audio, images, PDF, and video files.
