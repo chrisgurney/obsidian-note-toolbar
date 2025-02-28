@@ -61,6 +61,7 @@
             "exec-sourcefile-error-required": "Error: A Templater file is required"
         },
         "error": {
+            "args-format": "Invalid argument format.",
             "args-parsing": "Failed to parse arguments for script: {{filename}}",
             "args-parsing-error": "Failed to parse arguments for script: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
@@ -72,6 +73,7 @@
             "function-not-found": "Function not found: {{function}}",
             "function-note-not-open": "This function must be executed from an open note.",
             "plugin-disabled": "Toggle the Scripting setting after installing and enabling plugin: ",
+            "plugin-not-installed": "Plugin not installed and enabled.",
             "query-failed": "Failed to evaluate query: {{expression}}",
             "query-note-not-open": "This query must be run from an open note.",
             "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
@@ -372,6 +374,7 @@
         "use-item-command": {
             "name-add": "Add command for item",
             "name-remove": "Remove command for item",
+            "error-noname": "Command for item can not be created due to empty label or tooltip.",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}",
             "notice-command-removed_empty": "Command removed for item",

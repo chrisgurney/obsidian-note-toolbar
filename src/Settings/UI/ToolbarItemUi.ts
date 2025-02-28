@@ -959,7 +959,7 @@ export default class ToolbarItemUi {
                 const command = Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
                 if (!command) {
                     status = Status.Invalid;
-                    statusMessage = "Command for item can not be created due to empty label or tooltip.";
+                    statusMessage = t('setting.use-item-command.error-noname');
                 }
             }
 
@@ -968,7 +968,7 @@ export default class ToolbarItemUi {
                     const parsedArgs = importArgs(itemValue);
                     if (!parsedArgs) {
                         status = Status.Invalid;
-                        statusMessage = "Invalid argument format.";
+                        statusMessage = t('adapter.error.args-format');
                     }
                     break;
                 case SettingType.Command:
@@ -1041,7 +1041,7 @@ export default class ToolbarItemUi {
                         }
                         else {
                             status = Status.Invalid;
-                            statusMessage = "Plugin not installed and enabled.";
+                            statusMessage = t('adapter.error.plugin-not-installed');
                         }
                     }
                     break;
