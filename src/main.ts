@@ -478,6 +478,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			currentView = this.app.workspace.getActiveViewOfType(ItemView);
 			const otherViewType = currentView?.containerEl.getAttribute('data-type');
 			if (otherViewType) {
+				// TODO: use getViewType instead
+				// const isToolbarVisible = checkToolbarForViewType(this, currentView?.getViewType());
 				const isToolbarVisible = checkToolbarForViewType(this, otherViewType);
 				if (!isToolbarVisible) return;
 				// for most other views, move to 'top' if the position is set to 'props'
@@ -1820,6 +1822,17 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		
 		contextMenu.addSeparator();
+
+		// swap toolbar
+		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (currentView?.getViewType() === 'markdown') {
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('repeat')
+					.setTitle("Swap toolbar...")
+					.onClick(() => this.commands.swapToolbar());
+			});
+		}
 
 		// edit item
 		if (toolbarItem) {

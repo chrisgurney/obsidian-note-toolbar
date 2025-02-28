@@ -241,6 +241,19 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	updated: new Date().toISOString(),
 };
 
+export const EMPTY_TOOLBAR_SETTINGS: ToolbarSettings = {
+	uuid: 'EMPTY_TOOLBAR',
+	customClasses: '',
+	defaultItem: null,
+	defaultStyles: [],
+	hasCommand: false,
+	items: [], 
+	mobileStyles: [],
+	name: '',
+	position: {},
+	updated: ''
+}
+
 export const DEFAULT_ITEM_VISIBILITY_SETTINGS = {
 	desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
 	mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },

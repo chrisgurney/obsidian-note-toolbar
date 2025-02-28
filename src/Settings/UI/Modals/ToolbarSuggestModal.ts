@@ -1,27 +1,33 @@
 import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
-import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { EMPTY_TOOLBAR_SETTINGS, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
 
 export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     public plugin: NoteToolbarPlugin;
-    public activeFile: TFile | null;
     private callback: (toolbar: ToolbarSettings) => void;
-    private showPreviews: boolean = false;
+    private showPreviews: boolean;
+    private showRemove: boolean;
 
     /**
      * Creates a new modal.
      * @param plugin NoteToolbarPlugin
-     * @param activeFile TFile for the active file (so vars can be replaced)
+     * @param showPreviews true if toolbar previews should be shown
+     * @param showRemove true if the default toolbar option should be shown
+     * @param callback function to call when a toolbar is selected
      */
-	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, showPreviews: boolean = false, callback: (toolbar: ToolbarSettings) => void) {
+	constructor(
+        plugin: NoteToolbarPlugin,
+        showPreviews: boolean, 
+        showRemove: boolean,
+        callback: (toolbar: ToolbarSettings) => void) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         this.plugin = plugin;
-        this.activeFile = activeFile;
         this.showPreviews = showPreviews;
+        this.showRemove = showRemove;
         this.callback = callback;
 
         this.setPlaceholder(t('setting.toolbar-suggest-modal.placeholder'));
@@ -43,6 +49,12 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         const tbarSuggestions: ToolbarSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
+        if (this.showRemove) {
+            let emptyToolbar = EMPTY_TOOLBAR_SETTINGS;
+            emptyToolbar.name = "Default (use toolbar mapping)";
+            tbarSuggestions.push(emptyToolbar);
+        }
+
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
             if (toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
                 tbarSuggestions.push(toolbar);
@@ -60,7 +72,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
         let toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
-        if (this.showPreviews) {
+        if (this.showPreviews && toolbar.uuid !== 'EMPTY_TOOLBAR') {
             let previewContainerEl = el.createDiv();
             previewContainerEl.addClass('setting-item-description');
             let previewEl = previewContainerEl.createDiv();
