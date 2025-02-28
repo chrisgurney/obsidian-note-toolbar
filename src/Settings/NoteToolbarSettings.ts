@@ -43,6 +43,13 @@ export enum ComponentType {
 	Icon = 'icon',
 	Label = 'label'
 }
+export enum FileType {
+	Audio = 'audio',
+	Canvas = 'canvas',
+	Image = 'image',
+	Pdf = 'pdf',
+	Video = 'video'
+}
 export enum ItemType {
 	Break = 'break',
 	Command = 'command',
@@ -163,12 +170,8 @@ export interface NoteToolbarSettings {
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
-	showToolbarInAudio: boolean;
-	showToolbarInCanvas: boolean;
+	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
-	showToolbarInImage: boolean;
-	showToolbarInPdf: boolean;
-	showToolbarInVideo: boolean;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -188,12 +191,14 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
-	showToolbarInAudio: false,
-	showToolbarInCanvas: false,
+	showToolbarIn: {
+		audio: false,
+		canvas: false,
+		image: false,
+		pdf: false,
+		video: false
+	},
 	showToolbarInFileMenu: false,
-	showToolbarInImage: false,
-	showToolbarInPdf: false,
-	showToolbarInVideo: false,
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,

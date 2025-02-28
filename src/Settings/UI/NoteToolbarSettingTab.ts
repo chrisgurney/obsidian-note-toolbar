@@ -782,9 +782,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-contexts.option-audio'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
-					.setValue(this.plugin.settings.showToolbarInAudio)
+					.setValue(this.plugin.settings.showToolbarIn.audio)
 					.onChange(async (value: boolean) => {
-						this.plugin.settings.showToolbarInAudio = value;
+						this.plugin.settings.showToolbarIn.audio = value;
 						await this.plugin.settingsManager.save();
 					});
 			});
@@ -793,9 +793,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-contexts.option-canvas'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
-					.setValue(this.plugin.settings.showToolbarInCanvas)
+					.setValue(this.plugin.settings.showToolbarIn.canvas)
 					.onChange(async (value: boolean) => {
-						this.plugin.settings.showToolbarInCanvas = value;
+						this.plugin.settings.showToolbarIn.canvas = value;
 						await this.plugin.settingsManager.save();
 					});
 			});
@@ -816,9 +816,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-contexts.option-image'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
-					.setValue(this.plugin.settings.showToolbarInImage)
+					.setValue(this.plugin.settings.showToolbarIn.image)
 					.onChange(async (value: boolean) => {
-						this.plugin.settings.showToolbarInImage = value;
+						this.plugin.settings.showToolbarIn.image = value;
 						await this.plugin.settingsManager.save();
 					});
 			});
@@ -843,9 +843,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-contexts.option-pdf'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
-					.setValue(this.plugin.settings.showToolbarInPdf)
+					.setValue(this.plugin.settings.showToolbarIn.pdf)
 					.onChange(async (value: boolean) => {
-						this.plugin.settings.showToolbarInPdf = value;
+						this.plugin.settings.showToolbarIn.pdf = value;
 						await this.plugin.settingsManager.save();
 					});
 			});
@@ -854,9 +854,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-contexts.option-video'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
-					.setValue(this.plugin.settings.showToolbarInVideo)
+					.setValue(this.plugin.settings.showToolbarIn.video)
 					.onChange(async (value: boolean) => {
-						this.plugin.settings.showToolbarInVideo = value;
+						this.plugin.settings.showToolbarIn.video = value;
 						await this.plugin.settingsManager.save();
 					});
 			});
