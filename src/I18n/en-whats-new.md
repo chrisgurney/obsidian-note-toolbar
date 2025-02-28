@@ -50,7 +50,7 @@ _Thank you @laktiv for the idea._
 
 ### Settings UI
 
-- A dismissable onboarding message is shown when creating a new toolbar, noting that the toolbar must be mapped (or property set) in order to actually use it.
+- A dismissible onboarding message is shown when creating a new toolbar, noting that the toolbar must be mapped (or property set) in order to actually use it.
 - Toolbar search
   - Results now include any matches with visible toolbar item text (labels, tooltips).
   - Search field is now shown by default on desktop and tablet.
