@@ -8,7 +8,7 @@ While a note is open, right-click on a toolbar (long-press on mobile) to show an
 
 - This will override the default mapping for the toolbar by updating the Note Toolbar property/frontmatter in your note (`notetoolbar` by default).
 - Select the "Default" option to remove the property, which reverts to the default (folder) mapping.
-- _Swap toolbars_ won't be available if: 
+- _Swap toolbars_ will **not** be available if: 
   - the active file is not a note/markdown (as there's no properties to change);
   - your Property is set to `tags` (to prevent accidental deletion/overwriting of note tags)
 
