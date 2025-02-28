@@ -926,6 +926,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
     & .note-toolbar-setting-field-error {
         padding-top: 8px;
+        width: 100%;
     }
     &:focus-within {
         border-radius: var(--input-radius);
