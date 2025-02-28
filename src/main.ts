@@ -1829,7 +1829,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('repeat')
-					.setTitle("Swap toolbar...")
+					.setTitle(t('toolbar.menu-swap-toolbar'))
 					.onClick(() => this.commands.swapToolbar());
 			});
 		}

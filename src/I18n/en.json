@@ -492,6 +492,7 @@
         "menu-hide-properties": "Hide note properties",
         "menu-position": "Set position",
         "menu-show-properties": "Show note properties",
+        "menu-swap-toolbar": "Swap toolbar...",
         "menu-style": "Style...",
         "menu-toolbar-settings": "Note Toolbar settings..."
     }
