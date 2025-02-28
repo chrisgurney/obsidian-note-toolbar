@@ -1069,22 +1069,22 @@ export default class ToolbarSettingsModal extends Modal {
 				break;
 		}
 
+		// FIXME: figure out how to add back in, with error for each preview item (which needs flex-wrap:wrap)
 		// add an icon to indicate each line is editable on mobile (as there's no hover state available)
-		if (Platform.isMobile) {
-			if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-				let itemPreviewLabelEditIcon = createDiv();
-				itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
-				let itemPreviewEditIcon = createSpan();
-				itemPreviewEditIcon.addClass("note-toolbar-setting-icon-button-cta");
-				setIcon(itemPreviewEditIcon, 'lucide-pencil');
-				itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
-				itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
-				itemPreview.appendChild(itemPreviewLabelEditIcon);
-			}
-		}
-		else {
-			itemPreview.appendChild(itemPreviewContent);
-		}
+		// if (Platform.isMobile) {
+		// 	if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+		// 		let itemPreviewLabelEditIcon = createDiv();
+		// 		itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
+		// 		let itemPreviewEditIcon = createSpan();
+		// 		itemPreviewEditIcon.addClass("note-toolbar-setting-icon-button-cta");
+		// 		setIcon(itemPreviewEditIcon, 'lucide-pencil');
+		// 		itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
+		// 		itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
+		// 		itemPreview.appendChild(itemPreviewLabelEditIcon);
+		// 	}
+		// }
+
+		itemPreview.appendChild(itemPreviewContent);
 
 		// check if item previews are valid (non-empty + valid), and highlight if not
 		this.toolbarItemUi.updateItemComponentStatus(
