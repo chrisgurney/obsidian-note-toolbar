@@ -376,7 +376,7 @@ export default class ToolbarItemUi {
                         if (toolbarItem.hasCommand) {
                             if (itemText) {
                                 this.plugin.addCommand({ 
-                                    id: COMMAND_PREFIX_ITEM + this.toolbar.uuid, 
+                                    id: COMMAND_PREFIX_ITEM + toolbarItem.uuid, 
                                     name: commandName, 
                                     icon: toolbarItem.icon ? toolbarItem.icon : this.plugin.settings.icon, 
                                     callback: async () => {
