@@ -393,7 +393,9 @@ export default class ToolbarItemUi {
                         }
                         else {
                             this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
-                            new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }));
+                            itemText 
+                                ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
+                                : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
                         }
                         await this.plugin.settingsManager.save();
                     });
@@ -958,8 +960,6 @@ export default class ToolbarItemUi {
                 if (!command) {
                     status = Status.Invalid;
                     statusMessage = "Command for item can not be created due to empty label or tooltip.";
-                    toolbarItem.hasCommand = false;
-                    await this.plugin.settingsManager.save();
                 }
             }
 

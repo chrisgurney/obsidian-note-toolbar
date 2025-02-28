@@ -1773,6 +1773,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
+    flex-wrap: wrap;
     font-size: var(--font-ui-medium);
     column-gap: 0.5em;
     padding: 8px;
@@ -1829,6 +1830,9 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             height: var(--font-ui-medium);
             width: var(--font-ui-medium);            
         }
+    }
+    & .note-toolbar-setting-field-error {
+        padding-top: 8px;
     }
     &:focus-within {
         border-radius: var(--input-radius);

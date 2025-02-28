@@ -411,7 +411,6 @@ export function setFieldError(parent: ToolbarSettingsModal | ItemModal, fieldEl:
 		let fieldContainerEl = fieldEl.closest('.setting-item-control');
 		if (!fieldContainerEl) {
 			fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview');
-			errorText = ''; // no need to show errorText for item previews
 		}
 		if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
 			if (errorText) {
