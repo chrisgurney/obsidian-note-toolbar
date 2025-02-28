@@ -10,7 +10,7 @@ While a note is open, right-click on a toolbar (long-press on mobile) to show an
 - Select the "Default" option to remove the property, which reverts to the default (folder) mapping.
 - _Swap toolbars_ will **not** be available if: 
   - the active file is not a note/markdown (as there's no properties to change);
-  - your Property is set to `tags` (to prevent accidental deletion/overwriting of note tags)
+  - your Note Toolbar Property is set to `tags` (to prevent accidental deletion/overwriting of note tags)
 
 _Thanks to @FeralFlora for the original idea._
 
