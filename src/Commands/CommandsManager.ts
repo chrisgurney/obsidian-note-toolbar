@@ -21,6 +21,7 @@ export class CommandsManager {
     setupItemCommands() {
         this.plugin.settings.toolbars.forEach(toolbar => {
             let hasIgnoredCommands: boolean = false;
+            const ignoredCommandToolbars = new Set<string>();
             toolbar.items.forEach(item => {
                 if (item.hasCommand) {
                     const itemText = getItemText(this.plugin, item, true);
@@ -39,11 +40,12 @@ export class CommandsManager {
                     }
                     else {
                         hasIgnoredCommands = true;
+                        ignoredCommandToolbars.add(toolbar.name);
                     }
                 }
             });
             if (hasIgnoredCommands) {
-                new Notice(t('setting.use-item-command.notice-command-error-startup-noname'), 4000);
+                new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 8000);
             }
         });
     }
