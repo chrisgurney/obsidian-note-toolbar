@@ -63,11 +63,11 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
  */
 export function checkToolbarForViewType(plugin: NoteToolbarPlugin, currentViewType: string): boolean {
     const viewSettings: Record<string, boolean | undefined> = {
-        audio: plugin.settings.showToolbarInAudio,
-        canvas: plugin.settings.showToolbarInCanvas,
-        image: plugin.settings.showToolbarInImage,
-        pdf: plugin.settings.showToolbarInPdf,
-        video: plugin.settings.showToolbarInVideo,
+        audio: plugin.settings.showToolbarIn.audio,
+        canvas: plugin.settings.showToolbarIn.canvas,
+        image: plugin.settings.showToolbarIn.image,
+        pdf: plugin.settings.showToolbarIn.pdf,
+        video: plugin.settings.showToolbarIn.video,
         empty: (plugin.settings.emptyViewToolbar !== undefined),
         'beautitab-react-view': (plugin.settings.emptyViewToolbar !== undefined),
         'home-tab-view': (plugin.settings.emptyViewToolbar !== undefined)
