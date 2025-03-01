@@ -1049,8 +1049,11 @@ export default class ToolbarItemUi {
                     }
                     break;
                 default:
-                    status = Status.Empty;
-                    statusMessage = '';
+                    // if the status isn't already invalid (e.g., for a command that doesn't exist)
+                    if (status !== Status.Invalid) {
+                        status = Status.Empty;
+                        statusMessage = '';
+                    }
                     break;
             }
         }
