@@ -19,9 +19,9 @@ export class CommandsManager {
      * Adds commands to use each toolbar item.
      */
     setupItemCommands() {
+        let hasIgnoredCommands: boolean = false;
+        const ignoredCommandToolbars = new Set<string>();
         this.plugin.settings.toolbars.forEach(toolbar => {
-            let hasIgnoredCommands: boolean = false;
-            const ignoredCommandToolbars = new Set<string>();
             toolbar.items.forEach(item => {
                 if (item.hasCommand) {
                     const itemText = getItemText(this.plugin, item, true);
@@ -44,10 +44,10 @@ export class CommandsManager {
                     }
                 }
             });
-            if (hasIgnoredCommands) {
-                new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 8000);
-            }
         });
+        if (hasIgnoredCommands) {
+            new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 8000);
+        }
     }
 
     /**
