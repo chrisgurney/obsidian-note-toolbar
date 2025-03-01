@@ -374,7 +374,7 @@
         "use-item-command": {
             "name-add": "Add command for item",
             "name-remove": "Remove command for item",
-            "error-noname": "Command for item can not be created due to empty label or tooltip.",
+            "error-noname": "Command must be re-added. At least one label or tooltip must not be empty or contain expressions.",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}",
             "notice-command-removed_empty": "Command removed for item",
