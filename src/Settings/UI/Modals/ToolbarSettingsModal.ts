@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, SettingFieldItemMap, COMMAND_PREFIX_TBAR } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -106,6 +106,16 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
+
+		// show warning message about properties being changed
+		const onboardingId = 'new-toolbar-mapping';
+		if (!this.plugin.settings.onboarding[onboardingId]) {
+			let messageEl = createOnboardingMessageEl(this.plugin, 
+				onboardingId, 
+				t('onboarding.new-toolbar-mapping-title'),
+				t('onboarding.new-toolbar-mapping-content', { property: this.plugin.settings.toolbarProp }));
+			settingsDiv.append(messageEl);
+		}
 
 		this.displayNameSetting(settingsDiv);
 		this.displayItemList(settingsDiv);
@@ -1059,22 +1069,22 @@ export default class ToolbarSettingsModal extends Modal {
 				break;
 		}
 
+		// FIXME: figure out how to add back in, with error for each preview item (which needs flex-wrap:wrap)
 		// add an icon to indicate each line is editable on mobile (as there's no hover state available)
-		if (Platform.isMobile) {
-			if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-				let itemPreviewLabelEditIcon = createDiv();
-				itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
-				let itemPreviewEditIcon = createSpan();
-				itemPreviewEditIcon.addClass("note-toolbar-setting-icon-button-cta");
-				setIcon(itemPreviewEditIcon, 'lucide-pencil');
-				itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
-				itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
-				itemPreview.appendChild(itemPreviewLabelEditIcon);
-			}
-		}
-		else {
-			itemPreview.appendChild(itemPreviewContent);
-		}
+		// if (Platform.isMobile) {
+		// 	if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+		// 		let itemPreviewLabelEditIcon = createDiv();
+		// 		itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
+		// 		let itemPreviewEditIcon = createSpan();
+		// 		itemPreviewEditIcon.addClass("note-toolbar-setting-icon-button-cta");
+		// 		setIcon(itemPreviewEditIcon, 'lucide-pencil');
+		// 		itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
+		// 		itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
+		// 		itemPreview.appendChild(itemPreviewLabelEditIcon);
+		// 	}
+		// }
+
+		itemPreview.appendChild(itemPreviewContent);
 
 		// check if item previews are valid (non-empty + valid), and highlight if not
 		this.toolbarItemUi.updateItemComponentStatus(

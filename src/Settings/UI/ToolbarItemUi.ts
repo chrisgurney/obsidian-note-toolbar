@@ -376,7 +376,7 @@ export default class ToolbarItemUi {
                         if (toolbarItem.hasCommand) {
                             if (itemText) {
                                 this.plugin.addCommand({ 
-                                    id: COMMAND_PREFIX_ITEM + this.toolbar.uuid, 
+                                    id: COMMAND_PREFIX_ITEM + toolbarItem.uuid, 
                                     name: commandName, 
                                     icon: toolbarItem.icon ? toolbarItem.icon : this.plugin.settings.icon, 
                                     callback: async () => {
@@ -390,12 +390,16 @@ export default class ToolbarItemUi {
                                 toolbarItem.hasCommand = false;
                                 new Notice(t('setting.use-item-command.notice-command-error-noname'), 5000);
                             }
+                            await this.plugin.settingsManager.save();
                         }
                         else {
                             this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
-                            new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }));
+                            itemText 
+                                ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
+                                : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
+                            await this.plugin.settingsManager.save();
+                            this.parent.display();
                         }
-                        await this.plugin.settingsManager.save();
                     });
             });
         }
@@ -539,7 +543,7 @@ export default class ToolbarItemUi {
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new CommandSuggester(this.plugin.app, cb.inputEl, async (command) => {
-                            this.updateItemComponentStatus(command.id, SettingType.Command, cb.inputEl.parentElement);
+                            await this.updateItemComponentStatus(command.id, SettingType.Command, cb.inputEl.parentElement);
                             cb.inputEl.value = command.name;
                             toolbarItem.link = command.name;
                             toolbarItem.linkAttr.commandId = command.id;
@@ -551,7 +555,7 @@ export default class ToolbarItemUi {
                             .setValue(toolbarItem.link)
                             .onChange(debounce(async (commandName) => {
                                 const commandId = commandName ? getCommandIdByName(this.plugin, commandName) : '';
-                                const isValid = this.updateItemComponentStatus(commandId, SettingType.Command, cb.inputEl.parentElement);
+                                const isValid = await this.updateItemComponentStatus(commandId, SettingType.Command, cb.inputEl.parentElement);
                                 toolbarItem.link = isValid && commandName ? commandName : '';
                                 toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
                                 toolbarItem.linkAttr.type = type;
@@ -638,7 +642,7 @@ export default class ToolbarItemUi {
                         cb.setPlaceholder(t('setting.item.option-file-placeholder'))
                             .setValue(toolbarItem.link)
                             .onChange(debounce(async (value) => {
-                                let isValid = this.updateItemComponentStatus(value, SettingType.File, cb.inputEl.parentElement);
+                                let isValid = await this.updateItemComponentStatus(value, SettingType.File, cb.inputEl.parentElement);
                                 toolbarItem.link = isValid ? normalizePath(value) : '';
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
@@ -656,7 +660,7 @@ export default class ToolbarItemUi {
                         cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
                             .setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
                             .onChange(debounce(async (name) => {
-                                let isValid = this.updateItemComponentStatus(name, SettingType.Toolbar, cb.inputEl.parentElement);
+                                let isValid = await this.updateItemComponentStatus(name, SettingType.Toolbar, cb.inputEl.parentElement);
                                 let groupToolbar = isValid ? this.plugin.settingsManager.getToolbarByName(name) : undefined;
                                 toolbarItem.link = groupToolbar ? groupToolbar.uuid : '';
                                 toolbarItem.linkAttr.commandId = '';
@@ -750,7 +754,7 @@ export default class ToolbarItemUi {
                                     .setValue(initialValue ? (getCommandNameById(this.plugin, initialValue) || '') : '')
                                     .onChange(debounce(async (commandName) => {
                                         const commandId = commandName ? getCommandIdByName(this.plugin, commandName) : '';
-                                        const isValid = this.updateItemComponentStatus(commandId, param.type, cb.inputEl.parentElement);
+                                        const isValid = await this.updateItemComponentStatus(commandId, param.type, cb.inputEl.parentElement);
                                         config[param.parameter as keyof ScriptConfig] = isValid && commandId ? commandId : '';
                                         await this.plugin.settingsManager.save();
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
@@ -772,7 +776,7 @@ export default class ToolbarItemUi {
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(debounce(async (value) => {
-                                        let isValid = this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
+                                        let isValid = await this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
                                         config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
                                         this.toolbar.updated = new Date().toISOString();
                                         await this.plugin.settingsManager.save();
@@ -812,7 +816,7 @@ export default class ToolbarItemUi {
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(
                                         debounce(async (value: string) => {
-                                            let isValid = this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
+                                            let isValid = await this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
                                             config[param.parameter as keyof ScriptConfig] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
                                             await this.plugin.settingsManager.save();
@@ -831,7 +835,7 @@ export default class ToolbarItemUi {
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(
                                         debounce(async (value: string) => {
-                                            let isValid = this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
+                                            let isValid = await this.updateItemComponentStatus(value, param.type, cb.inputEl.parentElement);
                                             config[param.parameter as keyof ScriptConfig] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
                                             await this.plugin.settingsManager.save();
@@ -932,11 +936,11 @@ export default class ToolbarItemUi {
      * @param toolbarItem ToolbarItemSettings for the item if needed to provide more context
      * @returns true if the item is valid; false otherwise
      */
-    updateItemComponentStatus(
+    async updateItemComponentStatus(
         itemValue: string, 
         fieldType: SettingType, 
         componentEl: HTMLElement | null, 
-        toolbarItem?: ToolbarItemSettings): boolean 
+        toolbarItem?: ToolbarItemSettings): Promise<boolean> 
     {
 
         enum Status {
@@ -950,13 +954,24 @@ export default class ToolbarItemUi {
         var statusLink: HTMLAnchorElement | undefined = undefined;
         var isValid = true;
 
+        // FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
+        if (toolbarItem?.hasCommand) {
+            // check if a command was actually created for this item
+            const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + toolbarItem.uuid;
+            const command = Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+            if (!command) {
+                status = Status.Invalid;
+                statusMessage = t('setting.use-item-command.error-noname');
+            }
+        }
+
         if (itemValue) {
             switch(fieldType) {
                 case SettingType.Args:
                     const parsedArgs = importArgs(itemValue);
                     if (!parsedArgs) {
                         status = Status.Invalid;
-                        statusMessage = "Invalid argument format.";
+                        statusMessage = t('adapter.error.args-format');
                     }
                     break;
                 case SettingType.Command:
@@ -1016,18 +1031,20 @@ export default class ToolbarItemUi {
                         if (adapter) {
                             let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
                             const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
-                            params?.forEach((param, index) => {
-                                // TODO? error if required parameter is empty?
-                                const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
-                                if (value) {
-                                    const subfieldValid = this.updateItemComponentStatus(value, param.type, componentEl);
-                                    status = subfieldValid ? Status.Valid : Status.Invalid;
+                            if (params) {
+                                for (const [index, param] of params.entries()) {
+                                    // TODO? error if required parameter is empty?
+                                    const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
+                                    if (value) {
+                                        const subfieldValid = await this.updateItemComponentStatus(value, param.type, componentEl);
+                                        status = subfieldValid ? Status.Valid : Status.Invalid;
+                                    }
                                 }
-                            });
+                            }
                         }
                         else {
                             status = Status.Invalid;
-                            statusMessage = "Plugin not installed and enabled.";
+                            statusMessage = t('adapter.error.plugin-not-installed');
                         }
                     }
                     break;

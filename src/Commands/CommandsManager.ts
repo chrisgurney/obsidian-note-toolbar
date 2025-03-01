@@ -19,8 +19,9 @@ export class CommandsManager {
      * Adds commands to use each toolbar item.
      */
     setupItemCommands() {
+        let hasIgnoredCommands: boolean = false;
+        const ignoredCommandToolbars = new Set<string>();
         this.plugin.settings.toolbars.forEach(toolbar => {
-            let hasIgnoredCommands: boolean = false;
             toolbar.items.forEach(item => {
                 if (item.hasCommand) {
                     const itemText = getItemText(this.plugin, item, true);
@@ -39,13 +40,14 @@ export class CommandsManager {
                     }
                     else {
                         hasIgnoredCommands = true;
+                        ignoredCommandToolbars.add(toolbar.name);
                     }
                 }
             });
-            if (hasIgnoredCommands) {
-                new Notice(t('setting.use-item-command.notice-command-error-startup-noname'), 4000);
-            }
         });
+        if (hasIgnoredCommands) {
+            new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 8000);
+        }
     }
 
     /**
@@ -198,8 +200,27 @@ export class CommandsManager {
      */
     async openToolbarSuggester(): Promise<void> {
         let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ToolbarSuggestModal(this.plugin, activeFile, (toolbar: ToolbarSettings) => {
+        const modal = new ToolbarSuggestModal(this.plugin, false, false, (toolbar: ToolbarSettings) => {
             this.plugin.commands.openItemSuggester(toolbar.uuid);
+        });
+        modal.open();
+    }
+
+    /**
+     * Opens the toolbar suggester and replaces the current toolbar using the property.
+     */
+    async swapToolbar(): Promise<void> {
+        const modal = new ToolbarSuggestModal(this.plugin, true, true, async (toolbar: ToolbarSettings) => {
+            const activeFile = this.plugin.app.workspace.getActiveFile();
+            if (activeFile) {
+                await this.plugin.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
+                    if (toolbar.uuid === 'EMPTY_TOOLBAR') {
+                        delete frontmatter[this.plugin.settings.toolbarProp];
+                        return;
+                    }
+                    frontmatter[this.plugin.settings.toolbarProp] = toolbar.name;
+                });
+            }
         });
         modal.open();
     }

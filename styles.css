@@ -1631,13 +1631,36 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 }
 
+.note-toolbar-setting-plugin-error,
+.note-toolbar-setting-plugin-onboarding {
+    padding: 1em !important;
+    border-radius: 8px;
+}
+
 .note-toolbar-setting-plugin-error {
     & .setting-item-name {
         color: var(--text-error);
     }
     border: solid 1px var(--text-error) !important;
-    padding: 1em !important;
-    border-radius: 8px;
+}
+
+.note-toolbar-setting-plugin-onboarding {
+    border: solid 1px var(--color-accent-1) !important;
+    position: relative;
+    & .setting-item-name {
+        color: var(--color-accent-1);
+    }
+    & .setting-item-control {
+        .is-phone & {
+            margin-top: unset !important;
+        }
+    }
+}
+
+.note-toolbar-setting-plugin-onboarding-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
 }
 
 .note-toolbar-setting-item-link-container > .note-toolbar-setting-plugin-error {
@@ -1750,6 +1773,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
+    flex-wrap: wrap;
     font-size: var(--font-ui-medium);
     column-gap: 0.5em;
     padding: 8px;
@@ -1806,6 +1830,10 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             height: var(--font-ui-medium);
             width: var(--font-ui-medium);            
         }
+    }
+    & .note-toolbar-setting-field-error {
+        padding-top: 8px;
+        width: 100%;
     }
     &:focus-within {
         border-radius: var(--input-radius);
@@ -2562,6 +2590,10 @@ input[type="text"].note-toolbar-setting-error,
             }
         }
     }
+    & .note-toolbar-setting-plugin-onboarding {
+        margin: var(--size-4-3);
+        margin-bottom: 0;
+    }
 }
 
 .is-phone .note-toolbar-setting-dialog-phonefix {
@@ -2727,6 +2759,9 @@ input[type="text"].note-toolbar-setting-error,
     padding-inline-end: var(--size-4-5);
     .is-phone & {
         padding-bottom: var(--size-4-12);
+    }
+    & .note-toolbar-setting-plugin-onboarding {
+        margin-bottom: 0.75em;
     }
 }
 

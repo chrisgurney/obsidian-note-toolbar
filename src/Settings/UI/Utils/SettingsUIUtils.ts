@@ -8,6 +8,46 @@ import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
 
 /**
+ * Returns an element contianing a dismissable onboarding message.
+ * @param plugin NoteToolbarPlugin
+ * @param messageId unique identifier for the message, so it's not shown again
+ * @param title title of the message
+ * @param content content of the message
+ * @returns 
+ */
+export function createOnboardingMessageEl(
+	plugin: NoteToolbarPlugin,
+	messageId: string,
+	title: string,
+	content: string,
+): HTMLElement {
+	let containerEl = createDiv();
+	let setting = new Setting(containerEl)
+		.setName(title)
+		.setDesc(content)
+		.setClass('note-toolbar-setting-plugin-onboarding')
+		.addExtraButton((button) => {
+			button
+				.setIcon('cross')
+				.setTooltip("Dismiss")
+				.onClick(() => {
+					setting.settingEl.remove();
+					plugin.settings.onboarding[messageId] = true;
+					plugin.settingsManager.save();
+				});
+			button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
+			button.extraSettingsEl.tabIndex = 0;
+			plugin.registerDomEvent(button.extraSettingsEl, 'keydown', (e: KeyboardEvent) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					button.extraSettingsEl.click();
+				}
+			});
+		});
+	return setting.settingEl;
+}
+
+/**
  * Constructs a preview of the given toolbar, including the icons used.
  * @param plugin NoteToolbarPlugin reference
  * @param toolbar ToolbarSettings to display in the preview.
@@ -371,7 +411,6 @@ export function setFieldError(parent: ToolbarSettingsModal | ItemModal, fieldEl:
 		let fieldContainerEl = fieldEl.closest('.setting-item-control');
 		if (!fieldContainerEl) {
 			fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview');
-			errorText = ''; // no need to show errorText for item previews
 		}
 		if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
 			if (errorText) {

@@ -43,6 +43,13 @@ export enum ComponentType {
 	Icon = 'icon',
 	Label = 'label'
 }
+export enum FileType {
+	Audio = 'audio',
+	Canvas = 'canvas',
+	Image = 'image',
+	Pdf = 'pdf',
+	Video = 'video'
+}
 export enum ItemType {
 	Break = 'break',
 	Command = 'command',
@@ -151,6 +158,10 @@ export enum CalloutAttr {
 	Templater = 'data-templater-obsidian',
 }
 
+export interface OnboardingState {
+    [id: string]: boolean;
+}
+
 export enum ToolbarStyle {
 	ItemFocused = 'tbar-item-focused'
 }
@@ -160,15 +171,12 @@ export interface NoteToolbarSettings {
 	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
 	icon: string;
+	onboarding: OnboardingState;
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
-	showToolbarInAudio: boolean;
-	showToolbarInCanvas: boolean;
+	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
-	showToolbarInImage: boolean;
-	showToolbarInPdf: boolean;
-	showToolbarInVideo: boolean;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -185,15 +193,18 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	},
 	folderMappings: [],
 	icon: "circle-ellipsis",
+	onboarding: {},
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
-	showToolbarInAudio: false,
-	showToolbarInCanvas: false,
+	showToolbarIn: {
+		audio: false,
+		canvas: false,
+		image: false,
+		pdf: false,
+		video: false
+	},
 	showToolbarInFileMenu: false,
-	showToolbarInImage: false,
-	showToolbarInPdf: false,
-	showToolbarInVideo: false,
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
@@ -222,7 +233,6 @@ export interface ToolbarSettings {
 	positions?: Array<Position>;
 	position: Position;
 	updated: string;
-	// TODO: add setting to force rerender of toolbar? (for label variables)
 }
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
@@ -241,6 +251,19 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	},
 	updated: new Date().toISOString(),
 };
+
+export const EMPTY_TOOLBAR_SETTINGS: ToolbarSettings = {
+	uuid: 'EMPTY_TOOLBAR',
+	customClasses: '',
+	defaultItem: null,
+	defaultStyles: [],
+	hasCommand: false,
+	items: [], 
+	mobileStyles: [],
+	name: '',
+	position: {},
+	updated: ''
+}
 
 export const DEFAULT_ITEM_VISIBILITY_SETTINGS = {
 	desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },

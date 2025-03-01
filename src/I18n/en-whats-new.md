@@ -2,6 +2,18 @@ What's new in Note Toolbar v1.20?
 
 ## New Features 🎉
 
+### Easily swap toolbars
+
+While a note is open, right-click on a toolbar (long-press on mobile) to show an option to swap the toolbar with another you can then choose.
+
+- Selecting an option will override the default mapping for the toolbar by updating the Note Toolbar property/frontmatter in the current note (`notetoolbar` by default).
+- Select the "Default" option to remove the property, which reverts to the default (folder) mapping.
+- Note that _Swap toolbars_ will **not** be available if: 
+  - the active file is not a note/markdown (as there's no properties to change); or
+  - your Note Toolbar Property is set to `tags` (to prevent accidental deletion/overwriting of note tags).
+
+_Thanks to @FeralFlora for the original idea._
+
 ### Support for Audio, Images, PDF, and Video
 
 Open the **Show toolbars in other views** heading (under **Folder mappings**) to add mapped toolbars to audio, images, PDF, and video files.
@@ -36,13 +48,18 @@ _Thank you @laktiv for the idea._
 
 ## Improvements 🚀
 
-### Settings improvements
+### Settings UI
 
+- A dismissible onboarding message is shown when creating a new toolbar, noting that the toolbar must be mapped (or property set) in order to actually use it.
 - Toolbar search
   - Results now include any matches with visible toolbar item text (labels, tooltips).
   - Search field is now shown by default on desktop and tablet.
   - Arrow down out of the search field to navigate search results.
 - The new item actions menu (on phones) now contains the **Duplicate item** and **Delete** options, which helps give more room in the UI for visibility settings on smaller phones.
+
+### Other
+
+- The right-click > Edit item... text is now truncated if the toolbar item's name is too long (usually if using expressions).
 
 ## Fixes
 

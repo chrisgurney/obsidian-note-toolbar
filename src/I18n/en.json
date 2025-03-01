@@ -61,6 +61,7 @@
             "exec-sourcefile-error-required": "Error: A Templater file is required"
         },
         "error": {
+            "args-format": "Invalid argument format.",
             "args-parsing": "Failed to parse arguments for script: {{filename}}",
             "args-parsing-error": "Failed to parse arguments for script: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
@@ -72,6 +73,7 @@
             "function-not-found": "Function not found: {{function}}",
             "function-note-not-open": "This function must be executed from an open note.",
             "plugin-disabled": "Toggle the Scripting setting after installing and enabling plugin: ",
+            "plugin-not-installed": "Plugin not installed and enabled.",
             "query-failed": "Failed to evaluate query: {{expression}}",
             "query-note-not-open": "This query must be run from an open note.",
             "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
@@ -164,6 +166,12 @@
         "error-toolbar-not-found": "Check Note Toolbar setting or URI for this toolbar. Toolbar not found: {{toolbar}}",
         "error-uri-params-not-supported": "One or more of these Note Toolbar URI parameters is not supported: {{params}}",
         "warning-no-matching-toolbar": "Note Toolbar: No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
+    },
+    "onboarding": {
+        "new-toolbar-mapping-title": "How to use this toolbar", 
+        "new-toolbar-mapping-content": "To see this toolbar in your note, add a property ({{property}}) with the name of this toolbar. Or, map this toolbar to the folder the note is in (Note Toolbar Settings → Folder mappings).",
+        "swap-toolbar-title": "This note will be changed",
+        "swap-toolbar-content": "Selecting an option below will update this note by changing or removing the value of a property ({{property}})."
     },
     "plugin": {
         "name": "Note Toolbar"
@@ -366,10 +374,12 @@
         "use-item-command": {
             "name-add": "Add command for item",
             "name-remove": "Remove command for item",
+            "error-noname": "Command for item can not be created due to empty label or tooltip.",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}",
+            "notice-command-removed_empty": "Command removed for item",
             "notice-command-error-noname": "Unable to add command. Ensure item has a name or label set, and at least one does not include variables or an expression.",
-            "notice-command-error-startup-noname": "Note Toolbar: One or more item commands was not enabled due to an empty label and tooltip."
+            "notice-command-error-startup-noname": "Note Toolbar: Some item commands in these toolbars were not added due to empty labels or tooltips: {{toolbars}}"
         },
         "other": {
             "name": "Other",
@@ -492,6 +502,7 @@
         "menu-hide-properties": "Hide note properties",
         "menu-position": "Set position",
         "menu-show-properties": "Show note properties",
+        "menu-swap-toolbar": "Swap toolbar...",
         "menu-style": "Style...",
         "menu-toolbar-settings": "Note Toolbar settings..."
     }
