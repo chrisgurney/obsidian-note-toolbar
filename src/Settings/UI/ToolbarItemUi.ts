@@ -390,14 +390,16 @@ export default class ToolbarItemUi {
                                 toolbarItem.hasCommand = false;
                                 new Notice(t('setting.use-item-command.notice-command-error-noname'), 5000);
                             }
+                            await this.plugin.settingsManager.save();
                         }
                         else {
                             this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
                             itemText 
                                 ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
                                 : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
+                            await this.plugin.settingsManager.save();
+                            this.parent.display();
                         }
-                        await this.plugin.settingsManager.save();
                     });
             });
         }
@@ -952,17 +954,18 @@ export default class ToolbarItemUi {
         var statusLink: HTMLAnchorElement | undefined = undefined;
         var isValid = true;
 
-        if (itemValue) {
-            if (toolbarItem?.hasCommand) {
-                // check if a command was actually created for this item
-                const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + toolbarItem.uuid;
-                const command = Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
-                if (!command) {
-                    status = Status.Invalid;
-                    statusMessage = t('setting.use-item-command.error-noname');
-                }
+        // FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
+        if (toolbarItem?.hasCommand) {
+            // check if a command was actually created for this item
+            const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + toolbarItem.uuid;
+            const command = Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+            if (!command) {
+                status = Status.Invalid;
+                statusMessage = t('setting.use-item-command.error-noname');
             }
+        }
 
+        if (itemValue) {
             switch(fieldType) {
                 case SettingType.Args:
                     const parsedArgs = importArgs(itemValue);
