@@ -388,7 +388,7 @@ export default class ToolbarItemUi {
                             }
                             else {
                                 toolbarItem.hasCommand = false;
-                                new Notice(t('setting.use-item-command.notice-command-error-noname'), 5000);
+                                new Notice(t('setting.use-item-command.notice-command-error-noname'), 10000);
                             }
                             await this.plugin.settingsManager.save();
                         }
