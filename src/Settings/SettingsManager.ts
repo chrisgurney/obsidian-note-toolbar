@@ -543,6 +543,18 @@ export class SettingsManager {
 				old_version = new_version;
 			}
 
+			// MIGRATION: add and use IDs for toolbars and items
+			if (old_version === 20240727.1) {
+				new_version = 20250302.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				// don't show onboarding for new toolbars if user's already mapped stuff 
+				if (loaded_settings.folderMappings.length > 0) {
+					this.plugin.settings.onboarding['new-toolbar-mapping'] = true;
+				}
+				// for the next migration to run
+				old_version = new_version;
+			}
+
 			// COMMENT THIS OUT while testing new migration code
 			this.plugin.settings.version = SETTINGS_VERSION;
 			debugLog("updated settings:", this.plugin.settings);
