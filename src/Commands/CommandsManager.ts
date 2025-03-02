@@ -1,11 +1,11 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { debugLog, getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { MarkdownView, Notice } from "obsidian";
+import { Command, MarkdownView, Notice } from "obsidian";
 
 export class CommandsManager {
 
@@ -13,6 +13,14 @@ export class CommandsManager {
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Utility to get command for the given item ID, if it exists.
+     */
+    getCommandForItem(item: ToolbarItemSettings): Command | undefined {
+        const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + item.uuid;
+        return Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
     }
 
     /**

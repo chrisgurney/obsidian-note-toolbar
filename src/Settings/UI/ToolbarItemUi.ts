@@ -957,8 +957,7 @@ export default class ToolbarItemUi {
         // FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
         if (toolbarItem?.hasCommand) {
             // check if a command was actually created for this item
-            const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + toolbarItem.uuid;
-            const command = Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+            const command = this.plugin.commands.getCommandForItem(toolbarItem);
             if (!command) {
                 status = Status.Invalid;
                 statusMessage = t('setting.use-item-command.error-noname');
