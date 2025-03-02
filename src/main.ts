@@ -24,7 +24,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	api: INoteToolbarApi<any>;
 	commands: CommandsManager;
-	libraryManager: LibraryManager;
+	library: LibraryManager;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
@@ -158,8 +158,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			// this.libraryManager = new LibraryManager(this);
-			// this.libraryManager.load();
+			// this.library = new LibraryManager(this);
+			// this.library.load();
 
 		});
 

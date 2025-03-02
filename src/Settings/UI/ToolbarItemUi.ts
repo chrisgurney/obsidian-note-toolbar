@@ -788,7 +788,7 @@ export default class ToolbarItemUi {
                     case SettingType.LibraryScript:
                         const scriptOptions = {
                             '': t('library.script-option-default'),
-                            ...this.plugin.libraryManager.getScriptOptions(toolbarItem.linkAttr.type)
+                            ...this.plugin.library.getScriptOptions(toolbarItem.linkAttr.type)
                         }
                         let selectedScript = toolbarItem.scriptConfig?.libraryScriptId || '';
                         setting = new Setting(fieldDiv)
@@ -798,7 +798,7 @@ export default class ToolbarItemUi {
                                     .addOptions(scriptOptions)
                                     .setValue(selectedScript)
                                     .onChange(async (scriptId) => {
-                                        let selectedScriptEntry = this.plugin.libraryManager.getScriptEntry(toolbarItem.linkAttr.type, scriptId);
+                                        let selectedScriptEntry = this.plugin.library.getScriptEntry(toolbarItem.linkAttr.type, scriptId);
                                         if (setting) setFieldHelp(setting.controlEl, selectedScriptEntry?.description || param.description);
                                         // config[param.parameter as keyof ScriptConfig] = isValid ? scriptId : '';
                                         config[param.parameter as keyof ScriptConfig] = scriptId;
