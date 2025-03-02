@@ -18,7 +18,7 @@ export class CommandManager {
     /**
      * Adds the toolbar item's command.
      */
-    addCommandForItem(item: ToolbarItemSettings): void {
+    async addItemCommand(item: ToolbarItemSettings): Promise<void> {
         const itemText = getItemText(this.plugin, item, true);
         const commandName = t('command.name-use-item', {item: itemText});
         if (itemText) {
@@ -31,10 +31,13 @@ export class CommandManager {
                     await this.plugin.handleItemLink(item, undefined, activeFile);
                 }
             });
+            item.hasCommand = true;
+            await this.plugin.settingsManager.save();
             new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
         }
         else {
             item.hasCommand = false;
+            await this.plugin.settingsManager.save();
             new Notice(t('setting.use-item-command.notice-command-error-noname'), 10000);
         }
     }
@@ -42,7 +45,7 @@ export class CommandManager {
     /**
      * Utility to get command for the given toolbar item, if the command exists.
      */
-    getCommandForItem(item: ToolbarItemSettings): Command | undefined {
+    getItemCommand(item: ToolbarItemSettings): Command | undefined {
         const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + item.uuid;
         return Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
     }
@@ -50,10 +53,12 @@ export class CommandManager {
     /**
      * Removes the toolbar item's command.
      */
-    removeCommandForItem(item: ToolbarItemSettings): void {
+    async removeItemCommand(item: ToolbarItemSettings): Promise<void> {
         const itemText = getItemText(this.plugin, item, true);
         const commandName = t('command.name-use-item', {item: itemText});
         this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
+        item.hasCommand = false;
+        await this.plugin.settingsManager.save();
         itemText 
             ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
             : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
@@ -91,6 +96,26 @@ export class CommandManager {
         });
         if (hasIgnoredCommands) {
             new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 10000);
+        }
+    }
+
+    /**
+     * Update the command for the given toolbar item, to update its name and icon.
+     */
+    async updateItemCommand(item: ToolbarItemSettings, showNotice: boolean = true): Promise<void> {
+        // get command for item
+        const command = this.getItemCommand(item);
+        if (command) {
+            // get item text
+            const itemText = getItemText(this.plugin, item, true);
+            if (itemText) {
+                command.name = t('command.name-use-item', {item: itemText});
+                command.icon = item.icon ? item.icon : this.plugin.settings.icon;
+                if (showNotice) new Notice(t('setting.use-item-command.notice-command-updated', { command: command.name }));
+            }
+            else {
+                await this.removeItemCommand(item);
+            }
         }
     }
 

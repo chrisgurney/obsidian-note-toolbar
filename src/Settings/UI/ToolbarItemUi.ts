@@ -51,10 +51,11 @@ export default class ToolbarItemUi {
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(async () => {
                             let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                            const modal = new IconSuggestModal(this.plugin, (icon) => {
+                            const modal = new IconSuggestModal(this.plugin, async (icon) => {
                                 toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                 this.plugin.settingsManager.save();
                                 updateItemIcon(this.parent, itemRow, icon);
+                                if (toolbarItem.hasCommand) await this.plugin.commands.updateItemCommand(toolbarItem, false);
                             });
                             modal.open();
                         });
@@ -92,6 +93,7 @@ export default class ToolbarItemUi {
                             // however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
                             this.toolbar.updated = new Date().toISOString();
                             await this.plugin.settingsManager.save();
+                            if (toolbarItem.hasCommand) await this.plugin.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
                     this.updateItemComponentStatus(toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
@@ -110,6 +112,7 @@ export default class ToolbarItemUi {
                             toolbarItem.tooltip = value;
                             this.toolbar.updated = new Date().toISOString();
                             await this.plugin.settingsManager.save();
+                            if (toolbarItem.hasCommand) await this.plugin.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
                     this.updateItemComponentStatus(toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
@@ -370,12 +373,10 @@ export default class ToolbarItemUi {
                     .onClick(async (menuEvent) => {
                         toolbarItem.hasCommand = !toolbarItem.hasCommand;
                         if (toolbarItem.hasCommand) {
-                            this.plugin.commands.addCommandForItem(toolbarItem);
-                            await this.plugin.settingsManager.save();
+                            await this.plugin.commands.addItemCommand(toolbarItem);
                         }
                         else {
-                            this.plugin.commands.removeCommandForItem(toolbarItem);
-                            await this.plugin.settingsManager.save();
+                            await this.plugin.commands.removeItemCommand(toolbarItem);
                             this.parent.display();
                         }
                     });
@@ -935,7 +936,7 @@ export default class ToolbarItemUi {
         // FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
         if (toolbarItem?.hasCommand) {
             // check if a command was actually created for this item
-            const command = this.plugin.commands.getCommandForItem(toolbarItem);
+            const command = this.plugin.commands.getItemCommand(toolbarItem);
             if (!command) {
                 status = Status.Invalid;
                 statusMessage = t('setting.use-item-command.error-noname');
