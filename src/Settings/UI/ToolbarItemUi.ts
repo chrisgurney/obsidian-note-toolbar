@@ -150,7 +150,6 @@ export default class ToolbarItemUi {
                                 // for case where icon/label/tooltip fields are not used, disable them
                                 const disableFields = toolbarItem.linkAttr.type === ItemType.Group;
                                 iconField.setDisabled(disableFields);
-                                debugLog(iconField.controlEl);
                                 (iconField.controlEl.firstChild as Element | null)?.setAttribute("tabindex", disableFields ? "-1" : "0");
                                 labelField.setDisabled(disableFields);
                                 tooltipField.setDisabled(disableFields);
@@ -370,33 +369,12 @@ export default class ToolbarItemUi {
                     .setIcon('terminal')
                     .onClick(async (menuEvent) => {
                         toolbarItem.hasCommand = !toolbarItem.hasCommand;
-                        const itemText = getItemText(this.plugin, toolbarItem, true);
-                        const commandName = t('command.name-use-item', {item: itemText});
-                        // add or remove the command
                         if (toolbarItem.hasCommand) {
-                            if (itemText) {
-                                this.plugin.addCommand({ 
-                                    id: COMMAND_PREFIX_ITEM + toolbarItem.uuid, 
-                                    name: commandName, 
-                                    icon: toolbarItem.icon ? toolbarItem.icon : this.plugin.settings.icon, 
-                                    callback: async () => {
-                                        let activeFile = this.plugin.app.workspace.getActiveFile();
-                                        await this.plugin.handleItemLink(toolbarItem, undefined, activeFile);
-                                    }
-                                });
-                                new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
-                            }
-                            else {
-                                toolbarItem.hasCommand = false;
-                                new Notice(t('setting.use-item-command.notice-command-error-noname'), 10000);
-                            }
+                            this.plugin.commands.addCommandForItem(toolbarItem);
                             await this.plugin.settingsManager.save();
                         }
                         else {
-                            this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
-                            itemText 
-                                ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
-                                : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
+                            this.plugin.commands.removeCommandForItem(toolbarItem);
                             await this.plugin.settingsManager.save();
                             this.parent.display();
                         }

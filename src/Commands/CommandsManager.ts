@@ -16,11 +16,47 @@ export class CommandsManager {
     }
 
     /**
-     * Utility to get command for the given item ID, if it exists.
+     * Adds the toolbar item's command.
+     */
+    addCommandForItem(item: ToolbarItemSettings): void {
+        const itemText = getItemText(this.plugin, item, true);
+        const commandName = t('command.name-use-item', {item: itemText});
+        if (itemText) {
+            this.plugin.addCommand({ 
+                id: COMMAND_PREFIX_ITEM + item.uuid, 
+                name: commandName, 
+                icon: item.icon ? item.icon : this.plugin.settings.icon, 
+                callback: async () => {
+                    let activeFile = this.plugin.app.workspace.getActiveFile();
+                    await this.plugin.handleItemLink(item, undefined, activeFile);
+                }
+            });
+            new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
+        }
+        else {
+            item.hasCommand = false;
+            new Notice(t('setting.use-item-command.notice-command-error-noname'), 10000);
+        }
+    }
+
+    /**
+     * Utility to get command for the given toolbar item, if the command exists.
      */
     getCommandForItem(item: ToolbarItemSettings): Command | undefined {
         const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + item.uuid;
         return Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+    }
+
+    /**
+     * Removes the toolbar item's command.
+     */
+    removeCommandForItem(item: ToolbarItemSettings): void {
+        const itemText = getItemText(this.plugin, item, true);
+        const commandName = t('command.name-use-item', {item: itemText});
+        this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
+        itemText 
+            ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
+            : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
     }
 
     /**
