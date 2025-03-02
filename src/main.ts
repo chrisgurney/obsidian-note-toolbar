@@ -5,7 +5,7 @@ import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putF
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
-import { CommandsManager } from 'Commands/CommandsManager';
+import { CommandManager } from 'Commands/CommandManager';
 import { NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { INoteToolbarApi } from "Api/INoteToolbarApi";
 import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
@@ -23,7 +23,7 @@ import LibraryManager from 'Settings/LibraryManager';
 export default class NoteToolbarPlugin extends Plugin {
 
 	api: INoteToolbarApi<any>;
-	commands: CommandsManager;
+	commands: CommandManager;
 	library: LibraryManager;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
@@ -119,7 +119,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
 
 			// add commands
-			this.commands = new CommandsManager(this);
+			this.commands = new CommandManager(this);
 			this.addCommand({ id: 'copy-command-uri', name: t('command.name-copy-command-uri'), callback: async () => this.commands.copyCommand(false) });
 			this.addCommand({ id: 'copy-command-as-data-element', name: t('command.name-copy-command-as-data-element'), callback: async () => this.commands.copyCommand(true) });
 			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });

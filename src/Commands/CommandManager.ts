@@ -7,7 +7,7 @@ import { debugLog, getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Command, MarkdownView, Notice } from "obsidian";
 
-export class CommandsManager {
+export class CommandManager {
 
     public plugin: NoteToolbarPlugin;
 
