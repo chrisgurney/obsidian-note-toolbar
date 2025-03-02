@@ -130,7 +130,7 @@ Once installed and enabled, in Obsidian go to: _Settings... > Note Toolbar_ and 
 
 # License
 
-Note Toolbar is licensed under Apache License Version 2.0. See the [LICENSE](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/LICENSE).
+Note Toolbar is licensed under GPL 3.0. See the [LICENSE](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/LICENSE).
 
 # Inspiration and Thanks 🙏
 
