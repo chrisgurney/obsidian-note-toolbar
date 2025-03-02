@@ -2,6 +2,7 @@
     "adapter": {
         "args": "Аргументи (за бажанням)",
         "args-description": "Аргументи, що приймаються функцією, у форматі {\"name\": \"value\", ...} через кому, зі строковими значеннями в лапках.",
+        "option-function-default": "Оберіть функцію...",
         "outputcontainer": "ID експорту виноски (за бажанням)",
         "outputcontainer-description": "Додайте виноску note-toolbar-output до нота для відображення результату з унікальним метаполем.",
         "postCommand": "Команда після виконання (за бажанням)",
@@ -70,8 +71,10 @@
             "function-invalid": "Непідтримувана функція: {{function}}",
             "function-not-found": "Функцію не знайдено: {{function}}",
             "function-note-not-open": "Ця функція повинна виконуватися з відкритої нотатки.",
+            "plugin-disabled": "Увімкнути налаштунки Скриптування після встановлення та увімкнення додатка: ",
             "query-failed": "Не вдалося виконати запит: {{expression}}",
-            "query-note-not-open": "Цей запит повинен виконуватися з відкритої нотатки."
+            "query-note-not-open": "Цей запит повинен виконуватися з відкритої нотатки.",
+            "scripting-disabled": "Для використання цього елемента увімкніть виконування Скриптів у налаштуванні Note Toolbar."
         }
     },
     "api": {
@@ -97,7 +100,8 @@
         "name-hide-properties": "Приховати властивості",
         "name-fold-properties": "Згорнути властивості",
         "name-toggle-properties": "Перемкнути властивості",
-        "name-open-toolbar": "Відкрити {{toolbar}}"
+        "name-open-toolbar": "Відкрити {{toolbar}}",
+        "name-use-item": "Використати: {{item}}"
     },
     "export": {
         "item-generic": "Елемент {{number}}",
@@ -142,6 +146,14 @@
         "placeholder-import-into": "> Markdown виноска Note Toolbar...",
         "warning-invalid-plugins": "Ця панель використовує додаток, який не встановлено, або вимкнуто:",
         "warning-vars": "Ця панель використовує змінні, які Ви можете редагувати для роботи з вашим сховищем."
+    },
+    "library": {
+        "script": "Бібліотека скриптів",
+        "script-description": "Оберіть скрипт із бібліотеки.",
+        "script-function": "Використати скрипт з бібліотеки",
+        "script-option-default": "Оберіть скрипт...",
+        "error-invalid-script-id": "Скрипт не існує для ID: {{scriptId}} ({{pluginId}})",
+        "error-script-required": "⚠️ Помилка: Скрипт не вказано."
     },
     "notice": {
         "error-command-not-found": "Перевірте налаштування Note Toolbar, або URI цієї команди. Команду не знайдено: {{command}}",
@@ -201,13 +213,22 @@
             "button-delete-tooltip": "Видалити цю панель",
             "label-delete-confirm": "Дійсно бажаєте видалити цю панель?"
         },
+        "display-contexts": {
+            "name": "Показувати панелі в інших файлах та виглядах",
+            "description": "Увімкнути панель у полотнах, новому вигляді вкладки та інших типах файлів.",
+            "option-audio": "Аудіо",
+            "option-canvas": "Файли полотна",
+            "option-emptyview": "Новий вигляд",
+            "option-emptyview-description": "Оберіть панель для відображення, коли нотатка не відкрита.",
+            "option-filemenu": "Файл меню",
+            "option-filemenu-description": "Додає елемент до меню Файл для доступу до панелі у пов'язаній нотатці.",
+            "option-image": "Зображення",
+            "option-pdf": "PDF-документи",
+            "option-video": "Відео"
+        },
         "display-rules": {
             "name": "Правила відображення",
             "description": "Параметри відображення панелей у нотатках, використовуючи: Властивість, Зіставлені теки, або обидва засоби.",
-            "option-emptyview": "Панель у пустому вікні",
-            "option-emptyview-description": "Назва панелі для відображення у пустому вікні,  без нотактки.",
-            "toggle-emptyview": "Показувати панель у новий вкладці",
-            "toggle-emptyview-description": "Оберіть панель для відображення, коли нотатка не відкрита.",            
             "option-property": "Властивість",
             "option-property-description": "Вказана у Властивості панель буде відображатися у нотатці. Виконується з перевагою над будь-якими зіставленнями тек. Для приховання панелі вкажіть 'none'.",
             "option-property-placeholder": "Властивість"
@@ -249,6 +270,9 @@
             "title": "Редагування елемента",
             "button-duplicate-tooltip": "Дублювати елемент",
             "button-icon-tooltip": "Обрати іконку (за бажанням)",
+            "menu-copy-id": "Копіювати ID розробника",
+            "menu-copy-id-notice": "ID елемента скопійовано до буфера обміну.",
+            "menu-more-actions": "Додаткові дії...",
             "label-preview-edit": "Редагувати панель: {{toolbar}}",
             "label-preview-empty-no-items": "Немає елементів. Редагуйте цю панель для додавання елементів.",
             "option-break": "розрив",
@@ -335,9 +359,17 @@
         },
         "open-command": {
             "name": "Додати панель до переліку команд",
-            "description": "Додає команду закуску до Меню команд.",
+            "description": "Додає команду запуску до Меню команд.",
             "notice-command-added": "Команда додана:\n{{command}}",
             "notice-command-removed": "Команда видалена:\n{{command}}"
+        },
+        "use-item-command": {
+            "name-add": "Додати команду для елемента",
+            "name-remove": "Видалити команду для елемента",
+            "notice-command-added": "Команда доступна:\n{{command}}",
+            "notice-command-removed": "Команда видалена:\n{{command}}",
+            "notice-command-error-noname": "Не вдалося додати команду. Переконайтеся, що елемент має напис або підказку, і принаймні, один з них не містить змінну чи вираз.",
+            "notice-command-error-startup-noname": "Note Toolbar: Один або декілька команд елементів не було увімкнено через порожній напис та підказку."
         },
         "other": {
             "name": "Інше",
@@ -356,10 +388,6 @@
             "scripting": {
                 "name": "Скриптування",
                 "description": "Додає елементи Dataview, JsEngine та Templater. Потребує наявності цих додатків."
-            },
-            "show-toolbar-in-file-menu": {
-                "name": "Показувати панель у Меню файлів, до зіставленниз файлів",
-                "description": "Додає до зіставлених файлів панель у випадаючий список у Файловому менеджері."
             },
             "show-edit-tbar": {
                 "name": "Відображати 'Редагувати панель' в меню панелі",
@@ -431,7 +459,6 @@
         "toolbars": {
             "name": "Панелі",
             "name-with-count": "Панелі ({{count}})",
-            "description": "Параметри панелей, які бажаєте додати до нотаток.",
             "button-duplicate-tbar-tooltip": "Дублювати",
             "button-edit-tbar": "Редагувати",
             "button-edit-tbar-tooltip": "Оновити цю панель",
