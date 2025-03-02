@@ -69,6 +69,10 @@ _Thank you @laktiv for the idea._
 
 - Dataview expressions that use the new <code>\{\{dv:</code> notation no longer have extra letters removed.
 
+## Licensing
+
+Note Toolbar is now licensed under GPL 3.0 to ensure all contributions remain open source, and to maintain compliance when incorporating code from other projects.
+
 ---
 
 ## Previous releases
