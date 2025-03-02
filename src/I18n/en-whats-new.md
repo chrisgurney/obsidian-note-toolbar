@@ -6,6 +6,10 @@ What's new in Note Toolbar v1.20?
 
 While a note is open, right-click on a toolbar (long-press on mobile) to show an option to swap the toolbar with another you can then choose.
 
+<img src="https://github.com/user-attachments/assets/7f76705c-1b07-454c-be55-aafe29c4dba6" width="700"/>
+
+Notes:
+
 - Selecting an option will override the default mapping for the toolbar by updating the Note Toolbar property/frontmatter in the current note (`notetoolbar` by default).
 - Select the "Default" option to remove the property, which reverts to the default (folder) mapping.
 - Note that _Swap toolbars_ will **not** be available if: 
