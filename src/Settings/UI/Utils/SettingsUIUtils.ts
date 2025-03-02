@@ -297,13 +297,19 @@ export function pluginLinkFr(commandId: string, linkText?: string): DocumentFrag
 
 /**
  * Removes the error on the field.
- * @param fieldEl HTMLElement to update
+ * @param el HTMLElement to update
  */
-export function removeFieldError(fieldEl: HTMLElement | null) {
-	if (fieldEl) {
-		let fieldContainerEl = fieldEl.closest('.setting-item-control');
-		fieldContainerEl?.querySelector('.note-toolbar-setting-field-error')?.remove();
-		fieldEl?.removeClass('note-toolbar-setting-error');
+export function removeFieldError(el: HTMLElement | null) {
+	if (el) {
+		const itemControlClass = 'setting-item-control';
+		const itemPreviewClass = 'note-toolbar-setting-item-preview';
+		let containerEl = null;
+		el.hasClass(itemControlClass) ? containerEl = el : containerEl = el.closest(`.${itemControlClass}`);
+		if (!containerEl) {
+			el.hasClass(itemPreviewClass) ? containerEl = el : containerEl = el.closest(`.${itemPreviewClass}`);
+		}
+		containerEl?.querySelector('.note-toolbar-setting-field-error')?.remove();
+		el?.removeClass('note-toolbar-setting-error');
 	}
 }
 

@@ -1,18 +1,67 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { debugLog, getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { MarkdownView, Notice } from "obsidian";
+import { Command, MarkdownView, Notice } from "obsidian";
 
-export class CommandsManager {
+export class CommandManager {
 
     public plugin: NoteToolbarPlugin;
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Adds the toolbar item's command.
+     */
+    async addItemCommand(item: ToolbarItemSettings): Promise<void> {
+        const itemText = getItemText(this.plugin, item, true);
+        const commandName = t('command.name-use-item', {item: itemText});
+        if (itemText) {
+            this.plugin.addCommand({ 
+                id: COMMAND_PREFIX_ITEM + item.uuid, 
+                name: commandName, 
+                icon: item.icon ? item.icon : this.plugin.settings.icon, 
+                callback: async () => {
+                    let activeFile = this.plugin.app.workspace.getActiveFile();
+                    await this.plugin.handleItemLink(item, undefined, activeFile);
+                }
+            });
+            item.hasCommand = true;
+            await this.plugin.settingsManager.save();
+            new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
+        }
+        else {
+            item.hasCommand = false;
+            await this.plugin.settingsManager.save();
+            new Notice(t('setting.use-item-command.notice-command-error-noname'), 10000);
+        }
+    }
+
+    /**
+     * Utility to get command for the given toolbar item, if the command exists.
+     */
+    getItemCommand(item: ToolbarItemSettings): Command | undefined {
+        const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + item.uuid;
+        return Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+    }
+
+    /**
+     * Removes the toolbar item's command.
+     */
+    async removeItemCommand(item: ToolbarItemSettings): Promise<void> {
+        const itemText = getItemText(this.plugin, item, true);
+        const commandName = t('command.name-use-item', {item: itemText});
+        this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
+        item.hasCommand = false;
+        await this.plugin.settingsManager.save();
+        itemText 
+            ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
+            : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
     }
 
     /**
@@ -46,7 +95,27 @@ export class CommandsManager {
             });
         });
         if (hasIgnoredCommands) {
-            new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 8000);
+            new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 10000);
+        }
+    }
+
+    /**
+     * Update the command for the given toolbar item, to update its name and icon.
+     */
+    async updateItemCommand(item: ToolbarItemSettings, showNotice: boolean = true): Promise<void> {
+        // get command for item
+        const command = this.getItemCommand(item);
+        if (command) {
+            // get item text
+            const itemText = getItemText(this.plugin, item, true);
+            if (itemText) {
+                command.name = t('command.name-use-item', {item: itemText});
+                command.icon = item.icon ? item.icon : this.plugin.settings.icon;
+                if (showNotice) new Notice(t('setting.use-item-command.notice-command-updated', { command: command.name }));
+            }
+            else {
+                await this.removeItemCommand(item);
+            }
         }
     }
 

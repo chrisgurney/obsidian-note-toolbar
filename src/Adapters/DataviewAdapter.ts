@@ -366,7 +366,7 @@ export default class DataviewAdapter extends Adapter {
 
     private async useLibraryScript(libraryScriptId: string): Promise<string> {
         let result = '';
-        const scriptEntry = this.noteToolbar?.libraryManager.getScriptEntry(ItemType.Dataview, libraryScriptId);
+        const scriptEntry = this.noteToolbar?.library.getScriptEntry(ItemType.Dataview, libraryScriptId);
         if (scriptEntry) {
             result = await this.executeJs(scriptEntry.code);
         }

@@ -51,10 +51,11 @@ export default class ToolbarItemUi {
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(async () => {
                             let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                            const modal = new IconSuggestModal(this.plugin, (icon) => {
+                            const modal = new IconSuggestModal(this.plugin, async (icon) => {
                                 toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                 this.plugin.settingsManager.save();
                                 updateItemIcon(this.parent, itemRow, icon);
+                                if (toolbarItem.hasCommand) await this.plugin.commands.updateItemCommand(toolbarItem, false);
                             });
                             modal.open();
                         });
@@ -92,6 +93,7 @@ export default class ToolbarItemUi {
                             // however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
                             this.toolbar.updated = new Date().toISOString();
                             await this.plugin.settingsManager.save();
+                            if (toolbarItem.hasCommand) await this.plugin.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
                     this.updateItemComponentStatus(toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
@@ -110,6 +112,7 @@ export default class ToolbarItemUi {
                             toolbarItem.tooltip = value;
                             this.toolbar.updated = new Date().toISOString();
                             await this.plugin.settingsManager.save();
+                            if (toolbarItem.hasCommand) await this.plugin.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
                     this.updateItemComponentStatus(toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
@@ -150,7 +153,6 @@ export default class ToolbarItemUi {
                                 // for case where icon/label/tooltip fields are not used, disable them
                                 const disableFields = toolbarItem.linkAttr.type === ItemType.Group;
                                 iconField.setDisabled(disableFields);
-                                debugLog(iconField.controlEl);
                                 (iconField.controlEl.firstChild as Element | null)?.setAttribute("tabindex", disableFields ? "-1" : "0");
                                 labelField.setDisabled(disableFields);
                                 tooltipField.setDisabled(disableFields);
@@ -370,34 +372,11 @@ export default class ToolbarItemUi {
                     .setIcon('terminal')
                     .onClick(async (menuEvent) => {
                         toolbarItem.hasCommand = !toolbarItem.hasCommand;
-                        const itemText = getItemText(this.plugin, toolbarItem, true);
-                        const commandName = t('command.name-use-item', {item: itemText});
-                        // add or remove the command
                         if (toolbarItem.hasCommand) {
-                            if (itemText) {
-                                this.plugin.addCommand({ 
-                                    id: COMMAND_PREFIX_ITEM + toolbarItem.uuid, 
-                                    name: commandName, 
-                                    icon: toolbarItem.icon ? toolbarItem.icon : this.plugin.settings.icon, 
-                                    callback: async () => {
-                                        let activeFile = this.plugin.app.workspace.getActiveFile();
-                                        await this.plugin.handleItemLink(toolbarItem, undefined, activeFile);
-                                    }
-                                });
-                                new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
-                            }
-                            else {
-                                toolbarItem.hasCommand = false;
-                                new Notice(t('setting.use-item-command.notice-command-error-noname'), 5000);
-                            }
-                            await this.plugin.settingsManager.save();
+                            await this.plugin.commands.addItemCommand(toolbarItem);
                         }
                         else {
-                            this.plugin.removeCommand(COMMAND_PREFIX_ITEM + toolbarItem.uuid);
-                            itemText 
-                                ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
-                                : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
-                            await this.plugin.settingsManager.save();
+                            await this.plugin.commands.removeItemCommand(toolbarItem);
                             this.parent.display();
                         }
                     });
@@ -788,7 +767,7 @@ export default class ToolbarItemUi {
                     case SettingType.LibraryScript:
                         const scriptOptions = {
                             '': t('library.script-option-default'),
-                            ...this.plugin.libraryManager.getScriptOptions(toolbarItem.linkAttr.type)
+                            ...this.plugin.library.getScriptOptions(toolbarItem.linkAttr.type)
                         }
                         let selectedScript = toolbarItem.scriptConfig?.libraryScriptId || '';
                         setting = new Setting(fieldDiv)
@@ -798,7 +777,7 @@ export default class ToolbarItemUi {
                                     .addOptions(scriptOptions)
                                     .setValue(selectedScript)
                                     .onChange(async (scriptId) => {
-                                        let selectedScriptEntry = this.plugin.libraryManager.getScriptEntry(toolbarItem.linkAttr.type, scriptId);
+                                        let selectedScriptEntry = this.plugin.library.getScriptEntry(toolbarItem.linkAttr.type, scriptId);
                                         if (setting) setFieldHelp(setting.controlEl, selectedScriptEntry?.description || param.description);
                                         // config[param.parameter as keyof ScriptConfig] = isValid ? scriptId : '';
                                         config[param.parameter as keyof ScriptConfig] = scriptId;
@@ -957,8 +936,7 @@ export default class ToolbarItemUi {
         // FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
         if (toolbarItem?.hasCommand) {
             // check if a command was actually created for this item
-            const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + toolbarItem.uuid;
-            const command = Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+            const command = this.plugin.commands.getItemCommand(toolbarItem);
             if (!command) {
                 status = Status.Invalid;
                 statusMessage = t('setting.use-item-command.error-noname');
@@ -1049,8 +1027,11 @@ export default class ToolbarItemUi {
                     }
                     break;
                 default:
-                    status = Status.Empty;
-                    statusMessage = '';
+                    // if the status isn't already invalid (e.g., for a command that doesn't exist)
+                    if (status !== Status.Invalid) {
+                        status = Status.Empty;
+                        statusMessage = '';
+                    }
                     break;
             }
         }
