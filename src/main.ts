@@ -716,7 +716,14 @@ export default class NoteToolbarPlugin extends Plugin {
 					Object.entries(item.linkAttr).forEach(([key, value]) => {
 						toolbarItem?.setAttribute(`data-toolbar-link-attr-${key}`, value);
 					});
-					item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
+
+					if (!Platform.isPhone) {
+						const itemCommand = this.commands.getItemCommand(item);
+						let hotkeyText = itemCommand ? this.hotkeys.getHotkeyText(itemCommand) : undefined;
+						let tooltipText = item.tooltip ? item.tooltip + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '';
+						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
+					}
+
 					this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
 					this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
 		
