@@ -72,7 +72,7 @@ settings:
         title: 'Border color'
         title.uk: 'Колір рамки'
         description: 'Border around button. The "border" style must be added to the toolbar first.'
-        description.uk: 'Рамка навколо кнопки'
+        description.uk: 'Рамка навколо кнопки. Стиль "рамка" повинен бути додан до панелі.'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -716,7 +716,7 @@ settings:
         title.de: 'Rand-Farbe'
         title.zh: '边框颜色'
         description: 'Top + Bottom borders. The "border" style must be added to the toolbar first.'
-        description.uk: 'Верхня та нижня рамки'
+        description.uk: 'Верхня та нижня рамки. Стиль "рамка" повинен бути додан до панелі.'
         description.de: 'Obere + untere Ränder'
         description.zh: '上下边框'
         type: variable-themed-color
