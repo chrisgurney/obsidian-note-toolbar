@@ -20,7 +20,3 @@ data.json
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
-
-build/copy-files-plugin.mjs
-main.js
-style.css
