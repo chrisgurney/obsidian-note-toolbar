@@ -5,7 +5,7 @@ import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { debugLog, getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { Command, MarkdownView, Notice } from "obsidian";
+import { Command, MarkdownView, Notice, Platform } from "obsidian";
 
 export class CommandManager {
 
@@ -33,7 +33,18 @@ export class CommandManager {
             });
             item.hasCommand = true;
             await this.plugin.settingsManager.save();
-            new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
+
+            // open notice with a CTA to change hotkeys
+            const message = 
+                t('setting.use-item-command.notice-command-added', { command: commandName }) +
+                (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
+            const notice = new Notice(message, 10000);
+            const noticeEl = notice.noticeEl;
+            noticeEl.style.cursor = 'pointer';
+            this.plugin.registerDomEvent(noticeEl, 'click', async () => {
+                notice.hide();
+                this.openSettings('hotkeys');
+            });
         }
         else {
             item.hasCommand = false;
