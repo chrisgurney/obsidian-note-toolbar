@@ -54,9 +54,9 @@ export class CommandManager {
     }
 
     /**
-     * Utility to get command for the given toolbar item, if the command exists.
+     * Utility to get command for the given toolbar or toolbar item, if the command exists.
      */
-    getItemCommand(item: ToolbarItemSettings): Command | undefined {
+    getCommandFor(item: ToolbarItemSettings): Command | undefined {
         const commandId = `${this.plugin.manifest.id}:${COMMAND_PREFIX_ITEM}${item.uuid}`;
         return this.plugin.app.commands.commands[commandId];
     }
@@ -113,7 +113,7 @@ export class CommandManager {
      */
     async updateItemCommand(item: ToolbarItemSettings, showNotice: boolean = true): Promise<void> {
         // get command for item
-        const command = this.getItemCommand(item);
+        const command = this.getCommandFor(item);
         if (command) {
             // get item text
             const itemText = getItemText(this.plugin, item, true);

@@ -718,7 +718,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 
 					if (!Platform.isPhone) {
-						const itemCommand = this.commands.getItemCommand(item);
+						const itemCommand = this.commands.getCommandFor(item);
 						let hotkeyText = itemCommand ? this.hotkeys.getHotkeyText(itemCommand) : undefined;
 						let tooltipText = item.tooltip ? item.tooltip + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '';
 						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
