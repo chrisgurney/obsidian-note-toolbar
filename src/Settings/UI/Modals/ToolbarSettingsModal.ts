@@ -1084,6 +1084,15 @@ export default class ToolbarSettingsModal extends Modal {
 		// 	}
 		// }
 
+		// show hotkey
+		if (!Platform.isPhone) {
+			const itemCommand = this.plugin.commands.getItemCommand(toolbarItem);
+			if (itemCommand) {
+				const itemHotkeyEl = this.plugin.hotkeys.getHotkeyEl(itemCommand);
+				if (itemHotkeyEl) itemPreviewContent.appendChild(itemHotkeyEl);
+			}
+		}
+		
 		itemPreview.appendChild(itemPreviewContent);
 
 		// check if item previews are valid (non-empty + valid), and highlight if not
