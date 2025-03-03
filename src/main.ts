@@ -19,11 +19,13 @@ import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
 import LibraryManager from 'Settings/LibraryManager';
+import { HotkeyHelper } from 'Utils/Hotkeys';
 
 export default class NoteToolbarPlugin extends Plugin {
 
 	api: INoteToolbarApi<any>;
 	commands: CommandManager;
+	hotkeys: HotkeyHelper;
 	library: LibraryManager;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
@@ -157,6 +159,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			// needs to be done after plugins are setup so that string variable checks work
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
+
+			this.hotkeys = new HotkeyHelper(this);
 
 			// this.library = new LibraryManager(this);
 			// this.library.load();
