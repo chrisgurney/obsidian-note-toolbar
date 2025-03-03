@@ -57,8 +57,8 @@ export class CommandManager {
      * Utility to get command for the given toolbar item, if the command exists.
      */
     getItemCommand(item: ToolbarItemSettings): Command | undefined {
-        const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + item.uuid;
-        return Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+        const commandId = `${this.plugin.manifest.id}:${COMMAND_PREFIX_ITEM}${item.uuid}`;
+        return this.plugin.app.commands.commands[commandId];
     }
 
     /**
