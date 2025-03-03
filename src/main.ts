@@ -929,9 +929,21 @@ export default class NoteToolbarPlugin extends Plugin {
 							break;
 						}
 						menu.addItem((item: MenuItem) => {
+
+							const itemTitleFr = document.createDocumentFragment();
+							itemTitleFr.append(title);
+							// show hotkey
+							if (!Platform.isPhone) {
+								const itemCommand = this.commands.getCommandFor(toolbarItem);
+								if (itemCommand) {
+									const itemHotkeyEl = this.hotkeys.getHotkeyEl(itemCommand);
+									if (itemHotkeyEl) itemTitleFr.appendChild(itemHotkeyEl);
+								}
+							}
+							
 							item
 								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
-								.setTitle(title)
+								.setTitle(itemTitleFr)
 								.onClick(async (menuEvent) => {
 									debugLog(menuEvent, toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
 									await this.handleItemLink(toolbarItem, menuEvent, file);
