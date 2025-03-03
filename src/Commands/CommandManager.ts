@@ -95,8 +95,6 @@ export class CommandManager {
                                 await this.plugin.handleItemLink(item, undefined, activeFile);
                             }
                         });
-                        // TODO: adopt Hotkeys helper class from @mProjectsCode and test here:
-                        // debugLog(command.name, ...);
                     }
                     else {
                         hasIgnoredCommands = true;
