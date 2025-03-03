@@ -1857,6 +1857,8 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     margin-inline-start: 0.5em;
     padding: 2px 8px 2px 8px;
     gap: var(--size-4-1);
+    white-space: nowrap;
+    display: inline-block;
 }
 
 .note-toolbar-setting-item-preview-edit-mobile {
