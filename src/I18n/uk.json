@@ -4,7 +4,7 @@
         "args-description": "Аргументи, що приймаються функцією, у форматі {\"name\": \"value\", ...} через кому, зі строковими значеннями в лапках.",
         "option-function-default": "Оберіть функцію...",
         "outputcontainer": "ID експорту виноски (за бажанням)",
-        "outputcontainer-description": "Додайте виноску note-toolbar-output до нота для відображення результату з унікальним метаполем.",
+        "outputcontainer-description": "Додайте виноску note-toolbar-output до нотатки для відображення результату з унікальним метаполем.",
         "postCommand": "Команда після виконання (за бажанням)",
         "postCommand-description": "Команда, що виконується після завершення скрипту.",
         "dataview": {
@@ -61,6 +61,7 @@
             "exec-sourcefile-error-required": "⚠️ Помилка: Потрібен Templater файл"
         },
         "error": {
+            "args-format": "Невірний формат критерію.",
             "args-parsing": "Не вдалося розібрати аргументи скрипта: {{filename}}",
             "args-parsing-error": "Не вдалося розібрати аргументи скрипта: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "⚠️ Помилка: Не вдалося знайти виноску note-toolbar-output у поточній нотатці з ID: {{id}}",
@@ -72,6 +73,7 @@
             "function-not-found": "Функцію не знайдено: {{function}}",
             "function-note-not-open": "Ця функція повинна виконуватися з відкритої нотатки.",
             "plugin-disabled": "Увімкнути налаштунки Скриптування після встановлення та увімкнення додатка: ",
+            "plugin-not-installed": "Додаток не встановлено та не увімкнено.",
             "query-failed": "Не вдалося виконати запит: {{expression}}",
             "query-note-not-open": "Цей запит повинен виконуватися з відкритої нотатки.",
             "scripting-disabled": "Для використання цього елемента увімкніть виконування Скриптів у налаштуванні Note Toolbar."
@@ -164,6 +166,12 @@
         "error-toolbar-not-found": "Перевірте налаштування Note Toolbar, або URI цієї панелі. Панель не знайдено: {{toolbar}}",
         "error-uri-params-not-supported": "Один або кілька з цих параметрів Note Toolbar URI не підтримуються: {{params}}",
         "warning-no-matching-toolbar": "Note Toolbar: Немає відповідної панелі: {{toolbar}}\nНатисніть тут для створення."
+ },
+    "onboarding": {
+        "new-toolbar-mapping-title": "Як використовувати цю панель", 
+        "new-toolbar-mapping-content": "Щоб побачити цю панель у вашій нотатці, додайте властивість ({{property}}) з назвою цієї панелі. Або зіставте цю панель з текою, у якій міститься нотатка (Налаштування Note Toolbar → Зіставленні теки).",
+        "swap-toolbar-title": "Ця нотатка буде змінена",
+        "swap-toolbar-content": "Вибір опції нижче оновить цю нотатку, змінивши або видаливши значення властивості ({{property}})."
     },
     "plugin": {
         "name": "Note Toolbar"
@@ -366,8 +374,11 @@
         "use-item-command": {
             "name-add": "Додати команду для елемента",
             "name-remove": "Видалити команду для елемента",
-            "notice-command-added": "Команда доступна:\n{{command}}",
+            "error-noname": "Команду слід повторно додати. Принаймні один Напис/Підказка не повинні бути порожніми, або містити вирази.",
+            "notice-command-added": "Команда тепер доступна:\n{{command}}",
             "notice-command-removed": "Команда видалена:\n{{command}}",
+            "notice-command-removed_empty": "Команда вилучена для елемента",
+            "notice-command-updated": "Коменда оновлена:\n{{command}}",
             "notice-command-error-noname": "Не вдалося додати команду. Переконайтеся, що елемент має напис або підказку, і принаймні, один з них не містить змінну чи вираз.",
             "notice-command-error-startup-noname": "Note Toolbar: Один або декілька команд елементів не було увімкнено через порожній напис та підказку."
         },
@@ -492,6 +503,7 @@
         "menu-hide-properties": "Приховати властивості нотатки",
         "menu-position": "Розташування",
         "menu-show-properties": "Показати властивості нотатки",
+        "menu-swap-toolbar": "Змінити панель...",
         "menu-style": "Стиль...",
         "menu-toolbar-settings": "Налаштування Note Toolbar..."
     }
