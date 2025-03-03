@@ -215,8 +215,20 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
 				(toolbar) => {
+					
+					const toolbarNameFr = document.createDocumentFragment();
+					toolbarNameFr.append(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'));
+					// show hotkey
+					if (!Platform.isPhone) {
+						const itemCommand = this.plugin.commands.getCommandFor(toolbar);
+						if (itemCommand) {
+							const itemHotkeyEl = this.plugin.hotkeys.getHotkeyEl(itemCommand);
+							if (itemHotkeyEl) toolbarNameFr.appendChild(itemHotkeyEl);
+						}
+					}
+
 					let toolbarListItemSetting = new Setting(toolbarListDiv)
-						.setName(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'))
+						.setName(toolbarNameFr)
 						.setDesc(createToolbarPreviewFr(this.plugin, toolbar, this.plugin.settingsManager))
 						.addButton((button: ButtonComponent) => {
 							button

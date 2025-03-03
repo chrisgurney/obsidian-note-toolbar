@@ -5,7 +5,7 @@ import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { debugLog, getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { Command, MarkdownView, Notice } from "obsidian";
+import { Command, MarkdownView, Notice, Platform } from "obsidian";
 
 export class CommandManager {
 
@@ -33,7 +33,18 @@ export class CommandManager {
             });
             item.hasCommand = true;
             await this.plugin.settingsManager.save();
-            new Notice(t('setting.use-item-command.notice-command-added', { command: commandName }));
+
+            // open notice with a CTA to change hotkeys
+            const message = 
+                t('setting.use-item-command.notice-command-added', { command: commandName }) +
+                (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
+            const notice = new Notice(message, 10000);
+            const noticeEl = notice.noticeEl;
+            noticeEl.style.cursor = 'pointer';
+            this.plugin.registerDomEvent(noticeEl, 'click', async () => {
+                notice.hide();
+                this.openSettings('hotkeys');
+            });
         }
         else {
             item.hasCommand = false;
@@ -43,11 +54,12 @@ export class CommandManager {
     }
 
     /**
-     * Utility to get command for the given toolbar item, if the command exists.
+     * Utility to get command for the given toolbar or toolbar item, if the command exists.
      */
-    getItemCommand(item: ToolbarItemSettings): Command | undefined {
-        const commandId = this.plugin.manifest.id + ':' + COMMAND_PREFIX_ITEM + item.uuid;
-        return Object.values(this.plugin.app.commands.commands).find(command => command.id === commandId);
+    getCommandFor(toolbarOrItem: ToolbarItemSettings | ToolbarSettings): Command | undefined {
+        const prefix = ('items' in toolbarOrItem) ? COMMAND_PREFIX_TBAR : COMMAND_PREFIX_ITEM;
+        const commandId = `${this.plugin.manifest.id}:${prefix}${toolbarOrItem.uuid}`;
+        return this.plugin.app.commands.commands[commandId];
     }
 
     /**
@@ -84,8 +96,6 @@ export class CommandManager {
                                 await this.plugin.handleItemLink(item, undefined, activeFile);
                             }
                         });
-                        // TODO: adopt Hotkeys helper class from @mProjectsCode and test here:
-                        // debugLog(command.name, ...);
                     }
                     else {
                         hasIgnoredCommands = true;
@@ -104,7 +114,7 @@ export class CommandManager {
      */
     async updateItemCommand(item: ToolbarItemSettings, showNotice: boolean = true): Promise<void> {
         // get command for item
-        const command = this.getItemCommand(item);
+        const command = this.getCommandFor(item);
         if (command) {
             // get item text
             const itemText = getItemText(this.plugin, item, true);
@@ -234,13 +244,13 @@ export class CommandManager {
     }
 
     /**
-     * Convenience command to open Note Toolbar's settings.
+     * Convenience command to open settings (Note Toolbar's by default).
      */
-    async openSettings(): Promise<void> {
+    async openSettings(tabId: string = 'note-toolbar'): Promise<void> {
         // @ts-ignore
         const settings = this.plugin.app.setting;
-        settings.open();
-        settings.openTabById('note-toolbar');
+        await settings.open();
+        settings.openTabById(tabId);
     }
 
     /**

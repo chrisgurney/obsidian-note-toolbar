@@ -943,6 +943,17 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 }
 
+.note-toolbar-setting-hotkey {
+    font-size: var(--font-ui-small);
+    background-color: var(--background-modifier-hover);
+    border-radius: var(--radius-s);
+    margin-inline-start: 0.5em;
+    padding: 2px 8px 2px 8px;
+    gap: var(--size-4-1);
+    white-space: nowrap;
+    display: inline-block;
+}
+
 .note-toolbar-setting-item-preview-edit-mobile {
     display: flex;
     column-gap: 0.5em;

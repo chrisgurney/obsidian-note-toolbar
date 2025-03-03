@@ -19,11 +19,13 @@ import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
 import LibraryManager from 'Settings/LibraryManager';
+import { HotkeyHelper } from 'Utils/Hotkeys';
 
 export default class NoteToolbarPlugin extends Plugin {
 
 	api: INoteToolbarApi<any>;
 	commands: CommandManager;
+	hotkeys: HotkeyHelper;
 	library: LibraryManager;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
@@ -157,6 +159,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			// needs to be done after plugins are setup so that string variable checks work
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
+
+			this.hotkeys = new HotkeyHelper(this);
 
 			// this.library = new LibraryManager(this);
 			// this.library.load();
@@ -712,7 +716,14 @@ export default class NoteToolbarPlugin extends Plugin {
 					Object.entries(item.linkAttr).forEach(([key, value]) => {
 						toolbarItem?.setAttribute(`data-toolbar-link-attr-${key}`, value);
 					});
-					item.tooltip ? setTooltip(toolbarItem, item.tooltip, { placement: "top" }) : undefined;
+
+					if (!Platform.isPhone) {
+						const itemCommand = this.commands.getCommandFor(item);
+						let hotkeyText = itemCommand ? this.hotkeys.getHotkeyText(itemCommand) : undefined;
+						let tooltipText = item.tooltip ? item.tooltip + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '';
+						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
+					}
+
 					this.registerDomEvent(toolbarItem, 'click', (e) => this.toolbarClickHandler(e));
 					this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
 		
@@ -918,9 +929,21 @@ export default class NoteToolbarPlugin extends Plugin {
 							break;
 						}
 						menu.addItem((item: MenuItem) => {
+
+							const itemTitleFr = document.createDocumentFragment();
+							itemTitleFr.append(title);
+							// show hotkey
+							if (!Platform.isPhone) {
+								const itemCommand = this.commands.getCommandFor(toolbarItem);
+								if (itemCommand) {
+									const itemHotkeyEl = this.hotkeys.getHotkeyEl(itemCommand);
+									if (itemHotkeyEl) itemTitleFr.appendChild(itemHotkeyEl);
+								}
+							}
+							
 							item
 								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
-								.setTitle(title)
+								.setTitle(itemTitleFr)
 								.onClick(async (menuEvent) => {
 									debugLog(menuEvent, toolbarItem.link, toolbarItem.linkAttr, toolbarItem.contexts);
 									await this.handleItemLink(toolbarItem, menuEvent, file);
