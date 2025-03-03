@@ -234,13 +234,13 @@ export class CommandManager {
     }
 
     /**
-     * Convenience command to open Note Toolbar's settings.
+     * Convenience command to open settings (Note Toolbar's by default).
      */
-    async openSettings(): Promise<void> {
+    async openSettings(tabId: string = 'note-toolbar'): Promise<void> {
         // @ts-ignore
         const settings = this.plugin.app.setting;
-        settings.open();
-        settings.openTabById('note-toolbar');
+        await settings.open();
+        settings.openTabById(tabId);
     }
 
     /**
