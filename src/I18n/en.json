@@ -378,7 +378,7 @@
             "name-remove": "Remove command for item",
             "error-noname": "Command must be re-added. At least one label or tooltip must not be empty or contain expressions.",
             "notice-command-added": "Command now available:\n{{command}}",
-            "notice-command-added-hotkeys": "Open hotkey settings {{cta}}",
+            "notice-command-added-hotkeys": "Open hotkey settings {{cta}} →",
             "notice-command-removed": "Command removed:\n{{command}}",
             "notice-command-removed_empty": "Command removed for item",
             "notice-command-updated": "Command updated:\n{{command}}",
