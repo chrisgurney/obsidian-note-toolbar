@@ -22,5 +22,5 @@ data.json
 .DS_Store
 
 build/copy-files-plugin.mjs
+main.js
 style.css
-crowdin.yml
