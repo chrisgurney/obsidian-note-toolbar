@@ -74,15 +74,23 @@ export class HotkeyHelper {
 
     getHotkeyEl(command: Command): HTMLElement | undefined {
         let hotkeySpan;
-        const hotkeys = this.plugin.hotkeys.stringifyHotkeysForCommand(command);
-        if (hotkeys) {
-            const formatFirstElement = (arr?: string[]): string => arr?.length ? `${arr[0]}` : '';
-            const hotkeyText = formatFirstElement(hotkeys);
+        const hotkeyText = this.getHotkeyText(command);
+        if (hotkeyText) {
             hotkeySpan = createSpan();
             hotkeySpan.addClass('note-toolbar-setting-hotkey');
             hotkeySpan.setText(hotkeyText);
         }
         return hotkeySpan;
+    }
+
+    getHotkeyText(command: Command): string | undefined {
+        let hotkeyText = undefined;
+        const hotkeys = this.plugin.hotkeys.stringifyHotkeysForCommand(command);
+        if (hotkeys) {
+            const formatFirstElement = (arr?: string[]): string => arr?.length ? `${arr[0]}` : '';
+            hotkeyText = formatFirstElement(hotkeys);
+        }
+        return hotkeyText;
     }
 
 	stringifyKey(key: string): string {
