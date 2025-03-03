@@ -34,6 +34,7 @@ Add a command for any toolbar item you would like to execute from the command pa
 
 Notes
 
+- Hotkeys assigned to item commands will show in the item list in settings, in item tooltips, and in menus. _Thank you @mProjectsCode for the hotkey-handling code._
 - If the label and tooltip are empty, you won't be able to add the item.
 - If the label uses variables or expressions, the tooltip will be used instead; if the tooltip's empty, or also has variables, the command won't be able to be added.
 - _Thank you @Dopairym for the idea._
@@ -63,6 +64,7 @@ _Thank you @laktiv for the idea._
 
 ### Other
 
+- Hotkeys assigned to toolbar commands will show in the toolbar list in settings. _Thank you @mProjectsCode for the hotkey-handling code._
 - The right-click > Edit item... text is now truncated if the toolbar item's name is too long (usually if using expressions).
 
 ## Fixes
