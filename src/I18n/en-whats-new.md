@@ -69,6 +69,7 @@ _Thank you @laktiv for the idea._
 
 ## Fixes
 
+- When entering a Note Toolbar property (`notetoolbar` by default) that was a string type (vs. list), the “no matching toolbar" notice would show the first character. This may have also caused problems in the past showing the toolbar if this was a string property. In both cases, the correct toolbar name is now used.
 - Dataview expressions that use the new <code>\{\{dv:</code> notation no longer have extra letters removed.
 
 ## Licensing
