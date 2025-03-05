@@ -2046,6 +2046,9 @@ input[type="text"].note-toolbar-setting-error,
             flex-direction: unset !important;
         }
     }
+    & .setting-item-heading {
+        padding: 0.75em 0;
+    }
     & #tbar-search {
         padding-top: 0;
         & .setting-item-info {
@@ -2076,6 +2079,12 @@ input[type="text"].note-toolbar-setting-error,
             border-bottom: solid 1px var(--background-modifier-border);
             margin-bottom: 0.75em;
         }
+    }
+}
+
+.note-toolbar-setting-contexts-container {
+    &[data-active="false"] {
+        border-bottom: solid 1px var(--background-modifier-border);
     }
 }
 
