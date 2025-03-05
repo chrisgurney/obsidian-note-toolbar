@@ -118,26 +118,6 @@ Reapplies the last undone action.
 app.workspace.activeLeaf.view?.editor.redo();
 ```
 
-# Swap Toolbars
-`ID: swap-toolbar`
-
-Changes the current toolbar with the selected toolbar, by updating the Note Toolbar property.
-
-```js
-const { toolbars, toolbarProp } = app.plugins.getPlugin("note-toolbar").settings;
-const defaultOption = "Default folder mapping";
-const toolbarOptions = toolbars.map(toolbar => toolbar.name).concat(defaultOption);
-const pickedToolbar = await ntb.suggester(toolbarOptions);
-const currentFile = app.workspace.getActiveFile();
-await app.fileManager.processFrontMatter(currentFile, (frontmatter) => {
-    if (pickedToolbar === defaultOption) {
-        delete frontmatter[toolbarProp];
-        return;
-    }
-    frontmatter[toolbarProp] = pickedToolbar;
-});
-```
-
 # Undo
 
 Reverts the last action.
