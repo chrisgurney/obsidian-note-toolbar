@@ -359,24 +359,24 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
-		const notetoolbarProp: string[] = cache.frontmatter?.[this.settings.toolbarProp] ?? [];
-		if (notetoolbarProp.length > 0) {
-			const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
+		const notetoolbarProp = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
+		if (notetoolbarProp) {
 			// make sure just the relevant property changed in the open file
 			if (this.lastFileOpenedOnCacheChange !== activeFile) this.lastNtbProperty = undefined;
-			if (notetoolbarProp[0] !== this.lastNtbProperty) {
-				const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarFromProps(notetoolbarProp);
+			const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
+			if (notetoolbarProp !== this.lastNtbProperty) {
+				const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarByName(notetoolbarProp);
 				if (!matchingToolbar && !ignoreToolbar) {
-					const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp[0] }), 7500);
+					const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp }), 7500);
 					this.registerDomEvent(notice.noticeEl, 'click', async () => {
-						const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp[0]);
+						const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp);
 						this.settingsManager.openToolbarSettings(newToolbar);
 					});
 				}
 			}
 		}
 		// track current state to look for future Note Toolbar property changes
-		this.lastNtbProperty = notetoolbarProp[0];
+		this.lastNtbProperty = notetoolbarProp;
 		this.lastFileOpenedOnCacheChange = activeFile;
 	};
 
@@ -448,7 +448,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// remove existing toolbar if needed
 		let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
 
-		debugLog('checkAndRenderToolbar()', matchingToolbar, toolbarRemoved);
+		// debugLog('checkAndRenderToolbar()', matchingToolbar, toolbarRemoved);
 
 		if (matchingToolbar) {
 			// render the toolbar if we have one, and we don't have an existing toolbar to keep

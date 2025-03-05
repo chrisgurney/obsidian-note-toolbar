@@ -117,12 +117,12 @@ export class SettingsManager {
 		const propName = this.plugin.settings.toolbarProp;
 		let ignoreToolbar = false;
 
-		const notetoolbarProp: string[] = frontmatter?.[propName] ?? null;
-		if (notetoolbarProp !== null) {
+		const notetoolbarProp = this.getToolbarNameFromProps(frontmatter);
+		if (notetoolbarProp) {
 			// if any prop = 'none' then don't return a toolbar
 			notetoolbarProp.includes('none') ? ignoreToolbar = true : false;
 			// is it valid? (i.e., is there a matching toolbar?)
-			ignoreToolbar ? undefined : matchingToolbar = this.getToolbarFromProps(notetoolbarProp);
+			ignoreToolbar ? undefined : matchingToolbar = this.getToolbarByName(notetoolbarProp);
 		}
 
 		// we still don't have a matching toolbar
@@ -161,7 +161,17 @@ export class SettingsManager {
 			isUuid ? tbar.uuid === nameOrUuid : tbar.name.toLowerCase() === nameOrUuid.toLowerCase()
 		);
 	}
-	  
+	
+	/**
+	 * Gets the name of the toolbar from the props, if it exists.
+	 * @param frontmatter props to check.
+	 * @returns property value (the first value if it's a list type) or undefined.
+	 */
+	public getToolbarNameFromProps(frontmatter: FrontMatterCache | undefined): string | undefined {
+		const propValue = frontmatter?.[this.plugin.settings.toolbarProp];
+		return Array.isArray(propValue) ? propValue[0] : typeof propValue === 'string' ? propValue : undefined;
+	}
+
 	private isUuid(value: string): boolean {
 		const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 		return uuidRegex.test(value);
@@ -183,19 +193,6 @@ export class SettingsManager {
 	 */
 	public getToolbarByName(name: string | null): ToolbarSettings | undefined {
 		return name ? this.plugin.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
-	}
-
-	/**
-	 * Gets toolbar from settings, using the provided array of strings (which will come from note frontmatter).
-	 * @param names List of potential toolbars to get settings for (case-insensitive); only the first match is returned.
-	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
-	 */
-	public getToolbarFromProps(names: string[] | null): ToolbarSettings | undefined {
-		if (!names) return undefined;
-		if (typeof names === "string") {
-			return this.getToolbarByName(names);
-		}
-		return this.plugin.settings.toolbars.find(tbar => names.some(name => tbar.name.toLowerCase() === name.toLowerCase()));
 	}
 
 	/**
