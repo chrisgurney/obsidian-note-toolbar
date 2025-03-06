@@ -1089,7 +1089,15 @@ export default class ToolbarSettingsModal extends Modal {
 			const itemCommand = this.plugin.commands.getCommandFor(toolbarItem);
 			if (itemCommand) {
 				const itemHotkeyEl = this.plugin.hotkeys.getHotkeyEl(itemCommand);
-				if (itemHotkeyEl) itemPreviewContent.appendChild(itemHotkeyEl);
+				if (itemHotkeyEl) {
+					itemPreviewContent.appendChild(itemHotkeyEl);
+				}
+				else {
+					let commandIconEl = itemPreviewContent.createSpan();
+					commandIconEl.addClass('note-toolbar-setting-command-indicator');
+					setIcon(commandIconEl, 'terminal');
+					setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-incidator', { command: itemCommand.name }));
+				}
 			}
 		}
 		

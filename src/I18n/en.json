@@ -383,7 +383,8 @@
             "notice-command-removed_empty": "Command removed for item",
             "notice-command-updated": "Command updated:\n{{command}}",
             "notice-command-error-noname": "Unable to add command. Ensure item has a name or label set, and at least one does not include variables or an expression.",
-            "notice-command-error-startup-noname": "Note Toolbar: Some item commands in these toolbars were not added due to empty labels or tooltips: {{toolbars}}"
+            "notice-command-error-startup-noname": "Note Toolbar: Some item commands in these toolbars were not added due to empty labels or tooltips: {{toolbars}}",
+            "tooltip-command-incidator": "Has command: {{command}}"
         },
         "other": {
             "name": "Other",
