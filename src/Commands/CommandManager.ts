@@ -119,7 +119,7 @@ export class CommandManager {
             // get item text
             const itemText = getItemText(this.plugin, item, true);
             if (itemText) {
-                command.name = t('command.name-use-item', {item: itemText});
+                command.name = `${this.plugin.manifest.name}: ${t('command.name-use-item', {item: itemText})}`;
                 command.icon = item.icon ? item.icon : this.plugin.settings.icon;
                 if (showNotice) new Notice(t('setting.use-item-command.notice-command-updated', { command: command.name }));
             }
