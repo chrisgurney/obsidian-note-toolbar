@@ -1,4 +1,4 @@
-import { App, ButtonComponent, ExtraButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon } from 'obsidian';
+import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getElementPosition, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -220,10 +220,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					toolbarNameFr.append(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'));
 					// show hotkey
 					if (!Platform.isPhone) {
-						const itemCommand = this.plugin.commands.getCommandFor(toolbar);
-						if (itemCommand) {
-							const itemHotkeyEl = this.plugin.hotkeys.getHotkeyEl(itemCommand);
-							if (itemHotkeyEl) toolbarNameFr.appendChild(itemHotkeyEl);
+						const tbarCommand = this.plugin.commands.getCommandFor(toolbar);
+						if (tbarCommand) {
+							const hotkeyEl = this.plugin.hotkeys.getHotkeyEl(tbarCommand);
+							if (hotkeyEl) {
+								toolbarNameFr.appendChild(hotkeyEl);
+							}
+							else {
+								let commandIconEl = toolbarNameFr.createSpan();
+								commandIconEl.addClass('note-toolbar-setting-command-indicator');
+								setIcon(commandIconEl, 'terminal');
+								setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-incidator', { command: tbarCommand.name }));
+							}
 						}
 					}
 

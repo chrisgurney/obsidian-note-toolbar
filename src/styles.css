@@ -948,19 +948,20 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     font-size: var(--font-ui-small);
     background-color: var(--background-modifier-hover);
     border-radius: var(--radius-s);
+    color: var(--text-muted);
     margin-inline-start: 0.5em;
     padding: 2px 8px 2px 8px;
     gap: var(--size-4-1);
     white-space: nowrap;
-    display: inline-block;
+    display: flex;
+    align-items: center;
 }
 
 .note-toolbar-setting-command-indicator {
     padding: 2px;
     & svg {
-        color: var(--text-muted);
         height: var(--font-ui-small);
-        width: var(--font-ui-small);
+        vertical-align: middle;
     }
 }
 
@@ -1164,6 +1165,9 @@ input[type="text"].note-toolbar-setting-error,
     &[data-active="true"] {
         & .note-toolbar-setting-items-list-container {
             display: inherit !important;
+            & .setting-item-name {
+                display: flex;
+            }
         }
         & .setting-item .note-toolbar-setting-item-expand svg {
             transform: rotate(0deg);
