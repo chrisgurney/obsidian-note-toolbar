@@ -373,7 +373,20 @@ export default class ToolbarItemUi {
                     .onClick(async (menuEvent) => {
                         toolbarItem.hasCommand = !toolbarItem.hasCommand;
                         if (toolbarItem.hasCommand) {
-                            await this.plugin.commands.addItemCommand(toolbarItem);
+                            await this.plugin.commands.addItemCommand(toolbarItem, (commandName) => {
+                                // open notice with a CTA to change hotkeys
+                                const message = 
+                                    t('setting.use-item-command.notice-command-added', { command: commandName }) +
+                                    (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
+                                const notice = new Notice(message, 10000);
+                                const noticeEl = notice.noticeEl;
+                                noticeEl.style.cursor = 'pointer';
+                                this.plugin.registerDomEvent(noticeEl, 'click', async () => {
+                                    notice.hide();
+                                    this.parent.close();
+                                    await this.plugin.commands.openSettings('hotkeys');
+                                });
+                            });
                         }
                         else {
                             await this.plugin.commands.removeItemCommand(toolbarItem);

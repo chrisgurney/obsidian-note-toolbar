@@ -18,7 +18,7 @@ export class CommandManager {
     /**
      * Adds the toolbar item's command.
      */
-    async addItemCommand(item: ToolbarItemSettings): Promise<void> {
+    async addItemCommand(item: ToolbarItemSettings, callback: (commandName: string) => void): Promise<void> {
         const itemText = getItemText(this.plugin, item, true);
         const commandName = t('command.name-use-item', {item: itemText});
         if (itemText) {
@@ -33,18 +33,7 @@ export class CommandManager {
             });
             item.hasCommand = true;
             await this.plugin.settingsManager.save();
-
-            // open notice with a CTA to change hotkeys
-            const message = 
-                t('setting.use-item-command.notice-command-added', { command: commandName }) +
-                (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
-            const notice = new Notice(message, 10000);
-            const noticeEl = notice.noticeEl;
-            noticeEl.style.cursor = 'pointer';
-            this.plugin.registerDomEvent(noticeEl, 'click', async () => {
-                notice.hide();
-                this.openSettings('hotkeys');
-            });
+            callback(commandName);
         }
         else {
             item.hasCommand = false;
