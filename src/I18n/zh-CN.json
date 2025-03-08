@@ -233,13 +233,9 @@
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
       "name": "特定笔记显示规则",
-      "option-emptyview": "新标签页的工具栏",
-      "option-emptyview-description": "在新标签页中显示的工具栏",
       "option-property": "属性",
       "option-property-description": "如果在此属性中找到工具栏名称，则会在笔记上显示对应的工具栏。优先于任何文件夹映射的规则。设置为'none'则会隐藏工具栏。",
-      "option-property-placeholder": "属性",
-      "toggle-emptyview": "在新标签页视图中显示工具栏",
-      "toggle-emptyview-description": "选择当未打开任何笔记时显示的工具栏"
+      "option-property-placeholder": "属性"
     },
     "error-old-settings-description": "加载了旧的设置文件（{{oldVersion}}），当前最新版本为 {{currentVersion}}",
     "error-old-settings-name": "⚠️ 错误：请重新启用笔记工具栏插件（或重启 Obsidian）",
@@ -475,7 +471,6 @@
       "button-more-tooltip": "更多选项",
       "button-new-tbar": "+ 新建工具栏",
       "button-new-tbar-tooltip": "添加一个新的工具栏",
-      "description": "定义要添加到笔记中的工具栏。",
       "duplicated-tbar-suffix": "复制",
       "imported-tbar-name": "New toolbar",
       "label-empty-create-tbar": "点击按钮创建工具栏。",
