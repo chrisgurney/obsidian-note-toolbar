@@ -108,9 +108,13 @@ export class CommandManager {
             // get item text
             const itemText = getItemText(this.plugin, item, true);
             if (itemText) {
+                const oldCommandName = command.name;
                 command.name = `${this.plugin.manifest.name}: ${t('command.name-use-item', {item: itemText})}`;
                 command.icon = item.icon ? item.icon : this.plugin.settings.icon;
-                if (showNotice) new Notice(t('setting.use-item-command.notice-command-updated', { command: command.name }));
+                // only show notice if the command name changed, otherwise there's no need
+                if (showNotice && (oldCommandName !== command.name)) {
+                    new Notice(t('setting.use-item-command.notice-command-updated', { command: command.name }));
+                }
             }
             else {
                 await this.removeItemCommand(item);
