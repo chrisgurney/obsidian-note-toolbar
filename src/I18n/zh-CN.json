@@ -394,10 +394,6 @@
       "show-edit-tbar": {
         "description": "在工具栏菜单中添加一个项目，以快速访问工具栏的设置。",
         "name": "在工具栏菜单中显示'编辑工具栏'的链接"
-      },
-      "show-toolbar-in-file-menu": {
-        "description": "在右键菜单中添加一个选项以访问链接笔记中的工具栏。",
-        "name": "在右键菜单中显示链接笔记的工具栏"
       }
     },
     "position": {
@@ -507,7 +503,6 @@
     }
   },
   "toolbar": {
-    "button-floating-tooltip": "打开工具栏",
     "menu-edit-item": "编辑项目：{{text}}…",
     "menu-edit-item_none": "编辑项目…",
     "menu-edit-toolbar": "编辑工具栏：{{toolbar}}…",
