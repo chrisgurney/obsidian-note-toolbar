@@ -281,6 +281,7 @@
       "button-icon-tooltip": "选择图标（可选）",
       "label-preview-edit": "编辑工具栏：{{toolbar}}",
       "label-preview-empty-no-items": "缺少项目，编辑此工具栏以添加项目。",
+      "label-review-plugin": "查看插件",
       "menu-copy-id": "复制开发者 ID",
       "menu-copy-id-notice": "已将工具栏项目的ID复制到剪贴板。",
       "menu-more-actions": "更多操作…",
@@ -329,6 +330,7 @@
       "key-dismiss": "esc",
       "key-navigate": "↑↓",
       "key-use": "↵",
+      "option-default": "默认（使用工具栏映射）",
       "placeholder": "搜索项目…",
       "placeholder-toolbar": "{{toolbar}}: 搜索项目…"
     },
