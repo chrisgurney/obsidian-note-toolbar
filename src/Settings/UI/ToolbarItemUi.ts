@@ -386,6 +386,7 @@ export default class ToolbarItemUi {
                                     this.parent.close();
                                     await this.plugin.commands.openSettings('hotkeys');
                                 });
+                                this.parent.display();
                             });
                         }
                         else {
