@@ -72,6 +72,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
 
+		this.api = new NoteToolbarApi(this);
+		this.commands = new CommandManager(this);
+		this.hotkeys = new HotkeyHelper(this);
+		// this.library = new LibraryManager(this);
+		this.protocolManager = new ProtocolManager(this);
+
 		this.app.workspace.onLayoutReady(() => {
 
 			// add icons specific to the plugin
@@ -121,7 +127,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
 
 			// add commands
-			this.commands = new CommandManager(this);
 			this.addCommand({ id: 'copy-command-uri', name: t('command.name-copy-command-uri'), callback: async () => this.commands.copyCommand(false) });
 			this.addCommand({ id: 'copy-command-as-data-element', name: t('command.name-copy-command-as-data-element'), callback: async () => this.commands.copyCommand(true) });
 			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
@@ -139,14 +144,12 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleProps('toggle') });
 
 			// prototcol handler
-			this.protocolManager = new ProtocolManager(this);
 			this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolManager.handle(data));
 	
 			// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
 			this.app.workspace.trigger("parse-style-settings");
 
 			// make API available
-			this.api = new NoteToolbarApi(this);
 			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
 
 			// register custom view: What's New
@@ -160,9 +163,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			this.hotkeys = new HotkeyHelper(this);
-
-			// this.library = new LibraryManager(this);
 			// this.library.load();
 
 		});
