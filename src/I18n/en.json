@@ -324,6 +324,7 @@
         "item-suggest-modal": {
             "placeholder": "Search for an item...",
             "placeholder-toolbar": "{{toolbar}}: Search items...",
+            "option-default": "Default (use toolbar mapping)",
             "instruction-back": "to go back",
 			"instruction-navigate": "to navigate",
 			"instruction-use": "to use item",

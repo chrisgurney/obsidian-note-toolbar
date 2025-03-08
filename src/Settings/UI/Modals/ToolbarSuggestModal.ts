@@ -67,7 +67,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
         if (this.showSwapUi) {
             let emptyToolbar = EMPTY_TOOLBAR_SETTINGS;
-            emptyToolbar.name = "Default (use toolbar mapping)";
+            emptyToolbar.name = t('setting.item-suggest-modal.option-default');
             tbarSuggestions.push(emptyToolbar);
         }
 
