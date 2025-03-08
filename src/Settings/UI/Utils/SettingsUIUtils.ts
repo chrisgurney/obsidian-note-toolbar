@@ -288,7 +288,7 @@ export function pluginLinkFr(commandId: string, linkText?: string): DocumentFrag
 		pluginLinkFr = document.createDocumentFragment();
 		let pluginLink = pluginLinkFr.createEl('a', { 
 			href: `obsidian://show-plugin?id=${pluginId}`, 
-			text: linkText ? linkText : "Review\u00A0plugin" 
+			text: linkText ? linkText : t('setting.item.label-review-plugin') 
 		});
 		pluginLink.addClass('note-toolbar-setting-focussable-link');
 	}

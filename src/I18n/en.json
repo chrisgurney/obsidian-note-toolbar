@@ -285,6 +285,7 @@
             "menu-more-actions": "More actions...",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
             "label-preview-empty-no-items": "No items. Edit this toolbar to add items.",
+            "label-review-plugin": "Review\u00A0plugin",
             "option-break": "break",
             "option-command": "Command",
             "option-command-error-does-not-exist": "This command does not exist.",
