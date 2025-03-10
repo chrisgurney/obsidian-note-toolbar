@@ -11,20 +11,23 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     public plugin: NoteToolbarPlugin;
     public activeFile: TFile | null;
     public toolbarId: string | undefined;
+    private callback: ((item: ToolbarItemSettings) => void) | undefined;
 
     /**
      * Creates a new modal.
      * @param plugin NoteToolbarPlugin
      * @param activeFile TFile for the active file (so vars can be replaced)
      * @param toolbarId string ID of the toolbar to optionally scope this ItemSuggestModal to
+     * @oaram callback function to call when an item is selected
      */
-	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, toolbarId?: string) {
+	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, toolbarId?: string, callback?: (item: ToolbarItemSettings) => void) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         // this.parentEl = parentEl;
         this.plugin = plugin;
         this.activeFile = activeFile;
+        this.callback = callback;
 
         this.toolbarId = toolbarId;
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
@@ -201,7 +204,9 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     async onChooseSuggestion(selectedItem: ToolbarItemSettings, event: MouseEvent | KeyboardEvent) {
         debugLog("onChooseSuggestion: ", selectedItem, this.activeFile, event);
         this.close();
-        await this.plugin.handleItemLink(selectedItem, event);
+        (this.callback !== undefined)
+            ? this.callback(selectedItem) 
+            : await this.plugin.handleItemLink(selectedItem, event);
     }
 
 }
