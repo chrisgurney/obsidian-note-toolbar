@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -85,7 +85,7 @@ export default class TemplaterAdapter extends Adapter {
             // internal function for inline evaluations in which errors can be ignored
             case 'parseTemplateInline':
                 result = config.expression
-                    ? await this.parseTemplate(config.expression, false)
+                    ? await this.parseTemplate(config.expression, ErrorBehavior.Report)
                     : t('adapter.templater.eval-expr-error-required');
                 break;
             case 'parseTemplateFile':
@@ -183,15 +183,15 @@ export default class TemplaterAdapter extends Adapter {
      * <%tp.file.creation_date()%>
      * (Open and close tags are optional.)
      * @param expression 
-     * @param displayErrors
+     * @param errorBehavior
      * @returns 
      */
-    async parseTemplate(expression: string, displayErrors: boolean = true): Promise<string> {
+    async parseTemplate(expression: string, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> {
 
         let result = '';
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
-        if (!activeFile && displayErrors) {
+        if (!activeFile && errorBehavior === ErrorBehavior.Display) {
             displayScriptError(t('adapter.error.expr-note-not-open'));
             return t('adapter.error.expr-note-not-open');
         }
@@ -213,12 +213,17 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
         catch (error) {
-            if (displayErrors) {
-                displayScriptError(error);
-            }
-            else {
-                result = expression;
-                console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+            switch (errorBehavior) {
+                case ErrorBehavior.Display:
+                    displayScriptError(error);
+                    break;
+                case ErrorBehavior.Report:
+                    result = expression;
+                    console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+                    break;
+                case ErrorBehavior.Ignore:
+                    // do nothing
+                    break;
             }
         }
 

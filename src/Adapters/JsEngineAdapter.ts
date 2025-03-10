@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
-import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -69,7 +69,7 @@ export default class JsEngineAdapter extends Adapter {
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, false)
+                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Report)
                     : "Error: A JavaScript expression is required";
                 break;
             case 'exec':
@@ -102,7 +102,7 @@ export default class JsEngineAdapter extends Adapter {
      * @param displayErrors
      * @returns
      */
-    async evaluate(expression: string, containerEl?: HTMLElement, displayErrors: boolean = true): Promise<string> {
+    async evaluate(expression: string, containerEl?: HTMLElement, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> {
 
         let result = '';
         let resultEl = containerEl || createSpan();
@@ -131,12 +131,16 @@ export default class JsEngineAdapter extends Adapter {
             result = execution.result;
         }
         catch (error) {
-            if (displayErrors) {
-                displayScriptError(error);
-            }
-            else {
-                // result = expression;
-                console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+            switch (errorBehavior) {
+                case ErrorBehavior.Display:
+                    displayScriptError(error);
+                    break;
+                case ErrorBehavior.Report:
+                    console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+                    break;
+                case ErrorBehavior.Ignore:
+                    // do nothing
+                    break;
             }
         } 
         finally {

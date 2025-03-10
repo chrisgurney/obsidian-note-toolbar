@@ -166,6 +166,12 @@ export enum ToolbarStyle {
 	ItemFocused = 'tbar-item-focused'
 }
 
+export enum ErrorBehavior {
+	Display = 'display',
+	Report = 'report',
+	Ignore = 'ignore'
+}
+
 export interface NoteToolbarSettings {
 	emptyViewToolbar: string | null;
 	export: ExportSettings;
