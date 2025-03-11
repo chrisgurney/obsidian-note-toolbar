@@ -23,15 +23,15 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
-        
+
         this.plugin = plugin;
         this.activeFile = plugin.app.workspace.getActiveFile();
         this.toolbarId = toolbarId;
         this.callback = callback;
 
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
-
         this.setPlaceholder(toolbar ? t('setting.item-suggest-modal.placeholder-toolbar', {toolbar: toolbar.name}) : t('setting.item-suggest-modal.placeholder'));
+        
         let instructions = [];
         if (toolbarId) {
             instructions.push(
