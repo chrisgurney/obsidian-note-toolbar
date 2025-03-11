@@ -2203,15 +2203,23 @@ input[type="text"].note-toolbar-setting-error,
     font-size: var(--font-ui-smaller);
     line-height: var(--line-height-normal);
     overflow-wrap: anywhere;
+    width: 100%;
 }
 
 .note-toolbar-item-suggester-type {
     opacity: 0.4;
 }
 
+.note-toolbar-item-suggestion-container {
+    column-gap: 0.5em;
+    display: flex;
+    width: 100%;
+}
+
 .note-toolbar-item-suggestion {
     align-items: center;
     display: flex;
+    flex-direction: column;
     column-gap: 0.5rem;
     & svg {
         display: block;

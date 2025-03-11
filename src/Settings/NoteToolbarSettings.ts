@@ -341,6 +341,7 @@ export interface ToolbarItemSettings {
 	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration)
 	 */
 	contexts?: ViewContext[];
+	description?: string;
 	hasCommand: boolean;	
 	icon: string;
 	label: string;

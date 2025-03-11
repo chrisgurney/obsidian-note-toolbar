@@ -331,14 +331,18 @@ export function renderItemSuggestion(
 	if (!item) { return }
 	el.addClass("note-toolbar-item-suggestion");
 	el.setAttribute('id', item.uuid);
+
+	const itemMainEl = el.createDiv();
+	itemMainEl.addClass('note-toolbar-item-suggestion-container');
+
 	if (item.icon) {
 		let svgExists = getIcon(item.icon);
 		if (svgExists) {
-			let iconGlyph = el.createSpan();
-			setIcon(iconGlyph, item.icon);
+			let iconGlyphEl = itemMainEl.createSpan();
+			setIcon(iconGlyphEl, item.icon);
 		}
 	}
-	let itemNameEl = el.createSpan();
+	let itemNameEl = itemMainEl.createSpan();
 	let itemName = item.label || item.tooltip;
 
 	// fallback if no label or tooltip
@@ -354,13 +358,13 @@ export function renderItemSuggestion(
 	}
 
 	itemNameEl.addClass("note-toolbar-item-suggester-name");
-	let itemLabel = itemNameEl.createSpan();
+	const itemLabelEl = itemNameEl.createSpan();
 
 	let title = itemName;
 	// replace variables in labels (or tooltip, if no label set)
 	const activeFile = plugin.app.workspace.getActiveFile();
 	plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
-		itemLabel.setText(resolvedName);
+		itemLabelEl.setText(resolvedName);
 	});
 	
 	if (showMeta) {
@@ -399,9 +403,15 @@ export function renderItemSuggestion(
 				: item.tooltip.toLowerCase().includes(inputStrLower) 
 					? item.tooltip 
 					: item.link;
-		let itemNoteEl = itemLabel.createDiv();
+		const itemNoteEl = el.createDiv();
 		itemNoteEl.addClass('note-toolbar-item-suggester-note');
 		itemNoteEl.setText(inputMatch);
+	}
+	// show the description if one is set (for library items)
+	if (item.description) {
+		const itemDescEl = el.createDiv();
+		itemDescEl.addClass('note-toolbar-item-suggester-note');
+		itemDescEl.setText(item.description);
 	}
 }
 
