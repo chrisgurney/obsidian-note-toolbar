@@ -1,6 +1,6 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
@@ -2164,11 +2164,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
 	 * @param s String to replace the variables in.
 	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
-	 * @param encode True if we should encode the variables (recommended if part of external URL).
+	 * @param errorBehavior What to do with errors when they occur when replacing variables.
 	 * @returns String with the variables replaced.
 	 */
-	async replaceVars(s: string, file: TFile | null, encode: boolean = false): Promise<string> {
+	async replaceVars(s: string, file: TFile | null, errorBehavior: ErrorBehavior = ErrorBehavior.Report): Promise<string> {
 
+		// TODO: remove use of this variable; not used anywhere
+		// true if we should encode the variables (recommended if part of external URL); false by default
+		const encode = false;
 		let noteTitle = file?.basename;
 		if (noteTitle != null) {
 			s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));

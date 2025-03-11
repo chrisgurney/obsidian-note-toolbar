@@ -145,7 +145,7 @@ export default class TemplaterAdapter extends Adapter {
 
 		if (outputFile && this.noteToolbar?.hasVars(outputFile)) {
             const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
-			outputFile = await this.noteToolbar?.replaceVars(outputFile, activeFile, false);
+			outputFile = await this.noteToolbar?.replaceVars(outputFile, activeFile);
         }
 
         const { parsedFolder, parsedFilename } = this.parseOutputFile(outputFile);
