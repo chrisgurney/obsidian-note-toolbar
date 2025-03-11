@@ -231,8 +231,7 @@ export class CommandManager {
      * @param toolbarId optional ID of a toolbar to limit the ItemSuggestModal to show
      */
     async openItemSuggester(toolbarId?: string): Promise<void> {
-        let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ItemSuggestModal(this.plugin, activeFile, toolbarId);
+        const modal = new ItemSuggestModal(this.plugin, toolbarId);
         modal.open();
     }
 

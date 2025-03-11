@@ -7,7 +7,6 @@ import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
-    // private parentEl: HTMLElement;
     public plugin: NoteToolbarPlugin;
     public activeFile: TFile | null;
     public toolbarId: string | undefined;
@@ -20,16 +19,16 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param toolbarId string ID of the toolbar to optionally scope this ItemSuggestModal to
      * @oaram callback function to call when an item is selected
      */
-	constructor(plugin: NoteToolbarPlugin, activeFile: TFile | null, toolbarId?: string, callback?: (item: ToolbarItemSettings) => void) {
+	constructor(plugin: NoteToolbarPlugin, toolbarId?: string, callback?: (item: ToolbarItemSettings) => void) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
-        // this.parentEl = parentEl;
+        
         this.plugin = plugin;
-        this.activeFile = activeFile;
+        this.activeFile = plugin.app.workspace.getActiveFile();
+        this.toolbarId = toolbarId;
         this.callback = callback;
 
-        this.toolbarId = toolbarId;
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
 
         this.setPlaceholder(toolbar ? t('setting.item-suggest-modal.placeholder-toolbar', {toolbar: toolbar.name}) : t('setting.item-suggest-modal.placeholder'));
