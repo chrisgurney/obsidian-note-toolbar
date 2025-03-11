@@ -2201,7 +2201,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
 				if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
 				s = s.trim();
-				let result = await this.dvAdapter?.use({ pluginFunction: 'evaluateInline', expression: s });
+				let result = await this.dvAdapter?.use({
+					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+					expression: s
+				});
 				s = (result && typeof result === 'string') ? result : '';
 			}
 			// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
@@ -2216,7 +2219,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (this.hasPlugin[ItemType.JsEngine]) {
 			if (s.trim().startsWith('{{jse:')) {
 				s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
-				let result = await this.jsAdapter?.use({ pluginFunction: 'evaluateInline', expression: s });
+				let result = await this.jsAdapter?.use({ 
+					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+					 expression: s
+				});
 				s = (result && typeof result === 'string') ? result : '';
 			}
 		}
@@ -2229,7 +2235,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				// add Templater's prefix back in for evaluation
 				if (!s.startsWith('<%')) s = '<%' + s;
 				if (!s.endsWith('%>')) s += '%>';
-				let result = await this.tpAdapter?.use({ pluginFunction: 'parseInline', expression: s });
+				let result = await this.tpAdapter?.use({ 
+					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
+					expression: s
+				});
 				s = (result && typeof result === 'string') ? result : '';
 			}
 		}
