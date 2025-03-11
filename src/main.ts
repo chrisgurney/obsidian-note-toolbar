@@ -2229,7 +2229,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// add Templater's prefix back in for evaluation
 				if (!s.startsWith('<%')) s = '<%' + s;
 				if (!s.endsWith('%>')) s += '%>';
-				let result = await this.tpAdapter?.use({ pluginFunction: 'parseTemplateInline', expression: s });
+				let result = await this.tpAdapter?.use({ pluginFunction: 'parseInline', expression: s });
 				s = (result && typeof result === 'string') ? result : '';
 			}
 		}

@@ -82,10 +82,16 @@ export default class TemplaterAdapter extends Adapter {
                     ? await this.parseTemplate(config.expression)
                     : t('adapter.templater.eval-expr-error-required');
                 break;
-            // internal function for inline evaluations in which errors can be ignored
-            case 'parseTemplateInline':
+            // internal function for inline evaluations in which errors should be reported
+            case 'parseInline':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, ErrorBehavior.Report)
+                    : t('adapter.templater.eval-expr-error-required');
+                break;
+            // internal function for inline evaluations in which errors can be ignored
+            case 'parseIgnore':
+                result = config.expression
+                    ? await this.parseTemplate(config.expression, ErrorBehavior.Ignore)
                     : t('adapter.templater.eval-expr-error-required');
                 break;
             case 'parseTemplateFile':

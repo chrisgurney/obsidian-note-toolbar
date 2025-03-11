@@ -1,7 +1,7 @@
 import { Platform, SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { calcItemVisToggles, debugLog } from "Utils/Utils";
-import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
@@ -31,7 +31,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
         this.setPlaceholder(toolbar ? t('setting.item-suggest-modal.placeholder-toolbar', {toolbar: toolbar.name}) : t('setting.item-suggest-modal.placeholder'));
-        
+
         let instructions = [];
         if (toolbarId) {
             instructions.push(
@@ -94,8 +94,22 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     // ...and is visible on this platform
                     if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                         // ...and does not have a var link and label/tooltip that resolves to nothing
-                        if (!(this.plugin.hasVars(item.link) && await this.plugin.replaceVars(item.link, this.activeFile) === "") &&
-                            !(this.plugin.hasVars(itemName) && await this.plugin.replaceVars(itemName, this.activeFile) === "")) {
+                        if (
+                            !(
+                                this.plugin.hasVars(item.link) && 
+                                await this.plugin.replaceVars(
+                                    item.link,
+                                    this.activeFile,
+                                    this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
+                            ) &&
+                            !(
+                                this.plugin.hasVars(itemName) && 
+                                await this.plugin.replaceVars(
+                                    itemName,
+                                    this.activeFile,
+                                    this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
+                            )
+                        ) {
                             itemSuggestions.push(item);
                         }
                     }

@@ -66,10 +66,16 @@ export default class JsEngineAdapter extends Adapter {
         }
 
         switch (config.pluginFunction) {
-            // internal function for inline evaluations in which errors can be ignored
+            // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Report)
+                    : "Error: A JavaScript expression is required";
+                break;
+            // internal function for inline evaluations in which errors can be ignored
+            case 'evaluateIgnore':
+                result = config.expression
+                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Ignore)
                     : "Error: A JavaScript expression is required";
                 break;
             case 'exec':
