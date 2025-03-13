@@ -343,7 +343,7 @@ export interface ToolbarItemSettings {
 	description?: string;
 	hasCommand: boolean;	
 	icon: string;
-	isGalleryItem: boolean;
+	inGallery: boolean;
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;

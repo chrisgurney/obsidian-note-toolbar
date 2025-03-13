@@ -17,7 +17,7 @@ export default class GalleryManager {
             description: item.description?.[lang],
             hasCommand: false,
             icon: item.icon,
-            isGalleryItem: true,
+            inGallery: true,
             label: item.label[lang],
             link: item.link ?? '',
             linkAttr: {

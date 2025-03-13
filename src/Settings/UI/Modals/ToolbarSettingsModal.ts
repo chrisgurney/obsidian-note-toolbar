@@ -855,7 +855,7 @@ export default class ToolbarSettingsModal extends Modal {
 				label: "",
 				hasCommand: false,
 				icon: "",
-				isGalleryItem: false,
+				inGallery: false,
 				link: "",
 				linkAttr: {
 					commandId: "",
