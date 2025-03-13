@@ -450,6 +450,7 @@ export async function importFromCallout(
 				label: label.trim(),
                 hasCommand: false,
 				icon: icon.trim(),
+                isGalleryItem: false,
 				link: link.trim(),
 				linkAttr: {
 					commandId: itemType === ItemType.Command ? commandId.trim() : '',

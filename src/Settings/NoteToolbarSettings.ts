@@ -88,7 +88,6 @@ export enum SettingType {
 	Command = 'command',
 	File = 'file',
 	Ignore = 'ignore',
-	LibraryScript = 'library-script',
 	Script = 'script',
 	Text = 'text',
 	TextArea = 'textarea',
@@ -344,6 +343,7 @@ export interface ToolbarItemSettings {
 	description?: string;
 	hasCommand: boolean;	
 	icon: string;
+	isGalleryItem: boolean;
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;

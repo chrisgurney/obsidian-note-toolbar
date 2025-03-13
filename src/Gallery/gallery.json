@@ -1,0 +1,30 @@
+[
+    {
+        "label": { 
+            "en": "Pin" 
+        },
+        "icon": "pin",
+        "commandId": "workspace:toggle-pin",
+        "type": "command",
+        "tooltip": { 
+            "en": "Toggle pin" 
+        }
+    },
+    {
+        "label": { 
+            "en": "Undo"
+        },
+        "icon": "lucide-undo-2",
+        "description": { 
+            "en": "Reverts the latest action."
+        },
+        "type": "templater-obsidian",
+        "tooltip": { 
+            "en": "Undo"
+        },
+        "scriptConfig": {
+            "pluginFunction": "parseTemplate",
+            "expression": "{{tp: app.workspace.activeLeaf.view?.editor.undo() }}"
+        }
+    }
+]

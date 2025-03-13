@@ -18,7 +18,7 @@ import JsEngineAdapter from 'Adapters/JsEngineAdapter';
 import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
-import LibraryManager from 'Settings/LibraryManager';
+import GalleryManager from 'Gallery/GalleryManager';
 import { HotkeyHelper } from 'Utils/Hotkeys';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -26,7 +26,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	api: INoteToolbarApi<any>;
 	commands: CommandManager;
 	hotkeys: HotkeyHelper;
-	library: LibraryManager;
+	gallery: GalleryManager;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
@@ -75,7 +75,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.api = new NoteToolbarApi(this);
 		this.commands = new CommandManager(this);
 		this.hotkeys = new HotkeyHelper(this);
-		// this.library = new LibraryManager(this);
+		this.gallery = new GalleryManager(this);
 		this.protocolManager = new ProtocolManager(this);
 
 		this.app.workspace.onLayoutReady(() => {
@@ -163,7 +163,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			// this.library.load();
+			// this.gallery.load();
 
 		});
 

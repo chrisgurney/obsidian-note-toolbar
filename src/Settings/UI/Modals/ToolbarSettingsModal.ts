@@ -10,6 +10,7 @@ import { importFromModal } from './ImportModal';
 import ToolbarStyleUi from '../ToolbarStyleUi';
 import ToolbarItemUi from '../ToolbarItemUi';
 import { ItemSuggester } from '../Suggesters/ItemSuggester';
+import { ItemSuggestModal } from './ItemSuggestModal';
 
 enum ItemFormComponent {
 	Actions = 'actions',
@@ -389,6 +390,29 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText(t('setting.items.button-new-item'))
 					.setCta()
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Command));
+			})
+			.addExtraButton((btn) => {
+				btn.setIcon('zoom-in')
+					.setTooltip("Find items to add")
+					.onClick(async () => {
+						const modal = new ItemSuggestModal(this.plugin, undefined, async (item: ToolbarItemSettings) => {
+							this.toolbar.items.push(item);
+							this.toolbar.updated = new Date().toISOString();
+							await this.plugin.settingsManager.save();
+							this.display();
+						});
+						modal.open();
+					});
+				btn.extraSettingsEl.tabIndex = 0;
+				this.plugin.registerDomEvent(
+					btn.extraSettingsEl, 'keydown', (e) => {
+						switch (e.key) {
+							case "Enter":
+							case " ":
+								e.preventDefault();
+								btn.extraSettingsEl.click();
+						}
+					});
 			});
 
 		itemsListContainer.appendChild(itemsListButtonContainer);
@@ -831,6 +855,7 @@ export default class ToolbarSettingsModal extends Modal {
 				label: "",
 				hasCommand: false,
 				icon: "",
+				isGalleryItem: false,
 				link: "",
 				linkAttr: {
 					commandId: "",

@@ -69,21 +69,20 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
     async getSuggestions(inputStr: string): Promise<ToolbarItemSettings[]> {
 
-        let pluginToolbars = [];
+        let toolbarsToSearch = [];
         if (this.toolbarId) {
             let toolbar = this.plugin.settingsManager.getToolbarById(this.toolbarId);
-            pluginToolbars = toolbar ? [toolbar] : [];
+            toolbarsToSearch = toolbar ? [toolbar] : [];
         }
         else {
-            pluginToolbars = this.plugin.settings.toolbars
+            toolbarsToSearch = this.plugin.settings.toolbars
         }
 
-        // const pluginToolbars = this.plugin.settings.toolbars;
         const itemSuggestions: ToolbarItemSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         // get list of items
-        for (const toolbar of pluginToolbars) {
+        for (const toolbar of toolbarsToSearch) {
             for (const item of toolbar.items) {
                 let itemName = item.label || item.tooltip;
                 if (!itemName) itemName = item.icon ? item.link : '';
