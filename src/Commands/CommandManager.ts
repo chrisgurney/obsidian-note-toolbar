@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -285,7 +285,7 @@ export class CommandManager {
             const activeFile = this.plugin.app.workspace.getActiveFile();
             if (activeFile) {
                 await this.plugin.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
-                    if (toolbar.uuid === 'EMPTY_TOOLBAR') {
+                    if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
                         delete frontmatter[this.plugin.settings.toolbarProp];
                         return;
                     }

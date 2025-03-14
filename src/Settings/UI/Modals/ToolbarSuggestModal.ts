@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
-import { EMPTY_TOOLBAR_SETTINGS, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { createOnboardingMessageEl, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
 import { debugLog } from "Utils/Utils";
 
@@ -66,7 +66,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         if (this.showSwapUi) {
-            let emptyToolbar = EMPTY_TOOLBAR_SETTINGS;
+            let emptyToolbar = EMPTY_TOOLBAR;
             emptyToolbar.name = t('setting.item-suggest-modal.option-default');
             tbarSuggestions.push(emptyToolbar);
         }
@@ -88,7 +88,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
         let toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
-        if (this.showPreviews && toolbar.uuid !== 'EMPTY_TOOLBAR') {
+        if (this.showPreviews && toolbar.uuid !== EMPTY_TOOLBAR_ID) {
             let previewContainerEl = el.createDiv();
             previewContainerEl.addClass('setting-item-description');
             let previewEl = previewContainerEl.createDiv();
