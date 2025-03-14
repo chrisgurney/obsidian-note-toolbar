@@ -1,30 +1,41 @@
 [
     {
-        "label": { 
-            "en": "Pin" 
+        "commandId": "templater-obsidian:insert-templater",
+        "description": {
+            "en": "Inserts the chosen template."
         },
-        "icon": "pin",
-        "commandId": "workspace:toggle-pin",
-        "type": "command",
-        "tooltip": { 
-            "en": "Toggle pin" 
-        }
+        "icon": "templater-icon",
+        "tooltip": {
+            "en": "Insert template"
+        },
+        "type": "command"
     },
     {
-        "label": { 
-            "en": "Undo"
+        "commandId": "workspace:toggle-pin",
+        "icon": "pin",
+        "label": {
+            "en": "Pin"
         },
-        "icon": "lucide-undo-2",
-        "description": { 
+        "tooltip": {
+            "en": "Toggle pin"
+        },
+        "type": "command"
+    },
+    {
+        "description": {
             "en": "Reverts the latest action."
         },
-        "type": "templater-obsidian",
-        "tooltip": { 
+        "icon": "lucide-undo-2",
+        "label": {
             "en": "Undo"
         },
         "scriptConfig": {
-            "pluginFunction": "parseTemplate",
-            "expression": "{{tp: app.workspace.activeLeaf.view?.editor.undo() }}"
-        }
+            "expression": "{{tp: app.workspace.activeLeaf.view?.editor.undo() }}",
+            "pluginFunction": "parseTemplate"
+        },
+        "tooltip": {
+            "en": "Undo"
+        },
+        "type": "templater-obsidian"
     }
 ]
