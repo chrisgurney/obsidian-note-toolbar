@@ -393,7 +393,7 @@ export default class ToolbarSettingsModal extends Modal {
 			})
 			.addExtraButton((btn) => {
 				btn.setIcon('zoom-in')
-					.setTooltip("Find items to add")
+					.setTooltip(t('setting.items.button-find-item'))
 					.onClick(async () => {
 						const modal = new ItemSuggestModal(this.plugin, undefined, async (item: ToolbarItemSettings) => {
 							item.uuid = getUUID(); // make sure ID exists and is unique
