@@ -320,13 +320,15 @@ export function removeFieldError(el: HTMLElement | null) {
  * @param el HEMLElement to render suggestion into
  * @param inputStr string that was used to search for this item
  * @param showMeta boolean to set true if the meta icon should be shown (for Quick Tools)
+ * @param replaceVars boolean to set true if vars should be replaced; false to leave as-is (default)
  */
 export function renderItemSuggestion(
 	plugin: NoteToolbarPlugin, 
 	item: ToolbarItemSettings, 
 	el: HTMLElement, 
 	inputStr: string, 
-	showMeta: boolean = false
+	showMeta: boolean = false,
+	replaceVars: boolean = false
 ) {
 	if (!item) { return }
 	el.addClass("note-toolbar-item-suggestion");
@@ -363,9 +365,14 @@ export function renderItemSuggestion(
 	let title = itemName;
 	// replace variables in labels (or tooltip, if no label set)
 	const activeFile = plugin.app.workspace.getActiveFile();
-	plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
-		itemLabelEl.setText(resolvedName);
-	});
+	if (replaceVars) {
+		plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+			itemLabelEl.setText(resolvedName);
+		});
+	}
+	else {
+		itemLabelEl.setText(itemName);
+	}
 	
 	if (showMeta) {
 		let itemMeta = itemNameEl.createSpan();

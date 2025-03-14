@@ -93,28 +93,33 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
                 // add items with labels/tooltips, not menus, matching search string
                 if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(lowerCaseInputStr)) {
-                    const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
-                    // ...and is visible on this platform
-                    if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-                        // ...and does not have a var link and label/tooltip that resolves to nothing
-                        if (
-                            !(
-                                this.plugin.hasVars(item.link) && 
-                                await this.plugin.replaceVars(
-                                    item.link,
-                                    this.activeFile,
-                                    this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
-                            ) &&
-                            !(
-                                this.plugin.hasVars(itemName) && 
-                                await this.plugin.replaceVars(
-                                    itemName,
-                                    this.activeFile,
-                                    this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
-                            )
-                        ) {
-                            itemSuggestions.push(item);
+                    if (this.quickTools) {
+                        const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+                        // ...and is visible on this platform
+                        if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+                            // ...and does not have a var link and label/tooltip that resolves to nothing
+                            if (
+                                !(
+                                    this.plugin.hasVars(item.link) && 
+                                    await this.plugin.replaceVars(
+                                        item.link,
+                                        this.activeFile,
+                                        this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
+                                ) &&
+                                !(
+                                    this.plugin.hasVars(itemName) && 
+                                    await this.plugin.replaceVars(
+                                        itemName,
+                                        this.activeFile,
+                                        this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
+                                )
+                            ) {
+                                itemSuggestions.push(item);
+                            }
                         }
+                    }
+                    else {
+                        itemSuggestions.push(item);
                     }
                 }
             }
@@ -185,7 +190,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
-        renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true);
+        renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true, this.quickTools);
         if (item.inGallery) {
             el.addClass('note-toolbar-gallery-item-suggestion');
         }
