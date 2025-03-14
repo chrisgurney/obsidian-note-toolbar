@@ -545,7 +545,7 @@ export default class ToolbarItemUi {
                             this.renderPreview(toolbarItem);
                         });
                         cb.setPlaceholder(t('setting.item.option-command-placeholder'))
-                            .setValue(toolbarItem.link)
+                            .setValue(toolbarItem.link || (getCommandNameById(this.plugin, toolbarItem.linkAttr.commandId) || ''))
                             .onChange(debounce(async (commandName) => {
                                 const commandId = commandName ? getCommandIdByName(this.plugin, commandName) : '';
                                 const isValid = await this.updateItemComponentStatus(commandId, SettingType.Command, cb.inputEl.parentElement);
