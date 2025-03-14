@@ -1,5 +1,5 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ItemType, LINK_OPTIONS, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
@@ -414,11 +414,29 @@ export function renderItemSuggestion(
 		itemNoteEl.addClass('note-toolbar-item-suggester-note');
 		itemNoteEl.setText(inputMatch);
 	}
-	// show the description if one is set (for library items)
+	// show the description if one is set
 	if (item.description) {
 		const itemDescEl = el.createDiv();
 		itemDescEl.addClass('note-toolbar-item-suggester-note');
 		itemDescEl.setText(item.description);
+
+		// show the plugin used, or the command ID
+		if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type)) {
+			const pluginDescEl = el.createDiv();
+			pluginDescEl.addClass('note-toolbar-item-suggester-note');
+
+			let itemPlugin: string | undefined;
+			let itemType = item.linkAttr.type as keyof typeof LINK_OPTIONS;
+
+			if (itemType === ItemType.Command) {
+				const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
+				itemPlugin = LINK_OPTIONS[commandPluginId as keyof typeof LINK_OPTIONS];
+			} else {
+				itemPlugin = LINK_OPTIONS[itemType];
+			}
+
+			if (itemPlugin) pluginDescEl.setText(t('gallery.label-plugin', { plugin: itemPlugin }));
+		}
 	}
 }
 
