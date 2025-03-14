@@ -552,6 +552,19 @@ export class SettingsManager {
 				old_version = new_version;
 			}
 
+			// MIGRATION: set gallery flag on existing items
+			if (old_version === 20250302.1) {
+				new_version = 20250313.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						this.plugin.settings.toolbars[index].items[item_index].inGallery = false;
+					});
+				});
+				// for the next migration to run
+				old_version = new_version;
+			}
+
 			// COMMENT THIS OUT while testing new migration code
 			this.plugin.settings.version = SETTINGS_VERSION;
 			debugLog("updated settings:", this.plugin.settings);
