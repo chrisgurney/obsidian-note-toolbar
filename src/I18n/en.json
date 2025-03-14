@@ -121,6 +121,9 @@
         "warning-share-length": "Some web browsers may not load a URL that is longer than 2,048 characters.",
         "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive."
     },
+    "gallery": {
+        "label-divider": "ITEM GALLERY"
+    },
     "import": {
         "button-add-items": "Add items",
         "button-cancel": "Cancel",
@@ -148,14 +151,6 @@
         "title-import-into": "Add callout items to toolbar: {{toolbar}}",
         "warning-invalid-plugins": "This toolbar uses plugins you do not have installed and enabled:",
         "warning-vars": "This toolbar uses variables, which you can modify to work with your vault."
-    },
-    "library": {
-        "error-invalid-script-id": "Script does not exist for ID: {{scriptId}} ({{pluginId}})",
-        "error-script-required": "Error: A script was not selected.",
-        "script": "Library script",
-        "script-description": "Choose a script from the library.",
-        "script-function": "Use script from library",
-        "script-option-default": "Select a script..."
     },
     "notice": {
         "cta-click": "(click)",
