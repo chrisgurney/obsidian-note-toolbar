@@ -133,7 +133,7 @@ export class CommandManager {
                     name: t('command.name-open-toolbar', {toolbar: toolbar.name}),
                     icon: this.plugin.settings.icon,
                     callback: async () => {
-                        this.plugin.commands.openItemSuggester(toolbar.uuid);
+                        this.plugin.commands.openQuickTools(toolbar.uuid);
                     }}
                 );
             }
@@ -227,11 +227,11 @@ export class CommandManager {
     }
 
     /**
-     * Opens the item suggester modal.
+     * Opens the item suggester modal for Quick Tools/Toolbars.
      * @param toolbarId optional ID of a toolbar to limit the ItemSuggestModal to show
      */
-    async openItemSuggester(toolbarId?: string): Promise<void> {
-        const modal = new ItemSuggestModal(this.plugin, toolbarId);
+    async openQuickTools(toolbarId?: string): Promise<void> {
+        const modal = new ItemSuggestModal(this.plugin, toolbarId, undefined, true);
         modal.open();
     }
 
@@ -272,7 +272,7 @@ export class CommandManager {
     async openToolbarSuggester(): Promise<void> {
         let activeFile = this.plugin.app.workspace.getActiveFile();
         const modal = new ToolbarSuggestModal(this.plugin, false, false, (toolbar: ToolbarSettings) => {
-            this.plugin.commands.openItemSuggester(toolbar.uuid);
+            this.plugin.commands.openQuickTools(toolbar.uuid);
         });
         modal.open();
     }

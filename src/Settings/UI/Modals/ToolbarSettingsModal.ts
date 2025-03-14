@@ -740,7 +740,7 @@ export default class ToolbarSettingsModal extends Modal {
 								name: t('command.name-open-toolbar', {toolbar: this.toolbar.name}), 
 								icon: this.plugin.settings.icon, 
 								callback: async () => {
-									this.plugin.commands.openItemSuggester(this.toolbar.uuid);
+									this.plugin.commands.openQuickTools(this.toolbar.uuid);
 								}
 							});
 							new Notice(t(

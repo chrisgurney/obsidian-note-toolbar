@@ -196,7 +196,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     this.close();
                     let activeFile = this.plugin.app.workspace.getActiveFile();
                     const modal = new ToolbarSuggestModal(this.plugin, false, false, (toolbar: ToolbarSettings) => {
-                        this.plugin.commands.openItemSuggester(toolbar.uuid);
+                        this.plugin.commands.openQuickTools(toolbar.uuid);
                     });
                     modal.open();
                 }

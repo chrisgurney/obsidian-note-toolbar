@@ -130,10 +130,10 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'copy-command-uri', name: t('command.name-copy-command-uri'), callback: async () => this.commands.copyCommand(false) });
 			this.addCommand({ id: 'copy-command-as-data-element', name: t('command.name-copy-command-as-data-element'), callback: async () => this.commands.copyCommand(true) });
 			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
-			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openItemSuggester() });
+			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openQuickTools() });
 			this.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.settings.icon, callback: async () => {
 				const currentToolbar = this.getCurrentToolbar();
-				if (currentToolbar) this.commands.openItemSuggester(currentToolbar.uuid);
+				if (currentToolbar) this.commands.openQuickTools(currentToolbar.uuid);
 			}});
 			this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
 			this.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.commands.openSettings() });
@@ -1490,7 +1490,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async ribbonMenuHandler(event: MouseEvent) {
 		switch (this.settings.ribbonAction) {
 			case (RibbonAction.ItemSuggester):
-				await this.commands.openItemSuggester();
+				await this.commands.openQuickTools();
 				break;
 			case (RibbonAction.ToolbarSuggester):
 				await this.commands.openToolbarSuggester();
