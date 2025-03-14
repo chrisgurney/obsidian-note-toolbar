@@ -178,6 +178,13 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 return aItemNameRaw.localeCompare(bItemNameRaw);
             });
 
+            if (!this.quickTools) {
+                // add gallery items
+                sortedItemSuggestions.push(ITEM_GALLERY_DIVIDER);
+                // TODO: filter by search criteria as well
+                sortedItemSuggestions.push(...(this.plugin.gallery.getItems() || []));
+            }
+
         }
 
         return this.toolbarId ? itemSuggestions : sortedItemSuggestions;
@@ -227,9 +234,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
     async onChooseSuggestion(selectedItem: ToolbarItemSettings, event: MouseEvent | KeyboardEvent) {
         debugLog("onChooseSuggestion: ", selectedItem, this.activeFile, event);
-        this.close();
-        if (this.quickTools) await this.plugin.handleItemLink(selectedItem, event);
-        else if (this.callback !== undefined) this.callback(selectedItem);
+        if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
+            this.close();
+            if (this.quickTools) await this.plugin.handleItemLink(selectedItem, event);
+            else if (this.callback !== undefined) this.callback(selectedItem);
+        }
     }
 
 }

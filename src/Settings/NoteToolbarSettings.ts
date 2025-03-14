@@ -355,6 +355,22 @@ export interface ToolbarItemSettings {
 	visibility: Visibility;
 }
 
+export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
+	uuid: GALLERY_DIVIDER_ID,
+	hasCommand: false,
+	icon: '',
+	inGallery: true,
+	label: '',
+	link: '',
+	linkAttr: {
+		commandId: '',
+		hasVars: false,
+		type: ItemType.Separator
+	},
+	tooltip: '',
+	visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
+}
+
 /**
  * Used to describe the type of url, for efficiency on toolbar render and click handling.
  */
