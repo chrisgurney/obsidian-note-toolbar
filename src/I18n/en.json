@@ -321,6 +321,7 @@
             "instruction-back": "to go back",
             "instruction-dismiss": "to dismiss",
             "instruction-navigate": "to navigate",
+            "instruction-select": "to select item",
             "instruction-use": "to use item",
             "key-back": "⌫ or ←",
             "key-dismiss": "esc",

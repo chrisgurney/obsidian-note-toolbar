@@ -40,7 +40,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
         instructions.push(
             {command: t('setting.item-suggest-modal.key-navigate'), purpose: t('setting.item-suggest-modal.instruction-navigate')},
-            {command: t('setting.item-suggest-modal.key-use'), purpose: t('setting.item-suggest-modal.instruction-use')},
+            {command: t('setting.item-suggest-modal.key-use'), purpose: quickTools ? t('setting.item-suggest-modal.instruction-use') : t('setting.item-suggest-modal.instruction-select')},
             {command: t('setting.item-suggest-modal.key-dismiss'), purpose: t('setting.item-suggest-modal.instruction-dismiss')},
         );
         this.setInstructions(instructions);
