@@ -198,7 +198,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
         if (item.uuid === GALLERY_DIVIDER_ID) {
-            el.setText(t('gallery.label-divider'));
+            el.setText(t('gallery.label-suggestions'));
             el.addClass('note-toolbar-gallery-item-divider');
             el.removeClass('suggestion-item');
             el.removeClass('is-selected');
