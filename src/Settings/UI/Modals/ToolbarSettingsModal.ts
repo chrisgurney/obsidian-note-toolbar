@@ -396,6 +396,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setTooltip("Find items to add")
 					.onClick(async () => {
 						const modal = new ItemSuggestModal(this.plugin, undefined, async (item: ToolbarItemSettings) => {
+							item.uuid = getUUID(); // make sure ID exists and is unique
 							this.toolbar.items.push(item);
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
