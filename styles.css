@@ -2234,7 +2234,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-gallery-item-suggestion {
-    border: solid 1px blue;
+    border: 1px solid var(--background-modifier-border);
     margin-bottom: 0.5em;
 }
 
