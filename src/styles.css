@@ -1320,6 +1320,17 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-gallery-item-divider {
+    margin-bottom: 0.5em;
+    color: var(--text-muted);
+    font-size: var(--font-small);
+}
+
+.note-toolbar-gallery-item-suggestion {
+    border: solid 1px blue;
+    margin-bottom: 0.5em;
+}
+
 .note-toolbar-icon-suggestion {
     align-items: center;
     display: flex;
