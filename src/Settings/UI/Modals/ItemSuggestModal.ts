@@ -11,6 +11,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     public activeFile: TFile | null;
     public toolbarId: string | undefined;
     private callback: ((item: ToolbarItemSettings) => void) | undefined;
+    private quickTools: boolean;
 
     /**
      * Creates a new modal.
@@ -28,6 +29,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         this.activeFile = plugin.app.workspace.getActiveFile();
         this.toolbarId = toolbarId;
         this.callback = callback;
+        this.quickTools = quickTools;
 
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
         this.setPlaceholder(toolbar ? t('setting.item-suggest-modal.placeholder-toolbar', {toolbar: toolbar.name}) : t('setting.item-suggest-modal.placeholder'));
@@ -45,19 +47,21 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         );
         this.setInstructions(instructions);
 
-        // handle meta key selections
-        if (Platform.isWin || Platform.isLinux) {
-            this.scope.register(['Ctrl'], 'Enter', (event) => this.handleKeyboardSelection(event));
-            this.scope.register(['Ctrl', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
-        }
-        else {
-            this.scope.register(['Meta'], 'Enter', (event) => this.handleKeyboardSelection(event));
-            this.scope.register(['Meta', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
-        }
-        // handle back navigation
-        if (toolbarId) {
-            this.scope.register([], 'ArrowLeft', (event) => this.handleKeyboardSelection(event));
-            this.scope.register([], 'Backspace', (event) => this.handleKeyboardSelection(event));
+        if (quickTools) {
+            // handle meta key selections
+            if (Platform.isWin || Platform.isLinux) {
+                this.scope.register(['Ctrl'], 'Enter', (event) => this.handleKeyboardSelection(event));
+                this.scope.register(['Ctrl', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
+            }
+            else {
+                this.scope.register(['Meta'], 'Enter', (event) => this.handleKeyboardSelection(event));
+                this.scope.register(['Meta', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
+            }
+            // handle back navigation
+            if (toolbarId) {
+                this.scope.register([], 'ArrowLeft', (event) => this.handleKeyboardSelection(event));
+                this.scope.register([], 'Backspace', (event) => this.handleKeyboardSelection(event));
+            }
         }
     
     }
@@ -182,6 +186,9 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
         renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true);
+        if (item.inGallery) {
+            el.addClass('note-toolbar-gallery-item-suggestion');
+        }
     }
 
     /**
@@ -216,9 +223,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     async onChooseSuggestion(selectedItem: ToolbarItemSettings, event: MouseEvent | KeyboardEvent) {
         debugLog("onChooseSuggestion: ", selectedItem, this.activeFile, event);
         this.close();
-        (this.callback !== undefined)
-            ? this.callback(selectedItem) 
-            : await this.plugin.handleItemLink(selectedItem, event);
+        if (this.quickTools) await this.plugin.handleItemLink(selectedItem, event);
+        else if (this.callback !== undefined) this.callback(selectedItem);
     }
 
 }
