@@ -1046,6 +1046,9 @@ input[type="text"].note-toolbar-setting-error,
         animation-name: note-toolbar-setting-error-grows, note-toolbar-setting-error-shrinks;
         animation-timing-function: cubic-bezier(.2,0,0,1), cubic-bezier(.2,0,0,1);
         margin: 2px;
+        .is-mobile & {
+            padding-inline-start: 0.5em;
+        }
     }
     & input[type="text"], & input[type="search"] {
         box-shadow: 0 0 0 1px var(--text-error);
