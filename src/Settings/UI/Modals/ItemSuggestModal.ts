@@ -101,11 +101,15 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
         if (!this.quickTools) {
             // add gallery items
-            sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
-            // TODO: iterate through gallery looking for matches
-            // TODO: sort suggestions
-            // TODO: add to search results
-            sortedSuggestions.push(...(this.plugin.gallery.getItems() || []));
+            let gallerySuggestions: ToolbarItemSettings[] = [];
+            for (const galleryItem of this.plugin.gallery.getItems()) {
+                if (await this.isSearchMatch(galleryItem, lowerCaseInputStr)) gallerySuggestions.push(galleryItem);
+            }
+            gallerySuggestions = this.sortSuggestions(gallerySuggestions, lowerCaseInputStr);
+            if (gallerySuggestions.length > 0) {
+                sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
+                sortedSuggestions.push(...gallerySuggestions);
+            }
         }
 
         return this.toolbarId ? itemSuggestions : sortedSuggestions;

@@ -5,7 +5,7 @@ import { debugLog } from "Utils/Utils";
 
 export default class GalleryManager {
 
-    private items: ToolbarItemSettings[] | undefined;
+    private items: ToolbarItemSettings[] = [];
 
     constructor(private plugin: NoteToolbarPlugin) {
     }
@@ -31,7 +31,7 @@ export default class GalleryManager {
         }));
     }
 
-    getItems(): ToolbarItemSettings[] | undefined {
+    getItems(): ToolbarItemSettings[] {
         return this.items;
     }
 
