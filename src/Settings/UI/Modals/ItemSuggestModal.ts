@@ -126,7 +126,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
         let itemName = item.label || item.tooltip;
         if (!itemName) itemName = item.icon ? item.link : '';
-        let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
+        let itemStrings = `${item.label} ${item.tooltip} ${item.link} ${item.description ?? ''}`.toLowerCase();
         // add items with labels/tooltips, not menus, matching search string
         if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(searchString)) {
             if (this.quickTools) {
