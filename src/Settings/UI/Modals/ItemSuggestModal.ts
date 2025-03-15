@@ -85,43 +85,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         const itemSuggestions: ToolbarItemSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        // get list of items
+        // get matching items
         for (const toolbar of toolbarsToSearch) {
             for (const item of toolbar.items) {
-                let itemName = item.label || item.tooltip;
-                if (!itemName) itemName = item.icon ? item.link : '';
-                let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
-                // add items with labels/tooltips, not menus, matching search string
-                if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(lowerCaseInputStr)) {
-                    if (this.quickTools) {
-                        const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
-                        // ...and is visible on this platform
-                        if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-                            // ...and does not have a var link and label/tooltip that resolves to nothing
-                            if (
-                                !(
-                                    this.plugin.hasVars(item.link) && 
-                                    await this.plugin.replaceVars(
-                                        item.link,
-                                        this.activeFile,
-                                        this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
-                                ) &&
-                                !(
-                                    this.plugin.hasVars(itemName) && 
-                                    await this.plugin.replaceVars(
-                                        itemName,
-                                        this.activeFile,
-                                        this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
-                                )
-                            ) {
-                                itemSuggestions.push(item);
-                            }
-                        }
-                    }
-                    else {
-                        itemSuggestions.push(item);
-                    }
-                }
+                if (await this.isSearchMatch(item, lowerCaseInputStr)) itemSuggestions.push(item);
             }
         }
 
@@ -129,8 +96,6 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
-
-            // TODO? refactor as function to return item suggestions, for search?
 
             // remove duplicates (+ redundant item-suggester items)
             sortedItemSuggestions = 
@@ -150,6 +115,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     )!;
                 });
 
+            // TODO? prioritize recent items 
             const recentItems: string[] = [];
 
             // sort the results
@@ -178,16 +144,63 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 return aItemNameRaw.localeCompare(bItemNameRaw);
             });
 
-            if (!this.quickTools) {
-                // add gallery items
-                sortedItemSuggestions.push(ITEM_GALLERY_DIVIDER);
-                // TODO: filter by search criteria as well
-                sortedItemSuggestions.push(...(this.plugin.gallery.getItems() || []));
-            }
+        }
 
+        if (!this.quickTools) {
+            // add gallery items
+            sortedItemSuggestions.push(ITEM_GALLERY_DIVIDER);
+            // TODO: filter by search criteria as well
+            sortedItemSuggestions.push(...(this.plugin.gallery.getItems() || []));
         }
 
         return this.toolbarId ? itemSuggestions : sortedItemSuggestions;
+
+    }
+
+    /**
+     * Returns true if item matches provided search string.
+     * @param item ToolbarItemSettings to check
+     * @param searchString provided search string
+     * @returns true if match; false otherwise
+     */
+    async isSearchMatch(item: ToolbarItemSettings, searchString: string): Promise<boolean> {
+
+        let itemName = item.label || item.tooltip;
+        if (!itemName) itemName = item.icon ? item.link : '';
+        let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
+        // add items with labels/tooltips, not menus, matching search string
+        if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(searchString)) {
+            if (this.quickTools) {
+                const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+                // ...and is visible on this platform
+                if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+                    // ...and does not have a var link and label/tooltip that resolves to nothing
+                    if (
+                        !(
+                            this.plugin.hasVars(item.link) && 
+                            await this.plugin.replaceVars(
+                                item.link,
+                                this.activeFile,
+                                this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
+                        ) &&
+                        !(
+                            this.plugin.hasVars(itemName) && 
+                            await this.plugin.replaceVars(
+                                itemName,
+                                this.activeFile,
+                                this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
+                        )
+                    ) {
+                        return true;
+                    }
+                }
+            }
+            else {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
