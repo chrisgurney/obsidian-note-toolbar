@@ -228,14 +228,14 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
-        if (item.uuid === GALLERY_DIVIDER_ID) {
+        if (item?.uuid === GALLERY_DIVIDER_ID) {
             el.setText(t('gallery.label-suggestions'));
             el.addClass('note-toolbar-gallery-item-divider');
             el.removeClass('suggestion-item');
             el.removeClass('is-selected');
         }
         else {
-            if (item.inGallery) {
+            if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
             }
             renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true, this.quickTools);
