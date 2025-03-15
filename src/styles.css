@@ -1321,6 +1321,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-gallery-item-divider {
+    margin-top: 0.5em;
     margin-bottom: 0.5em;
     color: var(--text-muted);
     font-size: var(--font-small);
