@@ -373,9 +373,8 @@ export default class ToolbarSettingsModal extends Modal {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
 					.onClick(async () => {
 						const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
-							selectedItem.inGallery = false;
-							selectedItem.description = undefined;
-							this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
+							let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
+							if (newItem.linkAttr.type === ItemType.Plugin) await this.resolvePluginType(newItem);
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
 							this.display();
@@ -1110,6 +1109,61 @@ export default class ToolbarSettingsModal extends Modal {
 			SettingFieldItemMap[toolbarItem.linkAttr.type], 
 			itemPreview,
 			toolbarItem);
+
+	}
+
+	/**
+	 * Transforms "plugin" type items from the Gallery into types that can be handled by the toolbar.
+	 * Prompts user if there's more than one enabled plugin available.
+	 * Reports errors if the plugin's not supported, chosen plugin's not enabled, or the proper parameters aren't provided.
+	 * @param item ToolbarItemSettings to update
+	 * @returns nothing
+	 */
+	async resolvePluginType(item: ToolbarItemSettings): Promise<void> {
+
+		if (item.plugin && item.scriptConfig?.expression) {
+			const plugins = Array.isArray(item.plugin) ? item.plugin : [item.plugin];
+			const enabledPlugins = plugins.filter((p) =>
+				this.plugin.getAdapterForItemType(p as ItemType)
+			);
+			if (enabledPlugins.length === 0) {
+				return undefined;
+			}
+			
+			let pluginType: ItemType | undefined;
+			if (enabledPlugins.length === 1) {
+				pluginType = enabledPlugins[0] as ItemType;
+			}
+			else {
+				pluginType = await this.plugin.api.suggester(enabledPlugins, undefined, {
+					placeholder: "Select plugin to use..."
+				});
+			}
+
+			if (pluginType) {
+				item.linkAttr.type = pluginType;
+				if (item.scriptConfig) {
+					// set appropriate plugin function to execute the script
+					switch (item.linkAttr.type) {
+						case ItemType.Dataview:
+							item.scriptConfig.pluginFunction = 'executeJs';
+							break;
+						case ItemType.JsEngine:
+							item.scriptConfig.pluginFunction = 'evaluate';
+							break;
+						case ItemType.Templater:
+							item.scriptConfig.pluginFunction = 'parseTemplate';
+							break;
+					}
+				}
+			}
+			else {
+				// invalid plugin or none enabled
+			}
+		}
+		else {
+			// invalid item: missing plugin or script
+		}
 
 	}
 
