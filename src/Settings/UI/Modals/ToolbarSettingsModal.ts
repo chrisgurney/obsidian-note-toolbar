@@ -373,6 +373,8 @@ export default class ToolbarSettingsModal extends Modal {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
 					.onClick(async () => {
 						const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
+							selectedItem.inGallery = false;
+							selectedItem.description = undefined;
 							this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();

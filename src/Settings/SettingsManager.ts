@@ -87,9 +87,7 @@ export class SettingsManager {
 		debugLog('duplicateToolbarItem', item);
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
 		newItem.uuid = getUUID();
-		newItem.description = undefined;
 		newItem.hasCommand = false;
-		newItem.inGallery = false;
 		debugLog('duplicateToolbarItem: duplicated', newItem);
 		if (insertAfter) {
 			const index = toolbar.items.indexOf(item);
