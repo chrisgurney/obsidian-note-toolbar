@@ -1,7 +1,7 @@
 import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getElementPosition, moveElement } from 'Utils/Utils';
-import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr } from "./Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick } from "./Utils/SettingsUIUtils";
 import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -130,17 +130,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							if (!this.itemListOpen) {
 								this.toggleToolbarList();
 							}
-						})
-						.extraSettingsEl.tabIndex = 0;
-						this.plugin.registerDomEvent(
-							cb.extraSettingsEl, 'keydown', (e) => {
-								switch (e.key) {
-									case "Enter":
-									case " ":
-										e.preventDefault();
-										cb.extraSettingsEl.click();
-								}
-							});
+						});
+						handleKeyClick(this.plugin, cb.extraSettingsEl);
 						// used to set focus on settings display
 						cb.extraSettingsEl.id = 'ntb-tbar-search-button';
 					});
@@ -163,17 +154,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							this.display();
 						}
 					});
-				})
-				.extraSettingsEl.tabIndex = 0;
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ":
-								e.preventDefault();
-								cb.extraSettingsEl.click();
-						}
-					});
+				});
+				handleKeyClick(this.plugin, cb.extraSettingsEl);
 			});
 
 		// search field (phone)
@@ -189,19 +171,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip(t('setting.button-collapse-tooltip'))
 					.onClick(async () => {
 						this.toggleToolbarList();
-					})
-					.extraSettingsEl.tabIndex = 0;
+					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					this.plugin.registerDomEvent(
-						cb.extraSettingsEl, 'keydown', (e) => {
-							switch (e.key) {
-								case "Enter":
-								case " ":
-									e.preventDefault();
-									cb.extraSettingsEl.click();
-							}
-						});
 					cb.extraSettingsEl.id = 'ntb-tbar-toggle-button';
+					handleKeyClick(this.plugin, cb.extraSettingsEl);
 				});
 		}
 
@@ -565,18 +538,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							this.mappingListOpen ? heading?.setText(t('setting.mappings.name')) : heading?.setText(t('setting.mappings.name-with-count', { count: this.plugin.settings.folderMappings.length }));
 							cb.setTooltip(this.mappingListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 						}
-					})
-					.extraSettingsEl.tabIndex = 0;
+					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					this.plugin.registerDomEvent(
-						cb.extraSettingsEl, 'keydown', (e) => {
-							switch (e.key) {
-								case "Enter":
-								case " ":
-									e.preventDefault();
-									cb.extraSettingsEl.click();
-							}
-						});
+					handleKeyClick(this.plugin, cb.extraSettingsEl);
 				});
 		}
 
@@ -766,16 +730,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						cb.setTooltip(context[stateKey] ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 					}
 				});
-	
-			cb.extraSettingsEl.tabIndex = 0;
 			cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-	
-			this.plugin.registerDomEvent(cb.extraSettingsEl, 'keydown', (e) => {
-				if (e.key === 'Enter' || e.key === ' ') {
-					e.preventDefault();
-					cb.extraSettingsEl.click();
-				}
-			});
+			handleKeyClick(this.plugin, cb.extraSettingsEl);
 		});
 	}
 

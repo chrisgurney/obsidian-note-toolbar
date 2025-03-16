@@ -36,13 +36,7 @@ export function createOnboardingMessageEl(
 					plugin.settingsManager.save();
 				});
 			button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
-			button.extraSettingsEl.tabIndex = 0;
-			plugin.registerDomEvent(button.extraSettingsEl, 'keydown', (e: KeyboardEvent) => {
-				if (e.key === 'Enter' || e.key === ' ') {
-					e.preventDefault();
-					button.extraSettingsEl.click();
-				}
-			});
+			handleKeyClick(this.plugin, button.extraSettingsEl);
 		});
 	return setting.settingEl;
 }
