@@ -1334,7 +1334,8 @@ input[type="text"].note-toolbar-setting-error,
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     color: var(--text-muted);
-    font-size: var(--font-small);
+    font-size: var(--font-ui-small);
+    font-weight: var(--font-semibold);
 }
 
 .note-toolbar-gallery-item-suggestion {
