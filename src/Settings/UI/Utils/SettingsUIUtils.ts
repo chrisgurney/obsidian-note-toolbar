@@ -246,6 +246,19 @@ export function getValueForKey(dict: {[key: string]: string}[], key: string): st
 	return option ? Object.values(option)[0] : '';
 }
 
+export function handleKeyClick(plugin: NoteToolbarPlugin, el: HTMLElement) {
+	el.tabIndex = 0;
+	plugin.registerDomEvent(
+		el, 'keydown', (evt) => {
+			switch (evt.key) {
+				case 'Enter':
+				case ' ':
+					evt.preventDefault();
+					el.click();
+			}
+		});
+}
+
 export function iconTextFr(icon: string, text: string): DocumentFragment {
 	let headingFr = document.createDocumentFragment();
 	let headingEl = headingFr.createEl('span');

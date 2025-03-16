@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, SettingFieldItemMap, COMMAND_PREFIX_TBAR } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -227,17 +227,8 @@ export default class ToolbarSettingsModal extends Modal {
 							this.display();
 						}
 					});
-				})
-				.extraSettingsEl.tabIndex = 0;
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ":
-								e.preventDefault();
-								cb.extraSettingsEl.click();
-						}
-					});
+				});
+				handleKeyClick(this.plugin, cb.extraSettingsEl);
 			});
 
 		if (this.toolbar.items.length > 8) {
@@ -254,18 +245,9 @@ export default class ToolbarSettingsModal extends Modal {
 							this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
 							cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 						}
-					})
-					.extraSettingsEl.tabIndex = 0;
+					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					this.plugin.registerDomEvent(
-						cb.extraSettingsEl, 'keydown', (e) => {
-							switch (e.key) {
-								case "Enter":
-								case " ":
-									e.preventDefault();
-									cb.extraSettingsEl.click();
-							}
-						});
+					handleKeyClick(this.plugin, cb.extraSettingsEl);
 				});
 		}
 
@@ -376,11 +358,13 @@ export default class ToolbarSettingsModal extends Modal {
 				icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
 				btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
+				handleKeyClick(this.plugin, btn.extraSettingsEl);
 			})
 			.addExtraButton((btn) => {
 				btn.setIcon('lucide-corner-down-left')
 					.setTooltip(t('setting.items.button-add-break-tooltip'))
 					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Break));
+				handleKeyClick(this.plugin, btn.extraSettingsEl);
 			});
 		itemsListButtonContainer.appendChild(formattingButtons);
 
