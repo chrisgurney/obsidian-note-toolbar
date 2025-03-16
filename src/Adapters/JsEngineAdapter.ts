@@ -14,16 +14,15 @@ import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 export default class JsEngineAdapter extends Adapter {
 
     readonly FUNCTIONS: AdapterFunction[] = [
-        // TODO: for possible future use
-        // {
-        //     function: this.evaluate,
-        //     label: "Evaluate JavaScript",
-        //     description: "",
-        //     parameters: [
-        //         { parameter: 'expression', label: "JavaScript expression", description: "JavaScript expression to evaluate", type: SettingType.TextArea, required: true },
-        //         { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
-        //     ]
-        // },
+        {
+            function: this.evaluate,
+            label: t('adapter.js-engine.eval-function'),
+            description: "",
+            parameters: [
+                { parameter: 'expression', label: t('adapter.js-engine.eval-expr'), description: t('adapter.js-engine.eval-expr-description'), type: SettingType.TextArea, required: true },
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+            ]
+        },
         {
             function: this.exec,
             label: t('adapter.js-engine.exec-function'),
