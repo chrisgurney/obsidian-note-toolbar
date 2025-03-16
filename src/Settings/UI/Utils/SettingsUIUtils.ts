@@ -427,22 +427,25 @@ export function renderItemSuggestion(
 		itemDescEl.addClass('note-toolbar-item-suggester-note');
 		itemDescEl.setText(item.description);
 
-		// show the plugin used, or the command ID
-		if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type)) {
+		// show the plugin(s) supported, or the command ID used
+		if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
 			const pluginDescEl = el.createDiv();
 			pluginDescEl.addClass('note-toolbar-item-suggester-note');
 
-			let itemPlugin: string | undefined;
-			let itemType = item.linkAttr.type as keyof typeof LINK_OPTIONS;
-
-			if (itemType === ItemType.Command) {
+			let itemPluginType = (item.linkAttr.type === ItemType.Plugin)
+				? (Array.isArray(item.plugin) ? item.plugin : [item.plugin])
+				: [item.linkAttr.type];
+			// get the command ID
+			if (item.linkAttr.type === ItemType.Command) {
 				const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
-				itemPlugin = LINK_OPTIONS[commandPluginId as keyof typeof LINK_OPTIONS];
-			} else {
-				itemPlugin = LINK_OPTIONS[itemType];
+				itemPluginType = [commandPluginId];
 			}
+			// replace known commands with user-friendly strings, and create a list
+			const itemPluginText = itemPluginType
+				.map(p => LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? p)
+				.join(', ');
 
-			if (itemPlugin) pluginDescEl.setText(t('gallery.label-plugin', { plugin: itemPlugin }));
+			if (itemPluginText) pluginDescEl.setText(t('gallery.label-plugin', { plugin: itemPluginText }));
 		}
 	}
 }
