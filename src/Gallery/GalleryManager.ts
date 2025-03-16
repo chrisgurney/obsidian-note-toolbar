@@ -11,6 +11,14 @@ export default class GalleryManager {
     }
 
     load() {
+        this.loadItems();
+    }
+
+    getItems(): ToolbarItemSettings[] {
+        return this.items;
+    }
+
+    private loadItems() {
         const lang = i18next.language || 'en';
         this.items = gallery.map((item: any) => ({
             uuid: '',
@@ -25,14 +33,14 @@ export default class GalleryManager {
                 hasVars: false,
                 type: item.type
             },
-            scriptConfig: item.scriptConfig ?? {},
+            plugin: item.plugin ?? '',
+            scriptConfig: item.script ? {
+                expression: item.script ?? '',
+                pluginFunction: 'TBD'
+            } : undefined,
             tooltip: item.tooltip ? item.tooltip[lang] : '',
             visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
         }));
-    }
-
-    getItems(): ToolbarItemSettings[] {
-        return this.items;
     }
 
 }

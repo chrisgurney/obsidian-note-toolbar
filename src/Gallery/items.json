@@ -3,34 +3,28 @@
         "id": "copy",
         "description": { "en": "Copies the selected text to the clipboard." },
         "icon": "clipboard-copy",
-        "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor; try { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Copy failed:', error); }",
-            "pluginFunction": "executeJs"
-        },
+        "plugin": ["dataview", "js-engine"],
+        "script": "const e = app.workspace.activeLeaf.view?.editor; try { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Copy failed:', error); }",
         "tooltip": { "en": "Copy" },
-        "type": "dataview"
+        "type": "plugin"
     },
     {
         "id": "cut",
         "description": { "en": "Cuts the selected text to the clipboard." },
         "icon": "scissors",
-        "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor; try { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Cut failed:', error); }",
-            "pluginFunction": "executeJs"
-        },
+        "plugin": ["dataview", "js-engine"],
+        "script": "const e = app.workspace.activeLeaf.view?.editor; try { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Cut failed:', error); }",
         "tooltip": { "en": "Cut" },
-        "type": "dataview"
+        "type": "plugin"
     },
     {
         "id": "indent",
         "description": { "en": "Increases indentation on the current line." },
         "icon": "indent-increase",
-        "scriptConfig": {
-            "expression": "app.workspace.activeLeaf.view?.editor.indentList()",
-            "pluginFunction": "parseTemplate"
-        },
+        "plugin": ["dataview", "templater-obsidian", "js-engine"],
+        "script": "app.workspace.activeLeaf.view?.editor.indentList()",
         "tooltip": { "en": "Indent" },
-        "type": "templater-obsidian"
+        "type": "plugin"
     },
     {
         "id": "insert-template",
@@ -46,12 +40,10 @@
             "en": "Opens the next file in the folder, sorted A-Z. Opens the first file in the folder when the last file is reached."
         },
         "icon": "square-arrow-right",
-        "scriptConfig": {
-            "expression": "const cf=app.workspace.getActiveFile(),cfp=app.vault.getAbstractFileByPath(cf.parent.path),cfl=cfp.children.filter(f=>f.basename),sfl=cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);if(sfl.length>1){let nf=ci==sfl.length-1?sfl[0]:sfl[ci+1];app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf));}",
-            "pluginFunction": "executeJs"
-        },
+        "plugin": ["dataview", "js-engine"],
+        "script": "const cf=app.workspace.getActiveFile(),cfp=app.vault.getAbstractFileByPath(cf.parent.path),cfl=cfp.children.filter(f=>f.basename),sfl=cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);if(sfl.length>1){let nf=ci==sfl.length-1?sfl[0]:sfl[ci+1];app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf));}",
         "tooltip": { "en": "Next file" },
-        "type": "dataview"
+        "type": "plugin"
     },
     {
         "id": "previous-file",
@@ -59,23 +51,19 @@
             "en": "Opens the previous file in the folder, sorted A-Z. Opens the last file in the folder when the first file is reached."
         },
         "icon": "square-arrow-left",
-        "scriptConfig": {
-            "expression": "const cf=app.workspace.getActiveFile(),cfp=app.vault.getAbstractFileByPath(cf.parent.path),cfl=cfp.children.filter(f=>f.basename),sfl=cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);if(sfl.length>1){const pf=ci===0?sfl[sfl.length-1]:sfl[ci-1];app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(pf));}",
-            "pluginFunction": "executeJs"
-        },
+        "plugin": ["dataview", "js-engine"],
+        "script": "const cf=app.workspace.getActiveFile(),cfp=app.vault.getAbstractFileByPath(cf.parent.path),cfl=cfp.children.filter(f=>f.basename),sfl=cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);if(sfl.length>1){const pf=ci===0?sfl[sfl.length-1]:sfl[ci-1];app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(pf));}",
         "tooltip": { "en": "Previous file" },
-        "type": "dataview"
+        "type": "plugin"
     },
     {
         "id": "paste",
         "description": { "en": "Pastes the text from the clipboard." },
         "icon": "clipboard-paste",
-        "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor; try { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Paste failed:', error); }",
-            "pluginFunction": "executeJs"
-        },
+        "plugin": ["dataview", "js-engine"],
+        "script": "const e = app.workspace.activeLeaf.view?.editor; try { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Paste failed:', error); }",
         "tooltip": { "en": "Paste" },
-        "type": "dataview"
+        "type": "plugin"
     },
     {
         "id": "toggle-pin",
@@ -89,38 +77,27 @@
         "id": "redo",
         "description": { "en": "Reapplies the last undone action." },
         "icon": "lucide-redo-2",
-        "scriptConfig": {
-            "expression": "app.workspace.activeLeaf.view?.editor.redo()",
-            "pluginFunction": "parseTemplate"
-        },
+        "plugin": ["dataview", "templater-obsidian", "js-engine"],
+        "script": "app.workspace.activeLeaf.view?.editor.redo()",
         "tooltip": { "en": "Redo" },
-        "tooltip": {
-            "en": "Redo"
-        },
-        "type": "templater-obsidian"
+        "type": "plugin"
     },
     {
         "id": "undo",
         "description": { "en": "Reverts the latest action." },
         "icon": "lucide-undo-2",
-        "scriptConfig": {
-            "expression": "app.workspace.activeLeaf.view?.editor.undo()"
-        },
+        "plugin": ["dataview", "templater-obsidian", "js-engine"],
+        "script": "app.workspace.activeLeaf.view?.editor.undo()",
         "tooltip": { "en": "Undo" },
-        "tooltip": {
-            "en": "Undo"
-        },
-        "type": "templater-obsidian"
+        "type": "plugin"
     },
     {
         "id": "unindent",
         "description": { "en": "Decreases indentation on the current line." },
         "icon": "indent-decrease",
-        "scriptConfig": {
-            "expression": "app.workspace.activeLeaf.view?.editor.unindentList()",
-            "pluginFunction": "parseTemplate"
-        },
+        "plugin": ["dataview", "templater-obsidian", "js-engine"],
+        "script": "app.workspace.activeLeaf.view?.editor.unindentList()",
         "tooltip": { "en": "Unindent" },
-        "type": "templater-obsidian"
+        "type": "plugin"
     }
 ]
