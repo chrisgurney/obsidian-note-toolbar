@@ -330,8 +330,9 @@
         "items": {
             "button-add-break-tooltip": "Add a line break to the toolbar",
             "button-add-separator-tooltip": "Add a separator to the toolbar",
-            "button-find-item": "Find item to add",
-            "button-new-item": "+ Add toolbar item",
+            "button-find-item": "Search",
+            "button-find-item-tooltip": "Find an item to add to the toolbar",
+            "button-new-item": "Add",
             "button-new-item-tooltip": "Add a new item to the toolbar",
             "description": "Add items to the toolbar, in order.",
             "label-empty-no-items": "No toolbar items.",

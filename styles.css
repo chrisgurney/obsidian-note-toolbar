@@ -1705,11 +1705,18 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 } 
 
+.mod-cta .note-toolbar-setting-text-with-icon {
+    & svg {
+        color: var(--text-on-accent);
+    }
+}
+
 .note-toolbar-setting-text-with-icon {
     display: inline-flex;
     column-gap: 0.5em;
     align-items: center;
     & svg {
+        color: var(--text-color) !important;
         vertical-align: middle;
     }
 }

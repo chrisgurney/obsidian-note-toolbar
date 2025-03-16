@@ -370,14 +370,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
-				btn.setTooltip(t('setting.items.button-new-item-tooltip'))
-					.setButtonText(t('setting.items.button-new-item'))
-					.setCta()
-					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Command));
-			})
-			.addExtraButton((btn) => {
-				btn.setIcon('zoom-in')
-					.setTooltip(t('setting.items.button-find-item'))
+				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
 					.onClick(async () => {
 						const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
 							this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
@@ -387,16 +380,13 @@ export default class ToolbarSettingsModal extends Modal {
 						});
 						modal.open();
 					});
-				btn.extraSettingsEl.tabIndex = 0;
-				this.plugin.registerDomEvent(
-					btn.extraSettingsEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ":
-								e.preventDefault();
-								btn.extraSettingsEl.click();
-						}
-					});
+				btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
+			})
+			.addButton((btn) => {
+				btn.setTooltip(t('setting.items.button-new-item-tooltip'))
+					.setCta()
+					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Command));
+				btn.buttonEl.setText(iconTextFr('plus', t('setting.items.button-new-item')));
 			});
 
 		itemsListContainer.appendChild(itemsListButtonContainer);
