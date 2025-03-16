@@ -551,14 +551,14 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		this.plugin.registerDomEvent(
-			itemPreview, 'keydown', (e: KeyboardEvent) => {
+			itemPreview, 'keydown', async (e: KeyboardEvent) => {
 				switch (e.key) {
 					case "d":
 						const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
 						if (modifierPressed) {
-							const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+							const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
 							this.plugin.settingsManager.save();
-							this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+							this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItem.uuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
 						}
 						break;
 					case "Enter":
@@ -1013,7 +1013,7 @@ export default class ToolbarSettingsModal extends Modal {
 		}, 0);
 		return [mappingCount, itemCount];
 	}
-
+	
 	/**
 	 * Renders/Re-renders the preview for the given item in the item list.
 	 * @param toolbarItem ToolbarItemSettings to display preview for

@@ -81,14 +81,14 @@ export class SettingsManager {
 	 * Duplicates the given toolbar item, and adds it to the given toolbar.
 	 * @param toolbar ToolbarSettings to duplicate the item within.
 	 * @param item ToolbarItemSettings to duplicate.
-	 * @returns string UUID of the new item.
+	 * @returns the new item.
 	 */
-	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false): Promise<string> {
-		debugLog('duplicateToolbarItem', item);
+	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false): Promise<ToolbarItemSettings> {
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
-		newItem.uuid = getUUID();
+		newItem.description = undefined;
 		newItem.hasCommand = false;
-		debugLog('duplicateToolbarItem: duplicated', newItem);
+		newItem.inGallery = false;
+		newItem.uuid = getUUID();
 		if (insertAfter) {
 			const index = toolbar.items.indexOf(item);
 			if (index !== -1) {
@@ -98,7 +98,7 @@ export class SettingsManager {
 		else {
 			toolbar.items.push(newItem);
 		}
-		return newItem.uuid;
+		return newItem;
 	}
 
 	/**
