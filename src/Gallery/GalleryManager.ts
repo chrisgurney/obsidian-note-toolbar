@@ -1,4 +1,4 @@
-import gallery from "Gallery/gallery.json";
+import gallery from "Gallery/items.json";
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, ToolbarItemSettings } from "../Settings/NoteToolbarSettings";
 import { debugLog } from "Utils/Utils";
