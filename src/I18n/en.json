@@ -40,6 +40,10 @@
             "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
         },
         "js-engine": {
+            "eval-function": "Evaluate JavaScript",
+            "eval-expr": "JavaScript expression",
+            "eval-expr-description": "JavaScript expression to evaluate.",
+            "eval-expr-error-required": "Error: A JavaScript expression is required",
             "exec-function": "Execute JavaScript",
             "exec-sourcefile": "JavaScript file",
             "exec-sourcefile-description": "JavaScript file to execute.",
