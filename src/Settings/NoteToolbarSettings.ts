@@ -62,6 +62,7 @@ export enum ItemType {
 	Group = 'group',
 	JsEngine = 'js-engine',
 	Menu = 'menu',
+	Plugin = 'plugin', // used for Gallery items that rely on plugins
 	Separator = 'separator',
 	Templater = 'templater-obsidian',
 	Uri = 'uri'
@@ -138,6 +139,7 @@ export const SettingFieldItemMap: Record<ItemType, SettingType> = {
 	[ItemType.Group]: SettingType.Toolbar,
 	[ItemType.JsEngine]: SettingType.Script,
 	[ItemType.Menu]: SettingType.Toolbar,
+	[ItemType.Plugin]: SettingType.Ignore,
 	[ItemType.Separator]: SettingType.Ignore,
 	[ItemType.Uri]: SettingType.Text,
 	[ItemType.Templater]: SettingType.Script
@@ -339,9 +341,7 @@ export interface FolderMapping {
 
 export interface ToolbarItemSettings {
 	uuid: string;
-	/**
-	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration)
-	 */
+	/**	@deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration) */
 	contexts?: ViewContext[];
 	description?: string;
 	hasCommand: boolean;	
@@ -350,6 +350,8 @@ export interface ToolbarItemSettings {
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
+	/** Used for importing Gallery items that rely on plugins */
+	plugin?: string | string[];
 	scriptConfig?: ScriptConfig;
 	tooltip: string;
 	visibility: Visibility;
