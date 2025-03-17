@@ -2,7 +2,7 @@ import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, LINK_OPTIONS, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
+import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import Sortable from 'sortablejs';
@@ -1141,7 +1141,7 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 			else {
 				const pluginNames = plugins.map(p => {
-					const name = LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? undefined;
+					const name = t(`plugin.${p}`);
 					if (!name) return; // ignore plugins that aren't supported
 					const isEnabled = !!this.plugin.getAdapterForItemType(p as ItemType);
 					return isEnabled 

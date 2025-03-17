@@ -179,7 +179,12 @@
         "swap-toolbar-title": "This note will be changed"
     },
     "plugin": {
-        "name": "Note Toolbar"
+        "daily-notes": "Daily Notes",
+        "dataview": "Dataview",
+        "js-engine": "JS Engine",
+        "note-toolbar": "Note Toolbar",
+        "sync": "Obsidian Sync",
+        "templater-obsidian": "Templater"
     },
     "setting": {
         "button-cancel": "Cancel",

@@ -1,5 +1,5 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { ItemType, LINK_OPTIONS, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
@@ -172,7 +172,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 		);
 
 		new Setting(settingsDiv)
-			.setName(t('plugin.name') + ' • v' + plugin.manifest.version)
+			.setName(t('plugin.note-toolbar') + ' • v' + plugin.manifest.version)
 			.setDesc(t('setting.help.description'))
 			.addButton((button: ButtonComponent) => {
 				button
@@ -442,8 +442,7 @@ export function renderItemSuggestion(
 			}
 			// replace known commands with user-friendly strings (if supported), and create a list
 			const itemPluginText = itemPluginType
-				.map(p => LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? null)
-				.filter(Boolean)
+				.map(p => t(`plugin.${p}`))
 				.join(', ');
 
 			if (itemPluginText) pluginDescEl.setText(t('gallery.label-plugin', { plugin: itemPluginText }));
