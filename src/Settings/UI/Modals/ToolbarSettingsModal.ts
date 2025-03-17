@@ -2,7 +2,7 @@ import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, SettingFieldItemMap, COMMAND_PREFIX_TBAR } from 'Settings/NoteToolbarSettings';
+import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, SettingFieldItemMap, COMMAND_PREFIX_TBAR, LINK_OPTIONS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import Sortable from 'sortablejs';
@@ -1128,17 +1128,21 @@ export default class ToolbarSettingsModal extends Modal {
 
 		if (item.plugin && item.scriptConfig?.expression) {
 			const plugins = Array.isArray(item.plugin) ? item.plugin : [item.plugin];
-			const enabledPlugins = plugins.filter((p) =>
-				this.plugin.getAdapterForItemType(p as ItemType)
-			);
 			
-			if (enabledPlugins.length === 1) {
-				pluginType = enabledPlugins[0] as ItemType;
+			if (plugins.length === 1) {
+				pluginType = plugins[0] as ItemType;
 			}
 			else {
-				pluginType = await this.plugin.api.suggester(enabledPlugins, undefined, {
+				const pluginNames = plugins.map(p => {
+					const name = LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? p;
+					const isEnabled = !!this.plugin.getAdapterForItemType(p as ItemType);
+					return isEnabled 
+						? t('gallery.select-plugin-suggestion', { plugin: name }) 
+						: t('gallery.select-plugin-suggestion-not-enabled', { plugin: name });
+				});
+				pluginType = await this.plugin.api.suggester(pluginNames, plugins, {
 					class: 'note-toolbar-setting-mini-dialog',
-					placeholder: t('gallery.placeholder-select-plugin')
+					placeholder: t('gallery.select-plugin-placeholder')
 				});
 				if (!pluginType) {
 					return undefined;

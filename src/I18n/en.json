@@ -128,7 +128,9 @@
     "gallery": {
         "label-plugin": "Uses plugin: 🧩 {{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
-        "placeholder-select-plugin": "Select plugin to use..."
+        "select-plugin-placeholder": "Select plugin to use...",
+        "select-plugin-suggestion": "{{plugin}}",
+        "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Not enabled or installed"
     },
     "import": {
         "button-add-items": "Add items",
