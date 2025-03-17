@@ -1136,7 +1136,8 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 			else {
 				pluginType = await this.plugin.api.suggester(enabledPlugins, undefined, {
-					placeholder: "Select plugin to use..."
+					class: 'note-toolbar-setting-mini-dialog',
+					placeholder: t('gallery.placeholder-select-plugin')
 				});
 			}
 
@@ -1158,11 +1159,11 @@ export default class ToolbarSettingsModal extends Modal {
 				}
 			}
 			else {
-				// invalid plugin or none enabled
+				// TODO: error: invalid plugin or none enabled
 			}
 		}
 		else {
-			// invalid item: missing plugin or script
+			// TODO: error: invalid item: missing plugin or script
 		}
 
 	}

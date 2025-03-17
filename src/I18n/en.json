@@ -127,7 +127,8 @@
     },
     "gallery": {
         "label-plugin": "Uses plugin: 🧩 {{plugin}}",
-        "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY"
+        "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
+        "placeholder-select-plugin": "Select plugin to use..."
     },
     "import": {
         "button-add-items": "Add items",
