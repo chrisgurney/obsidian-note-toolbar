@@ -18,6 +18,30 @@
         "type": "plugin"
     },
     {
+        "id": "daily-notes-prev",
+        "commandId": "daily-notes:goto-prev",
+        "description": { "en": "Go to the previous daily note." },
+        "icon": "arrow-left",
+        "tooltip": { "en": "Previous daily note" },
+        "type": "command"
+    },
+    {
+        "id": "daily-notes-today",
+        "commandId": "daily-notes",
+        "description": { "en": "Open today's daily note." },
+        "icon": "calendar-check",
+        "tooltip": { "en": "Today's daily note" },
+        "type": "command"
+    },
+    {
+        "id": "daily-notes-next",
+        "commandId": "daily-notes:goto-next",
+        "description": { "en": "Go to the next daily note." },
+        "icon": "arrow-right",
+        "tooltip": { "en": "Next daily note" },
+        "type": "command"
+    },
+    {
         "id": "indent",
         "description": { "en": "Increases indentation on the current line." },
         "icon": "indent-increase",
