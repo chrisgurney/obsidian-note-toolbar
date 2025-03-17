@@ -1,19 +1,22 @@
 import NoteToolbarPlugin from "main";
-import { App, Modal } from "obsidian";
+import { App, ButtonComponent, Modal, Setting } from "obsidian";
 import { t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarItemUi from "../ToolbarItemUi";
+import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
 export default class ItemModal extends Modal {
 
     public plugin: NoteToolbarPlugin;
-
-    private toolbarItem: ToolbarItemSettings;
     private toolbarItemUi: ToolbarItemUi;
 
-    constructor(app: App, plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, toolbarItem: ToolbarItemSettings) {
-        super(app);
+    constructor(
+        plugin: NoteToolbarPlugin, 
+        toolbar: ToolbarSettings, 
+        private toolbarItem: ToolbarItemSettings, 
+        private parent?: ToolbarSettingsModal
+    ) {
+        super(plugin.app);
 		this.plugin = plugin;
-        this.toolbarItem = toolbarItem;
         this.toolbarItemUi = new ToolbarItemUi(this.plugin, this, toolbar);
     }
 
@@ -26,11 +29,12 @@ export default class ItemModal extends Modal {
     }
 
 	/**
-	 * Removes modal window and refreshes the parent settings window.
+	 * Removes modal window and refreshes the parent settings window if provided.
 	 */
 	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
+        if (this.parent) this.parent.display();
 	}
 
 	/**
@@ -40,6 +44,15 @@ export default class ItemModal extends Modal {
         this.contentEl.empty();
         let itemForm = this.toolbarItemUi.generateItemForm(this.toolbarItem);
         this.contentEl.append(itemForm);
+
+        new Setting(this.contentEl)
+            .addButton((btn: ButtonComponent) => {
+                btn.setButtonText(t('setting.item.button-close'))
+                    .setTooltip(t('setting.item.button-close-description'))
+                    .onClick(async (event) => {
+                        this.close();
+                    });
+            });
 
         // TODO: set initial keyboard focus?
     }

@@ -448,7 +448,7 @@ export default class ToolbarItemUi {
         const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
         await this.plugin.settingsManager.save();
         if (this.parent instanceof ItemModal) {
-            let newItemModal = new ItemModal(this.plugin.app, this.plugin, this.toolbar, newItem);
+            let newItemModal = new ItemModal(this.plugin, this.toolbar, newItem);
             this.parent.close();
             newItemModal.open();
         }

@@ -357,6 +357,22 @@ export interface ToolbarItemSettings {
 	visibility: Visibility;
 }
 
+export const DEFAULT_ITEM_SETTINGS = {
+	uuid: '',
+	label: '',
+	hasCommand: false,
+	icon: '',
+	inGallery: false,
+	link: '',
+	linkAttr: {
+		commandId: '',
+		hasVars: false,
+		type: ItemType.Command
+	},
+	tooltip: '',
+	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS },
+}
+
 export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 	uuid: GALLERY_DIVIDER_ID,
 	hasCommand: false,
