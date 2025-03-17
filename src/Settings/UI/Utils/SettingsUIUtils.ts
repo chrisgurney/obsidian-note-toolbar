@@ -440,9 +440,10 @@ export function renderItemSuggestion(
 				const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
 				itemPluginType = [commandPluginId];
 			}
-			// replace known commands with user-friendly strings, and create a list
+			// replace known commands with user-friendly strings (if supported), and create a list
 			const itemPluginText = itemPluginType
-				.map(p => LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? p)
+				.map(p => LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? null)
+				.filter(Boolean)
 				.join(', ');
 
 			if (itemPluginText) pluginDescEl.setText(t('gallery.label-plugin', { plugin: itemPluginText }));

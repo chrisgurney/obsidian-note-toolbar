@@ -1134,7 +1134,8 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 			else {
 				const pluginNames = plugins.map(p => {
-					const name = LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? p;
+					const name = LINK_OPTIONS[p as keyof typeof LINK_OPTIONS] ?? undefined;
+					if (!name) return; // ignore plugins that aren't supported
 					const isEnabled = !!this.plugin.getAdapterForItemType(p as ItemType);
 					return isEnabled 
 						? t('gallery.select-plugin-suggestion', { plugin: name }) 
