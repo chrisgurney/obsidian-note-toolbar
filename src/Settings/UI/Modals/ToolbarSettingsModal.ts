@@ -374,7 +374,10 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(async () => {
 						const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
 							let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
-							if (newItem.linkAttr.type === ItemType.Plugin) await this.resolvePluginType(newItem);
+							if (newItem.linkAttr.type === ItemType.Plugin) {
+								const pluginType = await this.resolvePluginType(newItem);
+								if (!pluginType) return;
+							}
 							this.toolbar.updated = new Date().toISOString();
 							await this.plugin.settingsManager.save();
 							this.display();
@@ -1117,20 +1120,18 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Prompts user if there's more than one enabled plugin available.
 	 * Reports errors if the plugin's not supported, chosen plugin's not enabled, or the proper parameters aren't provided.
 	 * @param item ToolbarItemSettings to update
-	 * @returns nothing
+	 * @returns a supported ItemType, or undefined
 	 */
-	async resolvePluginType(item: ToolbarItemSettings): Promise<void> {
+	async resolvePluginType(item: ToolbarItemSettings): Promise<ItemType | undefined> {
+
+		let pluginType: ItemType | undefined;
 
 		if (item.plugin && item.scriptConfig?.expression) {
 			const plugins = Array.isArray(item.plugin) ? item.plugin : [item.plugin];
 			const enabledPlugins = plugins.filter((p) =>
 				this.plugin.getAdapterForItemType(p as ItemType)
 			);
-			if (enabledPlugins.length === 0) {
-				return undefined;
-			}
 			
-			let pluginType: ItemType | undefined;
 			if (enabledPlugins.length === 1) {
 				pluginType = enabledPlugins[0] as ItemType;
 			}
@@ -1139,6 +1140,9 @@ export default class ToolbarSettingsModal extends Modal {
 					class: 'note-toolbar-setting-mini-dialog',
 					placeholder: t('gallery.placeholder-select-plugin')
 				});
+				if (!pluginType) {
+					return undefined;
+				}
 			}
 
 			if (pluginType) {
@@ -1159,12 +1163,16 @@ export default class ToolbarSettingsModal extends Modal {
 				}
 			}
 			else {
-				// TODO: error: invalid plugin or none enabled
+				console.error("Invalid plugin or none enabled.");
+				return undefined;
 			}
 		}
 		else {
-			// TODO: error: invalid item: missing plugin or script
+			console.error("Missing plugin or script element in Gallery data.");
+			return undefined;
 		}
+
+		return pluginType;
 
 	}
 
