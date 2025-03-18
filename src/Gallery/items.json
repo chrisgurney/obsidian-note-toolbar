@@ -107,7 +107,7 @@
     },
     {
         "id": "go-home",
-        "description": { "en": "Go to my home note. Enter the name of your home note." },
+        "description": { "en": "Go to my home note. After adding this item, enter the name of your home note in the URL." },
         "icon": "home",
         "tooltip": { "en": "Home" },
         "url": "",
