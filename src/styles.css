@@ -1345,11 +1345,15 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-gallery-view-items-container {
     align-items: stretch;
+    padding-bottom: 1em;
     display: flex;
     gap: 16px;
     overflow-x: auto;
     position: relative;
     scroll-behavior: smooth;
+    &:not(:last-child) {
+        border-block-end: solid 1px var(--background-modifier-border);
+    }
 }
 
 .note-toolbar-gallery-view-item {
