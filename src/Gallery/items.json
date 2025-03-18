@@ -106,6 +106,22 @@
         "type": "command"
     },
     {
+        "id": "go-home",
+        "description": { "en": "Go to my home note. Enter the name of your home note." },
+        "icon": "home",
+        "tooltip": { "en": "Home" },
+        "url": "",
+        "type": "link"
+    },
+    {
+        "id": "go-up",
+        "description": { "en": "Navigate upwards. Uses the 'up' property in your note." },
+        "icon": "arrow-up-left",
+        "tooltip": { "en": "Go up" },
+        "url": "{{prop_up}}",
+        "type": "link"
+    },
+    {
         "id": "indent",
         "description": { "en": "Increases indentation on the current line." },
         "icon": "indent-increase",
