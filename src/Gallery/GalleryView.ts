@@ -2,7 +2,8 @@ import NoteToolbarPlugin from 'main';
 import { ItemView, MarkdownRenderer, setIcon, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
 import { t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
-import { getPluginNames } from 'Settings/UI/Utils/SettingsUIUtils';
+import { getPluginNames, handleKeyClick } from 'Settings/UI/Utils/SettingsUIUtils';
+import { debugLog } from 'Utils/Utils';
 
 interface Category {
 	name: { [key: string]: string };
@@ -63,30 +64,35 @@ export class GalleryView extends ItemView {
 			itemsEl.addClass('note-toolbar-gallery-view-items-container');
 
 			category.itemIds.forEach(itemId => {
-				const itemEl = itemsEl.createDiv();
-				itemEl.addClass('note-toolbar-gallery-view-item');
-
 				const galleryItem = galleryItems.find(item => item.uuid.includes(itemId));
 				if (galleryItem) {
+					const itemEl = itemsEl.createDiv();
+					itemEl.addClass('note-toolbar-gallery-view-item');
+					setTooltip(itemEl, "Click/Tap to add to a toolbar");
+
 					itemEl.createEl('h3').setText(galleryItem.tooltip);
 					if (galleryItem.description) {
 						const itemDescEl = itemEl.createEl('p');
+						itemDescEl.addClass('note-toolbar-gallery-view-item-description');
 						MarkdownRenderer.render(this.plugin.app, galleryItem.description, itemDescEl, '/', this.plugin);
 					}
 
 					let pluginNames = getPluginNames(galleryItem);
 					if (pluginNames) {
 						const pluginEl = itemEl.createEl('p');
-						pluginEl.addClass('note-toolbar-gallery-view-item-plugin');
 						pluginEl.setText(t('gallery.label-plugin', { plugin: pluginNames }));
 					}
 
 					const iconEl = itemEl.createDiv();
 					iconEl.addClass('note-toolbar-gallery-view-item-icon');
 					setIcon(iconEl, galleryItem.icon);
+
+					this.plugin.registerDomEvent(itemEl, 'click', (evt) => {
+						debugLog('asdf');
+					});
+					handleKeyClick(this.plugin, itemEl);
 				}
 
-				setTooltip(itemEl, "Click/Tap to add to a toolbar");
 			});
 
 		});

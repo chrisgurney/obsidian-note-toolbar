@@ -2271,6 +2271,11 @@ input[type="text"].note-toolbar-setting-error,
     padding: 16px;
     position: relative;
     width: 200px;
+    &:focus-visible {
+        border-radius: var(--input-radius);
+        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
+    }
     &:hover {
         background-color: var(--background-modifier-border-focus);
     }
@@ -2285,6 +2290,9 @@ input[type="text"].note-toolbar-setting-error,
     & p {
         font-size: var(--font-ui-small);
         margin: 0;
+    }
+    & p.note-toolbar-gallery-view-item-description {
+        color: var(--text-muted);
     }
 }
 
@@ -2301,10 +2309,6 @@ input[type="text"].note-toolbar-setting-error,
         height: 30px;        
         width: 30px;
     }
-}
-
-.note-toolbar-gallery-view-item-plugin {
-    color: var(--text-muted);
 }
 
 .note-toolbar-icon-suggestion {
