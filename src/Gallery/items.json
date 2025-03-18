@@ -82,6 +82,22 @@
         "type": "command"
     },
     {
+        "id": "editor-toggle-preview",
+        "commandId": "markdown:toggle-preview",
+        "description": { "en": "Toggle the reading view of the note." },
+        "icon": "book-open",
+        "tooltip": { "en": "Toggle reading view" },
+        "type": "command"
+    },
+    {
+        "id": "editor-toggle-source",
+        "commandId": "editor:toggle-source",
+        "description": { "en": "Toggle between Live Preview and Source mode." },
+        "icon": "code-2",
+        "tooltip": { "en": "Toggle Live Preview/Source mode" },
+        "type": "command"
+    },
+    {
         "id": "global-search-open",
         "commandId": "global-search:open",
         "description": { "en": "Search across all files." },
@@ -298,6 +314,14 @@
         "type": "plugin"
     },
     {
+        "id": "pin",
+        "commandId": "workspace:toggle-pin",
+        "description": { "en": "Pins or unpins the current note, preventing it from being replaced when opening new notes." },
+        "icon": "pin",
+        "tooltip": { "en": "Toggle pin" },
+        "type": "command"
+    },
+    {
         "id": "search-replace-open",
         "commandId": "editor:open-search-replace",
         "description": { "en": "Open search and replace for the current file." },
@@ -319,14 +343,6 @@
         "description": { "en": "Inserts the chosen template." },
         "icon": "templater-icon",
         "tooltip": { "en": "Insert template" },
-        "type": "command"
-    },
-    {
-        "id": "toggle-pin",
-        "commandId": "workspace:toggle-pin",
-        "description": { "en": "Pins or unpins the current note, preventing it from being replaced when opening new notes." },
-        "icon": "pin",
-        "tooltip": { "en": "Toggle pin" },
         "type": "command"
     },
     {
@@ -352,6 +368,30 @@
         "description": { "en": "Move the current line up." },
         "icon": "corner-right-up",
         "tooltip": { "en": "Move line up" },
+        "type": "command"
+    },
+    {
+        "id": "theme-switch",
+        "commandId": "theme:switch",
+        "description": { "en": "Open the Obsidian theme switcher." },
+        "icon": "venetian-mask",
+        "tooltip": { "en": "Change theme" },
+        "type": "command"
+    },
+    {
+        "id": "theme-use-dark",
+        "commandId": "theme:use-dark",
+        "description": { "en": "Enable dark mode." },
+        "icon": "moon",
+        "tooltip": { "en": "Use dark mode" },
+        "type": "command"
+    },
+    {
+        "id": "theme-use-light",
+        "commandId": "theme:use-light",
+        "description": { "en": "Enable light mode." },
+        "icon": "sun",
+        "tooltip": { "en": "Use light mode" },
         "type": "command"
     },
     {
