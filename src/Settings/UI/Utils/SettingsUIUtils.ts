@@ -451,9 +451,9 @@ export function getPluginNames(item: ToolbarItemSettings): string | undefined {
 	}
 	// get the command ID
 	else if (item.linkAttr.type === ItemType.Command) {
-		const obsidianBuiltInCommands = ['bookmarks', 'editor', 'global-search', 'link', 'theme'];
+		const ignoreCommands = ['bookmarks', 'editor', 'global-search', 'link', 'markdown', 'note-toolbar', 'theme'];
 		const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
-		itemPluginType = !obsidianBuiltInCommands.includes(commandPluginId) ? [commandPluginId] : [];
+		itemPluginType = !ignoreCommands.includes(commandPluginId) ? [commandPluginId] : [];
 	}
 	// replace known commands with user-friendly strings (if supported), and create a list
 	if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')
