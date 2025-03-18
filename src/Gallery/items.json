@@ -8,6 +8,14 @@
         "type": "command"
     },
     {
+        "id": "bookmarks-open",
+        "commandId": "bookmarks:open",
+        "description": { "en": "Show bookmarks." },
+        "icon": "bookmark",
+        "tooltip": { "en": "Show bookmarks" },
+        "type": "command"
+    },
+    {
         "id": "clear-formatting",
         "commandId": "editor:clear-formatting",
         "description": { "en": "Remove all text formatting." },
@@ -71,6 +79,14 @@
         "description": { "en": "Go to the next daily note." },
         "icon": "arrow-right",
         "tooltip": { "en": "Next daily note" },
+        "type": "command"
+    },
+    {
+        "id": "global-search-open",
+        "commandId": "global-search:open",
+        "description": { "en": "Search across all files." },
+        "icon": "search",
+        "tooltip": { "en": "Search in all files" },
         "type": "command"
     },
     {
@@ -262,14 +278,6 @@
         "type": "command"
     },
     {
-        "id": "open-settings",
-        "commandId": "app:open-settings",
-        "description": { "en": "Open Obsidian's settings." },
-        "icon": "settings",
-        "tooltip": { "en": "Open settings" },
-        "type": "command"
-    },
-    {
         "id": "previous-file",
         "description": {
             "en": "Opens the previous file in the folder, sorted A-Z. Opens the last file in the folder when the first file is reached."
@@ -288,6 +296,22 @@
         "script": "const e = app.workspace.activeLeaf.view?.editor; try { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Paste failed:', error); }",
         "tooltip": { "en": "Paste" },
         "type": "plugin"
+    },
+    {
+        "id": "search-replace-open",
+        "commandId": "editor:open-search-replace",
+        "description": { "en": "Open search and replace for the current file." },
+        "icon": "file-search",
+        "tooltip": { "en": "Search & replace in current file" },
+        "type": "command"
+    },
+    {
+        "id": "settings-open",
+        "commandId": "app:open-settings",
+        "description": { "en": "Open Obsidian's settings." },
+        "icon": "settings",
+        "tooltip": { "en": "Open settings" },
+        "type": "command"
     },
     {
         "id": "templater-insert-template",
