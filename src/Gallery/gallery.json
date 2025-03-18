@@ -6,7 +6,7 @@
         "name": { "en": "Daily Notes" },
         "description": { "en": "Quickly navigate between daily notes." },
         "itemIds": [
-          "daily-notes-prev", "daily-notes-today", "daily-notes-next"
+            "daily-notes-prev", "daily-notes-today", "daily-notes-next"
         ]
       },
       {
@@ -48,49 +48,49 @@
         "name": { "en": "Navigation" },
         "description": { "en": "Navigate between files and directories." },
         "itemIds": [
-          "previous-file", "next-file", "go-home", "go-up", "bookmarks-open"
+            "previous-file", "next-file", "go-home", "go-up", "bookmarks-open"
         ]
       },
       {
         "name": { "en": "Note Toolbar" },
         "description": { "en": "Get access to Note Toolbar settings and tools quickly." },
         "itemIds": [
-          "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
+            "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
         ]
       },
       {
         "name": { "en": "Obsidian Support" },
         "description": { "en": "Get help from Obsidian community resources." },
         "itemIds": [
-          "obsidian-discord", "obsidian-forum", "obsidian-help-site", "obsidian-markdown-reference", "obsidian-subreddit"
+            "obsidian-discord", "obsidian-forum", "obsidian-help-site", "obsidian-markdown-reference", "obsidian-subreddit"
         ]
       },
       {
         "name": { "en": "Obsidian Sync" },
         "description": { "en": "View synced note versions." },
         "itemIds": [
-          "obsidian-sync-version-history"
+            "obsidian-sync-version-history"
         ]
       },
       {
         "name": { "en": "Search" },
         "description": { "en": "Search notes." },
         "itemIds": [
-          "search-replace-open", "global-search-open"
+            "search-replace-open", "global-search-open"
         ]
       },
       {
         "name": { "en": "Themes and Views" },
         "description": { "en": "Switch themes and toggle views." },
         "itemIds": [
-          "theme-switch", "theme-use-dark", "theme-use-light", "editor-toggle-preview", "editor-toggle-source"
+            "theme-switch", "theme-use-dark", "theme-use-light", "editor-toggle-preview", "editor-toggle-source"
         ]
       },
       {
         "name": { "en": "Templater" },
         "description": { "en": "Insert or create notes from templates." },
         "itemIds": [
-          "templater-insert-template", "templater-new-note-from-template"
+            "templater-insert-template", "templater-new-note-from-template"
         ]
       }
     ]
