@@ -2251,6 +2251,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-gallery-view-items-container {
+    align-items: stretch;
     display: flex;
     gap: 16px;
     overflow-x: auto;
@@ -2266,7 +2267,6 @@ input[type="text"].note-toolbar-setting-error,
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
-    height: 150px;
     justify-content: flex-end;
     padding: 16px;
     position: relative;
@@ -2277,6 +2277,7 @@ input[type="text"].note-toolbar-setting-error,
     & h3 {
         font-size: var(--font-normal);
         margin: 0;
+        margin-top: 46px; /* icon height */
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -2300,6 +2301,10 @@ input[type="text"].note-toolbar-setting-error,
         height: 30px;        
         width: 30px;
     }
+}
+
+.note-toolbar-gallery-view-item-plugin {
+    color: var(--text-muted);
 }
 
 .note-toolbar-icon-suggestion {

@@ -1,7 +1,8 @@
 import NoteToolbarPlugin from 'main';
 import { ItemView, MarkdownRenderer, setIcon, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
-import { VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { getPluginNames } from 'Settings/UI/Utils/SettingsUIUtils';
 
 interface Category {
 	name: { [key: string]: string };
@@ -71,6 +72,13 @@ export class GalleryView extends ItemView {
 					if (galleryItem.description) {
 						const itemDescEl = itemEl.createEl('p');
 						MarkdownRenderer.render(this.plugin.app, galleryItem.description, itemDescEl, '/', this.plugin);
+					}
+
+					let pluginNames = getPluginNames(galleryItem);
+					if (pluginNames) {
+						const pluginEl = itemEl.createEl('p');
+						pluginEl.addClass('note-toolbar-gallery-view-item-plugin');
+						pluginEl.setText(t('gallery.label-plugin', { plugin: pluginNames }));
 					}
 
 					const iconEl = itemEl.createDiv();
