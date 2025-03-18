@@ -139,14 +139,6 @@
         "type": "command"
     },
     {
-        "id": "insert-template",
-        "commandId": "templater-obsidian:insert-templater",
-        "description": { "en": "Inserts the chosen template." },
-        "icon": "templater-icon",
-        "tooltip": { "en": "Insert template" },
-        "type": "command"
-    },
-    {
         "id": "insert-wikilink",
         "commandId": "editor:insert-wikilink",
         "description": { "en": "Add an internal link." },
@@ -184,6 +176,14 @@
         "script": "const e = app.workspace.activeLeaf.view?.editor; try { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Paste failed:', error); }",
         "tooltip": { "en": "Paste" },
         "type": "plugin"
+    },
+    {
+        "id": "templater-insert-template",
+        "commandId": "templater-obsidian:insert-templater",
+        "description": { "en": "Inserts the chosen template." },
+        "icon": "templater-icon",
+        "tooltip": { "en": "Insert template" },
+        "type": "command"
     },
     {
         "id": "toggle-pin",
