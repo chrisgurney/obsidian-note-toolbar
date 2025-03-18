@@ -429,25 +429,35 @@ export function renderItemSuggestion(
 
 		// show the plugin(s) supported, or the command ID used
 		if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
-			const pluginDescEl = el.createDiv();
-			pluginDescEl.addClass('note-toolbar-item-suggester-note');
-
-			let itemPluginType = (item.linkAttr.type === ItemType.Plugin)
-				? (Array.isArray(item.plugin) ? item.plugin : [item.plugin])
-				: [item.linkAttr.type];
-			// get the command ID
-			if (item.linkAttr.type === ItemType.Command) {
-				const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
-				itemPluginType = [commandPluginId];
+			let itemPluginText = getPluginNames(item);
+			if (itemPluginText) {
+				const pluginDescEl = el.createDiv();
+				pluginDescEl.addClass('note-toolbar-item-suggester-note');			
+				pluginDescEl.setText(t('gallery.label-plugin', { plugin: itemPluginText }));
 			}
-			// replace known commands with user-friendly strings (if supported), and create a list
-			const itemPluginText = itemPluginType
-				.map(p => t(`plugin.${p}`))
-				.join(', ');
-
-			if (itemPluginText) pluginDescEl.setText(t('gallery.label-plugin', { plugin: itemPluginText }));
 		}
 	}
+}
+
+/**
+ * Gets a list of plugin names required by this item, derived from the commandId or plugin property.
+ * @param item ToolbarItemSettings to get plugin list from
+ * @returns list of plugin names
+ */
+export function getPluginNames(item: ToolbarItemSettings): string | undefined {
+	let itemPluginType;
+	if (item.linkAttr.type === ItemType.Plugin) {
+		itemPluginType = (Array.isArray(item.plugin) ? item.plugin : [item.plugin]);
+	}
+	// get the command ID
+	else if (item.linkAttr.type === ItemType.Command) {
+		const obsidianBuiltInCommands = ['bookmarks', 'editor', 'global-search', 'link', 'theme'];
+		const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
+		itemPluginType = !obsidianBuiltInCommands.includes(commandPluginId) ? [commandPluginId] : [];
+	}
+	// replace known commands with user-friendly strings (if supported), and create a list
+	if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')
+	else return undefined;
 }
 
 /**
