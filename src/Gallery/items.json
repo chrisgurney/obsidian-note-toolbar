@@ -107,7 +107,7 @@
     },
     {
         "id": "go-home",
-        "description": { "en": "Go to my home note. After adding this item, enter the name of your home note in the URL." },
+        "description": { "en": "Go to my home note. Enter the name of your home note in the URL." },
         "icon": "home",
         "tooltip": { "en": "Home" },
         "url": "",
@@ -213,7 +213,7 @@
     {
         "id": "next-file",
         "description": {
-            "en": "Opens the next file in the folder, sorted A-Z. Opens the first file in the folder when the last file is reached."
+            "en": "Opens the next file in the folder, sorted A-Z. Loops back to the first file."
         },
         "icon": "square-arrow-right",
         "plugin": ["dataview", "js-engine"],
@@ -263,7 +263,7 @@
     },
     {
         "id": "obsidian-discord",
-        "description": { "en": "Join the Obsidian Discord community." },
+        "description": { "en": "Opens the Obsidian Discord community." },
         "icon": "discord",
         "tooltip": { "en": "Obsidian Discord" },
         "url": "https://discord.gg/obsidianmd",
@@ -271,7 +271,7 @@
     },
     {
         "id": "obsidian-forum",
-        "description": { "en": "Visit the Obsidian forum for discussions and support." },
+        "description": { "en": "Opens the Obsidian forum for discussions and support." },
         "icon": "message-circle",
         "tooltip": { "en": "Obsidian forum" },
         "url": "https://forum.obsidian.md/",
@@ -279,7 +279,7 @@
     },
     {
         "id": "obsidian-help-site",
-        "description": { "en": "Access the official Obsidian help site." },
+        "description": { "en": "Opens the official Obsidian help site." },
         "icon": "book",
         "tooltip": { "en": "Obsidian help site" },
         "url": "https://help.obsidian.md/",
@@ -287,7 +287,7 @@
     },
     {
         "id": "obsidian-markdown-reference",
-        "description": { "en": "View the Obsidian Markdown formatting guide." },
+        "description": { "en": "Opens the Obsidian Markdown formatting guide." },
         "icon": "book-down",
         "tooltip": { "en": "Markdown reference" },
         "url": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
@@ -295,7 +295,7 @@
     },
     {
         "id": "obsidian-subreddit",
-        "description": { "en": "Join the Obsidian community on Reddit." },
+        "description": { "en": "Opens the Obsidian community on Reddit." },
         "icon": "messages-square",
         "tooltip": { "en": "Obsidian subreddit" },
         "url": "https://www.reddit.com/r/ObsidianMD/",
@@ -312,7 +312,7 @@
     {
         "id": "previous-file",
         "description": {
-            "en": "Opens the previous file in the folder, sorted A-Z. Opens the last file in the folder when the first file is reached."
+            "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file."
         },
         "icon": "square-arrow-left",
         "plugin": ["dataview", "js-engine"],
