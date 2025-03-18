@@ -306,7 +306,7 @@
         "commandId": "sync:view-version-history",
         "description": { "en": "View the version history for the current file." },
         "icon": "file-clock",
-        "tooltip": { "en": "Version history for current file" },
+        "tooltip": { "en": "Version history" },
         "type": "command"
     },
     {
