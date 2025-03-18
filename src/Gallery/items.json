@@ -346,6 +346,14 @@
         "type": "command"
     },
     {
+        "id": "templater-new-note-from-template",
+        "commandId": "templater-obsidian:create-new-note-from-template",
+        "description": { "en": "Create a new note from a template." },
+        "icon": "percent-square",
+        "tooltip": { "en": "New note from template" },
+        "type": "command"
+    },
+    {
         "id": "redo",
         "description": { "en": "Reapplies the last undone action." },
         "icon": "lucide-redo-2",
