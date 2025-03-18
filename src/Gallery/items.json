@@ -254,6 +254,14 @@
         "type": "link"
     },
     {
+        "id": "obsidian-sync-version-history",
+        "commandId": "sync:view-version-history",
+        "description": { "en": "View the version history for the current file." },
+        "icon": "file-clock",
+        "tooltip": { "en": "Version history for current file" },
+        "type": "command"
+    },
+    {
         "id": "open-settings",
         "commandId": "app:open-settings",
         "description": { "en": "Open Obsidian's settings." },
