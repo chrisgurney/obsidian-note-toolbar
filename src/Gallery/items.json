@@ -10,7 +10,7 @@
     {
         "id": "bookmarks-open",
         "commandId": "bookmarks:open",
-        "description": { "en": "Show bookmarks." },
+        "description": { "en": "Opens the bookmarks sidebar." },
         "icon": "bookmark",
         "tooltip": { "en": "Show bookmarks" },
         "type": "command"
@@ -52,7 +52,7 @@
     {
         "id": "cycle-list-checklist",
         "commandId": "editor:cycle-list-checklist",
-        "description": { "en": "Cycle between bullet, checkbox, and unchecked states." },
+        "description": { "en": "Changes to bullet, checkbox, or unchecked." },
         "icon": "check-square",
         "tooltip": { "en": "Cycle bullet/checkbox" },
         "type": "command"
@@ -68,7 +68,7 @@
     {
         "id": "daily-notes-today",
         "commandId": "daily-notes",
-        "description": { "en": "Open today's daily note." },
+        "description": { "en": "Go to today's daily note." },
         "icon": "calendar-check",
         "tooltip": { "en": "Today's daily note" },
         "type": "command"
@@ -107,7 +107,7 @@
     },
     {
         "id": "go-home",
-        "description": { "en": "Go to my home note. Enter the name of your home note in the URL." },
+        "description": { "en": "Go to my home note. Enter your home note in the URL." },
         "icon": "home",
         "tooltip": { "en": "Home" },
         "url": "",
@@ -115,7 +115,7 @@
     },
     {
         "id": "go-up",
-        "description": { "en": "Navigate upwards. Uses the 'up' property in your note." },
+        "description": { "en": "Navigate upwards. Uses your note's \"up\" property." },
         "icon": "arrow-up-left",
         "tooltip": { "en": "Go up" },
         "url": "{{prop_up}}",
@@ -224,7 +224,7 @@
     {
         "id": "note-toolbar-quick-toolbars",
         "commandId": "note-toolbar:open-toolbar-suggester",
-        "description": { "en": "Opens a window with quick access to all of your toolbars." },
+        "description": { "en": "Opens a window with access to all of your toolbars." },
         "icon": "package-search",
         "tooltip": { "en": "Note Toolbar: Quick Toolbars" },
         "type": "command"
@@ -232,7 +232,7 @@
     {
         "id": "note-toolbar-quick-tools",
         "commandId": "note-toolbar:open-item-suggester",
-        "description": { "en": "Opens a window with quick access to all of your toolbar tools." },
+        "description": { "en": "Opens a window with access to all of your toolbar items." },
         "icon": "rocket",
         "tooltip": { "en": "Note Toolbar: Quick Tools" },
         "type": "command"
