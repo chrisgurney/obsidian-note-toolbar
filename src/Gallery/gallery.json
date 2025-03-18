@@ -1,0 +1,97 @@
+{
+    "title": { "en": "Note Toolbar Gallery" },
+    "overview": { "en": "Browse examples of items, and click/tap to add them to your toolbars." },
+    "categories": [
+      {
+        "name": { "en": "Daily Notes" },
+        "description": { "en": "Quickly navigate between daily notes." },
+        "itemIds": [
+          "daily-notes-prev", "daily-notes-today", "daily-notes-next"
+        ]
+      },
+      {
+        "name": { "en" :"Basic Actions" },
+        "description": { "en": "For quick text editing and history control." },
+        "itemIds": [
+            "copy", "cut", "paste", "undo", "redo", "clear-formatting"
+        ]
+      },
+      {
+        "name": { "en" :"Text Formatting" },
+        "description": { "en": "Change how text looks." },
+        "itemIds": [
+            "toggle-bold", "toggle-italics", "toggle-strikethrough", "toggle-code", "toggle-blockquote", "toggle-highlight"
+        ]
+      },
+      {
+        "name": { "en" :"Lists & Indentation" },
+        "description": { "en": "Organize items into lists and adjust structure." },
+        "itemIds": [
+            "toggle-bullet-list", "toggle-checklist-status", "toggle-numbered-list", "indent", "unindent", "cycle-list-checklist"
+        ]
+      },
+      {
+        "name": { "en" :"Insertions" },
+        "description": { "en": "Add various types of content like links or media." },
+        "itemIds": [
+            "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
+        ]
+      },
+      {
+        "name": { "en" :"Line Actions" },
+        "description": { "en": "Adjust the order and arrangement of content." },
+        "itemIds": [
+            "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math"
+        ]
+      },
+      {
+        "name": { "en": "Navigation" },
+        "description": { "en": "Navigate between files and directories." },
+        "itemIds": [
+          "previous-file", "next-file", "go-home", "go-up", "bookmarks-open"
+        ]
+      },
+      {
+        "name": { "en": "Note Toolbar" },
+        "description": { "en": "Get access to Note Toolbar settings and tools quickly." },
+        "itemIds": [
+          "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
+        ]
+      },
+      {
+        "name": { "en": "Obsidian Support" },
+        "description": { "en": "Get help from Obsidian community resources." },
+        "itemIds": [
+          "obsidian-discord", "obsidian-forum", "obsidian-help-site", "obsidian-markdown-reference", "obsidian-subreddit"
+        ]
+      },
+      {
+        "name": { "en": "Obsidian Sync" },
+        "description": { "en": "View synced note versions." },
+        "itemIds": [
+          "obsidian-sync-version-history"
+        ]
+      },
+      {
+        "name": { "en": "Search" },
+        "description": { "en": "Search notes." },
+        "itemIds": [
+          "search-replace-open", "global-search-open"
+        ]
+      },
+      {
+        "name": { "en": "Themes and Views" },
+        "description": { "en": "Switch themes and toggle views." },
+        "itemIds": [
+          "theme-switch", "theme-use-dark", "theme-use-light", "editor-toggle-preview", "editor-toggle-source"
+        ]
+      },
+      {
+        "name": { "en": "Templater" },
+        "description": { "en": "Insert or create notes from templates." },
+        "itemIds": [
+          "templater-insert-template", "templater-new-note-from-template"
+        ]
+      }
+    ]
+  }

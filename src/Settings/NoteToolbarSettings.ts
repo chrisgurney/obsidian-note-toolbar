@@ -37,6 +37,7 @@ export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); 
 
 export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
 export const COMMAND_PREFIX_ITEM = 'use-toolbar-item-';
+export const VIEW_TYPE_GALLERY = 'ntb-gallery-view';
 export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
 
 export const EMPTY_TOOLBAR_ID = 'EMPTY_TOOLBAR';

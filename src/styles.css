@@ -1343,6 +1343,58 @@ input[type="text"].note-toolbar-setting-error,
     margin-bottom: 0.5em;
 }
 
+.note-toolbar-gallery-view-items-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    position: relative;
+    scroll-behavior: smooth;
+}
+
+.note-toolbar-gallery-view-item {
+    background-color: var(--background-modifier-border);
+    box-shadow: var(--input-shadow);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    height: 150px;
+    justify-content: flex-end;
+    padding: 16px;
+    position: relative;
+    width: 200px;
+    &:hover {
+        background-color: var(--background-modifier-border-focus);
+    }
+    & h3 {
+        font-size: var(--font-normal);
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    & p {
+        font-size: var(--font-ui-small);
+        margin: 0;
+    }
+}
+
+.note-toolbar-gallery-view-item-icon {
+    align-items: center;
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    left: 16px;
+    position: absolute;
+    top: 16px;
+    width: 30px;
+    & svg {
+        height: 30px;        
+        width: 30px;
+    }
+}
+
 .note-toolbar-icon-suggestion {
     align-items: center;
     display: flex;

@@ -1,4 +1,4 @@
-import gallery from "Gallery/items.json";
+import galleryItems from "Gallery/items.json";
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, ToolbarItemSettings } from "../Settings/NoteToolbarSettings";
 import { debugLog } from "Utils/Utils";
@@ -20,8 +20,8 @@ export default class GalleryManager {
 
     private loadItems() {
         const lang = i18next.language || 'en';
-        this.items = gallery.map((item: any) => ({
-            uuid: '',
+        this.items = galleryItems.map((item: any) => ({
+            uuid: item.id ?? '',
             description: item.description?.[lang],
             hasCommand: false,
             icon: item.icon ?? '',
