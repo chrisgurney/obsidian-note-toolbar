@@ -449,10 +449,10 @@ export function getPluginNames(item: ToolbarItemSettings): string | undefined {
 	if (item.linkAttr.type === ItemType.Plugin) {
 		itemPluginType = (Array.isArray(item.plugin) ? item.plugin : [item.plugin]);
 	}
-	// get the command ID
 	else if (item.linkAttr.type === ItemType.Command) {
-		const ignoreCommands = ['bookmarks', 'editor', 'global-search', 'link', 'markdown', 'note-toolbar', 'theme'];
+		// get the command ID; we can ignore built-in commands
 		const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
+		const ignoreCommands = ['bookmarks', 'editor', 'global-search', 'link', 'markdown', 'note-toolbar', 'theme'];
 		itemPluginType = !ignoreCommands.includes(commandPluginId) ? [commandPluginId] : [];
 	}
 	// replace known commands with user-friendly strings (if supported), and create a list
