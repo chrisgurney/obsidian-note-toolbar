@@ -99,6 +99,14 @@
         "type": "command"
     },
     {
+        "id": "insert-horizontal-rule",
+        "commandId": "editor:insert-horizontal-rule",
+        "description": { "en": "Insert a horizontal rule to separate sections." },
+        "icon": "line-horizontal",
+        "tooltip": { "en": "Insert horizontal rule." },
+        "type": "command"
+    },
+    {
         "id": "insert-link",
         "commandId": "editor:insert-link",
         "description": { "en": "Insert a markdown link." },
