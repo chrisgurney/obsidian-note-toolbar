@@ -158,6 +158,38 @@
         "type": "plugin"
     },
     {
+        "id": "note-toolbar-quick-toolbars",
+        "commandId": "note-toolbar:open-toolbar-suggester",
+        "description": { "en": "Opens a window with quick access to all of your toolbars." },
+        "icon": "package-search",
+        "tooltip": { "en": "Note Toolbar: Quick Toolbars" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-quick-tools",
+        "commandId": "note-toolbar:open-item-suggester",
+        "description": { "en": "Opens a window with quick access to all of your toolbar tools." },
+        "icon": "rocket",
+        "tooltip": { "en": "Note Toolbar: Quick Tools" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-tbar-settings",
+        "commandId": "note-toolbar:open-toolbar-settings",
+        "description": { "en": "Open the active toolbar's settings to customize your toolbar." },
+        "icon": "settings-2",
+        "tooltip": { "en": "Toolbar settings" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-user-guide",
+        "description": { "en": "Access the Note Toolbar User Guide for help and tips." },
+        "icon": "book",
+        "tooltip": { "en": "Note Toolbar User Guide" },
+        "url": "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
+        "type": "link"
+    },
+    {
         "id": "previous-file",
         "description": {
             "en": "Opens the previous file in the folder, sorted A-Z. Opens the last file in the folder when the first file is reached."
