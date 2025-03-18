@@ -1,5 +1,21 @@
 [
     {
+        "id": "attach-file",
+        "commandId": "editor:attach-file",
+        "description": { "en": "Insert a file attachment." },
+        "icon": "paperclip",
+        "tooltip": { "en": "Insert attachment" },
+        "type": "command"
+    },
+    {
+        "id": "clear-formatting",
+        "commandId": "editor:clear-formatting",
+        "description": { "en": "Remove all text formatting." },
+        "icon": "eraser",
+        "tooltip": { "en": "Clear formatting" },
+        "type": "command"
+    },
+    {
         "id": "copy",
         "description": { "en": "Copies the selected text to the clipboard." },
         "icon": "clipboard-copy",
@@ -16,6 +32,14 @@
         "script": "const e = app.workspace.activeLeaf.view?.editor; try { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (error) { console.error('Cut failed:', error); }",
         "tooltip": { "en": "Cut" },
         "type": "plugin"
+    },
+    {
+        "id": "cycle-list-checklist",
+        "commandId": "editor:cycle-list-checklist",
+        "description": { "en": "Cycle between bullet, checkbox, and unchecked states." },
+        "icon": "check-square",
+        "tooltip": { "en": "Cycle bullet/checkbox" },
+        "type": "command"
     },
     {
         "id": "daily-notes-prev",
@@ -51,11 +75,75 @@
         "type": "plugin"
     },
     {
+        "id": "insert-callout",
+        "commandId": "editor:insert-callout",
+        "description": { "en": "Insert a callout block." },
+        "icon": "quote",
+        "tooltip": { "en": "Insert callout" },
+        "type": "command"
+    },
+    {
+        "id": "insert-codeblock",
+        "commandId": "editor:insert-codeblock",
+        "description": { "en": "Insert a code block." },
+        "icon": "code-square",
+        "tooltip": { "en": "Insert code block" },
+        "type": "command"
+    },
+    {
+        "id": "insert-embed",
+        "commandId": "editor:insert-embed",
+        "description": { "en": "Add an embedded file or note." },
+        "icon": "sticky-note",
+        "tooltip": { "en": "Add embed" },
+        "type": "command"
+    },
+    {
+        "id": "insert-link",
+        "commandId": "editor:insert-link",
+        "description": { "en": "Insert a markdown link." },
+        "icon": "link",
+        "tooltip": { "en": "Insert markdown link" },
+        "type": "command"
+    },
+    {
+        "id": "insert-mathblock",
+        "commandId": "editor:insert-mathblock",
+        "description": { "en": "Insert a math block." },
+        "icon": "sigma-square",
+        "tooltip": { "en": "Insert math block" },
+        "type": "command"
+    },
+    {
+        "id": "insert-table",
+        "commandId": "editor:insert-table",
+        "description": { "en": "Insert a table." },
+        "icon": "table",
+        "tooltip": { "en": "Insert table" },
+        "type": "command"
+    },
+    {
+        "id": "insert-tag",
+        "commandId": "editor:insert-tag",
+        "description": { "en": "Add a tag to the note." },
+        "icon": "tag",
+        "tooltip": { "en": "Add tag" },
+        "type": "command"
+    },
+    {
         "id": "insert-template",
         "commandId": "templater-obsidian:insert-templater",
         "description": { "en": "Inserts the chosen template." },
         "icon": "templater-icon",
         "tooltip": { "en": "Insert template" },
+        "type": "command"
+    },
+    {
+        "id": "insert-wikilink",
+        "commandId": "editor:insert-wikilink",
+        "description": { "en": "Add an internal link." },
+        "icon": "brackets",
+        "tooltip": { "en": "Add internal link" },
         "type": "command"
     },
     {
@@ -105,6 +193,110 @@
         "script": "app.workspace.activeLeaf.view?.editor.redo()",
         "tooltip": { "en": "Redo" },
         "type": "plugin"
+    },
+    {
+        "id": "swap-line-down",
+        "commandId": "editor:swap-line-down",
+        "description": { "en": "Move the current line down." },
+        "icon": "corner-right-down",
+        "tooltip": { "en": "Move line down" },
+        "type": "command"
+    },
+    {
+        "id": "swap-line-up",
+        "commandId": "editor:swap-line-up",
+        "description": { "en": "Move the current line up." },
+        "icon": "corner-right-up",
+        "tooltip": { "en": "Move line up" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-blockquote",
+        "commandId": "editor:toggle-blockquote",
+        "description": { "en": "Apply or remove blockquote formatting." },
+        "icon": "text-quote",
+        "tooltip": { "en": "Toggle blockquote" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-bold",
+        "commandId": "editor:toggle-bold",
+        "description": { "en": "Apply or remove bold formatting." },
+        "icon": "bold",
+        "tooltip": { "en": "Toggle bold" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-bullet-list",
+        "commandId": "editor:toggle-bullet-list",
+        "description": { "en": "Apply or remove bullet list formatting." },
+        "icon": "list",
+        "tooltip": { "en": "Toggle bullet" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-checklist-status",
+        "commandId": "editor:toggle-checklist-status",
+        "description": { "en": "Toggle the status of checklist items." },
+        "icon": "list-checks",
+        "tooltip": { "en": "Toggle checkbox status" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-code",
+        "commandId": "editor:toggle-code",
+        "description": { "en": "Apply or remove inline code formatting." },
+        "icon": "code",
+        "tooltip": { "en": "Toggle code" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-comments",
+        "commandId": "editor:toggle-comments",
+        "description": { "en": "Add or remove comments." },
+        "icon": "percent",
+        "tooltip": { "en": "Toggle comment" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-highlight",
+        "commandId": "editor:toggle-highlight",
+        "description": { "en": "Apply or remove text highlighting." },
+        "icon": "highlighter",
+        "tooltip": { "en": "Toggle highlight" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-inline-math",
+        "commandId": "editor:toggle-inline-math",
+        "description": { "en": "Apply or remove inline math formatting." },
+        "icon": "sigma",
+        "tooltip": { "en": "Toggle inline math" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-italics",
+        "commandId": "editor:toggle-italics",
+        "description": { "en": "Apply or remove italic formatting." },
+        "icon": "italic",
+        "tooltip": { "en": "Toggle italics" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-numbered-list",
+        "commandId": "editor:toggle-numbered-list",
+        "description": { "en": "Apply or remove numbered list formatting." },
+        "icon": "list-ordered",
+        "tooltip": { "en": "Toggle numbered list" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-strikethrough",
+        "commandId": "editor:toggle-strikethrough",
+        "description": { "en": "Apply or remove strikethrough formatting." },
+        "icon": "strikethrough",
+        "tooltip": { "en": "Toggle strikethrough" },
+        "type": "command"
     },
     {
         "id": "undo",
