@@ -25,6 +25,14 @@
         "type": "plugin"
     },
     {
+        "id": "copy-obsidian-url",
+        "commandId": "workspace:copy-url",
+        "description": { "en": "Copy the Obsidian URL for the current note to the clipboard." },
+        "icon": "share",
+        "tooltip": { "en": "Copy Obsidian URL" },
+        "type": "command"
+    },
+    {
         "id": "cut",
         "description": { "en": "Cuts the selected text to the clipboard." },
         "icon": "scissors",
@@ -147,6 +155,14 @@
         "type": "command"
     },
     {
+        "id": "new-note",
+        "commandId": "file-explorer:new-file",
+        "description": { "en": "Create a new note." },
+        "icon": "file",
+        "tooltip": { "en": "New note" },
+        "type": "command"
+    },
+    {
         "id": "next-file",
         "description": {
             "en": "Opens the next file in the folder, sorted A-Z. Opens the first file in the folder when the last file is reached."
@@ -179,6 +195,14 @@
         "description": { "en": "Open the active toolbar's settings to customize your toolbar." },
         "icon": "settings-2",
         "tooltip": { "en": "Toolbar settings" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-toggle-properties",
+        "commandId": "note-toolbar:toggle-properties",
+        "description": { "en": "Toggle the visibility of note properties." },
+        "icon": "table-properties",
+        "tooltip": { "en": "Toggle Properties" },
         "type": "command"
     },
     {
