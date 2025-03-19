@@ -28,14 +28,14 @@ export class HelpModal extends Modal {
 			});
 
 		new Setting(this.modalEl)
-			.setName(iconTextFr('layout-grid', t('setting.help.label-examples')))
-			.setDesc(t('setting.help.label-examples-description'))
+			.setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
+			.setDesc(t('setting.help.label-gallery-description'))
 			.addButton((button: ButtonComponent) => {
 				button
 					.setButtonText(t('setting.help.button-open'))
-					.setTooltip(t('setting.help.button-open-github'))
+					.setTooltip(t('setting.help.label-gallery'))
 					.onClick(() => {
-						window.open(URL_USER_GUIDE + 'Examples', '_blank');
+						window.open('obsidian://note-toolbar?gallery', '_blank');
 					});
 			})
 			.setClass('note-toolbar-setting-no-border');
