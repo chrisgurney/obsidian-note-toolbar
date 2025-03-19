@@ -1351,9 +1351,7 @@ input[type="text"].note-toolbar-setting-error,
     overflow-x: auto;
     position: relative;
     scroll-behavior: smooth;
-    &:not(:last-child) {
-        border-block-end: solid 1px var(--background-modifier-border);
-    }
+    border-block-end: solid 1px var(--background-modifier-border);
 }
 
 .note-toolbar-gallery-view-plugin-note {

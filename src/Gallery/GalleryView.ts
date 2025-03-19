@@ -1,8 +1,8 @@
 import NoteToolbarPlugin from 'main';
-import { ItemView, MarkdownRenderer, setIcon, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, ItemView, MarkdownRenderer, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
-import { ItemType, t, ToolbarSettings, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
-import { getPluginNames } from 'Settings/UI/Utils/SettingsUIUtils';
+import { ItemType, t, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { debugLog } from 'Utils/Utils';
 import { ToolbarSuggestModal } from 'Settings/UI/Modals/ToolbarSuggestModal';
 
@@ -41,6 +41,7 @@ export class GalleryView extends ItemView {
     }
 
     async onOpen() {
+
         let contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-whatsnew-view');
 
@@ -131,6 +132,21 @@ export class GalleryView extends ItemView {
 				toolbarModal.open();
 			}
 		});
+
+		let feedbackEl = markdownEl.createDiv();
+		feedbackEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
+		new Setting(feedbackEl)
+			.setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
+			.setDesc(t('setting.help.label-feedback-description'))
+			.addButton((button: ButtonComponent) => {
+				button
+					.setButtonText(t('setting.help.label-feedback'))
+					.setTooltip(t('setting.help.button-open-google'))
+					.setCta()
+					.onClick(() => {
+						window.open(URL_FEEDBACK_FORM, '_blank');
+					});
+			});
 
     }
 
