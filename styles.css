@@ -2294,7 +2294,7 @@ input[type="text"].note-toolbar-setting-error,
     &:focus-visible {
         border-radius: var(--input-radius);
         box-shadow: inset 0 0 0 1px var(--background-modifier-border);
-        box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
+        box-shadow: inset 0 0 0 3px var(--background-modifier-border-focus);
     }
     &:hover {
         background-color: var(--background-modifier-border-focus);

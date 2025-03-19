@@ -106,7 +106,6 @@ export class GalleryView extends ItemView {
 						// TODO: put higher level; handle clicks on items by adding their IDs
 						debugLog('asdf');
 					});
-					handleKeyClick(this.plugin, itemEl);
 				}
 
 			});
