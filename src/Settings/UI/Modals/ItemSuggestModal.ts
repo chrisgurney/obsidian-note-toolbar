@@ -11,7 +11,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     public activeFile: TFile | null;
     public toolbarId: string | undefined;
     private callback: ((item: ToolbarItemSettings) => void) | undefined;
-    private quickTools: boolean;
+    private quickToolsMode: boolean;
 
     /**
      * Creates a new modal.
@@ -19,8 +19,9 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param activeFile TFile for the active file (so vars can be replaced)
      * @param toolbarId string ID of the toolbar to optionally scope this ItemSuggestModal to
      * @oaram callback function to call when an item is selected
+     * @param quickToolsMode true if we're showing items that can be used; otherwise false to search for items
      */
-	constructor(plugin: NoteToolbarPlugin, toolbarId?: string, callback?: (item: ToolbarItemSettings) => void, quickTools: boolean = false) {
+	constructor(plugin: NoteToolbarPlugin, toolbarId?: string, callback?: (item: ToolbarItemSettings) => void, quickToolsMode: boolean = false) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
@@ -29,7 +30,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         this.activeFile = plugin.app.workspace.getActiveFile();
         this.toolbarId = toolbarId;
         this.callback = callback;
-        this.quickTools = quickTools;
+        this.quickToolsMode = quickToolsMode;
 
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
         this.setPlaceholder(toolbar ? t('setting.item-suggest-modal.placeholder-toolbar', {toolbar: toolbar.name}) : t('setting.item-suggest-modal.placeholder'));
@@ -42,12 +43,12 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
         instructions.push(
             {command: t('setting.item-suggest-modal.key-navigate'), purpose: t('setting.item-suggest-modal.instruction-navigate')},
-            {command: t('setting.item-suggest-modal.key-use'), purpose: quickTools ? t('setting.item-suggest-modal.instruction-use') : t('setting.item-suggest-modal.instruction-select')},
+            {command: t('setting.item-suggest-modal.key-use'), purpose: quickToolsMode ? t('setting.item-suggest-modal.instruction-use') : t('setting.item-suggest-modal.instruction-select')},
             {command: t('setting.item-suggest-modal.key-dismiss'), purpose: t('setting.item-suggest-modal.instruction-dismiss')},
         );
         this.setInstructions(instructions);
 
-        if (quickTools) {
+        if (quickToolsMode) {
             // handle meta key selections
             if (Platform.isWin || Platform.isLinux) {
                 this.scope.register(['Ctrl'], 'Enter', (event) => this.handleKeyboardSelection(event));
@@ -99,7 +100,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             sortedSuggestions = this.sortSuggestions(itemSuggestions, lowerCaseInputStr);
         }
 
-        if (!this.quickTools) {
+        if (!this.quickToolsMode) {
             // add gallery items
             let gallerySuggestions: ToolbarItemSettings[] = [];
             for (const galleryItem of this.plugin.gallery.getItems()) {
@@ -129,7 +130,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let itemStrings = `${item.label} ${item.tooltip} ${item.link} ${item.description ?? ''}`.toLowerCase();
         // add items with labels/tooltips, not menus, matching search string
         if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(searchString)) {
-            if (this.quickTools) {
+            if (this.quickToolsMode) {
                 const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
                 // ...and is visible on this platform
                 if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
@@ -238,7 +239,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
             }
-            renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true, this.quickTools);
+            renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true, this.quickToolsMode);
         }
     }
 
@@ -275,7 +276,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         debugLog("onChooseSuggestion: ", selectedItem, this.activeFile, event);
         if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
             this.close();
-            if (this.quickTools) await this.plugin.handleItemLink(selectedItem, event);
+            if (this.quickToolsMode) await this.plugin.handleItemLink(selectedItem, event);
             else if (this.callback !== undefined) this.callback(selectedItem);
         }
     }
