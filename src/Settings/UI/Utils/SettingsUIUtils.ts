@@ -1,5 +1,5 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
@@ -168,7 +168,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 
 		const helpDesc = document.createDocumentFragment();
 		helpDesc.append(
-			helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + plugin.manifest.version })
+			helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + plugin.manifest.version })
 		);
 
 		new Setting(settingsDiv)
@@ -276,7 +276,7 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
 	messageFr.append(
 		message, ' ',
 	);
-	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: linkText });
+	let learnMoreLink = messageFr.createEl('a', { href: URL_USER_GUIDE + page, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
 }
