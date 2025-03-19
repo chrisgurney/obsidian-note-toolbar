@@ -1356,6 +1356,18 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-gallery-view-plugin-note {
+    display: flex;
+    gap: 0.5em;
+    & p {
+        margin: 0;
+    }
+}
+
+.note-toolbar-gallery-view-cat-description {
+    color: var(--text-muted);
+}
+
 .note-toolbar-gallery-view-item {
     background-color: var(--background-modifier-border);
     box-shadow: var(--input-shadow);
@@ -1365,6 +1377,7 @@ input[type="text"].note-toolbar-setting-error,
     flex: 0 0 auto;
     flex-direction: column;
     justify-content: flex-end;
+    min-height: 140px;
     padding: 16px;
     position: relative;
     width: 200px;
@@ -1384,6 +1397,20 @@ input[type="text"].note-toolbar-setting-error,
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+    & .note-toolbar-gallery-view-item-icon {
+        align-items: center;
+        display: flex;
+        height: 30px;
+        justify-content: center;
+        left: 16px;
+        position: absolute;
+        top: 16px;
+        width: 30px;
+        & svg {
+            height: 30px;        
+            width: 30px;
+        }
+    }
     & p {
         font-size: var(--font-ui-small);
         margin: 0;
@@ -1391,20 +1418,15 @@ input[type="text"].note-toolbar-setting-error,
     & p.note-toolbar-gallery-view-item-description {
         color: var(--text-muted);
     }
-}
-
-.note-toolbar-gallery-view-item-icon {
-    align-items: center;
-    display: flex;
-    height: 30px;
-    justify-content: center;
-    left: 16px;
-    position: absolute;
-    top: 16px;
-    width: 30px;
-    & svg {
-        height: 30px;        
-        width: 30px;
+    & p.note-toolbar-gallery-view-item-plugins {
+        display: flex;
+        vertical-align: middle;
+        gap: 0.25em;
+        margin-top: 0.5em;
+        & svg {
+            height: var(--font-ui-small);
+            width: var(--font-ui-small);
+        }
     }
 }
 

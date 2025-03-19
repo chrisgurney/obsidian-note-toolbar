@@ -14,6 +14,7 @@ interface Category {
 interface Gallery {
 	title: { [key: string]: string };
 	overview: { [key: string]: string };
+	pluginNote: { [key: string]: string };
 	categories: Category[];
 }
 
@@ -49,16 +50,26 @@ export class GalleryView extends ItemView {
 		const galleryItems = this.plugin.gallery.getItems();
 
 		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
-		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
 		MarkdownRenderer.render(this.plugin.app, `# ${title}`, markdownEl, '/', this.plugin);
+		
+		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
 		MarkdownRenderer.render(this.plugin.app, overview, markdownEl, '/', this.plugin);
+
+		const pluginNoteEl = markdownEl.createDiv();
+		pluginNoteEl.addClass('note-toolbar-gallery-view-plugin-note');
+		setIcon(pluginNoteEl.createSpan(), 'puzzle');
+		const pluginNoteText = (gallery as Gallery).pluginNote[lang] || (gallery as Gallery).pluginNote['en'];
+		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', this.plugin);
 
 		(gallery as Gallery).categories.forEach(category => {
 
 			const catName = category.name[lang] || category.name['en'];
-			const catDesc = category.description[lang] || category.description['en'];
 			MarkdownRenderer.render(this.plugin.app, `## ${catName}`, markdownEl, '/', this.plugin);
-			MarkdownRenderer.render(this.plugin.app, catDesc, markdownEl, '/', this.plugin);
+
+			const catDescEl = markdownEl.createEl('div');
+			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
+			const catDescText = category.description[lang] || category.description['en'];
+			MarkdownRenderer.render(this.plugin.app, catDescText, catDescEl, '/', this.plugin);
 
 			const itemsEl = markdownEl.createDiv();
 			itemsEl.addClass('note-toolbar-gallery-view-items-container');
@@ -80,7 +91,9 @@ export class GalleryView extends ItemView {
 					let pluginNames = getPluginNames(galleryItem);
 					if (pluginNames) {
 						const pluginEl = itemEl.createEl('p');
-						pluginEl.setText(t('gallery.label-plugin', { plugin: pluginNames }));
+						pluginEl.addClass('note-toolbar-gallery-view-item-plugins');
+						setIcon(pluginEl.createSpan(), 'puzzle');
+						pluginEl.createSpan().setText(pluginNames);
 					}
 
 					const iconEl = itemEl.createDiv();
