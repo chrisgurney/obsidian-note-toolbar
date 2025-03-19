@@ -1,9 +1,10 @@
 import NoteToolbarPlugin from 'main';
 import { ItemView, MarkdownRenderer, setIcon, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
-import { t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
-import { getPluginNames, handleKeyClick } from 'Settings/UI/Utils/SettingsUIUtils';
+import { ItemType, t, ToolbarSettings, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { getPluginNames } from 'Settings/UI/Utils/SettingsUIUtils';
 import { debugLog } from 'Utils/Utils';
+import { ToolbarSuggestModal } from 'Settings/UI/Modals/ToolbarSuggestModal';
 
 interface Category {
 	name: { [key: string]: string };
@@ -79,6 +80,7 @@ export class GalleryView extends ItemView {
 				if (galleryItem) {
 
 					const itemEl = itemsEl.createEl('button');
+					itemEl.id = galleryItem.uuid;
 					itemEl.addClass('note-toolbar-gallery-view-item');
 					// TODO: localize this
 					setTooltip(itemEl, "Add to a toolbar: " + galleryItem.tooltip);
@@ -101,15 +103,33 @@ export class GalleryView extends ItemView {
 					const iconEl = itemEl.createDiv();
 					iconEl.addClass('note-toolbar-gallery-view-item-icon');
 					setIcon(iconEl, galleryItem.icon);
-
-					this.plugin.registerDomEvent(itemEl, 'click', (evt) => {
-						// TODO: put higher level; handle clicks on items by adding their IDs
-						debugLog('asdf');
-					});
 				}
 
 			});
 
+		});
+
+		// on clicking an item, prompt for toolbar and add it
+		this.plugin.registerDomEvent(markdownEl, 'click', (evt) => {
+			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-view-item');
+			if (galleryItemEl && galleryItemEl.id) {
+				const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, async (selectedToolbar: ToolbarSettings) => {
+					if (selectedToolbar) {
+						const galleryItem = galleryItems.find(item => item.uuid.includes(galleryItemEl.id));
+						if (galleryItem) {
+							let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
+							if (newItem.linkAttr.type === ItemType.Plugin) {
+								const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
+								if (!pluginType) return;
+							}
+							selectedToolbar.updated = new Date().toISOString();
+							await this.plugin.settingsManager.save();
+							this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid);
+						}
+					}
+				});
+				toolbarModal.open();
+			}
 		});
 
     }

@@ -376,7 +376,7 @@ export default class ToolbarSettingsModal extends Modal {
 						const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
 							let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
 							if (newItem.linkAttr.type === ItemType.Plugin) {
-								const pluginType = await this.resolvePluginType(newItem);
+								const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
 								if (!pluginType) return;
 							}
 							this.toolbar.updated = new Date().toISOString();
@@ -1119,72 +1119,6 @@ export default class ToolbarSettingsModal extends Modal {
 			SettingFieldItemMap[toolbarItem.linkAttr.type], 
 			itemPreview,
 			toolbarItem);
-
-	}
-
-	/**
-	 * Transforms "plugin" type items from the Gallery into types that can be handled by the toolbar.
-	 * Prompts user if there's more than one enabled plugin available.
-	 * Reports errors if the plugin's not supported, chosen plugin's not enabled, or the proper parameters aren't provided.
-	 * @param item ToolbarItemSettings to update
-	 * @returns a supported ItemType, or undefined
-	 */
-	async resolvePluginType(item: ToolbarItemSettings): Promise<ItemType | undefined> {
-
-		let pluginType: ItemType | undefined;
-
-		if (item.plugin && item.scriptConfig?.expression) {
-			const plugins = Array.isArray(item.plugin) ? item.plugin : [item.plugin];
-			
-			if (plugins.length === 1) {
-				pluginType = plugins[0] as ItemType;
-			}
-			else {
-				const pluginNames = plugins.map(p => {
-					const name = t(`plugin.${p}`);
-					if (!name) return; // ignore plugins that aren't supported
-					const isEnabled = !!this.plugin.getAdapterForItemType(p as ItemType);
-					return isEnabled 
-						? t('gallery.select-plugin-suggestion', { plugin: name }) 
-						: t('gallery.select-plugin-suggestion-not-enabled', { plugin: name });
-				});
-				pluginType = await this.plugin.api.suggester(pluginNames, plugins, {
-					class: 'note-toolbar-setting-mini-dialog',
-					placeholder: t('gallery.select-plugin-placeholder')
-				});
-				if (!pluginType) {
-					return undefined;
-				}
-			}
-
-			if (pluginType) {
-				item.linkAttr.type = pluginType;
-				if (item.scriptConfig) {
-					// set appropriate plugin function to execute the script
-					switch (item.linkAttr.type) {
-						case ItemType.Dataview:
-							item.scriptConfig.pluginFunction = 'executeJs';
-							break;
-						case ItemType.JsEngine:
-							item.scriptConfig.pluginFunction = 'evaluate';
-							break;
-						case ItemType.Templater:
-							item.scriptConfig.pluginFunction = 'parseTemplate';
-							break;
-					}
-				}
-			}
-			else {
-				console.error("Invalid plugin or none enabled.");
-				return undefined;
-			}
-		}
-		else {
-			console.error("Missing plugin or script element in Gallery data.");
-			return undefined;
-		}
-
-		return pluginType;
 
 	}
 
