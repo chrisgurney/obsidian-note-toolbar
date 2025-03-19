@@ -51,7 +51,7 @@ export class GalleryView extends ItemView {
 
 		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
 		MarkdownRenderer.render(this.plugin.app, `# ${title}`, markdownEl, '/', this.plugin);
-		
+
 		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
 		MarkdownRenderer.render(this.plugin.app, overview, markdownEl, '/', this.plugin);
 
@@ -77,9 +77,11 @@ export class GalleryView extends ItemView {
 			category.itemIds.forEach(itemId => {
 				const galleryItem = galleryItems.find(item => item.uuid.includes(itemId));
 				if (galleryItem) {
-					const itemEl = itemsEl.createDiv();
+
+					const itemEl = itemsEl.createEl('button');
 					itemEl.addClass('note-toolbar-gallery-view-item');
-					setTooltip(itemEl, "Click/Tap to add to a toolbar");
+					// TODO: localize this
+					setTooltip(itemEl, "Add to a toolbar: " + galleryItem.tooltip);
 
 					itemEl.createEl('h3').setText(galleryItem.tooltip);
 					if (galleryItem.description) {
@@ -101,6 +103,7 @@ export class GalleryView extends ItemView {
 					setIcon(iconEl, galleryItem.icon);
 
 					this.plugin.registerDomEvent(itemEl, 'click', (evt) => {
+						// TODO: put higher level; handle clicks on items by adding their IDs
 						debugLog('asdf');
 					});
 					handleKeyClick(this.plugin, itemEl);

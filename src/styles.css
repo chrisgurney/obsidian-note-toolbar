@@ -1369,6 +1369,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-gallery-view-item {
+    align-items: start;
     background-color: var(--background-modifier-border);
     box-shadow: var(--input-shadow);
     border-radius: 8px;
@@ -1376,10 +1377,12 @@ input[type="text"].note-toolbar-setting-error,
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
+    height: unset;
     justify-content: flex-end;
     min-height: 140px;
-    padding: 16px;
+    padding: 16px !important;
     position: relative;
+    text-align: unset;
     width: 200px;
     &:focus-visible {
         border-radius: var(--input-radius);
@@ -1388,14 +1391,6 @@ input[type="text"].note-toolbar-setting-error,
     }
     &:hover {
         background-color: var(--background-modifier-border-focus);
-    }
-    & h3 {
-        font-size: var(--font-normal);
-        margin: 0;
-        margin-top: 46px; /* icon height */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
     & .note-toolbar-gallery-view-item-icon {
         align-items: center;
@@ -1411,21 +1406,33 @@ input[type="text"].note-toolbar-setting-error,
             width: 30px;
         }
     }
+    & h3 {
+        font-size: 1.25em;
+        margin: 0;
+        margin-top: 46px; /* icon height */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
     & p {
+        align-self: start;
+        display: flex;
         font-size: var(--font-ui-small);
         margin: 0;
-    }
-    & p.note-toolbar-gallery-view-item-description {
-        color: var(--text-muted);
-    }
-    & p.note-toolbar-gallery-view-item-plugins {
-        display: flex;
-        vertical-align: middle;
-        gap: 0.25em;
-        margin-top: 0.5em;
-        & svg {
-            height: var(--font-ui-small);
-            width: var(--font-ui-small);
+        text-wrap: auto;
+        &.note-toolbar-gallery-view-item-description {
+            color: var(--text-muted);
+        }
+        &.note-toolbar-gallery-view-item-plugins {
+            display: flex;
+            vertical-align: middle;
+            gap: 0.25em;
+            margin-top: 0.5em;
+            & svg {
+                height: var(--font-ui-small);
+                width: var(--font-ui-small);
+            }
         }
     }
 }
