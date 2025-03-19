@@ -224,23 +224,23 @@
     {
         "id": "note-toolbar-quick-toolbars",
         "commandId": "note-toolbar:open-toolbar-suggester",
-        "description": { "en": "Opens a window with access to all of your toolbars." },
+        "description": { "en": "Opens a window with access to all of your Note Toolbars." },
         "icon": "package-search",
-        "tooltip": { "en": "Note Toolbar: Quick Toolbars" },
+        "tooltip": { "en": "Quick Toolbars" },
         "type": "command"
     },
     {
         "id": "note-toolbar-quick-tools",
         "commandId": "note-toolbar:open-item-suggester",
-        "description": { "en": "Opens a window with access to all of your toolbar items." },
+        "description": { "en": "Opens a searchable window with access to all of your Note Toolbar items." },
         "icon": "rocket",
-        "tooltip": { "en": "Note Toolbar: Quick Tools" },
+        "tooltip": { "en": "Quick Tools" },
         "type": "command"
     },
     {
         "id": "note-toolbar-tbar-settings",
         "commandId": "note-toolbar:open-toolbar-settings",
-        "description": { "en": "Open the active toolbar's settings to customize your toolbar." },
+        "description": { "en": "Opens the active Note Toolbar's settings to customize your toolbar." },
         "icon": "settings-2",
         "tooltip": { "en": "Toolbar settings" },
         "type": "command"
@@ -447,7 +447,7 @@
         "commandId": "editor:toggle-checklist-status",
         "description": { "en": "Toggle the status of checklist items." },
         "icon": "list-checks",
-        "tooltip": { "en": "Toggle checkbox status" },
+        "tooltip": { "en": "Toggle check status" },
         "type": "command"
     },
     {
