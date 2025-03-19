@@ -1,6 +1,6 @@
 {
     "title": { "en": "Note Toolbar Gallery" },
-    "overview": { "en": "Browse examples of items, and click/tap to add them to your toolbars." },
+    "overview": { "en": "Browse examples of items, and click/tap to add them to a toolbar." },
     "pluginNote": { "en": "Some items use plugins for more sophisticated behavior. "},
     "categories": [
       {
