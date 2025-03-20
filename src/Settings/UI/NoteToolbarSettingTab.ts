@@ -1,7 +1,7 @@
 import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, debugLog, getElementPosition, moveElement } from 'Utils/Utils';
-import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick } from "./Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
 import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -343,12 +343,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.addButton((button: ButtonComponent) => {
 				button
 					.setTooltip(t('setting.toolbars.button-new-tbar-tooltip'))
-					.setButtonText(t('setting.toolbars.button-new-tbar'))
 					.setCta()
 					.onClick(async () => {
 						const newToolbar = await this.plugin.settingsManager.newToolbar();
 						this.plugin.settingsManager.openToolbarSettings(newToolbar, this);
 					});
+				button.buttonEl.setText(iconTextFr('plus', t('setting.toolbars.button-new-tbar')));
 			});
 
 		itemsContainer.appendChild(itemsListContainer);
@@ -590,7 +590,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
-					.setButtonText(t('setting.mappings.button-new'))
 					.setTooltip(t('setting.mappings.button-new-tooltip'))
 					.setCta()
 					.onClick(async () => {
@@ -605,6 +604,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						// TODO: set the focus in the form
 						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
 					});
+				button.buttonEl.setText(iconTextFr('plus', t('setting.mappings.button-new')));
 			});
 
 		mappingsContainer.appendChild(collapsibleContainer);

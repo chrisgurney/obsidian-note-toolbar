@@ -368,7 +368,7 @@
         "mappings": {
             "button-collapse-tooltip": "Collapse all mappings",
             "button-expand-tooltip": "Expand all mappings",
-            "button-new": "+ New mapping",
+            "button-new": "New mapping",
             "button-new-tooltip": "Add a new mapping",
             "description": "Notes in folders below will display the toolbar mapped to it. Precedence is top to bottom.",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it.",
@@ -485,7 +485,7 @@
             "button-edit-tbar": "Edit",
             "button-edit-tbar-tooltip": "Update this toolbar",
             "button-more-tooltip": "More options",
-            "button-new-tbar": "+ New toolbar",
+            "button-new-tbar": "New toolbar",
             "button-new-tbar-tooltip": "Add a new toolbar",
             "duplicated-tbar-suffix": "copy",
             "imported-tbar-name": "New toolbar",
