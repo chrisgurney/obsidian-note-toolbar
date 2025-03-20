@@ -1,5 +1,5 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY } from "Settings/NoteToolbarSettings";
+import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
@@ -467,8 +467,7 @@ export function getPluginNames(item: ToolbarItemSettings): string | undefined {
 	else if (item.linkAttr.type === ItemType.Command) {
 		// get the command ID; we can ignore built-in commands
 		const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
-		const ignoreCommands = ['bookmarks', 'editor', 'global-search', 'link', 'markdown', 'note-toolbar', 'theme'];
-		itemPluginType = !ignoreCommands.includes(commandPluginId) ? [commandPluginId] : [];
+		itemPluginType = !IGNORE_PLUGIN_IDS.includes(commandPluginId) ? [commandPluginId] : [];
 	}
 	// replace known commands with user-friendly strings (if supported), and create a list
 	if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')

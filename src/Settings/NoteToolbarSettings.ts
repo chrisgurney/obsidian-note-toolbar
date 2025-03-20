@@ -32,7 +32,7 @@ i18next.addResourceBundle('en', 'plugin-note-toolbar-docs', { "whats-new": en_wh
 export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); // string translation function
 
 /******************************************************************************
- TYPES
+ CONSTANTS
  ******************************************************************************/
 
 export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
@@ -42,6 +42,12 @@ export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
 
 export const EMPTY_TOOLBAR_ID = 'EMPTY_TOOLBAR';
 export const GALLERY_DIVIDER_ID = 'GALLERY_DIVIDER';
+
+export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'theme', 'workspace'];
+
+/******************************************************************************
+ TYPES
+ ******************************************************************************/
 
 export enum ComponentType {
 	Icon = 'icon',

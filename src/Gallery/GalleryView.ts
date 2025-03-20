@@ -1,10 +1,11 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, ItemView, MarkdownRenderer, Platform, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, debounce, ItemView, MarkdownRenderer, Platform, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
-import { ItemType, t, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { ItemType, t, ToolbarItemSettings, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { debugLog } from 'Utils/Utils';
 import { ToolbarSuggestModal } from 'Settings/UI/Modals/ToolbarSuggestModal';
+import { ItemSuggester } from 'Settings/UI/Suggesters/ItemSuggester';
 
 interface Category {
 	name: { [key: string]: string };
@@ -53,6 +54,21 @@ export class GalleryView extends ItemView {
 
 		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
 		MarkdownRenderer.render(this.plugin.app, `# ${title}`, markdownEl, '/', this.plugin);
+
+		new Setting(markdownEl)
+			.setClass('note-toolbar-setting-item-full-width-phone')
+			.setClass('note-toolbar-setting-no-border')
+			.setClass('note-toolbar-gallery-view-search')
+			.addSearch((cb) => {
+				new ItemSuggester(this.app, this.plugin, undefined, cb.inputEl, async (galleryItem) => {
+					this.addItem(galleryItem);
+					cb.inputEl.value = '';
+				});
+				cb.setPlaceholder(t('setting.item-suggest-modal.placeholder'))
+					.onChange(async (itemText) => {
+						cb.inputEl.value = itemText;
+					});
+			});
 
 		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
 		MarkdownRenderer.render(this.plugin.app, overview, markdownEl, '/', this.plugin);
@@ -120,22 +136,8 @@ export class GalleryView extends ItemView {
 		this.plugin.registerDomEvent(markdownEl, 'click', (evt) => {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-view-item');
 			if (galleryItemEl && galleryItemEl.id) {
-				const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, async (selectedToolbar: ToolbarSettings) => {
-					if (selectedToolbar) {
-						const galleryItem = galleryItems.find(item => item.uuid.includes(galleryItemEl.id));
-						if (galleryItem) {
-							let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
-							if (newItem.linkAttr.type === ItemType.Plugin) {
-								const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
-								if (!pluginType) return;
-							}
-							selectedToolbar.updated = new Date().toISOString();
-							await this.plugin.settingsManager.save();
-							this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid);
-						}
-					}
-				});
-				toolbarModal.open();
+				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
+				if (galleryItem) this.addItem(galleryItem);
 			}
 		});
 
@@ -155,6 +157,28 @@ export class GalleryView extends ItemView {
 			});
 
     }
+
+	/**
+	 * Adds the provided Gallery item, after prompting for the toolbar to add it to.
+	 * @param galleryItem Gallery item to add
+	 */
+	addItem(galleryItem: ToolbarItemSettings): void {
+		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, async (selectedToolbar: ToolbarSettings) => {
+			if (selectedToolbar) {
+				if (galleryItem) {
+					let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
+					if (newItem.linkAttr.type === ItemType.Plugin) {
+						const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
+						if (!pluginType) return;
+					}
+					selectedToolbar.updated = new Date().toISOString();
+					await this.plugin.settingsManager.save();
+					this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid);
+				}		
+			}
+		});
+		toolbarModal.open();
+	}
 
     async onClose() {
     }

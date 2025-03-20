@@ -2,18 +2,19 @@ import { AbstractInputSuggest, App } from "obsidian";
 import { ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
+import GalleryManager from "Gallery/GalleryManager";
 
 export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
 
     private plugin: NoteToolbarPlugin;
-    private toolbar: ToolbarSettings;
+    private toolbar: ToolbarSettings | undefined;
     private inputEl: HTMLInputElement;
     private callback: (item: ToolbarItemSettings) => void
 
     constructor(
         app: App, 
         plugin: NoteToolbarPlugin, 
-        toolbar: ToolbarSettings, 
+        toolbar: ToolbarSettings | undefined, 
         inputEl: HTMLInputElement, 
         callback: (item: ToolbarItemSettings) => void
     ) {
@@ -26,10 +27,10 @@ export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
 
     getSuggestions(inputStr: string): ToolbarItemSettings[] {
         const itemSuggestions: ToolbarItemSettings[] = [];
-        const toolbarItems = this.toolbar.items;
+        const itemsToSearch = this.toolbar ? this.toolbar.items : this.plugin.gallery.getItems();
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        toolbarItems.forEach((item: ToolbarItemSettings) => {
+        itemsToSearch.forEach((item: ToolbarItemSettings) => {
             let itemName = item.label || item.tooltip;
             if (!itemName) itemName = item.icon ? item.link : '';
             let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();

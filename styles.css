@@ -2251,6 +2251,19 @@ input[type="text"].note-toolbar-setting-error,
     margin-bottom: 0.5em;
 }
 
+.note-toolbar-gallery-view-search {
+    padding: 0;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        justify-content: flex-start;
+        & input[type='search']:focus-visible {
+            box-shadow: inset 0px 0px 0 2px var(--background-modifier-border-focus);
+        }
+    }
+}
+
 .note-toolbar-gallery-view-items-container {
     align-items: stretch;
     padding-bottom: 1em;
