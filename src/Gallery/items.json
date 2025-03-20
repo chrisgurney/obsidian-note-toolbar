@@ -100,14 +100,14 @@
     {
         "id": "global-search-open",
         "commandId": "global-search:open",
-        "description": { "en": "Search across all files." },
+        "description": { "en": "Opens the search sidebar." },
         "icon": "search",
-        "tooltip": { "en": "Search in all files" },
+        "tooltip": { "en": "Search all files" },
         "type": "command"
     },
     {
         "id": "go-home",
-        "description": { "en": "Go to my home note. Enter your home note in the URL." },
+        "description": { "en": "Go to your home note. (Enter your home note in the URL.)" },
         "icon": "home",
         "tooltip": { "en": "Home" },
         "url": "",
