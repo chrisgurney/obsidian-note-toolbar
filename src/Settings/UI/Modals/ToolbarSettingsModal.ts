@@ -96,7 +96,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Displays the toolbar item's settings.
 	 */
-	public display(focusSelector?: string) {
+	public display(focusItemId?: string) {
 
 		debugLog("🟡 REDRAWING MODAL 🟡");
 
@@ -151,8 +151,9 @@ export default class ToolbarSettingsModal extends Modal {
 			this.collapseItemForms(settingsDiv, rowClicked);
 		});
 
-		if (focusSelector) {
-			let focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
+		if (focusItemId) {
+			const selector = `.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${focusItemId}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`;
+			let focusEl = this.containerEl.querySelector(selector) as HTMLElement;
 			focusEl?.focus();
 		}
 
@@ -580,7 +581,7 @@ export default class ToolbarSettingsModal extends Modal {
 						if (modifierPressed) {
 							const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
 							this.plugin.settingsManager.save();
-							this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItem.uuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+							this.display(newItem.uuid);
 						}
 						break;
 					case "Enter":

@@ -6,6 +6,7 @@ import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { debugLog } from 'Utils/Utils';
 import { ToolbarSuggestModal } from 'Settings/UI/Modals/ToolbarSuggestModal';
 import { ItemSuggester } from 'Settings/UI/Suggesters/ItemSuggester';
+import { SettingsAttr } from 'Settings/UI/Modals/ToolbarSettingsModal';
 
 interface Category {
 	name: { [key: string]: string };
@@ -173,8 +174,8 @@ export class GalleryView extends ItemView {
 					}
 					selectedToolbar.updated = new Date().toISOString();
 					await this.plugin.settingsManager.save();
-					this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid);
-				}		
+					this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
+				}
 			}
 		});
 		toolbarModal.open();

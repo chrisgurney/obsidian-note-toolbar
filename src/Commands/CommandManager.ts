@@ -257,12 +257,13 @@ export class CommandManager {
     /**
      * Opens settings for a particular toolbar by ID.
      */
-    async openToolbarSettingsForId(uuid: string): Promise<void> {
+    async openToolbarSettingsForId(uuid: string, focusItemId?: string): Promise<void> {
         let toolbarSettings = this.plugin.settingsManager.getToolbarById(uuid);
         if (toolbarSettings) {
             const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, null, toolbarSettings);
             modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
             modal.open();
+            if (focusItemId) modal.display(focusItemId);
         }
     }
 
