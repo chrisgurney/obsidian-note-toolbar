@@ -37,7 +37,7 @@ export class GalleryView extends ItemView {
     }
 
     getIcon(): string {
-        return 'images';
+        return 'layout-grid';
     }
 
     async onOpen() {
