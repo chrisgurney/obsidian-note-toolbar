@@ -33,7 +33,7 @@ export class GalleryView extends ItemView {
     }
 
     getDisplayText(): string {
-        return "Note Toolbar Gallery";
+        return t('gallery.title');
     }
 
     getIcon(): string {

@@ -131,6 +131,7 @@
         "select-plugin-placeholder": "Select plugin to use...",
         "select-plugin-suggestion": "{{plugin}}",
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Not enabled or installed",
+        "title": "Note Toolbar Gallery",
         "tooltip-add-item": "Add to a toolbar: {{name}}"
     },
     "import": {
