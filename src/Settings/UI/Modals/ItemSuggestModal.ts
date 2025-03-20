@@ -136,20 +136,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                     // ...and does not have a var link and label/tooltip that resolves to nothing
                     if (
-                        !(
-                            this.plugin.hasVars(item.link) && 
-                            await this.plugin.replaceVars(
-                                item.link,
-                                this.activeFile,
-                                this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
-                        ) &&
-                        !(
-                            this.plugin.hasVars(itemName) && 
-                            await this.plugin.replaceVars(
-                                itemName,
-                                this.activeFile,
-                                this.activeFile ? ErrorBehavior.Report : ErrorBehavior.Ignore) === ''
-                        )
+                        !(this.plugin.hasVars(item.link) && 
+                            await this.plugin.replaceVars(item.link, this.activeFile, ErrorBehavior.Ignore) === '') &&
+                        !(this.plugin.hasVars(itemName) && 
+                            await this.plugin.replaceVars(itemName, this.activeFile, ErrorBehavior.Ignore) === '')
                     ) {
                         return true;
                     }
