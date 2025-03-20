@@ -265,10 +265,16 @@ export default class ToolbarSettingsModal extends Modal {
 		if (this.toolbar.items.length === 0) {
 
 			// display empty state
-			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr(t('setting.items.label-empty-no-items')) });
-			emptyMsg.className = "note-toolbar-setting-empty-message";
-			itemsSortableContainer.append(emptyMsg);
+			const emptyMsgEl = this.containerEl.createEl('div', 
+				{ text: emptyMessageFr(t('setting.items.label-empty-no-items') + ' ') });
+			emptyMsgEl.addClass('note-toolbar-setting-empty-message');
+
+			const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
+            galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
+			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => this.openItemSuggester());
+			handleKeyClick(this.plugin, galleryLinkEl);
+
+			itemsSortableContainer.append(emptyMsgEl);
 
 		}
 		else {
@@ -373,19 +379,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-					.onClick(async () => {
-						const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
-							let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
-							if (newItem.linkAttr.type === ItemType.Plugin) {
-								const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
-								if (!pluginType) return;
-							}
-							this.toolbar.updated = new Date().toISOString();
-							await this.plugin.settingsManager.save();
-							this.display();
-						});
-						modal.open();
-					});
+					.onClick(async () => this.openItemSuggester());
 				btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
 			})
 			.addButton((btn) => {
@@ -431,6 +425,23 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 		});
 
+	}
+
+	/**
+	 * Opens an item suggester that adds the selected item to this toolbar.
+	 */
+	private openItemSuggester() {
+		const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
+			let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
+			if (newItem.linkAttr.type === ItemType.Plugin) {
+				const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
+				if (!pluginType) return;
+			}
+			this.toolbar.updated = new Date().toISOString();
+			await this.plugin.settingsManager.save();
+			this.display();
+		});
+		modal.open();
 	}
 
 	/**

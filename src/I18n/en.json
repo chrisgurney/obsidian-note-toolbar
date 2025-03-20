@@ -340,6 +340,7 @@
             "key-use": "↵",
             "label-empty-no-items": "No results found.",
             "link-gallery": "Explore the gallery",
+            "link-search": "Search for an item",
             "option-default": "Default (use toolbar mapping)",
             "placeholder": "Search for an item...",
             "placeholder-toolbar": "{{toolbar}}: Search items..."

@@ -1921,10 +1921,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 }
 
 .note-toolbar-setting-empty-message {
-    color: var(--text-muted);
-    height: var(--input-height);
-    display: flex;
     align-items: center;
+    color: var(--text-muted);
+    display: flex;
+    font-style: italic;
+    height: var(--input-height);
     padding-bottom: 1em;
     .note-toolbar-setting-item-styles & {
         padding-bottom: 0;    
