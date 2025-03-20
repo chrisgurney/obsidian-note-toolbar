@@ -86,7 +86,7 @@
         "commandId": "markdown:toggle-preview",
         "description": { "en": "Toggle the reading view of the note." },
         "icon": "book-open",
-        "tooltip": { "en": "Toggle reading view" },
+        "tooltip": { "en": "Toggle Reading view" },
         "type": "command"
     },
     {
@@ -94,7 +94,7 @@
         "commandId": "editor:toggle-source",
         "description": { "en": "Toggle between Live Preview and Source mode." },
         "icon": "code-2",
-        "tooltip": { "en": "Toggle Live Preview/Source mode" },
+        "tooltip": { "en": "Toggle Source mode" },
         "type": "command"
     },
     {
