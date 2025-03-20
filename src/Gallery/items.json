@@ -33,6 +33,15 @@
         "type": "plugin"
     },
     {
+        "id": "copy-block-link",
+        "description": { "en": "Copies a link to the current block to the clipboard." },
+        "icon": "link-2",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const { metadataCache: m } = app, e = app.workspace.activeEditor?.editor, f = app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id; b ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice('Block link copied to clipboard')) : new Notice('No block ID found.');",
+        "tooltip": { "en": "Copy link to block" },
+        "type": "plugin"
+    },
+    {
         "id": "copy-obsidian-url",
         "commandId": "workspace:copy-url",
         "description": { "en": "Copy the Obsidian URL for the current note to the clipboard." },

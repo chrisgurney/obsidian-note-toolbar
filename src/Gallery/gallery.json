@@ -42,7 +42,7 @@
         "name": { "en" :"Line Actions" },
         "description": { "en": "Adjust the order and arrangement of content." },
         "itemIds": [
-            "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math"
+            "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
         ]
       },
       {
