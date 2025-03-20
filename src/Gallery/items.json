@@ -257,7 +257,7 @@
         "id": "note-toolbar-user-guide",
         "description": { "en": "Access the Note Toolbar User Guide for help and tips." },
         "icon": "book",
-        "tooltip": { "en": "Note Toolbar User Guide" },
+        "tooltip": { "en": "User Guide for Note Toolbar" },
         "url": "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
         "type": "link"
     },

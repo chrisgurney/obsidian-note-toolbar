@@ -63,7 +63,7 @@
         "name": { "en": "Obsidian Support" },
         "description": { "en": "Get help from Obsidian community resources." },
         "itemIds": [
-            "obsidian-discord", "obsidian-forum", "obsidian-help-site", "obsidian-markdown-reference", "obsidian-subreddit"
+            "obsidian-help-site", "obsidian-markdown-reference", "obsidian-discord", "obsidian-forum", "obsidian-subreddit"
         ]
       },
       {
