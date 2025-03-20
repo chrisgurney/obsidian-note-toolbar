@@ -340,9 +340,9 @@
     {
         "id": "search-replace-open",
         "commandId": "editor:open-search-replace",
-        "description": { "en": "Open search and replace for the current file." },
+        "description": { "en": "Search and replace in the current note." },
         "icon": "file-search",
-        "tooltip": { "en": "Search & replace in current file" },
+        "tooltip": { "en": "Search & Replace" },
         "type": "command"
     },
     {
