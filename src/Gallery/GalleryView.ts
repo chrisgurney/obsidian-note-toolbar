@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, ItemView, MarkdownRenderer, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, ItemView, MarkdownRenderer, Platform, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
 import { ItemType, t, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
@@ -104,6 +104,13 @@ export class GalleryView extends ItemView {
 					const iconEl = itemEl.createDiv();
 					iconEl.addClass('note-toolbar-gallery-view-item-icon');
 					setIcon(iconEl, galleryItem.icon);
+
+					// add indicator on mobile, since there's no tooltips
+					if (Platform.isMobile) {
+						const mobileAddEl = itemEl.createSpan();
+						mobileAddEl.addClass('note-toolbar-gallery-view-item-add');
+						setIcon(mobileAddEl, 'circle-plus');
+					}
 				}
 
 			});

@@ -2297,6 +2297,17 @@ input[type="text"].note-toolbar-setting-error,
     &:hover {
         background-color: var(--background-modifier-border-focus);
     }
+    & .note-toolbar-gallery-view-item-add {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        color: var(--interactive-accent);
+        cursor: pointer;
+        & svg {
+            height: 24px;        
+            width: 24px;
+        }
+    }
     & .note-toolbar-gallery-view-item-icon {
         align-items: center;
         display: flex;
