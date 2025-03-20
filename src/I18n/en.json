@@ -130,7 +130,8 @@
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
         "select-plugin-placeholder": "Select plugin to use...",
         "select-plugin-suggestion": "{{plugin}}",
-        "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Not enabled or installed"
+        "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Not enabled or installed",
+        "tooltip-add-item": "Add to a toolbar: {{name}}"
     },
     "import": {
         "button-add-items": "Add items",

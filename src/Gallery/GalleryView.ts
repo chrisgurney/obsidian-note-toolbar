@@ -83,8 +83,7 @@ export class GalleryView extends ItemView {
 					const itemEl = itemsEl.createEl('button');
 					itemEl.id = galleryItem.uuid;
 					itemEl.addClass('note-toolbar-gallery-view-item');
-					// TODO: localize this
-					setTooltip(itemEl, "Add to a toolbar: " + galleryItem.tooltip);
+					setTooltip(itemEl, t('gallery.tooltip-add-item', { name: galleryItem.tooltip }));
 
 					itemEl.createEl('h3').setText(galleryItem.tooltip);
 					if (galleryItem.description) {
