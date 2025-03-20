@@ -139,7 +139,7 @@ export class GalleryView extends ItemView {
 			}
 		});
 
-		let feedbackEl = markdownEl.createDiv();
+		const feedbackEl = markdownEl.createDiv();
 		feedbackEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
 		new Setting(feedbackEl)
 			.setName(iconTextFr('pen-box', t('setting.help.label-feedback')))

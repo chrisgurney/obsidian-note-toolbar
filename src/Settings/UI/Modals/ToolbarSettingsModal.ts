@@ -271,7 +271,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 			const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => this.openItemSuggester());
+			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => this.openItemSuggestModal());
 			handleKeyClick(this.plugin, galleryLinkEl);
 
 			itemsSortableContainer.append(emptyMsgEl);
@@ -379,7 +379,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-					.onClick(async () => this.openItemSuggester());
+					.onClick(async () => this.openItemSuggestModal());
 				btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
 			})
 			.addButton((btn) => {
@@ -430,7 +430,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Opens an item suggester that adds the selected item to this toolbar.
 	 */
-	private openItemSuggester() {
+	private openItemSuggestModal() {
 		const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
 			let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
 			if (newItem.linkAttr.type === ItemType.Plugin) {
