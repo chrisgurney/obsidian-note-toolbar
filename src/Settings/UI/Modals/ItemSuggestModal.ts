@@ -155,6 +155,25 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     }
 
     /**
+     * Handles case where there's no suggestions.
+     * If we're not in Quick Tools mode, it shows a link to the Gallery. 
+     */
+    onNoSuggestion(): void {
+        this.resultContainerEl.empty();
+        const emptyEl = this.resultContainerEl.createDiv();
+        emptyEl.addClass('suggestion-empty');
+        emptyEl.setText(t('setting.item-suggest-modal.label-empty-no-items'));
+        if (!this.quickToolsMode) {
+            emptyEl.appendText(' ');
+            const galleryLinkEl = emptyEl.createEl('a', { 
+                href: 'obsidian://note-toolbar?gallery', 
+                text: t('setting.item-suggest-modal.link-gallery')
+            });
+            galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
+        }
+    }
+
+    /**
      * Sorts the provided suggestions based on the provided search string.
      * @param itemsToSort ToolbarItemSettings to sort
      * @param searchString provided search string

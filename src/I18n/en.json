@@ -40,10 +40,10 @@
             "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
         },
         "js-engine": {
-            "eval-function": "Evaluate JavaScript",
             "eval-expr": "JavaScript expression",
             "eval-expr-description": "JavaScript expression to evaluate.",
             "eval-expr-error-required": "Error: A JavaScript expression is required",
+            "eval-function": "Evaluate JavaScript",
             "exec-function": "Execute JavaScript",
             "exec-sourcefile": "JavaScript file",
             "exec-sourcefile-description": "JavaScript file to execute.",
@@ -283,7 +283,7 @@
         },
         "item": {
             "button-close": "Close",
-            "button-close-description": "Closes and saves this item",            
+            "button-close-description": "Closes and saves this item",
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
@@ -338,6 +338,8 @@
             "key-dismiss": "esc",
             "key-navigate": "↑↓",
             "key-use": "↵",
+            "label-empty-no-items": "No results found.",
+            "link-gallery": "Explore the gallery",
             "option-default": "Default (use toolbar mapping)",
             "placeholder": "Search for an item...",
             "placeholder-toolbar": "{{toolbar}}: Search items..."
