@@ -106,6 +106,15 @@
         "type": "command"
     },
     {
+        "id": "go-bottom",
+        "description": { "en": "Moves the cursor to the bottom of the current note." },
+        "icon": "arrow-down",
+        "plugin": ["dataview", "templater-obsidian", "js-engine"],
+        "script": "app.workspace.activeEditor?.editor?.setCursor(app.workspace.activeEditor.editor.lineCount(), 0)",
+        "tooltip": { "en": "Jump to bottom" },
+        "type": "plugin"
+    },
+    {
         "id": "go-home",
         "description": { "en": "Go to your home note. (Enter your home note in the URL.)" },
         "icon": "home",

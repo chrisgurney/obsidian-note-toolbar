@@ -49,7 +49,7 @@
         "name": { "en": "Navigation" },
         "description": { "en": "Navigate between files and directories." },
         "itemIds": [
-            "previous-file", "next-file", "go-home", "go-up", "bookmarks-open"
+            "previous-file", "next-file", "go-home", "go-up", "bookmarks-open", "go-bottom"
         ]
       },
       {
