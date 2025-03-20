@@ -158,12 +158,12 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 			closeCallback();
 		});
 		helpDesc.append(' • ');
-		const galleryLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-gallery') });
+		const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
 		plugin.registerDomEvent(galleryLink, 'click', (event) => { 
 			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 			closeCallback();
 		});
-		helpDesc.append(' • ', helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }));
+		helpDesc.append(' • ', helpDesc.createEl("a", { href: "obsidian://note-toolbar?help", text: iconTextFr('help-circle', t('setting.button-help')) }));
 		helpContainerEl.append(helpDesc);
 
 	}
