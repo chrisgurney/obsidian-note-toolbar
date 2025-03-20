@@ -165,8 +165,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			this.gallery.load();
-
 		});
 
 	}

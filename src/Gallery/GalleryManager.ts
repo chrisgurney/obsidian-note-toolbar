@@ -10,15 +10,14 @@ export default class GalleryManager {
     constructor(private plugin: NoteToolbarPlugin) {
     }
 
-    load() {
-        this.loadItems();
-    }
-
     getItems(): ToolbarItemSettings[] {
+        if (this.items.length === 0) this.loadItems();
         return this.items;
     }
 
     private loadItems() {
+        const startTime = performance.now();
+        
         const lang = i18next.language || 'en';
         this.items = galleryItems.map((item: any) => ({
             uuid: item.id ?? '',
@@ -41,6 +40,9 @@ export default class GalleryManager {
             tooltip: item.tooltip ? item.tooltip[lang] : '',
             visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
         }));
+
+        const endTime = performance.now();
+        debugLog(`Gallery loaded in ${endTime - startTime} ms`);
     }
 
 }
