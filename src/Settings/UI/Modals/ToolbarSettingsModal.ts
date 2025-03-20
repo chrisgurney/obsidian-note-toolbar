@@ -59,6 +59,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Displays the toolbar item's settings within the modal window.
 	 */
 	onOpen() {
+		this.plugin.updateAdapters();
 		this.display();
 	}
 
