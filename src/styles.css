@@ -1380,6 +1380,9 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-gallery-view-cat-title {
     & h2 {
         margin-block-end: 0.25em;
+        &::after {
+            display: none; /* fix for Border theme */
+        }
     } 
 }
 
@@ -1448,12 +1451,15 @@ input[type="text"].note-toolbar-setting-error,
         text-overflow: ellipsis;
         white-space: nowrap;
         width: 100%;
+        &::after {
+            display: none; /* fix for Border theme */
+        }
     }
     & p {
         align-self: start;
         display: flex;
         font-size: var(--font-ui-small);
-        margin: 0;
+        margin: 0 !important;
         text-wrap: auto;
         &.note-toolbar-gallery-view-item-description {
             color: var(--text-muted);
@@ -1462,7 +1468,7 @@ input[type="text"].note-toolbar-setting-error,
             display: flex;
             vertical-align: middle;
             gap: 0.25em;
-            margin-top: 0.5em;
+            margin-top: 0.5em !important;
             & svg {
                 height: var(--font-ui-small);
                 width: var(--font-ui-small);
