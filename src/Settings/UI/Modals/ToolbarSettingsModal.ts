@@ -310,6 +310,7 @@ export default class ToolbarSettingsModal extends Modal {
 							currentFocussed.hasClass('sortable-handle') ? '.note-toolbar-setting-item-preview-container .sortable-handle' : '.note-toolbar-setting-item-preview';
 						const itemEls = Array.from(itemsSortableContainer.querySelectorAll<HTMLElement>(itemSelector));
 						const currentIndex = itemEls.indexOf(currentFocussed);
+						if (currentIndex === -1) return; // if focus is not on the item preview
 						switch (keyEvent.key) {
 							case 'ArrowUp':
 								if (currentIndex > 0) {
