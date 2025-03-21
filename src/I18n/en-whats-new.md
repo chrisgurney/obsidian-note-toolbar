@@ -6,7 +6,7 @@ What's new in Note Toolbar v1.21?
 
 The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks.
 
-Most of the items are from the User Guide's _Examples_ page. However, the Gallery can include _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's 66 items so far, but I'm aiming for a higher number on release.
+Most of the items are from the User Guide's _Examples_ page. However, the Gallery can include _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's around 70 items so far, but I'm aiming for a higher number on release.
 
 Explore via the new **Gallery** button in settings, or if you have the beta open [open the Gallery here](obsidian://note-toolbar?gallery).
 
@@ -33,11 +33,27 @@ Suggestions from the Gallery are provided at the bottom of search results.
 
 ## Fixes
 
+- Item Settings: Pressing down arrow key when in an edit field no longer closes the item.
 - Toolbar Settings: The need to re-enable the Scripting setting if a plugin was not installed/enabled, and it was then installed and enabled, has been removed.
 - Quick Tools: Console errors are no longer reported for any items.
 - Settings: Hot key display logic has been updated thanks to @mProjectsCode ’s updates.
 - Item Settings: (To test) Style dropdown not rounded when it’s actively being pressed down on phone.
 - Item Settings: Fixed an issue where the command suggester field was empty, even though the command was valid.
+
+## API Beta
+
+### New Features 🎉
+
+Get the active item (i.e., the item that was just clicked/tapped) and set its icon.
+
+```ts
+const item = ntb.getActiveItem();
+item?.setIcon('circle-alert');
+```
+
+Some of the items in the Gallery use this, such as `Toggle light/dark mode` which updates the icon to reflect the current mode.
+
+A very basic Item interface has been added to support this method, and getting its ID at the moment. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
 
 ---
 
