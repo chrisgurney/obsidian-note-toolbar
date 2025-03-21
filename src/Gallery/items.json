@@ -281,7 +281,7 @@
     },
     {
         "id": "obsidian-discord",
-        "description": { "en": "Opens the Obsidian Discord community." },
+        "description": { "en": "Opens Obsidian's Discord community." },
         "icon": "discord",
         "tooltip": { "en": "Obsidian Discord" },
         "url": "https://discord.gg/obsidianmd",
@@ -289,7 +289,7 @@
     },
     {
         "id": "obsidian-forum",
-        "description": { "en": "Opens the Obsidian forum for discussions and support." },
+        "description": { "en": "Opens Obsidian's forum for discussions and support." },
         "icon": "message-circle",
         "tooltip": { "en": "Obsidian forum" },
         "url": "https://forum.obsidian.md/",
@@ -305,7 +305,7 @@
     },
     {
         "id": "obsidian-markdown-reference",
-        "description": { "en": "Opens the Obsidian Markdown formatting guide." },
+        "description": { "en": "Opens Obsidian's Markdown formatting guide." },
         "icon": "book-down",
         "tooltip": { "en": "Markdown reference" },
         "url": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",

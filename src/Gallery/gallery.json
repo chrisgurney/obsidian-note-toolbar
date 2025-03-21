@@ -40,7 +40,7 @@
       },
       {
         "name": { "en" : "Editor" },
-        "description": { "en": "Get around in the text editor faster." },
+        "description": { "en": "Get around the text editor faster." },
         "itemIds": [
             "go-bottom", "toggle-vim-mode"
         ]
@@ -91,7 +91,7 @@
         "name": { "en": "Themes and Views" },
         "description": { "en": "Switch themes and toggle views." },
         "itemIds": [
-            "theme-switch", "theme-toggle-light-dark", "theme-use-dark", "theme-use-light", "editor-toggle-preview", "editor-toggle-source"
+            "theme-switch", "theme-toggle-light-dark", "editor-toggle-preview", "editor-toggle-source"
         ]
       },
       {
