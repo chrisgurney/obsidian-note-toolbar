@@ -535,6 +535,15 @@
         "type": "command"
     },
     {
+        "id": "toggle-vim-mode",
+        "description": { "en": "Turns Vim mode on and off." },
+        "icon": "keyboard",
+        "plugin": ["dataview", "js-engine"],        
+        "script": "const vm = app.vault.getConfig('vimMode');  app.vault.setConfig('vimMode', !vm); ntb.getActiveItem()?.setIcon(vm ? 'keyboard' : 'edit-2');",
+        "tooltip": { "en": "Toggle Vim mode" },
+        "type": "plugin"
+    },
+    {
         "id": "undo",
         "description": { "en": "Reverts the latest action." },
         "icon": "lucide-undo-2",
