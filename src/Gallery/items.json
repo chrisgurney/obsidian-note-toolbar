@@ -67,6 +67,15 @@
         "type": "command"
     },
     {
+        "id": "cycle-themes",
+        "description": { "en": "Cycles between themes, including the default." },
+        "icon": "venetian-mask",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const i = ntb.getActiveItem(); const t = [...Object.values(app.customCss.themes), { name: '' }]; const n = t[(t.findIndex(theme => theme.name === app.vault.getConfig('cssTheme')) + 1) % t.length].name; app.customCss.setTheme(n); if (n) new Notice(n);",
+        "tooltip": { "en": "Cycle themes" },
+        "type": "plugin"        
+    },
+    {
         "id": "daily-notes-prev",
         "commandId": "daily-notes:goto-prev",
         "description": { "en": "Go to the previous daily note." },

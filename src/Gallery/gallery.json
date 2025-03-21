@@ -91,7 +91,7 @@
         "name": { "en": "Themes and Views" },
         "description": { "en": "Switch themes and toggle views." },
         "itemIds": [
-            "theme-switch", "theme-toggle-light-dark", "editor-toggle-preview", "editor-toggle-source"
+            "theme-switch", "theme-toggle-light-dark", "cycle-themes", "editor-toggle-preview", "editor-toggle-source"
         ]
       },
       {
