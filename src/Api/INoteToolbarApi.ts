@@ -37,6 +37,7 @@ export interface INoteToolbarApi<T> {
      * Gets the active (last activated) toolbar item.
      * 
      * @returns The active (last activated) item.
+     * @remarks This does not work with Note Toolbar Callouts.
      */
     getActiveItem: () => IItem | undefined;
 
