@@ -82,8 +82,10 @@ export class GalleryView extends ItemView {
 
 		(gallery as Gallery).categories.forEach(category => {
 
+			const catNameEl = markdownEl.createEl('div');
+			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
 			const catName = category.name[lang] || category.name['en'];
-			MarkdownRenderer.render(this.plugin.app, `## ${catName}`, markdownEl, '/', this.plugin);
+			MarkdownRenderer.render(this.plugin.app, `## ${catName}`, catNameEl, '/', this.plugin);
 
 			const catDescEl = markdownEl.createEl('div');
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
