@@ -53,10 +53,13 @@ export class GalleryView extends ItemView {
 		const lang: string = i18next.language || 'en';
 		const galleryItems = this.plugin.gallery.getItems();
 
+		const headingEl = markdownEl.createDiv();
+		headingEl.addClass('note-toolbar-gallery-view-heading');
+		
 		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
-		MarkdownRenderer.render(this.plugin.app, `# ${title}`, markdownEl, '/', this.plugin);
+		MarkdownRenderer.render(this.plugin.app, `# ${title}`, headingEl, '/', this.plugin);
 
-		new Setting(markdownEl)
+		new Setting(headingEl)
 			.setClass('note-toolbar-setting-item-full-width-phone')
 			.setClass('note-toolbar-setting-no-border')
 			.setClass('note-toolbar-gallery-view-search')
