@@ -11,4 +11,16 @@ export interface IItem {
      */
     id?: string;
 
+    /**
+     * Updates the icon to the provided one, if it exists.
+     *
+     * @param iconId The icon ID.
+     * @returns nothing
+     * 
+     * @example
+     * const item = ntb.getActiveItem();
+     * item.setIcon('circle-alert'); 
+     */
+    setIcon(iconId: string): void;
+
 }

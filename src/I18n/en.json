@@ -84,6 +84,9 @@
         }
     },
     "api": {
+        "item": {
+            "error-invalid-icon": "Invalid icon ID: {{iconId}}"
+        },
         "ui": {
             "button-submit": "Submit",
             "error-cancelled": "Cancelled prompt",
