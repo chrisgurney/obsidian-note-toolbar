@@ -6,6 +6,7 @@ import { INoteToolbarApi, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions
 import { NtbModal } from "./NtbModal";
 import { TFile } from "obsidian";
 import { Toolbar } from "./Toolbar";
+import { Item } from "./Item";
 
 export type Callback = (arg: string) => void;
 
@@ -33,7 +34,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.getToolbars
      */
     getToolbars(): Toolbar[] {
-        return this.plugin.settings.toolbars.map(toolbar => new Toolbar(this.plugin, toolbar.uuid));
+        return this.plugin.settings.toolbars.map(toolbar => new Toolbar(this.plugin, toolbar));
     }
 
     /**

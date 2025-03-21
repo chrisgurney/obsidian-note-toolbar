@@ -7,11 +7,8 @@ export class Toolbar implements IToolbar {
 
     public readonly id?: string;
 
-    private toolbar: ToolbarSettings | undefined;
-
-    constructor(private plugin: NoteToolbarPlugin, id: string) {
-        this.toolbar = this.plugin.settingsManager.getToolbarById(id);
-        this.id = this.toolbar?.uuid;
+    constructor(private plugin: NoteToolbarPlugin, private toolbar: ToolbarSettings) {
+        this.id = toolbar.uuid;
     }
 
     /**
