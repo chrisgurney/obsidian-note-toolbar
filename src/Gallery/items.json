@@ -421,6 +421,16 @@
         "type": "command"
     },
     {
+        "id": "theme-toggle-light-dark",
+        "commandId": "theme:use-dark",
+        "description": { "en": "Toggle between light and dark modes." },
+        "icon": "sun-moon",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const i = ntb.getActiveItem(); if (app.vault.getConfig('theme') === 'obsidian') { app.vault.setConfig('theme', 'obsidian-light'); i?.setIcon('moon'); } else { app.vault.setConfig('theme', 'obsidian'); i?.setIcon('sun'); }",
+        "tooltip": { "en": "Toggle light/dark" },
+        "type": "plugin"
+    },
+    {
         "id": "theme-use-dark",
         "commandId": "theme:use-dark",
         "description": { "en": "Enable dark mode." },
