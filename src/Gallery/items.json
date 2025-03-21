@@ -158,6 +158,14 @@
         "type": "plugin"
     },
     {
+        "id": "go-prev-heading",
+        "description": { "en": "Moves the cursor to the previous heading in the note." },
+        "icon": "a-arrow-up",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",        "tooltip": { "en": "Previous heading" },
+        "type": "plugin"
+    },
+    {
         "id": "indent",
         "description": { "en": "Increases indentation on the current line." },
         "icon": "indent-increase",
@@ -195,7 +203,7 @@
         "commandId": "editor:insert-horizontal-rule",
         "description": { "en": "Insert a horizontal rule to separate sections." },
         "icon": "line-horizontal",
-        "tooltip": { "en": "Insert horizontal rule." },
+        "tooltip": { "en": "Insert horizontal rule" },
         "type": "command"
     },
     {
@@ -315,9 +323,9 @@
     },
     {
         "id": "obsidian-help-site",
-        "description": { "en": "Opens the official Obsidian help site." },
+        "description": { "en": "Opens the official Obsidian Help site." },
         "icon": "book",
-        "tooltip": { "en": "Obsidian help site" },
+        "tooltip": { "en": "Obsidian Help" },
         "url": "https://help.obsidian.md/",
         "type": "link"
     },
