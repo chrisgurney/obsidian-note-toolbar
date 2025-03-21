@@ -21,11 +21,11 @@ export default class GalleryManager {
         const lang = i18next.language || 'en';
         this.items = galleryItems.map((item: any) => ({
             uuid: item.id ?? '',
-            description: item.description?.[lang],
+            description: item.description ? (item.description[lang] || item.description['en']) : '',
             hasCommand: false,
             icon: item.icon ?? '',
             inGallery: true,
-            label: item.label ? item.label[lang] : '',
+            label: item.label ? (item.label[lang] || item.label['en']) : '',
             link: item.link ?? '',
             linkAttr: {
                 commandId: item.commandId ?? '',
@@ -37,7 +37,7 @@ export default class GalleryManager {
                 expression: item.script ?? '',
                 pluginFunction: 'TBD'
             } : undefined,
-            tooltip: item.tooltip ? item.tooltip[lang] : '',
+            tooltip: item.tooltip ? (item.tooltip[lang] || item.tooltip['en']) : '',
             visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
         }));
 
