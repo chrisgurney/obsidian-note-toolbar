@@ -42,7 +42,7 @@
         "name": { "en" : "Editor" },
         "description": { "en": "Get around the text editor faster." },
         "itemIds": [
-            "go-bottom", "toggle-vim-mode"
+            "go-next-heading", "go-bottom", "toggle-vim-mode"
         ]
       },
       {

@@ -149,6 +149,15 @@
         "type": "link"
     },
     {
+        "id": "go-next-heading",
+        "description": { "en": "Moves the cursor to the next heading in the note." },
+        "icon": "a-arrow-down",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = c.line + 1; i !== c.line; i = (i + 1) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "tooltip": { "en": "Next heading" },
+        "type": "plugin"
+    },
+    {
         "id": "indent",
         "description": { "en": "Increases indentation on the current line." },
         "icon": "indent-increase",
