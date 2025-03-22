@@ -149,6 +149,15 @@
         "type": "link"
     },
     {
+        "id": "go-next-callout",
+        "description": { "en": "Moves the cursor to the next callout in the note." },
+        "icon": "chevrons-down",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const ed = app.workspace.activeEditor?.editor;\nconst ln = ed.getValue().split('\\n');\nlet idx = ed.getCursor().line;\nconst r = /^\\s*>/;\nwhile (idx < ln.length && r.test(ln[idx])) idx++;\nwhile (idx < ln.length && !r.test(ln[idx])) idx++;\nif (idx >= ln.length) { idx = 0; while (idx < ln.length && !r.test(ln[idx])) idx++; }\nif (idx < ln.length) { ed.setCursor({ line: idx, ch: 0 }); }",
+        "tooltip": { "en": "Next callout" },
+        "type": "plugin"
+    },
+    {
         "id": "go-next-heading",
         "description": { "en": "Moves the cursor to the next heading in the note." },
         "icon": "a-arrow-down",
