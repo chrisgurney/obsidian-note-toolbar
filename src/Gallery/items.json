@@ -102,7 +102,7 @@
     {
         "id": "editor-toggle-preview",
         "commandId": "markdown:toggle-preview",
-        "description": { "en": "Toggle the reading view of the note." },
+        "description": { "en": "Toggle editor Preview/Reading mode." },
         "icon": "book-open",
         "tooltip": { "en": "Toggle Reading view" },
         "type": "command"
@@ -110,7 +110,7 @@
     {
         "id": "editor-toggle-source",
         "commandId": "editor:toggle-source",
-        "description": { "en": "Toggle between Live Preview and Source mode." },
+        "description": { "en": "Toggle editor Source mode." },
         "icon": "code-2",
         "tooltip": { "en": "Toggle Source mode" },
         "type": "command"
@@ -171,7 +171,8 @@
         "description": { "en": "Moves the cursor to the previous heading in the note." },
         "icon": "a-arrow-up",
         "plugin": ["dataview", "js-engine"],
-        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",        "tooltip": { "en": "Previous heading" },
+        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "tooltip": { "en": "Previous heading" },
         "type": "plugin"
     },
     {
