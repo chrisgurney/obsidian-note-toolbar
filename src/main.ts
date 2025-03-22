@@ -1833,8 +1833,20 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			}
 
-			// share
+			// swap toolbar (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
+			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+			if (currentView?.getViewType() === 'markdown' && this.settings.toolbarProp !== 'tags') {
+				contextMenu.addItem((item: MenuItem) => {
+					item
+						.setIcon('repeat')
+						.setTitle(t('toolbar.menu-swap-toolbar'))
+						.onClick(() => this.commands.swapToolbar());
+				});
+			}
+
 			contextMenu.addSeparator();
+			
+			// share
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('share')
@@ -1865,17 +1877,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		
 		contextMenu.addSeparator();
-
-		// swap toolbar (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		if (currentView?.getViewType() === 'markdown' && this.settings.toolbarProp !== 'tags') {
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('repeat')
-					.setTitle(t('toolbar.menu-swap-toolbar'))
-					.onClick(() => this.commands.swapToolbar());
-			});
-		}
 
 		// edit item
 		if (toolbarItem) {
