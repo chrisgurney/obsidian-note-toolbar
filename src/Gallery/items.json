@@ -531,6 +531,15 @@
         "type": "command"
     },
     {
+        "id": "toggle-css-class",
+        "description": { "en": "Toggles the provided CSS class in the cssclasses property." },
+        "icon": "paintbrush",
+        "plugin": ["dataview", "js-engine"],
+        "script": "let tc = 'myclass'; // CHANGE THIS VALUE\nconst af = app.workspace.getActiveFile();\nawait app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
+        "tooltip": { "en": "Toggle CSS class" },
+        "type": "plugin"
+    },
+    {
         "id": "toggle-highlight",
         "commandId": "editor:toggle-highlight",
         "description": { "en": "Apply or remove text highlighting." },
