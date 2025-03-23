@@ -141,8 +141,17 @@
         "type": "link"
     },
     {
+        "id": "go-top",
+        "description": { "en": "Moves the cursor to the top of the current note." },
+        "icon": "arrow-up",
+        "plugin": ["dataview", "templater-obsidian", "js-engine"],
+        "script": "app.workspace.activeEditor?.editor?.setCursor(0, 0)",
+        "tooltip": { "en": "Jump to top" },
+        "type": "plugin"
+    },
+    {
         "id": "go-up",
-        "description": { "en": "Navigate upwards. Uses your note's \"up\" property." },
+        "description": { "en": "Uses your note's \"up\" property to navigate to a parent note in your vault." },
         "icon": "arrow-up-left",
         "tooltip": { "en": "Go up" },
         "url": "{{prop_up}}",
