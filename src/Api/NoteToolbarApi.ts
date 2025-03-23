@@ -42,6 +42,16 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
+     * Gets an item by its ID, if it exists.
+     * 
+     * @see INoteToolbarApi.getItem
+     */
+    getItem(id: string): Item | undefined {
+        const item = this.plugin.settingsManager.getToolbarItemById(id);
+        return (item) ? new Item(this.plugin, item) : undefined;
+    }
+
+    /**
      * Gets all toolbars (as {@link Toolbar} objects).
      * 
      * @see INoteToolbarApi.getToolbars

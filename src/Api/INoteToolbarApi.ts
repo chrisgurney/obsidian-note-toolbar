@@ -42,6 +42,13 @@ export interface INoteToolbarApi<T> {
     getActiveItem: () => IItem | undefined;
 
     /**
+     * Gets an item by its ID, if it exists.
+     * 
+     * @returns The item, or undefined.
+     */   
+    getItem: (id: string) => IItem | undefined;
+
+    /**
      * Gets all toolbars.
      * 
      * @returns All toolbars.

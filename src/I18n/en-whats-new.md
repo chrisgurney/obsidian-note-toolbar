@@ -44,16 +44,18 @@ Suggestions from the Gallery are provided at the bottom of search results.
 
 ### New Features 🎉
 
-Get the active item (i.e., the item that was just clicked/tapped) and set its icon.
+Get an item by its ID, or get the active item (i.e., the item that was just clicked/tapped), and then set its icon:
 
 ```ts
 const item = ntb.getActiveItem();
+// you can also get items by ID
+// const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513'');
 item?.setIcon('circle-alert');
 ```
 
 Some of the items in the Gallery use this, such as `Toggle light/dark mode` which updates the icon to reflect the current mode.
 
-A very basic Item interface has been added to support this method, and getting its ID at the moment. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
+A very basic `Item` interface has been added to support this method, and getting its ID at the moment. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
 
 ---
 
