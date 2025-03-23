@@ -33,7 +33,7 @@ export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
         itemsToSearch.forEach((item: ToolbarItemSettings) => {
             let itemName = item.label || item.tooltip;
             if (!itemName) itemName = item.icon ? item.link : '';
-            let itemStrings = (item.label + item.tooltip + item.link).toLowerCase();
+            const itemStrings = `${item.label} ${item.tooltip} ${item.link} ${item.description ?? ''}`.toLowerCase();
             if (itemName && itemStrings.includes(lowerCaseInputStr)) {
                 itemSuggestions.push(item);
             }
