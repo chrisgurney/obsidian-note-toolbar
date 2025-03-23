@@ -418,7 +418,7 @@
     {
         "id": "templater-new-note-from-template",
         "commandId": "templater-obsidian:create-new-note-from-template",
-        "description": { "en": "Create a new note from a template." },
+        "description": { "en": "Create a new note from a template you select." },
         "icon": "percent-square",
         "tooltip": { "en": "New from template" },
         "type": "command"
