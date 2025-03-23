@@ -96,7 +96,7 @@
       },
       {
         "name": { "en": "Templater" },
-        "description": { "en": "Insert or create notes from templates." },
+        "description": { "en": "Insert or create notes from templates. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)." },
         "itemIds": [
             "templater-insert-template", "templater-new-note-from-template"
         ]
