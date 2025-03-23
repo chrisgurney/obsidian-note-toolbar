@@ -74,8 +74,10 @@ export class GalleryView extends ItemView {
 					});
 			});
 
+		const overviewEl = markdownEl.createDiv();
+		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
 		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
-		MarkdownRenderer.render(this.plugin.app, overview, markdownEl, '/', this.plugin);
+		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', this.plugin);
 
 		const pluginNoteEl = markdownEl.createDiv();
 		pluginNoteEl.addClass('note-toolbar-gallery-view-plugin-note');
