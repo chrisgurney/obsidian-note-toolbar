@@ -126,7 +126,7 @@
     {
         "id": "go-bottom",
         "description": { "en": "Moves the cursor to the bottom of the current note." },
-        "icon": "arrow-down",
+        "icon": "arrow-down-to-line",
         "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeEditor?.editor?.setCursor(app.workspace.activeEditor.editor.lineCount(), 0)",
         "tooltip": { "en": "Jump to bottom" },
@@ -143,7 +143,7 @@
     {
         "id": "go-top",
         "description": { "en": "Moves the cursor to the top of the current note." },
-        "icon": "arrow-up",
+        "icon": "arrow-up-to-line",
         "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeEditor?.editor?.setCursor(0, 0)",
         "tooltip": { "en": "Jump to top" },
