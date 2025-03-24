@@ -8,6 +8,7 @@ import { TFile } from "obsidian";
 import { Toolbar } from "./Toolbar";
 import { Item } from "./Item";
 import { debugLog } from "Utils/Utils";
+import { t } from "Settings/NoteToolbarSettings";
 
 export type Callback = (arg: string) => void;
 
@@ -127,5 +128,12 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         }
 
     };
+
+   /**
+     * The i18next T function, scoped to Note Toolbar's localized strings.
+     * 
+     * @see INoteToolbarApi.t
+     */
+    t: string = t;
 
 }

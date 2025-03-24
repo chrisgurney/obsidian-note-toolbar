@@ -141,6 +141,18 @@ export interface INoteToolbarApi<T> {
      */
     suggester: (values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
 
+   /**
+     * This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
+     * 
+     * @example
+     * // shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+     * new Notice(ntb.t('api.msg.clipboard-copied'));
+     * 
+     * @see For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
+     * @see `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+     */
+    t: string;
+
 }
 
 /**
