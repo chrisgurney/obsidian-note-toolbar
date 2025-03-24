@@ -182,7 +182,7 @@ export class GalleryView extends ItemView {
 		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, true, async (selectedToolbar: ToolbarSettings) => {
 			if (selectedToolbar && galleryItem) {
 				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
-					selectedToolbar = await this.plugin.settingsManager.newToolbar();
+					selectedToolbar = await this.plugin.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
 				}
 				let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
 				if (newItem.linkAttr.type === ItemType.Plugin) {
