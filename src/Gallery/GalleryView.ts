@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, ItemView, MarkdownRenderer, Platform, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, ItemView, MarkdownRenderer, Platform, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
 import { ItemType, t, ToolbarItemSettings, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
@@ -59,7 +59,7 @@ export class GalleryView extends ItemView {
 		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
 		MarkdownRenderer.render(this.plugin.app, `# ${title}`, headingEl, '/', this.plugin);
 
-		new Setting(headingEl)
+		const searchSetting = new Setting(headingEl)
 			.setClass('note-toolbar-setting-item-full-width-phone')
 			.setClass('note-toolbar-setting-no-border')
 			.setClass('note-toolbar-gallery-view-search')
@@ -73,6 +73,14 @@ export class GalleryView extends ItemView {
 						cb.inputEl.value = itemText;
 					});
 			});
+
+		// focus on search when cmd/ctrl-f pressed 
+		this.scope = new Scope(this.app.scope);
+		this.scope.register(['Mod'], 'F', (evt) => {
+			evt.preventDefault();
+			searchSetting.controlEl.querySelector('input')?.focus();
+			return false;
+		});
 
 		const overviewEl = markdownEl.createDiv();
 		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
