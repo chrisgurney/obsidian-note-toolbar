@@ -14,11 +14,10 @@ Explore via the new **Gallery** button in settings.
 - To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to.
 - If the item is compatible with more than one plugin, you will be prompted to select the one you would like to use.
 
-**I'd love your feedback!**
+>[!note] 
+> **I'd love your feedback** on the items, and categories I’ve started this with. What are some helpful items you think other users would benefit from, that Obsidian doesn’t already provide, or is maybe not obvious? Also, do let me know if anything’s broken.
 
-I’d love to hear your feedback on the items, and categories I’ve started this with. What are some helpful items you think other users would benefit from, that Obsidian doesn’t already provide, or is maybe not obvious? Also, do let me know if anything’s broken.
-
-🌐 Note for the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.  
+🌐 For the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.
 
 ### Search for items to add 
 
