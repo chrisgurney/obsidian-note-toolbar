@@ -57,7 +57,7 @@ item?.setIcon('circle-alert');
 
 Some of the items in the Gallery use this, such as `Toggle light/dark mode` which updates the icon to reflect the current mode.
 
-A very basic `Item` interface has been added to support this method, and getting its ID at the moment. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
+A very basic `Item` interface has been added to support this method, and to get its ID. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
 
 Scripts can now **access Note Toolbar's translations** via `ntb.t()`:
 
