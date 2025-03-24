@@ -486,7 +486,7 @@
             "instruction-dismiss": "to dismiss",
             "instruction-navigate": "to navigate",
             "instruction-use": "to open toolbar",
-            "option-new": "New toolbar",
+            "option-new": "+ Create a new toolbar",
             "placeholder": "Search for a toolbar..."
         },
         "toolbars": {
