@@ -13,12 +13,14 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param plugin NoteToolbarPlugin
      * @param showPreviews true if toolbar previews should be shown
      * @param showSwapUi true if UI for swap toolbars should be shown (e.g., default toolbar option)
+     * @param showNewOption true if UI should show a "New toolbar" option (for adding items from the Gallery)
      * @param callback function to call when a toolbar is selected
      */
 	constructor(
         plugin: NoteToolbarPlugin,
         private showPreviews: boolean, 
         private showSwapUi: boolean,
+        private showNewOption: boolean,
         private callback: (toolbar: ToolbarSettings) => void) {
 
         super(plugin.app);
@@ -60,9 +62,14 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         if (this.showSwapUi) {
-            let emptyToolbar = EMPTY_TOOLBAR;
+            let emptyToolbar = { ...EMPTY_TOOLBAR };
             emptyToolbar.name = t('setting.item-suggest-modal.option-default');
             tbarSuggestions.push(emptyToolbar);
+        }
+        else if (this.showNewOption) {
+            let newToolbar = { ...EMPTY_TOOLBAR };
+            newToolbar.name = t('setting.toolbar-suggest-modal.option-new');
+            tbarSuggestions.push(newToolbar);
         }
 
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {

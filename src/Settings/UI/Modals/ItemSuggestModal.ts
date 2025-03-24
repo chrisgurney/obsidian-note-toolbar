@@ -263,8 +263,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 if (this.toolbarId && this.inputEl.value === '') {
                     this.close();
                     let activeFile = this.plugin.app.workspace.getActiveFile();
-                    const modal = new ToolbarSuggestModal(this.plugin, false, false, (toolbar: ToolbarSettings) => {
-                        this.plugin.commands.openQuickTools(toolbar.uuid);
+                    const modal = new ToolbarSuggestModal(this.plugin, false, false, false, async (toolbar: ToolbarSettings) => {
+                        await this.plugin.commands.openQuickTools(toolbar.uuid);
                     });
                     modal.open();
                 }

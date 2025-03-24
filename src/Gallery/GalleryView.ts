@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, ItemView, MarkdownRenderer, Platform, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
-import { ItemType, t, ToolbarItemSettings, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { debugLog } from 'Utils/Utils';
 import { ToolbarSuggestModal } from 'Settings/UI/Modals/ToolbarSuggestModal';
@@ -179,18 +179,19 @@ export class GalleryView extends ItemView {
 	 * @param galleryItem Gallery item to add
 	 */
 	addItem(galleryItem: ToolbarItemSettings): void {
-		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, async (selectedToolbar: ToolbarSettings) => {
-			if (selectedToolbar) {
-				if (galleryItem) {
-					let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
-					if (newItem.linkAttr.type === ItemType.Plugin) {
-						const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
-						if (!pluginType) return;
-					}
-					selectedToolbar.updated = new Date().toISOString();
-					await this.plugin.settingsManager.save();
-					this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
+		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, true, async (selectedToolbar: ToolbarSettings) => {
+			if (selectedToolbar && galleryItem) {
+				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
+					selectedToolbar = await this.plugin.settingsManager.newToolbar();
 				}
+				let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
+				if (newItem.linkAttr.type === ItemType.Plugin) {
+					const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
+					if (!pluginType) return;
+				}
+				selectedToolbar.updated = new Date().toISOString();
+				await this.plugin.settingsManager.save();
+				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
 			}
 		});
 		toolbarModal.open();

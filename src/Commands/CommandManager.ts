@@ -272,8 +272,8 @@ export class CommandManager {
      */
     async openToolbarSuggester(): Promise<void> {
         let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ToolbarSuggestModal(this.plugin, false, false, (toolbar: ToolbarSettings) => {
-            this.plugin.commands.openQuickTools(toolbar.uuid);
+        const modal = new ToolbarSuggestModal(this.plugin, false, false, false, async (toolbar: ToolbarSettings) => {
+            await this.plugin.commands.openQuickTools(toolbar.uuid);
         });
         modal.open();
     }
@@ -282,7 +282,7 @@ export class CommandManager {
      * Opens the toolbar suggester and replaces the current toolbar using the property.
      */
     async swapToolbar(): Promise<void> {
-        const modal = new ToolbarSuggestModal(this.plugin, true, true, async (toolbar: ToolbarSettings) => {
+        const modal = new ToolbarSuggestModal(this.plugin, true, true, false, async (toolbar: ToolbarSettings) => {
             const activeFile = this.plugin.app.workspace.getActiveFile();
             if (activeFile) {
                 await this.plugin.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {

@@ -338,6 +338,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		}
 
+		// add toolbar
 		new Setting(itemsListContainer)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
