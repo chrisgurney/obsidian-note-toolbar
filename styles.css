@@ -2347,6 +2347,7 @@ input[type="text"].note-toolbar-setting-error,
         right: 16px;
         color: var(--interactive-accent);
         cursor: pointer;
+        opacity: 0.5;
         & svg {
             height: 24px;        
             width: 24px;
