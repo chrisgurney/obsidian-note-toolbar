@@ -7,9 +7,6 @@ import { debugLog } from "Utils/Utils";
 export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     public plugin: NoteToolbarPlugin;
-    private callback: (toolbar: ToolbarSettings) => void;
-    private showPreviews: boolean;
-    private showSwapUi: boolean;
 
     /**
      * Creates a new modal.
@@ -20,16 +17,13 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      */
 	constructor(
         plugin: NoteToolbarPlugin,
-        showPreviews: boolean, 
-        showSwapUi: boolean,
-        callback: (toolbar: ToolbarSettings) => void) {
+        private showPreviews: boolean, 
+        private showSwapUi: boolean,
+        private callback: (toolbar: ToolbarSettings) => void) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         this.plugin = plugin;
-        this.showPreviews = showPreviews;
-        this.showSwapUi = showSwapUi;
-        this.callback = callback;
 
         this.setPlaceholder(t('setting.toolbar-suggest-modal.placeholder'));
         this.setInstructions([
