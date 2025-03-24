@@ -44,6 +44,8 @@ Suggestions from the Gallery are provided at the bottom of search results.
 
 ### New Features 🎉
 
+A few features have been added to the API to support the addition of the Gallery, but your scripts may be able to benefit from them as well.
+
 **Get an item by its ID**, or **get the active item** (i.e., the item that was just clicked/tapped), and then **set its icon**:
 
 ```ts
@@ -57,7 +59,7 @@ Some of the items in the Gallery use this, such as `Toggle light/dark mode` whic
 
 A very basic `Item` interface has been added to support this method, and getting its ID at the moment. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
 
-You can also **access Note Toolbar's translations** via `ntb.t()`:
+Scripts can now **access Note Toolbar's translations** via `ntb.t()`:
 
 ```ts
 // shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
