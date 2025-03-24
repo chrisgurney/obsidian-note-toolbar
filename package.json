@@ -4,7 +4,7 @@
 	"description": "TODO: Note Toolbar Description",
 	"main": "main.js",
 	"scripts": {
-		"apidocs": "typedoc src/Api/INoteToolbarApi.ts src/Api/IToolbar.ts --readme none",
+		"apidocs": "typedoc src/Api/INoteToolbarApi.ts src/Api/IToolbar.ts src/Api/IItem.ts --readme none",
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"

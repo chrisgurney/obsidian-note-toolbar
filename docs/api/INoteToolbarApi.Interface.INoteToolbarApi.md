@@ -39,6 +39,44 @@ new Notice(value);
 
 ***
 
+### getActiveItem()
+
+> **getActiveItem**: () => `undefined` \| [`IItem`](IItem.Interface.IItem.md)
+
+Gets the active (last activated) toolbar item.
+
+#### Returns
+
+`undefined` \| [`IItem`](IItem.Interface.IItem.md)
+
+The active (last activated) item.
+
+#### Remarks
+
+This does not work with Note Toolbar Callouts.
+
+***
+
+### getItem()
+
+> **getItem**: (`id`) => `undefined` \| [`IItem`](IItem.Interface.IItem.md)
+
+Gets an item by its ID, if it exists.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+#### Returns
+
+`undefined` \| [`IItem`](IItem.Interface.IItem.md)
+
+The item, or undefined.
+
+***
+
 ### getToolbars()
 
 > **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
@@ -199,3 +237,23 @@ new Notice(selectedKey);
 #### See
 
 `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+
+***
+
+### t
+
+> **t**: `string`
+
+This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
+
+#### Example
+
+```ts
+// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+new Notice(ntb.t('api.msg.clipboard-copied'));
+```
+
+#### See
+
+ - For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
+ - `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
