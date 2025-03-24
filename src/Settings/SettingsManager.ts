@@ -273,15 +273,14 @@ export class SettingsManager {
 			hasCommand: false,
 			items: [],
 			mobileStyles: [],
-			name: name,
+			name: name ? this.getUniqueToolbarName(name, false) : '',
 			position: { 
 				desktop: { allViews: { position: 'props' } }, 
 				mobile: { allViews: { position: 'props' } }, 
 				tablet: { allViews: { position: 'props' } } },
 			updated: new Date().toISOString(),
 		} as ToolbarSettings;
-		this.plugin.settings.toolbars.push(newToolbar);
-		await this.save();
+		await this.addToolbar(newToolbar);
 		return newToolbar;
 	}
 
