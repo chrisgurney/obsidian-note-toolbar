@@ -1813,9 +1813,21 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 			});
 
+			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+			// swap toolbar (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
+			if ((currentView?.getViewType() === 'markdown') && this.settings.toolbarProp !== 'tags') {
+				contextMenu.addItem((item: MenuItem) => {
+					item
+						.setIcon('repeat')
+						.setTitle(t('toolbar.menu-swap-toolbar'))
+						.onClick(() => this.commands.swapToolbar());
+				});
+			}
+
 			// show/hide properties
 			const propsEl = this.getPropsEl();
-			if (propsEl) {
+			if ((currentView?.getViewType() === 'markdown') && propsEl) {
 				const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
 				if (propsDisplayStyle === 'none') {
 					contextMenu.addItem((item: MenuItem) => {
@@ -1833,19 +1845,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			}
 
-			// swap toolbar (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-			if (currentView?.getViewType() === 'markdown' && this.settings.toolbarProp !== 'tags') {
-				contextMenu.addItem((item: MenuItem) => {
-					item
-						.setIcon('repeat')
-						.setTitle(t('toolbar.menu-swap-toolbar'))
-						.onClick(() => this.commands.swapToolbar());
-				});
-			}
-
 			contextMenu.addSeparator();
-			
+
 			// share
 			contextMenu.addItem((item: MenuItem) => {
 				item
