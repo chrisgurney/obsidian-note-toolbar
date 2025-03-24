@@ -73,7 +73,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         }
 
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
-            if (toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
+            if (toolbar.name !== '' && toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
                 tbarSuggestions.push(toolbar);
             }
         });
