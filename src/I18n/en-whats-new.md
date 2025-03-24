@@ -6,7 +6,7 @@ What's new in Note Toolbar v1.21?
 
 The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks.
 
-Most of the items are from the User Guide's _Examples_ page. However, the Gallery can include _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's around 70 items so far, but I'm aiming for a higher number on release.
+The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's over 70 items so far, but I'm aiming for a higher number on release.
 
 Explore via the new **Gallery** button in settings.
 
@@ -16,9 +16,9 @@ Explore via the new **Gallery** button in settings.
 
 **I'd love your feedback!**
 
-I’d love to hear your feedback on the items, and categories I’ve started this with. What are some helpful items you think other users would benefit from, that Obsidian doesn’t already provide, or is maybe not obvious? And let me know if anything’s broken.
+I’d love to hear your feedback on the items, and categories I’ve started this with. What are some helpful items you think other users would benefit from, that Obsidian doesn’t already provide, or is maybe not obvious? Also, do let me know if anything’s broken.
 
-Note for the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.  
+🌐 Note for the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.  
 
 ### Search for items to add 
 
