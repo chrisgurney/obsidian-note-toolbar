@@ -8,7 +8,7 @@ The gallery is a curated list of items that can be added to your toolbars in jus
 
 Most of the items are from the User Guide's _Examples_ page. However, the Gallery can include _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's around 70 items so far, but I'm aiming for a higher number on release.
 
-Explore via the new **Gallery** button in settings, or if you have the beta open [open the Gallery here](obsidian://note-toolbar?gallery).
+Explore via the new **Gallery** button in settings.
 
 - Browse though the categories, or search for items at the top.
 - To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to.
