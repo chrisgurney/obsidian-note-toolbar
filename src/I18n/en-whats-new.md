@@ -44,18 +44,28 @@ Suggestions from the Gallery are provided at the bottom of search results.
 
 ### New Features 🎉
 
-Get an item by its ID, or get the active item (i.e., the item that was just clicked/tapped), and then set its icon:
+**Get an item by its ID**, or **get the active item** (i.e., the item that was just clicked/tapped), and then **set its icon**:
 
 ```ts
 const item = ntb.getActiveItem();
 // you can also get items by ID
-// const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513'');
+// const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
 item?.setIcon('circle-alert');
 ```
 
 Some of the items in the Gallery use this, such as `Toggle light/dark mode` which updates the icon to reflect the current mode.
 
 A very basic `Item` interface has been added to support this method, and getting its ID at the moment. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
+
+You can also **access Note Toolbar's translations** via `ntb.t()`:
+
+```ts
+// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+new Notice(ntb.t('api.msg.clipboard-copied'));
+```
+
+- For function usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
+- See `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
 
 ---
 
