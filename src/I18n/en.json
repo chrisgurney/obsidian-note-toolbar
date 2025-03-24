@@ -87,6 +87,11 @@
         "item": {
             "error-invalid-icon": "Invalid icon ID: {{iconId}}"
         },
+        "msg": {
+            "block-no-id": "No block ID found",
+            "clipboard-copied": "Copied to clipboard",
+            "error-console": "Error: Please check console for details"
+        },
         "ui": {
             "button-submit": "Submit",
             "error-cancelled": "Cancelled prompt",
