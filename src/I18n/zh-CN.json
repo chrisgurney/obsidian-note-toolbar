@@ -468,11 +468,11 @@
       "button-new-tbar": "+ 新建工具栏",
       "button-new-tbar-tooltip": "添加一个新的工具栏",
       "duplicated-tbar-suffix": "复制",
-      "imported-tbar-name": "New toolbar",
       "label-empty-create-tbar": "点击按钮创建工具栏。",
-      "label-tbar-name-not-set": "⚠️ 未设置工具栏名称",
+      "label-tbar-name-not-set": "未设置工具栏名称",
       "name": "工具栏",
-      "name-with-count": "工具栏（{{count}}）"
+      "name-with-count": "工具栏（{{count}}）",
+      "new-tbar-name": "New toolbar"
     },
     "usage": {
       "description": "此工具栏在 {{mappingCount}} 个映射和 {{itemCount}} 个工具栏项目中使用。",

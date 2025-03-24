@@ -496,11 +496,11 @@
             "button-new-tbar": "New toolbar",
             "button-new-tbar-tooltip": "Add a new toolbar",
             "duplicated-tbar-suffix": "copy",
-            "imported-tbar-name": "New toolbar",
             "label-empty-create-tbar": "Use the button to create a toolbar.",
-            "label-tbar-name-not-set": "⚠️ Toolbar name not set",
+            "label-tbar-name-not-set": "Toolbar name not set",
             "name": "Toolbars",
-            "name-with-count": "Toolbars ({{count}})"
+            "name-with-count": "Toolbars ({{count}})",
+            "new-tbar-name": "New toolbar"
         },
         "usage": {
             "description": "This toolbar is used in {{mappingCount}} mapping(s) and {{itemCount}} toolbar item(s).",

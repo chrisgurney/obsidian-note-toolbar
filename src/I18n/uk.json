@@ -466,11 +466,11 @@
             "button-new-tbar": "+ Нова панель",
             "button-new-tbar-tooltip": "Додати нову панель",
             "duplicated-tbar-suffix": "копіювати",
-            "imported-tbar-name": "Нова панель",
             "label-empty-create-tbar": "Натисніть кнопку для створення панелі.",
-            "label-tbar-name-not-set": "⚠️ Не вказано ім'я панелі",
+            "label-tbar-name-not-set": "Не вказано ім'я панелі",
             "name": "Панелі",
-            "name-with-count": "Панелі ({{count}})"
+            "name-with-count": "Панелі ({{count}})",
+            "new-tbar-name": "Нова панель"
         },
         "usage": {
             "description": "Ця панель використовується у {{mappingCount}} зіставлені(нях) та {{itemCount}} елементів(тах) панелей.",

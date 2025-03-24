@@ -295,7 +295,7 @@ export async function importFromCallout(
                     errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
-                toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.imported-tbar-name'), false);
+                toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.new-tbar-name'), false);
                 toolbar.defaultStyles = validDefaultStyles;
                 toolbar.mobileStyles = validMobileStyles;
             }
