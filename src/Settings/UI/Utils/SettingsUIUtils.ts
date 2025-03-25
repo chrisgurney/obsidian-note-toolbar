@@ -155,12 +155,14 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 		const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 		plugin.registerDomEvent(whatsNewLink, 'click', (event) => { 
 			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 			closeCallback();
 		});
 		helpDesc.append(' • ');
 		const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
 		plugin.registerDomEvent(galleryLink, 'click', (event) => { 
 			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 			closeCallback();
 		});
 		helpDesc.append(' • ', helpDesc.createEl("a", { href: "obsidian://note-toolbar?help", text: iconTextFr('help-circle', t('setting.button-help')) }));
@@ -185,6 +187,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 							type: VIEW_TYPE_WHATS_NEW,
 							active: true
 						});
+						if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 						closeCallback();
 					})
 					.buttonEl.setText(t('setting.button-whats-new'));
@@ -197,6 +200,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 							type: VIEW_TYPE_GALLERY,
 							active: true
 						});
+						if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 						closeCallback();
 					})
 					.buttonEl.setText(iconTextFr('layout-grid', t('setting.button-gallery')));
