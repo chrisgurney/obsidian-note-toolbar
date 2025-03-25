@@ -96,7 +96,7 @@
         "id": "daily-notes-today",
         "commandId": "daily-notes",
         "description": { "en": "Go to today's daily note." },
-        "icon": "calendar-check",
+        "icon": "calendar",
         "tooltip": { "en": "Today's daily note" },
         "type": "command"
     },
@@ -366,6 +366,14 @@
         "type": "link"
     },
     {
+        "id": "obsidian-kanban-create",
+        "commandId": "obsidian-kanban:create-new-kanban-board",
+        "description": { "en": "Create a new kanban board." },
+        "icon": "square-kanban",
+        "tooltip": { "en": "Create kanban" },
+        "type": "command"
+    },
+    {
         "id": "obsidian-markdown-reference",
         "description": { "en": "Opens Obsidian's Markdown formatting guide." },
         "icon": "book-down",
@@ -390,6 +398,14 @@
         "type": "command"
     },
     {
+        "id": "obsidian-tasks-edit",
+        "commandId": "obsidian-tasks-plugin:edit-task",
+        "description": { "en": "Create a new task." },
+        "icon": "check-square-2",
+        "tooltip": { "en": "Create/Edit task" },
+        "type": "command"
+    },
+    {
         "id": "previous-file",
         "description": {
             "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file."
@@ -408,6 +424,78 @@
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": { "en": "Paste" },
         "type": "plugin"
+    },
+    {
+        "id": "periodic-notes-monthly-next",
+        "commandId": "periodic-notes:next-monthly-note",
+        "description": { "en": "Open next monthly note. (Must be in monthly note.)" },
+        "icon": "lucide-calendar-plus",
+        "tooltip": { "en": "Next monthly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-monthly-open",
+        "commandId": "periodic-notes:open-monthly-note",
+        "description": { "en": "Open monthly note." },
+        "icon": "calendar-days",
+        "tooltip": { "en": "Open monthly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-monthly-prev",
+        "commandId": "periodic-notes:prev-monthly-note",
+        "description": { "en": "Open previous monthly note. (Must be in monthly note.)" },
+        "icon": "lucide-calendar-minus",
+        "tooltip": { "en": "Previous monthly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-next",
+        "commandId": "periodic-notes:next-weekly-note",
+        "description": { "en": "Next weekly note. (Must be in weekly note.)" },
+        "icon": "lucide-calendar-arrow-down",
+        "tooltip": { "en": "Next weekly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-open",
+        "commandId": "periodic-notes:open-weekly-note",
+        "description": { "en": "Open weekly note." },
+        "icon": "calendar-range",
+        "tooltip": { "en": "Open weekly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-prev",
+        "commandId": "periodic-notes:prev-weekly-note",
+        "description": { "en": "Previous weekly note. (Must be in weekly note.)" },
+        "icon": "lucide-calendar-arrow-up",
+        "tooltip": { "en": "Previous weekly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-next",
+        "commandId": "periodic-notes:next-yearly-note",
+        "description": { "en": "Next yearly note. (Must be in yearly note.)" },
+        "icon": "fast-forward",
+        "tooltip": { "en": "Next yearly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-open",
+        "commandId": "periodic-notes:open-yearly-note",
+        "description": { "en": "Open yearly note." },
+        "icon": "calendar-clock",
+        "tooltip": { "en": "Open yearly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-prev",
+        "commandId": "periodic-notes:prev-yearly-note",
+        "description": { "en": "Previous yearly note. (Must be in yearly note.)" },
+        "icon": "rewind",
+        "tooltip": { "en": "Previous yearly note" },
+        "type": "command"
     },
     {
         "id": "pin",

@@ -193,6 +193,9 @@
         "dataview": "Dataview",
         "js-engine": "JS\u00A0Engine",
         "note-toolbar": "Note\u00A0Toolbar",
+        "obsidian-kanban": "Kanban",
+        "obsidian-tasks-plugin": "Tasks",
+        "periodic-notes": "Periodic\u00A0Notes",
         "sync": "Obsidian\u00A0Sync",
         "templater-obsidian": "Templater",
         "workspaces": "Workspaces"
