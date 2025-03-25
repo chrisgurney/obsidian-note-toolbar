@@ -43,6 +43,7 @@ File items are now given a `data-active-file` attribute, if the file you're curr
     border-bottom: 1px solid var(--link-color);
     & span.external-link {
       color: var(--link-color);
+      filter: unset;
     }
   }
 }
