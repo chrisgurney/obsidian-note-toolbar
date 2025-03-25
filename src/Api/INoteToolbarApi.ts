@@ -144,6 +144,8 @@ export interface INoteToolbarApi<T> {
    /**
      * This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
      * 
+     * @returns The string translation corresponding with the provided key, if it exists, with a fallback to English. If the key does not exist, the key is returned.
+     * 
      * @example
      * // shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
      * new Notice(ntb.t('api.msg.clipboard-copied'));
