@@ -4,26 +4,32 @@ What's new in Note Toolbar v1.21?
 
 ### Introducing the Note Toolbar Gallery
 
-The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks.
+The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks. Explore it via the new **Gallery** button in settings.
 
-The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's over 70 items so far, but I'm aiming for a higher number on release.
+The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **over 70 items so far**, but I'm aiming for a higher number on release.
 
-Explore via the new **Gallery** button in settings.
+<img src="https://github.com/user-attachments/assets/2b271f98-c1d8-49cf-a1a0-83385422d337" width="700"/>
 
+It's easy to use the Gallery:
+
+- In settings, look for the new _Gallery_ button/link at the top.
 - Browse though the categories, or search for items at the top.
-- To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to.
+- To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to, or you can create a new toolbar.
 - If the item is compatible with more than one plugin, you will be prompted to select the one you would like to use.
+- Once the item is added to your toolbar, you can edit it however you see fit.
 
 >[!note] 
 > **I'd love your feedback** on the items, and categories I’ve started this with. What are some helpful items you think other users would benefit from, that Obsidian doesn’t already provide, or is maybe not obvious? Also, do let me know if anything’s broken.
 
-🌐 For the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.
+🌐 For the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.  
 
 ### Search for items to add 
 
 Next to the `Add` button for the toolbar, you can now Search for items to add from your existing toolbars. 
 
 Suggestions from the Gallery are provided at the bottom of search results.
+
+<img src="https://github.com/user-attachments/assets/d4318824-e537-42e2-adc3-9b88e173c051" width="700"/>
 
 ## Improvements 🚀
 
