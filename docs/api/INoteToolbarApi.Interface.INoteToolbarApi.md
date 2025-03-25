@@ -246,6 +246,10 @@ new Notice(selectedKey);
 
 This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
 
+#### Returns
+
+The string translation corresponding with the provided key, if it exists, with a fallback to English. If the key does not exist, the key is returned.
+
 #### Example
 
 ```ts
