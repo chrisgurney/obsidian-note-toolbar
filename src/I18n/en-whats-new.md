@@ -40,7 +40,10 @@ File items are now given a `data-active-file` attribute, if the file you're curr
 ```css
 .callout[data-callout="note-toolbar"] {
   li[data-active-file] {
-    border-bottom: solid 2px var(--link-color);
+    border-bottom: 1px solid var(--link-color);
+    & span.external-link {
+      color: var(--link-color);
+    }
   }
 }
 ```
