@@ -33,6 +33,20 @@ Suggestions from the Gallery are provided at the bottom of search results.
 
 ## Improvements 🚀
 
+### Active file attribute
+
+File items are now given a `data-active-file` attribute, if the file you're currently viewing matches the item's filename. This allows you to optionally style a button as if it was a tab:
+
+```css
+.callout[data-callout="note-toolbar"] {
+  li[data-active-file] {
+    border-bottom: solid 2px var(--link-color);
+  }
+}
+```
+
+### Other
+
 - On phones: Items opened or added in settings now use the item modal, rather than expanding in the list in-place.
 - JS Engine: Added an Evaluate function, which evaluates a provided expression and displays a value if returned.
 

@@ -1125,6 +1125,11 @@ export default class NoteToolbarPlugin extends Plugin {
 					}
 				}
 
+				// update li active-file property, to allow tab-like styling
+				if (activeFile && itemSetting.linkAttr.type === ItemType.File) {
+					itemSpanEl.parentElement?.toggleAttribute('data-active-file', activeFile.path === itemSetting.link);
+				}
+
 			}
 
 		}
