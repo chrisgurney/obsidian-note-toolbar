@@ -194,7 +194,8 @@
         "js-engine": "JS\u00A0Engine",
         "note-toolbar": "Note\u00A0Toolbar",
         "sync": "Obsidian\u00A0Sync",
-        "templater-obsidian": "Templater"
+        "templater-obsidian": "Templater",
+        "workspaces": "Workspaces"
     },
     "setting": {
         "button-cancel": "Cancel",

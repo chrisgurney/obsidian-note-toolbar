@@ -16,15 +16,6 @@
         "type": "command"
     },
     {
-        "id": "change-workspace",
-        "description": { "en": "Changes to the provided workspace." },
-        "icon": "layout-template",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const w = 'My Workspace'; // CHANGE THIS VALUE\nthis.app.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
-        "tooltip": { "en": "Change workspace" },
-        "type": "plugin"
-    },
-    {
         "id": "clear-formatting",
         "commandId": "editor:clear-formatting",
         "description": { "en": "Remove all text formatting." },
@@ -284,6 +275,14 @@
         "type": "command"
     },
     {
+        "id": "load-workspace",
+        "commandId": "workspaces:load",
+        "description": { "en": "Select and load a configured workspace." },
+        "icon": "layout-template",
+        "tooltip": { "en": "Load workspace" },
+        "type": "command"
+    },
+    {
         "id": "new-note",
         "commandId": "file-explorer:new-file",
         "description": { "en": "Create a new note." },
@@ -425,6 +424,15 @@
         "icon": "file-search",
         "tooltip": { "en": "Find & Replace" },
         "type": "command"
+    },
+    {
+        "id": "set-workspace",
+        "description": { "en": "Changes to a specific workspace you provide." },
+        "icon": "layout-template",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const w = 'My Workspace'; // CHANGE THIS VALUE\nthis.app.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
+        "tooltip": { "en": "My workspace" },
+        "type": "plugin"
     },
     {
         "id": "settings-open",
