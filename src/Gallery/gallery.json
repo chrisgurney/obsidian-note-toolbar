@@ -98,7 +98,7 @@
         "name": { "en": "Views and Themes" },
         "description": { "en": "Switch themes and toggle views." },
         "itemIds": [
-            "cycle-workspace", "change-workspace", "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source"
+            "cycle-workspace", "change-workspace", "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar"
         ]
       }
     ]

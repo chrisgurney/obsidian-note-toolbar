@@ -599,6 +599,15 @@
         "type": "command"
     },
     {
+        "id": "toggle-status-bar",
+        "description": { "en": "Shows or hides Obsidian's status bar." },
+        "icon": "dock",
+        "plugin": ["dataview", "js-engine"],        
+        "script": "const s = activeDocument.querySelector('.status-bar');\nif (s) { s.style.display = s.style.display === 'none' ? '' : 'none'; }",
+        "tooltip": { "en": "Toggle status bar" },
+        "type": "plugin"
+    },
+    {
         "id": "toggle-strikethrough",
         "commandId": "editor:toggle-strikethrough",
         "description": { "en": "Apply or remove strikethrough formatting." },
