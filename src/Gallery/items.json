@@ -572,6 +572,15 @@
         "type": "command"
     },
     {
+        "id": "tab-new",
+        "description": { "en": "Opens a new empty tab." },
+        "plugin": ["dataview", "templater-obsidian", "js-engine"],
+        "script": "app.workspace.getLeaf(true)",
+        "icon": "plus",
+        "tooltip": { "en": "New tab" },
+        "type": "plugin"
+    },
+    {
         "id": "templater-insert-template",
         "commandId": "templater-obsidian:insert-templater",
         "description": { "en": "Inserts the chosen template." },

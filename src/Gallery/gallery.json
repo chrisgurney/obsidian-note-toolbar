@@ -56,7 +56,7 @@
         "name": { "en" : "Editor Navigation" },
         "description": { "en": "Get around the text editor faster." },
         "itemIds": [
-            "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
+            "tab-new", "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
         ]
       },
       {
