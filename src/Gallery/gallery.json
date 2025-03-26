@@ -18,7 +18,14 @@
         ]
       },
       {
-        "name": { "en" : "Text Formatting" },
+        "name": { "en" : "Editing" },
+        "description": { "en": "Adjust the order and arrangement of content." },
+        "itemIds": [
+            "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
+        ]
+      },
+      {
+        "name": { "en" : "Formatting" },
         "description": { "en": "Change how text looks." },
         "itemIds": [
             "toggle-bold", "toggle-italics", "toggle-strikethrough", "toggle-code", "toggle-blockquote", "toggle-highlight"
@@ -36,13 +43,6 @@
         "description": { "en": "Add various types of content like links or media." },
         "itemIds": [
             "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
-        ]
-      },
-      {
-        "name": { "en" : "Editing" },
-        "description": { "en": "Adjust the order and arrangement of content." },
-        "itemIds": [
-            "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
         ]
       },
       {
@@ -74,24 +74,10 @@
         ]
       },
       {
-        "name": { "en": "Periodic Notes" },
-        "description": { "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin." },
-        "itemIds": [
-            "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
-        ]
-      },
-      {
         "name": { "en": "Search" },
         "description": { "en": "Search in notes and across your vault." },
         "itemIds": [
             "search-replace-open", "global-search-open"
-        ]
-      },
-      {
-        "name": { "en": "Templater" },
-        "description": { "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)." },
-        "itemIds": [
-          "templater-insert-template", "templater-new-note-from-template"
         ]
       },
       {
@@ -106,6 +92,20 @@
         "description": { "en": "Switch between workspaces. Requires the _Workspaces_ core plugin." },
         "itemIds": [
             "load-workspace", "cycle-workspace", "set-workspace"
+        ]
+      },
+      {
+        "name": { "en": "Periodic Notes" },
+        "description": { "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin." },
+        "itemIds": [
+            "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
+        ]
+      },
+      {
+        "name": { "en": "Templater" },
+        "description": { "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)." },
+        "itemIds": [
+          "templater-insert-template", "templater-new-note-from-template"
         ]
       },
       {
