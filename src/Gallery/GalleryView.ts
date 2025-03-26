@@ -106,6 +106,10 @@ export class GalleryView extends ItemView {
 
 			const itemsEl = markdownEl.createDiv();
 			itemsEl.addClass('note-toolbar-gallery-view-items-container');
+			// @ts-ignore
+			if (Platform.isMobile) this.plugin.registerDomEvent(itemsEl, 'swipe', (evt) => {
+				evt.preventDefault();
+			});
 
 			category.itemIds.forEach(itemId => {
 				const galleryItem = galleryItems.find(item => item.uuid.includes(itemId));

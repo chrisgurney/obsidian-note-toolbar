@@ -1374,7 +1374,6 @@ input[type="text"].note-toolbar-setting-error,
     padding-top: 1em;
     position: relative;
     scroll-behavior: smooth;
-    touch-action: pan-x;
 }
 
 .note-toolbar-gallery-view-heading {
