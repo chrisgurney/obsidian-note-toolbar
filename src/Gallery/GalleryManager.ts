@@ -26,7 +26,7 @@ export default class GalleryManager {
             icon: item.icon ?? '',
             inGallery: true,
             label: item.label ? (item.label[lang] || item.label['en']) : '',
-            link: item.link ?? '',
+            link: item.uri ?? '',
             linkAttr: {
                 commandId: item.commandId ?? '',
                 hasVars: false,

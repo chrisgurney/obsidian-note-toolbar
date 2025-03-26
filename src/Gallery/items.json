@@ -146,8 +146,8 @@
         "description": { "en": "Go to your home note. (Enter your home note in the URL.)" },
         "icon": "home",
         "tooltip": { "en": "Home" },
-        "url": "",
-        "type": "link"
+        "uri": "",
+        "type": "uri"
     },
     {
         "id": "go-top",
@@ -163,8 +163,8 @@
         "description": { "en": "Uses your note's \"up\" property to navigate to a parent note in your vault." },
         "icon": "arrow-up-left",
         "tooltip": { "en": "Go up" },
-        "url": "{{prop_up}}",
-        "type": "link"
+        "uri": "{{prop_up}}",
+        "type": "uri"
     },
     {
         "id": "go-next-callout",
@@ -338,32 +338,32 @@
         "description": { "en": "Access the Note Toolbar User Guide for help and tips." },
         "icon": "book",
         "tooltip": { "en": "User Guide for Note Toolbar" },
-        "url": "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
-        "type": "link"
+        "uri": "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
+        "type": "uri"
     },
     {
         "id": "obsidian-discord",
         "description": { "en": "Opens Obsidian's Discord community." },
         "icon": "discord",
         "tooltip": { "en": "Obsidian Discord" },
-        "url": "https://discord.gg/obsidianmd",
-        "type": "link"
+        "uri": "https://discord.gg/obsidianmd",
+        "type": "uri"
     },
     {
         "id": "obsidian-forum",
         "description": { "en": "Opens Obsidian's forum for discussions and support." },
         "icon": "message-circle",
         "tooltip": { "en": "Obsidian forum" },
-        "url": "https://forum.obsidian.md/",
-        "type": "link"
+        "uri": "https://forum.obsidian.md/",
+        "type": "uri"
     },
     {
         "id": "obsidian-help-site",
         "description": { "en": "Opens the official Obsidian Help site." },
         "icon": "book",
         "tooltip": { "en": "Obsidian Help" },
-        "url": "https://help.obsidian.md/",
-        "type": "link"
+        "uri": "https://help.obsidian.md/",
+        "type": "uri"
     },
     {
         "id": "obsidian-kanban-create",
@@ -378,16 +378,16 @@
         "description": { "en": "Opens Obsidian's Markdown formatting guide." },
         "icon": "book-down",
         "tooltip": { "en": "Markdown reference" },
-        "url": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
-        "type": "link"
+        "uri": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
+        "type": "uri"
     },
     {
         "id": "obsidian-subreddit",
         "description": { "en": "Opens the Obsidian community on Reddit." },
         "icon": "messages-square",
         "tooltip": { "en": "Obsidian subreddit" },
-        "url": "https://www.reddit.com/r/ObsidianMD/",
-        "type": "link"
+        "uri": "https://www.reddit.com/r/ObsidianMD/",
+        "type": "uri"
     },
     {
         "id": "obsidian-sync-version-history",
