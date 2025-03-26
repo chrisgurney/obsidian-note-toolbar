@@ -2206,13 +2206,21 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async replaceVars(s: string, file: TFile | null, errorBehavior: ErrorBehavior = ErrorBehavior.Report): Promise<string> {
 
-		// TODO: remove use of this variable; not used anywhere
-		// true if we should encode the variables (recommended if part of external URL); false by default
-		const encode = false;
-		let noteTitle = file?.basename;
-		if (noteTitle != null) {
-			s = s.replace('{{note_title}}', (encode ? encodeURIComponent(noteTitle) : noteTitle));
-		}
+		// NOTE_TITLE
+		const noteTitle = file?.basename;
+		if (noteTitle) s = s.replace('{{note_title}}', noteTitle);
+	
+		// TODO: future use, but need to encode these parts in the end of the URI to be useful (e.g., for a vscode:// URI)
+		// // FILE_PATH
+		// const filePath = file?.path;
+		// if (filePath) s = s.replace('{{file_path}}', filePath);
+		
+		// // VAULT_PATH
+		// // @ts-ignore
+		// const vaultPath = this.app.vault.adapter.getBasePath();
+		// s = s.replace('{{vault_path}}', vaultPath);
+
+		// PROP_ VARIABLES
 		// have to get this at run/click-time, as file or metadata may not have changed
 		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
 		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
@@ -2224,13 +2232,14 @@ export default class NoteToolbarPlugin extends Plugin {
 				// handle the case where the prop might be a list
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
 				// FIXME: does not work with number properties
-				return fm ? (encode ? encodeURIComponent(fm?.replace(linkWrap, '$1')) : fm.replace(linkWrap, '$1')) : '';
+				return fm ? fm.replace(linkWrap, '$1') : '';
 			}
 			else {
 				return '';
 			}
 		});
 
+		// PLUGIN EXPRESSIONS
 		if (this.hasPlugin[ItemType.Dataview]) {
 			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
 			if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
