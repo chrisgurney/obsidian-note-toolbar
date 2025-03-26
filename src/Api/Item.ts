@@ -18,7 +18,7 @@ export class Item implements IItem {
      */
     setIcon(iconId: string): void {
         const newIcon = getIcon(iconId);
-        if (newIcon) {
+        if (newIcon || iconId === '') {
             this.item.icon = iconId;
             const toolbar = this.plugin.settingsManager.getToolbarByItemId(this.item.uuid);
             if (toolbar) toolbar.updated = new Date().toISOString();
