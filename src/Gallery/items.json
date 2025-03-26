@@ -737,5 +737,13 @@
         "script": "app.workspace.activeLeaf.view?.editor.unindentList()",
         "tooltip": { "en": "Unindent" },
         "type": "plugin"
+    },
+    {
+        "id": "vscode-open",
+        "description": { "en": "Opens the current file in VS Code." },
+        "icon": "file-json-2",
+        "tooltip": { "en": "Open in VS Code" },
+        "uri": "vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}",
+        "type": "uri"
     }
 ]

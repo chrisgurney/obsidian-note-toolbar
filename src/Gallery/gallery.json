@@ -112,7 +112,7 @@
         "name": { "en": "Explore More" },
         "description": { "en": "Do more with Obsidian's plugins." },
         "itemIds": [
-            "obsidian-sync-version-history", "obsidian-tasks-edit", "obsidian-kanban-create"
+            "obsidian-sync-version-history", "obsidian-tasks-edit", "obsidian-kanban-create", "vscode-open"
         ]
       }
     ]
