@@ -1415,6 +1415,10 @@ input[type="text"].note-toolbar-setting-error,
         font-size: var(--font-smaller);
         margin-block-start: 0;
     }
+    & svg {
+        height: 1em;
+        width: 1em;
+    }
 }
 
 .note-toolbar-gallery-view-item {
