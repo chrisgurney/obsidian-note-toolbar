@@ -2219,8 +2219,8 @@ input[type="text"].note-toolbar-setting-error,
     vertical-align: middle;
     width: 100%;
     & svg {
-        height: var(--font-ui-smaller);
-        width: var(--font-ui-smaller);
+        height: var(--font-ui-smaller) !important;
+        width: var(--font-ui-smaller) !important;
     }
 }
 
