@@ -189,6 +189,7 @@
         "swap-toolbar-title": "This note will be changed"
     },
     "plugin": {
+        "canvas": "Canvas",
         "daily-notes": "Daily\u00A0Notes",
         "dataview": "Dataview",
         "js-engine": "JS\u00A0Engine",

@@ -15,6 +15,14 @@
         "tooltip": { "en": "Show bookmarks" },
         "type": "command"
     },
+    { 
+        "id": "canvas-new",
+        "commandId": "canvas:new-file",
+        "description": { "en": "Create a new canvas file." },
+        "icon": "network",
+        "tooltip": { "en": "New canvas" },
+        "type": "command"
+    },
     {
         "id": "clear-formatting",
         "commandId": "editor:clear-formatting",
@@ -122,6 +130,39 @@
         "description": { "en": "Turn Source mode on and off." },
         "icon": "code-2",
         "tooltip": { "en": "Toggle Source mode" },
+        "type": "command"
+    },
+    {
+        "id": "file-append",
+        "description": { "en": "Appends the prompted text to a file you specify." },
+        "icon": "file-plus-2",
+        "plugin": ["dataview", "js-engine"],
+        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) return;\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\n\n' + txt); }",
+        "tooltip": { "en": "Append text" },
+        "type": "plugin"
+    },
+    {
+        "id": "file-in-explorer",
+        "commandId": "file-explorer:reveal-active-file",
+        "description": { "en": "Reveal the active file in navigation." },
+        "icon": "folder-tree",
+        "tooltip": { "en": "Show in navigation" },
+        "type": "command"
+    },
+    {
+        "id": "file-in-os",
+        "commandId": "open-with-default-app:show",
+        "description": { "en": "Reveal the active file in the system's file explorer." },
+        "icon": "folder-search",
+        "tooltip": { "en": "Reveal file" },
+        "type": "command"
+    },
+    {
+        "id": "file-move",
+        "commandId": "file-explorer:move-file",
+        "description": { "en": "Move current file to a chosen folder." },
+        "icon": "folder-input",
+        "tooltip": { "en": "Move file to folder" },
         "type": "command"
     },
     {
@@ -370,7 +411,7 @@
         "commandId": "obsidian-kanban:create-new-kanban-board",
         "description": { "en": "Create a new kanban board." },
         "icon": "square-kanban",
-        "tooltip": { "en": "Create kanban" },
+        "tooltip": { "en": "New kanban" },
         "type": "command"
     },
     {

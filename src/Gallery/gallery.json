@@ -25,6 +25,13 @@
         ]
       },
       {
+        "name": { "en" : "Files" },
+        "description": { "en": "Tools for working with files." },
+        "itemIds": [
+            "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-os"
+        ]
+      },
+      {
         "name": { "en" : "Formatting" },
         "description": { "en": "Change how text looks." },
         "itemIds": [
@@ -112,7 +119,7 @@
         "name": { "en": "Explore More" },
         "description": { "en": "Do more with Obsidian's plugins." },
         "itemIds": [
-            "obsidian-sync-version-history", "obsidian-tasks-edit", "obsidian-kanban-create", "vscode-open"
+            "obsidian-sync-version-history", "obsidian-tasks-edit", "vscode-open"
         ]
       }
     ]
