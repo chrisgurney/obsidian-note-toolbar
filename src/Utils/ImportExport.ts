@@ -447,10 +447,10 @@ export async function importFromCallout(
             let toolbarItem: ToolbarItemSettings =
 			{
 				uuid: getUUID(),
-				label: label.trim(),
                 hasCommand: false,
 				icon: icon.trim(),
                 inGallery: false,
+				label: label.trim(),
 				link: link.trim(),
 				linkAttr: {
 					commandId: itemType === ItemType.Command ? commandId.trim() : '',
