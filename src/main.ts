@@ -2223,7 +2223,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// have to get this at run/click-time, as file or metadata may not have changed
 		let frontmatter = file ? this.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
 		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-		s = s.replace(/{{prop_(.*?)}}/g, (match, p1) => {
+		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (match, encode, p1) => {
 			const key = p1.trim();
 			if (frontmatter && frontmatter[key] !== undefined) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
@@ -2231,7 +2231,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				// handle the case where the prop might be a list
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
 				// FIXME: does not work with number properties
-				return fm ? fm.replace(linkWrap, '$1') : '';
+				fm = fm ? fm.replace(linkWrap, '$1') : '';
+				return encode ? encodeURIComponent(fm) : fm;
 			}
 			else {
 				return '';
