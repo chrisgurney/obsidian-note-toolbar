@@ -364,12 +364,12 @@ export interface ToolbarItemSettings {
 	visibility: Visibility;
 }
 
-export const DEFAULT_ITEM_SETTINGS = {
+export const DEFAULT_ITEM_SETTINGS: ToolbarItemSettings = {
 	uuid: '',
-	label: '',
 	hasCommand: false,
 	icon: '',
 	inGallery: false,
+	label: '',
 	link: '',
 	linkAttr: {
 		commandId: '',
