@@ -2198,7 +2198,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Replace variables in the given string of the format {{variablename}}, with metadata from the file.
+	 * Replace variables in the given string of the format {{prefix:variable_name}}, with metadata from the file.
 	 * @param s String to replace the variables in.
 	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
 	 * @param errorBehavior What to do with errors when they occur when replacing variables.
@@ -2208,16 +2208,16 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// NOTE_TITLE
 		const noteTitle = file?.basename;
-		if (noteTitle) s = s.replace('{{note_title}}', noteTitle);
+		if (noteTitle) s = this.replaceVar(s, 'note_title', noteTitle);
 	
 		// FILE_PATH
 		const filePath = file?.path;
-		if (filePath) s = s.replace('{{file_path}}', filePath);
+		if (filePath) s = this.replaceVar(s, 'file_path', filePath);
 		
 		// VAULT_PATH
 		// @ts-ignore
 		const vaultPath = this.app.vault.adapter.getBasePath();
-		s = s.replace('{{vault_path}}', vaultPath);
+		s = this.replaceVar(s, 'vault_path', vaultPath);
 
 		// PROP_ VARIABLES
 		// have to get this at run/click-time, as file or metadata may not have changed
@@ -2290,6 +2290,11 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		return s;
 
+	}
+
+	replaceVar(s: string, varKey: string, replaceText: string): string {
+		const regex = new RegExp(`{{\\s*(encode:)?\\s*${varKey}\\s*}}`);
+		return s.replace(regex, (_, encode) => encode ? encodeURIComponent(replaceText) : replaceText);
 	}
 
 	/**
