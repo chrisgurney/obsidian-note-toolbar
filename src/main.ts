@@ -2210,15 +2210,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		const noteTitle = file?.basename;
 		if (noteTitle) s = s.replace('{{note_title}}', noteTitle);
 	
-		// TODO: future use, but need to encode these parts in the end of the URI to be useful (e.g., for a vscode:// URI)
-		// // FILE_PATH
-		// const filePath = file?.path;
-		// if (filePath) s = s.replace('{{file_path}}', filePath);
+		// FILE_PATH
+		const filePath = file?.path;
+		if (filePath) s = s.replace('{{file_path}}', filePath);
 		
-		// // VAULT_PATH
-		// // @ts-ignore
-		// const vaultPath = this.app.vault.adapter.getBasePath();
-		// s = s.replace('{{vault_path}}', vaultPath);
+		// VAULT_PATH
+		// @ts-ignore
+		const vaultPath = this.app.vault.adapter.getBasePath();
+		s = s.replace('{{vault_path}}', vaultPath);
 
 		// PROP_ VARIABLES
 		// have to get this at run/click-time, as file or metadata may not have changed
