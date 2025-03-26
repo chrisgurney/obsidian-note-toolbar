@@ -2803,9 +2803,9 @@ input[type="text"].note-toolbar-setting-error,
             .is-phone & {
                 width: inherit !important;
             }
-            & select[class="dropdown"], 
-            & select[class="dropdown"]:active,
-            & select[class="dropdown"]:focus {
+            & select.dropdown, 
+            & select.dropdown:active,
+            & select.dropdown:focus {
                 border-radius: 2em;
                 font-size: var(--metadata-input-font-size);
             }
