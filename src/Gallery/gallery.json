@@ -84,7 +84,7 @@
         "name": { "en": "Search" },
         "description": { "en": "Search in notes and across your vault." },
         "itemIds": [
-            "search-replace-open", "global-search-open"
+            "search-replace-open", "global-search-open", "folder-search"
         ]
       },
       {
