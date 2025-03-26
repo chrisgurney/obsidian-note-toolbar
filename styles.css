@@ -2804,7 +2804,8 @@ input[type="text"].note-toolbar-setting-error,
                 width: inherit !important;
             }
             & select[class="dropdown"], 
-            & select[class="dropdown"]:active {
+            & select[class="dropdown"]:active,
+            & select[class="dropdown"]:focus {
                 border-radius: 2em;
                 font-size: var(--metadata-input-font-size);
             }
