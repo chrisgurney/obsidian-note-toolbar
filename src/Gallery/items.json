@@ -171,7 +171,7 @@
         "icon": "folder-search",
         "plugin": ["dataview", "js-engine"],
         "script": "const p = app.workspace.getActiveFile()?.parent.path;\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
-        "tooltip": { "en": "Search in folder" },
+        "tooltip": { "en": "Search folder" },
         "type": "plugin"
     },
     {
