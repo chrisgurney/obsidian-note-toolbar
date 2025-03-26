@@ -198,7 +198,7 @@ export class SettingsManager {
 	/**
 	 * Gets toolbar item from settings, using the provided UUID.
 	 * @param id UUID of toolbar item to get settings for.
-	 * @returns ToolbarItemSettings for the provided matched toolbar ID, undefined otherwise.
+	 * @returns ToolbarItemSettings for the provided matched item ID, undefined otherwise.
 	 */
 	public getToolbarItemById(uuid: string | null): ToolbarItemSettings | undefined {
 		if (!uuid) return undefined;
@@ -206,6 +206,22 @@ export class SettingsManager {
 			const item = toolbar.items.find((item: ToolbarItemSettings) => item.uuid === uuid);
 			if (item) {
 				return item;
+			}
+		}
+		return undefined;
+	}
+
+	/**
+	 * Gets toolbar from settings, using the provided item UUID.
+	 * @param id UUID of toolbar item to get toolbar settings for.
+	 * @returns ToolbarSettings for the provided matched item ID, undefined otherwise.
+	 */
+	public getToolbarByItemId(uuid: string | null): ToolbarSettings | undefined {
+		if (!uuid) return undefined;
+		for (const toolbar of this.plugin.settings.toolbars) {
+			const item = toolbar.items.find((item: ToolbarItemSettings) => item.uuid === uuid);
+			if (item) {
+				return toolbar;
 			}
 		}
 		return undefined;

@@ -20,6 +20,8 @@ export class Item implements IItem {
         const newIcon = getIcon(iconId);
         if (newIcon) {
             this.item.icon = iconId;
+            const toolbar = this.plugin.settingsManager.getToolbarByItemId(this.item.uuid);
+            if (toolbar) toolbar.updated = new Date().toISOString();
             this.plugin.settingsManager.save();
         }
         else {
