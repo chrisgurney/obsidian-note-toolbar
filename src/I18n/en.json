@@ -134,7 +134,7 @@
         "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive."
     },
     "gallery": {
-        "label-plugin": "Uses plugin: 🧩 {{plugin}}",
+        "label-plugin": "{{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
         "select-plugin-placeholder": "Select plugin to use...",
         "select-plugin-suggestion": "{{plugin}}",

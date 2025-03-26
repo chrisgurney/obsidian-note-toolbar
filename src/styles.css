@@ -1304,10 +1304,17 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-item-suggester-note {
     color: var(--text-muted);
+    display: flex;
+    gap: 0.25em;
     font-size: var(--font-ui-smaller);
-    line-height: var(--line-height-normal);
+    margin-top: 0.25em;
     overflow-wrap: anywhere;
+    vertical-align: middle;
     width: 100%;
+    & svg {
+        height: var(--font-ui-smaller);
+        width: var(--font-ui-smaller);
+    }
 }
 
 .note-toolbar-item-suggester-type {
