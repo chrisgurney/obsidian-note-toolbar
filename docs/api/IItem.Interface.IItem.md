@@ -12,6 +12,48 @@ Unique identifier for the item.
 
 ## Methods
 
+### getIcon()
+
+> **getIcon**(): `string`
+
+Returns the item's icon (ID).
+
+#### Returns
+
+`string`
+
+The item's icon ID, or an empty string if there isn't one set.
+
+***
+
+### getLabel()
+
+> **getLabel**(): `string`
+
+Returns the item's label.
+
+#### Returns
+
+`string`
+
+The item's label, or an empty string if there isn't one set.
+
+***
+
+### getTooltip()
+
+> **getTooltip**(): `string`
+
+Returns the item's tooltip.
+
+#### Returns
+
+`string`
+
+The item's tooltip, or an empty string if there isn't one set.
+
+***
+
 ### setIcon()
 
 > **setIcon**(`iconId`): `void`
@@ -22,7 +64,7 @@ Replaces the item's icon to the provided one, if it exists.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `iconId` | `string` | The icon ID. |
+| `iconId` | `string` | The icon ID. To remove the icon, provide an empty string. |
 
 #### Returns
 
