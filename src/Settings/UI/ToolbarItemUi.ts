@@ -600,10 +600,9 @@ export default class ToolbarItemUi {
                                 });
                         setFieldHelp(scriptSetting.controlEl, helpTextFr);
                         toolbarItem.scriptConfig ??= { pluginFunction: '' };
-                        let subfieldsDiv = createDiv();
+                        const subfieldsDiv = fieldDiv.createDiv();
                         subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
                         this.getScriptSubfields(adapter, toolbarItem, subfieldsDiv);
-                        fieldDiv.append(subfieldsDiv);
                     }
                     else {
                         fieldDiv.removeClass('note-toolbar-setting-item-link-field');
