@@ -31,6 +31,17 @@ Suggestions from the Gallery are provided at the bottom of search results.
 
 <img src="https://github.com/user-attachments/assets/d4318824-e537-42e2-adc3-9b88e173c051" width="700"/>
 
+### New URI variables + encoding
+
+Added URI variables for the current file path `{{file_path}}` and vault path `{{vault_path}}`.
+
+All variables (except for scripts) now support an `encode:` prefix, which, if added to a variable encodes that variable using `encodeURIComponent()`.
+
+For example, here's a URI for **Open in VS Code** -- available in the Gallery -- using [VS Code's URL handling ↗](https://code.visualstudio.com/docs/configure/command-line#_opening-vs-code-with-urls) to open the current file:
+```
+vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}
+```
+
 ## Improvements 🚀
 
 ### Use file items like tabs
@@ -74,7 +85,22 @@ Example CSS snippet:
 
 A few features have been added to the API to support the addition of the Gallery, but your scripts may be able to benefit from them as well.
 
-**Get an item by its ID**, or **get the active item** (i.e., the item that was just clicked/tapped), and then **set its icon**:
+#### [`ntb`](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API)
+
+**Get an item by its ID**, or **get the active item** (i.e., the item that was just clicked/tapped). See below for example.
+
+Scripts can now also **access Note Toolbar's translations** via `ntb.t()`. For function usage, see the [i18next documentation ↗](https://www.i18next.com/translation-function/essentials). Translations are located in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+
+```ts
+// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+new Notice(ntb.t('api.msg.clipboard-copied'));
+```
+
+#### [`Item`](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/IItem.Interface.IItem.md)
+
+**Get and set an item's label, tooltip, and icon.**
+
+Some of the items in the Gallery use this, such as `Toggle light/dark mode` which updates the icon to reflect the current mode:
 
 ```ts
 const item = ntb.getActiveItem();
@@ -82,20 +108,6 @@ const item = ntb.getActiveItem();
 // const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
 item?.setIcon('circle-alert');
 ```
-
-Some of the items in the Gallery use this, such as `Toggle light/dark mode` which updates the icon to reflect the current mode.
-
-A very basic `Item` interface has been added to support this method, and to get its ID. See the [updated API documentation](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
-
-Scripts can now **access Note Toolbar's translations** via `ntb.t()`:
-
-```ts
-// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
-new Notice(ntb.t('api.msg.clipboard-copied'));
-```
-
-- For function usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
-- See `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
 
 ---
 
