@@ -12,6 +12,33 @@ export class Item implements IItem {
     }
 
     /**
+     * Returns the item's icon (ID).
+     * 
+     * @see IItem.getIcon
+     */
+    getIcon(): string {
+        return this.item.icon;
+    }
+
+    /**
+     * Returns the item's label.
+     * 
+     * @see IItem.getLabel
+     */
+    getLabel(): string {
+        return this.item.label;
+    }
+
+    /**
+     * Returns the item's tooltip.
+     * 
+     * @see IItem.getTooltip
+     */
+    getTooltip(): string {
+        return this.item.tooltip;
+    }
+
+    /**
      * Replaces the item's icon to the provided one, if it exists.
      * 
      * @see IItem.setIcon

@@ -12,9 +12,30 @@ export interface IItem {
     id?: string;
 
     /**
+     * Returns the item's icon (ID).
+     * 
+     * @returns The item's icon ID, or an empty string if there isn't one set.
+     */
+    getIcon(): string;
+
+    /**
+     * Returns the item's label.
+     * 
+     * @returns The item's label, or an empty string if there isn't one set.
+     */
+    getLabel(): string;
+
+    /**
+     * Returns the item's tooltip.
+     * 
+     * @returns The item's tooltip, or an empty string if there isn't one set.
+     */
+    getTooltip(): string;
+
+    /**
      * Replaces the item's icon to the provided one, if it exists.
      *
-     * @param iconId The icon ID.
+     * @param iconId The icon ID. To remove the icon, provide an empty string.
      * @returns nothing
      * 
      * @example
