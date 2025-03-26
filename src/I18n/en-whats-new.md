@@ -55,7 +55,7 @@ Example CSS snippet:
 
 ### Other improvements
 
-- Context-menu: Moved _Swap toolbar..._ option below _Style..._ option, which is in a more logical section.
+- Context-menu: Moved _Swap toolbar..._ option up in a more logical section.
 - On phones: Items opened or added in settings now use the item modal, rather than expanding in the list in-place.
 - JS Engine: Added an Evaluate function, which evaluates a provided expression and displays a value if returned.
 
