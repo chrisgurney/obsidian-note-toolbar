@@ -12,7 +12,7 @@ export class Item implements IItem {
     }
 
     /**
-     * Updates the icon to the provided one, if it exists.
+     * Replaces the item's icon to the provided one, if it exists.
      * 
      * @see IItem.setIcon
      */
@@ -27,6 +27,30 @@ export class Item implements IItem {
         else {
             throw new Error(t('api.item.error-invalid-icon', { iconId: iconId }));
         }
+    }
+
+    /**
+     * Replaces the item's label with the provided text.
+     * 
+     * @see IItem.setLabel
+     */
+    setLabel(text: string): void {
+        this.item.label = text;
+        const toolbar = this.plugin.settingsManager.getToolbarByItemId(this.item.uuid);
+        if (toolbar) toolbar.updated = new Date().toISOString();
+        this.plugin.settingsManager.save();
+    }
+
+    /**
+     * Replaces the item's tooltip with the provided text.
+     * 
+     * @see IItem.setTooltip
+     */
+    setTooltip(text: string): void {
+        this.item.tooltip = text;
+        const toolbar = this.plugin.settingsManager.getToolbarByItemId(this.item.uuid);
+        if (toolbar) toolbar.updated = new Date().toISOString();
+        this.plugin.settingsManager.save();
     }
 
 }
