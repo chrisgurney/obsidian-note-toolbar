@@ -2277,6 +2277,7 @@ input[type="text"].note-toolbar-setting-error,
     display: flex;
     gap: 16px;
     overflow-x: auto;
+    overscroll-behavior-x: none;
     padding-bottom: 2em;
     padding-top: 1em;
     position: relative;
