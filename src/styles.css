@@ -1424,7 +1424,6 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-gallery-view-item {
     align-items: start;
-    background-color: var(--background-modifier-border);
     box-shadow: var(--input-shadow);
     border-radius: 8px;
     cursor: pointer;
@@ -1444,18 +1443,8 @@ input[type="text"].note-toolbar-setting-error,
         box-shadow: inset 0 0 0 3px var(--background-modifier-border-focus);
     }
     &:hover {
-        background-color: var(--background-modifier-border-focus);
-    }
-    & .note-toolbar-gallery-view-item-add {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        color: var(--interactive-accent);
-        cursor: pointer;
-        opacity: 0.5;
-        & svg {
-            height: 24px;        
-            width: 24px;
+        .is-mobile & {
+            background-color: var(--interactive-normal);
         }
     }
     & .note-toolbar-gallery-view-item-icon {

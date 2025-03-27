@@ -137,12 +137,6 @@ export class GalleryView extends ItemView {
 					iconEl.addClass('note-toolbar-gallery-view-item-icon');
 					setIcon(iconEl, galleryItem.icon);
 
-					// add indicator on mobile, since there's no tooltips
-					if (Platform.isMobile) {
-						const mobileAddEl = itemEl.createSpan();
-						mobileAddEl.addClass('note-toolbar-gallery-view-item-add');
-						setIcon(mobileAddEl, 'circle-plus');
-					}
 				}
 
 			});
