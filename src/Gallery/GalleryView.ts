@@ -173,7 +173,10 @@ export class GalleryView extends ItemView {
 
 		// prevent touch events that open the sidebar on mobile, when scrolling through items
 		if (Platform.isPhone) this.plugin.registerDomEvent(this.plugin.app.workspace.containerEl, 'touchstart', (evt) => {
-			evt.stopImmediatePropagation();
+			const target = evt.target as HTMLElement;
+			if (target?.closest('.note-toolbar-gallery-view-items-container')) {
+				evt.stopPropagation();
+			}
 		});
 
     }
