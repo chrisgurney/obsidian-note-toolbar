@@ -175,7 +175,6 @@ export class GalleryView extends ItemView {
 		if (Platform.isPhone) this.plugin.registerDomEvent(this.plugin.app.workspace.containerEl, 'touchstart', (evt) => {
 			const target = evt.target as HTMLElement;
 			if (target?.closest('.note-toolbar-gallery-view-items-container')) {
-				evt.preventDefault();
 				evt.stopImmediatePropagation();
 			}
 		});
