@@ -147,15 +147,6 @@ export class GalleryView extends ItemView {
 
 		});
 
-		// on clicking an item, prompt for toolbar and add it
-		this.plugin.registerDomEvent(markdownEl, 'click', (evt) => {
-			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-view-item');
-			if (galleryItemEl && galleryItemEl.id) {
-				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
-				if (galleryItem) this.addItem(galleryItem);
-			}
-		});
-
 		const feedbackEl = markdownEl.createDiv();
 		feedbackEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
 		new Setting(feedbackEl)
@@ -170,6 +161,24 @@ export class GalleryView extends ItemView {
 						window.open(URL_FEEDBACK_FORM, '_blank');
 					});
 			});
+
+		// on clicking an item, prompt for toolbar and add it
+		this.plugin.registerDomEvent(markdownEl, 'click', (evt) => {
+			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-view-item');
+			if (galleryItemEl && galleryItemEl.id) {
+				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
+				if (galleryItem) this.addItem(galleryItem);
+			}
+		});
+
+		// prevent touch events that open the sidebar on mobile, when scrolling through items
+		if (Platform.isPhone) this.plugin.registerDomEvent(this.plugin.app.workspace.containerEl, 'touchstart', (evt) => {
+			const target = evt.target as HTMLElement;
+			if (target?.closest('.note-toolbar-gallery-view-items-container')) {
+				evt.preventDefault();
+				evt.stopImmediatePropagation();
+			}
+		});
 
     }
 
