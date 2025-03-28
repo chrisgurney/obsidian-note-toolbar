@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
+import { debugLog, displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -75,6 +75,7 @@ export default class JavaScriptAdapter extends Adapter {
     }
 
     /**
+     * Executes the given JavaScript file.
      * 
      * @param filename 
      * @param containerEl 
@@ -106,6 +107,7 @@ export default class JavaScriptAdapter extends Adapter {
     }
 
     /**
+     * Evaluates the given JavaScript expression.
      * 
      * @param expression 
      * @param containerEl 
@@ -135,7 +137,6 @@ export default class JavaScriptAdapter extends Adapter {
                 // from dv.view: may directly render, in which case it will likely return undefined or null
                 let result = await Promise.resolve(func());
                 if (result && this.noteToolbar) {
-                    // TODO: render markdown in result here? this is what dataview was doing:
                     MarkdownRenderer.render(
                         this.noteToolbar.app,
                         result,
@@ -149,7 +150,7 @@ export default class JavaScriptAdapter extends Adapter {
                 switch (errorBehavior) {
                     case ErrorBehavior.Display:
                         displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
-                        result = t('adapter.dataview.error-general', { error: error });
+                        result = t('adapter.error.general', { error: error });
                         break;
                     case ErrorBehavior.Report:
                         result = expression;
