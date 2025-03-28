@@ -435,10 +435,8 @@ export default class ToolbarSettingsModal extends Modal {
 	private openItemSuggestModal() {
 		const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
 			let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
-			if (newItem.linkAttr.type === ItemType.Plugin) {
-				const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
-				if (!pluginType) return;
-			}
+			const isResolved = await this.plugin.settingsManager.resolveGalleryItem(newItem);
+			if (!isResolved) return;
 			this.toolbar.updated = new Date().toISOString();
 			await this.plugin.settingsManager.save();
 			this.display();

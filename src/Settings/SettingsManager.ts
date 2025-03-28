@@ -312,6 +312,38 @@ export class SettingsManager {
     }
 
 	/**
+	 * Transforms items from the Gallery into types that can be handled by the toolbar.
+	 * @param item ToolbarItemSettings to update
+	 * @returns true if the item is resolved, false otherwise
+	 */
+	async resolveGalleryItem(item: ToolbarItemSettings): Promise<boolean> {
+
+		if (!item.linkAttr?.type) {
+			// FIXME: localize this string
+			console.error("Gallery item: Missing item type.");
+			return false;
+		}
+
+		switch (item.linkAttr.type) {
+			case ItemType.JavaScript:
+				if (item.scriptConfig?.expression) {
+					item.scriptConfig.pluginFunction = 'evaluate';
+					return true;
+				}
+				break;
+			case ItemType.Plugin:
+				const pluginType = await this.resolvePluginType(item);
+				return pluginType ? true : false;
+			default:
+				return true;
+		}
+
+		// should not reach this point
+		return false;
+
+	}
+
+	/**
 	 * Transforms "plugin" type items from the Gallery into types that can be handled by the toolbar.
 	 * Prompts user if there's more than one enabled plugin available.
 	 * Reports errors if the plugin's not supported, chosen plugin's not enabled, or the proper parameters aren't provided.
@@ -364,11 +396,13 @@ export class SettingsManager {
 				}
 			}
 			else {
-				console.error("Invalid plugin or none enabled.");
+				// FIXME: lcoalize this string
+				console.error("Invalid plugin or none enabled for Gallery item.");
 				return undefined;
 			}
 		}
 		else {
+			// FIXME: lcoalize this string
 			console.error("Missing plugin or script element in Gallery data.");
 			return undefined;
 		}
