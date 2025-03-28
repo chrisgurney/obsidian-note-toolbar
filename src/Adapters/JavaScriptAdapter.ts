@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { debugLog, displayScriptError } from "Utils/Utils";
+import { displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
