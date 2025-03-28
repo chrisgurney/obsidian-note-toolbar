@@ -91,7 +91,6 @@ export default class JavaScriptAdapter extends Adapter {
 
         let viewFile = this.noteToolbar?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
-            // TODO: render messages into the container, if provided
             displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
@@ -101,8 +100,6 @@ export default class JavaScriptAdapter extends Adapter {
         if (contents) {
             await this.evaluate(contents, containerEl, ErrorBehavior.Report);
         }
-
-        // TODO? displayScriptError(t('adapter.error.exec-failed', { filename: viewFile.path }), error, containerEl);
 
     }
 
@@ -128,13 +125,14 @@ export default class JavaScriptAdapter extends Adapter {
 
         if (expression) {
             if (expression.includes("await")) expression = "(async () => { " + expression + " })()";
+            // TODO: not sure if this is needed for some reason when evaluating files? (from DataviewAdapter)
             // expression += `\n//# sourceURL=${viewFile.path}`;
-            let func = new Function("dv", "input", expression);
+            let func = new Function("input", expression);
             const component = new Component();
             component.load();
             try {
                 resultEl.empty();
-                // from dv.view: may directly render, in which case it will likely return undefined or null
+                // may directly render, in which case it will likely return undefined or null
                 let result = await Promise.resolve(func());
                 if (result && this.noteToolbar) {
                     MarkdownRenderer.render(
