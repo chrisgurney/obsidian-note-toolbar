@@ -13,8 +13,9 @@ import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ProtocolManager } from 'Protocol/ProtocolManager';
 import { ShareModal } from 'Settings/UI/Modals/ShareModal';
 import DataviewAdapter from 'Adapters/DataviewAdapter';
-import TemplaterAdapter from 'Adapters/TemplaterAdapter';
+import JavaScriptAdapter from 'Adapters/JavaScriptAdapter';
 import JsEngineAdapter from 'Adapters/JsEngineAdapter';
+import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
@@ -54,6 +55,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		'templater-obsidian': false,
 	}
 
+	jsAdapter: JavaScriptAdapter | undefined;
 	dvAdapter: DataviewAdapter | undefined;
 	jseAdapter: JsEngineAdapter | undefined;
 	tpAdapter: TemplaterAdapter | undefined;
@@ -1188,6 +1190,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						this.handleLinkCommand(value);
 						break;
 					case CalloutAttr.Dataview:
+					case CalloutAttr.JavaScript:
 					case CalloutAttr.JsEngine:
 					case CalloutAttr.Templater:
 						const scriptConfig = {
@@ -1202,6 +1205,9 @@ export default class NoteToolbarPlugin extends Plugin {
 						switch (attribute) {
 							case CalloutAttr.Dataview:
 								this.handleLinkScript(ItemType.Dataview, scriptConfig);
+								break;
+							case CalloutAttr.JavaScript:
+								this.handleLinkScript(ItemType.JavaScript, scriptConfig);
 								break;
 							case CalloutAttr.JsEngine:
 								this.handleLinkScript(ItemType.JsEngine, scriptConfig);
@@ -1376,6 +1382,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 			case ItemType.Dataview:
+			case ItemType.JavaScript:
 			case ItemType.JsEngine:
 			case ItemType.Templater:
 				this.updateAdapters();
@@ -1428,7 +1435,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param scriptConfig ScriptConfig to execute.
 	 */
 	async handleLinkScript(type: ItemType, scriptConfig: ScriptConfig) {
-		type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JsEngine | ItemType.Templater>;
+		type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JavaScript | ItemType.JsEngine | ItemType.Templater>;
 		const adapter = this.getAdapterForItemType(type);
 		if (!adapter) {
 			new Notice(t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[type as ScriptType] }));
@@ -1438,6 +1445,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		switch (type) {
 			case ItemType.Dataview:
 				result = await this.dvAdapter?.use(scriptConfig);
+				break;
+			case ItemType.JavaScript:
+				result = await this.jsAdapter?.use(scriptConfig);
 				break;
 			case ItemType.JsEngine:
 				result = await this.jseAdapter?.use(scriptConfig);
@@ -1479,6 +1489,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					}
 					break;
 				case ItemType.Dataview:
+				case ItemType.JavaScript:
 				case ItemType.JsEngine:
 				case ItemType.Templater:
 					await this.handleItemScript(toolbarItem);
@@ -2137,6 +2148,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Dataview:
 				adapter = this.hasPlugin[ItemType.Dataview] ? this.dvAdapter : undefined;
 				break;
+			case ItemType.JavaScript:
+				adapter = this.jsAdapter; // built-in, doens't rely on plugin
+				break;
 			case ItemType.JsEngine:
 				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jseAdapter : undefined;
 				break;
@@ -2317,14 +2331,17 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (this.settings.scriptingEnabled) {
 			this.checkPlugins(); // update status of enabled plugins
 			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? (this.dvAdapter || new DataviewAdapter(this)) : undefined;
+			this.jsAdapter = this.jsAdapter || new JavaScriptAdapter(this);
 			this.jseAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jseAdapter || new JsEngineAdapter(this)) : undefined;
 			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? (this.tpAdapter || new TemplaterAdapter(this)) : undefined;
 		}
 		else {
 			this.dvAdapter?.disable();
+			this.jsAdapter?.disable();
 			this.jseAdapter?.disable();
 			this.tpAdapter?.disable();
 			this.dvAdapter = undefined;
+			this.jsAdapter = undefined;
 			this.jseAdapter = undefined;
 			this.tpAdapter = undefined;
 		}

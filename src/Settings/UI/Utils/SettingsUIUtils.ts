@@ -416,6 +416,7 @@ export function renderItemSuggestion(
 				setTooltip(itemMeta, t('setting.item.option-uri'));
 				break;
 			case ItemType.Dataview:
+			case ItemType.JavaScript:
 			case ItemType.JsEngine:
 				setIcon(itemMeta, 'scroll');
 				setTooltip(itemMeta, "Script");

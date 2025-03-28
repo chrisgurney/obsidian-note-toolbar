@@ -92,6 +92,7 @@ async function exportToCalloutList(
                     : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
                 break;
             case ItemType.Dataview:
+            case ItemType.JavaScript:
             case ItemType.JsEngine:
             case ItemType.Templater:
                 if (item.scriptConfig) {
@@ -393,6 +394,7 @@ export async function importFromCallout(
                             // TODO: link needs to trigger field error style somehow
                             break;
                         case ItemType.Dataview:
+                        case ItemType.JavaScript:
                         case ItemType.JsEngine:
                         case ItemType.Templater:
                             itemType = dataUriType;

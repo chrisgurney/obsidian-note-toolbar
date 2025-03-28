@@ -556,6 +556,7 @@ export default class ToolbarItemUi {
                     });	
                 break;
             case ItemType.Dataview:
+            case ItemType.JavaScript:
             case ItemType.JsEngine:
             case ItemType.Templater:
                 if (this.plugin.settings.scriptingEnabled) {
@@ -832,15 +833,16 @@ export default class ToolbarItemUi {
                 this.getLinkSetting(type, fieldDiv, toolbarItem);
                 break;
             case ItemType.Dataview:
-                // FIXME: localize this string
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Dataview.", 'Dataview'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'Dataview'));
                 break;
             case ItemType.File:
                 this.getLinkSetting(type, fieldDiv, toolbarItem);
                 break;
+            case ItemType.JavaScript:
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'JavaScript'));
+                break;
             case ItemType.JsEngine:
-                // FIXME: localize this string
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use this.", 'JS-Engine'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'JS-Engine'));
                 break;
             case ItemType.Group:
             case ItemType.Menu:
@@ -856,8 +858,7 @@ export default class ToolbarItemUi {
                 this.getLinkSetting(type, fieldDiv, toolbarItem, fieldHelp);
                 break;
             case ItemType.Templater:
-                // FIXME: localize this string
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr("Select how you want to use Templater.", 'Templater'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'Templater'));
                 break;
             case ItemType.Uri:
                 this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));

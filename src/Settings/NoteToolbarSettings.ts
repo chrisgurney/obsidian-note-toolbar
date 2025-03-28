@@ -67,6 +67,7 @@ export enum ItemType {
 	File = 'file',
 	Folder = 'folder',
 	Group = 'group',
+	JavaScript = 'javascript',
 	JsEngine = 'js-engine',
 	Menu = 'menu',
 	Plugin = 'plugin', // used for Gallery items that rely on plugins
@@ -144,6 +145,7 @@ export const SettingFieldItemMap: Record<ItemType, SettingType> = {
 	[ItemType.File]: SettingType.File,
 	[ItemType.Folder]: SettingType.File,
 	[ItemType.Group]: SettingType.Toolbar,
+	[ItemType.JavaScript]: SettingType.Script,
 	[ItemType.JsEngine]: SettingType.Script,
 	[ItemType.Menu]: SettingType.Toolbar,
 	[ItemType.Plugin]: SettingType.Ignore,
@@ -163,6 +165,7 @@ export enum CalloutAttr {
 	Dataview = 'data-dataview',
     Folder = 'data-folder',
     FolderNtb = 'data-ntb-folder', // for backwards-compatibility
+	JavaScript = 'data-js',
 	JsEngine = 'data-js-engine',
     Menu = 'data-menu',
     MenuNtb = 'data-ntb-menu', // for backwards-compatibility
@@ -446,6 +449,7 @@ export const LINK_OPTIONS = {
 	[ItemType.File]: t('setting.item.option-file'),
 	[ItemType.Group]: t('setting.item.option-item-group'),
 	[ItemType.Menu]: t('setting.item.option-item-menu'),
+	[ItemType.JavaScript]: "JavaScript",
 	[ItemType.JsEngine]: "JS Engine",
 	[ItemType.Templater]: "Templater",
 	[ItemType.Uri]: t('setting.item.option-uri')
