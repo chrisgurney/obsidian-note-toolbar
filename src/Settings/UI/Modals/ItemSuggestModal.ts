@@ -1,4 +1,4 @@
-import { Platform, SuggestModal, TFile, getIcon, setIcon, setTooltip } from "obsidian";
+import { Platform, SuggestModal, TFile } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { calcItemVisToggles, debugLog } from "Utils/Utils";
 import { ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
@@ -7,11 +7,7 @@ import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
-    public plugin: NoteToolbarPlugin;
-    public activeFile: TFile | null;
-    public toolbarId: string | undefined;
-    private callback: ((item: ToolbarItemSettings) => void) | undefined;
-    private quickToolsMode: boolean;
+    private activeFile: TFile | null;
 
     /**
      * Creates a new modal.
@@ -21,18 +17,20 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @oaram callback function to call when an item is selected
      * @param quickToolsMode true if we're showing items that can be used; otherwise false to search for items
      */
-	constructor(plugin: NoteToolbarPlugin, toolbarId?: string, callback?: (item: ToolbarItemSettings) => void, quickToolsMode: boolean = false) {
+	constructor(
+        private plugin: NoteToolbarPlugin,
+        private toolbarId?: string,
+        private callback?: (item: ToolbarItemSettings) => void,
+        private mode: 'Default' | 'QuickTools' | 'New' = 'Default'
+    ) {
 
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
 
-        this.plugin = plugin;
         this.activeFile = plugin.app.workspace.getActiveFile();
-        this.toolbarId = toolbarId;
-        this.callback = callback;
-        this.quickToolsMode = quickToolsMode;
 
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
+        // TODO: set more appropriate placeholders for Quick Tools
         this.setPlaceholder(toolbar ? t('setting.item-suggest-modal.placeholder-toolbar', {toolbar: toolbar.name}) : t('setting.item-suggest-modal.placeholder'));
 
         let instructions = [];
@@ -43,12 +41,12 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
         instructions.push(
             {command: t('setting.item-suggest-modal.key-navigate'), purpose: t('setting.item-suggest-modal.instruction-navigate')},
-            {command: t('setting.item-suggest-modal.key-use'), purpose: quickToolsMode ? t('setting.item-suggest-modal.instruction-use') : t('setting.item-suggest-modal.instruction-select')},
+            {command: t('setting.item-suggest-modal.key-use'), purpose: (this.mode === 'QuickTools') ? t('setting.item-suggest-modal.instruction-use') : t('setting.item-suggest-modal.instruction-select')},
             {command: t('setting.item-suggest-modal.key-dismiss'), purpose: t('setting.item-suggest-modal.instruction-dismiss')},
         );
         this.setInstructions(instructions);
 
-        if (quickToolsMode) {
+        if (this.mode === 'QuickTools') {
             // handle meta key selections
             if (Platform.isWin || Platform.isLinux) {
                 this.scope.register(['Ctrl'], 'Enter', (event) => this.handleKeyboardSelection(event));
@@ -100,7 +98,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             sortedSuggestions = this.sortSuggestions(itemSuggestions, lowerCaseInputStr);
         }
 
-        if (!this.quickToolsMode) {
+        if (this.mode !== 'QuickTools') {
             // add gallery items
             let gallerySuggestions: ToolbarItemSettings[] = [];
             for (const galleryItem of this.plugin.gallery.getItems()) {
@@ -130,7 +128,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let itemStrings = `${item.label} ${item.tooltip} ${item.link} ${item.description ?? ''}`.toLowerCase();
         // add items with labels/tooltips, not menus, matching search string
         if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(searchString)) {
-            if (this.quickToolsMode) {
+            if (this.mode === 'QuickTools') {
                 const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
                 // ...and is visible on this platform
                 if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
@@ -163,7 +161,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         const emptyEl = this.resultContainerEl.createDiv();
         emptyEl.addClass('suggestion-empty');
         emptyEl.setText(t('setting.item-suggest-modal.label-empty-no-items'));
-        if (!this.quickToolsMode) {
+        if (this.mode !== 'QuickTools') {
             emptyEl.appendText(' ');
             const galleryLinkEl = emptyEl.createEl('a', { 
                 href: 'obsidian://note-toolbar?gallery', 
@@ -248,7 +246,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
             }
-            renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true, this.quickToolsMode);
+            renderItemSuggestion(this.plugin, item, el, this.inputEl.value, true, (this.mode === 'QuickTools'));
         }
     }
 
@@ -285,7 +283,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         debugLog("onChooseSuggestion: ", selectedItem, this.activeFile, event);
         if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
             this.close();
-            if (this.quickToolsMode) await this.plugin.handleItemLink(selectedItem, event);
+            if (this.mode === 'QuickTools') await this.plugin.handleItemLink(selectedItem, event);
             else if (this.callback !== undefined) this.callback(selectedItem);
         }
     }

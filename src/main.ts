@@ -9,7 +9,7 @@ import { CommandManager } from 'Commands/CommandManager';
 import { NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { INoteToolbarApi } from "Api/INoteToolbarApi";
 import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
-import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
+import { learnMoreFr, openItemSuggestModal } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ProtocolManager } from 'Protocol/ProtocolManager';
 import { ShareModal } from 'Settings/UI/Modals/ShareModal';
 import DataviewAdapter from 'Adapters/DataviewAdapter';
