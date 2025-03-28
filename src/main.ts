@@ -55,7 +55,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	dvAdapter: DataviewAdapter | undefined;
-	jsAdapter: JsEngineAdapter | undefined;
+	jseAdapter: JsEngineAdapter | undefined;
 	tpAdapter: TemplaterAdapter | undefined;
 
 	// TODO: remove if not needed
@@ -1440,7 +1440,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				result = await this.dvAdapter?.use(scriptConfig);
 				break;
 			case ItemType.JsEngine:
-				result = await this.jsAdapter?.use(scriptConfig);
+				result = await this.jseAdapter?.use(scriptConfig);
 				break;
 			case ItemType.Templater:
 				result = await this.tpAdapter?.use(scriptConfig);
@@ -2138,7 +2138,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				adapter = this.hasPlugin[ItemType.Dataview] ? this.dvAdapter : undefined;
 				break;
 			case ItemType.JsEngine:
-				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jsAdapter : undefined;
+				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jseAdapter : undefined;
 				break;
 			case ItemType.Templater:
 				adapter = this.hasPlugin[ItemType.Templater] ? this.tpAdapter : undefined;
@@ -2266,7 +2266,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (this.hasPlugin[ItemType.JsEngine]) {
 			if (s.trim().startsWith('{{jse:')) {
 				s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
-				let result = await this.jsAdapter?.use({ 
+				let result = await this.jseAdapter?.use({ 
 					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 					 expression: s
 				});
@@ -2317,15 +2317,15 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (this.settings.scriptingEnabled) {
 			this.checkPlugins(); // update status of enabled plugins
 			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? (this.dvAdapter || new DataviewAdapter(this)) : undefined;
-			this.jsAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jsAdapter || new JsEngineAdapter(this)) : undefined;
+			this.jseAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jseAdapter || new JsEngineAdapter(this)) : undefined;
 			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? (this.tpAdapter || new TemplaterAdapter(this)) : undefined;
 		}
 		else {
 			this.dvAdapter?.disable();
-			this.jsAdapter?.disable();
+			this.jseAdapter?.disable();
 			this.tpAdapter?.disable();
 			this.dvAdapter = undefined;
-			this.jsAdapter = undefined;
+			this.jseAdapter = undefined;
 			this.tpAdapter = undefined;
 		}
 	}
