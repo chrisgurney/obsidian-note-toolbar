@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -272,7 +272,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 			const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => this.openItemSuggestModal());
+			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.plugin, this.toolbar, this));
 			handleKeyClick(this.plugin, galleryLinkEl);
 
 			itemsSortableContainer.append(emptyMsgEl);
@@ -381,7 +381,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-					.onClick(async () => this.openItemSuggestModal());
+					.onClick(async () => openItemSuggestModal(this.plugin, this.toolbar, this));
 				btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
 			})
 			.addButton((btn) => {
@@ -427,21 +427,6 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 		});
 
-	}
-
-	/**
-	 * Opens an item suggester that adds the selected item to this toolbar.
-	 */
-	private openItemSuggestModal() {
-		const modal = new ItemSuggestModal(this.plugin, undefined, async (selectedItem: ToolbarItemSettings) => {
-			let newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, selectedItem);
-			const isResolved = await this.plugin.settingsManager.resolveGalleryItem(newItem);
-			if (!isResolved) return;
-			this.toolbar.updated = new Date().toISOString();
-			await this.plugin.settingsManager.save();
-			this.display();
-		});
-		modal.open();
 	}
 
 	/**
