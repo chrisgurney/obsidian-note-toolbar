@@ -1,7 +1,8 @@
 import galleryItems from "Gallery/items.json";
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, ToolbarItemSettings } from "../Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "../Settings/NoteToolbarSettings";
 import { debugLog } from "Utils/Utils";
+import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 
 export default class GalleryManager {
 
@@ -14,6 +15,29 @@ export default class GalleryManager {
         if (this.items.length === 0) this.loadItems();
         return this.items;
     }
+
+	/**
+	 * Adds the provided Gallery item, after prompting for the toolbar to add it to.
+	 * @param galleryItem Gallery item to add
+	 */
+	addItem(galleryItem: ToolbarItemSettings): void {
+		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, true, async (selectedToolbar: ToolbarSettings) => {
+			if (selectedToolbar && galleryItem) {
+				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
+					selectedToolbar = await this.plugin.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
+				}
+				let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
+				if (newItem.linkAttr.type === ItemType.Plugin) {
+					const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
+					if (!pluginType) return;
+				}
+				selectedToolbar.updated = new Date().toISOString();
+				await this.plugin.settingsManager.save();
+				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
+			}
+		});
+		toolbarModal.open();
+	}
 
     private loadItems() {
         const startTime = performance.now();

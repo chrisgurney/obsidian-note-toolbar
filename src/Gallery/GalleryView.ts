@@ -1,10 +1,8 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, ItemView, MarkdownRenderer, Platform, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
-import { EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { t, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
-import { debugLog } from 'Utils/Utils';
-import { ToolbarSuggestModal } from 'Settings/UI/Modals/ToolbarSuggestModal';
 import { ItemSuggester } from 'Settings/UI/Suggesters/ItemSuggester';
 
 interface Category {
@@ -64,7 +62,7 @@ export class GalleryView extends ItemView {
 			.setClass('note-toolbar-gallery-view-search')
 			.addSearch((cb) => {
 				new ItemSuggester(this.app, this.plugin, undefined, cb.inputEl, async (galleryItem) => {
-					this.addItem(galleryItem);
+					this.plugin.gallery.addItem(galleryItem);
 					cb.inputEl.value = '';
 				});
 				cb.setPlaceholder(t('setting.item-suggest-modal.placeholder'))
@@ -163,34 +161,11 @@ export class GalleryView extends ItemView {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-view-item');
 			if (galleryItemEl && galleryItemEl.id) {
 				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
-				if (galleryItem) this.addItem(galleryItem);
+				if (galleryItem) this.plugin.gallery.addItem(galleryItem);
 			}
 		});
 
     }
-
-	/**
-	 * Adds the provided Gallery item, after prompting for the toolbar to add it to.
-	 * @param galleryItem Gallery item to add
-	 */
-	addItem(galleryItem: ToolbarItemSettings): void {
-		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, true, async (selectedToolbar: ToolbarSettings) => {
-			if (selectedToolbar && galleryItem) {
-				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
-					selectedToolbar = await this.plugin.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
-				}
-				let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
-				if (newItem.linkAttr.type === ItemType.Plugin) {
-					const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
-					if (!pluginType) return;
-				}
-				selectedToolbar.updated = new Date().toISOString();
-				await this.plugin.settingsManager.save();
-				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
-			}
-		});
-		toolbarModal.open();
-	}
 
     async onClose() {
     }
