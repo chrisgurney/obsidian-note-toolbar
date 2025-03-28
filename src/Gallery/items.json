@@ -35,19 +35,17 @@
         "id": "copy",
         "description": { "en": "Copies the selected text to the clipboard." },
         "icon": "clipboard-copy",
-        "plugin": ["dataview", "js-engine"],
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": { "en": "Copy" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "copy-block-link",
         "description": { "en": "Copies a link to the current block to the clipboard." },
         "icon": "link-2",
-        "plugin": ["dataview", "js-engine"],
         "script": "const { metadataCache: m } = app, e = app.workspace.activeEditor?.editor, f = app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
         "tooltip": { "en": "Copy link to block" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "copy-obsidian-url",
@@ -61,10 +59,9 @@
         "id": "cut",
         "description": { "en": "Cuts the selected text to the clipboard." },
         "icon": "scissors",
-        "plugin": ["dataview", "js-engine"],
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": { "en": "Cut" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "cycle-list-checklist",
@@ -78,19 +75,17 @@
         "id": "cycle-themes",
         "description": { "en": "Cycles between installed themes, including the default." },
         "icon": "venetian-mask",
-        "plugin": ["dataview", "js-engine"],
         "script": "const i = ntb.getActiveItem();\nconst t = [...Object.values(app.customCss.themes), { name: '' }];\nconst n = t[(t.findIndex(theme => theme.name === app.vault.getConfig('cssTheme')) + 1) % t.length].name;\napp.customCss.setTheme(n);\nif (n) new Notice(n);",
         "tooltip": { "en": "Cycle themes" },
-        "type": "plugin"        
+        "type": "javascript"
     },
     {
         "id": "cycle-workspace",
         "description": { "en": "Cycles between workspaces." },
         "icon": "layout-grid",
-        "plugin": ["dataview", "js-engine"],    
-        "script": "const p = this.app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
+        "script": "const p = app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
         "tooltip": { "en": "Cycle workspaces" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "daily-notes-prev",
@@ -136,10 +131,9 @@
         "id": "file-append",
         "description": { "en": "Appends the prompted text to a file you specify." },
         "icon": "file-plus-2",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) return;\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\n\n' + txt); }",
+        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\\n\\n' + txt); }",
         "tooltip": { "en": "Append text" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "file-in-explorer",
@@ -169,10 +163,9 @@
         "id": "folder-search",
         "description": { "en": "Opens search for the current folder, or all files if the file is in the root." },
         "icon": "folder-search",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const p = app.workspace.getActiveFile()?.parent.path;\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
+        "script": "const p = app.workspace.getActiveFile()?.parent.path ?? '/';\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
         "tooltip": { "en": "Search folder" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "global-search-open",
@@ -568,7 +561,7 @@
         "description": { "en": "Changes to a specific workspace you provide." },
         "icon": "layout-template",
         "plugin": ["dataview", "js-engine"],
-        "script": "const w = 'My Workspace'; // CHANGE THIS VALUE\nthis.app.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
+        "script": "const w = 'My Workspace'; // CHANGE THIS VALUE\napp.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
         "tooltip": { "en": "My workspace" },
         "type": "plugin"
     },
