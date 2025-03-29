@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -1746,17 +1746,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 	/**
 	 * Shows a context menu with links to settings/configuration.
-	 * @param e MouseEvent
+	 * @param mouseEvent MouseEvent
 	 */
-	async toolbarContextMenuHandler(e: MouseEvent) {
+	async toolbarContextMenuHandler(mouseEvent: MouseEvent) {
 
-		e.preventDefault();
+		mouseEvent.preventDefault();
 
 		// figure out what toolbar we're in
-		let toolbarEl = (e.target as Element).closest('.cg-note-toolbar-container');
+		let toolbarEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-container');
 		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbarById(toolbarEl.id) : undefined;
 		
-		let toolbarItemEl = (e.target as Element).closest('.cg-note-toolbar-item');
+		let toolbarItemEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-item');
 		let toolbarItem = toolbarItemEl?.id ? this.settingsManager.getToolbarItemById(toolbarItemEl.id) : undefined;
 
 		let contextMenu = new Menu();
@@ -1859,9 +1859,12 @@ export default class NoteToolbarPlugin extends Plugin {
 					.setIcon('plus')
 					.setTitle("Add item...")
 					.onClick(async () => {
-						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New');
+						// FIXME: not returning right index when toolbar wraps to next line
+						// const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
+						// debugLog(toolbarItemIndex);
+						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined);
 					});
-			});		
+			});
 
 			// edit item
 			if (toolbarItem) {
@@ -1949,7 +1952,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		  });
 
 		navigator.vibrate(50);
-		contextMenu.showAtPosition(e);
+		contextMenu.showAtPosition(mouseEvent);
 
 	}
 
