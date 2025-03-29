@@ -272,7 +272,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 			const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.plugin, this.toolbar, this));
+			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.plugin, this.toolbar, 'Default', this));
 			handleKeyClick(this.plugin, galleryLinkEl);
 
 			itemsSortableContainer.append(emptyMsgEl);
@@ -381,7 +381,7 @@ export default class ToolbarSettingsModal extends Modal {
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-					.onClick(async () => openItemSuggestModal(this.plugin, this.toolbar, this));
+					.onClick(async () => openItemSuggestModal(this.plugin, this.toolbar, 'Default', this));
 				btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
 			})
 			.addButton((btn) => {

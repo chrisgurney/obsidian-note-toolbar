@@ -370,6 +370,7 @@
             "label-empty-no-items": "No results found.",
             "link-gallery": "Explore the gallery",
             "link-search": "Search for an item",
+            "option-new": "+ Create a new item",
             "placeholder": "Search for an item...",
             "placeholder-toolbar": "{{toolbar}}: Search items..."
         },

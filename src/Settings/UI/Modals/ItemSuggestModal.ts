@@ -1,9 +1,16 @@
 import { Platform, SuggestModal, TFile } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { calcItemVisToggles, debugLog } from "Utils/Utils";
-import { ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
+
+/**
+ * `Default` = Just uses modal to select an item, with no additional changes to UI.
+ * `New` = Show the new item option; for use from the toolbar context menu.
+ * `QuickTools` = Executes the item versus just selecting it.
+ */
+export type ItemSuggestMode = 'Default' | 'New' | 'QuickTools';
 
 export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
@@ -15,13 +22,14 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param activeFile TFile for the active file (so vars can be replaced)
      * @param toolbarId string ID of the toolbar to optionally scope this ItemSuggestModal to
      * @oaram callback function to call when an item is selected
+     * @param mode ItemSuggestMode to use
      * @param quickToolsMode true if we're showing items that can be used; otherwise false to search for items
      */
 	constructor(
         private plugin: NoteToolbarPlugin,
         private toolbarId?: string,
         private callback?: (item: ToolbarItemSettings) => void,
-        private mode: 'Default' | 'QuickTools' | 'New' = 'Default'
+        private mode: ItemSuggestMode = 'Default'
     ) {
 
         super(plugin.app);
@@ -93,9 +101,19 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
         let sortedSuggestions: ToolbarItemSettings[] = [];
 
+        // placeholder for creating a new item
+        if (this.mode === 'New') {
+            const newItem: ToolbarItemSettings = {
+                ...DEFAULT_ITEM_SETTINGS,
+                uuid: 'EMPTY_ITEM',
+                label: t('setting.item-suggest-modal.option-new')
+            };
+            sortedSuggestions.push(newItem);
+        }
+
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
-            sortedSuggestions = this.sortSuggestions(itemSuggestions, lowerCaseInputStr);
+            sortedSuggestions = sortedSuggestions.concat(this.sortSuggestions(itemSuggestions, lowerCaseInputStr));
         }
 
         if (this.mode !== 'QuickTools') {
