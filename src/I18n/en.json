@@ -370,7 +370,6 @@
             "label-empty-no-items": "No results found.",
             "link-gallery": "Explore the gallery",
             "link-search": "Search for an item",
-            "option-default": "Default (use toolbar mapping)",
             "placeholder": "Search for an item...",
             "placeholder-toolbar": "{{toolbar}}: Search items..."
         },
@@ -504,6 +503,7 @@
             "instruction-dismiss": "to dismiss",
             "instruction-navigate": "to navigate",
             "instruction-use": "to open toolbar",
+            "option-default": "Default (use toolbar mapping)",
             "option-new": "+ Create a new toolbar",
             "placeholder": "Search for a toolbar..."
         },
