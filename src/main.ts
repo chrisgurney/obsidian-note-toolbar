@@ -1761,6 +1761,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let contextMenu = new Menu();
 
+		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
 		if (toolbarSettings !== undefined) {
 
 			//
@@ -1829,19 +1831,6 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 			});
 
-			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-
-			// swap toolbar
-			// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-			if ((currentView?.getViewType() === 'markdown') && this.settings.toolbarProp !== 'tags') {
-				contextMenu.addItem((item: MenuItem) => {
-					item
-						.setIcon('repeat')
-						.setTitle(t('toolbar.menu-swap-toolbar'))
-						.onClick(() => this.commands.swapToolbar());
-				});
-			}
-
 			// show/hide properties
 			const propsEl = this.getPropsEl();
 			if ((currentView?.getViewType() === 'markdown') && propsEl) {
@@ -1860,6 +1849,25 @@ export default class NoteToolbarPlugin extends Plugin {
 							.onClick(async (menuEvent) => this.commands.toggleProps('hide'));
 					});
 				}
+			}
+
+			contextMenu.addSeparator();
+
+			// edit item
+			if (toolbarItem) {
+				const activeFile = this.app.workspace.getActiveFile();
+				let itemText = await this.getItemText(toolbarItem, activeFile, true);
+				contextMenu.addItem((item: MenuItem) => {
+					item
+						.setIcon('lucide-pen-box')
+						.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
+						.onClick(async () => {
+							if (toolbarSettings) {
+								const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
+								itemModal.open();
+							}
+						});
+				});
 			}
 
 			contextMenu.addSeparator();
@@ -1896,23 +1904,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 		contextMenu.addSeparator();
 
-		// edit item
-		if (toolbarItem) {
-			const activeFile = this.app.workspace.getActiveFile();
-			let itemText = await this.getItemText(toolbarItem, activeFile, true);
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('lucide-pen-box')
-					.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
-					.onClick(async () => {
-						if (toolbarSettings) {
-							const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
-							itemModal.open();
-						}
-					});
-			});
-		}
-
 		// edit toolbar
 		if (toolbarSettings !== undefined) {
 			contextMenu.addItem((item: MenuItem) => {
@@ -1925,6 +1916,17 @@ export default class NoteToolbarPlugin extends Plugin {
 						modal.open();
 					});
 			  });
+		}
+
+		// swap toolbar
+		// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
+		if ((currentView?.getViewType() === 'markdown') && this.settings.toolbarProp !== 'tags') {
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('repeat')
+					.setTitle(t('toolbar.menu-swap-toolbar'))
+					.onClick(() => this.commands.swapToolbar());
+			});
 		}
 
 		contextMenu.addItem((item: MenuItem) => {
