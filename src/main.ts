@@ -1853,6 +1853,16 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			contextMenu.addSeparator();
 
+			// add item
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('plus')
+					.setTitle("Add item...")
+					.onClick(async () => {
+						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New');
+					});
+			});		
+
 			// edit item
 			if (toolbarItem) {
 				const activeFile = this.app.workspace.getActiveFile();

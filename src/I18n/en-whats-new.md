@@ -42,6 +42,12 @@ For example, here's a URI for **Open in VS Code** -- available in the Gallery --
 vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}
 ```
 
+### Add items directly from the context menu
+
+You can now right-click (long-press on mobile) and add items directly to the toolbar from there. New items will be added to the end of the toolbar, and can then be rearranged in toolbar settings.
+
+The context menu has been reorganized a bit to create what are hopefully more logical sections.
+
 ## Improvements 🚀
 
 ### Use file items like tabs
@@ -66,7 +72,6 @@ Example CSS snippet:
 
 ### Other improvements
 
-- Context menu: Reorganized to create more logical sections.
 - On phones: Items opened or added in settings now use the item modal, rather than expanding in the list in-place.
 - JS Engine: Added an Evaluate function, which evaluates a provided expression and displays a value if returned.
 
