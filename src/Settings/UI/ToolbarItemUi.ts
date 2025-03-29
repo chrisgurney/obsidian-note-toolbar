@@ -453,7 +453,7 @@ export default class ToolbarItemUi {
             newItemModal.open();
         }
         else {
-            this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItem.uuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+            this.parent.display(newItem.uuid);
         }
     }
 
