@@ -81,17 +81,17 @@ export class SettingsManager {
 	 * Duplicates the given toolbar item, and adds it to the given toolbar.
 	 * @param toolbar ToolbarSettings to duplicate the item within.
 	 * @param item ToolbarItemSettings to duplicate.
-	 * @param itemIndex optional index to insert the new item after; if not provided, the item is added to the end of the toolbar.
+	 * @param insertIndex optional index to insert the new item at; if not provided, the item is added to the end of the toolbar.
 	 * @returns the new item.
 	 */
-	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, itemIndex?: number): Promise<ToolbarItemSettings> {
+	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<ToolbarItemSettings> {
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
 		newItem.description = undefined;
 		newItem.hasCommand = false;
 		newItem.inGallery = false;
 		newItem.uuid = getUUID();
-		if (itemIndex !== undefined && itemIndex >= 0) {
-			toolbar.items.splice(itemIndex + 1, 0, newItem);
+		if (insertIndex !== undefined && insertIndex >= 0) {
+			toolbar.items.splice(insertIndex, 0, newItem);
 		}
 		else {
 			toolbar.items.push(newItem);

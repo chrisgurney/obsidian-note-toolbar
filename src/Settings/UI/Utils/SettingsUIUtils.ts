@@ -304,7 +304,13 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
 /**
  * Opens an item suggester that then adds the selected item to this toolbar.
  */
-export function openItemSuggestModal(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, mode: ItemSuggestMode, parent?: ToolbarSettingsModal) {
+export function openItemSuggestModal(
+	plugin: NoteToolbarPlugin, 
+	toolbar: ToolbarSettings, 
+	mode: ItemSuggestMode, 
+	parent?: ToolbarSettingsModal, 
+	toolbarInsertIndex?: number
+) {
 	const modal = new ItemSuggestModal(
 		plugin, 
 		undefined, 
@@ -312,7 +318,7 @@ export function openItemSuggestModal(plugin: NoteToolbarPlugin, toolbar: Toolbar
 			const isEmptyItem = selectedItem.uuid === 'EMPTY_ITEM';
 			if (isEmptyItem) selectedItem.label = '';
 
-			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem);
+			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
 			if (!await plugin.settingsManager.resolveGalleryItem(newItem)) return;
 
 			toolbar.updated = new Date().toISOString();

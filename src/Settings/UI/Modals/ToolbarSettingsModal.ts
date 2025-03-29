@@ -562,8 +562,9 @@ export default class ToolbarSettingsModal extends Modal {
 				switch (e.key) {
 					case "d":
 						const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
-						if (modifierPressed) {
-							const itemIndex = this.toolbar.items.indexOf(toolbarItem);
+						if (modifierPressed) {        
+							const index = this.toolbar.items.indexOf(toolbarItem);
+							const itemIndex = index >= 0 ? index + 1 : undefined;
 							const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
 							this.plugin.settingsManager.save();
 							this.display(newItem.uuid);

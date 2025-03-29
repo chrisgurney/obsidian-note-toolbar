@@ -445,7 +445,8 @@ export default class ToolbarItemUi {
     }
 
     async handleItemDuplicate(toolbarItem: ToolbarItemSettings) {
-        const itemIndex = this.toolbar.items.indexOf(toolbarItem);
+        const index = this.toolbar.items.indexOf(toolbarItem);
+        const itemIndex = index >= 0 ? index + 1 : undefined;
         const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
         await this.plugin.settingsManager.save();
         if (this.parent instanceof ItemModal) {
