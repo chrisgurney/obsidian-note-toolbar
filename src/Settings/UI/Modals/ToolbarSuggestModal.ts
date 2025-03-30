@@ -63,7 +63,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
         if (this.showSwapUi) {
             let emptyToolbar = { ...EMPTY_TOOLBAR };
-            emptyToolbar.name = t('setting.toolbar-suggest-modal.option-default');
+            emptyToolbar.name = t('setting.item-suggest-modal.option-default');
             tbarSuggestions.push(emptyToolbar);
         }
         else if (this.showNewOption) {

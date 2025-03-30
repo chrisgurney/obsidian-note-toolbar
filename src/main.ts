@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -9,7 +9,7 @@ import { CommandManager } from 'Commands/CommandManager';
 import { NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { INoteToolbarApi } from "Api/INoteToolbarApi";
 import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
-import { learnMoreFr, openItemSuggestModal } from 'Settings/UI/Utils/SettingsUIUtils';
+import { learnMoreFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ProtocolManager } from 'Protocol/ProtocolManager';
 import { ShareModal } from 'Settings/UI/Modals/ShareModal';
 import DataviewAdapter from 'Adapters/DataviewAdapter';
@@ -1746,22 +1746,20 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 	/**
 	 * Shows a context menu with links to settings/configuration.
-	 * @param mouseEvent MouseEvent
+	 * @param e MouseEvent
 	 */
-	async toolbarContextMenuHandler(mouseEvent: MouseEvent) {
+	async toolbarContextMenuHandler(e: MouseEvent) {
 
-		mouseEvent.preventDefault();
+		e.preventDefault();
 
 		// figure out what toolbar we're in
-		let toolbarEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-container');
+		let toolbarEl = (e.target as Element).closest('.cg-note-toolbar-container');
 		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbarById(toolbarEl.id) : undefined;
 		
-		let toolbarItemEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-item');
+		let toolbarItemEl = (e.target as Element).closest('.cg-note-toolbar-item');
 		let toolbarItem = toolbarItemEl?.id ? this.settingsManager.getToolbarItemById(toolbarItemEl.id) : undefined;
 
 		let contextMenu = new Menu();
-
-		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		if (toolbarSettings !== undefined) {
 
@@ -1831,6 +1829,19 @@ export default class NoteToolbarPlugin extends Plugin {
 					});
 			});
 
+			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+			// swap toolbar
+			// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
+			if ((currentView?.getViewType() === 'markdown') && this.settings.toolbarProp !== 'tags') {
+				contextMenu.addItem((item: MenuItem) => {
+					item
+						.setIcon('repeat')
+						.setTitle(t('toolbar.menu-swap-toolbar'))
+						.onClick(() => this.commands.swapToolbar());
+				});
+			}
+
 			// show/hide properties
 			const propsEl = this.getPropsEl();
 			if ((currentView?.getViewType() === 'markdown') && propsEl) {
@@ -1849,36 +1860,6 @@ export default class NoteToolbarPlugin extends Plugin {
 							.onClick(async (menuEvent) => this.commands.toggleProps('hide'));
 					});
 				}
-			}
-
-			contextMenu.addSeparator();
-
-			// add item
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('plus')
-					.setTitle(t('toolbar.menu-add-item'))
-					.onClick(async () => {
-						const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
-						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined, toolbarItemIndex);
-					});
-			});
-
-			// edit item
-			if (toolbarItem) {
-				const activeFile = this.app.workspace.getActiveFile();
-				let itemText = await this.getItemText(toolbarItem, activeFile, true);
-				contextMenu.addItem((item: MenuItem) => {
-					item
-						.setIcon('lucide-pen-box')
-						.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
-						.onClick(async () => {
-							if (toolbarSettings) {
-								const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
-								itemModal.open();
-							}
-						});
-				});
 			}
 
 			contextMenu.addSeparator();
@@ -1915,6 +1896,23 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 		contextMenu.addSeparator();
 
+		// edit item
+		if (toolbarItem) {
+			const activeFile = this.app.workspace.getActiveFile();
+			let itemText = await this.getItemText(toolbarItem, activeFile, true);
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('lucide-pen-box')
+					.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
+					.onClick(async () => {
+						if (toolbarSettings) {
+							const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
+							itemModal.open();
+						}
+					});
+			});
+		}
+
 		// edit toolbar
 		if (toolbarSettings !== undefined) {
 			contextMenu.addItem((item: MenuItem) => {
@@ -1929,17 +1927,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			  });
 		}
 
-		// swap toolbar
-		// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-		if ((currentView?.getViewType() === 'markdown') && this.settings.toolbarProp !== 'tags') {
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('repeat')
-					.setTitle(t('toolbar.menu-swap-toolbar'))
-					.onClick(() => this.commands.swapToolbar());
-			});
-		}
-
 		contextMenu.addItem((item: MenuItem) => {
 			item
 			  .setTitle(t('toolbar.menu-toolbar-settings'))
@@ -1950,7 +1937,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		  });
 
 		navigator.vibrate(50);
-		contextMenu.showAtPosition(mouseEvent);
+		contextMenu.showAtPosition(e);
 
 	}
 

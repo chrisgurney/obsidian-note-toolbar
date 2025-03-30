@@ -445,9 +445,7 @@ export default class ToolbarItemUi {
     }
 
     async handleItemDuplicate(toolbarItem: ToolbarItemSettings) {
-        const index = this.toolbar.items.indexOf(toolbarItem);
-        const itemIndex = index >= 0 ? index + 1 : undefined;
-        const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
+        const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
         await this.plugin.settingsManager.save();
         if (this.parent instanceof ItemModal) {
             let newItemModal = new ItemModal(this.plugin, this.toolbar, newItem);
@@ -455,7 +453,7 @@ export default class ToolbarItemUi {
             newItemModal.open();
         }
         else {
-            this.parent.display(newItem.uuid);
+            this.parent.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItem.uuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
         }
     }
 

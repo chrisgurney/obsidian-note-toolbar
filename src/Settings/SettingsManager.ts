@@ -81,17 +81,19 @@ export class SettingsManager {
 	 * Duplicates the given toolbar item, and adds it to the given toolbar.
 	 * @param toolbar ToolbarSettings to duplicate the item within.
 	 * @param item ToolbarItemSettings to duplicate.
-	 * @param insertIndex optional index to insert the new item at; if not provided, the item is added to the end of the toolbar.
 	 * @returns the new item.
 	 */
-	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<ToolbarItemSettings> {
+	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false): Promise<ToolbarItemSettings> {
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
 		newItem.description = undefined;
 		newItem.hasCommand = false;
 		newItem.inGallery = false;
 		newItem.uuid = getUUID();
-		if (insertIndex !== undefined && insertIndex >= 0) {
-			toolbar.items.splice(insertIndex, 0, newItem);
+		if (insertAfter) {
+			const index = toolbar.items.indexOf(item);
+			if (index !== -1) {
+				toolbar.items.splice(index + 1, 0, newItem);
+			}
 		}
 		else {
 			toolbar.items.push(newItem);
@@ -310,38 +312,6 @@ export class SettingsManager {
     }
 
 	/**
-	 * Transforms items from the Gallery into types that can be handled by the toolbar.
-	 * @param item ToolbarItemSettings to update
-	 * @returns true if the item is resolved, false otherwise
-	 */
-	async resolveGalleryItem(item: ToolbarItemSettings): Promise<boolean> {
-
-		if (!item.linkAttr?.type) {
-			// FIXME: localize this string
-			console.error("Gallery item: Missing item type.");
-			return false;
-		}
-
-		switch (item.linkAttr.type) {
-			case ItemType.JavaScript:
-				if (item.scriptConfig?.expression) {
-					item.scriptConfig.pluginFunction = 'evaluate';
-					return true;
-				}
-				break;
-			case ItemType.Plugin:
-				const pluginType = await this.resolvePluginType(item);
-				return pluginType ? true : false;
-			default:
-				return true;
-		}
-
-		// should not reach this point
-		return false;
-
-	}
-
-	/**
 	 * Transforms "plugin" type items from the Gallery into types that can be handled by the toolbar.
 	 * Prompts user if there's more than one enabled plugin available.
 	 * Reports errors if the plugin's not supported, chosen plugin's not enabled, or the proper parameters aren't provided.
@@ -394,13 +364,11 @@ export class SettingsManager {
 				}
 			}
 			else {
-				// FIXME: lcoalize this string
-				console.error("Invalid plugin or none enabled for Gallery item.");
+				console.error("Invalid plugin or none enabled.");
 				return undefined;
 			}
 		}
 		else {
-			// FIXME: lcoalize this string
 			console.error("Missing plugin or script element in Gallery data.");
 			return undefined;
 		}

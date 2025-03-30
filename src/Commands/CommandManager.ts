@@ -231,7 +231,7 @@ export class CommandManager {
      * @param toolbarId optional ID of a toolbar to limit the ItemSuggestModal to show
      */
     async openQuickTools(toolbarId?: string): Promise<void> {
-        const modal = new ItemSuggestModal(this.plugin, toolbarId, undefined, 'QuickTools');
+        const modal = new ItemSuggestModal(this.plugin, toolbarId, undefined, true);
         modal.open();
     }
 

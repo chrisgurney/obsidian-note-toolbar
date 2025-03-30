@@ -6,7 +6,6 @@ import NoteToolbarPlugin from "main";
 import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
-import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";
 
 /**
  * Returns an element contianing a dismissable onboarding message.
@@ -299,37 +298,6 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
 	let learnMoreLink = messageFr.createEl('a', { href: URL_USER_GUIDE + page, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
-}
-
-/**
- * Opens an item suggester that then adds the selected item to this toolbar.
- */
-export function openItemSuggestModal(
-	plugin: NoteToolbarPlugin, 
-	toolbar: ToolbarSettings, 
-	mode: ItemSuggestMode, 
-	parent?: ToolbarSettingsModal, 
-	toolbarInsertIndex?: number
-) {
-	const modal = new ItemSuggestModal(
-		plugin, 
-		undefined, 
-		async (selectedItem: ToolbarItemSettings) => {
-			const isEmptyItem = selectedItem.uuid === 'EMPTY_ITEM';
-			if (isEmptyItem) selectedItem.label = '';
-
-			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
-			if (!await plugin.settingsManager.resolveGalleryItem(newItem)) return;
-
-			toolbar.updated = new Date().toISOString();
-			await plugin.settingsManager.save();
-
-			if (isEmptyItem) new ItemModal(plugin, toolbar, newItem).open();
-			if (parent) parent.display();
-		}, 
-		mode
-	);
-	modal.open();
 }
 
 /**
