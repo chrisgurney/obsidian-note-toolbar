@@ -57,6 +57,18 @@ export default class JavaScriptAdapter extends Adapter {
                     ? await this.evaluate(config.expression, containerEl)
                     : t('adapter.javascript.eval-expr-error-required');
                 break;
+            // internal function for inline evaluations in which errors should be reported
+            case 'evaluateInline':
+                result = config.expression
+                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Report)
+                    : t('adapter.javascript.eval-expr-error-required');
+                break;
+            // internal function for inline evaluations in which errors can be ignored
+            case 'evaluateIgnore':
+                result = config.expression
+                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Ignore)
+                    : t('adapter.javascript.eval-expr-error-required');
+                break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, containerEl)
