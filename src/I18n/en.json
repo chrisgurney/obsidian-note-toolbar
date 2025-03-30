@@ -551,6 +551,7 @@
         }
     },
     "toolbar": {
+        "menu-add-item": "Add item...",
         "menu-edit-item": "Edit item: {{text}}...",
         "menu-edit-item_none": "Edit item...",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",

@@ -1857,12 +1857,10 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('plus')
-					.setTitle("Add item...")
+					.setTitle(t('toolbar.menu-add-item'))
 					.onClick(async () => {
-						// FIXME: not returning right index when toolbar wraps to next line
-						// const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
-						// debugLog(toolbarItemIndex);
-						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined);
+						const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
+						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined, toolbarItemIndex);
 					});
 			});
 
