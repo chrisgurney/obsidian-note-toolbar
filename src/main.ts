@@ -2205,22 +2205,20 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	hasVars(s: string): boolean {
 		let hasVars = /{{.*?}}/g.test(s);
-		if (!hasVars && this.hasPlugin[ItemType.Dataview]) {
-			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
-			hasVars = !!prefix && s.trim().startsWith(prefix);
-			if (!hasVars) hasVars = s.trim().startsWith('{{dv:');
-			// TODO? support dvjs? check for $= JS inline queries
-			// if (!hasVars) {
-			// 	prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
-			// 	hasVars = !!prefix && s.trim().startsWith(prefix);
-			// }
-		}
-		if (!hasVars && this.hasPlugin[ItemType.JsEngine]) {
-			hasVars = s.trim().startsWith('{{jse:');
-		}
-		if (!hasVars && this.hasPlugin[ItemType.Templater]) {
-			hasVars = s.trim().startsWith('<%');
-			if (!hasVars) hasVars = s.trim().startsWith('{{tp:');
+		if (this.settings.scriptingEnabled) {
+			if (!hasVars && this.hasPlugin[ItemType.Dataview]) {
+				let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+				hasVars = !!prefix && s.trim().startsWith(prefix);
+				if (!hasVars) hasVars = s.trim().startsWith('{{dv:');
+				// TODO? support dvjs? check for $= JS inline queries
+				// if (!hasVars) {
+				// 	prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
+				// 	hasVars = !!prefix && s.trim().startsWith(prefix);
+				// }
+			}
+			if (!hasVars && this.hasPlugin[ItemType.Templater]) {
+				hasVars = s.trim().startsWith('<%');
+			}
 		}
 		return hasVars;
 	}
@@ -2260,6 +2258,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
 				// FIXME: does not work with number properties
 				fm = fm ? fm.replace(linkWrap, '$1') : '';
+				// FIXME: should this be returning here? or just updating the string?
 				return encode ? encodeURIComponent(fm) : fm;
 			}
 			else {
@@ -2267,54 +2266,68 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		});
 
-		// PLUGIN EXPRESSIONS
-		if (this.hasPlugin[ItemType.Dataview]) {
-			let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
-			if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
-				// strip prefix before evaluation
-				if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
-				if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
-				s = s.trim();
-				let result = await this.dvAdapter?.use({
-					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
-					expression: s
-				});
-				s = (result && typeof result === 'string') ? result : '';
-			}
-			// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
-			// prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
-			// if (prefix && s.trim().startsWith(prefix)) {
-			// 	s = s.trim().slice(prefix.length); // strip prefix before evaluation
-			// 	let result = await this.dvAdapter?.use({ pluginFunction: 'executeJs', expression: s });
-			// 	s = result ? result : '';
-			// }
-		}
+		if (this.settings.scriptingEnabled) {
 
-		if (this.hasPlugin[ItemType.JsEngine]) {
-			if (s.trim().startsWith('{{jse:')) {
-				s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
+			// JAVASCRIPT
+			if (s.trim().startsWith('{{js:')) {
+				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
 				let result = await this.jseAdapter?.use({ 
 					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
-					 expression: s
-				});
-				s = (result && typeof result === 'string') ? result : '';
-			}
-		}
-
-		if (this.hasPlugin[ItemType.Templater]) {
-			if (s.trim().startsWith('<%') || s.trim().startsWith('{{tp:')) {
-				// strip all prefixes
-				if (s.trim().startsWith('{{tp:')) s = s.replace(/^{{tp:\s*|\s*}}$/g, '');
-				s = s.trim();
-				// add Templater's prefix back in for evaluation
-				if (!s.startsWith('<%')) s = '<%' + s;
-				if (!s.endsWith('%>')) s += '%>';
-				let result = await this.tpAdapter?.use({ 
-					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
 					expression: s
 				});
 				s = (result && typeof result === 'string') ? result : '';
 			}
+
+			// PLUGIN EXPRESSIONS
+			if (this.hasPlugin[ItemType.Dataview]) {
+				let prefix = this.dvAdapter?.getSetting('inlineQueryPrefix');
+				if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
+					// strip prefix before evaluation
+					if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
+					if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
+					s = s.trim();
+					let result = await this.dvAdapter?.use({
+						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+						expression: s
+					});
+					s = (result && typeof result === 'string') ? result : '';
+				}
+				// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
+				// prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
+				// if (prefix && s.trim().startsWith(prefix)) {
+				// 	s = s.trim().slice(prefix.length); // strip prefix before evaluation
+				// 	let result = await this.dvAdapter?.use({ pluginFunction: 'executeJs', expression: s });
+				// 	s = result ? result : '';
+				// }
+			}
+
+			if (this.hasPlugin[ItemType.JsEngine]) {
+				if (s.trim().startsWith('{{jse:')) {
+					s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
+					let result = await this.jseAdapter?.use({ 
+						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+						expression: s
+					});
+					s = (result && typeof result === 'string') ? result : '';
+				}
+			}
+
+			if (this.hasPlugin[ItemType.Templater]) {
+				if (s.trim().startsWith('<%') || s.trim().startsWith('{{tp:')) {
+					// strip all prefixes
+					if (s.trim().startsWith('{{tp:')) s = s.replace(/^{{tp:\s*|\s*}}$/g, '');
+					s = s.trim();
+					// add Templater's prefix back in for evaluation
+					if (!s.startsWith('<%')) s = '<%' + s;
+					if (!s.endsWith('%>')) s += '%>';
+					let result = await this.tpAdapter?.use({ 
+						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
+						expression: s
+					});
+					s = (result && typeof result === 'string') ? result : '';
+				}
+			}
+
 		}
 
 		return s;
