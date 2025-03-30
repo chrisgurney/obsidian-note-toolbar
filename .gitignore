@@ -1,5 +1,6 @@
 # vscode
-.vscode 
+#.vscode
+copy-files-plugin.mjs
 
 # Intellij
 *.iml
@@ -17,6 +18,7 @@ main.js
 
 # obsidian
 data.json
+styles.css
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
