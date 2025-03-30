@@ -411,7 +411,7 @@
         "id": "obsidian-kanban-create",
         "commandId": "obsidian-kanban:create-new-kanban-board",
         "description": { "en": "Create a new kanban board." },
-        "icon": "square-kanban",
+        "icon": "trello",
         "tooltip": { "en": "New kanban" },
         "type": "command"
     },
