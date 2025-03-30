@@ -27,8 +27,10 @@ export default class GalleryManager {
 					selectedToolbar = await this.plugin.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
 				}
 				let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
-                const isResolved = await this.plugin.settingsManager.resolveGalleryItem(newItem);
-                if (!isResolved) return;
+				if (newItem.linkAttr.type === ItemType.Plugin) {
+					const pluginType = await this.plugin.settingsManager.resolvePluginType(newItem);
+					if (!pluginType) return;
+				}
 				selectedToolbar.updated = new Date().toISOString();
 				await this.plugin.settingsManager.save();
 				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);

@@ -43,35 +43,6 @@ export function calcComponentVisToggles(visibility: Visibility) {
 }
 
 /**
- * Returns the index of the item in the toolbar that *would be* where the mouse was clicked.
- * @param plugin 
- * @param event 
- * @returns 
- */
-export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent): number | undefined {
-	const toolbarListEl = plugin.getToolbarListEl();
-	if (!toolbarListEl) return undefined;
-
-	const rects = Array.from(toolbarListEl.children).map(el => el.getBoundingClientRect());
-	const cursorX = event.clientX;
-	const cursorY = event.clientY;
-	const rowHeight = rects[0]?.height || 0;
-
-	// filter items in the same row (matching top value within tolerance)
-	const sameRow = rects.filter(rect => Math.abs(rect.top - cursorY) <= rowHeight);
-
-	// find closest items to the left and right
-	const left = sameRow.filter(rect => rect.right <= cursorX).pop();
-	const right = sameRow.find(rect => rect.left > cursorX);
-
-	debugLog('Left:', left ? toolbarListEl.children[rects.indexOf(left)] : null);
-	debugLog('Right:', right ? toolbarListEl.children[rects.indexOf(right)] : null);
-
-	const itemIndex = left ? (rects.indexOf(left) >= 0 ? rects.indexOf(left) + 1 : undefined) : undefined;
-	return itemIndex ? itemIndex : (right ? rects.indexOf(right) : undefined);
-}
-
-/**
  * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
  * toggle values are the opposite of the Platform values.
  * @param Visibility

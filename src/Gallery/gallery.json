@@ -63,7 +63,7 @@
         "name": { "en": "Vault Navigation" },
         "description": { "en": "Navigate between files and directories." },
         "itemIds": [
-            "file-prev", "file-next", "go-home", "go-up", "bookmarks-open"
+            "previous-file", "next-file", "go-home", "go-up", "bookmarks-open"
         ]
       },
       {
