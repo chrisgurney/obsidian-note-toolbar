@@ -1,7 +1,7 @@
 {
     "adapter": {
         "args": "Arguments (optional)",
-        "args-description": "Arguments accepted by your script function, in comma-separated 'name: value' format, with string values in quotes.",
+        "args-description": "Arguments accepted by your script, in comma-separated 'name: value' format, with string values in quotes.",
         "dataview": {
             "dvjs-expr": "Dataview JS expression",
             "dvjs-expr-description": "Dataview JS expression to evaluate.",
@@ -22,8 +22,10 @@
         },
         "error": {
             "args-format": "Invalid argument format.",
-            "args-parsing": "Failed to parse arguments for script: {{filename}}",
-            "args-parsing-error": "Failed to parse arguments for script: {{filename}}\n```\n{{error}}\n```",
+            "args-parsing": "Failed to parse arguments",
+            "args-parsing-error": "Failed to parse arguments\n```\n{{error}}\n```",
+            "args-parsing-script": "Failed to parse arguments for script: {{filename}}",
+            "args-parsing-script-error": "Failed to parse arguments for script: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
             "exec-failed": "Failed to execute script: {{filename}}",
             "expr-failed": "Failed to evaluate expression: {{expression}}",
