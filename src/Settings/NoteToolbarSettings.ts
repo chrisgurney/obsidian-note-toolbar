@@ -165,7 +165,7 @@ export enum CalloutAttr {
 	Dataview = 'data-dataview',
     Folder = 'data-folder',
     FolderNtb = 'data-ntb-folder', // for backwards-compatibility
-	JavaScript = 'data-js',
+	JavaScript = 'data-javascript',
 	JsEngine = 'data-js-engine',
     Menu = 'data-menu',
     MenuNtb = 'data-ntb-menu', // for backwards-compatibility
