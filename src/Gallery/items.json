@@ -35,19 +35,17 @@
         "id": "copy",
         "description": { "en": "Copies the selected text to the clipboard." },
         "icon": "clipboard-copy",
-        "plugin": ["dataview", "js-engine"],
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": { "en": "Copy" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "copy-block-link",
         "description": { "en": "Copies a link to the current block to the clipboard." },
         "icon": "link-2",
-        "plugin": ["dataview", "js-engine"],
         "script": "const { metadataCache: m } = app, e = app.workspace.activeEditor?.editor, f = app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
         "tooltip": { "en": "Copy link to block" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "copy-obsidian-url",
@@ -61,10 +59,9 @@
         "id": "cut",
         "description": { "en": "Cuts the selected text to the clipboard." },
         "icon": "scissors",
-        "plugin": ["dataview", "js-engine"],
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": { "en": "Cut" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "cycle-list-checklist",
@@ -78,19 +75,17 @@
         "id": "cycle-themes",
         "description": { "en": "Cycles between installed themes, including the default." },
         "icon": "venetian-mask",
-        "plugin": ["dataview", "js-engine"],
         "script": "const i = ntb.getActiveItem();\nconst t = [...Object.values(app.customCss.themes), { name: '' }];\nconst n = t[(t.findIndex(theme => theme.name === app.vault.getConfig('cssTheme')) + 1) % t.length].name;\napp.customCss.setTheme(n);\nif (n) new Notice(n);",
         "tooltip": { "en": "Cycle themes" },
-        "type": "plugin"        
+        "type": "javascript"
     },
     {
         "id": "cycle-workspace",
         "description": { "en": "Cycles between workspaces." },
         "icon": "layout-grid",
-        "plugin": ["dataview", "js-engine"],    
-        "script": "const p = this.app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
+        "script": "const p = app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
         "tooltip": { "en": "Cycle workspaces" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "daily-notes-prev",
@@ -136,10 +131,9 @@
         "id": "file-append",
         "description": { "en": "Appends the prompted text to a file you specify." },
         "icon": "file-plus-2",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) return;\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\n\n' + txt); }",
+        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\\n\\n' + txt); }",
         "tooltip": { "en": "Append text" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "file-in-explorer",
@@ -166,13 +160,28 @@
         "type": "command"
     },
     {
+        "id": "file-next",
+        "description": { "en": "Opens the next file in the folder, sorted A-Z. Loops back to the first file." },
+        "icon": "square-arrow-right",
+        "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf)); }",
+        "tooltip": { "en": "Next file" },
+        "type": "javascript"
+    },
+    {
+        "id": "file-prev",
+        "description": { "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file." },
+        "icon": "square-arrow-left",
+        "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);\nif (sfl.length>1) { const pf = ci===0?sfl[sfl.length-1]:sfl[ci-1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(pf)); }",
+        "tooltip": { "en": "Previous file" },
+        "type": "javascript"
+    },
+    {
         "id": "folder-search",
         "description": { "en": "Opens search for the current folder, or all files if the file is in the root." },
         "icon": "folder-search",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const p = app.workspace.getActiveFile()?.parent.path;\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
+        "script": "const p = app.workspace.getActiveFile()?.parent.path ?? '/';\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
         "tooltip": { "en": "Search folder" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "global-search-open",
@@ -186,10 +195,9 @@
         "id": "go-bottom",
         "description": { "en": "Moves the cursor to the bottom of the current note." },
         "icon": "arrow-down-to-line",
-        "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeEditor?.editor?.setCursor(app.workspace.activeEditor.editor.lineCount(), 0)",
         "tooltip": { "en": "Jump to bottom" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "go-home",
@@ -203,10 +211,9 @@
         "id": "go-top",
         "description": { "en": "Moves the cursor to the top of the current note." },
         "icon": "arrow-up-to-line",
-        "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeEditor?.editor?.setCursor(0, 0)",
         "tooltip": { "en": "Jump to top" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "go-up",
@@ -220,37 +227,33 @@
         "id": "go-next-callout",
         "description": { "en": "Moves the cursor to the next callout in the note." },
         "icon": "chevrons-down",
-        "plugin": ["dataview", "js-engine"],
         "script": "const ed = app.workspace.activeEditor?.editor;\nconst ln = ed.getValue().split('\\n');\nlet idx = ed.getCursor().line;\nconst r = /^\\s*>/;\nwhile (idx < ln.length && r.test(ln[idx])) idx++;\nwhile (idx < ln.length && !r.test(ln[idx])) idx++;\nif (idx >= ln.length) { idx = 0; while (idx < ln.length && !r.test(ln[idx])) idx++; }\nif (idx < ln.length) { ed.setCursor({ line: idx, ch: 0 }); }",
         "tooltip": { "en": "Next callout" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "go-next-heading",
         "description": { "en": "Moves the cursor to the next heading in the note." },
         "icon": "a-arrow-down",
-        "plugin": ["dataview", "js-engine"],
         "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = c.line + 1; i !== c.line; i = (i + 1) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
         "tooltip": { "en": "Next heading" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "go-prev-heading",
         "description": { "en": "Moves the cursor to the previous heading in the note." },
         "icon": "a-arrow-up",
-        "plugin": ["dataview", "js-engine"],
         "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
         "tooltip": { "en": "Previous heading" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "indent",
         "description": { "en": "Increases indentation on the current line." },
         "icon": "indent-increase",
-        "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeLeaf.view?.editor.indentList()",
         "tooltip": { "en": "Indent" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "insert-callout",
@@ -339,17 +342,6 @@
         "icon": "file",
         "tooltip": { "en": "New note" },
         "type": "command"
-    },
-    {
-        "id": "next-file",
-        "description": {
-            "en": "Opens the next file in the folder, sorted A-Z. Loops back to the first file."
-        },
-        "icon": "square-arrow-right",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const cf = app.workspace.getActiveFile(), cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf)); }",
-        "tooltip": { "en": "Next file" },
-        "type": "plugin"
     },
     {
         "id": "note-toolbar-quick-toolbars",
@@ -456,24 +448,12 @@
         "type": "command"
     },
     {
-        "id": "previous-file",
-        "description": {
-            "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file."
-        },
-        "icon": "square-arrow-left",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const cf = app.workspace.getActiveFile(), cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);\nif (sfl.length>1) { const pf = ci===0?sfl[sfl.length-1]:sfl[ci-1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(pf)); }",
-        "tooltip": { "en": "Previous file" },
-        "type": "plugin"
-    },
-    {
         "id": "paste",
         "description": { "en": "Pastes the text from the clipboard." },
         "icon": "clipboard-paste",
-        "plugin": ["dataview", "js-engine"],
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": { "en": "Paste" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "periodic-notes-monthly-next",
@@ -567,10 +547,9 @@
         "id": "set-workspace",
         "description": { "en": "Changes to a specific workspace you provide." },
         "icon": "layout-template",
-        "plugin": ["dataview", "js-engine"],
-        "script": "const w = 'My Workspace'; // CHANGE THIS VALUE\nthis.app.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
+        "script": "const w = 'My Workspace'; // CHANGE THIS\napp.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
         "tooltip": { "en": "My workspace" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "settings-open",
@@ -583,11 +562,10 @@
     {
         "id": "tab-new",
         "description": { "en": "Opens a new empty tab." },
-        "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.getLeaf(true)",
         "icon": "plus",
         "tooltip": { "en": "New tab" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "templater-insert-template",
@@ -609,10 +587,9 @@
         "id": "redo",
         "description": { "en": "Reapplies the last undone action." },
         "icon": "lucide-redo-2",
-        "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeLeaf.view?.editor.redo()",
         "tooltip": { "en": "Redo" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "swap-line-down",
@@ -643,10 +620,9 @@
         "commandId": "theme:use-dark",
         "description": { "en": "Toggle between light and dark modes." },
         "icon": "sun-moon",
-        "plugin": ["dataview", "js-engine"],
         "script": "const i = ntb.getActiveItem();\nif (app.vault.getConfig('theme') === 'obsidian') { app.vault.setConfig('theme', 'obsidian-light'); i?.setIcon('moon'); }\nelse { app.vault.setConfig('theme', 'obsidian'); i?.setIcon('sun'); }",
         "tooltip": { "en": "Toggle light/dark" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "theme-use-dark",
@@ -716,10 +692,9 @@
         "id": "toggle-css-class",
         "description": { "en": "Adds or removes the provided CSS class in the cssclasses property." },
         "icon": "paintbrush",
-        "plugin": ["dataview", "js-engine"],
-        "script": "let tc = 'myclass'; // CHANGE THIS VALUE\nconst af = app.workspace.getActiveFile();\nawait app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
+        "script": "let tc = 'myclass'; // CHANGE THIS\nconst af = app.workspace.getActiveFile(); if (!af) return;\nawait app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
         "tooltip": { "en": "Toggle CSS class" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "toggle-highlight",
@@ -757,10 +732,9 @@
         "id": "toggle-status-bar",
         "description": { "en": "Shows or hides Obsidian's status bar." },
         "icon": "dock",
-        "plugin": ["dataview", "js-engine"],        
         "script": "const s = activeDocument.querySelector('.status-bar');\nif (s) { s.style.display = s.style.display === 'none' ? '' : 'none'; }",
         "tooltip": { "en": "Toggle status bar" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "toggle-strikethrough",
@@ -773,29 +747,26 @@
     {
         "id": "toggle-vim-mode",
         "description": { "en": "Turns Vim mode on and off." },
-        "icon": "keyboard",
-        "plugin": ["dataview", "js-engine"],        
+        "icon": "keyboard",    
         "script": "const vm = app.vault.getConfig('vimMode');\napp.vault.setConfig('vimMode', !vm);\nntb.getActiveItem()?.setIcon(vm ? 'keyboard' : 'edit-2');",
         "tooltip": { "en": "Toggle Vim mode" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "undo",
         "description": { "en": "Reverts the latest action." },
         "icon": "lucide-undo-2",
-        "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeLeaf.view?.editor.undo()",
         "tooltip": { "en": "Undo" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "unindent",
         "description": { "en": "Decreases indentation on the current line." },
         "icon": "indent-decrease",
-        "plugin": ["dataview", "templater-obsidian", "js-engine"],
         "script": "app.workspace.activeLeaf.view?.editor.unindentList()",
         "tooltip": { "en": "Unindent" },
-        "type": "plugin"
+        "type": "javascript"
     },
     {
         "id": "vscode-open",

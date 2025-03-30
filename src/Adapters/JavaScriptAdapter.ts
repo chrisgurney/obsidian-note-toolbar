@@ -12,20 +12,20 @@ export default class JavaScriptAdapter extends Adapter {
 
     readonly FUNCTIONS: AdapterFunction[] = [
         {
-            function: this.exec,
-            label: t('adapter.javascript.exec-function'),
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: t('adapter.javascript.exec-sourcefile'), description: t('adapter.javascript.exec-sourcefile-description'), type: SettingType.File, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
-            ]
-        },
-        {
             function: this.evaluate,
             label: t('adapter.javascript.eval-function'),
             description: "",
             parameters: [
                 { parameter: 'expression', label: t('adapter.javascript.eval-expr'),  description: t('adapter.javascript.eval-expr-description'), type: SettingType.TextArea, required: true },
+                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+            ]
+        },
+        {
+            function: this.exec,
+            label: t('adapter.javascript.exec-function'),
+            description: "",
+            parameters: [
+                { parameter: 'sourceFile', label: t('adapter.javascript.exec-sourcefile'), description: t('adapter.javascript.exec-sourcefile-description'), type: SettingType.File, required: true },
                 { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },

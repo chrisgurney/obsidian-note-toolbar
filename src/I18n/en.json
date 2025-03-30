@@ -101,7 +101,8 @@
         "msg": {
             "block-no-id": "No block ID found",
             "clipboard-copied": "Copied to clipboard",
-            "error-console": "Error: Please check console for details"
+            "error-console": "Error: Please check console for details",
+            "file-not-exist": "File does not exist"
         },
         "ui": {
             "button-submit": "Submit",
@@ -369,7 +370,7 @@
             "label-empty-no-items": "No results found.",
             "link-gallery": "Explore the gallery",
             "link-search": "Search for an item",
-            "option-default": "Default (use toolbar mapping)",
+            "option-new": "+ Create a new item",
             "placeholder": "Search for an item...",
             "placeholder-toolbar": "{{toolbar}}: Search items..."
         },
@@ -503,6 +504,7 @@
             "instruction-dismiss": "to dismiss",
             "instruction-navigate": "to navigate",
             "instruction-use": "to open toolbar",
+            "option-default": "Default (use toolbar mapping)",
             "option-new": "+ Create a new toolbar",
             "placeholder": "Search for a toolbar..."
         },
@@ -549,6 +551,7 @@
         }
     },
     "toolbar": {
+        "menu-add-item": "Add item...",
         "menu-edit-item": "Edit item: {{text}}...",
         "menu-edit-item_none": "Edit item...",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
