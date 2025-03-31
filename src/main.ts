@@ -1853,36 +1853,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			contextMenu.addSeparator();
 
-			// add item
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('plus')
-					.setTitle(t('toolbar.menu-add-item'))
-					.onClick(async () => {
-						const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
-						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined, toolbarItemIndex);
-					});
-			});
-
-			// edit item
-			if (toolbarItem) {
-				const activeFile = this.app.workspace.getActiveFile();
-				let itemText = await this.getItemText(toolbarItem, activeFile, true);
-				contextMenu.addItem((item: MenuItem) => {
-					item
-						.setIcon('lucide-pen-box')
-						.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
-						.onClick(async () => {
-							if (toolbarSettings) {
-								const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
-								itemModal.open();
-							}
-						});
-				});
-			}
-
-			contextMenu.addSeparator();
-
 			// share
 			contextMenu.addItem((item: MenuItem) => {
 				item
@@ -1913,6 +1883,36 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 		
+		contextMenu.addSeparator();
+
+		// add item
+		contextMenu.addItem((item: MenuItem) => {
+			item
+				.setIcon('plus')
+				.setTitle(t('toolbar.menu-add-item'))
+				.onClick(async () => {
+					const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
+					if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined, toolbarItemIndex);
+				});
+		});
+
+		// edit item
+		if (toolbarItem) {
+			const activeFile = this.app.workspace.getActiveFile();
+			let itemText = await this.getItemText(toolbarItem, activeFile, true);
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('lucide-pen-box')
+					.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
+					.onClick(async () => {
+						if (toolbarSettings) {
+							const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
+							itemModal.open();
+						}
+					});
+			});
+		}
+
 		contextMenu.addSeparator();
 
 		// edit toolbar
