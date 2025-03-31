@@ -112,6 +112,8 @@ export function checkToolbarForViewType(plugin: NoteToolbarPlugin, currentViewTy
  */
 export function debugLog(message?: any, ...optionalParams: any[]): void {
 	DEBUG && console.debug(message, ...optionalParams);
+	// const stack = new Error().stack?.split('\n')[2]?.trim();
+	// DEBUG && console.debug('Called from:', stack);
 }
 
 /**
