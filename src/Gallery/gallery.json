@@ -28,7 +28,7 @@
         "name": { "en" : "Files" },
         "description": { "en": "Tools for working with files." },
         "itemIds": [
-            "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+            "file-new", "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
         ]
       },
       {
@@ -56,14 +56,14 @@
         "name": { "en" : "Editor Navigation" },
         "description": { "en": "Get around the text editor faster." },
         "itemIds": [
-            "tab-new", "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
+            "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
         ]
       },
       {
         "name": { "en": "Vault Navigation" },
         "description": { "en": "Navigate between files and directories." },
         "itemIds": [
-            "file-prev", "file-next", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+            "file-prev", "file-next", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
         ]
       },
       {
