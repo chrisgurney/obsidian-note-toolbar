@@ -1,5 +1,4 @@
 import { INoteToolbarApi } from "Api/INoteToolbarApi";
-import NoteToolbar from "main";
 
 declare global {
     
@@ -24,6 +23,11 @@ declare module "obsidian" {
         hotkeyManager: {
             getHotkeys(command: string): KeymapInfo[];
         };
+    }
+
+    // allows access to the path of the vault, for the {{vault_path}} var
+    interface FileSystemAdapter extends DataAdapter{
+        getBasePath(): string;
     }
 
     // allows access to Menu DOM, to add a class for styling
