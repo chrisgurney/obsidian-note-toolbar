@@ -4,175 +4,211 @@
 
 Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
 
-- Previous daily note - Go to the previous daily note.
-- Today's daily note - Go to today's daily note.
-- Next daily note - Go to the next daily note.
+| Item | Description |
+| --- | --- |
+| Previous daily note | Go to the previous daily note. |
+| Today's daily note | Go to today's daily note. |
+| Next daily note | Go to the next daily note. |
 
 ## Basic Actions
 
 For quick text editing and history control.
 
-- Copy - Copies the selected text to the clipboard.
-- Cut - Cuts the selected text to the clipboard.
-- Paste - Pastes the text from the clipboard.
-- Undo - Reverts the latest action.
-- Redo - Reapplies the last undone action.
-- Clear formatting - Remove all text formatting.
+| Item | Description |
+| --- | --- |
+| Copy | Copies the selected text to the clipboard. |
+| Cut | Cuts the selected text to the clipboard. |
+| Paste | Pastes the text from the clipboard. |
+| Undo | Reverts the latest action. |
+| Redo | Reapplies the last undone action. |
+| Clear formatting | Remove all text formatting. |
 
 ## Editing
 
 Adjust the order and arrangement of content.
 
-- Move line up - Move the current line up.
-- Move line down - Move the current line down.
-- Toggle comment - Add or remove comments.
-- Toggle inline math - Apply or remove inline math formatting.
-- Copy link to block - Copies a link to the current block to the clipboard.
+| Item | Description |
+| --- | --- |
+| Move line up | Move the current line up. |
+| Move line down | Move the current line down. |
+| Toggle comment | Add or remove comments. |
+| Toggle inline math | Apply or remove inline math formatting. |
+| Copy link to block | Copies a link to the current block to the clipboard. |
 
 ## Files
 
 Tools for working with files.
 
-- New kanban - Create a new kanban board.
-- New canvas - Create a new canvas file.
-- Append text - Appends the prompted text to a file you specify.
-- Move file to folder - Move current file to a chosen folder.
-- Show in navigation - Reveal the active file in navigation.
-- Reveal file - Reveal the active file in the system's file explorer.
-- Open in VS Code - Opens the current file in VS Code.
+| Item | Description |
+| --- | --- |
+| New kanban | Create a new kanban board. |
+| New canvas | Create a new canvas file. |
+| Append text | Appends the prompted text to a file you specify. |
+| Move file to folder | Move current file to a chosen folder. |
+| Show file in navigation | Reveal the active file in navigation. |
+| Show file in system | Reveal the active file in the system's file explorer. |
+| Open in VS Code | Opens the current file in VS Code. |
 
 ## Formatting
 
 Change how text looks.
 
-- Toggle bold - Apply or remove bold formatting.
-- Toggle italics - Apply or remove italic formatting.
-- Toggle strikethrough - Apply or remove strikethrough formatting.
-- Toggle code - Apply or remove inline code formatting.
-- Toggle blockquote - Apply or remove blockquote formatting.
-- Toggle highlight - Apply or remove text highlighting.
+| Item | Description |
+| --- | --- |
+| Toggle bold | Apply or remove bold formatting. |
+| Toggle italics | Apply or remove italic formatting. |
+| Toggle strikethrough | Apply or remove strikethrough formatting. |
+| Toggle code | Apply or remove inline code formatting. |
+| Toggle blockquote | Apply or remove blockquote formatting. |
+| Toggle highlight | Apply or remove text highlighting. |
 
 ## Lists & Indentation
 
 Organize items into lists and adjust structure.
 
-- Toggle bullet - Apply or remove bullet list formatting.
-- Toggle check status - Toggle the status of checklist items.
-- Toggle numbered list - Apply or remove numbered list formatting.
-- Indent - Increases indentation on the current line.
-- Unindent - Decreases indentation on the current line.
-- Cycle bullet/checkbox - Changes to bullet, checkbox, or unchecked.
+| Item | Description |
+| --- | --- |
+| Toggle bullet | Apply or remove bullet list formatting. |
+| Toggle check status | Toggle the status of checklist items. |
+| Toggle numbered list | Apply or remove numbered list formatting. |
+| Indent | Increases indentation on the current line. |
+| Unindent | Decreases indentation on the current line. |
+| Cycle bullet/checkbox | Changes to bullet, checkbox, or unchecked. |
 
 ## Insertions
 
 Add various types of content like links or media.
 
-- Insert code block - Insert a code block.
-- Insert callout - Insert a callout block.
-- Insert markdown link - Insert a markdown link.
-- Add tag - Add a tag to the note.
-- Insert horizontal rule - Insert a horizontal rule to separate sections.
-- Add internal link - Add an internal link.
-- Insert table - Insert a table.
-- Add embed - Add an embedded file or note.
-- Insert attachment - Insert a file attachment.
-- Insert math block - Insert a math block.
+| Item | Description |
+| --- | --- |
+| Insert code block | Insert a code block. |
+| Insert callout | Insert a callout block. |
+| Insert markdown link | Insert a markdown link. |
+| Add tag | Add a tag to the note. |
+| Insert horizontal rule | Insert a horizontal rule to separate sections. |
+| Add internal link | Add an internal link. |
+| Insert table | Insert a table. |
+| Add embed | Add an embedded file or note. |
+| Insert attachment | Insert a file attachment. |
+| Insert math block | Insert a math block. |
 
 ## Editor Navigation
 
 Get around the text editor faster.
 
-- New tab - Opens a new empty tab.
-- Next heading - Moves the cursor to the next heading in the note.
-- Previous heading - Moves the cursor to the previous heading in the note.
-- Jump to top - Moves the cursor to the top of the current note.
-- Jump to bottom - Moves the cursor to the bottom of the current note.
-- Toggle Properties - Toggle the visibility of note properties.
-- Next callout - Moves the cursor to the next callout in the note.
-- Toggle Vim mode - Turns Vim mode on and off.
+| Item | Description |
+| --- | --- |
+| New tab | Opens a new empty tab. |
+| Next heading | Moves the cursor to the next heading in the note. |
+| Previous heading | Moves the cursor to the previous heading in the note. |
+| Jump to top | Moves the cursor to the top of the current note. |
+| Jump to bottom | Moves the cursor to the bottom of the current note. |
+| Toggle Properties | Toggle the visibility of note properties. |
+| Next callout | Moves the cursor to the next callout in the note. |
+| Toggle Vim mode | Turns Vim mode on and off. |
 
 ## Vault Navigation
 
 Navigate between files and directories.
 
-- Previous file - Opens the previous file in the folder, sorted A-Z. Loops back to the last file.
-- Next file - Opens the next file in the folder, sorted A-Z. Loops back to the first file.
-- Home - Go to your home note. (Enter your home note in the URL.)
-- Go up - Uses your note's "up" property to navigate to a parent note in your vault.
-- Show bookmarks - Opens the bookmarks sidebar.
+| Item | Description |
+| --- | --- |
+| Previous file | Opens the previous file in the folder, sorted A-Z. Loops back to the last file. |
+| Next file | Opens the next file in the folder, sorted A-Z. Loops back to the first file. |
+| Home | Go to your home note. (Enter your home note in the URL.) |
+| Go up | Uses your note's "up" property to navigate to a parent note in your vault. |
+| Show bookmarks | Opens the bookmarks sidebar. |
+| Show vault in system | Opens the vault's folder in the system's file explorer. |
 
 ## Note Toolbar
 
 Get access to Note Toolbar settings and tools quickly.
 
-- Quick Toolbars - Opens a window with access to all of your Note Toolbars.
-- Quick Tools - Opens a searchable window with access to all of your Note Toolbar items.
-- Toolbar settings - Opens the active Note Toolbar's settings to customize your toolbar.
-- User Guide for Note Toolbar - Access the Note Toolbar User Guide for help and tips.
+| Item | Description |
+| --- | --- |
+| Quick Toolbars | Opens a window with access to all of your Note Toolbars. |
+| Quick Tools | Opens a searchable window with access to all of your Note Toolbar items. |
+| Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
+| User Guide for Note Toolbar | Access the Note Toolbar User Guide for help and tips. |
 
 ## Obsidian Support
 
 Get help from Obsidian community resources.
 
-- Obsidian Help - Opens the official Obsidian Help site.
-- Markdown reference - Opens Obsidian's Markdown formatting guide.
-- Obsidian Discord - Opens Obsidian's Discord community.
-- Obsidian forum - Opens Obsidian's forum for discussions and support.
-- Obsidian subreddit - Opens the Obsidian community on Reddit.
+| Item | Description |
+| --- | --- |
+| Obsidian Help | Opens the official Obsidian Help site. |
+| Markdown reference | Opens Obsidian's Markdown formatting guide. |
+| Obsidian Discord | Opens Obsidian's Discord community. |
+| Obsidian forum | Opens Obsidian's forum for discussions and support. |
+| Obsidian subreddit | Opens the Obsidian community on Reddit. |
 
 ## Search
 
 Search in notes and across your vault.
 
-- Find & Replace - Open the find/replace panel in the current note.
-- Search all files - Opens the search sidebar.
-- Search folder - Opens search for the current folder, or all files if the file is in the root.
+| Item | Description |
+| --- | --- |
+| Find & Replace | Open the find/replace panel in the current note. |
+| Search all files | Opens the search sidebar. |
+| Search folder | Opens search for the current folder, or all files if the file is in the root. |
 
 ## Views and Themes
 
 Switch themes and toggle views.
 
-- Change theme - Open the Obsidian theme switcher.
-- Toggle light/dark - Toggle between light and dark modes.
-- Cycle themes - Cycles between installed themes, including the default.
-- Toggle CSS class - Adds or removes the provided CSS class in the cssclasses property.
-- Toggle Reading view - Change between the editor's Preview and Reading modes.
-- Toggle Source mode - Turn Source mode on and off.
-- Toggle status bar - Shows or hides Obsidian's status bar.
+| Item | Description |
+| --- | --- |
+| Change theme | Open the Obsidian theme switcher. |
+| Toggle light/dark | Toggle between light and dark modes. |
+| Cycle themes | Cycles between installed themes, including the default. |
+| Toggle CSS class | Adds or removes the provided CSS class in the cssclasses property. |
+| Toggle Reading view | Change between the editor's Preview and Reading modes. |
+| Toggle Source mode | Turn Source mode on and off. |
+| Toggle status bar | Shows or hides Obsidian's status bar. |
+| Show snippets in system | Opens the vault's snippets folder in the system's file explorer. |
 
 ## Workspaces
 
 Switch between workspaces. Requires the _Workspaces_ core plugin.
 
-- Load workspace - Select and load a configured workspace.
-- Cycle workspaces - Cycles between workspaces.
-- My workspace - Changes to a specific workspace you provide.
+| Item | Description |
+| --- | --- |
+| Load workspace | Select and load a configured workspace. |
+| Cycle workspaces | Cycles between workspaces. |
+| My workspace | Changes to a specific workspace you provide. |
 
 ## Periodic Notes
 
 Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin.
 
-- Previous weekly note - Previous weekly note. (Must be in weekly note.)
-- Open weekly note - Open weekly note.
-- Next weekly note - Next weekly note. (Must be in weekly note.)
-- Previous monthly note - Open previous monthly note. (Must be in monthly note.)
-- Open monthly note - Open monthly note.
-- Next monthly note - Open next monthly note. (Must be in monthly note.)
-- Previous yearly note - Previous yearly note. (Must be in yearly note.)
-- Open yearly note - Open yearly note.
-- Next yearly note - Next yearly note. (Must be in yearly note.)
+| Item | Description |
+| --- | --- |
+| Previous weekly note | Previous weekly note. (Must be in weekly note.) |
+| Open weekly note | Open weekly note. |
+| Next weekly note | Next weekly note. (Must be in weekly note.) |
+| Previous monthly note | Open previous monthly note. (Must be in monthly note.) |
+| Open monthly note | Open monthly note. |
+| Next monthly note | Open next monthly note. (Must be in monthly note.) |
+| Previous yearly note | Previous yearly note. (Must be in yearly note.) |
+| Open yearly note | Open yearly note. |
+| Next yearly note | Next yearly note. (Must be in yearly note.) |
 
 ## Templater
 
 Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater).
 
-- Insert template - Inserts the chosen template.
-- New from template - Create a new note from a template you select.
+| Item | Description |
+| --- | --- |
+| Insert template | Inserts the chosen template. |
+| New from template | Create a new note from a template you select. |
 
 ## Explore More
 
 Do more with Obsidian's plugins.
 
-- Version history - View the version history for the current file.
-- Create/Edit task - Create a new task.
+| Item | Description |
+| --- | --- |
+| Version history | View the version history for the current file. |
+| Create/Edit task | Create a new task. |
 

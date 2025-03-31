@@ -11,14 +11,17 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
     for (const category of gallery.categories) {
         markdown += `## ${category.name.en}\n\n${category.description.en}\n\n`;
 
+        markdown += '| Item | Description |\n| --- | --- |\n';
         for (const itemId of category.itemIds) {
             const item = items.find(item => item.id === itemId);
             if (!item) continue;
 
-            let line = `- ${item.tooltip.en} - ${item.description.en}`;
+            let line = `| ${item.tooltip.en} | ${item.description.en} |`;
+            // FIXME: reuse function to check command ID here?
             if (item.type === 'plugin' && item.pluginName) {
                 line += ` (uses plugin: ${item.pluginName})`;
             }
+
             markdown += line + '\n';
         }
         markdown += '\n';

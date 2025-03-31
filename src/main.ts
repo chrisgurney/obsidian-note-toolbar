@@ -1,4 +1,4 @@
-import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
@@ -1853,36 +1853,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			contextMenu.addSeparator();
 
-			// add item
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('plus')
-					.setTitle(t('toolbar.menu-add-item'))
-					.onClick(async () => {
-						const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
-						if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined, toolbarItemIndex);
-					});
-			});
-
-			// edit item
-			if (toolbarItem) {
-				const activeFile = this.app.workspace.getActiveFile();
-				let itemText = await this.getItemText(toolbarItem, activeFile, true);
-				contextMenu.addItem((item: MenuItem) => {
-					item
-						.setIcon('lucide-pen-box')
-						.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
-						.onClick(async () => {
-							if (toolbarSettings) {
-								const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
-								itemModal.open();
-							}
-						});
-				});
-			}
-
-			contextMenu.addSeparator();
-
 			// share
 			contextMenu.addItem((item: MenuItem) => {
 				item
@@ -1913,6 +1883,36 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 		
+		contextMenu.addSeparator();
+
+		// add item
+		contextMenu.addItem((item: MenuItem) => {
+			item
+				.setIcon('plus')
+				.setTitle(t('toolbar.menu-add-item'))
+				.onClick(async () => {
+					const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
+					if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined, toolbarItemIndex);
+				});
+		});
+
+		// edit item
+		if (toolbarItem) {
+			const activeFile = this.app.workspace.getActiveFile();
+			let itemText = await this.getItemText(toolbarItem, activeFile, true);
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setIcon('lucide-pen-box')
+					.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
+					.onClick(async () => {
+						if (toolbarSettings) {
+							const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
+							itemModal.open();
+						}
+					});
+			});
+		}
+
 		contextMenu.addSeparator();
 
 		// edit toolbar
@@ -2241,9 +2241,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (filePath) s = this.replaceVar(s, 'file_path', filePath);
 		
 		// VAULT_PATH
-		// @ts-ignore
-		const vaultPath = this.app.vault.adapter.getBasePath();
-		s = this.replaceVar(s, 'vault_path', vaultPath);
+		if (this.app.vault.adapter instanceof FileSystemAdapter) {
+			const vaultPath = this.app.vault.adapter.getBasePath();
+			s = this.replaceVar(s, 'vault_path', vaultPath);
+		}
 
 		// PROP_ VARIABLES
 		// have to get this at run/click-time, as file or metadata may not have changed

@@ -140,15 +140,15 @@
         "commandId": "file-explorer:reveal-active-file",
         "description": { "en": "Reveal the active file in navigation." },
         "icon": "folder-tree",
-        "tooltip": { "en": "Show in navigation" },
+        "tooltip": { "en": "Show file in navigation" },
         "type": "command"
     },
     {
-        "id": "file-in-os",
+        "id": "file-in-system",
         "commandId": "open-with-default-app:show",
         "description": { "en": "Reveal the active file in the system's file explorer." },
         "icon": "folder-search",
-        "tooltip": { "en": "Reveal file" },
+        "tooltip": { "en": "Show file in system" },
         "type": "command"
     },
     {
@@ -160,8 +160,16 @@
         "type": "command"
     },
     {
+        "id": "file-new",
+        "commandId": "file-explorer:new-file",
+        "description": { "en": "Creates a new note." },
+        "icon": "file-plus",
+        "tooltip": { "en": "New note" },
+        "type": "command"
+    },
+    {
         "id": "file-next",
-        "description": { "en": "Opens the next file in the folder, sorted A-Z. Loops back to the first file." },
+        "description": { "en": "Opens the next file in the folder, sorted A-Z. Loops over to the first file." },
         "icon": "square-arrow-right",
         "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf)); }",
         "tooltip": { "en": "Next file" },
@@ -560,12 +568,36 @@
         "type": "command"
     },
     {
+        "id": "tab-close",
+        "commandId": "workspace:close",
+        "description": { "en": "Close the current tab." },
+        "icon": "x",
+        "tooltip": { "en": "Close tab" },
+        "type": "command"
+    },
+    {
         "id": "tab-new",
         "description": { "en": "Opens a new empty tab." },
         "script": "app.workspace.getLeaf(true)",
         "icon": "plus",
         "tooltip": { "en": "New tab" },
         "type": "javascript"
+    },
+    {
+        "id": "tab-next",
+        "commandId": "workspace:next-tab",
+        "description": { "en": "Go to the next tab." },
+        "icon": "chevron-right",
+        "tooltip": { "en": "Next tab" },
+        "type": "command"
+    },
+    {
+        "id": "tab-prev",
+        "commandId": "workspace:previous-tab",
+        "description": { "en": "Go to the previous tab." },
+        "icon": "chevron-left",
+        "tooltip": { "en": "Previous tab" },
+        "type": "command"
     },
     {
         "id": "templater-insert-template",
@@ -606,6 +638,22 @@
         "icon": "corner-right-up",
         "tooltip": { "en": "Move line up" },
         "type": "command"
+    },
+    {
+        "id": "system-snippets-open",
+        "description": { "en": "Opens the vault's snippets folder in the system's file explorer." },
+        "icon": "folder-code",
+        "script": "let v = this.app.vault.adapter.getBasePath() + '/' + app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
+        "tooltip": { "en": "Show snippets in system" },
+        "type": "javascript"
+    },
+    {
+        "id": "system-vault-open",
+        "description": { "en": "Opens the vault's folder in the system's file explorer." },
+        "icon": "folder-heart",
+        "script": "let v = this.app.vault.adapter.getBasePath(); window.open('file://' + encodeURI(v));",
+        "tooltip": { "en": "Show vault in system" },
+        "type": "javascript"
     },
     {
         "id": "theme-switch",
