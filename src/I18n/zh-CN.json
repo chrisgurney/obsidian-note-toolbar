@@ -22,8 +22,8 @@
     },
     "error": {
       "args-format": "无效的参数格式",
-      "args-parsing": "编译 {{filename}} 脚本的参数失败",
-      "args-parsing-error": "编译 {{filename}} 脚本的参数失败\n```\n{{error}}\n```",
+      "args-parsing-script": "编译 {{filename}} 脚本的参数失败",
+      "args-parsing-script-error": "编译 {{filename}} 脚本的参数失败\n```\n{{error}}\n```",
       "callout-not-found": "错误：在当前笔记中无法找到 ID 为 {{id}} 的 note-toolbar-output 标注",
       "exec-failed": "无法执行脚本：{{filename}}",
       "expr-failed": "无法执行表达式：{{expression}}",

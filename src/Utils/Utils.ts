@@ -55,10 +55,9 @@ export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent)
 	const rects = Array.from(toolbarListEl.children).map(el => el.getBoundingClientRect());
 	const cursorX = event.clientX;
 	const cursorY = event.clientY;
-	const rowHeight = rects[0]?.height || 0;
 
-	// filter items in the same row (matching top value within tolerance)
-	const sameRow = rects.filter(rect => Math.abs(rect.top - cursorY) <= rowHeight);
+	// filter items in the same row by checking if cursorY is within the top and bottom bounds
+	const sameRow = rects.filter(rect => cursorY >= rect.top && cursorY <= rect.bottom);
 
 	// find closest items to the left and right
 	const left = sameRow.filter(rect => rect.right <= cursorX).pop();

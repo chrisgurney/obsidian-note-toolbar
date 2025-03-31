@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { displayScriptError } from "Utils/Utils";
+import { displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -26,6 +26,7 @@ export default class JavaScriptAdapter extends Adapter {
             description: "",
             parameters: [
                 { parameter: 'sourceFile', label: t('adapter.javascript.exec-sourcefile'), description: t('adapter.javascript.exec-sourcefile-description'), type: SettingType.File, required: true },
+                { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
                 { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
@@ -54,12 +55,24 @@ export default class JavaScriptAdapter extends Adapter {
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl)
+                    ? await this.evaluate(config.expression, undefined, containerEl)
+                    : t('adapter.javascript.eval-expr-error-required');
+                break;
+            // internal function for inline evaluations in which errors should be reported
+            case 'evaluateInline':
+                result = config.expression
+                    ? await this.evaluate(config.expression, undefined, containerEl, ErrorBehavior.Report)
+                    : t('adapter.javascript.eval-expr-error-required');
+                break;
+            // internal function for inline evaluations in which errors can be ignored
+            case 'evaluateIgnore':
+                result = config.expression
+                    ? await this.evaluate(config.expression, undefined, containerEl, ErrorBehavior.Ignore)
                     : t('adapter.javascript.eval-expr-error-required');
                 break;
             case 'exec':
                 result = config.sourceFile
-                    ? await this.exec(config.sourceFile, containerEl)
+                    ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
                     : t('adapter.javascript.exec-error-required');
                 break;
             case '':
@@ -77,11 +90,16 @@ export default class JavaScriptAdapter extends Adapter {
     /**
      * Executes the given JavaScript file.
      * 
+     * @example
+     * console.log(`Hello ${args['name']}`);
+     * new Notice(`Hello ${args['name']}`);
+     * 
      * @param filename 
+     * @param argsJson
      * @param containerEl 
      * @returns 
      */
-    private async exec(filename: string, containerEl?: HTMLElement) {
+    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement) {
 
         if (!filename) {
             return;
@@ -98,7 +116,7 @@ export default class JavaScriptAdapter extends Adapter {
         let contents = await this.noteToolbar?.app.vault.read(viewFile);
 
         if (contents) {
-            await this.evaluate(contents, containerEl, ErrorBehavior.Report);
+            await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
         }
 
     }
@@ -113,12 +131,22 @@ export default class JavaScriptAdapter extends Adapter {
      */    
     private async evaluate(
         expression: string,
+        argsJson?: string,
         containerEl?: HTMLElement,
         errorBehavior: ErrorBehavior = ErrorBehavior.Display
     ): Promise<string> {
                 
         let result = '';
         let resultEl = containerEl || createSpan();
+
+        let args;
+        try {
+            args = argsJson ? importArgs(argsJson) : {};
+        }
+        catch (error) {
+            displayScriptError(t('adapter.error.args-parsing'));
+            return t('adapter.error.args-parsing-error', { error: error });
+        }
 
         const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path || '';
@@ -133,7 +161,7 @@ export default class JavaScriptAdapter extends Adapter {
             try {
                 resultEl.empty();
                 // may directly render, in which case it will likely return undefined or null
-                let result = await Promise.resolve(func());
+                let result = await Promise.resolve(func(args));
                 if (result && this.noteToolbar) {
                     MarkdownRenderer.render(
                         this.noteToolbar.app,

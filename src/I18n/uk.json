@@ -22,8 +22,8 @@
         },
         "error": {
             "args-format": "Невірний формат критерію.",
-            "args-parsing": "Не вдалося розібрати аргументи скрипта: {{filename}}",
-            "args-parsing-error": "Не вдалося розібрати аргументи скрипта: {{filename}}\n```\n{{error}}\n```",
+            "args-parsing-script": "Не вдалося розібрати аргументи скрипта: {{filename}}",
+            "args-parsing-script-error": "Не вдалося розібрати аргументи скрипта: {{filename}}\n```\n{{error}}\n```",
             "callout-not-found": "⚠️ Помилка: Не вдалося знайти виноску note-toolbar-output у поточній нотатці з ID: {{id}}",
             "exec-failed": "Помилка виконання скрипта: {{filename}}",
             "expr-failed": "Не вдалося обчислити вираз: {{expression}}",
