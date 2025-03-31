@@ -28,7 +28,7 @@
         "name": { "en" : "Files" },
         "description": { "en": "Tools for working with files." },
         "itemIds": [
-            "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-os", "vscode-open"
+            "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
         ]
       },
       {
@@ -63,7 +63,7 @@
         "name": { "en": "Vault Navigation" },
         "description": { "en": "Navigate between files and directories." },
         "itemIds": [
-            "file-prev", "file-next", "go-home", "go-up", "bookmarks-open"
+            "file-prev", "file-next", "go-home", "go-up", "bookmarks-open", "system-vault-open"
         ]
       },
       {
@@ -91,7 +91,7 @@
         "name": { "en": "Views and Themes" },
         "description": { "en": "Switch themes and toggle views." },
         "itemIds": [
-            "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar"
+            "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "system-snippets-open"
         ]
       },
       {

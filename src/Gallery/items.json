@@ -140,15 +140,15 @@
         "commandId": "file-explorer:reveal-active-file",
         "description": { "en": "Reveal the active file in navigation." },
         "icon": "folder-tree",
-        "tooltip": { "en": "Show in navigation" },
+        "tooltip": { "en": "Show file in navigation" },
         "type": "command"
     },
     {
-        "id": "file-in-os",
+        "id": "file-in-system",
         "commandId": "open-with-default-app:show",
         "description": { "en": "Reveal the active file in the system's file explorer." },
         "icon": "folder-search",
-        "tooltip": { "en": "Reveal file" },
+        "tooltip": { "en": "Show file in system" },
         "type": "command"
     },
     {
@@ -606,6 +606,22 @@
         "icon": "corner-right-up",
         "tooltip": { "en": "Move line up" },
         "type": "command"
+    },
+    {
+        "id": "system-snippets-open",
+        "description": { "en": "Opens the vault's snippets folder in the system's file explorer." },
+        "icon": "folder-code",
+        "script": "let v = this.app.vault.adapter.getBasePath() + '/' + app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
+        "tooltip": { "en": "Show snippets in system" },
+        "type": "javascript"
+    },
+    {
+        "id": "system-vault-open",
+        "description": { "en": "Opens the vault's folder in the system's file explorer." },
+        "icon": "folder-heart",
+        "script": "let v = this.app.vault.adapter.getBasePath(); window.open('file://' + encodeURI(v));",
+        "tooltip": { "en": "Show vault in system" },
+        "type": "javascript"
     },
     {
         "id": "theme-switch",
