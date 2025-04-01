@@ -221,7 +221,7 @@
     "setting": {
         "add-item": {
             "error-invalid-command": "Command does not exist: {{commandId}}",
-            "label-confirm-command": "Command was not found:\n`{{commandId}}`\n\nAre you sure you still want to add this item?",
+            "label-confirm-command": "Command is not supported or was not found:\n`{{commandId}}`\n\nAre you sure you still want to add this item?",
             "title-confirm": "Add item: {{itemName}}"
         },
         "button-cancel": "Cancel",
