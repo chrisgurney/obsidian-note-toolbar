@@ -9,7 +9,7 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
     let markdown = `# ${gallery.title.en}\n\n`;
 
     for (const category of gallery.categories) {
-        markdown += `### ${category.name.en}\n\n${category.description.en}\n\n`;
+        markdown += `## ${category.name.en}\n\n${category.description.en}\n\n`;
 
         markdown += '| Item | Description |\n| --- | --- |\n';
         for (const itemId of category.itemIds) {
