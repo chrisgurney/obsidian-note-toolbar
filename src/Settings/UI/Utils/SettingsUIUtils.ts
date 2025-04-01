@@ -1,5 +1,5 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS } from "Settings/NoteToolbarSettings";
+import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS, DEFAULT_ITEM_VISIBILITY_SETTINGS } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
@@ -319,6 +319,8 @@ export function openItemSuggestModal(
 			if (isEmptyItem) selectedItem.label = '';
 
 			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
+			// reset the visibility setting, as there's no prior indication to the user as to its visibility
+			newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS));
 			if (!await plugin.settingsManager.resolveGalleryItem(newItem)) return;
 
 			toolbar.updated = new Date().toISOString();
