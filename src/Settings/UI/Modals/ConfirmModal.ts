@@ -1,9 +1,8 @@
-import { App, ButtonComponent, Modal } from "obsidian";
+import { App, ButtonComponent, Component, MarkdownRenderer, Modal } from "obsidian";
 
 interface UiSettings {
     title: string,
     questionLabel?: string,
-    questionFragment?: DocumentFragment,
     approveLabel: string,
     denyLabel: string,
     warning?: boolean
@@ -24,7 +23,7 @@ export class ConfirmModal extends Modal {
     public isConfirmed: boolean = false;
     public uiSettings: UiSettings;
 
-	constructor(app: App, uiSettings: UiSettings) {
+	constructor(public app: App, uiSettings: UiSettings) {
         super(app);
         this.modalEl.addClass('note-toolbar-setting-mini-dialog', 'note-toolbar-setting-dialog-phonefix'); 
         this.uiSettings = uiSettings;
@@ -40,10 +39,15 @@ export class ConfirmModal extends Modal {
             this.setTitle(this.uiSettings.title);
 
             if (this.uiSettings.questionLabel) {
-                this.modalEl.createEl('p', { text: this.uiSettings.questionLabel });
-            }
-            else if (this.uiSettings.questionFragment) {
-                this.modalEl.createEl('p').append(this.uiSettings.questionFragment);
+                const questionLabelEl = this.modalEl.createEl('p');
+                const component = new Component();
+                component.load();
+                try {
+                    MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, questionLabelEl, '/', component);
+                }
+                finally {
+                    component.unload();
+                }
             }
     
             let btnContainerEl = this.modalEl.createDiv();
