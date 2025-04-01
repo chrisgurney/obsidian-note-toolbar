@@ -1,6 +1,6 @@
 # Note Toolbar Gallery
 
-## Daily Notes
+### Daily Notes
 
 Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
 
@@ -10,7 +10,7 @@ Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
 | Today's daily note | Go to today's daily note. |
 | Next daily note | Go to the next daily note. |
 
-## Basic Actions
+### Basic Actions
 
 For quick text editing and history control.
 
@@ -23,7 +23,7 @@ For quick text editing and history control.
 | Redo | Reapplies the last undone action. |
 | Clear formatting | Remove all text formatting. |
 
-## Editing
+### Editing
 
 Adjust the order and arrangement of content.
 
@@ -35,7 +35,7 @@ Adjust the order and arrangement of content.
 | Toggle inline math | Apply or remove inline math formatting. |
 | Copy link to block | Copies a link to the current block to the clipboard. |
 
-## Files
+### Files
 
 Tools for working with files.
 
@@ -50,7 +50,7 @@ Tools for working with files.
 | Show file in system | Reveal the active file in the system's file explorer. |
 | Open in VS Code | Opens the current file in VS Code. |
 
-## Formatting
+### Formatting
 
 Change how text looks.
 
@@ -63,7 +63,7 @@ Change how text looks.
 | Toggle blockquote | Apply or remove blockquote formatting. |
 | Toggle highlight | Apply or remove text highlighting. |
 
-## Lists & Indentation
+### Lists & Indentation
 
 Organize items into lists and adjust structure.
 
@@ -76,7 +76,7 @@ Organize items into lists and adjust structure.
 | Unindent | Decreases indentation on the current line. |
 | Cycle bullet/checkbox | Changes to bullet, checkbox, or unchecked. |
 
-## Insertions
+### Insertions
 
 Add various types of content like links or media.
 
@@ -93,7 +93,7 @@ Add various types of content like links or media.
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 
-## Editor Navigation
+### Editor Navigation
 
 Get around the text editor faster.
 
@@ -107,7 +107,7 @@ Get around the text editor faster.
 | Next callout | Moves the cursor to the next callout in the note. |
 | Toggle Vim mode | Turns Vim mode on and off. |
 
-## Vault Navigation
+### Vault Navigation
 
 Navigate between files and directories.
 
@@ -124,7 +124,7 @@ Navigate between files and directories.
 | Show bookmarks | Opens the bookmarks sidebar. |
 | Show vault in system | Opens the vault's folder in the system's file explorer. |
 
-## Note Toolbar
+### Note Toolbar
 
 Get access to Note Toolbar settings and tools quickly.
 
@@ -135,7 +135,7 @@ Get access to Note Toolbar settings and tools quickly.
 | Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
 | User Guide for Note Toolbar | Access the Note Toolbar User Guide for help and tips. |
 
-## Obsidian Support
+### Obsidian Support
 
 Get help from Obsidian community resources.
 
@@ -147,7 +147,7 @@ Get help from Obsidian community resources.
 | Obsidian forum | Opens Obsidian's forum for discussions and support. |
 | Obsidian subreddit | Opens the Obsidian community on Reddit. |
 
-## Search
+### Search
 
 Search in notes and across your vault.
 
@@ -157,7 +157,7 @@ Search in notes and across your vault.
 | Search all files | Opens the search sidebar. |
 | Search folder | Opens search for the current folder, or all files if the file is in the root. |
 
-## Views and Themes
+### Views and Themes
 
 Switch themes and toggle views.
 
@@ -172,7 +172,7 @@ Switch themes and toggle views.
 | Toggle status bar | Shows or hides Obsidian's status bar. |
 | Show snippets in system | Opens the vault's snippets folder in the system's file explorer. |
 
-## Workspaces
+### Workspaces
 
 Switch between workspaces. Requires the _Workspaces_ core plugin.
 
@@ -182,7 +182,7 @@ Switch between workspaces. Requires the _Workspaces_ core plugin.
 | Cycle workspaces | Cycles between workspaces. |
 | My workspace | Changes to a specific workspace you provide. |
 
-## Periodic Notes
+### Periodic Notes
 
 Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin.
 
@@ -198,7 +198,7 @@ Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidi
 | Open yearly note | Open yearly note. |
 | Next yearly note | Next yearly note. (Must be in yearly note.) |
 
-## Templater
+### Templater
 
 Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater).
 
@@ -207,7 +207,7 @@ Insert or create notes from templates. Requires the [Templater](obsidian://show-
 | Insert template | Inserts the chosen template. |
 | New from template | Create a new note from a template you select. |
 
-## Explore More
+### Explore More
 
 Do more with Obsidian's plugins.
 
