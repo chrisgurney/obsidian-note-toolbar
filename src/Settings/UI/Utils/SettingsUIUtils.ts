@@ -481,7 +481,7 @@ export function renderItemSuggestion(
 
 		// show the plugin(s) supported, or the command ID used
 		if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
-			let itemPluginText = getPluginNames(item);
+			let itemPluginText = getPluginNames(plugin, item);
 			if (itemPluginText) {
 				const pluginDescEl = el.createDiv();
 				pluginDescEl.addClass('note-toolbar-item-suggester-note');	
@@ -497,19 +497,26 @@ export function renderItemSuggestion(
  * @param item ToolbarItemSettings to get plugin list from
  * @returns list of plugin names
  */
-export function getPluginNames(item: ToolbarItemSettings): string | undefined {
-	let itemPluginType;
+export function getPluginNames(plugin: NoteToolbarPlugin, item: ToolbarItemSettings): string | undefined {
 	if (item.linkAttr.type === ItemType.Plugin) {
-		itemPluginType = (Array.isArray(item.plugin) ? item.plugin : [item.plugin]);
+		const itemPluginType = (Array.isArray(item.plugin) ? item.plugin : [item.plugin]);
+		// replace known commands with user-friendly strings (if supported), and create a list
+		if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')
+			else return undefined;
 	}
 	else if (item.linkAttr.type === ItemType.Command) {
+		// make sure the command exists
+		const command = plugin.app.commands.commands[item.linkAttr.commandId];
+        if (!command) {
+			return t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
+		}
 		// get the command ID; we can ignore built-in commands
-		const [commandPluginId] = item.linkAttr.commandId.split(':').map(s => s.trim());
-		itemPluginType = !IGNORE_PLUGIN_IDS.includes(commandPluginId) ? [commandPluginId] : [];
+		const commandPluginId = item.linkAttr.commandId.split(':')[0];
+		const itemPluginType = !IGNORE_PLUGIN_IDS.includes(commandPluginId) ? commandPluginId : undefined;
+		// replace known commands with user-friendly string (if supported)
+		if (itemPluginType) return t(`plugin.${itemPluginType}`)
+			else return undefined;
 	}
-	// replace known commands with user-friendly strings (if supported), and create a list
-	if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')
-	else return undefined;
 }
 
 /**

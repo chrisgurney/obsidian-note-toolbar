@@ -123,7 +123,7 @@ export class GalleryView extends ItemView {
 						MarkdownRenderer.render(this.plugin.app, galleryItem.description, itemDescEl, '/', this.plugin);
 					}
 
-					let pluginNames = getPluginNames(galleryItem);
+					let pluginNames = getPluginNames(this.plugin, galleryItem);
 					if (pluginNames) {
 						const pluginEl = itemEl.createEl('p');
 						pluginEl.addClass('note-toolbar-gallery-view-item-plugins');

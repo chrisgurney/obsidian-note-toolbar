@@ -148,6 +148,9 @@
         "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive."
     },
     "gallery": {
+        "error-invalid-plugin": "Invalid plugin or none enabled for Gallery item.",
+        "error-missing-item-type": "Gallery item: Missing item type property",
+        "error-missing-property": "Missing plugin or script property in Gallery data.",
         "label-plugin": "{{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
         "select-plugin-placeholder": "Select plugin to use...",
@@ -216,7 +219,13 @@
         "workspaces": "Workspaces"
     },
     "setting": {
+        "add-item": {
+            "error-invalid-command": "Command does not exist: {{commandId}}",
+            "label-confirm-command": "Command was not found:\n`{{commandId}}`\n\nAre you sure you still want to add this item?",
+            "title-confirm": "Add item: {{itemName}}"
+        },
         "button-cancel": "Cancel",
+        "button-proceed": "Proceed",
         "button-collapse-tooltip": "Collapse section",
         "button-delete-tooltip": "Delete",
         "button-drag-tooltip": "Drag to rearrange",

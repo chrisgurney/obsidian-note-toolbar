@@ -3,6 +3,7 @@ import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "../Settings/NoteToolbarSettings";
 import { debugLog } from "Utils/Utils";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
+import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 
 export default class GalleryManager {
 
@@ -34,7 +35,26 @@ export default class GalleryManager {
 				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
 			}
 		});
-		toolbarModal.open();
+
+        // check if the item's command exists, before displaying toolbar modal
+        const command = this.plugin.app.commands.commands[galleryItem.linkAttr.commandId];
+        if (!command) {
+            // prompt the user if they'd still like to add it
+            confirmWithModal(
+                this.plugin.app, 
+                {
+                    title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
+                    questionLabel: t('setting.add-item.label-confirm-command', { commandId: galleryItem.linkAttr.commandId }),
+                    approveLabel: t('setting.button-proceed'),
+                    denyLabel: t('setting.button-cancel')
+                }
+            ).then((isConfirmed: boolean) => {
+                if (isConfirmed) toolbarModal.open();
+            });
+        }
+        else {
+            toolbarModal.open();
+        }
 	}
 
     private loadItems() {
