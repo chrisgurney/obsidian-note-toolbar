@@ -23,13 +23,24 @@ It's easy to use the Gallery:
 
 > 🌐 For the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.  
 
-### Search for items to add 
+### Add items to the toolbar more easily
 
-Next to the `Add` button for the toolbar, you can now Search for items to add from your existing toolbars. 
+Add items more easily in a couple new ways:
+
+- Right-click (long-press on mobile) and using the **Add Item...** option. The item will be added wherever you right-click.
+- In settings, next to the `Add` button for the toolbar, you can now Search for items to add from your existing toolbars. 
 
 Suggestions from the Gallery are provided at the bottom of search results.
 
 <img src="https://github.com/user-attachments/assets/d4318824-e537-42e2-adc3-9b88e173c051" width="700"/>
+
+### Choose where to open files or to execute commands
+
+Choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
+
+- Some commands may override this setting and do their own thing. 
+- When clicking on file items, Use modifier keys to override this setting.
+- Using this feature, the _New Canvas_ and _New Kanban_ items in the gallery now create those file types in a new tab (versus in the current tab).
 
 ### New URI variables + encoding
 
@@ -42,11 +53,13 @@ For example, here's a URI for **Open in VS Code** -- available in the Gallery --
 vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}
 ```
 
-### Add items directly from the context menu
+### Execute JavaScript without needing another plugin
 
-You can now right-click (long-press on mobile) and add items directly to the toolbar from there. New items will be added to the end of the toolbar, and can then be rearranged in toolbar settings.
+JavaScript can now be executed without the need for another plugin. Look for the **JavaScript item type**.
 
-The context menu has been reorganized a bit to create what are hopefully more logical sections.
+- The _Scripting_ option  must be enabled in order to see this option.
+- Gallery items that rely on scripts use this feature.
+- [Learn more.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript)
 
 ## Improvements 🚀
 
