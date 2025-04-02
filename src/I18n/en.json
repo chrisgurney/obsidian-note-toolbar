@@ -340,7 +340,7 @@
             "option-command-error-refresh": "Refresh",
             "option-command-placeholder": "Search for command",
             "option-command-target": "Where to run command",
-            "option-command-target-description": "Determines where the command runs. Some commands may override this setting.",
+            "option-command-target-description": "Some commands may override this setting.",
             "option-component-icon": "icon",
             "option-component-label": "label",
             "option-file": "File",
