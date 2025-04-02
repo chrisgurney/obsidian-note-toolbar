@@ -20,6 +20,7 @@
         "commandId": "canvas:new-file",
         "description": { "en": "Create a new canvas file." },
         "icon": "network",
+        "target": "tab",
         "tooltip": { "en": "New canvas" },
         "type": "command"
     },
@@ -420,6 +421,7 @@
         "commandId": "obsidian-kanban:create-new-kanban-board",
         "description": { "en": "Create a new kanban board." },
         "icon": "trello",
+        "target": "tab",
         "tooltip": { "en": "New kanban" },
         "type": "command"
     },

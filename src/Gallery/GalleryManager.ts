@@ -108,6 +108,7 @@ export default class GalleryManager {
             linkAttr: {
                 commandId: item.commandId ?? '',
                 hasVars: false,
+                target: item.target ?? '',
                 type: item.type
             },
             plugin: item.plugin ?? '',
