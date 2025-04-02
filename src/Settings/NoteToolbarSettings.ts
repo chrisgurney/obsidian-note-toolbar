@@ -397,7 +397,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 		type: ItemType.Separator
 	},
 	tooltip: '',
-	visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
+	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
 }
 
 /**
