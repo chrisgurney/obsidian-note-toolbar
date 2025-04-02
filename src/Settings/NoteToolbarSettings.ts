@@ -1,4 +1,5 @@
 import { getUUID } from "Utils/Utils";
+import { PaneType } from "obsidian";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20250313.1;
@@ -405,6 +406,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
+	target?: PaneType;
 	type: ItemType;
 };
 
@@ -478,6 +480,13 @@ export const RIBBON_ACTION_OPTIONS = {
 	[RibbonAction.ItemSuggester]: t('setting.other.ribbon-action.option-item-suggester'),
 	[RibbonAction.ToolbarSuggester]: t('setting.other.ribbon-action.option-toolbar-suggester'),
 	[RibbonAction.Toolbar]: (t('setting.other.ribbon-action.option-toolbar')),
+}
+
+export const TARGET_OPTIONS = {
+	'default': t('setting.item.option-target-default'),
+	'tab': t('setting.item.option-target-tab'),
+	'split': t('setting.item.option-target-split'),
+	'window': t('setting.item.option-target-window')
 }
 
 /**

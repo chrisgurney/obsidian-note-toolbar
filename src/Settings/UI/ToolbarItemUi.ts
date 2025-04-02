@@ -1,8 +1,8 @@
 import NoteToolbarPlugin from "main";
-import { COMMAND_DOES_NOT_EXIST, COMMAND_PREFIX_ITEM, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
-import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice } from "obsidian";
-import { debugLog, removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById, getItemText } from "Utils/Utils";
+import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice, PaneType } from "obsidian";
+import { removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
 import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
 import { FileSuggester } from "./Suggesters/FileSuggester";
@@ -556,6 +556,9 @@ export default class ToolbarItemUi {
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
                     });	
+                const commandSubfieldsEl = fieldDiv.createDiv();
+                commandSubfieldsEl.addClass('note-toolbar-setting-item-link-subfield-with-info');
+                this.getCommandSubfields(toolbarItem, commandSubfieldsEl);
                 break;
             case ItemType.Dataview:
             case ItemType.JavaScript:
@@ -643,6 +646,9 @@ export default class ToolbarItemUi {
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
                     });
+                const fileSubfieldsEl = fieldDiv.createDiv();
+                fileSubfieldsEl.addClass('note-toolbar-setting-item-link-subfield-with-info');
+                this.getFileSubfields(toolbarItem, fileSubfieldsEl);
                 break;
             case ItemType.Group:
                 const groupSetting = new Setting(fieldDiv)
@@ -718,6 +724,40 @@ export default class ToolbarItemUi {
                 break;
         }
 
+    }
+
+    getCommandSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+        new Setting(fieldDiv)
+            .setName(t('setting.item.option-command-target'))
+            .setDesc(t('setting.item.option-command-target-description'))
+            .addDropdown((dropdown) =>
+                dropdown
+                    .addOptions(Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => key !== 'window')))
+                    .setValue(item.linkAttr.target ?? 'default')
+                    .onChange(async (value) => {
+                        if (value === 'default') item.linkAttr.target = undefined
+                        else item.linkAttr.target = value as PaneType;
+                        this.toolbar.updated = new Date().toISOString();
+                        await this.plugin.settingsManager.save();
+                    })
+                );
+    }
+
+    getFileSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+        new Setting(fieldDiv)
+            .setName(t('setting.item.option-file-target'))
+            .setDesc(t('setting.item.option-file-target-description'))
+            .addDropdown((dropdown) =>
+                dropdown
+                    .addOptions(TARGET_OPTIONS)
+                    .setValue(item.linkAttr.target ?? 'default')
+                    .onChange(async (value) => {
+                        if (value === 'default') item.linkAttr.target = undefined
+                        else item.linkAttr.target = value as PaneType;
+                        this.toolbar.updated = new Date().toISOString();
+                        await this.plugin.settingsManager.save();
+                    })
+                );
     }
 
     getScriptSubfields(

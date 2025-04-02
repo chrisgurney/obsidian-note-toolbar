@@ -1,7 +1,7 @@
-import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiDest, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -1334,7 +1334,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
 		let activeFile = this.app.workspace.getActiveFile();
-		const toolbarItem = this.settingsManager.getToolbarItemById(uuid);
+		const item = this.settingsManager.getToolbarItemById(uuid);
 
 		// update active item attributes in the toolbar, so the API can fetch the right active item
 		this.updateActiveToolbarItem(uuid);
@@ -1347,7 +1347,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				(file && (file !== activeFile)) ? this.handleLinkInSidebar(toolbarItem, file) : this.handleLinkCommand(commandId);
+				(file && (file !== activeFile)) ? this.handleLinkInSidebar(item, file) : this.handleLinkCommand(commandId, item?.linkAttr.target);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -1359,8 +1359,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
 				}
 				else {
-					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiDest(event));
-				} 
+					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target);
+				}
 				break;
 			case ItemType.Menu:
 				let toolbar = this.settingsManager.getToolbarById(linkHref);
@@ -1382,7 +1382,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Templater:
 				this.updateAdapters();
 				if (this.settings.scriptingEnabled) {
-					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(toolbarItem, file) : await this.handleItemScript(toolbarItem);
+					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(item, file) : await this.handleItemScript(item);
 				}
 				else {
 					new Notice(t('notice.error-scripting-not-enabled'));
@@ -1396,7 +1396,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				else {
 					// as fallback, treat it as internal note
 					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					this.app.workspace.openLinkText(linkHref, activeFile, getLinkUiDest(event));
+					this.app.workspace.openLinkText(linkHref, activeFile, getLinkUiTarget(event));
 				}
 				break;
 		}
@@ -1406,8 +1406,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Executes the provided command.
 	 * @param commandId encoded command string, or null if nothing to do.
+	 * @param target where to execute the command.
 	 */
-	async handleLinkCommand(commandId: string | null) {
+	async handleLinkCommand(commandId: string | null, target?: PaneType | undefined) {
 		// debugLog("handleLinkCommand()", commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
@@ -1415,6 +1416,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				return;
 			}
 			try {
+				if (target) this.app.workspace.getLeaf(target);
 				await this.app.commands.executeCommandById(commandId);
 			} 
 			catch (error) {
