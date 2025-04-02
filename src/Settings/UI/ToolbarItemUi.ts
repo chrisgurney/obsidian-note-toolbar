@@ -733,7 +733,7 @@ export default class ToolbarItemUi {
             .addDropdown((dropdown) =>
                 dropdown
                     .addOptions(Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => key !== 'window')))
-                    .setValue(item.linkAttr.target ?? 'default')
+                    .setValue(item.linkAttr.target || 'default')
                     .onChange(async (value) => {
                         if (value === 'default') item.linkAttr.target = undefined
                         else item.linkAttr.target = value as PaneType;
@@ -750,7 +750,7 @@ export default class ToolbarItemUi {
             .addDropdown((dropdown) =>
                 dropdown
                     .addOptions(TARGET_OPTIONS)
-                    .setValue(item.linkAttr.target ?? 'default')
+                    .setValue(item.linkAttr.target || 'default')
                     .onChange(async (value) => {
                         if (value === 'default') item.linkAttr.target = undefined
                         else item.linkAttr.target = value as PaneType;
