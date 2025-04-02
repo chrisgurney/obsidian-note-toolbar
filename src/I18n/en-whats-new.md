@@ -34,25 +34,6 @@ Suggestions from the Gallery are provided at the bottom of search results.
 
 <img src="https://github.com/user-attachments/assets/d4318824-e537-42e2-adc3-9b88e173c051" width="700"/>
 
-### Choose where to open files or to execute commands
-
-Choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
-
-- Some commands may override this setting and do their own thing. 
-- When clicking on file items, Use modifier keys to override this setting.
-- Using this feature, the _New Canvas_ and _New Kanban_ items in the gallery now create those file types in a new tab (versus in the current tab).
-
-### New URI variables + encoding
-
-Added URI variables for the current file path `{{file_path}}` and vault path `{{vault_path}}`.
-
-All variables (except for scripts) now support an `encode:` prefix, which, if added to a variable encodes that variable using `encodeURIComponent()`.
-
-For example, here's a URI for **Open in VS Code** -- available in the Gallery -- using [VS Code's URL handling ↗](https://code.visualstudio.com/docs/configure/command-line#_opening-vs-code-with-urls) to open the current file:
-```
-vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}
-```
-
 ### Execute JavaScript without needing another plugin
 
 JavaScript can now be executed without the need for another plugin. Look for the **JavaScript item type**.
@@ -81,6 +62,25 @@ Example CSS snippet:
     }
   }
 }
+```
+
+### Choose where to open files or to execute commands
+
+Choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
+
+- Some commands may override this setting and do their own thing. 
+- When clicking on file items, Use modifier keys to override this setting.
+- Using this feature, the _New Canvas_ and _New Kanban_ items in the gallery now create those file types in a new tab (versus in the current tab).
+
+### New URI variables + encoding
+
+Added URI variables for the current file path `{{file_path}}` and vault path `{{vault_path}}`.
+
+All variables (except for scripts) now support an `encode:` prefix, which, if added to a variable encodes that variable using `encodeURIComponent()`.
+
+For example, here's a URI for **Open in VS Code** -- available in the Gallery -- using [VS Code's URL handling ↗](https://code.visualstudio.com/docs/configure/command-line#_opening-vs-code-with-urls) to open the current file:
+```
+vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}
 ```
 
 ### Other improvements
