@@ -336,6 +336,10 @@ export async function importFromCallout(
             // get the components of the external or internal link
             const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
+            debugLog(line);
+            debugLog('dataMatch:', dataMatch);
+            debugLog('linkMatch:', linkMatch);
+
             if (linkMatch) {
 
                 // for external links
@@ -398,6 +402,8 @@ export async function importFromCallout(
                         case ItemType.Templater:
                             itemType = dataUriType;
                             const dataEl = line.match(/<data\s[^>]*\/?>/);
+                            debugLog(dataUriType, dataEl);
+                            
                             if (dataEl) {
                                 const parser = new DOMParser();
                                 const doc = parser.parseFromString(dataEl[0], 'text/html');
