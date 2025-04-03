@@ -6,7 +6,7 @@ What's new in Note Toolbar v1.21?
 
 The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks. Explore it via the new **Gallery** button in settings.
 
-The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **over 70 items so far**, but I'm aiming for a higher number on release.
+The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **over 100+ items so far**.
 
 <img src="https://github.com/user-attachments/assets/2b271f98-c1d8-49cf-a1a0-83385422d337" width="700"/>
 
@@ -43,7 +43,7 @@ JavaScript can now be executed without the need for another plugin. Look for the
 
 ### Use file items like tabs
 
-Use the new `tab file items` to style to style a file item as if it was a tab, if the file you're currently viewing matches the item's filename.
+Use the new `tab file items` style to make a file item behave like a tab, if the file you're currently viewing matches the item's filename.
 
 <img src="https://github.com/user-attachments/assets/24d31261-f98c-4258-95bc-f807c5cf8774" width="600"/>
 
