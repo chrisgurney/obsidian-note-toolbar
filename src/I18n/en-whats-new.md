@@ -42,15 +42,13 @@ JavaScript can now be executed without the need for another plugin. Look for the
 - Gallery items that rely on scripts use this feature.
 - [Learn more.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript)
 
-## Improvements 🚀
-
 ### Use file items like tabs
 
-File items are now given a `data-active-file` attribute, if the file you're currently viewing matches the item's filename. This allows you to optionally style a button as if it was a tab.
+Use the new `tab file items` to style to style a file item as if it was a tab, if the file you're currently viewing matches the item's filename.
 
 <img src="https://github.com/user-attachments/assets/24d31261-f98c-4258-95bc-f807c5cf8774" width="600"/>
 
-Example CSS snippet:
+If you'd prefer a different style, use CSS snippet with the `data-active-file` attribute, which is applied. Example:
 
 ```css
 .callout[data-callout="note-toolbar"] {
@@ -63,6 +61,8 @@ Example CSS snippet:
   }
 }
 ```
+
+## Improvements 🚀
 
 ### Choose where to open files or to execute commands
 
