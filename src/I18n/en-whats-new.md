@@ -73,14 +73,14 @@ Choose from `New tab` or `Split pane`. For file items, you can also choose `New 
 
 ### New URI variables + encoding
 
-Added URI variables for the current file path `{{file_path}}` and vault path `{{vault_path}}`.
+Added URI variables for the current file path <code>&#123&#123file_path&#125&#125</code> and vault path <code>&#123&#123vault_path&#125&#125</code>.
 
 All variables (except for scripts) now support an `encode:` prefix, which, if added to a variable encodes that variable using `encodeURIComponent()`.
 
 For example, here's a URI for **Open in VS Code** -- available in the Gallery -- using [VS Code's URL handling ↗](https://code.visualstudio.com/docs/configure/command-line#_opening-vs-code-with-urls) to open the current file:
-```
-vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}
-```
+<pre>
+vscode://file/&#123;&#123;encode:vault_path&#125;&#125;%2F&#123;&#123;encode:file_path&#125;&#125;
+</pre>
 
 ### Other improvements
 
