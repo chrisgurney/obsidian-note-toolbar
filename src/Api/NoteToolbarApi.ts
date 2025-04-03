@@ -36,9 +36,9 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.getActiveItem
      */
     getActiveItem(): Item | undefined {
-        const activeItemEl = this.plugin.getActiveItemEl();
-        if (!activeItemEl) return;
-        const activeItem = this.plugin.settingsManager.getToolbarItemById(activeItemEl.id);
+        const activeItemId = this.plugin.getActiveItemId();
+        if (!activeItemId) return;
+        const activeItem = this.plugin.settingsManager.getToolbarItemById(activeItemId);
         return (activeItem) ? new Item(this.plugin, activeItem) : undefined;
     }
 

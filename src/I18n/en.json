@@ -148,6 +148,9 @@
         "warning-share-menu": "This toolbar refers to at least one other toolbar that the recipient won't receive."
     },
     "gallery": {
+        "error-invalid-plugin": "Invalid plugin or none enabled for Gallery item.",
+        "error-missing-item-type": "Gallery item: Missing item type property",
+        "error-missing-property": "Missing plugin or script property in Gallery data.",
         "label-plugin": "{{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
         "select-plugin-placeholder": "Select plugin to use...",
@@ -216,7 +219,14 @@
         "workspaces": "Workspaces"
     },
     "setting": {
+        "add-item": {
+            "error-invalid-command": "Command does not exist: {{commandId}}",
+            "label-confirm-command": "Command is not supported or was not found:\n`{{commandId}}`\n\nWould you still like to add this item to a toolbar?",
+            "label-confirm-mobile-uri": "This item uses a file URI which may not be supported on mobile.\n\nWould you still like to add it to a toolbar?",
+            "title-confirm": "Add item: {{itemName}}"
+        },
         "button-cancel": "Cancel",
+        "button-proceed": "Proceed",
         "button-collapse-tooltip": "Collapse section",
         "button-delete-tooltip": "Delete",
         "button-drag-tooltip": "Drag to rearrange",
@@ -329,10 +339,14 @@
             "option-command-error-not-available-search": "This command cannot be found. Try searching again.",
             "option-command-error-refresh": "Refresh",
             "option-command-placeholder": "Search for command",
+            "option-command-target": "Where to run command",
+            "option-command-target-description": "Some commands may override this setting.",
             "option-component-icon": "icon",
             "option-component-label": "label",
             "option-file": "File",
             "option-file-error-does-not-exist": "This file or folder does not exist.",
+            "option-file-target": "Where to open file",
+            "option-file-target-description": "Use modifier keys to override this setting.",
             "option-file-placeholder": "Search for file or folder",
             "option-item-group": "Item Group",
             "option-item-group-error-does-not-exist": "Toolbar does not exist",
@@ -346,6 +360,10 @@
             "option-label-placeholder": "Label (optional, if icon set)",
             "option-separator": "separator",
             "option-script": "Select how you want to use this.",
+            "option-target-default": "Default",
+            "option-target-split": "Split pane",
+            "option-target-tab": "New tab",
+            "option-target-window": "New window",
             "option-tooltip-placeholder": "Tooltip (optional)",
             "option-uri": "URI",
             "option-uri-help": "Tip: Use note properties and expressions in URIs.",

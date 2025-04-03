@@ -31,10 +31,11 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
     console.log('[gallery-docs] Markdown exported to:', outputFile);
 }
 
-if (process.argv.length === 5) {
-    const [,, itemsFile, galleryFile, outputFile] = process.argv;
-    await galleryDocs(itemsFile, galleryFile, outputFile);
-} else {
-    console.error('Usage: node gallery-docs.mjs <items.json> <gallery.json> <output.md>');
-    process.exit(1);
-}
+// // Uncomment the following lines to run this script directly from the command line
+// if (process.argv.length === 5) {
+//     const [,, itemsFile, galleryFile, outputFile] = process.argv;
+//     await galleryDocs(itemsFile, galleryFile, outputFile);
+// } else {
+//     console.error('Usage: node gallery-docs.mjs <items.json> <gallery.json> <output.md>');
+//     process.exit(1);
+// }

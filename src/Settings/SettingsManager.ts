@@ -317,8 +317,7 @@ export class SettingsManager {
 	async resolveGalleryItem(item: ToolbarItemSettings): Promise<boolean> {
 
 		if (!item.linkAttr?.type) {
-			// FIXME: localize this string
-			console.error("Gallery item: Missing item type.");
+			console.error(t('gallery.error-missing-item-type'));
 			return false;
 		}
 
@@ -394,14 +393,12 @@ export class SettingsManager {
 				}
 			}
 			else {
-				// FIXME: lcoalize this string
-				console.error("Invalid plugin or none enabled for Gallery item.");
+				console.error(t('gallery.error-invalid-plugin'));
 				return undefined;
 			}
 		}
 		else {
-			// FIXME: lcoalize this string
-			console.error("Missing plugin or script element in Gallery data.");
+			console.error(t('gallery.error-missing-property'));
 			return undefined;
 		}
 

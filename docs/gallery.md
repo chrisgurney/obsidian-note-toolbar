@@ -41,6 +41,7 @@ Tools for working with files.
 
 | Item | Description |
 | --- | --- |
+| New note | Creates a new note. |
 | New kanban | Create a new kanban board. |
 | New canvas | Create a new canvas file. |
 | Append text | Appends the prompted text to a file you specify. |
@@ -98,7 +99,6 @@ Get around the text editor faster.
 
 | Item | Description |
 | --- | --- |
-| New tab | Opens a new empty tab. |
 | Next heading | Moves the cursor to the next heading in the note. |
 | Previous heading | Moves the cursor to the previous heading in the note. |
 | Jump to top | Moves the cursor to the top of the current note. |
@@ -114,7 +114,11 @@ Navigate between files and directories.
 | Item | Description |
 | --- | --- |
 | Previous file | Opens the previous file in the folder, sorted A-Z. Loops back to the last file. |
-| Next file | Opens the next file in the folder, sorted A-Z. Loops back to the first file. |
+| Next file | Opens the next file in the folder, sorted A-Z. Loops over to the first file. |
+| New tab | Opens a new empty tab. |
+| Previous tab | Go to the previous tab. |
+| Next tab | Go to the next tab. |
+| Close tab | Close the current tab. |
 | Home | Go to your home note. (Enter your home note in the URL.) |
 | Go up | Uses your note's "up" property to navigate to a parent note in your vault. |
 | Show bookmarks | Opens the bookmarks sidebar. |

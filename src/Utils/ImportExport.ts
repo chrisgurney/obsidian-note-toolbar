@@ -327,15 +327,18 @@ export async function importFromCallout(
         }
         else {
 
-            const dataMatch = line.match(/<data data-(ntb-)?(command|dataview|folder|js-engine|menu|templater-obsidian)="(.*?)"(.*?)(\/?>|$)/);
+            const dataMatch = line.match(/data-(?:ntb-)?(command|dataview|folder|javascript|js-engine|menu|templater-obsidian)="(.*?)"(.*?)(\/?>|$)/);
             const uriMatch = line.match(/obsidian:\/\/note-toolbar\?(command|folder|menu)=(.*?)>?\)/);
             const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
 
             // remove the data element and tooltip to ensure the whole link is included in the match
-            let linkText = dataMatch ? line.replace(dataMatch[0], '').trim() : line;
-            linkText = tooltipMatch ? linkText.replace(tooltipMatch[0], '').trim() : linkText;
+            let linkText = line.replace(/<data[\s\S]*$|<!--[\s\S]*?-->$/g, '');
             // get the components of the external or internal link
             const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
+
+            debugLog(line);
+            debugLog('dataMatch:', dataMatch);
+            debugLog('linkMatch:', linkMatch);
 
             if (linkMatch) {
 
@@ -379,8 +382,8 @@ export async function importFromCallout(
                 tooltip = tooltipMatch ? tooltipMatch[1] : '';
 
                 if (dataMatch || uriMatch) {
-                    const dataUriType = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[1] : '');
-                    const dataUriValue = dataMatch ? dataMatch[3] : (uriMatch ? uriMatch[2] : '');
+                    const dataUriType = dataMatch ? dataMatch[1] : (uriMatch ? uriMatch[1] : '');
+                    const dataUriValue = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[2] : '');
                     debugLog('• data?', dataUriType, link);
         
                     switch (dataUriType) {
@@ -399,6 +402,8 @@ export async function importFromCallout(
                         case ItemType.Templater:
                             itemType = dataUriType;
                             const dataEl = line.match(/<data\s[^>]*\/?>/);
+                            debugLog(dataUriType, dataEl);
+                            
                             if (dataEl) {
                                 const parser = new DOMParser();
                                 const doc = parser.parseFromString(dataEl[0], 'text/html');
@@ -461,7 +466,7 @@ export async function importFromCallout(
 				},
                 scriptConfig: scriptConfig,
 				tooltip: tooltip,
-				visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS,
+				visibility: JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)),
 			};
 
             toolbar?.items.push(toolbarItem);

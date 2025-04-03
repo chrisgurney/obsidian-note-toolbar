@@ -3,6 +3,8 @@ import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "../Settings/NoteToolbarSettings";
 import { debugLog } from "Utils/Utils";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
+import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
+import { Platform } from "obsidian";
 
 export default class GalleryManager {
 
@@ -34,7 +36,61 @@ export default class GalleryManager {
 				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
 			}
 		});
-		toolbarModal.open();
+
+        switch (galleryItem.linkAttr.type) {
+            case ItemType.Command:
+                // check if the item's command exists, before displaying toolbar modal
+                const command = this.plugin.app.commands.commands[galleryItem.linkAttr.commandId];
+                if (!command) {
+                    // prompt the user if they'd still like to add it
+                    confirmWithModal(
+                        this.plugin.app, 
+                        {
+                            title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
+                            questionLabel: t('setting.add-item.label-confirm-command', { commandId: galleryItem.linkAttr.commandId }),
+                            approveLabel: t('setting.button-proceed'),
+                            denyLabel: t('setting.button-cancel')
+                        }
+                    ).then((isConfirmed: boolean) => {
+                        if (isConfirmed) toolbarModal.open();
+                    });
+                }
+                else {
+                    toolbarModal.open();
+                }
+                break;
+            case ItemType.JavaScript:
+            case ItemType.Uri:
+                // on mobile, check if this item uses a `file://` URI, which is not generally supported
+                if (Platform.isMobile) {
+                    const hasFileUri = galleryItem.link.startsWith('file://') || galleryItem.scriptConfig?.expression?.includes('file://');
+                    if (hasFileUri) {
+                        // prompt the user if they'd still like to add it
+                        confirmWithModal(
+                            this.plugin.app, 
+                            {
+                                title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
+                                questionLabel: t('setting.add-item.label-confirm-mobile-uri', { uri: galleryItem.link }),
+                                approveLabel: t('setting.button-proceed'),
+                                denyLabel: t('setting.button-cancel')
+                            }
+                        ).then((isConfirmed: boolean) => {
+                            if (isConfirmed) toolbarModal.open();
+                        });
+                    }
+                    else {
+                        toolbarModal.open();
+                    }
+                }
+                else {
+                    toolbarModal.open();
+                }
+                break;
+            default:
+                toolbarModal.open();
+                break;
+        }
+
 	}
 
     private loadItems() {
@@ -52,6 +108,7 @@ export default class GalleryManager {
             linkAttr: {
                 commandId: item.commandId ?? '',
                 hasVars: false,
+                target: item.target ?? '',
                 type: item.type
             },
             plugin: item.plugin ?? '',

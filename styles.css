@@ -2504,6 +2504,9 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .setting-item-info {
         display: initial !important;
+        & .setting-item-name {
+            font-size: var(--font-ui-small);
+        }
     }
     & .setting-item-control {
         justify-content: end !important;

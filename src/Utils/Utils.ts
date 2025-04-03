@@ -112,6 +112,8 @@ export function checkToolbarForViewType(plugin: NoteToolbarPlugin, currentViewTy
  */
 export function debugLog(message?: any, ...optionalParams: any[]): void {
 	DEBUG && console.debug(message, ...optionalParams);
+	// const stack = new Error().stack?.split('\n')[2]?.trim();
+	// DEBUG && console.debug('Called from:', stack);
 }
 
 /**
@@ -207,7 +209,7 @@ export function getElementPosition(element: HTMLElement): { x: number, y: number
  * @param event MouseEvent or KeyboardEvent
  * @returns PaneType or undefined
  */
-export function getLinkUiDest(event: MouseEvent | KeyboardEvent | undefined): PaneType | undefined {
+export function getLinkUiTarget(event: MouseEvent | KeyboardEvent | undefined): PaneType | undefined {
 	let linkDest: PaneType | undefined = undefined;
 	if (event) {
 		// check if middle button was clicked
