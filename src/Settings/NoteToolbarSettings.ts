@@ -108,30 +108,33 @@ export enum SettingType {
 }
 export enum DefaultStyleType {
 	Autohide = 'autohide',
-	Between = 'between',
 	Border = 'border',
 	Button = 'button',
 	Center = 'center',
-	Even = 'even',
+	Wide = 'wide',
 	Left = 'left',
 	Right = 'right',
+	Between = 'between',
+	Even = 'even',
 	Sticky = 'sticky',
-	Wide = 'wide'
+	Tab = 'tab'
 }
 export enum MobileStyleType {
-	Between = 'mbtwn',
 	Border = 'mbrder',
+	NoBorder = 'mnbrder',
 	Button = 'mbtn',
 	Center = 'mctr',
-	Even = 'mevn',
-	Left = 'mlft',
-	NoBorder = 'mnbrder',
-	NoSticky = 'mnstcky',
 	NoWide = 'mnwd',
 	NoWrap = 'mnwrp',
+	Wide = 'mwd',
+	Left = 'mlft',
 	Right = 'mrght',
+	Between = 'mbtwn',
+	Even = 'mevn',
 	Sticky = 'mstcky',
-	Wide = 'mwd'
+	NoSticky = 'mnstcky',
+	Tab = 'mtb',
+	NoTab = 'mntb'
 }
 export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 	[MobileStyleType.Left, MobileStyleType.Center, MobileStyleType.Right],
@@ -503,6 +506,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ [DefaultStyleType.Between]: t('setting.styles.option-between') },
     { [DefaultStyleType.Even]: t('setting.styles.option-even') },
     { [DefaultStyleType.Sticky]: t('setting.styles.option-sticky') },
+	{ [DefaultStyleType.Tab ]: t('setting.styles.option-tab') }
 ];
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
@@ -518,6 +522,7 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { [MobileStyleType.NoBorder]: t('setting.styles.option-noborder') },
 	{ [MobileStyleType.Button]: t('setting.styles.option-button') },
     { [MobileStyleType.Center]: t('setting.styles.option-center') },
+	{ [MobileStyleType.NoTab ]: t('setting.styles.option-notab') },
 	{ [MobileStyleType.NoWide]: t('setting.styles.option-nowide') },
 	{ [MobileStyleType.NoWrap]: t('setting.styles.option-nowrap') },
 	{ [MobileStyleType.Wide]: t('setting.styles.option-wide') },
@@ -527,6 +532,7 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { [MobileStyleType.Even]: t('setting.styles.option-even') },
     { [MobileStyleType.Sticky]: t('setting.styles.option-sticky') },
     { [MobileStyleType.NoSticky]: t('setting.styles.option-notsticky') },
+	{ [MobileStyleType.Tab ]: t('setting.styles.option-tab') }
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [

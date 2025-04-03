@@ -461,6 +461,40 @@ body {
         }
     }
 
+    &[data-callout-metadata*="tab"] ul {
+        & li[data-active-file] {
+            border-bottom: 1px solid var(--link-color);
+            & span.external-link {
+                color: var(--link-color);
+                filter: unset;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="mtb"] ul {
+        .is-mobile & {
+            & li[data-active-file] {
+                border-bottom: 1px solid var(--link-color);
+                & span.external-link {
+                    color: var(--link-color);
+                    filter: unset;
+                }
+            }
+        }
+    }
+
+    &[data-callout-metadata*="mntb"] ul {
+        .is-mobile & {
+            & li[data-active-file] {
+                border-bottom: unset;
+                & span.external-link {
+                    color: var(--cg-nt-item-text-color);
+                    filter: var(--link-external-filter);
+                }
+            }
+        }
+    }
+
     &.cg-note-toolbar-callout {
         /* margin-top: fix for reading mode */
         box-shadow: none;
