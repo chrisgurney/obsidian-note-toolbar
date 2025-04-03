@@ -8,7 +8,7 @@ The gallery is a curated list of items that can be added to your toolbars in jus
 
 The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **over 100+ items so far**.
 
-<img src="https://github.com/user-attachments/assets/2b271f98-c1d8-49cf-a1a0-83385422d337" width="700"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-gallery.png" width="700"/>
 
 It's easy to use the Gallery:
 
@@ -31,7 +31,7 @@ Add items more easily in a couple new ways:
 
 Suggestions from the Gallery are provided at the bottom of search results.
 
-<img src="https://github.com/user-attachments/assets/d4318824-e537-42e2-adc3-9b88e173c051" width="700"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-additems.gif" width="700"/>
 
 ### Execute JavaScript without needing another plugin
 
@@ -45,7 +45,7 @@ JavaScript can now be executed without the need for another plugin. Look for the
 
 Use the new `tab file items` style to make a file item behave like a tab, if the file you're currently viewing matches the item's filename.
 
-<img src="https://github.com/user-attachments/assets/24d31261-f98c-4258-95bc-f807c5cf8774" width="600"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-filetabs.gif" width="600"/>
 
 If you'd prefer a different style, create a CSS snippet with the `data-active-file` attribute, which is applied. Example:
 
