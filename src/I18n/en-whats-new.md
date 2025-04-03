@@ -65,11 +65,11 @@ If you'd prefer a different style, create a CSS snippet with the `data-active-fi
 
 ### Choose where to open files or to execute commands
 
-Choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
+When creating file or command items, choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
 
 - Some commands may override this setting and do their own thing. 
-- When clicking on file items, Use modifier keys to override this setting.
-- Using this feature, the _New Canvas_ and _New Kanban_ items in the gallery now create those file types in a new tab (versus in the current tab).
+- When clicking on file items, use modifier keys to override this setting.
+- Using this feature, the _New Canvas_ and _New Kanban_ items in the Gallery create those file types in a new tab (versus the default, which is in the current tab).
 
 ### New URI variables + encoding
 
