@@ -45,7 +45,7 @@ JavaScript can now be executed without the need for another plugin. Look for the
 
 Use the new `tab file items` style to make a file item behave like a tab, if the file you're currently viewing matches the item's filename.
 
-<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-filetabs.gif" width="600"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-filetabs.gif" width="700"/>
 
 If you'd prefer a different style, create a CSS snippet with the `data-active-file` attribute, which is applied. Example:
 
