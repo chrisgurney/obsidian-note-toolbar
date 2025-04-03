@@ -108,30 +108,30 @@ export enum SettingType {
 }
 export enum DefaultStyleType {
 	Autohide = 'autohide',
+	Between = 'between',
 	Border = 'border',
 	Button = 'button',
 	Center = 'center',
-	Wide = 'wide',
+	Even = 'even',
 	Left = 'left',
 	Right = 'right',
-	Between = 'between',
-	Even = 'even',
-	Sticky = 'sticky'
+	Sticky = 'sticky',
+	Wide = 'wide'
 }
 export enum MobileStyleType {
+	Between = 'mbtwn',
 	Border = 'mbrder',
-	NoBorder = 'mnbrder',
 	Button = 'mbtn',
 	Center = 'mctr',
+	Even = 'mevn',
+	Left = 'mlft',
+	NoBorder = 'mnbrder',
+	NoSticky = 'mnstcky',
 	NoWide = 'mnwd',
 	NoWrap = 'mnwrp',
-	Wide = 'mwd',
-	Left = 'mlft',
 	Right = 'mrght',
-	Between = 'mbtwn',
-	Even = 'mevn',
 	Sticky = 'mstcky',
-	NoSticky = 'mnstcky'
+	Wide = 'mwd'
 }
 export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 	[MobileStyleType.Left, MobileStyleType.Center, MobileStyleType.Right],
