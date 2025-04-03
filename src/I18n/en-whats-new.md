@@ -47,7 +47,7 @@ Use the new `tab file items` to style to style a file item as if it was a tab, i
 
 <img src="https://github.com/user-attachments/assets/24d31261-f98c-4258-95bc-f807c5cf8774" width="600"/>
 
-If you'd prefer a different style, use CSS snippet with the `data-active-file` attribute, which is applied. Example:
+If you'd prefer a different style, create a CSS snippet with the `data-active-file` attribute, which is applied. Example:
 
 ```css
 .callout[data-callout="note-toolbar"] {
