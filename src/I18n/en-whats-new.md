@@ -6,16 +6,15 @@ What's new in Note Toolbar v1.21?
 
 The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks. Explore it via the new **Gallery** button in settings.
 
-The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **over 70 items so far**, but I'm aiming for a higher number on release.
+The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **[over 100+ items so far](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)**.
 
-<img src="https://github.com/user-attachments/assets/2b271f98-c1d8-49cf-a1a0-83385422d337" width="700"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-gallery.png" width="700"/>
 
 It's easy to use the Gallery:
 
 - In settings, look for the new _Gallery_ button/link at the top.
 - Browse though the categories, or search for items at the top.
 - To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to, or you can create a new toolbar.
-- If the item is compatible with more than one plugin, you will be prompted to select the one you would like to use.
 - Once the item is added to your toolbar, you can edit it however you see fit.
 
 >[!note] 
@@ -32,7 +31,7 @@ Add items more easily in a couple new ways:
 
 Suggestions from the Gallery are provided at the bottom of search results.
 
-<img src="https://github.com/user-attachments/assets/d4318824-e537-42e2-adc3-9b88e173c051" width="700"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-additems.gif" width="700"/>
 
 ### Execute JavaScript without needing another plugin
 
@@ -42,15 +41,13 @@ JavaScript can now be executed without the need for another plugin. Look for the
 - Gallery items that rely on scripts use this feature.
 - [Learn more.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript)
 
-## Improvements 🚀
-
 ### Use file items like tabs
 
-File items are now given a `data-active-file` attribute, if the file you're currently viewing matches the item's filename. This allows you to optionally style a button as if it was a tab.
+Use the new `tab file items` style to make a file item behave like a tab, if the file you're currently viewing matches the item's filename.
 
-<img src="https://github.com/user-attachments/assets/24d31261-f98c-4258-95bc-f807c5cf8774" width="600"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-filetabs.gif" width="700"/>
 
-Example CSS snippet:
+If you'd prefer a different style, create a CSS snippet with the `data-active-file` attribute, which is applied. Example:
 
 ```css
 .callout[data-callout="note-toolbar"] {
@@ -64,24 +61,26 @@ Example CSS snippet:
 }
 ```
 
+## Improvements 🚀
+
 ### Choose where to open files or to execute commands
 
-Choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
+When creating file or command items, choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
 
 - Some commands may override this setting and do their own thing. 
-- When clicking on file items, Use modifier keys to override this setting.
-- Using this feature, the _New Canvas_ and _New Kanban_ items in the gallery now create those file types in a new tab (versus in the current tab).
+- When clicking on file items, use modifier keys to override this setting.
+- Using this feature, the _New Canvas_ and _New Kanban_ items in the Gallery create those file types in a new tab (versus the default, which is in the current tab).
 
 ### New URI variables + encoding
 
-Added URI variables for the current file path `{{file_path}}` and vault path `{{vault_path}}`.
+Added URI variables for the current file path <code>&#123&#123file_path&#125&#125</code> and vault path <code>&#123&#123vault_path&#125&#125</code>.
 
 All variables (except for scripts) now support an `encode:` prefix, which, if added to a variable encodes that variable using `encodeURIComponent()`.
 
 For example, here's a URI for **Open in VS Code** -- available in the Gallery -- using [VS Code's URL handling ↗](https://code.visualstudio.com/docs/configure/command-line#_opening-vs-code-with-urls) to open the current file:
-```
-vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}
-```
+<pre>
+vscode://file/&#123;&#123;encode:vault_path&#125;&#125;%2F&#123;&#123;encode:file_path&#125;&#125;
+</pre>
 
 ### Other improvements
 
