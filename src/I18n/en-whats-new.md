@@ -15,7 +15,6 @@ It's easy to use the Gallery:
 - In settings, look for the new _Gallery_ button/link at the top.
 - Browse though the categories, or search for items at the top.
 - To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to, or you can create a new toolbar.
-- If the item is compatible with more than one plugin, you will be prompted to select the one you would like to use.
 - Once the item is added to your toolbar, you can edit it however you see fit.
 
 >[!note] 
