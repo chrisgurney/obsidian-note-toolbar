@@ -6,7 +6,7 @@ What's new in Note Toolbar v1.21?
 
 The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks. Explore it via the new **Gallery** button in settings.
 
-The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **over 100+ items so far**.
+The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **[over 100+ items so far](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)**.
 
 <img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-gallery.png" width="700"/>
 
