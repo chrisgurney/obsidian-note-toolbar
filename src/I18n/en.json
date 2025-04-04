@@ -123,6 +123,7 @@
         "name-hide-properties": "Hide Properties",
         "name-item-suggester": "Quick tools",
         "name-item-suggester-current": "Quick tools (for current toolbar)",
+        "name-open-gallery": "Open Gallery",
         "name-open-toolbar": "Open: {{toolbar}}",
         "name-settings": "Plugin settings",
         "name-show-properties": "Show Properties",
@@ -221,8 +222,9 @@
     "setting": {
         "add-item": {
             "error-invalid-command": "Command does not exist: {{commandId}}",
-            "label-confirm-command": "Command is not supported or was not found:\n`{{commandId}}`\n\nWould you still like to add this item to a toolbar?",
-            "label-confirm-mobile-uri": "This item uses a file URI which may not be supported on mobile.\n\nWould you still like to add it to a toolbar?",
+            "label-confirm-command": "Command is not supported or was not found:\n\n`{{commandId}}`\n\nWould you still like to add this item to a toolbar? You can install/enable the plugin that provides this command later.",
+            "label-confirm-mobile-uri": "This item uses a file URI which may not be supported on mobile.\n\nWould you still like to add this item to a toolbar?",
+            "label-confirm-plugin": "Plugin not installed and enabled:\n\n**{{plugin}}**\n\nWould you still like to add this item to a toolbar? You can install/enable this plugin later.",
             "title-confirm": "Add item: {{itemName}}"
         },
         "button-cancel": "Cancel",

@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
 import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice, PaneType } from "obsidian";
-import { removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
+import { removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById, debugLog } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
 import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
 import { FileSuggester } from "./Suggesters/FileSuggester";
@@ -143,6 +143,15 @@ export default class ToolbarItemUi {
                         .onChange(async (value) => {
                             let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
                             let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
+                            // if there's an error instead, remove it
+                            if (!itemLinkFieldDiv) {
+                                itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-plugin-error') as HTMLDivElement;
+                                if (itemLinkFieldDiv) {
+                                    itemLinkFieldDiv.empty();
+                                    itemLinkFieldDiv.removeClass('note-toolbar-setting-plugin-error');
+                                    itemLinkFieldDiv.addClass('note-toolbar-setting-item-link-field');
+                                }
+                            }
                             if (itemLinkFieldDiv) {
                                 toolbarItem.linkAttr.type = value as ItemType;
                                 itemLinkFieldDiv.empty();
