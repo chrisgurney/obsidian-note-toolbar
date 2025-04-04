@@ -1,7 +1,7 @@
 import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForViewType, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
+import { calcComponentVisToggles, calcItemVisToggles, debugLog, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
@@ -330,9 +330,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		else {
 			currentView = this.app.workspace.getActiveViewOfType(ItemView);
-			const currentViewType = currentView?.containerEl.getAttribute('data-type');
-			if (currentViewType) {
-				renderToolbar = checkToolbarForViewType(this, currentViewType);
+			if (currentView) {
+				renderToolbar = checkToolbarForItemView(this, currentView);
 				if (!renderToolbar) return;
 			}
 		}
@@ -469,7 +468,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null): Promise<void> {
 
-		// debugLog("renderToolbar()", toolbar);
+		debugLog("➡️ renderToolbar()", toolbar.name);
 
 		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
 		let position;
@@ -482,15 +481,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (!currentView) {
 			currentView = this.app.workspace.getActiveViewOfType(ItemView);
-			const otherViewType = currentView?.containerEl.getAttribute('data-type');
-			if (otherViewType) {
-				// TODO: use getViewType instead
-				// const isToolbarVisible = checkToolbarForViewType(this, currentView?.getViewType());
-				const isToolbarVisible = checkToolbarForViewType(this, otherViewType);
+			if (currentView) {
+				const isToolbarVisible = checkToolbarForItemView(this, currentView);
 				if (!isToolbarVisible) return;
-				// for most other views, move to 'top' if the position is set to 'props'
 				if (position === 'props') position = 'top';
 			}
+			else return; // active view is another view (like the file explorer) and not the empty tab
 		}
 
 		let noteToolbarElement: HTMLElement;
@@ -579,7 +575,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
-		debugLog('⭐️ Rendered Toolbar in:', getViewId(currentView));
+		debugLog('⭐️ Rendered Toolbar in view:', getViewId(currentView));
 
 	}
 	
@@ -1562,12 +1558,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
 		}
 		else {
-			const currentView = this.app.workspace.getActiveViewOfType(ItemView);
-			const currentViewType = currentView?.containerEl.getAttribute('data-type');
-			if (currentViewType) {
-				let renderToolbar = checkToolbarForViewType(this, currentViewType);
+			const itemView = this.app.workspace.getActiveViewOfType(ItemView);
+			if (itemView) {
+				let renderToolbar = checkToolbarForItemView(this, itemView);
 				if (!renderToolbar) return;
-				switch (currentViewType) {
+				switch (itemView.getViewType()) {
 					case 'empty':
 					case 'beautitab-react-view':
 					case 'home-tab-view':

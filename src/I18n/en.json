@@ -268,7 +268,7 @@
         },
         "display-contexts": {
             "description": "Enable toolbars in canvases, the New tab view, and other file types.",
-            "name": "Show toolbars in other files and views",
+            "name": "File types and views",
             "option-audio": "Audio",
             "option-canvas": "Canvas files",
             "option-emptyview": "New tab view",

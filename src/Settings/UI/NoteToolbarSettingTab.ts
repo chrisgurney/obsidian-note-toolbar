@@ -747,6 +747,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
 
 		let otherContextSettings = new Setting(collapsibleEl)
+			.setHeading()
 			.setName(t('setting.display-contexts.name'))
 			.setDesc(t('setting.display-contexts.description'));
 

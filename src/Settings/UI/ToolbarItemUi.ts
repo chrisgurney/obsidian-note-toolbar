@@ -1052,7 +1052,9 @@ export default class ToolbarItemUi {
                         }
                         else {
                             status = Status.Invalid;
-                            statusMessage = t('adapter.error.plugin-not-installed');
+                            statusMessage = (this.plugin.settings.scriptingEnabled)
+                                ? t('adapter.error.plugin-not-installed') 
+                                : t('adapter.error.scripting-disabled');
                         }
                     }
                     break;
