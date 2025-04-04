@@ -151,10 +151,8 @@
         "error-invalid-plugin": "Неправильний додаток, або його не ввімкнено для елемента Галереї.",
         "error-missing-item-type": "Елемент галереї: Відсутня властивість типу елемента",
         "error-missing-property": "Відсутний додаток або властивість скрипта у даних Галереї.",
-        "label-plugin": "{{plugin}}",
         "label-suggestions": "ПРОПОЗИЦІЇ З ГАЛЕРЕЇ",
         "select-plugin-placeholder": "Оберіть додаток для використання...",
-        "select-plugin-suggestion": "{{plugin}}",
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Не ввімкнен, або не встановлен",
         "title": "Галерея Note Toolbar",
         "tooltip-add-item": "Додати до панелі: {{name}}"
@@ -208,14 +206,7 @@
     "plugin": {
         "canvas": "Полотно",
         "daily-notes": "Щоденні\u00A0нотатки",
-        "dataview": "Dataview",
-        "js-engine": "JS\u00A0Engine",
-        "note-toolbar": "Note\u00A0Toolbar",
-        "obsidian-kanban": "Kanban",
-        "obsidian-tasks-plugin": "Tasks",
-        "periodic-notes": "Periodic\u00A0Notes",
         "sync": "Синхронізація",
-        "templater-obsidian": "Templater",
         "workspaces": "Простори"
     },
     "setting": {
@@ -268,7 +259,7 @@
         },
         "display-contexts": {
             "description": "Увімкнути панель у полотнах, новому вигляді вкладки та інших типах файлів.",
-            "name": "Показувати панелі в інших файлах та виглядах",
+            "name": "Типи файлів та подання",
             "option-audio": "Аудіо",
             "option-canvas": "Файли полотна",
             "option-emptyview": "Новий вигляд",
@@ -365,7 +356,6 @@
             "option-target-tab": "Нова вкладка",
             "option-target-window": "Нове вікно",
             "option-tooltip-placeholder": "Підказка (за бажанням)",
-            "option-uri": "URI",
             "option-uri-help": "ℹ️ Використовуйте властивості нотаток та вирази в URI.",
             "option-uri-placehoder": "Адреса сайту, URI, або назва нотатки",
             "option-visibility-component-hidden-platform": "сховати {{component}} на {{platform}}",
@@ -384,9 +374,6 @@
             "instruction-select": "обрати елемент",
             "instruction-use": "використати",
             "key-back": "⌫ або ←",
-            "key-dismiss": "esc",
-            "key-navigate": "↑↓",
-            "key-use": "↵",
             "label-empty-no-items": "Нічого не знайдено.",
             "link-gallery": "Відкрити галерею",
             "link-search": "Пошук елемента",
