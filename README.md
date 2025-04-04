@@ -125,9 +125,9 @@ In the Gallery, **[explore 100+ items](https://github.com/chrisgurney/obsidian-n
 
 # User Guide
 
-📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)** for detailed instructions, and for what's in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery).
+📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)** for detailed instructions, tips, and lots more.
 
-Once installed and enabled, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New toolbar_.
+Screenshots of Note Toolbar's configuration:
 
 ![Example of settings configuration](./docs/images/settings.png)
 
