@@ -1234,6 +1234,17 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-callout-container,
+.note-toolbar-setting-contexts-container {
+    padding-top: 0;
+    & .note-toolbar-setting-items-list-container {
+        .setting-item:first-child {
+            padding: 0.75em 0;
+            border-top: 1px solid var(--background-modifier-border);
+        }
+    }
+}
+
 .note-toolbar-setting-contexts-container {
     &[data-active="false"] {
         border-bottom: solid 1px var(--background-modifier-border);
@@ -1247,15 +1258,6 @@ input[type="text"].note-toolbar-setting-error,
             & .setting-item-control {
                 width: unset !important;
             }
-        }
-    }
-}
-
-.note-toolbar-setting-callout-container {
-    & .note-toolbar-setting-items-list-container {
-        .setting-item:first-child {
-            padding: 0.75em 0;
-            border-top: 1px solid var(--background-modifier-border);
         }
     }
 }
