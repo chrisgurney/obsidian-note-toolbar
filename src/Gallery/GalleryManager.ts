@@ -41,13 +41,18 @@ export default class GalleryManager {
             case ItemType.Command:
                 // check if the item's command exists, before displaying toolbar modal
                 const command = this.plugin.app.commands.commands[galleryItem.linkAttr.commandId];
+                const commandPluginId = galleryItem.linkAttr.commandId.split(':')[0];
                 if (!command) {
                     // prompt the user if they'd still like to add it
+                    // get plugin name if known, otherwise show command ID
+                    const pluginName = t(`plugin.${commandPluginId}`, { defaultValue: '' });
                     confirmWithModal(
                         this.plugin.app, 
                         {
                             title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
-                            questionLabel: t('setting.add-item.label-confirm-command', { commandId: galleryItem.linkAttr.commandId }),
+                            questionLabel: pluginName 
+                                ? t('setting.add-item.label-confirm-plugin', { plugin: pluginName })
+                                : t('setting.add-item.label-confirm-command', { commandId: galleryItem.linkAttr.commandId }),
                             approveLabel: t('setting.button-proceed'),
                             denyLabel: t('setting.button-cancel')
                         }
