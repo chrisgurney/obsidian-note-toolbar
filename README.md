@@ -119,7 +119,7 @@ If you want your toolbar to show _without_ using a property, try mapping a folde
 
 # Gallery
 
-[Explore the Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery) which has **100+ items** that can be added to toolbars in just a couple clicks/taps.
+In the Gallery, **[explore 100+ items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)** that can be added to toolbars in just a couple clicks/taps.
 
 ![Screenshot of the Gallery](./docs/images/gallery.png)
 
