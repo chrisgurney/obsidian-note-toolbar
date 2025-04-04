@@ -509,11 +509,13 @@ export function getPluginNames(plugin: NoteToolbarPlugin, item: ToolbarItemSetti
 	else if (item.linkAttr.type === ItemType.Command) {
 		// make sure the command exists
 		const command = plugin.app.commands.commands[item.linkAttr.commandId];
-        if (!command) {
-			return t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
-		}
-		// get the command ID; we can ignore built-in commands
 		const commandPluginId = item.linkAttr.commandId.split(':')[0];
+        if (!command) {
+			// show plugin name if known, otherwise show command ID
+			const pluginName = t(`plugin.${commandPluginId}`, { defaultValue: '' });
+			return pluginName || t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
+		}
+		// we can ignore built-in commands
 		const itemPluginType = !IGNORE_PLUGIN_IDS.includes(commandPluginId) ? commandPluginId : undefined;
 		// replace known commands with user-friendly string (if supported)
 		if (itemPluginType) return t(`plugin.${itemPluginType}`)
