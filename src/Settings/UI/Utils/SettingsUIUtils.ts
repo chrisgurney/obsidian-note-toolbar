@@ -30,14 +30,14 @@ export function createOnboardingMessageEl(
 		.addExtraButton((button) => {
 			button
 				.setIcon('cross')
-				.setTooltip("Dismiss")
+				.setTooltip("Dismiss") // FIXME: localize string
 				.onClick(() => {
 					setting.settingEl.remove();
 					plugin.settings.onboarding[messageId] = true;
 					plugin.settingsManager.save();
 				});
 			button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
-			handleKeyClick(this.plugin, button.extraSettingsEl);
+			handleKeyClick(plugin, button.extraSettingsEl);
 		});
 	return setting.settingEl;
 }
