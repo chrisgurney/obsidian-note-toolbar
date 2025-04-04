@@ -27,6 +27,7 @@ More options on mobile:
 _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
 
 - [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to commands, files/folders, URIs/URLs, menus, and [scripts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts) (Dataview, JS Engine, Templater, and built-in support for JavaScript).
+  - Built-in [Gallery of 100+ items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery) that can be added to your toolbars in just a couple clicks/taps.
 - [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property.
   - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) below the Properties section, at the top or bottom of notes, or as a floating button.
   - Add a toolbar to the _New tab_ view.
@@ -104,23 +105,27 @@ Once enabled, open Note Toolbar's settings:
 
 1. Create a _+ New toolbar_
 2. Give the toolbar a _name_.
-3. _+ Add toolbar item_
+3. _+ Add_ (or search the [Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery))
 4. Exit settings, and _open a note_.
 5. Add a `notetoolbar` property. Set it to the name of your toolbar.
 
-If you want your toolbar to show without using a property, try mapping a folder (like wherever your Daily Notes are stored) to your new toolbar.
+If you want your toolbar to show _without_ using a property, try mapping a folder (like wherever your Daily Notes are stored) to your new toolbar.
 
 # Example
 
 ![Example Daily Notes toolbar including Daily Notes navigation, and multiple command shortcuts](./docs/images/example_toolbar_daily_notes.png)
 
-📖 [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and for what's in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery).
+📖 [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and tips, and [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell) for examples.
 
-[Let me know](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell) how you use your toolbars!
+# Gallery
+
+The [Gallery has 100+ items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery) that can be added to your toolbars in just a couple clicks/taps.
+
+![Screenshot of the Gallery](./docs/images/gallery.png)
 
 # User Guide
 
-📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
+📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)** for detailed instructions, and for what's in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery).
 
 Once installed and enabled, in Obsidian go to: _Settings... > Note Toolbar_ and click _+ New toolbar_.
 
