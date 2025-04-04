@@ -123,6 +123,7 @@
         "name-hide-properties": "Hide Properties",
         "name-item-suggester": "Quick tools",
         "name-item-suggester-current": "Quick tools (for current toolbar)",
+        "name-open-gallery": "Open Gallery",
         "name-open-toolbar": "Open: {{toolbar}}",
         "name-settings": "Plugin settings",
         "name-show-properties": "Show Properties",
