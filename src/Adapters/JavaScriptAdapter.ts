@@ -161,8 +161,8 @@ export default class JavaScriptAdapter extends Adapter {
             try {
                 resultEl.empty();
                 // may directly render, in which case it will likely return undefined or null
-                let result = await Promise.resolve(func(args));
-                if (result && this.noteToolbar) {
+                result = await Promise.resolve(func(args));
+                if (containerEl && result && this.noteToolbar) {
                     MarkdownRenderer.render(
                         this.noteToolbar.app,
                         result,

@@ -2263,7 +2263,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// JAVASCRIPT
 			if (s.trim().startsWith('{{js:')) {
 				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
-				let result = await this.jseAdapter?.use({ 
+				let result = await this.jsAdapter?.use({ 
 					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 					expression: s
 				});
