@@ -2408,7 +2408,7 @@ input[type="text"].note-toolbar-setting-error,
         font-size: 1.25em;
         margin: 0;
         margin-top: 46px; /* icon height */
-        text-wrap: auto;
+        text-wrap: wrap;
         width: 100%;
         &::after {
             display: none; /* fix for Border theme */
@@ -2419,7 +2419,7 @@ input[type="text"].note-toolbar-setting-error,
         display: flex;
         font-size: var(--font-ui-small);
         margin: 0 !important;
-        text-wrap: auto;
+        text-wrap: wrap;
         &.note-toolbar-gallery-view-item-description {
             color: var(--text-muted);
         }
