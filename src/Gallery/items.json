@@ -2,827 +2,1445 @@
     {
         "id": "attach-file",
         "commandId": "editor:attach-file",
-        "description": { "en": "Insert a file attachment." },
+        "description": { 
+            "en": "Insert a file attachment.",
+            "zh": "插入附件文件。"
+        },
         "icon": "paperclip",
-        "tooltip": { "en": "Insert attachment" },
+        "tooltip": { 
+            "en": "Insert attachment",
+            "zh": "插入附件"
+        },
         "type": "command"
     },
     {
         "id": "bookmarks-open",
         "commandId": "bookmarks:open",
-        "description": { "en": "Opens the bookmarks sidebar." },
+        "description": { 
+            "en": "Opens the bookmarks sidebar.",
+            "zh": "打开书签侧边栏。"
+        },
         "icon": "bookmark",
-        "tooltip": { "en": "Show bookmarks" },
+        "tooltip": { 
+            "en": "Show bookmarks",
+            "zh": "显示书签"
+        },
         "type": "command"
     },
     { 
         "id": "canvas-new",
         "commandId": "canvas:new-file",
-        "description": { "en": "Create a new canvas file." },
+        "description": { 
+            "en": "Create a new canvas file.",
+            "zh": "创建一个新的画布文件。"
+        },
         "icon": "network",
         "target": "tab",
-        "tooltip": { "en": "New canvas" },
+        "tooltip": { 
+            "en": "New canvas",
+            "zh": "新建画布（Canvas）"
+        },
         "type": "command"
     },
     {
         "id": "clear-formatting",
         "commandId": "editor:clear-formatting",
-        "description": { "en": "Remove all text formatting." },
+        "description": { 
+            "en": "Remove all text formatting.",
+            "zh": "移除所有文本格式。"
+        },
         "icon": "eraser",
-        "tooltip": { "en": "Clear formatting" },
+        "tooltip": { 
+            "en": "Clear formatting",
+            "zh": "清除格式"
+        },
         "type": "command"
     },
     {
         "id": "copy",
-        "description": { "en": "Copies the selected text to the clipboard." },
+        "description": { 
+            "en": "Copies the selected text to the clipboard.",
+            "zh": "将选中文本复制到剪贴板。"
+        },
         "icon": "clipboard-copy",
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-        "tooltip": { "en": "Copy" },
+        "tooltip": { 
+            "en": "Copy",
+            "zh": "复制"
+        },
         "type": "javascript"
     },
     {
         "id": "copy-block-link",
-        "description": { "en": "Copies a link to the current block to the clipboard." },
+        "description": { 
+            "en": "Copies a link to the current block to the clipboard.",
+            "zh": "复制当前块的链接到剪贴板。"
+        },
         "icon": "link-2",
         "script": "const { metadataCache: m } = app, e = app.workspace.activeEditor?.editor, f = app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
-        "tooltip": { "en": "Copy link to block" },
+        "tooltip": { 
+            "en": "Copy link to block",
+            "zh": "复制块链接（Block ID）"
+        },
         "type": "javascript"
     },
     {
         "id": "copy-obsidian-url",
         "commandId": "workspace:copy-url",
-        "description": { "en": "Copy the Obsidian URL for the current note to the clipboard." },
+        "description": { 
+            "en": "Copy the Obsidian URL for the current note to the clipboard.",
+            "zh": "将当前笔记的 Obsidian URL 复制到剪贴板。"
+        },
         "icon": "share",
-        "tooltip": { "en": "Copy Obsidian URL" },
+        "tooltip": { 
+            "en": "Copy Obsidian URL",
+            "zh": "复制 Obsidian URL"
+        },
         "type": "command"
     },
     {
         "id": "cut",
-        "description": { "en": "Cuts the selected text to the clipboard." },
+        "description": { 
+            "en": "Cuts the selected text to the clipboard.",
+            "zh": "将选中文本剪切到剪贴板。"
+        },
         "icon": "scissors",
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-        "tooltip": { "en": "Cut" },
+        "tooltip": { 
+            "en": "Cut",
+            "zh": "剪切"
+        },
         "type": "javascript"
     },
     {
         "id": "cycle-list-checklist",
         "commandId": "editor:cycle-list-checklist",
-        "description": { "en": "Changes to bullet, checkbox, or unchecked." },
+        "description": { 
+            "en": "Changes to bullet, checkbox, or unchecked.",
+            "zh": "在项目符号、复选框（勾选和未勾选）之间切换。"
+        },
         "icon": "check-square",
-        "tooltip": { "en": "Cycle bullet/checkbox" },
+        "tooltip": { 
+            "en": "Cycle bullet/checkbox",
+            "zh": "切换项目符号/复选框"
+        },
         "type": "command"
     },
     {
         "id": "cycle-themes",
-        "description": { "en": "Cycles between installed themes, including the default." },
+        "description": { 
+            "en": "Cycles between installed themes, including the default.",
+            "zh": "在已安装的主题之间循环切换，包括默认主题。"
+        },
         "icon": "venetian-mask",
         "script": "const i = ntb.getActiveItem();\nconst t = [...Object.values(app.customCss.themes), { name: '' }];\nconst n = t[(t.findIndex(theme => theme.name === app.vault.getConfig('cssTheme')) + 1) % t.length].name;\napp.customCss.setTheme(n);\nif (n) new Notice(n);",
-        "tooltip": { "en": "Cycle themes" },
+        "tooltip": { 
+            "en": "Cycle themes",
+            "zh": "切换主题"
+        },
         "type": "javascript"
     },
     {
         "id": "cycle-workspace",
-        "description": { "en": "Cycles between workspaces." },
+        "description": { 
+            "en": "Cycles between workspaces.",
+            "zh": "在工作区之间循环切换。"
+        },
         "icon": "layout-grid",
         "script": "const p = app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
-        "tooltip": { "en": "Cycle workspaces" },
+        "tooltip": { 
+            "en": "Cycle workspaces",
+            "zh": "切换工作区"
+        },
         "type": "javascript"
     },
     {
         "id": "daily-notes-prev",
         "commandId": "daily-notes:goto-prev",
-        "description": { "en": "Go to the previous daily note." },
+        "description": { 
+            "en": "Go to the previous daily note.",
+            "zh": "转到上一条每日笔记。"
+        },
         "icon": "arrow-left",
-        "tooltip": { "en": "Previous daily note" },
+        "tooltip": { 
+            "en": "Previous daily note",
+            "zh": "上一条每日笔记"
+        },
         "type": "command"
     },
     {
         "id": "daily-notes-today",
         "commandId": "daily-notes",
-        "description": { "en": "Go to today's daily note." },
+        "description": { 
+            "en": "Go to today's daily note.",
+            "zh": "转到今天的每日笔记。"
+        },
         "icon": "calendar",
-        "tooltip": { "en": "Today's daily note" },
+        "tooltip": { 
+            "en": "Today's daily note",
+            "zh": "今天的每日笔记"
+        },
         "type": "command"
     },
     {
         "id": "daily-notes-next",
         "commandId": "daily-notes:goto-next",
-        "description": { "en": "Go to the next daily note." },
+        "description": { 
+            "en": "Go to the next daily note.",
+            "zh": "转到下一条每日笔记。"
+        },
         "icon": "arrow-right",
-        "tooltip": { "en": "Next daily note" },
+        "tooltip": { 
+            "en": "Next daily note",
+            "zh": "下一条每日笔记"
+        },
         "type": "command"
     },
     {
         "id": "editor-toggle-preview",
         "commandId": "markdown:toggle-preview",
-        "description": { "en": "Change between the editor's Preview and Reading modes." },
+        "description": { 
+            "en": "Change between the editor's Preview and Reading modes.",
+            "zh": "在编辑器的预览和阅读模式之间切换。"
+        },
         "icon": "book-open",
-        "tooltip": { "en": "Toggle Reading view" },
+        "tooltip": { 
+            "en": "Toggle Reading view",
+            "zh": "切换阅读视图"
+        },
         "type": "command"
     },
     {
         "id": "editor-toggle-source",
         "commandId": "editor:toggle-source",
-        "description": { "en": "Turn Source mode on and off." },
+        "description": { 
+            "en": "Turn Source mode on and off.",
+            "zh": "打开和关闭源码模式。"
+        },
         "icon": "code-2",
-        "tooltip": { "en": "Toggle Source mode" },
+        "tooltip": { 
+            "en": "Toggle Source mode",
+            "zh": "切换源码模式"
+        },
         "type": "command"
     },
     {
         "id": "file-append",
-        "description": { "en": "Appends the prompted text to a file you specify." },
+        "description": { 
+            "en": "Appends the prompted text to a file you specify.",
+            "zh": "将提示框输入的文本附加到您指定的文件中。"
+        },
         "icon": "file-plus-2",
         "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\\n\\n' + txt); }",
-        "tooltip": { "en": "Append text" },
+        "tooltip": { 
+            "en": "Append text",
+            "zh": "附加文本"
+        },
         "type": "javascript"
     },
     {
         "id": "file-in-explorer",
         "commandId": "file-explorer:reveal-active-file",
-        "description": { "en": "Reveal the active file in navigation." },
+        "description": { 
+            "en": "Reveal the active file in navigation.",
+            "zh": "在导航中显示当前文件。"
+        },
         "icon": "folder-tree",
-        "tooltip": { "en": "Show file in navigation" },
+        "tooltip": { 
+            "en": "Show file in navigation",
+            "zh": "在导航中显示文件"
+        },
         "type": "command"
     },
     {
         "id": "file-in-system",
         "commandId": "open-with-default-app:show",
-        "description": { "en": "Reveal the active file in the system's file explorer." },
+        "description": { 
+            "en": "Reveal the active file in the system's file explorer.",
+            "zh": "在系统的文件资源管理器中显示当前文件。"
+        },
         "icon": "folder-search",
-        "tooltip": { "en": "Show file in system" },
+        "tooltip": { 
+            "en": "Show file in system",
+            "zh": "在系统中显示文件"
+        },
         "type": "command"
     },
     {
         "id": "file-move",
         "commandId": "file-explorer:move-file",
-        "description": { "en": "Move current file to a chosen folder." },
+        "description": { 
+            "en": "Move current file to a chosen folder.",
+            "zh": "将当前文件移动到选定的文件夹。"
+        },
         "icon": "folder-input",
-        "tooltip": { "en": "Move file to folder" },
+        "tooltip": { 
+            "en": "Move file to folder",
+            "zh": "将文件移动到文件夹"
+        },
         "type": "command"
     },
     {
         "id": "file-new",
         "commandId": "file-explorer:new-file",
-        "description": { "en": "Creates a new note." },
+        "description": { 
+            "en": "Creates a new note.",
+            "zh": "创建一个新笔记。"
+        },
         "icon": "file-plus",
-        "tooltip": { "en": "New note" },
+        "tooltip": { 
+            "en": "New note",
+            "zh": "新笔记"
+        },
         "type": "command"
     },
     {
         "id": "file-next",
-        "description": { "en": "Opens the next file in the folder, sorted A-Z. Loops over to the first file." },
+        "description": { 
+            "en": "Opens the next file in the folder, sorted A-Z. Loops over to the first file.",
+            "zh": "打开文件夹中的下一个文件，按 A-Z 排序。超过范围时，将重新循环到第一个文件。"
+        },
         "icon": "square-arrow-right",
         "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf)); }",
-        "tooltip": { "en": "Next file" },
+        "tooltip": { 
+            "en": "Next file",
+            "zh": "下一个文件"
+        },
         "type": "javascript"
     },
     {
         "id": "file-prev",
-        "description": { "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file." },
+        "description": { 
+            "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file.",
+            "zh": "打开文件夹中的上一个文件，按 A-Z 排序。超过范围时，将重新循环回到最后一个文件。"
+        },
         "icon": "square-arrow-left",
         "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);\nif (sfl.length>1) { const pf = ci===0?sfl[sfl.length-1]:sfl[ci-1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(pf)); }",
-        "tooltip": { "en": "Previous file" },
+        "tooltip": { 
+            "en": "Previous file",
+            "zh": "上一个文件"
+        },
         "type": "javascript"
     },
     {
         "id": "folder-search",
-        "description": { "en": "Opens search for the current folder, or all files if the file is in the root." },
+        "description": { 
+            "en": "Opens search for the current folder, or all files if the file is in the root.",
+            "zh": "打开基于当前文件夹的搜索，如果文件在根目录中，则搜索所有文件。"
+        },
         "icon": "folder-search",
         "script": "const p = app.workspace.getActiveFile()?.parent.path ?? '/';\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
-        "tooltip": { "en": "Search folder" },
+        "tooltip": { 
+            "en": "Search folder",
+            "zh": "搜索文件夹"
+        },
         "type": "javascript"
     },
     {
         "id": "global-search-open",
         "commandId": "global-search:open",
-        "description": { "en": "Opens the search sidebar." },
+        "description": { 
+            "en": "Opens the search sidebar.",
+            "zh": "打开搜索侧边栏。"
+        },
         "icon": "search",
-        "tooltip": { "en": "Search all files" },
+        "tooltip": { 
+            "en": "Search all files",
+            "zh": "搜索所有文件"
+        },
         "type": "command"
     },
     {
         "id": "go-bottom",
-        "description": { "en": "Moves the cursor to the bottom of the current note." },
+        "description": { 
+            "en": "Moves the cursor to the bottom of the current note.",
+            "zh": "将光标移动到当前笔记的底部。"
+        },
         "icon": "arrow-down-to-line",
         "script": "app.workspace.activeEditor?.editor?.setCursor(app.workspace.activeEditor.editor.lineCount(), 0)",
-        "tooltip": { "en": "Jump to bottom" },
+        "tooltip": { 
+            "en": "Jump to bottom",
+            "zh": "跳到底部"
+        },
         "type": "javascript"
     },
     {
         "id": "go-home",
-        "description": { "en": "Go to your home note. (Enter your home note in the URL.)" },
+        "description": { 
+            "en": "Go to your home note. (Enter your home note in the URL.)",
+            "zh": "转到您的主页笔记（在 URL 中输入您的主页笔记）"
+        },
         "icon": "home",
-        "tooltip": { "en": "Home" },
+        "tooltip": { 
+            "en": "Home",
+            "zh": "主页"
+        },
         "uri": "",
         "type": "uri"
     },
     {
         "id": "go-top",
-        "description": { "en": "Moves the cursor to the top of the current note." },
+        "description": { 
+            "en": "Moves the cursor to the top of the current note.",
+            "zh": "将光标移动到当前笔记的顶部。"
+        },
         "icon": "arrow-up-to-line",
         "script": "app.workspace.activeEditor?.editor?.setCursor(0, 0)",
-        "tooltip": { "en": "Jump to top" },
+        "tooltip": { 
+            "en": "Jump to top",
+            "zh": "跳到顶部"
+        },
         "type": "javascript"
     },
     {
         "id": "go-up",
-        "description": { "en": "Uses your note's \"up\" property to navigate to a parent note in your vault." },
+        "description": { 
+            "en": "Uses your note's \"up\" property to navigate to a parent note in your vault.",
+            "zh": "使用您的笔记的 \"up\" 属性导航到您的库中的父笔记。"
+        },
         "icon": "arrow-up-left",
-        "tooltip": { "en": "Go up" },
+        "tooltip": { 
+            "en": "Go up",
+            "zh": "向上"
+        },
         "uri": "{{prop_up}}",
         "type": "uri"
     },
     {
         "id": "go-next-callout",
-        "description": { "en": "Moves the cursor to the next callout in the note." },
+        "description": { 
+            "en": "Moves the cursor to the next callout in the note.",
+            "zh": "将光标移动到笔记中的下一个标注。"
+        },
         "icon": "chevrons-down",
         "script": "const ed = app.workspace.activeEditor?.editor;\nconst ln = ed.getValue().split('\\n');\nlet idx = ed.getCursor().line;\nconst r = /^\\s*>/;\nwhile (idx < ln.length && r.test(ln[idx])) idx++;\nwhile (idx < ln.length && !r.test(ln[idx])) idx++;\nif (idx >= ln.length) { idx = 0; while (idx < ln.length && !r.test(ln[idx])) idx++; }\nif (idx < ln.length) { ed.setCursor({ line: idx, ch: 0 }); }",
-        "tooltip": { "en": "Next callout" },
+        "tooltip": { 
+            "en": "Next callout",
+            "zh": "下一个标注（Callout）"
+        },
         "type": "javascript"
     },
     {
         "id": "go-next-heading",
-        "description": { "en": "Moves the cursor to the next heading in the note." },
+        "description": { 
+            "en": "Moves the cursor to the next heading in the note.",
+            "zh": "将光标移动到笔记中的下一个标题。"
+        },
         "icon": "a-arrow-down",
         "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = c.line + 1; i !== c.line; i = (i + 1) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
-        "tooltip": { "en": "Next heading" },
+        "tooltip": { 
+            "en": "Next heading",
+            "zh": "下一个标题"
+        },
         "type": "javascript"
     },
     {
         "id": "go-prev-heading",
-        "description": { "en": "Moves the cursor to the previous heading in the note." },
+        "description": { 
+            "en": "Moves the cursor to the previous heading in the note.",
+            "zh": "将光标移动到笔记中的上一个标题。"
+        },
         "icon": "a-arrow-up",
         "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
-        "tooltip": { "en": "Previous heading" },
+        "tooltip": { 
+            "en": "Previous heading",
+            "zh": "上一个标题"
+        },
         "type": "javascript"
     },
     {
         "id": "indent",
-        "description": { "en": "Increases indentation on the current line." },
+        "description": { 
+            "en": "Increases indentation on the current line.",
+            "zh": "增加当前行的缩进。"
+        },
         "icon": "indent-increase",
         "script": "app.workspace.activeLeaf.view?.editor.indentList()",
-        "tooltip": { "en": "Indent" },
+        "tooltip": { 
+            "en": "Indent",
+            "zh": "缩进"
+        },
         "type": "javascript"
     },
     {
         "id": "insert-callout",
         "commandId": "editor:insert-callout",
-        "description": { "en": "Insert a callout block." },
+        "description": { 
+            "en": "Insert a callout block.",
+            "zh": "插入一个标注块。"
+        },
         "icon": "quote",
-        "tooltip": { "en": "Insert callout" },
+        "tooltip": { 
+            "en": "Insert callout",
+            "zh": "插入标注（Callout）"
+        },
         "type": "command"
     },
     {
         "id": "insert-codeblock",
         "commandId": "editor:insert-codeblock",
-        "description": { "en": "Insert a code block." },
+        "description": { 
+            "en": "Insert a code block.",
+            "zh": "插入一个代码块。"
+        },
         "icon": "code-square",
-        "tooltip": { "en": "Insert code block" },
+        "tooltip": { 
+            "en": "Insert code block",
+            "zh": "插入代码块（Code Block）"
+        },
         "type": "command"
     },
     {
         "id": "insert-embed",
         "commandId": "editor:insert-embed",
-        "description": { "en": "Add an embedded file or note." },
+        "description": { 
+            "en": "Add an embedded file or note.",
+            "zh": "添加一个嵌入的文件或笔记。"
+        },
         "icon": "sticky-note",
-        "tooltip": { "en": "Add embed" },
+        "tooltip": { 
+            "en": "Add embed",
+            "zh": "添加嵌入"
+        },
         "type": "command"
     },
     {
         "id": "insert-horizontal-rule",
         "commandId": "editor:insert-horizontal-rule",
-        "description": { "en": "Insert a horizontal rule to separate sections." },
+        "description": { 
+            "en": "Insert a horizontal rule to separate sections.",
+            "zh": "插入一条分隔线。"
+        },
         "icon": "line-horizontal",
-        "tooltip": { "en": "Insert horizontal rule" },
+        "tooltip": { 
+            "en": "Insert horizontal rule",
+            "zh": "插入分隔线"
+        },
         "type": "command"
     },
     {
         "id": "insert-link",
         "commandId": "editor:insert-link",
-        "description": { "en": "Insert a markdown link." },
+        "description": { 
+            "en": "Insert a markdown link.",
+            "zh": "插入一个 markdown 链接。"
+        },
         "icon": "link",
-        "tooltip": { "en": "Insert markdown link" },
+        "tooltip": { 
+            "en": "Insert markdown link",
+            "zh": "插入 markdown 链接"
+        },
         "type": "command"
     },
     {
         "id": "insert-mathblock",
         "commandId": "editor:insert-mathblock",
-        "description": { "en": "Insert a math block." },
+        "description": { 
+            "en": "Insert a math block.",
+            "zh": "插入一个数学块。"
+        },
         "icon": "sigma-square",
-        "tooltip": { "en": "Insert math block" },
+        "tooltip": { 
+            "en": "Insert math block",
+            "zh": "插入数学块"
+        },
         "type": "command"
     },
     {
         "id": "insert-table",
         "commandId": "editor:insert-table",
-        "description": { "en": "Insert a table." },
+        "description": { 
+            "en": "Insert a table.",
+            "zh": "插入一个表格。"
+        },
         "icon": "table",
-        "tooltip": { "en": "Insert table" },
+        "tooltip": { 
+            "en": "Insert table",
+            "zh": "插入表格"
+        },
         "type": "command"
     },
     {
         "id": "insert-tag",
         "commandId": "editor:insert-tag",
-        "description": { "en": "Add a tag to the note." },
+        "description": { 
+            "en": "Add a tag to the note.",
+            "zh": "给笔记添加一个标签。"
+        },
         "icon": "tag",
-        "tooltip": { "en": "Add tag" },
+        "tooltip": { 
+            "en": "Add tag",
+            "zh": "添加标签"
+        },
         "type": "command"
     },
     {
         "id": "insert-wikilink",
         "commandId": "editor:insert-wikilink",
-        "description": { "en": "Add an internal link." },
+        "description": { 
+            "en": "Add an internal link.",
+            "zh": "添加一个内部链接。"
+        },
         "icon": "brackets",
-        "tooltip": { "en": "Add internal link" },
+        "tooltip": { 
+            "en": "Add internal link",
+            "zh": "添加内部链接"
+        },
         "type": "command"
     },
     {
         "id": "load-workspace",
         "commandId": "workspaces:load",
-        "description": { "en": "Select and load a configured workspace." },
+        "description": { 
+            "en": "Select and load a configured workspace.",
+            "zh": "选择并加载一个配置的工作区。"
+        },
         "icon": "layout-template",
-        "tooltip": { "en": "Load workspace" },
+        "tooltip": { 
+            "en": "Load workspace",
+            "zh": "加载工作区"
+        },
         "type": "command"
     },
     {
         "id": "new-note",
         "commandId": "file-explorer:new-file",
-        "description": { "en": "Create a new note." },
+        "description": { 
+            "en": "Create a new note.",
+            "zh": "创建一个新笔记。"
+        },
         "icon": "file",
-        "tooltip": { "en": "New note" },
+        "tooltip": { 
+            "en": "New note",
+            "zh": "新笔记"
+        },
         "type": "command"
     },
     {
         "id": "note-toolbar-quick-toolbars",
         "commandId": "note-toolbar:open-toolbar-suggester",
-        "description": { "en": "Opens a window with access to all of your Note Toolbars." },
+        "description": { 
+            "en": "Opens a window with access to all of your Note Toolbars.",
+            "zh": "打开一个窗口，以访问所有的笔记工具栏。"
+        },
         "icon": "package-search",
-        "tooltip": { "en": "Quick Toolbars" },
+        "tooltip": { 
+            "en": "Quick Toolbars",
+            "zh": "快速工具栏"
+        },
         "type": "command"
     },
     {
         "id": "note-toolbar-quick-tools",
         "commandId": "note-toolbar:open-item-suggester",
-        "description": { "en": "Opens a searchable window with access to all of your Note Toolbar items." },
+        "description": { 
+            "en": "Opens a searchable window with access to all of your Note Toolbar items.",
+            "zh": "打开一个可搜索的窗口，访问所有的笔记工具栏项目。"
+        },
         "icon": "rocket",
-        "tooltip": { "en": "Quick Tools" },
+        "tooltip": { 
+            "en": "Quick Tools",
+            "zh": "快速工具"
+        },
         "type": "command"
     },
     {
         "id": "note-toolbar-tbar-settings",
         "commandId": "note-toolbar:open-toolbar-settings",
-        "description": { "en": "Opens the active Note Toolbar's settings to customize your toolbar." },
+        "description": { 
+            "en": "Opens the active Note Toolbar's settings to customize your toolbar.",
+            "zh": "打开活动的笔记工具栏设置，以自定义您的工具栏。"
+        },
         "icon": "settings-2",
-        "tooltip": { "en": "Toolbar settings" },
+        "tooltip": { 
+            "en": "Toolbar settings",
+            "zh": "（当前）工具栏设置"
+        },
         "type": "command"
     },
     {
         "id": "note-toolbar-toggle-properties",
         "commandId": "note-toolbar:toggle-properties",
-        "description": { "en": "Toggle the visibility of note properties." },
+        "description": { 
+            "en": "Toggle the visibility of note properties.",
+            "zh": "切换笔记属性区的可见性。"
+        },
         "icon": "table-properties",
-        "tooltip": { "en": "Toggle Properties" },
+        "tooltip": { 
+            "en": "Toggle Properties",
+            "zh": "切换属性（Property）"
+        },
         "type": "command"
     },
     {
         "id": "note-toolbar-user-guide",
-        "description": { "en": "Access the Note Toolbar User Guide for help and tips." },
+        "description": { 
+            "en": "Access the Note Toolbar User Guide for help and tips.",
+            "zh": "访问笔记工具栏用户指南，获取帮助和提示。"
+        },
         "icon": "book",
-        "tooltip": { "en": "User Guide for Note Toolbar" },
+        "tooltip": { 
+            "en": "User Guide for Note Toolbar",
+            "zh": "笔记工具栏用户指南"
+        },
         "uri": "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
         "type": "uri"
     },
     {
         "id": "obsidian-discord",
-        "description": { "en": "Opens Obsidian's Discord community." },
+        "description": { 
+            "en": "Opens Obsidian's Discord community.",
+            "zh": "打开 Obsidian 的 Discord 社区。"
+        },
         "icon": "discord",
-        "tooltip": { "en": "Obsidian Discord" },
+        "tooltip": { 
+            "en": "Obsidian Discord",
+            "zh": "Obsidian Discord"
+        },
         "uri": "https://discord.gg/obsidianmd",
         "type": "uri"
     },
     {
         "id": "obsidian-forum",
-        "description": { "en": "Opens Obsidian's forum for discussions and support." },
+        "description": { 
+            "en": "Opens Obsidian's forum for discussions and support.",
+            "zh": "打开 Obsidian 的论坛进行讨论和支持。"
+        },
         "icon": "message-circle",
-        "tooltip": { "en": "Obsidian forum" },
+        "tooltip": { 
+            "en": "Obsidian forum",
+            "zh": "Obsidian 论坛"
+        },
         "uri": "https://forum.obsidian.md/",
         "type": "uri"
     },
     {
         "id": "obsidian-help-site",
-        "description": { "en": "Opens the official Obsidian Help site." },
+        "description": { 
+            "en": "Opens the official Obsidian Help site.",
+            "zh": "打开官方的 Obsidian 帮助网站。"
+        },
         "icon": "book",
-        "tooltip": { "en": "Obsidian Help" },
+        "tooltip": { 
+            "en": "Obsidian Help",
+            "zh": "Obsidian 帮助"
+        },
         "uri": "https://help.obsidian.md/",
         "type": "uri"
     },
     {
         "id": "obsidian-kanban-create",
         "commandId": "obsidian-kanban:create-new-kanban-board",
-        "description": { "en": "Create a new kanban board." },
+        "description": { 
+            "en": "Create a new kanban board.",
+            "zh": "创建一个新的看板。"
+        },
         "icon": "trello",
         "target": "tab",
-        "tooltip": { "en": "New kanban" },
+        "tooltip": { 
+            "en": "New kanban",
+            "zh": "新建看板"
+        },
         "type": "command"
     },
     {
         "id": "obsidian-markdown-reference",
-        "description": { "en": "Opens Obsidian's Markdown formatting guide." },
+        "description": { 
+            "en": "Opens Obsidian's Markdown formatting guide.",
+            "zh": "打开 Obsidian 的 Markdown 格式指南。"
+        },
         "icon": "book-down",
-        "tooltip": { "en": "Markdown reference" },
+        "tooltip": { 
+            "en": "Markdown reference",
+            "zh": "Markdown 参考"
+        },
         "uri": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
         "type": "uri"
     },
     {
         "id": "obsidian-subreddit",
-        "description": { "en": "Opens the Obsidian community on Reddit." },
+        "description": { 
+            "en": "Opens the Obsidian community on Reddit.",
+            "zh": "打开 Reddit 上的 Obsidian 社区。"
+        },
         "icon": "messages-square",
-        "tooltip": { "en": "Obsidian subreddit" },
+        "tooltip": { 
+            "en": "Obsidian subreddit",
+            "zh": "Obsidian 子版块"
+        },
         "uri": "https://www.reddit.com/r/ObsidianMD/",
         "type": "uri"
     },
     {
         "id": "obsidian-sync-version-history",
         "commandId": "sync:view-version-history",
-        "description": { "en": "View the version history for the current file." },
+        "description": { 
+            "en": "View the version history for the current file.",
+            "zh": "查看当前文件的版本历史。"
+        },
         "icon": "file-clock",
-        "tooltip": { "en": "Version history" },
+        "tooltip": { 
+            "en": "Version history",
+            "zh": "版本历史"
+        },
         "type": "command"
     },
     {
         "id": "obsidian-tasks-edit",
         "commandId": "obsidian-tasks-plugin:edit-task",
-        "description": { "en": "Create a new task." },
+        "description": { 
+            "en": "Create a new task.",
+            "zh": "创建一个新任务。"
+        },
         "icon": "check-square-2",
-        "tooltip": { "en": "Create/Edit task" },
+        "tooltip": { 
+            "en": "Create/Edit task",
+            "zh": "创建/编辑任务"
+        },
         "type": "command"
     },
     {
         "id": "paste",
-        "description": { "en": "Pastes the text from the clipboard." },
+        "description": { 
+            "en": "Pastes the text from the clipboard.",
+            "zh": "粘贴剪贴板中的文本。"
+        },
         "icon": "clipboard-paste",
         "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-        "tooltip": { "en": "Paste" },
+        "tooltip": { 
+            "en": "Paste",
+            "zh": "粘贴"
+        },
         "type": "javascript"
     },
     {
         "id": "periodic-notes-monthly-next",
         "commandId": "periodic-notes:next-monthly-note",
-        "description": { "en": "Open next monthly note. (Must be in monthly note.)" },
+        "description": { 
+            "en": "Open next monthly note. (Must be in monthly note.)",
+            "zh": "打开下一个月度笔记（当前位于一个月度笔记中时才有效）"
+        },
         "icon": "lucide-calendar-plus",
-        "tooltip": { "en": "Next monthly note" },
+        "tooltip": { 
+            "en": "Next monthly note",
+            "zh": "下一个月度笔记（Monthly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-monthly-open",
         "commandId": "periodic-notes:open-monthly-note",
-        "description": { "en": "Open monthly note." },
+        "description": { 
+            "en": "Open monthly note.",
+            "zh": "打开月度笔记。"
+        },
         "icon": "calendar-days",
-        "tooltip": { "en": "Open monthly note" },
+        "tooltip": { 
+            "en": "Open monthly note",
+            "zh": "打开月度笔记（Monthly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-monthly-prev",
         "commandId": "periodic-notes:prev-monthly-note",
-        "description": { "en": "Open previous monthly note. (Must be in monthly note.)" },
+        "description": { 
+            "en": "Open previous monthly note. (Must be in monthly note.)",
+            "zh": "打开上一个月度笔记（当前位于一个月度笔记中时才有效）"
+        },
         "icon": "lucide-calendar-minus",
-        "tooltip": { "en": "Previous monthly note" },
+        "tooltip": { 
+            "en": "Previous monthly note",
+            "zh": "上一个月度笔记（Monthly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-weekly-next",
         "commandId": "periodic-notes:next-weekly-note",
-        "description": { "en": "Next weekly note. (Must be in weekly note.)" },
+        "description": { 
+            "en": "Next weekly note. (Must be in weekly note.)",
+            "zh": "下一个周记（当前位于一个周记中时才有效）"
+        },
         "icon": "lucide-calendar-arrow-down",
-        "tooltip": { "en": "Next weekly note" },
+        "tooltip": { 
+            "en": "Next weekly note",
+            "zh": "下一个周记（Weekly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-weekly-open",
         "commandId": "periodic-notes:open-weekly-note",
-        "description": { "en": "Open weekly note." },
+        "description": { 
+            "en": "Open weekly note.",
+            "zh": "打开每周笔记。"
+        },
         "icon": "calendar-range",
-        "tooltip": { "en": "Open weekly note" },
+        "tooltip": { 
+            "en": "Open weekly note",
+            "zh": "打开周记（Weekly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-weekly-prev",
         "commandId": "periodic-notes:prev-weekly-note",
-        "description": { "en": "Previous weekly note. (Must be in weekly note.)" },
+        "description": { 
+            "en": "Previous weekly note. (Must be in weekly note.)",
+            "zh": "上一个周记（当前位于一个周记中时才有效）"
+        },
         "icon": "lucide-calendar-arrow-up",
-        "tooltip": { "en": "Previous weekly note" },
+        "tooltip": { 
+            "en": "Previous weekly note",
+            "zh": "上一个周记（Weekly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-yearly-next",
         "commandId": "periodic-notes:next-yearly-note",
-        "description": { "en": "Next yearly note. (Must be in yearly note.)" },
+        "description": { 
+            "en": "Next yearly note. (Must be in yearly note.)",
+            "zh": "下一个年度笔记（当前位于一个年度笔记中时才有效）"
+        },
         "icon": "fast-forward",
-        "tooltip": { "en": "Next yearly note" },
+        "tooltip": { 
+            "en": "Next yearly note",
+            "zh": "下一个年度笔记（Yearly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-yearly-open",
         "commandId": "periodic-notes:open-yearly-note",
-        "description": { "en": "Open yearly note." },
+        "description": { 
+            "en": "Open yearly note.",
+            "zh": "打开年度笔记。"
+        },
         "icon": "calendar-clock",
-        "tooltip": { "en": "Open yearly note" },
+        "tooltip": { 
+            "en": "Open yearly note",
+            "zh": "打开年度笔记（Yearly Note）"
+        },
         "type": "command"
     },
     {
         "id": "periodic-notes-yearly-prev",
         "commandId": "periodic-notes:prev-yearly-note",
-        "description": { "en": "Previous yearly note. (Must be in yearly note.)" },
+        "description": { 
+            "en": "Previous yearly note. (Must be in yearly note.)",
+            "zh": "上一个年度笔记（当前位于一个年度笔记中时才有效）"
+        },
         "icon": "rewind",
-        "tooltip": { "en": "Previous yearly note" },
+        "tooltip": { 
+            "en": "Previous yearly note",
+            "zh": "上一个年度笔记（Yearly Note）"
+        },
         "type": "command"
     },
     {
         "id": "pin",
         "commandId": "workspace:toggle-pin",
-        "description": { "en": "Pins or unpins the current note, preventing it from being replaced when opening new notes." },
+        "description": { 
+            "en": "Pins or unpins the current note, preventing it from being replaced when opening new notes.",
+            "zh": "固定或取消固定当前笔记，防止在打开新笔记时被替换。"
+        },
         "icon": "pin",
-        "tooltip": { "en": "Toggle pin" },
+        "tooltip": { 
+            "en": "Toggle pin",
+            "zh": "切换固定（Pin）"
+        },
         "type": "command"
     },
     {
         "id": "search-replace-open",
         "commandId": "editor:open-search-replace",
-        "description": { "en": "Open the find/replace panel in the current note." },
+        "description": { 
+            "en": "Open the find/replace panel in the current note.",
+            "zh": "在当前笔记中打开查找/替换面板。"
+        },
         "icon": "file-search",
-        "tooltip": { "en": "Find & Replace" },
+        "tooltip": { 
+            "en": "Find & Replace",
+            "zh": "查找和替换"
+        },
         "type": "command"
     },
     {
         "id": "set-workspace",
-        "description": { "en": "Changes to a specific workspace you provide." },
+        "description": { 
+            "en": "Changes to a specific workspace you provide.",
+            "zh": "切换到您提供的特定工作区。"
+        },
         "icon": "layout-template",
         "script": "const w = 'My Workspace'; // CHANGE THIS\napp.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
-        "tooltip": { "en": "My workspace" },
+        "tooltip": { 
+            "en": "My workspace",
+            "zh": "我的工作区"
+        },
         "type": "javascript"
     },
     {
         "id": "settings-open",
         "commandId": "app:open-settings",
-        "description": { "en": "Open Obsidian's settings." },
+        "description": { 
+            "en": "Open Obsidian's settings.",
+            "zh": "打开 Obsidian 的设置。"
+        },
         "icon": "settings",
-        "tooltip": { "en": "Open settings" },
+        "tooltip": { 
+            "en": "Open settings",
+            "zh": "打开设置"
+        },
         "type": "command"
     },
     {
         "id": "tab-close",
         "commandId": "workspace:close",
-        "description": { "en": "Close the current tab." },
+        "description": { 
+            "en": "Close the current tab.",
+            "zh": "关闭当前标签页。"
+        },
         "icon": "x",
-        "tooltip": { "en": "Close tab" },
+        "tooltip": { 
+            "en": "Close tab",
+            "zh": "关闭标签页"
+        },
         "type": "command"
     },
     {
         "id": "tab-new",
-        "description": { "en": "Opens a new empty tab." },
+        "description": { 
+            "en": "Opens a new empty tab.",
+            "zh": "打开一个新的空标签页。"
+        },
         "script": "app.workspace.getLeaf(true)",
         "icon": "plus",
-        "tooltip": { "en": "New tab" },
+        "tooltip": { 
+            "en": "New tab",
+            "zh": "新标签页"
+        },
         "type": "javascript"
     },
     {
         "id": "tab-next",
         "commandId": "workspace:next-tab",
-        "description": { "en": "Go to the next tab." },
+        "description": { 
+            "en": "Go to the next tab.",
+            "zh": "转到下一个标签页。"
+        },
         "icon": "chevron-right",
-        "tooltip": { "en": "Next tab" },
+        "tooltip": { 
+            "en": "Next tab",
+            "zh": "下一个标签页"
+        },
         "type": "command"
     },
     {
         "id": "tab-prev",
         "commandId": "workspace:previous-tab",
-        "description": { "en": "Go to the previous tab." },
+        "description": { 
+            "en": "Go to the previous tab.",
+            "zh": "转到上一个标签页。"
+        },
         "icon": "chevron-left",
-        "tooltip": { "en": "Previous tab" },
+        "tooltip": { 
+            "en": "Previous tab",
+            "zh": "上一个标签页"
+        },
         "type": "command"
     },
     {
         "id": "templater-insert-template",
         "commandId": "templater-obsidian:insert-templater",
-        "description": { "en": "Inserts the chosen template." },
+        "description": { 
+            "en": "Inserts the chosen template.",
+            "zh": "插入选定的模板。"
+        },
         "icon": "templater-icon",
-        "tooltip": { "en": "Insert template" },
+        "tooltip": { 
+            "en": "Insert template",
+            "zh": "插入模板"
+        },
         "type": "command"
     },
     {
         "id": "templater-new-note-from-template",
         "commandId": "templater-obsidian:create-new-note-from-template",
-        "description": { "en": "Create a new note from a template you select." },
+        "description": { 
+            "en": "Create a new note from a template you select.",
+            "zh": "从您选择的模板创建一个新笔记。"
+        },
         "icon": "percent-square",
-        "tooltip": { "en": "New from template" },
+        "tooltip": { 
+            "en": "New from template",
+            "zh": "从模板新建"
+        },
         "type": "command"
     },
     {
         "id": "redo",
-        "description": { "en": "Reapplies the last undone action." },
+        "description": { 
+            "en": "Reapplies the last undone action.",
+            "zh": "重新应用上一个撤销的操作。"
+        },
         "icon": "lucide-redo-2",
         "script": "app.workspace.activeLeaf.view?.editor.redo()",
-        "tooltip": { "en": "Redo" },
+        "tooltip": { 
+            "en": "Redo",
+            "zh": "重做"
+        },
         "type": "javascript"
     },
     {
         "id": "swap-line-down",
         "commandId": "editor:swap-line-down",
-        "description": { "en": "Move the current line down." },
+        "description": { 
+            "en": "Move the current line down.",
+            "zh": "将当前行向下移动。"
+        },
         "icon": "corner-right-down",
-        "tooltip": { "en": "Move line down" },
+        "tooltip": { 
+            "en": "Move line down",
+            "zh": "向下移动当前行"
+        },
         "type": "command"
     },
     {
         "id": "swap-line-up",
         "commandId": "editor:swap-line-up",
-        "description": { "en": "Move the current line up." },
+        "description": { 
+            "en": "Move the current line up.",
+            "zh": "将当前行向上移动。"
+        },
         "icon": "corner-right-up",
-        "tooltip": { "en": "Move line up" },
+        "tooltip": { 
+            "en": "Move line up",
+            "zh": "向上移动当前行"
+        },
         "type": "command"
     },
     {
         "id": "system-snippets-open",
-        "description": { "en": "Opens the vault's snippets folder in the system's file explorer." },
+        "description": { 
+            "en": "Opens the vault's snippets folder in the system's file explorer.",
+            "zh": "在系统的文件资源管理器中打开库的 CSS 片段文件夹。"
+        },
         "icon": "folder-code",
         "script": "let v = this.app.vault.adapter.getBasePath() + '/' + app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
-        "tooltip": { "en": "Show snippets in system" },
+        "tooltip": { 
+            "en": "Show snippets in system",
+            "zh": "在系统中显示 CSS 片段（Snippets）"
+        },
         "type": "javascript"
     },
     {
         "id": "system-vault-open",
-        "description": { "en": "Opens the vault's folder in the system's file explorer." },
+        "description": { 
+            "en": "Opens the vault's folder in the system's file explorer.",
+            "zh": "在系统的文件资源管理器中打开库所在的文件夹。"
+        },
         "icon": "folder-heart",
         "script": "let v = this.app.vault.adapter.getBasePath(); window.open('file://' + encodeURI(v));",
-        "tooltip": { "en": "Show vault in system" },
+        "tooltip": { 
+            "en": "Show vault in system",
+            "zh": "在系统中显示库"
+        },
         "type": "javascript"
     },
     {
         "id": "theme-switch",
         "commandId": "theme:switch",
-        "description": { "en": "Open the Obsidian theme switcher." },
+        "description": { 
+            "en": "Open the Obsidian theme switcher.",
+            "zh": "打开 Obsidian 主题切换器。"
+        },
         "icon": "venetian-mask",
-        "tooltip": { "en": "Change theme" },
+        "tooltip": { 
+            "en": "Change theme",
+            "zh": "更改主题"
+        },
         "type": "command"
     },
     {
         "id": "theme-toggle-light-dark",
         "commandId": "theme:use-dark",
-        "description": { "en": "Toggle between light and dark modes." },
+        "description": { 
+            "en": "Toggle between light and dark modes.",
+            "zh": "在浅色和深色模式之间切换。"
+        },
         "icon": "sun-moon",
         "script": "const i = ntb.getActiveItem();\nif (app.vault.getConfig('theme') === 'obsidian') { app.vault.setConfig('theme', 'obsidian-light'); i?.setIcon('moon'); }\nelse { app.vault.setConfig('theme', 'obsidian'); i?.setIcon('sun'); }",
-        "tooltip": { "en": "Toggle light/dark" },
+        "tooltip": { 
+            "en": "Toggle light/dark",
+            "zh": "切换浅色/深色"
+        },
         "type": "javascript"
     },
     {
         "id": "theme-use-dark",
         "commandId": "theme:use-dark",
-        "description": { "en": "Enable dark mode." },
+        "description": { 
+            "en": "Enable dark mode.",
+            "zh": "启用深色模式。"
+        },
         "icon": "moon",
-        "tooltip": { "en": "Use dark mode" },
+        "tooltip": { 
+            "en": "Use dark mode",
+            "zh": "使用深色模式"
+        },
         "type": "command"
     },
     {
         "id": "theme-use-light",
         "commandId": "theme:use-light",
-        "description": { "en": "Enable light mode." },
+        "description": { 
+            "en": "Enable light mode.",
+            "zh": "启用浅色模式。"
+        },
         "icon": "sun",
-        "tooltip": { "en": "Use light mode" },
+        "tooltip": { 
+            "en": "Use light mode",
+            "zh": "使用浅色模式"
+        },
         "type": "command"
     },
     {
         "id": "toggle-blockquote",
         "commandId": "editor:toggle-blockquote",
-        "description": { "en": "Apply or remove blockquote formatting." },
+        "description": { 
+            "en": "Apply or remove blockquote formatting.",
+            "zh": "应用或移除引用块格式。"
+        },
         "icon": "text-quote",
-        "tooltip": { "en": "Toggle blockquote" },
+        "tooltip": { 
+            "en": "Toggle blockquote",
+            "zh": "切换引用块（Blockquote）"
+        },
         "type": "command"
     },
     {
         "id": "toggle-bold",
         "commandId": "editor:toggle-bold",
-        "description": { "en": "Apply or remove bold formatting." },
+        "description": { 
+            "en": "Apply or remove bold formatting.",
+            "zh": "应用或移除粗体格式。"
+        },
         "icon": "bold",
-        "tooltip": { "en": "Toggle bold" },
+        "tooltip": { 
+            "en": "Toggle bold",
+            "zh": "切换粗体"
+        },
         "type": "command"
     },
     {
         "id": "toggle-bullet-list",
         "commandId": "editor:toggle-bullet-list",
-        "description": { "en": "Apply or remove bullet list formatting." },
+        "description": { 
+            "en": "Apply or remove bullet list formatting.",
+            "zh": "应用或移除无序列表格式。"
+        },
         "icon": "list",
-        "tooltip": { "en": "Toggle bullet" },
+        "tooltip": { 
+            "en": "Toggle bullet",
+            "zh": "切换无序列表"
+        },
         "type": "command"
     },
     {
         "id": "toggle-checklist-status",
         "commandId": "editor:toggle-checklist-status",
-        "description": { "en": "Toggle the status of checklist items." },
+        "description": { 
+            "en": "Toggle the status of checklist items.",
+            "zh": "切换任务列表的状态。"
+        },
         "icon": "list-checks",
-        "tooltip": { "en": "Toggle check status" },
+        "tooltip": { 
+            "en": "Toggle check status",
+            "zh": "切换任务状态"
+        },
         "type": "command"
     },
     {
         "id": "toggle-code",
         "commandId": "editor:toggle-code",
-        "description": { "en": "Apply or remove inline code formatting." },
+        "description": { 
+            "en": "Apply or remove inline code formatting.",
+            "zh": "应用或移除内联代码格式。"
+        },
         "icon": "code",
-        "tooltip": { "en": "Toggle code" },
+        "tooltip": { 
+            "en": "Toggle code",
+            "zh": "切换代码（Inline Code）"
+        },
         "type": "command"
     },
     {
         "id": "toggle-comments",
         "commandId": "editor:toggle-comments",
-        "description": { "en": "Add or remove comments." },
+        "description": { 
+            "en": "Add or remove comments.",
+            "zh": "添加或移除注释。"
+        },
         "icon": "percent",
-        "tooltip": { "en": "Toggle comment" },
+        "tooltip": { 
+            "en": "Toggle comment",
+            "zh": "切换注释（Comment）"
+        },
         "type": "command"
     },
     {
         "id": "toggle-css-class",
-        "description": { "en": "Adds or removes the provided CSS class in the cssclasses property." },
+        "description": { 
+            "en": "Adds or removes the provided CSS class in the cssclasses property.",
+            "zh": "在 cssclasses 属性中添加或移除提供的 CSS 类。"
+        },
         "icon": "paintbrush",
         "script": "let tc = 'myclass'; // CHANGE THIS\nconst af = app.workspace.getActiveFile(); if (!af) return;\nawait app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
-        "tooltip": { "en": "Toggle CSS class" },
+        "tooltip": { 
+            "en": "Toggle CSS class",
+            "zh": "切换 CSS 类"
+        },
         "type": "javascript"
     },
     {
         "id": "toggle-highlight",
         "commandId": "editor:toggle-highlight",
-        "description": { "en": "Apply or remove text highlighting." },
+        "description": { 
+            "en": "Apply or remove text highlighting.",
+            "zh": "应用或移除文本高亮。"
+        },
         "icon": "highlighter",
-        "tooltip": { "en": "Toggle highlight" },
+        "tooltip": { 
+            "en": "Toggle highlight",
+            "zh": "切换高亮文本（Highlight）"
+        },
         "type": "command"
     },
     {
         "id": "toggle-inline-math",
         "commandId": "editor:toggle-inline-math",
-        "description": { "en": "Apply or remove inline math formatting." },
+        "description": { 
+            "en": "Apply or remove inline math formatting.",
+            "zh": "应用或移除内联数学格式。"
+        },
         "icon": "sigma",
-        "tooltip": { "en": "Toggle inline math" },
+        "tooltip": { 
+            "en": "Toggle inline math",
+            "zh": "切换内联数学（Inline Math）"
+        },
         "type": "command"
     },
     {
         "id": "toggle-italics",
         "commandId": "editor:toggle-italics",
-        "description": { "en": "Apply or remove italic formatting." },
+        "description": { 
+            "en": "Apply or remove italic formatting.",
+            "zh": "应用或移除斜体格式。"
+        },
         "icon": "italic",
-        "tooltip": { "en": "Toggle italics" },
+        "tooltip": { 
+            "en": "Toggle italics",
+            "zh": "切换斜体（Italics）"
+        },
         "type": "command"
     },
     {
         "id": "toggle-numbered-list",
         "commandId": "editor:toggle-numbered-list",
-        "description": { "en": "Apply or remove numbered list formatting." },
+        "description": { 
+            "en": "Apply or remove numbered list formatting.",
+            "zh": "应用或移除有序列表格式。"
+        },
         "icon": "list-ordered",
-        "tooltip": { "en": "Toggle numbered list" },
+        "tooltip": { 
+            "en": "Toggle numbered list",
+            "zh": "切换有序列表"
+        },
         "type": "command"
     },
     {
         "id": "toggle-status-bar",
-        "description": { "en": "Shows or hides Obsidian's status bar." },
+        "description": { 
+            "en": "Shows or hides Obsidian's status bar.",
+            "zh": "显示或隐藏 Obsidian 的状态栏。"
+        },
         "icon": "dock",
         "script": "const s = activeDocument.querySelector('.status-bar');\nif (s) { s.style.display = s.style.display === 'none' ? '' : 'none'; }",
-        "tooltip": { "en": "Toggle status bar" },
+        "tooltip": { 
+            "en": "Toggle status bar",
+            "zh": "切换状态栏"
+        },
         "type": "javascript"
     },
     {
         "id": "toggle-strikethrough",
         "commandId": "editor:toggle-strikethrough",
-        "description": { "en": "Apply or remove strikethrough formatting." },
+        "description": { 
+            "en": "Apply or remove strikethrough formatting.",
+            "zh": "应用或移除删除线格式。"
+        },
         "icon": "strikethrough",
-        "tooltip": { "en": "Toggle strikethrough" },
+        "tooltip": { 
+            "en": "Toggle strikethrough",
+            "zh": "切换删除线（Strikethrough）"
+        },
         "type": "command"
     },
     {
         "id": "toggle-vim-mode",
-        "description": { "en": "Turns Vim mode on and off." },
+        "description": { 
+            "en": "Turns Vim mode on and off.",
+            "zh": "打开和关闭 Vim 模式。"
+        },
         "icon": "keyboard",    
         "script": "const vm = app.vault.getConfig('vimMode');\napp.vault.setConfig('vimMode', !vm);\nntb.getActiveItem()?.setIcon(vm ? 'keyboard' : 'edit-2');",
-        "tooltip": { "en": "Toggle Vim mode" },
+        "tooltip": { 
+            "en": "Toggle Vim mode",
+            "zh": "切换 Vim 模式"
+        },
         "type": "javascript"
     },
     {
         "id": "undo",
-        "description": { "en": "Reverts the latest action." },
+        "description": { 
+            "en": "Reverts the latest action.",
+            "zh": "撤销最新的操作。"
+        },
         "icon": "lucide-undo-2",
         "script": "app.workspace.activeLeaf.view?.editor.undo()",
-        "tooltip": { "en": "Undo" },
+        "tooltip": { 
+            "en": "Undo",
+            "zh": "撤销"
+        },
         "type": "javascript"
     },
     {
         "id": "unindent",
-        "description": { "en": "Decreases indentation on the current line." },
+        "description": { 
+            "en": "Decreases indentation on the current line.",
+            "zh": "减少当前行的缩进。"
+        },
         "icon": "indent-decrease",
         "script": "app.workspace.activeLeaf.view?.editor.unindentList()",
-        "tooltip": { "en": "Unindent" },
+        "tooltip": { 
+            "en": "Unindent",
+            "zh": "取消缩进"
+        },
         "type": "javascript"
     },
     {
         "id": "vscode-open",
-        "description": { "en": "Opens the current file in VS Code." },
+        "description": { 
+            "en": "Opens the current file in VS Code.",
+            "zh": "在 VS Code 中打开当前文件。"
+        },
         "icon": "file-json-2",
-        "tooltip": { "en": "Open in VS Code" },
+        "tooltip": { 
+            "en": "Open in VS Code",
+            "zh": "在 VS Code 中打开"
+        },
         "uri": "vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}",
         "type": "uri"
     }
