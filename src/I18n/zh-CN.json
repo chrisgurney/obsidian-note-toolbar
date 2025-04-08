@@ -1,7 +1,7 @@
 {
   "adapter": {
     "args": "参数（可选）",
-    "args-description": "您的脚本函数接受的参数，以逗号分隔的 '名称：value' 格式，字符串值在引号中。",
+    "args-description": "您的脚本函数接受的参数，以逗号分隔的 'key: value' 格式（字符符串需用英文引号包裹）。可以通过 `input` 变量访问这些参数。",
     "dataview": {
       "dvjs-expr": "Dataview JS 表达式",
       "dvjs-expr-description": "需要运行的 Dataview JS 表达式。",
@@ -90,10 +90,10 @@
       "eval-expr-description": "要执行的 Templater 命令。",
       "eval-expr-error-required": "错误：需要一个 Templater 表达式",
       "eval-function": "执行 Templater 命令",
-      "exec-function": "执行 Templater 文件",
+      "exec-function": "执行 Templater 模板文件",
       "exec-sourcefile": "模板文件",
       "exec-sourcefile-description": "执行文件内容并返回。",
-      "exec-sourcefile-error-required": "错误：需要一个 Templater 文件"
+      "exec-sourcefile-error-required": "错误：需要一个 Templater 模板文件"
     }
   },
   "api": {
@@ -124,13 +124,13 @@
     "name-item-suggester": "打开快速工具",
     "name-item-suggester-current": "打开当前工具栏的快速工具",
     "name-open-gallery": "打开工具展览",
-    "name-open-toolbar": "打开：{{toolbar}}",
+    "name-open-toolbar": "打开工具栏：{{toolbar}}",
     "name-settings": "打开插件设置",
     "name-show-properties": "显示笔记属性",
     "name-toggle-properties": "切换笔记属性的显示",
     "name-toolbar-settings": "打开工具栏设置",
     "name-toolbar-suggester": "打开快速工具栏",
-    "name-use-item": "使用：{{item}}"
+    "name-use-item": "调用工具：{{item}}"
   },
   "export": {
     "button-copy-link": "复制链接",
@@ -153,11 +153,11 @@
     "error-missing-item-type": "展览项目：缺少项目类型属性",
     "error-missing-property": "展览数据中含有缺失的插件或脚本属性。",
     "label-plugin": "{{{plugin}}",
-    "label-suggestions": "来自项目画廊的建议",
+    "label-suggestions": "来自工具展览的建议",
     "select-plugin-placeholder": "选择一个插件…",
     "select-plugin-suggestion": "{{plugin}}",
     "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ 未安装（或未启用）",
-    "title": "Note Toolbar Gallery 笔记工具栏展览",
+    "title": "Note Toolbar Gallery 工具展览",
     "tooltip-add-item": "添加项目到工具栏"
   },
   "import": {
@@ -192,7 +192,7 @@
     "error-invalid-script-id": "不存在 ID 为 {{{scriptid}}}（{{pluginid}}） 的脚本",
     "error-script-required": "错误：未选择脚本。",
     "script": "库脚本",
-    "script-function": "使用库中的脚本",
+    "script-function": "调用库中的脚本",
     "script-option-default": "选择脚本…"
   },
   "notice": {
@@ -378,7 +378,7 @@
       "option-target-window": "新窗口",
       "option-tooltip-placeholder": "工具提示（可选）",
       "option-uri": "URI",
-      "option-uri-help": "提示：在 URI 中可以使用使用笔记属性。",
+      "option-uri-help": "提示：在 URI 中可以使用笔记属性。",
       "option-uri-placehoder": "网站、URI 或笔记名称",
       "option-visibility-component-hidden-platform": "在{{platform}}隐藏{{component}}",
       "option-visibility-component-visible-platform": "在{{platform}}显示{{component}}",
@@ -394,7 +394,7 @@
       "instruction-dismiss": "取消",
       "instruction-navigate": "导航",
       "instruction-select": "选择",
-      "instruction-use": "使用该项",
+      "instruction-use": "确认",
       "key-back": "⌫ or ←",
       "key-dismiss": "esc",
       "key-navigate": "↑↓",
