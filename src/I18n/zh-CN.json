@@ -325,7 +325,7 @@
       "instruction-back": "返回",
       "instruction-dismiss": "取消",
       "instruction-navigate": "导航",
-      "instruction-use": "使用该项",
+      "instruction-use": "确认",
       "key-back": "⌫ or ←",
       "key-dismiss": "esc",
       "key-navigate": "↑↓",
@@ -490,7 +490,7 @@
     },
     "use-item-command": {
       "error-noname": "请重新添加命令。\n至少需要填写一个标签或工具提示（或包含表达式）。",
-      "name-add": "将该项目添加为 Command（命令）",
+      "name-add": "将该项目注册为命令（Command）",
       "name-remove": "移除该项目的命令",
       "notice-command-added": "命令现在可用：\n{{command}}",
       "notice-command-added-hotkeys": "打开热键设置 {{cta}} →",
