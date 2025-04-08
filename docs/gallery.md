@@ -170,6 +170,7 @@ Switch themes and toggle views.
 | Toggle Reading view | Change between the editor's Preview and Reading modes. |
 | Toggle Source mode | Turn Source mode on and off. |
 | Toggle status bar | Shows or hides Obsidian's status bar. |
+| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. |
 | Show snippets in system | Opens the vault's snippets folder in the system's file explorer. |
 
 ## Workspaces

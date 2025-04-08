@@ -1361,6 +1361,18 @@
         "type": "command"
     },
     {
+        "id": "toggle-ui",
+        "script": "const h = activeDocument.querySelector('.view-header'), s = activeDocument.querySelector('.status-bar');\nif (h && s) {\n if (h.style.display === 'none') {\n h.style.display = '';\n s.style.display = '';\n app.workspace.leftSplit?.expand();\n // app.workspace.rightSplit?.expand();\n await app.commands.executeCommandById('note-toolbar:show-properties');\n }\n else {\n h.style.display = 'none';\n s.style.display = 'none';\n app.workspace.leftSplit?.collapse();\n // app.workspace.rightSplit?.collapse();\n await app.commands.executeCommandById('note-toolbar:hide-properties');\n }\n }",
+        "description": { 
+            "en": "Shows or hides Obsidian's status bar, note properties, sidebar, and view header."
+        },
+        "icon": "focus",
+        "tooltip": { 
+            "en": "Toggle UI"
+        },
+        "type": "javascript"
+    },
+    {
         "id": "toggle-status-bar",
         "description": { 
             "en": "Shows or hides Obsidian's status bar.",

@@ -178,7 +178,7 @@
                 "zh": "切换主题和视图。"
             },
             "itemIds": [
-                "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "system-snippets-open"
+                "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "toggle-ui", "system-snippets-open"
             ]
         },
         {
