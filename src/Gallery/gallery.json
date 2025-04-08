@@ -1,25 +1,30 @@
 {
     "title": { 
         "en": "Note Toolbar Gallery",
-        "zh": "笔记工具栏展览"
+        "zh": "笔记工具栏展览",
+        "uk": "Галерея Note Toolbar"
     },
     "overview": { 
         "en": "Browse examples of items, and click/tap to add them to a toolbar.",
-        "zh": "浏览项目示例，点击/轻触以将其添加到工具栏。"
+        "zh": "浏览项目示例，点击/轻触以将其添加到工具栏。",
+        "uk": "Переглядайте приклади елементів і натисніть/торкніться, щоб додати їх до панелі інструментів."
     },
     "pluginNote": { 
         "en": "Some items require plugins for more sophisticated behavior. ",
-        "zh": "某些项目需要特定插件以实现更复杂的功能。"
+        "zh": "某些项目需要特定插件以实现更复杂的功能。",
+        "uk": "Деякі елементи потребують наявність додатків для більш функціональної обробки. "
     },
     "categories": [
         {
             "name": { 
                 "en": "Daily Notes",
-                "zh": "Daily Notes 每日笔记"
+                "zh": "Daily Notes 每日笔记",
+                "uk": "Щоденні нотатки"
             },
             "description": { 
                 "en": "Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.",
-                "zh": "快速在每日笔记之间导航。需要启用 _日记_ 核心插件。"
+                "zh": "快速在每日笔记之间导航。需要启用 _日记_ 核心插件。",
+                "uk": "Швидко переміщуйтесь між щоденними нотатками. Потрібен вбудований додаток _Щоденні нотатки_."
             },
             "itemIds": [
                 "daily-notes-prev", "daily-notes-today", "daily-notes-next"
@@ -28,11 +33,13 @@
         {
             "name": { 
                 "en": "Basic Actions",
-                "zh": "基本操作"
+                "zh": "基本操作",
+                "uk": "Основні дії"
             },
             "description": { 
                 "en": "For quick text editing and history control.",
-                "zh": "用于快速文本编辑和操作历史。"
+                "zh": "用于快速文本编辑和操作历史。",
+                "uk": "Для швидкого редагування тексту та керування історією."
             },
             "itemIds": [
                 "copy", "cut", "paste", "undo", "redo", "clear-formatting"
@@ -41,11 +48,13 @@
         {
             "name": { 
                 "en": "Editing",
-                "zh": "编辑"
+                "zh": "编辑",
+                "uk": "Редактор"
             },
             "description": { 
                 "en": "Adjust the order and arrangement of content.",
-                "zh": "调整内容的顺序和格式。"
+                "zh": "调整内容的顺序和格式。",
+                "uk": "Працюйте швидше з текстовим редактором."
             },
             "itemIds": [
                 "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
@@ -54,11 +63,13 @@
         {
             "name": { 
                 "en": "Files",
-                "zh": "文件"
+                "zh": "文件",
+                "uk": "Файли"
             },
             "description": { 
                 "en": "Tools for working with files.",
-                "zh": "用于处理文件的工具。"
+                "zh": "用于处理文件的工具。",
+                "uk": "Інструменти роботи з файлами."
             },
             "itemIds": [
                 "file-new", "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
@@ -67,11 +78,13 @@
         {
             "name": { 
                 "en": "Formatting",
-                "zh": "格式化"
+                "zh": "格式化",
+                "uk": "Форматування"
             },
             "description": { 
                 "en": "Change how text looks.",
-                "zh": "更改文本的外观。"
+                "zh": "更改文本的外观。",
+                "uk": "Змініть вигляд тексту."
             },
             "itemIds": [
                 "toggle-bold", "toggle-italics", "toggle-strikethrough", "toggle-code", "toggle-blockquote", "toggle-highlight"
@@ -80,11 +93,13 @@
         {
             "name": { 
                 "en": "Lists & Indentation",
-                "zh": "列表与缩进"
+                "zh": "列表与缩进",
+                "uk": "Списки та відступи"
             },
             "description": { 
                 "en": "Organize items into lists and adjust structure.",
-                "zh": "将项目组织成列表并调整结构。"
+                "zh": "将项目组织成列表并调整结构。",
+                "uk": "Упорядкуйте елементи у списки та налаштуйте структуру."
             },
             "itemIds": [
                 "toggle-bullet-list", "toggle-checklist-status", "toggle-numbered-list", "indent", "unindent", "cycle-list-checklist"
@@ -93,11 +108,13 @@
         {
             "name": { 
                 "en": "Insertions",
-                "zh": "插入"
+                "zh": "插入",
+                "uk": "Вставки"
             },
             "description": { 
                 "en": "Add various types of content like links or media.",
-                "zh": "添加各种类型的内容，如链接或媒体。"
+                "zh": "添加各种类型的内容，如链接或媒体。",
+                "uk": "Додайте різні типи вмісту, такі як посилання, або медіа."
             },
             "itemIds": [
                 "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
@@ -106,11 +123,13 @@
         {
             "name": { 
                 "en": "Editor Navigation",
-                "zh": "编辑器导航"
+                "zh": "编辑器导航",
+                "uk": "Навігація редактора"
             },
             "description": { 
                 "en": "Get around the text editor faster.",
-                "zh": "更快地在文本编辑器中导航。"
+                "zh": "更快地在文本编辑器中导航。",
+                "uk": "Швидше працюйте з текстовим редактором."
             },
             "itemIds": [
                 "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
@@ -119,11 +138,13 @@
         {
             "name": { 
                 "en": "Vault Navigation",
-                "zh": "库导航"
+                "zh": "库导航",
+                "uk": "Навігація по сховищу"
             },
             "description": { 
                 "en": "Navigate between files and directories.",
-                "zh": "在不同的文件和目录之间导航。"
+                "zh": "在不同的文件和目录之间导航。",
+                "uk": "Переміщуйтесь між файлами та каталогами."
             },
             "itemIds": [
                 "file-prev", "file-next", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
@@ -136,7 +157,8 @@
             },
             "description": { 
                 "en": "Get access to Note Toolbar settings and tools quickly.",
-                "zh": "快速访问笔记工具栏设置和工具。"
+                "zh": "快速访问笔记工具栏设置和工具。",
+                "uk": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
             },
             "itemIds": [
                 "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
@@ -145,11 +167,13 @@
         {
             "name": { 
                 "en": "Obsidian Support",
-                "zh": "Obsidian 支持"
+                "zh": "Obsidian 支持",
+                "uk": "Підтримка Obsidian"
             },
             "description": { 
                 "en": "Get help from Obsidian community resources.",
-                "zh": "从 Obsidian 社区资源中获取帮助。"
+                "zh": "从 Obsidian 社区资源中获取帮助。",
+                "uk": "Отримайте допомогу від спільноти Obsidian."
             },
             "itemIds": [
                 "obsidian-help-site", "obsidian-markdown-reference", "obsidian-discord", "obsidian-forum", "obsidian-subreddit"
@@ -158,11 +182,13 @@
         {
             "name": { 
                 "en": "Search",
-                "zh": "搜索"
+                "zh": "搜索",
+                "uk": "Пошук"
             },
             "description": { 
                 "en": "Search in notes and across your vault.",
-                "zh": "在笔记和整个库中搜索。"
+                "zh": "在笔记和整个库中搜索。",
+                "uk": "Шукайте в нотатках і по всьому сховищу."
             },
             "itemIds": [
                 "search-replace-open", "global-search-open", "folder-search"
@@ -171,11 +197,13 @@
         {
             "name": { 
                 "en": "Views and Themes",
-                "zh": "视图与主题"
+                "zh": "视图与主题",
+                "uk": "Теми та режими перегляду"
             },
             "description": { 
                 "en": "Switch themes and toggle views.",
-                "zh": "切换主题和视图。"
+                "zh": "切换主题和视图。",
+                "uk": "Перемикайте теми та режими перегляду."
             },
             "itemIds": [
                 "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "system-snippets-open"
@@ -184,11 +212,13 @@
         {
             "name": { 
                 "en": "Workspaces",
-                "zh": "工作区"
+                "zh": "工作区",
+                "uk": "Простори"
             },
             "description": { 
                 "en": "Switch between workspaces. Requires the _Workspaces_ core plugin.",
-                "zh": "在工作区之间切换。需要启用 _工作区_ 核心插件。"
+                "zh": "在工作区之间切换。需要启用 _工作区_ 核心插件。",
+                "uk": "Перемикання між робочими просторами. Потрібен вбудований додаток _Простори_."
             },
             "itemIds": [
                 "load-workspace", "cycle-workspace", "set-workspace"
@@ -201,7 +231,8 @@
             },
             "description": { 
                 "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin.",
-                "zh": "导航到每周、每月和每年的笔记。需要 [Periodic Notes](obsidian://show-plugin?id=periodic-notes) 插件。"
+                "zh": "导航到每周、每月和每年的笔记。需要 [Periodic Notes](obsidian://show-plugin?id=periodic-notes) 插件。",
+                "uk": "Перехід до щотижневих, щомісячних та річних нотаток. Потрібен додаток [Periodic Notes](obsidian://show-plugin?id=periodic-notes)."
             },
             "itemIds": [
                 "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
@@ -214,7 +245,8 @@
             },
             "description": { 
                 "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater).",
-                "zh": "从模板中插入或创建笔记。需要 [Templater](obsidian://show-plugin?id=templater-obsidian) 插件。请参阅用户指南以了解 [更多使用 Templater 的方法](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)。"
+                "zh": "从模板中插入或创建笔记。需要 [Templater](obsidian://show-plugin?id=templater-obsidian) 插件。请参阅用户指南以了解 [更多使用 Templater 的方法](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)。",
+                "uk": "Вставляйте, або створюйте нотатки з шаблонів. Потрібен додаток [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)."
             },
             "itemIds": [
                 "templater-insert-template", "templater-new-note-from-template"
@@ -223,11 +255,13 @@
         {
             "name": { 
                 "en": "Explore More",
-                "zh": "探索更多"
+                "zh": "探索更多",
+                "uk": "Знайти більше"
             },
             "description": { 
                 "en": "Do more with Obsidian's plugins.",
-                "zh": "通过 Obsidian 的插件实现更多妙妙功能。"
+                "zh": "通过 Obsidian 的插件实现更多妙妙功能。",
+                "uk": "Робіть більше з додатками Obsidian."
             },
             "itemIds": [
                 "obsidian-sync-version-history", "obsidian-tasks-edit"
