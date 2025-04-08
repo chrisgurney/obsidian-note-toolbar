@@ -207,6 +207,7 @@
     "plugin": {
         "canvas": "Полотно",
         "daily-notes": "Щоденні\u00A0нотатки",
+        "periodic-notes": "Periodic\u00A0Notes",
         "sync": "Синхронізація",
         "workspaces": "Простори"
     },
@@ -229,7 +230,7 @@
         "button-help": "Довідка",
         "button-help-tooltip": "Відкрити посібник",
         "button-learn-more": "Докладніше↗",
-        "button-user-guide": "Посібник користувача",
+        "button-user-guide": "Посібник\u00A0користувача",
         "button-whats-new": "Що нового?",
         "button-whats-new-tooltip": "Відкрити \"Що нового\"",
         "command-suggest-modal": {
