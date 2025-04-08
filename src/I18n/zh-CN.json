@@ -337,7 +337,7 @@
     "items": {
       "button-add-break-tooltip": "向工具栏添加换行",
       "button-add-separator-tooltip": "向工具栏添加分隔符",
-      "button-new-item": "+ 添加工具栏项目",
+      "button-new-item": "添加工具栏项目",
       "button-new-item-tooltip": "向工具栏添加新项目",
       "description": "按顺序向工具栏添加项目。",
       "label-empty-no-items": "无工具栏项目。",
@@ -352,7 +352,7 @@
     "mappings": {
       "button-collapse-tooltip": "折叠所有映射",
       "button-expand-tooltip": "展开所有映射",
-      "button-new": "+ 新建映射",
+      "button-new": "新建映射",
       "button-new-tooltip": "添加新映射",
       "description": "下列文件夹中的笔记将显示映射到该文件夹的工具栏，优先级从上到下。",
       "error-folder-already-mapped": "此文件夹已经关联了一个工具栏",
@@ -473,7 +473,7 @@
       "button-edit-tbar": "编辑",
       "button-edit-tbar-tooltip": "更新此工具栏",
       "button-more-tooltip": "更多选项",
-      "button-new-tbar": "+ 新建工具栏",
+      "button-new-tbar": "新建工具栏",
       "button-new-tbar-tooltip": "添加一个新的工具栏",
       "description": "定义要添加到笔记中的工具栏。",
       "duplicated-tbar-suffix": "复制",
