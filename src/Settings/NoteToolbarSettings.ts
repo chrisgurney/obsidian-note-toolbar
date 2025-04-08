@@ -1,8 +1,9 @@
 import { getUUID } from "Utils/Utils";
+import { PaneType } from "obsidian";
 
 /* only update when settings structure changes to trigger migrations */
-export const SETTINGS_VERSION = 20250302.1;
-export const WHATSNEW_VERSION = 1.20;
+export const SETTINGS_VERSION = 20250313.1;
+export const WHATSNEW_VERSION = 1.21;
 
 /******************************************************************************
  * TRANSLATIONS
@@ -32,12 +33,22 @@ i18next.addResourceBundle('en', 'plugin-note-toolbar-docs', { "whats-new": en_wh
 export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); // string translation function
 
 /******************************************************************************
- TYPES
+ CONSTANTS
  ******************************************************************************/
 
 export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
 export const COMMAND_PREFIX_ITEM = 'use-toolbar-item-';
+export const VIEW_TYPE_GALLERY = 'ntb-gallery-view';
 export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
+
+export const EMPTY_TOOLBAR_ID = 'EMPTY_TOOLBAR';
+export const GALLERY_DIVIDER_ID = 'GALLERY_DIVIDER';
+
+export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'open-with-default-app', 'theme', 'workspace'];
+
+/******************************************************************************
+ TYPES
+ ******************************************************************************/
 
 export enum ComponentType {
 	Icon = 'icon',
@@ -57,8 +68,10 @@ export enum ItemType {
 	File = 'file',
 	Folder = 'folder',
 	Group = 'group',
+	JavaScript = 'javascript',
 	JsEngine = 'js-engine',
 	Menu = 'menu',
+	Plugin = 'plugin', // used for Gallery items that rely on plugins
 	Separator = 'separator',
 	Templater = 'templater-obsidian',
 	Uri = 'uri'
@@ -88,7 +101,6 @@ export enum SettingType {
 	Command = 'command',
 	File = 'file',
 	Ignore = 'ignore',
-	LibraryScript = 'library-script',
 	Script = 'script',
 	Text = 'text',
 	TextArea = 'textarea',
@@ -104,7 +116,8 @@ export enum DefaultStyleType {
 	Right = 'right',
 	Between = 'between',
 	Even = 'even',
-	Sticky = 'sticky'
+	Sticky = 'sticky',
+	Tab = 'tab'
 }
 export enum MobileStyleType {
 	Border = 'mbrder',
@@ -119,7 +132,9 @@ export enum MobileStyleType {
 	Between = 'mbtwn',
 	Even = 'mevn',
 	Sticky = 'mstcky',
-	NoSticky = 'mnstcky'
+	NoSticky = 'mnstcky',
+	Tab = 'mtb',
+	NoTab = 'mntb'
 }
 export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 	[MobileStyleType.Left, MobileStyleType.Center, MobileStyleType.Right],
@@ -134,8 +149,10 @@ export const SettingFieldItemMap: Record<ItemType, SettingType> = {
 	[ItemType.File]: SettingType.File,
 	[ItemType.Folder]: SettingType.File,
 	[ItemType.Group]: SettingType.Toolbar,
+	[ItemType.JavaScript]: SettingType.Script,
 	[ItemType.JsEngine]: SettingType.Script,
 	[ItemType.Menu]: SettingType.Toolbar,
+	[ItemType.Plugin]: SettingType.Ignore,
 	[ItemType.Separator]: SettingType.Ignore,
 	[ItemType.Uri]: SettingType.Text,
 	[ItemType.Templater]: SettingType.Script
@@ -152,6 +169,7 @@ export enum CalloutAttr {
 	Dataview = 'data-dataview',
     Folder = 'data-folder',
     FolderNtb = 'data-ntb-folder', // for backwards-compatibility
+	JavaScript = 'data-javascript',
 	JsEngine = 'data-js-engine',
     Menu = 'data-menu',
     MenuNtb = 'data-ntb-menu', // for backwards-compatibility
@@ -164,6 +182,12 @@ export interface OnboardingState {
 
 export enum ToolbarStyle {
 	ItemFocused = 'tbar-item-focused'
+}
+
+export enum ErrorBehavior {
+	Display = 'display',
+	Report = 'report',
+	Ignore = 'ignore'
 }
 
 export interface NoteToolbarSettings {
@@ -252,8 +276,8 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	updated: new Date().toISOString(),
 };
 
-export const EMPTY_TOOLBAR_SETTINGS: ToolbarSettings = {
-	uuid: 'EMPTY_TOOLBAR',
+export const EMPTY_TOOLBAR: ToolbarSettings = {
+	uuid: EMPTY_TOOLBAR_ID,
 	customClasses: '',
 	defaultItem: null,
 	defaultStyles: [],
@@ -331,18 +355,52 @@ export interface FolderMapping {
 
 export interface ToolbarItemSettings {
 	uuid: string;
-	/**
-	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration)
-	 */
+	/**	@deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration) */
 	contexts?: ViewContext[];
+	description?: string;
 	hasCommand: boolean;	
 	icon: string;
+	inGallery: boolean;
 	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
+	/** Used for importing Gallery items that rely on plugins */
+	plugin?: string | string[];
 	scriptConfig?: ScriptConfig;
 	tooltip: string;
 	visibility: Visibility;
+}
+
+export const DEFAULT_ITEM_SETTINGS: ToolbarItemSettings = {
+	uuid: '',
+	hasCommand: false,
+	icon: '',
+	inGallery: false,
+	label: '',
+	link: '',
+	linkAttr: {
+		commandId: '',
+		hasVars: false,
+		type: ItemType.Command
+	},
+	tooltip: '',
+	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS },
+}
+
+export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
+	uuid: GALLERY_DIVIDER_ID,
+	hasCommand: false,
+	icon: '',
+	inGallery: true,
+	label: '',
+	link: '',
+	linkAttr: {
+		commandId: '',
+		hasVars: false,
+		type: ItemType.Separator
+	},
+	tooltip: '',
+	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
 }
 
 /**
@@ -351,6 +409,7 @@ export interface ToolbarItemSettings {
 export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
+	target?: PaneType;
 	type: ItemType;
 };
 
@@ -373,8 +432,11 @@ export interface ScriptConfig {
  UI STRINGS
  ******************************************************************************/
 
-export const USER_GUIDE_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
-export const RELEASES_URL = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
+export const URL_FEEDBACK_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform';
+export const URL_ISSUE_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform';
+export const URL_RELEASES = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
+export const URL_USER_GUIDE = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
+
 export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
 
 export const SCRIPT_ATTRIBUTE_MAP: Record<string, string> = {
@@ -392,6 +454,7 @@ export const LINK_OPTIONS = {
 	[ItemType.File]: t('setting.item.option-file'),
 	[ItemType.Group]: t('setting.item.option-item-group'),
 	[ItemType.Menu]: t('setting.item.option-item-menu'),
+	[ItemType.JavaScript]: "JavaScript",
 	[ItemType.JsEngine]: "JS Engine",
 	[ItemType.Templater]: "Templater",
 	[ItemType.Uri]: t('setting.item.option-uri')
@@ -422,6 +485,13 @@ export const RIBBON_ACTION_OPTIONS = {
 	[RibbonAction.Toolbar]: (t('setting.other.ribbon-action.option-toolbar')),
 }
 
+export const TARGET_OPTIONS = {
+	'default': t('setting.item.option-target-default'),
+	'tab': t('setting.item.option-target-tab'),
+	'split': t('setting.item.option-target-split'),
+	'window': t('setting.item.option-target-window')
+}
+
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
@@ -436,6 +506,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ [DefaultStyleType.Between]: t('setting.styles.option-between') },
     { [DefaultStyleType.Even]: t('setting.styles.option-even') },
     { [DefaultStyleType.Sticky]: t('setting.styles.option-sticky') },
+	{ [DefaultStyleType.Tab ]: t('setting.styles.option-tab') }
 ];
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
@@ -451,6 +522,7 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { [MobileStyleType.NoBorder]: t('setting.styles.option-noborder') },
 	{ [MobileStyleType.Button]: t('setting.styles.option-button') },
     { [MobileStyleType.Center]: t('setting.styles.option-center') },
+	{ [MobileStyleType.NoTab ]: t('setting.styles.option-notab') },
 	{ [MobileStyleType.NoWide]: t('setting.styles.option-nowide') },
 	{ [MobileStyleType.NoWrap]: t('setting.styles.option-nowrap') },
 	{ [MobileStyleType.Wide]: t('setting.styles.option-wide') },
@@ -460,6 +532,7 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { [MobileStyleType.Even]: t('setting.styles.option-even') },
     { [MobileStyleType.Sticky]: t('setting.styles.option-sticky') },
     { [MobileStyleType.NoSticky]: t('setting.styles.option-notsticky') },
+	{ [MobileStyleType.Tab ]: t('setting.styles.option-tab') }
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [

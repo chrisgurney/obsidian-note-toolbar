@@ -1,8 +1,8 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, DEFAULT_ITEM_VISIBILITY_SETTINGS, SettingFieldItemMap, COMMAND_PREFIX_TBAR } from 'Settings/NoteToolbarSettings';
+import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import Sortable from 'sortablejs';
@@ -10,6 +10,8 @@ import { importFromModal } from './ImportModal';
 import ToolbarStyleUi from '../ToolbarStyleUi';
 import ToolbarItemUi from '../ToolbarItemUi';
 import { ItemSuggester } from '../Suggesters/ItemSuggester';
+import { ItemSuggestModal } from './ItemSuggestModal';
+import ItemModal from './ItemModal';
 
 enum ItemFormComponent {
 	Actions = 'actions',
@@ -57,6 +59,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Displays the toolbar item's settings within the modal window.
 	 */
 	onOpen() {
+		this.plugin.updateAdapters();
 		this.display();
 	}
 
@@ -93,7 +96,7 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Displays the toolbar item's settings.
 	 */
-	public display(focusSelector?: string) {
+	public display(focusItemId?: string) {
 
 		debugLog("🟡 REDRAWING MODAL 🟡");
 
@@ -148,8 +151,9 @@ export default class ToolbarSettingsModal extends Modal {
 			this.collapseItemForms(settingsDiv, rowClicked);
 		});
 
-		if (focusSelector) {
-			let focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
+		if (focusItemId) {
+			const selector = `.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${focusItemId}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`;
+			let focusEl = this.containerEl.querySelector(selector) as HTMLElement;
 			focusEl?.focus();
 		}
 
@@ -226,17 +230,8 @@ export default class ToolbarSettingsModal extends Modal {
 							this.display();
 						}
 					});
-				})
-				.extraSettingsEl.tabIndex = 0;
-				this.plugin.registerDomEvent(
-					cb.extraSettingsEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ":
-								e.preventDefault();
-								cb.extraSettingsEl.click();
-						}
-					});
+				});
+				handleKeyClick(this.plugin, cb.extraSettingsEl);
 			});
 
 		if (this.toolbar.items.length > 8) {
@@ -253,18 +248,9 @@ export default class ToolbarSettingsModal extends Modal {
 							this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
 							cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 						}
-					})
-					.extraSettingsEl.tabIndex = 0;
+					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					this.plugin.registerDomEvent(
-						cb.extraSettingsEl, 'keydown', (e) => {
-							switch (e.key) {
-								case "Enter":
-								case " ":
-									e.preventDefault();
-									cb.extraSettingsEl.click();
-							}
-						});
+					handleKeyClick(this.plugin, cb.extraSettingsEl);
 				});
 		}
 
@@ -280,10 +266,16 @@ export default class ToolbarSettingsModal extends Modal {
 		if (this.toolbar.items.length === 0) {
 
 			// display empty state
-			let emptyMsg = this.containerEl.createEl("div", 
-				{ text: emptyMessageFr(t('setting.items.label-empty-no-items')) });
-			emptyMsg.className = "note-toolbar-setting-empty-message";
-			itemsSortableContainer.append(emptyMsg);
+			const emptyMsgEl = this.containerEl.createEl('div', 
+				{ text: emptyMessageFr(t('setting.items.label-empty-no-items') + ' ') });
+			emptyMsgEl.addClass('note-toolbar-setting-empty-message');
+
+			const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
+            galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
+			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.plugin, this.toolbar, 'Default', this));
+			handleKeyClick(this.plugin, galleryLinkEl);
+
+			itemsSortableContainer.append(emptyMsgEl);
 
 		}
 		else {
@@ -318,6 +310,7 @@ export default class ToolbarSettingsModal extends Modal {
 							currentFocussed.hasClass('sortable-handle') ? '.note-toolbar-setting-item-preview-container .sortable-handle' : '.note-toolbar-setting-item-preview';
 						const itemEls = Array.from(itemsSortableContainer.querySelectorAll<HTMLElement>(itemSelector));
 						const currentIndex = itemEls.indexOf(currentFocussed);
+						if (currentIndex === -1) return; // if focus is not on the item preview
 						switch (keyEvent.key) {
 							case 'ArrowUp':
 								if (currentIndex > 0) {
@@ -374,21 +367,35 @@ export default class ToolbarSettingsModal extends Modal {
 				btn.extraSettingsEl.empty(); // remove existing gear icon
 				icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
 				btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
-					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Separator));
+					.onClick(async () => this.addItemHandler(ItemType.Separator, itemsSortableContainer));
+				handleKeyClick(this.plugin, btn.extraSettingsEl);
 			})
 			.addExtraButton((btn) => {
 				btn.setIcon('lucide-corner-down-left')
 					.setTooltip(t('setting.items.button-add-break-tooltip'))
-					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Break));
+					.onClick(async () => this.addItemHandler(ItemType.Break, itemsSortableContainer));
+				handleKeyClick(this.plugin, btn.extraSettingsEl);
 			});
 		itemsListButtonContainer.appendChild(formattingButtons);
 
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
+				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
+					.onClick(async () => openItemSuggestModal(this.plugin, this.toolbar, 'Default', this));
+				btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
+			})
+			.addButton((btn) => {
 				btn.setTooltip(t('setting.items.button-new-item-tooltip'))
-					.setButtonText(t('setting.items.button-new-item'))
 					.setCta()
-					.onClick(async () => this.addItemHandler(itemsSortableContainer, ItemType.Command));
+					.onClick(async () => {
+						if (Platform.isPhone) {
+							let newToolbarItem = await this.addItemHandler(ItemType.Command);
+							const itemModal = new ItemModal(this.plugin, this.toolbar, newToolbarItem, this);
+							itemModal.open();
+						}
+						else await this.addItemHandler(ItemType.Command, itemsSortableContainer);
+					});
+				btn.buttonEl.setText(iconTextFr('plus', t('setting.items.button-new-item')));
 			});
 
 		itemsListContainer.appendChild(itemsListButtonContainer);
@@ -551,14 +558,16 @@ export default class ToolbarSettingsModal extends Modal {
 		//
 
 		this.plugin.registerDomEvent(
-			itemPreview, 'keydown', (e: KeyboardEvent) => {
+			itemPreview, 'keydown', async (e: KeyboardEvent) => {
 				switch (e.key) {
 					case "d":
 						const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
-						if (modifierPressed) {
-							const newItemUuid = this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, true);
+						if (modifierPressed) {        
+							const index = this.toolbar.items.indexOf(toolbarItem);
+							const itemIndex = index >= 0 ? index + 1 : undefined;
+							const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
 							this.plugin.settingsManager.save();
-							this.display(`.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${newItemUuid}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`);
+							this.display(newItem.uuid);
 						}
 						break;
 					case "Enter":
@@ -569,22 +578,28 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 		this.plugin.registerDomEvent(
 			itemPreview, 'click', (e) => {
-				const target = e.target as Element;
-				const currentTarget = e.currentTarget as Element;
-				// debugLog("clicked on: ", currentTarget, target);
-				let focusOn: ItemFormComponent = ItemFormComponent.Label;
-				if (currentTarget.querySelector('.note-toolbar-setting-tbar-preview')) {
-					focusOn = ItemFormComponent.Link;
+				if (Platform.isPhone) {
+					const itemModal = new ItemModal(this.plugin, this.toolbar, toolbarItem, this);
+					itemModal.open();
 				}
-				else if (target instanceof SVGElement || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
-					focusOn = ItemFormComponent.Icon;
-				}
-				else if (target instanceof HTMLSpanElement) {
-					if (target.classList.contains("note-toolbar-setting-item-preview-tooltip")) {
-						focusOn = ItemFormComponent.Tooltip;
+				else {
+					const target = e.target as Element;
+					const currentTarget = e.currentTarget as Element;
+					// debugLog("clicked on: ", currentTarget, target);
+					let focusOn: ItemFormComponent = ItemFormComponent.Label;
+					if (currentTarget.querySelector('.note-toolbar-setting-tbar-preview')) {
+						focusOn = ItemFormComponent.Link;
 					}
+					else if (target instanceof SVGElement || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
+						focusOn = ItemFormComponent.Icon;
+					}
+					else if (target instanceof HTMLSpanElement) {
+						if (target.classList.contains("note-toolbar-setting-item-preview-tooltip")) {
+							focusOn = ItemFormComponent.Tooltip;
+						}
+					}
+					this.toggleItemView(itemPreviewContainer, 'form', focusOn);
 				}
-				this.toggleItemView(itemPreviewContainer, 'form', focusOn);
 			});
 
 		return itemPreviewContainer;
@@ -716,7 +731,7 @@ export default class ToolbarSettingsModal extends Modal {
 								name: t('command.name-open-toolbar', {toolbar: this.toolbar.name}), 
 								icon: this.plugin.settings.icon, 
 								callback: async () => {
-									this.plugin.commands.openItemSuggester(this.toolbar.uuid);
+									this.plugin.commands.openQuickTools(this.toolbar.uuid);
 								}
 							});
 							new Notice(t(
@@ -816,62 +831,56 @@ export default class ToolbarSettingsModal extends Modal {
 
 	/**
 	 * Adds a new empty item to the given container (and settings).
-	 * @param itemContainer HTMLElement to add the new item to.
+	 * @param itemContainer optional HTMLElement to add the new item to.
 	 */
-	async addItemHandler(itemContainer: HTMLElement, itemType: ItemType) {
+	async addItemHandler(itemType: ItemType, itemContainer?: HTMLElement): Promise<ToolbarItemSettings> {
 
-		// removes the empty state message before we add anything to the list
-		if (this.toolbar.items.length === 0) {
+		// removes the item list empty state message before we add anything to it
+		if (itemContainer && (this.toolbar.items.length === 0)) {
 			itemContainer.empty();
 		}
 
-		let newToolbarItem: ToolbarItemSettings =
-			{
-				uuid: getUUID(),
-				label: "",
-				hasCommand: false,
-				icon: "",
-				link: "",
-				linkAttr: {
-					commandId: "",
-					hasVars: false,
-					type: itemType
-				},
-				tooltip: "",
-				visibility: {...DEFAULT_ITEM_VISIBILITY_SETTINGS},
-			};
+		// create the new item, with the given type
+		let newToolbarItem: ToolbarItemSettings = {
+			...DEFAULT_ITEM_SETTINGS,
+			uuid: getUUID(),
+			linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: itemType },
+		}
 		this.toolbar.items.push(newToolbarItem);
 		this.toolbar.updated = new Date().toISOString();
 		await this.plugin.settingsManager.save();
 
-		//
 		// add preview and form to the list
-		//
+		if (itemContainer) {
 
-		let newItemContainer = createDiv();
-		newItemContainer.setAttribute(SettingsAttr.ItemUuid, newToolbarItem.uuid);
-		newItemContainer.addClass("note-toolbar-setting-items-container-row");
+			let newItemContainer = createDiv();
+			newItemContainer.setAttribute(SettingsAttr.ItemUuid, newToolbarItem.uuid);
+			newItemContainer.addClass("note-toolbar-setting-items-container-row");
+	
+			let newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
+			newItemPreview.setAttribute(SettingsAttr.Active, 'false');
+			newItemContainer.appendChild(newItemPreview);
+	
+			let newItemForm = this.toolbarItemUi.generateItemForm(newToolbarItem);
+			newItemForm.setAttribute(SettingsAttr.Active, 'true');
+			newItemContainer.appendChild(newItemForm);
+	
+			this.itemListIdCounter++;
+			
+			itemContainer.appendChild(newItemContainer);
+	
+			// set focus in the form
+			let focusField = newItemForm?.querySelector('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon') as HTMLElement;
+			if (focusField) {
+				focusField.focus();
+				// scroll to the form
+				this.scrollToPosition('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon', 'note-toolbar-setting-item');
+			}
 
-		let newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
-		newItemPreview.setAttribute(SettingsAttr.Active, 'false');
-		newItemContainer.appendChild(newItemPreview);
-
-		let newItemForm = this.toolbarItemUi.generateItemForm(newToolbarItem);
-		newItemForm.setAttribute(SettingsAttr.Active, 'true');
-		newItemContainer.appendChild(newItemForm);
-
-		this.itemListIdCounter++;
-		
-		itemContainer.appendChild(newItemContainer);
-
-		// set focus in the form
-		let focusField = newItemForm?.querySelector('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon') as HTMLElement;
-		if (focusField) {
-			focusField.focus();
-			// scroll to the form
-			this.scrollToPosition('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon', 'note-toolbar-setting-item');
 		}
 
+		return newToolbarItem;
+		
 	}
 
 	/**
@@ -1012,7 +1021,7 @@ export default class ToolbarSettingsModal extends Modal {
 		}, 0);
 		return [mappingCount, itemCount];
 	}
-
+	
 	/**
 	 * Renders/Re-renders the preview for the given item in the item list.
 	 * @param toolbarItem ToolbarItemSettings to display preview for

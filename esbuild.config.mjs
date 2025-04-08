@@ -1,6 +1,7 @@
 import esbuild from "esbuild";
 import chokidar from "chokidar";
 import { yamlInliner } from "./build/yaml-inliner.mjs";
+import { galleryDocs } from "./build/gallery-docs.mjs";
 import process from "process";
 import builtins from "builtin-modules";
 
@@ -35,6 +36,19 @@ const yamlInlinerPlugin = {
 	},
   };
 
+const galleryDocsPlugin = {
+	name: 'gallery-docs',
+	setup(build) {
+	  build.onEnd(async () => {
+		try {
+			await galleryDocs('src/Gallery/items.json', 'src/Gallery/gallery.json', 'docs/gallery.md');
+		} catch {
+			process.exit(1);
+		}
+	  });
+	},
+  };
+
 const context = await esbuild.context({
 	banner: {
 		js: banner,
@@ -62,7 +76,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [yamlInlinerPlugin],
+	plugins: [yamlInlinerPlugin, galleryDocsPlugin],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,

@@ -43,6 +43,34 @@ export function calcComponentVisToggles(visibility: Visibility) {
 }
 
 /**
+ * Returns the index of the item in the toolbar that *would be* where the mouse was clicked.
+ * @param plugin 
+ * @param event 
+ * @returns 
+ */
+export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent): number | undefined {
+	const toolbarListEl = plugin.getToolbarListEl();
+	if (!toolbarListEl) return undefined;
+
+	const rects = Array.from(toolbarListEl.children).map(el => el.getBoundingClientRect());
+	const cursorX = event.clientX;
+	const cursorY = event.clientY;
+
+	// filter items in the same row by checking if cursorY is within the top and bottom bounds
+	const sameRow = rects.filter(rect => cursorY >= rect.top && cursorY <= rect.bottom);
+
+	// find closest items to the left and right
+	const left = sameRow.filter(rect => rect.right <= cursorX).pop();
+	const right = sameRow.find(rect => rect.left > cursorX);
+
+	debugLog('Left:', left ? toolbarListEl.children[rects.indexOf(left)] : null);
+	debugLog('Right:', right ? toolbarListEl.children[rects.indexOf(right)] : null);
+
+	const itemIndex = left ? (rects.indexOf(left) >= 0 ? rects.indexOf(left) + 1 : undefined) : undefined;
+	return itemIndex ? itemIndex : (right ? rects.indexOf(right) : undefined);
+}
+
+/**
  * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
  * toggle values are the opposite of the Platform values.
  * @param Visibility
@@ -61,7 +89,8 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
  * @param currentViewType Type of the current view.
  * @returns `true` if the toolbar should be visible, otherwise `false`.
  */
-export function checkToolbarForViewType(plugin: NoteToolbarPlugin, currentViewType: string): boolean {
+export function checkToolbarForItemView(plugin: NoteToolbarPlugin, itemView: ItemView): boolean {
+	const currentViewType = itemView.getViewType();
     const viewSettings: Record<string, boolean | undefined> = {
         audio: plugin.settings.showToolbarIn.audio,
         canvas: plugin.settings.showToolbarIn.canvas,
@@ -84,6 +113,8 @@ export function checkToolbarForViewType(plugin: NoteToolbarPlugin, currentViewTy
  */
 export function debugLog(message?: any, ...optionalParams: any[]): void {
 	DEBUG && console.debug(message, ...optionalParams);
+	// const stack = new Error().stack?.split('\n')[2]?.trim();
+	// DEBUG && console.debug('Called from:', stack);
 }
 
 /**
@@ -179,7 +210,7 @@ export function getElementPosition(element: HTMLElement): { x: number, y: number
  * @param event MouseEvent or KeyboardEvent
  * @returns PaneType or undefined
  */
-export function getLinkUiDest(event: MouseEvent | KeyboardEvent | undefined): PaneType | undefined {
+export function getLinkUiTarget(event: MouseEvent | KeyboardEvent | undefined): PaneType | undefined {
 	let linkDest: PaneType | undefined = undefined;
 	if (event) {
 		// check if middle button was clicked

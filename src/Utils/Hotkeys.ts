@@ -64,6 +64,16 @@ export class HotkeyHelper {
 
 		const modifiersArray: string[] = Array.isArray(modifiers) ? modifiers : modifiers.split(',').map(m => m.trim() as Modifier);
 
+		if (Platform.isMacOS) {
+			if (modifiersArray.includes('Meta')) {
+				modifiersArray.push('Mod');
+			}
+		} else {
+			if (modifiersArray.includes('Ctrl')) {
+				modifiersArray.push('Mod');
+			}
+		}
+
 		return modifiersArray.filter(m => MODIFIERS.contains(m as Modifier)) as Modifier[];
 	}
 

@@ -7,7 +7,6 @@
       "dvjs-expr-description": "需要运行的 Dataview JS 表达式。",
       "dvjs-expr-error-required": "Error: 请提供 Dataview JS 表达式",
       "dvjs-function": "执行 Dataview JS 表达式",
-      "error-general": "Dataview 错误: 查看控制台以获取更多细节\n```\n{{error}}\n```",
       "eval-expr": "Dataview 表达式",
       "eval-expr-description": "需要执行的 Dataview 表达式",
       "eval-expr-error-required": "错误: 请提供 Dataview 表达式",
@@ -23,8 +22,10 @@
     },
     "error": {
       "args-format": "无效的参数格式",
-      "args-parsing": "编译 {{filename}} 脚本的参数失败",
-      "args-parsing-error": "编译 {{filename}} 脚本的参数失败\n```\n{{error}}\n```",
+      "args-parsing": "无法解析参数",
+      "args-parsing-error": "无法解析参数\n\n```\n{{error}}\n```",
+      "args-parsing-script": "编译 {{filename}} 脚本的参数失败",
+      "args-parsing-script-error": "编译 {{filename}} 脚本的参数失败\n```\n{{error}}\n```",
       "callout-not-found": "错误：在当前笔记中无法找到 ID 为 {{id}} 的 note-toolbar-output 标注",
       "exec-failed": "无法执行脚本：{{filename}}",
       "expr-failed": "无法执行表达式：{{expression}}",
@@ -33,13 +34,29 @@
       "function-invalid": "不支持的函数：{{function}}",
       "function-not-found": "找不到函数：{{{function}}",
       "function-note-not-open": "此功能仅支持在打开的笔记中执行。",
+      "general": "错误: 查看控制台以获取更多细节\n```\n{{error}}\n```",
       "plugin-disabled": "安装并启用插件后，切换脚本设置：",
       "plugin-not-installed": "尚未安装和启用插件。",
       "query-failed": "无法执行查询：{{expression}}",
       "query-note-not-open": "此查询仅支持在打开的笔记中运行。",
       "scripting-disabled": "在 Note Toolbar 设置中启用脚本功能以使用此项目。"
     },
+    "javascript": {
+      "eval-expr": "JavaScript表达式",
+      "eval-expr-description": "需要执行的JavaScript表达式",
+      "eval-expr-error-required": "错误：需要提供JavaScript表达式",
+      "eval-function": "执行JavaScript",
+      "exec-error-required": "错误：需要提供一个脚本文件",
+      "exec-function": "执行脚本文件",
+      "exec-sourcefile": "JavaScript 文件",
+      "exec-sourcefile-description": "执行的 JavaScript 文件",
+      "exec-sourcefile-error-required": "错误：需要提供 JavaScript 文件"
+    },
     "js-engine": {
+      "eval-expr": "JavaScript 表达式",
+      "eval-expr-description": "需要执行的 JavaScript 表达式",
+      "eval-expr-error-required": "错误：需要提供 JavaScript 表达式",
+      "eval-function": "执行 JavaScript",
       "exec-function": "执行 JavaScript",
       "exec-sourcefile": "JavaScript 文件",
       "exec-sourcefile-description": "要执行的 JavaScript 文件。",
@@ -80,6 +97,15 @@
     }
   },
   "api": {
+    "item": {
+      "error-invalid-icon": "无效的图标ID：{{iconId}}"
+    },
+    "msg": {
+      "block-no-id": "未找到块ID",
+      "clipboard-copied": "已复制到剪贴板",
+      "error-console": "错误：请检查控制台以获取详细信息",
+      "file-not-exist": "文件不存在"
+    },
     "ui": {
       "button-submit": "提交",
       "error-cancelled": "已取消提示",
@@ -97,6 +123,7 @@
     "name-hide-properties": "隐藏笔记属性",
     "name-item-suggester": "打开快速工具",
     "name-item-suggester-current": "打开当前工具栏的快速工具",
+    "name-open-gallery": "打开工具展览",
     "name-open-toolbar": "打开：{{toolbar}}",
     "name-settings": "打开插件设置",
     "name-show-properties": "显示笔记属性",
@@ -120,6 +147,18 @@
     "title-share": "分享工具栏：{{toolbar}}",
     "warning-share-length": "某些网页浏览器可能无法加载长度超过 2,048 个字符的 URL。",
     "warning-share-menu": "此工具栏引用了至少一个外部工具栏，接收者将无法访问。"
+  },
+  "gallery": {
+    "error-invalid-plugin": "展览项目含无效插件（或未启用）",
+    "error-missing-item-type": "展览项目：缺少项目类型属性",
+    "error-missing-property": "展览数据中含有缺失的插件或脚本属性。",
+    "label-plugin": "{{{plugin}}",
+    "label-suggestions": "来自项目画廊的建议",
+    "select-plugin-placeholder": "选择一个插件…",
+    "select-plugin-suggestion": "{{plugin}}",
+    "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ 未安装（或未启用）",
+    "title": "Note Toolbar Gallery 笔记工具栏展览",
+    "tooltip-add-item": "添加项目到工具栏"
   },
   "import": {
     "button-add-items": "添加项目",
@@ -153,9 +192,8 @@
     "error-invalid-script-id": "不存在 ID 为 {{{scriptid}}}（{{pluginid}}） 的脚本",
     "error-script-required": "错误：未选择脚本。",
     "script": "库脚本",
-    "script-description": "从库中选择一个脚本。",
     "script-function": "使用库中的脚本",
-    "script-option-default": "选择脚…"
+    "script-option-default": "选择脚本…"
   },
   "notice": {
     "cta-click": "（点击）",
@@ -176,17 +214,38 @@
     "swap-toolbar-title": "该笔记将被修改"
   },
   "plugin": {
-    "name": "Note Toolbar 笔记工具栏"
+    "canvas": "Canvas 画布",
+    "daily-notes": "Daily Notes",
+    "dataview": "Dataview",
+    "js-engine": "JS Engine",
+    "name": "Note Toolbar 笔记工具栏",
+    "note-toolbar": "Note Toolbar",
+    "obsidian-kanban": "Kanban",
+    "obsidian-tasks-plugin": "Tasks",
+    "periodic-notes": "Periodic Notes",
+    "sync": "Obsidian Sync 官方同步",
+    "templater-obsidian": "Templater",
+    "workspaces": "Workspaces 工作区"
   },
   "setting": {
+    "add-item": {
+      "error-invalid-command": "命令不存在：{{{CommandId}}",
+      "label-confirm-command": "命令不支持或未找到：\n\n\n`{{commandId}}`\n\n\n您还想将此项目添加到工具栏中吗？\n您可以安装/启用以后提供此命令的插件。",
+      "label-confirm-mobile-uri": "该项目使用文件URI（在移动设备上可能不支持）\n\n\n您还想将此项目添加到工具栏中吗？",
+      "label-confirm-plugin": "插件未安装（或未启用）：\n\n\n** {{plugin}} **\n\n您还想将此项目添加到工具栏中吗？\n您可以稍后安装/启用此插件。",
+      "title-confirm": "添加项目：{{itemName}}"
+    },
     "button-cancel": "取消",
     "button-collapse-tooltip": "折叠",
     "button-delete-tooltip": "删除",
     "button-drag-tooltip": "拖动以重新排序",
     "button-expand-tooltip": "展开",
+    "button-gallery": "工具展览",
+    "button-gallery-tooltip": "打开工具展览（Gallery）",
     "button-help": "帮助",
     "button-help-tooltip": "打开帮助窗口",
     "button-learn-more": "了解更多",
+    "button-proceed": "继续",
     "button-user-guide": "用户指南",
     "button-whats-new": "更新了啥？",
     "button-whats-new-tooltip": "查看「更新了啥？」窗口",
@@ -233,13 +292,9 @@
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
       "name": "特定笔记显示规则",
-      "option-emptyview": "新标签页的工具栏",
-      "option-emptyview-description": "在新标签页中显示的工具栏",
       "option-property": "属性",
       "option-property-description": "如果在此属性中找到工具栏名称，则会在笔记上显示对应的工具栏。优先于任何文件夹映射的规则。设置为'none'则会隐藏工具栏。",
-      "option-property-placeholder": "属性",
-      "toggle-emptyview": "在新标签页视图中显示工具栏",
-      "toggle-emptyview-description": "选择当未打开任何笔记时显示的工具栏"
+      "option-property-placeholder": "属性"
     },
     "error-old-settings-description": "加载了旧的设置文件（{{oldVersion}}），当前最新版本为 {{currentVersion}}",
     "error-old-settings-name": "⚠️ 错误：请重新启用笔记工具栏插件（或重启 Obsidian）",
@@ -263,6 +318,8 @@
       "label-examples-description": "从这些现成的工具栏示例中获得启发",
       "label-feedback": "提供反馈",
       "label-feedback-description": "使用此Google表单来提供您可能有的任何反馈，问题或想法。",
+      "label-gallery": "打开工具展览",
+      "label-gallery-description": "查看工具展览（Gallery）以获取可供直接使用的现成项目，并添加进工具栏。",
       "label-support": "获取支持",
       "label-support-description": "访问Github上的论坛，向社区提出问题。",
       "label-user-guide": "阅读用户指南",
@@ -277,6 +334,8 @@
       "placeholder": "搜索图标…"
     },
     "item": {
+      "button-close": "关闭",
+      "button-close-description": "关闭并保存此项目",
       "button-duplicate-tooltip": "复制此项目",
       "button-icon-tooltip": "选择图标（可选）",
       "label-preview-edit": "编辑工具栏：{{toolbar}}",
@@ -292,11 +351,15 @@
       "option-command-error-not-available-search": "无法找到命令，请重新搜索",
       "option-command-error-refresh": "刷新",
       "option-command-placeholder": "搜索命令",
+      "option-command-target": "在哪里运行命令",
+      "option-command-target-description": "一些命令可能会覆盖此设置。",
       "option-component-icon": "图标",
       "option-component-label": "文本",
       "option-file": "文件",
       "option-file-error-does-not-exist": "此文件（或文件夹）不存在。",
       "option-file-placeholder": "搜索文件或文件夹",
+      "option-file-target": "在哪里打开文件",
+      "option-file-target-description": "使用修饰键（如Ctrl）覆盖此设置。",
       "option-item-group": "项目组",
       "option-item-group-error-does-not-exist": "工具栏不存在",
       "option-item-group-error-invalid": "⚠️ 无效的项目组",
@@ -307,7 +370,12 @@
       "option-item-menu-help": "选择要作为菜单打开的工具栏。",
       "option-item-menu-placeholder": "工具栏",
       "option-label-placeholder": "文本（如果设置了图标则可选）",
+      "option-script": "选择您要如何执行脚本",
       "option-separator": "分隔符",
+      "option-target-default": "默认（当前页打开）",
+      "option-target-split": "左右分屏",
+      "option-target-tab": "新标签页",
+      "option-target-window": "新窗口",
       "option-tooltip-placeholder": "工具提示（可选）",
       "option-uri": "URI",
       "option-uri-help": "提示：在 URI 中可以使用使用笔记属性。",
@@ -325,18 +393,24 @@
       "instruction-back": "返回",
       "instruction-dismiss": "取消",
       "instruction-navigate": "导航",
+      "instruction-select": "选择",
       "instruction-use": "使用该项",
       "key-back": "⌫ or ←",
       "key-dismiss": "esc",
       "key-navigate": "↑↓",
       "key-use": "↵",
-      "option-default": "默认（使用工具栏映射）",
+      "label-empty-no-items": "找不到结果",
+      "link-gallery": "探索工具展览",
+      "link-search": "搜索项目",
+      "option-new": "创建新项目",
       "placeholder": "搜索项目…",
       "placeholder-toolbar": "{{toolbar}}: 搜索项目…"
     },
     "items": {
       "button-add-break-tooltip": "向工具栏添加换行",
       "button-add-separator-tooltip": "向工具栏添加分隔符",
+      "button-find-item": "搜索",
+      "button-find-item-tooltip": "查找要添加到工具栏的项目",
       "button-new-item": "添加工具栏项目",
       "button-new-item-tooltip": "向工具栏添加新项目",
       "description": "按顺序向工具栏添加项目。",
@@ -398,10 +472,6 @@
       "show-edit-tbar": {
         "description": "在工具栏菜单中添加一个项目，以快速访问工具栏的设置。",
         "name": "在工具栏菜单中显示'编辑工具栏'的链接"
-      },
-      "show-toolbar-in-file-menu": {
-        "description": "在右键菜单中添加一个选项以访问链接笔记中的工具栏。",
-        "name": "在右键菜单中显示链接笔记的工具栏"
       }
     },
     "position": {
@@ -447,6 +517,7 @@
       "option-mobile-empty": "未设置移动端样式。使用默认样式。",
       "option-mobile-name": "移动端",
       "option-noborder": "无边框",
+      "option-notab": "非标签文件项目",
       "option-notsticky": "非粘性",
       "option-nowide": "正文宽度*",
       "option-nowrap": "不换行项目*",
@@ -455,6 +526,7 @@
       "option-right": "右对齐项目",
       "option-sticky": "Sticky（粘性定位）样式*",
       "option-sticky-disclaimer": "Sticky（粘性定位）样式在阅读模式下不适用。",
+      "option-tab": "标签文件项目",
       "option-wide": "编辑器宽度*",
       "style-remove-tooltip": "移除",
       "style-tooltip-use-class": "在 Callout 或 CSS 中使用：{{class}}",
@@ -466,6 +538,8 @@
       "instruction-dismiss": "取消",
       "instruction-navigate": "导航",
       "instruction-use": "打开工具栏",
+      "option-default": "默认（使用工具栏映射）",
+      "option-new": "创建一个新工具栏",
       "placeholder": "搜索工具栏…"
     },
     "toolbars": {
@@ -475,13 +549,12 @@
       "button-more-tooltip": "更多选项",
       "button-new-tbar": "新建工具栏",
       "button-new-tbar-tooltip": "添加一个新的工具栏",
-      "description": "定义要添加到笔记中的工具栏。",
       "duplicated-tbar-suffix": "复制",
-      "imported-tbar-name": "New toolbar",
       "label-empty-create-tbar": "点击按钮创建工具栏。",
-      "label-tbar-name-not-set": "⚠️ 未设置工具栏名称",
+      "label-tbar-name-not-set": "未设置工具栏名称",
       "name": "工具栏",
-      "name-with-count": "工具栏（{{count}}）"
+      "name-with-count": "工具栏（{{count}}）",
+      "new-tbar-name": "New toolbar"
     },
     "usage": {
       "description": "此工具栏在 {{mappingCount}} 个映射和 {{itemCount}} 个工具栏项目中使用。",
@@ -512,7 +585,7 @@
     }
   },
   "toolbar": {
-    "button-floating-tooltip": "打开工具栏",
+    "menu-add-item": "添加项目…",
     "menu-edit-item": "编辑项目：{{text}}…",
     "menu-edit-item_none": "编辑项目…",
     "menu-edit-toolbar": "编辑工具栏：{{toolbar}}…",

@@ -1,4 +1,4 @@
-// imports YAML files into the provided CSS
+// Imports YAML files into the provided CSS.
 // usage: @import "./style-settings.yaml";
 
 import fs from 'fs/promises';

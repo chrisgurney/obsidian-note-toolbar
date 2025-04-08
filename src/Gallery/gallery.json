@@ -1,0 +1,126 @@
+{
+    "title": { "en": "Note Toolbar Gallery" },
+    "overview": { "en": "Browse examples of items, and click/tap to add them to a toolbar." },
+    "pluginNote": { "en": "Some items require plugins for more sophisticated behavior. "},
+    "categories": [
+      {
+        "name": { "en": "Daily Notes" },
+        "description": { "en": "Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin." },
+        "itemIds": [
+            "daily-notes-prev", "daily-notes-today", "daily-notes-next"
+        ]
+      },
+      {
+        "name": { "en" : "Basic Actions" },
+        "description": { "en": "For quick text editing and history control." },
+        "itemIds": [
+            "copy", "cut", "paste", "undo", "redo", "clear-formatting"
+        ]
+      },
+      {
+        "name": { "en" : "Editing" },
+        "description": { "en": "Adjust the order and arrangement of content." },
+        "itemIds": [
+            "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
+        ]
+      },
+      {
+        "name": { "en" : "Files" },
+        "description": { "en": "Tools for working with files." },
+        "itemIds": [
+            "file-new", "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+        ]
+      },
+      {
+        "name": { "en" : "Formatting" },
+        "description": { "en": "Change how text looks." },
+        "itemIds": [
+            "toggle-bold", "toggle-italics", "toggle-strikethrough", "toggle-code", "toggle-blockquote", "toggle-highlight"
+        ]
+      },
+      {
+        "name": { "en" : "Lists & Indentation" },
+        "description": { "en": "Organize items into lists and adjust structure." },
+        "itemIds": [
+            "toggle-bullet-list", "toggle-checklist-status", "toggle-numbered-list", "indent", "unindent", "cycle-list-checklist"
+        ]
+      },
+      {
+        "name": { "en" : "Insertions" },
+        "description": { "en": "Add various types of content like links or media." },
+        "itemIds": [
+            "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
+        ]
+      },
+      {
+        "name": { "en" : "Editor Navigation" },
+        "description": { "en": "Get around the text editor faster." },
+        "itemIds": [
+            "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
+        ]
+      },
+      {
+        "name": { "en": "Vault Navigation" },
+        "description": { "en": "Navigate between files and directories." },
+        "itemIds": [
+            "file-prev", "file-next", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+        ]
+      },
+      {
+        "name": { "en": "Note Toolbar" },
+        "description": { "en": "Get access to Note Toolbar settings and tools quickly." },
+        "itemIds": [
+            "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
+        ]
+      },
+      {
+        "name": { "en": "Obsidian Support" },
+        "description": { "en": "Get help from Obsidian community resources." },
+        "itemIds": [
+            "obsidian-help-site", "obsidian-markdown-reference", "obsidian-discord", "obsidian-forum", "obsidian-subreddit"
+        ]
+      },
+      {
+        "name": { "en": "Search" },
+        "description": { "en": "Search in notes and across your vault." },
+        "itemIds": [
+            "search-replace-open", "global-search-open", "folder-search"
+        ]
+      },
+      {
+        "name": { "en": "Views and Themes" },
+        "description": { "en": "Switch themes and toggle views." },
+        "itemIds": [
+            "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "system-snippets-open"
+        ]
+      },
+      {
+        "name": { "en": "Workspaces" },
+        "description": { "en": "Switch between workspaces. Requires the _Workspaces_ core plugin." },
+        "itemIds": [
+            "load-workspace", "cycle-workspace", "set-workspace"
+        ]
+      },
+      {
+        "name": { "en": "Periodic Notes" },
+        "description": { "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin." },
+        "itemIds": [
+            "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
+        ]
+      },
+      {
+        "name": { "en": "Templater" },
+        "description": { "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)." },
+        "itemIds": [
+          "templater-insert-template", "templater-new-note-from-template"
+        ]
+      },
+      {
+        "name": { "en": "Explore More" },
+        "description": { "en": "Do more with Obsidian's plugins." },
+        "itemIds": [
+            "obsidian-sync-version-history", "obsidian-tasks-edit"
+        ]
+      }
+    ]
+  }
