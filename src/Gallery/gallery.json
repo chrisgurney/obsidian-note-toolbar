@@ -1,126 +1,237 @@
 {
-    "title": { "en": "Note Toolbar Gallery" },
-    "overview": { "en": "Browse examples of items, and click/tap to add them to a toolbar." },
-    "pluginNote": { "en": "Some items require plugins for more sophisticated behavior. "},
+    "title": { 
+        "en": "Note Toolbar Gallery",
+        "zh": "笔记工具栏展览"
+    },
+    "overview": { 
+        "en": "Browse examples of items, and click/tap to add them to a toolbar.",
+        "zh": "浏览项目示例，点击/轻触以将其添加到工具栏。"
+    },
+    "pluginNote": { 
+        "en": "Some items require plugins for more sophisticated behavior. ",
+        "zh": "某些项目需要特定插件以实现更复杂的功能。"
+    },
     "categories": [
-      {
-        "name": { "en": "Daily Notes" },
-        "description": { "en": "Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin." },
-        "itemIds": [
-            "daily-notes-prev", "daily-notes-today", "daily-notes-next"
-        ]
-      },
-      {
-        "name": { "en" : "Basic Actions" },
-        "description": { "en": "For quick text editing and history control." },
-        "itemIds": [
-            "copy", "cut", "paste", "undo", "redo", "clear-formatting"
-        ]
-      },
-      {
-        "name": { "en" : "Editing" },
-        "description": { "en": "Adjust the order and arrangement of content." },
-        "itemIds": [
-            "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
-        ]
-      },
-      {
-        "name": { "en" : "Files" },
-        "description": { "en": "Tools for working with files." },
-        "itemIds": [
-            "file-new", "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
-        ]
-      },
-      {
-        "name": { "en" : "Formatting" },
-        "description": { "en": "Change how text looks." },
-        "itemIds": [
-            "toggle-bold", "toggle-italics", "toggle-strikethrough", "toggle-code", "toggle-blockquote", "toggle-highlight"
-        ]
-      },
-      {
-        "name": { "en" : "Lists & Indentation" },
-        "description": { "en": "Organize items into lists and adjust structure." },
-        "itemIds": [
-            "toggle-bullet-list", "toggle-checklist-status", "toggle-numbered-list", "indent", "unindent", "cycle-list-checklist"
-        ]
-      },
-      {
-        "name": { "en" : "Insertions" },
-        "description": { "en": "Add various types of content like links or media." },
-        "itemIds": [
-            "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
-        ]
-      },
-      {
-        "name": { "en" : "Editor Navigation" },
-        "description": { "en": "Get around the text editor faster." },
-        "itemIds": [
-            "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
-        ]
-      },
-      {
-        "name": { "en": "Vault Navigation" },
-        "description": { "en": "Navigate between files and directories." },
-        "itemIds": [
-            "file-prev", "file-next", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
-        ]
-      },
-      {
-        "name": { "en": "Note Toolbar" },
-        "description": { "en": "Get access to Note Toolbar settings and tools quickly." },
-        "itemIds": [
-            "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
-        ]
-      },
-      {
-        "name": { "en": "Obsidian Support" },
-        "description": { "en": "Get help from Obsidian community resources." },
-        "itemIds": [
-            "obsidian-help-site", "obsidian-markdown-reference", "obsidian-discord", "obsidian-forum", "obsidian-subreddit"
-        ]
-      },
-      {
-        "name": { "en": "Search" },
-        "description": { "en": "Search in notes and across your vault." },
-        "itemIds": [
-            "search-replace-open", "global-search-open", "folder-search"
-        ]
-      },
-      {
-        "name": { "en": "Views and Themes" },
-        "description": { "en": "Switch themes and toggle views." },
-        "itemIds": [
-            "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "system-snippets-open"
-        ]
-      },
-      {
-        "name": { "en": "Workspaces" },
-        "description": { "en": "Switch between workspaces. Requires the _Workspaces_ core plugin." },
-        "itemIds": [
-            "load-workspace", "cycle-workspace", "set-workspace"
-        ]
-      },
-      {
-        "name": { "en": "Periodic Notes" },
-        "description": { "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin." },
-        "itemIds": [
-            "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
-        ]
-      },
-      {
-        "name": { "en": "Templater" },
-        "description": { "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)." },
-        "itemIds": [
-          "templater-insert-template", "templater-new-note-from-template"
-        ]
-      },
-      {
-        "name": { "en": "Explore More" },
-        "description": { "en": "Do more with Obsidian's plugins." },
-        "itemIds": [
-            "obsidian-sync-version-history", "obsidian-tasks-edit"
-        ]
-      }
+        {
+            "name": { 
+                "en": "Daily Notes",
+                "zh": "Daily Notes 每日笔记"
+            },
+            "description": { 
+                "en": "Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.",
+                "zh": "快速在每日笔记之间导航。需要启用 _日记_ 核心插件。"
+            },
+            "itemIds": [
+                "daily-notes-prev", "daily-notes-today", "daily-notes-next"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Basic Actions",
+                "zh": "基本操作"
+            },
+            "description": { 
+                "en": "For quick text editing and history control.",
+                "zh": "用于快速文本编辑和操作历史。"
+            },
+            "itemIds": [
+                "copy", "cut", "paste", "undo", "redo", "clear-formatting"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Editing",
+                "zh": "编辑"
+            },
+            "description": { 
+                "en": "Adjust the order and arrangement of content.",
+                "zh": "调整内容的顺序和格式。"
+            },
+            "itemIds": [
+                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Files",
+                "zh": "文件"
+            },
+            "description": { 
+                "en": "Tools for working with files.",
+                "zh": "用于处理文件的工具。"
+            },
+            "itemIds": [
+                "file-new", "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Formatting",
+                "zh": "格式化"
+            },
+            "description": { 
+                "en": "Change how text looks.",
+                "zh": "更改文本的外观。"
+            },
+            "itemIds": [
+                "toggle-bold", "toggle-italics", "toggle-strikethrough", "toggle-code", "toggle-blockquote", "toggle-highlight"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Lists & Indentation",
+                "zh": "列表与缩进"
+            },
+            "description": { 
+                "en": "Organize items into lists and adjust structure.",
+                "zh": "将项目组织成列表并调整结构。"
+            },
+            "itemIds": [
+                "toggle-bullet-list", "toggle-checklist-status", "toggle-numbered-list", "indent", "unindent", "cycle-list-checklist"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Insertions",
+                "zh": "插入"
+            },
+            "description": { 
+                "en": "Add various types of content like links or media.",
+                "zh": "添加各种类型的内容，如链接或媒体。"
+            },
+            "itemIds": [
+                "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Editor Navigation",
+                "zh": "编辑器导航"
+            },
+            "description": { 
+                "en": "Get around the text editor faster.",
+                "zh": "更快地在文本编辑器中导航。"
+            },
+            "itemIds": [
+                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Vault Navigation",
+                "zh": "库导航"
+            },
+            "description": { 
+                "en": "Navigate between files and directories.",
+                "zh": "在不同的文件和目录之间导航。"
+            },
+            "itemIds": [
+                "file-prev", "file-next", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Note Toolbar",
+                "zh": "笔记工具栏"
+            },
+            "description": { 
+                "en": "Get access to Note Toolbar settings and tools quickly.",
+                "zh": "快速访问笔记工具栏设置和工具。"
+            },
+            "itemIds": [
+                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Obsidian Support",
+                "zh": "Obsidian 支持"
+            },
+            "description": { 
+                "en": "Get help from Obsidian community resources.",
+                "zh": "从 Obsidian 社区资源中获取帮助。"
+            },
+            "itemIds": [
+                "obsidian-help-site", "obsidian-markdown-reference", "obsidian-discord", "obsidian-forum", "obsidian-subreddit"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Search",
+                "zh": "搜索"
+            },
+            "description": { 
+                "en": "Search in notes and across your vault.",
+                "zh": "在笔记和整个库中搜索。"
+            },
+            "itemIds": [
+                "search-replace-open", "global-search-open", "folder-search"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Views and Themes",
+                "zh": "视图与主题"
+            },
+            "description": { 
+                "en": "Switch themes and toggle views.",
+                "zh": "切换主题和视图。"
+            },
+            "itemIds": [
+                "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "system-snippets-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Workspaces",
+                "zh": "工作区"
+            },
+            "description": { 
+                "en": "Switch between workspaces. Requires the _Workspaces_ core plugin.",
+                "zh": "在工作区之间切换。需要启用 _工作区_ 核心插件。"
+            },
+            "itemIds": [
+                "load-workspace", "cycle-workspace", "set-workspace"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Periodic Notes",
+                "zh": "Periodic Notes 周期性笔记"
+            },
+            "description": { 
+                "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin.",
+                "zh": "导航到每周、每月和每年的笔记。需要 [Periodic Notes](obsidian://show-plugin?id=periodic-notes) 插件。"
+            },
+            "itemIds": [
+                "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Templater",
+                "zh": "Templater 模板"
+            },
+            "description": { 
+                "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater).",
+                "zh": "从模板中插入或创建笔记。需要 [Templater](obsidian://show-plugin?id=templater-obsidian) 插件。请参阅用户指南以了解 [更多使用 Templater 的方法](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)。"
+            },
+            "itemIds": [
+                "templater-insert-template", "templater-new-note-from-template"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Explore More",
+                "zh": "探索更多"
+            },
+            "description": { 
+                "en": "Do more with Obsidian's plugins.",
+                "zh": "通过 Obsidian 的插件实现更多妙妙功能。"
+            },
+            "itemIds": [
+                "obsidian-sync-version-history", "obsidian-tasks-edit"
+            ]
+        }
     ]
-  }
+}
