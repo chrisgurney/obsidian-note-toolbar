@@ -1,0 +1,829 @@
+[
+    {
+        "id": "attach-file",
+        "commandId": "editor:attach-file",
+        "description": { "en": "Insert a file attachment." },
+        "icon": "paperclip",
+        "tooltip": { "en": "Insert attachment" },
+        "type": "command"
+    },
+    {
+        "id": "bookmarks-open",
+        "commandId": "bookmarks:open",
+        "description": { "en": "Opens the bookmarks sidebar." },
+        "icon": "bookmark",
+        "tooltip": { "en": "Show bookmarks" },
+        "type": "command"
+    },
+    { 
+        "id": "canvas-new",
+        "commandId": "canvas:new-file",
+        "description": { "en": "Create a new canvas file." },
+        "icon": "network",
+        "target": "tab",
+        "tooltip": { "en": "New canvas" },
+        "type": "command"
+    },
+    {
+        "id": "clear-formatting",
+        "commandId": "editor:clear-formatting",
+        "description": { "en": "Remove all text formatting." },
+        "icon": "eraser",
+        "tooltip": { "en": "Clear formatting" },
+        "type": "command"
+    },
+    {
+        "id": "copy",
+        "description": { "en": "Copies the selected text to the clipboard." },
+        "icon": "clipboard-copy",
+        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "tooltip": { "en": "Copy" },
+        "type": "javascript"
+    },
+    {
+        "id": "copy-block-link",
+        "description": { "en": "Copies a link to the current block to the clipboard." },
+        "icon": "link-2",
+        "script": "const { metadataCache: m } = app, e = app.workspace.activeEditor?.editor, f = app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
+        "tooltip": { "en": "Copy link to block" },
+        "type": "javascript"
+    },
+    {
+        "id": "copy-obsidian-url",
+        "commandId": "workspace:copy-url",
+        "description": { "en": "Copy the Obsidian URL for the current note to the clipboard." },
+        "icon": "share",
+        "tooltip": { "en": "Copy Obsidian URL" },
+        "type": "command"
+    },
+    {
+        "id": "cut",
+        "description": { "en": "Cuts the selected text to the clipboard." },
+        "icon": "scissors",
+        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "tooltip": { "en": "Cut" },
+        "type": "javascript"
+    },
+    {
+        "id": "cycle-list-checklist",
+        "commandId": "editor:cycle-list-checklist",
+        "description": { "en": "Changes to bullet, checkbox, or unchecked." },
+        "icon": "check-square",
+        "tooltip": { "en": "Cycle bullet/checkbox" },
+        "type": "command"
+    },
+    {
+        "id": "cycle-themes",
+        "description": { "en": "Cycles between installed themes, including the default." },
+        "icon": "venetian-mask",
+        "script": "const i = ntb.getActiveItem();\nconst t = [...Object.values(app.customCss.themes), { name: '' }];\nconst n = t[(t.findIndex(theme => theme.name === app.vault.getConfig('cssTheme')) + 1) % t.length].name;\napp.customCss.setTheme(n);\nif (n) new Notice(n);",
+        "tooltip": { "en": "Cycle themes" },
+        "type": "javascript"
+    },
+    {
+        "id": "cycle-workspace",
+        "description": { "en": "Cycles between workspaces." },
+        "icon": "layout-grid",
+        "script": "const p = app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
+        "tooltip": { "en": "Cycle workspaces" },
+        "type": "javascript"
+    },
+    {
+        "id": "daily-notes-prev",
+        "commandId": "daily-notes:goto-prev",
+        "description": { "en": "Go to the previous daily note." },
+        "icon": "arrow-left",
+        "tooltip": { "en": "Previous daily note" },
+        "type": "command"
+    },
+    {
+        "id": "daily-notes-today",
+        "commandId": "daily-notes",
+        "description": { "en": "Go to today's daily note." },
+        "icon": "calendar",
+        "tooltip": { "en": "Today's daily note" },
+        "type": "command"
+    },
+    {
+        "id": "daily-notes-next",
+        "commandId": "daily-notes:goto-next",
+        "description": { "en": "Go to the next daily note." },
+        "icon": "arrow-right",
+        "tooltip": { "en": "Next daily note" },
+        "type": "command"
+    },
+    {
+        "id": "editor-toggle-preview",
+        "commandId": "markdown:toggle-preview",
+        "description": { "en": "Change between the editor's Preview and Reading modes." },
+        "icon": "book-open",
+        "tooltip": { "en": "Toggle Reading view" },
+        "type": "command"
+    },
+    {
+        "id": "editor-toggle-source",
+        "commandId": "editor:toggle-source",
+        "description": { "en": "Turn Source mode on and off." },
+        "icon": "code-2",
+        "tooltip": { "en": "Toggle Source mode" },
+        "type": "command"
+    },
+    {
+        "id": "file-append",
+        "description": { "en": "Appends the prompted text to a file you specify." },
+        "icon": "file-plus-2",
+        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\\n\\n' + txt); }",
+        "tooltip": { "en": "Append text" },
+        "type": "javascript"
+    },
+    {
+        "id": "file-in-explorer",
+        "commandId": "file-explorer:reveal-active-file",
+        "description": { "en": "Reveal the active file in navigation." },
+        "icon": "folder-tree",
+        "tooltip": { "en": "Show file in navigation" },
+        "type": "command"
+    },
+    {
+        "id": "file-in-system",
+        "commandId": "open-with-default-app:show",
+        "description": { "en": "Reveal the active file in the system's file explorer." },
+        "icon": "folder-search",
+        "tooltip": { "en": "Show file in system" },
+        "type": "command"
+    },
+    {
+        "id": "file-move",
+        "commandId": "file-explorer:move-file",
+        "description": { "en": "Move current file to a chosen folder." },
+        "icon": "folder-input",
+        "tooltip": { "en": "Move file to folder" },
+        "type": "command"
+    },
+    {
+        "id": "file-new",
+        "commandId": "file-explorer:new-file",
+        "description": { "en": "Creates a new note." },
+        "icon": "file-plus",
+        "tooltip": { "en": "New note" },
+        "type": "command"
+    },
+    {
+        "id": "file-next",
+        "description": { "en": "Opens the next file in the folder, sorted A-Z. Loops over to the first file." },
+        "icon": "square-arrow-right",
+        "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf)); }",
+        "tooltip": { "en": "Next file" },
+        "type": "javascript"
+    },
+    {
+        "id": "file-prev",
+        "description": { "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file." },
+        "icon": "square-arrow-left",
+        "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);\nif (sfl.length>1) { const pf = ci===0?sfl[sfl.length-1]:sfl[ci-1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(pf)); }",
+        "tooltip": { "en": "Previous file" },
+        "type": "javascript"
+    },
+    {
+        "id": "folder-search",
+        "description": { "en": "Opens search for the current folder, or all files if the file is in the root." },
+        "icon": "folder-search",
+        "script": "const p = app.workspace.getActiveFile()?.parent.path ?? '/';\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
+        "tooltip": { "en": "Search folder" },
+        "type": "javascript"
+    },
+    {
+        "id": "global-search-open",
+        "commandId": "global-search:open",
+        "description": { "en": "Opens the search sidebar." },
+        "icon": "search",
+        "tooltip": { "en": "Search all files" },
+        "type": "command"
+    },
+    {
+        "id": "go-bottom",
+        "description": { "en": "Moves the cursor to the bottom of the current note." },
+        "icon": "arrow-down-to-line",
+        "script": "app.workspace.activeEditor?.editor?.setCursor(app.workspace.activeEditor.editor.lineCount(), 0)",
+        "tooltip": { "en": "Jump to bottom" },
+        "type": "javascript"
+    },
+    {
+        "id": "go-home",
+        "description": { "en": "Go to your home note. (Enter your home note in the URL.)" },
+        "icon": "home",
+        "tooltip": { "en": "Home" },
+        "uri": "",
+        "type": "uri"
+    },
+    {
+        "id": "go-top",
+        "description": { "en": "Moves the cursor to the top of the current note." },
+        "icon": "arrow-up-to-line",
+        "script": "app.workspace.activeEditor?.editor?.setCursor(0, 0)",
+        "tooltip": { "en": "Jump to top" },
+        "type": "javascript"
+    },
+    {
+        "id": "go-up",
+        "description": { "en": "Uses your note's \"up\" property to navigate to a parent note in your vault." },
+        "icon": "arrow-up-left",
+        "tooltip": { "en": "Go up" },
+        "uri": "{{prop_up}}",
+        "type": "uri"
+    },
+    {
+        "id": "go-next-callout",
+        "description": { "en": "Moves the cursor to the next callout in the note." },
+        "icon": "chevrons-down",
+        "script": "const ed = app.workspace.activeEditor?.editor;\nconst ln = ed.getValue().split('\\n');\nlet idx = ed.getCursor().line;\nconst r = /^\\s*>/;\nwhile (idx < ln.length && r.test(ln[idx])) idx++;\nwhile (idx < ln.length && !r.test(ln[idx])) idx++;\nif (idx >= ln.length) { idx = 0; while (idx < ln.length && !r.test(ln[idx])) idx++; }\nif (idx < ln.length) { ed.setCursor({ line: idx, ch: 0 }); }",
+        "tooltip": { "en": "Next callout" },
+        "type": "javascript"
+    },
+    {
+        "id": "go-next-heading",
+        "description": { "en": "Moves the cursor to the next heading in the note." },
+        "icon": "a-arrow-down",
+        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = c.line + 1; i !== c.line; i = (i + 1) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "tooltip": { "en": "Next heading" },
+        "type": "javascript"
+    },
+    {
+        "id": "go-prev-heading",
+        "description": { "en": "Moves the cursor to the previous heading in the note." },
+        "icon": "a-arrow-up",
+        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "tooltip": { "en": "Previous heading" },
+        "type": "javascript"
+    },
+    {
+        "id": "indent",
+        "description": { "en": "Increases indentation on the current line." },
+        "icon": "indent-increase",
+        "script": "app.workspace.activeLeaf.view?.editor.indentList()",
+        "tooltip": { "en": "Indent" },
+        "type": "javascript"
+    },
+    {
+        "id": "insert-callout",
+        "commandId": "editor:insert-callout",
+        "description": { "en": "Insert a callout block." },
+        "icon": "quote",
+        "tooltip": { "en": "Insert callout" },
+        "type": "command"
+    },
+    {
+        "id": "insert-codeblock",
+        "commandId": "editor:insert-codeblock",
+        "description": { "en": "Insert a code block." },
+        "icon": "code-square",
+        "tooltip": { "en": "Insert code block" },
+        "type": "command"
+    },
+    {
+        "id": "insert-embed",
+        "commandId": "editor:insert-embed",
+        "description": { "en": "Add an embedded file or note." },
+        "icon": "sticky-note",
+        "tooltip": { "en": "Add embed" },
+        "type": "command"
+    },
+    {
+        "id": "insert-horizontal-rule",
+        "commandId": "editor:insert-horizontal-rule",
+        "description": { "en": "Insert a horizontal rule to separate sections." },
+        "icon": "line-horizontal",
+        "tooltip": { "en": "Insert horizontal rule" },
+        "type": "command"
+    },
+    {
+        "id": "insert-link",
+        "commandId": "editor:insert-link",
+        "description": { "en": "Insert a markdown link." },
+        "icon": "link",
+        "tooltip": { "en": "Insert markdown link" },
+        "type": "command"
+    },
+    {
+        "id": "insert-mathblock",
+        "commandId": "editor:insert-mathblock",
+        "description": { "en": "Insert a math block." },
+        "icon": "sigma-square",
+        "tooltip": { "en": "Insert math block" },
+        "type": "command"
+    },
+    {
+        "id": "insert-table",
+        "commandId": "editor:insert-table",
+        "description": { "en": "Insert a table." },
+        "icon": "table",
+        "tooltip": { "en": "Insert table" },
+        "type": "command"
+    },
+    {
+        "id": "insert-tag",
+        "commandId": "editor:insert-tag",
+        "description": { "en": "Add a tag to the note." },
+        "icon": "tag",
+        "tooltip": { "en": "Add tag" },
+        "type": "command"
+    },
+    {
+        "id": "insert-wikilink",
+        "commandId": "editor:insert-wikilink",
+        "description": { "en": "Add an internal link." },
+        "icon": "brackets",
+        "tooltip": { "en": "Add internal link" },
+        "type": "command"
+    },
+    {
+        "id": "load-workspace",
+        "commandId": "workspaces:load",
+        "description": { "en": "Select and load a configured workspace." },
+        "icon": "layout-template",
+        "tooltip": { "en": "Load workspace" },
+        "type": "command"
+    },
+    {
+        "id": "new-note",
+        "commandId": "file-explorer:new-file",
+        "description": { "en": "Create a new note." },
+        "icon": "file",
+        "tooltip": { "en": "New note" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-quick-toolbars",
+        "commandId": "note-toolbar:open-toolbar-suggester",
+        "description": { "en": "Opens a window with access to all of your Note Toolbars." },
+        "icon": "package-search",
+        "tooltip": { "en": "Quick Toolbars" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-quick-tools",
+        "commandId": "note-toolbar:open-item-suggester",
+        "description": { "en": "Opens a searchable window with access to all of your Note Toolbar items." },
+        "icon": "rocket",
+        "tooltip": { "en": "Quick Tools" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-tbar-settings",
+        "commandId": "note-toolbar:open-toolbar-settings",
+        "description": { "en": "Opens the active Note Toolbar's settings to customize your toolbar." },
+        "icon": "settings-2",
+        "tooltip": { "en": "Toolbar settings" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-toggle-properties",
+        "commandId": "note-toolbar:toggle-properties",
+        "description": { "en": "Toggle the visibility of note properties." },
+        "icon": "table-properties",
+        "tooltip": { "en": "Toggle Properties" },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-user-guide",
+        "description": { "en": "Access the Note Toolbar User Guide for help and tips." },
+        "icon": "book",
+        "tooltip": { "en": "User Guide for Note Toolbar" },
+        "uri": "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-discord",
+        "description": { "en": "Opens Obsidian's Discord community." },
+        "icon": "discord",
+        "tooltip": { "en": "Obsidian Discord" },
+        "uri": "https://discord.gg/obsidianmd",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-forum",
+        "description": { "en": "Opens Obsidian's forum for discussions and support." },
+        "icon": "message-circle",
+        "tooltip": { "en": "Obsidian forum" },
+        "uri": "https://forum.obsidian.md/",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-help-site",
+        "description": { "en": "Opens the official Obsidian Help site." },
+        "icon": "book",
+        "tooltip": { "en": "Obsidian Help" },
+        "uri": "https://help.obsidian.md/",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-kanban-create",
+        "commandId": "obsidian-kanban:create-new-kanban-board",
+        "description": { "en": "Create a new kanban board." },
+        "icon": "trello",
+        "target": "tab",
+        "tooltip": { "en": "New kanban" },
+        "type": "command"
+    },
+    {
+        "id": "obsidian-markdown-reference",
+        "description": { "en": "Opens Obsidian's Markdown formatting guide." },
+        "icon": "book-down",
+        "tooltip": { "en": "Markdown reference" },
+        "uri": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-subreddit",
+        "description": { "en": "Opens the Obsidian community on Reddit." },
+        "icon": "messages-square",
+        "tooltip": { "en": "Obsidian subreddit" },
+        "uri": "https://www.reddit.com/r/ObsidianMD/",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-sync-version-history",
+        "commandId": "sync:view-version-history",
+        "description": { "en": "View the version history for the current file." },
+        "icon": "file-clock",
+        "tooltip": { "en": "Version history" },
+        "type": "command"
+    },
+    {
+        "id": "obsidian-tasks-edit",
+        "commandId": "obsidian-tasks-plugin:edit-task",
+        "description": { "en": "Create a new task." },
+        "icon": "check-square-2",
+        "tooltip": { "en": "Create/Edit task" },
+        "type": "command"
+    },
+    {
+        "id": "paste",
+        "description": { "en": "Pastes the text from the clipboard." },
+        "icon": "clipboard-paste",
+        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "tooltip": { "en": "Paste" },
+        "type": "javascript"
+    },
+    {
+        "id": "periodic-notes-monthly-next",
+        "commandId": "periodic-notes:next-monthly-note",
+        "description": { "en": "Open next monthly note. (Must be in monthly note.)" },
+        "icon": "lucide-calendar-plus",
+        "tooltip": { "en": "Next monthly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-monthly-open",
+        "commandId": "periodic-notes:open-monthly-note",
+        "description": { "en": "Open monthly note." },
+        "icon": "calendar-days",
+        "tooltip": { "en": "Open monthly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-monthly-prev",
+        "commandId": "periodic-notes:prev-monthly-note",
+        "description": { "en": "Open previous monthly note. (Must be in monthly note.)" },
+        "icon": "lucide-calendar-minus",
+        "tooltip": { "en": "Previous monthly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-next",
+        "commandId": "periodic-notes:next-weekly-note",
+        "description": { "en": "Next weekly note. (Must be in weekly note.)" },
+        "icon": "lucide-calendar-arrow-down",
+        "tooltip": { "en": "Next weekly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-open",
+        "commandId": "periodic-notes:open-weekly-note",
+        "description": { "en": "Open weekly note." },
+        "icon": "calendar-range",
+        "tooltip": { "en": "Open weekly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-prev",
+        "commandId": "periodic-notes:prev-weekly-note",
+        "description": { "en": "Previous weekly note. (Must be in weekly note.)" },
+        "icon": "lucide-calendar-arrow-up",
+        "tooltip": { "en": "Previous weekly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-next",
+        "commandId": "periodic-notes:next-yearly-note",
+        "description": { "en": "Next yearly note. (Must be in yearly note.)" },
+        "icon": "fast-forward",
+        "tooltip": { "en": "Next yearly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-open",
+        "commandId": "periodic-notes:open-yearly-note",
+        "description": { "en": "Open yearly note." },
+        "icon": "calendar-clock",
+        "tooltip": { "en": "Open yearly note" },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-prev",
+        "commandId": "periodic-notes:prev-yearly-note",
+        "description": { "en": "Previous yearly note. (Must be in yearly note.)" },
+        "icon": "rewind",
+        "tooltip": { "en": "Previous yearly note" },
+        "type": "command"
+    },
+    {
+        "id": "pin",
+        "commandId": "workspace:toggle-pin",
+        "description": { "en": "Pins or unpins the current note, preventing it from being replaced when opening new notes." },
+        "icon": "pin",
+        "tooltip": { "en": "Toggle pin" },
+        "type": "command"
+    },
+    {
+        "id": "search-replace-open",
+        "commandId": "editor:open-search-replace",
+        "description": { "en": "Open the find/replace panel in the current note." },
+        "icon": "file-search",
+        "tooltip": { "en": "Find & Replace" },
+        "type": "command"
+    },
+    {
+        "id": "set-workspace",
+        "description": { "en": "Changes to a specific workspace you provide." },
+        "icon": "layout-template",
+        "script": "const w = 'My Workspace'; // CHANGE THIS\napp.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
+        "tooltip": { "en": "My workspace" },
+        "type": "javascript"
+    },
+    {
+        "id": "settings-open",
+        "commandId": "app:open-settings",
+        "description": { "en": "Open Obsidian's settings." },
+        "icon": "settings",
+        "tooltip": { "en": "Open settings" },
+        "type": "command"
+    },
+    {
+        "id": "tab-close",
+        "commandId": "workspace:close",
+        "description": { "en": "Close the current tab." },
+        "icon": "x",
+        "tooltip": { "en": "Close tab" },
+        "type": "command"
+    },
+    {
+        "id": "tab-new",
+        "description": { "en": "Opens a new empty tab." },
+        "script": "app.workspace.getLeaf(true)",
+        "icon": "plus",
+        "tooltip": { "en": "New tab" },
+        "type": "javascript"
+    },
+    {
+        "id": "tab-next",
+        "commandId": "workspace:next-tab",
+        "description": { "en": "Go to the next tab." },
+        "icon": "chevron-right",
+        "tooltip": { "en": "Next tab" },
+        "type": "command"
+    },
+    {
+        "id": "tab-prev",
+        "commandId": "workspace:previous-tab",
+        "description": { "en": "Go to the previous tab." },
+        "icon": "chevron-left",
+        "tooltip": { "en": "Previous tab" },
+        "type": "command"
+    },
+    {
+        "id": "templater-insert-template",
+        "commandId": "templater-obsidian:insert-templater",
+        "description": { "en": "Inserts the chosen template." },
+        "icon": "templater-icon",
+        "tooltip": { "en": "Insert template" },
+        "type": "command"
+    },
+    {
+        "id": "templater-new-note-from-template",
+        "commandId": "templater-obsidian:create-new-note-from-template",
+        "description": { "en": "Create a new note from a template you select." },
+        "icon": "percent-square",
+        "tooltip": { "en": "New from template" },
+        "type": "command"
+    },
+    {
+        "id": "redo",
+        "description": { "en": "Reapplies the last undone action." },
+        "icon": "lucide-redo-2",
+        "script": "app.workspace.activeLeaf.view?.editor.redo()",
+        "tooltip": { "en": "Redo" },
+        "type": "javascript"
+    },
+    {
+        "id": "swap-line-down",
+        "commandId": "editor:swap-line-down",
+        "description": { "en": "Move the current line down." },
+        "icon": "corner-right-down",
+        "tooltip": { "en": "Move line down" },
+        "type": "command"
+    },
+    {
+        "id": "swap-line-up",
+        "commandId": "editor:swap-line-up",
+        "description": { "en": "Move the current line up." },
+        "icon": "corner-right-up",
+        "tooltip": { "en": "Move line up" },
+        "type": "command"
+    },
+    {
+        "id": "system-snippets-open",
+        "description": { "en": "Opens the vault's snippets folder in the system's file explorer." },
+        "icon": "folder-code",
+        "script": "let v = this.app.vault.adapter.getBasePath() + '/' + app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
+        "tooltip": { "en": "Show snippets in system" },
+        "type": "javascript"
+    },
+    {
+        "id": "system-vault-open",
+        "description": { "en": "Opens the vault's folder in the system's file explorer." },
+        "icon": "folder-heart",
+        "script": "let v = this.app.vault.adapter.getBasePath(); window.open('file://' + encodeURI(v));",
+        "tooltip": { "en": "Show vault in system" },
+        "type": "javascript"
+    },
+    {
+        "id": "theme-switch",
+        "commandId": "theme:switch",
+        "description": { "en": "Open the Obsidian theme switcher." },
+        "icon": "venetian-mask",
+        "tooltip": { "en": "Change theme" },
+        "type": "command"
+    },
+    {
+        "id": "theme-toggle-light-dark",
+        "commandId": "theme:use-dark",
+        "description": { "en": "Toggle between light and dark modes." },
+        "icon": "sun-moon",
+        "script": "const i = ntb.getActiveItem();\nif (app.vault.getConfig('theme') === 'obsidian') { app.vault.setConfig('theme', 'obsidian-light'); i?.setIcon('moon'); }\nelse { app.vault.setConfig('theme', 'obsidian'); i?.setIcon('sun'); }",
+        "tooltip": { "en": "Toggle light/dark" },
+        "type": "javascript"
+    },
+    {
+        "id": "theme-use-dark",
+        "commandId": "theme:use-dark",
+        "description": { "en": "Enable dark mode." },
+        "icon": "moon",
+        "tooltip": { "en": "Use dark mode" },
+        "type": "command"
+    },
+    {
+        "id": "theme-use-light",
+        "commandId": "theme:use-light",
+        "description": { "en": "Enable light mode." },
+        "icon": "sun",
+        "tooltip": { "en": "Use light mode" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-blockquote",
+        "commandId": "editor:toggle-blockquote",
+        "description": { "en": "Apply or remove blockquote formatting." },
+        "icon": "text-quote",
+        "tooltip": { "en": "Toggle blockquote" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-bold",
+        "commandId": "editor:toggle-bold",
+        "description": { "en": "Apply or remove bold formatting." },
+        "icon": "bold",
+        "tooltip": { "en": "Toggle bold" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-bullet-list",
+        "commandId": "editor:toggle-bullet-list",
+        "description": { "en": "Apply or remove bullet list formatting." },
+        "icon": "list",
+        "tooltip": { "en": "Toggle bullet" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-checklist-status",
+        "commandId": "editor:toggle-checklist-status",
+        "description": { "en": "Toggle the status of checklist items." },
+        "icon": "list-checks",
+        "tooltip": { "en": "Toggle check status" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-code",
+        "commandId": "editor:toggle-code",
+        "description": { "en": "Apply or remove inline code formatting." },
+        "icon": "code",
+        "tooltip": { "en": "Toggle code" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-comments",
+        "commandId": "editor:toggle-comments",
+        "description": { "en": "Add or remove comments." },
+        "icon": "percent",
+        "tooltip": { "en": "Toggle comment" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-css-class",
+        "description": { "en": "Adds or removes the provided CSS class in the cssclasses property." },
+        "icon": "paintbrush",
+        "script": "let tc = 'myclass'; // CHANGE THIS\nconst af = app.workspace.getActiveFile(); if (!af) return;\nawait app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
+        "tooltip": { "en": "Toggle CSS class" },
+        "type": "javascript"
+    },
+    {
+        "id": "toggle-highlight",
+        "commandId": "editor:toggle-highlight",
+        "description": { "en": "Apply or remove text highlighting." },
+        "icon": "highlighter",
+        "tooltip": { "en": "Toggle highlight" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-inline-math",
+        "commandId": "editor:toggle-inline-math",
+        "description": { "en": "Apply or remove inline math formatting." },
+        "icon": "sigma",
+        "tooltip": { "en": "Toggle inline math" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-italics",
+        "commandId": "editor:toggle-italics",
+        "description": { "en": "Apply or remove italic formatting." },
+        "icon": "italic",
+        "tooltip": { "en": "Toggle italics" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-numbered-list",
+        "commandId": "editor:toggle-numbered-list",
+        "description": { "en": "Apply or remove numbered list formatting." },
+        "icon": "list-ordered",
+        "tooltip": { "en": "Toggle numbered list" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-status-bar",
+        "description": { "en": "Shows or hides Obsidian's status bar." },
+        "icon": "dock",
+        "script": "const s = activeDocument.querySelector('.status-bar');\nif (s) { s.style.display = s.style.display === 'none' ? '' : 'none'; }",
+        "tooltip": { "en": "Toggle status bar" },
+        "type": "javascript"
+    },
+    {
+        "id": "toggle-strikethrough",
+        "commandId": "editor:toggle-strikethrough",
+        "description": { "en": "Apply or remove strikethrough formatting." },
+        "icon": "strikethrough",
+        "tooltip": { "en": "Toggle strikethrough" },
+        "type": "command"
+    },
+    {
+        "id": "toggle-vim-mode",
+        "description": { "en": "Turns Vim mode on and off." },
+        "icon": "keyboard",    
+        "script": "const vm = app.vault.getConfig('vimMode');\napp.vault.setConfig('vimMode', !vm);\nntb.getActiveItem()?.setIcon(vm ? 'keyboard' : 'edit-2');",
+        "tooltip": { "en": "Toggle Vim mode" },
+        "type": "javascript"
+    },
+    {
+        "id": "undo",
+        "description": { "en": "Reverts the latest action." },
+        "icon": "lucide-undo-2",
+        "script": "app.workspace.activeLeaf.view?.editor.undo()",
+        "tooltip": { "en": "Undo" },
+        "type": "javascript"
+    },
+    {
+        "id": "unindent",
+        "description": { "en": "Decreases indentation on the current line." },
+        "icon": "indent-decrease",
+        "script": "app.workspace.activeLeaf.view?.editor.unindentList()",
+        "tooltip": { "en": "Unindent" },
+        "type": "javascript"
+    },
+    {
+        "id": "vscode-open",
+        "description": { "en": "Opens the current file in VS Code." },
+        "icon": "file-json-2",
+        "tooltip": { "en": "Open in VS Code" },
+        "uri": "vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}",
+        "type": "uri"
+    }
+]

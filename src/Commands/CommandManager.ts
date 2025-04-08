@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -133,7 +133,7 @@ export class CommandManager {
                     name: t('command.name-open-toolbar', {toolbar: toolbar.name}),
                     icon: this.plugin.settings.icon,
                     callback: async () => {
-                        this.plugin.commands.openItemSuggester(toolbar.uuid);
+                        this.plugin.commands.openQuickTools(toolbar.uuid);
                     }}
                 );
             }
@@ -227,12 +227,11 @@ export class CommandManager {
     }
 
     /**
-     * Opens the item suggester modal.
+     * Opens the item suggester modal for Quick Tools/Toolbars.
      * @param toolbarId optional ID of a toolbar to limit the ItemSuggestModal to show
      */
-    async openItemSuggester(toolbarId?: string): Promise<void> {
-        let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ItemSuggestModal(this.plugin, activeFile, toolbarId);
+    async openQuickTools(toolbarId?: string): Promise<void> {
+        const modal = new ItemSuggestModal(this.plugin, toolbarId, undefined, 'QuickTools');
         modal.open();
     }
 
@@ -258,12 +257,13 @@ export class CommandManager {
     /**
      * Opens settings for a particular toolbar by ID.
      */
-    async openToolbarSettingsForId(uuid: string): Promise<void> {
+    async openToolbarSettingsForId(uuid: string, focusItemId?: string): Promise<void> {
         let toolbarSettings = this.plugin.settingsManager.getToolbarById(uuid);
         if (toolbarSettings) {
             const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, null, toolbarSettings);
             modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
             modal.open();
+            if (focusItemId) modal.display(focusItemId);
         }
     }
 
@@ -272,8 +272,8 @@ export class CommandManager {
      */
     async openToolbarSuggester(): Promise<void> {
         let activeFile = this.plugin.app.workspace.getActiveFile();
-        const modal = new ToolbarSuggestModal(this.plugin, false, false, (toolbar: ToolbarSettings) => {
-            this.plugin.commands.openItemSuggester(toolbar.uuid);
+        const modal = new ToolbarSuggestModal(this.plugin, false, false, false, async (toolbar: ToolbarSettings) => {
+            await this.plugin.commands.openQuickTools(toolbar.uuid);
         });
         modal.open();
     }
@@ -282,11 +282,11 @@ export class CommandManager {
      * Opens the toolbar suggester and replaces the current toolbar using the property.
      */
     async swapToolbar(): Promise<void> {
-        const modal = new ToolbarSuggestModal(this.plugin, true, true, async (toolbar: ToolbarSettings) => {
+        const modal = new ToolbarSuggestModal(this.plugin, true, true, false, async (toolbar: ToolbarSettings) => {
             const activeFile = this.plugin.app.workspace.getActiveFile();
             if (activeFile) {
                 await this.plugin.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
-                    if (toolbar.uuid === 'EMPTY_TOOLBAR') {
+                    if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
                         delete frontmatter[this.plugin.settings.toolbarProp];
                         return;
                     }

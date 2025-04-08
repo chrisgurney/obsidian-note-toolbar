@@ -1,11 +1,12 @@
 import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { ItemType, RELEASES_URL, t, ToolbarItemSettings, ToolbarSettings, USER_GUIDE_URL, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS, DEFAULT_ITEM_VISIBILITY_SETTINGS } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
 import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
+import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";
 
 /**
  * Returns an element contianing a dismissable onboarding message.
@@ -29,20 +30,14 @@ export function createOnboardingMessageEl(
 		.addExtraButton((button) => {
 			button
 				.setIcon('cross')
-				.setTooltip("Dismiss")
+				.setTooltip("Dismiss") // FIXME: localize string
 				.onClick(() => {
 					setting.settingEl.remove();
 					plugin.settings.onboarding[messageId] = true;
 					plugin.settingsManager.save();
 				});
 			button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
-			button.extraSettingsEl.tabIndex = 0;
-			plugin.registerDomEvent(button.extraSettingsEl, 'keydown', (e: KeyboardEvent) => {
-				if (e.key === 'Enter' || e.key === ' ') {
-					e.preventDefault();
-					button.extraSettingsEl.click();
-				}
-			});
+			handleKeyClick(plugin, button.extraSettingsEl);
 		});
 	return setting.settingEl;
 }
@@ -158,15 +153,20 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 		helpContainerEl.addClass('note-toolbar-setting-help-section');
 		const helpDesc = document.createDocumentFragment();
 		helpDesc.append("v" + plugin.manifest.version, " • ");
-		let whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
+		const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 		plugin.registerDomEvent(whatsNewLink, 'click', (event) => { 
-			plugin.app.workspace.getLeaf(true).setViewState({
-				type: VIEW_TYPE_WHATS_NEW,
-				active: true
-			});
+			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+			if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
 			closeCallback();
 		});
-		helpDesc.append(" • ", helpDesc.createEl("a", { href: "obsidian://note-toolbar?help",	text: iconTextFr('help-circle', t('setting.button-help')) }));
+		helpDesc.append(' • ');
+		const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
+		plugin.registerDomEvent(galleryLink, 'click', (event) => { 
+			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+			if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
+			closeCallback();
+		});
+		helpDesc.append(' • ', helpDesc.createEl("a", { href: "obsidian://note-toolbar?help", text: iconTextFr('help-circle', t('setting.button-help')) }));
 		helpContainerEl.append(helpDesc);
 
 	}
@@ -174,11 +174,11 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 
 		const helpDesc = document.createDocumentFragment();
 		helpDesc.append(
-			helpDesc.createEl("a", { href: RELEASES_URL, text: 'v' + plugin.manifest.version })
+			helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + plugin.manifest.version })
 		);
 
 		new Setting(settingsDiv)
-			.setName(t('plugin.name') + ' • v' + plugin.manifest.version)
+			.setName(t('plugin.note-toolbar') + ' • v' + plugin.manifest.version)
 			.setDesc(t('setting.help.description'))
 			.addButton((button: ButtonComponent) => {
 				button
@@ -188,9 +188,23 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 							type: VIEW_TYPE_WHATS_NEW,
 							active: true
 						});
+						if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
 						closeCallback();
 					})
 					.buttonEl.setText(t('setting.button-whats-new'));
+			})
+			.addButton((button: ButtonComponent) => {
+				button
+					.setTooltip(t('setting.button-gallery-tooltip'))
+					.onClick(() => {
+						plugin.app.workspace.getLeaf(true).setViewState({
+							type: VIEW_TYPE_GALLERY,
+							active: true
+						});
+						if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
+						closeCallback();
+					})
+					.buttonEl.setText(iconTextFr('layout-grid', t('setting.button-gallery')));
 			})
 			.addButton((button: ButtonComponent) => {
 				button
@@ -246,6 +260,19 @@ export function getValueForKey(dict: {[key: string]: string}[], key: string): st
 	return option ? Object.values(option)[0] : '';
 }
 
+export function handleKeyClick(plugin: NoteToolbarPlugin, el: HTMLElement) {
+	el.tabIndex = 0;
+	plugin.registerDomEvent(
+		el, 'keydown', (evt) => {
+			switch (evt.key) {
+				case 'Enter':
+				case ' ':
+					evt.preventDefault();
+					el.click();
+			}
+		});
+}
+
 export function iconTextFr(icon: string, text: string): DocumentFragment {
 	let headingFr = document.createDocumentFragment();
 	let headingEl = headingFr.createEl('span');
@@ -269,9 +296,42 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
 	messageFr.append(
 		message, ' ',
 	);
-	let learnMoreLink = messageFr.createEl('a', { href: USER_GUIDE_URL + page, text: linkText });
+	let learnMoreLink = messageFr.createEl('a', { href: URL_USER_GUIDE + page, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
+}
+
+/**
+ * Opens an item suggester that then adds the selected item to this toolbar.
+ */
+export function openItemSuggestModal(
+	plugin: NoteToolbarPlugin, 
+	toolbar: ToolbarSettings, 
+	mode: ItemSuggestMode, 
+	parent?: ToolbarSettingsModal, 
+	toolbarInsertIndex?: number
+) {
+	const modal = new ItemSuggestModal(
+		plugin, 
+		undefined, 
+		async (selectedItem: ToolbarItemSettings) => {
+			const isEmptyItem = selectedItem.uuid === 'EMPTY_ITEM';
+			if (isEmptyItem) selectedItem.label = '';
+
+			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
+			// reset the visibility setting, as there's no prior indication to the user as to its visibility
+			newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS));
+			if (!await plugin.settingsManager.resolveGalleryItem(newItem)) return;
+
+			toolbar.updated = new Date().toISOString();
+			await plugin.settingsManager.save();
+
+			if (isEmptyItem) new ItemModal(plugin, toolbar, newItem).open();
+			if (parent) parent.display();
+		}, 
+		mode
+	);
+	modal.open();
 }
 
 /**
@@ -320,25 +380,31 @@ export function removeFieldError(el: HTMLElement | null) {
  * @param el HEMLElement to render suggestion into
  * @param inputStr string that was used to search for this item
  * @param showMeta boolean to set true if the meta icon should be shown (for Quick Tools)
+ * @param replaceVars boolean to set true if vars should be replaced; false to leave as-is (default)
  */
 export function renderItemSuggestion(
 	plugin: NoteToolbarPlugin, 
 	item: ToolbarItemSettings, 
 	el: HTMLElement, 
 	inputStr: string, 
-	showMeta: boolean = false
+	showMeta: boolean = false,
+	replaceVars: boolean = false
 ) {
 	if (!item) { return }
 	el.addClass("note-toolbar-item-suggestion");
 	el.setAttribute('id', item.uuid);
+
+	const itemMainEl = el.createDiv();
+	itemMainEl.addClass('note-toolbar-item-suggestion-container');
+
 	if (item.icon) {
 		let svgExists = getIcon(item.icon);
 		if (svgExists) {
-			let iconGlyph = el.createSpan();
-			setIcon(iconGlyph, item.icon);
+			let iconGlyphEl = itemMainEl.createSpan();
+			setIcon(iconGlyphEl, item.icon);
 		}
 	}
-	let itemNameEl = el.createSpan();
+	let itemNameEl = itemMainEl.createSpan();
 	let itemName = item.label || item.tooltip;
 
 	// fallback if no label or tooltip
@@ -354,14 +420,19 @@ export function renderItemSuggestion(
 	}
 
 	itemNameEl.addClass("note-toolbar-item-suggester-name");
-	let itemLabel = itemNameEl.createSpan();
+	const itemLabelEl = itemNameEl.createSpan();
 
 	let title = itemName;
 	// replace variables in labels (or tooltip, if no label set)
 	const activeFile = plugin.app.workspace.getActiveFile();
-	plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
-		itemLabel.setText(resolvedName);
-	});
+	if (replaceVars) {
+		plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+			itemLabelEl.setText(resolvedName);
+		});
+	}
+	else {
+		itemLabelEl.setText(itemName);
+	}
 	
 	if (showMeta) {
 		let itemMeta = itemNameEl.createSpan();
@@ -379,6 +450,7 @@ export function renderItemSuggestion(
 				setTooltip(itemMeta, t('setting.item.option-uri'));
 				break;
 			case ItemType.Dataview:
+			case ItemType.JavaScript:
 			case ItemType.JsEngine:
 				setIcon(itemMeta, 'scroll');
 				setTooltip(itemMeta, "Script");
@@ -399,9 +471,55 @@ export function renderItemSuggestion(
 				: item.tooltip.toLowerCase().includes(inputStrLower) 
 					? item.tooltip 
 					: item.link;
-		let itemNoteEl = itemLabel.createDiv();
+		const itemNoteEl = el.createDiv();
 		itemNoteEl.addClass('note-toolbar-item-suggester-note');
 		itemNoteEl.setText(inputMatch);
+	}
+	// show the description if one is set
+	if (item.description) {
+		const itemDescEl = el.createDiv();
+		itemDescEl.addClass('note-toolbar-item-suggester-note');
+		itemDescEl.setText(item.description);
+
+		// show the plugin(s) supported, or the command ID used
+		if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
+			let itemPluginText = getPluginNames(plugin, item);
+			if (itemPluginText) {
+				const pluginDescEl = el.createDiv();
+				pluginDescEl.addClass('note-toolbar-item-suggester-note');	
+				setIcon(pluginDescEl.createSpan(), 'puzzle');		
+				pluginDescEl.createSpan().setText(t('gallery.label-plugin', { plugin: itemPluginText }));
+			}
+		}
+	}
+}
+
+/**
+ * Gets a list of plugin names required by this item, derived from the commandId or plugin property.
+ * @param item ToolbarItemSettings to get plugin list from
+ * @returns list of plugin names
+ */
+export function getPluginNames(plugin: NoteToolbarPlugin, item: ToolbarItemSettings): string | undefined {
+	if (item.linkAttr.type === ItemType.Plugin) {
+		const itemPluginType = (Array.isArray(item.plugin) ? item.plugin : [item.plugin]);
+		// replace known commands with user-friendly strings (if supported), and create a list
+		if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')
+			else return undefined;
+	}
+	else if (item.linkAttr.type === ItemType.Command) {
+		// make sure the command exists
+		const command = plugin.app.commands.commands[item.linkAttr.commandId];
+		const commandPluginId = item.linkAttr.commandId.split(':')[0];
+        if (!command) {
+			// show plugin name if known, otherwise show command ID
+			const pluginName = t(`plugin.${commandPluginId}`, { defaultValue: '' });
+			return pluginName || t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
+		}
+		// we can ignore built-in commands
+		const itemPluginType = !IGNORE_PLUGIN_IDS.includes(commandPluginId) ? commandPluginId : undefined;
+		// replace known commands with user-friendly string (if supported)
+		if (itemPluginType) return t(`plugin.${itemPluginType}`)
+			else return undefined;
 	}
 }
 

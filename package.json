@@ -4,9 +4,10 @@
 	"description": "TODO: Note Toolbar Description",
 	"main": "main.js",
 	"scripts": {
-		"apidocs": "typedoc src/Api/INoteToolbarApi.ts src/Api/IToolbar.ts --readme none",
-		"dev": "node esbuild.config.mjs",
+		"apidocs": "typedoc src/Api/INoteToolbarApi.ts src/Api/IToolbar.ts src/Api/IItem.ts --readme none",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"dev": "node esbuild.config.mjs",
+		"gallerydocs": "node ./build/gallery-docs.mjs ./src/Gallery/items.json ./src/Gallery/gallery.json ./docs/gallery.md",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],

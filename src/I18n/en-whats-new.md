@@ -1,89 +1,139 @@
-What's new in Note Toolbar v1.20?
+What's new in Note Toolbar v1.21?
 
 ## New Features 🎉
 
-### Easily swap toolbars
+### Introducing the Note Toolbar Gallery
 
-While a note is open, right-click on a toolbar (long-press on mobile) to show an option to swap the toolbar with another you can then choose.
+The gallery is a curated list of items that can be added to your toolbars in just one (or two) clicks. Explore it via the new **Gallery** button in settings.
 
-<img src="https://github.com/user-attachments/assets/7f76705c-1b07-454c-be55-aafe29c4dba6" width="700"/>
+The Gallery includes the User Guide's examples, and _even more_ as items can use scripts, creating useful tools that Obsidian does not provide out of the box. There's **[over 100+ items so far](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)**.
 
-Notes:
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-gallery.png" width="700"/>
 
-- Selecting an option will override the default mapping for the toolbar by updating the Note Toolbar property/frontmatter in the current note (`notetoolbar` by default).
-- Select the "Default" option to remove the property, which reverts to the default (folder) mapping.
-- Note that _Swap toolbars_ will **not** be available if: 
-  - the active file is not a note/markdown (as there's no properties to change); or
-  - your Note Toolbar Property is set to `tags` (to prevent accidental deletion/overwriting of note tags).
+It's easy to use the Gallery:
 
-_Thanks to @FeralFlora for the original idea._
+- In settings, look for the new _Gallery_ button/link at the top.
+- Browse though the categories, or search for items at the top.
+- To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to, or you can create a new toolbar.
+- Once the item is added to your toolbar, you can edit it however you see fit.
 
-### Support for Audio, Images, PDF, and Video
+>[!note] 
+> **I'd love your feedback** on the items, and categories I’ve started this with. What are some helpful items you think other users would benefit from, that Obsidian doesn’t already provide, or is maybe not obvious? Also, do let me know if anything’s broken. [Google feedback form ↗](https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform)
 
-Open the **Show toolbars in other views** heading (under **Folder mappings**) to add mapped toolbars to audio, images, PDF, and video files.
+> 🌐 For the localization team: Strings used within the Gallery and its items are in the [`gallery.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/gallery.json) and [`items.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Gallery/items.json) files respectively.  
 
-Support for canvases, the File menu, and New tab view are now also grouped under this heading.
+### Add items to the toolbar more easily
 
-<img src="https://github.com/user-attachments/assets/ac6a5066-e46e-4794-801b-db9cd5c62073" width="600"/>
+Add items more easily in a couple new ways:
 
-### Add a command for any item
+- Right-click (long-press on mobile) and using the **Add Item...** option. The item will be added wherever you right-click.
+- In settings, next to the `Add` button for the toolbar, you can now Search for items to add from your existing toolbars. 
 
-Add a command for any toolbar item you would like to execute from the command palette or a hotkey. Use the new item action menu to add the command.
+Suggestions from the Gallery are provided at the bottom of search results.
 
-<img src="https://github.com/user-attachments/assets/ddcf0e37-c5ec-4f66-bdc9-71979e8ae92f" width="600"/>
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-additems.gif" width="700"/>
 
-Notes
+### Execute JavaScript without needing another plugin
 
-- Hotkeys assigned to item commands will show in the item list in settings, in item tooltips, and in menus. (Only the first mapped hotkey is shown.) _Thank you @mProjectsCode for the hotkey-handling code._
-- If the label and tooltip are empty, you won't be able to add the item.
-- If the label uses variables or expressions, the tooltip will be used instead; if the tooltip's empty, or also has variables, the command won't be able to be added.
-- _Thank you @Dopairym for the idea._
+JavaScript can now be executed without the need for another plugin. Look for the **JavaScript item type**.
 
-### Copy developer ID for items
+- The _Scripting_ option  must be enabled in order to see this option.
+- Gallery items that rely on scripts use this feature.
+- [Learn more.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript)
 
-Using the menu on items, copy the unique identifier (UUID) for the toolbar item to the clipboard, so that in code you can target the item and make changes to it.
+### Use file items like tabs
 
-Once you have the ID, you can fetch the HTML element. As an example:
+Use the new `tab file items` style to make a file item behave like a tab, if the file you're currently viewing matches the item's filename.
 
-```js
-activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/releases/1-21-filetabs.gif" width="700"/>
+
+If you'd prefer a different style, create a CSS snippet with the `data-active-file` attribute, which is applied. Example:
+
+```css
+.callout[data-callout="note-toolbar"] {
+  li[data-active-file] {
+    border-bottom: 1px solid var(--link-color);
+    & span.external-link {
+      color: var(--link-color);
+      filter: unset;
+    }
+  }
+}
 ```
-
-_Thank you @laktiv for the idea._
 
 ## Improvements 🚀
 
-### Settings UI
+### Choose where to open files or to execute commands
 
-- A dismissible onboarding message is shown when creating a new toolbar, noting that the toolbar must be mapped (or property set) in order to actually use it.
-- Toolbar search
-  - Results now include any matches with visible toolbar item text (labels, tooltips).
-  - Search field is now shown by default on desktop and tablet.
-  - Arrow down out of the search field to navigate search results.
-- The new item actions menu (on phones) now contains the **Duplicate item** and **Delete** options, which helps give more room in the UI for visibility settings on smaller phones.
+When creating file or command items, choose from `New tab` or `Split pane`. For file items, you can also choose `New window`.
+
+- Some commands may override this setting and do their own thing. 
+- When clicking on file items, use modifier keys to override this setting.
+- Using this feature, the _New Canvas_ and _New Kanban_ items in the Gallery create those file types in a new tab (versus the default, which is in the current tab).
+
+### New URI variables + encoding
+
+Added URI variables for the current file path <code>&#123&#123file_path&#125&#125</code> and vault path <code>&#123&#123vault_path&#125&#125</code>.
+
+All variables (except for scripts) now support an `encode:` prefix, which, if added to a variable encodes that variable using `encodeURIComponent()`.
+
+For example, here's a URI for **Open in VS Code** -- available in the Gallery -- using [VS Code's URL handling ↗](https://code.visualstudio.com/docs/configure/command-line#_opening-vs-code-with-urls) to open the current file:
+<pre>
+vscode://file/&#123;&#123;encode:vault_path&#125;&#125;%2F&#123;&#123;encode:file_path&#125;&#125;
+</pre>
 
 ### Other improvements
 
-- Hotkeys assigned to toolbar commands will show in the toolbar list in settings. (Only the first mapped hotkey is shown.) _Thank you @mProjectsCode for the hotkey-handling code._
-- The right-click > Edit item... text is now truncated if the toolbar item's name is too long (usually if using expressions).
+- On phones: Items opened or added in settings now use the item modal, rather than expanding in the list in-place.
+- JS Engine: Added an Evaluate function, which evaluates a provided expression and displays a value if returned.
 
 ## Fixes
 
-- When entering a Note Toolbar property (`notetoolbar` by default) that was a string type (vs. list), the “no matching toolbar" notice would only use the first character. This may have also caused problems in the past showing the toolbar if this was a string property. In both cases, the correct toolbar name is now used.
-- Dataview expressions that use the new <code>\{\{dv:</code> notation no longer have extra letters removed.
+- Item Settings: Pressing down arrow key when in an edit field no longer closes the item.
+- Toolbar Settings: The need to re-enable the Scripting setting if a plugin was not installed/enabled, and it was then installed and enabled, has been removed.
+- Quick Tools: Console errors are no longer reported for any items.
+- Settings: Hot key display logic has been updated thanks to @mProjectsCode ’s updates.
+- Item Settings: (To test) Style dropdown not rounded when it’s actively being pressed down on phone.
+- Item Settings: Fixed an issue where the command suggester field was empty, even though the command was valid.
 
-## Licensing
+## API Beta
 
-Note Toolbar is now licensed under GPL 3.0 to ensure all contributions remain open source, and to maintain compliance when incorporating code from other projects.
+### New Features 🎉
+
+A few features have been added to the API to support the addition of the Gallery, but your scripts may be able to benefit from them as well.
+
+#### [`ntb`](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API)
+
+**Get an item by its ID**, or **get the active item** (i.e., the item that was just clicked/tapped). See below for example.
+
+Scripts can now also **access Note Toolbar's translations** via `ntb.t()`. For function usage, see the [i18next documentation ↗](https://www.i18next.com/translation-function/essentials). Translations are located in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+
+```ts
+// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+new Notice(ntb.t('api.msg.clipboard-copied'));
+```
+
+#### [`Item`](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/IItem.Interface.IItem.md)
+
+**Get and set an item's label, tooltip, and icon.**
+
+Some of the items in the Gallery use this, such as `Toggle light/dark mode` which updates the icon to reflect the current mode:
+
+```ts
+const item = ntb.getActiveItem();
+// you can also get items by ID
+// const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+item?.setIcon('circle-alert');
+```
 
 ---
 
 ## Previous releases
+
+[v1.20](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.20.0): Swap toolbars; support for audio/images/PDF/video; add a command for any item
 
 [v1.19](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.19.1): Canvas support, right-click to edit items, default item for floating buttons, toolbar search in settings
 
 [v1.18](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.18.1): Add a toolbar to the New Tab view; Commands to show individual toolbars
 
 [v1.17](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.17.0): Bottom toolbars, quick access to styles, API component improvements
-
-[v1.16](https://github.com/chrisgurney/obsidian-note-toolbar/releases/tag/1.16.0): Custom styles, API (Suggesters + Prompts), toolbar rendering and import improvements

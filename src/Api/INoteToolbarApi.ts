@@ -2,6 +2,7 @@ import { TFile } from "obsidian";
 import { Callback } from "./NoteToolbarApi";
 import { Toolbar } from "./Toolbar";
 import { IToolbar } from "./IToolbar";
+import { IItem } from "./IItem";
 
 /**
  * The first Note Toolbar APIs allow you basic toolbar access, and to show UI (suggesters, prompts, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
@@ -31,6 +32,21 @@ export interface INoteToolbarApi<T> {
      * new Notice(value);
      */
     clipboard: () => Promise<string | null>;
+
+    /**
+     * Gets the active (last activated) toolbar item.
+     * 
+     * @returns The active (last activated) item.
+     * @remarks This does not work with Note Toolbar Callouts.
+     */
+    getActiveItem: () => IItem | undefined;
+
+    /**
+     * Gets an item by its ID, if it exists.
+     * 
+     * @returns The item, or undefined.
+     */   
+    getItem: (id: string) => IItem | undefined;
 
     /**
      * Gets all toolbars.
@@ -124,6 +140,20 @@ export interface INoteToolbarApi<T> {
      * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
     suggester: (values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
+
+   /**
+     * This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
+     * 
+     * @returns The string translation corresponding with the provided key, if it exists, with a fallback to English. If the key does not exist, the key is returned.
+     * 
+     * @example
+     * // shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+     * new Notice(ntb.t('api.msg.clipboard-copied'));
+     * 
+     * @see For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
+     * @see `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+     */
+    t: string;
 
 }
 

@@ -81,24 +81,22 @@ export class SettingsManager {
 	 * Duplicates the given toolbar item, and adds it to the given toolbar.
 	 * @param toolbar ToolbarSettings to duplicate the item within.
 	 * @param item ToolbarItemSettings to duplicate.
-	 * @returns string UUID of the new item.
+	 * @param insertIndex optional index to insert the new item at; if not provided, the item is added to the end of the toolbar.
+	 * @returns the new item.
 	 */
-	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertAfter: boolean = false): Promise<string> {
-		debugLog('duplicateToolbarItem', item);
+	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<ToolbarItemSettings> {
 		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
-		newItem.uuid = getUUID();
+		newItem.description = undefined;
 		newItem.hasCommand = false;
-		debugLog('duplicateToolbarItem: duplicated', newItem);
-		if (insertAfter) {
-			const index = toolbar.items.indexOf(item);
-			if (index !== -1) {
-				toolbar.items.splice(index + 1, 0, newItem);
-			}
+		newItem.inGallery = false;
+		newItem.uuid = getUUID();
+		if (insertIndex !== undefined && insertIndex >= 0) {
+			toolbar.items.splice(insertIndex, 0, newItem);
 		}
 		else {
 			toolbar.items.push(newItem);
 		}
-		return newItem.uuid;
+		return newItem;
 	}
 
 	/**
@@ -198,7 +196,7 @@ export class SettingsManager {
 	/**
 	 * Gets toolbar item from settings, using the provided UUID.
 	 * @param id UUID of toolbar item to get settings for.
-	 * @returns ToolbarItemSettings for the provided matched toolbar ID, undefined otherwise.
+	 * @returns ToolbarItemSettings for the provided matched item ID, undefined otherwise.
 	 */
 	public getToolbarItemById(uuid: string | null): ToolbarItemSettings | undefined {
 		if (!uuid) return undefined;
@@ -206,6 +204,22 @@ export class SettingsManager {
 			const item = toolbar.items.find((item: ToolbarItemSettings) => item.uuid === uuid);
 			if (item) {
 				return item;
+			}
+		}
+		return undefined;
+	}
+
+	/**
+	 * Gets toolbar from settings, using the provided item UUID.
+	 * @param id UUID of toolbar item to get toolbar settings for.
+	 * @returns ToolbarSettings for the provided matched item ID, undefined otherwise.
+	 */
+	public getToolbarByItemId(uuid: string | null): ToolbarSettings | undefined {
+		if (!uuid) return undefined;
+		for (const toolbar of this.plugin.settings.toolbars) {
+			const item = toolbar.items.find((item: ToolbarItemSettings) => item.uuid === uuid);
+			if (item) {
+				return toolbar;
 			}
 		}
 		return undefined;
@@ -273,15 +287,14 @@ export class SettingsManager {
 			hasCommand: false,
 			items: [],
 			mobileStyles: [],
-			name: name,
+			name: name ? this.getUniqueToolbarName(name, false) : '',
 			position: { 
 				desktop: { allViews: { position: 'props' } }, 
 				mobile: { allViews: { position: 'props' } }, 
 				tablet: { allViews: { position: 'props' } } },
 			updated: new Date().toISOString(),
 		} as ToolbarSettings;
-		this.plugin.settings.toolbars.push(newToolbar);
-		await this.save();
+		await this.addToolbar(newToolbar);
 		return newToolbar;
 	}
 
@@ -295,6 +308,103 @@ export class SettingsManager {
 		modal.setTitle( toolbar.name ? t('setting.title-edit-toolbar', { toolbar: toolbar.name }) : t('setting.title-edit-toolbar_none'));
         modal.open();
     }
+
+	/**
+	 * Transforms items from the Gallery into types that can be handled by the toolbar.
+	 * @param item ToolbarItemSettings to update
+	 * @returns true if the item is resolved, false otherwise
+	 */
+	async resolveGalleryItem(item: ToolbarItemSettings): Promise<boolean> {
+
+		if (!item.linkAttr?.type) {
+			console.error(t('gallery.error-missing-item-type'));
+			return false;
+		}
+
+		switch (item.linkAttr.type) {
+			case ItemType.JavaScript:
+				if (item.scriptConfig?.expression) {
+					item.scriptConfig.pluginFunction = 'evaluate';
+					return true;
+				}
+				break;
+			case ItemType.Plugin:
+				const pluginType = await this.resolvePluginType(item);
+				return pluginType ? true : false;
+			default:
+				return true;
+		}
+
+		// should not reach this point
+		return false;
+
+	}
+
+	/**
+	 * Transforms "plugin" type items from the Gallery into types that can be handled by the toolbar.
+	 * Prompts user if there's more than one enabled plugin available.
+	 * Reports errors if the plugin's not supported, chosen plugin's not enabled, or the proper parameters aren't provided.
+	 * @param item ToolbarItemSettings to update
+	 * @returns a supported ItemType, or undefined
+	 */
+	async resolvePluginType(item: ToolbarItemSettings): Promise<ItemType | undefined> {
+
+		let pluginType: ItemType | undefined;
+
+		if (item.plugin && item.scriptConfig?.expression) {
+			const plugins = Array.isArray(item.plugin) ? item.plugin : [item.plugin];
+			
+			if (plugins.length === 1) {
+				pluginType = plugins[0] as ItemType;
+			}
+			else {
+				const pluginNames = plugins.map(p => {
+					const name = t(`plugin.${p}`);
+					if (!name) return; // ignore plugins that aren't supported
+					const isEnabled = !!this.plugin.getAdapterForItemType(p as ItemType);
+					return isEnabled 
+						? t('gallery.select-plugin-suggestion', { plugin: name }) 
+						: t('gallery.select-plugin-suggestion-not-enabled', { plugin: name });
+				});
+				pluginType = await this.plugin.api.suggester(pluginNames, plugins, {
+					class: 'note-toolbar-setting-mini-dialog',
+					placeholder: t('gallery.select-plugin-placeholder')
+				});
+				if (!pluginType) {
+					return undefined;
+				}
+			}
+
+			if (pluginType) {
+				item.linkAttr.type = pluginType;
+				if (item.scriptConfig) {
+					// set appropriate plugin function to execute the script
+					switch (item.linkAttr.type) {
+						case ItemType.Dataview:
+							item.scriptConfig.pluginFunction = 'executeJs';
+							break;
+						case ItemType.JsEngine:
+							item.scriptConfig.pluginFunction = 'evaluate';
+							break;
+						case ItemType.Templater:
+							item.scriptConfig.pluginFunction = 'parseTemplate';
+							break;
+					}
+				}
+			}
+			else {
+				console.error(t('gallery.error-invalid-plugin'));
+				return undefined;
+			}
+		}
+		else {
+			console.error(t('gallery.error-missing-property'));
+			return undefined;
+		}
+
+		return pluginType;
+
+	}
 
 	/*************************************************************************
 	 * SAVE / LOAD / MIGRATION
@@ -548,6 +658,19 @@ export class SettingsManager {
 				if (loaded_settings.folderMappings.length > 0) {
 					this.plugin.settings.onboarding['new-toolbar-mapping'] = true;
 				}
+				// for the next migration to run
+				old_version = new_version;
+			}
+
+			// MIGRATION: set gallery flag on existing items
+			if (old_version === 20250302.1) {
+				new_version = 20250313.1;
+				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
+					tb.items.forEach((item: any, item_index: number) => {
+						this.plugin.settings.toolbars[index].items[item_index].inGallery = false;
+					});
+				});
 				// for the next migration to run
 				old_version = new_version;
 			}

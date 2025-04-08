@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal, Setting } from "obsidian";
-import { t, USER_GUIDE_URL } from "Settings/NoteToolbarSettings";
+import { URL_FEEDBACK_FORM, URL_ISSUE_FORM, t, URL_USER_GUIDE } from "Settings/NoteToolbarSettings";
 import { iconTextFr } from "../Utils/SettingsUIUtils";
 
 export class HelpModal extends Modal {
@@ -23,19 +23,19 @@ export class HelpModal extends Modal {
 					.setTooltip(t('setting.help.button-open-github'))
 					.setCta()
 					.onClick(() => {
-						window.open(USER_GUIDE_URL, '_blank');
+						window.open(URL_USER_GUIDE, '_blank');
 					});
 			});
 
 		new Setting(this.modalEl)
-			.setName(iconTextFr('layout-grid', t('setting.help.label-examples')))
-			.setDesc(t('setting.help.label-examples-description'))
+			.setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
+			.setDesc(t('setting.help.label-gallery-description'))
 			.addButton((button: ButtonComponent) => {
 				button
 					.setButtonText(t('setting.help.button-open'))
-					.setTooltip(t('setting.help.button-open-github'))
+					.setTooltip(t('setting.help.label-gallery'))
 					.onClick(() => {
-						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Examples', '_blank');
+						window.open('obsidian://note-toolbar?gallery', '_blank');
 					});
 			})
 			.setClass('note-toolbar-setting-no-border');
@@ -61,7 +61,7 @@ export class HelpModal extends Modal {
 					.setButtonText(t('setting.help.button-open'))
 					.setTooltip(t('setting.help.button-open-google'))
 					.onClick(() => {
-						window.open('https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform', '_blank');
+						window.open(URL_ISSUE_FORM, '_blank');
 					});
 			})
 			.setClass('note-toolbar-setting-no-border');
@@ -74,7 +74,7 @@ export class HelpModal extends Modal {
 					.setButtonText(t('setting.help.button-open'))
 					.setTooltip(t('setting.help.button-open-google'))
 					.onClick(() => {
-						window.open('https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform', '_blank');
+						window.open(URL_FEEDBACK_FORM, '_blank');
 					});
 			})
 			.setClass('note-toolbar-setting-no-border');

@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } from 'obsidian';
-import { t, tdocs, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
+import { URL_RELEASES, t, tdocs, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import { iconTextFr } from '../Utils/SettingsUIUtils';
 
 export class WhatsNewView extends ItemView {
@@ -43,7 +43,7 @@ export class WhatsNewView extends ItemView {
 					.setTooltip(t('setting.whats-new.button-read-tooltip'))
 					.setCta()
 					.onClick(() => {
-						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/releases', '_blank');
+						window.open(URL_RELEASES, '_blank');
 					});
 			});
 
@@ -58,7 +58,7 @@ export class WhatsNewView extends ItemView {
 					.setTooltip(t('setting.whats-new.button-read-tooltip'))
 					.setCta()
 					.onClick(() => {
-						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Roadmap', '_blank');
+						window.open(URL_USER_GUIDE + 'Roadmap', '_blank');
 					});
 			});
 

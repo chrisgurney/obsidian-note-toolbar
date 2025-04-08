@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
-import { ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -12,14 +12,6 @@ import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 export default class DataviewAdapter extends Adapter {
 
     readonly FUNCTIONS: AdapterFunction[] = [
-        // {
-        //     function: this.useLibraryScript,
-        //     label: t('library.script-function'),
-        //     description: "",
-        //     parameters: [
-        //         { parameter: 'libraryScriptId', label: t('library.script'), description: t('library.script-description'), type: SettingType.LibraryScript, required: true }
-        //     ]
-        // },
         {
             function: this.query,
             label: t('adapter.dataview.query-function'),
@@ -86,10 +78,16 @@ export default class DataviewAdapter extends Adapter {
                     ? await this.evaluate(config.expression, containerEl)
                     : t('adapter.dataview.eval-expr-error-required');
                 break;
-            // internal function for inline evaluations in which errors can be ignored
+            // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, false)
+                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Report)
+                    : t('adapter.dataview.eval-expr-error-required');
+                break;
+            // internal function for inline evaluations in which errors can be ignored
+            case 'evaluateIgnore':
+                result = config.expression
+                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Ignore)
                     : t('adapter.dataview.eval-expr-error-required');
                 break;
             case 'exec':
@@ -101,11 +99,6 @@ export default class DataviewAdapter extends Adapter {
                 result = config.expression
                     ? await this.executeJs(config.expression, containerEl)
                     : t('adapter.dataview.dvjs-expr-error-required');
-                break;
-            case 'useLibraryScript':
-                result = config.libraryScriptId
-                    ? await this.useLibraryScript(config.libraryScriptId)
-                    : t('library.error-script-required');
                 break;
             case 'query':
                 result = config.expression
@@ -134,10 +127,14 @@ export default class DataviewAdapter extends Adapter {
 	 * dateformat(this.file.mtime, "yyyy.MM.dd - HH:mm")
      * @param expression 
      * @param containerEl 
-     * @param displayErrors
+     * @param errorBehavior
      * @returns 
      */
-    private async evaluate(expression: string, containerEl?: HTMLElement, displayErrors: boolean = true): Promise<string> {
+    private async evaluate(
+        expression: string, 
+        containerEl?: HTMLElement, 
+        errorBehavior: ErrorBehavior = ErrorBehavior.Display
+    ): Promise<string> {
 
         let result = '';
         
@@ -167,13 +164,18 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            if (displayErrors) {
-                displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
-                result = t('adapter.dataview.error-general', { error: error });;
-            }
-            else {
-                result = expression;
-                console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+            switch (errorBehavior) {
+                case ErrorBehavior.Display:
+                    displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+                    result = t('adapter.error.general', { error: error });
+                    break;
+                case ErrorBehavior.Report:
+                    result = expression;
+                    console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+                    break;
+                case ErrorBehavior.Ignore:
+                    // do nothing
+                    break;
             }
         }
         finally {
@@ -354,7 +356,7 @@ export default class DataviewAdapter extends Adapter {
         }
         catch (error) {
             displayScriptError(t('adapter.error.query-failed', { expression: expression }), error, containerEl);
-            result = t('adapter.dataview.error-general', { error: error });
+            result = t('adapter.error.general', { error: error });
         }
         finally {
 			component.unload();
@@ -362,20 +364,6 @@ export default class DataviewAdapter extends Adapter {
 
         return result;
 
-    }
-
-    private async useLibraryScript(libraryScriptId: string): Promise<string> {
-        let result = '';
-        const scriptEntry = this.noteToolbar?.library.getScriptEntry(ItemType.Dataview, libraryScriptId);
-        if (scriptEntry) {
-            result = await this.executeJs(scriptEntry.code);
-        }
-        else {
-            displayScriptError(
-                t('library.error-invalid-script-id', { scriptId: libraryScriptId, pluginId: ItemType.Dataview})
-            );
-        }
-        return result;
     }
 
 }

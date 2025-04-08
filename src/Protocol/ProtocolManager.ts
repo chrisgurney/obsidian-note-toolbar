@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
-import { Notice, ObsidianProtocolData } from "obsidian";
-import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
+import { Notice, ObsidianProtocolData, Platform } from "obsidian";
+import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { HelpModal } from "Settings/UI/Modals/HelpModal";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -28,6 +28,13 @@ export class ProtocolManager {
 		}
 		else if (data.folder) {
 			this.plugin.handleLinkFolder(data.folder);
+		}
+		else if (data.gallery) {
+			this.plugin.app.workspace.getLeaf(true).setViewState({
+				type: VIEW_TYPE_GALLERY,
+				active: true
+			});
+			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 		}
 		else if (data.help) {
 			const helpModal = new HelpModal(this.plugin);
@@ -92,6 +99,7 @@ export class ProtocolManager {
 				type: VIEW_TYPE_WHATS_NEW,
 				active: true
 			});
+			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 		}
 		else {
 			new Notice(t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')}));
