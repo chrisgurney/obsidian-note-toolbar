@@ -57,7 +57,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	jsAdapter: JavaScriptAdapter | undefined;
 	dvAdapter: DataviewAdapter | undefined;
-	jseAdapter: JsEngineAdapter | undefined;
+	jsEngineAdapter: JsEngineAdapter | undefined;
 	tpAdapter: TemplaterAdapter | undefined;
 
 	// TODO: remove if not needed
@@ -1444,7 +1444,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				result = await this.jsAdapter?.use(scriptConfig);
 				break;
 			case ItemType.JsEngine:
-				result = await this.jseAdapter?.use(scriptConfig);
+				result = await this.jsEngineAdapter?.use(scriptConfig);
 				break;
 			case ItemType.Templater:
 				result = await this.tpAdapter?.use(scriptConfig);
@@ -2156,7 +2156,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				adapter = this.jsAdapter; // built-in, doens't rely on plugin
 				break;
 			case ItemType.JsEngine:
-				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jseAdapter : undefined;
+				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jsEngineAdapter : undefined;
 				break;
 			case ItemType.Templater:
 				adapter = this.hasPlugin[ItemType.Templater] ? this.tpAdapter : undefined;
@@ -2263,7 +2263,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// JAVASCRIPT
 			if (s.trim().startsWith('{{js:')) {
 				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
-				let result = await this.jseAdapter?.use({ 
+				let result = await this.jsAdapter?.use({ 
 					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 					expression: s
 				});
@@ -2296,7 +2296,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (this.hasPlugin[ItemType.JsEngine]) {
 				if (s.trim().startsWith('{{jse:')) {
 					s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
-					let result = await this.jseAdapter?.use({ 
+					let result = await this.jsEngineAdapter?.use({ 
 						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 						expression: s
 					});
@@ -2350,17 +2350,17 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.checkPlugins(); // update status of enabled plugins
 			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? (this.dvAdapter || new DataviewAdapter(this)) : undefined;
 			this.jsAdapter = this.jsAdapter || new JavaScriptAdapter(this);
-			this.jseAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jseAdapter || new JsEngineAdapter(this)) : undefined;
+			this.jsEngineAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jsEngineAdapter || new JsEngineAdapter(this)) : undefined;
 			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? (this.tpAdapter || new TemplaterAdapter(this)) : undefined;
 		}
 		else {
 			this.dvAdapter?.disable();
 			this.jsAdapter?.disable();
-			this.jseAdapter?.disable();
+			this.jsEngineAdapter?.disable();
 			this.tpAdapter?.disable();
 			this.dvAdapter = undefined;
 			this.jsAdapter = undefined;
-			this.jseAdapter = undefined;
+			this.jsEngineAdapter = undefined;
 			this.tpAdapter = undefined;
 		}
 	}
