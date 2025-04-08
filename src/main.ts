@@ -230,20 +230,22 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param oldPath old path.
 	 */
 	fileRenameListener = async (file: TFile, oldPath: string) => {
-		debugLog('fileRenameListener:', file, oldPath);
+		let settingsChanged = false;
 		this.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
 			toolbar.items.forEach((item: ToolbarItemSettings) => {
 				if (item.link === oldPath) {
 					debugLog('fileRenameListener: changing', item.link, 'to', file.path);
 					item.link = file.path;
+					settingsChanged = true;
 				}
 				if (item.scriptConfig?.sourceFile === oldPath) {
 					debugLog('fileRenameListener: changing', item.scriptConfig?.sourceFile, 'to', file.path);
 					item.scriptConfig.sourceFile = file.path;
+					settingsChanged = true;
 				}
 			});
 		});
-		await this.settingsManager.save();
+		if (settingsChanged) await this.settingsManager.save();
 	}
 
 	/**
