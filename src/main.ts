@@ -229,7 +229,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile of the new file.
 	 * @param oldPath old path.
 	 */
-	fileRenameListener = (file: TFile, oldPath: string) => {
+	fileRenameListener = async (file: TFile, oldPath: string) => {
 		debugLog('fileRenameListener:', file, oldPath);
 		this.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
 			toolbar.items.forEach((item: ToolbarItemSettings) => {
@@ -243,6 +243,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			});
 		});
+		await this.settingsManager.save();
 	}
 
 	/**
