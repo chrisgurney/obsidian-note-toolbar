@@ -33,8 +33,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 	
-	// track opened views, to reduce unneccesary toolbar re-renders
-	activeViewIds: string[] = [];
+	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
+	isRendering: boolean = false; // track if a toolbar is being rendered, to prevent >1 event from triggering two renders
 
 	// track the last opened layout state, to reduce unneccessary re-renders 
 	lastFileOpenedOnLayoutChange: TFile | null | undefined;
@@ -81,7 +81,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.gallery = new GalleryManager(this);
 		this.protocolManager = new ProtocolManager(this);
 
-		this.app.workspace.onLayoutReady(() => {
+		this.app.workspace.onLayoutReady(async () => {
 
 			// add icons specific to the plugin
 			addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
@@ -90,10 +90,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// render the initial toolbar
 			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-			this.updateActiveViewIds();
+
 			// TODO: for fix: initial rendering of toolbars across all views #94
 			// this.renderToolbarForLeaves();
-			this.renderActiveToolbar();
+			await this.renderActiveToolbar();
 
 			// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 			if (Platform.isPhone) {
@@ -216,11 +216,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On opening of a file, check and render toolbar if necessary.
 	 * @param file TFile that was opened.
 	 */
-	fileOpenListener = (file: TFile) => {
+	fileOpenListener = async (file: TFile) => {
 		// make sure we actually opened a file (and not just a new tab)
 		if (file != null) {
 			debugLog('===== FILE-OPEN ===== ', file.name);
-			this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
+			await this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
 		}
 	};
 
@@ -248,23 +248,25 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * On layout changes, delete, check and render toolbar if necessary.
 	 */
-	layoutChangeListener = () => {
+	layoutChangeListener = async () => {
+		// FIXME? what if there's more than one toolbar?
+		const toolbarEl = this.getToolbarEl();
 		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+		const viewId = getViewId(currentView);
+		const viewMode = currentView?.getMode();
+		debugLog('===== LAYOUT-CHANGE ===== ', viewId, currentView, viewMode);
 
 		// show empty view toolbar
 		if (!currentView) {
-			this.renderActiveToolbar();
+			await this.renderActiveToolbar();
 			return;
 		}
 
-		const viewMode = currentView?.getMode();
-		
 		// if we're in a popover, do nothing
 		if (currentView?.containerEl.closest('popover')) return;
 
-		const viewId = getViewId(currentView);
-		debugLog('===== LAYOUT-CHANGE ===== ', viewId, currentView, viewMode);
-		if (viewId && this.activeViewIds.contains(viewId)) return;
+		if (toolbarEl && viewId && this.activeViewIds.contains(viewId)) return;
 
 		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
 		const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
@@ -274,21 +276,21 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.lastViewModeOnLayoutChange = viewModeChanged ? viewMode : this.lastViewModeOnLayoutChange;
 		}
 		else {
-			return; // no changes, so do nothing
+			if (toolbarEl) return; // no changes, so do nothing
 		}
+
 		// check for editing or reading mode
 		switch(viewMode) {
 			case "source":
 			case "preview":
-				// debugLog("layout-change: ", viewMode, " -> re-rendering toolbar");
-				let toolbarEl = this.getToolbarEl();
-				let toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
-				// debugLog("layout-change: position: ", toolbarPos);
-				this.app.workspace.onLayoutReady(debounce(() => {
+				this.app.workspace.onLayoutReady(debounce(async () => {
+					// keeping just in case:
 					// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
+					// const toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
 					// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
-					this.updateActiveViewIds();
-					this.renderActiveToolbar();
+					debugLog("LAYOUT-CHANGE: renderActiveToolbar");
+					// this.updateActiveViewIds();
+					await this.renderActiveToolbar();
 				}, (viewMode === "preview" ? 200 : 0)));
 				break;
 			default:
@@ -299,29 +301,25 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * On leaf changes, delete, check and render toolbar if necessary. 
 	 */
-	leafChangeListener = (leaf: any) => {
-		// TODO: remove if not needed
-		// this.onMarkdownViewFileChange(leaf.view, (oldFile, newFile) => {
-		// 	debugLog('===== onMarkdownViewFileChange =====');
-		// });
+	leafChangeListener = async (leaf: any) => {
 		let renderToolbar = false;
+		// FIXME? what if there's more than one toolbar?
+		let toolbarEl = this.getToolbarEl();
 		let currentView = getActiveView();
 
 		const viewId = getViewId(currentView);
 		debugLog('===== LEAF-CHANGE ===== ', viewId);
 
 		// update the active toolbar if its configuration changed
-		let activeToolbarEl = this.getToolbarEl();
-		if (activeToolbarEl) {
-			let activeToolbar = this.settingsManager.getToolbarById(activeToolbarEl.id);
-			if (activeToolbar && (activeToolbar.updated !== activeToolbarEl.getAttribute('data-updated'))) {
+		if (toolbarEl) {
+			let activeToolbar = this.settingsManager.getToolbarById(toolbarEl.id);
+			if (activeToolbar && (activeToolbar.updated !== toolbarEl.getAttribute('data-updated'))) {
 				renderToolbar = true;
 			}
 		}
 
 		// exit if the view has already been handled
 		if (!renderToolbar && viewId && this.activeViewIds.contains(viewId)) return;
-		this.updateActiveViewIds();
 
 		if (currentView) {
 			// check for editing or reading mode
@@ -338,9 +336,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		if (renderToolbar) {
+			debugLog("LEAF-CHANGE: renderActiveToolbar");
 			// this.removeActiveToolbar();
 			// don't seem to need a delay before rendering for leaf changes
-			this.renderActiveToolbar();
+			await this.renderActiveToolbar();
 		}
 	}
 
@@ -350,14 +349,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param data ??? (not used)
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
-	metadataCacheListener = (file: TFile, data: any, cache: CachedMetadata) => {
+	metadataCacheListener = async (file: TFile, data: any, cache: CachedMetadata) => {
 		debugLog('===== METADATA-CHANGE ===== ', file.name);
 		const activeFile = this.app.workspace.getActiveFile();
 		// if the active file is the one that changed,
 		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
 		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
 			const currentView: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-			this.checkAndRenderToolbar(file, cache.frontmatter);
+			await this.checkAndRenderToolbar(file, cache.frontmatter);
 
 			// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
 			const notetoolbarProp = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
@@ -444,20 +443,29 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined): Promise<void> {
 
-		// get matching toolbar for this note, if there is one		
-		let matchingToolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, file);
-		
-		// remove existing toolbar if needed
-		let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
+		if (this.isRendering) return;
+		this.isRendering = true;
 
-		// debugLog('checkAndRenderToolbar()', matchingToolbar, toolbarRemoved);
+		try {
+			// get matching toolbar for this note, if there is one		
+			let matchingToolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, file);
+			
+			// remove existing toolbar if needed
+			let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
 
-		if (matchingToolbar) {
-			// render the toolbar if we have one, and we don't have an existing toolbar to keep
-			if (toolbarRemoved) {
-				await this.renderToolbar(matchingToolbar, file);	
+			// debugLog('checkAndRenderToolbar()', matchingToolbar, toolbarRemoved);
+
+			if (matchingToolbar) {
+				// render the toolbar if we have one, and we don't have an existing toolbar to keep
+				if (toolbarRemoved) {
+					this.updateActiveViewIds();
+					await this.renderToolbar(matchingToolbar, file);	
+				}
+				await this.updateToolbar(matchingToolbar, file);
 			}
-			await this.updateToolbar(matchingToolbar, file);
+		}
+		finally {
+			this.isRendering = false;
 		}
 
 	}
@@ -469,7 +477,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null): Promise<void> {
 
-		debugLog("➡️ renderToolbar()", toolbar.name);
+		debugLog("✅ renderToolbar()", toolbar.name);
 
 		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
 		let position;
@@ -576,7 +584,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
-		debugLog('⭐️ Rendered Toolbar in view:', getViewId(currentView));
+		debugLog(`⭐️ renderToolbar() Rendered ${toolbar.name} in view:`, getViewId(currentView));
 
 	}
 	
@@ -967,7 +975,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// for notes and other file types
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			this.checkAndRenderToolbar(activeFile, frontmatter);
+			await this.checkAndRenderToolbar(activeFile, frontmatter);
 		}
 		// for New tab view
 		else {
@@ -2003,6 +2011,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	getToolbarEl(): HTMLElement | null {
+		// const stack = new Error().stack?.split('\n')[2]?.trim();
+		// debugLog('getToolbarEl() Called from:', stack);
 		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
 		// if we didn't find one, check for a bottom toolbar
 		// if (!existingToolbarEl && Platform.isPhone) {
@@ -2070,61 +2080,68 @@ export default class NoteToolbarPlugin extends Plugin {
 	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined): boolean {
 
 		let toolbarRemoved: boolean = false;
-		let existingToolbarEl: HTMLElement | null = this.getToolbarEl();
-		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
-		// debugLog("removeToolbarIfNeeded() correct:", correctToolbar, "existing:", existingToolbarEl);
+		let existingToolbarEls = activeDocument.querySelectorAll('.workspace-leaf.mod-active .cg-note-toolbar-container');
 
-		if (existingToolbarEl) {
-
-			// debugLog('checkAndRenderToolbar: existing toolbar');
-			const existingToolbarName = existingToolbarEl?.getAttribute('data-name');
-			const existingToolbarUpdated = existingToolbarEl.getAttribute('data-updated');
-			const existingToolbarHasSibling = existingToolbarEl.nextElementSibling;
-			const existingToolbarViewMode = existingToolbarEl.getAttribute('data-view-mode');
-
-			// if we don't have a toolbar to check against
-			if (!correctToolbar) {
-				debugLog("⛔️ toolbar not needed, removing existing toolbar: " + existingToolbarName);
-				toolbarRemoved = true;
-			}
-			// we need a toolbar BUT the name of the existing toolbar doesn't match
-			else if (correctToolbar.name !== existingToolbarName) {
-				debugLog("⛔️ removing existing toolbar (name does not match): " + existingToolbarName);
-				toolbarRemoved = true;
-			}
-			// we need a toolbar BUT it needs to be updated
-			else if (correctToolbar.updated !== existingToolbarUpdated) {
-				debugLog("⛔️ existing toolbar out of date, removing existing toolbar");
-				toolbarRemoved = true;
-			}
-			// existingToolbarEl is not in the correct position, in preview mode
-			else if (existingToolbarHasSibling?.hasClass('inline-title')) {
-				debugLog("⛔️ toolbar not in correct position (sibling is `inline-title`), removing existing toolbar");
-				toolbarRemoved = true;
-			}
-			// ensure the toolbar is for the correct view mode
-			else if (currentView?.getMode() !== existingToolbarViewMode) {
-				debugLog("⛔️ toolbar not for correct view mode");
-				toolbarRemoved = true;
-			}
-
-			if (toolbarRemoved) {
-				existingToolbarEl.remove();
-				existingToolbarEl = null;
-			}
-
+		debugLog("🛑 removeToolbarIfNeeded() correct:", correctToolbar?.name, "existing:", existingToolbarEls);
+		if (existingToolbarEls.length > 0) {
+			// loop over elements and remove any that are not the correct one, ensuring there's only one (or none)
+			existingToolbarEls.forEach((toolbarEl) => {
+				if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements
+				else {
+					toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement);
+					if (toolbarRemoved) toolbarEl.remove();
+				}
+			});
+			debugLog(existingToolbarEls);
 		}
 		else {
 			debugLog("⛔️ no existing toolbar");
 			toolbarRemoved = true;
 		}
 
-		if (!toolbarRemoved) {
-			// debugLog("removeToolbarIfNeeded: nothing done");
+		return toolbarRemoved;
+
+	}
+
+	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement): boolean {
+
+		let removeToolbar = false;
+		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+		// debugLog('checkAndRenderToolbar: existing toolbar');
+		const existingToolbarName = existingToolbarEl?.getAttribute('data-name');
+		const existingToolbarUpdated = existingToolbarEl.getAttribute('data-updated');
+		const existingToolbarHasSibling = existingToolbarEl.nextElementSibling;
+		const existingToolbarViewMode = existingToolbarEl.getAttribute('data-view-mode');
+
+		// if we don't have a toolbar to check against
+		if (!correctToolbar) {
+			debugLog("⛔️ toolbar not needed, removing existing toolbar: " + existingToolbarName);
+			removeToolbar = true;
+		}
+		// we need a toolbar BUT the name of the existing toolbar doesn't match
+		else if (correctToolbar.name !== existingToolbarName) {
+			debugLog("⛔️ removing existing toolbar (name does not match): " + existingToolbarName);
+			removeToolbar = true;
+		}
+		// we need a toolbar BUT it needs to be updated
+		else if (correctToolbar.updated !== existingToolbarUpdated) {
+			debugLog("⛔️ existing toolbar out of date, removing existing toolbar");
+			removeToolbar = true;
+		}
+		// existingToolbarEl is not in the correct position, in preview mode
+		else if (existingToolbarHasSibling?.hasClass('inline-title')) {
+			debugLog("⛔️ toolbar not in correct position (sibling is `inline-title`), removing existing toolbar");
+			removeToolbar = true;
+		}
+		// ensure the toolbar is for the correct view mode
+		else if (currentView?.getMode() !== existingToolbarViewMode) {
+			debugLog("⛔️ toolbar not for correct view mode");
+			removeToolbar = true;
 		}
 
-		return toolbarRemoved;
+		return removeToolbar;
 
 	}
 
