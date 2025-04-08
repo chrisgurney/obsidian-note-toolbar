@@ -229,20 +229,23 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile of the new file.
 	 * @param oldPath old path.
 	 */
-	fileRenameListener = (file: TFile, oldPath: string) => {
-		debugLog('fileRenameListener:', file, oldPath);
+	fileRenameListener = async (file: TFile, oldPath: string) => {
+		let settingsChanged = false;
 		this.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
 			toolbar.items.forEach((item: ToolbarItemSettings) => {
 				if (item.link === oldPath) {
 					debugLog('fileRenameListener: changing', item.link, 'to', file.path);
 					item.link = file.path;
+					settingsChanged = true;
 				}
 				if (item.scriptConfig?.sourceFile === oldPath) {
 					debugLog('fileRenameListener: changing', item.scriptConfig?.sourceFile, 'to', file.path);
 					item.scriptConfig.sourceFile = file.path;
+					settingsChanged = true;
 				}
 			});
 		});
+		if (settingsChanged) await this.settingsManager.save();
 	}
 
 	/**
@@ -266,7 +269,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		// if we're in a popover, do nothing
 		if (currentView?.containerEl.closest('popover')) return;
 
-		if (toolbarEl && viewId && this.activeViewIds.contains(viewId)) return;
+		// exit if the view has already been handled, after updating the toolbar
+		if (toolbarEl && viewId && this.activeViewIds.contains(viewId)) {
+			debugLog('LAYOUT-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
+			this.updateActiveToolbar();
+			return;
+		}
 
 		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
 		const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
@@ -318,8 +326,12 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
-		// exit if the view has already been handled
-		if (!renderToolbar && viewId && this.activeViewIds.contains(viewId)) return;
+		// exit if the view has already been handled, after updating the toolbar
+		if (!renderToolbar && viewId && this.activeViewIds.contains(viewId)) {
+			debugLog('LEAF-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
+			this.updateActiveToolbar();
+			return;
+		};
 
 		if (currentView) {
 			// check for editing or reading mode
@@ -443,7 +455,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined): Promise<void> {
 
-		if (this.isRendering) return;
+		if (this.isRendering) {
+			debugLog('checkAndRenderToolbar() SKIPPED: ALREADY RENDERING');
+			return
+		};
 		this.isRendering = true;
 
 		try {
@@ -453,7 +468,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// remove existing toolbar if needed
 			let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
 
-			// debugLog('checkAndRenderToolbar()', matchingToolbar, toolbarRemoved);
+			debugLog('checkAndRenderToolbar()', matchingToolbar?.name);
 
 			if (matchingToolbar) {
 				// render the toolbar if we have one, and we don't have an existing toolbar to keep
@@ -1073,9 +1088,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null) {
 
+		debugLog("updateToolbar()", toolbar.name);
+
 		let toolbarEl = this.getToolbarEl();
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
-		// debugLog("updateToolbar()", toolbarEl);
 
 		// no need to run update for certain positions
 		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, undefined].contains(currentPosition)) {
@@ -1145,6 +1161,18 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
 
+	}
+
+	/**
+	 * Updates the toolbar for the active file.
+	 */
+	async updateActiveToolbar(): Promise<void> {
+		let activeFile = this.app.workspace.getActiveFile();
+		if (activeFile) {
+			let frontmatter = this.app.metadataCache.getFileCache(activeFile)?.frontmatter;
+			let toolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
+			if (toolbar) await this.updateToolbar(toolbar, activeFile);
+		}
 	}
 
 	/**
