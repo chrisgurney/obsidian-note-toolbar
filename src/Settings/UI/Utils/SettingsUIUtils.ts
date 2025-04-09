@@ -7,6 +7,7 @@ import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
 import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";
+import { confirmWithModal } from "../Modals/ConfirmModal";
 
 /**
  * Returns an element contianing a dismissable onboarding message.
@@ -321,6 +322,11 @@ export function openItemSuggestModal(
 			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
 			// reset the visibility setting, as there's no prior indication to the user as to its visibility
 			newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS));
+
+			// confirm with user if they would like to enable scripting
+			const isScriptingEnabled = await openScriptPrompt(plugin, newItem);
+			if (!isScriptingEnabled) return;
+
 			if (!await plugin.settingsManager.resolveGalleryItem(newItem)) return;
 
 			toolbar.updated = new Date().toISOString();
@@ -492,6 +498,38 @@ export function renderItemSuggestion(
 			}
 		}
 	}
+}
+
+/**
+ * Prompts the user if they want to enable scripting, if the item requires it.
+ * @param plugin NoteToolbarPlugin
+ * @param item 
+ * @returns true if the user confirmed, false if they cancelled
+ */
+export async function openScriptPrompt(plugin: NoteToolbarPlugin, item: ToolbarItemSettings): Promise<boolean> {
+	const isScript = [ItemType.Dataview,  ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type);
+
+	if (isScript && !plugin.settings.scriptingEnabled) {
+		const isConfirmed = await confirmWithModal(
+			plugin.app, 
+			{
+				title: t('setting.add-item.title-confirm-scripting'),
+				questionLabel: t('setting.add-item.label-confirm-scripting'),
+				approveLabel: t('setting.button-enable'),
+				denyLabel: t('setting.button-cancel')
+			}
+		);
+		
+		if (isConfirmed) {
+			plugin.settings.scriptingEnabled = true;
+			plugin.updateAdapters();
+			await plugin.settingsManager.save();
+		}
+
+		return isConfirmed;
+	}
+
+	return true;
 }
 
 /**

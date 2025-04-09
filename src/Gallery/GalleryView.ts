@@ -157,11 +157,11 @@ export class GalleryView extends ItemView {
 			});
 
 		// on clicking an item, prompt for toolbar and add it
-		this.plugin.registerDomEvent(markdownEl, 'click', (evt) => {
+		this.plugin.registerDomEvent(markdownEl, 'click', async (evt) => {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-view-item');
 			if (galleryItemEl && galleryItemEl.id) {
 				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
-				if (galleryItem) this.plugin.gallery.addItem(galleryItem);
+				if (galleryItem) await this.plugin.gallery.addItem(galleryItem);
 			}
 		});
 

@@ -5,6 +5,7 @@ import { debugLog } from "Utils/Utils";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import { Platform } from "obsidian";
+import { openScriptPrompt } from "Settings/UI/Utils/SettingsUIUtils";
 
 export default class GalleryManager {
 
@@ -22,7 +23,7 @@ export default class GalleryManager {
 	 * Adds the provided Gallery item, after prompting for the toolbar to add it to.
 	 * @param galleryItem Gallery item to add
 	 */
-	addItem(galleryItem: ToolbarItemSettings): void {
+	async addItem(galleryItem: ToolbarItemSettings): Promise<void> {
 		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, true, async (selectedToolbar: ToolbarSettings) => {
 			if (selectedToolbar && galleryItem) {
 				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
@@ -36,6 +37,10 @@ export default class GalleryManager {
 				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
 			}
 		});
+
+        // confirm with user if they would like to enable scripting
+        const isScriptingEnabled = await openScriptPrompt(this.plugin, galleryItem);
+        if (!isScriptingEnabled) return;
 
         switch (galleryItem.linkAttr.type) {
             case ItemType.Command:
