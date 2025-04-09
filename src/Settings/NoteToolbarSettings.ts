@@ -44,6 +44,7 @@ export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
 export const EMPTY_TOOLBAR_ID = 'EMPTY_TOOLBAR';
 export const GALLERY_DIVIDER_ID = 'GALLERY_DIVIDER';
 
+export const CORE_PLUGIN_IDS = ['bookmarks', 'daily-notes', 'file-explorer', 'global-search', 'workspace'];
 export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'open-with-default-app', 'theme', 'workspace'];
 
 /******************************************************************************

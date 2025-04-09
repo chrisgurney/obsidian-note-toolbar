@@ -1,9 +1,10 @@
 import NoteToolbarPlugin from "main";
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
-import { FrontMatterCache, Platform, TFile } from "obsidian";
+import { FrontMatterCache, Notice, Platform, TFile } from "obsidian";
 import { debugLog, getUUID } from "Utils/Utils";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
 import { NoteToolbarSettingTab } from "./UI/NoteToolbarSettingTab";
+import { ToolbarSuggestModal } from "./UI/Modals/ToolbarSuggestModal";
 
 export class SettingsManager {
 
@@ -271,6 +272,23 @@ export class SettingsManager {
 		}
 	
 		return uniqueName;
+	}
+
+	/**
+	 * Moves an item to a toolbar of the user's choice.
+	 * @param fromToolbar toolbar to move the item from
+	 * @param item item to move
+	 */
+	public async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
+		const modal = new ToolbarSuggestModal(this.plugin, false, false, false, async (toToolbar: ToolbarSettings) => {
+			if (toToolbar) {
+				fromToolbar.items.remove(item);
+				toToolbar.items.push(item);
+				await this.save();
+				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name }));
+			}
+		});
+		modal.open();
 	}
 
 	/**

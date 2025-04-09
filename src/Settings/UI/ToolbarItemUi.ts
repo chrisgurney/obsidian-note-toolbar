@@ -374,6 +374,15 @@ export default class ToolbarItemUi {
 
         let menu = new Menu();
 
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.menu-move-item'))
+                .setIcon('square-arrow-right')
+                .onClick(async (menuEvent) => {
+                    await this.plugin.settingsManager.moveToolbarItem(this.toolbar, toolbarItem);
+                });
+        });
+
         if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator].contains(toolbarItem.linkAttr.type)) {
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
