@@ -352,6 +352,7 @@ export function pluginLinkFr(commandId: string, linkText?: string): DocumentFrag
 	// don't show Community Plugins link for Obsidian's built-in commands
 	if (pluginId && pluginId !== 'workspace') {
 		pluginLinkFr = document.createDocumentFragment();
+		// TODO: return link to core plugin settings if ID is in CORE_PLUGIN_IDS
 		let pluginLink = pluginLinkFr.createEl('a', { 
 			href: `obsidian://show-plugin?id=${pluginId}`, 
 			text: linkText ? linkText : t('setting.item.label-review-plugin') 
