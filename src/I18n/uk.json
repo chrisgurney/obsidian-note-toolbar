@@ -207,6 +207,7 @@
     "plugin": {
         "canvas": "Полотно",
         "daily-notes": "Щоденні\u00A0нотатки",
+        "open-with-default-app": "Відкривати\u00A0у програмі\u00A0за\u00A0замовчуванням",
         "periodic-notes": "Periodic\u00A0Notes",
         "sync": "Синхронізація",
         "workspaces": "Простори"
@@ -217,9 +218,12 @@
             "label-confirm-command": "Команда не підтримується, або не знайдена:\n`{{commandId}}`\n\nВсе ще бажаєте додати цей елемент до панелі?",
             "label-confirm-mobile-uri": "Цей елемент використовує URI файлу, який може не підтримуватися на мобільному.\n\nВсе ще бажаєте додати цей елемент до панелі?",
             "label-confirm-plugin": "Додаток не встановлено та не увімкнено:\n\n**{{plugin}}**\n\nБажаєте додати цей елемент до панелі? Можете встановити/ввімкнути цей додаток пізніше.",
+            "label-confirm-scripting": "Щоб скористатися цим пунктом, слід увімкнути параметр _Скріптування_ у налаштуваннях Note Toolbar.\n\nЦей параметр дозволяє пвиконувати JavaScript, а також використовувати Dataview, Templater і JS Engine (за умови, що ці додатки встановлено та увімкнено).\n\nБажаєте увімкнути цей параметр зараз?",
+            "title-confirm-scripting": "Необхідний скрипт для елемента",
             "title-confirm": "Додати елемент: {{itemName}}"
         },
         "button-cancel": "Скасувати",
+        "button-enable": "Ввімкнути",
         "button-proceed": "Продовжити",
         "button-collapse-tooltip": "Згорнути розділ",
         "button-delete-tooltip": "Видалити",
@@ -325,6 +329,8 @@
             "menu-copy-id": "Копіювати ID розробника",
             "menu-copy-id-notice": "ID елемента скопійовано до буфера обміну.",
             "menu-more-actions": "Додаткові дії...",
+            "menu-move-item": "Перенести елемент до панелі...",
+            "menu-move-item-notice": "Перенесено до: {{toolbarName}}",
             "option-break": "розрив",
             "option-command": "Команда",
             "option-command-error-does-not-exist": "Цієї команди не існує.",
