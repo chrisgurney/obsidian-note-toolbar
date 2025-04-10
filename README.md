@@ -13,16 +13,10 @@ The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create cont
 **Jump to:**
 
 - [Features](#features)
-  - [Translations 🌐](#translations-)
 - [Installation](#installation)
-- [Getting Started 🚀](#getting-started-)
-- [Example](#example)
+- [Getting Started](#getting-started-)
 - [Gallery](#gallery)
 - [User Guide](#user-guide)
-- [License](#license)
-- [Inspiration and Thanks 🙏](#inspiration-and-thanks-)
-- [Contribute 🧑‍💻](#contribute-)
-- [Support 🛟](#support-)
 
 ![Demo of a sticky toolbar](./docs/images/note_toolbar_demo.gif)
 

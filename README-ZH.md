@@ -13,10 +13,9 @@
 **快速跳转：**
 
 - [功能](#功能)
-  - [多语言支持 🌐](#多语言支持-)
 - [安装](#安装)
 - [快速入门 🚀](#快速入门-)
-- [示例库（Gallery）](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
+- [示例库](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 - [用户指南](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
 ![粘性工具栏演示](./docs/images/note_toolbar_demo.gif)
