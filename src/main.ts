@@ -362,34 +362,35 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
 	metadataCacheListener = async (file: TFile, data: any, cache: CachedMetadata) => {
-		debugLog('===== METADATA-CHANGE ===== ', file.name);
 		const activeFile = this.app.workspace.getActiveFile();
 		// if the active file is the one that changed,
 		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
 		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
-			const currentView: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-			await this.checkAndRenderToolbar(file, cache.frontmatter);
-
-			// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
-			const notetoolbarProp = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
-			if (notetoolbarProp) {
-				// make sure just the relevant property changed in the open file
-				if (this.lastFileOpenedOnCacheChange !== activeFile) this.lastNtbProperty = undefined;
-				const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
-				if (notetoolbarProp !== this.lastNtbProperty) {
-					const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarByName(notetoolbarProp);
-					if (!matchingToolbar && !ignoreToolbar) {
-						const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp }), 7500);
-						this.registerDomEvent(notice.noticeEl, 'click', async () => {
-							const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp);
-							this.settingsManager.openToolbarSettings(newToolbar);
-						});
+			debugLog('===== METADATA-CHANGE ===== ', file.name);
+			debounce(async () => {
+				await this.checkAndRenderToolbar(file, cache.frontmatter);
+	
+				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
+				const notetoolbarProp = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
+				if (notetoolbarProp) {
+					// make sure just the relevant property changed in the open file
+					if (this.lastFileOpenedOnCacheChange !== activeFile) this.lastNtbProperty = undefined;
+					const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
+					if (notetoolbarProp !== this.lastNtbProperty) {
+						const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarByName(notetoolbarProp);
+						if (!matchingToolbar && !ignoreToolbar) {
+							const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp }), 7500);
+							this.registerDomEvent(notice.noticeEl, 'click', async () => {
+								const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp);
+								this.settingsManager.openToolbarSettings(newToolbar);
+							});
+						}
 					}
 				}
-			}
-			// track current state to look for future Note Toolbar property changes
-			this.lastNtbProperty = notetoolbarProp;
-			this.lastFileOpenedOnCacheChange = activeFile;
+				// track current state to look for future Note Toolbar property changes
+				this.lastNtbProperty = notetoolbarProp;
+				this.lastFileOpenedOnCacheChange = activeFile;
+			}, 300)();
 		}
 	};
 
