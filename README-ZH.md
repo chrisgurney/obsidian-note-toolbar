@@ -16,7 +16,7 @@
   - [多语言支持 🌐](#多语言支持-)
 - [安装](#安装)
 - [快速入门 🚀](#快速入门-)
-- [示例工具库（Gallery）](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
+- [示例库（Gallery）](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 - [用户指南](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
 ![粘性工具栏演示](./docs/images/note_toolbar_demo.gif)
@@ -102,7 +102,7 @@ _🏆 荣获 2024 年度 Obsidian 新星插件（亚军）_
 在启用插件后，打开 NoteToolbar 的插件设置：
 
 1. 创建一个新的工具栏
-2. 为工具栏命名，并添加一个新项目（或从[工具示例库](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)中添加示例项目）
+2. 为工具栏命名，并添加一个新项目（或从[示例库](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)中添加示例项目）
 3. 在笔记中添加 `notetoolbar` 属性，并填写工具栏名称
 
 ✨ 你也可以通过插件设置中的「文件夹映射」功能来为不同文件夹内的笔记指定不同工具栏。
@@ -112,8 +112,8 @@ _🏆 荣获 2024 年度 Obsidian 新星插件（亚军）_
 
 📖 [完整用户指南](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) | [案例分享](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell)
 
-# 工具示例库
-在工具示例库（Gallery）内，你可以 [探索 100+ 个预设工具](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
+# 示例库
+在示例库（Gallery）内，你可以 [探索 100+ 个预设工具](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 
 ![图库截图](./docs/images/gallery.png)
 
