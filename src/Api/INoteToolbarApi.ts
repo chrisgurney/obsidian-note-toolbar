@@ -44,9 +44,18 @@ export interface INoteToolbarApi<T> {
     /**
      * Gets an item by its ID, if it exists.
      * 
+     * @param id The ID of the item.
      * @returns The item, or undefined.
      */   
     getItem: (id: string) => IItem | undefined;
+
+    /**
+     * Gets the value of the given property in the active note.
+     * 
+     * @param property The property to get the frontmatter for.
+     * @returns The frontmatter value for the given property, or `undefined` if it does not exist.
+     */
+    getProperty: (property: string) => string | undefined;
 
     /**
      * Gets all toolbars.

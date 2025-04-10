@@ -65,15 +65,35 @@ Gets an item by its ID, if it exists.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `id` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `id` | `string` | The ID of the item. |
 
 #### Returns
 
 `undefined` \| [`IItem`](IItem.Interface.IItem.md)
 
 The item, or undefined.
+
+***
+
+### getProperty()
+
+> **getProperty**: (`property`) => `undefined` \| `string`
+
+Gets the value of the given property in the active note.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `property` | `string` | The property to get the frontmatter for. |
+
+#### Returns
+
+`undefined` \| `string`
+
+The frontmatter value for the given property, or `undefined` if it does not exist.
 
 ***
 

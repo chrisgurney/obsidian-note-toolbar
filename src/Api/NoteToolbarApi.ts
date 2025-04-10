@@ -53,6 +53,20 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
+     * Gets the value of the given property in the active note.
+     * 
+     * @see INoteToolbarApi.getProperty
+     */
+    getProperty(property: string): string | undefined {
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+        if (activeFile) {
+            const frontmatter = activeFile ? this.plugin.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
+            return frontmatter ? frontmatter[property] : undefined;
+        }
+        return undefined;
+    }
+
+    /**
      * Gets all toolbars (as {@link Toolbar} objects).
      * 
      * @see INoteToolbarApi.getToolbars
