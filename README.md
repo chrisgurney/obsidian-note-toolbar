@@ -15,8 +15,8 @@ The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create cont
 - [Features](#features)
 - [Installation](#installation)
 - [Getting Started](#getting-started-)
-- [Gallery](#gallery)
-- [User Guide](#user-guide)
+- [Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
+- [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
 ![Demo of a sticky toolbar](./docs/images/note_toolbar_demo.gif)
 
