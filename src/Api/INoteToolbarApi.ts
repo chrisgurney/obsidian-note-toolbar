@@ -54,6 +54,9 @@ export interface INoteToolbarApi<T> {
      * 
      * @param property The property to get the frontmatter for.
      * @returns The frontmatter value for the given property, or `undefined` if it does not exist.
+     * 
+     * @example
+     * const createdDate = ntb.getProperty('created');
      */
     getProperty: (property: string) => string | undefined;
 

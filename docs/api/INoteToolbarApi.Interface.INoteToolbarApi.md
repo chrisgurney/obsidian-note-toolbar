@@ -95,6 +95,12 @@ Gets the value of the given property in the active note.
 
 The frontmatter value for the given property, or `undefined` if it does not exist.
 
+#### Example
+
+```ts
+const createdDate = ntb.getProperty('created');
+```
+
 ***
 
 ### getToolbars()
