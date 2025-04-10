@@ -83,6 +83,13 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.app.workspace.onLayoutReady(async () => {
 
+			// make API available
+			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
+
+			// check what other plugins are enabled that we need to know about
+			this.checkPlugins();
+			this.updateAdapters();
+
 			// add icons specific to the plugin
 			addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
 			addIcon('note-toolbar-none', '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="24" viewBox="0 0 0 24" fill="none" class="svg-icon note-toolbar-none"></svg>');
@@ -90,7 +97,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// render the initial toolbar
 			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-
 			// TODO: for fix: initial rendering of toolbars across all views #94
 			// this.renderToolbarForLeaves();
 			await this.renderActiveToolbar();
@@ -153,16 +159,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			// provides support for the Style Settings plugin: https://github.com/mgmeyers/obsidian-style-settings
 			this.app.workspace.trigger("parse-style-settings");
 
-			// make API available
-			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
-
 			// register custom views
 			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
 			this.registerView(VIEW_TYPE_GALLERY, (leaf: WorkspaceLeaf) => new GalleryView(this, leaf));
-
-			// check what other plugins are enabled that we need to know about
-			this.checkPlugins();
-			this.updateAdapters();
 
 			// needs to be done after plugins are setup so that string variable checks work
 			this.commands.setupItemCommands();
