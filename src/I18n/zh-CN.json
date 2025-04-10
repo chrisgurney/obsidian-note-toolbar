@@ -225,7 +225,8 @@
     "periodic-notes": "Periodic Notes",
     "sync": "Obsidian Sync 官方同步",
     "templater-obsidian": "Templater",
-    "workspaces": "Workspaces 工作区"
+    "workspaces": "Workspaces 工作区",
+    "open-with-default-app": "使用默认应用程序打开"
   },
   "setting": {
     "add-item": {
@@ -233,7 +234,9 @@
       "label-confirm-command": "命令不支持或未找到：\n\n\n`{{commandId}}`\n\n\n您还想将此项目添加到工具栏中吗？\n您可以安装/启用以后提供此命令的插件。",
       "label-confirm-mobile-uri": "该项目使用文件URI（在移动设备上可能不支持）\n\n\n您还想将此项目添加到工具栏中吗？",
       "label-confirm-plugin": "插件未安装（或未启用）：\n\n\n** {{plugin}} **\n\n您还想将此项目添加到工具栏中吗？\n您可以稍后安装/启用此插件。",
-      "title-confirm": "添加项目：{{itemName}}"
+      "title-confirm": "添加项目：{{itemName}}",
+      "label-confirm-scripting": "为了使用此项目，必须启用 笔记工具栏 设置中的_脚本（scripting）_设置。\n\n此设置将允许您的工具栏执行 JavaScript 脚本，并使用 Dataview、Templater 和 JS Engine 插件（前提是您已安装并启用了这些插件）。\n\n您想现在启用此设置吗？",
+      "title-confirm-scripting": "该项目需要提供脚本"
     },
     "button-cancel": "取消",
     "button-collapse-tooltip": "折叠",
@@ -387,7 +390,9 @@
       "option-visibility-platform-desktop": "桌面端",
       "option-visibility-platform-mobile": "移动端",
       "option-visibility-visible-platform": "在{{platform}}显示",
-      "title": "编辑项目"
+      "title": "编辑项目",
+      "menu-move-item": "移至工具栏…",
+      "menu-move-item-notice": "项目已移至工具栏：{{toolbarName}}"
     },
     "item-suggest-modal": {
       "instruction-back": "返回",
@@ -582,7 +587,8 @@
       "label-roadmap": "Note Toolbar 的未来？",
       "label-roadmap-description": "查看路线图，以预览考虑开发的新功能。",
       "title": "Note Toolbar 更新内容"
-    }
+    },
+    "button-enable": "启用"
   },
   "toolbar": {
     "menu-add-item": "添加项目…",
