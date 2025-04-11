@@ -158,7 +158,7 @@
         "select-plugin-suggestion": "{{plugin}}",
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Not enabled or installed",
         "title": "Note Toolbar Gallery",
-        "tooltip-add-item": "Add item to a toolbar"
+        "tooltip-add-item": "Add this item to a toolbar"
     },
     "import": {
         "button-add-items": "Add items",
@@ -227,6 +227,7 @@
             "label-confirm-mobile-uri": "This item uses a file URI which may not be supported on mobile.\n\nWould you still like to add this item to a toolbar?",
             "label-confirm-plugin": "Plugin not installed and enabled:\n\n**{{plugin}}**\n\nWould you still like to add this item to a toolbar? You can install/enable this plugin later.",
             "label-confirm-scripting": "In order to use this item, the _Scripting_ setting in Note Toolbar's settings must be enabled.\n\nThis setting allows your toolbar to execute JavaScript, and to use Dataview, Templater, and JS Engine (assuming you have those plugins installed and enabled).\n\nWould you like to enable this setting now?",
+            "notice-item-added": "Item added to {{toolbarName}}",
             "title-confirm-scripting": "Scripting required for item",
             "title-confirm": "Add item: {{itemName}}"
         },
@@ -328,8 +329,8 @@
             "placeholder": "Search for an icon..."
         },
         "item": {
-            "button-close": "Close",
-            "button-close-description": "Closes and saves this item",
+            "button-close": "Done",
+            "button-close-description": "Saves and closes this item",
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
@@ -396,7 +397,7 @@
             "key-navigate": "↑↓",
             "key-use": "↵",
             "label-empty-no-items": "No results found.",
-            "link-gallery": "Explore the gallery",
+            "link-gallery": "Explore the Gallery ↗",
             "link-search": "Search for an item",
             "option-new": "+ Create a new item",
             "placeholder": "Search for an item...",
@@ -536,7 +537,8 @@
             "instruction-use": "to open toolbar",
             "option-default": "Default (use toolbar mapping)",
             "option-new": "+ Create a new toolbar",
-            "placeholder": "Search for a toolbar..."
+            "placeholder": "Search for a toolbar...",
+            "placeholder-add": "Add item to which toolbar?"
         },
         "toolbars": {
             "button-duplicate-tbar-tooltip": "Duplicate",

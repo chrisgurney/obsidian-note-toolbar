@@ -48,6 +48,7 @@ export default class ItemModal extends Modal {
         new Setting(this.contentEl)
             .addButton((btn: ButtonComponent) => {
                 btn.setButtonText(t('setting.item.button-close'))
+                    .setCta()
                     .setTooltip(t('setting.item.button-close-description'))
                     .onClick(async (event) => {
                         this.close();

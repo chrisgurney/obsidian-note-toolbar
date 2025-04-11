@@ -305,7 +305,7 @@ export class CommandManager {
 
         let propsEl = this.plugin.getPropsEl();
         let currentView = this.plugin.app.workspace.getActiveViewOfType(MarkdownView);
-        debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
+        // debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
         // @ts-ignore make sure we're not in source (code) view
         if (propsEl && !currentView.editMode.sourceMode) {
             let propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');

@@ -1,4 +1,4 @@
-import { ButtonComponent, getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
+import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip } from "obsidian";
 import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS, DEFAULT_ITEM_VISIBILITY_SETTINGS } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
@@ -316,7 +316,15 @@ export function openItemSuggestModal(
 		plugin, 
 		undefined, 
 		async (selectedItem: ToolbarItemSettings) => {
-			const isEmptyItem = selectedItem.uuid === 'EMPTY_ITEM';
+			
+			const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
+			if (isBrowseGalleryItem) {
+				plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+				if (parent) parent.close();
+				return;
+			}
+
+			const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
 			if (isEmptyItem) selectedItem.label = '';
 
 			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
@@ -332,8 +340,11 @@ export function openItemSuggestModal(
 			toolbar.updated = new Date().toISOString();
 			await plugin.settingsManager.save();
 
-			if (isEmptyItem) new ItemModal(plugin, toolbar, newItem).open();
-			if (parent) parent.display();
+			if (isEmptyItem) new ItemModal(plugin, toolbar, newItem).open()
+			else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name }));
+
+			if (parent) parent.display(newItem.uuid);
+
 		}, 
 		mode
 	);

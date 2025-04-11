@@ -27,7 +27,10 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
         this.plugin = plugin;
 
-        this.setPlaceholder(t('setting.toolbar-suggest-modal.placeholder'));
+        this.setPlaceholder(
+            showNewOption 
+                ? t('setting.toolbar-suggest-modal.placeholder-add') 
+                : t('setting.toolbar-suggest-modal.placeholder'));
         this.setInstructions([
             {command: '↑↓', purpose: t('setting.toolbar-suggest-modal.instruction-navigate')},
             {command: '↵', purpose: t('setting.toolbar-suggest-modal.instruction-use')},

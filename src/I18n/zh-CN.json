@@ -123,7 +123,7 @@
     "name-hide-properties": "隐藏笔记属性",
     "name-item-suggester": "打开快速工具",
     "name-item-suggester-current": "打开当前工具栏的快速工具",
-    "name-open-gallery": "打开工具展览",
+    "name-open-gallery": "打开示例库",
     "name-open-toolbar": "打开工具栏：{{toolbar}}",
     "name-settings": "打开插件设置",
     "name-show-properties": "显示笔记属性",
@@ -149,15 +149,15 @@
     "warning-share-menu": "此工具栏引用了至少一个外部工具栏，接收者将无法访问。"
   },
   "gallery": {
-    "error-invalid-plugin": "展览项目含无效插件（或未启用）",
-    "error-missing-item-type": "展览项目：缺少项目类型属性",
-    "error-missing-property": "展览数据中含有缺失的插件或脚本属性。",
+    "error-invalid-plugin": "示例项目含未安装（或未启用）的插件",
+    "error-missing-item-type": "示例项目：缺少项目类型属性",
+    "error-missing-property": "示例项目数据中含有缺失的插件或脚本属性。",
     "label-plugin": "{{{plugin}}",
-    "label-suggestions": "来自工具展览的建议",
+    "label-suggestions": "来自示例库的建议",
     "select-plugin-placeholder": "选择一个插件…",
     "select-plugin-suggestion": "{{plugin}}",
     "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ 未安装（或未启用）",
-    "title": "Note Toolbar Gallery 工具展览",
+    "title": "Note Toolbar Gallery 示例库",
     "tooltip-add-item": "添加项目到工具栏"
   },
   "import": {
@@ -225,7 +225,8 @@
     "periodic-notes": "Periodic Notes",
     "sync": "Obsidian Sync 官方同步",
     "templater-obsidian": "Templater",
-    "workspaces": "Workspaces 工作区"
+    "workspaces": "Workspaces 工作区",
+    "open-with-default-app": "使用默认应用程序打开"
   },
   "setting": {
     "add-item": {
@@ -233,15 +234,17 @@
       "label-confirm-command": "命令不支持或未找到：\n\n\n`{{commandId}}`\n\n\n您还想将此项目添加到工具栏中吗？\n您可以安装/启用以后提供此命令的插件。",
       "label-confirm-mobile-uri": "该项目使用文件URI（在移动设备上可能不支持）\n\n\n您还想将此项目添加到工具栏中吗？",
       "label-confirm-plugin": "插件未安装（或未启用）：\n\n\n** {{plugin}} **\n\n您还想将此项目添加到工具栏中吗？\n您可以稍后安装/启用此插件。",
-      "title-confirm": "添加项目：{{itemName}}"
+      "title-confirm": "添加项目：{{itemName}}",
+      "label-confirm-scripting": "为了使用此项目，必须启用 笔记工具栏 设置中的_脚本（scripting）_设置。\n\n此设置将允许您的工具栏执行 JavaScript 脚本，并使用 Dataview、Templater 和 JS Engine 插件（前提是您已安装并启用了这些插件）。\n\n您想现在启用此设置吗？",
+      "title-confirm-scripting": "该项目需要提供脚本"
     },
     "button-cancel": "取消",
     "button-collapse-tooltip": "折叠",
     "button-delete-tooltip": "删除",
     "button-drag-tooltip": "拖动以重新排序",
     "button-expand-tooltip": "展开",
-    "button-gallery": "工具展览",
-    "button-gallery-tooltip": "打开工具展览（Gallery）",
+    "button-gallery": "示例库",
+    "button-gallery-tooltip": "打开示例库（Gallery）",
     "button-help": "帮助",
     "button-help-tooltip": "打开帮助窗口",
     "button-learn-more": "了解更多",
@@ -318,8 +321,8 @@
       "label-examples-description": "从这些现成的工具栏示例中获得启发",
       "label-feedback": "提供反馈",
       "label-feedback-description": "使用此Google表单来提供您可能有的任何反馈，问题或想法。",
-      "label-gallery": "打开工具展览",
-      "label-gallery-description": "查看工具展览（Gallery）以获取可供直接使用的现成项目，并添加进工具栏。",
+      "label-gallery": "打开示例库",
+      "label-gallery-description": "查看示例库（Gallery）以获取开箱即用的工具项目。",
       "label-support": "获取支持",
       "label-support-description": "访问Github上的论坛，向社区提出问题。",
       "label-user-guide": "阅读用户指南",
@@ -387,7 +390,9 @@
       "option-visibility-platform-desktop": "桌面端",
       "option-visibility-platform-mobile": "移动端",
       "option-visibility-visible-platform": "在{{platform}}显示",
-      "title": "编辑项目"
+      "title": "编辑项目",
+      "menu-move-item": "移至工具栏…",
+      "menu-move-item-notice": "项目已移至工具栏：{{toolbarName}}"
     },
     "item-suggest-modal": {
       "instruction-back": "返回",
@@ -400,7 +405,7 @@
       "key-navigate": "↑↓",
       "key-use": "↵",
       "label-empty-no-items": "找不到结果",
-      "link-gallery": "探索工具展览",
+      "link-gallery": "探索示例库",
       "link-search": "搜索项目",
       "option-new": "创建新项目",
       "placeholder": "搜索项目…",
@@ -582,7 +587,8 @@
       "label-roadmap": "Note Toolbar 的未来？",
       "label-roadmap-description": "查看路线图，以预览考虑开发的新功能。",
       "title": "Note Toolbar 更新内容"
-    }
+    },
+    "button-enable": "启用"
   },
   "toolbar": {
     "menu-add-item": "添加项目…",

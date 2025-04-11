@@ -12,7 +12,7 @@ The Gallery includes the User Guide's examples, and _even more_ as items can use
 
 It's easy to use the Gallery:
 
-- In settings, look for the new _Gallery_ button/link at the top.
+- In settings, look for the new _Gallery_ button/link at the top, or use the `Note Toolbar: Open Gallery` command.
 - Browse though the categories, or search for items at the top.
 - To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to, or you can create a new toolbar.
 - Once the item is added to your toolbar, you can edit it however you see fit.
@@ -84,6 +84,8 @@ vscode://file/&#123;&#123;encode:vault_path&#125;&#125;%2F&#123;&#123;encode:fil
 
 ### Other improvements
 
+- Move an item to another toolbar, from the item's _More actions_ menu. _Thank you for the idea @Moyf_ [#301](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/301)
+- _Page preview_ core plugin support for File and URI items. Use the modifier key when hovering over one of those items to show the preview. _Thank you for the idea @holroy_  [#287](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/287)
 - On phones: Items opened or added in settings now use the item modal, rather than expanding in the list in-place.
 - JS Engine: Added an Evaluate function, which evaluates a provided expression and displays a value if returned.
 
@@ -105,6 +107,12 @@ A few features have been added to the API to support the addition of the Gallery
 #### [`ntb`](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API)
 
 **Get an item by its ID**, or **get the active item** (i.e., the item that was just clicked/tapped). See below for example.
+
+Also **get note properties** given the property's key:
+
+```javascript
+const createdDate = ntb.getProperty('created');
+```
 
 Scripts can now also **access Note Toolbar's translations** via `ntb.t()`. For function usage, see the [i18next documentation ↗](https://www.i18next.com/translation-function/essentials). Translations are located in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
 

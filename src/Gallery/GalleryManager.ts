@@ -4,7 +4,7 @@ import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, Toolba
 import { debugLog } from "Utils/Utils";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
-import { Platform } from "obsidian";
+import { Notice, Platform } from "obsidian";
 import { openScriptPrompt } from "Settings/UI/Utils/SettingsUIUtils";
 
 export default class GalleryManager {
@@ -35,6 +35,7 @@ export default class GalleryManager {
 				selectedToolbar.updated = new Date().toISOString();
 				await this.plugin.settingsManager.save();
 				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
+                new Notice(t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name }));
 			}
 		});
 
@@ -107,28 +108,39 @@ export default class GalleryManager {
         const startTime = performance.now();
         
         const lang = i18next.language || 'en';
-        this.items = galleryItems.map((item: any) => ({
-            uuid: item.id ?? '',
-            description: item.description ? (item.description[lang] || item.description['en']) : '',
-            hasCommand: false,
-            icon: item.icon ?? '',
-            inGallery: true,
-            label: item.label ? (item.label[lang] || item.label['en']) : '',
-            link: item.uri ?? '',
-            linkAttr: {
-                commandId: item.commandId ?? '',
-                hasVars: false,
-                target: item.target ?? '',
-                type: item.type
-            },
-            plugin: item.plugin ?? '',
-            scriptConfig: item.script ? {
-                expression: item.script ?? '',
-                pluginFunction: 'TBD'
-            } : undefined,
-            tooltip: item.tooltip ? (item.tooltip[lang] || item.tooltip['en']) : '',
-            visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
-        }));
+        this.items = galleryItems
+            .filter((item: any) => {
+                const excludeOn = item.excludeOn
+                    ? (Array.isArray(item.excludeOn) ? item.excludeOn : [item.excludeOn])
+                    : [];
+                return !(
+                    (excludeOn.includes('mobile') && Platform.isMobile) ||
+                    (excludeOn.includes('desktop') && Platform.isDesktop) ||
+                    (excludeOn.includes('phone') && Platform.isPhone)
+                );
+            })
+            .map((item: any) => ({
+                uuid: item.id ?? '',
+                description: item.description ? (item.description[lang] || item.description['en']) : '',
+                hasCommand: false,
+                icon: item.icon ?? '',
+                inGallery: true,
+                label: item.label ? (item.label[lang] || item.label['en']) : '',
+                link: item.uri ?? '',
+                linkAttr: {
+                    commandId: item.commandId ?? '',
+                    hasVars: false,
+                    target: item.target ?? '',
+                    type: item.type
+                },
+                plugin: item.plugin ?? '',
+                scriptConfig: item.script ? {
+                    expression: item.script ?? '',
+                    pluginFunction: 'TBD'
+                } : undefined,
+                tooltip: item.tooltip ? (item.tooltip[lang] || item.tooltip['en']) : '',
+                visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
+            }));
 
         const endTime = performance.now();
         debugLog(`Gallery loaded in ${endTime - startTime} ms`);
