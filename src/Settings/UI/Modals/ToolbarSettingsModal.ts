@@ -267,7 +267,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 			// display empty state
 			const emptyMsgEl = this.containerEl.createEl('div', 
-				{ text: emptyMessageFr(t('setting.items.label-empty-no-items') + ' ') });
+				{ text: emptyMessageFr(t('setting.items.label-empty-no-items') + '\u00A0') });
 			emptyMsgEl.addClass('note-toolbar-setting-empty-message');
 
 			const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
