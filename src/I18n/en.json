@@ -329,8 +329,8 @@
             "placeholder": "Search for an icon..."
         },
         "item": {
-            "button-close": "Close",
-            "button-close-description": "Closes and saves this item",
+            "button-close": "Done",
+            "button-close-description": "Saves and closes this item",
             "button-duplicate-tooltip": "Duplicate this item",
             "button-icon-tooltip": "Select icon (optional)",
             "label-preview-edit": "Edit toolbar: {{toolbar}}",
