@@ -343,7 +343,7 @@ export function openItemSuggestModal(
 			if (isEmptyItem) new ItemModal(plugin, toolbar, newItem).open()
 			else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name }));
 
-			if (parent) parent.display();
+			if (parent) parent.display(newItem.uuid);
 
 		}, 
 		mode
