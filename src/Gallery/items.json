@@ -1365,12 +1365,14 @@
         "id": "toggle-ui",
         "script": "const h = activeDocument.querySelector('.view-header'), s = activeDocument.querySelector('.status-bar');\nif (h && s) {\n if (h.style.display === 'none') {\n h.style.display = '';\n s.style.display = '';\n app.workspace.leftSplit?.expand();\n // app.workspace.rightSplit?.expand();\n await app.commands.executeCommandById('note-toolbar:show-properties');\n }\n else {\n h.style.display = 'none';\n s.style.display = 'none';\n app.workspace.leftSplit?.collapse();\n // app.workspace.rightSplit?.collapse();\n await app.commands.executeCommandById('note-toolbar:hide-properties');\n }\n }",
         "description": { 
-            "en": "Shows or hides Obsidian's status bar, note properties, sidebar, and view header."
+            "en": "Shows or hides Obsidian's status bar, note properties, sidebar, and view header.",
+            "zh": "显示或隐藏 Obsidian 的状态栏、笔记属性、侧边栏和视图标题。"
         },
         "excludeOn": "mobile",
         "icon": "focus",
         "tooltip": { 
-            "en": "Toggle UI"
+            "en": "Toggle UI",
+            "zh": "切换 UI 显示"
         },
         "type": "javascript"
     },
