@@ -537,7 +537,8 @@
             "instruction-use": "to open toolbar",
             "option-default": "Default (use toolbar mapping)",
             "option-new": "+ Create a new toolbar",
-            "placeholder": "Search for a toolbar..."
+            "placeholder": "Search for a toolbar...",
+            "placeholder-add": "Add item to which toolbar?"
         },
         "toolbars": {
             "button-duplicate-tbar-tooltip": "Duplicate",
