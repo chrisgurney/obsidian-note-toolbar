@@ -316,7 +316,15 @@ export function openItemSuggestModal(
 		plugin, 
 		undefined, 
 		async (selectedItem: ToolbarItemSettings) => {
-			const isEmptyItem = selectedItem.uuid === 'EMPTY_ITEM';
+			
+			const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
+			if (isBrowseGalleryItem) {
+				plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+				if (parent) parent.close();
+				return;
+			}
+
+			const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
 			if (isEmptyItem) selectedItem.label = '';
 
 			let newItem = await plugin.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);

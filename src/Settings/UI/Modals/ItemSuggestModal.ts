@@ -105,7 +105,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         if (this.mode === 'New') {
             const newItem: ToolbarItemSettings = {
                 ...DEFAULT_ITEM_SETTINGS,
-                uuid: 'EMPTY_ITEM',
+                uuid: 'NEW_ITEM',
                 label: t('setting.item-suggest-modal.option-new')
             };
             sortedSuggestions.push(newItem);
@@ -125,6 +125,12 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             gallerySuggestions = this.sortSuggestions(gallerySuggestions, lowerCaseInputStr);
             if (gallerySuggestions.length > 0) {
                 sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
+                const browseGallery: ToolbarItemSettings = {
+                    ...DEFAULT_ITEM_SETTINGS,
+                    uuid: 'OPEN_GALLERY',
+                    label: t('setting.item-suggest-modal.link-gallery')
+                };
+                sortedSuggestions.push(browseGallery);
                 sortedSuggestions.push(...gallerySuggestions);
             }
         }
