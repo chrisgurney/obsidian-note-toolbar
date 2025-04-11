@@ -259,6 +259,7 @@
             "en": "Reveal the active file in the system's file explorer.",
             "zh": "在系统的文件资源管理器中显示当前文件。"
         },
+        "excludeOn": "mobile",
         "icon": "folder-search",
         "tooltip": { 
             "en": "Show file in system",
@@ -1366,6 +1367,7 @@
         "description": { 
             "en": "Shows or hides Obsidian's status bar, note properties, sidebar, and view header."
         },
+        "excludeOn": "mobile",
         "icon": "focus",
         "tooltip": { 
             "en": "Toggle UI"
@@ -1378,6 +1380,7 @@
             "en": "Shows or hides Obsidian's status bar.",
             "zh": "显示或隐藏 Obsidian 的状态栏。"
         },
+        "excludeOn": "mobile",
         "icon": "dock",
         "script": "const s = activeDocument.querySelector('.status-bar');\nif (s) { s.style.display = s.style.display === 'none' ? '' : 'none'; }",
         "tooltip": { 
@@ -1448,6 +1451,7 @@
             "en": "Opens the current file in VS Code.",
             "zh": "在 VS Code 中打开当前文件。"
         },
+        "excludeOn": "mobile",
         "icon": "file-json-2",
         "tooltip": { 
             "en": "Open in VS Code",

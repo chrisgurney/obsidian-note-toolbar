@@ -108,28 +108,39 @@ export default class GalleryManager {
         const startTime = performance.now();
         
         const lang = i18next.language || 'en';
-        this.items = galleryItems.map((item: any) => ({
-            uuid: item.id ?? '',
-            description: item.description ? (item.description[lang] || item.description['en']) : '',
-            hasCommand: false,
-            icon: item.icon ?? '',
-            inGallery: true,
-            label: item.label ? (item.label[lang] || item.label['en']) : '',
-            link: item.uri ?? '',
-            linkAttr: {
-                commandId: item.commandId ?? '',
-                hasVars: false,
-                target: item.target ?? '',
-                type: item.type
-            },
-            plugin: item.plugin ?? '',
-            scriptConfig: item.script ? {
-                expression: item.script ?? '',
-                pluginFunction: 'TBD'
-            } : undefined,
-            tooltip: item.tooltip ? (item.tooltip[lang] || item.tooltip['en']) : '',
-            visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
-        }));
+        this.items = galleryItems
+            .filter((item: any) => {
+                const excludeOn = item.excludeOn
+                    ? (Array.isArray(item.excludeOn) ? item.excludeOn : [item.excludeOn])
+                    : [];
+                return !(
+                    (excludeOn.includes('mobile') && Platform.isMobile) ||
+                    (excludeOn.includes('desktop') && Platform.isDesktop) ||
+                    (excludeOn.includes('phone') && Platform.isPhone)
+                );
+            })
+            .map((item: any) => ({
+                uuid: item.id ?? '',
+                description: item.description ? (item.description[lang] || item.description['en']) : '',
+                hasCommand: false,
+                icon: item.icon ?? '',
+                inGallery: true,
+                label: item.label ? (item.label[lang] || item.label['en']) : '',
+                link: item.uri ?? '',
+                linkAttr: {
+                    commandId: item.commandId ?? '',
+                    hasVars: false,
+                    target: item.target ?? '',
+                    type: item.type
+                },
+                plugin: item.plugin ?? '',
+                scriptConfig: item.script ? {
+                    expression: item.script ?? '',
+                    pluginFunction: 'TBD'
+                } : undefined,
+                tooltip: item.tooltip ? (item.tooltip[lang] || item.tooltip['en']) : '',
+                visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
+            }));
 
         const endTime = performance.now();
         debugLog(`Gallery loaded in ${endTime - startTime} ms`);

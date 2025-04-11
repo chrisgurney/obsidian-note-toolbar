@@ -8,6 +8,15 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
 
     let markdown = `# ${gallery.title.en}\n\n`;
 
+    const getExclusionNote = (item) => {
+        const x = item.excludeOn
+            ? Array.isArray(item.excludeOn) ? item.excludeOn : [item.excludeOn]
+            : [];
+        return x.length > 0
+            ? `Not supported on: ${x.join(', ')}`
+            : '';
+    };
+
     for (const category of gallery.categories) {
         markdown += `## ${category.name.en}\n\n${category.description.en}\n\n`;
 
@@ -16,12 +25,17 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
             const item = items.find(item => item.id === itemId);
             if (!item) continue;
 
-            let line = `| ${item.tooltip.en} | ${item.description.en} |`;
-            // FIXME: reuse function to check command ID here?
-            if (item.type === 'plugin' && item.pluginName) {
-                line += ` (uses plugin: ${item.pluginName})`;
-            }
+            let description = `${item.description.en}`;
 
+            // FIXME: reuse function to check command ID here?
+            // if (item.type === 'plugin' && item.pluginName) {
+            //     description += ` • Uses plugin: ${item.pluginName})`;
+            // }
+
+            const exclusionNote = getExclusionNote(item);
+            description += `${exclusionNote ? ` • *${exclusionNote}*` : ''}`;
+            
+            let line = `| ${item.tooltip.en} | ${description} |`;
             markdown += line + '\n';
         }
         markdown += '\n';
