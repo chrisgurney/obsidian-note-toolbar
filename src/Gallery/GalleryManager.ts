@@ -4,7 +4,7 @@ import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, Toolba
 import { debugLog } from "Utils/Utils";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
-import { Platform } from "obsidian";
+import { Notice, Platform } from "obsidian";
 import { openScriptPrompt } from "Settings/UI/Utils/SettingsUIUtils";
 
 export default class GalleryManager {
@@ -35,6 +35,7 @@ export default class GalleryManager {
 				selectedToolbar.updated = new Date().toISOString();
 				await this.plugin.settingsManager.save();
 				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
+                new Notice(t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name }));
 			}
 		});
 
