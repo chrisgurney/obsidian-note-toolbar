@@ -51,7 +51,7 @@ export default class ToolbarItemUi {
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(async () => {
                             let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                            const modal = new IconSuggestModal(this.plugin, async (icon) => {
+                            const modal = new IconSuggestModal(this.plugin, toolbarItem.icon, async (icon) => {
                                 toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                 this.plugin.settingsManager.save();
                                 updateItemIcon(this.parent, itemRow, icon);
@@ -68,7 +68,7 @@ export default class ToolbarItemUi {
                                 case " ":
                                     e.preventDefault();
                                     let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                                    const modal = new IconSuggestModal(this.plugin, (icon) => {
+                                    const modal = new IconSuggestModal(this.plugin, toolbarItem.icon, (icon) => {
                                         toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
                                         this.plugin.settingsManager.save();
                                         updateItemIcon(this.parent, itemRow, icon);

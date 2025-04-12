@@ -5,12 +5,11 @@ import { NoteToolbarSettings, t, ToolbarItemSettings } from "Settings/NoteToolba
 
 export class IconSuggestModal extends SuggestModal<IconName> {
 
-    private parentEl: HTMLElement;
-    public plugin: NoteToolbarPlugin;
-    private settingsWithIcon: ToolbarItemSettings | NoteToolbarSettings;
-    private callback: (icon: string) => void;
-
-	constructor(plugin: NoteToolbarPlugin, callback: (icon: string) => void) {
+	constructor(
+        private plugin: NoteToolbarPlugin, 
+        private selectedIcon: string | undefined, 
+        private callback: (icon: string) => void
+    ) {
         super(plugin.app);
         this.modalEl.addClass("note-toolbar-setting-mini-dialog");
         this.plugin = plugin;
@@ -34,6 +33,17 @@ export class IconSuggestModal extends SuggestModal<IconName> {
             }
         });
         return iconSuggestions;
+    }
+
+    onOpen(): void {
+        if (this.selectedIcon && this.selectedIcon !== '') {
+            const iconName = this.selectedIcon.replace(/^lucide-/, '')
+            this.inputEl.value = iconName;
+            this.inputEl.trigger('input');
+        }
+        else {
+            super.onOpen();
+        }
     }
 
     renderSuggestion(icon: IconName, el: HTMLElement): void {

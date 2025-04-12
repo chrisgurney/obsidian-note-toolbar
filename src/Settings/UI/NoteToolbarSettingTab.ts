@@ -935,7 +935,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip(t('setting.other.icon.tooltip'))
 					.onClick(async (e) => {
 						e.preventDefault();
-						const modal = new IconSuggestModal(this.plugin, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
+						const modal = new IconSuggestModal(
+							this.plugin, this.plugin.settings.icon, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 						modal.open();
 					});
 				cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.plugin.settings.icon ? "true" : "false");
@@ -946,7 +947,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							case "Enter":
 							case " ":
 								e.preventDefault();					
-								const modal = new IconSuggestModal(this.plugin, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
+								const modal = new IconSuggestModal(
+									this.plugin, this.plugin.settings.icon, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 								modal.open();
 						}
 					});
