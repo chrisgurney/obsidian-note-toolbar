@@ -675,17 +675,20 @@ export default class NoteToolbarPlugin extends Plugin {
 				const target = (evt.target as HTMLElement)?.closest('.external-link');
 				const type = target?.getAttribute('data-toolbar-link-attr-type');
 				if (target && type && [ItemType.File, ItemType.Uri].contains(type as ItemType)) {
-					const activeFile = this.app.workspace.getActiveFile();
 					let itemLink = target.getAttribute('href') || '';
-					itemLink = await this.replaceVars(itemLink, activeFile);
-					// source doesn't seem to be required as Page preview plugin settings aren't being respected
-					this.app.workspace.trigger('hover-link', {
-						event: evt,
-						source: '',
-						hoverParent: noteToolbarCallout,
-						targetEl: target,
-						linktext: itemLink,
-					});
+					itemLink = await this.replaceVars(itemLink, this.app.workspace.getActiveFile());
+					// make sure it's not actually a folder, as we can't preview them
+					const file = this.app.vault.getAbstractFileByPath(itemLink);
+					if (!(file instanceof TFolder)) {
+						// source doesn't seem to be required as Page preview plugin settings aren't being respected
+						this.app.workspace.trigger('hover-link', {
+							event: evt,
+							source: '',
+							hoverParent: noteToolbarCallout,
+							targetEl: target,
+							linktext: itemLink,
+						});
+					}
 				}
 			});
 
