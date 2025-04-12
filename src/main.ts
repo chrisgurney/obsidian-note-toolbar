@@ -75,6 +75,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
 
+		// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
+		if (Platform.isPhone) {
+			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event) => this.ribbonMenuHandler(event));
+		}
+
 		this.api = new NoteToolbarApi(this);
 		this.commands = new CommandManager(this);
 		this.hotkeys = new HotkeyHelper(this);
@@ -100,11 +105,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			// TODO: for fix: initial rendering of toolbars across all views #94
 			// this.renderToolbarForLeaves();
 			await this.renderActiveToolbar();
-
-			// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
-			if (Platform.isPhone) {
-				this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event) => this.ribbonMenuHandler(event));
-			}
 
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
