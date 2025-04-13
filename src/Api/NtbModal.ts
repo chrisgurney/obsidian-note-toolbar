@@ -7,9 +7,6 @@ import NoteToolbarPlugin from "main";
  */
 export class NtbModal extends Modal {
 
-    private resolve: (value: string) => void;
-    private reject: (reason?: Error) => void;
-
     private title: string;
     private class: string;
 
@@ -39,7 +36,6 @@ export class NtbModal extends Modal {
 
     onOpen(): void {
         if (this.title) {
-            // this.titleEl.setText(this.title);
             let containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
             MarkdownRenderer.render(this.plugin.app, this.title, containerEl, "", new Component());
         }
@@ -49,13 +45,7 @@ export class NtbModal extends Modal {
         this.contentEl.empty();
     }
 
-    // private resolveAndClose(evt: Event | KeyboardEvent) {
-    //     evt.preventDefault();
-    //     this.resolve(this.value);
-    //     this.close();
-    // }
-
-    async openWithContent(resolve: (value: string) => void, reject: (reason?: Error) => void): Promise<void> {
+    async display(): Promise<void> {
 
         let containerEl = this.contentEl.createEl('div', {cls: 'markdown-preview-view'});
 
@@ -91,8 +81,6 @@ export class NtbModal extends Modal {
             this.contentEl.focus();
         }, 50);
 
-        this.resolve = resolve;
-        this.reject = reject;
         this.open();
 
     }
