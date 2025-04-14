@@ -2038,7 +2038,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	getPropsEl(): HTMLElement | null {
 		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.leaf.containerEl as HTMLElement;
-		const propertiesContainer = currentViewEl.querySelector('.metadata-container') as HTMLElement;
+		const propertiesContainer = currentViewEl?.querySelector('.metadata-container') as HTMLElement;
 		// debugLog("getPropsEl: ", propertiesContainer);
 		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
 		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
