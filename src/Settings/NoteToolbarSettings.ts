@@ -490,8 +490,8 @@ export const TARGET_OPTIONS = {
 	'default': t('setting.item.option-target-default'),
 	'modal': t('setting.item.option-target-modal'),
 	'tab': t('setting.item.option-target-tab'),
-	'split': t('setting.item.option-target-split'),
-	'window': t('setting.item.option-target-window')
+	'window': t('setting.item.option-target-window'),
+	'split': t('setting.item.option-target-split')
 }
 
 /**
