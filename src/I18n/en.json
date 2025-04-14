@@ -355,7 +355,7 @@
             "option-file": "File",
             "option-file-error-does-not-exist": "This file or folder does not exist.",
             "option-file-target": "Where to open file",
-            "option-file-target-description": "Use modifier keys to override this setting.",
+            "option-file-target-description": "Using modifier keys or plugins may override this setting.",
             "option-file-placeholder": "Search for file or folder",
             "option-item-group": "Item Group",
             "option-item-group-error-does-not-exist": "Toolbar does not exist",
