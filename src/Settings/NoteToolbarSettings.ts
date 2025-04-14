@@ -410,7 +410,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
-	target?: PaneType;
+	target?: PaneType | 'modal';
 	type: ItemType;
 };
 
@@ -488,6 +488,7 @@ export const RIBBON_ACTION_OPTIONS = {
 
 export const TARGET_OPTIONS = {
 	'default': t('setting.item.option-target-default'),
+	'modal': "Modal",
 	'tab': t('setting.item.option-target-tab'),
 	'split': t('setting.item.option-target-split'),
 	'window': t('setting.item.option-target-window')

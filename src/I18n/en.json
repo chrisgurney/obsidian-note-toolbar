@@ -370,6 +370,7 @@
             "option-separator": "separator",
             "option-script": "Select how you want to use this.",
             "option-target-default": "Default",
+            "option-target-modal": "Modal",
             "option-target-split": "Split pane",
             "option-target-tab": "New tab",
             "option-target-window": "New window",

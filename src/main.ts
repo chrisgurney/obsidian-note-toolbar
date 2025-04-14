@@ -1402,7 +1402,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				(file && (file !== activeFile)) ? this.handleLinkInSidebar(item, file) : this.handleLinkCommand(commandId, item?.linkAttr.target);
+				(file && (file !== activeFile)) ? this.handleLinkInSidebar(item, file) : this.handleLinkCommand(commandId, item?.linkAttr.target as PaneType);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -1413,8 +1413,11 @@ export default class NoteToolbarPlugin extends Plugin {
 					// @ts-ignore
 					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
 				}
+				else if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
+					this.api.modal(fileOrFolder);
+				}
 				else {
-					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target);
+					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
 				}
 				break;
 			case ItemType.Menu:

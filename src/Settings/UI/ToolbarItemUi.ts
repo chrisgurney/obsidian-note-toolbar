@@ -745,12 +745,14 @@ export default class ToolbarItemUi {
     }
 
     getCommandSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+        const targetsToExclude = new Set(['window', 'modal']);
+        const targetOptions = Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => !targetsToExclude.has(key)));
         new Setting(fieldDiv)
             .setName(t('setting.item.option-command-target'))
             .setDesc(t('setting.item.option-command-target-description'))
             .addDropdown((dropdown) =>
                 dropdown
-                    .addOptions(Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => key !== 'window')))
+                    .addOptions(targetOptions)
                     .setValue(item.linkAttr.target || 'default')
                     .onChange(async (value) => {
                         if (value === 'default') item.linkAttr.target = undefined
@@ -772,6 +774,7 @@ export default class ToolbarItemUi {
                     .onChange(async (value) => {
                         if (value === 'default') item.linkAttr.target = undefined
                         else item.linkAttr.target = value as PaneType;
+                        
                         this.toolbar.updated = new Date().toISOString();
                         await this.plugin.settingsManager.save();
                     })
