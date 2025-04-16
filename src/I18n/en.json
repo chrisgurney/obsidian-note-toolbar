@@ -380,6 +380,8 @@
             "option-uri": "URI",
             "option-uri-help": "Tip: Use note properties and expressions in URIs.",
             "option-uri-placehoder": "Website, URI, or note title",
+            "option-uri-target": "Where to open files",
+            "option-uri-target-description": "If the link is a file in the vault, choose how to open it. Using modifier keys or plugins may override this setting.",
             "option-visibility-component-hidden-platform": "{{component}} hidden on {{platform}}",
             "option-visibility-component-visible-platform": "{{component}} visible on {{platform}}",
             "option-visibility-hidden": "hidden",

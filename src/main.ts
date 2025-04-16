@@ -1457,8 +1457,15 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				else {
 					// as fallback, treat it as internal note
-					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					this.app.workspace.openLinkText(linkHref, activeFile, getLinkUiTarget(event));
+					let activeFilePath = this.app.workspace.getActiveFile()?.path ?? "";
+					let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
+					if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
+						// this.api.modal(fileOrFolder, { editable: true });
+						this.api.modal(fileOrFolder);
+					}
+					else {
+						this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
+					}
 				}
 				break;
 		}
