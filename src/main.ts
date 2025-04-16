@@ -564,21 +564,27 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
-		// add the toolbar to the editor UI
+		// add the toolbar to the editor or modal UI
+		const currentViewEl = currentView?.containerEl as HTMLElement | null;
+		const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
 		switch(position) {
 			case PositionType.Bottom:
-				let activeLeafEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
-				activeLeafEl
-					? activeLeafEl.insertAdjacentElement('afterbegin', embedBlock)
+				// position relative to modal container if in a modal
+				if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
+				else currentViewEl
+					? currentViewEl.insertAdjacentElement('afterbegin', embedBlock)
 					: debugLog(`🛑 renderToolbar(): Unable to find active leaf to insert toolbar`);
 				break;
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
-				currentView?.containerEl.appendChild(embedBlock);
-				// activeDocument ? activeDocument.querySelector('.app-container')?.appendChild(embedBlock) : undefined
+				// position relative to modal container if in a modal
+				if (modalEl) modalEl.appendChild(embedBlock)
+				else currentViewEl?.appendChild(embedBlock);
 				break;
 			case PositionType.Top:
-				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
+				let viewHeader = currentViewEl?.querySelector('.view-header') as HTMLElement;
+				// FIXME: add to modal header, but this is causing duplicate toolbars
+				// if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
 				viewHeader 
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
 					: debugLog("🛑 renderToolbar(): Unable to find .view-header to insert toolbar");
@@ -1411,6 +1417,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
 				}
 				else if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
+					// this.api.modal(fileOrFolder, { editable: true });
 					this.api.modal(fileOrFolder);
 				}
 				else {
@@ -2028,7 +2035,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	getAllToolbarEl(): NodeListOf<HTMLElement> {
-		const activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
+		let activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
+		activeContainerEl = activeContainerEl.closest('.modal-container .note-toolbar-ui') ?? activeContainerEl; 
 		return activeContainerEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
 	}
 
@@ -2037,7 +2045,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	getPropsEl(): HTMLElement | null {
-		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.leaf.containerEl as HTMLElement;
+		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.containerEl as HTMLElement;		
 		const propertiesContainer = currentViewEl?.querySelector('.metadata-container') as HTMLElement;
 		// debugLog("getPropsEl: ", propertiesContainer);
 		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)

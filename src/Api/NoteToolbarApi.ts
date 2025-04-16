@@ -82,7 +82,8 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     async modal(content: string | TFile, options?: NtbModalOptions): Promise<void> {
         const modal = new NtbModal(this.plugin, content, options);
-        await modal.display();
+        if (content instanceof TFile && options?.editable) await modal.displayEditor();
+        else await modal.displayMarkdown();
     }
 
     /**

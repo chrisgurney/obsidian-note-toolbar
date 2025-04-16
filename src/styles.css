@@ -2174,6 +2174,9 @@ input[type="text"].note-toolbar-setting-error,
         .is-phone & {
             padding-bottom: var(--size-4-6);
         }
+        & .view-header-left, .view-actions {
+            display: none;
+        }
         & .modal-content {
             overflow-y: auto;
         }
