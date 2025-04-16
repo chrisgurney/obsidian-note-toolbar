@@ -110,7 +110,8 @@
             "button-submit": "Submit",
             "error-cancelled": "Cancelled prompt",
             "error-undefined": "Undefined item",
-            "prompt-placeholder": "Type text here",
+            "prompt-placeholder": "Type text and press enter",
+            "prompt-placeholder-large": "Type text",
             "suggester-placeholder": "Select an option..."
         }
     },
