@@ -1,4 +1,4 @@
-import {Component, MarkdownRenderer, Modal, Notice, TFile, WorkspaceLeaf} from "obsidian";
+import {Component, MarkdownRenderer, Modal, normalizePath, Notice, TFile, WorkspaceLeaf} from "obsidian";
 import { NtbModalOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";
 import { t } from "Settings/NoteToolbarSettings";
@@ -69,32 +69,34 @@ export class NtbModal extends Modal {
         } 
         else {
             try {
+                const ext = this.content.extension;
                 // only render markdown files
-                if (['md', 'markdown'].includes(this.content.extension)) {
+                if (['md', 'markdown'].includes(ext)) {
                     const fileContent = await this.app.vault.cachedRead(this.content);
-                    await MarkdownRenderer.render(this.plugin.app, fileContent, containerEl, "", new Component());
+                    await MarkdownRenderer.render(this.plugin.app, fileContent, containerEl, normalizePath(this.content.path), new Component());
+
+                    // make links tabbable
+                    this.modalEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
+                        (link as HTMLElement).tabIndex = 1;
+                        if (link.hasClass('internal-link')) {
+                            this.plugin.registerDomEvent(link as HTMLElement, 'click', (event) => {
+                                event.preventDefault();
+                                const target = link.getAttribute('href');
+                                if (target) this.plugin.app.workspace.openLinkText(target, '', true);
+                            });
+                        }
+                    });
                 }
+                // attempt to embed everything else
                 else {
-                    new Notice(t('api.ui.error-file-unsupported'));
-                    return;
+                    const embedMd = `![[${this.content.path}]]`;
+                    await MarkdownRenderer.render(this.plugin.app, embedMd, containerEl, "", this.plugin);
                 };
             }
             catch (error) {
                 new Notice(error);
             }
         }
-
-        // make links tabbable
-        this.modalEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
-            (link as HTMLElement).tabIndex = 1;
-            if (link.hasClass('internal-link')) {
-                this.plugin.registerDomEvent(link as HTMLElement, 'click', (event) => {
-                    event.preventDefault();
-                    const target = link.getAttribute('href');
-                    if (target) this.plugin.app.workspace.openLinkText(target, '', true);
-                });
-            }
-        });
 
         // set focus in modal
         this.contentEl.tabIndex = 1;
