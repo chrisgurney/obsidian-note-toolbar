@@ -283,6 +283,7 @@
             "option-filemenu": "File menu",
             "option-filemenu-description": "Adds an item to the File menu to access the toolbar in the linked note.",
             "option-image": "Images",
+            "option-kanban": "Kanban boards",
             "option-pdf": "PDFs",
             "option-video": "Videos"
         },

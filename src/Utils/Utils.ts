@@ -95,6 +95,7 @@ export function checkToolbarForItemView(plugin: NoteToolbarPlugin, itemView: Ite
         audio: plugin.settings.showToolbarIn.audio,
         canvas: plugin.settings.showToolbarIn.canvas,
         image: plugin.settings.showToolbarIn.image,
+		kanban: plugin.settings.showToolbarIn.kanban,
         pdf: plugin.settings.showToolbarIn.pdf,
         video: plugin.settings.showToolbarIn.video,
         empty: (plugin.settings.emptyViewToolbar !== undefined),

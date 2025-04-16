@@ -802,6 +802,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-kanban'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarIn.kanban)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarIn.kanban = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-emptyview'))
 			.setDesc(t('setting.display-contexts.option-emptyview-description'))
 			.addSearch((cb) => {

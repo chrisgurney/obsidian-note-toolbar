@@ -59,6 +59,7 @@ export enum FileType {
 	Audio = 'audio',
 	Canvas = 'canvas',
 	Image = 'image',
+	Kanban = 'kanban',
 	Pdf = 'pdf',
 	Video = 'video'
 }
@@ -226,6 +227,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 		audio: false,
 		canvas: false,
 		image: false,
+		kanban: false,
 		pdf: false,
 		video: false
 	},
