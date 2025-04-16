@@ -335,8 +335,8 @@ export function openItemSuggestModal(
 			const isScriptingEnabled = await openScriptPrompt(plugin, newItem);
 			if (!isScriptingEnabled) return;
 
-			if (!await plugin.settingsManager.resolveGalleryItem(newItem)) return;
-
+			if (selectedItem.inGallery && !(await plugin.settingsManager.resolveGalleryItem(newItem))) return;
+			
 			toolbar.updated = new Date().toISOString();
 			await plugin.settingsManager.save();
 
