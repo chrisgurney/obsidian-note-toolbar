@@ -2043,7 +2043,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	getAllToolbarEl(): NodeListOf<HTMLElement> {
 		let activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
-		activeContainerEl = activeContainerEl.closest('.modal-container .note-toolbar-ui') ?? activeContainerEl; 
+		activeContainerEl = activeContainerEl?.closest('.modal-container .note-toolbar-ui') ?? activeContainerEl; 
 		return activeContainerEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
 	}
 
