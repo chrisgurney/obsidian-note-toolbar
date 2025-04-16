@@ -331,33 +331,6 @@ export function insertTextAtCursor(app: App, textToInsert: any) {
 }
 
 /**
- * Check if current view is a canvas.
- * Without a proper check, the toolbar gets added to other ItemViews e.g., Bookmarks view
- * @param itemView the current ItemView
- * @returns true if data looks like canvas data.
- * @link https://github.com/Zachatoo/obsidian-canvas-send-to-back/blob/68b27531f644784047be98af2b1cc6c102acf51f/src/canvas.ts#L35-L45
- */
-export function isViewCanvas(itemView: any): boolean {
-	debugLog("isViewCanvas", itemView);
-	return itemView.getViewType() === 'canvas';
-	// @ts-ignore
-	return itemView && itemView.file && itemView.file.extension === 'canvas';
-	// following does not work if there is no data in the canvas
-	// if (!itemView || !itemView.getViewData || !itemView.setViewData || !itemView.requestSave) {
-	// 	return false;
-	// }
-	// const data: unknown = JSON.parse(itemView.getViewData());
-	// return (
-	// 	!!data &&
-	// 	typeof data === "object" &&
-	// 	"nodes" in data &&
-	// 	Array.isArray(data.nodes) &&
-	// 	"edges" in data &&
-	// 	Array.isArray(data.edges)
-	// );
-}
-
-/**
  * Check if a string is a valid URI.
  * @link https://stackoverflow.com/a/49909903
  */
