@@ -1,6 +1,7 @@
 import {Component, MarkdownRenderer, Modal, Notice, TFile, WorkspaceLeaf} from "obsidian";
 import { NtbModalOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";
+import { t } from "Settings/NoteToolbarSettings";
 
 /**
  * Provides a modal that can be accessed from the Note Toolbar API.
@@ -68,8 +69,15 @@ export class NtbModal extends Modal {
         } 
         else {
             try {
-                const fileContent = await this.app.vault.read(this.content);
-                await MarkdownRenderer.render(this.plugin.app, fileContent, containerEl, "", new Component());
+                // only render markdown files
+                if (['md', 'markdown'].includes(this.content.extension)) {
+                    const fileContent = await this.app.vault.cachedRead(this.content);
+                    await MarkdownRenderer.render(this.plugin.app, fileContent, containerEl, "", new Component());
+                }
+                else {
+                    new Notice(t('api.ui.error-file-unsupported'));
+                    return;
+                };
             }
             catch (error) {
                 new Notice(error);

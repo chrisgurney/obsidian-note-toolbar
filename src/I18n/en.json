@@ -109,6 +109,7 @@
         "ui": {
             "button-submit": "Submit",
             "error-cancelled": "Cancelled prompt",
+            "error-file-unsupported": "Unsupported filetype",
             "error-undefined": "Undefined item",
             "prompt-placeholder": "Type text and press enter",
             "prompt-placeholder-large": "Type text",
