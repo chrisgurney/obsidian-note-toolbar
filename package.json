@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-note-toolbar",
-	"version": "1.0.0",
-	"description": "TODO: Note Toolbar Description",
+	"version": "1.21.17",
+	"description": "Obsidian plugin that adds customizable toolbars to your notes.",
 	"main": "main.js",
 	"scripts": {
 		"apidocs": "typedoc src/Api/INoteToolbarApi.ts src/Api/IToolbar.ts src/Api/IItem.ts --readme none",
