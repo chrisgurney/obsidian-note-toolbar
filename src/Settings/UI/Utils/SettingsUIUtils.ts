@@ -8,6 +8,7 @@ import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
 import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";
 import { confirmWithModal } from "../Modals/ConfirmModal";
+import { PLUGIN_VERSION } from "version";
 
 /**
  * Returns an element contianing a dismissable onboarding message.
@@ -153,7 +154,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 		let helpContainerEl = settingsDiv.createDiv();
 		helpContainerEl.addClass('note-toolbar-setting-help-section');
 		const helpDesc = document.createDocumentFragment();
-		helpDesc.append("v" + plugin.manifest.version, " • ");
+		helpDesc.append("v" + PLUGIN_VERSION, " • ");
 		const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 		plugin.registerDomEvent(whatsNewLink, 'click', (event) => { 
 			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
@@ -175,11 +176,11 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 
 		const helpDesc = document.createDocumentFragment();
 		helpDesc.append(
-			helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + plugin.manifest.version })
+			helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + PLUGIN_VERSION })
 		);
 
 		new Setting(settingsDiv)
-			.setName(t('plugin.note-toolbar') + ' • v' + plugin.manifest.version)
+			.setName(t('plugin.note-toolbar') + ' • v' + PLUGIN_VERSION)
 			.setDesc(t('setting.help.description'))
 			.addButton((button: ButtonComponent) => {
 				button
