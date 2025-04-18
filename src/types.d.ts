@@ -49,8 +49,10 @@ declare module "obsidian" {
     //     on(name: "note-toolbar:item-activated", callback: () => void, ctx?: any): EventRef;
     // }
 
-    // allows access to leaf's ID, to help uniquely identify note views
     interface WorkspaceItem {
+        // allows access to leaf's container element, for DOM queries (in current view mode)
+        containerEl: HTMLDivElement;
+        // allows access to leaf's ID, to help uniquely identify note views
         id: string;
     }
 

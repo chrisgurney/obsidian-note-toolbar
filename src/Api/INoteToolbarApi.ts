@@ -179,6 +179,10 @@ export interface NtbModalOptions {
      */
     title?: string;
     /**
+     * If `true`, and a file was provided, content can be edited; defaults to `false`.
+     */
+    editable?: boolean;
+    /**
      * Optional CSS class(es) to add to the component.
      */
     class?: string;

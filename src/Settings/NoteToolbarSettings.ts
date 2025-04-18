@@ -59,6 +59,7 @@ export enum FileType {
 	Audio = 'audio',
 	Canvas = 'canvas',
 	Image = 'image',
+	Kanban = 'kanban',
 	Pdf = 'pdf',
 	Video = 'video'
 }
@@ -226,6 +227,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 		audio: false,
 		canvas: false,
 		image: false,
+		kanban: false,
 		pdf: false,
 		video: false
 	},
@@ -410,7 +412,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 export interface ToolbarItemLinkAttr {
 	commandId: string;
 	hasVars: boolean;
-	target?: PaneType;
+	target?: PaneType | 'modal';
 	type: ItemType;
 };
 
@@ -488,9 +490,10 @@ export const RIBBON_ACTION_OPTIONS = {
 
 export const TARGET_OPTIONS = {
 	'default': t('setting.item.option-target-default'),
+	'modal': t('setting.item.option-target-modal'),
 	'tab': t('setting.item.option-target-tab'),
-	'split': t('setting.item.option-target-split'),
-	'window': t('setting.item.option-target-window')
+	'window': t('setting.item.option-target-window'),
+	'split': t('setting.item.option-target-split')
 }
 
 /**

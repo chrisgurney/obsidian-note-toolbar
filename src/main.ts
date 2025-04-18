@@ -564,24 +564,27 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
-		// add the toolbar to the editor UI
+		// add the toolbar to the editor or modal UI
+		const currentViewEl = currentView?.containerEl as HTMLElement | null;
+		const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
 		switch(position) {
 			case PositionType.Bottom:
-				let containerClass = '.workspace-leaf.mod-active';
-				let activeLeafEl = activeDocument.querySelector(containerClass) as HTMLElement;
-				activeLeafEl
-					? activeLeafEl.insertAdjacentElement('afterbegin', embedBlock)
-					: debugLog(`🛑 renderToolbar(): Unable to find ${containerClass} to insert toolbar`);
+				// position relative to modal container if in a modal
+				if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
+				else currentViewEl
+					? currentViewEl.insertAdjacentElement('afterbegin', embedBlock)
+					: debugLog(`🛑 renderToolbar(): Unable to find active leaf to insert toolbar`);
 				break;
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
-				currentView?.containerEl.appendChild(embedBlock);
-				// activeDocument ? activeDocument.querySelector('.app-container')?.appendChild(embedBlock) : undefined
+				// position relative to modal container if in a modal
+				if (modalEl) modalEl.appendChild(embedBlock)
+				else currentViewEl?.appendChild(embedBlock);
 				break;
 			case PositionType.Top:
-				let viewHeader = currentView?.containerEl.querySelector('.view-header') as HTMLElement;
-				// from pre-fix (#44) for calendar sidebar query -- keeping just in case
-				// let viewHeader = activeDocument.querySelector('.workspace-leaf.mod-active .view-header') as HTMLElement;
+				let viewHeader = currentViewEl?.querySelector('.view-header') as HTMLElement;
+				// FIXME: add to modal header, but this is causing duplicate toolbars
+				// if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
 				viewHeader 
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
 					: debugLog("🛑 renderToolbar(): Unable to find .view-header to insert toolbar");
@@ -1402,7 +1405,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				(file && (file !== activeFile)) ? this.handleLinkInSidebar(item, file) : this.handleLinkCommand(commandId, item?.linkAttr.target);
+				(file && (file !== activeFile)) ? this.handleLinkInSidebar(item, file) : this.handleLinkCommand(commandId, item?.linkAttr.target as PaneType);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -1413,8 +1416,12 @@ export default class NoteToolbarPlugin extends Plugin {
 					// @ts-ignore
 					this.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
 				}
+				else if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
+					// this.api.modal(fileOrFolder, { editable: true });
+					this.api.modal(fileOrFolder);
+				}
 				else {
-					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target);
+					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
 				}
 				break;
 			case ItemType.Menu:
@@ -1450,8 +1457,15 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				else {
 					// as fallback, treat it as internal note
-					let activeFile = this.app.workspace.getActiveFile()?.path ?? "";
-					this.app.workspace.openLinkText(linkHref, activeFile, getLinkUiTarget(event));
+					let activeFilePath = this.app.workspace.getActiveFile()?.path ?? "";
+					let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
+					if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
+						// this.api.modal(fileOrFolder, { editable: true });
+						this.api.modal(fileOrFolder);
+					}
+					else {
+						this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
+					}
 				}
 				break;
 		}
@@ -2027,14 +2041,20 @@ export default class NoteToolbarPlugin extends Plugin {
 		return localStorage.getItem('note-toolbar-active-item');
 	}
 
+	getAllToolbarEl(): NodeListOf<HTMLElement> {
+		let activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
+		activeContainerEl = activeContainerEl?.closest('.modal-container .note-toolbar-ui') ?? activeContainerEl; 
+		return activeContainerEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+	}
+
 	/**
 	 * Gets the Properties container in the current view.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	getPropsEl(): HTMLElement | null {
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let propertiesContainer = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container') as HTMLElement;
-		// debugLog("getPropsEl: ", '.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .metadata-container');
+		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.containerEl as HTMLElement;		
+		const propertiesContainer = currentViewEl?.querySelector('.metadata-container') as HTMLElement;
+		// debugLog("getPropsEl: ", propertiesContainer);
 		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
 		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
 			return null;
@@ -2047,11 +2067,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @example
 	 * > [!note-toolbar-output|META]
 	 * @param calloutMeta string to match
-	 * @returns HTMLElement or undefined
+	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	getOutputEl(calloutMeta: string): HTMLElement | undefined {
-		let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		let containerEl = activeDocument.querySelector('.workspace-leaf.mod-active .markdown-' + currentView?.getMode() + '-view .callout[data-callout="note-toolbar-output"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
+	getOutputEl(calloutMeta: string): HTMLElement | null {
+		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.leaf.containerEl as HTMLElement | null;
+		const containerEl = currentViewEl?.querySelector('.callout[data-callout="note-toolbar-output"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
 		// debugLog("getScriptOutputEl()", containerEl);
 		return containerEl;
 	}
@@ -2063,13 +2083,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	getToolbarEl(): HTMLElement | null {
 		// const stack = new Error().stack?.split('\n')[2]?.trim();
 		// debugLog('getToolbarEl() Called from:', stack);
-		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container') as HTMLElement;
-		// if we didn't find one, check for a bottom toolbar
-		// if (!existingToolbarEl && Platform.isPhone) {
-		// 	existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container') as HTMLElement;
-		// }
-		// debugLog("getToolbarEl()", existingToolbarEl);
-		return existingToolbarEl;
+		const activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
+		return activeContainerEl?.querySelector('.cg-note-toolbar-container') as HTMLElement;
 	}
 
 	/**
@@ -2077,12 +2092,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	getToolbarListEl(): HTMLElement | null {
-		let itemsUl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
-		// if we didn't find the toolbar, check for a bottom toolbar
-		// if (!itemsUl && Platform.isPhone) {
-		// 	itemsUl = activeDocument.querySelector('.app-container .cg-note-toolbar-container .callout-content > ul') as HTMLElement;
-		// }
-		return itemsUl;
+		const toolbarEl = this.getToolbarEl();
+		return toolbarEl?.querySelector('.callout-content > ul') as HTMLElement;
 	}
 
 	/**
@@ -2102,22 +2113,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Remove the toolbar on the active file.
 	 */
 	async removeActiveToolbar(): Promise<void> {
-		let existingToolbarEl = activeDocument.querySelector('.workspace-leaf.mod-active .cg-note-toolbar-container');
-		// if we didn't find one, check for a bottom toolbar
-		// if (!existingToolbarEl && Platform.isPhone) {
-		// 	existingToolbarEl = activeDocument.querySelector('.app-container .cg-note-toolbar-container');
-		// }
-		// debugLog("removeActiveToolbar: existingToolbar: ", existingToolbarEl);
-		existingToolbarEl?.remove();
+		const toolbarEl = this.getToolbarEl();
+		toolbarEl?.remove();
 	}
 
 	/**
 	 * Remove any toolbars in all open files.
 	 */
 	async removeAllToolbars(): Promise<void> {
-		let existingToolbars = activeDocument.querySelectorAll('.cg-note-toolbar-container');
-		existingToolbars.forEach((toolbar) => {
-			toolbar.remove();
+		this.getAllToolbarEl().forEach((toolbarEl) => {
+			toolbarEl.remove();
 		});
 	}
 
@@ -2131,10 +2136,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let toolbarRemoved: boolean = false;
 
-		let existingToolbarEls = activeDocument.querySelectorAll('.workspace-leaf.mod-active .cg-note-toolbar-container');
+		const existingToolbarEls = this.getAllToolbarEl();
 
 		debugLog("🛑 removeToolbarIfNeeded() correct:", correctToolbar?.name, "existing:", existingToolbarEls);
-		if (existingToolbarEls.length > 0) {
+		if (existingToolbarEls?.length > 0) {
 			// loop over elements and remove any that are not the correct one, ensuring there's only one (or none)
 			existingToolbarEls.forEach((toolbarEl) => {
 				if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements

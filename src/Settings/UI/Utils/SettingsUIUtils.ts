@@ -8,6 +8,7 @@ import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
 import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";
 import { confirmWithModal } from "../Modals/ConfirmModal";
+import { PLUGIN_VERSION } from "version";
 
 /**
  * Returns an element contianing a dismissable onboarding message.
@@ -153,7 +154,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 		let helpContainerEl = settingsDiv.createDiv();
 		helpContainerEl.addClass('note-toolbar-setting-help-section');
 		const helpDesc = document.createDocumentFragment();
-		helpDesc.append("v" + plugin.manifest.version, " • ");
+		helpDesc.append("v" + PLUGIN_VERSION, " • ");
 		const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 		plugin.registerDomEvent(whatsNewLink, 'click', (event) => { 
 			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
@@ -175,11 +176,11 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 
 		const helpDesc = document.createDocumentFragment();
 		helpDesc.append(
-			helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + plugin.manifest.version })
+			helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + PLUGIN_VERSION })
 		);
 
 		new Setting(settingsDiv)
-			.setName(t('plugin.note-toolbar') + ' • v' + plugin.manifest.version)
+			.setName(t('plugin.note-toolbar') + ' • v' + PLUGIN_VERSION)
 			.setDesc(t('setting.help.description'))
 			.addButton((button: ButtonComponent) => {
 				button
@@ -248,6 +249,57 @@ export function getStyleDisclaimersFr(disclaimers: {[key: string]: string}[], st
 			: undefined;
 	});
 	return disclaimersFr;
+}
+
+/**
+ * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
+ * @param toolbarName name of the toolbar to look for.
+ * @returns string 'obsidian://' URI.
+ */
+export function getToolbarPropSearchUri(plugin: NoteToolbarPlugin, toolbarName: string): string {
+	let searchUri = 'obsidian://search?vault=' + plugin.app.vault.getName() + '&query=[' + plugin.settings.toolbarProp + ': ' + toolbarName + ']';
+	return encodeURI(searchUri);
+}
+
+/**
+ * Search through settings to find out where this toolbar is referenced.
+ * @param id UUID of the toolbar to check usage for.
+ * @returns mappingCount and itemCount
+ */
+export function getToolbarSettingsUsage(plugin: NoteToolbarPlugin, id: string): [number, number] {
+	let mappingCount = plugin.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
+	let itemCount = plugin.settings.toolbars.reduce((count, toolbar) => {
+		return count + toolbar.items.filter(item => item.link === id && item.linkAttr.type === ItemType.Menu).length;
+	}, 0);
+	return [mappingCount, itemCount];
+}
+
+export function getToolbarUsageFr(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, parent?: ToolbarSettingsModal): DocumentFragment {
+	let usageFr = document.createDocumentFragment();
+	let descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
+	
+	usageFr.append(getToolbarUsageText(plugin, toolbar));
+
+	if (parent) {
+		usageFr.append(
+			usageFr.createEl("br"),
+			descLinkFr
+		);
+	
+		plugin.registerDomEvent(descLinkFr, 'click', () => {
+			parent.close();
+			// @ts-ignore
+			plugin.app.setting.close();
+			window.open(getToolbarPropSearchUri(plugin, toolbar.name));
+		});
+	}
+
+	return usageFr;
+}
+
+export function getToolbarUsageText(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): string {
+	const [ mappingCount, itemCount ] = getToolbarSettingsUsage(plugin, toolbar.uuid);
+	return t('setting.usage.description', { mappingCount: mappingCount, itemCount: itemCount });
 }
 
 /**
@@ -335,8 +387,8 @@ export function openItemSuggestModal(
 			const isScriptingEnabled = await openScriptPrompt(plugin, newItem);
 			if (!isScriptingEnabled) return;
 
-			if (!await plugin.settingsManager.resolveGalleryItem(newItem)) return;
-
+			if (selectedItem.inGallery && !(await plugin.settingsManager.resolveGalleryItem(newItem))) return;
+			
 			toolbar.updated = new Date().toISOString();
 			await plugin.settingsManager.save();
 
@@ -462,6 +514,10 @@ export function renderItemSuggestion(
 			case ItemType.File:
 				setIcon(itemMeta, 'file');
 				setTooltip(itemMeta, t('setting.item.option-file'));
+				break;
+			case ItemType.Menu:
+				setIcon(itemMeta, 'menu');
+				setTooltip(itemMeta, t('setting.item.option-menu'));
 				break;
 			case ItemType.Uri:
 				setIcon(itemMeta, 'globe');

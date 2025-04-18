@@ -739,18 +739,23 @@ export default class ToolbarItemUi {
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
                     });
                 setFieldHelp(uriSetting.controlEl, helpTextFr);
+                const uriSubfieldsEl = fieldDiv.createDiv();
+                uriSubfieldsEl.addClass('note-toolbar-setting-item-link-subfield-with-info');
+                this.getUriSubfields(toolbarItem, uriSubfieldsEl);
                 break;
         }
 
     }
 
     getCommandSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+        const targetsToExclude = new Set(['window', 'modal']);
+        const targetOptions = Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => !targetsToExclude.has(key)));
         new Setting(fieldDiv)
             .setName(t('setting.item.option-command-target'))
             .setDesc(t('setting.item.option-command-target-description'))
             .addDropdown((dropdown) =>
                 dropdown
-                    .addOptions(Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => key !== 'window')))
+                    .addOptions(targetOptions)
                     .setValue(item.linkAttr.target || 'default')
                     .onChange(async (value) => {
                         if (value === 'default') item.linkAttr.target = undefined
@@ -771,7 +776,8 @@ export default class ToolbarItemUi {
                     .setValue(item.linkAttr.target || 'default')
                     .onChange(async (value) => {
                         if (value === 'default') item.linkAttr.target = undefined
-                        else item.linkAttr.target = value as PaneType;
+                        else item.linkAttr.target = value as PaneType | 'modal';
+                        
                         this.toolbar.updated = new Date().toISOString();
                         await this.plugin.settingsManager.save();
                     })
@@ -881,6 +887,24 @@ export default class ToolbarItemUi {
             });
 
         }
+    }
+
+    getUriSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+        new Setting(fieldDiv)
+            .setName(t('setting.item.option-uri-target'))
+            .setDesc(t('setting.item.option-uri-target-description'))
+            .addDropdown((dropdown) =>
+                dropdown
+                    .addOptions(TARGET_OPTIONS)
+                    .setValue(item.linkAttr.target || 'default')
+                    .onChange(async (value) => {
+                        if (value === 'default') item.linkAttr.target = undefined
+                        else item.linkAttr.target = value as PaneType | 'modal';
+                        
+                        this.toolbar.updated = new Date().toISOString();
+                        await this.plugin.settingsManager.save();
+                    })
+                );
     }
 
     getLinkSettingForType(

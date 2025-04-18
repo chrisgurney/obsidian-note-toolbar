@@ -12,6 +12,9 @@ node_modules
 # They should be uploaded to GitHub releases instead.
 main.js
 
+# Not necessary to track; updated with every version update
+src/version.ts
+
 # Exclude sourcemaps
 *.map
 

@@ -40,7 +40,7 @@ export class NtbPrompt extends Modal {
         const {
             label: prompt_text = '',
             large: multi_line = false,
-            placeholder = t('api.ui.prompt-placeholder'),
+            placeholder = multi_line ? t('api.ui.prompt-placeholder-large') : t('api.ui.prompt-placeholder'),
             default: default_value = '',
             class: css_classes = ''
         } = this.options || {};
