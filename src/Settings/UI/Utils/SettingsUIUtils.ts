@@ -464,6 +464,10 @@ export function renderItemSuggestion(
 				setIcon(itemMeta, 'file');
 				setTooltip(itemMeta, t('setting.item.option-file'));
 				break;
+			case ItemType.Menu:
+				setIcon(itemMeta, 'menu');
+				setTooltip(itemMeta, t('setting.item.option-menu'));
+				break;
 			case ItemType.Uri:
 				setIcon(itemMeta, 'globe');
 				setTooltip(itemMeta, t('setting.item.option-uri'));

@@ -370,6 +370,7 @@
             "option-item-menu-help": "Select a toolbar to open as a menu.",
             "option-item-menu-placeholder": "Toolbar",
             "option-label-placeholder": "Label (optional, if icon set)",
+            "option-menu": "Menu",
             "option-separator": "separator",
             "option-script": "Select how you want to use this.",
             "option-target-default": "Default",

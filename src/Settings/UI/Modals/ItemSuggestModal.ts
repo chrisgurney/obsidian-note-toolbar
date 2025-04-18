@@ -150,9 +150,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let itemName = item.label || item.tooltip;
         if (!itemName) itemName = item.icon ? item.link : '';
         let itemStrings = `${item.label} ${item.tooltip} ${item.link} ${item.description ?? ''}`.toLowerCase();
-        // add items with labels/tooltips, not menus, matching search string
-        if (itemName && (item.linkAttr.type !== ItemType.Menu) && itemStrings.includes(searchString)) {
+        // add items with labels/tooltips, matching search string
+        if (itemName && itemStrings.includes(searchString)) {
             if (this.mode === 'QuickTools') {
+                // menu items can't be "used"
+                if (item.linkAttr.type === ItemType.Menu) return false;
                 const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
                 // ...and is visible on this platform
                 if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
