@@ -2139,7 +2139,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		const existingToolbarEls = this.getAllToolbarEl();
 
 		debugLog("🛑 removeToolbarIfNeeded() correct:", correctToolbar?.name, "existing:", existingToolbarEls);
-		if (existingToolbarEls.length > 0) {
+		if (existingToolbarEls?.length > 0) {
 			// loop over elements and remove any that are not the correct one, ensuring there's only one (or none)
 			existingToolbarEls.forEach((toolbarEl) => {
 				if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements
