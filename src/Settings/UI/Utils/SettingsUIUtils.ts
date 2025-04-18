@@ -277,11 +277,8 @@ export function getToolbarSettingsUsage(plugin: NoteToolbarPlugin, id: string): 
 export function getToolbarUsageFr(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, parent?: ToolbarSettingsModal): DocumentFragment {
 	let usageFr = document.createDocumentFragment();
 	let descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
-	let [ mappingCount, itemCount ] = getToolbarSettingsUsage(plugin, toolbar.uuid);
-
-	usageFr.append(
-		t('setting.usage.description', { mappingCount: mappingCount, itemCount: itemCount })
-	);
+	
+	usageFr.append(getToolbarUsageText(plugin, toolbar));
 
 	if (parent) {
 		usageFr.append(
@@ -298,6 +295,11 @@ export function getToolbarUsageFr(plugin: NoteToolbarPlugin, toolbar: ToolbarSet
 	}
 
 	return usageFr;
+}
+
+export function getToolbarUsageText(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): string {
+	const [ mappingCount, itemCount ] = getToolbarSettingsUsage(plugin, toolbar.uuid);
+	return t('setting.usage.description', { mappingCount: mappingCount, itemCount: itemCount });
 }
 
 /**
