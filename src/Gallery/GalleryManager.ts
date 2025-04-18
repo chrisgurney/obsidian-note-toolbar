@@ -141,6 +141,8 @@ export default class GalleryManager {
                 tooltip: item.tooltip ? (item.tooltip[lang] || item.tooltip['en']) : '',
                 visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
             }));
+        
+        this.items.sort((a, b) => a.tooltip.localeCompare(b.tooltip));
 
         const endTime = performance.now();
         debugLog(`Gallery loaded in ${endTime - startTime} ms`);
