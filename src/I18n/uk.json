@@ -109,8 +109,10 @@
         "ui": {
             "button-submit": "Відправити",
             "error-cancelled": "Сакасований запит",
+            "error-file-unsupported": "Тип файлу не підтримується: {{filetype}}",
             "error-undefined": "Невизначений елемент",
             "prompt-placeholder": "Введіть текст тут",
+            "prompt-placeholder-large": "Введіть текст",
             "suggester-placeholder": "Оберіть варіант..."
         }
     },
@@ -208,7 +210,6 @@
         "canvas": "Полотно",
         "daily-notes": "Щоденні\u00A0нотатки",
         "open-with-default-app": "Відкривати\u00A0у програмі\u00A0за\u00A0замовчуванням",
-        "periodic-notes": "Periodic\u00A0Notes",
         "sync": "Синхронізація",
         "workspaces": "Простори"
     },
@@ -266,16 +267,17 @@
             "title": "Видалення: {{toolbar}}"
         },
         "display-contexts": {
-            "description": "Увімкнути панель у полотнах, новому вигляді вкладки та інших типах файлів.",
+            "description": "Увімкнути панель у полотнах, новому вигляді вкладки та інших типів файлів.",
             "name": "Типи файлів та подання",
             "option-audio": "Аудіо",
-            "option-canvas": "Файли полотна",
-            "option-emptyview": "Новий вигляд",
+            "option-canvas": "Файл полотна",
+            "option-emptyview": "Нова вкладка",
             "option-emptyview-description": "Оберіть панель для відображення, коли нотатка не відкрита.",
             "option-filemenu": "Файл меню",
             "option-filemenu-description": "Додає елемент до меню Файл для доступу до панелі у пов'язаній нотатці.",
             "option-image": "Зображення",
-            "option-pdf": "PDF-документи",
+            "option-kanban": "Дошка Kanban",
+            "option-pdf": "PDF-документ",
             "option-video": "Відео"
         },
         "display-rules": {
@@ -327,7 +329,7 @@
             "label-preview-edit": "Редагувати панель: {{toolbar}}",
             "label-preview-empty-no-items": "Немає елементів. Редагуйте цю панель для додавання елементів.",
             "label-review-plugin": "Огляд додатку",
-            "menu-copy-id": "Копіювати ID розробника",
+            "menu-copy-id": "Скопіювати ID для розробки",
             "menu-copy-id-notice": "ID елемента скопійовано до буфера обміну.",
             "menu-more-actions": "Додаткові дії...",
             "menu-move-item": "Перенести елемент до панелі...",
@@ -339,15 +341,15 @@
             "option-command-error-not-available-search": "⚠️ Команда не знайдена. Спробуйте пошукати ще раз.",
             "option-command-error-refresh": "Оновити",
             "option-command-placeholder": "Знайти команду",
-            "option-command-target": "Де запустити команду",
-            "option-command-target-description": "Деякі команди можуть перевизначати цей параметр.",
+            "option-command-target": "Де запускати команду",
+            "option-command-target-description": "Деякі команди можуть заміняти цей параметр.",
             "option-component-icon": "іконку",
             "option-component-label": "напис",
             "option-file": "Файл",
-            "option-file-error-does-not-exist": "Цей файл або тека не існує.",
+            "option-file-error-does-not-exist": "Цей файл, або тека не існують.",
             "option-file-target": "Де відкрити файл",
-            "option-file-target-description": "Використовуйте клавіші-модифікатори, щоб змінити цей параметр.*",
-            "option-file-placeholder": "Пошук файлу чи теки",
+            "option-file-target-description": "Використовуйте сполучення клавіш щоб змінити цей параметр.",
+            "option-file-placeholder": "Знайти файл чи теку",
             "option-item-group": "Група",
             "option-item-group-error-does-not-exist": "Панелі не існує",
             "option-item-group-error-invalid": "⚠️ Недійсна група елементів",
@@ -358,15 +360,19 @@
             "option-item-menu-help": "Виберіть панель для відкриття як меню.",
             "option-item-menu-placeholder": "Панель",
             "option-label-placeholder": "Напис (є іконка — за бажанням)",
+            "option-menu": "Меню",
             "option-separator": "роздільник",
             "option-script": "Виберіть, як бажаєте це використати.",
-            "option-target-default": "За замовчуванням",
-            "option-target-split": "Роздільна панель*",
+            "option-target-default": "Типово",
+            "option-target-modal": "Модальне вікно",
+            "option-target-split": "Розділена вкладка",
             "option-target-tab": "Нова вкладка",
             "option-target-window": "Нове вікно",
             "option-tooltip-placeholder": "Підказка (за бажанням)",
             "option-uri-help": "ℹ️ Використовуйте властивості нотаток та вирази в URI.",
             "option-uri-placehoder": "Адреса сайту, URI, або назва нотатки",
+            "option-uri-target": "Де відкривати файли",
+            "option-uri-target-description": "Якщо посилання є файлом у сховищі, виберіть, як його відкрити. Сполучення клавіш, або додатки можуть заміняти цей параметр.",
             "option-visibility-component-hidden-platform": "сховати {{component}} на {{platform}}",
             "option-visibility-component-visible-platform": "показати {{component}} на {{platform}}",
             "option-visibility-hidden": "приховано",
@@ -428,8 +434,8 @@
             "name": "Назва панелі"
         },
         "open-command": {
-            "description": "Додає команду для відкриття панелі до Меню команд.",
-            "name": "Додати панель до переліку команд",
+            "description": "Додає команду відкриття панелі до Меню команд.",
+            "name": "Додати панель до Меню команд",
             "notice-command-added": "Команда додана:\n{{command}}",
             "notice-command-removed": "Команда видалена:\n{{command}}"
         },
@@ -454,8 +460,8 @@
                 "name": "Скриптування"
             },
             "show-edit-tbar": {
-                "description": "Додає пункт для налаштування панелі, який буде показан як меню внизу.",
-                "name": "Відображати \"Редагувати панель\" в меню панелі"
+                "description": "Додає пункт швидкого переходу до налаштування панелі, який буде додан внизу меню.",
+                "name": "Відображати \"Редагувати панель\" у меню"
             }
         },
         "position": {
@@ -463,8 +469,8 @@
             "name": "Розташування",
             "notice-defaultitem-invalid": "Недійсний елемент за замовчуванням для плаваючої кнопки. Перевірте налаштування панелі.",
             "option-bottom": "Внизу нотатки",
-            "option-defaultitem": "Типовий елемент Плаваючої кнопки",
-            "option-defaultitem-description": "Замість меню панелі буде відображено цей пункт як кнопку.",
+            "option-defaultitem": "Головний елемент Плаваючої кнопки",
+            "option-defaultitem-description": "Замість типової кнопки меню панелі, буде відображено цей пункт як головна кнопка.",
             "option-defaultitem-error-invalid": "Недійсний елемент панелі",
             "option-defaultitem-placeholder": "Елемент...",
             "option-fabl": "Плаваюча кнопка: Ліворуч",
@@ -524,7 +530,8 @@
             "instruction-use": "відкрити панель",
             "option-default": "Типове (згідно зіставленням тек)",
             "option-new": "+ Створити нову панель",
-            "placeholder": "Пошук панелі..."
+            "placeholder": "Пошук панелей...",
+            "placeholder-add": "До якої панелі додати цей елемент?"
         },
         "toolbars": {
             "button-duplicate-tbar-tooltip": "Дублювати",
@@ -572,7 +579,7 @@
         "menu-add-item": "Додати елемент...",
         "menu-edit-item": "Редагувати елемент: {{text}}...",
         "menu-edit-item_none": "Редагувати елемент...",
-        "menu-edit-toolbar": "Редагувати панель: {{toolbar}}...",
+        "menu-edit-toolbar": "Редагувати: {{toolbar}}...",
         "menu-hide-properties": "Приховати властивості нотатки",
         "menu-position": "Розташування",
         "menu-show-properties": "Показати властивості нотатки",
