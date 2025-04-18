@@ -252,6 +252,55 @@ export function getStyleDisclaimersFr(disclaimers: {[key: string]: string}[], st
 }
 
 /**
+ * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
+ * @param toolbarName name of the toolbar to look for.
+ * @returns string 'obsidian://' URI.
+ */
+export function getToolbarPropSearchUri(plugin: NoteToolbarPlugin, toolbarName: string): string {
+	let searchUri = 'obsidian://search?vault=' + plugin.app.vault.getName() + '&query=[' + plugin.settings.toolbarProp + ': ' + toolbarName + ']';
+	return encodeURI(searchUri);
+}
+
+/**
+ * Search through settings to find out where this toolbar is referenced.
+ * @param id UUID of the toolbar to check usage for.
+ * @returns mappingCount and itemCount
+ */
+export function getToolbarSettingsUsage(plugin: NoteToolbarPlugin, id: string): [number, number] {
+	let mappingCount = plugin.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
+	let itemCount = plugin.settings.toolbars.reduce((count, toolbar) => {
+		return count + toolbar.items.filter(item => item.link === id && item.linkAttr.type === ItemType.Menu).length;
+	}, 0);
+	return [mappingCount, itemCount];
+}
+
+export function getToolbarUsageFr(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, parent?: ToolbarSettingsModal): DocumentFragment {
+	let usageFr = document.createDocumentFragment();
+	let descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
+	let [ mappingCount, itemCount ] = getToolbarSettingsUsage(plugin, toolbar.uuid);
+
+	usageFr.append(
+		t('setting.usage.description', { mappingCount: mappingCount, itemCount: itemCount })
+	);
+
+	if (parent) {
+		usageFr.append(
+			usageFr.createEl("br"),
+			descLinkFr
+		);
+	
+		plugin.registerDomEvent(descLinkFr, 'click', () => {
+			parent.close();
+			// @ts-ignore
+			plugin.app.setting.close();
+			window.open(getToolbarPropSearchUri(plugin, toolbar.name));
+		});
+	}
+
+	return usageFr;
+}
+
+/**
  * Returns the value for the provided key from the provided dictionary.
  * @param dict key-value dictionary
  * @param key string key

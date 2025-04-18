@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -10,7 +10,6 @@ import { importFromModal } from './ImportModal';
 import ToolbarStyleUi from '../ToolbarStyleUi';
 import ToolbarItemUi from '../ToolbarItemUi';
 import { ItemSuggester } from '../Suggesters/ItemSuggester';
-import { ItemSuggestModal } from './ItemSuggestModal';
 import ItemModal from './ItemModal';
 
 enum ItemFormComponent {
@@ -756,24 +755,9 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayUsageSetting(settingsDiv: HTMLElement) {
 
-		let usageDescFr = document.createDocumentFragment();
-		let descLinkFr = usageDescFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
-		let [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(this.toolbar.uuid);
-
-		usageDescFr.append(
-			t('setting.usage.description', { mappingCount: mappingCount, itemCount: itemCount }),
-			usageDescFr.createEl("br"),
-			descLinkFr
-		);
-
-		this.plugin.registerDomEvent(descLinkFr, 'click', event => {
-			this.close();
-			// @ts-ignore
-			this.app.setting.close();
-			window.open(this.getToolbarPropSearchUri(this.toolbar.name));
-		});
-
-		let usageSetting = new Setting(settingsDiv)
+		let usageDescFr = getToolbarUsageFr(this.plugin, this.toolbar, this);
+		
+		new Setting(settingsDiv)
 			.setName(t('setting.usage.name'))
 			.setDesc(usageDescFr)
 			.setHeading();
@@ -998,29 +982,6 @@ export default class ToolbarSettingsModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
-
-	/**
-	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
-	 * @param toolbarName name of the toolbar to look for.
-	 * @returns string 'obsidian://' URI.
-	 */
-	getToolbarPropSearchUri(toolbarName: string): string {
-		let searchUri = 'obsidian://search?vault=' + this.app.vault.getName() + '&query=[' + this.plugin.settings.toolbarProp + ': ' + toolbarName + ']';
-		return encodeURI(searchUri);
-	}
-
-	/**
-	 * Search through settings to find out where this toolbar is referenced.
-	 * @param id UUID of the toolbar to check usage for.
-	 * @returns mappingCount and itemCount
-	 */
-	getToolbarSettingsUsage(id: string): [number, number] {
-		let mappingCount = this.plugin.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
-		let itemCount = this.plugin.settings.toolbars.reduce((count, toolbar) => {
-			return count + toolbar.items.filter(item => item.link === id && item.linkAttr.type === ItemType.Menu).length;
-		}, 0);
-		return [mappingCount, itemCount];
-	}
 	
 	/**
 	 * Renders/Re-renders the preview for the given item in the item list.
