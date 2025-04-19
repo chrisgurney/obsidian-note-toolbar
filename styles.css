@@ -978,6 +978,9 @@ body {
     &.is-android {
         --cg-nt-fab-border-radius: var(--radius-xl);
     }
+    &.is-mobile {
+        --cg-nt-fab-border-color: var(--interactive-accent);
+    }
 }
 
 .metadata-container {
@@ -1452,6 +1455,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
     & button[data-fab-metadata*="border"] {
         border: solid 1px var(--cg-nt-fab-border-color);
+    }
+    & button[data-fab-metadata*="mbrder"] {
+        .is-mobile & {
+            border: solid 1px var(--cg-nt-fab-border-color);
+        }
     }
 }
 
