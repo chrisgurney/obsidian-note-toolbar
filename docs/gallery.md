@@ -115,6 +115,7 @@ Navigate between files and directories.
 | --- | --- |
 | Previous file | Opens the previous file in the folder, sorted A-Z. Loops back to the last file. |
 | Next file | Opens the next file in the folder, sorted A-Z. Loops over to the first file. |
+| Open file in new tab | Opens the selected file in a new tab. |
 | New tab | Opens a new empty tab. |
 | Previous tab | Go to the previous tab. |
 | Next tab | Go to the next tab. |
