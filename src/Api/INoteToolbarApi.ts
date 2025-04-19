@@ -1,4 +1,4 @@
-import { TFile } from "obsidian";
+import { TAbstractFile, TFile } from "obsidian";
 import { Callback } from "./NoteToolbarApi";
 import { Toolbar } from "./Toolbar";
 import { IToolbar } from "./IToolbar";
@@ -32,6 +32,23 @@ export interface INoteToolbarApi<T> {
      * new Notice(value);
      */
     clipboard: () => Promise<string | null>;
+
+    /**
+     * Shows a file suggester modal and waits for the user's selection.
+     * 
+     * @param options Optional display options.
+     * @returns The selected TAbstractFile.
+     * 
+     * @example
+     * const fileOrFolder = await ntb.fileSuggester();
+     * new Notice(fileOrFolder.name);
+     * // show only folders
+     * const folder = await ntb.fileSuggester({
+     *  foldersonly: true
+     * });
+     * new Notice(folder.name);
+     */
+    fileSuggester: (options?: NtbFileSuggesterOptions) => Promise<TAbstractFile | null>;
 
     /**
      * Gets the active (last activated) toolbar item.
@@ -232,4 +249,19 @@ export interface NtbSuggesterOptions {
      * Optional CSS class(es) to add to the component.
      */
     class?: string;
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbFileSuggesterOptions extends NtbSuggesterOptions {
+    /**
+     * If set to true, only files are shown. If not provided, defaults to `false`.
+     */
+    filesonly?: boolean;
+    /**
+     * If set to true, only folders are shown. If not provided, defaults to `false`.
+     */
+    foldersonly?: boolean;
 }

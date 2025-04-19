@@ -2,9 +2,9 @@ import NoteToolbarPlugin from "main";
 import { testCallback } from "Api/TestCallback";
 import { NtbSuggester } from "./NtbSuggester";
 import { NtbPrompt } from "./NtbPrompt";
-import { INoteToolbarApi, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
+import { INoteToolbarApi, NtbFileSuggesterOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
 import { NtbModal } from "./NtbModal";
-import { TFile } from "obsidian";
+import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { Toolbar } from "./Toolbar";
 import { Item } from "./Item";
 import { debugLog } from "Utils/Utils";
@@ -29,6 +29,38 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     async clipboard(): Promise<string | null> {
         return await navigator.clipboard.readText();
     }
+
+    /**
+     * Shows a file suggester modal and waits for the user's selection. 
+     * 
+     * @see INoteToolbarApi.fileSuggester
+     */
+    async fileSuggester<T>(
+        options?: NtbFileSuggesterOptions
+    ): Promise<TAbstractFile> {
+
+        const abstractFiles = this.plugin.app.vault.getAllLoadedFiles();
+        let files: TAbstractFile[] = [];
+        files = abstractFiles.filter((file: TAbstractFile) => {
+            if (options?.filesonly && !(file instanceof TFile)) return false;
+            if (options?.foldersonly && !(file instanceof TFolder)) return false;
+            return true;
+        });
+
+        const suggester = new NtbSuggester(this.plugin, files.map(f => f.path), files, options);
+
+        const promise = new Promise((resolve: (value: TAbstractFile) => void, reject: (reason?: Error) => void) => 
+            suggester.openAndGetValue(resolve, reject)
+        );
+
+        try {
+            return await promise;
+        } 
+        catch (error) {
+            return null as unknown as TAbstractFile;
+        }
+
+    };
 
     /**
      * Gets the active item from the currently displayed toolbar.
