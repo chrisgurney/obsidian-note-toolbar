@@ -338,6 +338,18 @@
         "type": "command"
     },
     {
+        "id": "file-new-tab",
+        "description": { 
+            "en": "Opens the selected file in a new tab."
+        },
+        "icon": "file-plus",
+        "script": "const file = await ntb.fileSuggester({filesonly: true});\nif (file) app.workspace.getLeaf(true).openFile(file);",
+        "tooltip": { 
+            "en": "Open file in new tab"
+        },
+        "type": "javascript"
+    },
+    {
         "id": "file-next",
         "description": { 
             "en": "Opens the next file in the folder, sorted A-Z. Loops over to the first file.",

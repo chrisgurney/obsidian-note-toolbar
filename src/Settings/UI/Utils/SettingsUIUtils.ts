@@ -269,23 +269,22 @@ export function getToolbarPropSearchUri(plugin: NoteToolbarPlugin, toolbarName: 
 export function getToolbarSettingsUsage(plugin: NoteToolbarPlugin, id: string): [number, number] {
 	let mappingCount = plugin.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
 	let itemCount = plugin.settings.toolbars.reduce((count, toolbar) => {
-		return count + toolbar.items.filter(item => item.link === id && item.linkAttr.type === ItemType.Menu).length;
+		return count + toolbar.items.filter(item => 
+			item.link === id && (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu)
+		).length;
 	}, 0);
 	return [mappingCount, itemCount];
 }
 
 export function getToolbarUsageFr(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, parent?: ToolbarSettingsModal): DocumentFragment {
 	let usageFr = document.createDocumentFragment();
-	let descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
+	let usageText = getToolbarUsageText(plugin, toolbar) || t('setting.usage.description_none');
+	usageFr.append(usageText);
 	
-	usageFr.append(getToolbarUsageText(plugin, toolbar));
-
 	if (parent) {
-		usageFr.append(
-			usageFr.createEl("br"),
-			descLinkFr
-		);
-	
+		if (usageText) usageFr.append(usageFr.createEl("br")); 
+		const descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
+		usageFr.append(descLinkFr);
 		plugin.registerDomEvent(descLinkFr, 'click', () => {
 			parent.close();
 			// @ts-ignore
@@ -299,7 +298,11 @@ export function getToolbarUsageFr(plugin: NoteToolbarPlugin, toolbar: ToolbarSet
 
 export function getToolbarUsageText(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): string {
 	const [ mappingCount, itemCount ] = getToolbarSettingsUsage(plugin, toolbar.uuid);
-	return t('setting.usage.description', { mappingCount: mappingCount, itemCount: itemCount });
+	let label = t('setting.usage.description');
+	let usage: String[] = [];
+	if (mappingCount > 0) usage.push(t('setting.usage.description-mappings', { count: mappingCount }));
+	if (itemCount > 0) usage.push(t('setting.usage.description-toolbar-items', { count: itemCount }));
+	return (usage.length > 0) ? label + usage.join(', ') : '';
 }
 
 /**

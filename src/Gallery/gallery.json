@@ -147,7 +147,7 @@
                 "uk": "Переміщуйтесь між файлами та каталогами."
             },
             "itemIds": [
-                "file-prev", "file-next", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+                "file-prev", "file-next", "file-new-tab", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
             ]
         },
         {

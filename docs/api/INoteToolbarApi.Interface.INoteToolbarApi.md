@@ -39,6 +39,43 @@ new Notice(value);
 
 ***
 
+### fileSuggester()
+
+> **fileSuggester**: (`options`?) => `Promise`\<`null` \| `TAbstractFile`\>
+
+Shows a file suggester modal and waits for the user's selection.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options`? | \{ `class`: `string`; `filesonly`: `boolean`; `foldersonly`: `boolean`; `limit`: `number`; `placeholder`: `string`; \} | Optional display options. |
+| `options.class`? | `string` | Optional CSS class(es) to add to the component. |
+| `options.filesonly`? | `boolean` | If set to true, only files are shown. If not provided, defaults to `false`. |
+| `options.foldersonly`? | `boolean` | If set to true, only folders are shown. If not provided, defaults to `false`. |
+| `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
+| `options.placeholder`? | `string` | Optional text inside text field; defaults to preset message. |
+
+#### Returns
+
+`Promise`\<`null` \| `TAbstractFile`\>
+
+The selected TAbstractFile.
+
+#### Example
+
+```ts
+const fileOrFolder = await ntb.fileSuggester();
+new Notice(fileOrFolder.name);
+// show only folders
+const folder = await ntb.fileSuggester({
+ foldersonly: true
+});
+new Notice(folder.name);
+```
+
+***
+
 ### getActiveItem()
 
 > **getActiveItem**: () => `undefined` \| [`IItem`](IItem.Interface.IItem.md)
@@ -128,8 +165,9 @@ Shows a modal with the provided content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
-| `options`? | \{ `class`: `string`; `title`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `editable`: `boolean`; `title`: `string`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
+| `options.editable`? | `boolean` | If `true`, and a file was provided, content can be edited; defaults to `false`. |
 | `options.title`? | `string` | Optional title for the modal, rendered as markdown. |
 
 #### Returns

@@ -3,6 +3,7 @@ import { App, ButtonComponent, Component, MarkdownRenderer, Modal } from "obsidi
 interface UiSettings {
     title: string,
     questionLabel?: string,
+    notes?: string,
     approveLabel: string,
     denyLabel: string,
     warning?: boolean
@@ -39,18 +40,30 @@ export class ConfirmModal extends Modal {
             this.setTitle(this.uiSettings.title);
 
             if (this.uiSettings.questionLabel) {
-                const questionLabelEl = this.modalEl.createEl('p');
                 const component = new Component();
                 component.load();
                 try {
-                    MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, questionLabelEl, '/', component);
+                    MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, this.contentEl, '/', component);
                 }
                 finally {
                     component.unload();
                 }
             }
     
-            let btnContainerEl = this.modalEl.createDiv();
+            if (this.uiSettings.notes) {
+                const notesEl = this.contentEl.createDiv();
+                notesEl.addClass('note-toolbar-setting-confirm-dialog-note');
+                const component = new Component();
+                component.load();
+                try {
+                    MarkdownRenderer.render(this.app, this.uiSettings.notes, notesEl, '/', component);
+                }
+                finally {
+                    component.unload();
+                }
+            }
+
+            let btnContainerEl = this.contentEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
     
             let btn1 = new ButtonComponent(btnContainerEl)

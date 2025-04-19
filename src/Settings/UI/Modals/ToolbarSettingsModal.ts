@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr, getToolbarUsageText } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -792,6 +792,7 @@ export default class ToolbarSettingsModal extends Modal {
 							{ 
 								title: t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
 								questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
+								notes: getToolbarUsageText(this.plugin, this.toolbar) + '\n\n' + t('setting.delete-toolbar.label-usage-note', { propertyName: this.plugin.settings.toolbarProp, toolbarName: this.toolbar.name }),
 								approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
 								denyLabel: t('setting.button-cancel'),
 								warning: true
