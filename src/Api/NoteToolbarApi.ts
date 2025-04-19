@@ -47,6 +47,11 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             return true;
         });
 
+        options = {
+            ...options,
+            rendermd: false
+        }
+
         const suggester = new NtbSuggester(this.plugin, files.map(f => f.path), files, options);
 
         const promise = new Promise((resolve: (value: TAbstractFile) => void, reject: (reason?: Error) => void) => 
