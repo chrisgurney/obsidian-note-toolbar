@@ -48,6 +48,9 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         });
 
         options = {
+            placeholder: 
+                options?.filesonly ? t('api.ui.file-suggester-placeholder_file') :
+                    options?.foldersonly ? t('api.ui.file-suggester-placeholder_folder') : t('api.ui.file-suggester-placeholder'), 
             ...options,
             rendermd: false
         }
