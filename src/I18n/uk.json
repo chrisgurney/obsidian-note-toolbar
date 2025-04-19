@@ -156,6 +156,7 @@
         "error-missing-property": "Відсутний додаток або властивість скрипта у даних Галереї.",
         "label-suggestions": "ПРОПОЗИЦІЇ З ГАЛЕРЕЇ",
         "select-plugin-placeholder": "Оберіть додаток для використання...",
+
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Не ввімкнен, або не встановлен",
         "title": "Галерея Note Toolbar",
         "tooltip-add-item": "Додати до панелі: {{name}}"
@@ -263,6 +264,7 @@
             "button-delete-tooltip": "Видалити цю панель",
             "description": "Цю дію не можна скасувати.",
             "label-delete-confirm": "Дійсно бажаєте видалити цю панель?",
+            "label-usage-note": "Цю панель можна використовувати у властивості `{{propertyName}}`. Якщо бажаєте переконатися, закрийте це вікно та знайдіть `[{{propertyName}}:\u00A0{{toolbarName}}]`",
             "name": "Видалення панелі",
             "title": "Видалення: {{toolbar}}"
         },
@@ -516,7 +518,7 @@
             "option-right": "елементи праворуч",
             "option-sticky": "прикріпляти*",
             "option-sticky-disclaimer": "Прикріплення не працює у режимі Читання.",
-            "option-tab": "елементи файлу вкладки",
+            "option-tab": "вкладки файлів",
             "option-wide": "ширина редактора",
             "style-remove-tooltip": "Видалити",
             "style-tooltip-use-class": "Використовувати у виносках, або CSS: {{class}}",
@@ -548,7 +550,12 @@
             "new-tbar-name": "Нова панель"
         },
         "usage": {
-            "description": "Ця панель використовується у {{mappingCount}} зіставлені(нях) та {{itemCount}} елементі(ах) панелі.",
+            "description": "Ця панель використовується у: ",
+            "description_none": "Ця панель не використовується у жодному зіставленні, або елементі.",
+            "description-mappings": "{{count}} зіставлені",
+            "description-mappings_plural": "{{count}} зіставленнях",
+            "description-search": "Пошук використання увластивостях",
+            "description-toolbar-items": "{{count}} елементі(ах) панелі",
             "description-search": "Пошук використання",
             "name": "Використання"
         },
