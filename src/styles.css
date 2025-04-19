@@ -2007,6 +2007,11 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-confirm-dialog-buttons {
     column-gap: 0.5em;
     display: flex;
+    justify-content: flex-end;
+}
+
+.note-toolbar-setting-confirm-dialog-note {
+    font-size: var(--font-ui-small);
 }
 
 .note-toolbar-share-dialog {
