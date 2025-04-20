@@ -198,6 +198,7 @@ export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
 	icon: string;
 	onboarding: OnboardingState;
+	recentFiles: string[];
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
@@ -220,6 +221,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	folderMappings: [],
 	icon: "circle-ellipsis",
 	onboarding: {},
+	recentFiles: [],
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,

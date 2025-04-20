@@ -40,6 +40,11 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.class = css_classes;
         this.rendermd = rendermd;
         this.setPlaceholder(placeholder ? placeholder : t('api.ui.suggester-placeholder'));
+        this.setInstructions([
+            {command: '↑↓', purpose: t('api.ui.instruction-navigate')},
+            {command: '↵', purpose: t('api.ui.instruction-select')},
+            {command: 'esc', purpose: t('api.ui.instruction-dismiss')},
+        ]);
         if (!keys) {
             if (Array.isArray(values)) {
                 // if it's a string array, convert it to T[] (if possible)
