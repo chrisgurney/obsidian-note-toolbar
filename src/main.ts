@@ -109,7 +109,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
 
-			// this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
+			this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
 			this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));
 			this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
 			this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
@@ -212,14 +212,19 @@ export default class NoteToolbarPlugin extends Plugin {
 	 *************************************************************************/
 
 	/**
-	 * On opening of a file, check and render toolbar if necessary.
+	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
 	 * @param file TFile that was opened.
 	 */
 	fileOpenListener = async (file: TFile) => {
-		// make sure we actually opened a file (and not just a new tab)
-		if (file != null) {
-			debugLog('===== FILE-OPEN ===== ', file.name);
-			await this.checkAndRenderToolbar(file, this.app.metadataCache.getFileCache(file)?.frontmatter);
+		if (file) {
+			// maintain a list of the most recently opened files
+			const maxSize = 10;
+			const path = file.path;
+			const i = this.settings.recentFiles.indexOf(path);
+			if (i !== -1) this.settings.recentFiles.splice(i, 1);
+			this.settings.recentFiles.push(path);
+			if (this.settings.recentFiles.length > maxSize) this.settings.recentFiles.shift();
+			await this.settingsManager.save();
 		}
 	};
 

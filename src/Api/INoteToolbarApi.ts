@@ -238,17 +238,21 @@ export interface NtbPromptOptions {
  */
 export interface NtbSuggesterOptions {
     /**
-     * Optional text inside text field; defaults to preset message.
+     * Optional CSS class(es) to add to the component.
      */
-    placeholder?: string;
+    class?: string;
     /**
      * Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists).
      */
     limit?: number;
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional text inside text field; defaults to preset message.
      */
-    class?: string;
+    placeholder?: string;
+    /**
+     * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
+     */
+    rendermd?: boolean;
 }
 
 /**

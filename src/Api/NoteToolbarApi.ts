@@ -40,14 +40,38 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     ): Promise<TAbstractFile> {
 
         const abstractFiles = this.plugin.app.vault.getAllLoadedFiles();
+        const recentFilePaths = new Set(this.plugin.settings.recentFiles);
+
         let files: TAbstractFile[] = [];
         files = abstractFiles.filter((file: TAbstractFile) => {
             if (options?.filesonly && !(file instanceof TFile)) return false;
             if (options?.foldersonly && !(file instanceof TFolder)) return false;
             return true;
+        })
+        // prioritize recent files
+        .sort((a, b) => {
+            const aRecent = recentFilePaths.has(a.path) ? 0 : 1;
+            const bRecent = recentFilePaths.has(b.path) ? 0 : 1;
+            return aRecent - bRecent;
         });
 
-        const suggester = new NtbSuggester(this.plugin, files.map(f => f.path), files, options);
+        // strip out extension from markdown files
+        const filePaths = files.map(f =>
+            (f instanceof TFile && ['md', 'markdown'].includes(f.extension.toLowerCase()))
+                ? f.path.replace(/\.(md|markdown)$/i, '')
+                : f.path
+        );
+
+        options = {
+            limit: 9,
+            placeholder: 
+                options?.filesonly ? t('api.ui.file-suggester-placeholder_file') :
+                    options?.foldersonly ? t('api.ui.file-suggester-placeholder_folder') : t('api.ui.file-suggester-placeholder'), 
+            ...options,
+            rendermd: false
+        }
+
+        const suggester = new NtbSuggester(this.plugin, filePaths, files, options);
 
         const promise = new Promise((resolve: (value: TAbstractFile) => void, reject: (reason?: Error) => void) => 
             suggester.openAndGetValue(resolve, reject)

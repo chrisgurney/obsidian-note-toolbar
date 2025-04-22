@@ -111,6 +111,12 @@
             "error-cancelled": "Cancelled prompt",
             "error-file-unsupported": "Unsupported filetype: {{filetype}}",
             "error-undefined": "Undefined item",
+            "file-suggester-placeholder": "Choose a file or folder...",
+            "file-suggester-placeholder_file": "Choose a file...",
+            "file-suggester-placeholder_folder": "Choose a folder...",
+            "instruction-dismiss": "to dismiss",
+            "instruction-navigate": "to navigate",
+            "instruction-select": "to select item",
             "prompt-placeholder": "Type text and press enter",
             "prompt-placeholder-large": "Type text",
             "suggester-placeholder": "Select an option..."
