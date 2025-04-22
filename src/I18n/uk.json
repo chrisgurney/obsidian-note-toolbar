@@ -111,7 +111,13 @@
             "error-cancelled": "Сакасований запит",
             "error-file-unsupported": "Тип файлу не підтримується: {{filetype}}",
             "error-undefined": "Невизначений елемент",
-            "prompt-placeholder": "Введіть текст тут",
+            "file-suggester-placeholder": "Оберіть файл, або Теку...",
+            "file-suggester-placeholder_file": "Оберіть файл...",
+            "file-suggester-placeholder_folder": "Оберіть теку...",
+            "instruction-dismiss": "відміна",
+            "instruction-navigate": "навігація",
+            "instruction-select": "обрати",
+            "prompt-placeholder": "Введіть текст та нажміть Enter",
             "prompt-placeholder-large": "Введіть текст",
             "suggester-placeholder": "Оберіть варіант..."
         }
@@ -154,9 +160,10 @@
         "error-invalid-plugin": "Неправильний додаток, або його не ввімкнено для елемента Галереї.",
         "error-missing-item-type": "Елемент галереї: Відсутня властивість типу елемента",
         "error-missing-property": "Відсутний додаток або властивість скрипта у даних Галереї.",
+        "label-plugin": "{{plugin}}",
         "label-suggestions": "ПРОПОЗИЦІЇ З ГАЛЕРЕЇ",
         "select-plugin-placeholder": "Оберіть додаток для використання...",
-
+        "select-plugin-suggestion": "{{plugin}}",
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Не ввімкнен, або не встановлен",
         "title": "Галерея Note Toolbar",
         "tooltip-add-item": "Додати до панелі: {{name}}"
@@ -210,8 +217,15 @@
     "plugin": {
         "canvas": "Полотно",
         "daily-notes": "Щоденні\u00A0нотатки",
+        "dataview": "Dataview",
+        "js-engine": "JS\u00A0Engine",
+        "note-toolbar": "Note\u00A0Toolbar",
+        "obsidian-kanban": "Kanban",
+        "obsidian-tasks-plugin": "Tasks",
         "open-with-default-app": "Відкривати\u00A0у програмі\u00A0за\u00A0замовчуванням",
+        "periodic-notes": "Periodic\u00A0Notes",
         "sync": "Синхронізація",
+        "templater-obsidian": "Templater",
         "workspaces": "Простори"
     },
     "setting": {
@@ -238,7 +252,7 @@
         "button-help-tooltip": "Відкрити посібник",
         "button-learn-more": "Докладніше↗",
         "button-user-guide": "Посібник\u00A0користувача",
-        "button-whats-new": "Що нового?",
+        "button-whats-new": "Що\u00A0нового?",
         "button-whats-new-tooltip": "Відкрити \"Що нового\"",
         "command-suggest-modal": {
             "instruction-dismiss": "скасувати",
@@ -305,6 +319,7 @@
             "label-article-2-description": "Дізнатися як створювати панелі у нотатках.",
             "label-bug": "Повідомити про помилку",
             "label-bug-description": "Знайшли помилку? Надішліть її у GitHub, або заповніть цю форму.",
+            "label-donate": "Buy me a coffee",
             "label-donate-description": "Якщо Ви вважаєте цей додаток корисним та бажаєте підтримати, обміркуйте про донат. Дякую!",
             "label-feedback": "Залишити відгук",
             "label-feedback-description": "Скористайтеся цією формою для будь-яких відгуків, запитань або ідей.",
@@ -371,6 +386,7 @@
             "option-target-tab": "Нова вкладка",
             "option-target-window": "Нове вікно",
             "option-tooltip-placeholder": "Підказка (за бажанням)",
+            "option-uri": "URI",
             "option-uri-help": "ℹ️ Використовуйте властивості нотаток та вирази в URI.",
             "option-uri-placehoder": "Адреса сайту, URI, або назва нотатки",
             "option-uri-target": "Де відкривати файли",
@@ -391,6 +407,9 @@
             "instruction-select": "обрати елемент",
             "instruction-use": "використати",
             "key-back": "⌫ або ←",
+            "key-dismiss": "esc",
+            "key-navigate": "↑↓",
+            "key-use": "↵",
             "label-empty-no-items": "Нічого не знайдено.",
             "link-gallery": "Відкрити галерею",
             "link-search": "Пошук елемента",
@@ -426,7 +445,7 @@
             "name": "Зіставленні теки",
             "name-with-count": "Зіставленні теки ({{count}})",
             "option-folder-all": "всі теки",
-            "option-folder-root": "тільки коренева тека",
+            "option-folder-root": "тільки корнева тека",
             "placeholder-folder": "Тека",
             "placeholder-toolbar": "Панель"
         },
@@ -552,11 +571,11 @@
         "usage": {
             "description": "Ця панель використовується у: ",
             "description_none": "Ця панель не використовується у жодному зіставленні, або елементі.",
-            "description-mappings": "{{count}} зіставлені",
+            "description-mappings": "{{count}} зіставленя",
             "description-mappings_plural": "{{count}} зіставленнях",
-            "description-search": "Пошук використання увластивостях",
-            "description-toolbar-items": "{{count}} елементі(ах) панелі",
-            "description-search": "Пошук використання",
+            "description-search": "Пошук використання властивостей",
+            "description-toolbar-items": "{{count}} елемент панелі",
+            "description-toolbar-items_plural": "{{count}} елементіах панелі",
             "name": "Використання"
         },
         "use-item-command": {
@@ -568,9 +587,9 @@
             "notice-command-error-noname": "Не вдалося додати команду. Переконайтеся, що елемент має напис або підказку, і принаймні, один з них не містить змінну чи вираз.",
             "notice-command-error-startup-noname": "Note Toolbar: Деякі команди елементів у цих панелях не було додано через порожні написи або підказки: {{toolbars}}",
             "notice-command-removed": "Команда видалена:\n{{command}}",
-            "notice-command-removed_empty": "Команда вилучена",
+            "notice-command-removed_empty": "Команда елемента видалена",
             "notice-command-updated": "Команда оновлена:\n{{command}}",
-            "tooltip-command-incidator": "Використовуйте як команду:\n{{command}}"
+            "tooltip-command-incidator": "Використати як команду:\n{{command}}"
         },
         "whats-new": {
             "button-read": "Читати ↗",
