@@ -275,23 +275,6 @@ export class SettingsManager {
 	}
 
 	/**
-	 * Moves an item to a toolbar of the user's choice.
-	 * @param fromToolbar toolbar to move the item from
-	 * @param item item to move
-	 */
-	public async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
-		const modal = new ToolbarSuggestModal(this.plugin, false, false, false, async (toToolbar: ToolbarSettings) => {
-			if (toToolbar) {
-				fromToolbar.items.remove(item);
-				toToolbar.items.push(item);
-				await this.save();
-				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name }));
-			}
-		});
-		modal.open();
-	}
-
-	/**
 	 * Creates a new toolbar with default settings, with an optional name.
 	 * @param name name of the toolbar
 	 * @returns ToolbarSettings for the new toolbar

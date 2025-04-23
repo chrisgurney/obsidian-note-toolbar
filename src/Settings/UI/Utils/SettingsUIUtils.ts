@@ -9,6 +9,7 @@ import ItemModal from "../Modals/ItemModal";
 import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";
 import { confirmWithModal } from "../Modals/ConfirmModal";
 import { PLUGIN_VERSION } from "version";
+import { ToolbarSuggestModal } from "../Modals/ToolbarSuggestModal";
 
 /**
  * Returns an element contianing a dismissable onboarding message.
@@ -630,6 +631,39 @@ export function getPluginNames(plugin: NoteToolbarPlugin, item: ToolbarItemSetti
 		if (itemPluginType) return t(`plugin.${itemPluginType}`)
 			else return undefined;
 	}
+}
+
+/**
+ * Copies an item to a toolbar of the user's choice.
+ * @param fromToolbar toolbar to copy the item from
+ * @param item item to copy
+ */
+export async function copyToolbarItem(plugin: NoteToolbarPlugin, fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
+	const modal = new ToolbarSuggestModal(plugin, false, false, false, async (toToolbar: ToolbarSettings) => {
+		if (toToolbar) {
+			await plugin.settingsManager.duplicateToolbarItem(toToolbar, item);
+			await plugin.settingsManager.save();
+			new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name }));
+		}
+	});
+	modal.open();
+}
+
+/**
+ * Moves an item to a toolbar of the user's choice.
+ * @param fromToolbar toolbar to move the item from
+ * @param item item to move
+ */
+export async function moveToolbarItem(plugin: NoteToolbarPlugin, fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
+	const modal = new ToolbarSuggestModal(plugin, false, false, false, async (toToolbar: ToolbarSettings) => {
+		if (toToolbar) {
+			fromToolbar.items.remove(item);
+			toToolbar.items.push(item);
+			await plugin.settingsManager.save();
+			new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name }));
+		}
+	});
+	modal.open();
 }
 
 /**

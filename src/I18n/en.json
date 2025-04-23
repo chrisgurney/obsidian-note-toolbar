@@ -348,6 +348,8 @@
             "label-review-plugin": "Review\u00A0plugin",
             "menu-copy-id": "Copy developer ID",
             "menu-copy-id-notice": "Toolbar item ID copied to clipboard.",
+            "menu-copy-item": "Copy item to toolbar...",
+            "menu-copy-item-notice": "Copied item to toolbar: {{toolbarName}}",
             "menu-more-actions": "More actions...",
             "menu-move-item": "Move item to toolbar...",
             "menu-move-item-notice": "Moved item to toolbar: {{toolbarName}}",
