@@ -348,6 +348,8 @@
             "label-review-plugin": "Review\u00A0plugin",
             "menu-copy-id": "Copy developer ID",
             "menu-copy-id-notice": "Toolbar item ID copied to clipboard.",
+            "menu-copy-item": "Copy item to toolbar...",
+            "menu-copy-item-notice": "Copied item to toolbar: {{toolbarName}}",
             "menu-more-actions": "More actions...",
             "menu-move-item": "Move item to toolbar...",
             "menu-move-item-notice": "Moved item to toolbar: {{toolbarName}}",
@@ -594,6 +596,7 @@
         "whats-new": {
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
+            "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{language}}/{{version}}.md",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
             "label-roadmap": "What's ahead for Note Toolbar?",

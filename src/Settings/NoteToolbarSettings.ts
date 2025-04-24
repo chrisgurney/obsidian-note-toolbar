@@ -3,7 +3,7 @@ import { PaneType } from "obsidian";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20250313.1;
-export const WHATSNEW_VERSION = 1.21;
+export const WHATSNEW_VERSION = '1.22';
 
 /******************************************************************************
  * TRANSLATIONS
@@ -23,14 +23,6 @@ i18next.addResourceBundle('uk', 'plugin-note-toolbar', uk); // load localized st
 i18next.addResourceBundle('zh', 'plugin-note-toolbar', zh_CN); // load localized strings for Chinese Simplified
 
 export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
-
-// DOCUMENTATION TRANSLATIONS
-
-import en_whatsnew from "I18n/en-whats-new.md";
-
-i18next.addResourceBundle('en', 'plugin-note-toolbar-docs', { "whats-new": en_whatsnew });
-
-export const tdocs = i18next.getFixedT(null, 'plugin-note-toolbar-docs', null); // string translation function
 
 /******************************************************************************
  CONSTANTS
@@ -207,7 +199,7 @@ export interface NoteToolbarSettings {
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
-	whatsnew_version: number;
+	whatsnew_version: string;
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
@@ -237,7 +229,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
-	whatsnew_version: 0
+	whatsnew_version: '0'
 }
 
 export interface ExportSettings {
@@ -439,6 +431,7 @@ export interface ScriptConfig {
 
 export const URL_FEEDBACK_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform';
 export const URL_ISSUE_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform';
+export const URL_RELEASE_NOTES = 'https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/releases';
 export const URL_RELEASES = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
 export const URL_USER_GUIDE = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
 

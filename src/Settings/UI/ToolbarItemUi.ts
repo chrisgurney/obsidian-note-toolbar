@@ -4,7 +4,7 @@ import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModa
 import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice, PaneType } from "obsidian";
 import { removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById, debugLog } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
-import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
+import { copyToolbarItem, createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
 import { FileSuggester } from "./Suggesters/FileSuggester";
 import { CommandSuggester } from "./Suggesters/CommandSuggester";
 import { ToolbarSuggester } from "./Suggesters/ToolbarSuggester";
@@ -376,10 +376,10 @@ export default class ToolbarItemUi {
 
         menu.addItem((menuItem: MenuItem) => {
             menuItem
-                .setTitle(t('setting.item.menu-move-item'))
+                .setTitle(t('setting.item.menu-copy-item'))
                 .setIcon('square-arrow-right')
                 .onClick(async (menuEvent) => {
-                    await this.plugin.settingsManager.moveToolbarItem(this.toolbar, toolbarItem);
+                    await copyToolbarItem(this.plugin, this.toolbar, toolbarItem);
                 });
         });
 
@@ -651,7 +651,7 @@ export default class ToolbarItemUi {
                 new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
-                        new FileSuggester(this.plugin.app, cb.inputEl);
+                        new FileSuggester(this.plugin, cb.inputEl);
                         cb.setPlaceholder(t('setting.item.option-file-placeholder'))
                             .setValue(toolbarItem.link)
                             .onChange(debounce(async (value) => {
@@ -828,7 +828,7 @@ export default class ToolbarItemUi {
                                     fileSuggesterFolder = this.plugin.tpAdapter?.getSetting('templates_folder');
                                     fileSuggesterExt = undefined;
                                 }
-                                new FileSuggester(this.plugin.app, cb.inputEl, true, fileSuggesterExt, fileSuggesterFolder);
+                                new FileSuggester(this.plugin, cb.inputEl, true, fileSuggesterExt, fileSuggesterFolder);
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(debounce(async (value) => {
