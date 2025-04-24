@@ -509,6 +509,8 @@
             "field-placeholder": "Search toolbars..."
         },
         "styles": {
+            "button-close": "Done",
+            "button-close-description": "Saves and closes these settings",
             "description": "List of styles to apply to the toolbar.",
             "help": "Customize even more with the Style Settings plugin.",
             "name": "Styles",
