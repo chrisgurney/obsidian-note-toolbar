@@ -28,7 +28,8 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
             if (!matchesInput) return false;
             if (this.showFilesOnly && !isFile) return false;
             if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
-            if (this.folderPath && !lowerCaseFilePath.startsWith(this.folderPath.toLowerCase())) return false;
+            const lowerCaseFolder = this.folderPath?.toLowerCase();
+            if (lowerCaseFolder && !lowerCaseFilePath.startsWith(lowerCaseFolder + '/')) return false;
             return true;
         })
         // prioritize recent files
