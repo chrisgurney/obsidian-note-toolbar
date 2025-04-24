@@ -2124,6 +2124,20 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-remote-skeleton {
+    background: linear-gradient(90deg, var(--text-normal) 25%, var(--text-muted) 50%, var(--text-normal) 75%);
+    opacity: 0.25;
+    background-size: 200% 100%;
+    animation: note-toolbar-setting-remote-shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes note-toolbar-setting-remote-shimmer {
+    100% {
+        background-position: -200% 0;
+    }
+}
+
 .note-toolbar-setting-modal-container {
     .is-phone & {
         /* fix/workaround for Obsidian v1.5.11 bug: modals opened from settings have an inaccessible close button */
