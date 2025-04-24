@@ -123,18 +123,13 @@ export class WhatsNewView extends ItemView {
 	 * @param el HTMLDivElement to render the skeleton in.
 	 */
 	renderSkeleton(el: HTMLDivElement) {
-		const heights = [
-			'2em', '1.5em', '1em', '1em', '1em', '1em',
-			'1em',
-			'2em', '1.5em', '1em', '1em'
-		];
-		const widths = [
-			'30%', '70%', '80%', '90%', '80%', '90%', 
-			'0%', 
-			'30%', '50%', '80%', '90%'
-		];
+		const heights = ['2em', '1.5em', '1em', '1em', '1em', '1em'];
+		const widths = ['30%', '70%', '80%', '90%', '80%', '90%'];
 	
-		el.createEl('p').setText(t('setting.whats-new.placehoder-loading'));
+		const placeholderTextEl = el.createEl('p');
+		placeholderTextEl.setText(t('setting.whats-new.placehoder-loading'));
+		placeholderTextEl.setAttr('style', 'color: var(--text-muted)');
+
 		for (let i = 0; i < heights.length; i++) {
 			const lineEl = el.createEl('p');
 			const lineStyle = `height: ${heights[i]};${widths[i] ? ` width: ${widths[i]};` : ''} margin-bottom: 0.5em;`;
