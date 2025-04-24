@@ -337,6 +337,10 @@ body {
             border-top: solid 1px var(--cg-nt-tbar-border-color);
             border-bottom: solid 1px var(--cg-nt-tbar-border-color);
             border-radius: 0;
+            [data-tbar-position="bottom"] & {
+                border: solid 1px var(--cg-nt-tbar-border-color);
+                border-radius: var(--cg-nt-tbar-bottom-border-radius);
+            }
         }
     }
 
