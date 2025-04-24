@@ -596,6 +596,7 @@
         "whats-new": {
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
+            "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{language}}/{{version}}.md",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
             "label-roadmap": "What's ahead for Note Toolbar?",

@@ -850,6 +850,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+		// TODO: add a text field where you can specify a list of types
+
 		collapsibleEl.appendChild(collapsibleContainer);
 		containerEl.appendChild(collapsibleEl);
 
