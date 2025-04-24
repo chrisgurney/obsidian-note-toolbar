@@ -134,7 +134,7 @@ export class WhatsNewView extends ItemView {
 			'30%', '50%', '80%', '90%'
 		];
 	
-		el.createEl('p').setText("Loading release notes...");
+		el.createEl('p').setText(t('setting.whats-new.placehoder-loading'));
 		for (let i = 0; i < heights.length; i++) {
 			const lineEl = el.createEl('p');
 			const lineStyle = `height: ${heights[i]};${widths[i] ? ` width: ${widths[i]};` : ''} margin-bottom: 0.5em;`;
