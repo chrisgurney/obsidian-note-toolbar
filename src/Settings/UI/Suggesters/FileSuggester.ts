@@ -1,23 +1,23 @@
+import NoteToolbarPlugin from "main";
 import { AbstractInputSuggest, App, TAbstractFile, TFile, TFolder } from "obsidian";
 import { debugLog } from "Utils/Utils";
 
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
-    private inputEl: HTMLInputElement;
-    private showFilesOnly: boolean;
-    private fileExtension: string | undefined;
-    private folderPath: string | undefined;
-
-    constructor(app: App, inputEl: HTMLInputElement, showFilesOnly: boolean = false, fileExtension?: string, folderPath?: string) {
-        super(app, inputEl);
-        this.inputEl = inputEl;
-        this.showFilesOnly = showFilesOnly;
-        this.fileExtension = fileExtension;
-        this.folderPath = folderPath;
+    constructor(
+        private plugin: NoteToolbarPlugin,
+        private inputEl: HTMLInputElement, 
+        private showFilesOnly: boolean = false, 
+        private fileExtension?: string, 
+        private folderPath?: string
+    ) {
+        super(plugin.app, inputEl);
     }
 
     getSuggestions(inputStr: string): TAbstractFile[] {
         const abstractFiles = this.app.vault.getAllLoadedFiles();
+        const recentFilePaths = new Set(this.plugin.settings.recentFiles);
+        
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
@@ -30,6 +30,12 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
             if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
             if (this.folderPath && !lowerCaseFilePath.startsWith(this.folderPath.toLowerCase())) return false;
             return true;
+        })
+        // prioritize recent files
+        .sort((a, b) => {
+            const aRecent = recentFilePaths.has(a.path) ? 0 : 1;
+            const bRecent = recentFilePaths.has(b.path) ? 0 : 1;
+            return aRecent - bRecent;
         });
 
         return files;
