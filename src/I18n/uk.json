@@ -145,7 +145,7 @@
         "button-copy-link-description": "Скопіювати посилання до буфера обміну",
         "item-generic": "Елемент {{number}}",
         "label-callout": "Скопіювати як виноску",
-        "label-share": "Поширити...",
+        "label-share": "Поділитися...",
         "label-share-description": "Поширте це посиланням іншому користувачу Note Toolbar, щоб додати Вашу панель до його сховища.",
         "label-share-preview": "перегляд",
         "notice-completed": "Панель скопійовано до буфера обміну як виноску. Відкрийте налаштування, щоб змінити форматування.",
@@ -348,8 +348,9 @@
             "label-review-plugin": "Огляд додатку",
             "menu-copy-id": "Скопіювати ID для розробки",
             "menu-copy-id-notice": "ID елемента скопійовано до буфера обміну.",
+            "menu-copy-item": "Скопіювати до панелі...",
             "menu-more-actions": "Додаткові дії...",
-            "menu-move-item": "Перенести елемент до панелі...",
+            "menu-move-item": "Перенести до панелі...",
             "menu-move-item-notice": "Перенесено до: {{toolbarName}}",
             "option-break": "розрив",
             "option-command": "Команда",
@@ -507,6 +508,8 @@
             "field-placeholder": "Пошук панелей..."
         },
         "styles": {
+            "button-close": "Готово",
+            "button-close-description": "Закрити та зберігти ці налаштування.",
             "description": "Параметри застосування стилів до цієї панелі.",
             "help": "Налаштуйте ще більше з додатком Style Settings.",
             "name": "Стилі",
@@ -594,6 +597,8 @@
         "whats-new": {
             "button-read": "Читати ↗",
             "button-read-tooltip": "Відкрити github.com",
+            "error-failed-to-load": "Помилка завантаження коментарів випуску:\n{{baseUrl}}/{{language}}/{{version}}.md",
+            "placehoder-loading": "Завантаження...",
             "label-release-notes": "Примітки до випуску",
             "label-release-notes-description": "Детальні коментарі до останніх випусків, розміщені на GitHub.",
             "label-roadmap": "Що чекає попереду Note Toolbar?",
