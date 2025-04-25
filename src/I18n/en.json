@@ -509,6 +509,8 @@
             "field-placeholder": "Search toolbars..."
         },
         "styles": {
+            "button-close": "Done",
+            "button-close-description": "Saves and closes these settings",
             "description": "List of styles to apply to the toolbar.",
             "help": "Customize even more with the Style Settings plugin.",
             "name": "Styles",
@@ -597,6 +599,7 @@
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
             "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{language}}/{{version}}.md",
+            "placehoder-loading": "Loading...",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
             "label-roadmap": "What's ahead for Note Toolbar?",

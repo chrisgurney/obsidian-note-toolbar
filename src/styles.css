@@ -337,6 +337,10 @@ body {
             border-top: solid 1px var(--cg-nt-tbar-border-color);
             border-bottom: solid 1px var(--cg-nt-tbar-border-color);
             border-radius: 0;
+            [data-tbar-position="bottom"] & {
+                border: solid 1px var(--cg-nt-tbar-border-color);
+                border-radius: var(--cg-nt-tbar-bottom-border-radius);
+            }
         }
     }
 
@@ -2121,6 +2125,20 @@ input[type="text"].note-toolbar-setting-error,
         border: 1px solid var(--background-modifier-border);
         border-radius: 0.5rem;
         width: 100%;
+    }
+}
+
+.note-toolbar-setting-remote-skeleton {
+    background: linear-gradient(90deg, var(--text-normal) 25%, var(--text-muted) 50%, var(--text-normal) 75%);
+    opacity: 0.25;
+    background-size: 200% 100%;
+    animation: note-toolbar-setting-remote-shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes note-toolbar-setting-remote-shimmer {
+    100% {
+        background-position: -200% 0;
     }
 }
 

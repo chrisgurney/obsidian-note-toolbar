@@ -37,25 +37,7 @@ export class WhatsNewView extends ItemView {
 
 		const markdownEl = contentDiv.createDiv();
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
-
-		const language = i18next.language || 'en';
-		let releaseText = '';
-		try {
-			const release = await this.getReleaseNote(WHATSNEW_VERSION, language);
-			if (release) {
-				releaseText = release.body;
-			}
-			else {
-				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
-			}
-		}
-		catch (error) {
-			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
-			releaseText += `>[!error]-\n> \`${error as string}\`\n`;
-		}
-
-		const rootPath = this.plugin.app.vault.getRoot().path;
-		MarkdownRenderer.render(this.plugin.app, releaseText, markdownEl, rootPath, new Component());
+		this.renderSkeleton(markdownEl);
 
 		const releaseEl = contentDiv.createDiv();
 		releaseEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
@@ -87,6 +69,29 @@ export class WhatsNewView extends ItemView {
 					});
 			});
 
+		// fetch and display the notes
+		const language = i18next.language || 'en';
+		let releaseText = '';
+		try {
+			const release = await this.getReleaseNote(WHATSNEW_VERSION, language);
+			if (release) {
+				releaseText = release.body;
+			}
+			else {
+				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
+			}
+		}
+		catch (error) {
+			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
+			releaseText += `\n>[!error]-\n> \`${error as string}\`\n`;
+		}
+		finally {
+			markdownEl.empty();
+		}
+
+		const rootPath = this.plugin.app.vault.getRoot().path;
+		MarkdownRenderer.render(this.plugin.app, releaseText, markdownEl, rootPath, new Component());
+
     }
 
     async onClose() {
@@ -111,6 +116,26 @@ export class WhatsNewView extends ItemView {
 	
 		const body = await res.text();
 		return { tag_name: version, body };
+	}
+
+	/**
+	 * Renders a skeleton to show while the release notes are loading.
+	 * @param el HTMLDivElement to render the skeleton in.
+	 */
+	renderSkeleton(el: HTMLDivElement) {
+		const heights = ['2em', '1.5em', '1em', '1em', '1em', '1em'];
+		const widths = ['30%', '70%', '80%', '90%', '80%', '90%'];
+	
+		const placeholderTextEl = el.createEl('p');
+		placeholderTextEl.setText(t('setting.whats-new.placehoder-loading'));
+		placeholderTextEl.setAttr('style', 'color: var(--text-muted)');
+
+		for (let i = 0; i < heights.length; i++) {
+			const lineEl = el.createEl('p');
+			const lineStyle = `height: ${heights[i]};${widths[i] ? ` width: ${widths[i]};` : ''} margin-bottom: 0.5em;`;
+			lineEl.addClass('note-toolbar-setting-remote-skeleton');
+			lineEl.setAttr('style', lineStyle);
+		}
 	}
 
 }
