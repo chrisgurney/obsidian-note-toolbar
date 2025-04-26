@@ -1257,6 +1257,7 @@ input[type="text"].note-toolbar-setting-error,
     }
     &[data-active="true"] {
         border-bottom: solid 1px var(--background-modifier-border);
+        margin-bottom: 0.75em;
     }
 }
 
