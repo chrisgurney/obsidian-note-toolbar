@@ -7,7 +7,7 @@
     "overview": { 
         "en": "Browse examples of items, and click/tap to add them to a toolbar.",
         "zh": "浏览项目示例，点击/轻触以将其添加到工具栏。",
-        "uk": "Переглядайте приклади елементів і натисніть/торкніться, щоб додати їх до панелі інструментів."
+        "uk": "Перегляньте приклади елементів, та натисніть щоб додати їх до панелі."
     },
     "pluginNote": { 
         "en": "Some items require plugins for more sophisticated behavior. ",

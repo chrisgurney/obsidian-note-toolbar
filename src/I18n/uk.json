@@ -109,8 +109,16 @@
         "ui": {
             "button-submit": "Відправити",
             "error-cancelled": "Сакасований запит",
+            "error-file-unsupported": "Тип файлу не підтримується: {{filetype}}",
             "error-undefined": "Невизначений елемент",
-            "prompt-placeholder": "Введіть текст тут",
+            "file-suggester-placeholder": "Оберіть файл, або Теку...",
+            "file-suggester-placeholder_file": "Оберіть файл...",
+            "file-suggester-placeholder_folder": "Оберіть теку...",
+            "instruction-dismiss": "відміна",
+            "instruction-navigate": "навігація",
+            "instruction-select": "обрати",
+            "prompt-placeholder": "Введіть текст та нажміть Enter",
+            "prompt-placeholder-large": "Введіть текст",
             "suggester-placeholder": "Оберіть варіант..."
         }
     },
@@ -137,7 +145,7 @@
         "button-copy-link-description": "Скопіювати посилання до буфера обміну",
         "item-generic": "Елемент {{number}}",
         "label-callout": "Скопіювати як виноску",
-        "label-share": "Поширити...",
+        "label-share": "Поділитися...",
         "label-share-description": "Поширте це посиланням іншому користувачу Note Toolbar, щоб додати Вашу панель до його сховища.",
         "label-share-preview": "перегляд",
         "notice-completed": "Панель скопійовано до буфера обміну як виноску. Відкрийте налаштування, щоб змінити форматування.",
@@ -152,11 +160,13 @@
         "error-invalid-plugin": "Неправильний додаток, або його не ввімкнено для елемента Галереї.",
         "error-missing-item-type": "Елемент галереї: Відсутня властивість типу елемента",
         "error-missing-property": "Відсутний додаток або властивість скрипта у даних Галереї.",
+        "label-plugin": "{{plugin}}",
         "label-suggestions": "ПРОПОЗИЦІЇ З ГАЛЕРЕЇ",
         "select-plugin-placeholder": "Оберіть додаток для використання...",
+        "select-plugin-suggestion": "{{plugin}}",
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Не ввімкнен, або не встановлен",
         "title": "Галерея Note Toolbar",
-        "tooltip-add-item": "Додати до панелі: {{name}}"
+        "tooltip-add-item": "Додати елемент до панелі"
     },
     "import": {
         "button-add-items": "Додати елементи",
@@ -207,18 +217,25 @@
     "plugin": {
         "canvas": "Полотно",
         "daily-notes": "Щоденні\u00A0нотатки",
+        "dataview": "Dataview",
+        "js-engine": "JS\u00A0Engine",
+        "note-toolbar": "Note\u00A0Toolbar",
+        "obsidian-kanban": "Kanban",
+        "obsidian-tasks-plugin": "Tasks",
         "open-with-default-app": "Відкривати\u00A0у програмі\u00A0за\u00A0замовчуванням",
         "periodic-notes": "Periodic\u00A0Notes",
         "sync": "Синхронізація",
+        "templater-obsidian": "Templater",
         "workspaces": "Простори"
     },
     "setting": {
         "add-item": {
             "error-invalid-command": "Команди не існує: {{commandId}}",
-            "label-confirm-command": "Команда не підтримується, або не знайдена:\n`{{commandId}}`\n\nВсе ще бажаєте додати цей елемент до панелі?",
+            "label-confirm-command": "Команда не підтримується, або не знайдена:\n`{{commandId}}`\n\nВсе ще бажаєте додати цей елемент до панелі? Ви можете пізніше встановити/ввімкнути додаток, який надає цю команду.",
             "label-confirm-mobile-uri": "Цей елемент використовує URI файлу, який може не підтримуватися на мобільному.\n\nВсе ще бажаєте додати цей елемент до панелі?",
             "label-confirm-plugin": "Додаток не встановлено та не увімкнено:\n\n**{{plugin}}**\n\nБажаєте додати цей елемент до панелі? Можете встановити/ввімкнути цей додаток пізніше.",
             "label-confirm-scripting": "Щоб скористатися цим пунктом, слід увімкнути параметр _Скріптування_ у налаштуваннях Note Toolbar.\n\nЦей параметр дозволяє пвиконувати JavaScript, а також використовувати Dataview, Templater і JS Engine (за умови, що ці додатки встановлено та увімкнено).\n\nБажаєте увімкнути цей параметр зараз?",
+            "notice-item-added": "Елемент додано до {{toolbarName}}",
             "title-confirm-scripting": "Необхідний скрипт для елемента",
             "title-confirm": "Додати елемент: {{itemName}}"
         },
@@ -235,7 +252,7 @@
         "button-help-tooltip": "Відкрити посібник",
         "button-learn-more": "Докладніше↗",
         "button-user-guide": "Посібник\u00A0користувача",
-        "button-whats-new": "Що нового?",
+        "button-whats-new": "Що\u00A0нового?",
         "button-whats-new-tooltip": "Відкрити \"Що нового\"",
         "command-suggest-modal": {
             "instruction-dismiss": "скасувати",
@@ -261,20 +278,22 @@
             "button-delete-tooltip": "Видалити цю панель",
             "description": "Цю дію не можна скасувати.",
             "label-delete-confirm": "Дійсно бажаєте видалити цю панель?",
+            "label-usage-note": "Цю панель можна використовувати у властивості `{{propertyName}}`. Якщо бажаєте переконатися, закрийте це вікно та знайдіть `[{{propertyName}}:\u00A0{{toolbarName}}]`",
             "name": "Видалення панелі",
             "title": "Видалення: {{toolbar}}"
         },
         "display-contexts": {
-            "description": "Увімкнути панель у полотнах, новому вигляді вкладки та інших типах файлів.",
+            "description": "Увімкнути панель у полотнах, новому вигляді вкладки та інших типів файлів.",
             "name": "Типи файлів та подання",
             "option-audio": "Аудіо",
-            "option-canvas": "Файли полотна",
-            "option-emptyview": "Новий вигляд",
+            "option-canvas": "Файл полотна",
+            "option-emptyview": "Нова вкладка",
             "option-emptyview-description": "Оберіть панель для відображення, коли нотатка не відкрита.",
             "option-filemenu": "Файл меню",
             "option-filemenu-description": "Додає елемент до меню Файл для доступу до панелі у пов'язаній нотатці.",
             "option-image": "Зображення",
-            "option-pdf": "PDF-документи",
+            "option-kanban": "Дошка Kanban",
+            "option-pdf": "PDF-документ",
             "option-video": "Відео"
         },
         "display-rules": {
@@ -300,6 +319,7 @@
             "label-article-2-description": "Дізнатися як створювати панелі у нотатках.",
             "label-bug": "Повідомити про помилку",
             "label-bug-description": "Знайшли помилку? Надішліть її у GitHub, або заповніть цю форму.",
+            "label-donate": "Buy me a coffee",
             "label-donate-description": "Якщо Ви вважаєте цей додаток корисним та бажаєте підтримати, обміркуйте про донат. Дякую!",
             "label-feedback": "Залишити відгук",
             "label-feedback-description": "Скористайтеся цією формою для будь-яких відгуків, запитань або ідей.",
@@ -326,10 +346,11 @@
             "label-preview-edit": "Редагувати панель: {{toolbar}}",
             "label-preview-empty-no-items": "Немає елементів. Редагуйте цю панель для додавання елементів.",
             "label-review-plugin": "Огляд додатку",
-            "menu-copy-id": "Копіювати ID розробника",
+            "menu-copy-id": "Скопіювати ID для розробки",
             "menu-copy-id-notice": "ID елемента скопійовано до буфера обміну.",
+            "menu-copy-item": "Скопіювати до панелі...",
             "menu-more-actions": "Додаткові дії...",
-            "menu-move-item": "Перенести елемент до панелі...",
+            "menu-move-item": "Перенести до панелі...",
             "menu-move-item-notice": "Перенесено до: {{toolbarName}}",
             "option-break": "розрив",
             "option-command": "Команда",
@@ -338,15 +359,15 @@
             "option-command-error-not-available-search": "⚠️ Команда не знайдена. Спробуйте пошукати ще раз.",
             "option-command-error-refresh": "Оновити",
             "option-command-placeholder": "Знайти команду",
-            "option-command-target": "Де запустити команду",
-            "option-command-target-description": "Деякі команди можуть перевизначати цей параметр.",
+            "option-command-target": "Де запускати команду",
+            "option-command-target-description": "Деякі команди можуть заміняти цей параметр.",
             "option-component-icon": "іконку",
             "option-component-label": "напис",
             "option-file": "Файл",
-            "option-file-error-does-not-exist": "Цей файл або тека не існує.",
+            "option-file-error-does-not-exist": "Цей файл, або тека не існують.",
             "option-file-target": "Де відкрити файл",
-            "option-file-target-description": "Використовуйте клавіші-модифікатори, щоб змінити цей параметр.*",
-            "option-file-placeholder": "Пошук файлу чи теки",
+            "option-file-target-description": "Використовуйте сполучення клавіш щоб змінити цей параметр.",
+            "option-file-placeholder": "Знайти файл чи теку",
             "option-item-group": "Група",
             "option-item-group-error-does-not-exist": "Панелі не існує",
             "option-item-group-error-invalid": "⚠️ Недійсна група елементів",
@@ -357,15 +378,20 @@
             "option-item-menu-help": "Виберіть панель для відкриття як меню.",
             "option-item-menu-placeholder": "Панель",
             "option-label-placeholder": "Напис (є іконка — за бажанням)",
+            "option-menu": "Меню",
             "option-separator": "роздільник",
             "option-script": "Виберіть, як бажаєте це використати.",
-            "option-target-default": "За замовчуванням",
-            "option-target-split": "Роздільна панель*",
+            "option-target-default": "Типово",
+            "option-target-modal": "Модальне вікно",
+            "option-target-split": "Розділена вкладка",
             "option-target-tab": "Нова вкладка",
             "option-target-window": "Нове вікно",
             "option-tooltip-placeholder": "Підказка (за бажанням)",
+            "option-uri": "URI",
             "option-uri-help": "ℹ️ Використовуйте властивості нотаток та вирази в URI.",
             "option-uri-placehoder": "Адреса сайту, URI, або назва нотатки",
+            "option-uri-target": "Де відкривати файли",
+            "option-uri-target-description": "Якщо посилання є файлом у сховищі, виберіть, як його відкрити. Сполучення клавіш, або додатки можуть заміняти цей параметр.",
             "option-visibility-component-hidden-platform": "сховати {{component}} на {{platform}}",
             "option-visibility-component-visible-platform": "показати {{component}} на {{platform}}",
             "option-visibility-hidden": "приховано",
@@ -382,6 +408,9 @@
             "instruction-select": "обрати елемент",
             "instruction-use": "використати",
             "key-back": "⌫ або ←",
+            "key-dismiss": "esc",
+            "key-navigate": "↑↓",
+            "key-use": "↵",
             "label-empty-no-items": "Нічого не знайдено.",
             "link-gallery": "Відкрити галерею",
             "link-search": "Пошук елемента",
@@ -417,7 +446,7 @@
             "name": "Зіставленні теки",
             "name-with-count": "Зіставленні теки ({{count}})",
             "option-folder-all": "всі теки",
-            "option-folder-root": "тільки коренева тека",
+            "option-folder-root": "тільки корнева тека",
             "placeholder-folder": "Тека",
             "placeholder-toolbar": "Панель"
         },
@@ -427,8 +456,8 @@
             "name": "Назва панелі"
         },
         "open-command": {
-            "description": "Додає команду для відкриття панелі до Меню команд.",
-            "name": "Додати панель до переліку команд",
+            "description": "Додає команду відкриття панелі до Меню команд.",
+            "name": "Додати панель до Меню команд",
             "notice-command-added": "Команда додана:\n{{command}}",
             "notice-command-removed": "Команда видалена:\n{{command}}"
         },
@@ -453,8 +482,8 @@
                 "name": "Скриптування"
             },
             "show-edit-tbar": {
-                "description": "Додає пункт для налаштування панелі, який буде показан як меню внизу.",
-                "name": "Відображати \"Редагувати панель\" в меню панелі"
+                "description": "Додає пункт швидкого переходу до налаштування панелі, який буде додан внизу меню.",
+                "name": "Відображати \"Редагувати панель\" у меню"
             }
         },
         "position": {
@@ -462,8 +491,8 @@
             "name": "Розташування",
             "notice-defaultitem-invalid": "Недійсний елемент за замовчуванням для плаваючої кнопки. Перевірте налаштування панелі.",
             "option-bottom": "Внизу нотатки",
-            "option-defaultitem": "Типовий елемент Плаваючої кнопки",
-            "option-defaultitem-description": "Замість меню панелі буде відображено цей пункт як кнопку.",
+            "option-defaultitem": "Головний елемент Плаваючої кнопки",
+            "option-defaultitem-description": "Замість типової кнопки меню панелі, буде відображено цей пункт як головна кнопка.",
             "option-defaultitem-error-invalid": "Недійсний елемент панелі",
             "option-defaultitem-placeholder": "Елемент...",
             "option-fabl": "Плаваюча кнопка: Ліворуч",
@@ -479,6 +508,8 @@
             "field-placeholder": "Пошук панелей..."
         },
         "styles": {
+            "button-close": "Готово",
+            "button-close-description": "Закрити та зберігти ці налаштування.",
             "description": "Параметри застосування стилів до цієї панелі.",
             "help": "Налаштуйте ще більше з додатком Style Settings.",
             "name": "Стилі",
@@ -509,7 +540,7 @@
             "option-right": "елементи праворуч",
             "option-sticky": "прикріпляти*",
             "option-sticky-disclaimer": "Прикріплення не працює у режимі Читання.",
-            "option-tab": "елементи файлу вкладки",
+            "option-tab": "вкладки файлів",
             "option-wide": "ширина редактора",
             "style-remove-tooltip": "Видалити",
             "style-tooltip-use-class": "Використовувати у виносках, або CSS: {{class}}",
@@ -523,7 +554,8 @@
             "instruction-use": "відкрити панель",
             "option-default": "Типове (згідно зіставленням тек)",
             "option-new": "+ Створити нову панель",
-            "placeholder": "Пошук панелі..."
+            "placeholder": "Пошук панелей...",
+            "placeholder-add": "До якої панелі додати цей елемент?"
         },
         "toolbars": {
             "button-duplicate-tbar-tooltip": "Дублювати",
@@ -540,8 +572,13 @@
             "new-tbar-name": "Нова панель"
         },
         "usage": {
-            "description": "Ця панель використовується у {{mappingCount}} зіставлені(нях) та {{itemCount}} елементі(ах) панелі.",
-            "description-search": "Пошук використання",
+            "description": "Ця панель використовується у: ",
+            "description_none": "Ця панель не використовується у жодному зіставленні, або елементі.",
+            "description-mappings": "{{count}} зіставленя",
+            "description-mappings_plural": "{{count}} зіставленнях",
+            "description-search": "Пошук використання властивостей",
+            "description-toolbar-items": "{{count}} елемент панелі",
+            "description-toolbar-items_plural": "{{count}} елементіах панелі",
             "name": "Використання"
         },
         "use-item-command": {
@@ -553,13 +590,15 @@
             "notice-command-error-noname": "Не вдалося додати команду. Переконайтеся, що елемент має напис або підказку, і принаймні, один з них не містить змінну чи вираз.",
             "notice-command-error-startup-noname": "Note Toolbar: Деякі команди елементів у цих панелях не було додано через порожні написи або підказки: {{toolbars}}",
             "notice-command-removed": "Команда видалена:\n{{command}}",
-            "notice-command-removed_empty": "Команда вилучена",
+            "notice-command-removed_empty": "Команда елемента видалена",
             "notice-command-updated": "Команда оновлена:\n{{command}}",
-            "tooltip-command-incidator": "Використовуйте як команду:\n{{command}}"
+            "tooltip-command-incidator": "Використати як команду:\n{{command}}"
         },
         "whats-new": {
             "button-read": "Читати ↗",
             "button-read-tooltip": "Відкрити github.com",
+            "error-failed-to-load": "Помилка завантаження коментарів випуску:\n{{baseUrl}}/{{language}}/{{version}}.md",
+            "placehoder-loading": "Завантаження...",
             "label-release-notes": "Примітки до випуску",
             "label-release-notes-description": "Детальні коментарі до останніх випусків, розміщені на GitHub.",
             "label-roadmap": "Що чекає попереду Note Toolbar?",
@@ -571,7 +610,7 @@
         "menu-add-item": "Додати елемент...",
         "menu-edit-item": "Редагувати елемент: {{text}}...",
         "menu-edit-item_none": "Редагувати елемент...",
-        "menu-edit-toolbar": "Редагувати панель: {{toolbar}}...",
+        "menu-edit-toolbar": "Редагувати: {{toolbar}}...",
         "menu-hide-properties": "Приховати властивості нотатки",
         "menu-position": "Розташування",
         "menu-show-properties": "Показати властивості нотатки",
