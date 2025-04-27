@@ -349,6 +349,7 @@
             "menu-copy-id": "Скопіювати ID для розробки",
             "menu-copy-id-notice": "ID елемента скопійовано до буфера обміну.",
             "menu-copy-item": "Скопіювати до панелі...",
+            "menu-copy-item-notice": "Скопійовано елемент до панелі: {{toolbarName}}",
             "menu-more-actions": "Додаткові дії...",
             "menu-move-item": "Перенести до панелі...",
             "menu-move-item-notice": "Перенесено до: {{toolbarName}}",
