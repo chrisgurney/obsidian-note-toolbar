@@ -1255,11 +1255,18 @@ input[type="text"].note-toolbar-setting-error,
             border-top: 1px solid var(--background-modifier-border);
         }
     }
+    &[data-active="true"] {
+        border-bottom: solid 1px var(--background-modifier-border);
+        margin-bottom: 0.75em;
+    }
 }
 
 .note-toolbar-setting-contexts-container {
     &[data-active="false"] {
-        border-bottom: solid 1px var(--background-modifier-border);
+        & .setting-item-heading {
+            border-bottom: solid 1px var(--background-modifier-border);
+            margin-bottom: 0;
+        }
     }
 }
 
