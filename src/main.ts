@@ -1001,7 +1001,7 @@ export default class NoteToolbarPlugin extends Plugin {
 									// fixes issue where focus sticks on executing commands
 									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
 										await this.removeFocusStyle();
-										await this.app.commands.executeCommandById('editor:focus');
+										this.app.workspace.activeEditor?.editor?.focus();
 									}
 								});
 							});
@@ -1528,7 +1528,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 		result ? insertTextAtCursor(this.app, result) : undefined;
-		await this.app.commands.executeCommandById('editor:focus');
+		this.app.workspace.activeEditor?.editor?.focus();
 	}
 
 	/**
