@@ -1,7 +1,6 @@
 import galleryItems from "Gallery/items.json";
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "../Settings/NoteToolbarSettings";
-import { debugLog } from "Utils/Utils";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import { Notice, Platform } from "obsidian";
@@ -145,7 +144,7 @@ export default class GalleryManager {
         this.items.sort((a, b) => a.tooltip.localeCompare(b.tooltip));
 
         const endTime = performance.now();
-        debugLog(`Gallery loaded in ${endTime - startTime} ms`);
+        this.plugin.debug(`Gallery loaded in ${endTime - startTime} ms`);
     }
 
 }

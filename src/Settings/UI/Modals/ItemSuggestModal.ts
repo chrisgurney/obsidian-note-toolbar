@@ -1,6 +1,6 @@
 import { Platform, SuggestModal, TFile } from "obsidian";
 import NoteToolbarPlugin from "main";
-import { calcItemVisToggles, debugLog } from "Utils/Utils";
+import { calcItemVisToggles } from "Utils/Utils";
 import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
@@ -306,7 +306,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      * @param selectedItem Item to use.
      */
     async onChooseSuggestion(selectedItem: ToolbarItemSettings, event: MouseEvent | KeyboardEvent) {
-        debugLog("onChooseSuggestion: ", selectedItem, this.activeFile, event);
+        this.plugin.debug("onChooseSuggestion: ", selectedItem, this.activeFile, event);
         if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
             this.close();
             if (this.mode === 'QuickTools') await this.plugin.handleItemLink(selectedItem, event);

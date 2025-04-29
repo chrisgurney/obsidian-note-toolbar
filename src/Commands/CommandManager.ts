@@ -3,7 +3,7 @@ import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
-import { debugLog, getItemText } from "Utils/Utils";
+import { getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Command, MarkdownView, Notice, Platform } from "obsidian";
 
@@ -149,7 +149,7 @@ export class CommandManager {
      */
     async focus(): Promise<void> {
 
-        debugLog("focusCommand()");
+        this.plugin.debug("focusCommand()");
         // need to get the type of toolbar first
         let toolbarEl = this.plugin.getToolbarEl();
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
@@ -158,7 +158,7 @@ export class CommandManager {
             case PositionType.FabLeft:
                 // trigger the menu
                 let toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
-                debugLog("focusCommand: button: ", toolbarFabEl);
+                this.plugin.debug("focusCommand: button: ", toolbarFabEl);
                 if (toolbarEl) {
                     const toolbar = this.plugin.settingsManager.getToolbarById(toolbarEl.id);
                     // show the toolbar's menu if it has a default item set
@@ -191,7 +191,7 @@ export class CommandManager {
                 // get the list and set focus on the first visible item
                 let itemsUl: HTMLElement | null = this.plugin.getToolbarListEl();
                 if (itemsUl) {
-                    debugLog("focusCommand: toolbar: ", itemsUl);
+                    this.plugin.debug("focusCommand: toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);
                     const visibleItems = items.filter(item => {
                         const hasSpan = item.querySelector('span') !== null; // to filter out separators
@@ -199,7 +199,7 @@ export class CommandManager {
                         return hasSpan && isVisible;
                     });
                     const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-                    debugLog("focusCommand: focussed item: ", linkEl);
+                    this.plugin.debug("focusCommand: focussed item: ", linkEl);
                     visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
                     linkEl?.focus();
                 }
@@ -305,7 +305,7 @@ export class CommandManager {
 
         let propsEl = this.plugin.getPropsEl();
         let currentView = this.plugin.app.workspace.getActiveViewOfType(MarkdownView);
-        // debugLog("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
+        // this.plugin.debug("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
         // @ts-ignore make sure we're not in source (code) view
         if (propsEl && !currentView.editMode.sourceMode) {
             let propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');

@@ -465,6 +465,10 @@
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
         "other": {
+            "debugging": {
+                "description": "If enabled, debugging information will be shown in the console. This might be useful for developers and for troubleshooting problems.",
+                "name": "Debugging"
+            },
             "icon": {
                 "description": "Sets the icon for the floating button and navigation bar (on phone). Requires restart.",
                 "name": "Icon",

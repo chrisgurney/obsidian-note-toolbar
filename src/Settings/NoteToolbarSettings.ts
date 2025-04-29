@@ -185,6 +185,7 @@ export enum ErrorBehavior {
 }
 
 export interface NoteToolbarSettings {
+	debugEnabled: boolean;
 	emptyViewToolbar: string | null;
 	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
@@ -203,6 +204,7 @@ export interface NoteToolbarSettings {
 }
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
+	debugEnabled: false,
 	emptyViewToolbar: null,
 	export: {
 		includeIcons: true,

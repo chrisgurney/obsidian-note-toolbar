@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
+import { displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
@@ -145,9 +145,9 @@ export default class DataviewAdapter extends Adapter {
 		component.load();
         try {
             if (this.adapterApi) {
-                // debugLog("evaluate() " + expression);
+                // this.noteToolbar?.debug("evaluate() " + expression);
                 let dvResult = await (this.adapterApi as any).evaluateInline(expression, activeFile?.path);
-                // debugLog("evaluate() result:", dvResult);
+                // this.noteToolbar?.debug("evaluate() result:", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     await this.adapterApi.renderValue(
@@ -279,9 +279,9 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                // debugLog("executeJs() ", expression);
+                // this.noteToolbar?.debug("executeJs() ", expression);
                 await (this.adapterApi as any).executeJs(expression, resultEl, component, activeFile?.path);
-                // debugLog("executeJs() result:", resultEl);
+                // this.noteToolbar?.debug("executeJs() result:", resultEl);
                 if (!containerEl) {
                     const errorEl = resultEl.querySelector('.dataview-error');
                     if (errorEl) {
@@ -289,7 +289,7 @@ export default class DataviewAdapter extends Adapter {
                     }
                     else if (resultEl.children.length === 0 && resultEl.textContent?.trim() === '') {
                         // nothing was returned; do nothing? may depend on what user wants to do
-                        // debugLog('executeJs() no result');
+                        // this.noteToolbar?.debug('executeJs() no result');
                         result = '';
                     }
                     else {
@@ -332,10 +332,10 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                debugLog("query() " + expression);
+                this.noteToolbar?.debug("query() " + expression);
                 // returns a Promise<Result<QueryResult, string>>
                 let dvResult = await (this.adapterApi as any).queryMarkdown(expression, activeFile, this.adapterApi.settings);
-                debugLog("query() result: ", dvResult);
+                this.noteToolbar?.debug("query() result: ", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     if (this.noteToolbar) {

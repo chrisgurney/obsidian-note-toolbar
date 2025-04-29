@@ -7,7 +7,6 @@ import { NtbModal } from "./NtbModal";
 import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { Toolbar } from "./Toolbar";
 import { Item } from "./Item";
-import { debugLog } from "Utils/Utils";
 import { t } from "Settings/NoteToolbarSettings";
 
 export type Callback = (arg: string) => void;

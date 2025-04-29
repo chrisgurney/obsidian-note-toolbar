@@ -2,8 +2,6 @@ import NoteToolbarPlugin from "main";
 import { App, Command, FileView, ItemView, MarkdownView, Notice, PaneType, Platform, TFile } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
-const DEBUG: boolean = false;
-
 /**
  * Adds the given component to the given visibility prop.
  * @param platform platform visibility to add to
@@ -63,8 +61,8 @@ export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent)
 	const left = sameRow.filter(rect => rect.right <= cursorX).pop();
 	const right = sameRow.find(rect => rect.left > cursorX);
 
-	debugLog('Left:', left ? toolbarListEl.children[rects.indexOf(left)] : null);
-	debugLog('Right:', right ? toolbarListEl.children[rects.indexOf(right)] : null);
+	plugin.debug('Left:', left ? toolbarListEl.children[rects.indexOf(left)] : null);
+	plugin.debug('Right:', right ? toolbarListEl.children[rects.indexOf(right)] : null);
 
 	const itemIndex = left ? (rects.indexOf(left) >= 0 ? rects.indexOf(left) + 1 : undefined) : undefined;
 	return itemIndex ? itemIndex : (right ? rects.indexOf(right) : undefined);
@@ -106,16 +104,6 @@ export function checkToolbarForItemView(plugin: NoteToolbarPlugin, itemView: Ite
     if (viewSettings[currentViewType] === false) return false;
     if (!(currentViewType in viewSettings)) return false;
     return true;
-}
-
-/**
- * Utility for debug logging.
- * @param message Message to output for debugging.
- */
-export function debugLog(message?: any, ...optionalParams: any[]): void {
-	DEBUG && console.debug(message, ...optionalParams);
-	// const stack = new Error().stack?.split('\n')[2]?.trim();
-	// DEBUG && console.debug('Called from:', stack);
 }
 
 /**

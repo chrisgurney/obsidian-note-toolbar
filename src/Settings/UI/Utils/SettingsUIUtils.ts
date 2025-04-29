@@ -3,7 +3,6 @@ import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_US
 import { SettingsManager } from "Settings/SettingsManager";
 import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
-import { debugLog } from "Utils/Utils";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
 import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";

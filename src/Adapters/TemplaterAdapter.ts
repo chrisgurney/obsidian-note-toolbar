@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { debugLog, displayScriptError } from "Utils/Utils";
+import { displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -267,7 +267,7 @@ export default class TemplaterAdapter extends Adapter {
                 };
                 if (this.adapterApi) {
                     result = await this.adapterApi.read_and_parse_template(config);
-                    debugLog("parseTemplateFile() result:", result);
+                    this.noteToolbar?.debug("parseTemplateFile() result:", result);
                 }    
             }
             else {
