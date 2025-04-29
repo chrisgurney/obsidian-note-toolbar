@@ -161,7 +161,7 @@
                 "uk": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
             },
             "itemIds": [
-                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
+                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide", "note-toolbar-backup-data"
             ]
         },
         {
