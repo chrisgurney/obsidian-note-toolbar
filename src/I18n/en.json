@@ -466,7 +466,7 @@
         "option-platform-mobile": "Mobile",
         "other": {
             "debugging": {
-                "description": "If enabled, debugging information will be shown in the console. This might be useful for developers and for troubleshooting problems.",
+                "description": "If enabled, debug messages will be shown in the console. This might be useful for developers and for troubleshooting problems.",
                 "name": "Debugging"
             },
             "icon": {
