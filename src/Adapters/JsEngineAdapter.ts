@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Notice } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
+import { displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
@@ -202,7 +202,7 @@ export default class JsEngineAdapter extends Adapter {
                         else {
                             result = module[functionName](this.adapterApi);
                         }
-                        debugLog('importExec() result:', result);
+                        this.noteToolbar?.debug('importExec() result:', result);
                     }
                     catch (error) {
                         displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
@@ -239,7 +239,7 @@ export default class JsEngineAdapter extends Adapter {
                 container: resultEl,
                 component: this.noteToolbar,
             });
-            debugLog('exec() result:', execution.result);
+            this.noteToolbar?.debug('exec() result:', execution.result);
             if (this.noteToolbar) {
                 if (containerEl) {
                     const renderer = this.adapterApi.internal.createRenderer(resultEl, activeFilePath, this.noteToolbar);

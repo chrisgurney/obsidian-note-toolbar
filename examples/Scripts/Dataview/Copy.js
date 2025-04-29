@@ -10,7 +10,7 @@
 	const editor =  app.workspace.activeLeaf.view?.editor;
 	try {
 	  await window.navigator.clipboard.writeText(editor.getSelection());
-	  app.commands.executeCommandById("editor:focus");
+	  app.workspace.activeEditor?.editor?.focus();
 	} catch (error) {
 	  console.error("Copy failed:", error);
 	}

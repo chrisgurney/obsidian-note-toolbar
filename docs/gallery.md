@@ -135,6 +135,7 @@ Get access to Note Toolbar settings and tools quickly.
 | Quick Tools | Opens a searchable window with access to all of your Note Toolbar items. |
 | Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
 | User Guide for Note Toolbar | Access the Note Toolbar User Guide for help and tips. |
+| Backup Note Toolbar config | Backup Note Toolbar's configuration (data.json) file into the vault. |
 
 ## Obsidian Support
 

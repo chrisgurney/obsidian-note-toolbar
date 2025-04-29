@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
-import { arraymove, debugLog, moveElement, getUUID } from 'Utils/Utils';
+import { arraymove, moveElement, getUUID } from 'Utils/Utils';
 import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr, getToolbarUsageText } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
@@ -97,7 +97,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	public display(focusItemId?: string) {
 
-		debugLog("🟡 REDRAWING MODAL 🟡");
+		this.plugin.debug("🟡 REDRAWING MODAL 🟡");
 
 		this.modalEl.addClass("note-toolbar-setting-modal-container");
 
@@ -342,7 +342,7 @@ export default class ToolbarSettingsModal extends Modal {
 			onChange: (item) => navigator.vibrate(50),
 			onChoose: (item) => navigator.vibrate(50),
 			onSort: async (item) => {
-				debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+				this.plugin.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 				if (item.oldIndex !== undefined && item.newIndex !== undefined) {
 					moveElement(this.toolbar.items, item.oldIndex, item.newIndex);
 					await this.plugin.settingsManager.save();
@@ -437,7 +437,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		let itemForm = itemPreviewContainer.nextElementSibling;
 		let itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type');
-		// debugLog("toggleItemView", itemPreviewContainer, itemForm, itemType, focusOn);
+		// this.plugin.debug("toggleItemView", itemPreviewContainer, itemForm, itemType, focusOn);
 		
 		let previewState: string;
 		let formState: string;
@@ -584,7 +584,7 @@ export default class ToolbarSettingsModal extends Modal {
 				else {
 					const target = e.target as Element;
 					const currentTarget = e.currentTarget as Element;
-					// debugLog("clicked on: ", currentTarget, target);
+					// this.plugin.debug("clicked on: ", currentTarget, target);
 					let focusOn: ItemFormComponent = ItemFormComponent.Label;
 					if (currentTarget.querySelector('.note-toolbar-setting-tbar-preview')) {
 						focusOn = ItemFormComponent.Link;
@@ -939,7 +939,7 @@ export default class ToolbarSettingsModal extends Modal {
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {	
 		let itemIndex = this.getIndexByUuid(itemUuid);
-		debugLog("listMoveHandlerById: moving index:", itemIndex);
+		this.plugin.debug("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
 	}
 
@@ -951,7 +951,7 @@ export default class ToolbarSettingsModal extends Modal {
 	*/
     private rememberLastPosition(containerEl: HTMLElement) {
 
-		// debugLog("rememberLastPosition:", containerEl);
+		// this.plugin.debug("rememberLastPosition:", containerEl);
 
         // go to the last position
 		containerEl.scrollTo({

@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { debugLog, getCommandNameById, getUUID } from "./Utils";
+import { getCommandNameById, getUUID } from "./Utils";
 import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
 
 const toIconizeFormat = (s: string) => 
@@ -18,7 +18,7 @@ const toIconizeFormat = (s: string) =>
  */
 export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, options: ExportSettings): Promise<string> {
     
-    // debugLog('exportToCallout()');
+    // plugin.debug('exportToCallout()');
 
     // write out callout type + styles
     const defaultStyles = toolbar.defaultStyles.length ? toolbar.defaultStyles.join('-') : '';
@@ -289,10 +289,10 @@ export async function importFromCallout(
                     style && !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
                 );
     
-                debugLog('• name?', name);
-                debugLog('• styles?', validDefaultStyles, validMobileStyles);
+                plugin.debug('• name?', name);
+                plugin.debug('• styles?', validDefaultStyles, validMobileStyles);
                 if (invalidStyles.length > 0) {
-                    debugLog('  • invalid:', invalidStyles);
+                    plugin.debug('  • invalid:', invalidStyles);
                     errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
@@ -308,7 +308,7 @@ export async function importFromCallout(
     // parse the rest
     lines.map((line, index) => {
 
-        debugLog(index + 1);
+        plugin.debug(index + 1);
         
         var itemType: ItemType | undefined = undefined;
 
@@ -336,9 +336,9 @@ export async function importFromCallout(
             // get the components of the external or internal link
             const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
-            debugLog(line);
-            debugLog('dataMatch:', dataMatch);
-            debugLog('linkMatch:', linkMatch);
+            plugin.debug(line);
+            plugin.debug('dataMatch:', dataMatch);
+            plugin.debug('linkMatch:', linkMatch);
 
             if (linkMatch) {
 
@@ -384,7 +384,7 @@ export async function importFromCallout(
                 if (dataMatch || uriMatch) {
                     const dataUriType = dataMatch ? dataMatch[1] : (uriMatch ? uriMatch[1] : '');
                     const dataUriValue = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[2] : '');
-                    debugLog('• data?', dataUriType, link);
+                    plugin.debug('• data?', dataUriType, link);
         
                     switch (dataUriType) {
                         case ItemType.Command:
@@ -402,7 +402,7 @@ export async function importFromCallout(
                         case ItemType.Templater:
                             itemType = dataUriType;
                             const dataEl = line.match(/<data\s[^>]*\/?>/);
-                            debugLog(dataUriType, dataEl);
+                            plugin.debug(dataUriType, dataEl);
                             
                             if (dataEl) {
                                 const parser = new DOMParser();
@@ -438,13 +438,13 @@ export async function importFromCallout(
 
         }
 
-        debugLog('• icon?', icon);
-        debugLog('• label?', label);
-        debugLog('• tooltip?', tooltip);
-        debugLog('• link?', link);
-        debugLog('• commandId?', commandId);
-        debugLog('• scriptConfig?', scriptConfig);
-        debugLog(`=> ${itemType?.toUpperCase()}`);
+        plugin.debug('• icon?', icon);
+        plugin.debug('• label?', label);
+        plugin.debug('• tooltip?', tooltip);
+        plugin.debug('• link?', link);
+        plugin.debug('• commandId?', commandId);
+        plugin.debug('• scriptConfig?', scriptConfig);
+        plugin.debug(`=> ${itemType?.toUpperCase()}`);
 
         errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 

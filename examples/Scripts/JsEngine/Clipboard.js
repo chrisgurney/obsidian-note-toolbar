@@ -12,7 +12,7 @@ export async function copy() {
 	const editor =  app.workspace.activeLeaf.view?.editor;
 	try {
 	  await window.navigator.clipboard.writeText(editor.getSelection());
-	  app.commands.executeCommandById("editor:focus");
+	  editor.focus();
 	} catch (error) {
 	  console.error("Copy failed:", error);
 	}
@@ -23,7 +23,7 @@ export async function cut() {
 	try {
 	  await window.navigator.clipboard.writeText(editor.getSelection());
 	  editor.replaceSelection('');
-	  app.commands.executeCommandById("editor:focus");
+	  editor.focus();
 	} catch (error) {
 	  console.error("Cut failed:", error);
 	}
@@ -35,7 +35,7 @@ export async function paste() {
 	  let replaceSelection = editor.replaceSelection;
 	  let text = await window.navigator.clipboard.readText();
 	  if (text) replaceSelection.apply(editor, [text]);
-	  app.commands.executeCommandById("editor:focus");
+	  editor.focus();
 	} catch (error) {
 	  console.error("Paste failed:", error);
 	}

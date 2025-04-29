@@ -11,7 +11,7 @@
 	try {
 	  await window.navigator.clipboard.writeText(editor.getSelection());
 	  editor.replaceSelection('');
-	  app.commands.executeCommandById("editor:focus");
+	  app.workspace.activeEditor?.editor?.focus();
 	} catch (error) {
 	  console.error("Cut failed:", error);
 	}

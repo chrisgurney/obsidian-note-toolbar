@@ -5,7 +5,6 @@ import { HelpModal } from "Settings/UI/Modals/HelpModal";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
-import { debugLog } from "Utils/Utils";
 
 export class ProtocolManager {
 
@@ -21,7 +20,7 @@ export class ProtocolManager {
 	 * @param data ObsidianProtocolData
 	 */
 	async handle(data: ObsidianProtocolData) {
-		debugLog('protocolHandler', data);
+		this.plugin.debug('protocolHandler', data);
 		// supports both commandid= and command= for backwards-compatability with Advanced URI
 		if (data.commandid || data.commandId || data.command) {
 			this.plugin.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));

@@ -12,7 +12,7 @@
 	  let replaceSelection = editor.replaceSelection;
 	  let text = await window.navigator.clipboard.readText();
 	  if (text) replaceSelection.apply(editor, [text]);
-	  app.commands.executeCommandById("editor:focus");
+	  app.workspace.activeEditor?.editor?.focus();
 	} catch (error) {
 	  console.error("Paste failed:", error);
 	}

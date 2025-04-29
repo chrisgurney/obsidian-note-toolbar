@@ -1,14 +1,16 @@
 import NoteToolbarPlugin from "main";
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
 import { FrontMatterCache, Notice, Platform, TFile } from "obsidian";
-import { debugLog, getUUID } from "Utils/Utils";
+import { getUUID } from "Utils/Utils";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
 import { NoteToolbarSettingTab } from "./UI/NoteToolbarSettingTab";
-import { ToolbarSuggestModal } from "./UI/Modals/ToolbarSuggestModal";
+
 
 export class SettingsManager {
-
-    public plugin: NoteToolbarPlugin;
+	
+	private DEBUG = false;
+	
+	public plugin: NoteToolbarPlugin;
 
     constructor(plugin: NoteToolbarPlugin) {
         this.plugin = plugin;
@@ -57,7 +59,7 @@ export class SettingsManager {
 	 * @returns string UUID of the new toolbar.
 	 */
 	public async duplicateToolbar(toolbar: ToolbarSettings): Promise<string> {
-		debugLog('duplicateToolbar', toolbar);
+		this.debug('duplicateToolbar', toolbar);
 		let newToolbar = {
 			uuid: getUUID(),
 			customClasses: "",
@@ -73,7 +75,7 @@ export class SettingsManager {
 		toolbar.items.forEach((item) => {
 			this.duplicateToolbarItem(newToolbar, item);
 		});
-		debugLog('duplicateToolbar: duplicated', newToolbar);
+		this.debug('duplicateToolbar: duplicated', newToolbar);
 		await this.addToolbar(newToolbar);
 		return newToolbar.uuid;
 	}
@@ -108,11 +110,11 @@ export class SettingsManager {
 	 */
 	public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
 
-		// debugLog('getMappedToolbar()');
+		// this.debug('getMappedToolbar()');
 
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
-		// debugLog('- frontmatter: ', frontmatter);
+		// this.debug('- frontmatter: ', frontmatter);
 		const propName = this.plugin.settings.toolbarProp;
 		let ignoreToolbar = false;
 
@@ -133,12 +135,12 @@ export class SettingsManager {
 			for (let index = 0; index < this.plugin.settings.folderMappings.length; index++) {
 				mapping = this.plugin.settings.folderMappings[index];
 				filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
-				// debugLog('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
+				// this.debug('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
 				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
 					// continue until we get a matching toolbar
 					matchingToolbar = this.getToolbarById(mapping.toolbar);
 					if (matchingToolbar) {
-						// debugLog('  - matched toolbar:', matchingToolbar);
+						// this.debug('  - matched toolbar:', matchingToolbar);
 						break;
 					}
 				}
@@ -423,7 +425,7 @@ export class SettingsManager {
 	async load(): Promise<void> {
 
 		const loaded_settings = await this.plugin.loadData();
-		debugLog("loadSettings: loaded settings: ", loaded_settings);
+		this.debug("loadSettings: loaded settings: ", loaded_settings);
 		this.plugin.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 	
 		let old_version = loaded_settings?.version as number;
@@ -432,22 +434,22 @@ export class SettingsManager {
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 
-			debugLog("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
-			debugLog("running migrations...");
+			this.debug("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
+			this.debug("running migrations...");
 
 			// first version without update (i.e., version is `undefined`)
 			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
 			if (!old_version) {
 				new_version = 20240318.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				// for each: double-check setting to migrate is there
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					if (tb.styles) {
-						debugLog("\t- OLD SETTING: " + tb.styles);
-						debugLog("\t\t- SETTING: this.plugin.settings.toolbars[index].defaultStyles: " + this.plugin.settings.toolbars[index].defaultStyles);
+						this.debug("\t- OLD SETTING: " + tb.styles);
+						this.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].defaultStyles: " + this.plugin.settings.toolbars[index].defaultStyles);
 						this.plugin.settings.toolbars[index].defaultStyles = tb.styles;
-						debugLog("\t\t- SET: " + this.plugin.settings.toolbars[index].defaultStyles);
-						debugLog("\t\t- SETTING: this.plugin.settings.toolbars[index].mobileStyles = []");
+						this.debug("\t\t- SET: " + this.plugin.settings.toolbars[index].defaultStyles);
+						this.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].mobileStyles = []");
 						this.plugin.settings.toolbars[index].mobileStyles = [];
 						delete tb.styles;
 					}
@@ -459,11 +461,11 @@ export class SettingsManager {
 			// MIGRATION: added urlAttr setting
 			if (old_version === 20240318.1) {
 				new_version = 20240322.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						if (!item?.urlAttr) {
-							debugLog("  - add urlAttr for: ", tb.name, item.label);
+							this.debug("  - add urlAttr for: ", tb.name, item.label);
 							// assume old urls are indeed urls and have variables
 							item.urlAttr = {
 								hasVars: true,
@@ -479,7 +481,7 @@ export class SettingsManager {
 			// MIGRATION: support for icons + generic links with types
 			if (old_version === 20240322.1) {
 				new_version = 20240330.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						this.plugin.settings.toolbars[index].items[item_index].icon = "";
@@ -504,7 +506,7 @@ export class SettingsManager {
 			// MIGRATION: support for position + contexts
 			if (old_version === 20240330.1) {
 				new_version = 20240416.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						// convert hideOnDesktop + hideOnMobile to contexts
@@ -529,7 +531,7 @@ export class SettingsManager {
 			// MIGRATION: platform-specific positions + item/component visibiility
 			if (old_version === 20240416.1) {
 				new_version = 20240426.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					// toolbar position -> platform-specific positions
 					if (this.plugin.settings.toolbars[index].positions) {
@@ -618,7 +620,7 @@ export class SettingsManager {
 			// MIGRATION: add and use IDs for toolbars and items
 			if (old_version === 20240426.1) {
 				new_version = 20240727.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					// add UUIDs to toolbars first
 					this.plugin.settings.toolbars[index].uuid = this.plugin.settings.toolbars[index].uuid 
@@ -654,7 +656,7 @@ export class SettingsManager {
 			// MIGRATION: add and use IDs for toolbars and items
 			if (old_version === 20240727.1) {
 				new_version = 20250302.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				// don't show onboarding for new toolbars if user's already mapped stuff 
 				if (loaded_settings.folderMappings.length > 0) {
 					this.plugin.settings.onboarding['new-toolbar-mapping'] = true;
@@ -666,7 +668,7 @@ export class SettingsManager {
 			// MIGRATION: set gallery flag on existing items
 			if (old_version === 20250302.1) {
 				new_version = 20250313.1;
-				debugLog("- starting migration: " + old_version + " -> " + new_version);
+				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						this.plugin.settings.toolbars[index].items[item_index].inGallery = false;
@@ -678,7 +680,7 @@ export class SettingsManager {
 
 			// COMMENT THIS OUT while testing new migration code
 			this.plugin.settings.version = SETTINGS_VERSION;
-			debugLog("updated settings:", this.plugin.settings);
+			this.debug("updated settings:", this.plugin.settings);
 
 			// ensure that migrated settings are saved 
 			await this.save();
@@ -697,12 +699,16 @@ export class SettingsManager {
 		await this.plugin.removeActiveToolbar();
 		await this.plugin.renderActiveToolbar();
 
-		debugLog("SETTINGS SAVED: " + new Date().getTime());
+		this.debug("SETTINGS SAVED: " + new Date().getTime());
 	}
 
 	/*************************************************************************
 	 * HELPERS
 	 *************************************************************************/
+
+	debug(message: string, ...args: any[]) {
+		this.DEBUG && console.debug(message, ...args);
+	}
 
 	/**
 	 * Migration: Returns the platform visibility value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;

@@ -2,7 +2,6 @@ import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { createOnboardingMessageEl, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
-import { debugLog } from "Utils/Utils";
 
 export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 

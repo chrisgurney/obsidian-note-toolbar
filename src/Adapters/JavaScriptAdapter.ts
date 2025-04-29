@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { debugLog, displayScriptError, importArgs } from "Utils/Utils";
+import { displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -160,7 +160,7 @@ export default class JavaScriptAdapter extends Adapter {
             component.load();
             try {
                 resultEl.empty();
-                debugLog(expression);
+                this.noteToolbar?.debug(expression);
                 // may directly render, in which case it will likely return undefined or null
                 result = await Promise.resolve(func(args));
                 if (containerEl && result && this.noteToolbar) {

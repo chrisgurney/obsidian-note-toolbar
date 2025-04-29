@@ -72,7 +72,7 @@
             "uk": "Копіює вибраний текст у буфер обміну."
         },
         "icon": "clipboard-copy",
-        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Copy",
             "zh": "复制",
@@ -120,7 +120,7 @@
             "uk": "Вирізає вибраний текст у буфер обміну."
         },
         "icon": "scissors",
-        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Cut",
             "zh": "剪切",
@@ -720,6 +720,18 @@
         "type": "command"
     },
     {
+        "id": "note-toolbar-backup-data",
+        "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `data-${date}.json`;\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); });",
+        "description": {
+            "en": "Backup Note Toolbar's configuration (data.json) file into the vault."
+        },
+        "icon": "file-stack",
+        "tooltip": {
+            "en": "Backup Note Toolbar config"
+        },
+        "type": "javascript"
+    },
+    {
         "id": "note-toolbar-quick-toolbars",
         "commandId": "note-toolbar:open-toolbar-suggester",
         "description": {
@@ -934,7 +946,7 @@
             "uk": "Вставте текст з буфера обміну."
         },
         "icon": "clipboard-paste",
-        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Paste",
             "zh": "粘贴",

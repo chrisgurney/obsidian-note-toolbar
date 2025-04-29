@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import NoteToolbarPlugin from 'main';
-import { arraymove, debugLog, getElementPosition, moveElement } from 'Utils/Utils';
+import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
 import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
@@ -571,7 +571,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				onChange: (item) => navigator.vibrate(50),
 				onChoose: (item) => navigator.vibrate(50),
 				onSort: async (item) => {
-					debugLog("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+					this.plugin.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 					if (item.oldIndex !== undefined && item.newIndex !== undefined) {
 						moveElement(this.plugin.settings.folderMappings, item.oldIndex, item.newIndex);
 						await this.plugin.settingsManager.save();
@@ -700,7 +700,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.extraSettingsEl,	'keydown', (e) => {
 						let currentEl = e.target as HTMLElement;
 						let rowId = currentEl.getAttribute('data-row-id');
-						// debugLog("rowId", rowId);
+						// this.plugin.debug("rowId", rowId);
 						rowId ? this.listMoveHandlerById(e, rowId) : undefined;
 					});
 			});
@@ -941,6 +941,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		new Setting(containerEl)
+			.setName(t('setting.other.debugging.name'))
+			.setDesc(t('setting.other.debugging.description'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.debugEnabled)
+				cb.onChange(async (value) => {
+					this.plugin.settings.debugEnabled = value;
+					await this.plugin.settingsManager.save();
+				});
+			});
+
+		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
 			.setDesc(t('setting.other.icon.description'))
 			.addButton((cb) => {
@@ -1075,7 +1086,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {	
 		let itemIndex = this.getIndexByRowId(rowId);
-		// debugLog("listMoveHandlerById: moving index:", itemIndex);
+		// this.plugin.debug("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemIndex, action);
 	}
 
@@ -1088,7 +1099,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	*/
     private rememberLastPosition(containerEl: HTMLElement) {
 
-		// debugLog("rememberLastPosition:", containerEl);
+		// this.plugin.debug("rememberLastPosition:", containerEl);
 
         // go to the last position
 		containerEl.scrollTo({
