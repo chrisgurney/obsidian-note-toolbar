@@ -474,6 +474,10 @@
                 "name": "Icon",
                 "tooltip": "Select icon"
             },
+            "load-settings-changes": {
+                "description": "If settings are being synced, enable to load settings as soon as they change. If not enabled, Obsidian needs to be restarted to see changes.",
+                "name": "Load settings changes"
+            },
             "name": "Other",
             "ribbon-action": {
                 "description": "Action to take when the ribbon icon (on phones) is used.",

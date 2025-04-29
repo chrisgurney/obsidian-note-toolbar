@@ -978,6 +978,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+		// new Setting(containerEl)
+		// 	.setName(t('setting.other.load-settings-changes.name'))
+		// 	.setDesc(t('setting.other.load-settings-changes.description'))
+		// 	.addToggle((cb) => {
+		// 		cb.setValue(this.plugin.settings.debugEnabled)
+		// 		cb.onChange(async (value) => {
+		// 			this.plugin.settings.debugEnabled = value;
+		// 			await this.plugin.settingsManager.save();
+		// 		});
+		// 	});
+
 		new Setting(containerEl)
 			.setName(t('setting.other.scripting.name'))
 			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
