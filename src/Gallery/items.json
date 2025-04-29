@@ -721,7 +721,7 @@
     },
     {
         "id": "note-toolbar-backup-data",
-        "script": "const dest = `data-${date}.json`;\nconst src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); });",
+        "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `data-${date}.json`;\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); });",
         "description": {
             "en": "Backup Note Toolbar's configuration (data.json) file into the vault."
         },
