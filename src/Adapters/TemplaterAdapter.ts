@@ -110,6 +110,7 @@ export default class TemplaterAdapter extends Adapter {
         if (config.postCommand) {
             try {
                 await this.noteToolbar?.app.commands.executeCommandById(config.postCommand);
+                this.noteToolbar?.app.workspace.activeEditor?.editor?.focus();
             } 
             catch (error) {
                 throw new Error(error);
