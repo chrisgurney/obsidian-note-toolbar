@@ -338,8 +338,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		}
 
+		itemsContainer.appendChild(itemsListContainer);
+
 		// add toolbar
-		new Setting(itemsListContainer)
+		new Setting(itemsContainer)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
@@ -352,7 +354,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				button.buttonEl.setText(iconTextFr('plus', t('setting.toolbars.button-new-tbar')));
 			});
 
-		itemsContainer.appendChild(itemsListContainer);
 		containerEl.append(itemsContainer);
 
 	}
