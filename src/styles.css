@@ -1281,6 +1281,16 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-items-list-container {
+    .is-phone & {
+        & .note-toolbar-setting-button {
+            & .setting-item-info {
+                display: none;
+            }
+        }       
+    }
+}
+
 .note-toolbar-setting-items-button-container {
     align-items: center !important;
     display: flex;
