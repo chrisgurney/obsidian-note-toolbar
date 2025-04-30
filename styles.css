@@ -3083,6 +3083,7 @@ input[type="text"].note-toolbar-setting-error,
     padding-inline-start: var(--size-4-5);
     padding-inline-end: var(--size-4-5);
     .is-phone & {
+        padding-top: 0;
         padding-bottom: var(--size-4-12);
     }
     & .note-toolbar-setting-plugin-onboarding {
