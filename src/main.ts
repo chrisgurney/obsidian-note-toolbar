@@ -1492,7 +1492,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			try {
 				if (target) this.app.workspace.getLeaf(target);
 				await this.app.commands.executeCommandById(commandId);
-				this.app.workspace.activeEditor?.editor?.focus();
+				// FIXME: make this a per-command setting
+				// this.app.workspace.activeEditor?.editor?.focus();
 			} 
 			catch (error) {
 				console.error(error);
