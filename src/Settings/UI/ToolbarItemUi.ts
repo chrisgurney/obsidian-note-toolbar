@@ -748,6 +748,20 @@ export default class ToolbarItemUi {
     }
 
     getCommandSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+        // focus
+        new Setting(fieldDiv)
+            .setName(t('setting.item.option-command-focus'))
+            .setDesc(t('setting.item.option-command-focus-description'))
+            .addToggle((toggle) => {
+                toggle
+                    .setValue(item.linkAttr.focus === 'editor')
+                    .onChange(async (value: boolean) => {
+                        item.linkAttr.focus = value ? 'editor' : undefined
+                        await this.plugin.settingsManager.save();
+                    });
+            });
+
+        // target
         const targetsToExclude = new Set(['window', 'modal']);
         const targetOptions = Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => !targetsToExclude.has(key)));
         new Setting(fieldDiv)

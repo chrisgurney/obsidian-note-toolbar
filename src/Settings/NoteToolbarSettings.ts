@@ -409,6 +409,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
  */
 export interface ToolbarItemLinkAttr {
 	commandId: string;
+	focus?: 'editor';
 	hasVars: boolean;
 	target?: PaneType | 'modal';
 	type: ItemType;

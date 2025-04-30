@@ -2568,8 +2568,12 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-item-link-subfield-with-info {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    gap: 1em;
     & .setting-item {
+        border: none;
         padding: 0;
     }
     & .setting-item-info {

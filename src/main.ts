@@ -1410,7 +1410,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				(file && (file !== activeFile)) ? this.handleLinkInSidebar(item, file) : this.handleLinkCommand(commandId, item?.linkAttr.target as PaneType);
+				(file && (file !== activeFile)) 
+					? this.handleLinkInSidebar(item, file) 
+					: this.handleLinkCommand(commandId, item?.linkAttr.focus, item?.linkAttr.target as PaneType);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -1482,7 +1484,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param commandId encoded command string, or null if nothing to do.
 	 * @param target where to execute the command.
 	 */
-	async handleLinkCommand(commandId: string | null, target?: PaneType | undefined) {
+	async handleLinkCommand(commandId: string | null, focus?: 'editor', target?: PaneType | undefined) {
 		// this.debug("handleLinkCommand()", commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
@@ -1492,8 +1494,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			try {
 				if (target) this.app.workspace.getLeaf(target);
 				await this.app.commands.executeCommandById(commandId);
-				// FIXME: make this a per-command setting
-				// this.app.workspace.activeEditor?.editor?.focus();
+				if (focus === 'editor') this.app.workspace.activeEditor?.editor?.focus();
 			} 
 			catch (error) {
 				console.error(error);
