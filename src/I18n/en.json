@@ -104,6 +104,7 @@
             "block-no-id": "No block ID found",
             "clipboard-copied": "Copied to clipboard",
             "error-console": "Error: Please check console for details",
+            "file-created": "Created: {{filename}}",
             "file-not-exist": "File does not exist"
         },
         "ui": {
