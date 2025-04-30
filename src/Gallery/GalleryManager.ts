@@ -128,6 +128,7 @@ export default class GalleryManager {
                 link: item.uri ?? '',
                 linkAttr: {
                     commandId: item.commandId ?? '',
+                    focus: item.focus || undefined,
                     hasVars: false,
                     target: item.target ?? '',
                     type: item.type

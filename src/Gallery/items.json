@@ -7,6 +7,7 @@
             "zh": "插入附件文件。",
             "uk": "Виберіть файл для вставки."
         },
+        "focus": "editor",
         "icon": "paperclip",
         "tooltip": {
             "en": "Insert attachment",
@@ -56,6 +57,7 @@
             "zh": "移除所有文本格式。",
             "uk": "Видаліть все форматування тексту."
         },
+        "focus": "editor",
         "icon": "eraser",
         "tooltip": {
             "en": "Clear formatting",
@@ -136,6 +138,7 @@
             "zh": "在项目符号、复选框（勾选和未勾选）之间切换。",
             "uk": "Змінює на маркер, прапорець, або знімає позначку."
         },
+        "focus": "editor",
         "icon": "check-square",
         "tooltip": {
             "en": "Cycle bullet/checkbox",
@@ -551,6 +554,7 @@
             "zh": "插入一个标注块。",
             "uk": "Додайте блок виноски."
         },
+        "focus": "editor",
         "icon": "quote",
         "tooltip": {
             "en": "Insert callout",
@@ -567,6 +571,7 @@
             "zh": "插入一个代码块。",
             "uk": "Додайте блок коду."
         },
+        "focus": "editor",
         "icon": "code-square",
         "tooltip": {
             "en": "Insert code block",
@@ -583,6 +588,7 @@
             "zh": "添加一个嵌入的文件或笔记。",
             "uk": "Додайте вбудований файл, або нотатку."
         },
+        "focus": "editor",
         "icon": "sticky-note",
         "tooltip": {
             "en": "Add embed",
@@ -599,6 +605,7 @@
             "zh": "插入一条分隔线。",
             "uk": "Додайте горизонтальну лінію для розділення секцій."
         },
+        "focus": "editor",
         "icon": "line-horizontal",
         "tooltip": {
             "en": "Insert horizontal rule",
@@ -615,6 +622,7 @@
             "zh": "插入一个 markdown 链接。",
             "uk": "Додайте посилання Markdown."
         },
+        "focus": "editor",
         "icon": "link",
         "tooltip": {
             "en": "Insert markdown link",
@@ -631,6 +639,7 @@
             "zh": "插入一个数学块。",
             "uk": "Додайте блок формул."
         },
+        "focus": "editor",
         "icon": "sigma-square",
         "tooltip": {
             "en": "Insert math block",
@@ -647,6 +656,7 @@
             "zh": "插入一个表格。",
             "uk": "Додайте таблицю."
         },
+        "focus": "editor",
         "icon": "table",
         "tooltip": {
             "en": "Insert table",
@@ -663,6 +673,7 @@
             "zh": "给笔记添加一个标签。",
             "uk": "Додайте мітку до нотатки."
         },
+        "focus": "editor",
         "icon": "tag",
         "tooltip": {
             "en": "Insert tag",
@@ -679,6 +690,7 @@
             "zh": "添加一个内部链接。",
             "uk": "Додайте внутрішнє посилання."
         },
+        "focus": "editor",
         "icon": "brackets",
         "tooltip": {
             "en": "Add internal link",
@@ -1264,6 +1276,7 @@
             "zh": "将当前行向下移动。",
             "uk": "Перемістіть поточний рядок вниз."
         },
+        "focus": "editor",
         "icon": "corner-right-down",
         "tooltip": {
             "en": "Move line down",
@@ -1280,6 +1293,7 @@
             "zh": "将当前行向上移动。",
             "uk": "Перемістіть поточний рядок вгору."
         },
+        "focus": "editor",
         "icon": "corner-right-up",
         "tooltip": {
             "en": "Move line up",
@@ -1393,6 +1407,7 @@
             "zh": "应用或移除引用块格式。",
             "uk": "Перемикайте форматування цитати."
         },
+        "focus": "editor",
         "icon": "text-quote",
         "tooltip": {
             "en": "Toggle blockquote",
@@ -1409,6 +1424,7 @@
             "zh": "应用或移除粗体格式。",
             "uk": "Перемикайте жирне форматування."
         },
+        "focus": "editor",
         "icon": "bold",
         "tooltip": {
             "en": "Toggle bold",
@@ -1425,6 +1441,7 @@
             "zh": "应用或移除无序列表格式。",
             "uk": "Перемикайте форматування маркованого списку."
         },
+        "focus": "editor",
         "icon": "list",
         "tooltip": {
             "en": "Toggle bullet",
@@ -1441,6 +1458,7 @@
             "zh": "切换任务列表的状态。",
             "uk": "Перемикайте стан елементів списку завдань."
         },
+        "focus": "editor",
         "icon": "list-checks",
         "tooltip": {
             "en": "Toggle check status",
@@ -1457,6 +1475,7 @@
             "zh": "应用或移除内联代码格式。",
             "uk": "Перемикайте форматування вбудованого коду."
         },
+        "focus": "editor",
         "icon": "code",
         "tooltip": {
             "en": "Toggle code",
@@ -1473,6 +1492,7 @@
             "zh": "添加或移除注释。",
             "uk": "Додайте, або видаліть коментарі."
         },
+        "focus": "editor",
         "icon": "percent",
         "tooltip": {
             "en": "Toggle comment",
@@ -1505,6 +1525,7 @@
             "zh": "应用或移除文本高亮。",
             "uk": "Перемикайте виділення тексту."
         },
+        "focus": "editor",
         "icon": "highlighter",
         "tooltip": {
             "en": "Toggle highlight",
@@ -1521,6 +1542,7 @@
             "zh": "应用或移除内联数学格式。",
             "uk": "Застосуйте, або скасуйте форматування вбудованих формул."
         },
+        "focus": "editor",
         "icon": "sigma",
         "tooltip": {
             "en": "Toggle inline math",
@@ -1553,6 +1575,7 @@
             "zh": "应用或移除有序列表格式。",
             "uk": "Перемикайте форматування нумерованого списку."
         },
+        "focus": "editor",
         "icon": "list-ordered",
         "tooltip": {
             "en": "Toggle numbered list",
@@ -1603,6 +1626,7 @@
             "zh": "应用或移除删除线格式。",
             "uk": "Перемикайте форматування закреслення."
         },
+        "focus": "editor",
         "icon": "strikethrough",
         "tooltip": {
             "en": "Toggle strikethrough",
