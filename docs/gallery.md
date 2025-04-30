@@ -85,7 +85,7 @@ Add various types of content like links or media.
 | Insert code block | Insert a code block. |
 | Insert callout | Insert a callout block. |
 | Insert markdown link | Insert a markdown link. |
-| Add tag | Add a tag to the note. |
+| Insert tag | Insert a tag in the note. |
 | Insert horizontal rule | Insert a horizontal rule to separate sections. |
 | Add internal link | Add an internal link. |
 | Insert table | Insert a table. |
