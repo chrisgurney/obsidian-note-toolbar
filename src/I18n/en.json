@@ -479,7 +479,7 @@
                 "tooltip": "Select icon"
             },
             "load-settings-changes": {
-                "description": "If settings are being synced between devices, load settings as soon as they change. If not enabled, Obsidian needs to be restarted to see changes.",
+                "description": "Load settings as soon as they change, if plugin settings are being synced between devices. If not enabled, Obsidian needs to be restarted to see changes.",
                 "name": "Load settings changes"
             },
             "name": "Other",
