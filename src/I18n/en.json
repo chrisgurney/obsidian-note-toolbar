@@ -339,6 +339,7 @@
             "placeholder": "Search for an icon..."
         },
         "item": {
+            "button-advanced-tooltip": "Advanced settings",
             "button-close": "Done",
             "button-close-description": "Saves and closes this item",
             "button-duplicate-tooltip": "Duplicate this item",
