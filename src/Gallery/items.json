@@ -659,13 +659,13 @@
         "id": "insert-tag",
         "commandId": "editor:insert-tag",
         "description": {
-            "en": "Add a tag to the note.",
+            "en": "Insert a tag in the note.",
             "zh": "给笔记添加一个标签。",
             "uk": "Додайте мітку до нотатки."
         },
         "icon": "tag",
         "tooltip": {
-            "en": "Add tag",
+            "en": "Insert tag",
             "zh": "添加标签",
             "uk": "Нова мітка"
         },
