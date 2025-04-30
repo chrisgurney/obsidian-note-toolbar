@@ -2335,9 +2335,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (frontmatter && frontmatter[key] !== undefined) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
 				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
-				// handle the case where the prop might be a list
-				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-				// FIXME: does not work with number properties
+				// handle the case where the prop might be a list, and convert numbers to strings
+				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : String(frontmatter[key]);
 				fm = fm ? fm.replace(linkWrap, '$1') : '';
 				// FIXME: should this be returning here? or just updating the string?
 				return encode ? encodeURIComponent(fm) : fm;
