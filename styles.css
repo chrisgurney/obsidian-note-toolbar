@@ -2160,7 +2160,6 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container {
-    padding-top: 0;
     & .note-toolbar-setting-items-list-container {
         .setting-item:first-child {
             padding: 0.75em 0;
