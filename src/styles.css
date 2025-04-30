@@ -1209,6 +1209,11 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .setting-item-heading {
         padding: 0.75em 0;
+        .is-mobile & {
+            & .setting-item-control {
+                gap: var(--size-4-4);
+            }
+        }
     }
     & #tbar-search {
         padding-top: 0;
