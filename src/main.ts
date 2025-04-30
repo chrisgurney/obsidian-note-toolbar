@@ -1136,28 +1136,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		// iterate over the item elements of this toolbarEl
-		// TODO: use the hasvars attribute to further filter this down
 		let toolbarItemEls = Array.from(toolbarEl.querySelectorAll('.callout-content > ul > li') as NodeListOf<HTMLElement>);
 		for (const itemEl of toolbarItemEls) {
 
 			let itemSpanEl = itemEl.querySelector('span.external-link') as HTMLSpanElement;
 
-			// skip separators
+			// skip separators and breaks
 			if (!itemSpanEl) { continue }
 
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
-
-				// if link resolves to nothing, there's no need to display the item
-				if (this.hasVars(itemSetting.link)) {
-					if (await this.replaceVars(itemSetting.link, activeFile) === "") {
-						itemEl.addClass('hide'); // hide the containing li element
-						continue;
-					}
-					else {
-						itemEl.removeClass('hide'); // unhide the containing li element
-					}
-				}
 
 				// update tooltip + label
 				if (this.hasVars(itemSetting.tooltip)) {
@@ -1175,6 +1163,18 @@ export default class NoteToolbarPlugin extends Plugin {
 						itemElLabel?.addClass('hide');
 						itemElLabel?.setText('');
 					}
+				}
+
+				// if item's empty, is not visible, or its link resolves to nothing, do not show it
+				const isItemEmpty = itemSpanEl.innerText === '' && itemSetting.icon === '';
+				const isItemHidden = getComputedStyle(itemSpanEl).display === 'none';
+				const isLinkEmpty = this.hasVars(itemSetting.link) && (await this.replaceVars(itemSetting.link, activeFile) === '');
+				if (isItemEmpty || isLinkEmpty || isItemHidden) {
+					itemEl.addClass('hide');
+					continue;
+				}
+				else {
+					itemEl.removeClass('hide');
 				}
 
 				// update li active-file property, to allow tab-like styling
