@@ -386,7 +386,7 @@
       "option-label-placeholder": "文本（如果设置了图标则可选）",
       "option-script": "选择您要如何执行脚本",
       "option-separator": "分隔符",
-      "option-target-default": "默认（当前页打开）",
+      "option-target-default": "当前页（默认）",
       "option-target-split": "左右分屏",
       "option-target-tab": "新标签页",
       "option-target-window": "新窗口",
@@ -409,7 +409,7 @@
       "option-menu": "菜单",
       "option-uri-target": "如何打开文件",
       "option-uri-target-description": "如果该 URI 对应的是库中的文件，在此选择如何打开它。\n使用修饰键或插件可能会覆盖此设置。",
-      "option-target-modal": "模态窗口"
+      "option-target-modal": "模态窗口（Modal）"
     },
     "item-suggest-modal": {
       "instruction-back": "返回",
