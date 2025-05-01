@@ -480,8 +480,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		if (itemsContainer) {
 			this.itemListOpen = !this.itemListOpen;
 			itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+			// TODO: REMOVE? commented out as was causing problems with expand/collapse
 			// hide search field, if needed
-			if (!Platform.isDesktop && !this.itemListOpen) this.toggleSearch(false);
+			// if (!Platform.isDesktop && !this.itemListOpen) this.toggleSearch(false);
 			// update heading (with toolbar count)
 			let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
 			this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
