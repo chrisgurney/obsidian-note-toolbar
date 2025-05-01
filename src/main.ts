@@ -184,9 +184,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
 	 */
 	async onExternalSettingsChange(): Promise<void> {
-		if (this.settings.loadSettingsChanges) {
+		const loadSettingsChanges = localStorage.getItem('note-toolbar-load-settings-changes') === 'true';
+		if (loadSettingsChanges) {
 			this.debug("onExternalSettingsChange() loading settings changes");
 			await this.settingsManager.load();
+			await this.renderActiveToolbar();
 		}
 	}
 

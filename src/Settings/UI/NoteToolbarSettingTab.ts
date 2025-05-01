@@ -980,14 +980,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
+		// sync setting (stored locally only)
+		const loadSettingsChanges = localStorage.getItem('note-toolbar-load-settings-changes') === 'true';
 		new Setting(containerEl)
 			.setName(t('setting.other.load-settings-changes.name'))
 			.setDesc(t('setting.other.load-settings-changes.description'))
 			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.debugEnabled)
+				cb.setValue(loadSettingsChanges)
 				cb.onChange(async (value) => {
-					this.plugin.settings.debugEnabled = value;
-					await this.plugin.settingsManager.save();
+					localStorage.setItem('note-toolbar-load-settings-changes', value.toString());
 				});
 			});
 
