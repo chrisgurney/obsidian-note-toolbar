@@ -2121,6 +2121,9 @@ input[type="text"].note-toolbar-setting-error,
                 gap: var(--size-4-4);
             }
         }
+        .is-phone & {
+            padding-top: 1.5em !important;
+        }
     }
     & #tbar-search {
         padding-top: 0;
