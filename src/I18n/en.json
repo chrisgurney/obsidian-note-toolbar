@@ -479,7 +479,7 @@
                 "tooltip": "Select icon"
             },
             "load-settings-changes": {
-                "description": "Load settings as soon as they change, if plugin settings are being synced between devices. If not enabled, Obsidian needs to be restarted to see changes.",
+                "description": "If you’re syncing plugin settings across devices, turn this on to automatically load toolbar updates. If not, you’ll need to restart Obsidian to see changes from other devices.",
                 "name": "Load settings changes"
             },
             "name": "Other",
