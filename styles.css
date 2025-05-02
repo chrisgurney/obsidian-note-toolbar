@@ -2195,14 +2195,14 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-setting-items-list-container {
-    .is-phone & {
-        & .note-toolbar-setting-button {
-            & .setting-item-info {
-                display: none;
-            }
-        }       
-    }
+
+.is-phone .note-toolbar-setting-items-container,
+.is-phone .note-toolbar-setting-items-list-container {
+    & .note-toolbar-setting-button {
+        & .setting-item-info {
+            display: none;
+        }
+    }  
 }
 
 .note-toolbar-setting-items-button-container {
