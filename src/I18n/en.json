@@ -496,7 +496,7 @@
             },
             "show-edit-tbar": {
                 "description": "Adds an item to access the toolbar's settings in toolbars that are displayed as menus.",
-                "name": "Show \"Edit toolbar\" link in toolbar menus"
+                "name": "Show \"Edit toolbar\" in toolbar menus"
             }
         },
         "position": {
