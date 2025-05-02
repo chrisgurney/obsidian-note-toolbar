@@ -181,10 +181,10 @@ export default class ToolbarSettingsModal extends Modal {
 					// check for existing toolbar with this name
 					let existingToolbar = this.plugin.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
-						setFieldError(this, cb.inputEl, t('setting.name.error-toolbar-already-exists'));
+						setFieldError(this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
 					}
 					else {
-						removeFieldError(cb.inputEl);
+						removeFieldError(cb.inputEl, 'beforeend');
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
@@ -677,7 +677,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setClass('note-toolbar-setting-item-full-width-phone')
 			.addSearch((cb) => {
 				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
-					removeFieldError(cb.inputEl);
+					removeFieldError(cb.inputEl, 'beforeend');
 					cb.inputEl.value = item.label || item.tooltip;
 					this.toolbar.defaultItem = item.uuid;
 					await this.plugin.settingsManager.save();
@@ -687,10 +687,10 @@ export default class ToolbarSettingsModal extends Modal {
 					.onChange(debounce(async (itemText) => {
 						if (itemText) {
 							cb.inputEl.value = itemText;
-							setFieldError(this, cb.inputEl, t('setting.position.option-defaultitem-error-invalid'));
+							setFieldError(this, cb.inputEl, 'beforeend', t('setting.position.option-defaultitem-error-invalid'));
 						}
 						else {
-							removeFieldError(cb.inputEl);
+							removeFieldError(cb.inputEl, 'beforeend');
 							this.toolbar.defaultItem = null;
 							await this.plugin.settingsManager.save();
 						}

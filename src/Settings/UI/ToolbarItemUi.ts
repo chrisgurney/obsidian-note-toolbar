@@ -1162,14 +1162,14 @@ export default class ToolbarItemUi {
             }
         }
 
-        removeFieldError(componentEl);
+        removeFieldError(componentEl, 'afterend');
         switch (status) {
             case Status.Empty:
                 // TODO? flag for whether empty should show as an error or not
                 isValid = false;
                 break;
             case Status.Invalid:
-                setFieldError(this.parent, componentEl, statusMessage, statusLink);
+                setFieldError(this.parent, componentEl, 'afterend', statusMessage, statusLink);
                 isValid = false;
                 break;
         }

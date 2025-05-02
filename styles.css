@@ -2599,7 +2599,10 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-item-field-link {
+    align-items: flex-start;
     border-top: none !important;
+    flex-direction: column;
+    gap: 0.5em;
     padding-top: 0 !important;
     width: 100%;
     & .setting-item-info {
