@@ -109,8 +109,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 
+		const toolbarListHeading = this.itemListOpen ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length });
 		let toolbarListSetting = new Setting(itemsContainer)
-			.setName(t('setting.toolbars.name'))
+			.setName(toolbarListHeading)
 			.setHeading();
 
 		// search button (or field on desktop)
