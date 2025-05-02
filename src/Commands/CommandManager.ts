@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -176,7 +176,7 @@ export class CommandManager {
                                 left: (fabPos === PositionType.FabLeft ? false : true)
                             };
                             // store menu position for sub-menu positioning
-                            localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+                            localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
                             menu.showAtPosition(menuPos);
                         });
                     }

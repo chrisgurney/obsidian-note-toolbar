@@ -2,7 +2,7 @@ import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTa
 import NoteToolbarPlugin from 'main';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
-import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, LocalVar, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
@@ -981,14 +981,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		// sync setting (stored locally only)
-		const loadSettingsChanges = localStorage.getItem('note-toolbar-load-settings-changes') === 'true';
+		const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
 		new Setting(containerEl)
 			.setName(t('setting.other.load-settings-changes.name'))
 			.setDesc(t('setting.other.load-settings-changes.description'))
 			.addToggle((cb) => {
 				cb.setValue(loadSettingsChanges)
 				cb.onChange(async (value) => {
-					localStorage.setItem('note-toolbar-load-settings-changes', value.toString());
+					localStorage.setItem(LocalVar.LoadSettings, value.toString());
 				});
 			});
 

@@ -1,6 +1,6 @@
 import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
@@ -184,7 +184,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
 	 */
 	async onExternalSettingsChange(): Promise<void> {
-		const loadSettingsChanges = localStorage.getItem('note-toolbar-load-settings-changes') === 'true';
+		const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
 		if (loadSettingsChanges) {
 			this.debug("onExternalSettingsChange() loading settings changes");
 			await this.settingsManager.load();
@@ -1086,12 +1086,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (clickedItemEl) {
 			let elemRect = clickedItemEl.getBoundingClientRect();
 			menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
-			localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+			localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
 		}
 
 		// if we don't have a position yet, try to get it from the previous menu
 		if (!menuPos) {
-			let previousPosData = localStorage.getItem('note-toolbar-menu-pos');
+			let previousPosData = localStorage.getItem(LocalVar.MenuPos);
 			menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
 		}
 
@@ -1213,7 +1213,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param activeItemId UUID of the item that was clicked/tapped; provide nothing to unset.
 	 */
 	updateActiveToolbarItem(activeItemId?: string): void {
-		localStorage.setItem('note-toolbar-active-item', activeItemId ?? '');
+		localStorage.setItem(LocalVar.ActiveItem, activeItemId ?? '');
 	}
 
 	/*************************************************************************
@@ -1682,7 +1682,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							left: (fabPos === PositionType.FabLeft ? false : true)
 						};
 						// store menu position for sub-menu positioning
-						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+						localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
 						menu.showAtPosition(menuPos);
 					}
 				});
@@ -2048,7 +2048,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns last activated toolbar item ID, or null if it can't be found.
 	 */
 	getActiveItemId(): string | null {
-		return localStorage.getItem('note-toolbar-active-item');
+		return localStorage.getItem(LocalVar.ActiveItem);
 	}
 
 	getAllToolbarEl(): NodeListOf<HTMLElement> {

@@ -157,6 +157,12 @@ export enum ViewType {
 	Source = 'source'
 }
 
+export enum LocalVar {
+	ActiveItem = 'note-toolbar-active-item',
+	LoadSettings = 'note-toolbar-load-settings-changes',
+	MenuPos = 'note-toolbar-menu-pos'
+}
+
 export enum CalloutAttr {
     Command = 'data-command',
     CommandNtb = 'data-ntb-command', // for backwards-compatibility
