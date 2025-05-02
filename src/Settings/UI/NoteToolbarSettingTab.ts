@@ -546,6 +546,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					handleKeyClick(this.plugin, cb.extraSettingsEl);
 				});
 		}
+		else {
+			// remove the area where the collapse button would be
+			toolbarMapSetting.controlEl.style.display = 'none';
+		}
 
 		let collapsibleContainer = createDiv();
 		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
