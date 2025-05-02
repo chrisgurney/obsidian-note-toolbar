@@ -307,19 +307,22 @@ export class CommandManager {
         let currentView = this.plugin.app.workspace.getActiveViewOfType(MarkdownView);
         // this.plugin.debug("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
         // @ts-ignore make sure we're not in source (code) view
-        if (propsEl && !currentView.editMode.sourceMode) {
+        if (propsEl && !currentView?.editMode.sourceMode) {
             let propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
             visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
             switch (visibility) {
                 case 'show':
+                    // TODO: there's also var(--metadata-display-reading) for reading mode
                     propsEl.style.display = 'var(--metadata-display-editing)';
                     // expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
                     if (propsEl.classList.contains('is-collapsed')) {
                         (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
                     }	
+                    localStorage.setItem(LocalVar.HideProperties, 'false');
                     break;
                 case 'hide':
                     propsEl.style.display = 'none';
+                    localStorage.setItem(LocalVar.HideProperties, 'true');
                     break;
                 case 'fold':
                     if (!propsEl.classList.contains('is-collapsed')) {

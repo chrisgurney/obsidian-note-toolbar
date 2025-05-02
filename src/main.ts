@@ -1122,6 +1122,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug("updateToolbar()", toolbar.name);
 
+		// hide properties if they've been hidden before
+		if (localStorage.getItem(LocalVar.HideProperties) === 'true') {
+			this.debug('updateToolbar() hiding properties');
+			this.commands.toggleProps('hide');
+		}
+
 		let toolbarEl = this.getToolbarEl();
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
 
