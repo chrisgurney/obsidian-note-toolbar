@@ -1,6 +1,6 @@
 import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
@@ -184,10 +184,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
 	 */
 	async onExternalSettingsChange(): Promise<void> {
-		this.debug("onExternalSettingsChange()");
-		// reload in-memory settings
-		// FIXME? removing for now due to bug with settings not being saved properly while editing
-		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
+		if (loadSettingsChanges) {
+			this.debug("onExternalSettingsChange() loading settings changes");
+			await this.settingsManager.load();
+			await this.renderActiveToolbar();
+		}
 	}
 
 	/* keeping for potential future use
@@ -1084,12 +1086,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (clickedItemEl) {
 			let elemRect = clickedItemEl.getBoundingClientRect();
 			menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
-			localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+			localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
 		}
 
 		// if we don't have a position yet, try to get it from the previous menu
 		if (!menuPos) {
-			let previousPosData = localStorage.getItem('note-toolbar-menu-pos');
+			let previousPosData = localStorage.getItem(LocalVar.MenuPos);
 			menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
 		}
 
@@ -1120,6 +1122,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug("updateToolbar()", toolbar.name);
 
+		// hide properties if they've been hidden before
+		if (localStorage.getItem(LocalVar.HideProperties) === 'true') {
+			this.debug('updateToolbar() hiding properties');
+			this.commands.toggleProps('hide');
+		}
+
 		let toolbarEl = this.getToolbarEl();
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
 
@@ -1136,28 +1144,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		// iterate over the item elements of this toolbarEl
-		// TODO: use the hasvars attribute to further filter this down
 		let toolbarItemEls = Array.from(toolbarEl.querySelectorAll('.callout-content > ul > li') as NodeListOf<HTMLElement>);
 		for (const itemEl of toolbarItemEls) {
 
 			let itemSpanEl = itemEl.querySelector('span.external-link') as HTMLSpanElement;
 
-			// skip separators
+			// skip separators and breaks
 			if (!itemSpanEl) { continue }
 
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
-
-				// if link resolves to nothing, there's no need to display the item
-				if (this.hasVars(itemSetting.link)) {
-					if (await this.replaceVars(itemSetting.link, activeFile) === "") {
-						itemEl.addClass('hide'); // hide the containing li element
-						continue;
-					}
-					else {
-						itemEl.removeClass('hide'); // unhide the containing li element
-					}
-				}
 
 				// update tooltip + label
 				if (this.hasVars(itemSetting.tooltip)) {
@@ -1175,6 +1171,18 @@ export default class NoteToolbarPlugin extends Plugin {
 						itemElLabel?.addClass('hide');
 						itemElLabel?.setText('');
 					}
+				}
+
+				// if item's empty, is not visible, or its link resolves to nothing, do not show it
+				const isItemEmpty = itemSpanEl.innerText === '' && itemSetting.icon === '';
+				const isItemHidden = getComputedStyle(itemSpanEl).display === 'none';
+				const isLinkEmpty = this.hasVars(itemSetting.link) && (await this.replaceVars(itemSetting.link, activeFile) === '');
+				if (isItemEmpty || isLinkEmpty || isItemHidden) {
+					itemEl.addClass('hide');
+					continue;
+				}
+				else {
+					itemEl.removeClass('hide');
 				}
 
 				// update li active-file property, to allow tab-like styling
@@ -1211,7 +1219,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param activeItemId UUID of the item that was clicked/tapped; provide nothing to unset.
 	 */
 	updateActiveToolbarItem(activeItemId?: string): void {
-		localStorage.setItem('note-toolbar-active-item', activeItemId ?? '');
+		localStorage.setItem(LocalVar.ActiveItem, activeItemId ?? '');
 	}
 
 	/*************************************************************************
@@ -1410,7 +1418,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		switch (type) {
 			case ItemType.Command:
-				(file && (file !== activeFile)) ? this.handleLinkInSidebar(item, file) : this.handleLinkCommand(commandId, item?.linkAttr.target as PaneType);
+				(file && (file !== activeFile)) 
+					? this.handleLinkInSidebar(item, file) 
+					: this.handleLinkCommand(commandId, item?.linkAttr.focus, item?.linkAttr.target as PaneType);
 				break;
 			case ItemType.File:
 				// it's an internal link (note); try to open it
@@ -1482,7 +1492,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param commandId encoded command string, or null if nothing to do.
 	 * @param target where to execute the command.
 	 */
-	async handleLinkCommand(commandId: string | null, target?: PaneType | undefined) {
+	async handleLinkCommand(commandId: string | null, focus?: 'editor', target?: PaneType | undefined) {
 		// this.debug("handleLinkCommand()", commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
@@ -1492,7 +1502,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			try {
 				if (target) this.app.workspace.getLeaf(target);
 				await this.app.commands.executeCommandById(commandId);
-				this.app.workspace.activeEditor?.editor?.focus();
+				if (focus === 'editor') this.app.workspace.activeEditor?.editor?.focus();
 			} 
 			catch (error) {
 				console.error(error);
@@ -1678,7 +1688,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							left: (fabPos === PositionType.FabLeft ? false : true)
 						};
 						// store menu position for sub-menu positioning
-						localStorage.setItem('note-toolbar-menu-pos', JSON.stringify(menuPos));
+						localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
 						menu.showAtPosition(menuPos);
 					}
 				});
@@ -2044,7 +2054,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns last activated toolbar item ID, or null if it can't be found.
 	 */
 	getActiveItemId(): string | null {
-		return localStorage.getItem('note-toolbar-active-item');
+		return localStorage.getItem(LocalVar.ActiveItem);
 	}
 
 	getAllToolbarEl(): NodeListOf<HTMLElement> {
@@ -2334,9 +2344,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (frontmatter && frontmatter[key] !== undefined) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
 				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
-				// handle the case where the prop might be a list
-				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : frontmatter[key];
-				// FIXME: does not work with number properties
+				// handle the case where the prop might be a list, and convert numbers to strings
+				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : String(frontmatter[key]);
 				fm = fm ? fm.replace(linkWrap, '$1') : '';
 				// FIXME: should this be returning here? or just updating the string?
 				return encode ? encodeURIComponent(fm) : fm;

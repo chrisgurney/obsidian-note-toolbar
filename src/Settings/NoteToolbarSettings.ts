@@ -3,7 +3,7 @@ import { PaneType } from "obsidian";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20250313.1;
-export const WHATSNEW_VERSION = '1.22';
+export const WHATSNEW_VERSION = '1.23';
 
 /******************************************************************************
  * TRANSLATIONS
@@ -155,6 +155,13 @@ export enum ViewType {
 	All = 'all',
 	Preview = 'preview',
 	Source = 'source'
+}
+
+export enum LocalVar {
+	ActiveItem = 'note-toolbar-active-item',
+	HideProperties = 'note-toolbar-hide-properties',
+	LoadSettings = 'note-toolbar-load-settings-changes',
+	MenuPos = 'note-toolbar-menu-pos'
 }
 
 export enum CalloutAttr {
@@ -407,6 +414,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
  */
 export interface ToolbarItemLinkAttr {
 	commandId: string;
+	focus?: 'editor';
 	hasVars: boolean;
 	target?: PaneType | 'modal';
 	type: ItemType;

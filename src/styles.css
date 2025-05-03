@@ -1209,6 +1209,14 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .setting-item-heading {
         padding: 0.75em 0;
+        .is-mobile & {
+            & .setting-item-control {
+                gap: var(--size-4-4);
+            }
+        }
+        .is-phone & {
+            padding-top: 1.5em !important;
+        }
     }
     & #tbar-search {
         padding-top: 0;
@@ -1248,7 +1256,6 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container {
-    padding-top: 0;
     & .note-toolbar-setting-items-list-container {
         .setting-item:first-child {
             padding: 0.75em 0;
@@ -1279,6 +1286,15 @@ input[type="text"].note-toolbar-setting-error,
             }
         }
     }
+}
+
+.is-phone .note-toolbar-setting-items-container,
+.is-phone .note-toolbar-setting-items-list-container {
+    & .note-toolbar-setting-button {
+        & .setting-item-info {
+            display: none;
+        }
+    }  
 }
 
 .note-toolbar-setting-items-button-container {
@@ -1645,9 +1661,16 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-setting-item-link-subfield-with-info {
+.note-toolbar-setting-item-link-advanced {
+    display: none;
+    &[data-active] {
+        display: flex !important;
+    }
+    flex-direction: column;
     flex-grow: 1;
+    gap: 1em;
     & .setting-item {
+        border: none;
         padding: 0;
     }
     & .setting-item-info {
@@ -1669,15 +1692,23 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-item-field-link {
+    align-items: flex-start;
     border-top: none !important;
+    flex-direction: column;
+    gap: 0.5em;
     padding-top: 0 !important;
     width: 100%;
     & .setting-item-info {
         display: none;
     }
     & .setting-item-control {
-        flex-direction: column;
         align-items: flex-start;
+        flex-direction: column;
+        /* for the advanced settings gear */
+        &.note-toolbar-setting-item-control-advanced {
+            align-items: center;
+            flex-direction: row
+        }
     };
     & .setting-item-control, .search-input-container {
         width: 100%;
@@ -2161,6 +2192,7 @@ input[type="text"].note-toolbar-setting-error,
     padding-inline-start: var(--size-4-5);
     padding-inline-end: var(--size-4-5);
     .is-phone & {
+        padding-top: 0;
         padding-bottom: var(--size-4-12);
     }
     & .note-toolbar-setting-plugin-onboarding {

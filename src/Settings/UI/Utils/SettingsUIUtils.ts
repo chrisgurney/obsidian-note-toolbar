@@ -431,8 +431,9 @@ export function pluginLinkFr(commandId: string, linkText?: string): DocumentFrag
 /**
  * Removes the error on the field.
  * @param el HTMLElement to update
+ * @param position Position to insert the error text
  */
-export function removeFieldError(el: HTMLElement | null) {
+export function removeFieldError(el: HTMLElement | null, position: 'beforeend' | 'afterend') {
 	if (el) {
 		const itemControlClass = 'setting-item-control';
 		const itemPreviewClass = 'note-toolbar-setting-item-preview';
@@ -441,7 +442,13 @@ export function removeFieldError(el: HTMLElement | null) {
 		if (!containerEl) {
 			el.hasClass(itemPreviewClass) ? containerEl = el : containerEl = el.closest(`.${itemPreviewClass}`);
 		}
-		containerEl?.querySelector('.note-toolbar-setting-field-error')?.remove();
+		const errorEl = position === 'beforeend'
+			? containerEl?.querySelector('.note-toolbar-setting-field-error')
+			: containerEl?.nextElementSibling?.classList.contains('note-toolbar-setting-field-error')
+				? containerEl.nextElementSibling
+				: null;
+
+		errorEl?.remove();
 		el?.removeClass('note-toolbar-setting-error');
 	}
 }
@@ -669,16 +676,27 @@ export async function moveToolbarItem(plugin: NoteToolbarPlugin, fromToolbar: To
  * Updates the given element with an error border and text.
  * @param parent ToolbarSettingsModal
  * @param fieldEl HTMLElement to update
+ * @param position Position to insert the error text
  * @param errorText Optional error text to display
  * @param errorLink Optional link to display after error text
  */
-export function setFieldError(parent: ToolbarSettingsModal | ItemModal, fieldEl: HTMLElement | null, errorText?: string, errorLink?: HTMLAnchorElement) {
+export function setFieldError(
+	parent: ToolbarSettingsModal | ItemModal, 
+	fieldEl: HTMLElement | null, 
+	position: 'afterend' | 'beforeend',
+	errorText?: string, 
+	errorLink?: HTMLAnchorElement
+) {
 	if (fieldEl) {
 		let fieldContainerEl = fieldEl.closest('.setting-item-control');
 		if (!fieldContainerEl) {
 			fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview');
 		}
-		if (fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') === null) {
+		const hasError = 
+			(position === 'afterend') 
+				? fieldContainerEl?.nextElementSibling?.classList.contains('note-toolbar-setting-field-error') === true
+				: fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') !== null;
+		if (fieldContainerEl && !hasError) {
 			if (errorText) {
 				let errorDiv = createEl('div', { 
 					text: errorText, 
@@ -698,7 +716,7 @@ export function setFieldError(parent: ToolbarSettingsModal | ItemModal, fieldEl:
 					});
 					errorDiv.append(' ', errorLink);
 				}
-				fieldContainerEl.insertAdjacentElement('beforeend', errorDiv);
+				fieldContainerEl.insertAdjacentElement(position, errorDiv);
 			}
 			fieldEl.addClass('note-toolbar-setting-error');
 		}

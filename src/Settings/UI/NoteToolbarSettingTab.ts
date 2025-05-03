@@ -2,7 +2,7 @@ import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTa
 import NoteToolbarPlugin from 'main';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
-import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, LocalVar, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
@@ -109,8 +109,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 
+		const toolbarListHeading = this.itemListOpen ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length });
 		let toolbarListSetting = new Setting(itemsContainer)
-			.setName(t('setting.toolbars.name'))
+			.setName(toolbarListHeading)
 			.setHeading();
 
 		// search button (or field on desktop)
@@ -338,8 +339,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		}
 
+		itemsContainer.appendChild(itemsListContainer);
+
 		// add toolbar
-		new Setting(itemsListContainer)
+		new Setting(itemsContainer)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
@@ -352,7 +355,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				button.buttonEl.setText(iconTextFr('plus', t('setting.toolbars.button-new-tbar')));
 			});
 
-		itemsContainer.appendChild(itemsListContainer);
 		containerEl.append(itemsContainer);
 
 	}
@@ -479,8 +481,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		if (itemsContainer) {
 			this.itemListOpen = !this.itemListOpen;
 			itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+			// TODO: REMOVE? commented out as was causing problems with expand/collapse
 			// hide search field, if needed
-			if (!Platform.isDesktop && !this.itemListOpen) this.toggleSearch(false);
+			// if (!Platform.isDesktop && !this.itemListOpen) this.toggleSearch(false);
 			// update heading (with toolbar count)
 			let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
 			this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length }));
@@ -543,6 +546,10 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
 					handleKeyClick(this.plugin, cb.extraSettingsEl);
 				});
+		}
+		else {
+			// remove the area where the collapse button would be
+			toolbarMapSetting.controlEl.style.display = 'none';
 		}
 
 		let collapsibleContainer = createDiv();
@@ -976,6 +983,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								modal.open();
 						}
 					});
+			});
+
+		// sync setting (stored locally only)
+		const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
+		new Setting(containerEl)
+			.setName(t('setting.other.load-settings-changes.name'))
+			.setDesc(t('setting.other.load-settings-changes.description'))
+			.addToggle((cb) => {
+				cb.setValue(loadSettingsChanges)
+				cb.onChange(async (value) => {
+					localStorage.setItem(LocalVar.LoadSettings, value.toString());
+				});
 			});
 
 		new Setting(containerEl)

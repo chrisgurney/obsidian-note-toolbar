@@ -104,6 +104,7 @@
             "block-no-id": "No block ID found",
             "clipboard-copied": "Copied to clipboard",
             "error-console": "Error: Please check console for details",
+            "file-created": "Created: {{filename}}",
             "file-not-exist": "File does not exist"
         },
         "ui": {
@@ -339,6 +340,7 @@
             "placeholder": "Search for an icon..."
         },
         "item": {
+            "button-advanced-tooltip": "Advanced settings",
             "button-close": "Done",
             "button-close-description": "Saves and closes this item",
             "button-duplicate-tooltip": "Duplicate this item",
@@ -359,6 +361,8 @@
             "option-command-error-not-available-install": "This command is not available. Plugin must be installed and enabled.",
             "option-command-error-not-available-search": "This command cannot be found. Try searching again.",
             "option-command-error-refresh": "Refresh",
+            "option-command-focus": "Focus in editor",
+            "option-command-focus-description": "Set focus in editor after command is executed.",
             "option-command-placeholder": "Search for command",
             "option-command-target": "Where to run command",
             "option-command-target-description": "Some commands may override this setting.",
@@ -474,6 +478,10 @@
                 "name": "Icon",
                 "tooltip": "Select icon"
             },
+            "load-settings-changes": {
+                "description": "If you’re syncing plugin settings across devices, turn this on to automatically load toolbar updates. If not, you’ll need to restart Obsidian to see changes from other devices.",
+                "name": "Load settings changes"
+            },
             "name": "Other",
             "ribbon-action": {
                 "description": "Action to take when the ribbon icon (on phones) is used.",
@@ -488,7 +496,7 @@
             },
             "show-edit-tbar": {
                 "description": "Adds an item to access the toolbar's settings in toolbars that are displayed as menus.",
-                "name": "Show \"Edit toolbar\" link in toolbar menus"
+                "name": "Show \"Edit toolbar\" in toolbar menus"
             }
         },
         "position": {

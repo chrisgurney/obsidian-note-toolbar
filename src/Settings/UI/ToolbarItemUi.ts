@@ -4,7 +4,7 @@ import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModa
 import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice, PaneType } from "obsidian";
 import { removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
-import { copyToolbarItem, createToolbarPreviewFr, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
+import { copyToolbarItem, createToolbarPreviewFr, handleKeyClick, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
 import { FileSuggester } from "./Suggesters/FileSuggester";
 import { CommandSuggester } from "./Suggesters/CommandSuggester";
 import { ToolbarSuggester } from "./Suggesters/ToolbarSuggester";
@@ -549,7 +549,7 @@ export default class ToolbarItemUi {
 
         switch(type) {
             case ItemType.Command: 
-                new Setting(fieldDiv)
+                const commandSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new CommandSuggester(this.plugin.app, cb.inputEl, async (command) => {
@@ -574,9 +574,22 @@ export default class ToolbarItemUi {
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
                     });	
-                const commandSubfieldsEl = fieldDiv.createDiv();
-                commandSubfieldsEl.addClass('note-toolbar-setting-item-link-subfield-with-info');
-                this.getCommandSubfields(toolbarItem, commandSubfieldsEl);
+
+                const commandAdvancedEl = fieldDiv.createDiv();
+                commandAdvancedEl.addClass('note-toolbar-setting-item-link-advanced');
+                this.getCommandSubfields(toolbarItem, commandAdvancedEl);
+
+                commandSetting.controlEl.addClass('note-toolbar-setting-item-control-advanced');
+                commandSetting.addExtraButton((button) => {
+                    button
+                        .setIcon('gear')
+                        .setTooltip(t('setting.item.button-advanced-tooltip'))
+                        .onClick(() => {
+                            commandAdvancedEl.toggleAttribute('data-active');
+                        });
+                    button.extraSettingsEl.tabIndex = 0;
+                    handleKeyClick(this.plugin, button.extraSettingsEl);     
+                });
                 break;
             case ItemType.Dataview:
             case ItemType.JavaScript:
@@ -648,7 +661,7 @@ export default class ToolbarItemUi {
                 }
                 break;
             case ItemType.File:
-                new Setting(fieldDiv)
+                const fileSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new FileSuggester(this.plugin, cb.inputEl);
@@ -664,9 +677,21 @@ export default class ToolbarItemUi {
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
                     });
-                const fileSubfieldsEl = fieldDiv.createDiv();
-                fileSubfieldsEl.addClass('note-toolbar-setting-item-link-subfield-with-info');
-                this.getFileSubfields(toolbarItem, fileSubfieldsEl);
+                const fileAdvancedEl = fieldDiv.createDiv();
+                fileAdvancedEl.addClass('note-toolbar-setting-item-link-advanced');
+                this.getFileSubfields(toolbarItem, fileAdvancedEl);
+
+                fileSetting.controlEl.addClass('note-toolbar-setting-item-control-advanced');
+                fileSetting.addExtraButton((button) => {
+                    button
+                        .setIcon('gear')
+                        .setTooltip(t('setting.item.button-advanced-tooltip'))
+                        .onClick(() => {
+                            fileAdvancedEl.toggleAttribute('data-active');
+                        });
+                    button.extraSettingsEl.tabIndex = 0;
+                    handleKeyClick(this.plugin, button.extraSettingsEl);      
+                });
                 break;
             case ItemType.Group:
                 const groupSetting = new Setting(fieldDiv)
@@ -738,16 +763,43 @@ export default class ToolbarItemUi {
                                 }, 500));
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
                     });
-                setFieldHelp(uriSetting.controlEl, helpTextFr);
-                const uriSubfieldsEl = fieldDiv.createDiv();
-                uriSubfieldsEl.addClass('note-toolbar-setting-item-link-subfield-with-info');
-                this.getUriSubfields(toolbarItem, uriSubfieldsEl);
+                // unable to put help about vars below the field without restructuring; leaving out for now
+                // setFieldHelp(uriSetting.controlEl, helpTextFr);
+                const uriAdvancedEl = fieldDiv.createDiv();
+                uriAdvancedEl.addClass('note-toolbar-setting-item-link-advanced');
+                this.getUriSubfields(toolbarItem, uriAdvancedEl);
+
+                uriSetting.controlEl.addClass('note-toolbar-setting-item-control-advanced');
+                uriSetting.addExtraButton((button) => {
+                    button
+                        .setIcon('gear')
+                        .setTooltip(t('setting.item.button-advanced-tooltip'))
+                        .onClick(() => {
+                            uriAdvancedEl.toggleAttribute('data-active');
+                        });
+                    button.extraSettingsEl.tabIndex = 0;
+                    handleKeyClick(this.plugin, button.extraSettingsEl);
+                });
                 break;
         }
 
     }
 
     getCommandSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+        // focus
+        new Setting(fieldDiv)
+            .setName(t('setting.item.option-command-focus'))
+            .setDesc(t('setting.item.option-command-focus-description'))
+            .addToggle((toggle) => {
+                toggle
+                    .setValue(item.linkAttr.focus === 'editor')
+                    .onChange(async (value: boolean) => {
+                        item.linkAttr.focus = value ? 'editor' : undefined
+                        await this.plugin.settingsManager.save();
+                    });
+            });
+
+        // target
         const targetsToExclude = new Set(['window', 'modal']);
         const targetOptions = Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => !targetsToExclude.has(key)));
         new Setting(fieldDiv)
@@ -1110,14 +1162,14 @@ export default class ToolbarItemUi {
             }
         }
 
-        removeFieldError(componentEl);
+        removeFieldError(componentEl, 'afterend');
         switch (status) {
             case Status.Empty:
                 // TODO? flag for whether empty should show as an error or not
                 isValid = false;
                 break;
             case Status.Invalid:
-                setFieldError(this.parent, componentEl, statusMessage, statusLink);
+                setFieldError(this.parent, componentEl, 'afterend', statusMessage, statusLink);
                 isValid = false;
                 break;
         }
