@@ -1470,8 +1470,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
 					if (target === 'modal') target = 'window';
 
-					const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer'].enabled;
-					const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer'].instance.options.openExternalURLs;					
+					const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled;
+					const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance.options.openExternalURLs;					
 					let useWebViewer = false;
 
 					if (isWebViewerEnabled && (['split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)) {
