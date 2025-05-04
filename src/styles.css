@@ -470,7 +470,7 @@ body {
 
     &[data-callout-metadata*="tab"] ul {
         & li[data-active-file] {
-            border-bottom: 1px solid var(--link-color);
+            box-shadow: inset 0 -1px 0 var(--link-color);
             & span.external-link {
                 color: var(--link-color);
                 filter: unset;
@@ -481,7 +481,7 @@ body {
     &[data-callout-metadata*="mtb"] ul {
         .is-mobile & {
             & li[data-active-file] {
-                border-bottom: 1px solid var(--link-color);
+                box-shadow: inset 0 -1px 0 var(--link-color);
                 & span.external-link {
                     color: var(--link-color);
                     filter: unset;
@@ -493,7 +493,7 @@ body {
     &[data-callout-metadata*="mntb"] ul {
         .is-mobile & {
             & li[data-active-file] {
-                border-bottom: unset;
+                box-shadow: none;
                 & span.external-link {
                     color: var(--cg-nt-item-text-color);
                     filter: var(--link-external-filter);
