@@ -186,9 +186,6 @@ export default class ToolbarStyleUi {
             .setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
 
     }
-    getStyleDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS: any, defaultStyles: any): string | Node {
-        throw new Error("Method not implemented.");
-    }
 
     /**
      * Figures out list of default styles not to show, based on toolbar position and other styles set.

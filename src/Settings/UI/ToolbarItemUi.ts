@@ -942,9 +942,9 @@ export default class ToolbarItemUi {
     }
 
     getUriSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
-        new Setting(fieldDiv)
+        const uriTargetSetting = new Setting(fieldDiv)
             .setName(t('setting.item.option-uri-target'))
-            .setDesc(t('setting.item.option-uri-target-description'))
+            .setDesc(this.getUriTargetDescription(item.linkAttr.target || 'default'))
             .addDropdown((dropdown) =>
                 dropdown
                     .addOptions(TARGET_OPTIONS)
@@ -952,11 +952,19 @@ export default class ToolbarItemUi {
                     .onChange(async (value) => {
                         if (value === 'default') item.linkAttr.target = undefined
                         else item.linkAttr.target = value as PaneType | 'modal';
-                        
+                        uriTargetSetting.setDesc(this.getUriTargetDescription(item.linkAttr.target || 'default'));
                         this.toolbar.updated = new Date().toISOString();
                         await this.plugin.settingsManager.save();
                     })
                 );
+    }
+
+    getUriTargetDescription(target: PaneType | 'default' | 'modal'): DocumentFragment {
+        const descFr = document.createDocumentFragment();
+        descFr.append(t('setting.item.option-uri-target-description'));
+        if (target === 'modal') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-modal'));
+        if (target !== 'default') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-non-default'));
+        return descFr;
     }
 
     getLinkSettingForType(
