@@ -165,6 +165,20 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     };
 
     /**
+     * Sets the given property's value in the active note. 
+     * 
+     * @see INoteToolbarApi.setProperty
+     */
+    async setProperty(property: string, value: any) {
+        const activeFile = this.plugin.app.workspace.getActiveFile();
+        if (activeFile) {
+            await this.plugin.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
+                frontmatter[property] = value;
+            });
+        }
+    }
+
+    /**
      * Shows a suggester modal and waits for the user's selection. 
      * 
      * @see INoteToolbarApi.suggester

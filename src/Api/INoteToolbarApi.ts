@@ -140,6 +140,21 @@ export interface INoteToolbarApi<T> {
     prompt: (options?: NtbPromptOptions) => Promise<string | null>;
 
     /**
+     * Sets the given property's value in the active note.
+     * 
+     * @param property Propety to set in the frontmatter.
+     * @param value Value to set for the property.
+     * 
+     * @example
+     * await ntb.setProperty('Created', moment().format('YYYY-MM-DD'));
+     * await ntb.setProperty('cssclasses', 'myclass');
+     * await ntb.setProperty('A Link', '[[Some Note]]');
+     * await ntb.setProperty('A Number', 1234);
+     * await ntb.setProperty('A List', ['asdf', 'asdf2']);
+     */
+    setProperty: (property: string, value: any) => Promise<void>;
+
+    /**
      * Shows a suggester modal and waits for the user's selection.
      * 
      * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered
