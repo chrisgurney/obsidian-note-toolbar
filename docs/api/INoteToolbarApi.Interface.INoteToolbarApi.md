@@ -49,12 +49,13 @@ Shows a file suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options`? | \{ `class`: `string`; `filesonly`: `boolean`; `foldersonly`: `boolean`; `limit`: `number`; `placeholder`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `filesonly`: `boolean`; `foldersonly`: `boolean`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.filesonly`? | `boolean` | If set to true, only files are shown. If not provided, defaults to `false`. |
 | `options.foldersonly`? | `boolean` | If set to true, only folders are shown. If not provided, defaults to `false`. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder`? | `string` | Optional text inside text field; defaults to preset message. |
+| `options.rendermd`? | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
 
@@ -252,6 +253,35 @@ new Notice(result);
 
 ***
 
+### setProperty()
+
+> **setProperty**: (`property`, `value`) => `Promise`\<`void`\>
+
+Sets the given property's value in the active note.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `property` | `string` | Propety to set in the frontmatter. |
+| `value` | `any` | Value to set for the property. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Example
+
+```ts
+await ntb.setProperty('Created', moment().format('YYYY-MM-DD'));
+await ntb.setProperty('cssclasses', 'myclass');
+await ntb.setProperty('A Link', '[[Some Note]]');
+await ntb.setProperty('A Number', 1234);
+await ntb.setProperty('A List', ['asdf', 'asdf2']);
+```
+
+***
+
 ### suggester()
 
 > **suggester**: (`values`, `keys`?, `options`?) => `Promise`\<`null` \| `T`\>
@@ -264,10 +294,11 @@ Shows a suggester modal and waits for the user's selection.
 | ------ | ------ | ------ |
 | `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys`? | `T`[] | Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection. |
-| `options`? | \{ `class`: `string`; `limit`: `number`; `placeholder`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder`? | `string` | Optional text inside text field; defaults to preset message. |
+| `options.rendermd`? | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
 
