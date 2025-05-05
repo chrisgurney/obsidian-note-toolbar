@@ -159,10 +159,12 @@ export enum ViewType {
 
 export enum LocalVar {
 	ActiveItem = 'note-toolbar-active-item',
-	HideProperties = 'note-toolbar-hide-properties',
 	LoadSettings = 'note-toolbar-load-settings-changes',
-	MenuPos = 'note-toolbar-menu-pos'
+	MenuPos = 'note-toolbar-menu-pos',
+	PropsState = 'note-toolbar-props-state'
 }
+
+export type PropsState = 'show' | 'hide' | 'fold' | 'toggle';
 
 export enum CalloutAttr {
     Command = 'data-command',
