@@ -1467,8 +1467,24 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 			case ItemType.Uri:
 				if (isValidUri(linkHref)) {
-					// if actually a url, just open the url
-					window.open(linkHref, '_blank');
+					let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
+					if (target === 'modal') target = 'window';
+
+					const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled;
+					const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance.options.openExternalURLs;					
+					let useWebViewer = false;
+
+					if (isWebViewerEnabled && (['split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)) {
+						useWebViewer = true;
+					}
+
+					if (useWebViewer) {
+						const leaf = this.app.workspace.getLeaf(target);
+						await leaf.setViewState({type: 'webviewer', state: { url: linkHref, navigate: true }, active: true});
+					}
+					else {
+						window.open(linkHref, '_blank');
+					}
 				}
 				else {
 					// as fallback, treat it as internal note
