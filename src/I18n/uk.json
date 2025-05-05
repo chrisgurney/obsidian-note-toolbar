@@ -397,6 +397,8 @@
             "option-uri-placehoder": "Адреса сайту, URI, або назва нотатки",
             "option-uri-target": "Де відкривати файли",
             "option-uri-target-description": "Якщо посилання є файлом у сховищі, виберіть, як його відкрити. Сполучення клавіш, або додатки можуть заміняти цей параметр.",
+            "option-uri-target-disclaimer-modal": "Тільки URI файлів відкривається у модальному вікні.",
+            "option-uri-target-disclaimer-non-default": "URI зовнішніх посилань вимагають увімкнення додатку Вебпереглядач, щоб використовувати не встановлені за замовчуванням параметри.",
             "option-visibility-component-hidden-platform": "сховати {{component}} на {{platform}}",
             "option-visibility-component-visible-platform": "показати {{component}} на {{platform}}",
             "option-visibility-hidden": "приховано",
