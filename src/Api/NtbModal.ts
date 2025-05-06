@@ -10,6 +10,7 @@ export class NtbModal extends Modal {
 
     private title: string;
     private isEditable: boolean;
+    private isWebviewer: boolean;
     private class: string;
 
     private leaf: WorkspaceLeaf;
@@ -27,11 +28,13 @@ export class NtbModal extends Modal {
         const {
             title: title = '',
             editable: editable = false,
+            webpage: webpage = false,
             class: css_classes = ''
         } = this.options || {};
 
         this.title = title;
         this.isEditable = editable;
+        this.isWebviewer = webpage;
         this.class = css_classes;
 
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
@@ -50,6 +53,12 @@ export class NtbModal extends Modal {
             this.leaf = this.plugin.app.workspace.createLeafInParent(this.plugin.app.workspace.rootSplit, 0);
             if (this.leaf) (this.leaf as any).containerEl.style.display = 'none';
             await this.leaf.openFile(this.content);
+            this.contentEl.appendChild(this.leaf.view.containerEl);
+        }
+        else if (this.isWebviewer && typeof this.content === 'string') {
+            this.leaf = this.plugin.app.workspace.createLeafInParent(this.plugin.app.workspace.rootSplit, 0);
+            if (this.leaf) (this.leaf as any).containerEl.style.display = 'none';
+            await this.leaf.setViewState({type: 'webviewer', state: { url: this.content, navigate: true }, active: true});
             this.contentEl.appendChild(this.leaf.view.containerEl);
         }
     }
@@ -114,6 +123,10 @@ export class NtbModal extends Modal {
     }
 
     async displayEditor(): Promise<void> {
+        this.open();
+    }
+
+    async displayWebpage(): Promise<void> {
         this.open();
     }
 

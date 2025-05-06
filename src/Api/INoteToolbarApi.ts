@@ -207,17 +207,22 @@ export interface INoteToolbarApi<T> {
  */
 export interface NtbModalOptions {
     /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
+    /**
+     * If `true`, and a file was provided, content can be edited; defaults to `false`.
+     * @hidden
+     */
+    editable?: boolean;
+    /**
      * Optional title for the modal, rendered as markdown.
      */
     title?: string;
     /**
-     * If `true`, and a file was provided, content can be edited; defaults to `false`.
+     * If `true`, the modal will show the web page URL in `content` using the Web Viewer core plugin (if enabled); defaults to `false`.
      */
-    editable?: boolean;
-    /**
-     * Optional CSS class(es) to add to the component.
-     */
-    class?: string;
+    webpage?: boolean;
 }
 
 /**
