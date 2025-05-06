@@ -286,8 +286,8 @@ export default class ToolbarSettingsModal extends Modal {
 				itemContainer.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				itemContainer.addClass("note-toolbar-setting-items-container-row");
 
-				let itemPreview = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
-				itemContainer.appendChild(itemPreview);
+				let itemPreviewContainer = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
+				itemContainer.appendChild(itemPreviewContainer);
 
 				let itemForm = this.toolbarItemUi.generateItemForm(toolbarItem);
 				itemForm.setAttribute(SettingsAttr.Active, 'false');
@@ -297,6 +297,15 @@ export default class ToolbarSettingsModal extends Modal {
 				
 				itemsSortableContainer.appendChild(itemContainer);
 
+				// check if item previews are valid (non-empty + valid), and highlight if not
+				const itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
+				if (itemPreviewEl) {
+					this.toolbarItemUi.updateItemComponentStatus(
+						(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
+						SettingFieldItemMap[toolbarItem.linkAttr.type], 
+						itemPreviewEl,
+						toolbarItem);
+				}
 			});
 
 			// support up/down arrow keys
@@ -412,16 +421,18 @@ export default class ToolbarSettingsModal extends Modal {
 	collapseItemForms(settingsDiv: HTMLDivElement, activeRow: Element | null, closeAll: boolean = false) {
 
 		// collapse all items except row
-		let listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
+		const listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
 		listItems.forEach((row) => {
-			let itemPreviewContainer = row.querySelector('.note-toolbar-setting-item-preview-container') as HTMLElement;
+			const itemPreviewContainer = row.querySelector('.note-toolbar-setting-item-preview-container') as HTMLElement;
+			const itemPreviewError = row.querySelector('.note-toolbar-setting-field-error') as HTMLDivElement;
 			if (closeAll || row !== activeRow) {
-				let itemForm = row.querySelector('.note-toolbar-setting-item');
+				const itemForm = row.querySelector('.note-toolbar-setting-item');
 				itemPreviewContainer?.setAttribute(SettingsAttr.Active, 'true');
+				itemPreviewError?.setAttribute(SettingsAttr.Active, 'true');
 				itemForm?.setAttribute(SettingsAttr.Active, 'false');
 			}
 			if (closeAll && row === activeRow) {
-				let itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
+				const itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
 				itemPreview.focus();
 			}
 		});
@@ -435,8 +446,12 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	private toggleItemView(itemPreviewContainer: HTMLDivElement, state: 'preview' | 'form', focusOn?: ItemFormComponent) {
 
-		let itemForm = itemPreviewContainer.nextElementSibling;
-		let itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type');
+		const itemRow = itemPreviewContainer.closest('.note-toolbar-setting-items-container-row');
+		if (!itemRow) return;
+
+		const itemForm = itemRow.querySelector('.note-toolbar-setting-item') as HTMLDivElement;
+		const itemPreviewError = itemRow.querySelector('.note-toolbar-setting-field-error') as HTMLDivElement;
+		const itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type');
 		// this.plugin.debug("toggleItemView", itemPreviewContainer, itemForm, itemType, focusOn);
 		
 		let previewState: string;
@@ -461,6 +476,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		itemForm?.setAttribute(SettingsAttr.Active, formState);
 		itemPreviewContainer?.setAttribute(SettingsAttr.Active, previewState);
+		itemPreviewError?.setAttribute(SettingsAttr.Active, previewState);
 
 		// move focus to form / field
 		if (formState === 'true') {	
@@ -1073,13 +1089,6 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 		
 		itemPreview.appendChild(itemPreviewContent);
-
-		// check if item previews are valid (non-empty + valid), and highlight if not
-		this.toolbarItemUi.updateItemComponentStatus(
-			(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
-			SettingFieldItemMap[toolbarItem.linkAttr.type], 
-			itemPreview,
-			toolbarItem);
 
 	}
 

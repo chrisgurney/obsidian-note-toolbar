@@ -889,6 +889,10 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             padding-bottom: 0;
         }
     }
+    + .note-toolbar-setting-field-error {
+        padding-top: 8px;
+        padding-bottom: 16px;
+    }
     &[data-active="true"] {
         display: flex !important;
     }
@@ -976,10 +980,6 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             height: var(--font-ui-medium);
             width: var(--font-ui-medium);            
         }
-    }
-    & .note-toolbar-setting-field-error {
-        padding-top: 8px;
-        width: 100%;
     }
     &:focus-within {
         border-radius: var(--input-radius);
@@ -1759,6 +1759,9 @@ input[type="text"].note-toolbar-setting-error,
         margin-inline-start: 0.25em;
         width: var(--font-ui-smaller);
         vertical-align: middle;
+    }
+    &[data-active="false"] {
+        display: none !important;
     }
 }
 
