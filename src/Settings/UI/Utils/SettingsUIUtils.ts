@@ -690,7 +690,7 @@ export function setFieldError(
 	if (fieldEl) {
 		let fieldContainerEl = fieldEl.closest('.setting-item-control');
 		if (!fieldContainerEl) {
-			fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview');
+			fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview-container');
 		}
 		const hasError = 
 			(position === 'afterend') 
