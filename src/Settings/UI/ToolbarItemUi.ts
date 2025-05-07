@@ -962,7 +962,6 @@ export default class ToolbarItemUi {
     getUriTargetDescription(target: PaneType | 'default' | 'modal'): DocumentFragment {
         const descFr = document.createDocumentFragment();
         descFr.append(t('setting.item.option-uri-target-description'));
-        if (target === 'modal') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-modal'));
         if (target !== 'default') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-non-default'));
         return descFr;
     }
