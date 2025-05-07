@@ -104,7 +104,8 @@
       "block-no-id": "未找到块ID",
       "clipboard-copied": "已复制到剪贴板",
       "error-console": "错误：请检查控制台以获取详细信息",
-      "file-not-exist": "文件不存在"
+      "file-not-exist": "文件不存在",
+      "file-created": "已创建：{{filename}}"
     },
     "ui": {
       "button-submit": "提交",
@@ -409,7 +410,12 @@
       "option-menu": "菜单",
       "option-uri-target": "如何打开文件",
       "option-uri-target-description": "如果该 URI 对应的是库中的文件，在此选择如何打开它。\n使用修饰键或插件可能会覆盖此设置。",
-      "option-target-modal": "模态窗口（Modal）"
+      "option-target-modal": "模态窗口（Modal）",
+      "button-advanced-tooltip": "高级设置",
+      "option-command-focus": "聚焦到编辑器",
+      "option-command-focus-description": "执行命令后，将焦点设置为编辑器。",
+      "option-uri-target-disclaimer-modal": "仅有文件的URIS以模态（Modal）打开。",
+      "option-uri-target-disclaimer-non-default": "外部链接的 URIS 只有在启用核心插件 WebViewer 的情况下，才能使用非默认选项。"
     },
     "item-suggest-modal": {
       "instruction-back": "返回",
