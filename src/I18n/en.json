@@ -626,6 +626,7 @@
         "menu-add-item": "Add item...",
         "menu-edit-item": "Edit item: {{text}}...",
         "menu-edit-item_none": "Edit item...",
+        "menu-edit-menu": "Edit menu toolbar: {{toolbar}}...",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
         "menu-hide-properties": "Hide note properties",
         "menu-position": "Set position",

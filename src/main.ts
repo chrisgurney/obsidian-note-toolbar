@@ -2014,6 +2014,22 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					});
 			});
+
+			if (toolbarItem.linkAttr.type === ItemType.Menu) {
+				const menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+				if (menuToolbar) {
+					contextMenu.addItem((item: MenuItem) => {
+						item
+							.setIcon('list')
+							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name }))
+							.onClick(async () => {
+								const modal = new ToolbarSettingsModal(this.app, this, null, menuToolbar as ToolbarSettings);
+								modal.setTitle(t('setting.title-edit-toolbar', { toolbar: menuToolbar.name }));
+								modal.open();
+							});
+					});					
+				}
+			}
 		}
 
 		contextMenu.addSeparator();
