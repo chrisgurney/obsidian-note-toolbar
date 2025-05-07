@@ -839,6 +839,18 @@
         "type": "uri"
     },
     {
+        "id": "obsidian-excalidraw-create",
+        "commandId": "obsidian-excalidraw-plugin:excalidraw-autocreate-newtab",
+        "description": {
+            "en": "Create a new Excalidraw drawing."
+        },
+        "icon": "pencil-line",
+        "tooltip": {
+            "en": "New drawing"
+        },
+        "type": "command"
+    },
+    {
         "id": "obsidian-forum",
         "description": {
             "en": "Opens Obsidian's forum for discussions and support.",

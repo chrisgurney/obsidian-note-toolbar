@@ -264,7 +264,7 @@
                 "uk": "Робіть більше з додатками Obsidian."
             },
             "itemIds": [
-                "obsidian-sync-version-history", "obsidian-tasks-edit"
+                "obsidian-sync-version-history", "obsidian-excalidraw-create", "obsidian-tasks-edit"
             ]
         }
     ]
