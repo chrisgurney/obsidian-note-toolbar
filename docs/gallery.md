@@ -217,5 +217,6 @@ Do more with Obsidian's plugins.
 | Item | Description |
 | --- | --- |
 | Version history | View the version history for the current file. |
+| New drawing | Create a new Excalidraw drawing. |
 | Create/Edit task | Create a new task. |
 
