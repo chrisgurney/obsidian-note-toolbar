@@ -3163,6 +3163,10 @@ input[type="text"].note-toolbar-setting-error,
             .is-phone & {
                 padding: var(--size-4-5);
             }
+            /* hide the Web Viewer navigation bar */
+            & .workspace-leaf-content[data-type="webviewer"] .view-header {
+                display: none !important;
+            }
         }
         & .modal-title > .markdown-preview-view > * {
             margin: unset;
