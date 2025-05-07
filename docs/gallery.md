@@ -34,6 +34,7 @@ Adjust the order and arrangement of content.
 | Toggle comment | Add or remove comments. |
 | Toggle inline math | Apply or remove inline math formatting. |
 | Copy link to block | Copies a link to the current block to the clipboard. |
+| Copy note content | Copies the body of the current note to the clipboard, ignoring frontmatter. |
 
 ## Files
 

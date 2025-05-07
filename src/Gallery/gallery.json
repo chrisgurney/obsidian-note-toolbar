@@ -57,7 +57,7 @@
                 "uk": "Працюйте швидше з текстовим редактором."
             },
             "itemIds": [
-                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
+                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link", "copy-note-content"
             ]
         },
         {
