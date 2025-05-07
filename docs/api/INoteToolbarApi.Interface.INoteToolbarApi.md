@@ -166,10 +166,10 @@ Shows a modal with the provided content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
-| `options`? | \{ `class`: `string`; `editable`: `boolean`; `title`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `title`: `string`; `webpage`: `boolean`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
-| `options.editable`? | `boolean` | If `true`, and a file was provided, content can be edited; defaults to `false`. |
 | `options.title`? | `string` | Optional title for the modal, rendered as markdown. |
+| `options.webpage`? | `boolean` | If `true`, the modal will show the web page URL in `content` using the Web Viewer core plugin (if enabled); defaults to `false`. |
 
 #### Returns
 

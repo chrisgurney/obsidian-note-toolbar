@@ -1469,19 +1469,24 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.Uri:
 				if (isValidUri(linkHref)) {
 					let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
-					if (target === 'modal') target = 'window';
 
 					const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled;
 					const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance.options.openExternalURLs;					
-					let useWebViewer = false;
+					let usingWebViewer = false;
 
-					if (isWebViewerEnabled && (['split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)) {
-						useWebViewer = true;
+					// use Web Viewer for certain targets even if the 'Open external links' setting is disabled
+					if (isWebViewerEnabled && (['modal', 'split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)) {
+						usingWebViewer = true;
 					}
 
-					if (useWebViewer) {
-						const leaf = this.app.workspace.getLeaf(target);
-						await leaf.setViewState({type: 'webviewer', state: { url: linkHref, navigate: true }, active: true});
+					if (usingWebViewer) {
+						if (target === 'modal') {
+							this.api.modal(linkHref, { webpage: true });
+						}
+						else {
+							const leaf = this.app.workspace.getLeaf(target);
+							await leaf.setViewState({type: 'webviewer', state: { url: linkHref, navigate: true }, active: true});
+						}
 					}
 					else {
 						window.open(linkHref, '_blank');
