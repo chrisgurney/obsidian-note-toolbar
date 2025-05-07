@@ -42,7 +42,7 @@
                 "uk": "Для швидкого редагування тексту та керування історією."
             },
             "itemIds": [
-                "copy", "cut", "paste", "undo", "redo", "clear-formatting"
+                "copy", "cut", "paste", "undo", "redo", "clear-formatting", "copy-note-content"
             ]
         },
         {
@@ -57,7 +57,7 @@
                 "uk": "Працюйте швидше з текстовим редактором."
             },
             "itemIds": [
-                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link", "copy-note-content"
+                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
             ]
         },
         {
