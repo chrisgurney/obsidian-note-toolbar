@@ -941,7 +941,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			return; // stop recursion
 		}
 
-		for (const toolbarItem of toolbar.items) {
+		for (const toolbarItem of toolbar.items) { 
+			// skip empty items
+			if (![ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type) &&
+				!toolbarItem.icon && !toolbarItem.label && !toolbarItem.tooltip) continue;
+		
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
