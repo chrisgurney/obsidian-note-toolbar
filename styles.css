@@ -3160,6 +3160,9 @@ input[type="text"].note-toolbar-setting-error,
         }
         & .modal-content {
             overflow-y: auto;
+            .is-phone & {
+                padding: var(--size-4-5);
+            }
         }
         & .modal-title > .markdown-preview-view > * {
             margin: unset;
