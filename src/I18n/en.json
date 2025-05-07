@@ -421,8 +421,9 @@
             "link-gallery": "Explore the Gallery ↗",
             "link-search": "Search for an item",
             "option-new": "+ Create a new item",
-            "placeholder": "Search for an item...",
-            "placeholder-toolbar": "{{toolbar}}: Search items..."
+            "placeholder": "Search for an item to add...",
+            "placeholder-toolbar": "{{toolbar}}: Search items...",
+            "placeholder-use": "Search for an item to use..."
         },
         "items": {
             "button-add-break-tooltip": "Add a line break to the toolbar",
