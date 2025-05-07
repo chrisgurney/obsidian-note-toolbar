@@ -739,6 +739,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
                 width: var(--cg-nt-menu-icon-size);
             }
         }
+        /* fix for hotkeys not displaying next to text */
+        & .menu-item-title {
+            align-items: center;
+            display: flex;
+        }
     }
     & .menu-item.selected:not(.is-label):not(.is-disabled) {
         background-color: var(--cg-nt-menu-item-bg-color-hover);
