@@ -1479,7 +1479,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					let usingWebViewer = false;
 
 					// use Web Viewer for certain targets even if the 'Open external links' setting is disabled
-					if (isWebViewerEnabled && (['modal', 'split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)) {
+					if (isWebViewerEnabled 
+						&& linkHref.toLowerCase().startsWith('http') 
+						&& (['modal', 'split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)
+					) {
 						usingWebViewer = true;
 					}
 
