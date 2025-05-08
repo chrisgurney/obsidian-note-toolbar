@@ -903,3 +903,16 @@ settings:
         type: variable-number
         default: 1
         format: em
+    -
+        id: ui
+        title: 'Other UI'
+        description: 'Styles for other Note Toolbar UI elements'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-ui-modal-width
+        title: 'Modal width on desktop (in px units)'
+        type: variable-number
+        default: 700
+        format: px

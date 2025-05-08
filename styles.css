@@ -907,6 +907,19 @@ settings:
         type: variable-number
         default: 1
         format: em
+    -
+        id: ui
+        title: 'Other UI'
+        description: 'Styles for other Note Toolbar UI elements'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-ui-modal-width
+        title: 'Modal width on desktop (in px units)'
+        type: variable-number
+        default: 700
+        format: px
  */
 
 body {
@@ -974,6 +987,7 @@ body {
     --cg-nt-quick-tools-item-font-size: 1em;
     --cg-nt-quick-tools-item-border-radius: var(--radius-s);
     --cg-nt-quick-tools-item-text-color: var(--text-normal);
+    --cg-nt-ui-modal-width: var(--prompt-width);
 
     &.is-android {
         --cg-nt-fab-border-radius: var(--radius-xl);
@@ -1644,6 +1658,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
                 height: var(--cg-nt-menu-icon-size);
                 width: var(--cg-nt-menu-icon-size);
             }
+        }
+        /* fix for hotkeys not displaying next to text */
+        & .menu-item-title {
+            align-items: center;
+            display: flex;
         }
     }
     & .menu-item.selected:not(.is-label):not(.is-disabled) {
@@ -3152,14 +3171,19 @@ input[type="text"].note-toolbar-setting-error,
     }
     &[data-ntb-ui-type="modal"] {
         height: 100%;
-        .is-phone & {
-            padding-bottom: var(--size-4-6);
-        }
+        width: var(--cg-nt-ui-modal-width);
         & .view-header-left, .view-actions {
             display: none;
         }
         & .modal-content {
             overflow-y: auto;
+            .is-phone & {
+                padding: var(--size-4-5);
+            }
+            /* hide the Web Viewer navigation bar */
+            & .workspace-leaf-content[data-type="webviewer"] .view-header {
+                display: none !important;
+            }
         }
         & .modal-title > .markdown-preview-view > * {
             margin: unset;

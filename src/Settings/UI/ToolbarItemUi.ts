@@ -374,6 +374,15 @@ export default class ToolbarItemUi {
 
         let menu = new Menu();
 
+        if (Platform.isPhone) {
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.item.button-duplicate-tooltip'))
+                    .setIcon('copy-plus')
+                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
+            });
+        }
+
         menu.addItem((menuItem: MenuItem) => {
             menuItem
                 .setTitle(t('setting.item.menu-copy-item'))
@@ -382,6 +391,10 @@ export default class ToolbarItemUi {
                     await copyToolbarItem(this.plugin, this.toolbar, toolbarItem);
                 });
         });
+
+        if (Platform.isPhone) {
+            menu.addSeparator();
+        }
 
         if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator].contains(toolbarItem.linkAttr.type)) {
             menu.addItem((menuItem: MenuItem) => {
@@ -429,13 +442,6 @@ export default class ToolbarItemUi {
 
             menu.addSeparator();
 
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('setting.item.button-duplicate-tooltip'))
-                    .setIcon('copy-plus')
-                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
-            });
-    
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
                     .setTitle(t('setting.button-delete-tooltip'))
@@ -962,7 +968,6 @@ export default class ToolbarItemUi {
     getUriTargetDescription(target: PaneType | 'default' | 'modal'): DocumentFragment {
         const descFr = document.createDocumentFragment();
         descFr.append(t('setting.item.option-uri-target-description'));
-        if (target === 'modal') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-modal'));
         if (target !== 'default') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-non-default'));
         return descFr;
     }

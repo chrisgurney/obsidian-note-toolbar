@@ -221,6 +221,7 @@
         "dataview": "Dataview",
         "js-engine": "JS\u00A0Engine",
         "note-toolbar": "Note\u00A0Toolbar",
+        "obsidian-excalidraw-plugin": "Excalidraw",
         "obsidian-kanban": "Kanban",
         "obsidian-tasks-plugin": "Tasks",
         "open-with-default-app": "Open\u00A0with default\u00A0app",
@@ -397,8 +398,7 @@
             "option-uri-placehoder": "Website, URI, or note title",
             "option-uri-target": "Where to open",
             "option-uri-target-description": "Using modifier keys or plugins may override this setting.",
-            "option-uri-target-disclaimer-modal": "Only file URIs open in modals.",
-            "option-uri-target-disclaimer-non-default": "External link URIs require Web Viewer plugin to be enabled to use non-default options.",
+            "option-uri-target-disclaimer-non-default": "External links require the Web Viewer plugin to be enabled, to use options other than Default. Available on desktop only.",
             "option-visibility-component-hidden-platform": "{{component}} hidden on {{platform}}",
             "option-visibility-component-visible-platform": "{{component}} visible on {{platform}}",
             "option-visibility-hidden": "hidden",
@@ -422,8 +422,9 @@
             "link-gallery": "Explore the Gallery ↗",
             "link-search": "Search for an item",
             "option-new": "+ Create a new item",
-            "placeholder": "Search for an item...",
-            "placeholder-toolbar": "{{toolbar}}: Search items..."
+            "placeholder": "Search for an item to add...",
+            "placeholder-toolbar": "{{toolbar}}: Search items...",
+            "placeholder-use": "Search for an item to use..."
         },
         "items": {
             "button-add-break-tooltip": "Add a line break to the toolbar",
@@ -625,6 +626,7 @@
         "menu-add-item": "Add item...",
         "menu-edit-item": "Edit item: {{text}}...",
         "menu-edit-item_none": "Edit item...",
+        "menu-edit-menu": "Edit menu toolbar: {{toolbar}}...",
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
         "menu-hide-properties": "Hide note properties",
         "menu-position": "Set position",

@@ -941,7 +941,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			return; // stop recursion
 		}
 
-		for (const toolbarItem of toolbar.items) {
+		for (const toolbarItem of toolbar.items) { 
+			// skip empty items
+			if (![ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type) &&
+				!toolbarItem.icon && !toolbarItem.label && !toolbarItem.tooltip) continue;
+		
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
@@ -1475,7 +1479,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					let usingWebViewer = false;
 
 					// use Web Viewer for certain targets even if the 'Open external links' setting is disabled
-					if (isWebViewerEnabled && (['modal', 'split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)) {
+					if (isWebViewerEnabled 
+						&& linkHref.toLowerCase().startsWith('http') 
+						&& (['modal', 'split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)
+					) {
 						usingWebViewer = true;
 					}
 
@@ -2014,6 +2021,22 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					});
 			});
+
+			if (toolbarItem.linkAttr.type === ItemType.Menu) {
+				const menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+				if (menuToolbar) {
+					contextMenu.addItem((item: MenuItem) => {
+						item
+							.setIcon('list')
+							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name }))
+							.onClick(async () => {
+								const modal = new ToolbarSettingsModal(this.app, this, null, menuToolbar as ToolbarSettings);
+								modal.setTitle(t('setting.title-edit-toolbar', { toolbar: menuToolbar.name }));
+								modal.open();
+							});
+					});					
+				}
+			}
 		}
 
 		contextMenu.addSeparator();

@@ -42,7 +42,7 @@
                 "uk": "Для швидкого редагування тексту та керування історією."
             },
             "itemIds": [
-                "copy", "cut", "paste", "undo", "redo", "clear-formatting"
+                "copy", "cut", "paste", "undo", "redo", "clear-formatting", "copy-note-content"
             ]
         },
         {
@@ -264,7 +264,7 @@
                 "uk": "Робіть більше з додатками Obsidian."
             },
             "itemIds": [
-                "obsidian-sync-version-history", "obsidian-tasks-edit"
+                "obsidian-sync-version-history", "obsidian-excalidraw-create", "obsidian-tasks-edit"
             ]
         }
     ]

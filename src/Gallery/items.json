@@ -99,6 +99,18 @@
         "type": "javascript"
     },
     {
+        "id": "copy-note-content",
+        "description": {
+            "en": "Copies the body of the current note to the clipboard, ignoring frontmatter."
+        },
+        "icon": "clipboard-check",
+        "script": "const e = app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
+        "tooltip": {
+            "en": "Copy note content"
+        },
+        "type": "javascript"
+    },
+    {
         "id": "copy-obsidian-url",
         "commandId": "workspace:copy-url",
         "description": {
@@ -837,6 +849,18 @@
         },
         "uri": "https://discord.gg/obsidianmd",
         "type": "uri"
+    },
+    {
+        "id": "obsidian-excalidraw-create",
+        "commandId": "obsidian-excalidraw-plugin:excalidraw-autocreate-newtab",
+        "description": {
+            "en": "Create a new Excalidraw drawing."
+        },
+        "icon": "pencil-line",
+        "tooltip": {
+            "en": "New drawing"
+        },
+        "type": "command"
     },
     {
         "id": "obsidian-forum",

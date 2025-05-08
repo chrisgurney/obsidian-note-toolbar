@@ -22,6 +22,7 @@ For quick text editing and history control.
 | Undo | Reverts the latest action. |
 | Redo | Reapplies the last undone action. |
 | Clear formatting | Remove all text formatting. |
+| Copy note content | Copies the body of the current note to the clipboard, ignoring frontmatter. |
 
 ## Editing
 
@@ -217,5 +218,6 @@ Do more with Obsidian's plugins.
 | Item | Description |
 | --- | --- |
 | Version history | View the version history for the current file. |
+| New drawing | Create a new Excalidraw drawing. |
 | Create/Edit task | Create a new task. |
 
