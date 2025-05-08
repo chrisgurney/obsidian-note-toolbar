@@ -2027,7 +2027,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (menuToolbar) {
 					contextMenu.addItem((item: MenuItem) => {
 						item
-							.setIcon('list')
+							.setIcon('square-menu')
 							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name }))
 							.onClick(async () => {
 								const modal = new ToolbarSettingsModal(this.app, this, null, menuToolbar as ToolbarSettings);
