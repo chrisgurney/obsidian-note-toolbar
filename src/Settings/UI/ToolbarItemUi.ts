@@ -968,6 +968,8 @@ export default class ToolbarItemUi {
     getUriTargetDescription(target: PaneType | 'default' | 'modal'): DocumentFragment {
         const descFr = document.createDocumentFragment();
         descFr.append(t('setting.item.option-uri-target-description'));
+        if (Platform.isPhone && ['split', 'window'].includes(target)) descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-device'));
+        if (Platform.isTablet && target === 'window') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-device'));
         if (target !== 'default') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-non-default'));
         return descFr;
     }

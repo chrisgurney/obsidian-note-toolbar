@@ -398,6 +398,7 @@
             "option-uri-placehoder": "Website, URI, or note title",
             "option-uri-target": "Where to open",
             "option-uri-target-description": "Using modifier keys or plugins may override this setting.",
+            "option-uri-target-disclaimer-device": "This option does nothing on this device.",
             "option-uri-target-disclaimer-non-default": "External links require the Web Viewer plugin to be enabled, to use options other than Default. Available on desktop only.",
             "option-visibility-component-hidden-platform": "{{component}} hidden on {{platform}}",
             "option-visibility-component-visible-platform": "{{component}} visible on {{platform}}",
