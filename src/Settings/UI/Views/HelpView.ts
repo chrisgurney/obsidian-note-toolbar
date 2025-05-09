@@ -31,7 +31,7 @@ export class HelpView extends ItemView {
         contentDiv.addClass('note-toolbar-setting-help-view');
 
         const helpLinkDiv = contentDiv.createDiv();
-        helpLinkDiv.addClass('is-readable-line-width');
+        helpLinkDiv.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
         new Setting(helpLinkDiv)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
             .setDesc(t('setting.help.label-user-guide-description'))
