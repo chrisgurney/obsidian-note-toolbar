@@ -2296,45 +2296,49 @@ input[type="text"].note-toolbar-setting-error,
     flex-grow: 1;
 }
 
+/*************************************************************************
+ * Launchpad
+ *************************************************************************/
+
+.note-toolbar-launchpad-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    & .cg-note-toolbar-container {
+        margin: auto 0;
+    }
+    & .empty-state {
+        display: none;
+    }
+}
+
 .note-toolbar-launchpad {
     & .callout-content ul[role="menu"] {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        .is-phone & {
-            grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        margin: 0 auto;
+        & li {
+            background-color: var(--background-primary-alt);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            & .cg-note-toolbar-item {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                min-height: 100px;
+                gap: 4px;
+            }
         }
-        justify-content: center;
-        align-content: center;
-        gap: 8px;
-        padding: 0;
-        margin: 0;
-        list-style: none;
+        & li:hover {
+            background-color: var(--background-modifier-hover);
+            cursor: pointer;
+        }
     }
 
-    & .cg-note-toolbar-callout li {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 12px;
-        border-radius: 6px;
-        transition: background 0.2s;
-        width: 100%;
-    }
-
-    & .cg-note-toolbar-callout li:hover {
-        background-color: var(--background-modifier-hover);
-        cursor: pointer;
-    }
-
-    & .cg-note-toolbar-item {
-        background-color: var(--background-primary-alt);
-        min-width: 100px;
-        min-height: 100px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 4px;
-    }
 }

@@ -572,14 +572,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		// EXPERIMENTAL
-		if (currentView instanceof ItemView && currentView.getViewType() === 'empty'
-			&& toolbar.customClasses?.includes('note-toolbar-launchpad')
-		) {
-			// FIXME: flickers before displaying the toolbar items
-			const emptyStateEl = currentView.contentEl.querySelector('.empty-state') as HTMLElement;
-			emptyStateEl?.setCssStyles({ display: 'none' });
+		// FIXME: flickers before displaying the toolbar items
+		const useLaunchpad = currentView instanceof ItemView && currentView.getViewType() === 'empty'
+			&& toolbar.customClasses?.includes('note-toolbar-launchpad');
+		currentView.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
+		if (useLaunchpad) {
 			currentView.contentEl.insertAdjacentElement('afterbegin', embedBlock);
-			currentView.contentEl.setCssStyles({ alignItems: 'center', display: 'flex', justifyContent: 'center' });
 			return;
 		}
 
@@ -1138,12 +1136,13 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug("updateToolbar()", toolbar.name);
 
+		// FIXME: need to `show` here too, but doesn't consistently work (in Reading mode only perhaps?)
 		// fold/hide properties if they were before
 		const propsState = localStorage.getItem(LocalVar.PropsState) ?? '';
-		if (['hide', 'fold'].includes(propsState)) {
-			this.debug('updateToolbar() properties', propsState);
-			this.commands.toggleProps(propsState as PropsState);
-		}
+		this.commands.toggleProps(propsState as PropsState);
+		// if (['hide', 'fold'].includes(propsState)) {
+		// 	this.debug('updateToolbar() properties', propsState);
+		// }
 
 		let toolbarEl = this.getToolbarEl();
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
@@ -2127,7 +2126,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	getPropsEl(): HTMLElement | null {
 		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.containerEl as HTMLElement;		
 		const propertiesContainer = currentViewEl?.querySelector('.metadata-container') as HTMLElement;
-		// this.debug("getPropsEl: ", propertiesContainer);
+		this.debug("getPropsEl: ", propertiesContainer);
 		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
 		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
 			return null;
