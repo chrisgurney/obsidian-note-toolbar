@@ -571,6 +571,18 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
+		// EXPERIMENTAL
+		if (currentView instanceof ItemView && currentView.getViewType() === 'empty'
+			&& toolbar.customClasses?.includes('note-toolbar-launchpad')
+		) {
+			// FIXME: flickers before displaying the toolbar items
+			const emptyStateEl = currentView.contentEl.querySelector('.empty-state') as HTMLElement;
+			emptyStateEl?.setCssStyles({ display: 'none' });
+			currentView.contentEl.insertAdjacentElement('afterbegin', embedBlock);
+			currentView.contentEl.setCssStyles({ alignItems: 'center', display: 'flex', justifyContent: 'center' });
+			return;
+		}
+
 		// add the toolbar to the editor or modal UI
 		const currentViewEl = currentView?.containerEl as HTMLElement | null;
 		const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
