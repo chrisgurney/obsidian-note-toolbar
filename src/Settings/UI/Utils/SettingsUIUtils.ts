@@ -1,7 +1,6 @@
 import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS, DEFAULT_ITEM_VISIBILITY_SETTINGS } from "Settings/NoteToolbarSettings";
+import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS, DEFAULT_ITEM_VISIBILITY_SETTINGS, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import { SettingsManager } from "Settings/SettingsManager";
-import { HelpModal } from "../Modals/HelpModal";
 import NoteToolbarPlugin from "main";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ItemModal from "../Modals/ItemModal";
@@ -168,9 +167,15 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 			if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
 			closeCallback();
 		});
-		helpDesc.append(' • ', helpDesc.createEl("a", { href: "obsidian://note-toolbar?help", text: iconTextFr('help-circle', t('setting.button-help')) }));
+		helpDesc.append(' • ');
+		const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
+		plugin.registerDomEvent(helpLink, 'click', (event) => { 
+			plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+			if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
+			closeCallback();
+		});
 		helpContainerEl.append(helpDesc);
-
+		
 	}
 	else {
 
@@ -199,10 +204,7 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 				button
 					.setTooltip(t('setting.button-gallery-tooltip'))
 					.onClick(() => {
-						plugin.app.workspace.getLeaf(true).setViewState({
-							type: VIEW_TYPE_GALLERY,
-							active: true
-						});
+						plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 						if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
 						closeCallback();
 					})
@@ -212,8 +214,9 @@ export function displayHelpSection(plugin: NoteToolbarPlugin, settingsDiv: HTMLE
 				button
 					.setTooltip(t('setting.button-help-tooltip'))
 					.onClick(() => {
-						let help = new HelpModal(plugin);
-						help.open();
+						plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+						if (Platform.isPhone) plugin.app.workspace.leftSplit?.collapse();
+						closeCallback();
 					})
 					.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
 			});

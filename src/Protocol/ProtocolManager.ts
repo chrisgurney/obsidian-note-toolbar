@@ -1,7 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice, ObsidianProtocolData, Platform } from "obsidian";
-import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
-import { HelpModal } from "Settings/UI/Modals/HelpModal";
+import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
@@ -36,8 +35,8 @@ export class ProtocolManager {
 			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 		}
 		else if (data.help) {
-			const helpModal = new HelpModal(this.plugin);
-			helpModal.open();
+			this.plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
 		}
         else if (data.import) {
             const content = decodeURIComponent(data.import);

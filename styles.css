@@ -3008,20 +3008,6 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.is-phone .note-toolbar-setting-help-dialog {
-    padding: 1em;
-    .setting-item {
-        flex-direction: row !important;
-        .setting-item-control {
-            margin-top: 0 !important;
-            width: auto !important;
-            button {
-                width: auto;
-            }
-        }
-    }
-}
-
 .note-toolbar-setting-help-section {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
@@ -3043,6 +3029,7 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-help-view .is-readable-line-width,
 .note-toolbar-setting-whatsnew-view .is-readable-line-width {
     max-width: var(--file-line-width);
     margin-left: auto;
