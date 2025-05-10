@@ -1,6 +1,6 @@
 import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
@@ -22,6 +22,7 @@ import ItemModal from 'Settings/UI/Modals/ItemModal';
 import GalleryManager from 'Gallery/GalleryManager';
 import { HotkeyHelper } from 'Utils/Hotkeys';
 import { GalleryView } from 'Gallery/GalleryView';
+import { HelpView } from 'Settings/UI/Views/HelpView';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -160,8 +161,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.app.workspace.trigger("parse-style-settings");
 
 			// register custom views
-			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
 			this.registerView(VIEW_TYPE_GALLERY, (leaf: WorkspaceLeaf) => new GalleryView(this, leaf));
+			this.registerView(VIEW_TYPE_HELP, (leaf: WorkspaceLeaf) => new HelpView(this, leaf));
+			this.registerView(VIEW_TYPE_WHATS_NEW, (leaf: WorkspaceLeaf) => new WhatsNewView(this, leaf));
 
 			// needs to be done after plugins are setup so that string variable checks work
 			this.commands.setupItemCommands();
@@ -223,9 +225,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			const maxSize = 10;
 			const path = file.path;
 			const i = this.settings.recentFiles.indexOf(path);
-			if (i !== -1) this.settings.recentFiles.splice(i, 1);
-			this.settings.recentFiles.push(path);
-			if (this.settings.recentFiles.length > maxSize) this.settings.recentFiles.shift();
+			if (i !== -1) this.settings.recentFiles.splice(i, 1); // remove if exists
+			this.settings.recentFiles.unshift(path); // add to top
+			if (this.settings.recentFiles.length > maxSize) this.settings.recentFiles.pop(); // remove oldest
 			await this.settingsManager.save();
 		}
 	};
@@ -569,6 +571,16 @@ export default class NoteToolbarPlugin extends Plugin {
 			default:
 				// we're not rendering it
 				break;
+		}
+
+		// EXPERIMENTAL
+		// FIXME: flickers before displaying the toolbar items
+		const useLaunchpad = currentView instanceof ItemView && currentView.getViewType() === 'empty'
+			&& toolbar.customClasses?.includes('note-toolbar-launchpad');
+		currentView.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
+		if (useLaunchpad) {
+			currentView.contentEl.insertAdjacentElement('afterbegin', embedBlock);
+			return;
 		}
 
 		// add the toolbar to the editor or modal UI
@@ -1126,12 +1138,13 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug("updateToolbar()", toolbar.name);
 
+		// FIXME: need to `show` here too, but doesn't consistently work (in Reading mode only perhaps?)
 		// fold/hide properties if they were before
 		const propsState = localStorage.getItem(LocalVar.PropsState) ?? '';
-		if (['hide', 'fold'].includes(propsState)) {
-			this.debug('updateToolbar() properties', propsState);
-			this.commands.toggleProps(propsState as PropsState);
-		}
+		this.commands.toggleProps(propsState as PropsState);
+		// if (['hide', 'fold'].includes(propsState)) {
+		// 	this.debug('updateToolbar() properties', propsState);
+		// }
 
 		let toolbarEl = this.getToolbarEl();
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
@@ -2027,7 +2040,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (menuToolbar) {
 					contextMenu.addItem((item: MenuItem) => {
 						item
-							.setIcon('list')
+							.setIcon('square-menu')
 							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name }))
 							.onClick(async () => {
 								const modal = new ToolbarSettingsModal(this.app, this, null, menuToolbar as ToolbarSettings);
@@ -2115,7 +2128,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	getPropsEl(): HTMLElement | null {
 		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.containerEl as HTMLElement;		
 		const propertiesContainer = currentViewEl?.querySelector('.metadata-container') as HTMLElement;
-		// this.debug("getPropsEl: ", propertiesContainer);
+		this.debug("getPropsEl: ", propertiesContainer);
 		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
 		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
 			return null;

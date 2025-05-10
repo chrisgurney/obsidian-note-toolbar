@@ -2088,20 +2088,6 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.is-phone .note-toolbar-setting-help-dialog {
-    padding: 1em;
-    .setting-item {
-        flex-direction: row !important;
-        .setting-item-control {
-            margin-top: 0 !important;
-            width: auto !important;
-            button {
-                width: auto;
-            }
-        }
-    }
-}
-
 .note-toolbar-setting-help-section {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
@@ -2123,25 +2109,24 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-help-view .is-readable-line-width,
 .note-toolbar-setting-whatsnew-view .is-readable-line-width {
     max-width: var(--file-line-width);
     margin-left: auto;
     margin-right: auto;
 }
 
-.note-toolbar-setting-whatsnew-cta {
-    border-top: 1px solid var(--background-modifier-border);
-    padding-top: 0.75em;
-}
-
-.is-phone .note-toolbar-setting-whatsnew-cta {
-    .setting-item {
-        flex-direction: row !important;
-        padding-top: 0 !important;
-        .setting-item-control {
-            width: auto !important;
-            button {
-                width: auto;
+.note-toolbar-setting-view-cta {
+    & .setting-item {
+        border-top: 1px solid var(--background-modifier-border);
+        padding-top: 0.75em;
+        .is-phone & {
+            flex-direction: row !important;
+            & .setting-item-control {
+                width: auto !important;
+                & button {
+                    width: auto;
+                }
             }
         }
     }
@@ -2294,4 +2279,50 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-ui-input {
     flex-grow: 1;
+}
+
+/*************************************************************************
+ * Launchpad
+ *************************************************************************/
+
+.note-toolbar-launchpad-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    & .cg-note-toolbar-container {
+        margin: auto 0;
+    }
+    & .empty-state {
+        display: none;
+    }
+}
+
+.note-toolbar-launchpad {
+    & .callout-content ul[role="menu"] {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        .is-phone & {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+        margin: 0 auto;
+        & li {
+            background-color: var(--background-primary-alt);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            & .cg-note-toolbar-item {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                min-height: 100px;
+                gap: 4px;
+            }
+        }
+    }
+
 }

@@ -310,11 +310,13 @@
         "help": {
             "button-donate": "Donate ↗",
             "button-donate-tooltip": "Open buymeacoffee.com",
-            "button-open": "Open ↗",
+            "button-open": "Open",
+            "button-open-external": "Open ↗",
             "button-open-github": "Open github.com",
             "button-open-google": "Open google.com",
             "button-read": "Read ↗",
             "description": "Context-aware toolbars for your notes.",
+            "heading": "Help using Note Toolbar",
             "label-article-1": "Creating toolbar items",
             "label-article-1-description": "Learn about the different types of items.",
             "label-article-2": "Note Toolbar Callouts",
@@ -326,12 +328,12 @@
             "label-feedback": "Provide feedback",
             "label-feedback-description": "Use this quick Google form for any feedback, questions, or ideas you may have.",
             "label-gallery": "Open Gallery",
-            "label-gallery-description": "Visit the Gallery for ready-to-use items to your toolbars.",
+            "label-gallery-description": "Visit the Gallery to add ready-to-use items to your toolbars.",
             "label-support": "Get support",
             "label-support-description": "Visit the forums on GitHub to ask questions to the community.",
             "label-user-guide": "Read the User Guide",
             "label-user-guide-description": "How to make the most out of the plugin, including tips and examples.",
-            "title": "Help using Note Toolbar 🛟"
+            "title": "Note Toolbar Help"
         },
         "icon-suggester": {
             "instruction-dismiss": "to dismiss",
@@ -398,6 +400,7 @@
             "option-uri-placehoder": "Website, URI, or note title",
             "option-uri-target": "Where to open",
             "option-uri-target-description": "Using modifier keys or plugins may override this setting.",
+            "option-uri-target-disclaimer-device": "This option does nothing on this device.",
             "option-uri-target-disclaimer-non-default": "External links require the Web Viewer plugin to be enabled, to use options other than Default. Available on desktop only.",
             "option-visibility-component-hidden-platform": "{{component}} hidden on {{platform}}",
             "option-visibility-component-visible-platform": "{{component}} visible on {{platform}}",

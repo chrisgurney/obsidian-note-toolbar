@@ -38,9 +38,10 @@ export class WhatsNewView extends ItemView {
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 		this.renderSkeleton(markdownEl);
 
-		const releaseEl = contentDiv.createDiv();
-		releaseEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
-		new Setting(releaseEl)
+		const ctaEl = contentDiv.createDiv();
+		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
+
+		new Setting(ctaEl)
 			.setName(iconTextFr('book-text', t('setting.whats-new.label-release-notes')))
 			.setDesc(t('setting.whats-new.label-release-notes-description'))
 			.addButton((button: ButtonComponent) => {
@@ -53,9 +54,7 @@ export class WhatsNewView extends ItemView {
 					});
 			});
 
-		const roadmapEl = contentDiv.createDiv();
-		roadmapEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
-		new Setting(roadmapEl)
+		new Setting(ctaEl)
 			.setName(iconTextFr('signpost', t('setting.whats-new.label-roadmap')))
 			.setDesc(t('setting.whats-new.label-roadmap-description'))
 			.addButton((button: ButtonComponent) => {

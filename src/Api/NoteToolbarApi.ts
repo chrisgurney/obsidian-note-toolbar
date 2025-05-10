@@ -39,7 +39,6 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     ): Promise<TAbstractFile> {
 
         const abstractFiles = this.plugin.app.vault.getAllLoadedFiles();
-        const recentFilePaths = new Set(this.plugin.settings.recentFiles);
 
         let files: TAbstractFile[] = [];
         files = abstractFiles.filter((file: TAbstractFile) => {
@@ -49,9 +48,12 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         })
         // prioritize recent files
         .sort((a, b) => {
-            const aRecent = recentFilePaths.has(a.path) ? 0 : 1;
-            const bRecent = recentFilePaths.has(b.path) ? 0 : 1;
-            return aRecent - bRecent;
+            const ai = this.plugin.settings.recentFiles.indexOf(a.path);
+            const bi = this.plugin.settings.recentFiles.indexOf(b.path);
+            if (ai === -1 && bi === -1) return 0;
+            if (ai === -1) return 1;
+            if (bi === -1) return -1;
+            return ai - bi; // lower index = more recent
         });
 
         // strip out extension from markdown files
