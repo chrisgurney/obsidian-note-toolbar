@@ -1,4 +1,4 @@
-import { ButtonComponent, ItemView, Setting, WorkspaceLeaf } from "obsidian";
+import { ButtonComponent, ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } from "obsidian";
 import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import { iconTextFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from "main";
@@ -30,6 +30,13 @@ export class HelpView extends ItemView {
         const contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-help-view');
 
+        const markdownEl = contentDiv.createDiv();
+        markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
+
+		const headingEl = markdownEl.createDiv();
+		headingEl.addClass('note-toolbar-gallery-view-heading');
+        MarkdownRenderer.render(this.plugin.app, `# ${t('setting.help.heading')}`, headingEl, '/', this.plugin);
+
         const ctaEl = contentDiv.createDiv();
         ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
         new Setting(ctaEl)
@@ -52,18 +59,18 @@ export class HelpView extends ItemView {
                 button
                     .setButtonText(t('setting.help.button-open'))
                     .setTooltip(t('setting.help.label-gallery'))
+                    .setCta()
                     .onClick(() => {
                         window.open('obsidian://note-toolbar?gallery', '_blank');
                     });
-            })
-            .setClass('note-toolbar-setting-no-border');
+            });
 
         new Setting(ctaEl)
             .setName(iconTextFr('messages-square', t('setting.help.label-support')))
             .setDesc(t('setting.help.label-support-description'))
             .addButton((button: ButtonComponent) => {
                 button
-                    .setButtonText(t('setting.help.button-open'))
+                    .setButtonText(t('setting.help.button-open-external'))
                     .setTooltip(t('setting.help.button-open-github'))
                     .setCta()
                     .onClick(() => {
@@ -76,7 +83,7 @@ export class HelpView extends ItemView {
             .setDesc(t('setting.help.label-bug-description'))
             .addButton((button: ButtonComponent) => {
                 button
-                    .setButtonText(t('setting.help.button-open'))
+                    .setButtonText(t('setting.help.button-open-external'))
                     .setTooltip(t('setting.help.button-open-google'))
                     .onClick(() => {
                         window.open(URL_ISSUE_FORM, '_blank');
@@ -89,7 +96,7 @@ export class HelpView extends ItemView {
             .setDesc(t('setting.help.label-feedback-description'))
             .addButton((button: ButtonComponent) => {
                 button
-                    .setButtonText(t('setting.help.button-open'))
+                    .setButtonText(t('setting.help.button-open-external'))
                     .setTooltip(t('setting.help.button-open-google'))
                     .onClick(() => {
                         window.open(URL_FEEDBACK_FORM, '_blank');
