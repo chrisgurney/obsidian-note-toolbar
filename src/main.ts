@@ -225,9 +225,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			const maxSize = 10;
 			const path = file.path;
 			const i = this.settings.recentFiles.indexOf(path);
-			if (i !== -1) this.settings.recentFiles.splice(i, 1);
-			this.settings.recentFiles.push(path);
-			if (this.settings.recentFiles.length > maxSize) this.settings.recentFiles.shift();
+			if (i !== -1) this.settings.recentFiles.splice(i, 1); // remove if exists
+			this.settings.recentFiles.unshift(path); // add to top
+			if (this.settings.recentFiles.length > maxSize) this.settings.recentFiles.pop(); // remove oldest
 			await this.settingsManager.save();
 		}
 	};
