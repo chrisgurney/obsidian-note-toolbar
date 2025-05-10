@@ -1,12 +1,32 @@
 [obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / INoteToolbarApi
 
+> [!note]
+> This documentation is for version `1.23`.
+
 The first Note Toolbar APIs allow you basic toolbar access, and to show UI (suggesters, prompts, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
 
 Using the `ntb` object, below are the functions that can be called in scripts that are [executed from Note Toolbar items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts).
 
+I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions).
+
 > [!warning]
-> This API is considered BETA, until more functions are added in the future (e.g., manipulating toolbars, and other UI components) and I consider naming and organization of the methods available. Functions may change.
-> I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions).
+> While you could also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
+
+## Copy developer ID for items
+
+In each item's _More actions..._ menu, use `Copy developer ID` to copy the unique identifier (UUID) for any toolbar item to the clipboard. 
+
+From code you can then target the item and make changes to it:
+
+```js
+const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+item.setIcon('alert');
+
+// or fetch the HTML element (for non-floating-button toolbars)
+const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+```
+
+## `ntb` API
 
 ## Type Parameters
 
