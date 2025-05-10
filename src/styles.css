@@ -2116,19 +2116,17 @@ input[type="text"].note-toolbar-setting-error,
     margin-right: auto;
 }
 
-.note-toolbar-setting-whatsnew-cta {
-    border-top: 1px solid var(--background-modifier-border);
-    padding-top: 0.75em;
-}
-
-.is-phone .note-toolbar-setting-whatsnew-cta {
-    .setting-item {
-        flex-direction: row !important;
-        padding-top: 0 !important;
-        .setting-item-control {
-            width: auto !important;
-            button {
-                width: auto;
+.note-toolbar-setting-view-cta {
+    & .setting-item {
+        border-top: 1px solid var(--background-modifier-border);
+        padding-top: 0.75em;
+        .is-phone & {
+            flex-direction: row !important;
+            & .setting-item-control {
+                width: auto !important;
+                & button {
+                    width: auto;
+                }
             }
         }
     }

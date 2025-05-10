@@ -141,9 +141,9 @@ export class GalleryView extends ItemView {
 
 		});
 
-		const feedbackEl = markdownEl.createDiv();
-		feedbackEl.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
-		new Setting(feedbackEl)
+		const ctaEl = markdownEl.createDiv();
+		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
+		new Setting(ctaEl)
 			.setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
 			.setDesc(t('setting.help.label-feedback-description'))
 			.addButton((button: ButtonComponent) => {

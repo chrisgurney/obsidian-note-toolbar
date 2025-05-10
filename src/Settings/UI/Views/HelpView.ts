@@ -30,9 +30,9 @@ export class HelpView extends ItemView {
         const contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-help-view');
 
-        const helpLinkDiv = contentDiv.createDiv();
-        helpLinkDiv.addClass('note-toolbar-setting-whatsnew-cta', 'is-readable-line-width');
-        new Setting(helpLinkDiv)
+        const ctaEl = contentDiv.createDiv();
+        ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
+        new Setting(ctaEl)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
             .setDesc(t('setting.help.label-user-guide-description'))
             .addButton((button: ButtonComponent) => {
@@ -45,7 +45,7 @@ export class HelpView extends ItemView {
                     });
             });
 
-        new Setting(helpLinkDiv)
+        new Setting(ctaEl)
             .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
             .setDesc(t('setting.help.label-gallery-description'))
             .addButton((button: ButtonComponent) => {
@@ -58,7 +58,7 @@ export class HelpView extends ItemView {
             })
             .setClass('note-toolbar-setting-no-border');
 
-        new Setting(helpLinkDiv)
+        new Setting(ctaEl)
             .setName(iconTextFr('messages-square', t('setting.help.label-support')))
             .setDesc(t('setting.help.label-support-description'))
             .addButton((button: ButtonComponent) => {
@@ -71,7 +71,7 @@ export class HelpView extends ItemView {
                     });
             });
 
-        new Setting(helpLinkDiv)
+        new Setting(ctaEl)
             .setName(iconTextFr('bug', t('setting.help.label-bug')))
             .setDesc(t('setting.help.label-bug-description'))
             .addButton((button: ButtonComponent) => {
@@ -84,7 +84,7 @@ export class HelpView extends ItemView {
             })
             .setClass('note-toolbar-setting-no-border');
 
-        new Setting(helpLinkDiv)
+        new Setting(ctaEl)
             .setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
             .setDesc(t('setting.help.label-feedback-description'))
             .addButton((button: ButtonComponent) => {
@@ -97,7 +97,7 @@ export class HelpView extends ItemView {
             })
             .setClass('note-toolbar-setting-no-border');
 
-        new Setting(helpLinkDiv)
+        new Setting(ctaEl)
             .setName(iconTextFr('heart', t('setting.help.label-donate')))
             .setDesc(t('setting.help.label-donate-description'))
             .addButton((button: ButtonComponent) => {
