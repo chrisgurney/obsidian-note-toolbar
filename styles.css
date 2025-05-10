@@ -910,13 +910,16 @@ settings:
     -
         id: ui
         title: 'Other UI'
+        title.uk: 'Додатковий UI'
         description: 'Styles for other Note Toolbar UI elements'
+        description.uk: 'Стилі додаткових елементів Note Toolbar'
         type: heading
         level: 1
         collapsed: true
     -
         id: cg-nt-ui-modal-width
         title: 'Modal width on desktop (in px units)'
+        title.uk: 'Ширина модального вікна на ПК (пікселі)'
         type: variable-number
         default: 700
         format: px
