@@ -104,13 +104,22 @@
       "block-no-id": "未找到块ID",
       "clipboard-copied": "已复制到剪贴板",
       "error-console": "错误：请检查控制台以获取详细信息",
+      "file-created": "已创建：{{filename}}",
       "file-not-exist": "文件不存在"
     },
     "ui": {
       "button-submit": "提交",
       "error-cancelled": "已取消提示",
+      "error-file-unsupported": "不支持的文件类型：{{filetype}}",
       "error-undefined": "未定义的项目",
+      "file-suggester-placeholder": "选择一个文件（或文件夹）…",
+      "file-suggester-placeholder_file": "选择一个文件…",
+      "file-suggester-placeholder_folder": "选择一个文件夹…",
+      "instruction-dismiss": "取消",
+      "instruction-navigate": "导航",
+      "instruction-select": "确认",
       "prompt-placeholder": "在此输入文本",
+      "prompt-placeholder-large": "输入文本",
       "suggester-placeholder": "选择一个选项…"
     }
   },
@@ -165,8 +174,8 @@
     "button-cancel": "取消",
     "button-confirm": "确认",
     "button-create": "创建",
-    "button-import-into-tooltip": "从 Callout 添加工具栏项目",
-    "button-import-tooltip": "从 Callout 创建工具栏",
+    "button-import-into-tooltip": "从标注（Callout）添加工具栏项目",
+    "button-import-tooltip": "从标注（Callout）创建工具栏",
     "error-invalid-uri-content": "Note Toolbar：此链接似乎有问题。请检查 URI 是否正确，或查看用户指南。",
     "errorlog-command-not-recognized": "未识别的命令：{{command}}",
     "errorlog-heading": "导入工具栏时发现错误：",
@@ -175,16 +184,16 @@
     "errorlog-invalid-styles": "已忽略无效样式：{{styles}}",
     "errorlog-item": "项目 {{number}}：",
     "errorlog-menu-not-found": "未找到菜单：{{menu}}",
-    "label-import": "在下方粘贴 Note Toolbar Callout，它将被添加为新的工具栏。",
+    "label-import": "在下方粘贴笔记工具栏的标注（Callout），它将被添加为新的工具栏。",
     "label-import-confirmation": "确认要添加此工具栏。添加后，需要将此工具栏映射到一个或多个笔记。",
-    "label-import-into": "在下方粘贴 Note Toolbar Callout，其项目将被添加到此工具栏。如果有样式，将被忽略。",
-    "label-import-into-help": "不需要 Callout 标题，即使提供了也会被忽略。",
-    "option-create": "从 Callout 创建 Note Toolbar…",
-    "option-help": "关于 Note Toolbar Callouts",
+    "label-import-into": "在下方粘贴笔记工具栏的标注（Callout），其项目将被添加到此工具栏。（样式将被忽略）",
+    "label-import-into-help": "不需要提供标注的标题，即使提供了也会被忽略。",
+    "option-create": "从标注（Callout）创建笔记工具栏…",
+    "option-help": "关于笔记工具栏 Callouts",
     "placeholder-import-into": "> Note Toolbar Callout markdown…",
-    "title-import": "从 Callout 创建工具栏",
-    "title-import-confirmation": "创建 Note Toolbar：{{toolbar}}",
-    "title-import-into": "添加 Callout 项目到工具栏：{{toolbar}}",
+    "title-import": "从标注（Callout）创建工具栏",
+    "title-import-confirmation": "创建笔记工具栏：{{toolbar}}",
+    "title-import-into": "将标注（Callout）内的项目添加到工具栏：{{toolbar}}",
     "warning-invalid-plugins": "此工具栏使用了你尚未安装和启用的插件：",
     "warning-vars": "此工具栏使用了变量，你可以修改它们以适应你的仓库。"
   },
@@ -220,13 +229,14 @@
     "js-engine": "JS Engine",
     "name": "Note Toolbar 笔记工具栏",
     "note-toolbar": "Note Toolbar",
+    "obsidian-excalidraw-plugin": "Excalidraw",
     "obsidian-kanban": "Kanban",
     "obsidian-tasks-plugin": "Tasks",
+    "open-with-default-app": "使用默认应用程序打开",
     "periodic-notes": "Periodic Notes",
     "sync": "Obsidian Sync 官方同步",
     "templater-obsidian": "Templater",
-    "workspaces": "Workspaces 工作区",
-    "open-with-default-app": "使用默认应用程序打开"
+    "workspaces": "Workspaces 工作区"
   },
   "setting": {
     "add-item": {
@@ -234,14 +244,16 @@
       "label-confirm-command": "命令不支持或未找到：\n\n\n`{{commandId}}`\n\n\n您还想将此项目添加到工具栏中吗？\n您可以安装/启用以后提供此命令的插件。",
       "label-confirm-mobile-uri": "该项目使用文件URI（在移动设备上可能不支持）\n\n\n您还想将此项目添加到工具栏中吗？",
       "label-confirm-plugin": "插件未安装（或未启用）：\n\n\n** {{plugin}} **\n\n您还想将此项目添加到工具栏中吗？\n您可以稍后安装/启用此插件。",
-      "title-confirm": "添加项目：{{itemName}}",
       "label-confirm-scripting": "为了使用此项目，必须启用 笔记工具栏 设置中的_脚本（scripting）_设置。\n\n此设置将允许您的工具栏执行 JavaScript 脚本，并使用 Dataview、Templater 和 JS Engine 插件（前提是您已安装并启用了这些插件）。\n\n您想现在启用此设置吗？",
+      "notice-item-added": "已将项目添加至 {{toolbarName}}",
+      "title-confirm": "添加项目：{{itemName}}",
       "title-confirm-scripting": "该项目需要提供脚本"
     },
     "button-cancel": "取消",
     "button-collapse-tooltip": "折叠",
     "button-delete-tooltip": "删除",
     "button-drag-tooltip": "拖动以重新排序",
+    "button-enable": "启用",
     "button-expand-tooltip": "展开",
     "button-gallery": "示例库",
     "button-gallery-tooltip": "打开示例库（Gallery）",
@@ -276,6 +288,7 @@
       "button-delete-tooltip": "删除此工具栏",
       "description": "此操作无法撤销。",
       "label-delete-confirm": "您确定要删除此工具栏吗？",
+      "label-usage-note": "该工具栏可能在 `{{propertyName}}` 属性中被使用。\n如果你想确认，请关闭此窗口后搜索 `[{{propertyName}}: {{toolbarName}}]`",
       "name": "删除此工具栏",
       "title": "删除工具栏：{{toolbar}}"
     },
@@ -289,6 +302,7 @@
       "option-filemenu": "文件菜单",
       "option-filemenu-description": "在文件右键菜单中添加项目，以快速访问链接的笔记对应的工具栏。",
       "option-image": "图像",
+      "option-kanban": "Kanban 看板",
       "option-pdf": "PDF文档",
       "option-video": "视频"
     },
@@ -305,10 +319,12 @@
       "button-donate": "捐赠 ↗",
       "button-donate-tooltip": "打开 buymeacoffee.com",
       "button-open": "打开↗",
+      "button-open-external": "打开 ↗",
       "button-open-github": "打开github.com",
       "button-open-google": "打开Goog​​le.com",
       "button-read": "阅读↗",
       "description": "为您的笔记创建上下文感知的工具栏。",
+      "heading": "使用笔记工具栏的帮助",
       "label-article-1": "创建工具栏项目",
       "label-article-1-description": "了解不同类型的项目",
       "label-article-2": "笔记工具栏的标注",
@@ -337,6 +353,7 @@
       "placeholder": "搜索图标…"
     },
     "item": {
+      "button-advanced-tooltip": "高级设置",
       "button-close": "关闭",
       "button-close-description": "关闭并保存此项目",
       "button-duplicate-tooltip": "复制此项目",
@@ -346,13 +363,19 @@
       "label-review-plugin": "查看插件",
       "menu-copy-id": "复制开发者 ID",
       "menu-copy-id-notice": "已将工具栏项目的ID复制到剪贴板。",
+      "menu-copy-item": "复制项目至工具栏…",
+      "menu-copy-item-notice": "已将项目复制到工具栏：{{toolbarName}}",
       "menu-more-actions": "更多操作…",
+      "menu-move-item": "移至工具栏…",
+      "menu-move-item-notice": "项目已移至工具栏：{{toolbarName}}",
       "option-break": "换行",
       "option-command": "命令",
       "option-command-error-does-not-exist": "该命令不存在",
       "option-command-error-not-available-install": "该命令不可用；必须先安装并启用对应插件。",
       "option-command-error-not-available-search": "无法找到命令，请重新搜索",
       "option-command-error-refresh": "刷新",
+      "option-command-focus": "聚焦到编辑器",
+      "option-command-focus-description": "执行命令后，将焦点设置为编辑器。",
       "option-command-placeholder": "搜索命令",
       "option-command-target": "在哪里运行命令",
       "option-command-target-description": "一些命令可能会覆盖此设置。",
@@ -373,9 +396,11 @@
       "option-item-menu-help": "选择要作为菜单打开的工具栏。",
       "option-item-menu-placeholder": "工具栏",
       "option-label-placeholder": "文本（如果设置了图标则可选）",
+      "option-menu": "菜单",
       "option-script": "选择您要如何执行脚本",
       "option-separator": "分隔符",
-      "option-target-default": "默认（当前页打开）",
+      "option-target-default": "当前页（默认）",
+      "option-target-modal": "模态窗口（Modal）",
       "option-target-split": "左右分屏",
       "option-target-tab": "新标签页",
       "option-target-window": "新窗口",
@@ -383,6 +408,11 @@
       "option-uri": "URI",
       "option-uri-help": "提示：在 URI 中可以使用笔记属性。",
       "option-uri-placehoder": "网站、URI 或笔记名称",
+      "option-uri-target": "如何打开文件",
+      "option-uri-target-description": "如果该 URI 对应的是库中的文件，在此选择如何打开它。\n使用修饰键或插件可能会覆盖此设置。",
+      "option-uri-target-disclaimer-device": "该选项在本设备上无效。",
+      "option-uri-target-disclaimer-modal": "仅有文件的URIS以模态（Modal）打开。",
+      "option-uri-target-disclaimer-non-default": "外部链接的 URIS 只有在启用核心插件 WebViewer 的情况下，才能使用非默认选项。",
       "option-visibility-component-hidden-platform": "在{{platform}}隐藏{{component}}",
       "option-visibility-component-visible-platform": "在{{platform}}显示{{component}}",
       "option-visibility-hidden": "隐藏",
@@ -390,9 +420,7 @@
       "option-visibility-platform-desktop": "桌面端",
       "option-visibility-platform-mobile": "移动端",
       "option-visibility-visible-platform": "在{{platform}}显示",
-      "title": "编辑项目",
-      "menu-move-item": "移至工具栏…",
-      "menu-move-item-notice": "项目已移至工具栏：{{toolbarName}}"
+      "title": "编辑项目"
     },
     "item-suggest-modal": {
       "instruction-back": "返回",
@@ -409,7 +437,8 @@
       "link-search": "搜索项目",
       "option-new": "创建新项目",
       "placeholder": "搜索项目…",
-      "placeholder-toolbar": "{{toolbar}}: 搜索项目…"
+      "placeholder-toolbar": "{{toolbar}}: 搜索项目…",
+      "placeholder-use": "搜索要使用的项目…"
     },
     "items": {
       "button-add-break-tooltip": "向工具栏添加换行",
@@ -457,10 +486,18 @@
     "option-platform-desktop": "桌面端",
     "option-platform-mobile": "移动端",
     "other": {
+      "debugging": {
+        "description": "启用后，将会在控制台中显示调试消息。\n这对于开发人员和故障排除可能会很有帮助。",
+        "name": "调试"
+      },
       "icon": {
         "description": "设置浮动按钮和导航栏（移动端）的图标，需要重启。",
         "name": "图标",
         "tooltip": "选择图标"
+      },
+      "load-settings-changes": {
+        "description": "启用后，将在设置发生改动后立即生效。\n否则，需要重新启动 Obsidian 才能让改动生效。",
+        "name": "加载设置变动"
       },
       "name": "其他",
       "ribbon-action": {
@@ -501,6 +538,8 @@
       "field-placeholder": "搜索工具栏…"
     },
     "styles": {
+      "button-close": "完成",
+      "button-close-description": "保存并关闭设置",
       "description": "应用于工具栏的样式列表。",
       "help": "使用 Style Settings 插件可进行更多自定义。",
       "name": "样式",
@@ -545,7 +584,8 @@
       "instruction-use": "打开工具栏",
       "option-default": "默认（使用工具栏映射）",
       "option-new": "创建一个新工具栏",
-      "placeholder": "搜索工具栏…"
+      "placeholder": "搜索工具栏…",
+      "placeholder-add": "将项目添加至哪个工具栏？"
     },
     "toolbars": {
       "button-duplicate-tbar-tooltip": "复制此工具栏",
@@ -562,8 +602,13 @@
       "new-tbar-name": "New toolbar"
     },
     "usage": {
-      "description": "此工具栏在 {{mappingCount}} 个映射和 {{itemCount}} 个工具栏项目中使用。",
+      "description": "此工具栏在 {{mappingCount}} 个文件夹映射和 {{itemCount}} 个工具栏项目中使用。",
+      "description-mappings": "{{count}} 个文件夹映射",
+      "description-mappings_plural": "{{count}} 个文件夹映射",
       "description-search": "搜索属性的使用情况",
+      "description-toolbar-items": "{{count}} 个工具栏项目",
+      "description-toolbar-items_plural": "{{count}} 个工具栏项目",
+      "description_none": "该工具栏未被任何项目（或文件夹映射）所使用。",
       "name": "使用情况"
     },
     "use-item-command": {
@@ -582,18 +627,20 @@
     "whats-new": {
       "button-read": "阅读 ↗",
       "button-read-tooltip": "打开 github.com",
+      "error-failed-to-load": "无法加载更新日志：\n{{baseUrl}}/{{language}}/{{version}}.md",
       "label-release-notes": "发布说明",
       "label-release-notes-description": "最新版本的详细说明位于 Github",
       "label-roadmap": "Note Toolbar 的未来？",
       "label-roadmap-description": "查看路线图，以预览考虑开发的新功能。",
+      "placehoder-loading": "加载中……",
       "title": "Note Toolbar 更新内容"
-    },
-    "button-enable": "启用"
+    }
   },
   "toolbar": {
     "menu-add-item": "添加项目…",
     "menu-edit-item": "编辑项目：{{text}}…",
     "menu-edit-item_none": "编辑项目…",
+    "menu-edit-menu": "编辑菜单工具栏：{{toolbar}}…",
     "menu-edit-toolbar": "编辑工具栏：{{toolbar}}…",
     "menu-hide-properties": "隐藏笔记属性",
     "menu-position": "设置位置",
