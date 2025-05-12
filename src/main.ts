@@ -380,7 +380,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	
 				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
 				const ntbPropValue = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
-				if (ntbPropValue) {
+				if (ntbPropValue && this.settings.toolbarProp !== 'tags') {
 					// make sure just the relevant property changed in the open file
 					if (this.lastFileOpenedOnCacheChange !== activeFile) this.lastNtbPropValue = undefined;
 					const ignoreToolbar = ntbPropValue.includes('none') ? true : false;
