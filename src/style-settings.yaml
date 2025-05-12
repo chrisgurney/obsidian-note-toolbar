@@ -26,7 +26,7 @@ settings:
     -
         id: cg-nt-fab-bg-color-desktop
         title: 'Background color on desktop'
-        title.uk: 'Колір фону на робочому столі'
+        title.uk: "Колір фону на комп'ютері"
         title.de: 'Hintergrundfarbe am PC'
         title.zh: '桌面端背景颜色'
         type: variable-themed-color
@@ -37,7 +37,7 @@ settings:
     -
         id: cg-nt-fab-bg-color
         title: 'Background color on mobile 📱'
-        title.uk: 'Колір фону на мобільному пристрої 📱'
+        title.uk: 'Колір фону на мобільному 📱'
         title.de: 'Hintergrundfarbe am Handy 📱'
         title.zh: '移动端背景颜色 📱'
         type: variable-themed-color
@@ -48,7 +48,7 @@ settings:
     -
         id: cg-nt-fab-bg-color-hover-desktop
         title: 'Background color on desktop (on hover)'
-        title.uk: 'Колір фону на робочому столі (при наведенні)'
+        title.uk: "Колір фону на комп'ютері (при наведенні)"
         title.de: 'Hintergrundfarbe am PC (beim Überfahren mit der Maus)'
         title.zh: '桌面端背景颜色（悬停）'
         type: variable-themed-color
@@ -59,7 +59,7 @@ settings:
     -
         id: cg-nt-fab-bg-color-hover
         title: 'Background color on mobile (on press) 📱'
-        title.uk: 'Колір фону на мобільному пристрої (при натисканні) 📱'
+        title.uk: 'Колір фону на мобільному (при натисканні) 📱'
         title.de: 'Hintergrundfarbe am Handy (bei Drücken) 📱'
         title.zh: '移动端背景颜色（按下） 📱'
         type: variable-themed-color
@@ -81,7 +81,7 @@ settings:
     -
         id: cg-nt-fab-icon-color-desktop
         title: 'Icon color on desktop'
-        title.uk: 'Колір іконок на робочому столі'
+        title.uk: "Колір іконок на комп'ютері"
         title.de: 'Symbolfarbe am PC'
         title.zh: '桌面端图标颜色'
         type: variable-themed-color
@@ -92,7 +92,7 @@ settings:
     -
         id: cg-nt-fab-icon-color
         title: 'Icon color on mobile 📱'
-        title.uk: 'Колір іконки на мобільному пристрої 📱'
+        title.uk: 'Колір іконки на мобільному 📱'
         title.de: 'Symbolfarbe am Handy 📱'
         title.zh: '移动端图标颜色 📱'
         type: variable-themed-color
@@ -112,7 +112,7 @@ settings:
     -
         id: cg-nt-fab-pos-x-desktop
         title: 'X position on desktop (in px units)'
-        title.uk: 'Позиція X на робочому столі (пікселі)'
+        title.uk: "Позиція X на комп'ютері (пікселі)"
         title.de: 'X-Position am PC (in px-Einheiten)'
         title.zh: '桌面端X轴位置（单位：px）'
         description: 'Distance from the edge of the editor view.'
@@ -138,7 +138,7 @@ settings:
     -
         id: cg-nt-fab-pos-y-desktop
         title: 'Y position on desktop (in px units)'
-        title.uk: 'Позиція Y на робочому столі (пікселі)'
+        title.uk: "Позиція Y на комп'ютері (пікселі)"
         title.de: 'Y-Position am PC (in px-Einheiten)'
         title.zh: '桌面端Y轴位置（单位：px）'
         description: "Distance from the bottom of the editor view."
@@ -151,7 +151,7 @@ settings:
     -
         id: cg-nt-fab-pos-y-mobile
         title: 'Y position on mobile (in px units) 📱'
-        title.uk: 'Позиція Y на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Позиція Y на мобільному (пікселі) 📱'
         title.de: 'Y-Position am Handy (in px-Einheiten) 📱'
         title.zh: '移动端Y轴位置（单位：px）📱'
         description: "Distance from the bottom of the editor view."
@@ -173,7 +173,7 @@ settings:
     -
         id: cg-nt-fab-padding-desktop
         title: 'Padding on desktop (in px units)'
-        title.uk: 'Відступи на робочому столі (пікселі)'
+        title.uk: "Відступи на комп'ютері (пікселі)"
         title.de: 'Abstand am PC (in px)'
         title.zh: '桌面端内边距（单位：像素）'
         description: 'Spacing around the icon.'
@@ -186,7 +186,7 @@ settings:
     -
         id: cg-nt-fab-padding
         title: 'Padding on mobile (in px units) 📱'
-        title.uk: 'Відступи на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Відступи на мобільному (пікселі) 📱'
         title.de: 'Abstand am Handy (in px) 📱'
         title.zh: '移动端内边距（单位：像素）📱'
         description: 'Spacing around the icon.'
@@ -198,7 +198,7 @@ settings:
     -
         id: cg-nt-fab-icon-size-desktop
         title: 'Icon size on desktop (in px units)'
-        title.uk: 'Розмір іконки на робочому столі (пікселі)'
+        title.uk: "Розмір іконки на комп'ютері (пікселі)"
         title.de: 'Symbolgröße am PC (in px) 📱'
         title.zh: '桌面端图标大小（单位：像素）'
         type: variable-number
@@ -207,7 +207,7 @@ settings:
     -
         id: cg-nt-fab-icon-size
         title: 'Icon size on mobile (in px units) 📱'
-        title.uk: 'Розмір іконки на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Розмір іконки на мобільному (пікселі) 📱'
         title.de: 'Symbolgröße am Handy (in px) 📱'
         title.zh: '移动端图标大小（单位：像素）📱'
         type: variable-number
@@ -216,7 +216,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width-desktop
         title: 'Icon stroke width on desktop (in px units)'
-        title.uk: 'Ширина контуру іконки на робочому столі (пікселі)'
+        title.uk: "Ширина контуру іконки на комп'ютері (пікселі)"
         title.de: 'Symbol-Strichstärke am PC (in px)'
         title.zh: '桌面端图标描边宽度（单位：像素）'
         type: variable-number
@@ -225,7 +225,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width
         title: 'Icon stroke width on mobile (in px units) 📱'
-        title.uk: 'Ширина контуру іконки на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Ширина контуру іконки на мобільному (пікселі) 📱'
         title.de: 'Symbol-Strichstärke am Handy (in px) 📱'
         title.zh: '移动端图标描边宽度（单位：像素）📱'
         type: variable-number
@@ -254,11 +254,11 @@ settings:
     -
         id: cg-nt-fab-border-radius-desktop
         title: 'Border radius on desktop (in px units)'
-        title.uk: 'Круглість рамки на робочому столі (пікселі)'
+        title.uk: "Круглість рамки на комп'ютері (пікселі)"
         title.de: 'Rahmenabrundung am PC (in px)'
         title.zh: '桌面端边框圆角（单位：像素）'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
-        description.uk: 'Наскільки круглою є кнопка. Як більше число, тим більше округлення.'
+        description.uk: 'Наскільки круглою є кнопка. Чим більше число, тим більше округлення.'
         description.de: 'Wie abgerundet die Schaltfläche ist. Je höher die Zahl, desto runder.'
         description.zh: '按钮的圆角设置；数值越大，圆角越明显（默认值：Android = 16，iOS = 999）'
         type: variable-number
@@ -267,7 +267,7 @@ settings:
     -
         id: cg-nt-fab-border-radius
         title: 'Border radius on mobile (in px units) 📱'
-        title.uk: 'Круглість рамки на мобільному пристрої (пікселі) 📱'
+        title.uk: 'Круглість рамки на мобільному (пікселі) 📱'
         title.de: 'Rahmenabrundung am Handy (in px) 📱'
         title.zh: '移动端边框圆角（单位：像素）📱'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
@@ -299,7 +299,7 @@ settings:
         title.de: 'Elemente'
         title.zh: '项目'
         description: 'Styles for items within toolbars'
-        description.uk: 'Стилі елементів у панелях'
+        description.uk: 'Стилі елементів панелей'
         description.de: 'Stile für Elemente von Toolbars'
         description.zh: '工具栏内项目的样式'
         type: heading
@@ -428,7 +428,7 @@ settings:
         title.de: 'Menüs'
         title.zh: '菜单'
         description: "Styles for toolbars shown as menus. (In Obsidian's settings, first disable: Appearance → Native menus)"
-        description.uk: 'Стилі елементів меню'
+        description.uk: "Стилі елементів меню. (Спочатку відключіть у налаштунках Obsidian: Оформлення → Нативні меню)"
         description.de: 'Stile für Element-Menüs'
         description.zh: '项目菜单类型的样式'
         type: heading
@@ -736,11 +736,11 @@ settings:
     -
         id: cg-nt-tbar-top-sticky-pos-desktop
         title: 'Top sticky offset on desktop (in px units)'
-        title.uk: 'Верхнє липке зміщення на робочому столі (пікселі)'
+        title.uk: "Верхнє липке зміщення на комп'ютері (пікселі)"
         title.de: 'Oberer Sticky-Offset am PC (in rem-Einheiten) 📱'
         title.zh: '桌面端顶部 Sticky 附着的偏移量（单位：像素）'
         description: "For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed)."
-        description.uk: 'У деяких темах панель не прилипає до верху (чим більше значення, тим далі від верху). Це не застосовується, якщо позиція = Зверху (фіксовано).'
+        description.uk: 'У деяких темах панель не прилипає до верху (чим більше значення, тим далі від верху). Це не застосовується, якщо позиція = Фіксовано зверху.'
         description.de: 'Bei einigen Themes klebt die Symbolleiste nicht ganz oben (größer = weiter von oben). Beachten Sie, dass dies nicht gilt, wenn Position = Oben (fixiert)'
         description.zh: '对于某些主题，工具栏并不能完全贴在顶部（数值越大，离顶部越远）。注意，当位置为「置顶（固定）」时，此设置不适用。'
         type: variable-number
@@ -749,7 +749,7 @@ settings:
     -
         id: cg-nt-tbar-top-sticky-pos-mobile
         title: 'Top sticky offset on mobile (in rem units) 📱'
-        title.uk: 'Верхній липкий офсет на мобільному пристрої (rem) 📱'
+        title.uk: 'Верхній липкий офсет на мобільному (rem) 📱'
         title.de: 'Oberer Sticky-Offset am Handy (in rem-Einheiten) 📱'
         title.zh: '移动端顶部 Sticky 附着的偏移量（单位：rem）📱'
         description: 'See above.'
@@ -822,7 +822,7 @@ settings:
     -
         id: cg-nt-tbar-inactive-opacity-desktop
         title: 'Inactive opacity on desktop'
-        title.uk: 'Прозорість у неактивному режимі на ПК'
+        title.uk: "Прозорість у неактивному режимі на комп'ютері"
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
         description: 'When focus is in another view, dim the toolbar'
@@ -863,7 +863,7 @@ settings:
         title: 'Toolbar border radius (in px units)'
         title.uk: 'Радіус закруглення рамки панелі (пікселі)'
         description: 'How rounded the toolbar is. The higher the number, the more rounded.'
-        description.uk: 'Наскільки закруглена панель. Чим більше число, тим більше заокруглення.'
+        description.uk: 'Закруглення панелі. Чим більше число, тим більше округлення.'
         type: variable-number
         default: 5
         format: px
@@ -915,7 +915,7 @@ settings:
     -
         id: cg-nt-ui-modal-width
         title: 'Modal width on desktop (in px units)'
-        title.uk: 'Ширина модального вікна на ПК (пікселі)'
+        title.uk: "Ширина модального вікна на комп'ютері (пікселі)"
         type: variable-number
         default: 700
         format: px

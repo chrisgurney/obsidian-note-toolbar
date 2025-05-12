@@ -101,12 +101,14 @@
     {
         "id": "copy-note-content",
         "description": {
-            "en": "Copies the body of the current note to the clipboard, ignoring frontmatter."
+            "en": "Copies the body of the current note to the clipboard, ignoring frontmatter.",
+            "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
         },
         "icon": "clipboard-check",
         "script": "const e = app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
         "tooltip": {
-            "en": "Copy note content"
+            "en": "Copy note content",
+            "uk": "Скопіювати вміст нотатки"
         },
         "type": "javascript"
     },
@@ -747,11 +749,13 @@
         "id": "note-toolbar-backup-data",
         "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
         "description": {
-            "en": "Backup Note Toolbar's configuration (data.json) file into the vault."
+            "en": "Backup Note Toolbar's configuration (data.json) file into the vault.",
+            "uk": "Зберігайте до сховища резервну копію файлу налаштунків Note Toolbar (data.json)."
         },
         "icon": "file-stack",
         "tooltip": {
-            "en": "Backup Note Toolbar config"
+            "en": "Backup Note Toolbar config",
+            "uk": "Резервна копія Note Toolbar"
         },
         "type": "javascript"
     },
@@ -840,7 +844,7 @@
         "description": {
             "en": "Opens Obsidian's Discord community.",
             "zh": "打开 Obsidian 的 Discord 社区。",
-            "uk": "Відкрийте Discord-спільноту Obsidian."
+            "uk": "Відвідайте Discord спільноту Obsidian."
         },
         "icon": "discord",
         "tooltip": {
@@ -854,11 +858,13 @@
         "id": "obsidian-excalidraw-create",
         "commandId": "obsidian-excalidraw-plugin:excalidraw-autocreate-newtab",
         "description": {
-            "en": "Create a new Excalidraw drawing."
+            "en": "Create a new Excalidraw drawing.",
+            "uk": "Створіть новий малюнок Excalidraw."
         },
         "icon": "pencil-line",
         "tooltip": {
-            "en": "New drawing"
+            "en": "New drawing",
+            "uk": "Новий малюнок"
         },
         "type": "command"
     },
@@ -932,12 +938,13 @@
         "description": {
             "en": "Opens the Obsidian community on Reddit.",
             "zh": "打开 Reddit 上的 Obsidian 社区。",
-            "uk": "Відкрийте спільноту Obsidian на Reddit."
+            "uk": "Відвідайте спільноту Obsidian на Reddit."
         },
         "icon": "messages-square",
         "tooltip": {
             "en": "Obsidian subreddit",
-            "zh": "Obsidian 子版块"
+            "zh": "Obsidian 子版块",
+            "uk": "Obsidian Reddit"
         },
         "uri": "https://www.reddit.com/r/ObsidianMD/",
         "type": "uri"
@@ -995,12 +1002,14 @@
         "commandId": "periodic-notes:next-monthly-note",
         "description": {
             "en": "Open next monthly note. (Must be in monthly note.)",
-            "zh": "打开下一个月度笔记（当前位于一个月度笔记中时才有效）"
+            "zh": "打开下一个月度笔记（当前位于一个月度笔记中时才有效）",
+            "uk": "Відкрийте наступну місячну нотатку. (Потрібно бути у місячній нотатці)."
         },
         "icon": "lucide-calendar-plus",
         "tooltip": {
             "en": "Next monthly note",
-            "zh": "下一个月度笔记（Monthly Note）"
+            "zh": "下一个月度笔记（Monthly Note）",
+            "uk": "Наступна місячна нотатка"
         },
         "type": "command"
     },
@@ -1009,12 +1018,14 @@
         "commandId": "periodic-notes:open-monthly-note",
         "description": {
             "en": "Open monthly note.",
-            "zh": "打开月度笔记。"
+            "zh": "打开月度笔记。",
+            "uk": "Відкрийте місячну нотатку."
         },
         "icon": "calendar-days",
         "tooltip": {
             "en": "Open monthly note",
-            "zh": "打开月度笔记（Monthly Note）"
+            "zh": "打开月度笔记（Monthly Note）",
+            "uk": "Місячна нотатка"
         },
         "type": "command"
     },
@@ -1023,12 +1034,14 @@
         "commandId": "periodic-notes:prev-monthly-note",
         "description": {
             "en": "Open previous monthly note. (Must be in monthly note.)",
-            "zh": "打开上一个月度笔记（当前位于一个月度笔记中时才有效）"
+            "zh": "打开上一个月度笔记（当前位于一个月度笔记中时才有效）",
+            "uk": "Відкрийте попередню місячну нотатку. (Потрібно бути у місячній нотатці)."
         },
         "icon": "lucide-calendar-minus",
         "tooltip": {
             "en": "Previous monthly note",
-            "zh": "上一个月度笔记（Monthly Note）"
+            "zh": "上一个月度笔记（Monthly Note）",
+            "uk": "Попередня місячна нотатка"
         },
         "type": "command"
     },
@@ -1037,12 +1050,14 @@
         "commandId": "periodic-notes:next-weekly-note",
         "description": {
             "en": "Next weekly note. (Must be in weekly note.)",
-            "zh": "下一个周记（当前位于一个周记中时才有效）"
+            "zh": "下一个周记（当前位于一个周记中时才有效）",
+            "uk": "Відкрийте наступну щотижневу нотатку. (Потрібно бути у щотижневій нотатці)."
         },
         "icon": "lucide-calendar-arrow-down",
         "tooltip": {
             "en": "Next weekly note",
-            "zh": "下一个周记（Weekly Note）"
+            "zh": "下一个周记（Weekly Note）",
+            "uk": "Наступна щотижнева нотатка"
         },
         "type": "command"
     },
@@ -1051,12 +1066,14 @@
         "commandId": "periodic-notes:open-weekly-note",
         "description": {
             "en": "Open weekly note.",
-            "zh": "打开每周笔记。"
+            "zh": "打开每周笔记。",
+            "uk": "Відкрийте щотижневу нотатку."
         },
         "icon": "calendar-range",
         "tooltip": {
             "en": "Open weekly note",
-            "zh": "打开周记（Weekly Note）"
+            "zh": "打开周记（Weekly Note）",
+            "uk": "Щотижнева нотатка"
         },
         "type": "command"
     },
@@ -1065,12 +1082,14 @@
         "commandId": "periodic-notes:prev-weekly-note",
         "description": {
             "en": "Previous weekly note. (Must be in weekly note.)",
-            "zh": "上一个周记（当前位于一个周记中时才有效）"
+            "zh": "上一个周记（当前位于一个周记中时才有效）",
+            "uk": "Відкрийте попередню щотижневу нотатку. (Потрібно бути у щотижневій нотатці)."
         },
         "icon": "lucide-calendar-arrow-up",
         "tooltip": {
             "en": "Previous weekly note",
-            "zh": "上一个周记（Weekly Note）"
+            "zh": "上一个周记（Weekly Note）",
+            "uk": "Попередня щотижнева нотатка"
         },
         "type": "command"
     },
@@ -1079,12 +1098,14 @@
         "commandId": "periodic-notes:next-yearly-note",
         "description": {
             "en": "Next yearly note. (Must be in yearly note.)",
-            "zh": "下一个年度笔记（当前位于一个年度笔记中时才有效）"
+            "zh": "下一个年度笔记（当前位于一个年度笔记中时才有效）",
+            "uk": "Відкрийте наступну річну нотатку. (Потрібно бути у річній нотатці)."
         },
         "icon": "fast-forward",
         "tooltip": {
             "en": "Next yearly note",
-            "zh": "下一个年度笔记（Yearly Note）"
+            "zh": "下一个年度笔记（Yearly Note）",
+            "uk": "Наступна річна нотатка"
         },
         "type": "command"
     },
@@ -1093,12 +1114,14 @@
         "commandId": "periodic-notes:open-yearly-note",
         "description": {
             "en": "Open yearly note.",
-            "zh": "打开年度笔记。"
+            "zh": "打开年度笔记。",
+            "uk": "Відкрийте річну нотатку."
         },
         "icon": "calendar-clock",
         "tooltip": {
             "en": "Open yearly note",
-            "zh": "打开年度笔记（Yearly Note）"
+            "zh": "打开年度笔记（Yearly Note）",
+            "uk": "Річна нотатка"
         },
         "type": "command"
     },
@@ -1107,12 +1130,14 @@
         "commandId": "periodic-notes:prev-yearly-note",
         "description": {
             "en": "Previous yearly note. (Must be in yearly note.)",
-            "zh": "上一个年度笔记（当前位于一个年度笔记中时才有效）"
+            "zh": "上一个年度笔记（当前位于一个年度笔记中时才有效）",
+            "uk": "Відкрийте попередню річну нотатку. (Потрібно бути у річній нотатці)."
         },
         "icon": "rewind",
         "tooltip": {
             "en": "Previous yearly note",
-            "zh": "上一个年度笔记（Yearly Note）"
+            "zh": "上一个年度笔记（Yearly Note）",
+            "uk": "Попередня річна нотатка"
         },
         "type": "command"
     },
@@ -1192,7 +1217,7 @@
         "tooltip": {
             "en": "Close tab",
             "zh": "关闭标签页",
-            "uk": "Закрити"
+            "uk": "Закрити вкладку"
         },
         "type": "command"
     },
@@ -1370,7 +1395,7 @@
         "tooltip": {
             "en": "Change theme",
             "zh": "更改主题",
-            "uk": "Перемикайте тему"
+            "uk": "Перемкнути тему"
         },
         "type": "command"
     },
@@ -1621,7 +1646,7 @@
         "tooltip": {
             "en": "Toggle UI",
             "zh": "切换 UI 显示",
-            "uk": "Перемикнути інтерфейс"
+            "uk": "Перемкнути інтерфейс"
         },
         "type": "javascript"
     },
@@ -1638,7 +1663,7 @@
         "tooltip": {
             "en": "Toggle status bar",
             "zh": "切换状态栏",
-            "uk": "Перемикати рядок стану"
+            "uk": "Перемкнути рядок стану"
         },
         "type": "javascript"
     },
