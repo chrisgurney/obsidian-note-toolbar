@@ -3231,6 +3231,7 @@ input[type="text"].note-toolbar-setting-error,
         margin: 0 auto;
         & li {
             background-color: var(--background-primary-alt);
+            border-radius: var(--button-radius);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -3244,6 +3245,9 @@ input[type="text"].note-toolbar-setting-error,
                 text-align: center;
                 min-height: 100px;
                 gap: 4px;
+                .is-phone & {
+                    color: var(--interactive-accent);
+                }
             }
         }
     }
