@@ -46,7 +46,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	// track the last used file and property, to prompt if Note Toolbar property references unknown toolbar
 	lastFileOpenedOnCacheChange: TFile | null;
-	lastNtbProperty: string | undefined;
+	lastNtbPropValue: string | undefined;
 
 	// for tracking other plugins available (for adapters and rendering edge cases)
 	hasPlugin: { [key: string]: boolean } = {
@@ -379,24 +379,24 @@ export default class NoteToolbarPlugin extends Plugin {
 				await this.checkAndRenderToolbar(file, cache.frontmatter);
 	
 				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
-				const notetoolbarProp = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
-				if (notetoolbarProp) {
+				const ntbPropValue = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
+				if (ntbPropValue) {
 					// make sure just the relevant property changed in the open file
-					if (this.lastFileOpenedOnCacheChange !== activeFile) this.lastNtbProperty = undefined;
-					const ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
-					if (notetoolbarProp !== this.lastNtbProperty) {
-						const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarByName(notetoolbarProp);
+					if (this.lastFileOpenedOnCacheChange !== activeFile) this.lastNtbPropValue = undefined;
+					const ignoreToolbar = ntbPropValue.includes('none') ? true : false;
+					if (ntbPropValue !== this.lastNtbPropValue) {
+						const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarByName(ntbPropValue);
 						if (!matchingToolbar && !ignoreToolbar) {
-							const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: notetoolbarProp }), 7500);
+							const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: ntbPropValue }), 7500);
 							this.registerDomEvent(notice.noticeEl, 'click', async () => {
-								const newToolbar = await this.settingsManager.newToolbar(notetoolbarProp);
+								const newToolbar = await this.settingsManager.newToolbar(ntbPropValue);
 								this.settingsManager.openToolbarSettings(newToolbar);
 							});
 						}
 					}
 				}
 				// track current state to look for future Note Toolbar property changes
-				this.lastNtbProperty = notetoolbarProp;
+				this.lastNtbPropValue = ntbPropValue;
 				this.lastFileOpenedOnCacheChange = activeFile;
 			}, 300)();
 		}
