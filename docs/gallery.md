@@ -48,8 +48,8 @@ Tools for working with files.
 | Append text | Appends the prompted text to a file you specify. |
 | Move file to folder | Move current file to a chosen folder. |
 | Show file in navigation | Reveal the active file in navigation. |
-| Show file in system | Reveal the active file in the system's file explorer. • *Not supported on: mobile* |
-| Open in VS Code | Opens the current file in VS Code. • *Not supported on: mobile* |
+| Show file in system | Reveal the active file in the system's file explorer. *Not supported on: mobile* |
+| Open in VS Code | Opens the current file in VS Code. *Not supported on: mobile* |
 
 ## Formatting
 
@@ -172,8 +172,8 @@ Switch themes and toggle views.
 | Toggle CSS class | Adds or removes the provided CSS class in the cssclasses property. |
 | Toggle Reading view | Change between the editor's Preview and Reading modes. |
 | Toggle Source mode | Turn Source mode on and off. |
-| Toggle status bar | Shows or hides Obsidian's status bar. • *Not supported on: mobile* |
-| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. • *Not supported on: mobile* |
+| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
+| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
 | Show snippets in system | Opens the vault's snippets folder in the system's file explorer. |
 
 ## Workspaces

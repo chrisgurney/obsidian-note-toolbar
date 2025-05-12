@@ -33,7 +33,7 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
             // }
 
             const exclusionNote = getExclusionNote(item);
-            description += `${exclusionNote ? ` • *${exclusionNote}*` : ''}`;
+            description += `${exclusionNote ? ` *${exclusionNote}*` : ''}`;
             
             let line = `| ${item.tooltip.en} | ${description} |`;
             markdown += line + '\n';
