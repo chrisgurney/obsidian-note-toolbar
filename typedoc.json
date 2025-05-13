@@ -8,5 +8,5 @@
     "parametersFormat": "table",
     "outputFileStrategy": "members",
     "plugin": ["typedoc-plugin-markdown"],
-    "out": "./docs/api"
+    "out": "./docs/wiki/api"
 }
