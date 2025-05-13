@@ -312,8 +312,7 @@ export class CommandManager {
             visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
             switch (visibility) {
                 case 'show':
-                    // TODO: there's also var(--metadata-display-reading) for reading mode
-                    propsEl.style.display = 'var(--metadata-display-editing)';
+                    propsEl.style.display = '';
                     // expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
                     if (propsEl.classList.contains('is-collapsed')) {
                         (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
@@ -323,7 +322,7 @@ export class CommandManager {
                     propsEl.style.display = 'none';
                     break;
                 case 'fold':
-                    propsEl.style.display = 'var(--metadata-display-editing)';
+                    propsEl.style.display = '';
                     if (!propsEl.classList.contains('is-collapsed')) {
                         (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
                     }
