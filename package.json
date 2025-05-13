@@ -7,7 +7,6 @@
 		"apidocs": "typedoc src/Api/INoteToolbarApi.ts src/Api/IToolbar.ts src/Api/IItem.ts --readme none",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"dev": "npm run prebuild && node esbuild.config.mjs",
-		"gallerydocs": "node ./build/gallery-docs.mjs ./src/Gallery/items.json ./src/Gallery/gallery.json ./docs/gallery.md",
 		"prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
