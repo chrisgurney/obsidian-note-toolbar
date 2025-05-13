@@ -565,6 +565,9 @@
             "style-tooltip-use-class": "Use in Callout or CSS: {{class}}",
             "title": "Style toolbar: {{toolbar}}"
         },
+        "tips": {
+            "error-failed-to-load": "Failed to load tip:\n{{baseUrl}}/{{language}}/{{name}}.md"
+        },
         "title-edit-toolbar": "Edit Toolbar: {{toolbar}}",
         "title-edit-toolbar_none": "Edit Toolbar",
         "toolbar-suggest-modal": {

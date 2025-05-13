@@ -32,6 +32,7 @@ export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
 export const COMMAND_PREFIX_ITEM = 'use-toolbar-item-';
 export const VIEW_TYPE_GALLERY = 'ntb-gallery-view';
 export const VIEW_TYPE_HELP = 'ntb-help-view';
+export const VIEW_TYPE_TIP = 'ntb-tip-view';
 export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
 
 export const EMPTY_TOOLBAR_ID = 'EMPTY_TOOLBAR';
@@ -446,6 +447,7 @@ export const URL_FEEDBACK_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeVWH
 export const URL_ISSUE_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform';
 export const URL_RELEASE_NOTES = 'https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/releases';
 export const URL_RELEASES = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
+export const URL_TIPS = 'https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/tips';
 export const URL_USER_GUIDE = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
 
 export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';

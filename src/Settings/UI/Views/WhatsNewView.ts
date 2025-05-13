@@ -67,7 +67,7 @@ export class WhatsNewView extends ItemView {
 					});
 			});
 
-		// fetch and display the notes
+		// fetch and display the content
 		const language = i18next.language || 'en';
 		let releaseText = '';
 		try {
@@ -117,7 +117,7 @@ export class WhatsNewView extends ItemView {
 	}
 
 	/**
-	 * Renders a skeleton to show while the release notes are loading.
+	 * Renders a skeleton to show while the content is being fetched.
 	 * @param el HTMLDivElement to render the skeleton in.
 	 */
 	renderSkeleton(el: HTMLDivElement) {
