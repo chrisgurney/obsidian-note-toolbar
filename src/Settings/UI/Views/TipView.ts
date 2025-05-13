@@ -26,8 +26,12 @@ export class TipView extends ItemView {
         contentDiv.addClass('note-toolbar-setting-help-view');
 
         const headingEl = contentDiv.createDiv();
-        headingEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
-        MarkdownRenderer.render(this.plugin.app, `# ${this.state.title}\n\n${this.state.description}`, headingEl, '/', this.plugin);
+        headingEl.addClass('note-toolbar-gallery-view-heading');
+        MarkdownRenderer.render(this.plugin.app, `# ${this.state.title}`, headingEl, '/', this.plugin);
+
+        const descEl = contentDiv.createDiv();
+        descEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
+        MarkdownRenderer.render(this.plugin.app, `${this.state.description}`, descEl, '/', this.plugin);
 
         const markdownEl = contentDiv.createDiv();
         markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
