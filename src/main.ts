@@ -1487,8 +1487,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (isValidUri(linkHref)) {
 					let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
 
-					const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled;
-					const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance.options.openExternalURLs;					
+					const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled ?? false;
+					const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;					
 					let usingWebViewer = false;
 
 					// use Web Viewer for certain targets even if the 'Open external links' setting is disabled
