@@ -1,9 +1,9 @@
 import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP, DEFAULT_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
-import { WhatsNewView } from 'Settings/UI/Views/WhatsNewView';
+import { WhatsNewView } from 'Help/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandManager } from 'Commands/CommandManager';
 import { NoteToolbarApi } from 'Api/NoteToolbarApi';
@@ -19,11 +19,11 @@ import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
-import GalleryManager from 'Gallery/GalleryManager';
+import GalleryManager from 'Help/Gallery/GalleryManager';
 import { HotkeyHelper } from 'Utils/Hotkeys';
-import { GalleryView } from 'Gallery/GalleryView';
-import { HelpView } from 'Settings/UI/Views/HelpView';
-import { TipView } from 'Settings/UI/Views/TipView';
+import { GalleryView } from 'Help/Gallery/GalleryView';
+import { HelpView } from 'Help/HelpView';
+import { TipView } from 'Help/TipView';
 
 export default class NoteToolbarPlugin extends Plugin {
 

@@ -1,6 +1,6 @@
 import { ButtonComponent, ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } from "obsidian";
 import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
-import { iconTextFr } from "../Utils/SettingsUIUtils";
+import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import NoteToolbarPlugin from "main";
 
 

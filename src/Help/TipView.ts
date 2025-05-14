@@ -1,7 +1,7 @@
 import { Component, ItemView, MarkdownRenderer, setIcon, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
-import { renderGalleryItems } from "Gallery/GalleryView";
+import { renderGalleryItems } from "Help/Gallery/GalleryView";
 
 interface TipViewState {
     basename: string;

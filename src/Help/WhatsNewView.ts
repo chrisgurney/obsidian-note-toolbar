@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, Component, ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } from 'obsidian';
 import { URL_RELEASES, t, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, URL_RELEASE_NOTES } from 'Settings/NoteToolbarSettings';
-import { iconTextFr } from '../Utils/SettingsUIUtils';
+import { iconTextFr } from '../Settings/UI/Utils/SettingsUIUtils';
 
 type Release = { 
 	tag_name: string; 

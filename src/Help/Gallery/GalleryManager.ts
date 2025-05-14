@@ -1,6 +1,6 @@
-import galleryItems from "Gallery/items.json";
+import galleryItems from "Help/Gallery/items.json";
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "../Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import { Notice, Platform } from "obsidian";
