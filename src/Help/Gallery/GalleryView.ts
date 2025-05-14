@@ -167,7 +167,7 @@ export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLD
 			if (galleryItem.description) {
 				const itemDescEl = itemEl.createEl('p');
 				itemDescEl.addClass('note-toolbar-gallery-view-item-description');
-				MarkdownRenderer.render(plugin.app, galleryItem.description, itemDescEl, '/', this.plugin);
+				MarkdownRenderer.render(plugin.app, galleryItem.description, itemDescEl, '/', plugin);
 			}
 
 			let pluginNames = getPluginNames(plugin, galleryItem);
