@@ -1,11 +1,14 @@
-import { Component, ItemView, MarkdownRenderer, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, setIcon, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
+import { renderGalleryItems } from "Gallery/GalleryView";
 
 interface TipViewState {
     basename: string;
-    title: string;
     description: string;
+    galleryItems: string[];
+    icon: string;
+    title: string;
 }
 
 export class TipView extends ItemView {
@@ -25,17 +28,18 @@ export class TipView extends ItemView {
         const contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-help-view');
 
-        const headingEl = contentDiv.createDiv();
-        headingEl.addClass('note-toolbar-gallery-view-heading');
-        MarkdownRenderer.render(this.plugin.app, `# ${this.state.title}`, headingEl, '/', this.plugin);
+        const bannerEl = contentDiv.createDiv();
+        bannerEl.addClass('note-toolbar-setting-tips-view-banner', 'is-readable-line-width');
+        const bannerIconEl = bannerEl.createDiv();
+        setIcon(bannerIconEl, this.state.icon);
+        const bannerTitleEl = bannerEl.createDiv();
+        MarkdownRenderer.render(this.plugin.app, `# ${this.state.title}`, bannerTitleEl, '/', this.plugin);
+        const bannerDescEl = bannerEl.createDiv();
+        MarkdownRenderer.render(this.plugin.app, `${this.state.description}`, bannerDescEl, '/', this.plugin);
 
-        const descEl = contentDiv.createDiv();
-        descEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
-        MarkdownRenderer.render(this.plugin.app, `${this.state.description}`, descEl, '/', this.plugin);
-
-        const markdownEl = contentDiv.createDiv();
-        markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
-		this.renderSkeleton(markdownEl);
+        const contentEl = contentDiv.createDiv();
+        contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
+		this.renderSkeleton(contentEl);
 
         // fetch and display the content
         const language = i18next.language || 'en';
@@ -54,11 +58,15 @@ export class TipView extends ItemView {
             tipText += `\n>[!error]-\n> \`${error as string}\`\n`;
         }
         finally {
-            markdownEl.empty();
+            contentEl.empty();
         }
 
         const rootPath = this.plugin.app.vault.getRoot().path;
-        MarkdownRenderer.render(this.plugin.app, tipText, markdownEl, rootPath, new Component());
+        MarkdownRenderer.render(this.plugin.app, tipText, contentEl, rootPath, new Component());
+
+        if (this.state.galleryItems?.length > 0) {
+            renderGalleryItems(this.plugin, contentEl, this.state.galleryItems);
+        }
 
     }
 

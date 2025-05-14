@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Gallery/gallery.json';
-import { t, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ItemSuggester } from 'Settings/UI/Suggesters/ItemSuggester';
 
@@ -48,7 +48,6 @@ export class GalleryView extends ItemView {
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 
 		const lang: string = i18next.language || 'en';
-		const galleryItems = this.plugin.gallery.getItems();
 
 		const headingEl = markdownEl.createDiv();
 		headingEl.addClass('note-toolbar-gallery-view-heading');
@@ -102,42 +101,9 @@ export class GalleryView extends ItemView {
 			const catDescText = category.description[lang] || category.description['en'];
 			MarkdownRenderer.render(this.plugin.app, catDescText, catDescEl, '/', this.plugin);
 
-			const itemsEl = markdownEl.createDiv();
-			itemsEl.addClass('note-toolbar-gallery-view-items-container');
-			itemsEl.setAttribute('data-ignore-swipe', 'true');
-
-			category.itemIds.forEach(itemId => {
-				const galleryItem = galleryItems.find(item => item.uuid.includes(itemId));
-				if (galleryItem) {
-
-					const itemEl = itemsEl.createEl('button');
-					itemEl.id = galleryItem.uuid;
-					itemEl.addClass('note-toolbar-gallery-view-item');
-					itemEl.setAttribute('data-ignore-swipe', 'true');
-					setTooltip(itemEl, t('gallery.tooltip-add-item', { name: galleryItem.tooltip }));
-
-					itemEl.createEl('h3').setText(galleryItem.tooltip);
-					if (galleryItem.description) {
-						const itemDescEl = itemEl.createEl('p');
-						itemDescEl.addClass('note-toolbar-gallery-view-item-description');
-						MarkdownRenderer.render(this.plugin.app, galleryItem.description, itemDescEl, '/', this.plugin);
-					}
-
-					let pluginNames = getPluginNames(this.plugin, galleryItem);
-					if (pluginNames) {
-						const pluginEl = itemEl.createEl('p');
-						pluginEl.addClass('note-toolbar-gallery-view-item-plugins');
-						setIcon(pluginEl.createSpan(), 'puzzle');
-						pluginEl.createSpan().setText(pluginNames);
-					}
-
-					const iconEl = itemEl.createDiv();
-					iconEl.addClass('note-toolbar-gallery-view-item-icon');
-					setIcon(iconEl, galleryItem.icon);
-
-				}
-
-			});
+			const galleryItemContainerEl = markdownEl.createDiv();
+			galleryItemContainerEl.addClass('note-toolbar-gallery-view-items-container');
+			renderGalleryItems(this.plugin, galleryItemContainerEl, category.itemIds);
 
 		});
 
@@ -169,5 +135,55 @@ export class GalleryView extends ItemView {
 
     async onClose() {
     }
+
+}
+
+/**
+ * Renders the provided list of items in the Gallery into a scrollable container.
+ * @param plugin NoteToolbarPlugin
+ * @param containerEl HTMLDivElement container to render items into.
+ * @param itemIds list of string IDs as defined in `src/Gallery/items.json`
+ */
+export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, itemIds: string[]) {
+
+	const galleryItems: ToolbarItemSettings[] = plugin.gallery.getItems();
+
+	const itemsEl = containerEl.createDiv();
+	itemsEl.addClass('note-toolbar-gallery-items-container');
+	itemsEl.setAttribute('data-ignore-swipe', 'true');
+
+	itemIds.forEach(itemId => {
+
+		const galleryItem = galleryItems.find(item => item.uuid.includes(itemId));
+		if (galleryItem) {
+
+			const itemEl = itemsEl.createEl('button');
+			itemEl.id = galleryItem.uuid;
+			itemEl.addClass('note-toolbar-gallery-view-item');
+			itemEl.setAttribute('data-ignore-swipe', 'true');
+			setTooltip(itemEl, t('gallery.tooltip-add-item', { name: galleryItem.tooltip }));
+
+			itemEl.createEl('h3').setText(galleryItem.tooltip);
+			if (galleryItem.description) {
+				const itemDescEl = itemEl.createEl('p');
+				itemDescEl.addClass('note-toolbar-gallery-view-item-description');
+				MarkdownRenderer.render(plugin.app, galleryItem.description, itemDescEl, '/', this.plugin);
+			}
+
+			let pluginNames = getPluginNames(plugin, galleryItem);
+			if (pluginNames) {
+				const pluginEl = itemEl.createEl('p');
+				pluginEl.addClass('note-toolbar-gallery-view-item-plugins');
+				setIcon(pluginEl.createSpan(), 'puzzle');
+				pluginEl.createSpan().setText(pluginNames);
+			}
+
+			const iconEl = itemEl.createDiv();
+			iconEl.addClass('note-toolbar-gallery-view-item-icon');
+			setIcon(iconEl, galleryItem.icon);
+
+		}
+
+	});
 
 }

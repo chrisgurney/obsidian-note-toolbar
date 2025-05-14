@@ -2364,17 +2364,20 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-gallery-view-items-container {
+.note-toolbar-gallery-items-container {
     align-items: stretch;
-    border-block-end: solid 1px var(--background-modifier-border);
     display: flex;
     gap: 16px;
     overflow-x: auto;
     overscroll-behavior-x: none;
-    padding-bottom: 2em;
-    padding-top: 1em;
     position: relative;
     scroll-behavior: smooth;
+}
+
+.note-toolbar-gallery-view-items-container {
+    border-block-end: solid 1px var(--background-modifier-border);
+    padding-bottom: 2em;
+    padding-top: 1em;
 }
 
 .note-toolbar-gallery-view-heading {
@@ -3037,6 +3040,25 @@ input[type="text"].note-toolbar-setting-error,
     max-width: var(--file-line-width);
     margin-left: auto;
     margin-right: auto;
+}
+
+.note-toolbar-setting-tips-view-banner {
+    background-color:hsla(268,51%,21%,1);
+    background-image:
+        radial-gradient(at 4% 92%, hsla(255,48%,30%,0.85) 0px, transparent 50%),
+        radial-gradient(at 95% 7%, hsla(277,80%,6%,1) 0px, transparent 50%),
+        radial-gradient(at 95% 91%, hsla(287,88%,66%,0.32) 0px, transparent 50%),
+        radial-gradient(at 61% 56%, hsla(281,44%,13%,1) 0px, transparent 50%),
+        radial-gradient(at 4% 7%, hsla(47,100%,50%,0.35) 0px, transparent 50%);
+    font-size: var(--font-ui-medium);
+    padding: 2em;
+    text-align: center;
+    text-shadow: 1px 1px black;
+    vertical-align: middle;
+    & svg {
+        height: 64px;
+        width: 64px;
+    }
 }
 
 .note-toolbar-setting-view-cta {
