@@ -15,8 +15,6 @@ export class TipView extends ItemView {
 
     state: TipViewState;
 
-    VIEW_TITLE = "Note Toolbar Tip";
-
     constructor(readonly plugin: NoteToolbarPlugin, readonly leaf: WorkspaceLeaf) {
         super(leaf);
     }
@@ -75,7 +73,7 @@ export class TipView extends ItemView {
     }
 
     getDisplayText(): string {
-        return this.VIEW_TITLE;
+        return this.state?.title ?? "Note Toolbar Help";
     }
 
     getIcon(): string {
