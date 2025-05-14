@@ -32,8 +32,6 @@ export class TipView extends ItemView {
         setIcon(bannerIconEl, this.state.icon);
         const bannerTitleEl = bannerEl.createDiv();
         MarkdownRenderer.render(this.plugin.app, `# ${this.state.title}`, bannerTitleEl, '/', this.plugin);
-        const bannerDescEl = bannerEl.createDiv();
-        MarkdownRenderer.render(this.plugin.app, `${this.state.description}`, bannerDescEl, '/', this.plugin);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');

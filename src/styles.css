@@ -2127,11 +2127,15 @@ input[type="text"].note-toolbar-setting-error,
         radial-gradient(at 95% 91%, hsla(287,88%,66%,0.32) 0px, transparent 50%),
         radial-gradient(at 61% 56%, hsla(281,44%,13%,1) 0px, transparent 50%),
         radial-gradient(at 4% 7%, hsla(47,100%,50%,0.35) 0px, transparent 50%);
+    border-radius: 0.5rem;
     font-size: var(--font-ui-medium);
     padding: 2em;
     text-align: center;
     text-shadow: 1px 1px black;
     vertical-align: middle;
+    & h1 {
+        margin-block-end: 0;
+    }
     & svg {
         height: 64px;
         width: 64px;
