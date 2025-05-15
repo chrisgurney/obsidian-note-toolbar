@@ -1487,7 +1487,7 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-gallery-view-plugin-note,
+.note-toolbar-gallery-view-note,
 .note-toolbar-gallery-view-cat-description {
     display: flex;
     gap: 0.5em;

@@ -84,7 +84,7 @@ export class GalleryView extends ItemView {
 		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', this.plugin);
 
 		const pluginNoteEl = markdownEl.createDiv();
-		pluginNoteEl.addClass('note-toolbar-gallery-view-plugin-note');
+		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
 		setIcon(pluginNoteEl.createSpan(), 'puzzle');
 		const pluginNoteText = (gallery as Gallery).pluginNote[lang] || (gallery as Gallery).pluginNote['en'];
 		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', this.plugin);
