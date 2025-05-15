@@ -51,7 +51,7 @@ export class TipView extends ItemView {
         contentDiv.addClass('note-toolbar-setting-help-view');
 
         const bannerEl = contentDiv.createDiv();
-        bannerEl.addClass('note-toolbar-setting-tips-view-banner', 'is-readable-line-width');
+        bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
         if (tip.color) bannerEl.style.backgroundImage = createLinearGradient(tip.color as LinearGradientType);
         const bannerIconEl = bannerEl.createDiv();
         setIcon(bannerIconEl, tip.icon);

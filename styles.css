@@ -3051,7 +3051,7 @@ input[type="text"].note-toolbar-setting-error,
     margin-right: auto;
 }
 
-.note-toolbar-setting-tips-view-banner {
+.note-toolbar-setting-view-banner {
     background-blend-mode: overlay;
     border-radius: 0.5rem;
     font-size: var(--font-ui-medium);
