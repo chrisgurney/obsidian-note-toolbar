@@ -21,7 +21,7 @@ const TIPS = [
         description: 'Add ready-to-use items to your toolbars.',
         icon: 'layout-grid',
         id: 'gallery',
-        title: 'View Gallery'
+        title: 'Gallery'
     },
     {
         color: 'green',

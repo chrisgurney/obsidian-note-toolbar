@@ -3062,6 +3062,7 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-view-banner {
     background-blend-mode: overlay;
+    /* border-radius: 0.5rem; */
     font-size: var(--font-ui-medium);
     padding: 2em;
     text-align: center;
