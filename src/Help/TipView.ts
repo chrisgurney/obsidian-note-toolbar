@@ -1,16 +1,29 @@
-import { Component, ItemView, MarkdownRenderer, Platform, setIcon, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, Platform, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
 import { renderGalleryItems } from "Help/Gallery/GalleryView";
 
 interface TipViewState {
-    basename: string;
-    color: GradientType;
-    description: string;
-    galleryItems: string[];
-    icon: string;
-    title: string;
+    id: string;
 }
+
+const TIPS = [
+    {
+        color: 'red',
+        description: 'Create your first toolbar.',
+        galleryItems: ['copy', 'paste', 'undo', 'redo'],
+        icon: 'rocket',
+        id: 'getting-started',
+        title: 'Getting Started',
+    },
+    {
+        color: 'green',
+        description: 'Make the most of Obsidian on your phone.',
+        icon: 'smartphone',
+        id: 'mobile-tips',
+        title: 'Mobile Tips',
+    }
+];
 
 export class TipView extends ItemView {
 
@@ -24,16 +37,19 @@ export class TipView extends ItemView {
 
         if (!this.state) return; // state is not ready yet
 
+        const tip = TIPS.find(tip => tip.id.includes(this.state.id));
+        if (!tip) return; // no matching tip
+
         const contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-help-view');
 
         const bannerEl = contentDiv.createDiv();
         bannerEl.addClass('note-toolbar-setting-tips-view-banner', 'is-readable-line-width');
-        if (this.state.color) bannerEl.style.backgroundImage = createRadialGradient(this.state.color);
+        if (tip.color) bannerEl.style.backgroundImage = createRadialGradient(tip.color);
         const bannerIconEl = bannerEl.createDiv();
-        setIcon(bannerIconEl, this.state.icon);
+        setIcon(bannerIconEl, tip.icon);
         const bannerTitleEl = bannerEl.createDiv();
-        MarkdownRenderer.render(this.plugin.app, `# ${this.state.title}`, bannerTitleEl, '/', this.plugin);
+        MarkdownRenderer.render(this.plugin.app, `# ${tip.title}`, bannerTitleEl, '/', this.plugin);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
@@ -43,16 +59,16 @@ export class TipView extends ItemView {
         const language = i18next.language || 'en';
         let tipText = '';
         try {
-            const tipMd = await this.getTip(this.state.basename, language);
+            const tipMd = await this.getTip(tip.id, language);
             if (tipMd) {
 				tipText = tipMd;
             }
             else {
-                tipText = t('setting.tips.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: this.state.basename });
+                tipText = t('setting.tips.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
             }
         }
         catch (error) {
-            tipText = t('setting.tips.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: this.state.basename });
+            tipText = t('setting.tips.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
             tipText += `\n>[!error]-\n> \`${error as string}\`\n`;
         }
         finally {
@@ -62,12 +78,12 @@ export class TipView extends ItemView {
         const rootPath = this.plugin.app.vault.getRoot().path;
         MarkdownRenderer.render(this.plugin.app, tipText, contentEl, rootPath, new Component());
 
-        if (this.state.galleryItems?.length > 0) {
+        if (tip.galleryItems && tip.galleryItems?.length > 0) {
             const itemNoteEl = contentEl.createDiv();
             itemNoteEl.addClass('note-toolbar-gallery-view-note');
             setIcon(itemNoteEl.createSpan(), Platform.isDesktop ? 'mouse-pointer-click' : 'pointer');
             MarkdownRenderer.render(this.plugin.app, "Click or tap to add any of these to a toolbar:", itemNoteEl, '/', this.plugin);
-            renderGalleryItems(this.plugin, contentEl, this.state.galleryItems);
+            renderGalleryItems(this.plugin, contentEl, tip.galleryItems);
         }
 
     }
@@ -77,7 +93,8 @@ export class TipView extends ItemView {
     }
 
     getDisplayText(): string {
-        return this.state?.title ?? "Note Toolbar Help";
+        const tip = TIPS.find(tip => tip.id.includes(this.state?.id));
+        return tip?.title ?? "Note Toolbar Help";
     }
 
     getIcon(): string {
@@ -173,3 +190,51 @@ const createRadialGradient = (name: GradientType): string => {
         `radial-gradient(at ${positions[i % positions.length]}, ${color}, transparent 70%)`
     ).join(', ');
 };
+
+/**
+ * Renders the provided list of tip items in a scrollable container.
+ * @param plugin NoteToolbarPlugin
+ * @param containerEl HTMLDivElement container to render items into.
+ * @param tipIds list of string IDs as defined in `tips.json`
+ */
+export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, tipIds: string[]) {
+
+    // TODO: read this in from a file and then...
+    // const tips: Tip[] = plugin.tips.getTips();
+
+    const itemsEl = containerEl.createDiv();
+    itemsEl.addClass('note-toolbar-card-items');
+    itemsEl.setAttribute('data-ignore-swipe', 'true');
+
+    tipIds.forEach(itemId => {
+
+        const tip = TIPS.find(item => item.id.includes(itemId));
+        if (tip) {
+
+            const itemEl = itemsEl.createEl('button');
+            itemEl.id = tip.id;
+            itemEl.addClass('note-toolbar-card-item');
+            itemEl.setAttribute('data-ignore-swipe', 'true');
+            setTooltip(itemEl, "View this tip");
+
+            itemEl.createEl('h3').setText(tip.title);
+            if (tip.description) {
+                const itemDescEl = itemEl.createEl('p');
+                itemDescEl.addClass('note-toolbar-card-item-description');
+                MarkdownRenderer.render(plugin.app, tip.description, itemDescEl, '/', plugin);
+            }
+
+            const iconEl = itemEl.createDiv();
+            iconEl.addClass('note-toolbar-card-item-icon');
+            setIcon(iconEl, tip.icon);
+
+        }
+
+    });
+
+    plugin.registerDomEvent(containerEl, 'click', (event) => { 
+        const tipEl = (event.target as HTMLElement).closest('.note-toolbar-card-item');
+        if (tipEl) plugin.app.workspace.getLeaf(false).setViewState({ type: VIEW_TYPE_TIP, state: { id: tipEl.id }, active: true });
+    });
+
+}

@@ -2,6 +2,7 @@ import { ButtonComponent, ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } f
 import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import NoteToolbarPlugin from "main";
+import { renderTipItems } from "./TipView";
 
 
 export class HelpView extends ItemView {
@@ -37,34 +38,7 @@ export class HelpView extends ItemView {
 		headingEl.addClass('note-toolbar-gallery-view-heading');
         MarkdownRenderer.render(this.plugin.app, `# ${t('setting.help.heading')}`, headingEl, '/', this.plugin);
 
-        // const tipLink = markdownEl.createDiv().createEl("a", { href: "#", text: iconTextFr('help-circle', "Open a Tip") });
-        // this.plugin.registerDomEvent(tipLink, 'click', (event) => { 
-        //     this.plugin.app.workspace.getLeaf(false).setViewState({ 
-        //         type: VIEW_TYPE_TIP, 
-        //         state: {
-        //             basename: 'getting-started',
-        //             description: 'Getting started with the Note Toolbar plugin',
-        //             galleryItems: ['copy', 'paste', 'undo', 'redo'],
-        //             icon: 'rocket',
-        //             title: 'Getting Started with Note Toolbar',
-        //         },
-        //         active: true 
-        //     });
-        // });
-
-        // const tip2Link = markdownEl.createDiv().createEl("a", { href: "#", text: iconTextFr('help-circle', "Open another Tip") });
-        // this.plugin.registerDomEvent(tip2Link, 'click', (event) => { 
-        //     this.plugin.app.workspace.getLeaf(false).setViewState({ 
-        //         type: VIEW_TYPE_TIP, 
-        //         state: {
-        //             basename: 'getting-started',
-        //             description: 'Doing stuff and things',
-        //             icon: 'smartphone',
-        //             title: 'Mobile tips',
-        //         },
-        //         active: true 
-        //     });
-        // });
+        // renderTipItems(this.plugin, markdownEl, ['getting-started', 'mobile-tips']);
 
         const ctaEl = contentDiv.createDiv();
         ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
@@ -81,6 +55,7 @@ export class HelpView extends ItemView {
                     });
             });
 
+        // TODO: move up into one of the cards at the top (to make more prominent)
         new Setting(ctaEl)
             .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
             .setDesc(t('setting.help.label-gallery-description'))
