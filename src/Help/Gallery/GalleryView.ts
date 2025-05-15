@@ -50,7 +50,7 @@ export class GalleryView extends ItemView {
 		const lang: string = i18next.language || 'en';
 
 		const headingEl = markdownEl.createDiv();
-		headingEl.addClass('note-toolbar-gallery-view-heading');
+		headingEl.addClass('note-toolbar-view-heading');
 		
 		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
 		MarkdownRenderer.render(this.plugin.app, `# ${title}`, headingEl, '/', this.plugin);

@@ -2380,7 +2380,7 @@ input[type="text"].note-toolbar-setting-error,
     padding-top: 1em;
 }
 
-.note-toolbar-gallery-view-heading {
+.note-toolbar-view-heading {
     display: flex;
     flex-basis: fit-content;
     justify-content: space-between;

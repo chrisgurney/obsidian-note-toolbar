@@ -35,7 +35,7 @@ export class HelpView extends ItemView {
         markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 
 		const headingEl = markdownEl.createDiv();
-		headingEl.addClass('note-toolbar-gallery-view-heading');
+		headingEl.addClass('note-toolbar-view-heading');
         MarkdownRenderer.render(this.plugin.app, `# ${t('setting.help.heading')}`, headingEl, '/', this.plugin);
 
         // renderTipItems(this.plugin, markdownEl, ['getting-started', 'mobile-tips']);
