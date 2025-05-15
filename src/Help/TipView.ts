@@ -103,7 +103,7 @@ export class TipView extends ItemView {
 
     getDisplayText(): string {
         const tip = TIPS.find(tip => tip.id.includes(this.state?.id));
-        return tip?.title ?? "Note Toolbar Help";
+        return `${t('plugin.note-toolbar')} • ${tip?.title ?? "Note Toolbar Help"}`;
     }
 
     getIcon(): string {
