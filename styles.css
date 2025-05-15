@@ -2352,12 +2352,14 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-gallery-view-search {
-    padding-top: 0;
     & .setting-item-info {
         display: none;
     }
     & .setting-item-control {
         justify-content: flex-start;
+        & .search-input-container {
+            width: 250px;
+        }
         & input[type='search']:focus-visible {
             box-shadow: inset 0px 0px 0 2px var(--background-modifier-border-focus);
         }
@@ -3044,6 +3046,7 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-gallery-view .is-readable-line-width,
 .note-toolbar-setting-help-view .is-readable-line-width,
 .note-toolbar-setting-whatsnew-view .is-readable-line-width {
     max-width: var(--file-line-width);
@@ -3051,9 +3054,14 @@ input[type="text"].note-toolbar-setting-error,
     margin-right: auto;
 }
 
+.note-toolbar-setting-gallery-view {
+    & .note-toolbar-setting-view-banner {
+        background-image: linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%), linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%);
+    }
+}
+
 .note-toolbar-setting-view-banner {
     background-blend-mode: overlay;
-    border-radius: 0.5rem;
     font-size: var(--font-ui-medium);
     padding: 2em;
     text-align: center;

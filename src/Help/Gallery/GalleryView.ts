@@ -42,20 +42,33 @@ export class GalleryView extends ItemView {
     async onOpen() {
 
         let contentDiv = this.contentEl.createDiv();
-        contentDiv.addClass('note-toolbar-setting-whatsnew-view');
+        contentDiv.addClass('note-toolbar-setting-gallery-view');
 
 		let markdownEl = contentDiv.createDiv();
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 
 		const lang: string = i18next.language || 'en';
 
-		const headingEl = markdownEl.createDiv();
-		headingEl.addClass('note-toolbar-view-heading');
-		
+		const bannerEl = markdownEl.createDiv();
+		bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
+		const bannerIconEl = bannerEl.createDiv();
+		setIcon(bannerIconEl, 'layout-grid');
 		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
-		MarkdownRenderer.render(this.plugin.app, `# ${title}`, headingEl, '/', this.plugin);
+		const bannerTitleEl = bannerEl.createDiv();
+		MarkdownRenderer.render(this.plugin.app, `# ${title}`, bannerTitleEl, '/', this.plugin);
 
-		const searchSetting = new Setting(headingEl)
+		const overviewEl = markdownEl.createDiv();
+		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
+		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
+		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', this.plugin);
+
+		const pluginNoteEl = markdownEl.createDiv();
+		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
+		setIcon(pluginNoteEl.createSpan(), 'puzzle');
+		const pluginNoteText = (gallery as Gallery).pluginNote[lang] || (gallery as Gallery).pluginNote['en'];
+		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', this.plugin);
+
+		const searchSetting = new Setting(markdownEl)
 			.setClass('note-toolbar-setting-item-full-width-phone')
 			.setClass('note-toolbar-setting-no-border')
 			.setClass('note-toolbar-gallery-view-search')
@@ -77,17 +90,6 @@ export class GalleryView extends ItemView {
 			searchSetting.controlEl.querySelector('input')?.focus();
 			return false;
 		});
-
-		const overviewEl = markdownEl.createDiv();
-		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
-		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
-		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', this.plugin);
-
-		const pluginNoteEl = markdownEl.createDiv();
-		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
-		setIcon(pluginNoteEl.createSpan(), 'puzzle');
-		const pluginNoteText = (gallery as Gallery).pluginNote[lang] || (gallery as Gallery).pluginNote['en'];
-		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', this.plugin);
 
 		(gallery as Gallery).categories.forEach(category => {
 
