@@ -38,7 +38,9 @@ export class HelpView extends ItemView {
 		headingEl.addClass('note-toolbar-view-heading');
         MarkdownRenderer.render(this.plugin.app, `# ${t('setting.help.heading')}`, headingEl, '/', this.plugin);
 
-        // renderTipItems(this.plugin, markdownEl, ['getting-started', 'mobile-tips']);
+        // const tipsEl = markdownEl.createDiv();
+        // tipsEl.addClass('note-toolbar-tips-card-items');
+        // renderTipItems(this.plugin, tipsEl, ['getting-started', 'gallery', 'mobile-tips']);
 
         const ctaEl = contentDiv.createDiv();
         ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');

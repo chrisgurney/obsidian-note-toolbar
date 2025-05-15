@@ -17,6 +17,13 @@ const TIPS = [
         title: 'Getting Started',
     },
     {
+        color: 'purple',
+        description: 'Add ready-to-use items to your toolbars.',
+        icon: 'layout-grid',
+        id: 'gallery',
+        title: 'View Gallery'
+    },
+    {
         color: 'green',
         description: 'Make the most of Obsidian on your phone.',
         icon: 'smartphone',
@@ -45,11 +52,13 @@ export class TipView extends ItemView {
 
         const bannerEl = contentDiv.createDiv();
         bannerEl.addClass('note-toolbar-setting-tips-view-banner', 'is-readable-line-width');
-        if (tip.color) bannerEl.style.backgroundImage = createRadialGradient(tip.color);
+        if (tip.color) bannerEl.style.backgroundImage = createLinearGradient(tip.color as LinearGradientType);
         const bannerIconEl = bannerEl.createDiv();
         setIcon(bannerIconEl, tip.icon);
         const bannerTitleEl = bannerEl.createDiv();
         MarkdownRenderer.render(this.plugin.app, `# ${tip.title}`, bannerTitleEl, '/', this.plugin);
+        const bannerDescEl = bannerEl.createDiv();
+        MarkdownRenderer.render(this.plugin.app, `${tip.description}`, bannerDescEl, '/', this.plugin);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
@@ -168,28 +177,20 @@ export class TipView extends ItemView {
 
 }
 
-export type GradientType = keyof typeof TIP_GRADIENTS;
+export type LinearGradientType = keyof typeof TIP_GRADIENTS;
 
-type GradientMap = Record<string, string[]>;
+export const TIP_GRADIENTS = {
+    red: 'linear-gradient(45deg, var(--color-red) 50%, var(--color-orange) 100%)',
+    orange: 'linear-gradient(45deg, var(--color-orange) 50%, var(--color-yellow) 100%)',
+    green: 'linear-gradient(45deg, var(--color-green) 50%, var(--color-cyan) 100%)',
+    cyan: 'linear-gradient(45deg, var(--color-cyan) 50%, var(--color-blue) 100%)',
+    blue: 'linear-gradient(45deg, var(--color-blue) 50%, var(--color-purple) 100%)',
+    purple: 'linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%)',  
+}
 
-export const TIP_GRADIENTS: GradientMap = {
-    red: ['hsl(350, 80%, 40%)', 'hsl(0, 85%, 30%)', 'hsl(5, 90%, 25%)'],
-    blue: ['hsl(210, 80%, 35%)', 'hsl(220, 85%, 25%)', 'hsl(230, 90%, 20%)'],
-    green: ['hsl(140, 50%, 35%)', 'hsl(145, 55%, 30%)', 'hsl(150, 60%, 25%)'],
-    purple: ['hsl(270, 60%, 35%)', 'hsl(275, 65%, 30%)', 'hsl(280, 70%, 25%)'],
-    teal: ['hsl(180, 60%, 30%)', 'hsl(185, 65%, 25%)', 'hsl(190, 70%, 20%)'],
-    orange: ['hsl(30, 80%, 40%)', 'hsl(25, 85%, 30%)', 'hsl(20, 90%, 25%)'],
-    gray: ['hsl(0, 0%, 35%)', 'hsl(0, 0%, 25%)', 'hsl(0, 0%, 15%)']
-};
-
-const positions = ['20% 80%', '80% 20%', '50% 50%'];
-
-const createRadialGradient = (name: GradientType): string => {
-    const colors = TIP_GRADIENTS[name];
-    return colors.map((color, i) =>
-        `radial-gradient(at ${positions[i % positions.length]}, ${color}, transparent 70%)`
-    ).join(', ');
-};
+const createLinearGradient = (name: LinearGradientType): string => {
+    return `${TIP_GRADIENTS[name]}, linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%)`;
+}
 
 /**
  * Renders the provided list of tip items in a scrollable container.
@@ -214,10 +215,12 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
             const itemEl = itemsEl.createEl('button');
             itemEl.id = tip.id;
             itemEl.addClass('note-toolbar-card-item');
+            if (tip.color && tip.color in TIP_GRADIENTS) itemEl.style.background = createLinearGradient(tip.color as LinearGradientType);
             itemEl.setAttribute('data-ignore-swipe', 'true');
             setTooltip(itemEl, "View this tip");
 
-            itemEl.createEl('h3').setText(tip.title);
+            const itemTitleEl = itemEl.createEl('h3');
+            itemTitleEl.setText(tip.title);
             if (tip.description) {
                 const itemDescEl = itemEl.createEl('p');
                 itemDescEl.addClass('note-toolbar-card-item-description');
@@ -234,7 +237,14 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
 
     plugin.registerDomEvent(containerEl, 'click', (event) => { 
         const tipEl = (event.target as HTMLElement).closest('.note-toolbar-card-item');
-        if (tipEl) plugin.app.workspace.getLeaf(false).setViewState({ type: VIEW_TYPE_TIP, state: { id: tipEl.id }, active: true });
+        if (tipEl) {
+            if (tipEl.id === 'gallery') {
+                window.open('obsidian://note-toolbar?gallery', '_blank');
+            }
+            else {
+                plugin.app.workspace.getLeaf(false).setViewState({ type: VIEW_TYPE_TIP, state: { id: tipEl.id }, active: true });
+            }
+        }
     });
 
 }

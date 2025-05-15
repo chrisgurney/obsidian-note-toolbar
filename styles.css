@@ -2380,6 +2380,15 @@ input[type="text"].note-toolbar-setting-error,
     padding-top: 1em;
 }
 
+.note-toolbar-tips-card-items {
+    & .note-toolbar-card-item {
+        background-blend-mode: overlay;
+        & h3, p, svg {
+            color: var(--text-on-accent);
+        }
+    }
+}
+
 .note-toolbar-view-heading {
     display: flex;
     flex-basis: fit-content;
@@ -3043,20 +3052,22 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-tips-view-banner {
-    background-color:hsla(268,51%,21%,1);
+    background-blend-mode: overlay;
     border-radius: 0.5rem;
     font-size: var(--font-ui-medium);
     padding: 2em;
     text-align: center;
-    text-shadow: 1px 1px black;
     vertical-align: middle;
-    & h1 {
+    & h1, p, svg {
+        color: var(--text-on-accent);
+    }
+    & h1, p {
         margin-block-end: 0;
     }
     & svg {
         height: 64px;
         width: 64px;
-        animation: note-toolbar-tip-icon-animation 1.5s ease-in-out 1;
+        animation: note-toolbar-tip-icon-animation 1s ease-in-out 1;
         transform-origin: center;
     }
 }
