@@ -1,4 +1,4 @@
-import { Component, ItemView, MarkdownRenderer, setIcon, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, Platform, setIcon, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
 import { renderGalleryItems } from "Help/Gallery/GalleryView";
@@ -63,6 +63,10 @@ export class TipView extends ItemView {
         MarkdownRenderer.render(this.plugin.app, tipText, contentEl, rootPath, new Component());
 
         if (this.state.galleryItems?.length > 0) {
+            const itemNoteEl = contentEl.createDiv();
+            itemNoteEl.addClass('note-toolbar-gallery-view-note');
+            setIcon(itemNoteEl.createSpan(), Platform.isDesktop ? 'mouse-pointer-click' : 'pointer');
+            MarkdownRenderer.render(this.plugin.app, "Click or tap to add any of these to a toolbar:", itemNoteEl, '/', this.plugin);
             renderGalleryItems(this.plugin, contentEl, this.state.galleryItems);
         }
 

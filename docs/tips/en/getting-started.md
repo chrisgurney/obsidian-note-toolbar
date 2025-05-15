@@ -3,5 +3,3 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac orci id magna 
 Integer aliquam bibendum arcu, ac lobortis orci convallis sed. Donec mollis leo in velit varius efficitur. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis in faucibus ipsum. Etiam venenatis enim ut elementum maximus. Ut facilisis iaculis ligula. Quisque tincidunt ligula est, sed imperdiet ipsum vestibulum non. Etiam maximus felis vitae dolor aliquet venenatis. Donec pretium tortor convallis lorem interdum malesuada. Cras finibus mi vel dictum finibus. Integer nulla purus, elementum nec ultricies sit amet, sodales vulputate leo. Mauris convallis vestibulum lacus, in condimentum ante blandit non. Aliquam posuere lacinia enim, vitae molestie erat dignissim a. Sed nisi tortor, bibendum non porttitor a, elementum id mi. Ut hendrerit placerat est in euismod. Suspendisse sapien justo, elementum a ex ut, venenatis posuere dolor.
 
 ## Try these toolbar items
-
-Tap or click to add any of these to a toolbar.
