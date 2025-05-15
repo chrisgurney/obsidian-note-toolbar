@@ -2364,7 +2364,7 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-gallery-items-container {
+.note-toolbar-card-items {
     align-items: stretch;
     display: flex;
     gap: 16px;
@@ -2374,7 +2374,7 @@ input[type="text"].note-toolbar-setting-error,
     scroll-behavior: smooth;
 }
 
-.note-toolbar-gallery-view-items-container {
+.note-toolbar-gallery-card-items {
     border-block-end: solid 1px var(--background-modifier-border);
     padding-bottom: 2em;
     padding-top: 1em;
@@ -2425,7 +2425,7 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-gallery-view-item {
+.note-toolbar-card-item {
     align-items: start;
     box-shadow: var(--input-shadow);
     border-radius: 8px;
@@ -2450,7 +2450,7 @@ input[type="text"].note-toolbar-setting-error,
             background-color: var(--interactive-normal);
         }
     }
-    & .note-toolbar-gallery-view-item-icon {
+    & .note-toolbar-card-item-icon {
         align-items: center;
         display: flex;
         height: 30px;
@@ -2480,10 +2480,10 @@ input[type="text"].note-toolbar-setting-error,
         font-size: var(--font-ui-small);
         margin: 0 !important;
         text-wrap: wrap;
-        &.note-toolbar-gallery-view-item-description {
+        &.note-toolbar-card-item-description {
             color: var(--text-muted);
         }
-        &.note-toolbar-gallery-view-item-plugins {
+        &.note-toolbar-card-item-plugins {
             display: flex;
             vertical-align: middle;
             gap: 0.25em;
