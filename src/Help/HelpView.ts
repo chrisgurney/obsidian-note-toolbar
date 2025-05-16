@@ -1,4 +1,4 @@
-import { ButtonComponent, ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } from "obsidian";
+import { ButtonComponent, ItemView, MarkdownRenderer, setIcon, Setting, WorkspaceLeaf } from "obsidian";
 import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import NoteToolbarPlugin from "main";
@@ -29,36 +29,25 @@ export class HelpView extends ItemView {
     async onOpen() {
 
         const contentDiv = this.contentEl.createDiv();
-        contentDiv.addClass('note-toolbar-setting-help-view');
+        contentDiv.addClass('note-toolbar-setting-help-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 
-        const markdownEl = contentDiv.createDiv();
-        markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
-
-		const headingEl = markdownEl.createDiv();
+		const headingEl = contentDiv.createDiv();
 		headingEl.addClass('note-toolbar-view-heading');
-        MarkdownRenderer.render(this.plugin.app, `# ${t('setting.help.heading')}`, headingEl, '/', this.plugin);
+        
+		const bannerEl = contentDiv.createDiv();
+		bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
+		const bannerIconEl = bannerEl.createDiv();
+		setIcon(bannerIconEl, 'circle-help');
+		const bannerTitleEl = bannerEl.createDiv();
+        MarkdownRenderer.render(this.plugin.app, `# ${t('setting.help.heading')}`, bannerTitleEl, '/', this.plugin);
 
-        // const tipsEl = markdownEl.createDiv();
-        // tipsEl.addClass('note-toolbar-tips-card-items');
-        // renderTipItems(this.plugin, tipsEl, ['getting-started', 'gallery', 'mobile-tips']);
+        // const tipsEl = contentDiv.createDiv();
+        // tipsEl.addClass('note-toolbar-tips-card-items', 'is-readable-line-width');
+        // renderTipItems(this.plugin, tipsEl, ['gallery', 'getting-started', 'mobile-tips']);
 
-        const ctaEl = contentDiv.createDiv();
-        ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
-        new Setting(ctaEl)
-            .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
-            .setDesc(t('setting.help.label-user-guide-description'))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-read'))
-                    .setTooltip(t('setting.help.button-open-github'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open(URL_USER_GUIDE, '_blank');
-                    });
-            });
-
-        // TODO: move up into one of the cards at the top (to make more prominent)
-        new Setting(ctaEl)
+        const galleryEl = contentDiv.createDiv();
+        galleryEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        new Setting(galleryEl)
             .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
             .setDesc(t('setting.help.label-gallery-description'))
             .addButton((button: ButtonComponent) => {
@@ -69,9 +58,28 @@ export class HelpView extends ItemView {
                     .onClick(() => {
                         window.open('obsidian://note-toolbar?gallery', '_blank');
                     });
-            });
+            })
+            .setClass('note-toolbar-setting-no-border');
 
-        new Setting(ctaEl)
+        const guideEl = contentDiv.createDiv();
+        guideEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        new Setting(guideEl)
+            .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
+            .setDesc(t('setting.help.label-user-guide-description'))
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.help.button-read'))
+                    .setTooltip(t('setting.help.button-open-github'))
+                    .setCta()
+                    .onClick(() => {
+                        window.open(URL_USER_GUIDE, '_blank');
+                    });
+            })
+            .setClass('note-toolbar-setting-no-border');
+
+        const supportEl = contentDiv.createDiv();
+        supportEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        new Setting(supportEl)
             .setName(iconTextFr('messages-square', t('setting.help.label-support')))
             .setDesc(t('setting.help.label-support-description'))
             .addButton((button: ButtonComponent) => {
@@ -82,9 +90,10 @@ export class HelpView extends ItemView {
                     .onClick(() => {
                         window.open('https://github.com/chrisgurney/obsidian-note-toolbar/discussions', '_blank');
                     });
-            });
+            })
+            .setClass('note-toolbar-setting-no-border');
 
-        new Setting(ctaEl)
+        new Setting(supportEl)
             .setName(iconTextFr('bug', t('setting.help.label-bug')))
             .setDesc(t('setting.help.label-bug-description'))
             .addButton((button: ButtonComponent) => {
@@ -94,10 +103,9 @@ export class HelpView extends ItemView {
                     .onClick(() => {
                         window.open(URL_ISSUE_FORM, '_blank');
                     });
-            })
-            .setClass('note-toolbar-setting-no-border');
+            });
 
-        new Setting(ctaEl)
+        new Setting(supportEl)
             .setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
             .setDesc(t('setting.help.label-feedback-description'))
             .addButton((button: ButtonComponent) => {
@@ -107,10 +115,11 @@ export class HelpView extends ItemView {
                     .onClick(() => {
                         window.open(URL_FEEDBACK_FORM, '_blank');
                     });
-            })
-            .setClass('note-toolbar-setting-no-border');
+            });
 
-        new Setting(ctaEl)
+        const donateEl = contentDiv.createDiv();
+        donateEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        new Setting(donateEl)
             .setName(iconTextFr('heart', t('setting.help.label-donate')))
             .setDesc(t('setting.help.label-donate-description'))
             .addButton((button: ButtonComponent) => {
@@ -121,7 +130,8 @@ export class HelpView extends ItemView {
                     .onClick(() => {
                         window.open('https://buymeacoffee.com/cheznine', '_blank');
                     });
-            });
+            })
+            .setClass('note-toolbar-setting-no-border');
 
     }
 

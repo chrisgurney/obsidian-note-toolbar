@@ -1460,6 +1460,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-tips-card-items {
+    padding-bottom: 2em;
     & .note-toolbar-card-item {
         background-blend-mode: overlay;
         & h3, p, svg {
@@ -2129,6 +2130,13 @@ input[type="text"].note-toolbar-setting-error,
     max-width: var(--file-line-width);
     margin-left: auto;
     margin-right: auto;
+}
+
+.note-toolbar-setting-help-view-section {
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin: 0em 0em 1em 0em;
+    padding: 0em 1em;
 }
 
 .note-toolbar-setting-gallery-view {
