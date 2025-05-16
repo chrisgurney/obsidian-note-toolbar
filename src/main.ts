@@ -186,15 +186,26 @@ export default class NoteToolbarPlugin extends Plugin {
  
 	/**
 	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
+	 * FIXME: DISABLED DUE TO DATA LOSS ISSUES WITH USERS NOT EVEN USING SETTING (POTENTIAL CAUSE)
+	 * More info: https://github.com/chrisgurney/obsidian-note-toolbar/issues/340
 	 */
-	async onExternalSettingsChange(): Promise<void> {
-		const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
-		if (loadSettingsChanges) {
-			this.debug("onExternalSettingsChange() loading settings changes");
-			await this.settingsManager.load();
-			await this.renderActiveToolbar();
-		}
-	}
+	// async onExternalSettingsChange(): Promise<void> {
+	// 	const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
+	// 	if (loadSettingsChanges) {
+	// 		this.debug('onExternalSettingsChange() loading settings changes...');
+	// 		const loaded_settings = await this.loadData();
+	// 		if (typeof loaded_settings === 'object' && loaded_settings != null) {
+	// 			this.debug('onExternalSettingsChange() loaded:', loaded_settings);
+	// 			this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
+	// 			await this.settingsManager.save();
+	// 			// TODO: if we're in the settings tab and this occurs, should it refresh? show a refresh CTA? (if so, how?)
+	// 			// check if a settings tab or modal is open, and show a notice if so?
+	// 		}
+	// 		else {
+	// 			this.debug('onExternalSettingsChange() settings EMPTY, ignoring');
+	// 		}
+	// 	}
+	// }
 
 	/* keeping for potential future use
 	async storeLeafId(currentView: MarkdownView) {
