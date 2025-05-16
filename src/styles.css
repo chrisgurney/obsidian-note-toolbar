@@ -2345,35 +2345,42 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-launchpad {
-    & .callout-content ul[role="menu"] {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        .is-phone & {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        }
-        margin: 0 auto;
-        & li {
-            background-color: var(--background-primary-alt);
-            border-radius: var(--button-radius);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            & .cg-note-toolbar-item {
-                width: 100%;
+    & .callout-content {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: var(--file-line-width);
+        & ul[role="menu"] {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            /* @media (min-width: 800px) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .is-phone & {
+                grid-template-columns: repeat(2, 1fr);
+            } */
+            margin: 0 auto;
+            & li {
+                background-color: var(--background-primary-alt);
+                border-radius: var(--button-radius);
                 display: flex;
-                flex-direction: column;
-                align-items: center;
                 justify-content: center;
-                text-align: center;
-                min-height: 100px;
-                gap: 4px;
-                .is-phone & {
-                    color: var(--interactive-accent);
+                align-items: center;
+                width: 100%;
+                & .cg-note-toolbar-item {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    min-height: 100px;
+                    gap: 4px;
+                    .is-phone & {
+                        color: var(--interactive-accent);
+                    }
                 }
             }
         }
     }
-
 }
