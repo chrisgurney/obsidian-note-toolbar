@@ -2383,4 +2383,9 @@ input[type="text"].note-toolbar-setting-error,
             }
         }
     }
+    &[data-callout-metadata*="border"] {
+        border: solid 1px var(--cg-nt-tbar-border-color) !important;
+        border-radius: var(--button-radius) !important;
+        padding: 1em;
+    }
 }
