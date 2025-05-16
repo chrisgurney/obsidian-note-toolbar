@@ -565,6 +565,9 @@
             "style-tooltip-use-class": "Використовувати у виносках, або CSS: {{class}}",
             "title": "Стиль панелі: {{toolbar}}"
         },
+        "tips": {
+            "error-failed-to-load": "Помилка завантаження поради:\n{{baseUrl}}/{{language}}/{{name}}.md"
+        },
         "title-edit-toolbar": "Редагування панелі: {{toolbar}}",
         "title-edit-toolbar_none": "Редагування панелі",
         "toolbar-suggest-modal": {
