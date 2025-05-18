@@ -3056,6 +3056,14 @@ input[type="text"].note-toolbar-setting-error,
     margin-right: auto;
 }
 
+.note-toolbar-setting-help-view {
+    & .note-toolbar-setting-view-banner {
+        .is-phone & {
+            padding: 1em 1em 2em 1em;
+        }
+    }
+}
+
 .note-toolbar-setting-help-view-section {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
