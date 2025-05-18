@@ -104,9 +104,19 @@ Get around the text editor faster.
 | Previous heading | Moves the cursor to the previous heading in the note. |
 | Jump to top | Moves the cursor to the top of the current note. |
 | Jump to bottom | Moves the cursor to the bottom of the current note. |
-| Toggle Properties | Toggle the visibility of note properties. |
 | Next callout | Moves the cursor to the next callout in the note. |
 | Toggle Vim mode | Turns Vim mode on and off. |
+
+## Reduce Distractions
+
+Remove Obsidian's UI and focus on your writing.
+
+| Item | Description |
+| --- | --- |
+| Toggle Properties | Toggle the visibility of note properties. |
+| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
+| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
+| Load workspace | Select and load a configured workspace. |
 
 ## Vault Navigation
 
@@ -172,8 +182,6 @@ Switch themes and toggle views.
 | Toggle CSS class | Adds or removes the provided CSS class in the cssclasses property. |
 | Toggle Reading view | Change between the editor's Preview and Reading modes. |
 | Toggle Source mode | Turn Source mode on and off. |
-| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
-| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
 | Show snippets in system | Opens the vault's snippets folder in the system's file explorer. |
 
 ## Workspaces
