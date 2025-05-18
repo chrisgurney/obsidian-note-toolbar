@@ -2356,6 +2356,7 @@ input[type="text"].note-toolbar-setting-error,
         display: none;
     }
     & .setting-item-control {
+        margin-top: 0 !important;
         justify-content: flex-start;
         & .search-input-container {
             width: 250px;
