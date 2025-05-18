@@ -132,7 +132,18 @@
                 "uk": "Швидше працюйте з текстовим редактором."
             },
             "itemIds": [
-                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "note-toolbar-toggle-properties", "go-next-callout", "toggle-vim-mode"
+                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "go-next-callout", "toggle-vim-mode"
+            ]
+        },
+        {
+            "name": {
+                "en": "Reduce Distractions"
+            },
+            "description": {
+                "en": "Remove Obsidian's UI and focus on your writing."
+            },
+            "itemIds": [
+                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace"
             ]
         },
         {
@@ -206,7 +217,7 @@
                 "uk": "Перемикайте теми та режими перегляду."
             },
             "itemIds": [
-                "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "toggle-status-bar", "toggle-ui", "system-snippets-open"
+                "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "system-snippets-open"
             ]
         },
         {

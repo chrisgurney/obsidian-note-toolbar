@@ -2356,6 +2356,7 @@ input[type="text"].note-toolbar-setting-error,
         display: none;
     }
     & .setting-item-control {
+        margin-top: 0 !important;
         justify-content: flex-start;
         & .search-input-container {
             width: 250px;
@@ -2478,6 +2479,9 @@ input[type="text"].note-toolbar-setting-error,
     }
     & h3 {
         font-size: 1.25em;
+        .is-mobile & {
+            font-size: var(--font-ui-small);
+        }
         margin: 0;
         margin-top: 46px; /* icon height */
         text-wrap: wrap;
@@ -3055,6 +3059,14 @@ input[type="text"].note-toolbar-setting-error,
     margin-right: auto;
 }
 
+.note-toolbar-setting-help-view {
+    & .note-toolbar-setting-view-banner {
+        .is-phone & {
+            padding: 1em 1em 2em 1em;
+        }
+    }
+}
+
 .note-toolbar-setting-help-view-section {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
@@ -3072,6 +3084,9 @@ input[type="text"].note-toolbar-setting-error,
     background-blend-mode: overlay;
     font-size: var(--font-ui-medium);
     padding: 2em;
+    .is-phone & {
+        padding: 2em 1em;
+    }
     text-align: center;
     vertical-align: middle;
     & h1, p, svg {

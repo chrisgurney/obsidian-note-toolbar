@@ -300,33 +300,40 @@ export class CommandManager {
     /**
      * Shows, completely hides, folds, or toggles the visibility of this note's Properties.
      * @param visibility Set to 'show', 'hide', 'fold', or 'toggle'
+     * @param isAutoFold Set to `true` if triggering automatically
      */
-    async toggleProps(visibility: PropsState): Promise<void> {
+    async toggleProps(visibility: PropsState, isAutoFold: boolean = false): Promise<void> {
 
         let propsEl = this.plugin.getPropsEl();
+        const activeFile = this.plugin.app.workspace.getActiveFile();
         const currentView = this.plugin.app.workspace.getActiveViewOfType(MarkdownView);
         // this.plugin.debug("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
         // @ts-ignore make sure we're not in source (code) view
-        if (propsEl && !currentView?.editMode.sourceMode) {
+        if (activeFile && propsEl && !currentView?.editMode.sourceMode) {
             const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
             visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
+            activeDocument.body.style.setProperty(
+                '--metadata-display-reading', ['show', 'fold'].contains(visibility) ? 'block' : 'none');
+            activeDocument.body.style.setProperty(
+                '--metadata-display-editing', ['show', 'fold'].contains(visibility) ? 'block' : 'none');
             switch (visibility) {
                 case 'show':
-                    propsEl.style.display = '';
                     // expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
                     if (propsEl.classList.contains('is-collapsed')) {
                         (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
-                    }  
-                    break;
-                case 'hide':
-                    propsEl.style.display = 'none';
+                    }
+                    else if (!isAutoFold) {
+                        // if there's no properties, execute the Add property command
+                        const metadata = this.plugin.app.metadataCache.getFileCache(activeFile);
+                        const hasProperties = !!metadata?.frontmatter && Object.keys(metadata.frontmatter).length > 0;
+                        if (!hasProperties) await this.plugin.app.commands.executeCommandById('markdown:add-metadata-property');
+                    }
                     break;
                 case 'fold':
-                    propsEl.style.display = '';
                     if (!propsEl.classList.contains('is-collapsed')) {
                         (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
                     }
-                    break;	
+                    break;
             }
             localStorage.setItem(LocalVar.PropsState, visibility);
         }
