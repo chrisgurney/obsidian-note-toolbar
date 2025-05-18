@@ -1556,6 +1556,9 @@ input[type="text"].note-toolbar-setting-error,
     }
     & h3 {
         font-size: 1.25em;
+        .is-mobile & {
+            font-size: var(--font-ui-small);
+        }
         margin: 0;
         margin-top: 46px; /* icon height */
         text-wrap: wrap;
