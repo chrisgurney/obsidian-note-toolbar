@@ -1151,16 +1151,17 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug("updateToolbar()", toolbar.name);
 
-		// FIXME: need to `show` here too, but doesn't consistently work (in Reading mode only perhaps?)
-		// fold/hide properties if they were before
-		const propsState = localStorage.getItem(LocalVar.PropsState) ?? '';
-		this.commands.toggleProps(propsState as PropsState, true);
+		// restore properties to the state they were before
+		const propsState = localStorage.getItem(LocalVar.PropsState);
+		if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
+			this.commands.toggleProps(propsState as PropsState, true);
+		}
 
 		let toolbarEl = this.getToolbarEl();
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
 
 		// no need to run update for certain positions
-		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, undefined].contains(currentPosition)) {
+		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, undefined].includes(currentPosition)) {
 			return;
 		}
 
