@@ -312,11 +312,16 @@ export class CommandManager {
         if (activeFile && propsEl && !currentView?.editMode.sourceMode) {
             const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
             visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
-            activeDocument.body.style.setProperty(
+            propsEl.style.setProperty(
                 '--metadata-display-reading', ['show', 'fold'].contains(visibility) ? 'block' : 'none');
-            activeDocument.body.style.setProperty(
+            propsEl.style.setProperty(
                 '--metadata-display-editing', ['show', 'fold'].contains(visibility) ? 'block' : 'none');
             switch (visibility) {
+                case 'fold':
+                    if (!propsEl.classList.contains('is-collapsed')) {
+                        (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
+                    }
+                    break;
                 case 'show':
                     // expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
                     if (propsEl.classList.contains('is-collapsed')) {
@@ -327,11 +332,6 @@ export class CommandManager {
                         const metadata = this.plugin.app.metadataCache.getFileCache(activeFile);
                         const hasProperties = !!metadata?.frontmatter && Object.keys(metadata.frontmatter).length > 0;
                         if (!hasProperties) await this.plugin.app.commands.executeCommandById('markdown:add-metadata-property');
-                    }
-                    break;
-                case 'fold':
-                    if (!propsEl.classList.contains('is-collapsed')) {
-                        (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
                     }
                     break;
             }
