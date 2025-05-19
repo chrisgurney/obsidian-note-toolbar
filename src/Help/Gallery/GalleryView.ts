@@ -144,7 +144,7 @@ export class GalleryView extends ItemView {
  * Renders the provided list of items in the Gallery into a scrollable container.
  * @param plugin NoteToolbarPlugin
  * @param containerEl HTMLDivElement container to render items into.
- * @param itemIds list of string IDs as defined in `src/Gallery/items.json`
+ * @param itemIds list of string IDs as defined in `src/Gallery/gallery-items.json`
  */
 export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, itemIds: string[]) {
 
