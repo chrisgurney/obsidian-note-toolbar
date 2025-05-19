@@ -68,7 +68,7 @@ export class WhatsNewView extends ItemView {
 			});
 
 		// fetch and display the content
-		const language = i18next.language || 'en';
+		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 		let releaseText = '';
 		try {
 			const release = await this.getReleaseNote(WHATSNEW_VERSION, language);

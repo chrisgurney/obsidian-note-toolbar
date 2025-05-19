@@ -65,7 +65,7 @@ export class TipView extends ItemView {
 		this.renderSkeleton(contentEl);
 
         // fetch and display the content
-        const language = i18next.language || 'en';
+        const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
         let tipText = '';
         try {
             const tipMd = await this.getTip(tip.id, language);

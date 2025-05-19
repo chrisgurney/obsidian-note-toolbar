@@ -47,25 +47,25 @@ export class GalleryView extends ItemView {
 		let markdownEl = contentDiv.createDiv();
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 
-		const lang: string = i18next.language || 'en';
+		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
 		const bannerEl = markdownEl.createDiv();
 		bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
 		const bannerIconEl = bannerEl.createDiv();
 		setIcon(bannerIconEl, 'layout-grid');
-		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
+		const title = (gallery as Gallery).title[language] || gallery.title['en'];
 		const bannerTitleEl = bannerEl.createDiv();
 		MarkdownRenderer.render(this.plugin.app, `# ${title}`, bannerTitleEl, '/', this.plugin);
 
 		const overviewEl = markdownEl.createDiv();
 		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
-		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
+		const overview = (gallery as Gallery).overview[language] || gallery.overview['en'];
 		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', this.plugin);
 
 		const pluginNoteEl = markdownEl.createDiv();
 		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
 		setIcon(pluginNoteEl.createSpan(), 'puzzle');
-		const pluginNoteText = (gallery as Gallery).pluginNote[lang] || (gallery as Gallery).pluginNote['en'];
+		const pluginNoteText = (gallery as Gallery).pluginNote[language] || (gallery as Gallery).pluginNote['en'];
 		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', this.plugin);
 
 		const searchSetting = new Setting(markdownEl)
@@ -95,12 +95,12 @@ export class GalleryView extends ItemView {
 
 			const catNameEl = markdownEl.createEl('div');
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
-			const catName = category.name[lang] || category.name['en'];
+			const catName = category.name[language] || category.name['en'];
 			MarkdownRenderer.render(this.plugin.app, `## ${catName}`, catNameEl, '/', this.plugin);
 
 			const catDescEl = markdownEl.createEl('div');
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
-			const catDescText = category.description[lang] || category.description['en'];
+			const catDescText = category.description[language] || category.description['en'];
 			MarkdownRenderer.render(this.plugin.app, catDescText, catDescEl, '/', this.plugin);
 
 			const galleryItemContainerEl = markdownEl.createDiv();
