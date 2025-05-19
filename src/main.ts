@@ -1151,10 +1151,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug("updateToolbar()", toolbar.name);
 
-		// restore properties to the state they were before
-		const propsState = localStorage.getItem(LocalVar.PropsState);
-		if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
-			this.commands.toggleProps(propsState as PropsState, true);
+		if (this.settings.keepPropsState) {
+			// restore properties to the state they were before
+			const propsState = localStorage.getItem(LocalVar.PropsState);
+			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
+				this.commands.toggleProps(propsState as PropsState, true);
+			}
 		}
 
 		let toolbarEl = this.getToolbarEl();

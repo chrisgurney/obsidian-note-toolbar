@@ -484,6 +484,10 @@
                 "name": "Icon",
                 "tooltip": "Select icon"
             },
+            "keep-props-state": {
+                "description": "Maintains the visibility state of Properties in notes, if you use Note Toolbar's options to toggle properties. If enabled, you will have to use Note Toolbar's \"Show note properties\" to show properties again.",
+                "name": "Keep properties state"
+            },
             "load-settings-changes": {
                 "description": "If you’re syncing plugin settings across devices, turn this on to automatically load toolbar updates. If not, you’ll need to restart Obsidian to see changes from other devices.",
                 "name": "Load settings changes"

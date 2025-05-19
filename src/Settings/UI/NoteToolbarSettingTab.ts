@@ -1000,6 +1000,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// 	});
 
 		new Setting(containerEl)
+			.setName(t('setting.other.keep-props-state.name'))
+			.setDesc(t('setting.other.keep-props-state.description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.keepPropsState)
+					.onChange(async (value) => {
+						this.plugin.settings.keepPropsState = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(containerEl)
 			.setName(t('setting.other.scripting.name'))
 			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
 			.addToggle((cb: ToggleComponent) => {
