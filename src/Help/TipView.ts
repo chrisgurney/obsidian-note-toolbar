@@ -1,3 +1,4 @@
+import TipItems from "Help/tips.json";
 import { Component, ItemView, MarkdownRenderer, Platform, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
@@ -7,30 +8,14 @@ interface TipViewState {
     id: string;
 }
 
-const TIPS = [
-    {
-        color: 'red',
-        description: 'Create your first toolbar.',
-        galleryItems: ['copy', 'paste', 'undo', 'redo'],
-        icon: 'rocket',
-        id: 'getting-started',
-        title: 'Getting Started',
-    },
-    {
-        color: 'purple',
-        description: 'Add ready-to-use items to your toolbars.',
-        icon: 'layout-grid',
-        id: 'gallery',
-        title: 'Gallery'
-    },
-    {
-        color: 'green',
-        description: 'Make the most of Obsidian on your phone.',
-        icon: 'smartphone',
-        id: 'mobile-tips',
-        title: 'Mobile Tips',
-    }
-];
+type TipType = {
+    color: string;
+    description: Record<string, string>;
+    galleryItems: string[];
+    icon: string;
+    id: string;
+    title: Record<string, string>;
+};
 
 export class TipView extends ItemView {
 
@@ -44,8 +29,10 @@ export class TipView extends ItemView {
 
         if (!this.state) return; // state is not ready yet
 
-        const tip = TIPS.find(tip => tip.id.includes(this.state.id));
+        const tip = TipItems.find(tip => tip.id.includes(this.state.id));
         if (!tip) return; // no matching tip
+
+        const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
         const contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-help-view');
@@ -56,16 +43,15 @@ export class TipView extends ItemView {
         const bannerIconEl = bannerEl.createDiv();
         setIcon(bannerIconEl, tip.icon);
         const bannerTitleEl = bannerEl.createDiv();
-        MarkdownRenderer.render(this.plugin.app, `# ${tip.title}`, bannerTitleEl, '/', this.plugin);
+        MarkdownRenderer.render(this.plugin.app, `# ${(tip as TipType).title[language]}`, bannerTitleEl, '/', this.plugin);
         const bannerDescEl = bannerEl.createDiv();
-        MarkdownRenderer.render(this.plugin.app, `${tip.description}`, bannerDescEl, '/', this.plugin);
+        MarkdownRenderer.render(this.plugin.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', this.plugin);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 		this.renderSkeleton(contentEl);
 
         // fetch and display the content
-        const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
         let tipText = '';
         try {
             const tipMd = await this.getTip(tip.id, language);
@@ -102,8 +88,9 @@ export class TipView extends ItemView {
     }
 
     getDisplayText(): string {
-        const tip = TIPS.find(tip => tip.id.includes(this.state?.id));
-        return `${t('plugin.note-toolbar')} • ${tip?.title ?? "Note Toolbar Help"}`;
+        const tip = TipItems.find(tip => tip.id.includes(this.state?.id));
+        const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
+        return `${t('plugin.note-toolbar')} • ${(tip as TipType)?.title[language] ?? "Note Toolbar Help"}`;
     }
 
     getIcon(): string {
@@ -200,8 +187,7 @@ const createLinearGradient = (name: LinearGradientType): string => {
  */
 export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, tipIds: string[]) {
 
-    // TODO: read this in from a file and then...
-    // const tips: Tip[] = plugin.tips.getTips();
+    const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
     const itemsEl = containerEl.createDiv();
     itemsEl.addClass('note-toolbar-card-items');
@@ -209,7 +195,7 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
 
     tipIds.forEach(itemId => {
 
-        const tip = TIPS.find(item => item.id.includes(itemId));
+        const tip = TipItems.find(item => item.id.includes(itemId)) as TipType;
         if (tip) {
 
             const itemEl = itemsEl.createEl('button');
@@ -220,11 +206,11 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
             setTooltip(itemEl, "View this tip");
 
             const itemTitleEl = itemEl.createEl('h3');
-            itemTitleEl.setText(tip.title);
+            itemTitleEl.setText(tip.title[language]);
             if (tip.description) {
                 const itemDescEl = itemEl.createEl('p');
                 itemDescEl.addClass('note-toolbar-card-item-description');
-                MarkdownRenderer.render(plugin.app, tip.description, itemDescEl, '/', plugin);
+                MarkdownRenderer.render(plugin.app, tip.description[language], itemDescEl, '/', plugin);
             }
 
             const iconEl = itemEl.createDiv();
