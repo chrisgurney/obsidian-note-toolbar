@@ -22,7 +22,7 @@ For quick text editing and history control.
 | Undo | Reverts the latest action. |
 | Redo | Reapplies the last undone action. |
 | Clear formatting | Remove all text formatting. |
-| Copy note content | Copies the body of the current note to the clipboard, ignoring frontmatter. |
+| Copy note content | Copy body of the note to the clipboard, ignoring frontmatter. |
 
 ## Editing
 
@@ -124,15 +124,15 @@ Navigate between files and directories.
 
 | Item | Description |
 | --- | --- |
-| Previous file | Opens the previous file in the folder, sorted A-Z. Loops back to the last file. |
-| Next file | Opens the next file in the folder, sorted A-Z. Loops over to the first file. |
+| Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
+| Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
 | Open file in new tab | Opens the selected file in a new tab. |
 | New tab | Opens a new empty tab. |
 | Previous tab | Go to the previous tab. |
 | Next tab | Go to the next tab. |
 | Close tab | Close the current tab. |
 | Home | Go to your home note. (Enter your home note in the URL.) |
-| Go up | Uses your note's "up" property to navigate to a parent note in your vault. |
+| Go up | Uses your note's "up" property to link to a parent note. |
 | Show bookmarks | Opens the bookmarks sidebar. |
 | Show vault in system | Opens the vault's folder in the system's file explorer. |
 
@@ -143,10 +143,10 @@ Get access to Note Toolbar settings and tools quickly.
 | Item | Description |
 | --- | --- |
 | Quick Toolbars | Opens a window with access to all of your Note Toolbars. |
-| Quick Tools | Opens a searchable window with access to all of your Note Toolbar items. |
+| Quick Tools | Opens a searchable window with access to all toolbar items. |
 | Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
-| User Guide for Note Toolbar | Access the Note Toolbar User Guide for help and tips. |
-| Backup Note Toolbar config | Backup Note Toolbar's configuration (data.json) file into the vault. |
+| Note Toolbar User Guide | Access the Note Toolbar User Guide for help and tips. |
+| Backup Note Toolbar config | Copy Note Toolbar's settings (data.json) file into the vault. |
 
 ## Obsidian Support
 
@@ -168,7 +168,7 @@ Search in notes and across your vault.
 | --- | --- |
 | Find & Replace | Open the find/replace panel in the current note. |
 | Search all files | Opens the search sidebar. |
-| Search folder | Opens search for the current folder, or all files if the file is in the root. |
+| Search folder | Search in the current folder, or all files if currently in the root. |
 
 ## Views and Themes
 
@@ -179,10 +179,10 @@ Switch themes and toggle views.
 | Change theme | Open the Obsidian theme switcher. |
 | Toggle light/dark | Toggle between light and dark modes. |
 | Cycle themes | Cycles between installed themes, including the default. |
-| Toggle CSS class | Adds or removes the provided CSS class in the cssclasses property. |
+| Toggle CSS class | Adds or removes the provided class in the cssclasses property. |
 | Toggle Reading view | Change between the editor's Preview and Reading modes. |
 | Toggle Source mode | Turn Source mode on and off. |
-| Show snippets in system | Opens the vault's snippets folder in the system's file explorer. |
+| Open snippets folder | Opens the vault's snippets folder in the system's file explorer. |
 
 ## Workspaces
 
@@ -200,15 +200,15 @@ Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidi
 
 | Item | Description |
 | --- | --- |
-| Previous weekly note | Previous weekly note. (Must be in weekly note.) |
+| Previous weekly note | Opens previous weekly note. (Must be in a weekly note.) |
 | Open weekly note | Open weekly note. |
-| Next weekly note | Next weekly note. (Must be in weekly note.) |
-| Previous monthly note | Open previous monthly note. (Must be in monthly note.) |
+| Next weekly note | Next weekly note. (Must be in a weekly note.) |
+| Previous monthly note | Open previous monthly note. (Must be in a monthly note.) |
 | Open monthly note | Open monthly note. |
-| Next monthly note | Open next monthly note. (Must be in monthly note.) |
-| Previous yearly note | Previous yearly note. (Must be in yearly note.) |
+| Next monthly note | Open next monthly note. (Must be in a monthly note.) |
+| Previous yearly note | Previous yearly note. (Must be in a yearly note.) |
 | Open yearly note | Open yearly note. |
-| Next yearly note | Next yearly note. (Must be in yearly note.) |
+| Next yearly note | Opens next yearly note. (Must be in a yearly note.) |
 
 ## Templater
 
