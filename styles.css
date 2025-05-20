@@ -2481,6 +2481,7 @@ input[type="text"].note-toolbar-setting-error,
         font-size: 1.25em;
         .is-mobile & {
             font-size: var(--font-ui-small);
+            font-weight: var(--font-bold);
         }
         margin: 0;
         margin-top: 46px; /* icon height */
