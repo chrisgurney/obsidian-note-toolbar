@@ -425,7 +425,7 @@
             "key-navigate": "↑↓",
             "key-use": "↵",
             "label-empty-no-items": "No results found.",
-            "link-gallery": "Explore the Gallery ↗",
+            "link-gallery": "Explore the Gallery...",
             "link-search": "Search for an item",
             "option-new": "+ Create a new item",
             "placeholder": "Search for an item to add...",

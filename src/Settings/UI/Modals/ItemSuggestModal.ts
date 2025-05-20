@@ -130,13 +130,14 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             gallerySuggestions = this.sortSuggestions(gallerySuggestions, lowerCaseInputStr);
             if (gallerySuggestions.length > 0) {
                 sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
+                sortedSuggestions.push(...gallerySuggestions);
                 const browseGallery: ToolbarItemSettings = {
                     ...DEFAULT_ITEM_SETTINGS,
                     uuid: 'OPEN_GALLERY',
-                    label: t('setting.item-suggest-modal.link-gallery')
+                    label: t('setting.item-suggest-modal.link-gallery'),
+                    icon: 'layout-grid'
                 };
                 sortedSuggestions.push(browseGallery);
-                sortedSuggestions.push(...gallerySuggestions);
             }
         }
 
