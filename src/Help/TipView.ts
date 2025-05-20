@@ -59,11 +59,11 @@ export class TipView extends ItemView {
 				tipText = tipMd;
             }
             else {
-                tipText = t('setting.tips.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
+                tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
             }
         }
         catch (error) {
-            tipText = t('setting.tips.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
+            tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
             tipText += `\n>[!error]-\n> \`${error as string}\`\n`;
         }
         finally {
@@ -77,7 +77,7 @@ export class TipView extends ItemView {
             const itemNoteEl = contentEl.createDiv();
             itemNoteEl.addClass('note-toolbar-gallery-view-note');
             setIcon(itemNoteEl.createSpan(), Platform.isDesktop ? 'mouse-pointer-click' : 'pointer');
-            MarkdownRenderer.render(this.plugin.app, "Click or tap to add any of these to a toolbar:", itemNoteEl, '/', this.plugin);
+            MarkdownRenderer.render(this.plugin.app, t('gallery.label-add-item'), itemNoteEl, '/', this.plugin);
             renderGalleryItems(this.plugin, contentEl, tip.galleryItems);
         }
 
@@ -90,7 +90,7 @@ export class TipView extends ItemView {
     getDisplayText(): string {
         const tip = TipItems.find(tip => tip.id.includes(this.state?.id));
         const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
-        return `${t('plugin.note-toolbar')} • ${(tip as TipType)?.title[language] ?? "Note Toolbar Help"}`;
+        return `${t('plugin.note-toolbar')} • ${(tip as TipType)?.title[language] ?? t('setting.help.title')}`;
     }
 
     getIcon(): string {
@@ -203,7 +203,7 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
             itemEl.addClass('note-toolbar-card-item');
             if (tip.color && tip.color in TIP_GRADIENTS) itemEl.style.background = createLinearGradient(tip.color as LinearGradientType);
             itemEl.setAttribute('data-ignore-swipe', 'true');
-            setTooltip(itemEl, "View this tip");
+            setTooltip(itemEl, t('setting.help.tooltip-view-tip'));
 
             const itemTitleEl = itemEl.createEl('h3');
             itemTitleEl.setText(tip.title[language]);
