@@ -839,10 +839,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
 					.onChange(debounce(async (name) => {
 						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
-						if (newToolbar) {
-							this.plugin.settings.emptyViewToolbar = newToolbar.uuid;
-							await this.plugin.settingsManager.save();
-						}
+						this.plugin.settings.emptyViewToolbar = newToolbar?.uuid ?? null;
+						await this.plugin.settingsManager.save();
 					}, 250));
 			});
 
