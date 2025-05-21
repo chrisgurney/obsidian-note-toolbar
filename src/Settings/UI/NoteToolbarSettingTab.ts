@@ -857,7 +857,16 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		// TODO: add a text field where you can specify a list of types
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-other'))
+			.setDesc(t('setting.display-contexts.option-other-description'))
+			.addText(text => text
+				.setPlaceholder(t('setting.display-contexts.option-other-placeholder'))
+				.setValue(this.plugin.settings.showToolbarInOther)
+				.onChange(debounce(async (value) => {
+					this.plugin.settings.showToolbarInOther = value;
+					await this.plugin.settingsManager.save();	
+				}, 750)));
 
 		collapsibleEl.appendChild(collapsibleContainer);
 		containerEl.appendChild(collapsibleEl);

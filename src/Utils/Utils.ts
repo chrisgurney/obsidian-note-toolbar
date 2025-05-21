@@ -89,6 +89,8 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
  */
 export function checkToolbarForItemView(plugin: NoteToolbarPlugin, itemView: ItemView): boolean {
 	const currentViewType = itemView.getViewType();
+	if (plugin.settings.showToolbarInOther.includes(currentViewType)) return true;
+	
     const viewSettings: Record<string, boolean | undefined> = {
         audio: plugin.settings.showToolbarIn.audio,
         canvas: plugin.settings.showToolbarIn.canvas,

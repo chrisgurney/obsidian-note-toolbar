@@ -209,6 +209,7 @@ export interface NoteToolbarSettings {
 	showEditInFabMenu: boolean;
 	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
+	showToolbarInOther: string;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -241,6 +242,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 		video: false
 	},
 	showToolbarInFileMenu: false,
+	showToolbarInOther: "",
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
