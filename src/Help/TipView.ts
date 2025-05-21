@@ -147,7 +147,7 @@ export class TipView extends ItemView {
                 if (id) items.push(id);
             });
             calloutEl.innerHTML = '';
-            calloutEl.classList = '';
+            calloutEl.className = '';
             renderGalleryItems(this.plugin, calloutEl, items, TIP_COLORS[color]);
         });
 
