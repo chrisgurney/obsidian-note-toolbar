@@ -281,7 +281,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		const viewMode = currentView?.getMode();
 		this.debug('===== LAYOUT-CHANGE ===== ', viewId, currentView, viewMode);
 
-		// show empty view toolbar
+		// show empty view or other data type toolbar
 		if (!currentView) {
 			await this.renderActiveToolbar();
 			return;
