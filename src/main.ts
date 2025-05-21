@@ -589,8 +589,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
-		// EXPERIMENTAL
-		// FIXME: flickers before displaying the toolbar items
+		// FIXME: do earlier, first load + layout change - flickers before displaying toolbar,
+		// especially on startup with expensive plugins (e.g,. Excalidraw)
 		const useLaunchpad = currentView instanceof ItemView && currentView.getViewType() === 'empty'
 			&& toolbar.customClasses?.includes('note-toolbar-launchpad');
 		currentView.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
