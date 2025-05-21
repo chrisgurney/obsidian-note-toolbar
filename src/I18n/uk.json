@@ -616,7 +616,7 @@
         "whats-new": {
             "button-read": "Читати ↗",
             "button-read-tooltip": "Відкрити github.com",
-            "error-failed-to-load": "Помилка завантаження коментарів випуску:\n{{baseUrl}}/{{language}}/{{version}}.md",
+            "error-failed-to-load": "Помилка завантаження коментарів випуску:\n{{baseUrl}}/{{lang}}/{{version}}.md",
             "placehoder-loading": "Завантаження...",
             "label-release-notes": "Примітки до випуску",
             "label-release-notes-description": "Детальні коментарі до останніх випусків, розміщені на GitHub.",

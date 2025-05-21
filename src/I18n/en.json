@@ -320,7 +320,7 @@
             "button-open-google": "Open google.com",
             "button-read": "Read ↗",
             "description": "Context-aware toolbars for your notes.",
-            "error-failed-to-load": "Failed to load:\n{{baseUrl}}/{{language}}/{{name}}.md",
+            "error-failed-to-load": "Failed to load:\n{{baseUrl}}/{{lang}}/{{name}}.md",
             "heading": "Help using Note Toolbar",
             "label-article-1": "Creating toolbar items",
             "label-article-1-description": "Learn about the different types of items.",
@@ -626,7 +626,7 @@
         "whats-new": {
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
-            "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{language}}/{{version}}.md",
+            "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{lang}}/{{version}}.md",
             "placehoder-loading": "Loading...",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",

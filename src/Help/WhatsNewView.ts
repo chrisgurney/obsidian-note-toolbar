@@ -76,11 +76,11 @@ export class WhatsNewView extends ItemView {
 				releaseText = release.body;
 			}
 			else {
-				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
+				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
 			}
 		}
 		catch (error) {
-			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
+			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
 			releaseText += `\n>[!error]-\n> \`${error as string}\`\n`;
 		}
 		finally {

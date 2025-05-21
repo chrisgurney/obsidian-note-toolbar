@@ -59,11 +59,11 @@ export class TipView extends ItemView {
 				tipText = tipMd;
             }
             else {
-                tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
+                tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_TIPS, lang: language, name: tip.id });
             }
         }
         catch (error) {
-            tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_TIPS, langauge: language, name: tip.id });
+            tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_TIPS, lang: language, name: tip.id });
             tipText += `\n>[!error]-\n> \`${error as string}\`\n`;
         }
         finally {

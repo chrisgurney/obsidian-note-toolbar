@@ -627,7 +627,7 @@
     "whats-new": {
       "button-read": "阅读 ↗",
       "button-read-tooltip": "打开 github.com",
-      "error-failed-to-load": "无法加载更新日志：\n{{baseUrl}}/{{language}}/{{version}}.md",
+      "error-failed-to-load": "无法加载更新日志：\n{{baseUrl}}/{{lang}}/{{version}}.md",
       "label-release-notes": "发布说明",
       "label-release-notes-description": "最新版本的详细说明位于 Github",
       "label-roadmap": "Note Toolbar 的未来？",
