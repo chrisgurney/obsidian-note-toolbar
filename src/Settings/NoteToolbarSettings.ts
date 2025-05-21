@@ -51,6 +51,7 @@ export enum ComponentType {
 }
 export enum FileType {
 	Audio = 'audio',
+	Bases = 'bases',
 	Canvas = 'canvas',
 	Image = 'image',
 	Kanban = 'kanban',
@@ -235,6 +236,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	showEditInFabMenu: false,
 	showToolbarIn: {
 		audio: false,
+		bases: false,
 		canvas: false,
 		image: false,
 		kanban: false,

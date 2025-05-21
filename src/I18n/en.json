@@ -289,6 +289,7 @@
             "description": "Enable toolbars in canvases, the New tab view, and other file types.",
             "name": "File types and views",
             "option-audio": "Audio",
+            "option-bases": "Bases",
             "option-canvas": "Canvas files",
             "option-emptyview": "New tab view",
             "option-emptyview-description": "Select a toolbar to show when no note is open.",

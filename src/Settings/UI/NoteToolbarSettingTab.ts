@@ -775,6 +775,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-bases'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarIn.bases)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarIn.bases = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-canvas'))
 			.addToggle((cb: ToggleComponent) => {
 				cb
