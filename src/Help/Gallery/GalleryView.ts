@@ -179,6 +179,10 @@ export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLD
 			itemEl.setAttribute('data-ignore-swipe', 'true');
 			setTooltip(itemEl, t('gallery.tooltip-add-item', { name: galleryItem.tooltip }));
 
+			const plusEl = itemEl.createDiv();
+			plusEl.addClass('note-toolbar-card-item-plus');
+			setIcon(plusEl, 'circle-plus');
+
 			itemEl.createEl('h3').setText(galleryItem.tooltip);
 			if (galleryItem.description) {
 				const itemDescEl = itemEl.createEl('p');

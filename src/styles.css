@@ -1559,6 +1559,20 @@ input[type="text"].note-toolbar-setting-error,
             width: 30px;
         }
     }
+    .note-toolbar-card-item-plus {
+        position: absolute;
+        color: var(--interactive-accent);
+        top: 16px;
+        right: 16px;
+        opacity: 0;
+        & svg {
+            height: 24px;        
+            width: 24px;
+        }
+    }
+    &:hover .note-toolbar-card-item-plus {
+        opacity: 0.8;
+    }
     & h3 {
         font-size: 1.25em;
         .is-mobile & {
