@@ -235,8 +235,8 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
             itemEl.addClass('note-toolbar-card-item');
             if (tip.color && tip.color in TIP_GRADIENTS) itemEl.style.background = createLinearGradient(tip.color as LinearGradientType);
             itemEl.setAttribute('data-ignore-swipe', 'true');
-            setTooltip(itemEl, t('setting.help.tooltip-view-tip'));
-
+            setTooltip(itemEl, tip.id === 'gallery' ? t('setting.button-gallery-tooltip') : t('setting.help.tooltip-view-tip'));
+            
             const itemTitleEl = itemEl.createEl('h3');
             itemTitleEl.setText(tip.title[language]);
             if (tip.description) {
