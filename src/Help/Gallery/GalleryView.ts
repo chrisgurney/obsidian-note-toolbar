@@ -18,6 +18,17 @@ interface Gallery {
 	categories: Category[];
 }
 
+const cssColors: string[] = [
+    'var(--color-red)',
+    'var(--color-orange)',
+    'var(--color-yellow)',
+    'var(--color-green)',
+    'var(--color-cyan)',
+    'var(--color-blue)',
+    'var(--color-purple)',
+    'var(--color-pink)',
+];
+
 export class GalleryView extends ItemView {
 
     plugin: NoteToolbarPlugin;
@@ -91,7 +102,9 @@ export class GalleryView extends ItemView {
 			return false;
 		});
 
-		(gallery as Gallery).categories.forEach(category => {
+		(gallery as Gallery).categories.forEach((category, i) => {
+
+			const cssColor = cssColors[i % cssColors.length];
 
 			const catNameEl = markdownEl.createEl('div');
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
@@ -105,7 +118,7 @@ export class GalleryView extends ItemView {
 
 			const galleryItemContainerEl = markdownEl.createDiv();
 			galleryItemContainerEl.addClass('note-toolbar-gallery-card-items');
-			renderGalleryItems(this.plugin, galleryItemContainerEl, category.itemIds);
+			renderGalleryItems(this.plugin, galleryItemContainerEl, category.itemIds, cssColor);
 
 		});
 
@@ -145,8 +158,9 @@ export class GalleryView extends ItemView {
  * @param plugin NoteToolbarPlugin
  * @param containerEl HTMLDivElement container to render items into.
  * @param itemIds list of string IDs as defined in `src/Gallery/gallery-items.json`
+ * @param cssColor optional color to use in cards 
  */
-export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, itemIds: string[]) {
+export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, itemIds: string[], cssColor?: string) {
 
 	const galleryItems: ToolbarItemSettings[] = plugin.gallery.getItems();
 
@@ -182,6 +196,7 @@ export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLD
 
 			const iconEl = itemEl.createDiv();
 			iconEl.addClass('note-toolbar-card-item-icon');
+			if (cssColor) iconEl.style.color = cssColor;
 			setIcon(iconEl, galleryItem.icon);
 
 		}
