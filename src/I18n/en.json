@@ -298,8 +298,8 @@
             "option-image": "Images",
             "option-kanban": "Kanban boards",
             "option-pdf": "PDFs",
-            "option-other": "Other file types",
-            "option-other-description": "List of other file types toolbars can appear in, separated by spaces.",
+            "option-other": "Other data types",
+            "option-other-description": "List of other data types toolbars can appear in, separated by spaces.",
             "option-other-placeholder": "e.g., excalidraw",
             "option-video": "Videos"
         },
