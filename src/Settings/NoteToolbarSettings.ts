@@ -3,7 +3,7 @@ import { PaneType } from "obsidian";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20250313.1;
-export const WHATSNEW_VERSION = '1.23';
+export const WHATSNEW_VERSION = '1.24';
 
 /******************************************************************************
  * TRANSLATIONS
