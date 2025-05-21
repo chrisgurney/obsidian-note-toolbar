@@ -514,7 +514,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null): Promise<void> {
 
-		this.debug("✅ renderToolbar()", toolbar.name);
+		this.debug("renderToolbar()", toolbar.name);
 
 		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
 		let position;
@@ -529,7 +529,10 @@ export default class NoteToolbarPlugin extends Plugin {
 			currentView = this.app.workspace.getActiveViewOfType(ItemView);
 			if (currentView) {
 				const isToolbarVisible = checkToolbarForItemView(this, currentView);
-				if (!isToolbarVisible) return;
+				if (!isToolbarVisible) {
+					this.debug("🛑 renderToolbar(): nothing to render in this view");
+					return;
+				}
 				if (position === 'props') position = 'top';
 			}
 			else return; // active view is another view (like the file explorer) and not the empty tab
