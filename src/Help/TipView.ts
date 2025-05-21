@@ -71,7 +71,7 @@ export class TipView extends ItemView {
 
         const rootPath = this.plugin.app.vault.getRoot().path;
         MarkdownRenderer.render(this.plugin.app, tipText, contentEl, rootPath, new Component());
-        this.renderGalleryCallouts(contentEl);
+        this.renderGalleryCallouts(contentEl, tip.color as ColorType);
 
     }
 
@@ -138,7 +138,7 @@ export class TipView extends ItemView {
      * Renders any `note-toolbar-gallery` callouts in the tip content, replacing a list of Gallery IDs with item cards.
      * @param contentEl HTMLDivElement to render Gallery items in.
      */
-    renderGalleryCallouts(contentEl: HTMLDivElement) {
+    renderGalleryCallouts(contentEl: HTMLDivElement, color: ColorType) {
         const callouts = contentEl.querySelectorAll('.callout[data-callout="note-toolbar-gallery"]');
         callouts.forEach(async (calloutEl: HTMLDivElement) => {
             const items: string[] = [];
@@ -148,7 +148,7 @@ export class TipView extends ItemView {
             });
             calloutEl.innerHTML = '';
             calloutEl.classList = '';
-            renderGalleryItems(this.plugin, calloutEl, items);
+            renderGalleryItems(this.plugin, calloutEl, items, TIP_COLORS[color]);
         });
 
 		this.plugin.registerDomEvent(contentEl, 'click', async (evt) => {
@@ -182,15 +182,29 @@ export class TipView extends ItemView {
 
 }
 
+export type ColorType = keyof typeof TIP_COLORS;
 export type LinearGradientType = keyof typeof TIP_GRADIENTS;
+
+export const TIP_COLORS = {
+    red: 'var(--color-red)',
+    orange: 'var(--color-orange)',
+    yellow: 'var(--color-yellow)',
+    green: 'var(--color-green)',
+    cyan: 'var(--color-cyan)',
+    blue: 'var(--color-blue)',
+    purple: 'var(--color-purple)',
+    ping: 'var(--color-pink)',
+}
 
 export const TIP_GRADIENTS = {
     red: 'linear-gradient(45deg, var(--color-red) 50%, var(--color-orange) 100%)',
     orange: 'linear-gradient(45deg, var(--color-orange) 50%, var(--color-yellow) 100%)',
+    yellow: 'linear-gradient(45deg, var(--color-yellow) 50%, var(--color-green) 100%)',
     green: 'linear-gradient(45deg, var(--color-green) 50%, var(--color-cyan) 100%)',
     cyan: 'linear-gradient(45deg, var(--color-cyan) 50%, var(--color-blue) 100%)',
     blue: 'linear-gradient(45deg, var(--color-blue) 50%, var(--color-purple) 100%)',
-    purple: 'linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%)',  
+    purple: 'linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%)',
+    pink: 'linear-gradient(45deg, var(--color-pink) 50%, var(--color-red) 100%)',
 }
 
 const createLinearGradient = (name: LinearGradientType): string => {
