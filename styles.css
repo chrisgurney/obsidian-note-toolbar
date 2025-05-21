@@ -3068,6 +3068,12 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-help-view-title {
+    & h1, p, svg {
+        color: var(--text-normal) !important;
+    }
+}
+
 .note-toolbar-setting-help-view-section {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);

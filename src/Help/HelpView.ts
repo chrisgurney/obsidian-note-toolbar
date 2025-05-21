@@ -35,7 +35,7 @@ export class HelpView extends ItemView {
 		headingEl.addClass('note-toolbar-view-heading');
         
 		const bannerEl = contentDiv.createDiv();
-		bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
+		bannerEl.addClass('note-toolbar-setting-view-banner', 'note-toolbar-setting-help-view-title', 'is-readable-line-width');
 		const bannerIconEl = bannerEl.createDiv();
 		setIcon(bannerIconEl, 'circle-help');
 		const bannerTitleEl = bannerEl.createDiv();
