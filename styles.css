@@ -3348,6 +3348,9 @@ input[type="text"].note-toolbar-setting-error,
                     text-align: center;
                     min-height: 100px;
                     gap: 4px;
+                    & .cg-note-toolbar-item-label {
+                        white-space: wrap;
+                    }
                     .is-phone & {
                         color: var(--interactive-accent);
                     }
