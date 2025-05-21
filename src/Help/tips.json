@@ -15,7 +15,6 @@
         "description": {
             "en": "Create your first toolbar."
         },
-        "galleryItems": ["copy", "paste", "undo", "redo"],
         "icon": "rocket",
         "id": "getting-started",
         "title": {

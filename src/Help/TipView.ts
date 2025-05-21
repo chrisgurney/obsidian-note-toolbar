@@ -11,7 +11,6 @@ interface TipViewState {
 type TipType = {
     color: string;
     description: Record<string, string>;
-    galleryItems: string[];
     icon: string;
     id: string;
     title: Record<string, string>;
@@ -72,14 +71,7 @@ export class TipView extends ItemView {
 
         const rootPath = this.plugin.app.vault.getRoot().path;
         MarkdownRenderer.render(this.plugin.app, tipText, contentEl, rootPath, new Component());
-
-        if (tip.galleryItems && tip.galleryItems?.length > 0) {
-            const itemNoteEl = contentEl.createDiv();
-            itemNoteEl.addClass('note-toolbar-gallery-view-note');
-            setIcon(itemNoteEl.createSpan(), Platform.isDesktop ? 'mouse-pointer-click' : 'pointer');
-            MarkdownRenderer.render(this.plugin.app, t('gallery.label-add-item'), itemNoteEl, '/', this.plugin);
-            renderGalleryItems(this.plugin, contentEl, tip.galleryItems);
-        }
+        this.renderGalleryCallouts(contentEl);
 
     }
 
@@ -140,6 +132,32 @@ export class TipView extends ItemView {
     
         const body = await res.text();
         return body;
+    }
+
+    /**
+     * Renders any `note-toolbar-gallery` callouts in the tip content, replacing a list of Gallery IDs with item cards.
+     * @param contentEl HTMLDivElement to render Gallery items in.
+     */
+    renderGalleryCallouts(contentEl: HTMLDivElement) {
+        const callouts = contentEl.querySelectorAll('.callout[data-callout="note-toolbar-gallery"]');
+        callouts.forEach(async (calloutEl: HTMLDivElement) => {
+            const items: string[] = [];
+            calloutEl.querySelectorAll('li').forEach(li => {
+                const id = li.textContent?.trim();
+                if (id) items.push(id);
+            });
+            calloutEl.innerHTML = '';
+            calloutEl.classList = '';
+            renderGalleryItems(this.plugin, calloutEl, items);
+        });
+
+		this.plugin.registerDomEvent(contentEl, 'click', async (evt) => {
+			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-card-item');
+			if (galleryItemEl && galleryItemEl.id) {
+				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
+				if (galleryItem) await this.plugin.gallery.addItem(galleryItem);
+			}
+		});
     }
 
 	/**
