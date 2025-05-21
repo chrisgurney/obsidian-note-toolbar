@@ -1,5 +1,16 @@
 [
     {
+        "color": "blue",
+        "description": {
+            "en": "Add navigation to your daily notes."
+        },
+        "icon": "calendar-days",
+        "id": "daily-notes",
+        "title": {
+            "en": "Daily Notes"
+        }
+    },
+    {
         "color": "red",
         "description": {
             "en": "Create your first toolbar."
