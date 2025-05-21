@@ -1705,20 +1705,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
 		}
 		else {
-			const itemView = this.app.workspace.getActiveViewOfType(ItemView);
-			if (itemView) {
-				let renderToolbar = checkToolbarForItemView(this, itemView);
-				if (!renderToolbar) return;
-				switch (itemView.getViewType()) {
-					case 'empty':
-					case 'beautitab-react-view':
-					case 'home-tab-view':
-						if (this.settings.emptyViewToolbar) {
-							toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
-						}
-						break;
-				}
-			}
+			toolbar = this.settingsManager.getEmptyViewToolbar();
 		}
 
 		if (toolbar) {

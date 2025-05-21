@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
-import { FrontMatterCache, Notice, Platform, TFile } from "obsidian";
-import { getUUID } from "Utils/Utils";
+import { FrontMatterCache, ItemView, Notice, Platform, TFile } from "obsidian";
+import { checkToolbarForItemView, getUUID } from "Utils/Utils";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
 import { NoteToolbarSettingTab } from "./UI/NoteToolbarSettingTab";
 
@@ -100,6 +100,28 @@ export class SettingsManager {
 			toolbar.items.push(newItem);
 		}
 		return newItem;
+	}
+
+	/**
+	 * Gets the toolbar configured for the empty view, assuming we're actively in an empty view.
+	 * @returns ToolbarSettings or undefined, if we're not in the empty view or there is no toolbar set
+	 */
+	public getEmptyViewToolbar(): ToolbarSettings | undefined {
+		const itemView = this.plugin.app.workspace.getActiveViewOfType(ItemView);
+		if (itemView) {
+			let renderToolbar = checkToolbarForItemView(this.plugin, itemView);
+			if (!renderToolbar) return;
+			switch (itemView.getViewType()) {
+				case 'empty':
+				case 'beautitab-react-view':
+				case 'home-tab-view':
+					if (this.plugin.settings.emptyViewToolbar) {
+						return this.getToolbarById(this.plugin.settings.emptyViewToolbar);
+					}
+					break;
+			}
+		}
+		return undefined;
 	}
 
 	/**
