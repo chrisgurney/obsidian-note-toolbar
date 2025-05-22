@@ -749,19 +749,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayOtherMappings(containerEl: HTMLElement): void {
 
-		let collapsibleEl = createDiv();
-		collapsibleEl.addClasses(['note-toolbar-setting-contexts-container']);
+		const collapsibleEl = createDiv('note-toolbar-setting-contexts-container');
 		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
 
-		let otherContextSettings = new Setting(collapsibleEl)
+		const otherContextSettings = new Setting(collapsibleEl)
 			.setHeading()
 			.setName(t('setting.display-contexts.name'))
 			.setDesc(t('setting.display-contexts.description'));
 
 		this.renderSettingToggle(otherContextSettings, '.note-toolbar-setting-contexts-container', this, 'contextSettingsOpen');
 
-		let collapsibleContainer = createDiv();
-		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+		const collapsibleContainer = createDiv('note-toolbar-setting-items-list-container');
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-audio'))
