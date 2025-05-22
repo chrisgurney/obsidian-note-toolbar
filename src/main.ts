@@ -105,8 +105,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// render the initial toolbar
 			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 			// TODO: for fix: initial rendering of toolbars across all views #94
-			// this.renderToolbarForLeaves();
-			await this.renderActiveToolbar();
+			await this.renderToolbarForAllLeaves();
 
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
@@ -1066,19 +1065,31 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 	}
 
-	// TODO: for fix: initial rendering of toolbars across all views #94
-	// async renderToolbarForLeaves() {
-	// 	this.app.workspace.iterateAllLeaves((leaf) => {
-	// 		if (leaf.view instanceof MarkdownView) {
-	// 			this.debug('💡', leaf.view.file?.name);
-	// 			const file = leaf.view.file;
-	// 			if (file) {
-	// 				const frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
-	// 				this.checkAndRenderToolbar(file, frontmatter);
-	// 			}
-	// 		}
-	// 	});
-	// }
+	/**
+	 * Iterates all leaves and renders toolbars for all active leaves.
+	 */
+	async renderToolbarForAllLeaves() {
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof MarkdownView) {
+				// this.debug('💡 Markdown Leaf', leaf, leaf.containerEl);
+				if (leaf.view.file !== null) {
+					const frontmatter = this.app.metadataCache.getFileCache(leaf.view.file)?.frontmatter;
+					const mdToolbar = this.settingsManager.getMappedToolbar(frontmatter, leaf.view.file);
+					if (mdToolbar) {
+						this.renderToolbar(mdToolbar, leaf.view.file, leaf.view);
+					}
+				}
+			}
+			else if (leaf.view instanceof ItemView) {
+				// this.debug('💡 Item Leaf', leaf, leaf.containerEl);
+				const itemToolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				const isToolbarVisible = checkToolbarForItemView(this, leaf.view);
+				if (itemToolbar && isToolbarVisible) {
+					this.renderToolbar(itemToolbar, null, leaf.view)
+				}
+			}
+		});
+	}
 
 	/**
 	 * Sets the appropriate class on the given component, based on its visibility settings.
