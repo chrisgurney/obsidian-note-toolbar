@@ -237,12 +237,9 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
             itemEl.setAttribute('data-ignore-swipe', 'true');
             setTooltip(itemEl, tip.id === 'gallery' ? t('setting.button-gallery-tooltip') : t('setting.help.tooltip-view-tip'));
             
-            const itemTitleEl = itemEl.createEl('h3');
-            itemTitleEl.setText(tip.title[language]);
+            const itemTitleEl = itemEl.createDiv('note-toolbar-card-item-title').setText(tip.title[language]);
             if (tip.description) {
-                const itemDescEl = itemEl.createEl('p');
-                itemDescEl.addClass('note-toolbar-card-item-description');
-                MarkdownRenderer.render(plugin.app, tip.description[language], itemDescEl, '/', plugin);
+                itemEl.createDiv('note-toolbar-card-item-description').setText(tip.description[language]);
             }
 
             const iconEl = itemEl.createDiv();
