@@ -205,6 +205,8 @@ export interface NoteToolbarSettings {
 	keepPropsState: boolean;
 	onboarding: OnboardingState;
 	recentFiles: string[];
+	recentItems: string[];
+	recentToolbars: string[];
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
@@ -231,6 +233,8 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	keepPropsState: false,
 	onboarding: {},
 	recentFiles: [],
+	recentItems: [],
+	recentToolbars: [],
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,

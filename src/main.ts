@@ -233,16 +233,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile that was opened.
 	 */
 	fileOpenListener = async (file: TFile) => {
-		if (file) {
-			// maintain a list of the most recently opened files
-			const maxSize = 10;
-			const path = file.path;
-			const i = this.settings.recentFiles.indexOf(path);
-			if (i !== -1) this.settings.recentFiles.splice(i, 1); // remove if exists
-			this.settings.recentFiles.unshift(path); // add to top
-			if (this.settings.recentFiles.length > maxSize) this.settings.recentFiles.pop(); // remove oldest
-			await this.settingsManager.save();
-		}
+		// update list of the most recently opened files
+		if (file) await this.settingsManager.updateRecentList(this.settings.recentFiles, file.path);
 	};
 
 	/**

@@ -87,6 +87,12 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             const aName = a.name.toLowerCase();
             const bName = b.name.toLowerCase();
 
+            // prioritize recent items
+            const isARecent = this.plugin.settings.recentToolbars.includes(aName);
+            const isBRecent = this.plugin.settings.recentToolbars.includes(bName);
+            if (isARecent && !isBRecent) return -1;
+            if (!isARecent && isBRecent) return 1;
+
             // prioritize items that start with the search string
             const aStarts = aName.startsWith(query);
             const bStarts = bName.startsWith(query);
@@ -128,6 +134,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param toolbar ToolbarSettings to use.
      */
     async onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
+        await this.plugin.settingsManager.updateRecentList(this.plugin.settings.recentToolbars, toolbar.name);
         this.callback(toolbar);
         this.close();
     }

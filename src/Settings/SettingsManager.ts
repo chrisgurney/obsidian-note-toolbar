@@ -431,6 +431,20 @@ export class SettingsManager {
 
 	}
 
+	/**
+	 * Updates one of the recent_ settings, maintaining a maximum size of 10.
+	 * @param list the list to update (`recentFiles`, `recentItems`, `recentToolbars`)
+	 * @param value value to update the list with
+	 */
+	async updateRecentList(list: string[], value: string): Promise<void> {
+		const maxSize = 10;
+		const i = list.indexOf(value);
+		if (i !== -1) list.splice(i, 1); // remove if it already exists
+		list.unshift(value); // add to top
+		if (list.length > maxSize) list.pop(); // remove oldest
+		await this.save();
+	}
+
 	/*************************************************************************
 	 * SAVE / LOAD / MIGRATION
 	 *************************************************************************/
