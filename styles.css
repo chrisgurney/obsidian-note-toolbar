@@ -2496,12 +2496,14 @@ input[type="text"].note-toolbar-setting-error,
     &:hover .note-toolbar-card-item-plus {
         opacity: 0.8;
     }
-    & h3 {
+    & .note-toolbar-card-item-title {
         font-size: 1.25em;
+        font-weight: var(--h3-weight);
         .is-mobile & {
             font-size: var(--font-ui-small);
             font-weight: var(--font-bold);
         }
+        line-height: var(--h3-line-height);
         margin: 0;
         margin-top: 46px; /* icon height */
         text-wrap: wrap;
@@ -2510,24 +2512,22 @@ input[type="text"].note-toolbar-setting-error,
             display: none; /* fix for Border theme */
         }
     }
-    & p {
+    & .note-toolbar-card-item-description {
         align-self: start;
+        color: var(--text-muted);
         display: flex;
         font-size: var(--font-ui-small);
         margin: 0 !important;
         text-wrap: wrap;
-        &.note-toolbar-card-item-description {
-            color: var(--text-muted);
-        }
-        &.note-toolbar-card-item-plugins {
-            display: flex;
-            vertical-align: middle;
-            gap: 0.25em;
-            margin-top: 0.5em !important;
-            & svg {
-                height: var(--font-ui-small);
-                width: var(--font-ui-small);
-            }
+    }
+    & .note-toolbar-card-item-plugins {
+        display: flex;
+        vertical-align: middle;
+        gap: 0.25em;
+        margin-top: 0.5em !important;
+        & svg {
+            height: var(--font-ui-small);
+            width: var(--font-ui-small);
         }
     }
 }

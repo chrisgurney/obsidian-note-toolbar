@@ -179,27 +179,22 @@ export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLD
 			itemEl.setAttribute('data-ignore-swipe', 'true');
 			setTooltip(itemEl, t('gallery.tooltip-add-item', { name: galleryItem.tooltip }));
 
-			const plusEl = itemEl.createDiv();
-			plusEl.addClass('note-toolbar-card-item-plus');
+			const plusEl = itemEl.createDiv('note-toolbar-card-item-plus');
 			setIcon(plusEl, 'circle-plus');
 
-			itemEl.createEl('h3').setText(galleryItem.tooltip);
+			itemEl.createDiv('note-toolbar-card-item-title').setText(galleryItem.tooltip);
 			if (galleryItem.description) {
-				const itemDescEl = itemEl.createEl('p');
-				itemDescEl.addClass('note-toolbar-card-item-description');
-				MarkdownRenderer.render(plugin.app, galleryItem.description, itemDescEl, '/', plugin);
+				itemEl.createDiv('note-toolbar-card-item-description').setText(galleryItem.description);
 			}
 
 			let pluginNames = getPluginNames(plugin, galleryItem);
 			if (pluginNames) {
-				const pluginEl = itemEl.createEl('p');
-				pluginEl.addClass('note-toolbar-card-item-plugins');
+				const pluginEl = itemEl.createDiv('note-toolbar-card-item-plugins');
 				setIcon(pluginEl.createSpan(), 'puzzle');
-				pluginEl.createSpan().setText(pluginNames);
+				pluginEl.createDiv().setText(pluginNames);
 			}
 
-			const iconEl = itemEl.createDiv();
-			iconEl.addClass('note-toolbar-card-item-icon');
+			const iconEl = itemEl.createDiv('note-toolbar-card-item-icon');
 			if (cssColor) iconEl.style.color = cssColor;
 			setIcon(iconEl, galleryItem.icon);
 
