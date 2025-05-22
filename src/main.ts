@@ -264,13 +264,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On layout changes, delete, check and render toolbar if necessary.
 	 */
 	layoutChangeListener = async () => {
-		// FIXME? what if there's more than one toolbar?
+
 		const toolbarEl = this.getToolbarEl();
 		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-
-		const viewId = getViewId(currentView);
-		const viewMode = currentView?.getMode();
-		this.debug('===== LAYOUT-CHANGE ===== ', viewId, currentView, viewMode);
+		const currentViewId = getViewId(currentView);
+		const currentViewMode = currentView?.getMode();
+		this.debug('===== LAYOUT-CHANGE ===== ', currentViewId, currentView, currentViewMode);
 
 		// show empty view or other data type toolbar
 		if (!currentView) {
@@ -282,7 +281,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (currentView?.containerEl.closest('popover')) return;
 
 		// exit if the view has already been handled, after updating the toolbar
-		if (toolbarEl && viewId && this.activeViewIds.contains(viewId)) {
+		if (toolbarEl && currentViewId && this.activeViewIds.contains(currentViewId)) {
 			this.debug('LAYOUT-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
 			this.updateActiveToolbar();
 			return;
@@ -290,17 +289,17 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
 		const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
-		const viewModeChanged = this.lastViewModeOnLayoutChange !== viewMode;
+		const viewModeChanged = this.lastViewModeOnLayoutChange !== currentViewMode;
 		if (fileChanged || viewModeChanged) {
 			this.lastFileOpenedOnLayoutChange = fileChanged ? currentView?.file : this.lastFileOpenedOnLayoutChange;
-			this.lastViewModeOnLayoutChange = viewModeChanged ? viewMode : this.lastViewModeOnLayoutChange;
+			this.lastViewModeOnLayoutChange = viewModeChanged ? currentViewMode : this.lastViewModeOnLayoutChange;
 		}
 		else {
 			if (toolbarEl) return; // no changes, so do nothing
 		}
 
 		// check for editing or reading mode
-		switch(viewMode) {
+		switch(currentViewMode) {
 			case "source":
 			case "preview":
 				this.app.workspace.onLayoutReady(debounce(async () => {
@@ -311,7 +310,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.debug("LAYOUT-CHANGE: renderActiveToolbar");
 					// this.updateActiveViewIds();
 					await this.renderActiveToolbar();
-				}, (viewMode === "preview" ? 200 : 0)));
+				}, (currentViewMode === "preview" ? 200 : 0)));
 				break;
 			default:
 				return;
