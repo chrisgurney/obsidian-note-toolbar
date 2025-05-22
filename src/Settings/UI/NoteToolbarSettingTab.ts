@@ -750,7 +750,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	displayOtherMappings(containerEl: HTMLElement): void {
 
 		let collapsibleEl = createDiv();
-		collapsibleEl.addClasses(['note-toolbar-setting-contexts-container', 'note-toolbar-setting-top-border']);
+		collapsibleEl.addClasses(['note-toolbar-setting-contexts-container']);
 		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
 
 		let otherContextSettings = new Setting(collapsibleEl)
