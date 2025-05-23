@@ -41,7 +41,7 @@ const galleryDocsPlugin = {
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await galleryDocs('src/Help/Gallery/items.json', 'src/Help/Gallery/gallery.json', 'docs/wiki/gallery.md');
+			await galleryDocs('src/Help/Gallery/gallery-items.json', 'src/Help/Gallery/gallery.json', 'docs/wiki/gallery.md');
 		} catch {
 			process.exit(1);
 		}

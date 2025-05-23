@@ -18,6 +18,17 @@ interface Gallery {
 	categories: Category[];
 }
 
+const cssColors: string[] = [
+    'var(--color-red)',
+    'var(--color-orange)',
+    'var(--color-yellow)',
+    'var(--color-green)',
+    'var(--color-cyan)',
+    'var(--color-blue)',
+    'var(--color-purple)',
+    'var(--color-pink)',
+];
+
 export class GalleryView extends ItemView {
 
     plugin: NoteToolbarPlugin;
@@ -47,25 +58,25 @@ export class GalleryView extends ItemView {
 		let markdownEl = contentDiv.createDiv();
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
 
-		const lang: string = i18next.language || 'en';
+		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
 		const bannerEl = markdownEl.createDiv();
 		bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
 		const bannerIconEl = bannerEl.createDiv();
 		setIcon(bannerIconEl, 'layout-grid');
-		const title = (gallery as Gallery).title[lang] || gallery.title['en'];
+		const title = (gallery as Gallery).title[language] || gallery.title['en'];
 		const bannerTitleEl = bannerEl.createDiv();
 		MarkdownRenderer.render(this.plugin.app, `# ${title}`, bannerTitleEl, '/', this.plugin);
 
 		const overviewEl = markdownEl.createDiv();
 		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
-		const overview = (gallery as Gallery).overview[lang] || gallery.overview['en'];
+		const overview = (gallery as Gallery).overview[language] || gallery.overview['en'];
 		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', this.plugin);
 
 		const pluginNoteEl = markdownEl.createDiv();
 		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
 		setIcon(pluginNoteEl.createSpan(), 'puzzle');
-		const pluginNoteText = (gallery as Gallery).pluginNote[lang] || (gallery as Gallery).pluginNote['en'];
+		const pluginNoteText = (gallery as Gallery).pluginNote[language] || (gallery as Gallery).pluginNote['en'];
 		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', this.plugin);
 
 		const searchSetting = new Setting(markdownEl)
@@ -91,21 +102,23 @@ export class GalleryView extends ItemView {
 			return false;
 		});
 
-		(gallery as Gallery).categories.forEach(category => {
+		(gallery as Gallery).categories.forEach((category, i) => {
+
+			const cssColor = cssColors[i % cssColors.length];
 
 			const catNameEl = markdownEl.createEl('div');
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
-			const catName = category.name[lang] || category.name['en'];
+			const catName = category.name[language] || category.name['en'];
 			MarkdownRenderer.render(this.plugin.app, `## ${catName}`, catNameEl, '/', this.plugin);
 
 			const catDescEl = markdownEl.createEl('div');
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
-			const catDescText = category.description[lang] || category.description['en'];
+			const catDescText = category.description[language] || category.description['en'];
 			MarkdownRenderer.render(this.plugin.app, catDescText, catDescEl, '/', this.plugin);
 
 			const galleryItemContainerEl = markdownEl.createDiv();
 			galleryItemContainerEl.addClass('note-toolbar-gallery-card-items');
-			renderGalleryItems(this.plugin, galleryItemContainerEl, category.itemIds);
+			renderGalleryItems(this.plugin, galleryItemContainerEl, category.itemIds, cssColor);
 
 		});
 
@@ -144,9 +157,10 @@ export class GalleryView extends ItemView {
  * Renders the provided list of items in the Gallery into a scrollable container.
  * @param plugin NoteToolbarPlugin
  * @param containerEl HTMLDivElement container to render items into.
- * @param itemIds list of string IDs as defined in `src/Gallery/items.json`
+ * @param itemIds list of string IDs as defined in `src/Gallery/gallery-items.json`
+ * @param cssColor optional color to use in cards 
  */
-export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, itemIds: string[]) {
+export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, itemIds: string[], cssColor?: string) {
 
 	const galleryItems: ToolbarItemSettings[] = plugin.gallery.getItems();
 
@@ -165,23 +179,23 @@ export function renderGalleryItems(plugin: NoteToolbarPlugin, containerEl: HTMLD
 			itemEl.setAttribute('data-ignore-swipe', 'true');
 			setTooltip(itemEl, t('gallery.tooltip-add-item', { name: galleryItem.tooltip }));
 
-			itemEl.createEl('h3').setText(galleryItem.tooltip);
+			const plusEl = itemEl.createDiv('note-toolbar-card-item-plus');
+			setIcon(plusEl, 'circle-plus');
+
+			itemEl.createDiv('note-toolbar-card-item-title').setText(galleryItem.tooltip);
 			if (galleryItem.description) {
-				const itemDescEl = itemEl.createEl('p');
-				itemDescEl.addClass('note-toolbar-card-item-description');
-				MarkdownRenderer.render(plugin.app, galleryItem.description, itemDescEl, '/', plugin);
+				itemEl.createDiv('note-toolbar-card-item-description').setText(galleryItem.description);
 			}
 
 			let pluginNames = getPluginNames(plugin, galleryItem);
 			if (pluginNames) {
-				const pluginEl = itemEl.createEl('p');
-				pluginEl.addClass('note-toolbar-card-item-plugins');
+				const pluginEl = itemEl.createDiv('note-toolbar-card-item-plugins');
 				setIcon(pluginEl.createSpan(), 'puzzle');
-				pluginEl.createSpan().setText(pluginNames);
+				pluginEl.createDiv().setText(pluginNames);
 			}
 
-			const iconEl = itemEl.createDiv();
-			iconEl.addClass('note-toolbar-card-item-icon');
+			const iconEl = itemEl.createDiv('note-toolbar-card-item-icon');
+			if (cssColor) iconEl.style.color = cssColor;
 			setIcon(iconEl, galleryItem.icon);
 
 		}

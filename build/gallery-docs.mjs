@@ -50,6 +50,6 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
 //     const [,, itemsFile, galleryFile, outputFile] = process.argv;
 //     await galleryDocs(itemsFile, galleryFile, outputFile);
 // } else {
-//     console.error('Usage: node gallery-docs.mjs <items.json> <gallery.json> <output.md>');
+//     console.error('Usage: node gallery-docs.mjs <gallery-items.json> <gallery.json> <output.md>');
 //     process.exit(1);
 // }

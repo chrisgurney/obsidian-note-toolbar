@@ -105,8 +105,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// render the initial toolbar
 			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 			// TODO: for fix: initial rendering of toolbars across all views #94
-			// this.renderToolbarForLeaves();
-			await this.renderActiveToolbar();
+			await this.renderToolbarForAllLeaves();
 
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
@@ -233,16 +232,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile that was opened.
 	 */
 	fileOpenListener = async (file: TFile) => {
-		if (file) {
-			// maintain a list of the most recently opened files
-			const maxSize = 10;
-			const path = file.path;
-			const i = this.settings.recentFiles.indexOf(path);
-			if (i !== -1) this.settings.recentFiles.splice(i, 1); // remove if exists
-			this.settings.recentFiles.unshift(path); // add to top
-			if (this.settings.recentFiles.length > maxSize) this.settings.recentFiles.pop(); // remove oldest
-			await this.settingsManager.save();
-		}
+		// update list of the most recently opened files
+		if (file) await this.settingsManager.updateRecentList(this.settings.recentFiles, file.path);
 	};
 
 	/**
@@ -273,15 +264,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On layout changes, delete, check and render toolbar if necessary.
 	 */
 	layoutChangeListener = async () => {
-		// FIXME? what if there's more than one toolbar?
+
 		const toolbarEl = this.getToolbarEl();
 		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const currentViewId = getViewId(currentView);
+		const currentViewMode = currentView?.getMode();
+		this.debug('===== LAYOUT-CHANGE ===== ', currentViewId, currentView, currentViewMode);
 
-		const viewId = getViewId(currentView);
-		const viewMode = currentView?.getMode();
-		this.debug('===== LAYOUT-CHANGE ===== ', viewId, currentView, viewMode);
-
-		// show empty view toolbar
+		// show empty view or other data type toolbar
 		if (!currentView) {
 			await this.renderActiveToolbar();
 			return;
@@ -291,7 +281,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (currentView?.containerEl.closest('popover')) return;
 
 		// exit if the view has already been handled, after updating the toolbar
-		if (toolbarEl && viewId && this.activeViewIds.contains(viewId)) {
+		if (toolbarEl && currentViewId && this.activeViewIds.contains(currentViewId)) {
 			this.debug('LAYOUT-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
 			this.updateActiveToolbar();
 			return;
@@ -299,17 +289,17 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
 		const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
-		const viewModeChanged = this.lastViewModeOnLayoutChange !== viewMode;
+		const viewModeChanged = this.lastViewModeOnLayoutChange !== currentViewMode;
 		if (fileChanged || viewModeChanged) {
 			this.lastFileOpenedOnLayoutChange = fileChanged ? currentView?.file : this.lastFileOpenedOnLayoutChange;
-			this.lastViewModeOnLayoutChange = viewModeChanged ? viewMode : this.lastViewModeOnLayoutChange;
+			this.lastViewModeOnLayoutChange = viewModeChanged ? currentViewMode : this.lastViewModeOnLayoutChange;
 		}
 		else {
 			if (toolbarEl) return; // no changes, so do nothing
 		}
 
 		// check for editing or reading mode
-		switch(viewMode) {
+		switch(currentViewMode) {
 			case "source":
 			case "preview":
 				this.app.workspace.onLayoutReady(debounce(async () => {
@@ -320,7 +310,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.debug("LAYOUT-CHANGE: renderActiveToolbar");
 					// this.updateActiveViewIds();
 					await this.renderActiveToolbar();
-				}, (viewMode === "preview" ? 200 : 0)));
+				}, (currentViewMode === "preview" ? 200 : 0)));
 				break;
 			default:
 				return;
@@ -511,10 +501,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Renders the toolbar for the provided toolbar settings.
 	 * @param toolbar ToolbarSettings
 	 * @param file TFile for the note that the toolbar is being rendered for
+	 * @param view MarkdownView or ItemView to render toolbar in; if not provided uses active view
 	 */
-	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null): Promise<void> {
+	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null, view?: MarkdownView | ItemView): Promise<void> {
 
-		this.debug("✅ renderToolbar()", toolbar.name);
+		this.debug("renderToolbar()", toolbar.name);
 
 		// get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
 		let position;
@@ -522,28 +513,30 @@ export default class NoteToolbarPlugin extends Plugin {
 			? position = toolbar.position.mobile?.allViews?.position ?? 'props'
 			: position = toolbar.position.desktop?.allViews?.position ?? 'props';
 
-		let currentView: MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-		const viewMode = (currentView instanceof MarkdownView) ? currentView.getMode() : '';
+		// if no view is provided, get the active view
+		if (!view) view = this.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
+		if (!view) view = this.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
+		if (!view) return;
 
-		if (!currentView) {
-			currentView = this.app.workspace.getActiveViewOfType(ItemView);
-			if (currentView) {
-				const isToolbarVisible = checkToolbarForItemView(this, currentView);
-				if (!isToolbarVisible) return;
-				if (position === 'props') position = 'top';
+		if (!(view instanceof MarkdownView)) {
+			const isToolbarVisible = checkToolbarForItemView(this, view);
+			if (!isToolbarVisible) {
+				this.debug("🛑 renderToolbar(): nothing to render in this view");
+				return;
 			}
-			else return; // active view is another view (like the file explorer) and not the empty tab
+			if (position === 'props') position = 'top';
 		}
 
 		let noteToolbarElement: HTMLElement;
 		let embedBlock = activeDocument.createElement("div");
 		embedBlock.addClass('cg-note-toolbar-container');
 		toolbar.uuid ? embedBlock.id = toolbar.uuid : undefined;
+		const markdownViewMode = (view instanceof MarkdownView) ? view.getMode() : '';
 		embedBlock.setAttrs({
 			'data-name': toolbar.name,
 			'data-tbar-position': position,
 			'data-updated': toolbar.updated,
-			'data-view-mode': viewMode,
+			'data-view-mode': markdownViewMode,
 			'data-csstheme': this.app.vault.getConfig('cssTheme')
 		});
 
@@ -586,35 +579,35 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
-		// EXPERIMENTAL
-		// FIXME: flickers before displaying the toolbar items
-		const useLaunchpad = currentView instanceof ItemView && currentView.getViewType() === 'empty'
+		// FIXME: do earlier, first load + layout change - flickers before displaying toolbar,
+		// especially on startup with expensive plugins (e.g,. Excalidraw)
+		const useLaunchpad = !(view instanceof MarkdownView) && view.getViewType() === 'empty'
 			&& toolbar.customClasses?.includes('note-toolbar-launchpad');
-		currentView.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
+		view.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
 		if (useLaunchpad) {
-			currentView.contentEl.insertAdjacentElement('afterbegin', embedBlock);
+			view.contentEl.insertAdjacentElement('afterbegin', embedBlock);
 			return;
 		}
 
 		// add the toolbar to the editor or modal UI
-		const currentViewEl = currentView?.containerEl as HTMLElement | null;
+		const viewEl = view?.containerEl as HTMLElement | null;
 		const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
 		switch(position) {
 			case PositionType.Bottom:
 				// position relative to modal container if in a modal
 				if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
-				else currentViewEl
-					? currentViewEl.insertAdjacentElement('afterbegin', embedBlock)
+				else viewEl
+					? viewEl.insertAdjacentElement('afterbegin', embedBlock)
 					: this.debug(`🛑 renderToolbar(): Unable to find active leaf to insert toolbar`);
 				break;
 			case PositionType.FabLeft:
 			case PositionType.FabRight:
 				// position relative to modal container if in a modal
 				if (modalEl) modalEl.appendChild(embedBlock)
-				else currentViewEl?.appendChild(embedBlock);
+				else viewEl?.appendChild(embedBlock);
 				break;
 			case PositionType.Top:
-				let viewHeader = currentViewEl?.querySelector('.view-header') as HTMLElement;
+				let viewHeader = viewEl?.querySelector('.view-header') as HTMLElement;
 				// FIXME: add to modal header, but this is causing duplicate toolbars
 				// if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
 				viewHeader 
@@ -625,16 +618,18 @@ export default class NoteToolbarPlugin extends Plugin {
 				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
 			case PositionType.Props:
 			default:
-				// inject it between the properties and content divs
-				let propsEl = this.getPropsEl();
-				if (!propsEl) {
-					this.debug("🛑 renderToolbar(): Unable to find .metadata-container to insert toolbar");
+				if (view instanceof MarkdownView) {
+					// inject it between the properties and content divs
+					let propsEl = this.getPropsEl(view);
+					if (!propsEl) {
+						this.debug("🛑 renderToolbar(): Unable to find .metadata-container to insert toolbar");
+					}
+					propsEl?.insertAdjacentElement("afterend", embedBlock);
 				}
-				propsEl?.insertAdjacentElement("afterend", embedBlock);
 				break;
 		}
 
-		this.debug(`⭐️ renderToolbar() Rendered ${toolbar.name} in view:`, getViewId(currentView));
+		this.debug(`⭐️ renderToolbar() Rendered ${toolbar.name} in view:`, getViewId(view));
 
 	}
 	
@@ -1069,19 +1064,31 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 	}
 
-	// TODO: for fix: initial rendering of toolbars across all views #94
-	// async renderToolbarForLeaves() {
-	// 	this.app.workspace.iterateAllLeaves((leaf) => {
-	// 		if (leaf.view instanceof MarkdownView) {
-	// 			this.debug('💡', leaf.view.file?.name);
-	// 			const file = leaf.view.file;
-	// 			if (file) {
-	// 				const frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
-	// 				this.checkAndRenderToolbar(file, frontmatter);
-	// 			}
-	// 		}
-	// 	});
-	// }
+	/**
+	 * Iterates all leaves and renders toolbars for all active leaves.
+	 */
+	async renderToolbarForAllLeaves() {
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof MarkdownView) {
+				// this.debug('💡 Markdown Leaf', leaf, leaf.containerEl);
+				if (leaf.view.file !== null) {
+					const frontmatter = this.app.metadataCache.getFileCache(leaf.view.file)?.frontmatter;
+					const mdToolbar = this.settingsManager.getMappedToolbar(frontmatter, leaf.view.file);
+					if (mdToolbar) {
+						this.renderToolbar(mdToolbar, leaf.view.file, leaf.view);
+					}
+				}
+			}
+			else if (leaf.view instanceof ItemView) {
+				// this.debug('💡 Item Leaf', leaf, leaf.containerEl);
+				const itemToolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				const isToolbarVisible = checkToolbarForItemView(this, leaf.view);
+				if (itemToolbar && isToolbarVisible) {
+					this.renderToolbar(itemToolbar, null, leaf.view)
+				}
+			}
+		});
+	}
 
 	/**
 	 * Sets the appropriate class on the given component, based on its visibility settings.
@@ -1151,16 +1158,19 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug("updateToolbar()", toolbar.name);
 
-		// FIXME: need to `show` here too, but doesn't consistently work (in Reading mode only perhaps?)
-		// fold/hide properties if they were before
-		const propsState = localStorage.getItem(LocalVar.PropsState) ?? '';
-		this.commands.toggleProps(propsState as PropsState, true);
+		if (this.settings.keepPropsState) {
+			// restore properties to the state they were before
+			const propsState = localStorage.getItem(LocalVar.PropsState);
+			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
+				this.commands.toggleProps(propsState as PropsState, true);
+			}
+		}
 
 		let toolbarEl = this.getToolbarEl();
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
 
 		// no need to run update for certain positions
-		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, undefined].contains(currentPosition)) {
+		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, undefined].includes(currentPosition)) {
 			return;
 		}
 
@@ -1699,20 +1709,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
 		}
 		else {
-			const itemView = this.app.workspace.getActiveViewOfType(ItemView);
-			if (itemView) {
-				let renderToolbar = checkToolbarForItemView(this, itemView);
-				if (!renderToolbar) return;
-				switch (itemView.getViewType()) {
-					case 'empty':
-					case 'beautitab-react-view':
-					case 'home-tab-view':
-						if (this.settings.emptyViewToolbar) {
-							toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
-						}
-						break;
-				}
-			}
+			toolbar = this.settingsManager.getEmptyViewToolbar();
 		}
 
 		if (toolbar) {
@@ -2132,11 +2129,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Gets the Properties container in the current view.
+	 * Gets the Properties container for the active or provided view.
+	 * @param view optional MarkdownView to find the Properties container for; otherwise uses the active view.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	getPropsEl(): HTMLElement | null {
-		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.containerEl as HTMLElement;		
+	getPropsEl(view?: MarkdownView): HTMLElement | null {
+		const currentViewEl = view ? view.containerEl : this.app.workspace.getActiveViewOfType(MarkdownView)?.containerEl as HTMLElement;		
 		const propertiesContainer = currentViewEl?.querySelector('.metadata-container') as HTMLElement;
 		this.debug("getPropsEl: ", propertiesContainer);
 		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)

@@ -1468,6 +1468,11 @@ input[type="text"].note-toolbar-setting-error,
             color: var(--text-on-accent);
         }
     }
+    @media (hover: hover) {
+        & button:hover {
+            box-shadow: inset 0 0 0 2px var(--text-normal);
+        }
+    }
 }
 
 .note-toolbar-view-heading {
@@ -1554,11 +1559,28 @@ input[type="text"].note-toolbar-setting-error,
             width: 30px;
         }
     }
-    & h3 {
+    .note-toolbar-card-item-plus {
+        position: absolute;
+        color: var(--interactive-accent);
+        top: 16px;
+        right: 16px;
+        opacity: 0;
+        & svg {
+            height: 24px;        
+            width: 24px;
+        }
+    }
+    &:hover .note-toolbar-card-item-plus {
+        opacity: 0.8;
+    }
+    & .note-toolbar-card-item-title {
         font-size: 1.25em;
+        font-weight: var(--h3-weight);
         .is-mobile & {
             font-size: var(--font-ui-small);
+            font-weight: var(--font-bold);
         }
+        line-height: var(--h3-line-height);
         margin: 0;
         margin-top: 46px; /* icon height */
         text-wrap: wrap;
@@ -1567,24 +1589,25 @@ input[type="text"].note-toolbar-setting-error,
             display: none; /* fix for Border theme */
         }
     }
-    & p {
+    & .note-toolbar-card-item-description {
         align-self: start;
+        color: var(--text-muted);
+        .note-toolbar-tips-card-items & {
+            color: var(--text-normal);
+        }
         display: flex;
         font-size: var(--font-ui-small);
         margin: 0 !important;
         text-wrap: wrap;
-        &.note-toolbar-card-item-description {
-            color: var(--text-muted);
-        }
-        &.note-toolbar-card-item-plugins {
-            display: flex;
-            vertical-align: middle;
-            gap: 0.25em;
-            margin-top: 0.5em !important;
-            & svg {
-                height: var(--font-ui-small);
-                width: var(--font-ui-small);
-            }
+    }
+    & .note-toolbar-card-item-plugins {
+        display: flex;
+        vertical-align: middle;
+        gap: 0.25em;
+        margin-top: 0.5em !important;
+        & svg {
+            height: var(--font-ui-small);
+            width: var(--font-ui-small);
         }
     }
 }
@@ -2144,6 +2167,12 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-help-view-title {
+    & h1, p, svg {
+        color: var(--text-normal) !important;
+    }
+}
+
 .note-toolbar-setting-help-view-section {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
@@ -2399,6 +2428,9 @@ input[type="text"].note-toolbar-setting-error,
                     text-align: center;
                     min-height: 100px;
                     gap: 4px;
+                    & .cg-note-toolbar-item-label {
+                        white-space: wrap;
+                    }
                     .is-phone & {
                         color: var(--interactive-accent);
                     }

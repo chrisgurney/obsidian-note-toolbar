@@ -161,6 +161,7 @@
         "error-invalid-plugin": "Invalid plugin or none enabled for Gallery item.",
         "error-missing-item-type": "Gallery item: Missing item type property",
         "error-missing-property": "Missing plugin or script property in Gallery data.",
+        "label-add-item": "Click or tap to add any of these to a toolbar:",
         "label-plugin": "{{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
         "select-plugin-placeholder": "Select plugin to use...",
@@ -288,6 +289,7 @@
             "description": "Enable toolbars in canvases, the New tab view, and other file types.",
             "name": "File types and views",
             "option-audio": "Audio",
+            "option-bases": "Bases",
             "option-canvas": "Canvas files",
             "option-emptyview": "New tab view",
             "option-emptyview-description": "Select a toolbar to show when no note is open.",
@@ -296,6 +298,9 @@
             "option-image": "Images",
             "option-kanban": "Kanban boards",
             "option-pdf": "PDFs",
+            "option-other": "Other data types",
+            "option-other-description": "List of other data types toolbars can appear in, separated by spaces.",
+            "option-other-placeholder": "e.g., excalidraw",
             "option-video": "Videos"
         },
         "display-rules": {
@@ -316,7 +321,11 @@
             "button-open-google": "Open google.com",
             "button-read": "Read ↗",
             "description": "Context-aware toolbars for your notes.",
+            "error-failed-to-load": "Failed to load:\n{{baseUrl}}/{{lang}}/{{name}}.md",
             "heading": "Help using Note Toolbar",
+            "heading-donate": "Donate",
+            "heading-support": "Support",
+            "heading-user-guide": "User guide",
             "label-article-1": "Creating toolbar items",
             "label-article-1-description": "Learn about the different types of items.",
             "label-article-2": "Note Toolbar Callouts",
@@ -333,7 +342,8 @@
             "label-support-description": "Visit the forums on GitHub to ask questions to the community.",
             "label-user-guide": "Read the User Guide",
             "label-user-guide-description": "How to make the most out of the plugin, including tips and examples.",
-            "title": "Note Toolbar Help"
+            "title": "Note Toolbar Help",
+            "tooltip-view-tip": "View this tip"
         },
         "icon-suggester": {
             "instruction-dismiss": "to dismiss",
@@ -422,7 +432,7 @@
             "key-navigate": "↑↓",
             "key-use": "↵",
             "label-empty-no-items": "No results found.",
-            "link-gallery": "Explore the Gallery ↗",
+            "link-gallery": "Explore the Gallery...",
             "link-search": "Search for an item",
             "option-new": "+ Create a new item",
             "placeholder": "Search for an item to add...",
@@ -483,6 +493,10 @@
                 "description": "Sets the icon for the floating button and navigation bar (on phone). Requires restart.",
                 "name": "Icon",
                 "tooltip": "Select icon"
+            },
+            "keep-props-state": {
+                "description": "Maintains the visibility state of Properties in notes, if you use Note Toolbar's options to toggle properties. If enabled, you will have to use Note Toolbar's \"Show note properties\" to show properties again.",
+                "name": "Keep properties state"
             },
             "load-settings-changes": {
                 "description": "If you’re syncing plugin settings across devices, turn this on to automatically load toolbar updates. If not, you’ll need to restart Obsidian to see changes from other devices.",
@@ -565,9 +579,6 @@
             "style-tooltip-use-class": "Use in Callout or CSS: {{class}}",
             "title": "Style toolbar: {{toolbar}}"
         },
-        "tips": {
-            "error-failed-to-load": "Failed to load tip:\n{{baseUrl}}/{{language}}/{{name}}.md"
-        },
         "title-edit-toolbar": "Edit Toolbar: {{toolbar}}",
         "title-edit-toolbar_none": "Edit Toolbar",
         "toolbar-suggest-modal": {
@@ -619,7 +630,7 @@
         "whats-new": {
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
-            "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{language}}/{{version}}.md",
+            "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{lang}}/{{version}}.md",
             "placehoder-loading": "Loading...",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",

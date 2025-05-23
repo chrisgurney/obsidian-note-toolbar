@@ -61,6 +61,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
     getSuggestions(inputStr: string): ToolbarSettings[] {
         const pluginToolbars = this.plugin.settings.toolbars;
         const tbarSuggestions: ToolbarSettings[] = [];
+        const sortedSuggestions: ToolbarSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         if (this.showSwapUi) {
@@ -76,11 +77,37 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
             if (toolbar.name !== '' && toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
-                tbarSuggestions.push(toolbar);
+                sortedSuggestions.push(toolbar);
             }
         });
 
-        return tbarSuggestions;
+        // sort the search results
+        sortedSuggestions.sort((a, b) => {
+            const query = lowerCaseInputStr;
+            const aName = a.name.toLowerCase();
+            const bName = b.name.toLowerCase();
+
+            // prioritize recent items
+            const isARecent = this.plugin.settings.recentToolbars.includes(aName);
+            const isBRecent = this.plugin.settings.recentToolbars.includes(bName);
+            if (isARecent && !isBRecent) return -1;
+            if (!isARecent && isBRecent) return 1;
+
+            // prioritize items that start with the search string
+            const aStarts = aName.startsWith(query);
+            const bStarts = bName.startsWith(query);
+            if (aStarts && !bStarts) return -1;
+            if (!aStarts && bStarts) return 1;
+
+            const aIncludes = aName.includes(query);
+            const bIncludes = bName.includes(query);
+            if (aIncludes && !bIncludes) return -1;
+            if (!aIncludes && bIncludes) return 1;
+
+            return aName.localeCompare(bName);
+        });
+
+        return tbarSuggestions.concat(sortedSuggestions);
     }
 
     /**
@@ -107,6 +134,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param toolbar ToolbarSettings to use.
      */
     async onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
+        await this.plugin.settingsManager.updateRecentList(this.plugin.settings.recentToolbars, toolbar.name);
         this.callback(toolbar);
         this.close();
     }

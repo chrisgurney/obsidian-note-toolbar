@@ -3,7 +3,7 @@ import { PaneType } from "obsidian";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20250313.1;
-export const WHATSNEW_VERSION = '1.23';
+export const WHATSNEW_VERSION = '1.24';
 
 /******************************************************************************
  * TRANSLATIONS
@@ -51,6 +51,7 @@ export enum ComponentType {
 }
 export enum FileType {
 	Audio = 'audio',
+	Bases = 'bases',
 	Canvas = 'canvas',
 	Image = 'image',
 	Kanban = 'kanban',
@@ -201,13 +202,17 @@ export interface NoteToolbarSettings {
 	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
 	icon: string;
+	keepPropsState: boolean;
 	onboarding: OnboardingState;
 	recentFiles: string[];
+	recentItems: string[];
+	recentToolbars: string[];
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
 	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
+	showToolbarInOther: string;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -225,13 +230,17 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	},
 	folderMappings: [],
 	icon: "circle-ellipsis",
+	keepPropsState: false,
 	onboarding: {},
 	recentFiles: [],
+	recentItems: [],
+	recentToolbars: [],
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
 	showToolbarIn: {
 		audio: false,
+		bases: false,
 		canvas: false,
 		image: false,
 		kanban: false,
@@ -239,6 +248,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 		video: false
 	},
 	showToolbarInFileMenu: false,
+	showToolbarInOther: "",
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,

@@ -101,7 +101,7 @@
     {
         "id": "copy-note-content",
         "description": {
-            "en": "Copies the body of the current note to the clipboard, ignoring frontmatter.",
+            "en": "Copy body of the note to the clipboard, ignoring frontmatter.",
             "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
         },
         "icon": "clipboard-check",
@@ -371,7 +371,7 @@
     {
         "id": "file-next",
         "description": {
-            "en": "Opens the next file in the folder, sorted A-Z. Loops over to the first file.",
+            "en": "Open next file in the folder, sorted A-Z. Loops to the first file.",
             "zh": "打开文件夹中的下一个文件，按 A-Z 排序。超过范围时，将重新循环到第一个文件。",
             "uk": "Відкрийте наступний файл у теці згідно сортировки за алфавітом (А–Я). Повертається до першого файлу."
         },
@@ -387,7 +387,7 @@
     {
         "id": "file-prev",
         "description": {
-            "en": "Opens the previous file in the folder, sorted A-Z. Loops back to the last file.",
+            "en": "Open previous file in the folder, sorted A-Z. Loops to the last file.",
             "zh": "打开文件夹中的上一个文件，按 A-Z 排序。超过范围时，将重新循环回到最后一个文件。",
             "uk": "Відкрийте попередній файл у теці згідно сортировки за алфавітом (А–Я). Повертається до останнього файлу."
         },
@@ -403,7 +403,7 @@
     {
         "id": "folder-search",
         "description": {
-            "en": "Opens search for the current folder, or all files if the file is in the root.",
+            "en": "Search in the current folder, or all files if currently in the root.",
             "zh": "打开基于当前文件夹的搜索，如果文件在根目录中，则搜索所有文件。",
             "uk": "Відкрийте пошук у поточній теці, або серед усіх файлів у її корені."
         },
@@ -483,7 +483,7 @@
     {
         "id": "go-up",
         "description": {
-            "en": "Uses your note's \"up\" property to navigate to a parent note in your vault.",
+            "en": "Uses your note's \"up\" property to link to a parent note.",
             "zh": "使用您的笔记的 \"up\" 属性导航到您的库中的父笔记。",
             "uk": "Перейдіть на рівень вище (використовується властивість нотатки \"up\")."
         },
@@ -749,7 +749,7 @@
         "id": "note-toolbar-backup-data",
         "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
         "description": {
-            "en": "Backup Note Toolbar's configuration (data.json) file into the vault.",
+            "en": "Copy Note Toolbar's settings (data.json) file into the vault.",
             "uk": "Зберігайте до сховища резервну копію файлу налаштунків Note Toolbar (data.json)."
         },
         "icon": "file-stack",
@@ -779,7 +779,7 @@
         "id": "note-toolbar-quick-tools",
         "commandId": "note-toolbar:open-item-suggester",
         "description": {
-            "en": "Opens a searchable window with access to all of your Note Toolbar items.",
+            "en": "Opens a searchable window with access to all toolbar items.",
             "zh": "打开一个可搜索的窗口，访问所有的笔记工具栏项目。",
             "uk": "Відкрийте вікно пошуку з доступом до всіх елементів Note Toolbar."
         },
@@ -832,7 +832,7 @@
         },
         "icon": "book",
         "tooltip": {
-            "en": "User Guide for Note Toolbar",
+            "en": "Note Toolbar User Guide",
             "zh": "笔记工具栏用户指南",
             "uk": "Довідка Note Toolbar"
         },
@@ -1001,7 +1001,7 @@
         "id": "periodic-notes-monthly-next",
         "commandId": "periodic-notes:next-monthly-note",
         "description": {
-            "en": "Open next monthly note. (Must be in monthly note.)",
+            "en": "Open next monthly note. (Must be in a monthly note.)",
             "zh": "打开下一个月度笔记（当前位于一个月度笔记中时才有效）",
             "uk": "Відкрийте наступну місячну нотатку. (Потрібно бути у місячній нотатці)."
         },
@@ -1033,7 +1033,7 @@
         "id": "periodic-notes-monthly-prev",
         "commandId": "periodic-notes:prev-monthly-note",
         "description": {
-            "en": "Open previous monthly note. (Must be in monthly note.)",
+            "en": "Open previous monthly note. (Must be in a monthly note.)",
             "zh": "打开上一个月度笔记（当前位于一个月度笔记中时才有效）",
             "uk": "Відкрийте попередню місячну нотатку. (Потрібно бути у місячній нотатці)."
         },
@@ -1049,7 +1049,7 @@
         "id": "periodic-notes-weekly-next",
         "commandId": "periodic-notes:next-weekly-note",
         "description": {
-            "en": "Next weekly note. (Must be in weekly note.)",
+            "en": "Next weekly note. (Must be in a weekly note.)",
             "zh": "下一个周记（当前位于一个周记中时才有效）",
             "uk": "Відкрийте наступну щотижневу нотатку. (Потрібно бути у щотижневій нотатці)."
         },
@@ -1081,7 +1081,7 @@
         "id": "periodic-notes-weekly-prev",
         "commandId": "periodic-notes:prev-weekly-note",
         "description": {
-            "en": "Previous weekly note. (Must be in weekly note.)",
+            "en": "Opens previous weekly note. (Must be in a weekly note.)",
             "zh": "上一个周记（当前位于一个周记中时才有效）",
             "uk": "Відкрийте попередню щотижневу нотатку. (Потрібно бути у щотижневій нотатці)."
         },
@@ -1097,7 +1097,7 @@
         "id": "periodic-notes-yearly-next",
         "commandId": "periodic-notes:next-yearly-note",
         "description": {
-            "en": "Next yearly note. (Must be in yearly note.)",
+            "en": "Opens next yearly note. (Must be in a yearly note.)",
             "zh": "下一个年度笔记（当前位于一个年度笔记中时才有效）",
             "uk": "Відкрийте наступну річну нотатку. (Потрібно бути у річній нотатці)."
         },
@@ -1129,7 +1129,7 @@
         "id": "periodic-notes-yearly-prev",
         "commandId": "periodic-notes:prev-yearly-note",
         "description": {
-            "en": "Previous yearly note. (Must be in yearly note.)",
+            "en": "Previous yearly note. (Must be in a yearly note.)",
             "zh": "上一个年度笔记（当前位于一个年度笔记中时才有效）",
             "uk": "Відкрийте попередню річну нотатку. (Потрібно бути у річній нотатці)."
         },
@@ -1361,7 +1361,7 @@
         "icon": "folder-code",
         "script": "let v = this.app.vault.adapter.getBasePath() + '/' + app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
         "tooltip": {
-            "en": "Show snippets in system",
+            "en": "Open snippets folder",
             "zh": "在系统中显示 CSS 片段（Snippets）",
             "uk": "Тека CSS сніпетів"
         },
@@ -1553,7 +1553,7 @@
     {
         "id": "toggle-css-class",
         "description": {
-            "en": "Adds or removes the provided CSS class in the cssclasses property.",
+            "en": "Adds or removes the provided class in the cssclasses property.",
             "zh": "在 cssclasses 属性中添加或移除提供的 CSS 类。",
             "uk": "Додайте, або видаліть вказаний клас CSS у властивості cssclasses."
         },

@@ -79,6 +79,13 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
     }
 
     /**
+     * Removes non-alphanumeric characters including emojis
+     */ 
+    cleanString(str: string): string {
+        return str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
+    }
+
+    /**
      * Gets suggestions to display.
      * @param inputStr string to search
      * @returns array of ToolbarItemSettings
@@ -130,13 +137,14 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             gallerySuggestions = this.sortSuggestions(gallerySuggestions, lowerCaseInputStr);
             if (gallerySuggestions.length > 0) {
                 sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
+                sortedSuggestions.push(...gallerySuggestions);
                 const browseGallery: ToolbarItemSettings = {
                     ...DEFAULT_ITEM_SETTINGS,
                     uuid: 'OPEN_GALLERY',
-                    label: t('setting.item-suggest-modal.link-gallery')
+                    label: t('setting.item-suggest-modal.link-gallery'),
+                    icon: 'layout-grid'
                 };
                 sortedSuggestions.push(browseGallery);
-                sortedSuggestions.push(...gallerySuggestions);
             }
         }
 
@@ -228,27 +236,30 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 )!;
             });
 
-        // TODO? prioritize recent items 
-        const recentItems: string[] = [];
-
         // sort the results
         sortedSuggestions.sort((a, b) => {
-            // remove non-alphanumeric characters including emojis
-            const cleanString = (str: string) => str.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
-            const aItemNameRaw = cleanString(a.label || a.tooltip || a.link || '');
-            const bItemNameRaw = cleanString(b.label || b.tooltip || a.link || '');
-            const aItemName = cleanString((!this.plugin.hasVars(a.label) ? a.label : '') || 
+            const aItemNameRaw = this.cleanString(a.label || a.tooltip || a.link || '');
+            const bItemNameRaw = this.cleanString(b.label || b.tooltip || a.link || '');
+            const aItemName = this.cleanString((!this.plugin.hasVars(a.label) ? a.label : '') || 
                 (!this.plugin.hasVars(a.tooltip) ? a.tooltip : '') || (!this.plugin.hasVars(a.link) ? a.link : ''));
-            const bItemName = cleanString((!this.plugin.hasVars(b.label) ? b.label : '') || 
+            const bItemName = this.cleanString((!this.plugin.hasVars(b.label) ? b.label : '') || 
                 (!this.plugin.hasVars(b.tooltip) ? b.tooltip : '') || (!this.plugin.hasVars(b.link) ? b.link : ''));
 
-            // prioritize recent items
-            const isARecent = recentItems.includes(aItemNameRaw);
-            const isBRecent = recentItems.includes(bItemNameRaw);
-            if (isARecent && !isBRecent) return -1;
-            if (!isARecent && isBRecent) return 1;
+            if (this.mode === 'QuickTools') {
+                // prioritize recent items
+                const isARecent = this.plugin.settings.recentItems.includes(aItemNameRaw);
+                const isBRecent = this.plugin.settings.recentItems.includes(bItemNameRaw);
+                if (isARecent && !isBRecent) return -1;
+                if (!isARecent && isBRecent) return 1;
+            }
 
-            // check if primary contains the search string, and prioritize primary matches
+            // prioritize items that start with the search string
+            const aStartsWith = aItemName.startsWith(searchString);
+            const bStartsWith = bItemName.startsWith(searchString);
+            if (aStartsWith && !bStartsWith) return -1;
+            if (!aStartsWith && bStartsWith) return 1;
+
+            // check if primary contains the search string, and then prioritize primary matches
             const aPrimaryMatch = aItemName.includes(searchString);
             const bPrimaryMatch = bItemName.includes(searchString);
             if (aPrimaryMatch && !bPrimaryMatch) return -1;
@@ -312,6 +323,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
     async onChooseSuggestion(selectedItem: ToolbarItemSettings, event: MouseEvent | KeyboardEvent) {
         this.plugin.debug("onChooseSuggestion: ", selectedItem, this.activeFile, event);
+        if (this.mode === 'QuickTools') {
+            const itemName = this.cleanString(selectedItem.label || selectedItem.tooltip || selectedItem.link || '');
+            await this.plugin.settingsManager.updateRecentList(this.plugin.settings.recentItems, itemName);
+        }
         if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
             this.close();
             if (this.mode === 'QuickTools') await this.plugin.handleItemLink(selectedItem, event);

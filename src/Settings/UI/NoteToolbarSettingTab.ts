@@ -749,19 +749,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayOtherMappings(containerEl: HTMLElement): void {
 
-		let collapsibleEl = createDiv();
-		collapsibleEl.addClasses(['note-toolbar-setting-contexts-container', 'note-toolbar-setting-top-border']);
+		const collapsibleEl = createDiv('note-toolbar-setting-contexts-container');
 		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
 
-		let otherContextSettings = new Setting(collapsibleEl)
+		const otherContextSettings = new Setting(collapsibleEl)
 			.setHeading()
 			.setName(t('setting.display-contexts.name'))
 			.setDesc(t('setting.display-contexts.description'));
 
 		this.renderSettingToggle(otherContextSettings, '.note-toolbar-setting-contexts-container', this, 'contextSettingsOpen');
 
-		let collapsibleContainer = createDiv();
-		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+		const collapsibleContainer = createDiv('note-toolbar-setting-items-list-container');
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-audio'))
@@ -770,6 +768,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.showToolbarIn.audio)
 					.onChange(async (value: boolean) => {
 						this.plugin.settings.showToolbarIn.audio = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-bases'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.showToolbarIn.bases)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showToolbarIn.bases = value;
 						await this.plugin.settingsManager.save();
 					});
 			});
@@ -828,10 +837,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
 					.onChange(debounce(async (name) => {
 						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
-						if (newToolbar) {
-							this.plugin.settings.emptyViewToolbar = newToolbar.uuid;
-							await this.plugin.settingsManager.save();
-						}
+						this.plugin.settings.emptyViewToolbar = newToolbar?.uuid ?? null;
+						await this.plugin.settingsManager.save();
 					}, 250));
 			});
 
@@ -857,7 +864,16 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 			});
 
-		// TODO: add a text field where you can specify a list of types
+		new Setting(collapsibleContainer)
+			.setName(t('setting.display-contexts.option-other'))
+			.setDesc(t('setting.display-contexts.option-other-description'))
+			.addText(text => text
+				.setPlaceholder(t('setting.display-contexts.option-other-placeholder'))
+				.setValue(this.plugin.settings.showToolbarInOther)
+				.onChange(debounce(async (value) => {
+					this.plugin.settings.showToolbarInOther = value;
+					await this.plugin.settingsManager.save();	
+				}, 750)));
 
 		collapsibleEl.appendChild(collapsibleContainer);
 		containerEl.appendChild(collapsibleEl);
@@ -998,6 +1014,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// 			localStorage.setItem(LocalVar.LoadSettings, value.toString());
 		// 		});
 		// 	});
+
+		new Setting(containerEl)
+			.setName(t('setting.other.keep-props-state.name'))
+			.setDesc(t('setting.other.keep-props-state.description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.keepPropsState)
+					.onChange(async (value) => {
+						this.plugin.settings.keepPropsState = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
 
 		new Setting(containerEl)
 			.setName(t('setting.other.scripting.name'))

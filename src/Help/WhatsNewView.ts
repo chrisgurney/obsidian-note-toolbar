@@ -68,7 +68,7 @@ export class WhatsNewView extends ItemView {
 			});
 
 		// fetch and display the content
-		const language = i18next.language || 'en';
+		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 		let releaseText = '';
 		try {
 			const release = await this.getReleaseNote(WHATSNEW_VERSION, language);
@@ -76,11 +76,11 @@ export class WhatsNewView extends ItemView {
 				releaseText = release.body;
 			}
 			else {
-				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
+				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
 			}
 		}
 		catch (error) {
-			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, langauge: language, version: WHATSNEW_VERSION });
+			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
 			releaseText += `\n>[!error]-\n> \`${error as string}\`\n`;
 		}
 		finally {

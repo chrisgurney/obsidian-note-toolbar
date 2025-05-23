@@ -28,14 +28,14 @@ export class HelpView extends ItemView {
 
     async onOpen() {
 
-        const contentDiv = this.contentEl.createDiv();
-        contentDiv.addClass('note-toolbar-setting-help-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
+        const containerDiv = this.contentEl.createDiv();
+        containerDiv.addClass('note-toolbar-setting-help-view', 'note-toolbar-setting-whatsnew-content');
 
-		const headingEl = contentDiv.createDiv();
-		headingEl.addClass('note-toolbar-view-heading');
+        const contentDiv = containerDiv.createDiv();
+        contentDiv.addClass('is-readable-line-width');
         
 		const bannerEl = contentDiv.createDiv();
-		bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
+		bannerEl.addClass('note-toolbar-setting-view-banner', 'note-toolbar-setting-help-view-title');
 		const bannerIconEl = bannerEl.createDiv();
 		setIcon(bannerIconEl, 'circle-help');
 		const bannerTitleEl = bannerEl.createDiv();
@@ -46,7 +46,7 @@ export class HelpView extends ItemView {
         // renderTipItems(this.plugin, tipsEl, ['gallery', 'getting-started', 'mobile-tips']);
 
         const galleryEl = contentDiv.createDiv();
-        galleryEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        galleryEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
         new Setting(galleryEl)
             .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
             .setDesc(t('setting.help.label-gallery-description'))
@@ -61,8 +61,12 @@ export class HelpView extends ItemView {
             })
             .setClass('note-toolbar-setting-no-border');
 
+        // User guide
+
+        contentDiv.createEl('h2').setText(t('setting.help.heading-user-guide'));
+
         const guideEl = contentDiv.createDiv();
-        guideEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
         new Setting(guideEl)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
             .setDesc(t('setting.help.label-user-guide-description'))
@@ -77,8 +81,12 @@ export class HelpView extends ItemView {
             })
             .setClass('note-toolbar-setting-no-border');
 
+        // Support
+
+        contentDiv.createEl('h2').setText(t('setting.help.heading-support'));
+
         const supportEl = contentDiv.createDiv();
-        supportEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        supportEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
         new Setting(supportEl)
             .setName(iconTextFr('messages-square', t('setting.help.label-support')))
             .setDesc(t('setting.help.label-support-description'))
@@ -117,8 +125,12 @@ export class HelpView extends ItemView {
                     });
             });
 
+        // Donate
+
+        contentDiv.createEl('h2').setText(t('setting.help.heading-donate'));
+
         const donateEl = contentDiv.createDiv();
-        donateEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width', 'note-toolbar-setting-help-view-section');
+        donateEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
         new Setting(donateEl)
             .setName(iconTextFr('heart', t('setting.help.label-donate')))
             .setDesc(t('setting.help.label-donate-description'))

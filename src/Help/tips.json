@@ -1,0 +1,46 @@
+[
+    {
+        "color": "blue",
+        "description": {
+            "en": "Add navigation to your daily notes."
+        },
+        "icon": "calendar-days",
+        "id": "daily-notes",
+        "title": {
+            "en": "Daily Notes"
+        }
+    },
+    {
+        "color": "red",
+        "description": {
+            "en": "Create your first toolbar."
+        },
+        "icon": "rocket",
+        "id": "getting-started",
+        "title": {
+            "en": "Getting Started"
+        }
+    },
+    {
+        "color": "purple",
+        "description": {
+            "en": "Add ready-to-use items to your toolbars."
+        },
+        "icon": "layout-grid",
+        "id": "gallery",
+        "title": {
+            "en": "Gallery"
+        }
+    },
+    {
+        "color": "green",
+        "description": {
+            "en": "Make the most of Obsidian on your phone."
+        },
+        "icon": "smartphone",
+        "id": "mobile-tips",
+        "title": {
+            "en": "Mobile Tips"
+        }
+    }
+]
