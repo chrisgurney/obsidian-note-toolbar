@@ -40,9 +40,11 @@ export class HelpView extends ItemView {
 		setIcon(bannerIconEl, 'circle-help');
 		bannerEl.createEl('h1').setText(t('setting.help.heading'));
 
+        // Tips
+
         // const tipsEl = contentDiv.createDiv();
-        // tipsEl.addClass('note-toolbar-tips-card-items', 'is-readable-line-width');
-        // renderTipItems(this.plugin, tipsEl, ['gallery', 'getting-started', 'mobile-tips']);
+        // tipsEl.addClass('note-toolbar-tips-card-items');
+        // renderTipItems(this.plugin, tipsEl, ['gallery', 'getting-started', 'daily-notes', 'mobile-tips']);
 
         const galleryEl = contentDiv.createDiv();
         galleryEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
@@ -99,11 +101,24 @@ export class HelpView extends ItemView {
             .setClass('note-toolbar-setting-no-border');
 
         new Setting(supportEl)
+            .setName(iconTextFr('circle-dot', t('setting.help.label-issues')))
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.help.button-open-external'))
+                    .setTooltip(t('setting.help.button-open-github'))
+                    .setCta()
+                    .onClick(() => {
+                        window.open('https://github.com/chrisgurney/obsidian-note-toolbar/issues', '_blank');
+                    });
+            });
+
+        new Setting(supportEl)
             .setName(iconTextFr('bug', t('setting.help.label-bug')))
             .addButton((button: ButtonComponent) => {
                 button
                     .setButtonText(t('setting.help.button-open-external'))
                     .setTooltip(t('setting.help.button-open-google'))
+                    .setCta()
                     .onClick(() => {
                         window.open(URL_ISSUE_FORM, '_blank');
                     });
@@ -115,6 +130,7 @@ export class HelpView extends ItemView {
                 button
                     .setButtonText(t('setting.help.button-open-external'))
                     .setTooltip(t('setting.help.button-open-google'))
+                    .setCta()
                     .onClick(() => {
                         window.open(URL_FEEDBACK_FORM, '_blank');
                     });

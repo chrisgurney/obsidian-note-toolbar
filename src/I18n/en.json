@@ -337,7 +337,8 @@
             "label-feedback-description": "Use this quick Google form for any feedback, questions, or ideas you may have.",
             "label-gallery": "Open Gallery",
             "label-gallery-description": "Visit the Gallery to add ready-to-use items to your toolbars.",
-            "label-support": "Discussion forums",
+            "label-issues": "View open issues",
+            "label-support": "Search the discussion forums",
             "label-user-guide": "Read the User Guide",
             "title": "Note Toolbar Help",
             "tooltip-view-tip": "View this tip"
