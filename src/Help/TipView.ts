@@ -257,7 +257,7 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
                 window.open('obsidian://note-toolbar?gallery', '_blank');
             }
             else {
-                plugin.app.workspace.getLeaf(false).setViewState({ type: VIEW_TYPE_TIP, state: { id: tipEl.id }, active: true });
+                window.open(`obsidian://note-toolbar?tip=${tipEl.id}`, '_blank');
             }
         }
     });

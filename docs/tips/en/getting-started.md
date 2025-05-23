@@ -15,3 +15,7 @@ Integer aliquam bibendum arcu, ac lobortis orci convallis sed. Donec mollis leo 
 > - paste
 > - undo
 > - redo
+
+## More tips
+
+Learn about how to add toolbars to your [daily notes](obsidian://note-toolbar?tip=daily-notes).
