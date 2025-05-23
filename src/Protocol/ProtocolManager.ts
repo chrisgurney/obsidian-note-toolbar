@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice, ObsidianProtocolData, Platform } from "obsidian";
-import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
+import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
@@ -74,6 +74,11 @@ export class ProtocolManager {
 				else {
 					new Notice(t('notice.error-item-menu-not-found', { toolbar: data.menu }));
 				}
+			}
+		}
+		else if (data.tip) {
+			if (data.tip.length > 0) {
+				this.plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
 			}
 		}
 		else if (data.toolbarsettings) {
