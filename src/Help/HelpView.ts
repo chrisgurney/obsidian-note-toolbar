@@ -38,8 +38,7 @@ export class HelpView extends ItemView {
 		bannerEl.addClass('note-toolbar-setting-view-banner', 'note-toolbar-setting-help-view-title');
 		const bannerIconEl = bannerEl.createDiv();
 		setIcon(bannerIconEl, 'circle-help');
-		const bannerTitleEl = bannerEl.createDiv();
-        MarkdownRenderer.render(this.plugin.app, `# ${t('setting.help.heading')}`, bannerTitleEl, '/', this.plugin);
+		bannerEl.createEl('h1').setText(t('setting.help.heading'));
 
         // const tipsEl = contentDiv.createDiv();
         // tipsEl.addClass('note-toolbar-tips-card-items', 'is-readable-line-width');
@@ -69,7 +68,6 @@ export class HelpView extends ItemView {
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
         new Setting(guideEl)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
-            .setDesc(t('setting.help.label-user-guide-description'))
             .addButton((button: ButtonComponent) => {
                 button
                     .setButtonText(t('setting.help.button-read'))
@@ -89,7 +87,6 @@ export class HelpView extends ItemView {
         supportEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
         new Setting(supportEl)
             .setName(iconTextFr('messages-square', t('setting.help.label-support')))
-            .setDesc(t('setting.help.label-support-description'))
             .addButton((button: ButtonComponent) => {
                 button
                     .setButtonText(t('setting.help.button-open-external'))
@@ -103,7 +100,6 @@ export class HelpView extends ItemView {
 
         new Setting(supportEl)
             .setName(iconTextFr('bug', t('setting.help.label-bug')))
-            .setDesc(t('setting.help.label-bug-description'))
             .addButton((button: ButtonComponent) => {
                 button
                     .setButtonText(t('setting.help.button-open-external'))
@@ -115,7 +111,6 @@ export class HelpView extends ItemView {
 
         new Setting(supportEl)
             .setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
-            .setDesc(t('setting.help.label-feedback-description'))
             .addButton((button: ButtonComponent) => {
                 button
                     .setButtonText(t('setting.help.button-open-external'))
