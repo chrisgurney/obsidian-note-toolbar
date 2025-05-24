@@ -3101,6 +3101,13 @@ input[type="text"].note-toolbar-setting-error,
     border: 1px solid var(--background-modifier-border);
     margin: 0em 0em 1em 0em;
     padding: 0em 1em;
+    & .setting-item {
+        align-items: center !important;
+        padding: 1em 0em !important;
+    }
+    & .setting-item-control {
+        margin-top: 0 !important;
+    }
 }
 
 .note-toolbar-setting-help-video {
