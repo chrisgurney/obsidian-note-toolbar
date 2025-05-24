@@ -202,12 +202,12 @@ export class TipView extends ItemView {
             const overlayEl = wrapperEl.createEl('div', 'note-toolbar-setting-help-video-overlay');
             overlayEl.onclick = () => {
                 videoEl.play();
-                playBtn.remove();
+                playButtonEl.remove();
                 videoEl.setAttribute('controls', '');
             };
 
-            const playBtn = overlayEl.createEl('button', 'note-toolbar-setting-help-video-play');
-            setIcon(playBtn, 'play');
+            const playButtonEl = overlayEl.createEl('button', 'note-toolbar-setting-help-video-play');
+            setIcon(playButtonEl, 'play');
 
         });
     }
