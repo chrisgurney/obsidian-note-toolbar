@@ -3111,13 +3111,15 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-help-video {
+    aspect-ratio: 8 / 5;
     position: relative;
-    display: inline-block;
+    width: 100%;
     & video {
-        width: 100%;
-        height: 100%;
+        border: 1px solid var(--background-modifier-border);
+        border-radius: 0.5em;
         display: block;
-        border-radius: 8px;
+        height: 100%;
+        width: 100%;
     }
     & .note-toolbar-setting-help-video-overlay {
         position: absolute;
