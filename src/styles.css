@@ -2209,7 +2209,7 @@ input[type="text"].note-toolbar-setting-error,
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: var(--interactive-normal);
+        background-color: color-mix(in srgb, var(--interactive-normal) 45%, transparent);
         opacity: 0.8;
         border: none;
         border-radius: 50%;
@@ -2220,11 +2220,11 @@ input[type="text"].note-toolbar-setting-error,
         align-items: center;
         justify-content: center;
         pointer-events: none;
-
         svg {
             color: var(--interactive-accent);
             width: 5em;
             height: 5em;
+            fill: var(--interactive-accent);
         }
     }
 }
