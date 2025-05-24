@@ -71,6 +71,8 @@ export class TipView extends ItemView {
 
         const rootPath = this.plugin.app.vault.getRoot().path;
         MarkdownRenderer.render(this.plugin.app, tipText, contentEl, rootPath, new Component());
+
+        this.renderTipVideos(contentEl);
         this.renderGalleryCallouts(contentEl, tip.color as ColorType);
 
     }
@@ -179,6 +181,45 @@ export class TipView extends ItemView {
 			lineEl.setAttr('style', lineStyle);
 		}
 	}
+
+    /**
+     * Renders any `note-toolbar-video` callouts in the tip content, replacing the URL with HTML controls to play the video.
+     * @param contentEl HTMLDivElement to render videos in.
+     */
+    renderTipVideos(contentEl: HTMLDivElement) {
+        const callouts = contentEl.querySelectorAll('.callout[data-callout="note-toolbar-video"]');
+        callouts.forEach(async (calloutEl: HTMLDivElement) => {
+            const url = calloutEl.querySelector('.callout-content')?.textContent?.trim();
+            if (!url) return;
+
+            calloutEl.className = '';
+            calloutEl.innerHTML = '';
+
+            const wrapperEl = calloutEl.createDiv('note-toolbar-setting-help-video');
+            const videoEl = wrapperEl.createEl('video');
+            videoEl.setAttrs({ preload: 'metadata', src: url });
+
+            const overlayEl = wrapperEl.createEl('div', 'note-toolbar-setting-help-video-overlay');
+            const playButtonEl = overlayEl.createEl('button', 'note-toolbar-setting-help-video-play');
+            setIcon(playButtonEl, 'play');
+            playButtonEl.style.display = 'none';
+
+            overlayEl.onclick = () => {
+                if (videoEl.paused) {
+                    videoEl.play();
+                    playButtonEl.remove();
+                    videoEl.setAttribute('controls', '');
+                } else {
+                    videoEl.pause();
+                }
+            };
+
+            videoEl.addEventListener('loadedmetadata', () => {
+                playButtonEl.style.display = '';
+            });
+
+        });
+    }
 
 }
 
