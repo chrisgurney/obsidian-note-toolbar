@@ -1,6 +1,7 @@
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac orci id magna semper luctus. Morbi facilisis leo est, non pharetra urna fermentum non. Nullam ultricies mi vel lectus luctus varius. Nulla sed iaculis turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
 
-<video controls src="https://chrisgurney.github.io/obsidian-note-toolbar/tips/en/getting-started-gallery.mp4"></video>
+> [!note-toolbar-video]
+> https://chrisgurney.github.io/obsidian-note-toolbar/tips/en/getting-started-gallery.mp4
 
 Pellentesque sollicitudin urna vel lacus egestas, eget congue est placerat. Nam semper laoreet imperdiet. Pellentesque eu nisi consequat, posuere lacus at, pharetra est. Sed gravida, ante nec interdum venenatis, eros massa eleifend nunc, ac pretium purus risus ac nisi. Aliquam consectetur vehicula posuere. Mauris sed velit nec ligula ultricies gravida in et mi. Etiam ac sapien vel metus maximus porttitor. Ut sodales neque urna, vitae imperdiet elit varius nec. Phasellus dui metus, mollis in elit nec, convallis iaculis turpis. Sed sit amet libero tellus.
 
