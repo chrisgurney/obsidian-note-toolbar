@@ -200,14 +200,23 @@ export class TipView extends ItemView {
             videoEl.setAttrs({ preload: 'metadata', src: url });
 
             const overlayEl = wrapperEl.createEl('div', 'note-toolbar-setting-help-video-overlay');
-            overlayEl.onclick = () => {
-                videoEl.play();
-                playButtonEl.remove();
-                videoEl.setAttribute('controls', '');
-            };
-
             const playButtonEl = overlayEl.createEl('button', 'note-toolbar-setting-help-video-play');
             setIcon(playButtonEl, 'play');
+            playButtonEl.style.display = 'none';
+
+            overlayEl.onclick = () => {
+                if (videoEl.paused) {
+                    videoEl.play();
+                    playButtonEl.remove();
+                    videoEl.setAttribute('controls', '');
+                } else {
+                    videoEl.pause();
+                }
+            };
+
+            videoEl.addEventListener('loadedmetadata', () => {
+                playButtonEl.style.display = '';
+            });
 
         });
     }
