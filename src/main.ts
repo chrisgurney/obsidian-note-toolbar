@@ -1,4 +1,4 @@
-import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, Command, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP, DEFAULT_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
@@ -1157,6 +1157,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null) {
 
 		this.debug("updateToolbar()", toolbar.name);
+		const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		if (this.settings.keepPropsState) {
 			// restore properties to the state they were before
@@ -1192,6 +1193,25 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
+
+				// hide if the command is not available in the current context
+				if (itemSetting.linkAttr.commandId) {
+					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
+					let canRunCommand: boolean = true;
+					if (typeof command.checkCallback === 'function') {
+						canRunCommand = command.checkCallback(true) ?? false;
+					}
+					else if (markdownView && typeof command.editorCheckCallback === 'function') {
+						canRunCommand = command.editorCheckCallback(true, markdownView.editor, markdownView) ?? false;
+					}
+					if (canRunCommand) {
+						itemEl.removeClass('hide');
+					}
+					else {
+						itemEl.addClass('hide');
+						continue;
+					}
+				}
 
 				// update tooltip + label
 				if (this.hasVars(itemSetting.tooltip)) {
