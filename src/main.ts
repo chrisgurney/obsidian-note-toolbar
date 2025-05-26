@@ -1202,11 +1202,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (itemSetting.linkAttr.commandId) {
 					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
 					let canRunCommand: boolean = true;
-					if (typeof command.checkCallback === 'function') {
-						canRunCommand = command.checkCallback(true) ?? false;
-					}
-					else if (markdownView && typeof command.editorCheckCallback === 'function') {
+					if (markdownView && typeof command.editorCheckCallback === 'function') {
 						canRunCommand = command.editorCheckCallback(true, markdownView.editor, markdownView) ?? false;
+					}
+					else if (typeof command.checkCallback === 'function') {
+						canRunCommand = command.checkCallback(true) ?? false;
 					}
 					if (canRunCommand) {
 						itemEl.removeClass('hide');
