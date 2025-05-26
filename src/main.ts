@@ -232,6 +232,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile that was opened.
 	 */
 	fileOpenListener = async (file: TFile) => {
+		this.debug('===== FILE-OPEN ===== ', file.name);
 		// update list of the most recently opened files
 		if (file) await this.settingsManager.updateRecentList(this.settings.recentFiles, file.path);
 	};
@@ -466,6 +467,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined): Promise<void> {
+
+		this.debug('checkAndRenderToolbar()', file.name);
 
 		if (this.isRendering) {
 			this.debug('checkAndRenderToolbar() SKIPPED: ALREADY RENDERING');
@@ -1042,6 +1045,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Creates the toolbar in the active file/view, assuming it needs one.
 	 */
 	async renderActiveToolbar() {
+		this.debug('renderActiveToolbar()');
 		let activeFile = this.app.workspace.getActiveFile();
 		// for notes and other file types
 		if (activeFile) {
@@ -2321,8 +2325,8 @@ export default class NoteToolbarPlugin extends Plugin {
      */
     debug(message?: any, ...optionalParams: any[]): void {
         this.settings.debugEnabled && console.debug(message, ...optionalParams);
-        // const stack = new Error().stack?.split('\n')[2]?.trim();
-        // this.settings.debugEnabled && console.debug('Called from:', stack);
+        // const stack = new Error().stack;
+        // this.settings.debugEnabled && console.debug('Call stack:', stack);
     }
 
 	/**
