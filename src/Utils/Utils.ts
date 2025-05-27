@@ -82,7 +82,7 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
 }
 
 /**
- * Determines whether the toolbar should be visible for the given view type.
+ * Determines whether a toolbar should be visible for the given view type.
  * @param plugin NoteToolbarPlugin instance containing toolbar visibility settings.
  * @param currentViewType Type of the current view.
  * @returns `true` if the toolbar should be visible, otherwise `false`.
@@ -226,7 +226,7 @@ export function getLinkUiTarget(event: MouseEvent | KeyboardEvent | undefined): 
  * @param view to get the identifer for
  * @returns ID string, consisting of the leaf's ID and the view's file path
  */
-export function getViewId(view: FileView | ItemView | MarkdownView | null): string | undefined {
+export function getViewId(view: ItemView | null | undefined): string | undefined {
 	let viewId = undefined;
 	if (view instanceof FileView || view instanceof MarkdownView) {
 		viewId = `${view.leaf.id} ${view.file?.path}`;

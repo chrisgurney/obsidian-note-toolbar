@@ -132,7 +132,7 @@ export class SettingsManager {
 	 */
 	public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
 
-		// this.debug('getMappedToolbar()');
+		// this.debug('getMappedToolbar');
 
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
@@ -733,7 +733,7 @@ export class SettingsManager {
 		await this.plugin.saveData(this.plugin.settings);
 
 		await this.plugin.removeActiveToolbar();
-		await this.plugin.renderActiveToolbar();
+		await this.plugin.renderToolbarForView();
 
 		this.debug("SETTINGS SAVED: " + new Date().getTime());
 	}
