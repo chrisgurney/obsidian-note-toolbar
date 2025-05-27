@@ -1085,9 +1085,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Iterates all leaves and renders toolbars for all active leaves.
 	 */
 	async renderToolbarForAllLeaves() {
-		this.app.workspace.iterateAllLeaves((leaf) => {
-			if (leaf.view instanceof MarkdownView) this.renderToolbarForView(leaf.view as MarkdownView);
-			else if (leaf.view instanceof ItemView) this.renderToolbarForView(leaf.view as ItemView);
+		this.app.workspace.iterateAllLeaves(leaf => {
+			if (leaf.view instanceof ItemView) this.renderToolbarForView(leaf.view as ItemView);
 		});
 	}
 
