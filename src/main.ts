@@ -2148,7 +2148,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		return localStorage.getItem(LocalVar.ActiveItem);
 	}
 
-	getAllToolbarEl(view?: MarkdownView): NodeListOf<HTMLElement> {
+	getAllToolbarEl(view?: ItemView): NodeListOf<HTMLElement> {
 		let currentViewEl = view ? view.containerEl : this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
 		currentViewEl = currentViewEl?.closest('.modal-container .note-toolbar-ui') ?? currentViewEl;
 		return currentViewEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
