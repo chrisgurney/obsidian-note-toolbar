@@ -1204,10 +1204,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (itemSetting.linkAttr.commandId) {
 					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
 					let canRunCommand: boolean = true;
-					if ((toolbarView instanceof MarkdownView) && typeof command.editorCheckCallback === 'function') {
+					if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
 						canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
 					}
-					else if (typeof command.checkCallback === 'function') {
+					else if (typeof command?.checkCallback === 'function') {
 						canRunCommand = command.checkCallback(true) ?? false;
 					}
 					if (canRunCommand) {
