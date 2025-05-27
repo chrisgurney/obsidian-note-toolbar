@@ -2233,13 +2233,15 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Removes toolbar in the current view only if needed: there is no valid toolbar to check against; 
 	 * the toolbar names don't match; it's out of date with the settings; or it's not in the correct DOM position. 
 	 * @param correctToolbar ToolbarSettings for the toolbar that should be used.
+	 * @param view view to check toolbar in; if not provided, uses the active view.
 	 * @returns true if the toolbar was removed (or doesn't exist), false otherwise.
 	 */
-	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined): boolean {
+	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
 
 		let toolbarRemoved: boolean = false;
 
-		const existingToolbarEls = this.getAllToolbarEl();
+		// get toolbar elements in current view, or active view if not provided
+		const existingToolbarEls = this.getAllToolbarEl(view);
 
 		this.debug("🛑 removeToolbarIfNeeded() correct:", correctToolbar?.name, "existing:", existingToolbarEls);
 		if (existingToolbarEls?.length > 0) {
@@ -2247,7 +2249,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			existingToolbarEls.forEach((toolbarEl) => {
 				if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements
 				else {
-					toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement);
+					toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement, view);
 					if (toolbarRemoved) toolbarEl.remove();
 				}
 			});
@@ -2262,10 +2264,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 
-	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement): boolean {
+	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement, view?: ItemView): boolean {
 
 		let removeToolbar = false;
-		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const currentView: ItemView | MarkdownView | null = view ? view : this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// this.debug('checkAndRenderToolbar: existing toolbar');
 		const existingToolbarName = existingToolbarEl?.getAttribute('data-name');
@@ -2294,7 +2296,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			removeToolbar = true;
 		}
 		// ensure the toolbar is for the correct view mode
-		else if (currentView?.getMode() !== existingToolbarViewMode) {
+		else if (currentView instanceof MarkdownView && currentView?.getMode() !== existingToolbarViewMode) {
 			this.debug("⛔️ toolbar not for correct view mode");
 			removeToolbar = true;
 		}
