@@ -1074,9 +1074,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
 					if (toolbarRemoved) {
-						await this.renderToolbar(toolbar, null);	
+						await this.renderToolbar(toolbar, null, view);	
 					}
-					await this.updateToolbar(toolbar, null);
+					await this.updateToolbar(toolbar, null, view);
 				}
 			}
 		}
