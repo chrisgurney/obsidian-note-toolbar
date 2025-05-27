@@ -104,7 +104,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// render the initial toolbar
 			const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-			// TODO: for fix: initial rendering of toolbars across all views #94
 			await this.renderToolbarForAllLeaves();
 
 			// add the settings UI
@@ -276,7 +275,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// show empty view or other data type toolbar
 		if (!currentView) {
-			await this.renderActiveToolbar();
+			await this.renderToolbarForView();
 			return;
 		}
 
@@ -312,7 +311,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
 					this.debug("LAYOUT-CHANGE: renderActiveToolbar");
 					// this.updateActiveViewIds();
-					await this.renderActiveToolbar();
+					await this.renderToolbarForView();
 				}, (currentViewMode === "preview" ? 200 : 0)));
 				break;
 			default:
@@ -365,7 +364,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.debug("LEAF-CHANGE: renderActiveToolbar");
 			// this.removeActiveToolbar();
 			// don't seem to need a delay before rendering for leaf changes
-			await this.renderActiveToolbar();
+			await this.renderToolbarForView();
 		}
 	}
 
@@ -508,7 +507,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile for the note that the toolbar is being rendered for
 	 * @param view MarkdownView or ItemView to render toolbar in; if not provided uses active view
 	 */
-	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null, view?: MarkdownView | ItemView): Promise<void> {
+	async renderToolbar(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView): Promise<void> {
 
 		this.debug("renderToolbar()", toolbar.name);
 
@@ -1044,11 +1043,24 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Creates the toolbar in the active file/view, assuming it needs one.
+	 * Renders the toolbar in the provided view or active view, assuming it needs one.
 	 */
-	async renderActiveToolbar() {
-		this.debug('renderActiveToolbar()');
-		let activeFile = this.app.workspace.getActiveFile();
+	async renderToolbarForView(view?: ItemView) {
+
+		this.debug('renderToolbarForView()');
+
+		let activeFile: TFile | null = null;
+		const currentView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
+		if (!currentView) return;
+		if (currentView instanceof MarkdownView) {
+			activeFile = currentView.file;
+		}
+		else if (currentView instanceof ItemView) {
+			const viewState = currentView.getState();
+			const abstractFile = viewState.file ? this.app.vault.getAbstractFileByPath(viewState.file as string) : null;
+			if (abstractFile && abstractFile instanceof TFile) activeFile = abstractFile; 
+		}
+		
 		// for notes and other file types
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
@@ -1058,7 +1070,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		else {
 			if (this.settings.emptyViewToolbar) {
 				const toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
-				const toolbarRemoved = this.removeToolbarIfNeeded(toolbar);
+				const toolbarRemoved = this.removeToolbarIfNeeded(toolbar, currentView);
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
 					if (toolbarRemoved) {
