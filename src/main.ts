@@ -469,7 +469,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined, view?: ItemView): Promise<void> {
 
-		this.debug('checkAndRenderToolbar:', file.name);
+		this.debug('checkAndRenderToolbar: file:', file.name, 'view:', view);
 
 		const viewId = getViewId(view);
 		if (viewId) {	
@@ -1051,10 +1051,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async renderToolbarForView(view?: ItemView) {
 
-		this.debug('renderToolbarForView', view);
+		const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
+		this.debug('renderToolbarForView', toolbarView);
 
 		let activeFile: TFile | null = null;
-		const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
 		if (!toolbarView) return;
 		if (toolbarView instanceof MarkdownView) {
 			activeFile = toolbarView.file;
@@ -1068,7 +1068,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// for notes and other file types
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			await this.checkAndRenderToolbar(activeFile, frontmatter, view);
+			await this.checkAndRenderToolbar(activeFile, frontmatter, toolbarView);
 		}
 		// for New tab view
 		else {
@@ -1078,9 +1078,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
 					if (toolbarRemoved) {
-						await this.renderToolbar(toolbar, null, view);	
+						await this.renderToolbar(toolbar, null, toolbarView);	
 					}
-					await this.updateToolbar(toolbar, null, view);
+					await this.updateToolbar(toolbar, null, toolbarView);
 				}
 			}
 		}
