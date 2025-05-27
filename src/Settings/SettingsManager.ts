@@ -132,7 +132,7 @@ export class SettingsManager {
 	 */
 	public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
 
-		// this.debug('getMappedToolbar()');
+		// this.debug('getMappedToolbar');
 
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
