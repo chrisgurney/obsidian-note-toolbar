@@ -2189,10 +2189,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Get the toolbar element, in the current view.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	getToolbarEl(): HTMLElement | null {
-		// const stack = new Error().stack?.split('\n')[2]?.trim();
-		// this.debug('getToolbarEl() Called from:', stack);
-		const activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
+	getToolbarEl(view?: ItemView): HTMLElement | null {
+		const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
+		const activeContainerEl = toolbarView?.containerEl as HTMLElement;
 		return activeContainerEl?.querySelector('.cg-note-toolbar-container') as HTMLElement;
 	}
 
