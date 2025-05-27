@@ -1155,11 +1155,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * If the item resolves to a URI that's empty, the item is hidden.
 	 * @param toolbar ToolbarSettings to get values from.
 	 * @param activeFile TFile to update toolbar for.
+	 * @param view ItemView to update toolbar within; uses active view otherwise.
 	 */
-	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null) {
+	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null, view?: ItemView) {
 
 		this.debug("updateToolbar()", toolbar.name);
-		const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
 
 		if (this.settings.keepPropsState) {
 			// restore properties to the state they were before
@@ -1169,7 +1170,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
-		let toolbarEl = this.getToolbarEl();
+		const toolbarEl = this.getToolbarEl(toolbarView ?? undefined);
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
 
 		// no need to run update for certain positions
@@ -1200,8 +1201,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (itemSetting.linkAttr.commandId) {
 					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
 					let canRunCommand: boolean = true;
-					if (markdownView && typeof command.editorCheckCallback === 'function') {
-						canRunCommand = command.editorCheckCallback(true, markdownView.editor, markdownView) ?? false;
+					if ((toolbarView instanceof MarkdownView) && typeof command.editorCheckCallback === 'function') {
+						canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
 					}
 					else if (typeof command.checkCallback === 'function') {
 						canRunCommand = command.checkCallback(true) ?? false;
