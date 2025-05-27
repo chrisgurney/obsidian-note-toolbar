@@ -465,8 +465,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * or if we need to remove the toolbar if it shouldn't be there.
 	 * @param file TFile (note) to check if we need to create a toolbar.
 	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
+	 * @param view view to render toolbar in; defaults to active view if not provided.
 	 */
-	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined): Promise<void> {
+	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined, view?: ItemView): Promise<void> {
 
 		this.debug('checkAndRenderToolbar:', file.name);
 
@@ -481,7 +482,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			let matchingToolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, file);
 			
 			// remove existing toolbar if needed
-			let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar);
+			let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar, view);
 
 			this.debug('checkAndRenderToolbar:', matchingToolbar?.name);
 
@@ -489,9 +490,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				// render the toolbar if we have one, and we don't have an existing toolbar to keep
 				if (toolbarRemoved) {
 					this.updateActiveViewIds();
-					await this.renderToolbar(matchingToolbar, file);	
+					await this.renderToolbar(matchingToolbar, file, view);	
 				}
-				await this.updateToolbar(matchingToolbar, file);
+				await this.updateToolbar(matchingToolbar, file, view);
 			}
 		}
 		finally {
@@ -1063,7 +1064,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// for notes and other file types
 		if (activeFile) {
 			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			await this.checkAndRenderToolbar(activeFile, frontmatter);
+			await this.checkAndRenderToolbar(activeFile, frontmatter, view);
 		}
 		// for New tab view
 		else {
