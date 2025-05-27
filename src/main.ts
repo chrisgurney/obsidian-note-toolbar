@@ -179,7 +179,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * removes all toolbars.
 	 */
 	async onunload() {
-		this.removeAllToolbars();
+		this.getAllToolbarEl().forEach((toolbarEl) => {
+			toolbarEl.remove();
+		});
 		this.debug('UNLOADED');
 	}
  
@@ -2146,10 +2148,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		return localStorage.getItem(LocalVar.ActiveItem);
 	}
 
-	getAllToolbarEl(): NodeListOf<HTMLElement> {
-		let activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
-		activeContainerEl = activeContainerEl?.closest('.modal-container .note-toolbar-ui') ?? activeContainerEl; 
-		return activeContainerEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+	getAllToolbarEl(view?: MarkdownView): NodeListOf<HTMLElement> {
+		let currentViewEl = view ? view.containerEl : this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
+		currentViewEl = currentViewEl?.closest('.modal-container .note-toolbar-ui') ?? currentViewEl;
+		return currentViewEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
 	}
 
 	/**
@@ -2221,15 +2223,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	async removeActiveToolbar(): Promise<void> {
 		const toolbarEl = this.getToolbarEl();
 		toolbarEl?.remove();
-	}
-
-	/**
-	 * Remove any toolbars in all open files.
-	 */
-	async removeAllToolbars(): Promise<void> {
-		this.getAllToolbarEl().forEach((toolbarEl) => {
-			toolbarEl.remove();
-		});
 	}
 
 	/**
