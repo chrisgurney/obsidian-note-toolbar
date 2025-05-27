@@ -1076,7 +1076,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async renderToolbarForAllLeaves() {
 		this.app.workspace.iterateAllLeaves((leaf) => {
 			if (leaf.view instanceof MarkdownView) {
-				// this.debug('💡 Markdown Leaf', leaf, leaf.containerEl);
+				this.debug('💡 Markdown Leaf', leaf, leaf.containerEl);
 				if (leaf.view.file !== null) {
 					const frontmatter = this.app.metadataCache.getFileCache(leaf.view.file)?.frontmatter;
 					const mdToolbar = this.settingsManager.getMappedToolbar(frontmatter, leaf.view.file);
@@ -1086,10 +1086,20 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			}
 			else if (leaf.view instanceof ItemView) {
-				// this.debug('💡 Item Leaf', leaf, leaf.containerEl);
-				const itemToolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				this.debug('💡 Item Leaf', leaf, leaf.containerEl);
 				const isToolbarVisible = checkToolbarForItemView(this, leaf.view);
-				if (itemToolbar && isToolbarVisible) {
+				if (!isToolbarVisible) return;
+				// get mapped toolbar to show
+				const viewState = leaf.view.getState();
+				const viewFile = viewState.file ? this.app.vault.getAbstractFileByPath(viewState.file as string) : null;
+				let itemToolbar;
+				if (viewFile && (viewFile instanceof TFile)) {
+					itemToolbar = this.settingsManager.getMappedToolbar(undefined, viewFile);
+				}
+				else {
+					itemToolbar = this.settingsManager.getEmptyViewToolbar();
+				}
+				if (itemToolbar) {
 					this.renderToolbar(itemToolbar, null, leaf.view)
 				}
 			}
