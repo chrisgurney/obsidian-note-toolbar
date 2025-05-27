@@ -1050,13 +1050,13 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.debug('renderToolbarForView()');
 
 		let activeFile: TFile | null = null;
-		const currentView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
-		if (!currentView) return;
-		if (currentView instanceof MarkdownView) {
-			activeFile = currentView.file;
+		const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
+		if (!toolbarView) return;
+		if (toolbarView instanceof MarkdownView) {
+			activeFile = toolbarView.file;
 		}
-		else if (currentView instanceof ItemView) {
-			const viewState = currentView.getState();
+		else if (toolbarView instanceof ItemView) {
+			const viewState = toolbarView.getState();
 			const abstractFile = viewState.file ? this.app.vault.getAbstractFileByPath(viewState.file as string) : null;
 			if (abstractFile && abstractFile instanceof TFile) activeFile = abstractFile; 
 		}
@@ -1070,7 +1070,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		else {
 			if (this.settings.emptyViewToolbar) {
 				const toolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
-				const toolbarRemoved = this.removeToolbarIfNeeded(toolbar, currentView);
+				const toolbarRemoved = this.removeToolbarIfNeeded(toolbar, toolbarView);
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
 					if (toolbarRemoved) {
