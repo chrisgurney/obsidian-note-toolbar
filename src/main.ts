@@ -1,4 +1,4 @@
-import { CachedMetadata, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, Command, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP, DEFAULT_SETTINGS } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
@@ -179,7 +179,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * removes all toolbars.
 	 */
 	async onunload() {
-		this.removeAllToolbars();
+		this.getAllToolbarEl().forEach((toolbarEl) => {
+			toolbarEl.remove();
+		});
 		this.debug('UNLOADED');
 	}
  
@@ -232,6 +234,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param file TFile that was opened.
 	 */
 	fileOpenListener = async (file: TFile) => {
+		this.debug('===== FILE-OPEN ===== ', file.name);
 		// update list of the most recently opened files
 		if (file) await this.settingsManager.updateRecentList(this.settings.recentFiles, file.path);
 	};
@@ -466,6 +469,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
 	 */
 	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined): Promise<void> {
+
+		this.debug('checkAndRenderToolbar()', file.name);
 
 		if (this.isRendering) {
 			this.debug('checkAndRenderToolbar() SKIPPED: ALREADY RENDERING');
@@ -1042,6 +1047,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Creates the toolbar in the active file/view, assuming it needs one.
 	 */
 	async renderActiveToolbar() {
+		this.debug('renderActiveToolbar()');
 		let activeFile = this.app.workspace.getActiveFile();
 		// for notes and other file types
 		if (activeFile) {
@@ -1070,7 +1076,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async renderToolbarForAllLeaves() {
 		this.app.workspace.iterateAllLeaves((leaf) => {
 			if (leaf.view instanceof MarkdownView) {
-				// this.debug('💡 Markdown Leaf', leaf, leaf.containerEl);
+				this.debug('💡 Markdown Leaf', leaf, leaf.containerEl);
 				if (leaf.view.file !== null) {
 					const frontmatter = this.app.metadataCache.getFileCache(leaf.view.file)?.frontmatter;
 					const mdToolbar = this.settingsManager.getMappedToolbar(frontmatter, leaf.view.file);
@@ -1080,10 +1086,20 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			}
 			else if (leaf.view instanceof ItemView) {
-				// this.debug('💡 Item Leaf', leaf, leaf.containerEl);
-				const itemToolbar = this.settingsManager.getToolbarById(this.settings.emptyViewToolbar);
+				this.debug('💡 Item Leaf', leaf, leaf.containerEl);
 				const isToolbarVisible = checkToolbarForItemView(this, leaf.view);
-				if (itemToolbar && isToolbarVisible) {
+				if (!isToolbarVisible) return;
+				// get mapped toolbar to show
+				const viewState = leaf.view.getState();
+				const viewFile = viewState.file ? this.app.vault.getAbstractFileByPath(viewState.file as string) : null;
+				let itemToolbar;
+				if (viewFile && (viewFile instanceof TFile)) {
+					itemToolbar = this.settingsManager.getMappedToolbar(undefined, viewFile);
+				}
+				else {
+					itemToolbar = this.settingsManager.getEmptyViewToolbar();
+				}
+				if (itemToolbar) {
 					this.renderToolbar(itemToolbar, null, leaf.view)
 				}
 			}
@@ -1157,6 +1173,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null) {
 
 		this.debug("updateToolbar()", toolbar.name);
+		const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		if (this.settings.keepPropsState) {
 			// restore properties to the state they were before
@@ -1192,6 +1209,25 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
+
+				// hide if the command is not available in the current context
+				if (itemSetting.linkAttr.commandId) {
+					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
+					let canRunCommand: boolean = true;
+					if (markdownView && typeof command.editorCheckCallback === 'function') {
+						canRunCommand = command.editorCheckCallback(true, markdownView.editor, markdownView) ?? false;
+					}
+					else if (typeof command.checkCallback === 'function') {
+						canRunCommand = command.checkCallback(true) ?? false;
+					}
+					if (canRunCommand) {
+						itemEl.removeClass('hide');
+					}
+					else {
+						itemEl.addClass('hide');
+						continue;
+					}
+				}
 
 				// update tooltip + label
 				if (this.hasVars(itemSetting.tooltip)) {
@@ -2122,10 +2158,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		return localStorage.getItem(LocalVar.ActiveItem);
 	}
 
-	getAllToolbarEl(): NodeListOf<HTMLElement> {
-		let activeContainerEl = this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
-		activeContainerEl = activeContainerEl?.closest('.modal-container .note-toolbar-ui') ?? activeContainerEl; 
-		return activeContainerEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+	/**
+	 * Gets all toolbar elements in the current or provided view.
+	 * @returns all toolbar elements in the current view, or an empty NodeList if none found.
+	 */
+	getAllToolbarEl(view?: ItemView): NodeListOf<HTMLElement> {
+		let currentViewEl = view ? view.containerEl : this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
+		currentViewEl = currentViewEl?.closest('.modal-container .note-toolbar-ui') ?? currentViewEl;
+		return currentViewEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
 	}
 
 	/**
@@ -2200,25 +2240,18 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * Remove any toolbars in all open files.
-	 */
-	async removeAllToolbars(): Promise<void> {
-		this.getAllToolbarEl().forEach((toolbarEl) => {
-			toolbarEl.remove();
-		});
-	}
-
-	/**
 	 * Removes toolbar in the current view only if needed: there is no valid toolbar to check against; 
 	 * the toolbar names don't match; it's out of date with the settings; or it's not in the correct DOM position. 
 	 * @param correctToolbar ToolbarSettings for the toolbar that should be used.
+	 * @param view view to check toolbar in; if not provided, uses the active view.
 	 * @returns true if the toolbar was removed (or doesn't exist), false otherwise.
 	 */
-	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined): boolean {
+	private removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
 
 		let toolbarRemoved: boolean = false;
 
-		const existingToolbarEls = this.getAllToolbarEl();
+		// get toolbar elements in current view, or active view if not provided
+		const existingToolbarEls = this.getAllToolbarEl(view);
 
 		this.debug("🛑 removeToolbarIfNeeded() correct:", correctToolbar?.name, "existing:", existingToolbarEls);
 		if (existingToolbarEls?.length > 0) {
@@ -2226,7 +2259,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			existingToolbarEls.forEach((toolbarEl) => {
 				if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements
 				else {
-					toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement);
+					toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement, view);
 					if (toolbarRemoved) toolbarEl.remove();
 				}
 			});
@@ -2241,10 +2274,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
 
-	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement): boolean {
+	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement, view?: ItemView): boolean {
 
 		let removeToolbar = false;
-		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const currentView: ItemView | MarkdownView | null = view ? view : this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// this.debug('checkAndRenderToolbar: existing toolbar');
 		const existingToolbarName = existingToolbarEl?.getAttribute('data-name');
@@ -2273,7 +2306,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			removeToolbar = true;
 		}
 		// ensure the toolbar is for the correct view mode
-		else if (currentView?.getMode() !== existingToolbarViewMode) {
+		else if (currentView instanceof MarkdownView && currentView?.getMode() !== existingToolbarViewMode) {
 			this.debug("⛔️ toolbar not for correct view mode");
 			removeToolbar = true;
 		}
@@ -2301,8 +2334,8 @@ export default class NoteToolbarPlugin extends Plugin {
      */
     debug(message?: any, ...optionalParams: any[]): void {
         this.settings.debugEnabled && console.debug(message, ...optionalParams);
-        // const stack = new Error().stack?.split('\n')[2]?.trim();
-        // this.settings.debugEnabled && console.debug('Called from:', stack);
+        // const stack = new Error().stack;
+        // this.settings.debugEnabled && console.debug('Call stack:', stack);
     }
 
 	/**

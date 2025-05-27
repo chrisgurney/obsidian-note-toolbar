@@ -197,7 +197,11 @@ export class TipView extends ItemView {
 
             const wrapperEl = calloutEl.createDiv('note-toolbar-setting-help-video');
             const videoEl = wrapperEl.createEl('video');
-            videoEl.setAttrs({ preload: 'metadata', src: url });
+            videoEl.setAttrs({ 
+                playsinline: '',
+                preload: 'metadata', 
+                src: url 
+            });
 
             const overlayEl = wrapperEl.createEl('div', 'note-toolbar-setting-help-video-overlay');
             const playButtonEl = overlayEl.createEl('button', 'note-toolbar-setting-help-video-play');
