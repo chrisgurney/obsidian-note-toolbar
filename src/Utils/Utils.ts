@@ -226,7 +226,7 @@ export function getLinkUiTarget(event: MouseEvent | KeyboardEvent | undefined): 
  * @param view to get the identifer for
  * @returns ID string, consisting of the leaf's ID and the view's file path
  */
-export function getViewId(view: FileView | ItemView | MarkdownView | null): string | undefined {
+export function getViewId(view: ItemView | null | undefined): string | undefined {
 	let viewId = undefined;
 	if (view instanceof FileView || view instanceof MarkdownView) {
 		viewId = `${view.leaf.id} ${view.file?.path}`;

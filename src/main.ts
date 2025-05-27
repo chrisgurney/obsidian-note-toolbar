@@ -36,7 +36,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	settingsManager: SettingsManager;
 	
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
-	isRendering: boolean = false; // track if a toolbar is being rendered, to prevent >1 event from triggering two renders
+	isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
 
 	// track the last opened layout state, to reduce unneccessary re-renders 
 	lastFileOpenedOnLayoutChange: TFile | null | undefined;
@@ -471,11 +471,15 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debug('checkAndRenderToolbar:', file.name);
 
-		if (this.isRendering) {
-			this.debug('checkAndRenderToolbar: SKIPPED: ALREADY RENDERING');
-			return
-		};
-		this.isRendering = true;
+		const viewId = getViewId(view);
+		if (viewId) {	
+			if (this.isRendering[viewId]) {
+				this.debug('checkAndRenderToolbar: SKIPPED: ALREADY RENDERING', viewId);
+				return;
+			};
+			this.isRendering[viewId] = true;
+		}
+		else return;
 
 		try {
 			// get matching toolbar for this note, if there is one		
@@ -496,7 +500,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 		finally {
-			this.isRendering = false;
+			this.isRendering[viewId] = false;
 		}
 
 	}
