@@ -262,60 +262,61 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * On layout changes, delete, check and render toolbar if necessary.
+	 * On layout changes, render and update toolbars as necessary.
 	 */
 	layoutChangeListener = async () => {
+		await this.renderToolbarForAllLeaves();
+		
+		// const toolbarEl = this.getToolbarEl();
+		// const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		// const currentViewId = getViewId(currentView);
+		// const currentViewMode = currentView?.getMode();
+		// this.debug('===== LAYOUT-CHANGE ===== ', currentViewId, currentView, currentViewMode);
 
-		const toolbarEl = this.getToolbarEl();
-		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		const currentViewId = getViewId(currentView);
-		const currentViewMode = currentView?.getMode();
-		this.debug('===== LAYOUT-CHANGE ===== ', currentViewId, currentView, currentViewMode);
+		// // show empty view or other data type toolbar
+		// if (!currentView) {
+		// 	await this.renderToolbarForView();
+		// 	return;
+		// }
 
-		// show empty view or other data type toolbar
-		if (!currentView) {
-			await this.renderToolbarForView();
-			return;
-		}
+		// // if we're in a popover, do nothing
+		// if (currentView?.containerEl.closest('popover')) return;
 
-		// if we're in a popover, do nothing
-		if (currentView?.containerEl.closest('popover')) return;
+		// // exit if the view has already been handled, after updating the toolbar
+		// if (toolbarEl && currentViewId && this.activeViewIds.contains(currentViewId)) {
+		// 	this.debug('LAYOUT-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
+		// 	this.updateActiveToolbar();
+		// 	return;
+		// }
 
-		// exit if the view has already been handled, after updating the toolbar
-		if (toolbarEl && currentViewId && this.activeViewIds.contains(currentViewId)) {
-			this.debug('LAYOUT-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
-			this.updateActiveToolbar();
-			return;
-		}
+		// // partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
+		// const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
+		// const viewModeChanged = this.lastViewModeOnLayoutChange !== currentViewMode;
+		// if (fileChanged || viewModeChanged) {
+		// 	this.lastFileOpenedOnLayoutChange = fileChanged ? currentView?.file : this.lastFileOpenedOnLayoutChange;
+		// 	this.lastViewModeOnLayoutChange = viewModeChanged ? currentViewMode : this.lastViewModeOnLayoutChange;
+		// }
+		// else {
+		// 	if (toolbarEl) return; // no changes, so do nothing
+		// }
 
-		// partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
-		const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
-		const viewModeChanged = this.lastViewModeOnLayoutChange !== currentViewMode;
-		if (fileChanged || viewModeChanged) {
-			this.lastFileOpenedOnLayoutChange = fileChanged ? currentView?.file : this.lastFileOpenedOnLayoutChange;
-			this.lastViewModeOnLayoutChange = viewModeChanged ? currentViewMode : this.lastViewModeOnLayoutChange;
-		}
-		else {
-			if (toolbarEl) return; // no changes, so do nothing
-		}
-
-		// check for editing or reading mode
-		switch(currentViewMode) {
-			case "source":
-			case "preview":
-				this.app.workspace.onLayoutReady(debounce(async () => {
-					// keeping just in case:
-					// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
-					// const toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
-					// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
-					this.debug("LAYOUT-CHANGE: renderActiveToolbar");
-					// this.updateActiveViewIds();
-					await this.renderToolbarForView();
-				}, (currentViewMode === "preview" ? 200 : 0)));
-				break;
-			default:
-				return;
-		}
+		// // check for editing or reading mode
+		// switch(currentViewMode) {
+		// 	case "source":
+		// 	case "preview":
+		// 		this.app.workspace.onLayoutReady(debounce(async () => {
+		// 			// keeping just in case:
+		// 			// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
+		// 			// const toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
+		// 			// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
+		// 			this.debug("LAYOUT-CHANGE: renderActiveToolbar");
+		// 			// this.updateActiveViewIds();
+		// 			await this.renderToolbarForView();
+		// 		}, (currentViewMode === "preview" ? 200 : 0)));
+		// 		break;
+		// 	default:
+		// 		return;
+		// }
 	};
 
 	/**
