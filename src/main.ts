@@ -2263,7 +2263,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement, view?: ItemView): boolean {
 
 		let removeToolbar = false;
-		const currentView: ItemView | MarkdownView | null = view ? view : this.app.workspace.getActiveViewOfType(MarkdownView);
+		const toolbarView: ItemView | MarkdownView | null = view ? view : this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// this.debug('checkAndRenderToolbar: existing toolbar');
 		const existingToolbarName = existingToolbarEl?.getAttribute('data-name');
@@ -2292,7 +2292,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			removeToolbar = true;
 		}
 		// ensure the toolbar is for the correct view mode
-		else if (currentView instanceof MarkdownView && currentView?.getMode() !== existingToolbarViewMode) {
+		else if (toolbarView instanceof MarkdownView && toolbarView?.getMode() !== existingToolbarViewMode) {
 			this.debug("⛔️ toolbar not for correct view mode");
 			removeToolbar = true;
 		}
