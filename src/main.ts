@@ -2148,6 +2148,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		return localStorage.getItem(LocalVar.ActiveItem);
 	}
 
+	/**
+	 * Gets all toolbar elements in the current or provided view.
+	 * @returns all toolbar elements in the current view, or an empty NodeList if none found.
+	 */
 	getAllToolbarEl(view?: ItemView): NodeListOf<HTMLElement> {
 		let currentViewEl = view ? view.containerEl : this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
 		currentViewEl = currentViewEl?.closest('.modal-container .note-toolbar-ui') ?? currentViewEl;
