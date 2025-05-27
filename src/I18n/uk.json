@@ -298,8 +298,8 @@
             "option-image": "Зображення",
             "option-kanban": "Дошки Kanban",
             "option-pdf": "PDF-документи",
-            "option-other": "Інші типи",
-            "option-other-description": "List of other data types toolbars can appear in, separated by spaces.",
+            "option-other": "Інші файли",
+            "option-other-description": "Перелік інших типів файлів де можуть відображатися панелі (розділені пробілами).",
             "option-other-placeholder": "наприклад: excalidraw",
             "option-video": "Відео"
         },
@@ -307,7 +307,7 @@
             "description": "Параметри відображення панелей у нотатках, використовуючи: Властивість, Зіставлені теки, або обидва засоби.",
             "name": "Правила відображення",
             "option-property": "Властивість",
-            "option-property-description": "Вказана у Властивості панель буде відображатися у нотатці. Виконується з перевагою над будь-якими зіставленнями тек. Для приховання панелі вкажіть 'none'.",
+            "option-property-description": "Вказана у Властивості панель буде відображатися у нотатці. Виконується з перевагою над зіставленнями тек. Для приховання панелі вкажіть 'none'.",
             "option-property-placeholder": "Властивість"
         },
         "error-old-settings-description": "Завантажено старий файл налаштувань ({{oldVersion}}), найновіший - {{currentVersion}}",
