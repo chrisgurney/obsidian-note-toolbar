@@ -460,6 +460,7 @@ export async function importFromCallout(
 				label: label.trim(),
 				link: link.trim(),
 				linkAttr: {
+                    commandCheck: false,
 					commandId: itemType === ItemType.Command ? commandId.trim() : '',
 					hasVars: false,
 					type: itemType
