@@ -386,6 +386,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
 			this.debug('===== METADATA-CHANGE ===== ', file.name);
 			debounce(async () => {
+				// FIXME: should this instead update all visible toolbars?
 				await this.checkAndRenderToolbar(file, cache.frontmatter);
 	
 				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
