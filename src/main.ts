@@ -57,6 +57,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		'templater-obsidian': false,
 	}
 
+	isInternalPluginEnabled: { [key: string]: boolean } = {
+		'page-preview': false,
+		'webviewer': false,
+	}
+
 	jsAdapter: JavaScriptAdapter | undefined;
 	dvAdapter: DataviewAdapter | undefined;
 	jsEngineAdapter: JsEngineAdapter | undefined;
@@ -2313,9 +2318,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Updates status of other installed plugins we're interested in.
 	 */
 	checkPlugins() {
-		Object.keys(this.hasPlugin).forEach(pluginKey => {
-			this.hasPlugin[pluginKey] = pluginKey in (this.app as any).plugins.plugins;
+		const appPlugins = (this.app as any).plugins.plugins;
+		const internalPlugins = (this.app as any).internalPlugins.plugins;
+
+		Object.keys(this.hasPlugin).forEach(key => {
+			this.hasPlugin[key] = key in appPlugins;
 		});
+		Object.keys(this.isInternalPluginEnabled).forEach(key => {
+			this.isInternalPluginEnabled[key] = internalPlugins[key]?.enabled ?? false;
+		});
+
+		this.debug('⭐️', this.hasPlugin, this.hasInternalPlugin);
 	}
 
     /**
