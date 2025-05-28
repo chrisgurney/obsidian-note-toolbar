@@ -25,6 +25,7 @@ export default class ItemModal extends Modal {
      */
     onOpen() {
         this.setTitle(t('setting.item.title'));
+        this.plugin.checkPlugins();
         this.display();
     }
 
