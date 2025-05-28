@@ -127,6 +127,7 @@ export default class GalleryManager {
                 label: item.label ? (item.label[language] || item.label['en']) : '',
                 link: item.uri ?? '',
                 linkAttr: {
+                    commandCheck: false,
                     commandId: item.commandId ?? '',
                     focus: item.focus || undefined,
                     hasVars: false,
