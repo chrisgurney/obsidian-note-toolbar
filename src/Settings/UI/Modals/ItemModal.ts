@@ -25,7 +25,6 @@ export default class ItemModal extends Modal {
      */
     onOpen() {
         this.setTitle(t('setting.item.title'));
-        this.plugin.checkPlugins();
         this.display();
     }
 
@@ -42,7 +41,12 @@ export default class ItemModal extends Modal {
 	 * Displays the item UI.
 	 */
 	public display() {
+        
         this.contentEl.empty();
+
+		// update status of installed plugins so we can show available plugins and display errors if needed
+        this.plugin.checkPlugins();
+
         let itemForm = this.toolbarItemUi.generateItemForm(this.toolbarItem);
         this.contentEl.append(itemForm);
 
