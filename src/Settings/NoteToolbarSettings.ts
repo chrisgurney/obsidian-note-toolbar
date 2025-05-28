@@ -399,6 +399,7 @@ export const DEFAULT_ITEM_SETTINGS: ToolbarItemSettings = {
 	label: '',
 	link: '',
 	linkAttr: {
+		commandCheck: false,
 		commandId: '',
 		hasVars: false,
 		type: ItemType.Command
@@ -415,6 +416,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 	label: '',
 	link: '',
 	linkAttr: {
+		commandCheck: false,
 		commandId: '',
 		hasVars: false,
 		type: ItemType.Separator
@@ -427,6 +429,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
  * Used to describe the type of url, for efficiency on toolbar render and click handling.
  */
 export interface ToolbarItemLinkAttr {
+	commandCheck: boolean;
 	commandId: string;
 	focus?: 'editor';
 	hasVars: boolean;

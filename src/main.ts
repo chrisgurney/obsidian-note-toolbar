@@ -1206,22 +1206,29 @@ export default class NoteToolbarPlugin extends Plugin {
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 
-				// hide if the command is not available in the current context
-				if (itemSetting.linkAttr.commandId) {
+				if (itemSetting.linkAttr.commandId) {					
 					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
-					let canRunCommand: boolean = true;
-					if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
-						canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
-					}
-					else if (typeof command?.checkCallback === 'function') {
-						canRunCommand = command.checkCallback(true) ?? false;
-					}
-					if (canRunCommand) {
-						itemEl.removeClass('hide');
-					}
-					else {
+					// hide if the command doesn't exist
+					if (!command) {
 						itemEl.addClass('hide');
-						continue;
+						continue;						
+					}
+					// hide if the command is not available in the current context
+					else if (itemSetting.linkAttr.commandCheck) {
+						let canRunCommand: boolean = true;
+						if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
+							canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
+						}
+						else if (typeof command?.checkCallback === 'function') {
+							canRunCommand = command.checkCallback(true) ?? false;
+						}
+						if (canRunCommand) {
+							itemEl.removeClass('hide');
+						}
+						else {
+							itemEl.addClass('hide');
+							continue;
+						}
 					}
 				}
 
