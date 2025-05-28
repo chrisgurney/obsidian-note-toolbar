@@ -2335,8 +2335,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		Object.keys(this.isInternalPluginEnabled).forEach(key => {
 			this.isInternalPluginEnabled[key] = internalPlugins[key]?.enabled ?? false;
 		});
-
-		this.debug('⭐️', this.hasPlugin, this.hasInternalPlugin);
 	}
 
     /**
