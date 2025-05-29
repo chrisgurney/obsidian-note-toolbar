@@ -57,6 +57,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		'templater-obsidian': false,
 	}
 
+	isInternalPluginEnabled: { [key: string]: boolean } = {
+		'page-preview': false,
+		'webviewer': false,
+	}
+
 	jsAdapter: JavaScriptAdapter | undefined;
 	dvAdapter: DataviewAdapter | undefined;
 	jsEngineAdapter: JsEngineAdapter | undefined;
@@ -381,6 +386,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
 			this.debug('===== METADATA-CHANGE ===== ', file.name);
 			debounce(async () => {
+				// FIXME: should this instead update all visible toolbars?
 				await this.checkAndRenderToolbar(file, cache.frontmatter);
 	
 				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
@@ -1201,22 +1207,29 @@ export default class NoteToolbarPlugin extends Plugin {
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 
-				// hide if the command is not available in the current context
-				if (itemSetting.linkAttr.commandId) {
+				if (itemSetting.linkAttr.commandId) {					
 					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
-					let canRunCommand: boolean = true;
-					if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
-						canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
-					}
-					else if (typeof command?.checkCallback === 'function') {
-						canRunCommand = command.checkCallback(true) ?? false;
-					}
-					if (canRunCommand) {
-						itemEl.removeClass('hide');
-					}
-					else {
+					// hide if the command doesn't exist
+					if (!command) {
 						itemEl.addClass('hide');
-						continue;
+						continue;						
+					}
+					// hide if the command is not available in the current context
+					else if (itemSetting.linkAttr.commandCheck) {
+						let canRunCommand: boolean = true;
+						if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
+							canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
+						}
+						else if (typeof command?.checkCallback === 'function') {
+							canRunCommand = command.checkCallback(true) ?? false;
+						}
+						if (canRunCommand) {
+							itemEl.removeClass('hide');
+						}
+						else {
+							itemEl.addClass('hide');
+							continue;
+						}
 					}
 				}
 
@@ -2313,8 +2326,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Updates status of other installed plugins we're interested in.
 	 */
 	checkPlugins() {
-		Object.keys(this.hasPlugin).forEach(pluginKey => {
-			this.hasPlugin[pluginKey] = pluginKey in (this.app as any).plugins.plugins;
+		const appPlugins = (this.app as any).plugins.plugins;
+		const internalPlugins = (this.app as any).internalPlugins.plugins;
+
+		Object.keys(this.hasPlugin).forEach(key => {
+			this.hasPlugin[key] = key in appPlugins;
+		});
+		Object.keys(this.isInternalPluginEnabled).forEach(key => {
+			this.isInternalPluginEnabled[key] = internalPlugins[key]?.enabled ?? false;
 		});
 	}
 

@@ -792,6 +792,20 @@ export default class ToolbarItemUi {
     }
 
     getCommandSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
+
+        // hide if not available
+         new Setting(fieldDiv)
+            .setName(t('setting.item.option-command-check'))
+            .setDesc(t('setting.item.option-command-check-description'))
+            .addToggle((toggle) => {
+                toggle
+                    .setValue(item.linkAttr.commandCheck)
+                    .onChange(async (value: boolean) => {
+                        item.linkAttr.commandCheck = value;
+                        await this.plugin.settingsManager.save();
+                    });
+            });       
+
         // focus
         new Setting(fieldDiv)
             .setName(t('setting.item.option-command-focus'))
@@ -800,7 +814,7 @@ export default class ToolbarItemUi {
                 toggle
                     .setValue(item.linkAttr.focus === 'editor')
                     .onChange(async (value: boolean) => {
-                        item.linkAttr.focus = value ? 'editor' : undefined
+                        item.linkAttr.focus = value ? 'editor' : undefined;
                         await this.plugin.settingsManager.save();
                     });
             });

@@ -527,6 +527,7 @@ export class SettingsManager {
 						}
 						if (item.urlAttr) {
 							this.plugin.settings.toolbars[index].items[item_index].linkAttr = {
+								commandCheck: false,
 								commandId: "",
 								hasVars: item.urlAttr.hasVars,
 								type: item.urlAttr.isUri ? ItemType.Uri : ItemType.File

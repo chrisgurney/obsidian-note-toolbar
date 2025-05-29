@@ -372,6 +372,8 @@
             "option-command-error-not-available-install": "This command is not available. Plugin must be installed and enabled.",
             "option-command-error-not-available-search": "This command cannot be found. Try searching again.",
             "option-command-error-refresh": "Refresh",
+            "option-command-check": "Hide if not available",
+            "option-command-check-description": "If the command cannot be performed in the current context, the item will be hidden in the toolbar.",
             "option-command-focus": "Focus in editor",
             "option-command-focus-description": "Set focus in editor after command is executed.",
             "option-command-placeholder": "Search for command",
