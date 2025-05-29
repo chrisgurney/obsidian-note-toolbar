@@ -161,6 +161,7 @@
         "error-invalid-plugin": "Неправильний додаток, або його не ввімкнено для елемента Галереї.",
         "error-missing-item-type": "Елемент галереї: Відсутня властивість типу елемента",
         "error-missing-property": "Відсутний додаток, або властивість скрипта у даних Галереї.",
+        "label-add-item": "Клацніть або торкніться, щоб додати будь-яку з них до панелі:",
         "label-plugin": "{{plugin}}",
         "label-suggestions": "ПРОПОЗИЦІЇ З ГАЛЕРЕЇ",
         "select-plugin-placeholder": "Оберіть додаток для використання...",
@@ -216,7 +217,7 @@
         "swap-toolbar-title": "Ця нотатка буде змінена"
     },
     "plugin": {
-        "canvas": "Полотно",
+        "canvas": "Полотна",
         "daily-notes": "Щоденні\u00A0нотатки",
         "dataview": "Dataview",
         "js-engine": "JS\u00A0Engine",
@@ -288,21 +289,25 @@
             "description": "Увімкнути панель у полотнах, новому вигляді вкладки та інших типів файлів.",
             "name": "Типи файлів та подання",
             "option-audio": "Аудіо",
-            "option-canvas": "Файл полотна",
+            "option-bases": "Бази",
+            "option-canvas": "Файли полотен",
             "option-emptyview": "Нова вкладка",
             "option-emptyview-description": "Оберіть панель для відображення, коли нотатка не відкрита.",
             "option-filemenu": "Файл меню",
             "option-filemenu-description": "Додає елемент до меню Файл для доступу до панелі у пов'язаній нотатці.",
             "option-image": "Зображення",
-            "option-kanban": "Дошка Kanban",
-            "option-pdf": "PDF-документ",
+            "option-kanban": "Дошки Kanban",
+            "option-pdf": "PDF-документи",
+            "option-other": "Інші файли",
+            "option-other-description": "Перелік інших типів файлів де можуть відображатися панелі (розділені пробілами).",
+            "option-other-placeholder": "наприклад: excalidraw",
             "option-video": "Відео"
         },
         "display-rules": {
             "description": "Параметри відображення панелей у нотатках, використовуючи: Властивість, Зіставлені теки, або обидва засоби.",
             "name": "Правила відображення",
             "option-property": "Властивість",
-            "option-property-description": "Вказана у Властивості панель буде відображатися у нотатці. Виконується з перевагою над будь-якими зіставленнями тек. Для приховання панелі вкажіть 'none'.",
+            "option-property-description": "Вказана у Властивості панель буде відображатися у нотатці. Виконується з перевагою над зіставленнями тек. Для приховання панелі вкажіть 'none'.",
             "option-property-placeholder": "Властивість"
         },
         "error-old-settings-description": "Завантажено старий файл налаштувань ({{oldVersion}}), найновіший - {{currentVersion}}",
@@ -316,7 +321,11 @@
             "button-open-google": "Відвідати google.com",
             "button-read": "Читати ↗",
             "description": "Створення контекстно-орієнтованих панелей у нотатках.",
+            "error-failed-to-load": "Помилка завантаження:\n{{baseUrl}}/{{lang}}/{{name}}.md",
             "heading": "Довідка та корисне Note Toolbar",
+            "heading-donate": "Пожертвувати",
+            "heading-support": "Підтримка",
+            "heading-user-guide": "Посібник користувача",
             "label-article-1": "Створення елементів панелі",
             "label-article-1-description": "Дізнатися про різні типи елементів.",
             "label-article-2": "Виноски Note Toolbar",
@@ -328,9 +337,11 @@
             "label-feedback-description": "Скористайтеся цією формою для будь-яких відгуків, запитань, або ідей.",
             "label-gallery": "Відвідати Галерею",
             "label-gallery-description": "Відвідайте Галерею, щоб знайти готові елементи для Ваших панелей.",
-            "label-support": "Підтримка",
+            "label-issues": "Переглянути відкриті проблеми",
+            "label-support": "Шукати обговорення на форумі",
             "label-user-guide": "Посібник користувача",
-            "title": "Довідка Note Toolbar 🛟"
+            "title": "Довідка Note Toolbar 🛟",
+            "tooltip-view-tip": "Переглянути підказку"
         },
         "icon-suggester": {
             "instruction-dismiss": "скасувати",
@@ -361,6 +372,8 @@
             "option-command-error-not-available-install": "⚠️ Команда недоступна. Додаток не встановлений, або викнений.",
             "option-command-error-not-available-search": "⚠️ Команда не знайдена. Спробуйте пошукати ще раз.",
             "option-command-error-refresh": "Оновити",
+            "option-command-check": "Сховати коли команда недоступна",
+            "option-command-check-description": "Якщо команда не може бути виконана у поточному контексті, елемент на панелі буде прихований.",
             "option-command-focus": "Фокусування у редакторі",
             "option-command-focus-description": "Встановити фокус у редакторі після виконання команди.",
             "option-command-placeholder": "Знайти команду",
@@ -480,6 +493,10 @@
                 "description": "Іконка плаваючої кнопки на мобільном. Потребує перезавантаження.",
                 "name": "Іконка",
                 "tooltip": "Обрати іконку"
+            },
+            "keep-props-state": {
+                "description": "Зберігає стан відображення властивостей у нотатках, якщо використовується опція перемикання властивостей Note Toolbar. Якщо увімкнено, то доведеться скористатися \"Показати властивості нотатки\" у Note Toolbar, щоб знову показати властивості.",
+                "name": "Зберігати стан властивостей"
             },
             "load-settings-changes": {
                 "description": "Увімкніть цю опцію, якщо синхронізуєте налаштування додатка на різних пристроях, для автоматичного завантажування оновлень. Якщо вимкнено - доведеться перезапустити Obsidian, щоб побачити зміни на інших пристроях.",
