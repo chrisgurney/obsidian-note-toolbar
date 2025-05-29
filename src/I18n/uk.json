@@ -372,6 +372,8 @@
             "option-command-error-not-available-install": "⚠️ Команда недоступна. Додаток не встановлений, або викнений.",
             "option-command-error-not-available-search": "⚠️ Команда не знайдена. Спробуйте пошукати ще раз.",
             "option-command-error-refresh": "Оновити",
+            "option-command-check": "Сховати коли команда недоступна",
+            "option-command-check-description": "Якщо команда не може бути виконана у поточному контексті, елемент на панелі буде прихований.",
             "option-command-focus": "Фокусування у редакторі",
             "option-command-focus-description": "Встановити фокус у редакторі після виконання команди.",
             "option-command-placeholder": "Знайти команду",
