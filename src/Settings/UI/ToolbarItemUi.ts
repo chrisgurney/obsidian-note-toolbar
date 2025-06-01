@@ -550,7 +550,7 @@ export default class ToolbarItemUi {
         type: ItemType, 
         fieldDiv: HTMLDivElement, 
         toolbarItem: ToolbarItemSettings,
-        helpTextFr?: DocumentFragment)
+        helpTextFr: DocumentFragment)
     {
 
         switch(type) {
@@ -596,6 +596,8 @@ export default class ToolbarItemUi {
                     button.extraSettingsEl.tabIndex = 0;
                     handleKeyClick(this.plugin, button.extraSettingsEl);     
                 });
+
+                setFieldHelp(commandSetting.settingEl, helpTextFr);
                 break;
             case ItemType.Dataview:
             case ItemType.JavaScript:
@@ -698,6 +700,8 @@ export default class ToolbarItemUi {
                     button.extraSettingsEl.tabIndex = 0;
                     handleKeyClick(this.plugin, button.extraSettingsEl);      
                 });
+
+                setFieldHelp(fileSetting.settingEl, helpTextFr);
                 break;
             case ItemType.Group:
                 const groupSetting = new Setting(fieldDiv)
@@ -722,7 +726,7 @@ export default class ToolbarItemUi {
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
                     });
-                setFieldHelp(groupSetting.controlEl, helpTextFr);
+                setFieldHelp(groupSetting.settingEl, helpTextFr);
                 break;
             case ItemType.Menu:
                 const menuSetting = new Setting(fieldDiv)
@@ -786,6 +790,7 @@ export default class ToolbarItemUi {
                     button.extraSettingsEl.tabIndex = 0;
                     handleKeyClick(this.plugin, button.extraSettingsEl);
                 });
+                setFieldHelp(uriSetting.settingEl, helpTextFr);
                 break;
         }
 
@@ -995,19 +1000,19 @@ export default class ToolbarItemUi {
     ) {
         switch (type) {
             case ItemType.Command:
-                this.getLinkSetting(type, fieldDiv, toolbarItem);
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-command-help'), 'Command-items'));
                 break;
             case ItemType.Dataview:
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'Dataview'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-dataview-help'), 'Dataview'));
                 break;
             case ItemType.File:
-                this.getLinkSetting(type, fieldDiv, toolbarItem);
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-file-help'), 'File-items'));
                 break;
             case ItemType.JavaScript:
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'JavaScript'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-javascript-help'), 'JavaScript'));
                 break;
             case ItemType.JsEngine:
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'JS-Engine'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-js-engine-help'), 'JS-Engine'));
                 break;
             case ItemType.Group:
             case ItemType.Menu:
@@ -1018,15 +1023,15 @@ export default class ToolbarItemUi {
                     : fieldHelp.append(
                         learnMoreFr(
                             type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
-                            'Creating-toolbar-items')
+                            type === ItemType.Group ? 'Item-Groups': 'Item-Menus')
                     );
                 this.getLinkSetting(type, fieldDiv, toolbarItem, fieldHelp);
                 break;
             case ItemType.Templater:
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-script'), 'Templater'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-templater-help'), 'Templater'));
                 break;
             case ItemType.Uri:
-                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-uri-help'), 'Variables'));
+                this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-uri-help'), 'URI-items'));
                 break;
         }
     }
