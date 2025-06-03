@@ -964,17 +964,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		new Setting(containerEl)
-			.setName(t('setting.other.debugging.name'))
-			.setDesc(t('setting.other.debugging.description'))
-			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.debugEnabled)
-				cb.onChange(async (value) => {
-					this.plugin.settings.debugEnabled = value;
-					await this.plugin.settingsManager.save();
-				});
-			});
-
-		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
 			.setDesc(t('setting.other.icon.description'))
 			.addButton((cb) => {
@@ -1064,6 +1053,17 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						await this.plugin.settingsManager.save();
 					})
 				);
+
+		new Setting(containerEl)
+			.setName(t('setting.other.debugging.name'))
+			.setDesc(t('setting.other.debugging.description'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.debugEnabled)
+				cb.onChange(async (value) => {
+					this.plugin.settings.debugEnabled = value;
+					await this.plugin.settingsManager.save();
+				});
+			});
 
 	}
 
