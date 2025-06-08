@@ -7,7 +7,7 @@ import { NtbModal } from "./NtbModal";
 import { TAbstractFile, TFile, TFolder } from "obsidian";
 import { Toolbar } from "./Toolbar";
 import { Item } from "./Item";
-import { t } from "Settings/NoteToolbarSettings";
+import { LocalVar, t } from "Settings/NoteToolbarSettings";
 
 export type Callback = (arg: string) => void;
 
@@ -39,6 +39,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     ): Promise<TAbstractFile> {
 
         const abstractFiles = this.plugin.app.vault.getAllLoadedFiles();
+        const recentFiles = JSON.parse(localStorage.getItem(LocalVar.RecentFiles) || '[]');
 
         let files: TAbstractFile[] = [];
         files = abstractFiles.filter((file: TAbstractFile) => {
@@ -48,8 +49,8 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         })
         // prioritize recent files
         .sort((a, b) => {
-            const ai = this.plugin.settings.recentFiles.indexOf(a.path);
-            const bi = this.plugin.settings.recentFiles.indexOf(b.path);
+            const ai = recentFiles.indexOf(a.path);
+            const bi = recentFiles.indexOf(b.path);
             if (ai === -1 && bi === -1) return 0;
             if (ai === -1) return 1;
             if (bi === -1) return -1;

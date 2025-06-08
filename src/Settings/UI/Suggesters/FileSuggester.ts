@@ -1,5 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { AbstractInputSuggest, App, TAbstractFile, TFile, TFolder } from "obsidian";
+import { LocalVar } from "Settings/NoteToolbarSettings";
 
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
@@ -18,6 +19,7 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
+        const recentFiles = JSON.parse(localStorage.getItem(LocalVar.RecentFiles) || '[]');
 
         files = abstractFiles.filter((file: TAbstractFile) => {
             const isFile = file instanceof TFile;
@@ -32,8 +34,8 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         })
         // prioritize recent files
         .sort((a, b) => {
-            const ai = this.plugin.settings.recentFiles.indexOf(a.path);
-            const bi = this.plugin.settings.recentFiles.indexOf(b.path);
+            const ai = recentFiles.indexOf(a.path);
+            const bi = recentFiles.indexOf(b.path);
             if (ai === -1 && bi === -1) return 0;
             if (ai === -1) return 1;
             if (bi === -1) return -1;

@@ -1,7 +1,7 @@
 import { Platform, SuggestModal, TFile } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { calcItemVisToggles } from "Utils/Utils";
-import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, LocalVar, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
@@ -237,6 +237,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             });
 
         // sort the results
+        const recentItems = JSON.parse(localStorage.getItem(LocalVar.RecentItems) || '[]');
         sortedSuggestions.sort((a, b) => {
             const aItemNameRaw = this.cleanString(a.label || a.tooltip || a.link || '');
             const bItemNameRaw = this.cleanString(b.label || b.tooltip || a.link || '');
@@ -247,8 +248,8 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
             if (this.mode === 'QuickTools') {
                 // prioritize recent items
-                const isARecent = this.plugin.settings.recentItems.includes(aItemNameRaw);
-                const isBRecent = this.plugin.settings.recentItems.includes(bItemNameRaw);
+                const isARecent = recentItems.includes(aItemNameRaw);
+                const isBRecent = recentItems.includes(bItemNameRaw);
                 if (isARecent && !isBRecent) return -1;
                 if (!isARecent && isBRecent) return 1;
             }
@@ -325,7 +326,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         this.plugin.debug("onChooseSuggestion: ", selectedItem, this.activeFile, event);
         if (this.mode === 'QuickTools') {
             const itemName = this.cleanString(selectedItem.label || selectedItem.tooltip || selectedItem.link || '');
-            await this.plugin.settingsManager.updateRecentList(this.plugin.settings.recentItems, itemName);
+            await this.plugin.settingsManager.updateRecentList(LocalVar.RecentItems, itemName);
         }
         if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
             this.close();

@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
-import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { createOnboardingMessageEl, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
 
 export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
@@ -82,14 +82,15 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         });
 
         // sort the search results
+        const recentToolbars = JSON.parse(localStorage.getItem(LocalVar.RecentToolbars) || '[]');
         sortedSuggestions.sort((a, b) => {
             const query = lowerCaseInputStr;
             const aName = a.name.toLowerCase();
             const bName = b.name.toLowerCase();
 
             // prioritize recent items
-            const isARecent = this.plugin.settings.recentToolbars.includes(aName);
-            const isBRecent = this.plugin.settings.recentToolbars.includes(bName);
+            const isARecent = recentToolbars.includes(aName);
+            const isBRecent = recentToolbars.includes(bName);
             if (isARecent && !isBRecent) return -1;
             if (!isARecent && isBRecent) return 1;
 
@@ -134,7 +135,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param toolbar ToolbarSettings to use.
      */
     async onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
-        await this.plugin.settingsManager.updateRecentList(this.plugin.settings.recentToolbars, toolbar.name);
+        await this.plugin.settingsManager.updateRecentList(LocalVar.RecentToolbars, toolbar.name);
         this.callback(toolbar);
         this.close();
     }

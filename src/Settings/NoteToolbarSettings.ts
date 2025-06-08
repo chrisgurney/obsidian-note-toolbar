@@ -164,7 +164,10 @@ export enum LocalVar {
 	ActiveItem = 'note-toolbar-active-item',
 	LoadSettings = 'note-toolbar-load-settings-changes',
 	MenuPos = 'note-toolbar-menu-pos',
-	PropsState = 'note-toolbar-props-state'
+	PropsState = 'note-toolbar-props-state',
+	RecentFiles = 'note-toolbar-recent-files',
+	RecentItems = 'note-toolbar-recent-items',
+	RecentToolbars = 'note-toolbar-recent-toolbars',
 }
 
 export type PropsState = 'show' | 'hide' | 'fold' | 'toggle';
@@ -204,9 +207,6 @@ export interface NoteToolbarSettings {
 	icon: string;
 	keepPropsState: boolean;
 	onboarding: OnboardingState;
-	recentFiles: string[];
-	recentItems: string[];
-	recentToolbars: string[];
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
@@ -232,9 +232,6 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	icon: "circle-ellipsis",
 	keepPropsState: false,
 	onboarding: {},
-	recentFiles: [],
-	recentItems: [],
-	recentToolbars: [],
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,

@@ -239,7 +239,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	fileOpenListener = async (file: TFile) => {
 		this.debug('FILE-OPEN: updating recent file list:', file?.name);
 		// update list of the most recently opened files
-		if (file) await this.settingsManager.updateRecentList(this.settings.recentFiles, file.path);
+		if (file) await this.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
 	};
 
 	/**

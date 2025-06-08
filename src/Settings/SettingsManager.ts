@@ -436,13 +436,14 @@ export class SettingsManager {
 	 * @param list the list to update (`recentFiles`, `recentItems`, `recentToolbars`)
 	 * @param value value to update the list with
 	 */
-	async updateRecentList(list: string[], value: string): Promise<void> {
+	async updateRecentList(localVar: string, value: string): Promise<void> {
+		const list = JSON.parse(localStorage.getItem(localVar) || '[]');
 		const maxSize = 10;
 		const i = list.indexOf(value);
 		if (i !== -1) list.splice(i, 1); // remove if it already exists
 		list.unshift(value); // add to top
 		if (list.length > maxSize) list.pop(); // remove oldest
-		await this.save();
+		localStorage.setItem(localVar, JSON.stringify(list));
 	}
 
 	/*************************************************************************
