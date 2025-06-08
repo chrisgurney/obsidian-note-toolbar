@@ -93,7 +93,7 @@ export function checkToolbarForItemView(plugin: NoteToolbarPlugin, itemView: Ite
 	
     const viewSettings: Record<string, boolean | undefined> = {
         'audio': plugin.settings.showToolbarIn.audio,
-		'bases-query': plugin.settings.showToolbarIn.bases,
+		'bases': plugin.settings.showToolbarIn.bases,
         'beautitab-react-view': (plugin.settings.emptyViewToolbar !== undefined),
         'canvas': plugin.settings.showToolbarIn.canvas,
         'empty': (plugin.settings.emptyViewToolbar !== undefined),
