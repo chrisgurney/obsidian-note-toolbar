@@ -780,6 +780,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			switch (item.linkAttr.type) {
 				case ItemType.Break:
 				case ItemType.Separator:
+					if (view.getViewType() === 'empty' && this.settings.showLaunchpad) continue;
 					toolbarItem = activeDocument.createElement('data');
 					toolbarItem.setAttribute(
 						item.linkAttr.type === ItemType.Break ? 'data-break' : 'data-sep', '');
