@@ -210,6 +210,7 @@ export interface NoteToolbarSettings {
 	ribbonAction: RibbonAction;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
+	showLaunchpad: boolean;
 	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
 	showToolbarInOther: string;
@@ -235,6 +236,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	ribbonAction: RibbonAction.Toolbar,
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
+	showLaunchpad: false,
 	showToolbarIn: {
 		audio: false,
 		bases: false,

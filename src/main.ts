@@ -542,7 +542,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (position === 'props') position = 'top';
 		}
 
-		let noteToolbarElement: HTMLElement;
+		let noteToolbarElement: HTMLElement | undefined;
 		let embedBlock = activeDocument.createElement("div");
 		embedBlock.addClass('cg-note-toolbar-container');
 		toolbar.uuid ? embedBlock.id = toolbar.uuid : undefined;
@@ -561,7 +561,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case PositionType.FabRight:
 				noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
 				embedBlock.append(noteToolbarElement);
-				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement));
+				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement!));
 				// render toolbar in context menu if a default item is set
 				if (toolbar.defaultItem) {
 					this.registerDomEvent(noteToolbarElement, 'contextmenu', (event) => {
@@ -579,7 +579,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case PositionType.Bottom:
 			case PositionType.Props:
 			case PositionType.Top:
-				noteToolbarElement = await this.renderToolbarAsCallout(toolbar, file);
+				noteToolbarElement = await this.renderToolbarAsCallout(toolbar, file, view);
 				// extra div workaround to emulate callout-in-content structure, to use same sticky css
 				let div = activeDocument.createElement("div");
 				div.append(noteToolbarElement);
@@ -594,12 +594,13 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 
-		// FIXME: do earlier, first load + layout change - flickers before displaying toolbar,
-		// especially on startup with expensive plugins (e.g,. Excalidraw)
-		const useLaunchpad = !(view instanceof MarkdownView) && view.getViewType() === 'empty'
-			&& toolbar.customClasses?.includes('note-toolbar-launchpad');
+		const useLaunchpad = Boolean(
+			!(view instanceof MarkdownView) && view.getViewType() === 'empty' 
+			&& this.settings.showLaunchpad && this.settings.emptyViewToolbar
+		);
 		view.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
-		if (useLaunchpad) {
+		if (useLaunchpad && noteToolbarElement) {
+			noteToolbarElement.addClass('note-toolbar-launchpad');
 			view.contentEl.insertAdjacentElement('afterbegin', embedBlock);
 			return;
 		}
@@ -688,15 +689,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Renders the given toolbar as a callout (to add to the container) and returns it.
 	 * @param toolbar ToolbarSettings to render
 	 * @param file TFile of the note to render the toolbar for
+	 * @param view ItemView to render toolbar in, just used for context
 	 * @returns HTMLElement cg-note-toolbar-callout
 	 */
-	async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile | null): Promise<HTMLElement> {
-
+	async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile | null, view: ItemView): Promise<HTMLElement> {
+		
 		/* create the unordered list of menu items */
 		let noteToolbarUl = activeDocument.createElement("ul");
 		noteToolbarUl.setAttribute("role", "menu");
 
-		let noteToolbarLiArray = await this.renderToolbarLItems(toolbar, file);
+		let noteToolbarLiArray = await this.renderToolbarLItems(toolbar, file, view);
 		noteToolbarUl.append(...noteToolbarLiArray);
 
 		let noteToolbarCallout = activeDocument.createElement("div");
@@ -747,10 +749,11 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Returns the callout LIs for the items in the given toolbar.
 	 * @param toolbar ToolbarSettings to render
 	 * @param file TFile to render the toolbar for
+	 * @param view ItemView items are being rendered for, for context
 	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0): Promise<HTMLLIElement[]> {
+	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile | null, view: ItemView, recursions: number = 0): Promise<HTMLLIElement[]> {
 
 		if (recursions >= 2) {
 			return []; // stop recursion
@@ -786,7 +789,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					let groupToolbar = this.settingsManager.getToolbarById(item.link);
 					if (groupToolbar) {
 						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-							let groupLItems = await this.renderToolbarLItems(groupToolbar, file, recursions + 1);
+							let groupLItems = await this.renderToolbarLItems(groupToolbar, file, view, recursions + 1);
 							noteToolbarLiArray.push(...groupLItems);
 						}
 					}

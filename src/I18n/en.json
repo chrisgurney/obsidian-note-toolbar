@@ -291,8 +291,6 @@
             "option-audio": "Audio",
             "option-bases": "Bases",
             "option-canvas": "Canvas files",
-            "option-emptyview": "New tab view",
-            "option-emptyview-description": "Select a toolbar to show when no note is open.",
             "option-filemenu": "File menu",
             "option-filemenu-description": "Adds an item to the File menu to access the toolbar in the linked note.",
             "option-image": "Images",
@@ -302,6 +300,14 @@
             "option-other-description": "List of other data types toolbars can appear in, separated by spaces.",
             "option-other-placeholder": "e.g., excalidraw",
             "option-video": "Videos"
+        },
+        "display-empty-view": {
+            "description": "Add a toolbar to the new tab view, or replace it with a toolbar.",
+            "name": "New tab view",
+            "option-emptyview": "New tab toolbar",
+            "option-emptyview-description": "Select a toolbar to show when no note is open.",
+            "option-launchpad": "Replace new tab options with toolbar",
+            "option-launchpad-description": "Replace the new tab view with this toolbar."
         },
         "display-rules": {
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",

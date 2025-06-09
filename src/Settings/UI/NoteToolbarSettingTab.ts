@@ -66,7 +66,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setHeading();
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
-		this.displayOtherMappings(containerEl);
+		this.displayEmptyViewSettings(containerEl);
+		this.displayOtherViewSettings(containerEl);
 
 		// other global settings
 		this.displayCopyAsCalloutSettings(containerEl);
@@ -744,10 +745,54 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
-	 * Displays the canvas and empty view toolbar settings.
+	 * Displays empty view toolbar settings.
 	 * @param containerEl HTMLElement to add the settings to.
 	 */
-	displayOtherMappings(containerEl: HTMLElement): void {
+	displayEmptyViewSettings(containerEl: HTMLElement): void {
+
+		const otherContextSettings = new Setting(containerEl)
+			.setHeading()
+			.setName(t('setting.display-empty-view.name'))
+			.setDesc(t('setting.display-empty-view.description'));
+
+		new Setting(containerEl)
+			.setName(t('setting.display-empty-view.option-emptyview'))
+			// .setDesc(t('setting.display-empty-view.option-emptyview-description'))
+			.addSearch((cb) => {
+				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
+					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
+					.onChange(debounce(async (name) => {
+						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
+						this.plugin.settings.emptyViewToolbar = newToolbar?.uuid ?? null;
+						const hasEmptyViewToolbar = !!this.plugin.settings.emptyViewToolbar;
+						const launchpadSettingEl = this.containerEl.querySelector('#note-toolbar-launchpad-setting');
+						launchpadSettingEl?.setAttribute('data-active', hasEmptyViewToolbar.toString());
+						await this.plugin.settingsManager.save();
+					}, 250));
+			});
+
+		const launchpadSetting = new Setting(containerEl)
+			.setName(t('setting.display-empty-view.option-launchpad'))
+			// .setDesc(t('setting.display-empty-view.option-launchpad-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb.setValue(this.plugin.settings.showLaunchpad)
+					.onChange(async (value: boolean) => {
+						this.plugin.settings.showLaunchpad = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+		launchpadSetting.settingEl.id = 'note-toolbar-launchpad-setting';
+		const hasEmptyViewToolbar = !!this.plugin.settings.emptyViewToolbar;
+		launchpadSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
+
+	}
+
+	/**
+	 * Displays toolbar settings for other file types.
+	 * @param containerEl HTMLElement to add the settings to.
+	 */
+	displayOtherViewSettings(containerEl: HTMLElement): void {
 
 		const collapsibleEl = createDiv('note-toolbar-setting-contexts-container');
 		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
@@ -826,20 +871,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.plugin.settings.showToolbarIn.kanban = value;
 						await this.plugin.settingsManager.save();
 					});
-			});
-
-		new Setting(collapsibleContainer)
-			.setName(t('setting.display-contexts.option-emptyview'))
-			.setDesc(t('setting.display-contexts.option-emptyview-description'))
-			.addSearch((cb) => {
-				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
-					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
-					.onChange(debounce(async (name) => {
-						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
-						this.plugin.settings.emptyViewToolbar = newToolbar?.uuid ?? null;
-						await this.plugin.settingsManager.save();
-					}, 250));
 			});
 
 		new Setting(collapsibleContainer)
