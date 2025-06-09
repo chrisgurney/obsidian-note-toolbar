@@ -1935,7 +1935,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let contextMenu = new Menu();
 
-		const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		const currentView = this.app.workspace.getActiveViewOfType(ItemView);
 
 		if (toolbarSettings !== undefined) {
 
@@ -1954,27 +1954,50 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 
 			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
-			if (currentPosition !== PositionType.Top) {
-				positionMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('setting.position.option-top'))
-						.setIcon('arrow-up-to-line')
-						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
-				});
+			if (currentView?.getViewType() === 'empty') {
+				if (this.settings.showLaunchpad) {
+					if (currentPosition !== PositionType.Top && currentPosition !== PositionType.Props) {
+						positionMenu.addItem((item: MenuItem) => {
+							item.setTitle(t('setting.position.option-centered'))
+								.setIcon('fold-vertical')
+								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
+						});
+					}
+				}
+				else {
+					if (currentPosition !== PositionType.Top) {
+						positionMenu.addItem((item: MenuItem) => {
+							item.setTitle(t('setting.position.option-top'))
+								.setIcon('arrow-up-to-line')
+								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
+						});
+					}
+				}
+			} 
+			else {
+				if (currentPosition !== PositionType.Top) {
+					positionMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('setting.position.option-top'))
+							.setIcon('arrow-up-to-line')
+							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
+					});
+				}
+				if (currentPosition !== PositionType.Props) {
+					positionMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('setting.position.option-props'))
+							.setIcon('arrow-down-narrow-wide')
+							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
+					});
+				}
+				if (currentPosition !== PositionType.Bottom) {
+					positionMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('setting.position.option-bottom'))
+							.setIcon('arrow-down-to-line')
+							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
+					});
+				}
 			}
-			if (currentPosition !== PositionType.Props) {
-				positionMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('setting.position.option-props'))
-						.setIcon('arrow-down-narrow-wide')
-						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
-				});
-			}
-			if (currentPosition !== PositionType.Bottom) {
-				positionMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('setting.position.option-bottom'))
-						.setIcon('arrow-down-to-line')
-						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
-				});
-			}
+
 			if (currentPosition !== PositionType.FabLeft) {
 				positionMenu.addItem((item: MenuItem) => {
 					item.setTitle(t('setting.position.option-fabl'))

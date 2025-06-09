@@ -535,6 +535,7 @@
             "name": "Position",
             "notice-defaultitem-invalid": "Invalid default item for floating button. Check toolbar configuration.",
             "option-bottom": "Bottom",
+            "option-centered": "Centered",
             "option-defaultitem": "Floating button default item",
             "option-defaultitem-description": "Instead of the toolbar menu, show this item as the button. Other items appear in right-click menu (long-press on mobile).",
             "option-defaultitem-error-invalid": "Invalid toolbar item",
