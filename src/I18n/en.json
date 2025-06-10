@@ -286,7 +286,7 @@
             "title": "Delete toolbar: {{toolbar}}"
         },
         "display-contexts": {
-            "description": "Enable toolbars in canvases, the New tab view, and other file types.",
+            "description": "Enable toolbars in canvases, PDFs, video, and other file types.",
             "name": "File types and views",
             "option-audio": "Audio",
             "option-bases": "Bases",
