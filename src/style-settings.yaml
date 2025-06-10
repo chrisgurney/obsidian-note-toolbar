@@ -560,39 +560,71 @@ settings:
         level: 1
         collapsed: true
     -
-        id: cg-nt-launchpad-columns
-        title: '📐 Number of columns'
-        type: variable-number
-        default: 2
-    -
-        id: cg-nt-launchpad-max-width
-        title: '📐 Max width (in px units)'
-        type: variable-number
-        default: 0
-        format: px
+        id: launchpad-colors
+        title: '↳ 🎨 Colors'
+        title.uk: '↳ 🎨 Кольори'
+        title.de: '↳ 🎨 Farben'
+        title.zh: '↳ 🎨 颜色'
+        type: heading
+        level: 2
+        collapsed: true
     -
         id: cg-nt-launchpad-item-bg-color
-        title: '🎨 Item: Background color'
+        title: 'Item: Background color'
         type: variable-themed-color
         opacity: true
         format: hex
         default-light: '#'
         default-dark: '#'
     -
+        id: launchpad-sizing-spacing
+        title: '↳ 📐 Sizing and Spacing'
+        title.uk: '↳ 📐 Розміри та інтервали'
+        title.de: '↳ 📐 Größe und Abstände'
+        title.zh: '↳ 📐 大小和间距'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-launchpad-cols-desktop
+        title: 'Number of columns on desktop'
+        type: variable-number
+        default: 2
+    -
+        id: cg-nt-launchpad-cols-mobile
+        title: 'Number of columns on mobile 📱'
+        type: variable-number
+        default: 2
+    -
+        id: cg-nt-launchpad-max-width
+        title: 'Max width (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
         id: cg-nt-launchpad-item-font-size
-        title: '📐 Item: Font size (in em units)'
+        title: 'Item: Font size (in em units)'
         type: variable-number
         default: 0
         format: em
     -
         id: cg-nt-launchpad-item-icon-size
-        title: '📐 Item: Icon size (in px units)'
+        title: 'Item: Icon size (in px units)'
         type: variable-number
         default: 0
         format: px
     -
+        id: launchpad-styles
+        title: '↳ 😎 Style'
+        title.uk: '↳ 😎 Стиль'
+        title.de: '↳ 😎 Stil'
+        title.zh: '↳ 😎 样式'
+        type: heading
+        level: 2
+        collapsed: true
+    -
         id: cg-nt-launchpad-item-border-radius
-        title: '😎 Item: Border radius (in px units)'
+        title: 'Item: Border radius (in px units)'
         type: variable-number
         default: 0
         format: px

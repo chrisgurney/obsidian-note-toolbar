@@ -52,7 +52,8 @@ body {
     --cg-nt-item-sep-margin-y: 0.25em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
-    --cg-nt-launchpad-columns: 2;
+    --cg-nt-launchpad-cols-desktop: 2;
+    --cg-nt-launchpad-cols-mobile: 2;
     --cg-nt-launchpad-item-bg-color: var(--background-primary-alt);
     --cg-nt-launchpad-item-border-radius: var(--button-radius);
     --cg-nt-launchpad-item-font-size: var(--metadata-label-font-size);
@@ -2460,7 +2461,10 @@ input[type="text"].note-toolbar-setting-error,
         & ul[role="menu"] {
             display: grid;
             gap: 1rem;
-            grid-template-columns: repeat(var(--cg-nt-launchpad-columns), 1fr);
+            grid-template-columns: repeat(var(--cg-nt-launchpad-cols-desktop), 1fr);
+            .is-mobile & {
+                grid-template-columns: repeat(var(--cg-nt-launchpad-cols-mobile), 1fr);
+            }
             margin: 0 auto;
             & li {
                 background-color: var(--cg-nt-launchpad-item-bg-color);
