@@ -2,45 +2,53 @@
     {
         "color": "blue",
         "description": {
-            "en": "Add navigation to your daily notes."
+            "en": "Add navigation to your daily notes.",
+            "uk": "Додайте навігацію до щоденних нотаток."
         },
         "icon": "calendar-days",
         "id": "daily-notes",
         "title": {
-            "en": "Daily Notes"
+            "en": "Daily Notes",
+            "uk": "Щоденні нотатки"
         }
     },
     {
         "color": "red",
         "description": {
-            "en": "Create your first toolbar."
+            "en": "Create your first toolbar.",
+            "uk": "Створіть свою першу панель."
         },
         "icon": "rocket",
         "id": "getting-started",
         "title": {
-            "en": "Getting Started"
+            "en": "Getting Started",
+            "uk": "Початок роботи"
         }
     },
     {
         "color": "purple",
         "description": {
-            "en": "Add ready-to-use items to your toolbars."
+            "en": "Add ready-to-use items to your toolbars.",
+            "uk": "Додайте готові елементи до своїх панелей."
         },
         "icon": "layout-grid",
         "id": "gallery",
         "title": {
-            "en": "Gallery"
+            "en": "Gallery",
+            "uk": "Галерея"
         }
     },
     {
         "color": "green",
         "description": {
-            "en": "Make the most of Obsidian on your phone."
+            "en": "Make the most of Obsidian on your phone.",
+            "uk": "Використовуйте всі можливості Obsidian на своєму телефоні."
         },
         "icon": "smartphone",
         "id": "mobile-tips",
         "title": {
-            "en": "Mobile Tips"
+            "en": "Mobile Tips",
+            "uk": "Поради для Мобільного"
         }
     }
 ]
