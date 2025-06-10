@@ -557,6 +557,50 @@ settings:
         default: 0
         format: px
     -
+        id: launchpad
+        title: 'New tab view (Launchpad)'
+        description: 'Style the toolbar replacing the New tab view'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-launchpad-columns
+        title: '📐 Number of columns'
+        type: variable-number
+        default: 2
+    -
+        id: cg-nt-launchpad-max-width
+        title: '📐 Max width (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: cg-nt-launchpad-item-bg-color
+        title: '🎨 Item: Background color'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-launchpad-item-font-size
+        title: '📐 Item: Font size (in em units)'
+        type: variable-number
+        default: 0
+        format: em
+    -
+        id: cg-nt-launchpad-item-icon-size
+        title: '📐 Item: Icon size (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
+        id: cg-nt-launchpad-item-border-radius
+        title: '😎 Item: Border radius (in px units)'
+        type: variable-number
+        default: 0
+        format: px
+    -
         id: quick-tools
         title: 'Quick Tools'
         title.uk: 'Швидкі інструменти'
@@ -975,6 +1019,12 @@ body {
     --cg-nt-item-sep-margin-y: 0.25em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
+    --cg-nt-launchpad-columns: 2;
+    --cg-nt-launchpad-item-bg-color: var(--background-primary-alt);
+    --cg-nt-launchpad-item-border-radius: var(--button-radius);
+    --cg-nt-launchpad-item-font-size: var(--metadata-label-font-size);
+    --cg-nt-launchpad-item-icon-size: var(--icon-size);
+    --cg-nt-launchpad-max-width: var(--file-line-width);
     --cg-nt-menu-bg-color: var(--background-secondary);
     --cg-nt-menu-border-color: var(--hr-color);
     --cg-nt-menu-border-radius: var(--radius-m);
@@ -3373,21 +3423,15 @@ input[type="text"].note-toolbar-setting-error,
     & .callout-content {
         margin-left: auto;
         margin-right: auto;
-        max-width: var(--file-line-width);
+        max-width: var(--cg-nt-launchpad-max-width);
         & ul[role="menu"] {
             display: grid;
             gap: 1rem;
-            grid-template-columns: repeat(2, 1fr);
-            /* @media (min-width: 800px) {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .is-phone & {
-                grid-template-columns: repeat(2, 1fr);
-            } */
+            grid-template-columns: repeat(var(--cg-nt-launchpad-columns), 1fr);
             margin: 0 auto;
             & li {
-                background-color: var(--background-primary-alt);
-                border-radius: var(--button-radius);
+                background-color: var(--cg-nt-launchpad-item-bg-color);
+                border-radius: var(--cg-nt-launchpad-item-border-radius);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -3396,6 +3440,7 @@ input[type="text"].note-toolbar-setting-error,
                     width: 100%;
                     display: flex;
                     flex-direction: column;
+                    font-size: var(--cg-nt-launchpad-item-font-size);
                     align-items: center;
                     justify-content: center;
                     text-align: center;
@@ -3406,6 +3451,10 @@ input[type="text"].note-toolbar-setting-error,
                     }
                     .is-phone & {
                         color: var(--interactive-accent);
+                    }
+                    & svg {
+                        height: var(--cg-nt-launchpad-item-icon-size);
+                        width: var(--cg-nt-launchpad-item-icon-size);
                     }
                 }
             }

@@ -52,6 +52,12 @@ body {
     --cg-nt-item-sep-margin-y: 0.25em;
     --cg-nt-item-text-color: var(--metadata-label-text-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
+    --cg-nt-launchpad-columns: 2;
+    --cg-nt-launchpad-item-bg-color: var(--background-primary-alt);
+    --cg-nt-launchpad-item-border-radius: var(--button-radius);
+    --cg-nt-launchpad-item-font-size: var(--metadata-label-font-size);
+    --cg-nt-launchpad-item-icon-size: var(--icon-size);
+    --cg-nt-launchpad-max-width: var(--file-line-width);
     --cg-nt-menu-bg-color: var(--background-secondary);
     --cg-nt-menu-border-color: var(--hr-color);
     --cg-nt-menu-border-radius: var(--radius-m);
@@ -2450,21 +2456,15 @@ input[type="text"].note-toolbar-setting-error,
     & .callout-content {
         margin-left: auto;
         margin-right: auto;
-        max-width: var(--file-line-width);
+        max-width: var(--cg-nt-launchpad-max-width);
         & ul[role="menu"] {
             display: grid;
             gap: 1rem;
-            grid-template-columns: repeat(2, 1fr);
-            /* @media (min-width: 800px) {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .is-phone & {
-                grid-template-columns: repeat(2, 1fr);
-            } */
+            grid-template-columns: repeat(var(--cg-nt-launchpad-columns), 1fr);
             margin: 0 auto;
             & li {
-                background-color: var(--background-primary-alt);
-                border-radius: var(--button-radius);
+                background-color: var(--cg-nt-launchpad-item-bg-color);
+                border-radius: var(--cg-nt-launchpad-item-border-radius);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -2473,6 +2473,7 @@ input[type="text"].note-toolbar-setting-error,
                     width: 100%;
                     display: flex;
                     flex-direction: column;
+                    font-size: var(--cg-nt-launchpad-item-font-size);
                     align-items: center;
                     justify-content: center;
                     text-align: center;
@@ -2483,6 +2484,10 @@ input[type="text"].note-toolbar-setting-error,
                     }
                     .is-phone & {
                         color: var(--interactive-accent);
+                    }
+                    & svg {
+                        height: var(--cg-nt-launchpad-item-icon-size);
+                        width: var(--cg-nt-launchpad-item-icon-size);
                     }
                 }
             }
