@@ -753,7 +753,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		const otherContextSettings = new Setting(containerEl)
 			.setHeading()
 			.setName(t('setting.display-empty-view.name'))
-			.setDesc(t('setting.display-empty-view.description'));
+			.setDesc(learnMoreFr(t('setting.display-empty-view.description'), 'New-tab-view'));
 
 		new Setting(containerEl)
 			.setName(t('setting.display-empty-view.option-emptyview'))
