@@ -1683,7 +1683,7 @@ input[type="text"].note-toolbar-setting-error,
     gap: 0.75em;
     width: 100%;
     & .setting-item {
-        padding: 0;
+        padding: 0 !important;
         & .setting-item-info {
             display: none;
         }
