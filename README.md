@@ -32,9 +32,9 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
   - Built-in [Gallery of 100+ items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery) that can be added to your toolbars in just a couple clicks/taps.
 - [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property.
   - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) below the Properties section, at the top or bottom of notes, or as a floating button.
-  - Add a toolbar to the _New tab_ view, or completely replace the New tab view as a launchpad for your vault.
+  - Add a toolbar to the _New tab_ view, or [completely replace the New tab view](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view) as a launchpad for your vault.
   - Access the toolbar from the navigation bar (on mobile).
-  - Toolbar items can use Obsidian's built-in icons, labels (which can include emojis), or a mix of both.
+- Use Obsidian's built-in icons, labels (which can include emojis), or a mix of both.
   - Set optional tooltips for each item.
   - Show items specifically on mobile, desktop, or both.
   - Choose whether the icon, label, or both are displayed.
