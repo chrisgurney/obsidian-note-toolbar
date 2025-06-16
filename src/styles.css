@@ -2314,6 +2314,17 @@ input[type="text"].note-toolbar-setting-error,
         border-radius: 0.5rem;
         width: 100%;
     }
+    table {
+        border-collapse: collapse;
+        & td, th {
+            border-collapse: collapse;
+            border-color: grey;
+            border-style: solid;
+            border-width: 1px;
+            padding: var(--size-2-2) var(--size-4-2);
+            text-align: start;
+        }
+    }
 }
 
 .note-toolbar-setting-remote-skeleton {
