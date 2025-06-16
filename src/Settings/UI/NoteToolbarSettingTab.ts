@@ -760,7 +760,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			// .setDesc(t('setting.display-empty-view.option-emptyview-description'))
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
+				cb.setPlaceholder(t('setting.display-empty-view.option-emptyview-placeholder'))
 					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
 					.onChange(debounce(async (name) => {
 						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);

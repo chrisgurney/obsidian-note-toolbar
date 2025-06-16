@@ -306,6 +306,7 @@
             "name": "New tab view",
             "option-emptyview": "New tab toolbar",
             "option-emptyview-description": "Select a toolbar to show when no note is open.",
+            "option-emptyview-placeholder": "Select toolbar...",
             "option-launchpad": "Replace view with toolbar",
             "option-launchpad-description": "Replace the new tab view with this toolbar."
         },
