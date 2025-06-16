@@ -94,6 +94,19 @@ Add various types of content like links or media.
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 
+## New tab view
+
+Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)
+
+| Item | Description |
+| --- | --- |
+| Home | Go to your home note. (Enter your home note in the URL.) |
+| Today's daily note | Go to today's daily note. |
+| New note | Creates a new note. |
+| Open file in new tab | Opens the selected file in a new tab. |
+| New from template | Create a new note from a template you select. |
+| Show bookmarks | Opens the bookmarks sidebar. |
+
 ## Editor Navigation
 
 Get around the text editor faster.

@@ -122,6 +122,17 @@
         },
         {
             "name": { 
+                "en": "New tab view"
+            },
+            "description": {
+                "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
+            },
+            "itemIds": [
+                "go-home", "daily-notes-today", "file-new", "file-new-tab", "templater-new-note-from-template", "bookmarks-open"
+            ]
+        },
+        {
+            "name": { 
                 "en": "Editor Navigation",
                 "zh": "编辑器导航",
                 "uk": "Навігація редактора"
