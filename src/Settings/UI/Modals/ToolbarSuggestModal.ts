@@ -88,17 +88,20 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             const aName = a.name.toLowerCase();
             const bName = b.name.toLowerCase();
 
-            // prioritize recent items
-            const isARecent = recentToolbars.includes(aName);
-            const isBRecent = recentToolbars.includes(bName);
-            if (isARecent && !isBRecent) return -1;
-            if (!isARecent && isBRecent) return 1;
+            const aStartsWith = aName.startsWith(query);
+            const bStartsWith = bName.startsWith(query);
+
+            // prioritize recent items if they start with the search string
+            if (aStartsWith && bStartsWith) {
+                const isARecent = recentToolbars.includes(aName);
+                const isBRecent = recentToolbars.includes(bName);
+                if (isARecent && !isBRecent) return -1;
+                if (!isARecent && isBRecent) return 1;
+            }
 
             // prioritize items that start with the search string
-            const aStarts = aName.startsWith(query);
-            const bStarts = bName.startsWith(query);
-            if (aStarts && !bStarts) return -1;
-            if (!aStarts && bStarts) return 1;
+            if (aStartsWith && !bStartsWith) return -1;
+            if (!aStartsWith && bStartsWith) return 1;
 
             const aIncludes = aName.includes(query);
             const bIncludes = bName.includes(query);

@@ -246,17 +246,20 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             const bItemName = this.cleanString((!this.plugin.hasVars(b.label) ? b.label : '') || 
                 (!this.plugin.hasVars(b.tooltip) ? b.tooltip : '') || (!this.plugin.hasVars(b.link) ? b.link : ''));
 
+            const aStartsWith = aItemName.startsWith(searchString);
+            const bStartsWith = bItemName.startsWith(searchString);
+
+            // for Quick Tools, prioritize recent items if they start with the search string
             if (this.mode === 'QuickTools') {
-                // prioritize recent items
-                const isARecent = recentItems.includes(aItemNameRaw);
-                const isBRecent = recentItems.includes(bItemNameRaw);
-                if (isARecent && !isBRecent) return -1;
-                if (!isARecent && isBRecent) return 1;
+                if (aStartsWith && bStartsWith) {
+                    const isARecent = recentItems.includes(aItemNameRaw);
+                    const isBRecent = recentItems.includes(bItemNameRaw);
+                    if (isARecent && !isBRecent) return -1;
+                    if (!isARecent && isBRecent) return 1;
+                }
             }
 
             // prioritize items that start with the search string
-            const aStartsWith = aItemName.startsWith(searchString);
-            const bStartsWith = bItemName.startsWith(searchString);
             if (aStartsWith && !bStartsWith) return -1;
             if (!aStartsWith && bStartsWith) return 1;
 
