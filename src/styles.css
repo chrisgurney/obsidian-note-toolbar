@@ -1188,6 +1188,7 @@ input[type="text"].note-toolbar-setting-error,
     border-top: 1px solid var(--background-modifier-border);
     padding: 8px 0;
     & .setting-item {
+        align-items: center !important;
         border-bottom: none !important;
     }
     & .note-toolbar-setting-item-fields {
