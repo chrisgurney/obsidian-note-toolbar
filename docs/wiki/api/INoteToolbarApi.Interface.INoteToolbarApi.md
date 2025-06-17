@@ -195,6 +195,8 @@ Shows a modal with the provided content.
 
 `Promise`\<`Modal`\>
 
+A `Modal`, in case you want to manipulate it further; can be ignored otherwise.
+
 #### Examples
 
 ```ts

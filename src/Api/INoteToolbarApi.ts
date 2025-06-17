@@ -107,6 +107,7 @@ export interface INoteToolbarApi<T> {
      * 
      * @param content Content to display in the modal, either as a string or a file within the vault.
      * @param options Optional display options.
+     * @returns A `Modal`, in case you want to manipulate it further; can be ignored otherwise.
      * 
      * @example
      * // shows a modal with the provided string
