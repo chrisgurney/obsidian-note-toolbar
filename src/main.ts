@@ -724,9 +724,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (target && type && [ItemType.File, ItemType.Uri].contains(type as ItemType)) {
 					let itemLink = target.getAttribute('href') || '';
 					itemLink = await this.replaceVars(itemLink, this.app.workspace.getActiveFile());
-					// make sure it's not actually a folder, as we can't preview them
-					const file = this.app.vault.getAbstractFileByPath(itemLink);
-					if (!(file instanceof TFolder)) {
+					// make sure it's not actually a folder or URI, as we can't preview them
+					const isFolder = this.app.vault.getAbstractFileByPath(itemLink) instanceof TFolder;
+					const isUri = ((type === ItemType.Uri) && isValidUri(itemLink));
+					if (!isFolder && !isUri) {
 						// source doesn't seem to be required as Page preview plugin settings aren't being respected
 						this.app.workspace.trigger('hover-link', {
 							event: evt,
