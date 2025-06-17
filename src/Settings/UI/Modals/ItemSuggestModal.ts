@@ -239,12 +239,12 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         // sort the results
         const recentItems = JSON.parse(localStorage.getItem(LocalVar.RecentItems) || '[]');
         sortedSuggestions.sort((a, b) => {
-            const aItemNameRaw = this.cleanString(a.label || a.tooltip || a.link || '');
-            const bItemNameRaw = this.cleanString(b.label || b.tooltip || a.link || '');
+            const aItemNameRaw = this.cleanString(a.label || a.tooltip || '');
+            const bItemNameRaw = this.cleanString(b.label || b.tooltip || '');
             const aItemName = this.cleanString((!this.plugin.hasVars(a.label) ? a.label : '') || 
-                (!this.plugin.hasVars(a.tooltip) ? a.tooltip : '') || (!this.plugin.hasVars(a.link) ? a.link : ''));
+                (!this.plugin.hasVars(a.tooltip) ? a.tooltip : '') || '');
             const bItemName = this.cleanString((!this.plugin.hasVars(b.label) ? b.label : '') || 
-                (!this.plugin.hasVars(b.tooltip) ? b.tooltip : '') || (!this.plugin.hasVars(b.link) ? b.link : ''));
+                (!this.plugin.hasVars(b.tooltip) ? b.tooltip : '') || '');
 
             const aStartsWith = aItemName.startsWith(searchString);
             const bStartsWith = bItemName.startsWith(searchString);
