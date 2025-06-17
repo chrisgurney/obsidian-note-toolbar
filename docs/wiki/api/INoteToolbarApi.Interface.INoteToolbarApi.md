@@ -177,7 +177,7 @@ All toolbars.
 
 ### modal()
 
-> **modal**: (`content`, `options`?) => `Promise`\<`void`\>
+> **modal**: (`content`, `options`?) => `Promise`\<`Modal`\>
 
 Shows a modal with the provided content.
 
@@ -193,7 +193,7 @@ Shows a modal with the provided content.
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`Modal`\>
 
 #### Examples
 

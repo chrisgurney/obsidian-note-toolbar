@@ -1,6 +1,4 @@
-import { TAbstractFile, TFile } from "obsidian";
-import { Callback } from "./NoteToolbarApi";
-import { Toolbar } from "./Toolbar";
+import { Modal, TAbstractFile, TFile } from "obsidian";
 import { IToolbar } from "./IToolbar";
 import { IItem } from "./IItem";
 
@@ -130,7 +128,7 @@ export interface INoteToolbarApi<T> {
      * 
      * @see `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
-    modal: (content: string | TFile, options?: NtbModalOptions) => Promise<void>;
+    modal: (content: string | TFile, options?: NtbModalOptions) => Promise<Modal>;
 
     /**
      * Shows the prompt modal and waits for the user's input.

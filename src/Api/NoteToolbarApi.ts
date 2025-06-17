@@ -4,7 +4,7 @@ import { NtbSuggester } from "./NtbSuggester";
 import { NtbPrompt } from "./NtbPrompt";
 import { INoteToolbarApi, NtbFileSuggesterOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
 import { NtbModal } from "./NtbModal";
-import { TAbstractFile, TFile, TFolder } from "obsidian";
+import { Modal, TAbstractFile, TFile, TFolder } from "obsidian";
 import { Toolbar } from "./Toolbar";
 import { Item } from "./Item";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
@@ -138,11 +138,12 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.modal
      */
-    async modal(content: string | TFile, options?: NtbModalOptions): Promise<void> {
+    async modal(content: string | TFile, options?: NtbModalOptions): Promise<Modal> {
         const modal = new NtbModal(this.plugin, content, options);
         if (options?.editable && content instanceof TFile) await modal.displayEditor();
         else if (options?.webpage && typeof content === 'string') await modal.displayWebpage();
         else await modal.displayMarkdown();
+        return modal as Modal;
     }
 
     /**
