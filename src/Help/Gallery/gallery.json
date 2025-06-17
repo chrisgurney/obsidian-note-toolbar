@@ -148,10 +148,12 @@
         },
         {
             "name": {
-                "en": "Reduce Distractions"
+                "en": "Reduce Distractions",
+                "uk": "Зменшити відволікання"
             },
             "description": {
-                "en": "Remove Obsidian's UI and focus on your writing."
+                "en": "Remove Obsidian's UI and focus on your writing.",
+                "uk": "Сховати зайві елементи інтерфейсу та зосередиться на написанні."
             },
             "itemIds": [
                 "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace"
