@@ -55,7 +55,7 @@ export interface INoteToolbarApi<T> {
      * Shows a file suggester modal and waits for the user's selection.
      * 
      * @param options Optional display options.
-     * @returns The selected TAbstractFile.
+     * @returns The selected `TAbstractFile`.
      * 
      * @example
      * const fileOrFolder = await ntb.fileSuggester();

@@ -81,7 +81,7 @@ Shows a file suggester modal and waits for the user's selection.
 
 `Promise`\<`null` \| `TAbstractFile`\>
 
-The selected TAbstractFile.
+The selected `TAbstractFile`.
 
 #### Example
 
