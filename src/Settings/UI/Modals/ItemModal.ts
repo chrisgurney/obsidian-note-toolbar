@@ -43,6 +43,7 @@ export default class ItemModal extends Modal {
 	public display() {
         
         this.contentEl.empty();
+        this.modalEl.addClass('note-toolbar-setting-modal-container');
 
 		// update status of installed plugins so we can show available plugins and display errors if needed
         this.plugin.checkPlugins();

@@ -35,7 +35,10 @@ export default class StyleModal extends Modal {
 	 * Displays the toolbar's Style UI.
 	 */
 	public display() {
+
         this.contentEl.empty();
+		this.modalEl.addClass('note-toolbar-setting-modal-container');
+		
         const toolbarStyleUi = new ToolbarStyleUi(this.plugin, this, this.toolbar);
         toolbarStyleUi.displayStyleSetting(this.contentEl);
 

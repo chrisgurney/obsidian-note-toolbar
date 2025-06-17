@@ -33,6 +33,8 @@ export class ImportModal extends Modal {
 
         new Promise((resolve) => {
 
+            this.modalEl.addClass('note-toolbar-setting-modal-container');
+            
             this.setTitle(this.toolbar
                 ? t('import.title-import-into', { toolbar: this.toolbar.name })
                 : t('import.title-import')

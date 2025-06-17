@@ -34,6 +34,8 @@ export class ImportConfirmModal extends Modal {
 
     async display() {
 
+        this.modalEl.addClass('note-toolbar-setting-modal-container');
+
         // parse the callout to show a preview
         let toolbar: ToolbarSettings = await importFromCallout(this.plugin, this.callout, undefined, true);
 

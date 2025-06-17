@@ -36,7 +36,8 @@ export class ConfirmModal extends Modal {
 
     async display() {
         new Promise((resolve) => {
-
+            
+            this.modalEl.addClass('note-toolbar-setting-modal-container');
             this.setTitle(this.uiSettings.title);
 
             if (this.uiSettings.questionLabel) {

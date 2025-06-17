@@ -28,6 +28,7 @@ export class ShareModal extends Modal {
     public display() {
 
         this.contentEl.empty();
+        this.modalEl.addClass('note-toolbar-setting-modal-container');
 
         this.contentEl.createEl(
             "p", 

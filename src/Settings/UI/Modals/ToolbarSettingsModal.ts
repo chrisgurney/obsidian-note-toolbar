@@ -99,9 +99,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.plugin.debug("🟡 REDRAWING MODAL 🟡");
 
-		this.modalEl.addClass("note-toolbar-setting-modal-container");
-
 		this.contentEl.empty();
+		this.modalEl.addClass('note-toolbar-setting-modal-container');
 
 		// update status of installed plugins so we can display errors if needed
 		this.plugin.checkPlugins();
