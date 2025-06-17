@@ -1,4 +1,4 @@
-import { debounce, Setting } from "obsidian";
+import { debounce, ItemView, MarkdownView, Setting } from "obsidian";
 import { emptyMessageFr, getStyleDisclaimersFr, getValueForKey, learnMoreFr } from "./Utils/SettingsUIUtils";
 import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { arraymove } from "Utils/Utils";
@@ -198,6 +198,10 @@ export default class ToolbarStyleUi {
         if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Top &&
             this.toolbar.position.desktop?.allViews?.position !== PositionType.Bottom) excludedStyles.push('wide');
 
+        if (this.isUsingLaunchpad()) {
+            excludedStyles.push('center', 'left', 'right', 'between', 'even', 'sticky', 'tab');
+        }
+
         const { defaultStyles } = this.toolbar;
         if (defaultStyles.includes('left')) excludedStyles.push('right', 'center');
         if (defaultStyles.includes('right')) excludedStyles.push('left', 'center');
@@ -218,6 +222,10 @@ export default class ToolbarStyleUi {
         if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Top) excludedStyles.push('mnwd', 'mwd');
         if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Props) excludedStyles.push('mstcky', 'mnstcky');
 
+        if (this.isUsingLaunchpad()) {
+            excludedStyles.push('mctr', 'mlft', 'mrght', 'mbtwn', 'mevn', 'mstcky', 'mnstcky', 'mntb', 'mnwrp', 'mtb');
+        }
+
         const { mobileStyles } = this.toolbar;
         if (mobileStyles.includes('mlft')) excludedStyles.push('mrght', 'mctr');
         if (mobileStyles.includes('mrght')) excludedStyles.push('mlft', 'mctr');
@@ -234,6 +242,18 @@ export default class ToolbarStyleUi {
         if (defaultStyles.includes('wide')) excludedStyles.push('mwd');
 
         return excludedStyles;
+    }
+
+    /**
+     * Checks if the toolbar is being displayed in the Launchpad view.
+     * @returns true if the toolbar is being displayed in the Launchpad view, false otherwise.
+     */
+    isUsingLaunchpad(): boolean {
+        const toolbarView = this.plugin.app.workspace.getActiveViewOfType(ItemView);
+        return Boolean(
+            !(toolbarView instanceof MarkdownView) && toolbarView?.getViewType() === 'empty' 
+            && this.plugin.settings.showLaunchpad && this.plugin.settings.emptyViewToolbar
+        );
     }
 
     /**
