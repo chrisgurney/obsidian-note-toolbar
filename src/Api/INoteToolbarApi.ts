@@ -4,7 +4,7 @@ import { IItem } from "./IItem";
 
 /**
  * > [!note]
- * > This documentation is for version `1.23`.
+ * > This documentation is for version `1.24`.
  * 
  * The Note Toolbar API provides basic toolbar access, and the ability to show UI (suggesters, prompts, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
  * 
