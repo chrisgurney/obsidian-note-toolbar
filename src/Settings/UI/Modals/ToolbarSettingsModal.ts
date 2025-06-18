@@ -101,6 +101,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.contentEl.empty();
 		this.modalEl.addClass('note-toolbar-setting-modal-container');
+		this.modalEl.addClass('note-toolbar-setting-modal-phone-inset-fix');
 
 		// update status of installed plugins so we can display errors if needed
 		this.plugin.checkPlugins();
