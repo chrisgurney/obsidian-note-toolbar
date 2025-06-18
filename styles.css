@@ -3341,10 +3341,16 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-setting-modal-phone-inset-fix {
+.note-toolbar-setting-modal-phone-top-inset-fix {
     .is-phone & {
         /* fix/workaround for Obsidian v1.5.11 bug: tall modals opened from settings have an inaccessible close button */
         top: var(--safe-area-inset-top);
+    }
+}
+
+.note-toolbar-setting-modal-phone-bottom-inset-fix {
+    .is-phone & {
+        padding-bottom: var(--safe-area-inset-bottom);
     }
 }
 

@@ -38,7 +38,8 @@ export default class StyleModal extends Modal {
 
         this.contentEl.empty();
 		this.modalEl.addClass('note-toolbar-setting-modal-container');
-		this.modalEl.addClass('note-toolbar-setting-modal-phone-inset-fix');
+		this.modalEl.addClass('note-toolbar-setting-modal-phone-top-inset-fix');
+		this.modalEl.addClass('note-toolbar-setting-modal-phone-bottom-inset-fix');
 		
         const toolbarStyleUi = new ToolbarStyleUi(this.plugin, this, this.toolbar);
         toolbarStyleUi.displayStyleSetting(this.contentEl);
