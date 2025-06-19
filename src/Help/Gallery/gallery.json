@@ -6,7 +6,7 @@
     },
     "overview": { 
         "en": "Browse examples of items, and click/tap to add them to a toolbar.",
-        "zh": "浏览项目示例，点击/轻触以将其添加到工具栏。",
+        "zh": "浏览项目示例，点击以将其添加到工具栏。",
         "uk": "Перегляньте приклади елементів, та натисніть щоб додати їх до панелі."
     },
     "pluginNote": { 
@@ -122,10 +122,12 @@
         },
         {
             "name": { 
-                "en": "New tab view"
+                "en": "New tab view",
+                "zh": "新标签页视图"
             },
             "description": {
-                "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
+                "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
+                "zh": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
             },
             "itemIds": [
                 "go-home", "daily-notes-today", "file-new", "file-new-tab", "templater-new-note-from-template", "bookmarks-open"
@@ -149,11 +151,13 @@
         {
             "name": {
                 "en": "Reduce Distractions",
+                "zh": "减少干扰",
                 "uk": "Зменшити відволікання"
             },
             "description": {
                 "en": "Remove Obsidian's UI and focus on your writing.",
-                "uk": "Сховати зайві елементи інтерфейсу та зосередиться на написанні."
+                "zh": "隐藏 Obsidian 的 UI 元素，专注于写作。",
+                "uk": "Сховати зайві елементи інтерфейсу та зосередитися на написанні."
             },
             "itemIds": [
                 "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace"

@@ -166,8 +166,9 @@
     "select-plugin-placeholder": "选择一个插件…",
     "select-plugin-suggestion": "{{plugin}}",
     "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ 未安装（或未启用）",
-    "title": "Note Toolbar Gallery 示例库",
-    "tooltip-add-item": "添加项目到工具栏"
+    "title": "Note Toolbar 示例库",
+    "tooltip-add-item": "添加项目到工具栏",
+    "label-add-item": "点击以将其中一项添加到工具栏中："
   },
   "import": {
     "button-add-items": "添加项目",
@@ -304,7 +305,11 @@
       "option-image": "图像",
       "option-kanban": "Kanban 看板",
       "option-pdf": "PDF文档",
-      "option-video": "视频"
+      "option-video": "视频",
+      "option-bases": "Bases（数据库）",
+      "option-other": "其他数据类型（data types）",
+      "option-other-description": "其他可用于显示工具栏的数据类型，用空格分隔。",
+      "option-other-placeholder": "例如：excalidraw"
     },
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
@@ -340,7 +345,13 @@
       "label-gallery-description": "查看示例库（Gallery）以获取开箱即用的工具项目。",
       "label-support": "获取支持",
       "label-user-guide": "阅读用户指南",
-      "title": "笔记工具栏的帮助🛟"
+      "title": "笔记工具栏的帮助🛟",
+      "heading-donate": "捐赠",
+      "error-failed-to-load": "无法加载：\n{{baseUrl}}/{{lang}}/{{name}}.md",
+      "heading-support": "支持",
+      "label-issues": "查看未决问题",
+      "heading-user-guide": "用户指南",
+      "tooltip-view-tip": "查看该 Tip"
     },
     "icon-suggester": {
       "instruction-dismiss": "关闭",
@@ -416,7 +427,15 @@
       "option-visibility-platform-desktop": "桌面端",
       "option-visibility-platform-mobile": "移动端",
       "option-visibility-visible-platform": "在{{platform}}显示",
-      "title": "编辑项目"
+      "title": "编辑项目",
+      "option-command-check": "如果不可用则隐藏",
+      "option-command-check-description": "如果无法在当前上下文中执行命令，则在工具栏中隐藏该项目。",
+      "option-command-help": "使用此项目时运行命令。",
+      "option-dataview-help": "运行 Dataview 查询，评估表达式或执行脚本。",
+      "option-file-help": "使用此项目时，打开文件或定位到文件夹。",
+      "option-javascript-help": "执行或评估 JavaScript 脚本",
+      "option-js-engine-help": "使用 JS Engine 插件执行或评估 JavaScript 脚本",
+      "option-templater-help": "插入模板，使用模板创建新笔记，或执行 Templater 命令或模板文件。"
     },
     "item-suggest-modal": {
       "instruction-back": "返回",
@@ -510,6 +529,10 @@
       "show-edit-tbar": {
         "description": "在工具栏菜单中添加一个项目，以快速访问工具栏的设置。",
         "name": "在工具栏菜单中显示'编辑工具栏'的链接"
+      },
+      "keep-props-state": {
+        "description": "如果您使用 Note Toolbar 的选项来切换属性，则将保持笔记中的属性区显示状态。\n启用时，您必须使用本插件的“显示笔记属性”命令来重新显示属性。",
+        "name": "保持属性区可见状态"
       }
     },
     "position": {
@@ -527,7 +550,8 @@
       "option-hidden-mobile": "隐藏 / 导航栏",
       "option-mobile-help": "提示：你可以从导航栏访问工具栏。",
       "option-props": "属性下方",
-      "option-top": "置顶（固定位置）"
+      "option-top": "置顶（固定位置）",
+      "option-centered": "居中"
     },
     "search": {
       "button-tooltip": "搜索工具栏",
@@ -630,6 +654,15 @@
       "label-roadmap-description": "查看路线图，以预览考虑开发的新功能。",
       "placehoder-loading": "加载中……",
       "title": "Note Toolbar 更新内容"
+    },
+    "display-empty-view": {
+      "description": "将工具栏附加到新标签页（或直接将新标签页替换为工具栏）",
+      "name": "新标签页",
+      "option-emptyview-description": "选择一个工具栏，在没有笔记打开的时显示",
+      "option-launchpad": "使用工具栏替换视图",
+      "option-emptyview": "新标签页的工具栏",
+      "option-launchpad-description": "使用该工具栏替换新标签页",
+      "option-emptyview-placeholder": "选择工具栏…"
     }
   },
   "toolbar": {

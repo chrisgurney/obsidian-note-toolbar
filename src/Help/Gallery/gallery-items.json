@@ -102,12 +102,14 @@
         "id": "copy-note-content",
         "description": {
             "en": "Copy body of the note to the clipboard, ignoring frontmatter.",
+            "zh": "复制笔记正文到剪贴板，忽略 frontmatter。",
             "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
         },
         "icon": "clipboard-check",
         "script": "const e = app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
         "tooltip": {
             "en": "Copy note content",
+            "zh": "复制笔记内容",
             "uk": "Скопіювати вміст нотатки"
         },
         "type": "javascript"
@@ -358,12 +360,14 @@
         "id": "file-new-tab",
         "description": {
             "en": "Opens the selected file in a new tab.",
+            "zh": "在新标签页中打开选定的文件。",
             "uk": "Відкрийте обраний файл в новій вкладці."
         },
         "icon": "file-plus",
         "script": "const file = await ntb.fileSuggester({filesonly: true});\nif (file) app.workspace.getLeaf(true).openFile(file);",
         "tooltip": {
             "en": "Open file in new tab",
+            "zh": "在新标签页中打开文件",
             "uk": "Відкрити в новій вкладці"
         },
         "type": "javascript"
@@ -750,11 +754,13 @@
         "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
         "description": {
             "en": "Copy Note Toolbar's settings (data.json) file into the vault.",
+            "zh": "将 Note Toolbar 的设置（data.json）文件复制到库中。",
             "uk": "Зберігайте до сховища резервну копію файлу налаштунків Note Toolbar (data.json)."
         },
         "icon": "file-stack",
         "tooltip": {
             "en": "Backup Note Toolbar config",
+            "zh": "备份 Note Toolbar 配置",
             "uk": "Резервна копія Note Toolbar"
         },
         "type": "javascript"
@@ -859,11 +865,13 @@
         "commandId": "obsidian-excalidraw-plugin:excalidraw-autocreate-newtab",
         "description": {
             "en": "Create a new Excalidraw drawing.",
+            "zh": "创建一个新的 Excalidraw 绘图。",
             "uk": "Створіть новий малюнок Excalidraw."
         },
         "icon": "pencil-line",
         "tooltip": {
             "en": "New drawing",
+            "zh": "新建绘图",
             "uk": "Новий малюнок"
         },
         "type": "command"
