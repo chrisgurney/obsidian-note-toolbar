@@ -44,6 +44,8 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	// track the last used callout link, for the menu URI
 	lastCalloutLink: Element | null = null;
+	// track the last clicked element, for the menu API
+	lastClickedEl: Element | null = null;
 
 	// track the last used file and property, to prompt if Note Toolbar property references unknown toolbar
 	lastFileOpenedOnCacheChange: TFile | null;
@@ -1489,6 +1491,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		let activeFile = this.app.workspace.getActiveFile();
 		const item = this.settingsManager.getToolbarItemById(uuid);
+
+		const eventTarget = event?.target as HTMLElement | null;
+		if (eventTarget) this.lastClickedEl = eventTarget.closest('.callout[data-callout="note-toolbar"] span.external-link');
 
 		// update active item attributes in the toolbar, so the API can fetch the right active item
 		this.updateActiveToolbarItem(uuid);
