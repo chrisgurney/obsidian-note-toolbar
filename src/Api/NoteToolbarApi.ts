@@ -2,9 +2,9 @@ import NoteToolbarPlugin from "main";
 import { testCallback } from "Api/TestCallback";
 import { NtbSuggester } from "./NtbSuggester";
 import { NtbPrompt } from "./NtbPrompt";
-import { INoteToolbarApi, NtbFileSuggesterOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
+import { INoteToolbarApi, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
 import { NtbModal } from "./NtbModal";
-import { Modal, TAbstractFile, TFile, TFolder } from "obsidian";
+import { Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { Toolbar } from "./Toolbar";
 import { Item } from "./Item";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
@@ -131,6 +131,54 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     getToolbars(): Toolbar[] {
         return this.plugin.settings.toolbars.map(toolbar => new Toolbar(this.plugin, toolbar));
+    }
+
+    /**
+     * Shows a menu with the provided items.
+     * 
+     * @see INoteToolbarApi.menu
+     */
+    async menu(items: NtbMenuItem[], options?: NtbMenuOptions): Promise<void> {
+
+        const menu = new Menu();
+        const requiredProps: (keyof NtbMenuItem)[] = ['type', 'value'];
+        items.map((item: NtbMenuItem) => {
+            const missingProp = requiredProps.find(p => !item[p]);
+            if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type}));
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(item.label)
+                    .setIcon(item.icon ? item.icon : null)
+                    .onClick(async () => {
+                        switch (item.type) {
+                            case 'command':
+                                await this.plugin.handleLinkCommand(item.value);
+                                break;
+                            case 'file':
+                                const activeFile = this.plugin.app.workspace.getActiveFile();
+                                const activeFilePath = activeFile ? activeFile.path : '';
+                                this.plugin.app.workspace.openLinkText(item.value, activeFilePath);
+                                break;
+                            case 'uri':
+                                await this.plugin.handleLinkUri(item.value);
+                                break;
+                            default:
+                                new Notice(t('api.ui.error-unsupported-property', {property: item.type}));
+                                break;
+                        }
+                    });
+            });
+        });
+
+        menu.dom.addClass('note-toolbar-menu');
+
+		// apply custom classes to the sub-menu by getting the note's toolbar 
+		const activeToolbar = this.plugin.getCurrentToolbar();
+		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+        if (options?.class) menu.dom.addClasses([...options.class.split(' ')]);
+
+        // this.plugin.debug('lastClickedEl', this.plugin.lastClickedEl);
+        this.plugin.showMenuAtElement(menu, this.plugin.lastClickedEl);
     }
 
     /**

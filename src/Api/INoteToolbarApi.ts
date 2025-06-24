@@ -103,6 +103,22 @@ export interface INoteToolbarApi<T> {
     getToolbars: () => IToolbar[];
 
     /**
+     * Shows a menu with the provided items.
+     * 
+     * @param {NtbMenuItem[]} items Array of items to display.
+     * @param options Optional display options.
+     * @returns Nothing. Displays the menu.
+     * 
+     * @example
+     * await ntb.menu([
+     *   { type: 'command', value: 'editor:toggle-bold', label: 'Toggle Bold', icon: 'bold' },
+     *   { type: 'file', value: 'Templates/Daily.md', label: 'Open Template' },
+     *   { type: 'uri', value: 'https://example.com', label: 'Visit Site' }
+     * ]);
+     */
+    menu: (items: NtbMenuItem[], options?: NtbMenuOptions) => Promise<void>;
+
+    /**
      * Shows a modal with the provided content.
      * 
      * @param content Content to display in the modal, either as a string or a file within the vault.
@@ -218,6 +234,36 @@ export interface INoteToolbarApi<T> {
      */
     t: string;
 
+}
+
+export interface NtbMenuItem {
+    /**
+     * Optional icon to display in the menu item.
+     */
+    icon?: string;
+    /**
+     * Label for the menu item.
+     */
+    label: string;
+    /**
+     * Type of the menu item. One of: 'command', 'file', or 'uri'.
+     */
+    type: 'command' | 'file' | 'uri';
+    /**
+     * Value for the menu item. For 'command', this is the command ID.
+     */
+    value: string;
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbMenuOptions {
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
 }
 
 /**

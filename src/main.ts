@@ -1554,46 +1554,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 			case ItemType.Uri:
-				if (isValidUri(linkHref)) {
-					let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
-
-					const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled ?? false;
-					const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;					
-					let usingWebViewer = false;
-
-					// use Web Viewer for certain targets even if the 'Open external links' setting is disabled
-					if (isWebViewerEnabled 
-						&& linkHref.toLowerCase().startsWith('http') 
-						&& (['modal', 'split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)
-					) {
-						usingWebViewer = true;
-					}
-
-					if (usingWebViewer) {
-						if (target === 'modal') {
-							this.api.modal(linkHref, { webpage: true });
-						}
-						else {
-							const leaf = this.app.workspace.getLeaf(target);
-							await leaf.setViewState({type: 'webviewer', state: { url: linkHref, navigate: true }, active: true});
-						}
-					}
-					else {
-						window.open(linkHref, '_blank');
-					}
-				}
-				else {
-					// as fallback, treat it as internal note
-					let activeFilePath = this.app.workspace.getActiveFile()?.path ?? "";
-					let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
-					if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
-						// this.api.modal(fileOrFolder, { editable: true });
-						this.api.modal(fileOrFolder);
-					}
-					else {
-						this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
-					}
-				}
+				await this.handleLinkUri(linkHref, event, item);
 				break;
 		}
 		
@@ -1652,6 +1613,49 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		result ? insertTextAtCursor(this.app, result) : undefined;
 		this.app.workspace.activeEditor?.editor?.focus();
+	}
+
+	async handleLinkUri(linkHref: string, event?: MouseEvent | KeyboardEvent, item?: ToolbarItemSettings) {
+		if (isValidUri(linkHref)) {
+			let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
+
+			const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled ?? false;
+			const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;					
+			let usingWebViewer = false;
+
+			// use Web Viewer for certain targets even if the 'Open external links' setting is disabled
+			if (isWebViewerEnabled 
+				&& linkHref.toLowerCase().startsWith('http') 
+				&& (['modal', 'split', 'tab', 'window'].includes(target) || isWebViewerOpeningUrls)
+			) {
+				usingWebViewer = true;
+			}
+
+			if (usingWebViewer) {
+				if (target === 'modal') {
+					this.api.modal(linkHref, { webpage: true });
+				}
+				else {
+					const leaf = this.app.workspace.getLeaf(target);
+					await leaf.setViewState({type: 'webviewer', state: { url: linkHref, navigate: true }, active: true});
+				}
+			}
+			else {
+				window.open(linkHref, '_blank');
+			}
+		}
+		else {
+			// as fallback, treat it as internal note
+			let activeFilePath = this.app.workspace.getActiveFile()?.path ?? "";
+			let fileOrFolder = this.app.vault.getAbstractFileByPath(linkHref);
+			if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
+				// this.api.modal(fileOrFolder, { editable: true });
+				this.api.modal(fileOrFolder);
+			}
+			else {
+				this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
+			}
+		}
 	}
 
 	/**

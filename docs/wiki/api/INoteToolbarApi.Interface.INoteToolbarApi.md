@@ -175,6 +175,38 @@ All toolbars.
 
 ***
 
+### menu()
+
+> **menu**: (`items`, `options`?) => `Promise`\<`void`\>
+
+Shows a menu with the provided items.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `items` | [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Array of items to display. |
+| `options`? | \{ `class`: `string`; \} | Optional display options. |
+| `options.class`? | `string` | Optional CSS class(es) to add to the component. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing. Displays the menu.
+
+#### Example
+
+```ts
+await ntb.menu([
+  { type: 'command', value: 'editor:toggle-bold', label: 'Toggle Bold', icon: 'bold' },
+  { type: 'file', value: 'Templates/Daily.md', label: 'Open Template' },
+  { type: 'uri', value: 'https://example.com', label: 'Visit Site' }
+]);
+```
+
+***
+
 ### modal()
 
 > **modal**: (`content`, `options`?) => `Promise`\<`Modal`\>
