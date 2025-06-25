@@ -208,6 +208,7 @@ export interface NoteToolbarSettings {
 	keepPropsState: boolean;
 	onboarding: OnboardingState;
 	ribbonAction: RibbonAction;
+	// rules: Array<ToolbarRule>;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
 	showLaunchpad: boolean;
@@ -234,6 +235,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	keepPropsState: false,
 	onboarding: {},
 	ribbonAction: RibbonAction.Toolbar,
+	// rules: [],
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
 	showLaunchpad: false,
@@ -370,6 +372,24 @@ export interface ItemViewContext extends ViewContext {
 export interface FolderMapping {
 	folder: string;
 	toolbar: string;
+}
+
+export type ConjunctionType = 'and' | 'or';
+export type RuleType = 'folder';
+export type RuleOperatorType = 'is' | 'isNot' | 'startsWith';
+
+export interface ToolbarRule {
+	id: string;
+	toolbar: string;
+	conjunction: ConjunctionType;
+	rules: Array<ToolbarCondition>;
+}
+
+export interface ToolbarCondition {
+	type: RuleType;
+	key: string;
+	condition: RuleOperatorType;
+	value: string;
 }
 
 export interface ToolbarItemSettings {

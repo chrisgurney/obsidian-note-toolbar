@@ -551,6 +551,21 @@
             "option-props": "Below Properties",
             "option-top": "Top (fixed)"
         },
+        "rules": {
+            "button-collapse-tooltip": "Collapse all rules",
+            "button-expand-tooltip": "Expand all rules",
+            "button-new": "New rule",
+            "button-new-tooltip": "Add a new rule",
+            "description": "Rules that define which notes to display toolbars on.",
+            "error-folder-already-mapped": "This folder already has a toolbar associated with it. Precedence is top to bottom.",
+            "label-empty": "Use the button to create a rule.",
+            "name": "Rules",
+            "name-with-count": "Rules ({{count}})",
+            "option-folder-all": "all folders",
+            "option-folder-root": "root folder only",
+            "placeholder-folder": "Folder",
+            "placeholder-toolbar": "Toolbar"
+        },
         "search": {
             "button-tooltip": "Search toolbars",
             "field-placeholder": "Search toolbars..."
