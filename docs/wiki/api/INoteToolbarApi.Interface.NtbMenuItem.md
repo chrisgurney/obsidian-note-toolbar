@@ -24,7 +24,7 @@ Label for the menu item.
 
 > **type**: `"file"` \| `"command"` \| `"uri"`
 
-Type of the menu item. One of: 'command', 'file', or 'uri'.
+Type of the menu item. Can be `command`, `file`, or `uri`.
 
 ***
 
@@ -32,4 +32,4 @@ Type of the menu item. One of: 'command', 'file', or 'uri'.
 
 > **value**: `string`
 
-Value for the menu item. For 'command', this is the command ID.
+Value for the menu item. For `command`, this is the command ID.

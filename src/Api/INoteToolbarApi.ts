@@ -249,11 +249,11 @@ export interface NtbMenuItem {
      */
     label: string;
     /**
-     * Type of the menu item. One of: 'command', 'file', or 'uri'.
+     * Type of the menu item. Can be `command`, `file`, or `uri`.
      */
     type: 'command' | 'file' | 'uri';
     /**
-     * Value for the menu item. For 'command', this is the command ID.
+     * Value for the menu item. For `command`, this is the command ID.
      */
     value: string;
 }
