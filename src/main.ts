@@ -983,6 +983,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			return; // stop recursion
 		}
 
+		const toolbarView = this.app.workspace.getActiveViewOfType(ItemView);
+
 		for (const toolbarItem of toolbar.items) { 
 			// skip empty items
 			if (![ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type) &&
@@ -1027,7 +1029,11 @@ export default class NoteToolbarPlugin extends Plugin {
 						// don't show the item if the link has variables and resolves to nothing
 						if (this.hasVars(toolbarItem.link) && await this.replaceVars(toolbarItem.link, file) === "") {
 							break;
-						}
+						}						
+						// don't show command if not available
+						const isCommandAvailable = this.isCommandItemAvailable(toolbarItem, toolbarView);
+						if (!isCommandAvailable) break;
+
 						menu.addItem((item: MenuItem) => {
 
 							const itemTitleFr = document.createDocumentFragment();
@@ -1213,32 +1219,13 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			let itemSetting = this.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
-
-				if (itemSetting.linkAttr.commandId) {					
-					const command: Command = this.app.commands.commands[itemSetting.linkAttr.commandId];
-					// hide if the command doesn't exist
-					if (!command) {
-						itemEl.addClass('hide');
-						continue;						
-					}
-					// hide if the command is not available in the current context
-					else if (itemSetting.linkAttr.commandCheck) {
-						let canRunCommand: boolean = true;
-						if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
-							canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
-						}
-						if (canRunCommand && typeof command?.checkCallback === 'function') {
-							canRunCommand = command.checkCallback(true) ?? false;
-						}
-						this.debug('command availability for:', itemSetting.linkAttr.commandId, '→', canRunCommand);
-						if (canRunCommand) {
-							itemEl.removeClass('hide');
-						}
-						else {
-							itemEl.addClass('hide');
-							continue;
-						}
-					}
+				const isCommandAvailable = this.isCommandItemAvailable(itemSetting, toolbarView);
+				if (isCommandAvailable) {
+					itemEl.removeClass('hide');
+				}
+				else {
+					itemEl.addClass('hide');
+					continue;
 				}
 
 				// update tooltip + label
@@ -2457,6 +2444,34 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 		return hasVars;
+	}
+
+	/**
+	 * Checks if the command item exists and is available in the current context.
+	 * @param item toolbar item to check
+	 * @param toolbarView view to check the command availability in
+	 * @returns true if item is a command and is available, false otherwise.
+	 */
+	isCommandItemAvailable(item: ToolbarItemSettings, toolbarView: ItemView | null): boolean {
+		let isCommandAvailable: boolean = true;
+		if (item.linkAttr.type === ItemType.Command && item.linkAttr.commandId) {
+			const command: Command = this.app.commands.commands[item.linkAttr.commandId];
+			// command doesn't exist
+			if (!command) {
+				isCommandAvailable = false;				
+			}
+			// command is not available in the current context
+			else if (item.linkAttr.commandCheck) {
+				if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
+					isCommandAvailable = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
+				}
+				if (isCommandAvailable && typeof command?.checkCallback === 'function') {
+					isCommandAvailable = command.checkCallback(true) ?? false;
+				}
+			}
+			this.debug('command available:', item.linkAttr.commandId, '→', isCommandAvailable);
+		}
+		return isCommandAvailable;
 	}
 
 	/**
