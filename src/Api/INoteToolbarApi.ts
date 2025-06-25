@@ -236,6 +236,9 @@ export interface INoteToolbarApi<T> {
 
 }
 
+/**
+ * Defines a menu item that can be dynamically created and displayed via [`ntb.menu()`](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#menu).
+ */
 export interface NtbMenuItem {
     /**
      * Optional icon to display in the menu item.

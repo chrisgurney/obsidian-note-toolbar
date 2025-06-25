@@ -1,5 +1,7 @@
 [obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / NtbMenuItem
 
+Defines a menu item that can be dynamically created and displayed via [`ntb.menu()`](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API#menu).
+
 ## Properties
 
 ### icon?
