@@ -1227,9 +1227,10 @@ export default class NoteToolbarPlugin extends Plugin {
 						if ((toolbarView instanceof MarkdownView) && typeof command?.editorCheckCallback === 'function') {
 							canRunCommand = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
 						}
-						else if (typeof command?.checkCallback === 'function') {
+						if (canRunCommand && typeof command?.checkCallback === 'function') {
 							canRunCommand = command.checkCallback(true) ?? false;
 						}
+						this.debug('command availability for:', itemSetting.linkAttr.commandId, '→', canRunCommand);
 						if (canRunCommand) {
 							itemEl.removeClass('hide');
 						}
