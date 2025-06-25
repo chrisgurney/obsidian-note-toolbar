@@ -2470,7 +2470,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					isCommandAvailable = command.checkCallback(true) ?? false;
 				}
 			}
-			this.debug('command available:', item.linkAttr.commandId, '→', isCommandAvailable);
+			// this.debug('command available:', item.linkAttr.commandId, '→', isCommandAvailable);
 		}
 		return isCommandAvailable;
 	}
