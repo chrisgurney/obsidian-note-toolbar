@@ -955,12 +955,11 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const otherContextSettings = new Setting(containerEl)
 			.setHeading()
-			.setName(t('setting.display-empty-view.name'))
-			.setDesc(learnMoreFr(t('setting.display-empty-view.description'), 'New-tab-view'));
+			.setName(t('setting.display-empty-view.name'));
 
 		new Setting(containerEl)
 			.setName(t('setting.display-empty-view.option-emptyview'))
-			// .setDesc(t('setting.display-empty-view.option-emptyview-description'))
+			.setDesc(t('setting.display-empty-view.option-emptyview-description'))
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
 				cb.setPlaceholder(t('setting.display-empty-view.option-emptyview-placeholder'))
@@ -977,7 +976,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const launchpadSetting = new Setting(containerEl)
 			.setName(t('setting.display-empty-view.option-launchpad'))
-			// .setDesc(t('setting.display-empty-view.option-launchpad-description'))
+			.setDesc(learnMoreFr(t('setting.display-empty-view.option-launchpad-description'), 'New-tab-view'))
 			.addToggle((cb: ToggleComponent) => {
 				cb.setValue(this.plugin.settings.showLaunchpad)
 					.onChange(async (value: boolean) => {
