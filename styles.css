@@ -1731,6 +1731,13 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         border-radius: var(--cg-nt-menu-item-border-radius);
         color: var(--cg-nt-menu-item-text-color);
         font-size: var(--cg-nt-menu-item-font-size);
+        /* potential fix for hover color not appearing in menus on tablets when using a mouse/trackpad
+        https://github.com/chrisgurney/obsidian-note-toolbar/discussions/233#discussioncomment-13574855
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                background-color: var(--background-modifier-hover);
+            }
+        } */
         &.is-label {
             font-size: var(--font-ui-small);
             color: var(--text-muted);
