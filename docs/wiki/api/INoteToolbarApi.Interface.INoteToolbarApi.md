@@ -200,7 +200,7 @@ Nothing. Displays the menu.
 ```ts
 await ntb.menu([
   { type: 'command', value: 'editor:toggle-bold', label: 'Toggle Bold', icon: 'bold' },
-  { type: 'file', value: 'Templates/Daily.md', label: 'Open Template' },
+  { type: 'file', value: 'Home.md', label: 'Open File' },
   { type: 'uri', value: 'https://example.com', label: 'Visit Site' }
 ]);
 ```
