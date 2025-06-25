@@ -3,12 +3,14 @@
         "color": "blue",
         "description": {
             "en": "Add navigation to your daily notes.",
+            "zh": "添加导航到每日笔记。",
             "uk": "Додайте навігацію до щоденних нотаток."
         },
         "icon": "calendar-days",
         "id": "daily-notes",
         "title": {
             "en": "Daily Notes",
+            "zh": "每日笔记",
             "uk": "Щоденні нотатки"
         }
     },
@@ -16,12 +18,14 @@
         "color": "red",
         "description": {
             "en": "Create your first toolbar.",
+            "zh": "创建你的第一个工具栏。",
             "uk": "Створіть свою першу панель."
         },
         "icon": "rocket",
         "id": "getting-started",
         "title": {
             "en": "Getting Started",
+            "zh": "快速上手",
             "uk": "Початок роботи"
         }
     },
@@ -29,12 +33,14 @@
         "color": "purple",
         "description": {
             "en": "Add ready-to-use items to your toolbars.",
+            "zh": "将现成的项目添加到你的工具栏。",
             "uk": "Додайте готові елементи до своїх панелей."
         },
         "icon": "layout-grid",
         "id": "gallery",
         "title": {
             "en": "Gallery",
+            "zh": "示例库",
             "uk": "Галерея"
         }
     },
@@ -42,12 +48,14 @@
         "color": "green",
         "description": {
             "en": "Make the most of Obsidian on your phone.",
+            "zh": "在手机上充分利用 Obsidian。",
             "uk": "Використовуйте всі можливості Obsidian на своєму телефоні."
         },
         "icon": "smartphone",
         "id": "mobile-tips",
         "title": {
             "en": "Mobile Tips",
+            "zh": "移动端提示",
             "uk": "Поради для Мобільного"
         }
     }
