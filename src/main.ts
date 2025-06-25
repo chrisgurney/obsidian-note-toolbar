@@ -389,7 +389,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.debug('===== METADATA-CHANGE ===== ', file.name);
 			debounce(async () => {
 				// FIXME: should this instead update all visible toolbars?
-				await this.checkAndRenderToolbar(file, cache.frontmatter);
+				const toolbarView = this.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
+				await this.checkAndRenderToolbar(file, cache.frontmatter, toolbarView);
 	
 				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
 				const ntbPropValue = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
