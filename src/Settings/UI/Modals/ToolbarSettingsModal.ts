@@ -189,7 +189,9 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toolbar.updated = new Date().toISOString();
 						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 						await this.plugin.settingsManager.save();
-						this.setTitle(t('setting.title-edit-toolbar', { toolbar: this.toolbar.name }));
+						this.setTitle(this.toolbar.name
+							? t('setting.title-edit-toolbar', { toolbar: this.toolbar.name }) 
+							: t('setting.title-edit-toolbar_none'));
 					}
 				}, 750)));
 		settingsDiv.append(toolbarNameDiv);
