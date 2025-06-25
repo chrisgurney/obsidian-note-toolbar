@@ -4,7 +4,7 @@ import { IItem } from "./IItem";
 
 /**
  * > [!note]
- * > This documentation is for version `1.24`.
+ * > This documentation is for version `1.24.05`.
  * 
  * The Note Toolbar API provides basic toolbar access, and the ability to show UI (suggesters, prompts, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
  * 
@@ -105,7 +105,7 @@ export interface INoteToolbarApi<T> {
     /**
      * Shows a menu with the provided items.
      * 
-     * @param {NtbMenuItem[]} items Array of items to display.
+     * @param {NtbMenuItem[]} items Array of items to display. See {@link NtbMenuItem}.
      * @param options Optional display options.
      * @returns Nothing. Displays the menu.
      * 
