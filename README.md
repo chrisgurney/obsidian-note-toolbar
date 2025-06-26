@@ -51,7 +51,7 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
 - Right-click toolbars to swap with other toolbars, quickly change the position, style, or to access configuration.
 - The [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) which, to start, includes enhanced prompt and suggester UI that you can trigger from script items, including from Dataview and JavaScript.
 
-## Translations 🌐
+# Translations 🌐
 
 Note Toolbar's UI, and Style Settings options, are also available in:
 
