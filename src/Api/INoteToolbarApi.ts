@@ -31,6 +31,21 @@ import { IItem } from "./IItem";
  * 
  * ## `ntb` API
  * 
+ * - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
+ * - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
+ * - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
+ * - [[ntb.getItem|Note-Toolbar-API#getitem]]
+ * - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
+ * - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
+ * - [[ntb.menu|Note-Toolbar-API#menu]]
+ * - [[ntb.modal|Note-Toolbar-API#modal]]
+ * - [[ntb.prompt|Note-Toolbar-API#prompt]]
+ * - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
+ * - [[ntb.suggester|Note-Toolbar-API#suggester]]
+ * - [[ntb.t|Note-Toolbar-API#t]]
+ * 
+ * ---
+ * 
  * @privateRemarks
  * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
  */
