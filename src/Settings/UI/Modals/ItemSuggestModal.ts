@@ -4,6 +4,7 @@ import { calcItemVisToggles } from "Utils/Utils";
 import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, LocalVar, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
+import ItemModal from "./ItemModal";
 
 /**
  * `Default` = Just uses modal to select an item, with no additional changes to UI.
@@ -55,24 +56,25 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         instructions.push(
             {command: t('setting.item-suggest-modal.key-navigate'), purpose: t('setting.item-suggest-modal.instruction-navigate')},
             {command: t('setting.item-suggest-modal.key-use'), purpose: (this.mode === 'QuickTools') ? t('setting.item-suggest-modal.instruction-use') : t('setting.item-suggest-modal.instruction-select')},
-            {command: t('setting.item-suggest-modal.key-dismiss'), purpose: t('setting.item-suggest-modal.instruction-dismiss')},
+        );
+        // TODO: instructions for editing items
+        // if (this.mode === 'QuickTools') {
+        //     instructions.push(
+        //         {command: (Platform.isWin || Platform.isLinux) ? t('setting.item-suggest-modal.key-edit-windows') : t('setting.item-suggest-modal.key-edit-macos'), purpose: t('setting.item-suggest-modal.instruction-edit')}
+        //     );
+        // }
+        instructions.push(
+            {command: t('setting.item-suggest-modal.key-dismiss'), purpose: t('setting.item-suggest-modal.instruction-dismiss')}
         );
         this.setInstructions(instructions);
 
         if (this.mode === 'QuickTools') {
             // handle meta key selections
-            if (Platform.isWin || Platform.isLinux) {
-                this.scope.register(['Ctrl'], 'Enter', (event) => this.handleKeyboardSelection(event));
-                this.scope.register(['Ctrl', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
-            }
-            else {
-                this.scope.register(['Meta'], 'Enter', (event) => this.handleKeyboardSelection(event));
-                this.scope.register(['Meta', 'Alt'], 'Enter', (event) => this.handleKeyboardSelection(event));
-            }
+            this.scope.register(null, 'Enter', (event) => this.handleKeyboardSelection(event));
             // handle back navigation
             if (toolbarId) {
-                this.scope.register([], 'ArrowLeft', (event) => this.handleKeyboardSelection(event));
-                this.scope.register([], 'Backspace', (event) => this.handleKeyboardSelection(event));
+                this.scope.register(null, 'ArrowLeft', (event) => this.handleKeyboardSelection(event));
+                this.scope.register(null, 'Backspace', (event) => this.handleKeyboardSelection(event));
             }
         }
     
@@ -333,7 +335,20 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
         if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
             this.close();
-            if (this.mode === 'QuickTools') await this.plugin.handleItemLink(selectedItem, event);
+            if (this.mode === 'QuickTools') {
+                // TODO: open the editor if the proper key modifiers are pressed
+                // const isModifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
+                // if (isModifierPressed && event?.shiftKey && !event?.altKey) {
+                //     const toolbar = this.plugin.settingsManager.getToolbarByItemId(selectedItem.uuid);
+                //     if (toolbar) {
+                //         const itemModal = new ItemModal(this.plugin, toolbar, selectedItem);
+                //         itemModal.open();
+                //         return;
+                //     }
+                // }
+                // fall back to handling the item
+                await this.plugin.handleItemLink(selectedItem, event);
+            }
             else if (this.callback !== undefined) this.callback(selectedItem);
         }
     }

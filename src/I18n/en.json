@@ -438,10 +438,13 @@
         "item-suggest-modal": {
             "instruction-back": "to go back",
             "instruction-dismiss": "to dismiss",
+            "instruction-edit": "to edit item",
             "instruction-navigate": "to navigate",
             "instruction-select": "to select item",
             "instruction-use": "to use item",
             "key-back": "⌫ or ←",
+            "key-edit-macos": "hold ⌘ + shift",
+            "key-edit-windows": "hold ctrl + shift",
             "key-dismiss": "esc",
             "key-navigate": "↑↓",
             "key-use": "↵",
