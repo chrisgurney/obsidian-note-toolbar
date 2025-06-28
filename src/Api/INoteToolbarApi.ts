@@ -288,6 +288,10 @@ export interface NtbMenuOptions {
      * Optional CSS class(es) to add to the component.
      */
     class?: string;
+    /**
+     * If `true`, the menu item will be focused when the menu opens; defaults to `false`.
+     */
+    focusInMenu?: boolean;
 }
 
 /**

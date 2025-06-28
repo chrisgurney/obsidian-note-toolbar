@@ -8,6 +8,7 @@ import { Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "ob
 import { Toolbar } from "./Toolbar";
 import { Item } from "./Item";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
+import { putFocusInMenu } from "Utils/Utils";
 
 export type Callback = (arg: string) => void;
 
@@ -179,6 +180,9 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         // this.plugin.debug('lastClickedEl', this.plugin.lastClickedEl);
         this.plugin.showMenuAtElement(menu, this.plugin.lastClickedEl);
+
+        if (options?.focusInMenu) putFocusInMenu();
+
     }
 
     /**
