@@ -96,7 +96,8 @@ export interface INoteToolbarApi<T> {
      * 
      * @param id The ID of the item.
      * @returns The item, or undefined.
-     */   
+     * @remarks Edit an item's settings and use _Copy developer ID_ to get an item's ID.
+     */
     getItem: (id: string) => IItem | undefined;
 
     /**

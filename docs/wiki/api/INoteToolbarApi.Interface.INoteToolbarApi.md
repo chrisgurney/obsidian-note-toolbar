@@ -148,6 +148,10 @@ Gets an item by its ID, if it exists.
 
 The item, or undefined.
 
+#### Remarks
+
+Edit an item's settings and use _Copy developer ID_ to get an item's ID.
+
 ***
 
 ### getProperty()
