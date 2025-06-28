@@ -1958,7 +1958,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					if (currentPosition !== PositionType.Top && currentPosition !== PositionType.Props) {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t('setting.position.option-centered'))
-								.setIcon('fold-vertical')
+								.setIcon('layout-grid')
 								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
 						});
 					}
