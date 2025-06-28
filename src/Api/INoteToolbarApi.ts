@@ -96,7 +96,12 @@ export interface INoteToolbarApi<T> {
      * 
      * @param id The ID of the item.
      * @returns The item, or undefined.
-     * @remarks Edit an item's settings and use _Copy developer ID_ to get an item's ID.
+     * 
+     * @example
+     * ```js
+     * // to get the ID, edit an item's settings and use _Copy developer ID_
+     * const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+     * ```
      */
     getItem: (id: string) => IItem | undefined;
 

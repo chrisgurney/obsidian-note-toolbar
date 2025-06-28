@@ -148,9 +148,12 @@ Gets an item by its ID, if it exists.
 
 The item, or undefined.
 
-#### Remarks
+#### Example
 
-Edit an item's settings and use _Copy developer ID_ to get an item's ID.
+```js
+// to get the ID, edit an item's settings and use _Copy developer ID_
+const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+```
 
 ***
 
