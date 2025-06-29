@@ -219,23 +219,17 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
      */
     sortSuggestions(itemsToSort: ToolbarItemSettings[], searchString: string): ToolbarItemSettings[] {
 
+        const sortedSuggestions = [];
+        
         // remove duplicates (+ redundant item-suggester items)
-        let sortedSuggestions = 
-            Array.from(
-                new Set(
-                    itemsToSort
-                        .filter(item => item.linkAttr.commandId !== 'note-toolbar:open-item-suggester')
-                        .map(item => 
-                            `${(item.label || item.tooltip).toLowerCase()}|${item.link}`
-                    )
-                )
-            ).map(uniqueKey => {
-                const [labelOrTooltip, link] = uniqueKey.split('|');
-                return itemsToSort.find(item =>
-                    (item.label || item.tooltip).toLowerCase() === labelOrTooltip &&
-                    item.link === link
-                )!;
-            });
+        const seen = new Set<string>();
+        for (const item of itemsToSort) {
+            if (item.linkAttr.commandId === 'note-toolbar:open-item-suggester') continue;
+            const key = `${(item.label || item.tooltip).toLowerCase()}|${item.link}`;
+            if (seen.has(key)) continue;
+            seen.add(key);
+            sortedSuggestions.push(item);
+        }
 
         // sort the results
         const recentItems = JSON.parse(localStorage.getItem(LocalVar.RecentItems) || '[]');
