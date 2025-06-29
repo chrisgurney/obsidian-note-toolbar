@@ -208,8 +208,9 @@ Shows a menu with the provided items.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `items` | [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
-| `options`? | \{ `class`: `string`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `focusInMenu`: `boolean`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
+| `options.focusInMenu`? | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
 
 #### Returns
 
