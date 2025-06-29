@@ -57,12 +57,11 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
             {command: t('setting.item-suggest-modal.key-navigate'), purpose: t('setting.item-suggest-modal.instruction-navigate')},
             {command: t('setting.item-suggest-modal.key-use'), purpose: (this.mode === 'QuickTools') ? t('setting.item-suggest-modal.instruction-use') : t('setting.item-suggest-modal.instruction-select')},
         );
-        // TODO: instructions for editing items
-        // if (this.mode === 'QuickTools') {
-        //     instructions.push(
-        //         {command: (Platform.isWin || Platform.isLinux) ? t('setting.item-suggest-modal.key-edit-windows') : t('setting.item-suggest-modal.key-edit-macos'), purpose: t('setting.item-suggest-modal.instruction-edit')}
-        //     );
-        // }
+        if (this.mode === 'QuickTools') {
+            instructions.push(
+                {command: (Platform.isWin || Platform.isLinux) ? t('setting.item-suggest-modal.key-edit-windows') : t('setting.item-suggest-modal.key-edit-macos'), purpose: t('setting.item-suggest-modal.instruction-edit')}
+            );
+        }
         instructions.push(
             {command: t('setting.item-suggest-modal.key-dismiss'), purpose: t('setting.item-suggest-modal.instruction-dismiss')}
         );
@@ -336,16 +335,16 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         if (selectedItem.uuid !== GALLERY_DIVIDER_ID) {
             this.close();
             if (this.mode === 'QuickTools') {
-                // TODO: open the editor if the proper key modifiers are pressed
-                // const isModifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
-                // if (isModifierPressed && event?.shiftKey && !event?.altKey) {
-                //     const toolbar = this.plugin.settingsManager.getToolbarByItemId(selectedItem.uuid);
-                //     if (toolbar) {
-                //         const itemModal = new ItemModal(this.plugin, toolbar, selectedItem);
-                //         itemModal.open();
-                //         return;
-                //     }
-                // }
+                // open the item editor if the proper key modifiers are pressed
+                const isModifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
+                if (isModifierPressed && event?.shiftKey && !event?.altKey) {
+                    const toolbar = this.plugin.settingsManager.getToolbarByItemId(selectedItem.uuid);
+                    if (toolbar) {
+                        const itemModal = new ItemModal(this.plugin, toolbar, selectedItem);
+                        itemModal.open();
+                        return;
+                    }
+                }
                 // fall back to handling the item
                 await this.plugin.handleItemLink(selectedItem, event);
             }
