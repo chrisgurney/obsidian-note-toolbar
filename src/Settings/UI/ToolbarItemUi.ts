@@ -867,6 +867,7 @@ export default class ToolbarItemUi {
         fieldDiv: HTMLDivElement)
     {
         if (toolbarItem.scriptConfig) {
+            let outputContainerSettingEl: HTMLDivElement | undefined = undefined;
             const config = toolbarItem.scriptConfig;
             const selectedFunction = adapter.getFunctions().get(toolbarItem.scriptConfig.pluginFunction);
             selectedFunction?.parameters.forEach(param => {
@@ -919,8 +920,12 @@ export default class ToolbarItemUi {
                             });
                         break;
                     case SettingType.Text:
-                        setting = new Setting(fieldDiv)
-                            .setClass("note-toolbar-setting-item-field-link")
+                        // outputContainer setting is shown in Advanced settings section below
+                        const textFieldDiv = param.parameter === 'outputContainer'
+                            ? (outputContainerSettingEl = createDiv())
+                            : fieldDiv;
+                        setting = new Setting(textFieldDiv)
+                           .setClass("note-toolbar-setting-item-field-link")
                             .addText(cb => {
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? initialValue : '')
@@ -963,7 +968,47 @@ export default class ToolbarItemUi {
                 }
             });
 
+            this.getScriptAdvancedSubfields(toolbarItem, fieldDiv, outputContainerSettingEl);
         }
+    }
+
+    getScriptAdvancedSubfields(toolbarItem: ToolbarItemSettings, fieldDiv: HTMLDivElement, outputContainerSettingEl?: HTMLDivElement) {
+        const advancedDivEl = fieldDiv.createDiv();
+        advancedDivEl.addClass('note-toolbar-setting-subfield-advanced-container');
+
+        const advancedSetting = new Setting(advancedDivEl)
+            .setName(t('adapter.option-advanced'))
+            .setClass("note-toolbar-setting-item-field-link")
+            .addExtraButton((button) => {
+                button
+                .setIcon('gear')
+                .setTooltip(t('adapter.option-advanced-tooltip'))
+                .onClick(() => {
+                    advancedSettingsDiv.toggleAttribute('data-active');
+                });
+                button.extraSettingsEl.tabIndex = 0;
+                handleKeyClick(this.plugin, button.extraSettingsEl);     
+            });
+        advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced');
+
+        const advancedSettingsDiv = advancedDivEl.createDiv();
+        advancedSettingsDiv.addClass('note-toolbar-setting-item-link-advanced');
+
+        // show output container setting here instead
+        if (outputContainerSettingEl !== undefined) advancedSettingsDiv.append(outputContainerSettingEl);
+
+        const focusSetting = new Setting(advancedSettingsDiv)
+            .setName(t('setting.item.option-script-focus'))
+            .setDesc(t('setting.item.option-script-focus-description'))
+            .addToggle((toggle) => {
+                toggle
+                    .setValue(!toolbarItem.linkAttr.focus || toolbarItem.linkAttr.focus === 'editor')
+                    .onChange(async (value: boolean) => {
+                        value ? toolbarItem.linkAttr.focus = 'editor' : toolbarItem.linkAttr.focus = 'none';
+                        this.toolbar.updated = new Date().toISOString();
+                        await this.plugin.settingsManager.save();
+                    });
+            });
     }
 
     getUriSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {

@@ -1,6 +1,6 @@
 import { CachedMetadata, Command, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP, DEFAULT_SETTINGS } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP, DEFAULT_SETTINGS, ItemFocusType } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Help/WhatsNewView';
@@ -1461,7 +1461,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async handleItemScript(toolbarItem: ToolbarItemSettings | undefined) {
 		if (toolbarItem && toolbarItem?.scriptConfig) {
-			await this.handleLinkScript(toolbarItem.linkAttr.type, toolbarItem.scriptConfig);
+			await this.handleLinkScript(toolbarItem.linkAttr.type, toolbarItem.scriptConfig, toolbarItem.linkAttr.focus);
 		}
 	}
 
@@ -1554,7 +1554,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param commandId encoded command string, or null if nothing to do.
 	 * @param target where to execute the command.
 	 */
-	async handleLinkCommand(commandId: string | null, focus?: 'editor', target?: PaneType | undefined) {
+	async handleLinkCommand(commandId: string | null, focus?: ItemFocusType, target?: PaneType | undefined) {
 		// this.debug('handleLinkCommand:', commandId);
 		if (commandId) {
 			if (!(commandId in this.app.commands.commands)) {
@@ -1577,8 +1577,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Executes the provided script using the provided configuration.
 	 * @param type type of script.
 	 * @param scriptConfig ScriptConfig to execute.
+	 * @param focus where to set focus after executing the script; defaults to 'editor'.
 	 */
-	async handleLinkScript(type: ItemType, scriptConfig: ScriptConfig) {
+	async handleLinkScript(type: ItemType, scriptConfig: ScriptConfig, focus?: ItemFocusType) {
 		type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JavaScript | ItemType.JsEngine | ItemType.Templater>;
 		const adapter = this.getAdapterForItemType(type);
 		if (!adapter) {
@@ -1601,7 +1602,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 		}
 		result ? insertTextAtCursor(this.app, result) : undefined;
-		this.app.workspace.activeEditor?.editor?.focus();
+
+		if (!focus || focus === 'editor') {
+			this.app.workspace.activeEditor?.editor?.focus();
+		}
 	}
 
 	async handleLinkUri(linkHref: string, event?: MouseEvent | KeyboardEvent, item?: ToolbarItemSettings) {

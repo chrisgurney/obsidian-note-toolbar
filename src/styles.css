@@ -1721,6 +1721,28 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-subfield-advanced-container {
+    width: 100%;
+}
+
+.note-toolbar-setting-subfield-advanced {
+    align-items: center !important;
+    display: flex;
+    flex-direction: row !important;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    & .setting-item-info {
+        display: initial !important;
+    }
+    & .setting-item-control {
+        align-items: flex-end !important;
+        width: auto !important;
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+
 .note-toolbar-setting-item-link-advanced {
     display: none;
     &[data-active] {

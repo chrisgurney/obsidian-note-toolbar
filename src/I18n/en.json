@@ -70,6 +70,8 @@
             "importexec-sourcefunction": "Function (optional)",
             "importexec-sourcefunction-description": "If the script has functions, function name to execute."
         },
+        "option-advanced": "Advanced settings",
+        "option-advanced-tooltip": "Open advanced settings",
         "option-function-default": "Select a function...",
         "outputcontainer": "Output callout ID (optional)",
         "outputcontainer-description": "Add a note-toolbar-output callout with a unique meta field to your note to put text output.",
@@ -412,6 +414,8 @@
             "option-label-placeholder": "Label (optional, if icon set)",
             "option-menu": "Menu",
             "option-separator": "separator",
+            "option-script-focus": "Focus in editor",
+            "option-script-focus-description": "Set focus in editor after command is executed.",
             "option-target-default": "Default",
             "option-target-modal": "Modal",
             "option-target-split": "Split pane",

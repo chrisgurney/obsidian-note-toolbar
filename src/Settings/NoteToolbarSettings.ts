@@ -444,13 +444,15 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
 }
 
+export type ItemFocusType = 'editor' | 'none';
+
 /**
  * Used to describe the type of url, for efficiency on toolbar render and click handling.
  */
 export interface ToolbarItemLinkAttr {
 	commandCheck: boolean;
 	commandId: string;
-	focus?: 'editor';
+	focus?: ItemFocusType;
 	hasVars: boolean;
 	target?: PaneType | 'modal';
 	type: ItemType;
