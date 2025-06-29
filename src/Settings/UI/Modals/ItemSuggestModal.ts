@@ -225,7 +225,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         const seen = new Set<string>();
         for (const item of itemsToSort) {
             if (item.linkAttr.commandId === 'note-toolbar:open-item-suggester') continue;
-            const key = `${(item.label || item.tooltip).toLowerCase()}|${item.link}`;
+            const key = `${(item.label || item.tooltip).toLowerCase()}|${item.linkAttr.type === ItemType.Command ? item.linkAttr.commandId : item.link}`;
             if (seen.has(key)) continue;
             seen.add(key);
             sortedSuggestions.push(item);
