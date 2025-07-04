@@ -374,19 +374,24 @@ export interface FolderMapping {
 	toolbar: string;
 }
 
-export type ConjunctionType = 'and' | 'or';
-export type RuleType = 'folder';
+export enum RuleConjunctionType {
+	And = 'and',
+	Or = 'or'
+}
+export enum RuleConditionType {
+	Folder = 'folder'
+}
 export type RuleOperatorType = 'is' | 'isNot' | 'startsWith';
 
 export interface ToolbarRule {
-	id: string;
 	toolbar: string;
-	conjunction: ConjunctionType;
-	rules: Array<ToolbarCondition>;
+	conjunction: RuleConjunctionType;
+	rules: Array<ToolbarRuleCondition>;
 }
 
-export interface ToolbarCondition {
-	type: RuleType;
+export interface ToolbarRuleCondition {
+	id: string;
+	type: RuleConditionType;
 	key: string;
 	condition: RuleOperatorType;
 	value: string;
