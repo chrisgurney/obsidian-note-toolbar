@@ -142,12 +142,15 @@ export interface INoteToolbarApi<T> {
      * const b = app.internalPlugins.plugins['bookmarks'];
      * if (!b?.enabled) return;
      * const i = b.instance?.getBookmarks();
-     * const mi = i.map(b => ({
-     *     type: 'file',
-     *     value: b.path,
-     *     label: b.title ? b.title : b.path,
-     *     icon: b.type === 'folder' ? 'folder' : 'file'
-     * }));
+     * const b = app.internalPlugins.plugins['bookmarks'];
+     * const mi = i
+     *   .filter(b => b.type === 'file' || b.type === 'folder')
+     *   .map(b => ({
+     *       type: 'file',
+     *       value: b.path,
+     *       label: b.title ? b.title : b.path,
+     *       icon: b.type === 'folder' ? 'folder' : 'file'
+     *   }));
      * ntb.menu(mi);
      */
     menu: (items: NtbMenuItem[], options?: NtbMenuOptions) => Promise<void>;
