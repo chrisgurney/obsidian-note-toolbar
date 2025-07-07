@@ -70,6 +70,8 @@
       "importexec-sourcefunction": "函数（可选）",
       "importexec-sourcefunction-description": "如果脚本有函数，要执行的函数名。"
     },
+    "option-advanced": "进阶设置",
+    "option-advanced-tooltip": "打开进阶设置",
     "option-function-default": "选择一个函数…",
     "outputcontainer": "（可选）输出的 callout ID",
     "outputcontainer-description": "在笔记中添加一个带有唯一元字段的 note-toolbar-output callout 以输出文本。",
@@ -111,7 +113,9 @@
       "button-submit": "提交",
       "error-cancelled": "已取消提示",
       "error-file-unsupported": "不支持的文件类型：{{filetype}}",
+      "error-missing-property": "缺少 API 所需的参数: {{property}}",
       "error-undefined": "未定义的项目",
+      "error-unsupported-property": "无法将 {{property}} 属性传给 API",
       "file-suggester-placeholder": "选择一个文件（或文件夹）…",
       "file-suggester-placeholder_file": "选择一个文件…",
       "file-suggester-placeholder_folder": "选择一个文件夹…",
@@ -161,14 +165,14 @@
     "error-invalid-plugin": "示例项目含未安装（或未启用）的插件",
     "error-missing-item-type": "示例项目：缺少项目类型属性",
     "error-missing-property": "示例项目数据中含有缺失的插件或脚本属性。",
+    "label-add-item": "点击以将其中一项添加到工具栏中：",
     "label-plugin": "{{{plugin}}",
     "label-suggestions": "来自示例库的建议",
     "select-plugin-placeholder": "选择一个插件…",
     "select-plugin-suggestion": "{{plugin}}",
     "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ 未安装（或未启用）",
     "title": "Note Toolbar 示例库",
-    "tooltip-add-item": "添加项目到工具栏",
-    "label-add-item": "点击以将其中一项添加到工具栏中："
+    "tooltip-add-item": "添加项目到工具栏"
   },
   "import": {
     "button-add-items": "添加项目",
@@ -297,6 +301,7 @@
       "description": "允许在 Canvas（画布）、新标签页和其他文件类型中显示工具栏。",
       "name": "在其他文件和视图中显示工具栏",
       "option-audio": "音频",
+      "option-bases": "Bases（数据库）",
       "option-canvas": "Canvas（画布）文件",
       "option-emptyview": "新标签页视图",
       "option-emptyview-description": "在没打开任何笔记时，显示选择的工具栏",
@@ -304,12 +309,20 @@
       "option-filemenu-description": "在文件右键菜单中添加项目，以快速访问链接的笔记对应的工具栏。",
       "option-image": "图像",
       "option-kanban": "Kanban 看板",
-      "option-pdf": "PDF文档",
-      "option-video": "视频",
-      "option-bases": "Bases（数据库）",
       "option-other": "其他数据类型（data types）",
       "option-other-description": "其他可用于显示工具栏的数据类型，用空格分隔。",
-      "option-other-placeholder": "例如：excalidraw"
+      "option-other-placeholder": "例如：excalidraw",
+      "option-pdf": "PDF文档",
+      "option-video": "视频"
+    },
+    "display-empty-view": {
+      "description": "将工具栏附加到新标签页（或直接将新标签页替换为工具栏）",
+      "name": "新标签页",
+      "option-emptyview": "新标签页的工具栏",
+      "option-emptyview-description": "选择一个工具栏，在没有笔记打开的时显示",
+      "option-emptyview-placeholder": "选择工具栏…",
+      "option-launchpad": "使用工具栏替换视图",
+      "option-launchpad-description": "使用该工具栏替换新标签页"
     },
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
@@ -329,7 +342,11 @@
       "button-open-google": "打开Goog​​le.com",
       "button-read": "阅读↗",
       "description": "为您的笔记创建上下文感知的工具栏。",
+      "error-failed-to-load": "无法加载：\n{{baseUrl}}/{{lang}}/{{name}}.md",
       "heading": "使用笔记工具栏的帮助",
+      "heading-donate": "捐赠",
+      "heading-support": "支持",
+      "heading-user-guide": "用户指南",
       "label-article-1": "创建工具栏项目",
       "label-article-1-description": "了解不同类型的项目",
       "label-article-2": "笔记工具栏的标注",
@@ -343,14 +360,10 @@
       "label-feedback-description": "使用此Google表单来提供您可能有的任何反馈，问题或想法。",
       "label-gallery": "打开示例库",
       "label-gallery-description": "查看示例库（Gallery）以获取开箱即用的工具项目。",
+      "label-issues": "查看开放问题",
       "label-support": "获取支持",
       "label-user-guide": "阅读用户指南",
       "title": "笔记工具栏的帮助🛟",
-      "heading-donate": "捐赠",
-      "error-failed-to-load": "无法加载：\n{{baseUrl}}/{{lang}}/{{name}}.md",
-      "heading-support": "支持",
-      "label-issues": "查看未决问题",
-      "heading-user-guide": "用户指南",
       "tooltip-view-tip": "查看该 Tip"
     },
     "icon-suggester": {
@@ -378,19 +391,24 @@
       "menu-move-item-notice": "项目已移至工具栏：{{toolbarName}}",
       "option-break": "换行",
       "option-command": "命令",
+      "option-command-check": "如果不可用则隐藏",
+      "option-command-check-description": "如果无法在当前上下文中执行命令，则在工具栏中隐藏该项目。",
       "option-command-error-does-not-exist": "该命令不存在",
       "option-command-error-not-available-install": "该命令不可用；必须先安装并启用对应插件。",
       "option-command-error-not-available-search": "无法找到命令，请重新搜索",
       "option-command-error-refresh": "刷新",
       "option-command-focus": "聚焦到编辑器",
       "option-command-focus-description": "执行命令后，将焦点设置为编辑器。",
+      "option-command-help": "使用此项目时运行命令。",
       "option-command-placeholder": "搜索命令",
       "option-command-target": "在哪里运行命令",
       "option-command-target-description": "一些命令可能会覆盖此设置。",
       "option-component-icon": "图标",
       "option-component-label": "文本",
+      "option-dataview-help": "运行 Dataview 查询，评估表达式或执行脚本。",
       "option-file": "文件",
       "option-file-error-does-not-exist": "此文件（或文件夹）不存在。",
+      "option-file-help": "使用此项目时，打开文件或定位到文件夹。",
       "option-file-placeholder": "搜索文件或文件夹",
       "option-file-target": "在哪里打开文件",
       "option-file-target-description": "使用修饰键（如Ctrl）覆盖此设置。",
@@ -403,14 +421,19 @@
       "option-item-menu-error-does-not-exist": "工具栏不存在",
       "option-item-menu-help": "选择要作为菜单打开的工具栏。",
       "option-item-menu-placeholder": "工具栏",
+      "option-javascript-help": "执行或评估 JavaScript 脚本",
+      "option-js-engine-help": "使用 JS Engine 插件执行或评估 JavaScript 脚本",
       "option-label-placeholder": "文本（如果设置了图标则可选）",
       "option-menu": "菜单",
+      "option-script-focus": "聚焦到编辑器",
+      "option-script-focus-description": "在命令执行后聚焦回编辑器",
       "option-separator": "分隔符",
       "option-target-default": "当前页（默认）",
       "option-target-modal": "模态窗口（Modal）",
       "option-target-split": "左右分屏",
       "option-target-tab": "新标签页",
       "option-target-window": "新窗口",
+      "option-templater-help": "插入模板，使用模板创建新笔记，或执行 Templater 命令或模板文件。",
       "option-tooltip-placeholder": "工具提示（可选）",
       "option-uri": "URI",
       "option-uri-help": "提示：在 URI 中可以使用笔记属性。",
@@ -427,24 +450,19 @@
       "option-visibility-platform-desktop": "桌面端",
       "option-visibility-platform-mobile": "移动端",
       "option-visibility-visible-platform": "在{{platform}}显示",
-      "title": "编辑项目",
-      "option-command-check": "如果不可用则隐藏",
-      "option-command-check-description": "如果无法在当前上下文中执行命令，则在工具栏中隐藏该项目。",
-      "option-command-help": "使用此项目时运行命令。",
-      "option-dataview-help": "运行 Dataview 查询，评估表达式或执行脚本。",
-      "option-file-help": "使用此项目时，打开文件或定位到文件夹。",
-      "option-javascript-help": "执行或评估 JavaScript 脚本",
-      "option-js-engine-help": "使用 JS Engine 插件执行或评估 JavaScript 脚本",
-      "option-templater-help": "插入模板，使用模板创建新笔记，或执行 Templater 命令或模板文件。"
+      "title": "编辑项目"
     },
     "item-suggest-modal": {
       "instruction-back": "返回",
       "instruction-dismiss": "取消",
+      "instruction-edit": "编辑对象",
       "instruction-navigate": "导航",
       "instruction-select": "选择",
       "instruction-use": "确认",
       "key-back": "⌫ or ←",
       "key-dismiss": "esc",
+      "key-edit-macos": "按住 ⌘ + shift 并确认",
+      "key-edit-windows": "按住 ctrl+shift 并确认",
       "key-navigate": "↑↓",
       "key-use": "↵",
       "label-empty-no-items": "找不到结果",
@@ -510,6 +528,10 @@
         "name": "图标",
         "tooltip": "选择图标"
       },
+      "keep-props-state": {
+        "description": "如果您使用 Note Toolbar 的选项来切换属性，则将保持笔记中的属性区显示状态。\n启用时，您必须使用本插件的“显示笔记属性”命令来重新显示属性。",
+        "name": "保持属性区可见状态"
+      },
       "load-settings-changes": {
         "description": "启用后，将在设置发生改动后立即生效。\n否则，需要重新启动 Obsidian 才能让改动生效。",
         "name": "加载设置变动"
@@ -529,10 +551,6 @@
       "show-edit-tbar": {
         "description": "在工具栏菜单中添加一个项目，以快速访问工具栏的设置。",
         "name": "在工具栏菜单中显示'编辑工具栏'的链接"
-      },
-      "keep-props-state": {
-        "description": "如果您使用 Note Toolbar 的选项来切换属性，则将保持笔记中的属性区显示状态。\n启用时，您必须使用本插件的“显示笔记属性”命令来重新显示属性。",
-        "name": "保持属性区可见状态"
       }
     },
     "position": {
@@ -540,6 +558,7 @@
       "name": "位置",
       "notice-defaultitem-invalid": "浮动按钮的默认项目无效。\n请检查工具栏的配置。",
       "option-bottom": "底部",
+      "option-centered": "居中",
       "option-defaultitem": "浮动按钮的默认项目",
       "option-defaultitem-description": "将此项目显示为主要按钮（代替原来的工具栏菜单）；\n其他项目将会出现在右键（移动设备上则是长按按钮）的菜单中。",
       "option-defaultitem-error-invalid": "无效的工具栏项目",
@@ -550,8 +569,20 @@
       "option-hidden-mobile": "隐藏 / 导航栏",
       "option-mobile-help": "提示：你可以从导航栏访问工具栏。",
       "option-props": "属性下方",
-      "option-top": "置顶（固定位置）",
-      "option-centered": "居中"
+      "option-top": "置顶（固定位置）"
+    },
+    "rules": {
+      "button-collapse-tooltip": "收起所有规则",
+      "button-expand-tooltip": "展开所有规则",
+      "button-new": "新规则",
+      "button-new-tooltip": "增加新规则",
+      "description": "决定笔记如何显示工具栏的规则",
+      "error-folder-already-mapped": "该文件夹已存在一个关联的工具栏，将使用以从上到下的首个工具栏。",
+      "label-empty": "使用该按钮创建规则",
+      "name": "规则",
+      "name-with-count": "规则 ({{count}})",
+      "option-folder-root": "仅根目录",
+      "placeholder-folder": "文件夹"
     },
     "search": {
       "button-tooltip": "搜索工具栏",
@@ -654,15 +685,6 @@
       "label-roadmap-description": "查看路线图，以预览考虑开发的新功能。",
       "placehoder-loading": "加载中……",
       "title": "Note Toolbar 更新内容"
-    },
-    "display-empty-view": {
-      "description": "将工具栏附加到新标签页（或直接将新标签页替换为工具栏）",
-      "name": "新标签页",
-      "option-emptyview-description": "选择一个工具栏，在没有笔记打开的时显示",
-      "option-launchpad": "使用工具栏替换视图",
-      "option-emptyview": "新标签页的工具栏",
-      "option-launchpad-description": "使用该工具栏替换新标签页",
-      "option-emptyview-placeholder": "选择工具栏…"
     }
   },
   "toolbar": {
