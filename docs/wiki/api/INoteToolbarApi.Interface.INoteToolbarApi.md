@@ -218,7 +218,7 @@ Shows a menu with the provided items.
 
 Nothing. Displays the menu.
 
-#### Example
+#### Examples
 
 ```ts
 await ntb.menu([
@@ -226,6 +226,20 @@ await ntb.menu([
   { type: 'file', value: 'Home.md', label: 'Open File' },
   { type: 'uri', value: 'https://example.com', label: 'Visit Site' }
 ]);
+```
+
+```ts
+// shows bookmarks in a menu
+const b = app.internalPlugins.plugins['bookmarks'];
+if (!b?.enabled) return;
+const i = b.instance?.getBookmarks();
+const mi = i.map(b => ({
+    type: 'file',
+    value: b.path,
+    label: b.title ? b.title : b.path,
+    icon: b.type === 'folder' ? 'folder' : 'file'
+}));
+ntb.menu(mi);
 ```
 
 ***
