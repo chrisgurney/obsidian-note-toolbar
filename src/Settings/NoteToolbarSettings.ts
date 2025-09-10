@@ -1,5 +1,5 @@
 import { getUUID } from "Utils/Utils";
-import { PaneType } from "obsidian";
+import { getLanguage, PaneType } from "obsidian";
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20250313.1;
@@ -17,12 +17,21 @@ import * as en from 'I18n/en.json';
 import * as uk from 'I18n/uk.json';
 import * as zh_CN from 'I18n/zh-CN.json';
 
-i18next.addResourceBundle('de', 'plugin-note-toolbar', de); // load localized strings for German
-i18next.addResourceBundle('en', 'plugin-note-toolbar', en); // load localized strings for English
-i18next.addResourceBundle('uk', 'plugin-note-toolbar', uk); // load localized strings for Ukrainian
-i18next.addResourceBundle('zh', 'plugin-note-toolbar', zh_CN); // load localized strings for Chinese Simplified
+/* create a new i18next instance that will be garbage-collected once the plugin was unloaded */
+const Locales = i18next.createInstance({
+	lng: getLanguage(),
+	fallbackLng: 'en',
+	resources: {
+		de: { 'plugin-note-toolbar': de }, // load localized strings for German
+		en: { 'plugin-note-toolbar': en }, // load localized strings for English
+		uk: { 'plugin-note-toolbar': uk }, // load localized strings for Ukrainian
+		zh: { 'plugin-note-toolbar': zh_CN } // load localized strings for Chinese Simplified
+	}
+});
 
-export const t = i18next.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
+Locales.init();
+
+export const t = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
 /******************************************************************************
  CONSTANTS
