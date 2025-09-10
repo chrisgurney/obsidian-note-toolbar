@@ -381,19 +381,23 @@ export enum RuleConjunctionType {
 export enum RuleConditionType {
 	Folder = 'folder'
 }
-export type RuleOperatorType = 'is' | 'isNot' | 'startsWith';
+export enum RuleOperatorType {
+	Is = 'is',
+	IsNot = 'isNot',
+	StartsWith = 'startsWith'
+}
 
 export interface ToolbarRule {
 	toolbar: string;
 	conjunction: RuleConjunctionType;
-	rules: Array<ToolbarRuleCondition>;
+	conditions: Array<ToolbarRuleCondition>;
 }
 
 export interface ToolbarRuleCondition {
 	id: string;
 	type: RuleConditionType;
 	key: string;
-	condition: RuleOperatorType;
+	operator: RuleOperatorType;
 	value: string;
 }
 

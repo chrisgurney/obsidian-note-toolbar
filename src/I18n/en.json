@@ -563,6 +563,8 @@
             "button-expand-tooltip": "Expand all rules",
             "button-new": "New rule",
             "button-new-tooltip": "Add a new rule",
+            "button-newcondition": "New condition",
+            "button-newcondition-tooltip": "Add a new condition to this rule",
             "description": "Rules that define which notes to display toolbars on.",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it. Precedence is top to bottom.",
             "label-empty": "Use the button to create a rule.",
