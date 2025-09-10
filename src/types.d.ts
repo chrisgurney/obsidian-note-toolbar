@@ -13,6 +13,8 @@ declare global {
 
 declare module "obsidian" {
 
+    export function getLanguage(): string;
+
     // allows access to commands for execution
     interface App {
         commands: {
