@@ -217,7 +217,7 @@ export interface NoteToolbarSettings {
 	keepPropsState: boolean;
 	onboarding: OnboardingState;
 	ribbonAction: RibbonAction;
-	// rules: Array<ToolbarRule>;
+	rules: Array<ToolbarRule>;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
 	showLaunchpad: boolean;
@@ -244,7 +244,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	keepPropsState: false,
 	onboarding: {},
 	ribbonAction: RibbonAction.Toolbar,
-	// rules: [],
+	rules: [],
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
 	showLaunchpad: false,
