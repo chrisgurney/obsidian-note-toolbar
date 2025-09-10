@@ -61,6 +61,21 @@ export default class StyleModal extends Modal {
 				dropdown.focus();
 			}, 50);
 		}
+
+        // let user close modal with Cmd/Ctrl + Enter
+        this.plugin.registerDomEvent(
+            this.modalEl, 'keydown', async (e: KeyboardEvent) => {
+                switch (e.key) {
+                    case "Enter":
+                        const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+                        if (modifierPressed) {
+                            this.close();
+                        }
+                        break;
+                }
+            }
+        );
+
     }
 
 }

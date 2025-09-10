@@ -66,14 +66,17 @@ export default class ToolbarItemUi {
                             switch (e.key) {
                                 case "Enter":
                                 case " ":
-                                    e.preventDefault();
-                                    let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                                    const modal = new IconSuggestModal(this.plugin, toolbarItem.icon, (icon) => {
-                                        toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
-                                        this.plugin.settingsManager.save();
-                                        updateItemIcon(this.parent, itemRow, icon);
-                                    });
-                                    modal.open();
+                                    const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+                                    if (!modifierPressed) {
+                                        e.preventDefault();
+                                        let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
+                                        const modal = new IconSuggestModal(this.plugin, toolbarItem.icon, (icon) => {
+                                            toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
+                                            this.plugin.settingsManager.save();
+                                            updateItemIcon(this.parent, itemRow, icon);
+                                        });
+                                        modal.open();
+                                    }
                             }
                         });
                 });

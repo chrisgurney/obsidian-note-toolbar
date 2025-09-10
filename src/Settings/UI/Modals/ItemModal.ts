@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, ButtonComponent, Modal, Setting } from "obsidian";
+import { ButtonComponent, Modal, Platform, Setting } from "obsidian";
 import { t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarItemUi from "../ToolbarItemUi";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
@@ -60,6 +60,20 @@ export default class ItemModal extends Modal {
                         this.close();
                     });
             });
+
+        // let user close modal with Cmd/Ctrl + Enter
+        this.plugin.registerDomEvent(
+            this.modalEl, 'keydown', async (e: KeyboardEvent) => {
+                switch (e.key) {
+                    case "Enter":
+                        const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+                        if (modifierPressed) {
+                            this.close();
+                        }
+                        break;
+                }
+            }
+        );
 
         // TODO: set initial keyboard focus?
     }
