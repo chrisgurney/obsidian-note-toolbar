@@ -161,6 +161,10 @@ body {
 
 .callout[data-callout="note-toolbar"] {
 
+    /* fix: (#378) reset CSS rules applied by themes (e.g., Velocity) */
+    background-image: unset !important;
+    box-shadow: unset !important;
+
     background-color: var(--cg-nt-tbar-bg-color) !important;
     border-radius: var(--cg-nt-tbar-border-radius);
     border-style: none;
@@ -173,6 +177,9 @@ body {
     }
 
     & .callout-content {
+
+        /* fix: (#378) reset CSS rules applied by themes (e.g., Primary) */
+        box-shadow: unset !important;
 
         & ul {
             display: flex;
