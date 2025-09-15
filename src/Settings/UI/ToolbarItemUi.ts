@@ -395,11 +395,28 @@ export default class ToolbarItemUi {
                 });
         });
 
-        if (Platform.isPhone) {
-            menu.addSeparator();
-        }
+        menu.addSeparator();
 
         if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator].contains(toolbarItem.linkAttr.type)) {
+
+            // copy item command URI
+            if (toolbarItem.hasCommand) {
+                const itemCommand = this.plugin.commands.getCommandFor(toolbarItem);
+                if (itemCommand) {
+                    menu.addItem((menuItem: MenuItem) => {
+                        menuItem
+                            .setTitle(t('setting.use-item-command.name-copy'))
+                            .setIcon('copy')
+                            .onClick(async (menuEvent) => {
+                                const commandText = `obsidian://note-toolbar?command=${itemCommand.id}`;
+                                navigator.clipboard.writeText(commandText);
+                                new Notice(t('command.copy-command-notice'));
+                            });
+                    });
+                }
+            }
+
+            // add/remove item command
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
                     .setTitle(toolbarItem.hasCommand ? t('setting.use-item-command.name-remove') : t('setting.use-item-command.name-add'))

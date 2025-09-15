@@ -656,6 +656,7 @@
         "use-item-command": {
             "error-noname": "Command must be re-added. At least one label or tooltip must not be empty or contain expressions.",
             "name-add": "Add command for item",
+            "name-copy": "Copy command URI for item",
             "name-remove": "Remove command for item",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-added-hotkeys": "Open hotkey settings {{cta}} →",
