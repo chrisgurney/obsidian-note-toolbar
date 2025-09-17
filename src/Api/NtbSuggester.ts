@@ -16,6 +16,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     private submitted = false;
     private class = '';
+    private default: string;
     private rendermd;
 
     /**
@@ -32,12 +33,14 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         const { 
             class: css_classes = '',
+            default: default_value = '',
             limit,
             placeholder,
             rendermd = true, 
         } = options || {};
 
         this.class = css_classes;
+        this.default = default_value;
         this.rendermd = rendermd;
         this.setPlaceholder(placeholder ? placeholder : t('api.ui.suggester-placeholder'));
         this.setInstructions([
@@ -57,6 +60,14 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.modalEl.addClass("note-toolbar-ui");
         this.class && this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'suggester');
+    }
+
+    onOpen(): void {
+        super.onOpen();
+        if (this.default) {
+            this.inputEl.value = this.default;
+            this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        }
     }
 
     getItems(): T[] {

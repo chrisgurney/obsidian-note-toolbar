@@ -84,12 +84,13 @@ Shows a file suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options`? | \{ `class`: `string`; `filesonly`: `boolean`; `foldersonly`: `boolean`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
+| `options`? | \{ `class`: `string`; `default`: `string`; `filesonly`: `boolean`; `foldersonly`: `boolean`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
+| `options.default`? | `string` | Optional default value for input field. If not provided, no default is set. |
 | `options.filesonly`? | `boolean` | If set to true, only files are shown. If not provided, defaults to `false`. |
 | `options.foldersonly`? | `boolean` | If set to true, only folders are shown. If not provided, defaults to `false`. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
-| `options.placeholder`? | `string` | Optional text inside text field; defaults to preset message. |
+| `options.placeholder`? | `string` | Optional placeholder text for input field; defaults to preset message. |
 | `options.rendermd`? | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
@@ -387,11 +388,12 @@ Shows a suggester modal and waits for the user's selection.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
-| `keys`? | `T`[] | Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection. |
-| `options`? | \{ `class`: `string`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
+| `keys`? | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
+| `options`? | \{ `class`: `string`; `default`: `string`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
+| `options.default`? | `string` | Optional default value for input field. If not provided, no default is set. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
-| `options.placeholder`? | `string` | Optional text inside text field; defaults to preset message. |
+| `options.placeholder`? | `string` | Optional placeholder text for input field; defaults to preset message. |
 | `options.rendermd`? | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns

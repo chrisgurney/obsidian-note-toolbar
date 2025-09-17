@@ -230,7 +230,7 @@ export interface INoteToolbarApi<T> {
      * Shows a suggester modal and waits for the user's selection.
      * 
      * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered
-     * @param keys Optional array containing the keys of each item in the correct order. If not provided, values are returned on selection.
+     * @param keys Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection.
      * @param options Optional display options.
      * @returns The selected value, or corresponding key if keys are provided.
      * 
@@ -371,11 +371,15 @@ export interface NtbSuggesterOptions {
      */
     class?: string;
     /**
+     * Optional default value for input field. If not provided, no default is set.
+     */
+    default?: string;
+    /**
      * Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists).
      */
     limit?: number;
     /**
-     * Optional text inside text field; defaults to preset message.
+     * Optional placeholder text for input field; defaults to preset message.
      */
     placeholder?: string;
     /**
