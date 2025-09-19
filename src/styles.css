@@ -2329,6 +2329,9 @@ input[type="text"].note-toolbar-setting-error,
         padding: unset;
     }
     pre {
+        &:has(code) {
+            overflow-x: auto;
+        }
         & code {
             font-size: calc(var(--font-ui-small) + 1px);
             overflow: scroll;
