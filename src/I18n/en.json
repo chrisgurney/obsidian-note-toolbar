@@ -532,7 +532,7 @@
                 "option-toolbar-suggester": "Show all toolbars"
             },
             "scripting": {
-                "description": "Adds item types for Dataview, JS Engine, and Templater, which must be installed and enabled.",
+                "description": "Adds support for Dataview, JS Engine, and Templater, which must be installed and enabled.",
                 "name": "Scripting"
             },
             "show-edit-tbar": {
