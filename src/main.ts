@@ -38,6 +38,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
 	isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
 
+	activeWorkspace: string; // track current workspace, to reduce unneccessary toolbar re-renders
+	workspacesPlugin: { instance: any; enabled: boolean } | null = null;
+
 	// track the last opened layout state, to reduce unneccessary re-renders 
 	lastFileOpenedOnLayoutChange: TFile | null | undefined;
 	lastViewModeOnLayoutChange: MarkdownViewModeType | undefined;
@@ -103,6 +106,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			// check what other plugins are enabled that we need to know about
 			this.checkPlugins();
 			this.updateAdapters();
+			// @ts-ignore
+			this.workspacesPlugin = this.app.internalPlugins.getPluginById('workspaces');
 
 			// add icons specific to the plugin
 			addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
@@ -272,8 +277,18 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * On layout changes, render and update toolbars as necessary.
 	 */
 	layoutChangeListener = async () => {
-		await this.renderToolbarForAllLeaves();
 		
+		// if workspace changed, render all toolbars, otherwise just render the toolbar for the active view (#367)
+		const workspace = this.workspacesPlugin?.instance.activeWorkspace;
+		if (workspace !== this.activeWorkspace) {
+			await this.renderToolbarForAllLeaves();
+			this.activeWorkspace = workspace;
+		}
+		else {
+			const currentView = this.app.workspace.getActiveViewOfType(ItemView);
+			if (currentView) await this.renderToolbarForView(currentView);
+		}
+
 		// const toolbarEl = this.getToolbarEl();
 		// const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		// const currentViewId = getViewId(currentView);
