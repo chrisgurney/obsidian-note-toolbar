@@ -108,15 +108,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayToolbarList(containerEl: HTMLElement): void {
 
-		let itemsListContainer = createDiv();
+		const itemsListContainer = createDiv();
 		itemsListContainer.addClass('note-toolbar-setting-items-list-container');
 
-		let itemsContainer = createDiv();
+		const itemsContainer = createDiv();
 		itemsContainer.addClass('note-toolbar-setting-items-container');
 		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
 
 		const toolbarListHeading = this.itemListOpen ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.plugin.settings.toolbars.length });
-		let toolbarListSetting = new Setting(itemsContainer)
+		const toolbarListSetting = new Setting(itemsContainer)
 			.setName(toolbarListHeading)
 			.setHeading();
 
@@ -191,7 +191,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
-			let toolbarListDiv = createDiv();
+			const toolbarListDiv = createDiv();
 			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.plugin.settings.toolbars.forEach(
 				(toolbar) => {
@@ -215,9 +215,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					}
 
-					let toolbarListItemSetting = new Setting(toolbarListDiv)
+					const toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbarNameFr)
-						.setDesc(createToolbarPreviewFr(this.plugin, toolbar, this.plugin.settingsManager))
 						.addButton((button: ButtonComponent) => {
 							button
 								.setIcon('more-horizontal')
@@ -295,6 +294,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							// used to distinguish buttons for keyboard navigation
 							button.buttonEl.addClass('ntb-tbar-edit');
 						});
+
+					// for performance, render previews after a slight delay
+					requestAnimationFrame(() => {
+						toolbarListItemSetting.descEl.append(createToolbarPreviewFr(this.plugin, toolbar, this.plugin.settingsManager));
+					});
+
 					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
 					toolbar.name ? undefined : toolbarListItemSetting.nameEl.addClass('mod-warning');
 			

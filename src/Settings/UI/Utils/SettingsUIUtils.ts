@@ -58,10 +58,13 @@ export function createToolbarPreviewFr(
 	showEditLink: boolean = false
 ): DocumentFragment {
 
-	let toolbarFr: DocumentFragment = document.createDocumentFragment();
-	let previewContainer = toolbarFr.createDiv();
+	const toolbarFr: DocumentFragment = document.createDocumentFragment();
+
+	const previewContainer = toolbarFr.createDiv();
 	previewContainer.addClass('note-toolbar-setting-tbar-preview');
-	let itemsFr: DocumentFragment = document.createDocumentFragment();
+
+	const itemsFr: DocumentFragment = document.createDocumentFragment();
+
 	if (toolbar.items.length > 0) {
 		toolbar.items
 			.filter((item: ToolbarItemSettings) => {
@@ -92,25 +95,23 @@ export function createToolbarPreviewFr(
 						}
 						break;
 					default:
-						let iconExists = getIcon(item.icon);
-						if (iconExists || item.label) {
-							let defaultItemFr = createDiv();
+						const itemIcon = item.icon ? getIcon(item.icon) : null;
+						if (itemIcon || item.label) {
+							const defaultItemFr = createDiv();
 							defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
 							if (item.icon) {
-								if (iconExists) {
-									let iconFr = createSpan();
-									setIcon(iconFr, item.icon);
-									itemsFr.append(iconFr);
+								if (itemIcon) {
+									const iconFr = document.createDocumentFragment();
+									iconFr.appendChild(itemIcon.cloneNode(true) as SVGSVGElement);
 									defaultItemFr.append(iconFr);
 								}
 							}
 							if (item.label) {
-								let labelFr = createSpan();
+								const labelFr = createSpan();
 								labelFr.textContent = item.label;
 								if (item.label && plugin.hasVars(item.label)) {
 									labelFr.addClass('note-toolbar-setting-item-preview-code');
 								}
-								itemsFr.append(labelFr);
 								defaultItemFr.append(labelFr);
 							}
 							itemsFr.append(defaultItemFr);
@@ -122,7 +123,7 @@ export function createToolbarPreviewFr(
 			});
 	}
 	else {
-		itemsFr = emptyMessageFr(t('setting.item.label-preview-empty-no-items'));
+		itemsFr.appendChild(emptyMessageFr(t('setting.item.label-preview-empty-no-items')));
 	}
 	previewContainer.appendChild(itemsFr);
 
