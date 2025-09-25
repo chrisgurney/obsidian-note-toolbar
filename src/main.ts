@@ -1612,8 +1612,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (isValidUri(linkHref)) {
 			let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
 
-			const isWebViewerEnabled = (this.app as any).internalPlugins.plugins['webviewer']?.enabled ?? false;
-			const isWebViewerOpeningUrls = (this.app as any).internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;					
+			// @ts-ignore
+			const isWebViewerEnabled = this.app.internalPlugins.plugins['webviewer']?.enabled ?? false;
+			// @ts-ignore
+			const isWebViewerOpeningUrls = this.app.internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;					
 			let usingWebViewer = false;
 
 			// use Web Viewer for certain targets even if the 'Open external links' setting is disabled
@@ -2357,8 +2359,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Updates status of other installed plugins we're interested in.
 	 */
 	checkPlugins() {
-		const appPlugins = (this.app as any).plugins.plugins;
-		const internalPlugins = (this.app as any).internalPlugins.plugins;
+		// @ts-ignore
+		const appPlugins = this.app.plugins.plugins;
+		// @ts-ignore
+		const internalPlugins = this.app.internalPlugins.plugins;
 
 		Object.keys(this.hasPlugin).forEach(key => {
 			this.hasPlugin[key] = key in appPlugins;
