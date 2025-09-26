@@ -1,7 +1,7 @@
 import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
-import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr, setFieldHelp, removeFieldHelp } from "./Utils/SettingsUIUtils";
 import { FolderMapping, LocalVar, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarRule, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -386,31 +386,50 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					}
 					const query = search.toLowerCase();
 					let firstVisibleSet = false;
+					// let hasNonVisibleMatch = false;
 					this.containerEl
 						.querySelectorAll<HTMLElement>('.note-toolbar-setting-toolbar-list .setting-item')
 						.forEach((toolbarEl) => {
 							// search contents of name and item text
 							const toolbarName = toolbarEl.querySelector('.setting-item-name')?.textContent?.toLowerCase() ?? '';
-							const toolbarItemText = Array.from(toolbarEl.querySelectorAll('*:not(svg)'))
+							const allItemText = Array.from(toolbarEl.querySelectorAll('*:not(svg)'))
 								.flatMap(el => Array.from(el.childNodes))
 								.filter(node => node.nodeType === Node.TEXT_NODE)
 								.map(node => node.textContent?.trim())
 								.filter(text => text)
 								.join(' ')
 								.toLowerCase();
-							const toolbarNameMatches = toolbarName.includes(query);
-							const toolbarItemTextMatches = toolbarItemText.includes(query);
+							// const allItemTooltips = Array.from(toolbarEl.querySelectorAll('.note-toolbar-setting-toolbar-list-preview-item[aria-label]'))
+							// 	.map(el => el.getAttribute('aria-label')?.trim())
+							// 	.filter(label => label)
+							// 	.join(' ')
+							// 	.toLowerCase();
 
-							toolbarEl.style.display = (toolbarNameMatches || toolbarItemTextMatches) ? '' : 'none';
+							const toolbarNameMatches = toolbarName.includes(query);
+							const itemTextMatches = allItemText.includes(query);
+							// const itemTooltipMatches = allItemTooltips.includes(query);
+
+							// hide non-matching results
+							toolbarEl.style.display = (toolbarNameMatches || itemTextMatches) ? '' : 'none';
+
+							// hasNonVisibleMatch = hasNonVisibleMatch || (itemTooltipMatches && query.length > 0);
 
 							// remove the top border on the first search result
-							if ((toolbarNameMatches || toolbarItemTextMatches) && !firstVisibleSet) {
+							if ((toolbarNameMatches || itemTextMatches) && !firstVisibleSet) {
 								toolbarEl.classList.add('note-toolbar-setting-no-border');
 								firstVisibleSet = true;
 							} else {
 								toolbarEl.classList.remove('note-toolbar-setting-no-border');
 							}
 						});
+
+					// show that some results are hidden, and reset the "found" flag
+					// this.plugin.debug(hasNonVisibleMatch);
+					// hasNonVisibleMatch
+					// 	? setFieldHelp(toolbarSearchSetting.controlEl, 'Some results match tooltips.')
+					// 	: removeFieldHelp(toolbarSearchSetting.controlEl);
+					// hasNonVisibleMatch = false;
+
 				});
 			});
 		toolbarSearchSetting.settingEl.id = 'tbar-search';
