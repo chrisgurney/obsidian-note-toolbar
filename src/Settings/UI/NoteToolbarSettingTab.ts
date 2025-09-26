@@ -386,6 +386,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					}
 					const query = search.toLowerCase();
 					let firstVisibleSet = false;
+					let hasMatch = false;
 					// let hasNonVisibleMatch = false;
 					this.containerEl
 						.querySelectorAll<HTMLElement>('.note-toolbar-setting-toolbar-list .setting-item')
@@ -412,6 +413,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							// hide non-matching results
 							toolbarEl.style.display = (toolbarNameMatches || itemTextMatches) ? '' : 'none';
 
+							hasMatch = hasMatch || ((toolbarNameMatches || itemTextMatches) && query.length > 0);
 							// hasNonVisibleMatch = hasNonVisibleMatch || (itemTooltipMatches && query.length > 0);
 
 							// remove the top border on the first search result
@@ -422,6 +424,16 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								toolbarEl.classList.remove('note-toolbar-setting-no-border');
 							}
 						});
+
+					// if no results, show "no results" message
+					const toolbarListEl = this.containerEl.querySelector('.note-toolbar-setting-toolbar-list') as HTMLElement;
+					toolbarListEl?.querySelector('.note-toolbar-setting-empty-message')?.remove();
+					if (!hasMatch && query.length > 0) {
+						toolbarListEl?.createDiv({ 
+							text: emptyMessageFr(t('setting.search.label-no-results')), 
+							cls: 'note-toolbar-setting-empty-message' 
+						});
+					}
 
 					// show that some results are hidden, and reset the "found" flag
 					// this.plugin.debug(hasNonVisibleMatch);

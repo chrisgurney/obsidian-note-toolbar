@@ -578,7 +578,8 @@
         },
         "search": {
             "button-tooltip": "Search toolbars",
-            "field-placeholder": "Search toolbars..."
+            "field-placeholder": "Search toolbars...",
+            "label-no-results": "No results found."
         },
         "styles": {
             "button-close": "Done",
