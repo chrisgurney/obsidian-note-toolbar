@@ -1330,77 +1330,88 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async calloutLinkHandler(e: MouseEvent) {
 
-		let target = e.target as HTMLElement | null;
-		let clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
+		const target = e.target as HTMLElement | null;
+		const clickedCalloutEl = target?.closest('.callout[data-callout="note-toolbar"]');
+		
+		// only process clicks inside of Note Toolbar callouts
+		if (clickedCalloutEl) {
 
-		// remove any active item attributes from the main toolbar, so the API doesn't fetch the wrong item
-		// (not supported for Note Toolbar Callouts)
-		this.updateActiveToolbarItem();
+			// remove any active item attributes from the main toolbar, so the API doesn't fetch the wrong item
+			// (not supported for Note Toolbar Callouts)
+			this.updateActiveToolbarItem();
 
-		if (clickedItemEl) {
-			// this.debug('calloutLinkHandler:', target, clickedItemEl);
-			this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
-			let dataEl = clickedItemEl?.nextElementSibling;
-			if (dataEl) {
-				// make sure it's a valid attribute, and get its value
-				const attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
-				attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
-				const value = attribute ? dataEl?.getAttribute(attribute) : null;
-				
-				switch (attribute) {
-					case CalloutAttr.Command:
-					case CalloutAttr.CommandNtb:
-						this.handleLinkCommand(value);
-						break;
-					case CalloutAttr.Dataview:
-					case CalloutAttr.JavaScript:
-					case CalloutAttr.JsEngine:
-					case CalloutAttr.Templater:
-						const scriptConfig = {
-							pluginFunction: value,
-							expression: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['expression']) ?? undefined,
-							sourceFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFile']) ?? undefined,
-							sourceFunction: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFunction']) ?? undefined,
-							sourceArgs: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceArgs']) ?? undefined,
-							outputContainer: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputContainer']) ?? undefined,
-							outputFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputFile']) ?? undefined,
-						} as ScriptConfig;
-						switch (attribute) {
-							case CalloutAttr.Dataview:
-								this.handleLinkScript(ItemType.Dataview, scriptConfig);
-								break;
-							case CalloutAttr.JavaScript:
-								this.handleLinkScript(ItemType.JavaScript, scriptConfig);
-								break;
-							case CalloutAttr.JsEngine:
-								this.handleLinkScript(ItemType.JsEngine, scriptConfig);
-								break;
-							case CalloutAttr.Templater:
-								this.handleLinkScript(ItemType.Templater, scriptConfig);
-								break;	
-						}
-						break;
-					case CalloutAttr.Folder:
-					case CalloutAttr.FolderNtb:
-						this.handleLinkFolder(value);
-						break;
-					case CalloutAttr.Menu:
-					case CalloutAttr.MenuNtb:
-						const activeFile = this.app.workspace.getActiveFile();
-						const toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbar(value);
-						if (activeFile) {
-							if (toolbar) {
-								this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
-									this.showMenuAtElement(menu, this.lastCalloutLink);
-								});
+			// TODO: optionally ignore clicks that expand the callout
+			// if (clickedCalloutEl.hasAttribute('data-callout-fold')) {
+			// 	e.preventDefault();
+			// }
+
+			const clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
+			if (clickedItemEl) {
+				// this.debug('calloutLinkHandler:', target, clickedItemEl);
+				this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
+				let dataEl = clickedItemEl?.nextElementSibling;
+				if (dataEl) {
+					// make sure it's a valid attribute, and get its value
+					const attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
+					attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
+					const value = attribute ? dataEl?.getAttribute(attribute) : null;
+					
+					switch (attribute) {
+						case CalloutAttr.Command:
+						case CalloutAttr.CommandNtb:
+							this.handleLinkCommand(value);
+							break;
+						case CalloutAttr.Dataview:
+						case CalloutAttr.JavaScript:
+						case CalloutAttr.JsEngine:
+						case CalloutAttr.Templater:
+							const scriptConfig = {
+								pluginFunction: value,
+								expression: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['expression']) ?? undefined,
+								sourceFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFile']) ?? undefined,
+								sourceFunction: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFunction']) ?? undefined,
+								sourceArgs: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceArgs']) ?? undefined,
+								outputContainer: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputContainer']) ?? undefined,
+								outputFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputFile']) ?? undefined,
+							} as ScriptConfig;
+							switch (attribute) {
+								case CalloutAttr.Dataview:
+									this.handleLinkScript(ItemType.Dataview, scriptConfig);
+									break;
+								case CalloutAttr.JavaScript:
+									this.handleLinkScript(ItemType.JavaScript, scriptConfig);
+									break;
+								case CalloutAttr.JsEngine:
+									this.handleLinkScript(ItemType.JsEngine, scriptConfig);
+									break;
+								case CalloutAttr.Templater:
+									this.handleLinkScript(ItemType.Templater, scriptConfig);
+									break;	
 							}
-							else {
-								new Notice(t('notice.error-item-menu-not-found', { toolbar: value }));
+							break;
+						case CalloutAttr.Folder:
+						case CalloutAttr.FolderNtb:
+							this.handleLinkFolder(value);
+							break;
+						case CalloutAttr.Menu:
+						case CalloutAttr.MenuNtb:
+							const activeFile = this.app.workspace.getActiveFile();
+							const toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbar(value);
+							if (activeFile) {
+								if (toolbar) {
+									this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
+										this.showMenuAtElement(menu, this.lastCalloutLink);
+									});
+								}
+								else {
+									new Notice(t('notice.error-item-menu-not-found', { toolbar: value }));
+								}
 							}
-						}
-						break;
+							break;
+					}
 				}
 			}
+
 		}
 
 	}
