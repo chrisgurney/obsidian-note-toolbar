@@ -735,15 +735,23 @@ export function setFieldError(
 }
 
 /**
+ * Removes help from the given element, if it exists.
+ * @param fieldEl HTMLElement to update
+ */
+export function removeFieldHelp(fieldEl: HTMLElement) {
+	const existingHelp = fieldEl.querySelector('.note-toolbar-setting-field-help');
+	existingHelp?.remove();
+}
+
+/**
  * Updates the given element with the given help text.
  * @param fieldEl HTMLElement to update
  * @param helpText DocumentFragment or string of the help text
  */
 export function setFieldHelp(fieldEl: HTMLElement, helpText: DocumentFragment | string | undefined) {
 	if (!helpText) return;
-	let existingHelp = fieldEl.querySelector('.note-toolbar-setting-field-help');
-	existingHelp?.remove();
-	let fieldHelp = createDiv();
+	removeFieldHelp(fieldEl);
+	const fieldHelp = createDiv();
 	fieldHelp.addClass('note-toolbar-setting-field-help');
 	(helpText instanceof DocumentFragment) ? fieldHelp.append(helpText) : fieldHelp.setText(helpText);
 	fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
