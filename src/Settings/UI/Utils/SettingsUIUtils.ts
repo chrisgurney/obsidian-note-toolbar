@@ -114,6 +114,9 @@ export function createToolbarPreviewFr(
 								}
 								defaultItemFr.append(labelFr);
 							}
+							if (item.tooltip) {
+								setTooltip(defaultItemFr, item.tooltip);
+							}
 							itemsFr.append(defaultItemFr);
 						}
 						break;
