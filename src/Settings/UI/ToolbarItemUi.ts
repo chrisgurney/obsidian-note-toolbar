@@ -724,12 +724,13 @@ export default class ToolbarItemUi {
                 setFieldHelp(fileSetting.settingEl, helpTextFr);
                 break;
             case ItemType.Group:
+                const initialGroupToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
                 const groupSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new ToolbarSuggester(this.plugin.app, this.plugin, cb.inputEl);
                         cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
-                            .setValue(this.plugin.settingsManager.getToolbarName(toolbarItem.link))
+                            .setValue(initialGroupToolbar ? initialGroupToolbar.name : '')
                             .onChange(debounce(async (name) => {
                                 let isValid = await this.updateItemComponentStatus(name, SettingType.Toolbar, cb.inputEl.parentElement);
                                 let groupToolbar = isValid ? this.plugin.settingsManager.getToolbarByName(name) : undefined;
@@ -749,13 +750,13 @@ export default class ToolbarItemUi {
                 setFieldHelp(groupSetting.settingEl, helpTextFr);
                 break;
             case ItemType.Menu:
+                const initialMenuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
                 const menuSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new ToolbarSuggester(this.plugin.app, this.plugin, cb.inputEl);
-                        const defaultValue = this.plugin.settingsManager.getToolbarName(toolbarItem.link);
                         cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
-                            .setValue(defaultValue ? defaultValue : toolbarItem.link)
+                            .setValue(initialMenuToolbar ? initialMenuToolbar.name : '')
                             .onChange(debounce(async (name) => {
                                 this.updateItemComponentStatus(name, SettingType.Toolbar, cb.inputEl.parentElement);
                                 // TODO? return an ID from the suggester vs. the name
@@ -1088,8 +1089,8 @@ export default class ToolbarItemUi {
                 break;
             case ItemType.Group:
             case ItemType.Menu:
-                let menuGroupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
-                let fieldHelp = document.createDocumentFragment();
+                const menuGroupToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
+                const fieldHelp = document.createDocumentFragment();
                 menuGroupToolbar
                     ? fieldHelp.append(createToolbarPreviewFr(this.plugin, menuGroupToolbar, undefined, true))
                     : fieldHelp.append(
@@ -1219,8 +1220,7 @@ export default class ToolbarItemUi {
                 case SettingType.Toolbar:
                     let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
                     if (!toolbar) {
-                        // toolbars are stored by IDs for previews
-                        toolbar = this.plugin.settingsManager.getToolbarById(itemValue);
+                        toolbar = this.plugin.settingsManager.getToolbar(itemValue);
                         if (!toolbar) {
                             status = Status.Invalid;
                             statusMessage = t('setting.item.option-item-menu-error-does-not-exist');

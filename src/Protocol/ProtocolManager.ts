@@ -62,9 +62,8 @@ export class ProtocolManager {
 			}
         }
 		else if (data.menu) {
-			let activeFile = this.plugin.app.workspace.getActiveFile();
-			let toolbar: ToolbarSettings | undefined = this.plugin.settingsManager.getToolbarByName(data.menu);
-			toolbar = toolbar ? toolbar : this.plugin.settingsManager.getToolbarById(data.menu); // try getting by UUID
+			const activeFile = this.plugin.app.workspace.getActiveFile();
+			const toolbar: ToolbarSettings | undefined = this.plugin.settingsManager.getToolbar(data.menu);
 			if (activeFile) {
 				if (toolbar) {
 					this.plugin.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 

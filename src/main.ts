@@ -806,10 +806,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					toolbarItem.setAttribute('role', 'separator');
 					break;
 				case ItemType.Group:
-					let groupToolbar = this.settingsManager.getToolbarById(item.link);
+					const groupToolbar = this.settingsManager.getToolbar(item.link);
 					if (groupToolbar) {
 						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-							let groupLItems = await this.renderToolbarLItems(groupToolbar, file, view, recursions + 1);
+							const groupLItems = await this.renderToolbarLItems(groupToolbar, file, view, recursions + 1);
 							noteToolbarLiArray.push(...groupLItems);
 						}
 					}
@@ -1021,7 +1021,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						menu.addSeparator();
 						break;
 					case ItemType.Group:
-						let groupToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+						const groupToolbar = this.settingsManager.getToolbar(toolbarItem.link);
 						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, file, recursions + 1) : undefined;
 						break;
 					case ItemType.Menu:
@@ -1386,9 +1386,8 @@ export default class NoteToolbarPlugin extends Plugin {
 						break;
 					case CalloutAttr.Menu:
 					case CalloutAttr.MenuNtb:
-						let activeFile = this.app.workspace.getActiveFile();
-						let toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbarByName(value);
-						toolbar = toolbar ? toolbar : this.settingsManager.getToolbarById(value); // try getting by UUID
+						const activeFile = this.app.workspace.getActiveFile();
+						const toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbar(value);
 						if (activeFile) {
 							if (toolbar) {
 								this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
@@ -1540,8 +1539,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				break;
 			case ItemType.Menu:
-				let toolbar = this.settingsManager.getToolbarById(linkHref);
-				this.debug("- menu item for toolbar", toolbar, activeFile);
+				const toolbar = this.settingsManager.getToolbar(linkHref);
 				if (toolbar) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
 						let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
@@ -2138,7 +2136,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			});
 
 			if (toolbarItem.linkAttr.type === ItemType.Menu) {
-				const menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+				const menuToolbar = this.settingsManager.getToolbar(toolbarItem.link);
 				if (menuToolbar) {
 					contextMenu.addItem((item: MenuItem) => {
 						item

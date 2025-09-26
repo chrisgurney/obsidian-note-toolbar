@@ -82,15 +82,15 @@ export function createToolbarPreviewFr(
 						break;
 					case ItemType.Group:
 						if (settingsManager) {
-							let groupToolbar = settingsManager.getToolbarById(item.link);
+							const groupToolbar = settingsManager.getToolbar(item.link);
 							if (groupToolbar) {
-								let groupItemFr = createDiv();
-								groupItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
-								let groupNameFr = createSpan();
-								groupNameFr.addClass('note-toolbar-setting-group-preview');
-								groupNameFr.setText(groupToolbar.name);
-								groupItemFr.append(groupNameFr);
-								itemsFr.append(groupItemFr);
+								const groupItemEl = createDiv();
+								groupItemEl.addClass("note-toolbar-setting-toolbar-list-preview-item");
+								const groupNameEl = createSpan();
+								groupNameEl.addClass('note-toolbar-setting-group-preview');
+								groupNameEl.setText(groupToolbar.name);
+								groupItemEl.append(groupNameEl);
+								itemsFr.append(groupItemEl);
 							}
 						}
 						break;

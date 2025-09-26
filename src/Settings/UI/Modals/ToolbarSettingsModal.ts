@@ -1052,7 +1052,7 @@ export default class ToolbarSettingsModal extends Modal {
 				itemPreview.append(itemPreviewContent);
 				break;
 			case ItemType.Group:
-				let groupToolbar = this.plugin.settingsManager.getToolbarById(toolbarItem.link);
+				const groupToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
 				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.plugin, groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
