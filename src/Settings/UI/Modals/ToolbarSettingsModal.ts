@@ -170,8 +170,8 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
-		let toolbarNameDiv = createDiv();
-		new Setting(toolbarNameDiv)
+		const toolbarNameDiv = createDiv();
+		const toolbarNameSetting = new Setting(toolbarNameDiv)
 			.setName(t('setting.name.name'))
 			.setDesc(t('setting.name.description'))
 			.addText(cb => cb
@@ -195,6 +195,20 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 				}, 750)));
 		settingsDiv.append(toolbarNameDiv);
+
+		// allow keyboard navigation down to first toolbar item
+		this.plugin.registerDomEvent(
+			toolbarNameSetting.controlEl, 'keydown', (e) => {
+				switch (e.key) {
+					case 'ArrowDown':
+						const selector = '.note-toolbar-setting-items-container .note-toolbar-setting-item-preview';
+						const itemEls = this.containerEl.querySelectorAll<HTMLElement>(selector);
+						if (itemEls.length > 0) itemEls[0].focus();
+						e.preventDefault();
+						break;
+				}
+			}
+		)
 
 	}
 
