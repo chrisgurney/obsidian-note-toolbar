@@ -999,6 +999,10 @@ export default class NoteToolbarPlugin extends Plugin {
 			return; // stop recursion
 		}
 
+		// check if the toolbar has icons, so we know whether to show placeholders or not
+		// FIXME: this does not take platform visibility into account
+		const hasIcons = toolbar.items.some(item => item.icon?.length);
+
 		const toolbarView = this.app.workspace.getActiveViewOfType(ItemView);
 
 		for (const toolbarItem of toolbar.items) { 
@@ -1027,7 +1031,9 @@ export default class NoteToolbarPlugin extends Plugin {
 							if (recursions >= 1) break;
 							menu.addItem((item: MenuItem) => {
 								item
-									.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
+									.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon)
+										? toolbarItem.icon 
+										: (hasIcons ? 'note-toolbar-empty' : null))
 									.setTitle(title);
 								let subMenu = item.setSubmenu() as Menu;
 								// add class so we can style the menu
@@ -1064,7 +1070,9 @@ export default class NoteToolbarPlugin extends Plugin {
 							}
 							
 							item
-								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon) ? toolbarItem.icon : 'note-toolbar-empty')
+								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon)
+									? toolbarItem.icon 
+									: (hasIcons ? 'note-toolbar-empty' : null))
 								.setTitle(itemTitleFr)
 								.onClick(async (menuEvent) => {
 									await this.handleItemLink(toolbarItem, menuEvent, file);
