@@ -1042,7 +1042,7 @@ export default class NoteToolbarPlugin extends Plugin {
 								const activeToolbar = this.getCurrentToolbar();
 								if (activeToolbar && activeToolbar.customClasses) subMenu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
 								// render the sub-menu items
-								let menuToolbar = this.settingsManager.getToolbarById(toolbarItem.link);
+								let menuToolbar = this.settingsManager.getToolbar(toolbarItem.link);
 								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
 							});
 							break;
