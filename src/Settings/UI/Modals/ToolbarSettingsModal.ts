@@ -1,8 +1,8 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr, getToolbarUsageText } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr, getToolbarUsageText, getDisclaimersFr } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS } from 'Settings/NoteToolbarSettings';
+import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, SETTINGS_DISCLAIMERS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import Sortable from 'sortablejs';
@@ -654,7 +654,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialMobilePosition);
 		this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialDesktopPosition);
 
-		new Setting(settingsDiv)
+		const desktopPosSetting = new Setting(settingsDiv)
 			.setName(t('setting.option-platform-desktop'))
 			.addDropdown((dropdown) =>
 				dropdown
@@ -671,10 +671,21 @@ export default class ToolbarSettingsModal extends Modal {
 						if (!this.hasMobileFabPosition) {
 							defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
 						}
+						// update disclaimers
+						desktopPosSetting.descEl.empty();
+						const isNativeMenusEnabled: boolean = !!this.plugin.app.vault.getConfig('nativeMenus');
+						if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
+							desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
+						}
 						await this.plugin.settingsManager.save();
 						this.display();
 					})
 				);
+
+		const isNativeMenusEnabled: boolean = !!this.plugin.app.vault.getConfig('nativeMenus');
+		if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
+			desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
+		}
 
 		new Setting(settingsDiv)
 			.setName(t('setting.option-platform-mobile'))

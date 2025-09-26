@@ -605,3 +605,7 @@ export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ [MobileStyleType.NoWrap]: t('setting.styles.option-nowrap-disclaimer') },
 	{ [MobileStyleType.Sticky]: t('setting.styles.option-sticky-disclaimer') },
 ];
+
+export const SETTINGS_DISCLAIMERS: { [key: string]: string }[] = [
+	{ 'nativeMenus': t('setting.position.option-fab-desktop-native-menus-disclaimer') }
+];

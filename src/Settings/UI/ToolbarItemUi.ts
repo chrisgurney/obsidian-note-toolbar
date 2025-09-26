@@ -1,10 +1,10 @@
 import NoteToolbarPlugin from "main";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
 import { Setting, debounce, ButtonComponent, setIcon, TFile, TFolder, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice, PaneType } from "obsidian";
 import { removeComponentVisibility, addComponentVisibility, getElementPosition, importArgs, getCommandIdByName, getCommandNameById } from "Utils/Utils";
 import { IconSuggestModal } from "./Modals/IconSuggestModal";
-import { copyToolbarItem, createToolbarPreviewFr, handleKeyClick, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
+import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, pluginLinkFr, removeFieldError, setFieldError, setFieldHelp, updateItemIcon } from "./Utils/SettingsUIUtils";
 import { FileSuggester } from "./Suggesters/FileSuggester";
 import { CommandSuggester } from "./Suggesters/CommandSuggester";
 import { ToolbarSuggester } from "./Suggesters/ToolbarSuggester";
@@ -766,10 +766,17 @@ export default class ToolbarItemUi {
                                 await this.plugin.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                                 // update help text with toolbar preview or default if none selected
-                                let menuPreviewFr = menuToolbar 
+                                let menuHelpFr = menuToolbar 
                                     ? createToolbarPreviewFr(this.plugin, menuToolbar, undefined, true)
                                     : learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
-                                setFieldHelp(menuSetting.controlEl, menuPreviewFr);
+                                // add disclaimers
+                                const isNativeMenusEnabled: boolean = !!this.plugin.app.vault.getConfig('nativeMenus');
+                                if (isNativeMenusEnabled) {
+                                    menuHelpFr.append(
+                                        document.createElement('br'),
+                                        getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
+                                }
+                                setFieldHelp(menuSetting.controlEl, menuHelpFr);
                             }, 500));
                         this.updateItemComponentStatus(toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
                     });

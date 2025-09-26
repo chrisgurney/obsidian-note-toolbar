@@ -550,6 +550,7 @@
             "option-defaultitem-description": "Instead of the toolbar menu, show this item as the button. Other items appear in right-click menu (long-press on mobile).",
             "option-defaultitem-error-invalid": "Invalid toolbar item",
             "option-defaultitem-placeholder": "Item...",
+            "option-fab-desktop-native-menus-disclaimer": "Disable Obsidian's Appearance → Native menus option, if you want icons to appear floating button menus.",
             "option-fabl": "Floating button: left",
             "option-fabr": "Floating button: right",
             "option-hidden": "Hidden (do not display)",
