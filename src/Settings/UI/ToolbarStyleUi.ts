@@ -1,5 +1,5 @@
 import { debounce, ItemView, MarkdownView, Setting } from "obsidian";
-import { emptyMessageFr, getStyleDisclaimersFr, getValueForKey, learnMoreFr } from "./Utils/SettingsUIUtils";
+import { emptyMessageFr, getDisclaimersFr, getValueForKey, learnMoreFr } from "./Utils/SettingsUIUtils";
 import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { arraymove } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
@@ -92,8 +92,8 @@ export default class ToolbarStyleUi {
         defaultStyleDropdown.controlEl.id = 'default-style-dropdown';
 
         const defaultDesc = document.createDocumentFragment();
-        defaultDesc.append(t('setting.styles.option-default-description'));
-        defaultDesc.append(getStyleDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
+        defaultDesc.append(t('setting.styles.option-default-description'), document.createElement('br'));
+        defaultDesc.append(getDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
 
         new Setting(settingsDiv)
             .setName(t('setting.styles.option-default-name'))
@@ -161,8 +161,8 @@ export default class ToolbarStyleUi {
         );
 
         const mobileDesc = document.createDocumentFragment();
-        mobileDesc.append(t('setting.styles.option-mobile-description'));
-        mobileDesc.append(getStyleDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
+        mobileDesc.append(t('setting.styles.option-mobile-description'), document.createElement('br'));
+        mobileDesc.append(getDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
 
         new Setting(settingsDiv)
             .setName(t('setting.styles.option-mobile-name'))

@@ -240,17 +240,21 @@ export function emptyMessageFr(message: string): DocumentFragment {
 }
 
 /**
- * Returns a fragment containing any applicable style disclaimers to show, for the provided styles.
- * @param disclaimers List of disclaimers, corresponds with DEFAULT and MOBILE _STYLE_DISCLAIMERS
- * @param stylesToCheck styles that have been applied by the user, to check for applicable disclaimers
+ * Returns a fragment containing any applicable disclaimers to show, for the provided keys.
+ * @param disclaimers List of disclaimers, e.g., for styles this corresponds with DEFAULT and MOBILE _STYLE_DISCLAIMERS
+ * @param keysToCheck e.g., styles that have been applied by the user, to check for applicable disclaimers
  * @returns DocumentFragment with disclaimers to show in settings UI
  */
-export function getStyleDisclaimersFr(disclaimers: {[key: string]: string}[], stylesToCheck: string[]): DocumentFragment {
+export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToCheck: string[]): DocumentFragment {
 	let disclaimersFr = document.createDocumentFragment();
-	stylesToCheck.forEach(style => {
-		disclaimers.find(disclaimer => style in disclaimer)
-			? disclaimersFr.append( disclaimersFr.createEl("br"), "* ", getValueForKey(disclaimers, style) )
-			: undefined;
+	let first = true;
+	keysToCheck.forEach(keyToCheck => {
+		const disclaimer = disclaimers.find(d => keyToCheck in d);
+		if (disclaimer) {
+			if (!first) disclaimersFr.append(document.createElement('br'));
+			disclaimersFr.append('* ', getValueForKey(disclaimers, keyToCheck) );
+			first = false;
+		}
 	});
 	return disclaimersFr;
 }
