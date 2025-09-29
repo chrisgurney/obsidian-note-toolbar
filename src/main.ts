@@ -1340,10 +1340,12 @@ export default class NoteToolbarPlugin extends Plugin {
 			// (not supported for Note Toolbar Callouts)
 			this.updateActiveToolbarItem();
 
-			// TODO: optionally ignore clicks that expand the callout
-			// if (clickedCalloutEl.hasAttribute('data-callout-fold')) {
-			// 	e.preventDefault();
-			// }
+			// prevent expansion of callouts if setting is enabled
+			if (this.settings.lockCallouts) {
+				if (clickedCalloutEl.hasAttribute('data-callout-fold')) {
+					e.preventDefault();
+				}
+			}
 
 			const clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
 			if (clickedItemEl) {

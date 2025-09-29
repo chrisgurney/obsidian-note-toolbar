@@ -1088,6 +1088,18 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl)
+			.setName(t('setting.other.lock-callouts.name'))
+			.setDesc(t('setting.other.lock-callouts.description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb
+					.setValue(this.plugin.settings.lockCallouts)
+					.onChange(async (value) => {
+						this.plugin.settings.lockCallouts = value;
+						await this.plugin.settingsManager.save();
+					});
+			});
+			
+		new Setting(containerEl)
 			.setName(t('setting.other.scripting.name'))
 			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
 			.addToggle((cb: ToggleComponent) => {

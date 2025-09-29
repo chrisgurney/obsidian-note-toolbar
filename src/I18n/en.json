@@ -523,6 +523,10 @@
                 "description": "If you’re syncing plugin settings across devices, turn this on to automatically load toolbar updates. If not, you’ll need to restart Obsidian to see changes from other devices.",
                 "name": "Load settings changes"
             },
+            "lock-callouts": {
+                "description": "Note Toolbar callouts will not be expanded for editing on click. If enabled, use the Edit option in the callout menu to make changes.",
+                "name": "Lock Note Toolbar callouts"
+            },
             "name": "Other",
             "ribbon-action": {
                 "description": "Action to take when the ribbon icon (on phones) is used.",

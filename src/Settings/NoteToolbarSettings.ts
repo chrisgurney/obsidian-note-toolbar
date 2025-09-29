@@ -215,6 +215,7 @@ export interface NoteToolbarSettings {
 	folderMappings: Array<FolderMapping>;
 	icon: string;
 	keepPropsState: boolean;
+	lockCallouts: boolean;
 	onboarding: OnboardingState;
 	ribbonAction: RibbonAction;
 	rules: Array<ToolbarRule>;
@@ -242,6 +243,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	folderMappings: [],
 	icon: "circle-ellipsis",
 	keepPropsState: false,
+	lockCallouts: false,
 	onboarding: {},
 	ribbonAction: RibbonAction.Toolbar,
 	rules: [],
