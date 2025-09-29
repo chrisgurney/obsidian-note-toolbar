@@ -298,6 +298,19 @@ export class CommandManager {
     }
 
     /**
+     * Toggles the Lock Note Toolbars callout setting.
+     */
+    async toggleLockCallouts(): Promise<void> {
+        this.plugin.settings.lockCallouts = !this.plugin.settings.lockCallouts;
+        await this.plugin.settingsManager.save();
+        new Notice(
+            this.plugin.settings.lockCallouts
+                ? t('command.callouts-locked-notice')
+                : t('command.callouts-unlocked-notice')
+        );
+    }
+
+    /**
      * Shows, completely hides, folds, or toggles the visibility of this note's Properties.
      * @param visibility Set to 'show', 'hide', 'fold', or 'toggle'
      * @param isAutoFold Set to `true` if triggering automatically

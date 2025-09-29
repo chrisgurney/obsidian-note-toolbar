@@ -129,6 +129,8 @@
     },
     "command": {
         "copy-command-notice": "Command copied to clipboard",
+        "callouts-locked-notice": "Locked Note Toolbar Callouts",
+        "callouts-unlocked-notice": "Unlocked Note Toolbar Callouts",
         "name-copy-command-as-data-element": "Copy callout item for command",
         "name-copy-command-uri": "Copy URI for command",
         "name-focus": "Focus",
@@ -140,6 +142,7 @@
         "name-open-toolbar": "Open: {{toolbar}}",
         "name-settings": "Plugin settings",
         "name-show-properties": "Show Properties",
+        "name-toggle-lock-callouts": "Lock/Unlock Note Toolbar Callouts",
         "name-toggle-properties": "Toggle Properties",
         "name-toolbar-settings": "Toolbar settings",
         "name-toolbar-suggester": "Quick toolbars",
@@ -524,8 +527,8 @@
                 "name": "Load settings changes"
             },
             "lock-callouts": {
-                "description": "Note Toolbar callouts will not be expanded for editing on click. If enabled, use the Edit option in the callout menu to make changes.",
-                "name": "Lock Note Toolbar callouts"
+                "description": "Note Toolbar Callouts will not be expanded for editing on click. If enabled, use the Edit option in the callout menu to make changes.",
+                "name": "Lock Note Toolbar Callouts"
             },
             "name": "Other",
             "ribbon-action": {
