@@ -836,6 +836,9 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     padding: 1em 1em;
     .is-mobile & {
         padding: 1em;
+        & .setting-item > .setting-item-control > button {
+            width: unset !important;
+        }
     }
     & .setting-item {
         padding: 0.5em;
@@ -1230,6 +1233,10 @@ input[type="text"].note-toolbar-setting-error,
     & .setting-item {
         .is-phone & {
             flex-direction: unset !important;
+            & .setting-item-control {
+                justify-content: flex-end !important;
+                width: unset !important;
+            }
         }
     }
     & .setting-item-heading {
@@ -2051,6 +2058,7 @@ input[type="text"].note-toolbar-setting-error,
             flex: 0 0 100%;
         }
         & .setting-item-info {
+            align-self: unset !important;
             margin-inline-end: 0.25em;
             color: var(--pill-color);
             & .setting-item-name {
