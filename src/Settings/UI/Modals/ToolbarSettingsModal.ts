@@ -12,7 +12,7 @@ import ToolbarItemUi from '../ToolbarItemUi';
 import { ItemSuggester } from '../Suggesters/ItemSuggester';
 import ItemModal from './ItemModal';
 
-enum ItemFormComponent {
+const enum ItemFormComponent {
 	Actions = 'actions',
 	Delete = 'delete',
 	Icon = 'icon',
@@ -21,7 +21,7 @@ enum ItemFormComponent {
 	Tooltip = 'tooltip',
 }
 
-export enum SettingsAttr {
+export const enum SettingsAttr {
 	Active = 'data-active',
 	ItemUuid = 'data-item-uuid',
 	PreviewType = 'data-item-type',

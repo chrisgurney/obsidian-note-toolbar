@@ -1153,7 +1153,7 @@ export default class ToolbarItemUi {
         toolbarItem?: ToolbarItemSettings): Promise<boolean> 
     {
 
-        enum Status {
+        const enum Status {
             Empty = 'empty',
             Invalid = 'invalid',
             Valid = 'valid'
