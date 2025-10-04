@@ -148,7 +148,7 @@ export class TipView extends ItemView {
                 const id = li.textContent?.trim();
                 if (id) items.push(id);
             });
-            calloutEl.innerHTML = '';
+            calloutEl.textContent = '';
             calloutEl.className = '';
             renderGalleryItems(this.plugin, calloutEl, items, TIP_COLORS[color]);
         });
@@ -193,7 +193,7 @@ export class TipView extends ItemView {
             if (!url) return;
 
             calloutEl.className = '';
-            calloutEl.innerHTML = '';
+            calloutEl.textContent = '';
 
             const wrapperEl = calloutEl.createDiv('note-toolbar-setting-help-video');
             const videoEl = wrapperEl.createEl('video');
