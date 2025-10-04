@@ -67,7 +67,8 @@ export const enum FileType {
 	Pdf = 'pdf',
 	Video = 'video'
 }
-export const enum ItemType {
+// note: can't make this a constant as it's used in Object.values()
+export enum ItemType {
 	Break = 'break',
 	Command = 'command',
 	Dataview = 'dataview',
@@ -181,7 +182,8 @@ export const enum LocalVar {
 
 export type PropsState = 'show' | 'hide' | 'fold' | 'toggle';
 
-export const enum CalloutAttr {
+// note: can't make this a constant as it's used in Object.values()
+export enum CalloutAttr {
     Command = 'data-command',
     CommandNtb = 'data-ntb-command', // for backwards-compatibility
 	Dataview = 'data-dataview',
@@ -389,7 +391,8 @@ export const enum RuleConjunctionType {
 	And = 'and',
 	Or = 'or'
 }
-export const enum RuleConditionType {
+// note: can't make this a constant as it's used in Object.entries()
+export enum RuleConditionType {
 	Folder = 'folder'
 }
 export const enum RuleOperatorType {
