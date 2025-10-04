@@ -190,10 +190,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * removes all toolbars.
 	 */
 	async onunload() {
-		this.getAllToolbarEl().forEach((toolbarEl) => {
-			toolbarEl.remove();
-		});
+
+		// remove any toolbars
+		this.getAllToolbarEl().forEach((toolbarEl) => { toolbarEl.remove(); });
+		// remove the global API
+		if (window["ntb"]) delete window["ntb"];
+
 		this.debug('UNLOADED');
+
 	}
  
 	/**
