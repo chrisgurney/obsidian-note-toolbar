@@ -19,7 +19,7 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
-        const recentFiles = JSON.parse(localStorage.getItem(LocalVar.RecentFiles) || '[]');
+        const recentFiles = JSON.parse(this.plugin.app.loadLocalStorage(LocalVar.RecentFiles) || '[]');
 
         files = abstractFiles.filter((file: TAbstractFile) => {
             const isFile = file instanceof TFile;

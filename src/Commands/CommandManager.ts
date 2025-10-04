@@ -176,7 +176,7 @@ export class CommandManager {
                                 left: (fabPos === PositionType.FabLeft ? false : true)
                             };
                             // store menu position for sub-menu positioning
-                            localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
+                            this.plugin.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
                             menu.showAtPosition(menuPos);
                         });
                     }
@@ -348,7 +348,7 @@ export class CommandManager {
                     }
                     break;
             }
-            localStorage.setItem(LocalVar.PropsState, visibility);
+            this.plugin.app.saveLocalStorage(LocalVar.PropsState, visibility);
         }
 
     }

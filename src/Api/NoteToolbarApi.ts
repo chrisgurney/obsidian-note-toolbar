@@ -40,7 +40,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     ): Promise<TAbstractFile> {
 
         const abstractFiles = this.plugin.app.vault.getAllLoadedFiles();
-        const recentFiles = JSON.parse(localStorage.getItem(LocalVar.RecentFiles) || '[]');
+        const recentFiles = JSON.parse(this.plugin.app.loadLocalStorage(LocalVar.RecentFiles) || '[]');
 
         let files: TAbstractFile[] = [];
         files = abstractFiles.filter((file: TAbstractFile) => {

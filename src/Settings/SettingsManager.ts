@@ -437,13 +437,13 @@ export class SettingsManager {
 	 * @param value value to update the list with
 	 */
 	async updateRecentList(localVar: string, value: string): Promise<void> {
-		const list = JSON.parse(localStorage.getItem(localVar) || '[]');
+		const list = JSON.parse(this.plugin.app.loadLocalStorage(localVar) || '[]');
 		const maxSize = 10;
 		const i = list.indexOf(value);
 		if (i !== -1) list.splice(i, 1); // remove if it already exists
 		list.unshift(value); // add to top
 		if (list.length > maxSize) list.pop(); // remove oldest
-		localStorage.setItem(localVar, JSON.stringify(list));
+		this.plugin.app.saveLocalStorage(localVar, JSON.stringify(list));
 	}
 
 	/*************************************************************************

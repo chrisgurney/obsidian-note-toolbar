@@ -1064,14 +1064,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		// sync setting (stored locally only)
 		//  * FIXME: DISABLED DUE TO DATA LOSS ISSUES WITH USERS NOT EVEN USING SETTING (POTENTIAL CAUSE)
 		//  * More info: https://github.com/chrisgurney/obsidian-note-toolbar/issues/340
-		// const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
+		// const loadSettingsChanges = this.plugin.app.loadLocalStorage(LocalVar.LoadSettings) === 'true';
 		// new Setting(containerEl)
 		// 	.setName(t('setting.other.load-settings-changes.name'))
 		// 	.setDesc(t('setting.other.load-settings-changes.description'))
 		// 	.addToggle((cb) => {
 		// 		cb.setValue(loadSettingsChanges)
 		// 		cb.onChange(async (value) => {
-		// 			localStorage.setItem(LocalVar.LoadSettings, value.toString());
+		// 			this.plugin.app.saveLocalStorage(LocalVar.LoadSettings, value.toString());
 		// 		});
 		// 	});
 

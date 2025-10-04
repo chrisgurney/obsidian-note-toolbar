@@ -206,7 +206,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * More info: https://github.com/chrisgurney/obsidian-note-toolbar/issues/340
 	 */
 	// async onExternalSettingsChange(): Promise<void> {
-	// 	const loadSettingsChanges = localStorage.getItem(LocalVar.LoadSettings) === 'true';
+	// 	const loadSettingsChanges = this.app.loadLocalStorage(LocalVar.LoadSettings) === 'true';
 	// 	if (loadSettingsChanges) {
 	// 		this.debug('onExternalSettingsChange: loading settings changes...');
 	// 		const loaded_settings = await this.loadData();
@@ -1176,12 +1176,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (clickedItemEl) {
 			let elemRect = clickedItemEl.getBoundingClientRect();
 			menuPos = { x: elemRect.x, y: elemRect.bottom, overlap: true, left: false };
-			localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
+			this.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
 		}
 
 		// if we don't have a position yet, try to get it from the previous menu
 		if (!menuPos) {
-			let previousPosData = localStorage.getItem(LocalVar.MenuPos);
+			let previousPosData = this.app.loadLocalStorage(LocalVar.MenuPos);
 			menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
 		}
 
@@ -1216,7 +1216,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		if (this.settings.keepPropsState) {
 			// restore properties to the state they were before
-			const propsState = localStorage.getItem(LocalVar.PropsState);
+			const propsState = this.app.loadLocalStorage(LocalVar.PropsState);
 			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
 				this.commands.toggleProps(propsState as PropsState, true);
 			}
@@ -1321,7 +1321,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @param activeItemId UUID of the item that was clicked/tapped; provide nothing to unset.
 	 */
 	updateActiveToolbarItem(activeItemId?: string): void {
-		localStorage.setItem(LocalVar.ActiveItem, activeItemId ?? '');
+		this.app.saveLocalStorage(LocalVar.ActiveItem, activeItemId ?? '');
 	}
 
 	/*************************************************************************
@@ -1825,7 +1825,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							left: (fabPos === PositionType.FabLeft ? false : true)
 						};
 						// store menu position for sub-menu positioning
-						localStorage.setItem(LocalVar.MenuPos, JSON.stringify(menuPos));
+						this.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
 						menu.showAtPosition(menuPos);
 					}
 				});
@@ -2230,7 +2230,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns last activated toolbar item ID, or null if it can't be found.
 	 */
 	getActiveItemId(): string | null {
-		return localStorage.getItem(LocalVar.ActiveItem);
+		return this.app.loadLocalStorage(LocalVar.ActiveItem);
 	}
 
 	/**

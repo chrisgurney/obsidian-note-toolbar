@@ -82,7 +82,7 @@ export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         });
 
         // sort the search results
-        const recentToolbars = JSON.parse(localStorage.getItem(LocalVar.RecentToolbars) || '[]');
+        const recentToolbars = JSON.parse(this.plugin.app.loadLocalStorage(LocalVar.RecentToolbars) || '[]');
         sortedSuggestions.sort((a, b) => {
             const query = lowerCaseInputStr;
             const aName = a.name.toLowerCase();

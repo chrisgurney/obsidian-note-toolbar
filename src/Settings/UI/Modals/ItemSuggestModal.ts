@@ -232,7 +232,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         }
 
         // sort the results
-        const recentItems = JSON.parse(localStorage.getItem(LocalVar.RecentItems) || '[]');
+        const recentItems = JSON.parse(this.plugin.app.loadLocalStorage(LocalVar.RecentItems) || '[]');
         sortedSuggestions.sort((a, b) => {
             const aItemNameRaw = this.cleanString(a.label || a.tooltip || '');
             const bItemNameRaw = this.cleanString(b.label || b.tooltip || '');
