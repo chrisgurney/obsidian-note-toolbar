@@ -431,7 +431,7 @@ export default class ToolbarItemUi {
                                     (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
                                 const notice = new Notice(message, 10000);
                                 const noticeEl = notice.messageEl;
-                                noticeEl.style.cursor = 'pointer';
+                                noticeEl.addClass('note-toolbar-notice-with-cta');
                                 this.plugin.registerDomEvent(noticeEl, 'click', async () => {
                                     notice.hide();
                                     this.parent.close();

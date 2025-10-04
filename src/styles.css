@@ -1654,6 +1654,10 @@ input[type="text"].note-toolbar-setting-error,
     gap: 0 1em;
 }
 
+.note-toolbar-notice-with-cta {
+    cursor: pointer;
+}
+
 .note-toolbar-setting-folder-suggestion-item-muted {
     display: flex;
     gap: 1em;
