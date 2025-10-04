@@ -27,10 +27,11 @@ declare module "obsidian" {
         };
     }
 
-    interface Command {
-        checkCallback?: (checking: boolean) => boolean | void;
-        editorCheckCallback?: (checking: boolean, editor: Editor, ctx: MarkdownView | MarkdownFileInfo) => boolean | void;
-    }
+    // TODO: remove in next version; looks like it's now in official API
+    // interface Command {
+    //     checkCallback?: (checking: boolean) => boolean | void;
+    //     editorCheckCallback?: (checking: boolean, editor: Editor, ctx: MarkdownView | MarkdownFileInfo) => boolean | void;
+    // }
 
     // allows access to the path of the vault, for the {{vault_path}} var
     interface FileSystemAdapter extends DataAdapter{
@@ -45,7 +46,8 @@ declare module "obsidian" {
     // allows access to sub-menus, and setting warning style
     interface MenuItem {
         setSubmenu: () => Menu;
-        setWarning(warning: boolean): void;
+        // TODO: remove in next version; looks like it's now in official API
+        // setWarning(warning: boolean): void;
     }
 
     interface Vault {
