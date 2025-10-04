@@ -186,8 +186,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/**
-	 * When this plugin is unloaded (e.g., disabled in settings, or Obsidian is restarted):
-	 * removes all toolbars.
+	 * Cleanup when the plugin is unloaded (e.g., disabled in settings, or Obsidian is restarted).
 	 */
 	async onunload() {
 
