@@ -61,8 +61,8 @@ export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent)
 	const left = sameRow.filter(rect => rect.right <= cursorX).pop();
 	const right = sameRow.find(rect => rect.left > cursorX);
 
-	plugin.debug('Left:', left ? toolbarListEl.children[rects.indexOf(left)] : null);
-	plugin.debug('Right:', right ? toolbarListEl.children[rects.indexOf(right)] : null);
+	// plugin.debug('Left:', left ? toolbarListEl.children[rects.indexOf(left)] : null);
+	// plugin.debug('Right:', right ? toolbarListEl.children[rects.indexOf(right)] : null);
 
 	const itemIndex = left ? (rects.indexOf(left) >= 0 ? rects.indexOf(left) + 1 : undefined) : undefined;
 	return itemIndex ? itemIndex : (right ? rects.indexOf(right) : undefined);
