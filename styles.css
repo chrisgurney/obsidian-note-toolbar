@@ -179,7 +179,7 @@ settings:
         title: 'Padding on desktop (in px units)'
         title.uk: "Відступи на комп'ютері (пікселі)"
         title.de: 'Abstand am PC (in px)'
-        title.zh: '桌面端内边距（单位：像素）'
+        title.zh: '桌面端内边距（单位：px）'
         description: 'Spacing around the icon.'
         description.uk: 'Відстань навколо іконки.'
         description.de: 'Abstand um das Symbol herum'
@@ -192,7 +192,7 @@ settings:
         title: 'Padding on mobile (in px units) 📱'
         title.uk: 'Відступи на мобільному (пікселі) 📱'
         title.de: 'Abstand am Handy (in px) 📱'
-        title.zh: '移动端内边距（单位：像素）📱'
+        title.zh: '移动端内边距（单位：px）📱'
         description: 'Spacing around the icon.'
         description.uk: 'Відстань навколо іконки.'
         description.zh: '图标周围的间距（Padding）'
@@ -204,7 +204,7 @@ settings:
         title: 'Icon size on desktop (in px units)'
         title.uk: "Розмір іконки на комп'ютері (пікселі)"
         title.de: 'Symbolgröße am PC (in px) 📱'
-        title.zh: '桌面端图标大小（单位：像素）'
+        title.zh: '桌面端图标大小（单位：px）'
         type: variable-number
         default: 20
         format: px
@@ -213,7 +213,7 @@ settings:
         title: 'Icon size on mobile (in px units) 📱'
         title.uk: 'Розмір іконки на мобільному (пікселі) 📱'
         title.de: 'Symbolgröße am Handy (in px) 📱'
-        title.zh: '移动端图标大小（单位：像素）📱'
+        title.zh: '移动端图标大小（单位：px）📱'
         type: variable-number
         default: 24
         format: px
@@ -222,7 +222,7 @@ settings:
         title: 'Icon stroke width on desktop (in px units)'
         title.uk: "Ширина контуру іконки на комп'ютері (пікселі)"
         title.de: 'Symbol-Strichstärke am PC (in px)'
-        title.zh: '桌面端图标描边宽度（单位：像素）'
+        title.zh: '桌面端图标描边宽度（单位：px）'
         type: variable-number
         default: 1.8
         format: px
@@ -231,7 +231,7 @@ settings:
         title: 'Icon stroke width on mobile (in px units) 📱'
         title.uk: 'Ширина контуру іконки на мобільному (пікселі) 📱'
         title.de: 'Symbol-Strichstärke am Handy (in px) 📱'
-        title.zh: '移动端图标描边宽度（单位：像素）📱'
+        title.zh: '移动端图标描边宽度（单位：px）📱'
         type: variable-number
         default: 1.8
         format: px
@@ -247,8 +247,10 @@ settings:
     -
         id: cg-nt-fab-autohide-opacity
         title: 'Autohide opacity'
+        title.zh: '自动隐藏的透明度'
         title.uk: 'Прозорість при автоприховуванні'
         description: 'When autohide style is enabled, how transparent the button is when hidden'
+        description.zh: '当启用自动隐藏样式时，隐藏状态的按钮的透明度'
         description.uk: 'Якщо увімкнено автоприховування, наскільки прозорою буде кнопка, коли вона прихована'
         type: variable-number-slider
         default: 0
@@ -260,7 +262,7 @@ settings:
         title: 'Border radius on desktop (in px units)'
         title.uk: "Круглість рамки на комп'ютері (пікселі)"
         title.de: 'Rahmenabrundung am PC (in px)'
-        title.zh: '桌面端边框圆角（单位：像素）'
+        title.zh: '桌面端边框圆角（单位：px）'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
         description.uk: 'Наскільки круглою є кнопка. Чим більше число, тим більше округлення.'
         description.de: 'Wie abgerundet die Schaltfläche ist. Je höher die Zahl, desto runder.'
@@ -273,7 +275,7 @@ settings:
         title: 'Border radius on mobile (in px units) 📱'
         title.uk: 'Круглість рамки на мобільному (пікселі) 📱'
         title.de: 'Rahmenabrundung am Handy (in px) 📱'
-        title.zh: '移动端边框圆角（单位：像素）📱'
+        title.zh: '移动端边框圆角（单位：px）📱'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
         description.uk: 'Наскільки круглою є кнопка. Чим більше число, тим більше округлення.'
         description.de: 'Wie abgerundet die Schaltfläche ist. Je höher die Zahl, desto runder. (Plugin-Standardwerte: Android = 16, iOS = 999)'
@@ -385,7 +387,7 @@ settings:
         title: 'Icon size (in px units)'
         title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
-        title.zh: '图标大小（单位：像素）'
+        title.zh: '图标大小（单位：px）'
         type: variable-number
         default: 18
         format: px
@@ -421,7 +423,7 @@ settings:
         title: 'Border radius (in px units)'
         title.uk: 'Закруглення рамок (пікселі)'
         title.de: 'Rahmenrundung (in px)'
-        title.zh: '边框圆角（单位：像素）'
+        title.zh: '边框圆角（单位：px）'
         type: variable-number
         default: 5
         format: px
@@ -525,7 +527,7 @@ settings:
         title: 'Icon size (in px units)'
         title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
-        title.zh: '图标大小（单位：像素）'
+        title.zh: '图标大小（单位：px）'
         type: variable-number
         default: 16
         format: px
@@ -543,7 +545,7 @@ settings:
         title: 'Menu: Border radius (in px units)'
         title.uk: 'Меню: Закруглення рамки (пікселі)'
         title.de: 'Menü: Randabrundung (in px)'
-        title.zh: '菜单：边框圆角（单位：像素）'
+        title.zh: '菜单：边框圆角（单位：px）'
         type: variable-number
         default: 0
         format: px
@@ -552,16 +554,16 @@ settings:
         title: 'Item: Border radius (in px units)'
         title.uk: 'Елемент: Закруглення рамки (пікселі)'
         title.de: 'Element: Randabrundung (in px)'
-        title.zh: '项目：边框圆角（单位：像素）'
+        title.zh: '项目：边框圆角（单位：px）'
         type: variable-number
         default: 0
         format: px
     -
         id: launchpad
         title: 'New tab view (Launchpad)'
-        title.zh: '新标签页视图（Launchpad）'
+        title.zh: '新标签页视图（Launchpad 启动台）'
         description: 'Style the toolbar replacing the New tab view'
-        description.zh: '替换新标签页视图的工具栏的样式'
+        description.zh: '为替换新标签页视图的工具栏设置样式'
         type: heading
         level: 1
         collapsed: true
@@ -595,13 +597,13 @@ settings:
     -
         id: cg-nt-launchpad-cols-desktop
         title: 'Number of columns on desktop'
-        title.zh: '桌面端的列数'
+        title.zh: '桌面端列数'
         type: variable-number
         default: 2
     -
         id: cg-nt-launchpad-cols-mobile
         title: 'Number of columns on mobile 📱'
-        title.zh: '移动端的列数'
+        title.zh: '移动端列数 📱'
         type: variable-number
         default: 2
     -
@@ -701,7 +703,7 @@ settings:
         title: '📐 Icon size (in px units)'
         title.uk: '📐 Розмір іконки (пікселі)'
         title.de: '📐 Symbolgröße (in px)'
-        title.zh: '📐 图标大小（单位：像素）'
+        title.zh: '📐 图标大小（单位：px）'
         type: variable-number
         default: 18
         format: px
@@ -710,7 +712,7 @@ settings:
         title: '😎 Border radius (in px units)'
         title.uk: '😎 Закруглення рамки (пікселі)'
         title.de: '😎 Randabrundung (in px)'
-        title.zh: '😎 边框圆角（单位：像素）'
+        title.zh: '😎 边框圆角（单位：px）'
         type: variable-number
         default: 4
         format: px
@@ -827,7 +829,7 @@ settings:
         title: 'Top sticky offset on desktop (in px units)'
         title.uk: "Верхнє липке зміщення на комп'ютері (пікселі)"
         title.de: 'Oberer Sticky-Offset am PC (in rem-Einheiten) 📱'
-        title.zh: '桌面端顶部 Sticky 附着的偏移量（单位：像素）'
+        title.zh: '桌面端顶部 Sticky 附着的偏移量（单位：px）'
         description: "For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed)."
         description.uk: 'У деяких темах панель не прилипає до верху (чим більше значення, тим далі від верху). Це не застосовується, якщо позиція = Фіксовано зверху.'
         description.de: 'Bei einigen Themes klebt die Symbolleiste nicht ganz oben (größer = weiter von oben). Beachten Sie, dass dies nicht gilt, wenn Position = Oben (fixiert)'
@@ -904,7 +906,7 @@ settings:
         title: 'Border radius (in px units)'
         title.uk: 'Закруглення рамок (пікселі)'
         title.de: 'Rahmenrundung (in px)'
-        title.zh: '边框圆角（单位：像素）'
+        title.zh: '边框圆角（单位：px）'
         type: variable-number
         default: 0
         format: px
@@ -941,9 +943,10 @@ settings:
     -
         id: toolbar-bottom-tbar
         title: 'Toolbars (bottom)'
-        title.zh: '工具栏（底部）'
+        title.zh: '底部工具栏'
         title.uk: 'Панелі (внизу)'
         description: 'Styles for toolbars in the "bottom" position'
+        description.zh: '位于「底部」位置的工具栏样式'
         description.uk: 'Стилі панелей у положенні "Внизу"'
         type: heading
         level: 1
@@ -961,7 +964,7 @@ settings:
     -
         id: cg-nt-tbar-bottom-padding-x-desktop
         title: 'Left + Right toolbar padding on desktop (in px units)'
-        title.zh: '桌面端工具栏左右内边距（单位：px）'
+        title.zh: '桌面端左右工具栏的内边距（单位：px）'
         title.uk: "Лівий та правий відступи на комп'ютері (пікселі)"
         description: 'Spacing around the toolbar.'
         description.zh: '工具栏周围的间距。'
@@ -972,7 +975,7 @@ settings:
     -
         id: cg-nt-tbar-bottom-padding-x-mobile
         title: 'Left + Right toolbar padding on mobile (in px units) 📱'
-        title.zh: '移动端工具栏左右内边距（单位：px）📱'
+        title.zh: '移动端左右工具栏的内边距（单位：px）📱'
         title.uk: 'Лівий та правий відступи на мобільному (пікселі) 📱'
         description: 'Spacing around the toolbar.'
         description.zh: '工具栏周围的间距。'
@@ -1016,7 +1019,7 @@ settings:
     -
         id: cg-nt-ui-modal-width
         title: 'Modal width on desktop (in px units)'
-        title.zh: '桌面端 Modal 模态窗口宽度（单位：px）'
+        title.zh: '桌面端 Modal 模态框宽度（单位：px）'
         title.uk: "Ширина модального вікна на комп'ютері (пікселі)"
         type: variable-number
         default: 700
