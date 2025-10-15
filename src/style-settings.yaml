@@ -70,8 +70,10 @@ settings:
     -
         id: cg-nt-fab-border-color
         title: 'Border color'
+        title.zh: '边框颜色'
         title.uk: 'Колір рамки'
         description: 'Border around button. The "border" style must be added to the toolbar first.'
+        description.zh: '按钮周围的边框。必须先将“边框”样式添加到工具栏才会生效。'
         description.uk: 'Рамка навколо кнопки. Стиль "рамка" повинен бути додан до панелі.'
         type: variable-themed-color
         opacity: true
@@ -889,8 +891,10 @@ settings:
     -    
         id: cg-nt-tbar-autohide-opacity
         title: 'Autohide opacity'
+        title.zh: '自动隐藏的透明度'
         title.uk: 'Прозорість автоприховування'
         description: 'When autohide style is enabled, how transparent the toolbar is when hidden'
+        description.zh: '当启用自动隐藏样式时，隐藏状态的工具栏的透明度'
         description.uk: 'Якщо автоприховування увімкнено, наскільки прозорою буде панель, коли її приховано'
         type: variable-number-slider
         default: 0
