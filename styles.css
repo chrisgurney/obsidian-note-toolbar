@@ -135,7 +135,7 @@ settings:
         description: "Distance from the edge of the editor view."
         description.uk: 'Відстань від краю вікна редактора.'
         description.de: 'Als Prozentsatz der Breite des Editors, ausgehend vom linken Rand (umgekehrt, wenn sich die Schaltfläche rechts befindet).'
-        description.zh: '基于左侧边缘，占编辑器宽度的百分比（当按钮在右侧时则相反）'
+        description.zh: '距编辑器视图边缘的距离。'
         type: variable-number
         default: 24
         format: px
@@ -148,7 +148,7 @@ settings:
         description: "Distance from the bottom of the editor view."
         description.uk: 'Відстань від нижнього краю вікна редактора.'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
-        description.zh: '基于顶部边缘，占编辑器高度的百分比'
+        description.zh: '距编辑器视图底部的距离。'
         type: variable-number
         default: 50
         format: px
@@ -161,7 +161,7 @@ settings:
         description: "Distance from the bottom of the editor view."
         description.uk: 'Відстань від нижнього краю вікна редактора.'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
-        description.zh: '基于顶部边缘，占编辑器高度的百分比'
+        description.zh: '距编辑器视图底部的距离。'
         type: variable-number
         default: 24
         format: px
@@ -559,7 +559,9 @@ settings:
     -
         id: launchpad
         title: 'New tab view (Launchpad)'
+        title.zh: '新标签页视图（Launchpad）'
         description: 'Style the toolbar replacing the New tab view'
+        description.zh: '替换新标签页视图的工具栏的样式'
         type: heading
         level: 1
         collapsed: true
@@ -575,6 +577,7 @@ settings:
     -
         id: cg-nt-launchpad-item-bg-color
         title: 'Item: Background color'
+        title.zh: '项目：背景颜色'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -592,28 +595,33 @@ settings:
     -
         id: cg-nt-launchpad-cols-desktop
         title: 'Number of columns on desktop'
+        title.zh: '桌面端的列数'
         type: variable-number
         default: 2
     -
         id: cg-nt-launchpad-cols-mobile
         title: 'Number of columns on mobile 📱'
+        title.zh: '移动端的列数'
         type: variable-number
         default: 2
     -
         id: cg-nt-launchpad-max-width
         title: 'Max width (in px units)'
+        title.zh: '最大宽度（单位：px）'
         type: variable-number
         default: 0
         format: px
     -
         id: cg-nt-launchpad-item-font-size
         title: 'Item: Font size (in em units)'
+        title.zh: '项目：字体大小（单位：em）'
         type: variable-number
         default: 0
         format: em
     -
         id: cg-nt-launchpad-item-icon-size
         title: 'Item: Icon size (in px units)'
+        title.zh: '项目：图标大小（单位：px）'
         type: variable-number
         default: 0
         format: px
@@ -629,6 +637,7 @@ settings:
     -
         id: cg-nt-launchpad-item-border-radius
         title: 'Item: Border radius (in px units)'
+        title.zh: '项目：边框圆角（单位：px）'
         type: variable-number
         default: 0
         format: px
@@ -932,6 +941,7 @@ settings:
     -
         id: toolbar-bottom-tbar
         title: 'Toolbars (bottom)'
+        title.zh: '工具栏（底部）'
         title.uk: 'Панелі (внизу)'
         description: 'Styles for toolbars in the "bottom" position'
         description.uk: 'Стилі панелей у положенні "Внизу"'
@@ -941,6 +951,7 @@ settings:
     -
         id: cg-nt-tbar-bottom-border-radius
         title: 'Toolbar border radius (in px units)'
+        title.zh: '工具栏边框圆角（单位：px）'
         title.uk: 'Радіус закруглення рамки панелі (пікселі)'
         description: 'How rounded the toolbar is. The higher the number, the more rounded.'
         description.uk: 'Закруглення панелі. Чим більше число, тим більше округлення.'
@@ -950,8 +961,10 @@ settings:
     -
         id: cg-nt-tbar-bottom-padding-x-desktop
         title: 'Left + Right toolbar padding on desktop (in px units)'
+        title.zh: '桌面端工具栏左右内边距（单位：px）'
         title.uk: "Лівий та правий відступи на комп'ютері (пікселі)"
         description: 'Spacing around the toolbar.'
+        description.zh: '工具栏周围的间距。'
         description.uk: 'Проміжки навколо панелі.'
         type: variable-number
         default: 32
@@ -959,8 +972,10 @@ settings:
     -
         id: cg-nt-tbar-bottom-padding-x-mobile
         title: 'Left + Right toolbar padding on mobile (in px units) 📱'
+        title.zh: '移动端工具栏左右内边距（单位：px）📱'
         title.uk: 'Лівий та правий відступи на мобільному (пікселі) 📱'
         description: 'Spacing around the toolbar.'
+        description.zh: '工具栏周围的间距。'
         description.uk: 'Проміжки навколо панелі.'
         type: variable-number
         default: 24
@@ -968,8 +983,10 @@ settings:
     -
         id: cg-nt-tbar-bottom-pos-y-desktop
         title: 'Y position on desktop (in em units)'
+        title.zh: '桌面端 Y 轴位置（单位：em）'
         title.uk: "Позиція Y на комп'ютері (em)"
         description: 'Distance from bottom edge.'
+        description.zh: '距编辑器视图底部的距离。'
         description.uk: 'Відстань від нижнього краю.'
         type: variable-number
         default: 4.25
@@ -977,8 +994,10 @@ settings:
     -
         id: cg-nt-tbar-bottom-pos-y-mobile
         title: 'Y position on mobile (in em units) 📱'
+        title.zh: '移动端 Y 轴位置（单位：em）📱'
         title.uk: 'Позиція Y на мобільному (em) 📱'
         description: "Distance from bottom edge."
+        description.zh: '距编辑器视图底部的距离。'
         description.uk: 'Відстань від нижнього краю.'
         type: variable-number
         default: 1
@@ -986,8 +1005,10 @@ settings:
     -
         id: ui
         title: 'Other UI'
+        title.zh: '其他 UI'
         title.uk: 'Додатковий UI'
         description: 'Styles for other Note Toolbar UI elements'
+        description.zh: '其他 Note Toolbar UI 元素的样式'
         description.uk: 'Стилі додаткових елементів Note Toolbar'
         type: heading
         level: 1
@@ -995,6 +1016,7 @@ settings:
     -
         id: cg-nt-ui-modal-width
         title: 'Modal width on desktop (in px units)'
+        title.zh: '桌面端 Modal 模态窗口宽度（单位：px）'
         title.uk: "Ширина модального вікна на комп'ютері (пікселі)"
         type: variable-number
         default: 700
