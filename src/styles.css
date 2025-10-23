@@ -2416,10 +2416,6 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.is-phone .note-toolbar-setting-modal-container {
-    border: var(--prompt-border-width) solid var(--prompt-border-color) !important;
-}
-
 .vertical-tab-content.note-toolbar-setting-modal {
     padding-bottom: var(--size-4-5);
     padding-inline-start: var(--size-4-5);
