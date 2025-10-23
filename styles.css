@@ -3442,10 +3442,10 @@ input[type="text"].note-toolbar-setting-error,
             top: var(--size-4-3);
         }
     }
-    .is-phone & {
-        border-top: var(--prompt-border-width) solid var(--prompt-border-color) !important;
-        border-bottom: var(--prompt-border-width) solid var(--prompt-border-color) !important;
-    }
+}
+
+.is-phone .note-toolbar-setting-modal-container {
+    border: var(--prompt-border-width) solid var(--prompt-border-color) !important;
 }
 
 .vertical-tab-content.note-toolbar-setting-modal {
