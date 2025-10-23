@@ -17,6 +17,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private submitted = false;
     private class = '';
     private default: string;
+    private label: string;
     private rendermd;
 
     /**
@@ -34,6 +35,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
         const { 
             class: css_classes = '',
             default: default_value = '',
+            label: label_text = '',
             limit,
             placeholder,
             rendermd = true, 
@@ -41,6 +43,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         this.class = css_classes;
         this.default = default_value;
+        this.label = label_text;
         this.rendermd = rendermd;
         this.setPlaceholder(placeholder ? placeholder : t('api.ui.suggester-placeholder'));
         this.setInstructions([
@@ -63,7 +66,15 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
     }
 
     onOpen(): void {
+
         super.onOpen();
+
+        if (this.label) {
+            const headerEl = this.containerEl.createDiv('ntb-suggester-header');
+            MarkdownRenderer.render(this.plugin.app, this.label, headerEl, "", new Component());
+            this.modalEl.insertAdjacentElement('afterbegin', headerEl);
+        }
+
         if (this.default) {
             this.inputEl.value = this.default;
             this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));

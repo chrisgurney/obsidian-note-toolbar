@@ -2450,7 +2450,7 @@ input[type="text"].note-toolbar-setting-error,
             height: unset;
         }
     }
-    & .modal-header > .modal-title {
+    & .modal-header > .modal-title, .ntb-suggester-header {
         font-size: var(--font-ui-medium);
         font-weight: var(--font-normal);
     }
@@ -2497,6 +2497,15 @@ input[type="text"].note-toolbar-setting-error,
         & .modal-header, .modal-content {
             & .markdown-preview-view {
                 padding: unset;
+            }
+        }
+    }
+    &[data-ntb-ui-type="suggester"] {
+        & .ntb-suggester-header {
+            border-bottom: 1px solid var(--background-secondary);
+            padding: var(--size-4-4) var(--size-4-4) 0.75em var(--size-4-4);
+            & p {
+                margin: unset;
             }
         }
     }

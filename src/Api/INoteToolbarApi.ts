@@ -375,6 +375,10 @@ export interface NtbSuggesterOptions {
      */
     default?: string;
     /**
+     * Optional text shown above the input field, rendered as markdown. Default is no label.
+     */
+    label?: string;
+    /**
      * Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists).
      */
     limit?: number;
