@@ -143,7 +143,7 @@
     "name-toggle-properties": "切换笔记属性的显示",
     "name-toolbar-settings": "打开工具栏设置",
     "name-toolbar-suggester": "打开快速工具栏",
-    "name-use-item": "调用 {item}}",
+    "name-use-item": "调用 {{item}}",
     "callouts-locked-notice": "锁定笔记工具栏标注",
     "callouts-unlocked-notice": "解锁笔记工具栏标注",
     "name-toggle-lock-callouts": "切换笔记工具栏标注的锁定状态"
@@ -169,7 +169,7 @@
     "error-missing-item-type": "示例项目：缺少项目类型属性",
     "error-missing-property": "示例项目数据中含有缺失的插件或脚本属性。",
     "label-add-item": "点击以将其中一项添加到工具栏中：",
-    "label-plugin": "{{{plugin}}",
+    "label-plugin": "{{plugin}}",
     "label-suggestions": "来自示例库的建议",
     "select-plugin-placeholder": "选择一个插件…",
     "select-plugin-suggestion": "{{plugin}}",
