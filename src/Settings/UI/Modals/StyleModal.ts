@@ -44,7 +44,7 @@ export default class StyleModal extends Modal {
         const toolbarStyleUi = new ToolbarStyleUi(this.plugin, this, this.toolbar);
         toolbarStyleUi.displayStyleSetting(this.contentEl);
 
-		new Setting(this.contentEl)
+		const doneButton = new Setting(this.contentEl)
 			.addButton((btn: ButtonComponent) => {
 				btn.setButtonText(t('setting.styles.button-close'))
 					.setCta()
@@ -53,6 +53,7 @@ export default class StyleModal extends Modal {
 						this.close();
 					});
 			});
+		doneButton.settingEl.addClass('note-toolbar-setting-no-border');
 			
 		// set initial keyboard focus on the relvant dropdown
 		if (Platform.isDesktop) {

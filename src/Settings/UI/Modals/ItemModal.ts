@@ -51,7 +51,7 @@ export default class ItemModal extends Modal {
         let itemForm = this.toolbarItemUi.generateItemForm(this.toolbarItem);
         this.contentEl.append(itemForm);
 
-        new Setting(this.contentEl)
+        const doneButton = new Setting(this.contentEl)
             .addButton((btn: ButtonComponent) => {
                 btn.setButtonText(t('setting.item.button-close'))
                     .setCta()
@@ -60,6 +60,7 @@ export default class ItemModal extends Modal {
                         this.close();
                     });
             });
+        doneButton.settingEl.addClass('note-toolbar-setting-no-border');
 
         // let user close modal with Cmd/Ctrl + Enter
         this.plugin.registerDomEvent(
