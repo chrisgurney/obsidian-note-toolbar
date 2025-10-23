@@ -84,11 +84,13 @@ Shows a file suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options`? | \{ `class`: `string`; `default`: `string`; `filesonly`: `boolean`; `foldersonly`: `boolean`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
+| `options`? | \{ `allowCustomInput`: `boolean`; `class`: `string`; `default`: `string`; `filesonly`: `boolean`; `foldersonly`: `boolean`; `label`: `string`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
+| `options.allowCustomInput`? | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions (submitted with a modifier key + `Enter`). Default is `false`. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.default`? | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
 | `options.filesonly`? | `boolean` | If set to true, only files are shown. If not provided, defaults to `false`. |
 | `options.foldersonly`? | `boolean` | If set to true, only folders are shown. If not provided, defaults to `false`. |
+| `options.label`? | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder`? | `string` | Optional placeholder text for input field; defaults to preset message. |
 | `options.rendermd`? | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
@@ -261,7 +263,7 @@ Shows a modal with the provided content.
 | `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
 | `options`? | \{ `class`: `string`; `title`: `string`; `webpage`: `boolean`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
-| `options.title`? | `string` | Optional title for the modal, rendered as markdown. |
+| `options.title`? | `string` | Optional title for the modal, with markdown formatting supported. |
 | `options.webpage`? | `boolean` | If `true`, the modal will show the web page URL in `content` using the Web Viewer core plugin (if enabled); defaults to `false`. |
 
 #### Returns
@@ -311,7 +313,7 @@ Shows the prompt modal and waits for the user's input.
 | `options`? | \{ `class`: `string`; `default`: `string`; `label`: `string`; `large`: `boolean`; `placeholder`: `string`; \} | Optional display options. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.default`? | `string` | Optional default value for text field. If not provided, no default value is set. |
-| `options.label`? | `string` | Optional text shown above the text field, rendered as markdown. Default is no label. |
+| `options.label`? | `string` | Optional text shown above the text field, with markdown formatting supported. Default is no label. |
 | `options.large`? | `boolean` | If set to `true`, the input field will be multi line. If not provided, defaults to `false`. |
 | `options.placeholder`? | `string` | Optional text inside text field. Defaults to a preset message. |
 
@@ -387,11 +389,13 @@ Shows a suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
+| `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys`? | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
-| `options`? | \{ `class`: `string`; `default`: `string`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
+| `options`? | \{ `allowCustomInput`: `boolean`; `class`: `string`; `default`: `string`; `label`: `string`; `limit`: `number`; `placeholder`: `string`; `rendermd`: `boolean`; \} | Optional display options. |
+| `options.allowCustomInput`? | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions (submitted with a modifier key + `Enter`). Default is `false`. |
 | `options.class`? | `string` | Optional CSS class(es) to add to the component. |
 | `options.default`? | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
+| `options.label`? | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit`? | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder`? | `string` | Optional placeholder text for input field; defaults to preset message. |
 | `options.rendermd`? | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |

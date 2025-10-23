@@ -229,7 +229,7 @@ export interface INoteToolbarApi<T> {
     /**
      * Shows a suggester modal and waits for the user's selection.
      * 
-     * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Rendered as markdown: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered
+     * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered
      * @param keys Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection.
      * @param options Optional display options.
      * @returns The selected value, or corresponding key if keys are provided.
@@ -325,7 +325,7 @@ export interface NtbModalOptions {
      */
     editable?: boolean;
     /**
-     * Optional title for the modal, rendered as markdown.
+     * Optional title for the modal, with markdown formatting supported.
      */
     title?: string;
     /**
@@ -340,7 +340,7 @@ export interface NtbModalOptions {
  */
 export interface NtbPromptOptions {
     /**
-     * Optional text shown above the text field, rendered as markdown. Default is no label.
+     * Optional text shown above the text field, with markdown formatting supported. Default is no label.
      */
     label?: string;
     /**
@@ -379,7 +379,7 @@ export interface NtbSuggesterOptions {
      */
     default?: string;
     /**
-     * Optional text shown above the input field, rendered as markdown. Default is no label.
+     * Optional text shown above the input field, with markdown formatting supported. Default is no label.
      */
     label?: string;
     /**
