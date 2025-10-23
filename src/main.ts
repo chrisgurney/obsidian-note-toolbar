@@ -948,19 +948,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	async renderToolbarAsMenu(
 		toolbar: ToolbarSettings, 
 		activeFile: TFile | null, 
-		showEditToolbar: boolean = false, 
-		showToolbarName: boolean = false
+		showEditToolbar: boolean = false
 	): Promise<Menu> {
 
 		let menu = new Menu();
 
-		if (showToolbarName) {
+		if (Platform.isMobile) {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setTitle(toolbar.name)
 					.setIsLabel(true)
 			});
-			menu.addSeparator();
 		}
 
 		await this.renderMenuItems(menu, toolbar, activeFile);
@@ -1982,6 +1980,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		const currentView = this.app.workspace.getActiveViewOfType(ItemView);
 
 		if (toolbarSettings !== undefined) {
+
+			if (Platform.isPhone) {
+				contextMenu.addItem((item: MenuItem) => {
+					item
+						.setTitle(toolbarSettings.name)
+						.setIsLabel(true)
+				});
+			}
 
 			//
 			// position
