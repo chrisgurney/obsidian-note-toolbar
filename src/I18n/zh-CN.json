@@ -32,7 +32,7 @@
       "expr-note-not-open": "该表达式仅支持在打开的笔记中执行。",
       "file-not-found": "找不到文件：{{filename}}",
       "function-invalid": "不支持的函数：{{function}}",
-      "function-not-found": "找不到函数：{{{function}}",
+      "function-not-found": "找不到函数：{{function}}",
       "function-note-not-open": "此功能仅支持在打开的笔记中执行。",
       "general": "错误: 查看控制台以获取更多细节\n```\n{{error}}\n```",
       "plugin-disabled": "安装并启用插件后，切换脚本设置：",
@@ -206,7 +206,7 @@
     "warning-vars": "此工具栏使用了变量，你可以修改它们以适应你的仓库。"
   },
   "library": {
-    "error-invalid-script-id": "不存在 ID 为 {{{scriptid}}}（{{pluginid}}） 的脚本",
+    "error-invalid-script-id": "不存在 ID 为 {{scriptid}}（{{pluginid}}） 的脚本",
     "error-script-required": "错误：未选择脚本。",
     "script": "库脚本",
     "script-function": "调用库中的脚本",
@@ -248,7 +248,7 @@
   },
   "setting": {
     "add-item": {
-      "error-invalid-command": "命令不存在：{{{CommandId}}",
+      "error-invalid-command": "命令不存在：{{CommandId}}",
       "label-confirm-command": "命令不支持或未找到：\n\n\n`{{commandId}}`\n\n\n您还想将此项目添加到工具栏中吗？\n您可以安装/启用以后提供此命令的插件。",
       "label-confirm-mobile-uri": "该项目使用文件URI（在移动设备上可能不支持）\n\n\n您还想将此项目添加到工具栏中吗？",
       "label-confirm-plugin": "插件未安装（或未启用）：\n\n\n** {{plugin}} **\n\n您还想将此项目添加到工具栏中吗？\n您可以稍后安装/启用此插件。",
