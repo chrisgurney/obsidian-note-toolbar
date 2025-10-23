@@ -367,6 +367,10 @@ export interface NtbPromptOptions {
  */
 export interface NtbSuggesterOptions {
     /**
+     * If set to `true`, the user can input a custom value that is not in the list of suggestions (submitted with a modifier key + `Enter`). Default is `false`.
+     */
+    allowCustomInput?: boolean;
+    /**
      * Optional CSS class(es) to add to the component.
      */
     class?: string;

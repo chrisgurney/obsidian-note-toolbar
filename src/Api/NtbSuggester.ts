@@ -15,6 +15,8 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private reject: (reason?: Error) => void;
 
     private submitted = false;
+
+    private allowCustomInput: boolean = false;
     private class = '';
     private default: string;
     private label: string;
@@ -33,6 +35,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
         super(plugin.app);
 
         const { 
+            allowCustomInput = false,
             class: css_classes = '',
             default: default_value = '',
             label: label_text = '',
@@ -41,6 +44,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
             rendermd = true, 
         } = options || {};
 
+        this.allowCustomInput = allowCustomInput;
         this.class = css_classes;
         this.default = default_value;
         this.label = label_text;
@@ -79,6 +83,19 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
             this.inputEl.value = this.default;
             this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
         }
+
+        if (this.allowCustomInput) {
+            this.plugin.registerDomEvent(this.modalEl, 'keydown', async (e: KeyboardEvent) => {
+                console.log(e);
+                if (e.key === 'Enter' && this.inputEl.value.trim().length > 0) {
+                    e.preventDefault();
+                    this.submitted = true;
+                    this.close();
+                    this.resolve(this.inputEl.value as unknown as T);
+                }
+            });
+        }
+
     }
 
     getItems(): T[] {
