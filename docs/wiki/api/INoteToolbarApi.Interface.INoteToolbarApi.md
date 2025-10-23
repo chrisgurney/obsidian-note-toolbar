@@ -1,7 +1,7 @@
 [obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / INoteToolbarApi
 
 > [!note]
-> This documentation is for version `1.25.07`.
+> This documentation is for version `1.25.14`.
 
 The Note Toolbar API provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
 
