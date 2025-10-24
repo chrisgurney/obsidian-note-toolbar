@@ -1451,6 +1451,12 @@ body {
         }
     }
 
+    &[data-callout-metadata*="inactive"] {
+        body:not(.is-mobile):not(.is-focused) &, .workspace-leaf:not(.mod-active) & {
+            display: none;
+        }
+    }
+
     &[data-callout-metadata*="left"] ul {
         justify-content: left;
     }
