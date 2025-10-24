@@ -41,10 +41,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         let toolbar = this.plugin.settingsManager.getToolbarById(toolbarId ?? null);
 
         const placeholder = toolbar
-        ? t('setting.item-suggest-modal.placeholder-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } })
-        : this.mode === 'QuickTools'
-            ? t('setting.item-suggest-modal.placeholder-use')
-            : t('setting.item-suggest-modal.placeholder');
+            ? t('setting.item-suggest-modal.placeholder-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } })
+            : this.mode === 'QuickTools'
+                ? t('setting.item-suggest-modal.placeholder-use')
+                : t('setting.item-suggest-modal.placeholder');
         this.setPlaceholder(placeholder);
 
         let instructions = [];
