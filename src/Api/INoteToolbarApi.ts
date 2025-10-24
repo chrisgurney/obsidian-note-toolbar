@@ -4,7 +4,7 @@ import { IItem } from "./IItem";
 
 /**
  * > [!note]
- * > This documentation is for version `1.25.14`.
+ * > This documentation is for version `1.25.18`.
  * 
  * The Note Toolbar API provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
  * 
@@ -367,7 +367,7 @@ export interface NtbPromptOptions {
  */
 export interface NtbSuggesterOptions {
     /**
-     * If set to `true`, the user can input a custom value that is not in the list of suggestions (submitted with a modifier key + `Enter`). Default is `false`.
+     * If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`.
      */
     allowCustomInput?: boolean;
     /**

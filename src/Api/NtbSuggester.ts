@@ -84,22 +84,28 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
             this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
-        if (this.allowCustomInput) {
-            this.plugin.registerDomEvent(this.modalEl, 'keydown', async (e: KeyboardEvent) => {
-                console.log(e);
-                if (e.key === 'Enter' && this.inputEl.value.trim().length > 0) {
-                    e.preventDefault();
-                    this.submitted = true;
-                    this.close();
-                    this.resolve(this.inputEl.value as unknown as T);
-                }
-            });
-        }
-
     }
 
     getItems(): T[] {
         return this.keys ? this.keys : [];
+    }
+
+    getSuggestions(query: string): FuzzyMatch<T>[] {
+        if (this.allowCustomInput && query.trim().length > 0) {
+            const matches = super.getSuggestions(query);
+            // add the raw query as a custom option if it's not already in the matches
+            const queryAsOption = query as unknown as T;
+            const alreadyExists = matches.some(match => {
+                const item = 'item' in match ? match.item : match;
+                return this.getItemText(item) === query;
+            });
+            if (!alreadyExists) {
+                // prepend the custom input option
+                return [{ item: queryAsOption, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
+            }
+            return matches;
+        }
+        return super.getSuggestions(query);
     }
 
     onClose(): void {
@@ -123,9 +129,19 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
             return this.values(item);
         }
         if (this.keys) {
-            return (this.values[this.keys.indexOf(item)] || t('api.ui.error-undefined'));
+            const keyIndex = this.keys.indexOf(item);
+            if (keyIndex !== -1) {
+                return this.values[keyIndex] || t('api.ui.error-undefined');
+            }
+            if (this.allowCustomInput && typeof item === 'string') {
+                return item;
+            }
+            return t('api.ui.error-undefined');
         }
         else {
+            if (this.allowCustomInput && typeof item === 'string') {
+                return item;
+            }
             return t('api.ui.error-undefined');
         }
     }
