@@ -119,6 +119,7 @@
             "file-suggester-placeholder": "Choose a file or folder...",
             "file-suggester-placeholder_file": "Choose a file...",
             "file-suggester-placeholder_folder": "Choose a folder...",
+            "instruction-autofill": "to autofill",
             "instruction-dismiss": "to dismiss",
             "instruction-navigate": "to navigate",
             "instruction-select": "to select item",

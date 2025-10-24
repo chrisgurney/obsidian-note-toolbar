@@ -53,6 +53,7 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.setInstructions([
             {command: '↑↓', purpose: t('api.ui.instruction-navigate')},
             {command: '↵', purpose: t('api.ui.instruction-select')},
+            {command: 'tab', purpose: t('api.ui.instruction-autofill')},
             {command: 'esc', purpose: t('api.ui.instruction-dismiss')},
         ]);
         if (!keys) {
@@ -83,6 +84,20 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
             this.inputEl.value = this.default;
             this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
         }
+
+        // when tab is pressed, fill the input with the currently selected option
+        this.scope.register(null, 'Tab', (e: KeyboardEvent) => {
+            e.preventDefault();
+            const selectedEl = this.modalEl.querySelector('.suggestion-item.is-selected');
+            if (selectedEl) {
+                const itemText = selectedEl.textContent?.trim();
+                if (itemText) {
+                    this.inputEl.value = itemText;
+                    this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+            return false;
+        });
 
     }
 
