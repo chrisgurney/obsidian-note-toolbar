@@ -135,7 +135,7 @@ export function createToolbarPreviewFr(
 		toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
 		let toolbarLink = createEl('a');
 		toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
-		toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name }));
+		toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
 		toolbarLinkContainer.appendChild(toolbarLink);
 		toolbarFr.appendChild(toolbarLinkContainer);
 	}

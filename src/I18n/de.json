@@ -674,7 +674,7 @@
             "notice-command-removed": "Befehl entfernt:\n{{command}}",
             "notice-command-removed_empty": "Befehl für Element entfernt",
             "notice-command-updated": "Befehl aktualisiert:\n{{command}}",
-            "tooltip-command-incidator": "Mit Befehl verwenden:\n{{command}}"
+            "tooltip-command-indicator": "Mit Befehl verwenden:\n{{command}}"
         },
         "whats-new": {
             "button-read": "Lesen ↗",

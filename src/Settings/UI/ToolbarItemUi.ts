@@ -427,7 +427,7 @@ export default class ToolbarItemUi {
                             await this.plugin.commands.addItemCommand(toolbarItem, (commandName) => {
                                 // open notice with a CTA to change hotkeys
                                 const message = 
-                                    t('setting.use-item-command.notice-command-added', { command: commandName }) +
+                                    t('setting.use-item-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } }) +
                                     (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
                                 const notice = new Notice(message, 10000);
                                 const noticeEl = notice.messageEl;

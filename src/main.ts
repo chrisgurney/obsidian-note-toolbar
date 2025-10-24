@@ -967,11 +967,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			menu.addSeparator();
 			menu.addItem((item: MenuItem) => {
 				item
-					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbar.name }))
+					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }))
 					.setIcon('rectangle-ellipsis')
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbar as ToolbarSettings);
-						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name }));
+						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
 						modal.open();
 					});
 			});
@@ -2120,7 +2120,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('lucide-pen-box')
-					.setTitle(itemText ? t('toolbar.menu-edit-item', { text: itemText }) : t('toolbar.menu-edit-item_none'))
+					.setTitle(itemText 
+						? t('toolbar.menu-edit-item', { text: itemText, interpolation: { escapeValue: false } }) 
+						: t('toolbar.menu-edit-item_none'))
 					.onClick(async () => {
 						if (toolbarSettings) {
 							const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
@@ -2135,10 +2137,10 @@ export default class NoteToolbarPlugin extends Plugin {
 					contextMenu.addItem((item: MenuItem) => {
 						item
 							.setIcon('square-menu')
-							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name }))
+							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name, interpolation: { escapeValue: false } }))
 							.onClick(async () => {
 								const modal = new ToolbarSettingsModal(this.app, this, null, menuToolbar as ToolbarSettings);
-								modal.setTitle(t('setting.title-edit-toolbar', { toolbar: menuToolbar.name }));
+								modal.setTitle(t('setting.title-edit-toolbar', { toolbar: menuToolbar.name, interpolation: { escapeValue: false } }));
 								modal.open();
 							});
 					});					
@@ -2152,11 +2154,11 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarSettings !== undefined) {
 			contextMenu.addItem((item: MenuItem) => {
 				item
-					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name }))
+					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }))
 					.setIcon('rectangle-ellipsis')
 					.onClick((menuEvent) => {
 						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name }));
+						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }));
 						modal.open();
 					});
 			  });

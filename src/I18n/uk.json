@@ -624,7 +624,7 @@
             "notice-command-removed": "Команда видалена:\n{{command}}",
             "notice-command-removed_empty": "Команда елемента видалена",
             "notice-command-updated": "Команда оновлена:\n{{command}}",
-            "tooltip-command-incidator": "Використати як команду:\n{{command}}"
+            "tooltip-command-indicator": "Використати як команду:\n{{command}}"
         },
         "whats-new": {
             "button-read": "Читати ↗",

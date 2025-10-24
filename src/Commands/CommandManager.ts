@@ -20,7 +20,7 @@ export class CommandManager {
      */
     async addItemCommand(item: ToolbarItemSettings, callback: (commandName: string) => void): Promise<void> {
         const itemText = getItemText(this.plugin, item, true);
-        const commandName = t('command.name-use-item', {item: itemText});
+        const commandName = t('command.name-use-item', { item: itemText, interpolation: { escapeValue: false } });
         if (itemText) {
             this.plugin.addCommand({ 
                 id: COMMAND_PREFIX_ITEM + item.uuid, 
@@ -56,12 +56,12 @@ export class CommandManager {
      */
     async removeItemCommand(item: ToolbarItemSettings): Promise<void> {
         const itemText = getItemText(this.plugin, item, true);
-        const commandName = t('command.name-use-item', {item: itemText});
+        const commandName = t('command.name-use-item', { item: itemText, interpolation: { escapeValue: false } });
         this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
         item.hasCommand = false;
         await this.plugin.settingsManager.save();
         itemText 
-            ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName }))
+            ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName, interpolation: { escapeValue: false } }))
             : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
     }
 
@@ -78,7 +78,7 @@ export class CommandManager {
                     if (itemText) {
                         const command = this.plugin.addCommand({
                             id: COMMAND_PREFIX_ITEM + item.uuid,
-                            name: t('command.name-use-item', { item: itemText }),
+                            name: t('command.name-use-item', { item: itemText, interpolation: { escapeValue: false } }),
                             icon: item.icon ? item.icon : this.plugin.settings.icon,
                             callback: async () => {
                                 let activeFile = this.plugin.app.workspace.getActiveFile();
@@ -109,7 +109,7 @@ export class CommandManager {
             const itemText = getItemText(this.plugin, item, true);
             if (itemText) {
                 const oldCommandName = command.name;
-                command.name = `${this.plugin.manifest.name}: ${t('command.name-use-item', {item: itemText})}`;
+                command.name = `${this.plugin.manifest.name}: ${t('command.name-use-item', { item: itemText, interpolation: { escapeValue: false } })}`;
                 command.icon = item.icon ? item.icon : this.plugin.settings.icon;
                 // only show notice if the command name changed, otherwise there's no need
                 if (showNotice && (oldCommandName !== command.name)) {
@@ -130,7 +130,7 @@ export class CommandManager {
             if (toolbar.hasCommand) {
                 this.plugin.addCommand({ 
                     id: COMMAND_PREFIX_TBAR + toolbar.uuid,
-                    name: t('command.name-open-toolbar', {toolbar: toolbar.name}),
+                    name: t('command.name-open-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }),
                     icon: this.plugin.settings.icon,
                     callback: async () => {
                         this.plugin.commands.openQuickTools(toolbar.uuid);

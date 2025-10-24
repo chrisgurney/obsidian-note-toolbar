@@ -686,7 +686,7 @@
       "notice-command-removed": "命令已移除：\n{{command}}",
       "notice-command-removed_empty": "项目的命令被移除",
       "notice-command-updated": "命令已更新：\n{{command}}",
-      "tooltip-command-incidator": "已存在命令：{{command}}",
+      "tooltip-command-indicator": "已存在命令：{{command}}",
       "name-copy": "复制该项的命令URI"
     },
     "whats-new": {

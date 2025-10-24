@@ -330,7 +330,9 @@ export class SettingsManager {
 	 */
     public openToolbarSettings(toolbar: ToolbarSettings, parent: NoteToolbarSettingTab | null | undefined = null) {
         const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, parent, toolbar);
-		modal.setTitle( toolbar.name ? t('setting.title-edit-toolbar', { toolbar: toolbar.name }) : t('setting.title-edit-toolbar_none'));
+		modal.setTitle( toolbar.name 
+			? t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }) 
+			: t('setting.title-edit-toolbar_none'));
         modal.open();
     }
 

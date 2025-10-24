@@ -210,7 +210,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 								let commandIconEl = toolbarNameFr.createSpan();
 								commandIconEl.addClass('note-toolbar-setting-command-indicator');
 								setIcon(commandIconEl, 'terminal');
-								setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-incidator', { command: tbarCommand.name }));
+								setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
 							}
 						}
 					}
@@ -263,7 +263,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 												confirmWithModal(
 													this.plugin.app, 
 													{ 
-														title: t('setting.delete-toolbar.title', { toolbar: toolbar.name }),
+														title: t('setting.delete-toolbar.title', { toolbar: toolbar.name, interpolation: { escapeValue: false } }),
 														questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
 														approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
 														denyLabel: t('setting.button-cancel'),

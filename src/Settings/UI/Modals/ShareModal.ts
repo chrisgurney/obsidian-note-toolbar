@@ -21,7 +21,7 @@ export class ShareModal extends Modal {
     }
 
     public onOpen() {
-        this.setTitle(t('export.title-share', { toolbar: this.toolbar.name }));
+        this.setTitle(t('export.title-share', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }));
         this.display();
     }
 

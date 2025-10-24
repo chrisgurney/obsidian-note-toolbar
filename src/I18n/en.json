@@ -676,7 +676,7 @@
             "notice-command-removed": "Command removed:\n{{command}}",
             "notice-command-removed_empty": "Command removed for item",
             "notice-command-updated": "Command updated:\n{{command}}",
-            "tooltip-command-incidator": "Use with command:\n{{command}}"
+            "tooltip-command-indicator": "Use with command:\n{{command}}"
         },
         "whats-new": {
             "button-read": "Read ↗",

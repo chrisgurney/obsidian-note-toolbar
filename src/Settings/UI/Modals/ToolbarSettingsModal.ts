@@ -1111,7 +1111,7 @@ export default class ToolbarSettingsModal extends Modal {
 					let commandIconEl = itemPreviewContent.createSpan();
 					commandIconEl.addClass('note-toolbar-setting-command-indicator');
 					setIcon(commandIconEl, 'terminal');
-					setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-incidator', { command: itemCommand.name }));
+					setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: itemCommand.name, interpolation: { escapeValue: false } }));
 				}
 			}
 		}
