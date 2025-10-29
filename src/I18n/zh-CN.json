@@ -129,8 +129,8 @@
   },
   "command": {
     "copy-command-notice": "命令已复制到剪贴板",
-    "name-copy-command-as-data-element": "复制命令的 callout 项目",
-    "name-copy-command-uri": "复制命令的 URI",
+    "name-copy-cmd-as-data-element": "复制命令的 callout 项目",
+    "name-copy-cmd-uri": "复制命令的 URI",
     "name-focus": "聚焦",
     "name-fold-properties": "折叠笔记属性",
     "name-hide-properties": "隐藏笔记属性",
