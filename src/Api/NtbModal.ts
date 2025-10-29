@@ -46,7 +46,8 @@ export class NtbModal extends Modal {
     async onOpen(): Promise<void> {
         if (this.title) {
             let containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
-            MarkdownRenderer.render(this.plugin.app, this.title, containerEl, "", new Component());
+            const component = new Component();
+            MarkdownRenderer.render(this.plugin.app, this.title, containerEl, "", component);
         }
         if (this.isEditable && this.content instanceof TFile) {
             // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
@@ -106,7 +107,8 @@ export class NtbModal extends Modal {
                 // attempt to embed everything else
                 else {
                     const embedMd = `![[${this.content.path}]]`;
-                    await MarkdownRenderer.render(this.plugin.app, embedMd, containerEl, "", this.plugin);
+                    const embedMdComponent = new Component();
+                    await MarkdownRenderer.render(this.plugin.app, embedMd, containerEl, "", embedMdComponent);
                 };
             }
             catch (error) {

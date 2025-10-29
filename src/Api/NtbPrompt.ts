@@ -59,7 +59,8 @@ export class NtbPrompt extends Modal {
 
     onOpen(): void {
         if (this.label) {
-            MarkdownRenderer.render(this.plugin.app, this.label, this.titleEl, "", new Component());
+            const component = new Component();
+            MarkdownRenderer.render(this.plugin.app, this.label, this.titleEl, "", component);
         }
         this.createForm();
     }

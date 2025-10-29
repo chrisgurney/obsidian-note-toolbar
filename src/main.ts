@@ -2432,10 +2432,12 @@ export default class NoteToolbarPlugin extends Plugin {
     }
 
 	debugGroup(label: string): void {
+		// eslint-disable-next-line
 		this.settings.debugEnabled && console.group(label);
 	}
 
 	debugGroupEnd(): void {
+		// eslint-disable-next-line
 		this.settings.debugEnabled && console.groupEnd();
 	}
 

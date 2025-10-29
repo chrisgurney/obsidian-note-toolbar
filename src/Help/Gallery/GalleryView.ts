@@ -66,18 +66,21 @@ export class GalleryView extends ItemView {
 		setIcon(bannerIconEl, 'layout-grid');
 		const title = (gallery as Gallery).title[language] || gallery.title['en'];
 		const bannerTitleEl = bannerEl.createDiv();
-		MarkdownRenderer.render(this.plugin.app, `# ${title}`, bannerTitleEl, '/', this.plugin);
+		const bannerTitleComponent = new Component();
+		MarkdownRenderer.render(this.plugin.app, `# ${title}`, bannerTitleEl, '/', bannerTitleComponent);
 
 		const overviewEl = markdownEl.createDiv();
 		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
 		const overview = (gallery as Gallery).overview[language] || gallery.overview['en'];
-		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', this.plugin);
+		const overviewComponent = new Component();
+		MarkdownRenderer.render(this.plugin.app, overview, overviewEl, '/', overviewComponent);
 
 		const pluginNoteEl = markdownEl.createDiv();
 		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
 		setIcon(pluginNoteEl.createSpan(), 'puzzle');
 		const pluginNoteText = (gallery as Gallery).pluginNote[language] || (gallery as Gallery).pluginNote['en'];
-		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', this.plugin);
+		const pluginNoteComponent = new Component();
+		MarkdownRenderer.render(this.plugin.app, pluginNoteText, pluginNoteEl, '/', pluginNoteComponent);
 
 		const searchSetting = new Setting(markdownEl)
 			.setClass('note-toolbar-setting-item-full-width-phone')
