@@ -308,11 +308,12 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     modal.open();
                 }
                 break;
-            default:
+            default: {
                 let selectedItem = this.modalEl.querySelector('.note-toolbar-item-suggestion.is-selected');
                 let item = selectedItem?.id ? this.plugin.settingsManager.getToolbarItemById(selectedItem?.id) : undefined;
                 item ? this.onChooseSuggestion(item, event) : undefined;
-                break;    
+                break;
+            }
         }
     }
 

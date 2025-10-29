@@ -200,12 +200,13 @@ export default class ToolbarSettingsModal extends Modal {
 		this.plugin.registerDomEvent(
 			toolbarNameSetting.controlEl, 'keydown', (e) => {
 				switch (e.key) {
-					case 'ArrowDown':
+					case 'ArrowDown': {
 						const selector = '.note-toolbar-setting-items-container .note-toolbar-setting-item-preview';
 						const itemEls = this.containerEl.querySelectorAll<HTMLElement>(selector);
 						if (itemEls.length > 0) itemEls[0].focus();
 						e.preventDefault();
 						break;
+					}
 				}
 			}
 		)
@@ -592,7 +593,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.plugin.registerDomEvent(
 			itemPreview, 'keydown', async (e: KeyboardEvent) => {
 				switch (e.key) {
-					case "d":
+					case "d": {
 						const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
 						if (modifierPressed) {        
 							const index = this.toolbar.items.indexOf(toolbarItem);
@@ -602,6 +603,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.display(newItem.uuid);
 						}
 						break;
+					}
 					case "Enter":
 					case " ":
 						e.preventDefault();
@@ -1051,13 +1053,14 @@ export default class ToolbarSettingsModal extends Modal {
 				itemPreviewContent.setText(t('setting.item.option-separator'));
 				itemPreview.append(itemPreviewContent);
 				break;
-			case ItemType.Group:
+			case ItemType.Group: {
 				const groupToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
 				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.plugin, groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
 				break;
-			default:
+			}
+			default: {
 				setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
 				let itemPreviewIcon = createSpan();
 				itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
@@ -1082,6 +1085,7 @@ export default class ToolbarSettingsModal extends Modal {
 					itemPreviewContent.addClass("note-toolbar-setting-item-preview-empty");
 				}
 				break;
+			}
 		}
 
 		// FIXME: figure out how to add back in, with error for each preview item (which needs flex-wrap:wrap)

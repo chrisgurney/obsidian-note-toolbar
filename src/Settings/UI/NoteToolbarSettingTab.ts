@@ -306,7 +306,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					this.plugin.registerDomEvent(
 						toolbarListItemSetting.settingEl, 'keydown', (e: KeyboardEvent) => {
 							switch (e.key) {
-								case "d":
+								case "d": {
 									const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
 									if (modifierPressed) {
 										this.plugin.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
@@ -314,6 +314,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 										});
 									}
 								}
+							}
 					});
 				}
 			);
@@ -453,13 +454,14 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			this.plugin.registerDomEvent(
 				searchInputEl, 'keydown', (e) => {
 					switch (e.key) {
-						case 'ArrowDown':
+						case 'ArrowDown': {
 							const selector = '.note-toolbar-setting-toolbar-list .ntb-tbar-edit';
 							const toolbarButtonEls = Array.from(this.containerEl.querySelectorAll<HTMLElement>(selector))
 								.filter((btn) => getComputedStyle(btn.closest('.setting-item')!).display !== 'none');
 							if (toolbarButtonEls.length > 0) toolbarButtonEls[0].focus();
 							e.preventDefault();
 							break;
+						}
 					}
 				}
 			)
@@ -591,7 +593,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 		else {
 			// remove the area where the collapse button would be
-			toolbarMapSetting.controlEl.style.display = 'none';
+			toolbarMapSetting.controlEl.hide();
 		}
 
 		let collapsibleContainer = createDiv();
@@ -1052,11 +1054,12 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.buttonEl, 'keydown', (e) => {
 						switch (e.key) {
 							case "Enter":
-							case " ":
+							case " ": {
 								e.preventDefault();					
 								const modal = new IconSuggestModal(
 									this.plugin, this.plugin.settings.icon, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 								modal.open();
+							}
 						}
 					});
 			});

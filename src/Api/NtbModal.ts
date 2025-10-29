@@ -52,13 +52,13 @@ export class NtbModal extends Modal {
         if (this.isEditable && this.content instanceof TFile) {
             // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
             this.leaf = this.plugin.app.workspace.createLeafInParent(this.plugin.app.workspace.rootSplit, 0);
-            if (this.leaf) (this.leaf as any).containerEl.style.display = 'none';
+            if (this.leaf) (this.leaf as any).containerEl.hide();
             await this.leaf.openFile(this.content);
             this.contentEl.appendChild(this.leaf.view.containerEl);
         }
         else if (this.isWebviewer && typeof this.content === 'string') {
             this.leaf = this.plugin.app.workspace.createLeafInParent(this.plugin.app.workspace.rootSplit, 0);
-            if (this.leaf) (this.leaf as any).containerEl.style.display = 'none';
+            if (this.leaf) (this.leaf as any).containerEl.hide();
             await this.leaf.setViewState({type: 'webviewer', state: { url: this.content, navigate: true }, active: true});
             this.contentEl.appendChild(this.leaf.view.containerEl);
         }
