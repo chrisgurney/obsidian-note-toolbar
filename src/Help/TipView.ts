@@ -1,5 +1,5 @@
 import TipItems from "Help/tips.json";
-import { Component, ItemView, MarkdownRenderer, Platform, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
 import { renderGalleryItems } from "Help/Gallery/GalleryView";
@@ -126,17 +126,16 @@ export class TipView extends ItemView {
      */
     async getTip(filename: string, language: string = 'en'): Promise<string | null> {
         let url = `${URL_TIPS}/${language}/${filename}.md`;
-        let res = await fetch(url);
+        let res = await requestUrl(url);
     
-        if (!res.ok && language !== 'en') {
+        if ((!res || res.status !== 200) && language !== 'en') {
             url = `${URL_TIPS}/en/${filename}.md`;
-            res = await fetch(url);
+            res = await requestUrl(url);
         }
     
-        if (!res.ok) return null;
+        if (!res || res.status !== 200) return null;
     
-        const body = await res.text();
-        return body;
+        return res.text;
     }
 
     /**

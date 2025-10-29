@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, Component, ItemView, MarkdownRenderer, Setting, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, Component, ItemView, MarkdownRenderer, requestUrl, Setting, WorkspaceLeaf } from 'obsidian';
 import { URL_RELEASES, t, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, URL_RELEASE_NOTES } from 'Settings/NoteToolbarSettings';
 import { iconTextFr } from '../Settings/UI/Utils/SettingsUIUtils';
 
@@ -104,17 +104,16 @@ export class WhatsNewView extends ItemView {
 	 */
 	async getReleaseNote(version: string, language: string = 'en'): Promise<Release | null> {
 		let url = `${URL_RELEASE_NOTES}/${language}/${version}.md`;
-		let res = await fetch(url);
+		let res = await requestUrl(url);
 	
-		if (!res.ok && language !== 'en') {
+		if ((!res || res.status !== 200) && language !== 'en') {
 			url = `${URL_RELEASE_NOTES}/en/${version}.md`;
-			res = await fetch(url);
+			res = await requestUrl(url);
 		}
 	
-		if (!res.ok) return null;
-	
-		const body = await res.text();
-		return { tag_name: version, body };
+		if (!res || res.status !== 200) return null;
+
+		return { tag_name: version, body: res.text };
 	}
 
 	/**
