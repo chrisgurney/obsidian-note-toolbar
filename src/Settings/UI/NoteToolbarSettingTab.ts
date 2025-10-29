@@ -1187,6 +1187,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				case 'Backspace':
 					keyEvent.preventDefault();
 					action = 'delete';	
+					break;
 				case 'Enter':
 				case ' ':
 					keyEvent.preventDefault();
