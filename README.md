@@ -161,6 +161,6 @@ Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolb
 
 [Ask questions here](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) or [request a feature](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/ideas). If you run into something that looks like a bug, please [log an issue](https://github.com/chrisgurney/obsidian-note-toolbar/issues).
 
-If you find this plugin useful, and wish to support me financially, I accept donations. Thank you!
+If you find this plugin useful, and wish to support me financially, [I accept donations](https://buymeacoffee.com/cheznine). Thank you!
 
 <a href="https://www.buymeacoffee.com/cheznine"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=cheznine&button_colour=fe9b27&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00" /></a>
