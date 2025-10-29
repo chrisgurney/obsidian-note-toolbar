@@ -6,12 +6,14 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 
 export default defineConfig([
+
     globalIgnores([
         "build/*",
         "examples/*",
         "main.js",
         "*.mjs",
     ]),
+
     {
         files: [ "**/*.ts" ],
         languageOptions: {
@@ -29,9 +31,11 @@ export default defineConfig([
             "@typescript-eslint": tsPlugin
         },
     },
+
     // bring in Obsidian's recommended rules
     ...obsidianmd.configs.recommended,
-    // ignore some basic rules for now
+
+    // IGNORE TS + ESLINT BASIC RULES FOR NOW
     {
         rules: {
             'no-undef': 'off',
@@ -40,4 +44,5 @@ export default defineConfig([
             )
         }
     }
+    
 ]);
