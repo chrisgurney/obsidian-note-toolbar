@@ -605,7 +605,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				break;
 			case PositionType.Bottom:
 			case PositionType.Props:
-			case PositionType.Top:
+			case PositionType.Top: {
 				noteToolbarElement = await this.renderToolbarAsCallout(toolbar, file, view);
 				// extra div workaround to emulate callout-in-content structure, to use same sticky css
 				let div = activeDocument.createElement("div");
@@ -615,6 +615,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.registerDomEvent(embedBlock, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
 				this.registerDomEvent(embedBlock, 'keydown', (e) => this.toolbarKeyboardHandler(e));	
 				break;
+			}
 			case PositionType.Hidden:
 			default:
 				// we're not rendering it
@@ -650,7 +651,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (modalEl) modalEl.appendChild(embedBlock)
 				else viewEl?.appendChild(embedBlock);
 				break;
-			case PositionType.Top:
+			case PositionType.Top: {
 				let viewHeader = viewEl?.querySelector('.view-header') as HTMLElement;
 				// FIXME: add to modal header, but this is causing duplicate toolbars
 				// if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
@@ -658,6 +659,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
 					: this.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				break;
+			}
 			default:
 				// default case includes Hidden and Props positions; Hidden is rendered for command reference
 				if (view instanceof MarkdownView) {
@@ -807,14 +809,15 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			switch (item.linkAttr.type) {
 				case ItemType.Break:
-				case ItemType.Separator:
+				case ItemType.Separator: {
 					if (view.getViewType() === 'empty' && this.settings.showLaunchpad) continue;
 					toolbarItem = activeDocument.createElement('data');
 					toolbarItem.setAttribute(
 						item.linkAttr.type === ItemType.Break ? 'data-break' : 'data-sep', '');
 					toolbarItem.setAttribute('role', 'separator');
 					break;
-				case ItemType.Group:
+				}
+				case ItemType.Group: {
 					const groupToolbar = this.settingsManager.getToolbar(item.link);
 					if (groupToolbar) {
 						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
@@ -823,7 +826,8 @@ export default class NoteToolbarPlugin extends Plugin {
 						}
 					}
 					break;
-				default:
+				}
+				default: {
 					// changed to span as temporary(?) fix (#19) for links on Android
 					toolbarItem = activeDocument.createElement('span');
 					item.uuid ? toolbarItem.id = item.uuid : undefined;
@@ -872,6 +876,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						setIcon(toolbarItem, item.icon);
 					}
 					break;
+				}
 			}
 
 			if (toolbarItem) {
@@ -1029,10 +1034,11 @@ export default class NoteToolbarPlugin extends Plugin {
 					case ItemType.Separator:
 						menu.addSeparator();
 						break;
-					case ItemType.Group:
+					case ItemType.Group: {
 						const groupToolbar = this.settingsManager.getToolbar(toolbarItem.link);
 						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, file, recursions + 1) : undefined;
 						break;
+					}
 					case ItemType.Menu:
 						// the sub-menu UI doesn't appear to work on mobile, so default to treat as link
 						if (!Platform.isMobile) {
@@ -1056,7 +1062,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							});
 						}
 						break;
-					default:
+					default: {
 						// don't show the item if the link has variables and resolves to nothing
 						if (this.hasVars(toolbarItem.link) && await this.replaceVars(toolbarItem.link, file) === "") {
 							break;
@@ -1093,6 +1099,7 @@ export default class NoteToolbarPlugin extends Plugin {
 								});
 							});
 						break;
+					}
 				}
 			}
 		};
@@ -1379,7 +1386,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						case CalloutAttr.Dataview:
 						case CalloutAttr.JavaScript:
 						case CalloutAttr.JsEngine:
-						case CalloutAttr.Templater:
+						case CalloutAttr.Templater: {
 							const scriptConfig = {
 								pluginFunction: value,
 								expression: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['expression']) ?? undefined,
@@ -1404,12 +1411,13 @@ export default class NoteToolbarPlugin extends Plugin {
 									break;	
 							}
 							break;
+						}
 						case CalloutAttr.Folder:
 						case CalloutAttr.FolderNtb:
 							this.handleLinkFolder(value);
 							break;
 						case CalloutAttr.Menu:
-						case CalloutAttr.MenuNtb:
+						case CalloutAttr.MenuNtb: {
 							const activeFile = this.app.workspace.getActiveFile();
 							const toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbar(value);
 							if (activeFile) {
@@ -1423,6 +1431,7 @@ export default class NoteToolbarPlugin extends Plugin {
 								}
 							}
 							break;
+						}
 					}
 				}
 			}
@@ -1716,7 +1725,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (sidebarTab) {
 			await sidebarTab.openFile(file);
 			switch (toolbarItem?.linkAttr.type) {
-				case ItemType.Command:
+				case ItemType.Command: {
 					const commandId = toolbarItem?.linkAttr.commandId;
 					if (!(commandId in this.app.commands.commands)) {
 						new Notice(t('notice.error-command-not-found', { command: commandId }));
@@ -1730,6 +1739,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						new Notice(error);
 					}
 					break;
+				}
 				case ItemType.Dataview:
 				case ItemType.JavaScript:
 				case ItemType.JsEngine:
@@ -1773,7 +1783,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case (RibbonAction.ToolbarSuggester):
 				await this.commands.openToolbarSuggester();
 				break;
-			case (RibbonAction.Toolbar):
+			case (RibbonAction.Toolbar): {
 				let activeFile = this.app.workspace.getActiveFile();
 				if (activeFile) {
 					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
@@ -1785,6 +1795,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					}
 				}
 				break;
+			}
 		}
 	}
 
@@ -1876,29 +1887,32 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			switch (key) {
 				case 'ArrowRight':
-				case 'ArrowDown':
+				case 'ArrowDown': {
 					const nextIndex = (currentIndex + 1) % visibleItems.length;
 					this.debug(currentEl);
 					currentEl.removeClass(ToolbarStyle.ItemFocused);
 					visibleItems[nextIndex].addClass(ToolbarStyle.ItemFocused);
 					visibleItems[nextIndex].querySelector('span')?.focus();
 					break;
+				}
 				case 'ArrowLeft':
-				case 'ArrowUp':
+				case 'ArrowUp': {
 					const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
 					currentEl.removeClass(ToolbarStyle.ItemFocused);
 					visibleItems[prevIndex].addClass(ToolbarStyle.ItemFocused);
 					visibleItems[prevIndex].querySelector('span')?.focus();
 					break;
+				}
 				case 'Enter':
-				case ' ':
+				case ' ': {
 					let activeEl = activeDocument?.activeElement as HTMLElement;
 					let selectedItem = this.settingsManager.getToolbarItemById(activeEl?.id);
 					if (selectedItem) {
 						await this.handleItemLink(selectedItem, e);
 					}
 					break;
-				case 'Escape':
+				}
+				case 'Escape': {
 					// need this implemented for Reading mode, as escape does nothing
 					let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
 					let viewMode = currentView?.getMode();
@@ -1913,6 +1927,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						await this.removeFocusStyle();
 					}
 					break;
+				}
 			}
 
 		}
