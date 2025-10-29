@@ -2611,6 +2611,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const key = p1.trim();
 			if (frontmatter && frontmatter[key] !== undefined) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
+				// eslint-disable-next-line no-useless-escape
 				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
 				// handle the case where the prop might be a list, and convert numbers to strings
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : String(frontmatter[key]);
