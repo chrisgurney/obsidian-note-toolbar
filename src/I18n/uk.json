@@ -125,8 +125,8 @@
     },
     "command": {
         "copy-command-notice": "Команду скопійовано до буфера обміну",
-        "name-copy-command-as-data-element": "Копіювати елемент виноски для команди",
-        "name-copy-command-uri": "Копіювати URI команди",
+        "name-copy-cmd-as-data-element": "Копіювати елемент виноски для команди",
+        "name-copy-cmd-uri": "Копіювати URI команди",
         "name-focus": "Фокусування",
         "name-fold-properties": "Згорнути властивості",
         "name-hide-properties": "Приховати властивості",
