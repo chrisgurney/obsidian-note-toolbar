@@ -1547,7 +1547,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					? this.handleLinkInSidebar(item, file) 
 					: this.handleLinkCommand(commandId, item?.linkAttr.focus, item?.linkAttr.target as PaneType);
 				break;
-			case ItemType.File:
+			case ItemType.File: {
 				// it's an internal link (note); try to open it
 				let activeFilePath = activeFile ? activeFile.path : '';
 				this.debug("- openLinkText: ", linkHref, " from: ", activeFilePath);
@@ -1564,7 +1564,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
 				}
 				break;
-			case ItemType.Menu:
+			}
+			case ItemType.Menu: {
 				const toolbar = this.settingsManager.getToolbar(linkHref);
 				if (toolbar) {
 					this.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
@@ -1577,6 +1578,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					new Notice(t('notice.error-item-menu-not-found', { toolbar: linkHref }));
 				}
 				break;
+			}
 			case ItemType.Dataview:
 			case ItemType.JavaScript:
 			case ItemType.JsEngine:

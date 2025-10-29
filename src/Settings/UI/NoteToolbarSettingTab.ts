@@ -412,7 +412,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							// const itemTooltipMatches = allItemTooltips.includes(query);
 
 							// hide non-matching results
-							toolbarEl.style.display = (toolbarNameMatches || itemTextMatches) ? '' : 'none';
+							(toolbarNameMatches || itemTextMatches) ? toolbarEl.show() : toolbarEl.hide();
 
 							hasMatch = hasMatch || ((toolbarNameMatches || itemTextMatches) && query.length > 0);
 							// hasNonVisibleMatch = hasNonVisibleMatch || (itemTooltipMatches && query.length > 0);

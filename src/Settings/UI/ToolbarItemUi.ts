@@ -65,7 +65,7 @@ export default class ToolbarItemUi {
                         cb.extraSettingsEl, 'keydown', (e) => {
                             switch (e.key) {
                                 case "Enter":
-                                case " ":
+                                case " ": {
                                     const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
                                     if (!modifierPressed) {
                                         e.preventDefault();
@@ -77,6 +77,7 @@ export default class ToolbarItemUi {
                                         });
                                         modal.open();
                                     }
+                                }
                             }
                         });
                 });
@@ -574,7 +575,7 @@ export default class ToolbarItemUi {
     {
 
         switch(type) {
-            case ItemType.Command: 
+            case ItemType.Command: {
                 const commandSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
@@ -619,10 +620,11 @@ export default class ToolbarItemUi {
 
                 setFieldHelp(commandSetting.settingEl, helpTextFr);
                 break;
+            }
             case ItemType.Dataview:
             case ItemType.JavaScript:
             case ItemType.JsEngine:
-            case ItemType.Templater:
+            case ItemType.Templater: {
                 if (this.plugin.settings.scriptingEnabled) {
                     let adapter = this.plugin.getAdapterForItemType(type);
                     if (adapter) {
@@ -688,7 +690,8 @@ export default class ToolbarItemUi {
                     fieldDiv.setText(t('adapter.error.scripting-disabled'));
                 }
                 break;
-            case ItemType.File:
+            }
+            case ItemType.File: {
                 const fileSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
@@ -723,7 +726,8 @@ export default class ToolbarItemUi {
 
                 setFieldHelp(fileSetting.settingEl, helpTextFr);
                 break;
-            case ItemType.Group:
+            }
+            case ItemType.Group: {
                 const initialGroupToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
                 const groupSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
@@ -749,7 +753,8 @@ export default class ToolbarItemUi {
                     });
                 setFieldHelp(groupSetting.settingEl, helpTextFr);
                 break;
-            case ItemType.Menu:
+            }
+            case ItemType.Menu: {
                 const initialMenuToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
                 const menuSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
@@ -783,7 +788,8 @@ export default class ToolbarItemUi {
                     });
                 setFieldHelp(menuSetting.controlEl, helpTextFr);
                 break;
-            case ItemType.Uri: 
+            }
+            case ItemType.Uri: {
                 const uriSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addText(cb => {
@@ -820,6 +826,7 @@ export default class ToolbarItemUi {
                 });
                 setFieldHelp(uriSetting.settingEl, helpTextFr);
                 break;
+            }
         }
 
     }
@@ -947,7 +954,7 @@ export default class ToolbarItemUi {
                                 this.updateItemComponentStatus(initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         break;
-                    case SettingType.Text:
+                    case SettingType.Text: {
                         // outputContainer setting is shown in Advanced settings section below
                         const textFieldDiv = param.parameter === 'outputContainer'
                             ? (outputContainerSettingEl = createDiv())
@@ -969,6 +976,7 @@ export default class ToolbarItemUi {
                             });
                         // fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
                         break;
+                    }
                     case SettingType.Args:
                     case SettingType.TextArea:
                         setting = new Setting(fieldDiv)
@@ -1088,7 +1096,7 @@ export default class ToolbarItemUi {
                 this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-js-engine-help'), 'JS-Engine'));
                 break;
             case ItemType.Group:
-            case ItemType.Menu:
+            case ItemType.Menu: {
                 const menuGroupToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
                 const fieldHelp = document.createDocumentFragment();
                 menuGroupToolbar
@@ -1100,6 +1108,7 @@ export default class ToolbarItemUi {
                     );
                 this.getLinkSetting(type, fieldDiv, toolbarItem, fieldHelp);
                 break;
+            }
             case ItemType.Templater:
                 this.getLinkSetting(type, fieldDiv, toolbarItem, learnMoreFr(t('setting.item.option-templater-help'), 'Templater'));
                 break;
@@ -1176,13 +1185,14 @@ export default class ToolbarItemUi {
 
         if (itemValue) {
             switch(fieldType) {
-                case SettingType.Args:
+                case SettingType.Args: {
                     const parsedArgs = importArgs(itemValue);
                     if (!parsedArgs) {
                         status = Status.Invalid;
                         statusMessage = t('adapter.error.args-format');
                     }
                     break;
+                }
                 case SettingType.Command:
                     if (!(itemValue in this.plugin.app.commands.commands)) {
                         status = Status.Invalid;
@@ -1201,13 +1211,14 @@ export default class ToolbarItemUi {
                         }
                     }
                     break;
-                case SettingType.File:
+                case SettingType.File: {
                     const file = this.plugin.app.vault.getAbstractFileByPath(itemValue);
                     if (!(file instanceof TFile) && !(file instanceof TFolder)) {
                         status = Status.Invalid;
                         statusMessage = t('setting.item.option-file-error-does-not-exist');
                     }
                     break;
+                }
                 case SettingType.Text:
                     // if (this.plugin.hasVars(itemValue)) {
                     // 	this.plugin.debug('VALIDATING TEXT', itemValue);
@@ -1217,7 +1228,7 @@ export default class ToolbarItemUi {
                     // 	});
                     // }
                     break;
-                case SettingType.Toolbar:
+                case SettingType.Toolbar: {
                     let toolbar = this.plugin.settingsManager.getToolbarByName(itemValue);
                     if (!toolbar) {
                         toolbar = this.plugin.settingsManager.getToolbar(itemValue);
@@ -1227,6 +1238,7 @@ export default class ToolbarItemUi {
                         }
                     }
                     break;
+                }
             }
         }
         // empty fields and script items (which don't have values)
