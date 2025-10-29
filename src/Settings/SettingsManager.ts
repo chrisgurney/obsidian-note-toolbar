@@ -355,9 +355,10 @@ export class SettingsManager {
 					return true;
 				}
 				break;
-			case ItemType.Plugin:
+			case ItemType.Plugin: {
 				const pluginType = await this.resolvePluginType(item);
 				return pluginType ? true : false;
+			}
 			default:
 				return true;
 		}

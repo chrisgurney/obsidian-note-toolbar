@@ -94,7 +94,7 @@ export function createToolbarPreviewFr(
 							}
 						}
 						break;
-					default:
+					default: {
 						const itemIcon = item.icon ? getIcon(item.icon) : null;
 						if (itemIcon || item.label) {
 							const defaultItemFr = createDiv();
@@ -120,6 +120,7 @@ export function createToolbarPreviewFr(
 							itemsFr.append(defaultItemFr);
 						}
 						break;
+					}
 
 				}
 

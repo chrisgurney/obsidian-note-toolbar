@@ -155,7 +155,7 @@ export class CommandManager {
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
         switch (toolbarPosition) {
             case PositionType.FabRight:
-            case PositionType.FabLeft:
+            case PositionType.FabLeft: {
                 // trigger the menu
                 let toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
                 this.plugin.debug("focusCommand: button: ", toolbarFabEl);
@@ -185,9 +185,10 @@ export class CommandManager {
                     }
                 }
                 break;
+            }
             case PositionType.Bottom:
             case PositionType.Props:
-            case PositionType.Top:
+            case PositionType.Top: {
                 // get the list and set focus on the first visible item
                 let itemsUl: HTMLElement | null = this.plugin.getToolbarListEl();
                 if (itemsUl) {
@@ -204,6 +205,7 @@ export class CommandManager {
                     linkEl?.focus();
                 }
                 break;
+            }
             case PositionType.Hidden:
             default:
                 // do nothing

@@ -43,7 +43,7 @@ export default class GalleryManager {
         if (!isScriptingEnabled) return;
 
         switch (galleryItem.linkAttr.type) {
-            case ItemType.Command:
+            case ItemType.Command: {
                 // check if the item's command exists, before displaying toolbar modal
                 const command = this.plugin.app.commands.commands[galleryItem.linkAttr.commandId];
                 const commandPluginId = galleryItem.linkAttr.commandId.split(':')[0];
@@ -69,6 +69,7 @@ export default class GalleryManager {
                     toolbarModal.open();
                 }
                 break;
+            }
             case ItemType.JavaScript:
             case ItemType.Uri:
                 // on mobile, check if this item uses a `file://` URI, which is not generally supported

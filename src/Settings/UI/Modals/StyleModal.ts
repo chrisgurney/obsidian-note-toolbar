@@ -67,12 +67,13 @@ export default class StyleModal extends Modal {
         this.plugin.registerDomEvent(
             this.modalEl, 'keydown', async (e: KeyboardEvent) => {
                 switch (e.key) {
-                    case "Enter":
+                    case "Enter": {
                         const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
                         if (modifierPressed) {
                             this.close();
                         }
                         break;
+					}
                 }
             }
         );
