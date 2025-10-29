@@ -56,7 +56,7 @@ export class GalleryView extends ItemView {
         contentDiv.addClass('note-toolbar-setting-gallery-view');
 
 		let markdownEl = contentDiv.createDiv();
-		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
+		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-gallery-content', 'is-readable-line-width');
 
 		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 

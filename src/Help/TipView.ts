@@ -49,7 +49,7 @@ export class TipView extends ItemView {
         MarkdownRenderer.render(this.plugin.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', bannerDescComponent);
 
         const contentEl = contentDiv.createDiv();
-        contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
+        contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-tip-content', 'is-readable-line-width');
 		this.renderSkeleton(contentEl);
 
         // fetch and display the content

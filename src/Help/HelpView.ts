@@ -29,7 +29,7 @@ export class HelpView extends ItemView {
     async onOpen() {
 
         const containerDiv = this.contentEl.createDiv();
-        containerDiv.addClass('note-toolbar-setting-help-view', 'note-toolbar-setting-whatsnew-content');
+        containerDiv.addClass('note-toolbar-setting-help-view', 'note-toolbar-setting-help-content');
 
         const contentDiv = containerDiv.createDiv();
         contentDiv.addClass('is-readable-line-width');

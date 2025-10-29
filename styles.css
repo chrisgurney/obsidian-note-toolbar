@@ -3368,6 +3368,9 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-gallery-content,
+.note-toolbar-setting-help-content,
+.note-toolbar-setting-tip-content,
 .note-toolbar-setting-whatsnew-content {
     margin-bottom: 2rem;
     user-select: text;
@@ -3406,6 +3409,16 @@ input[type="text"].note-toolbar-setting-error,
             border-width: 1px;
             padding: var(--size-2-2) var(--size-4-2);
             text-align: start;
+        }
+    }
+}
+
+.note-toolbar-setting-whatsnew-content {
+    h2 {
+        border-bottom: 1px solid var(--background-modifier-border);
+        padding-bottom: .3em;
+        &::after {
+            display: none; /* fix for ITS theme */
         }
     }
 }
