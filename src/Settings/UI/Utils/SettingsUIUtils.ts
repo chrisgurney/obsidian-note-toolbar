@@ -408,7 +408,7 @@ export function openItemSuggestModal(
 			await plugin.settingsManager.save();
 
 			if (isEmptyItem) new ItemModal(plugin, toolbar, newItem).open()
-			else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name }));
+			else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } }));
 
 			if (parent) parent.display(newItem.uuid);
 

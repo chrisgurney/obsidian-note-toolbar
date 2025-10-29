@@ -34,7 +34,7 @@ export default class GalleryManager {
 				selectedToolbar.updated = new Date().toISOString();
 				await this.plugin.settingsManager.save();
 				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
-                new Notice(t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name }));
+                new Notice(t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name, interpolation: { escapeValue: false } }));
 			}
 		});
 
