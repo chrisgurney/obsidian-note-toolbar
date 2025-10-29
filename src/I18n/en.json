@@ -608,7 +608,7 @@
             "option-default-empty": "No default styles set.",
             "option-default-name": "Default",
             "option-even": "space items evenly",
-            "option-inactive": "hide when inactive",
+            "option-inactive": "hide in inactive views",
             "option-left": "left align items",
             "option-mobile-description": "Override default styles.",
             "option-mobile-empty": "No mobile styles set. Using default styles.",
