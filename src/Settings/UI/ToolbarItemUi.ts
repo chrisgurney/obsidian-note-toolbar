@@ -1159,10 +1159,10 @@ export default class ToolbarItemUi {
             Valid = 'valid'
         }
 
-        var status: Status = Status.Valid;
-        var statusMessage: string = '';
-        var statusLink: HTMLAnchorElement | undefined = undefined;
-        var isValid = true;
+        let status: Status = Status.Valid;
+        let statusMessage: string = '';
+        let statusLink: HTMLAnchorElement | undefined = undefined;
+        let isValid = true;
 
         // FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
         if (toolbarItem?.hasCommand) {

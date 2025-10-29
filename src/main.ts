@@ -658,10 +658,8 @@ export default class NoteToolbarPlugin extends Plugin {
 					? viewHeader.insertAdjacentElement("afterend", embedBlock)
 					: this.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				break;
-			case PositionType.Hidden:
-				// we're not rendering it above, but it still needs to be on the note somewhere, for command reference
-			case PositionType.Props:
 			default:
+				// default case includes Hidden and Props positions; Hidden is rendered for command reference
 				if (view instanceof MarkdownView) {
 					// inject it between the properties and content divs
 					let propsEl = this.getPropsEl(view);
@@ -1026,6 +1024,8 @@ export default class NoteToolbarPlugin extends Plugin {
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
+						menu.addSeparator();
+						break;
 					case ItemType.Separator:
 						menu.addSeparator();
 						break;
@@ -1054,8 +1054,8 @@ export default class NoteToolbarPlugin extends Plugin {
 								let menuToolbar = this.settingsManager.getToolbar(toolbarItem.link);
 								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
 							});
-							break;
 						}
+						break;
 					default:
 						// don't show the item if the link has variables and resolves to nothing
 						if (this.hasVars(toolbarItem.link) && await this.replaceVars(toolbarItem.link, file) === "") {

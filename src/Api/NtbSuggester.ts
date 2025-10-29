@@ -76,7 +76,8 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         if (this.label) {
             const headerEl = this.containerEl.createDiv('ntb-suggester-header');
-            MarkdownRenderer.render(this.plugin.app, this.label, headerEl, "", new Component());
+            const component = new Component();
+            MarkdownRenderer.render(this.plugin.app, this.label, headerEl, "", component);
             this.modalEl.insertAdjacentElement('afterbegin', headerEl);
         }
 
@@ -135,7 +136,8 @@ export class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     renderSuggestion(item: FuzzyMatch<T>, el: HTMLElement): void {
         // renders text markdown, if provided
-        if (this.rendermd) MarkdownRenderer.render(this.plugin.app, this.getItemText(item.item), el, '', new Component());
+        const component = new Component();
+        if (this.rendermd) MarkdownRenderer.render(this.plugin.app, this.getItemText(item.item), el, '', component);
         else el.setText(this.getItemText(item.item));
     }
 

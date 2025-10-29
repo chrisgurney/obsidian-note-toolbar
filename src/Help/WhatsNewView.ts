@@ -88,7 +88,8 @@ export class WhatsNewView extends ItemView {
 		}
 
 		const rootPath = this.plugin.app.vault.getRoot().path;
-		MarkdownRenderer.render(this.plugin.app, releaseText, markdownEl, rootPath, new Component());
+		const component = new Component();
+		MarkdownRenderer.render(this.plugin.app, releaseText, markdownEl, rootPath, component);
 
     }
 

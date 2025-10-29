@@ -248,7 +248,7 @@ export async function importFromCallout(
 
     const lines = callout.trim().split('\n');
     const isToolbarProvided = toolbar ? true : false;
-    var errorLog = '';
+    let errorLog = '';
 
     // get the active file to provide context
     let activeFile = plugin.app.workspace.getActiveFile();
@@ -310,7 +310,7 @@ export async function importFromCallout(
 
         plugin.debug(index + 1);
         
-        var itemType: ItemType | undefined = undefined;
+        let itemType: ItemType | undefined = undefined;
 
         let icon = '';
         let label = '';

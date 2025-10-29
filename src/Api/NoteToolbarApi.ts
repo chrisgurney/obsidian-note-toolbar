@@ -155,11 +155,12 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                             case 'command':
                                 await this.plugin.handleLinkCommand(item.value);
                                 break;
-                            case 'file':
+                            case 'file': {
                                 const activeFile = this.plugin.app.workspace.getActiveFile();
                                 const activeFilePath = activeFile ? activeFile.path : '';
                                 this.plugin.app.workspace.openLinkText(item.value, activeFilePath);
                                 break;
+                            }
                             case 'uri':
                                 await this.plugin.handleLinkUri(item.value);
                                 break;

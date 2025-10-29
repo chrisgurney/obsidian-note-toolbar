@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import gallery from 'Help/Gallery/gallery.json';
 import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
@@ -105,16 +105,18 @@ export class GalleryView extends ItemView {
 		(gallery as Gallery).categories.forEach((category, i) => {
 
 			const cssColor = cssColors[i % cssColors.length];
-
+			
 			const catNameEl = markdownEl.createEl('div');
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
 			const catName = category.name[language] || category.name['en'];
-			MarkdownRenderer.render(this.plugin.app, `## ${catName}`, catNameEl, '/', this.plugin);
+			const catComponent = new Component();
+			MarkdownRenderer.render(this.plugin.app, `## ${catName}`, catNameEl, '/', catComponent);
 
 			const catDescEl = markdownEl.createEl('div');
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
 			const catDescText = category.description[language] || category.description['en'];
-			MarkdownRenderer.render(this.plugin.app, catDescText, catDescEl, '/', this.plugin);
+			const catDescComponent = new Component();
+			MarkdownRenderer.render(this.plugin.app, catDescText, catDescEl, '/', catDescComponent);
 
 			const galleryItemContainerEl = markdownEl.createDiv();
 			galleryItemContainerEl.addClass('note-toolbar-gallery-card-items');
