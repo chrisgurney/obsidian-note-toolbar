@@ -2386,6 +2386,11 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-whatsnew-content {
+    code:not(.language-ts) {
+        background-color: var(--code-background);
+        border-width: var(--code-border-width);
+        padding: 0.3em;
+    }
     h2 {
         border-bottom: 1px solid var(--background-modifier-border);
         padding-bottom: .3em;
