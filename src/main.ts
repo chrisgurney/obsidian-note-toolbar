@@ -2291,9 +2291,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
 	getPropsEl(view?: MarkdownView): HTMLElement | null {
-		const currentViewEl = view ? view.containerEl : this.app.workspace.getActiveViewOfType(MarkdownView)?.containerEl as HTMLElement;		
-		const propertiesContainer = currentViewEl?.querySelector('.metadata-container') as HTMLElement;
-		this.debug("getPropsEl: ", propertiesContainer);
+		const currentView = view ?? this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (!currentView) return null;
+		const currentMode = currentView.getMode();
+		const currentViewEl = currentView.containerEl as HTMLElement;
+		// get the props container based on view mode; fix for toolbar not showing below props in reading mode, in notes with an embed (#392)
+		const propertiesContainer = currentViewEl?.querySelector(`.markdown-${currentMode === 'preview' ? 'reading' : 'source'}-view .metadata-container`) as HTMLElement;
 		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
 		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
 			return null;
