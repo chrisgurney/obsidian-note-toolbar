@@ -1045,7 +1045,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.onClick(async (e) => {
 						e.preventDefault();
 						const modal = new IconSuggestModal(
-							this.plugin, this.plugin.settings.icon, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
+							this.plugin, this.plugin.settings.icon, false, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 						modal.open();
 					});
 				cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.plugin.settings.icon ? "true" : "false");
@@ -1057,7 +1057,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 							case " ": {
 								e.preventDefault();					
 								const modal = new IconSuggestModal(
-									this.plugin, this.plugin.settings.icon, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
+									this.plugin, this.plugin.settings.icon, false, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
 								modal.open();
 							}
 						}

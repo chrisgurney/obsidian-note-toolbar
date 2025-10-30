@@ -6,7 +6,8 @@ export class IconSuggestModal extends SuggestModal<IconName> {
 
 	constructor(
         private plugin: NoteToolbarPlugin, 
-        private selectedIcon: string | undefined, 
+        private selectedIcon: string | undefined,
+        private showNoIconOption: boolean, 
         private callback: (icon: string) => void
     ) {
         super(plugin.app);
@@ -25,7 +26,7 @@ export class IconSuggestModal extends SuggestModal<IconName> {
         const iconIds = getIconIds();
         const iconSuggestions: IconName[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
-        iconSuggestions.push(t('setting.icon-suggester.option-no-icon'));
+        this.showNoIconOption ? iconSuggestions.push(t('setting.icon-suggester.option-no-icon')) : null;
         iconIds.forEach((icon: IconName) => {
             if (icon.toLowerCase().includes(lowerCaseInputStr)) {
                 iconSuggestions.push(icon);
