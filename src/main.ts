@@ -881,6 +881,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			if (toolbarItem) {
 				let noteToolbarLi = activeDocument.createElement("li");
+				noteToolbarLi.dataset.index = i.toString();
 				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
 				!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 				noteToolbarLi.append(toolbarItem);

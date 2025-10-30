@@ -47,25 +47,29 @@ export function calcComponentVisToggles(visibility: Visibility) {
  * @returns 
  */
 export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent): number | undefined {
-	const toolbarListEl = plugin.getToolbarListEl();
-	if (!toolbarListEl) return undefined;
+    const toolbarListEl = plugin.getToolbarListEl();
+    if (!toolbarListEl) return;
 
-	const rects = Array.from(toolbarListEl.children).map(el => el.getBoundingClientRect());
-	const cursorX = event.clientX;
-	const cursorY = event.clientY;
+    const children = Array.from(toolbarListEl.children) as HTMLElement[];
+    const rects = children.map(el => el.getBoundingClientRect());
+    const { clientX: x, clientY: y } = event;
 
-	// filter items in the same row by checking if cursorY is within the top and bottom bounds
-	const sameRow = rects.filter(rect => cursorY >= rect.top && cursorY <= rect.bottom);
+    const itemRow = rects.filter(r => y >= r.top && y <= r.bottom);
+    const findEl = (r: DOMRect | undefined): HTMLElement | undefined =>
+        r ? children[rects.indexOf(r)] : undefined; // helper
 
-	// find closest items to the left and right
-	const left = sameRow.filter(rect => rect.right <= cursorX).pop();
-	const right = sameRow.find(rect => rect.left > cursorX);
+    const mouseEl = findEl(itemRow.find(r => x >= r.left && x <= r.right));
+    const leftEl = findEl(itemRow.filter(r => r.right <= x).pop());
+    const rightEl = findEl(itemRow.find(r => r.left > x));
 
-	// plugin.debug('Left:', left ? toolbarListEl.children[rects.indexOf(left)] : null);
-	// plugin.debug('Right:', right ? toolbarListEl.children[rects.indexOf(right)] : null);
+    // plugin.debug('Item under cursor:', mouseEl || null);
+    // plugin.debug('Left:', leftEl || null);
+    // plugin.debug('Right:', rightEl || null);
 
-	const itemIndex = left ? (rects.indexOf(left) >= 0 ? rects.indexOf(left) + 1 : undefined) : undefined;
-	return itemIndex ? itemIndex : (right ? rects.indexOf(right) : undefined);
+    const getIndex = (el?: HTMLElement): number | undefined =>
+        el?.dataset.index ? Number(el.dataset.index) : undefined;
+
+    return getIndex(mouseEl) ?? getIndex(leftEl) ?? getIndex(rightEl);
 }
 
 /**
