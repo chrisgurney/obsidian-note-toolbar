@@ -1061,8 +1061,8 @@ export default class NoteToolbarPlugin extends Plugin {
 								let menuToolbar = this.settingsManager.getToolbar(toolbarItem.link);
 								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
 							});
+							break;
 						}
-						break;
 					default: {
 						// don't show the item if the link has variables and resolves to nothing
 						if (this.hasVars(toolbarItem.link) && await this.replaceVars(toolbarItem.link, file) === "") {
