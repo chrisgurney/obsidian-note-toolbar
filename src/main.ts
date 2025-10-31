@@ -570,7 +570,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 
 		let noteToolbarElement: HTMLElement | undefined;
-		let embedBlock = activeDocument.createElement("div");
+		let embedBlock = activeDocument.createElement((position === PositionType.TabBar) ? 'button' : 'div');
 		embedBlock.addClass('cg-note-toolbar-container');
 		toolbar.uuid ? embedBlock.id = toolbar.uuid : undefined;
 		const markdownViewMode = (view instanceof MarkdownView) ? view.getMode() : '';
@@ -603,6 +603,14 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
 				}
 				break;
+			case PositionType.TabBar: {
+				setIcon(embedBlock, this.settings.icon);
+				setTooltip(embedBlock, toolbar.name);
+				embedBlock.addClasses(['clickable-icon', 'view-action']);
+				this.registerDomEvent(embedBlock, 'click', (e) => this.toolbarFabHandler(e, noteToolbarElement!));
+				this.registerDomEvent(embedBlock, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
+				break;
+			}
 			case PositionType.Bottom:
 			case PositionType.Props:
 			case PositionType.Top: {
@@ -651,6 +659,11 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (modalEl) modalEl.appendChild(embedBlock)
 				else viewEl?.appendChild(embedBlock);
 				break;
+			case PositionType.TabBar: {
+				const viewActionsEl = viewEl?.querySelector('.view-actions') as HTMLElement;
+				viewActionsEl.insertAdjacentElement('afterbegin', embedBlock);
+				break;
+			}
 			case PositionType.Top: {
 				let viewHeader = viewEl?.querySelector('.view-header') as HTMLElement;
 				// FIXME: add to modal header, but this is causing duplicate toolbars
@@ -1851,6 +1864,10 @@ export default class NoteToolbarPlugin extends Plugin {
 						this.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
 						menu.showAtPosition(menuPos);
 					}
+					else {
+						// for Position.TabBar
+						menu.showAtMouseEvent(event);
+					}
 				});
 			}
 		}
@@ -2054,6 +2071,13 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			} 
 			else {
+				// if (currentPosition !== PositionType.TabBar) {
+				// 	positionMenu.addItem((item: MenuItem) => {
+				// 		item.setTitle(t('setting.position.option-tabbar'))
+				// 			.setIcon('panel-top')
+				// 			.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.TabBar));
+				// 	});
+				// }
 				if (currentPosition !== PositionType.Top) {
 					positionMenu.addItem((item: MenuItem) => {
 						item.setTitle(t('setting.position.option-top'))
@@ -2095,17 +2119,19 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (Platform.isTablet) contextMenu.addSeparator();
 
 			// style toolbar
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('palette')
-					.setTitle(t('toolbar.menu-style'))
-					.onClick(async () => {
-						if (toolbarSettings) {
-							const styleModal = new StyleModal(this.app, this, toolbarSettings);
-							styleModal.open();
-						}
-					});
-			});
+			if (currentPosition !== PositionType.TabBar) {
+				contextMenu.addItem((item: MenuItem) => {
+					item
+						.setIcon('palette')
+						.setTitle(t('toolbar.menu-style'))
+						.onClick(async () => {
+							if (toolbarSettings) {
+								const styleModal = new StyleModal(this.app, this, toolbarSettings);
+								styleModal.open();
+							}
+						});
+				});
+			}
 
 			// show/hide properties
 			const propsEl = this.getPropsEl();

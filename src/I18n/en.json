@@ -565,6 +565,7 @@
             "option-hidden-mobile": "Hidden / Navigation bar",
             "option-mobile-help": "Tip: Access toolbars from the navigation bar.",
             "option-props": "Below Properties",
+            "option-tabbar": "Tab bar",
             "option-top": "Top (fixed)"
         },
         "rules": {

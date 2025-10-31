@@ -96,6 +96,7 @@ export const enum PositionType {
 	FabRight = 'fabr',
 	Hidden = 'hidden',
 	Props = 'props',
+	TabBar = 'tabbar',
 	Top = 'top'
 }
 export const enum RibbonAction {
@@ -533,6 +534,7 @@ export const LINK_OPTIONS = {
 
 export const POSITION_OPTIONS = {
 	desktop: [
+		// { [PositionType.TabBar]: t('setting.position.option-tabbar') },
 		{ [PositionType.Top]: t('setting.position.option-top') },
 		{ [PositionType.Props]: t('setting.position.option-props') },
 		{ [PositionType.Bottom]: t('setting.position.option-bottom') },
@@ -541,6 +543,7 @@ export const POSITION_OPTIONS = {
 		{ [PositionType.Hidden]: t('setting.position.option-hidden') },
 	],
 	mobile: [
+		// { [PositionType.TabBar]: t('setting.position.option-tabbar') },
 		{ [PositionType.Top]: t('setting.position.option-top') },
 		{ [PositionType.Props]: t('setting.position.option-props') },
 		{ [PositionType.Bottom]: t('setting.position.option-bottom') },
