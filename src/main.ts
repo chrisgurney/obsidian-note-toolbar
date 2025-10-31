@@ -1063,6 +1063,7 @@ export default class NoteToolbarPlugin extends Plugin {
 							});
 							break;
 						}
+						// fall through
 					default: {
 						// don't show the item if the link has variables and resolves to nothing
 						if (this.hasVars(toolbarItem.link) && await this.replaceVars(toolbarItem.link, file) === "") {
