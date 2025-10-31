@@ -1166,6 +1166,11 @@ body {
     }
 }
 
+/* fixes header div getting squished when the toolbar's at the top position */
+.view-header:has(+ [data-tbar-position="top"]) {
+    min-height: var(--header-height);
+}
+
 .callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
     margin: 0em !important;
