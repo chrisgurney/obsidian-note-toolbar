@@ -2071,13 +2071,13 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 			} 
 			else {
-				// if (currentPosition !== PositionType.TabBar) {
-				// 	positionMenu.addItem((item: MenuItem) => {
-				// 		item.setTitle(t('setting.position.option-tabbar'))
-				// 			.setIcon('panel-top')
-				// 			.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.TabBar));
-				// 	});
-				// }
+				if (currentPosition !== PositionType.TabBar) {
+					positionMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('setting.position.option-tabbar'))
+							.setIcon('panel-top')
+							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.TabBar));
+					});
+				}
 				if (currentPosition !== PositionType.Top) {
 					positionMenu.addItem((item: MenuItem) => {
 						item.setTitle(t('setting.position.option-top'))
