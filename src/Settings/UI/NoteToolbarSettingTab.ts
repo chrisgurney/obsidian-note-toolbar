@@ -795,14 +795,15 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const otherContextSettings = new Setting(containerEl)
 			.setHeading()
-			.setName(t('setting.display-empty-view.name'));
+			.setName(t('setting.display-empty-view.name'))
+			.setDesc(learnMoreFr(t('setting.display-empty-view.option-emptyview-description'), 'New-tab-view'));
 
 		new Setting(containerEl)
-			.setName(t('setting.display-empty-view.option-emptyview'))
-			.setDesc(t('setting.display-empty-view.option-emptyview-description'))
+			.setName(t('setting.display-empty-view.option-emptyview-tbar'))
+			.setDesc(t('setting.display-empty-view.option-emptyview-tbar-description'))
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder(t('setting.display-empty-view.option-emptyview-placeholder'))
+				cb.setPlaceholder(t('setting.display-empty-view.option-emptyview-tbar-placeholder'))
 					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
 					.onChange(debounce(async (name) => {
 						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
@@ -816,7 +817,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const launchpadSetting = new Setting(containerEl)
 			.setName(t('setting.display-empty-view.option-launchpad'))
-			.setDesc(learnMoreFr(t('setting.display-empty-view.option-launchpad-description'), 'New-tab-view'))
+			.setDesc(t('setting.display-empty-view.option-launchpad-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb.setValue(this.plugin.settings.showLaunchpad)
 					.onChange(async (value: boolean) => {
@@ -883,7 +884,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-filemenu'))
-			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Other-settings'))
+			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Defining-where-to-show-toolbars#file-menu'))
 			.addToggle((cb) => {
 				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
 				cb.onChange(async (value) => {

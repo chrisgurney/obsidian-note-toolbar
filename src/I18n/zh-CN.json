@@ -321,9 +321,9 @@
     "display-empty-view": {
       "description": "将工具栏附加到新标签页（或直接将新标签页替换为工具栏）",
       "name": "新标签页",
-      "option-emptyview": "新标签页的工具栏",
-      "option-emptyview-description": "选择一个工具栏，在没有笔记打开的时显示",
-      "option-emptyview-placeholder": "选择工具栏…",
+      "option-emptyview-tbar": "新标签页的工具栏",
+      "option-emptyview-tbar-description": "选择一个工具栏，在没有笔记打开的时显示",
+      "option-emptyview-tbar-placeholder": "选择工具栏…",
       "option-launchpad": "使用工具栏替换视图（Launchpad 启动台）",
       "option-launchpad-description": "使用该工具栏替换新标签页，作为启动台呈现。"
     },

@@ -312,11 +312,12 @@
         "display-empty-view": {
             "description": "Add a toolbar to the new tab view, or replace it with a toolbar.",
             "name": "New tab view",
-            "option-emptyview": "New tab toolbar",
-            "option-emptyview-description": "Select an existing toolbar to show when no note is open.",
-            "option-emptyview-placeholder": "Select toolbar...",
+            "option-emptyview-description": "Display a toolbar when no note is open.",
+            "option-emptyview-tbar": "New tab toolbar",
+            "option-emptyview-tbar-description": "Existing toolbar to show.",
+            "option-emptyview-tbar-placeholder": "Select toolbar...",
             "option-launchpad": "Replace view with toolbar",
-            "option-launchpad-description": "Replace the new tab view with this toolbar."
+            "option-launchpad-description": "Replace the new tab view with a large version of this toolbar. If not enabled, the toolbar will be in the position selected in its settings."
         },
         "display-rules": {
             "description": "Define which notes to display toolbars on, using a property, mappings, or both.",
