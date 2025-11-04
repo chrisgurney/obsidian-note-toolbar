@@ -204,6 +204,14 @@ body {
             padding: 0;
             margin: 0;
             
+            &[aria-disabled="true"] {
+                color: var(--text-muted);
+                opacity: 0.4;
+                > span:hover {
+                    background-color: unset;
+                    cursor: default;
+                }
+            }
             & .list-bullet {
                 display: none; /* remove for reading mode */
             }

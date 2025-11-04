@@ -1278,10 +1278,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 				const isCommandAvailable = this.isCommandItemAvailable(itemSetting, toolbarView);
 				if (isCommandAvailable) {
-					itemEl.removeClass('hide');
+					itemEl.ariaDisabled = 'false';
 				}
 				else {
-					itemEl.addClass('hide');
+					itemEl.ariaDisabled = 'true';
+					setTooltip(itemSpanEl, t('toolbar.item-unavailable-tooltip'));
 					continue;
 				}
 
