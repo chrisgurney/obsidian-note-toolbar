@@ -133,7 +133,16 @@ export class CommandManager {
                     name: t('command.name-open-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }),
                     icon: this.plugin.settings.icon,
                     callback: async () => {
+                        // TODO? SETTING? on phones, show the toolbar as a menu instead
+                        // if (Platform.isPhone) {
+                        //     const activeFile = this.plugin.app.workspace.getActiveFile();
+                        //     this.plugin.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
+                        //         menu.showAtMouseEvent(new MouseEvent('click'));
+                        //     });
+                        // }
+                        // else {
                         this.plugin.commands.openQuickTools(toolbar.uuid);
+                        // }
                     }}
                 );
             }
