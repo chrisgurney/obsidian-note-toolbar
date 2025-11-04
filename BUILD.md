@@ -34,6 +34,13 @@ Gallery documentation should automatically be generated when any changes are mad
 
 # Releasing
 
+## For major releases
+
+- [ ] Create and update the latest _What's New_ documentation in `docs/releases/en`.
+- [ ] Update `WHATSNEW_VERSION` in `NoteToolbarSettings.ts` in order to show the latest _What's New_ doc in the plugin.
+
+## Release process
+
 1. Update `package.json` with the new version (and stage changes).
 1. Run `npm run version`, which updates `manifest.json` and `versions.json`.
     ```sh
