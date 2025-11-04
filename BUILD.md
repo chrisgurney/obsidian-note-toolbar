@@ -30,7 +30,9 @@ Once complete, update the [API wiki page](https://github.com/chrisgurney/obsidia
 
 ### Gallery
 
-Gallery documentation should automatically be generated when any changes are made to the Gallery JSON files. Update the [Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery) once complete.
+Gallery documentation should automatically be generated when any changes are made to the Gallery JSON files.
+
+Once generated, update the [Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery).
 
 # Releasing
 
