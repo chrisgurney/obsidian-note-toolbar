@@ -2,7 +2,7 @@ import TipItems from "Help/tips.json";
 import { Component, ItemView, MarkdownRenderer, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
-import { renderGalleryItems } from "Help/Gallery/GalleryView";
+import { renderGalleryItems } from "Gallery/GalleryView";
 
 interface TipViewState {
     id: string;

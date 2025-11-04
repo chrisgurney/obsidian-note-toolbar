@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
-import gallery from 'Help/Gallery/gallery.json';
+import gallery from 'Gallery/gallery.json';
 import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ItemSuggester } from 'Settings/UI/Suggesters/ItemSuggester';
@@ -146,7 +146,7 @@ export class GalleryView extends ItemView {
 		this.plugin.registerDomEvent(markdownEl, 'click', async (evt) => {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-card-item');
 			if (galleryItemEl && galleryItemEl.id) {
-				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
+				const galleryItem = this.plugin.gallery.getItems().find((item: any) => item.uuid.includes(galleryItemEl.id));
 				if (galleryItem) await this.plugin.gallery.addItem(galleryItem);
 			}
 		});

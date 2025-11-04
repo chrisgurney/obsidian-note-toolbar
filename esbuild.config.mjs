@@ -41,8 +41,10 @@ const galleryDocsPlugin = {
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await galleryDocs('src/Help/Gallery/gallery-items.json', 'src/Help/Gallery/gallery.json', 'docs/wiki/gallery.md');
-		} catch {
+			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', 'docs/wiki/gallery.md');
+		} 
+		catch (error) {
+			console.log("[esbuild] Error generating Gallery docs:", error);
 			process.exit(1);
 		}
 	  });

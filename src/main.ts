@@ -19,9 +19,9 @@ import TemplaterAdapter from 'Adapters/TemplaterAdapter';
 import { Adapter } from 'Adapters/Adapter';
 import StyleModal from 'Settings/UI/Modals/StyleModal';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
-import GalleryManager from 'Help/Gallery/GalleryManager';
+import GalleryManager from 'Gallery/GalleryManager';
 import { HotkeyHelper } from 'Utils/Hotkeys';
-import { GalleryView } from 'Help/Gallery/GalleryView';
+import { GalleryView } from 'Gallery/GalleryView';
 import { HelpView } from 'Help/HelpView';
 import { TipView } from 'Help/TipView';
 
