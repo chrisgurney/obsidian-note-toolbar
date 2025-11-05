@@ -2019,8 +2019,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		// figure out what toolbar we're in
 		let toolbarEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-container');
 		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbarById(toolbarEl.id) : undefined;
-		
-		let toolbarItemEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-item');
+
+		// figure out what item was clicked on (if any)
+		let toolbarItemEl: Element | null = null;
+		this.debug(mouseEvent.target);
+		if (mouseEvent.target instanceof HTMLLIElement) {
+			toolbarItemEl = (mouseEvent.target as Element).querySelector('.cg-note-toolbar-item');
+		}
+		else {
+			toolbarItemEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-item');
+		}
 		let toolbarItem = toolbarItemEl?.id ? this.settingsManager.getToolbarItemById(toolbarItemEl.id) : undefined;
 
 		let contextMenu = new Menu();
