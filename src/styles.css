@@ -988,6 +988,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             font-size: var(--font-ui-smaller);
             font-variant: small-caps;
             height: 1em;
+            text-transform: lowercase;
             width: 100%;
             &:before, &:after {
                 content: "";

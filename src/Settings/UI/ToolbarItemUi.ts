@@ -249,7 +249,7 @@ export default class ToolbarItemUi {
         if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
             let type = toolbarItem.linkAttr.type;
             let separatorTitle = createSpan();
-            separatorTitle.setText(type.charAt(0).toUpperCase() + type.slice(1));
+            separatorTitle.setText(type === ItemType.Break ? t('setting.item.option-break') : t('setting.item.option-separator'));
             itemControlsContainer.append(separatorTitle);
         }
 
