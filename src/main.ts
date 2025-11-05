@@ -1882,7 +1882,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async toolbarKeyboardHandler(e: KeyboardEvent) {
 
-		this.debug("toolbarKeyboardHandler: ", e);
+		// this.debug("toolbarKeyboardHandler: ", e);
 
 		let itemsUl: HTMLElement | null = this.getToolbarListEl();
 		if (itemsUl) {
@@ -2022,7 +2022,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// figure out what item was clicked on (if any)
 		let toolbarItemEl: Element | null = null;
-		this.debug(mouseEvent.target);
 		if (mouseEvent.target instanceof HTMLLIElement) {
 			toolbarItemEl = (mouseEvent.target as Element).querySelector('.cg-note-toolbar-item');
 		}
