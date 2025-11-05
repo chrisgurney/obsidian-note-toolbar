@@ -843,7 +843,6 @@ export default class NoteToolbarPlugin extends Plugin {
 				default: {
 					// changed to span as temporary(?) fix (#19) for links on Android
 					toolbarItem = activeDocument.createElement('span');
-					item.uuid ? toolbarItem.id = item.uuid : undefined;
 					toolbarItem.className = "external-link";
 					toolbarItem.setAttrs({
 						'href': item.link,
@@ -866,7 +865,6 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.registerDomEvent(toolbarItem, 'auxclick', (e) => this.toolbarClickHandler(e));
 		
 					const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
-					toolbarItem.addClass('cg-note-toolbar-item');
 					if (item.label) {
 						if (item.icon) {
 							let itemIcon = toolbarItem.createSpan();
@@ -893,6 +891,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 
 			if (toolbarItem) {
+				item.uuid ? toolbarItem.id = item.uuid : undefined;
+				toolbarItem.addClass('cg-note-toolbar-item');
+
 				let noteToolbarLi = activeDocument.createElement("li");
 				noteToolbarLi.dataset.index = i.toString();
 				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
@@ -2173,6 +2174,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (toolbarItem) {
 			const activeFile = this.app.workspace.getActiveFile();
 			let itemText = await this.getItemText(toolbarItem, activeFile, true);
+			if (!itemText && toolbarItem.linkAttr.type === ItemType.Separator) itemText = t('setting.item.option-separator');
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('lucide-pen-box')
