@@ -14,13 +14,13 @@ Unique identifier for the toolbar.
 
 ### export()
 
-> **export**(): `Promise`\<`null` \| `string`\>
+> **export**(): `Promise`\<`string` \| `null`\>
 
 Exports this toolbar to a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
 
 #### Returns
 
-`Promise`\<`null` \| `string`\>
+`Promise`\<`string` \| `null`\>
 
 Toolbar as a callout or `null` if the toolbar is undefined.
 
@@ -42,12 +42,12 @@ for (let toolbar of toolbars) {
 
 ### getName()
 
-> **getName**(): `undefined` \| `string`
+> **getName**(): `string` \| `undefined`
 
 Gets the name of this toolbar.
 
 #### Returns
 
-`undefined` \| `string`
+`string` \| `undefined`
 
 Name of the toolbar or `undefined` if the toolbar is invalid.
