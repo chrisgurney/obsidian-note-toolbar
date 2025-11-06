@@ -2036,6 +2036,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		let contextMenu = new Menu();
 
 		const currentView = this.app.workspace.getActiveViewOfType(ItemView);
+		const currentPosition = toolbarSettings ? this.settingsManager.getToolbarPosition(toolbarSettings) : undefined;
+		const isTextToolbar = toolbarSettings ? (this.settings.textToolbar === toolbarSettings.uuid) : false;
 
 		if (toolbarSettings !== undefined) {
 
@@ -2051,28 +2053,46 @@ export default class NoteToolbarPlugin extends Plugin {
 			// position
 			//
 
-			// workaround: sub-menus only work on non-tablet devices
-			let positionMenu = contextMenu;
-			if (!Platform.isTablet) {
-				contextMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('toolbar.menu-position'));
-					item.setIcon('move');
-					positionMenu = item.setSubmenu() as Menu;
-				});
-			}
+			if (!isTextToolbar) {
 
-			let currentPosition = this.settingsManager.getToolbarPosition(toolbarSettings);
-			if (currentView?.getViewType() === 'empty') {
-				if (this.settings.showLaunchpad) {
-					if (currentPosition !== PositionType.Top && currentPosition !== PositionType.Props) {
+				// workaround: sub-menus only work on non-tablet devices
+				let positionMenu = contextMenu;
+				if (!Platform.isTablet) {
+					contextMenu.addItem((item: MenuItem) => {
+						item.setTitle(t('toolbar.menu-position'));
+						item.setIcon('move');
+						positionMenu = item.setSubmenu() as Menu;
+					});
+				}
+
+				if (currentView?.getViewType() === 'empty') {
+					if (this.settings.showLaunchpad) {
+						if (currentPosition !== PositionType.Top && currentPosition !== PositionType.Props) {
+							positionMenu.addItem((item: MenuItem) => {
+								item.setTitle(t('setting.position.option-centered'))
+									.setIcon('layout-grid')
+									.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
+							});
+						}
+					}
+					else {
+						if (currentPosition !== PositionType.Top) {
+							positionMenu.addItem((item: MenuItem) => {
+								item.setTitle(t('setting.position.option-top'))
+									.setIcon('arrow-up-to-line')
+									.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
+							});
+						}
+					}
+				} 
+				else {
+					if (currentPosition !== PositionType.TabBar) {
 						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-centered'))
-								.setIcon('layout-grid')
-								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
+							item.setTitle(t('setting.position.option-tabbar'))
+								.setIcon('panel-top')
+								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.TabBar));
 						});
 					}
-				}
-				else {
 					if (currentPosition !== PositionType.Top) {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t('setting.position.option-top'))
@@ -2080,57 +2100,45 @@ export default class NoteToolbarPlugin extends Plugin {
 								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
 						});
 					}
+					if (currentPosition !== PositionType.Props) {
+						positionMenu.addItem((item: MenuItem) => {
+							item.setTitle(t('setting.position.option-props'))
+								.setIcon('arrow-down-narrow-wide')
+								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
+						});
+					}
+					if (currentPosition !== PositionType.Bottom) {
+						positionMenu.addItem((item: MenuItem) => {
+							item.setTitle(t('setting.position.option-bottom'))
+								.setIcon('arrow-down-to-line')
+								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
+						});
+					}
 				}
-			} 
-			else {
-				if (currentPosition !== PositionType.TabBar) {
+
+				if (currentPosition !== PositionType.FabLeft) {
 					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-tabbar'))
-							.setIcon('panel-top')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.TabBar));
+						item.setTitle(t('setting.position.option-fabl'))
+							.setIcon('circle-chevron-left')
+							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabLeft));
 					});
 				}
-				if (currentPosition !== PositionType.Top) {
+				if (currentPosition !== PositionType.FabRight) {
 					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-top'))
-							.setIcon('arrow-up-to-line')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
+						item.setTitle(t('setting.position.option-fabr'))
+							.setIcon('circle-chevron-right')
+							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabRight));
 					});
 				}
-				if (currentPosition !== PositionType.Props) {
-					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-props'))
-							.setIcon('arrow-down-narrow-wide')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
-					});
-				}
-				if (currentPosition !== PositionType.Bottom) {
-					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-bottom'))
-							.setIcon('arrow-down-to-line')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
-					});
-				}
+
+				if (Platform.isTablet) contextMenu.addSeparator();
+
 			}
 
-			if (currentPosition !== PositionType.FabLeft) {
-				positionMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('setting.position.option-fabl'))
-						.setIcon('circle-chevron-left')
-						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabLeft));
-				});
-			}
-			if (currentPosition !== PositionType.FabRight) {
-				positionMenu.addItem((item: MenuItem) => {
-					item.setTitle(t('setting.position.option-fabr'))
-						.setIcon('circle-chevron-right')
-						.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabRight));
-				});
-			}
-
-			if (Platform.isTablet) contextMenu.addSeparator();
-
+			//
 			// style toolbar
+			//
+
 			if (currentPosition !== PositionType.TabBar) {
 				contextMenu.addItem((item: MenuItem) => {
 					item
@@ -2145,7 +2153,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				});
 			}
 
+			//
 			// show/hide properties
+			//
+
 			const propsEl = this.getPropsEl();
 			if ((currentView?.getViewType() === 'markdown') && propsEl) {
 				const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
@@ -2169,7 +2180,10 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 		contextMenu.addSeparator();
 
+		//
 		// add item
+		//
+
 		contextMenu.addItem((item: MenuItem) => {
 			item
 				.setIcon('plus')
@@ -2180,7 +2194,10 @@ export default class NoteToolbarPlugin extends Plugin {
 				});
 		});
 
+		//
 		// edit item
+		//
+
 		if (toolbarItem) {
 			const activeFile = this.app.workspace.getActiveFile();
 			let itemText = await this.getItemText(toolbarItem, activeFile, true);
@@ -2218,7 +2235,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		contextMenu.addSeparator();
 
+		//
 		// edit toolbar
+		//
+
 		if (toolbarSettings !== undefined) {
 			contextMenu.addItem((item: MenuItem) => {
 				item
@@ -2232,9 +2252,12 @@ export default class NoteToolbarPlugin extends Plugin {
 			  });
 		}
 
+		//
 		// swap toolbar
+		//
+
 		// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-		if ((currentView?.getViewType() === 'markdown') && this.settings.toolbarProp !== 'tags') {
+		if (!isTextToolbar && currentView?.getViewType() === 'markdown' && this.settings.toolbarProp !== 'tags') {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('repeat')
