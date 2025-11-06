@@ -40,35 +40,40 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
                 // if there's no text toolbar set, there's nothing to do
                 if (!plugin.settings.textToolbar) {
+                    // plugin.debug('no text toolbar setting');
                     if (this.toolbarEl) this.toolbarEl.remove();
                     return;
                 };
-
+                
                 // don't show toolbar until selection is complete
-                if (this.isMouseDown) return;
+                if (this.isMouseDown) {
+                    // plugin.debug('mousedown');
+                    return;
+                };
 
                 // defer layout calculation
                 requestAnimationFrame(async () => {
 
+                    const { state, view } = update;
+                    const selection = state.selection.main;
+                    const selectFrom = selection.from;
+                    const selectTo = selection.to;
+                    const selectText = state.doc.sliceString(selection.from, selection.to);
+
                     if (!update.selectionSet) {
-                        // FIXME: removing the toolbar here solves switching views, but doesn't when using menus, modals, etc.
-                        if (this.toolbarEl) this.toolbarEl.remove();
+                        // FIXME? removing the toolbar here solves switching views, but removes toolbar when using menus, modals, etc.
+                        if (selectFrom === selectTo || !view.hasFocus) {
+                            if (this.toolbarEl) this.toolbarEl.remove();
+                        }
                         return;
                     };
 
-                    plugin.debug(update);
-                    
-                    const selection = update.state.selection.main;
-
                     if (selection.empty) {
+                        // plugin.debug('selection empty - removing toolbar');
                         this.lastSelection = null;
                         if (this.toolbarEl) this.toolbarEl.remove();
                         return;
                     }
-
-                    const selectFrom = selection.from;
-                    const selectTo = selection.to;
-                    const selectText = update.state.doc.sliceString(selection.from, selection.to);
 
                     // plugin.debug('Text selected:', selectFrom, selectTo, selectText);
                     // plugin.debug('MouseDown', this.isMouseDown, 'MouseSelection', this.isMouseSelection);
@@ -84,16 +89,19 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     }
 
                     // top-left of selection start and end
-                    const selectStartPos: Rect | null = update.view.coordsAtPos(selectFrom);
-                    const selectEndPos: Rect | null = update.view.coordsAtPos(selectTo);
+                    const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
+                    const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
                     if (!selectStartPos || !selectEndPos) return;
 
                     const toolbar = plugin.settingsManager.getToolbarById(plugin.settings.textToolbar);
-                    // TODO: show an error if toolbar not found
-                    if (!toolbar) return;
+                    if (!toolbar) {
+                        // TODO: show an error if toolbar not found
+                        return;
+                    };
 
                     // remove the existing toolbar because we're likely in a new position
                     if (this.toolbarEl) {
+                        // plugin.debug('removing old toolbar');
                         this.toolbarEl.remove();
                     }
 
@@ -123,6 +131,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     this.toolbarEl.style.top = `${selectStartPos.top - this.toolbarEl.offsetHeight - 8}px`;
 
                     plugin.registerDomEvent(this.toolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
+                    // plugin.debug('drew toolbar');
 
                     // TODO: need this for placing within modals?
                     // const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
