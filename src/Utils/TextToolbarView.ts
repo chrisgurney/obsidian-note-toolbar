@@ -1,6 +1,7 @@
 import { EditorView, PluginValue, ViewUpdate, ViewPlugin, Rect } from '@codemirror/view';
 import NoteToolbarPlugin from 'main';
 import { MarkdownView } from 'obsidian';
+import { PositionType } from 'Settings/NoteToolbarSettings';
 
 export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
@@ -89,10 +90,16 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     if (!activeView) return;
 
                     this.toolbarEl = activeDocument.createElement('div');
-                    // TODO: move to styles.css
-                    this.toolbarEl.setCssProps({
-                        'position': 'absolute',
-                        'z-index': '1000'
+                    this.toolbarEl.id = toolbar.uuid;
+                    this.toolbarEl.addClasses([
+                        'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'
+                    ]);
+                    this.toolbarEl.setAttrs({
+                        'data-name': toolbar.name,
+                        'data-tbar-position': PositionType.Text,
+                        'data-updated': toolbar.updated,
+                        // 'data-view-mode': markdownViewMode,
+                        'data-csstheme': plugin.app.vault.getConfig('cssTheme')
                     });
 
                     const renderedToolbarEl = await plugin.renderToolbarAsCallout(toolbar, activeFile, activeView);
@@ -102,6 +109,8 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     const centerX = (selectStartPos.left + selectEndPos.right) / 2;
                     this.toolbarEl.style.left = `${centerX - (this.toolbarEl.offsetWidth / 2)}px`;
                     this.toolbarEl.style.top = `${selectStartPos.top - this.toolbarEl.offsetHeight - 8}px`;
+
+                    plugin.registerDomEvent(this.toolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
 
                     // TODO: need this for placing within modals?
                     // const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;

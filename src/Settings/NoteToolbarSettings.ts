@@ -97,6 +97,7 @@ export const enum PositionType {
 	Hidden = 'hidden',
 	Props = 'props',
 	TabBar = 'tabbar',
+	Text = 'text',
 	Top = 'top'
 }
 export const enum RibbonAction {

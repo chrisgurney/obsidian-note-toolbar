@@ -1768,6 +1768,14 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         }
     }
 
+    &[data-tbar-position="text"] {
+        position: absolute;
+        z-index: var(--layer-status-bar);
+        & .cg-note-toolbar-callout {
+            margin-bottom: 0;
+        }
+    }
+
     /* width fix for Minimal theme in props position #204 #216 */
     &[data-csstheme="Minimal"][data-tbar-position="props"] {
         .is-readable-line-width & {
@@ -1776,6 +1784,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             margin-inline: var(--content-margin) !important;
         }
     }
+
 }
 
 .note-toolbar-menu {
