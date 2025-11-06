@@ -14,7 +14,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
             private toolbarEl: HTMLDivElement | null = null;
 
             constructor(view: EditorView) {
-                plugin.debug('TextToolbarView initialized');
+                // plugin.debug('TextToolbarView initialized');
 
                 plugin.registerDomEvent(view.dom, 'mousedown', () => {
                     this.isMouseDown = true;
@@ -51,7 +51,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     return;
                 };
 
-                // defer layout calculation
+                // defer layout calculation, so we can get coordinates
                 requestAnimationFrame(async () => {
 
                     const { state, view } = update;
@@ -150,7 +150,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
             destroy() {
                 if (this.toolbarEl) this.toolbarEl.remove();
-                plugin.debug('TextToolbarView destroyed');
+                // plugin.debug('TextToolbarView destroyed');
             }
         }
 

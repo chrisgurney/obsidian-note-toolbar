@@ -182,7 +182,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			// this.registerEditorExtension(TextToolbarView(this));
+			this.registerEditorExtension(TextToolbarView(this));
 
 		});
 
