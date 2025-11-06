@@ -88,11 +88,6 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                         return;
                     }
 
-                    // top-left of selection start and end
-                    const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
-                    const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
-                    if (!selectStartPos || !selectEndPos) return;
-
                     const toolbar = plugin.settingsManager.getToolbarById(plugin.settings.textToolbar);
                     if (!toolbar) {
                         // TODO: show an error if toolbar not found
@@ -126,9 +121,10 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     this.toolbarEl.appendChild(renderedToolbarEl);
                     activeDocument.body.appendChild(this.toolbarEl);
                     
-                    const centerX = (selectStartPos.left + selectEndPos.right) / 2;
-                    this.toolbarEl.style.left = `${centerX - (this.toolbarEl.offsetWidth / 2)}px`;
-                    this.toolbarEl.style.top = `${selectStartPos.top - this.toolbarEl.offsetHeight - 8}px`;
+                    const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
+                    const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
+                    if (!selectStartPos || !selectEndPos) return;
+                    this.positionToolbar(selectStartPos, selectEndPos);
 
                     plugin.registerDomEvent(this.toolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
                     // plugin.debug('drew toolbar');
@@ -152,6 +148,40 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                 if (this.toolbarEl) this.toolbarEl.remove();
                 // plugin.debug('TextToolbarView destroyed');
             }
+
+            /**
+             * Positions the toolbar, ensuring it doesn't go over the edge of the window.
+             * @param selectStartPos 
+             * @param selectEndPos 
+             * @returns nothing
+             */
+            private positionToolbar(selectStartPos: Rect, selectEndPos: Rect): void {
+                if (!this.toolbarEl) return;
+
+                const centerX = (selectStartPos.left + selectEndPos.right) / 2;
+                let left = centerX - (this.toolbarEl.offsetWidth / 2);
+                let top = selectStartPos.top - this.toolbarEl.offsetHeight - 8;
+
+                // Prevent horizontal overflow
+                const minLeft = 8;
+                const maxLeft = window.innerWidth - this.toolbarEl.offsetWidth - 8;
+                left = Math.max(minLeft, Math.min(left, maxLeft));
+
+                // Prevent vertical overflow
+                if (top < 8) {
+                    // Try below selection
+                    top = selectEndPos.bottom + 8;
+                    
+                    // If still overflows below, clamp to bottom
+                    if (top + this.toolbarEl.offsetHeight > window.innerHeight - 8) {
+                        top = window.innerHeight - this.toolbarEl.offsetHeight - 8;
+                    }
+                }
+
+                this.toolbarEl.style.left = `${left}px`;
+                this.toolbarEl.style.top = `${top}px`;
+            }
+
         }
 
     );
