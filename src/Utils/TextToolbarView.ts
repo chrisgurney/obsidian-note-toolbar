@@ -44,12 +44,23 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     return;
                 };
 
+                // don't show toolbar until selection is complete
+                if (this.isMouseDown) return;
+
                 // defer layout calculation
                 requestAnimationFrame(async () => {
 
+                    if (!update.selectionSet) {
+                        // FIXME: removing the toolbar here solves switching views, but doesn't when using menus, modals, etc.
+                        if (this.toolbarEl) this.toolbarEl.remove();
+                        return;
+                    };
+
+                    plugin.debug(update);
+                    
                     const selection = update.state.selection.main;
 
-                    if (!update.selectionSet || selection.empty) {
+                    if (selection.empty) {
                         this.lastSelection = null;
                         if (this.toolbarEl) this.toolbarEl.remove();
                         return;
@@ -59,8 +70,8 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     const selectTo = selection.to;
                     const selectText = update.state.doc.sliceString(selection.from, selection.to);
 
-                    plugin.debug('Text selected:', selectFrom, selectTo, selectText);
-                    plugin.debug('MouseDown', this.isMouseDown, 'MouseSelection', this.isMouseSelection);
+                    // plugin.debug('Text selected:', selectFrom, selectTo, selectText);
+                    // plugin.debug('MouseDown', this.isMouseDown, 'MouseSelection', this.isMouseSelection);
 
                     // if the selection hasn't changed, do nothing
                     if (
