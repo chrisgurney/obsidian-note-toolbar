@@ -1220,7 +1220,7 @@ body {
             gap: 0rem;
             margin: var(--cg-nt-tbar-margin-y) 0;
             padding-inline-start: 0;
-            [data-tbar-position="bottom"] & {
+            [data-tbar-position="bottom"] &, [data-tbar-position="text"] & {
                 margin: var(--cg-nt-tbar-margin-y);
             }
         }
