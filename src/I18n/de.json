@@ -308,9 +308,7 @@
             "option-other-placeholder": "z.B., Excalidraw",
             "option-video": "Videos"
         },
-        "display-empty-view": {
-            "description": "Fügen Sie der neuen Registerkartenansicht eine Toolbar hinzu oder ersetzen Sie sie durch eine Toolbar.",
-            "name": "Neue Tab Ansicht",
+        "display-locations": {
             "option-emptyview-tbar": "Neuer Tab Toolbar",
             "option-emptyview-tbar-description": "Wählen Sie eine vorhandene Toolbar aus, die angezeigt werden soll, wenn keine Notiz geöffnet ist.",
             "option-emptyview-tbar-placeholder": "Toolbar auswählen...",

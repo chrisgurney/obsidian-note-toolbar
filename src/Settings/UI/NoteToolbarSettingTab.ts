@@ -71,8 +71,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
 		// this.ruleUi.displayRules(containerEl);
-		this.displayEmptyViewSettings(containerEl);
-		this.displayOtherViewSettings(containerEl);
+		this.displayLocationSettings(containerEl);
+		this.displayFileTypeSettings(containerEl);
 
 		// other global settings
 		this.displayCopyAsCalloutSettings(containerEl);
@@ -788,22 +788,34 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
-	 * Displays empty view toolbar settings.
+	 * Displays toolbar location settings.
 	 * @param containerEl HTMLElement to add the settings to.
 	 */
-	displayEmptyViewSettings(containerEl: HTMLElement): void {
-
-		const otherContextSettings = new Setting(containerEl)
-			.setHeading()
-			.setName(t('setting.display-empty-view.name'))
-			.setDesc(learnMoreFr(t('setting.display-empty-view.option-emptyview-description'), 'New-tab-view'));
+	displayLocationSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
-			.setName(t('setting.display-empty-view.option-emptyview-tbar'))
-			.setDesc(t('setting.display-empty-view.option-emptyview-tbar-description'))
+			.setHeading()
+			.setName(t('setting.display-locations.name'))
+			.setDesc(t('setting.display-locations.description'));
+
+		new Setting(containerEl)
+			.setName(t('setting.display-contexts.option-filemenu'))
+			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Defining-where-to-show-toolbars#file-menu'))
+			.addToggle((cb) => {
+				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
+				cb.onChange(async (value) => {
+					this.plugin.settings.showToolbarInFileMenu = value;
+					await this.plugin.settingsManager.save();
+					// TODO? force the re-rendering of the current toolbar to update the menu
+				});
+			});
+
+		new Setting(containerEl)
+			.setName(t('setting.display-locations.option-emptyview-tbar'))
+			.setDesc(learnMoreFr(t('setting.display-locations.option-emptyview-tbar-description'), 'New-tab-view'))
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
-				cb.setPlaceholder(t('setting.display-empty-view.option-emptyview-tbar-placeholder'))
+				cb.setPlaceholder(t('setting.display-locations.option-emptyview-tbar-placeholder'))
 					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
 					.onChange(debounce(async (name) => {
 						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
@@ -816,8 +828,8 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		const launchpadSetting = new Setting(containerEl)
-			.setName(t('setting.display-empty-view.option-launchpad'))
-			.setDesc(t('setting.display-empty-view.option-launchpad-description'))
+			.setName(t('setting.display-locations.option-launchpad'))
+			.setDesc(t('setting.display-locations.option-launchpad-description'))
 			.addToggle((cb: ToggleComponent) => {
 				cb.setValue(this.plugin.settings.showLaunchpad)
 					.onChange(async (value: boolean) => {
@@ -829,13 +841,28 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		const hasEmptyViewToolbar = !!this.plugin.settings.emptyViewToolbar;
 		launchpadSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
 
+		new Setting(containerEl)
+			.setName(t('setting.display-locations.option-text'))
+			.setDesc(t('setting.display-locations.option-text-description'))
+			.addSearch((cb) => {
+				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				cb.setPlaceholder(t('setting.display-locations.option-text-placeholder'))
+					.setValue(this.plugin.settings.textToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.textToolbar) : '')
+					.onChange(debounce(async (name) => {
+						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
+						this.plugin.settings.textToolbar = newToolbar?.uuid ?? null;
+						const hasTextToolbar = !!this.plugin.settings.textToolbar;
+						await this.plugin.settingsManager.save();
+					}, 250));
+			});
+
 	}
 
 	/**
-	 * Displays toolbar settings for other file types.
+	 * Displays toolbar settings for file types.
 	 * @param containerEl HTMLElement to add the settings to.
 	 */
-	displayOtherViewSettings(containerEl: HTMLElement): void {
+	displayFileTypeSettings(containerEl: HTMLElement): void {
 
 		const collapsibleEl = createDiv('note-toolbar-setting-contexts-container');
 		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
@@ -880,18 +907,6 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						this.plugin.settings.showToolbarIn.canvas = value;
 						await this.plugin.settingsManager.save();
 					});
-			});
-
-		new Setting(collapsibleContainer)
-			.setName(t('setting.display-contexts.option-filemenu'))
-			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Defining-where-to-show-toolbars#file-menu'))
-			.addToggle((cb) => {
-				cb.setValue(this.plugin.settings.showToolbarInFileMenu)
-				cb.onChange(async (value) => {
-					this.plugin.settings.showToolbarInFileMenu = value;
-					await this.plugin.settingsManager.save();
-					// TODO? force the re-rendering of the current toolbar to update the menu
-				});
 			});
 
 		new Setting(collapsibleContainer)

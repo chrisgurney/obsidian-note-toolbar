@@ -230,6 +230,7 @@ export interface NoteToolbarSettings {
 	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
 	showToolbarInOther: string;
+	textToolbar: string | null;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -266,6 +267,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	},
 	showToolbarInFileMenu: false,
 	showToolbarInOther: "",
+	textToolbar: null,
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
