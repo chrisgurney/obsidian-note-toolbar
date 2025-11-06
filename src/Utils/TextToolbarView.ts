@@ -38,15 +38,18 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
             update(update: ViewUpdate) {
 
+                // if there's no text toolbar set, there's nothing to do
+                if (!plugin.settings.textToolbar) {
+                    if (this.toolbarEl) this.toolbarEl.remove();
+                    return;
+                };
+
                 // defer layout calculation
                 requestAnimationFrame(async () => {
 
-                    if (!update.selectionSet) return;
-
                     const selection = update.state.selection.main;
-                    
-                    // TODO: hide toolbar if nothing's selected?
-                    if (selection.empty) {
+
+                    if (!update.selectionSet || selection.empty) {
                         this.lastSelection = null;
                         if (this.toolbarEl) this.toolbarEl.remove();
                         return;
@@ -59,6 +62,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     plugin.debug('Text selected:', selectFrom, selectTo, selectText);
                     plugin.debug('MouseDown', this.isMouseDown, 'MouseSelection', this.isMouseSelection);
 
+                    // if the selection hasn't changed, do nothing
                     if (
                         this.lastSelection &&
                         this.lastSelection.from === selectFrom &&
@@ -73,10 +77,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     const selectEndPos: Rect | null = update.view.coordsAtPos(selectTo);
                     if (!selectStartPos || !selectEndPos) return;
 
-                    // plugin.debug('Selection coords:', selectStartPos, selectEndPos);
-
-                    // TODO: provide via configuration
-                    const toolbar = plugin.settingsManager.getToolbarByName('Selection');
+                    const toolbar = plugin.settingsManager.getToolbarById(plugin.settings.textToolbar);
                     // TODO: show an error if toolbar not found
                     if (!toolbar) return;
 
@@ -87,7 +88,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
                     const activeFile = plugin.app.workspace.getActiveFile();
                     const activeView = plugin.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
-                    if (!activeView) return;
+                    if (!activeFile || !activeView) return;
 
                     this.toolbarEl = activeDocument.createElement('div');
                     this.toolbarEl.id = toolbar.uuid;
