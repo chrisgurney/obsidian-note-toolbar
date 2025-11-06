@@ -354,7 +354,7 @@ body {
         [data-tbar-position="top"] & {
             border-top: none;
         }
-        [data-tbar-position="bottom"] & {
+        [data-tbar-position="bottom"] &, [data-tbar-position="text"] & {
             border: solid 1px var(--cg-nt-tbar-border-color);
             border-radius: var(--cg-nt-tbar-bottom-border-radius);
         }
