@@ -24,6 +24,7 @@ import { HotkeyHelper } from 'Utils/Hotkeys';
 import { GalleryView } from 'Gallery/GalleryView';
 import { HelpView } from 'Help/HelpView';
 import { TipView } from 'Help/TipView';
+import { TextToolbarView } from 'Utils/TextToolbarView';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -180,6 +181,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			// needs to be done after plugins are setup so that string variable checks work
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
+
+			// this.registerEditorExtension(TextToolbarView(this));
 
 		});
 
