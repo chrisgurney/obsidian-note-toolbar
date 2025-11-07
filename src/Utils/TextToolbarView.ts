@@ -1,7 +1,7 @@
 import { EditorView, PluginValue, ViewUpdate, ViewPlugin, Rect } from '@codemirror/view';
 import NoteToolbarPlugin from 'main';
 import { MarkdownView } from 'obsidian';
-import { PositionType } from 'Settings/NoteToolbarSettings';
+import { PositionType, ToolbarStyle } from 'Settings/NoteToolbarSettings';
 
 export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
@@ -51,58 +51,68 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     return;
                 };
 
+                const { state, view } = update;
+
+                const isToolbarFocussed = this.toolbarEl && this.toolbarEl.querySelector(`.${ToolbarStyle.ItemFocused}`) !== null;
+                // const isToolbarFocussed = this.toolbarEl && this.toolbarEl.contains(activeDocument.activeElement);
+
+                const selection = state.selection.main;
+                const selectFrom = selection.from;
+                const selectTo = selection.to;
+                const selectText = state.doc.sliceString(selection.from, selection.to);
+
+                if (!update.selectionSet) {
+                    // FIXME? removing the toolbar here solves switching views, but removes toolbar when using menus, modals, etc.
+                    if (!isToolbarFocussed && (selectFrom === selectTo || !view.hasFocus)) {
+                        plugin.debug('selection empty:', selectFrom === selectTo, ' • has focus: view', view.hasFocus, 'toolbar', isToolbarFocussed);
+                        if (this.toolbarEl) {
+                            plugin.debug('⛔️ no selection or view out of focus - removing toolbar')
+                            this.toolbarEl.remove();
+                        }
+                        return;
+                    }
+                };
+
+                if (selection.empty) {
+                    this.lastSelection = null;
+                    if (this.toolbarEl) {
+                        plugin.debug('⛔️ selection empty - removing toolbar');
+                        this.toolbarEl.remove();
+                    }
+                    return;
+                }
+
+                // plugin.debug('Text selected:', selectFrom, selectTo, selectText);
+                // plugin.debug('MouseDown', this.isMouseDown, 'MouseSelection', this.isMouseSelection);
+
+                // if the selection hasn't changed, do nothing
+                if (
+                    this.lastSelection &&
+                    this.lastSelection.from === selectFrom &&
+                    this.lastSelection.to === selectTo &&
+                    this.lastSelection.text === selectText
+                ) {
+                    return;
+                }
+
+                const toolbar = plugin.settingsManager.getToolbarById(plugin.settings.textToolbar);
+                if (!toolbar) {
+                    // TODO: show an error if toolbar not found
+                    return;
+                };
+
+                const activeFile = plugin.app.workspace.getActiveFile();
+                const activeView = plugin.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
+                if (!activeFile || !activeView) return;
+
                 // defer layout calculation, so we can get coordinates
                 requestAnimationFrame(async () => {
 
-                    const { state, view } = update;
-                    const selection = state.selection.main;
-                    const selectFrom = selection.from;
-                    const selectTo = selection.to;
-                    const selectText = state.doc.sliceString(selection.from, selection.to);
-
-                    if (!update.selectionSet) {
-                        // FIXME? removing the toolbar here solves switching views, but removes toolbar when using menus, modals, etc.
-                        if (selectFrom === selectTo || !view.hasFocus) {
-                            if (this.toolbarEl) this.toolbarEl.remove();
-                        }
-                        return;
-                    };
-
-                    if (selection.empty) {
-                        // plugin.debug('selection empty - removing toolbar');
-                        this.lastSelection = null;
-                        if (this.toolbarEl) this.toolbarEl.remove();
-                        return;
-                    }
-
-                    // plugin.debug('Text selected:', selectFrom, selectTo, selectText);
-                    // plugin.debug('MouseDown', this.isMouseDown, 'MouseSelection', this.isMouseSelection);
-
-                    // if the selection hasn't changed, do nothing
-                    if (
-                        this.lastSelection &&
-                        this.lastSelection.from === selectFrom &&
-                        this.lastSelection.to === selectTo &&
-                        this.lastSelection.text === selectText
-                    ) {
-                        return;
-                    }
-
-                    const toolbar = plugin.settingsManager.getToolbarById(plugin.settings.textToolbar);
-                    if (!toolbar) {
-                        // TODO: show an error if toolbar not found
-                        return;
-                    };
-
                     // remove the existing toolbar because we're likely in a new position
                     if (this.toolbarEl) {
-                        // plugin.debug('removing old toolbar');
+                        plugin.debug('♻️ removing old toolbar - rendering new one');
                         this.toolbarEl.remove();
                     }
-
-                    const activeFile = plugin.app.workspace.getActiveFile();
-                    const activeView = plugin.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
-                    if (!activeFile || !activeView) return;
 
                     this.toolbarEl = activeDocument.createElement('div');
                     this.toolbarEl.id = toolbar.uuid;
@@ -116,17 +126,19 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                         // 'data-view-mode': markdownViewMode,
                         'data-csstheme': plugin.app.vault.getConfig('cssTheme')
                     });
-
+                    
                     const renderedToolbarEl = await plugin.renderToolbarAsCallout(toolbar, activeFile, activeView);
                     this.toolbarEl.appendChild(renderedToolbarEl);
                     activeDocument.body.appendChild(this.toolbarEl);
-                    
+    
                     const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
                     const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
                     if (!selectStartPos || !selectEndPos) return;
                     this.positionToolbar(selectStartPos, selectEndPos);
 
                     plugin.registerDomEvent(this.toolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
+                    plugin.registerDomEvent(this.toolbarEl, 'keydown', (e) => plugin.toolbarKeyboardHandler(e));
+
                     // plugin.debug('drew toolbar');
 
                     // TODO: need this for placing within modals?
