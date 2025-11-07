@@ -156,23 +156,25 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
              * @returns nothing
              */
             private positionToolbar(selectStartPos: Rect, selectEndPos: Rect): void {
+
                 if (!this.toolbarEl) return;
 
                 const centerX = (selectStartPos.left + selectEndPos.right) / 2;
                 let left = centerX - (this.toolbarEl.offsetWidth / 2);
+                // TODO? make offset via CSS variable instead of subtracting here?
                 let top = selectStartPos.top - this.toolbarEl.offsetHeight - 8;
 
-                // Prevent horizontal overflow
+                // prevent horizontal overflow
                 const minLeft = 8;
                 const maxLeft = window.innerWidth - this.toolbarEl.offsetWidth - 8;
                 left = Math.max(minLeft, Math.min(left, maxLeft));
 
-                // Prevent vertical overflow
+                // prevent vertical overflow
                 if (top < 8) {
-                    // Try below selection
+                    // try below selection
                     top = selectEndPos.bottom + 8;
                     
-                    // If still overflows below, clamp to bottom
+                    // if still overflows below, clamp to bottom
                     if (top + this.toolbarEl.offsetHeight > window.innerHeight - 8) {
                         top = window.innerHeight - this.toolbarEl.offsetHeight - 8;
                     }
@@ -180,6 +182,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
                 this.toolbarEl.style.left = `${left}px`;
                 this.toolbarEl.style.top = `${top}px`;
+                
             }
 
         }
