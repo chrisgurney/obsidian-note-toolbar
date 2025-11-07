@@ -158,7 +158,7 @@ export class CommandManager {
      */
     async focus(): Promise<void> {
 
-        this.plugin.debug("focusCommand()");
+        this.plugin.debug("focus()");
         // need to get the type of toolbar first
         let toolbarEl = this.plugin.getToolbarEl();
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
@@ -199,7 +199,7 @@ export class CommandManager {
             case PositionType.Props:
             case PositionType.Top: {
                 // get the list and set focus on the first visible item
-                let itemsUl: HTMLElement | null = this.plugin.getToolbarListEl();
+                const itemsUl: HTMLElement | null = this.plugin.getToolbarListEl();
                 if (itemsUl) {
                     this.plugin.debug("focusCommand: toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);
