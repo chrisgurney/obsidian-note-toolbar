@@ -158,7 +158,8 @@ export class CommandManager {
      */
     async focus(): Promise<void> {
 
-        this.plugin.debug("focus()");
+        this.plugin.debugGroup("focus");
+
         // need to get the type of toolbar first
         let toolbarEl = this.plugin.getToolbarEl();
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
@@ -167,7 +168,7 @@ export class CommandManager {
             case PositionType.FabLeft: {
                 // trigger the menu
                 let toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
-                this.plugin.debug("focusCommand: button: ", toolbarFabEl);
+                this.plugin.debug("button: ", toolbarFabEl);
                 if (toolbarEl) {
                     const toolbar = this.plugin.settingsManager.getToolbarById(toolbarEl.id);
                     // show the toolbar's menu if it has a default item set
@@ -201,7 +202,7 @@ export class CommandManager {
                 // get the list and set focus on the first visible item
                 const itemsUl: HTMLElement | null = this.plugin.getToolbarListEl();
                 if (itemsUl) {
-                    this.plugin.debug("focusCommand: toolbar: ", itemsUl);
+                    this.plugin.debug("toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);
                     const visibleItems = items.filter(item => {
                         const hasSpan = item.querySelector('span') !== null; // to filter out separators
@@ -209,7 +210,7 @@ export class CommandManager {
                         return hasSpan && isVisible;
                     });
                     const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-                    this.plugin.debug("focusCommand: focussed item: ", linkEl);
+                    this.plugin.debug("focussed item: ", linkEl);
                     visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
                     linkEl?.focus();
                 }
@@ -220,6 +221,8 @@ export class CommandManager {
                 // do nothing
                 break;
         }
+
+        this.plugin.debugGroupEnd();
 
     }
 
