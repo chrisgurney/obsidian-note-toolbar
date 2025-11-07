@@ -63,7 +63,8 @@ See for more details: https://github.com/TfTHacker/obsidian42-brat/blob/main/BRA
 
 1. Create `manifest-beta.json` a copy of `manifest.json`.
     1. Set the `version` as `X.Y-beta-01`.
-1. Commit and push the file.
+1. Update the `package.json` with the beta version. _Do not_ run `npm run version`.
+1. Commit and push.
 1. Tag the release by running `./release.sh {NEWVERSION}`. Example:
     ```sh
     ./release.sh X.Y-beta-01
