@@ -319,7 +319,7 @@
             "option-launchpad": "Replace new tab view with toolbar",
             "option-launchpad-description": "Replace the new tab view with a large version of this toolbar. If not enabled, the toolbar will be in the position selected in its settings.",
             "option-text": "Text toolbar",
-            "option-text-description": "Toolbar to show when text is selected.",
+            "option-text-description": "Display a toolbar when text is selected.",
             "option-text-placeholder": "Select toolbar..."
         },
         "display-rules": {
