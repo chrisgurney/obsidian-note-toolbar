@@ -155,13 +155,14 @@ export class CommandManager {
 
     /**
      * Sets the keyboard's focus on the first visible item in the toolbar.
+     * @param isTextToolbar set to true if this is for the text toolbar.
      */
-    async focus(): Promise<void> {
+    async focus(isTextToolbar: boolean = false): Promise<void> {
 
         this.plugin.debugGroup("focus");
 
         // need to get the type of toolbar first
-        let toolbarEl = this.plugin.getToolbarEl();
+        let toolbarEl = this.plugin.getToolbarEl(undefined, true);
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
         switch (toolbarPosition) {
             case PositionType.FabRight:
@@ -198,9 +199,10 @@ export class CommandManager {
             }
             case PositionType.Bottom:
             case PositionType.Props:
+            case PositionType.Text:
             case PositionType.Top: {
                 // get the list and set focus on the first visible item
-                const itemsUl: HTMLElement | null = this.plugin.getToolbarListEl();
+                const itemsUl: HTMLElement | null = this.plugin.getToolbarListEl(isTextToolbar);
                 if (itemsUl) {
                     this.plugin.debug("toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);

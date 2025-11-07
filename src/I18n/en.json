@@ -135,6 +135,7 @@
         "name-copy-cmd-as-data-element": "Copy callout item for command",
         "name-copy-cmd-uri": "Copy URI for command",
         "name-focus": "Focus",
+        "name-focus-text-toolbar": "Focus in text toolbar",
         "name-fold-properties": "Fold Properties",
         "name-hide-properties": "Hide Properties",
         "name-item-suggester": "Quick tools",

@@ -151,6 +151,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: async () => this.commands.copyCommand(false) });
 			this.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: async () => this.commands.copyCommand(true) });
 			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
+			this.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.commands.focus(true) });
 			this.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
 			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openQuickTools() });
 			this.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.settings.icon, callback: async () => {
@@ -1882,12 +1883,13 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Handles keyboard navigation within the toolbar.
 	 * @param e KeyboardEvent
+	 * @param isTextToolbar set to true if this is for the text toolbar.
 	 */
-	async toolbarKeyboardHandler(e: KeyboardEvent) {
+	async toolbarKeyboardHandler(e: KeyboardEvent, isTextToolbar: boolean = false) {
 
-		// this.debug("toolbarKeyboardHandler: ", e);
+		this.debugGroup("toolbarKeyboardHandler");
 
-		let itemsUl: HTMLElement | null = this.getToolbarListEl();
+		let itemsUl: HTMLElement | null = this.getToolbarListEl(isTextToolbar);
 		if (itemsUl) {
 
 			// not preventing default from 'Escape' for now (I think this helps)
@@ -1955,6 +1957,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 
 		}
+
+		this.debugGroupEnd();
 
 	}
 
@@ -2384,20 +2388,27 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Get the toolbar element, in the current view.
 	 * @param view optional ItemView to find the toolbar container for; otherwise uses the active view.
+	 * @param isTextToolbar set to true if this is for the text toolbar.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	getToolbarEl(view?: ItemView): HTMLElement | null {
-		const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
-		const toolbarViewEl = toolbarView?.containerEl as HTMLElement;
-		return toolbarViewEl?.querySelector('.cg-note-toolbar-container') as HTMLElement;
+	getToolbarEl(view?: ItemView, isTextToolbar: boolean = false): HTMLElement | null {
+		if (isTextToolbar) {
+			return activeDocument.querySelector('.cg-note-toolbar-container[data-tbar-position="text"]') as HTMLElement;
+		}
+		else {
+			const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
+			const toolbarViewEl = toolbarView?.containerEl as HTMLElement;
+			return toolbarViewEl?.querySelector('.cg-note-toolbar-container') as HTMLElement;
+		}
 	}
 
 	/**
 	 * Get the toolbar element's <ul> element, in the current view.
+	 * @param isTextToolbar set to true if this is for the text toolbar.
 	 * @returns HTMLElement or null, if it doesn't exist.
 	 */
-	getToolbarListEl(): HTMLElement | null {
-		const toolbarEl = this.getToolbarEl();
+	getToolbarListEl(isTextToolbar: boolean = false): HTMLElement | null {
+		const toolbarEl = this.getToolbarEl(undefined, isTextToolbar);
 		return toolbarEl?.querySelector('.callout-content > ul') as HTMLElement;
 	}
 

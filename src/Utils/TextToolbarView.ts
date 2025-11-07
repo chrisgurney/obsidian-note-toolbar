@@ -141,7 +141,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     this.positionToolbar(selectStartPos, selectEndPos);
 
                     plugin.registerDomEvent(this.toolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
-                    plugin.registerDomEvent(this.toolbarEl, 'keydown', (e) => plugin.toolbarKeyboardHandler(e));
+                    plugin.registerDomEvent(this.toolbarEl, 'keydown', (e) => plugin.toolbarKeyboardHandler(e, true));
 
                     // plugin.debug('drew toolbar');
 
