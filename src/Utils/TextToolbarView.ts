@@ -63,7 +63,11 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
                 if (!update.selectionSet) {
                     // FIXME? removing the toolbar here solves switching views, but removes toolbar when using menus, modals, etc.
-                    if (!isToolbarFocussed && (selectFrom === selectTo || !view.hasFocus)) {
+                    if (isToolbarFocussed) {
+                        plugin.debug('toolbar in focus - exiting');
+                        return;
+                    }
+                    if (selectFrom === selectTo || !view.hasFocus) {
                         plugin.debug('selection empty:', selectFrom === selectTo, ' • has focus: view', view.hasFocus, 'toolbar', isToolbarFocussed);
                         if (this.toolbarEl) {
                             plugin.debug('⛔️ no selection or view out of focus - removing toolbar')
