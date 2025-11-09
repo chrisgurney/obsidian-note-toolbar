@@ -33,6 +33,12 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                 plugin.registerDomEvent(view.dom, 'dblclick', () => {
                     this.isMouseSelection = true;
                 });
+                plugin.registerDomEvent(view.scrollDOM, 'scroll', () => {
+                    if (plugin.textToolbarEl) {
+                        plugin.debug('⛔️ view scrolled - removing toolbar');
+                        plugin.textToolbarEl.remove();
+                    }
+                });
             }
 
             update(update: ViewUpdate) {
@@ -67,7 +73,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     }
                     if (selectFrom === selectTo || !view.hasFocus) {
                         if (plugin.textToolbarEl) {
-                            plugin.debug('⛔️ no selection or view out of focus - removing toolbar')
+                            plugin.debug('⛔️ no selection or view out of focus - removing toolbar');
                             plugin.debug('selection empty:', selectFrom === selectTo, ' • has focus: view', view.hasFocus, 'toolbar', isToolbarFocussed);
                             plugin.textToolbarEl.remove();
                         }
