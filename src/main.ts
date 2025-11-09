@@ -73,6 +73,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	jsEngineAdapter: JsEngineAdapter | undefined;
 	tpAdapter: TemplaterAdapter | undefined;
 
+	textToolbarEl: HTMLDivElement | null = null;
+
 	// TODO: remove if not needed
 	// __onNoteChange__leafFiles: { [id: string]: TFile | null } = {};
 	// __onNoteChange__leafCallbacks: { [id: string]: (oldFile: TFile | null, newFile: TFile) => void } = {};
@@ -196,6 +198,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// remove any toolbars
 		this.getAllToolbarEl().forEach((toolbarEl) => { toolbarEl.remove(); });
+		if (this.textToolbarEl) this.textToolbarEl.remove();
 		// remove the global API
 		if (window["ntb"]) delete window["ntb"];
 

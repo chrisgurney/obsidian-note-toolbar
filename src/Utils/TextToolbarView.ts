@@ -11,7 +11,6 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
             private isMouseDown: boolean = false;
             private isMouseSelection: boolean = false;
             private lastSelection: { from: number; to: number; text: string } | null = null;
-            private toolbarEl: HTMLDivElement | null = null;
 
             constructor(view: EditorView) {
                 // plugin.debug('TextToolbarView initialized');
@@ -41,7 +40,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                 // if there's no text toolbar set, there's nothing to do
                 if (!plugin.settings.textToolbar) {
                     // plugin.debug('no text toolbar setting');
-                    if (this.toolbarEl) this.toolbarEl.remove();
+                    if (plugin.textToolbarEl) plugin.textToolbarEl.remove();
                     return;
                 };
                 
@@ -53,8 +52,8 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
                 const { state, view } = update;
 
-                // const isToolbarFocussed = this.toolbarEl && this.toolbarEl.querySelector(`.${ToolbarStyle.ItemFocused}`) !== null;
-                const isToolbarFocussed = this.toolbarEl && this.toolbarEl.contains(activeDocument.activeElement);
+                // const isToolbarFocussed = plugin.textToolbarEl && plugin.textToolbarEl.querySelector(`.${ToolbarStyle.ItemFocused}`) !== null;
+                const isToolbarFocussed = plugin.textToolbarEl && plugin.textToolbarEl.contains(activeDocument.activeElement);
 
                 const selection = state.selection.main;
                 const selectFrom = selection.from;
@@ -67,10 +66,10 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                         return;
                     }
                     if (selectFrom === selectTo || !view.hasFocus) {
-                        if (this.toolbarEl) {
+                        if (plugin.textToolbarEl) {
                             plugin.debug('⛔️ no selection or view out of focus - removing toolbar')
                             plugin.debug('selection empty:', selectFrom === selectTo, ' • has focus: view', view.hasFocus, 'toolbar', isToolbarFocussed);
-                            this.toolbarEl.remove();
+                            plugin.textToolbarEl.remove();
                         }
                         return;
                     }
@@ -78,9 +77,9 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
 
                 if (selection.empty) {
                     this.lastSelection = null;
-                    if (this.toolbarEl) {
+                    if (plugin.textToolbarEl) {
                         plugin.debug('⛔️ selection empty - removing toolbar');
-                        this.toolbarEl.remove();
+                        plugin.textToolbarEl.remove();
                     }
                     return;
                 }
@@ -112,17 +111,17 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                 requestAnimationFrame(async () => {
 
                     // remove the existing toolbar because we're likely in a new position
-                    if (this.toolbarEl) {
+                    if (plugin.textToolbarEl) {
                         plugin.debug('♻️ removing old toolbar - rendering new one');
-                        this.toolbarEl.remove();
+                        plugin.textToolbarEl.remove();
                     }
 
-                    this.toolbarEl = activeDocument.createElement('div');
-                    this.toolbarEl.id = toolbar.uuid;
-                    this.toolbarEl.addClasses([
+                    plugin.textToolbarEl = activeDocument.createElement('div');
+                    plugin.textToolbarEl.id = toolbar.uuid;
+                    plugin.textToolbarEl.addClasses([
                         'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'
                     ]);
-                    this.toolbarEl.setAttrs({
+                    plugin.textToolbarEl.setAttrs({
                         'data-name': toolbar.name,
                         'data-tbar-position': PositionType.Text,
                         'data-updated': toolbar.updated,
@@ -131,16 +130,16 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     });
                     
                     const renderedToolbarEl = await plugin.renderToolbarAsCallout(toolbar, activeFile, activeView);
-                    this.toolbarEl.appendChild(renderedToolbarEl);
-                    activeDocument.body.appendChild(this.toolbarEl);
+                    plugin.textToolbarEl.appendChild(renderedToolbarEl);
+                    activeDocument.body.appendChild(plugin.textToolbarEl);
     
                     const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
                     const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
                     if (!selectStartPos || !selectEndPos) return;
                     this.positionToolbar(selectStartPos, selectEndPos);
 
-                    plugin.registerDomEvent(this.toolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
-                    plugin.registerDomEvent(this.toolbarEl, 'keydown', (e) => plugin.toolbarKeyboardHandler(e, true));
+                    plugin.registerDomEvent(plugin.textToolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
+                    plugin.registerDomEvent(plugin.textToolbarEl, 'keydown', (e) => plugin.toolbarKeyboardHandler(e, true));
 
                     // plugin.debug('drew toolbar');
 
@@ -160,7 +159,7 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
             }
 
             destroy() {
-                if (this.toolbarEl) this.toolbarEl.remove();
+                if (plugin.textToolbarEl) plugin.textToolbarEl.remove();
                 // plugin.debug('TextToolbarView destroyed');
             }
 
@@ -172,16 +171,16 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
              */
             private positionToolbar(selectStartPos: Rect, selectEndPos: Rect): void {
 
-                if (!this.toolbarEl) return;
+                if (!plugin.textToolbarEl) return;
 
                 const centerX = (selectStartPos.left + selectEndPos.right) / 2;
-                let left = centerX - (this.toolbarEl.offsetWidth / 2);
+                let left = centerX - (plugin.textToolbarEl.offsetWidth / 2);
                 // TODO? make offset via CSS variable instead of subtracting here?
-                let top = selectStartPos.top - this.toolbarEl.offsetHeight - 8;
+                let top = selectStartPos.top - plugin.textToolbarEl.offsetHeight - 8;
 
                 // prevent horizontal overflow
                 const minLeft = 8;
-                const maxLeft = window.innerWidth - this.toolbarEl.offsetWidth - 8;
+                const maxLeft = window.innerWidth - plugin.textToolbarEl.offsetWidth - 8;
                 left = Math.max(minLeft, Math.min(left, maxLeft));
 
                 // prevent vertical overflow
@@ -190,13 +189,13 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     top = selectEndPos.bottom + 8;
                     
                     // if still overflows below, clamp to bottom
-                    if (top + this.toolbarEl.offsetHeight > window.innerHeight - 8) {
-                        top = window.innerHeight - this.toolbarEl.offsetHeight - 8;
+                    if (top + plugin.textToolbarEl.offsetHeight > window.innerHeight - 8) {
+                        top = window.innerHeight - plugin.textToolbarEl.offsetHeight - 8;
                     }
                 }
 
-                this.toolbarEl.style.left = `${left}px`;
-                this.toolbarEl.style.top = `${top}px`;
+                plugin.textToolbarEl.style.left = `${left}px`;
+                plugin.textToolbarEl.style.top = `${top}px`;
                 
             }
 
