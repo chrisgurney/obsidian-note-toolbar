@@ -149,10 +149,10 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     // if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
                     // else ...
 
-                    // TODO: is this the right spot?
-                    if (!this.isMouseSelection) {
-                        this.isMouseDown = false;
-                    }
+                    // TODO: is this the right spot? do we need this?
+                    // if (!this.isMouseSelection) {
+                    //     this.isMouseDown = false;
+                    // }
 
                 });
 
