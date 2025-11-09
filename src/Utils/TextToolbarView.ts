@@ -103,6 +103,30 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                     return;
                 }
 
+                requestAnimationFrame(async () => {
+
+                    const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
+                    const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
+                    await this.renderTextToolbar(selectStartPos, selectEndPos);
+
+                    // TODO: do we need this?
+                    // if (!this.isMouseSelection) {
+                    //     this.isMouseDown = false;
+                    // }
+                    
+                });
+
+            }
+
+            destroy() {
+                if (plugin.textToolbarEl) plugin.textToolbarEl.remove();
+                // plugin.debug('TextToolbarView destroyed');
+            }
+
+            private async renderTextToolbar(selectStartPos: Rect | null, selectEndPos: Rect | null) {
+
+                if (!selectStartPos || !selectEndPos) return;
+                
                 const toolbar = plugin.settingsManager.getToolbarById(plugin.settings.textToolbar);
                 if (!toolbar) {
                     // TODO: show an error if toolbar not found
@@ -113,60 +137,42 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
                 const activeView = plugin.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
                 if (!activeFile || !activeView) return;
 
-                // defer layout calculation, so we can get coordinates
-                requestAnimationFrame(async () => {
+                // remove the existing toolbar because we're likely in a new position
+                if (plugin.textToolbarEl) {
+                    plugin.debug('♻️ removing old toolbar - rendering new one');
+                    plugin.textToolbarEl.remove();
+                }
 
-                    // remove the existing toolbar because we're likely in a new position
-                    if (plugin.textToolbarEl) {
-                        plugin.debug('♻️ removing old toolbar - rendering new one');
-                        plugin.textToolbarEl.remove();
-                    }
-
-                    plugin.textToolbarEl = activeDocument.createElement('div');
-                    plugin.textToolbarEl.id = toolbar.uuid;
-                    plugin.textToolbarEl.addClasses([
-                        'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'
-                    ]);
-                    plugin.textToolbarEl.setAttrs({
-                        'data-name': toolbar.name,
-                        'data-tbar-position': PositionType.Text,
-                        'data-updated': toolbar.updated,
-                        // 'data-view-mode': markdownViewMode,
-                        'data-csstheme': plugin.app.vault.getConfig('cssTheme')
-                    });
-                    
-                    const renderedToolbarEl = await plugin.renderToolbarAsCallout(toolbar, activeFile, activeView);
-                    plugin.textToolbarEl.appendChild(renderedToolbarEl);
-                    activeDocument.body.appendChild(plugin.textToolbarEl);
-    
-                    const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
-                    const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
-                    if (!selectStartPos || !selectEndPos) return;
-                    this.positionToolbar(selectStartPos, selectEndPos);
-
-                    plugin.registerDomEvent(plugin.textToolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
-                    plugin.registerDomEvent(plugin.textToolbarEl, 'keydown', (e) => plugin.toolbarKeyboardHandler(e, true));
-
-                    // plugin.debug('drew toolbar');
-
-                    // TODO: need this for placing within modals?
-                    // const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
-                    // position relative to modal container if in a modal
-                    // if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
-                    // else ...
-
-                    // TODO: is this the right spot? do we need this?
-                    // if (!this.isMouseSelection) {
-                    //     this.isMouseDown = false;
-                    // }
-
+                plugin.textToolbarEl = activeDocument.createElement('div');
+                plugin.textToolbarEl.id = toolbar.uuid;
+                plugin.textToolbarEl.addClasses([
+                    'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'
+                ]);
+                plugin.textToolbarEl.setAttrs({
+                    'data-name': toolbar.name,
+                    'data-tbar-position': PositionType.Text,
+                    'data-updated': toolbar.updated,
+                    // 'data-view-mode': markdownViewMode,
+                    'data-csstheme': plugin.app.vault.getConfig('cssTheme')
                 });
+                
+                const renderedToolbarEl = await plugin.renderToolbarAsCallout(toolbar, activeFile, activeView);
+                plugin.textToolbarEl.appendChild(renderedToolbarEl);
+                activeDocument.body.appendChild(plugin.textToolbarEl);
 
-            }
+                this.positionToolbar(selectStartPos, selectEndPos);
 
-            destroy() {
-                if (plugin.textToolbarEl) plugin.textToolbarEl.remove();
-                // plugin.debug('TextToolbarView destroyed');
+                plugin.registerDomEvent(plugin.textToolbarEl, 'contextmenu', (e) => plugin.toolbarContextMenuHandler(e));
+                plugin.registerDomEvent(plugin.textToolbarEl, 'keydown', (e) => plugin.toolbarKeyboardHandler(e, true));
+
+                // plugin.debug('drew toolbar');
+
+                // TODO: need this for placing within modals?
+                // const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
+                // position relative to modal container if in a modal
+                // if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
+                // else ...
+
             }
 
             /**
