@@ -7,18 +7,15 @@ import tsParser from "@typescript-eslint/parser";
 
 export default defineConfig([
 
-	globalIgnores([
-		"build/*",
-		"examples/*",
-		"main.js",
-		"*.mjs",
-	]),
+	globalIgnores([ "build/*", "examples/*", "main.js", "*.mjs" ]),
 	
 	{
 		files: [ "**/*.ts" ],
 		languageOptions: {
 			globals: {
+				...globals.browser,
 				...globals.node,
+				'i18next': 'readonly',
 			},
 			parser: tsParser,
 			parserOptions: {
@@ -38,7 +35,7 @@ export default defineConfig([
 	// IGNORE TS + ESLINT BASIC RULES FOR NOW
 	{
 		rules: {
-			'no-undef': 'off',
+			// 'no-undef': 'off',
 			...Object.fromEntries(
 				Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
 			)
