@@ -4,7 +4,7 @@
 
 English | [中文文档](./README-ZH.md)
 
-The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create context-aware toolbars for your notes, which can include commands, links to vault files and folders, websites/URIs, menus, and scripts (Dataview, Templater, and JavaScript).
+The Note Toolbar plugin for [Obsidian](https://obsidian.md) lets you create context-aware toolbars for your notes, which can include commands, file and folder links, websites/URIs, menus, and scripts (Dataview, Templater, and JavaScript).
 
 > What's new? See the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 > 
