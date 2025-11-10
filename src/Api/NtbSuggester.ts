@@ -1,4 +1,4 @@
-import { App, Component, FuzzyMatch, FuzzySuggestModal, MarkdownRenderer } from "obsidian";
+import { Component, FuzzyMatch, FuzzySuggestModal, MarkdownRenderer } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSuggesterOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";

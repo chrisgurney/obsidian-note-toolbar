@@ -1,10 +1,9 @@
 import NoteToolbarPlugin from "main";
-import { Component, MarkdownRenderer, Notice } from "obsidian";
+import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { displayScriptError, importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts

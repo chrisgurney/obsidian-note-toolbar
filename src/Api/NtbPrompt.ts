@@ -1,8 +1,4 @@
-import {App, ButtonComponent, Component, MarkdownRenderer, Modal,
-    Platform,
-    TextAreaComponent,
-    TextComponent,
-} from "obsidian";
+import { ButtonComponent, Component, MarkdownRenderer, Modal, Platform, TextAreaComponent, TextComponent } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbPromptOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";

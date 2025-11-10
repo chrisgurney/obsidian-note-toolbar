@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Component, MarkdownRenderer, Notice } from "obsidian";
+import { Component } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { displayScriptError, importArgs } from "Utils/Utils";

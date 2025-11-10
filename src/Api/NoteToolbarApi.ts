@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { testCallback } from "Api/TestCallback";
+// import { testCallback } from "Api/TestCallback";
 import { NtbSuggester } from "./NtbSuggester";
 import { NtbPrompt } from "./NtbPrompt";
 import { INoteToolbarApi, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";

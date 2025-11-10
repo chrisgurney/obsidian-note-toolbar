@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { AbstractInputSuggest, App, TAbstractFile, TFile, TFolder } from "obsidian";
+import { AbstractInputSuggest, TAbstractFile, TFile } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
