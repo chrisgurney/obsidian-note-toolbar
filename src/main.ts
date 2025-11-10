@@ -1307,7 +1307,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// if we don't have a position yet, try to get it from the previous menu
 		if (!menuPos) {
-			let previousPosData = this.app.loadLocalStorage(LocalVar.MenuPos);
+			let previousPosData = this.app.loadLocalStorage(LocalVar.MenuPos) as string;
 			menuPos = previousPosData ? JSON.parse(previousPosData) : undefined;
 		}
 
