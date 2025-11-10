@@ -1,7 +1,6 @@
-import obsidianmd from "eslint-plugin-obsidianmd";
-
 import globals from "globals";
 import { defineConfig, globalIgnores } from "eslint/config";
+import obsidianmd from "eslint-plugin-obsidianmd";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 
@@ -16,6 +15,15 @@ export default defineConfig([
 				...globals.browser,
 				...globals.node,
 				'i18next': 'readonly',
+				'activeDocument': 'readonly',
+				'activeWindow': 'readonly',
+				'createDiv': 'readonly',
+				'createEl': 'readonly',
+				'createFragment': 'readonly',
+				'createSpan': 'readonly',
+				'createSvg': 'readonly',
+				'isBoolean': 'readonly',
+				'sleep': 'readonly',
 			},
 			parser: tsParser,
 			parserOptions: {
@@ -35,7 +43,6 @@ export default defineConfig([
 	// IGNORE TS + ESLINT BASIC RULES FOR NOW
 	{
 		rules: {
-			// 'no-undef': 'off',
 			...Object.fromEntries(
 				Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
 			)

@@ -1,4 +1,5 @@
 import { INoteToolbarApi } from "Api/INoteToolbarApi";
+/* globals DataAdapter, KeymapInfo */
 
 declare global {
     
@@ -34,7 +35,7 @@ declare module "obsidian" {
     // }
 
     // allows access to the path of the vault, for the {{vault_path}} var
-    interface FileSystemAdapter extends DataAdapter{
+    interface FileSystemAdapter extends DataAdapter {
         getBasePath(): string;
     }
 
