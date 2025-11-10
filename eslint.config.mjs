@@ -47,10 +47,10 @@ export default defineConfig([
 			...Object.fromEntries(
 				Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
 			),
-
+			
 			// COMMENT BACK IN BELOW SUGGESTED LIST TO TACKLE ONE-BY-ONE
 
-			// '@typescript-eslint/no-unused-vars': 'warn',
+			// '@typescript-eslint/no-unused-vars': 'error',
 
 			// MEMORY
 			// Prevents forgetting to unsubscribe/cleanup
