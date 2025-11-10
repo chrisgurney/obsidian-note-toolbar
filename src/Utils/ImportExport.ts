@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getCommandNameById, getUUID } from "./Utils";
-import { Command, getIcon, Notice, TFile, TFolder } from "obsidian";
+import { getIcon, Notice, TFile, TFolder } from "obsidian";
 
 const toIconizeFormat = (s: string) => 
     `:Li${s.replace(/^lucide-/, '')

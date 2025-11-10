@@ -131,7 +131,7 @@ export default class ToolbarItemUi {
             linkContainer.className = "note-toolbar-setting-item-link-container";
 
             let linkSelector = createDiv();
-            const s1t = new Setting(linkSelector)
+            new Setting(linkSelector)
                 .addDropdown((dropdown) =>
                     dropdown
                         .addOptions(
@@ -1033,7 +1033,7 @@ export default class ToolbarItemUi {
         // show output container setting here instead
         if (outputContainerSettingEl !== undefined) advancedSettingsDiv.append(outputContainerSettingEl);
 
-        const focusSetting = new Setting(advancedSettingsDiv)
+        new Setting(advancedSettingsDiv)
             .setName(t('setting.item.option-script-focus'))
             .setDesc(t('setting.item.option-script-focus-description'))
             .addToggle((toggle) => {

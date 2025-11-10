@@ -142,7 +142,7 @@ export default class ToolbarStyleUi {
             })
             .reduce((acc, option) => ({ ...acc, ...option }), {});
 
-        let mobileStyleDropdown = new Setting(mobileStyleDiv)
+        new Setting(mobileStyleDiv)
             .addDropdown((dropdown) =>
                 dropdown
                     .addOptions(mobileStyleOptions)
