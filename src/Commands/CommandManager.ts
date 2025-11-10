@@ -1,3 +1,4 @@
+import { EditorView } from "@codemirror/view";
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, PropsState, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
 import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
@@ -160,6 +161,16 @@ export class CommandManager {
     async focus(isTextToolbar: boolean = false): Promise<void> {
 
         this.plugin.debugGroup("focus");
+
+        // display the text toolbar at the current cursor position, if it's not already rendered
+        if (isTextToolbar && !this.plugin.textToolbarEl?.isConnected) {
+            const editor = this.plugin.app.workspace.activeEditor?.editor;
+            if (!editor) return;
+            const offset = editor.posToOffset(editor.getCursor());
+            const cmView = (editor as any).cm as EditorView;
+            const coords = cmView.coordsAtPos(offset);
+            await this.plugin.renderTextToolbar(coords, coords);
+        }
 
         // need to get the type of toolbar first
         let toolbarEl = this.plugin.getToolbarEl(undefined, true);
