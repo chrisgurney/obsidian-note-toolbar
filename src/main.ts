@@ -25,6 +25,7 @@ import { GalleryView } from 'Gallery/GalleryView';
 import { HelpView } from 'Help/HelpView';
 import { TipView } from 'Help/TipView';
 import { TextToolbarView } from 'Utils/TextToolbarView';
+import { Rect } from '@codemirror/view';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -539,6 +540,97 @@ export default class NoteToolbarPlugin extends Plugin {
 		finally {
 			this.isRendering[viewId] = false;
 		}
+
+	}
+
+	/**
+	 * Positions the text toolbar, ensuring it doesn't go over the edge of the window.
+	 */
+	positionTextToolbar(selectStartPos: Rect, selectEndPos: Rect): void {
+
+		if (!this.textToolbarEl) return;
+
+		const centerX = (selectStartPos.left + selectEndPos.right) / 2;
+		let left = centerX - (this.textToolbarEl.offsetWidth / 2);
+		// TODO? make offset via CSS variable instead of subtracting here?
+		let top = selectStartPos.top - this.textToolbarEl.offsetHeight - 8;
+
+		// prevent horizontal overflow
+		const minLeft = 8;
+		const maxLeft = window.innerWidth - this.textToolbarEl.offsetWidth - 8;
+		left = Math.max(minLeft, Math.min(left, maxLeft));
+
+		// prevent vertical overflow
+		if (top < 8) {
+			// try below selection
+			top = selectEndPos.bottom + 8;
+			
+			// if still overflows below, clamp to bottom
+			if (top + this.textToolbarEl.offsetHeight > window.innerHeight - 8) {
+				top = window.innerHeight - this.textToolbarEl.offsetHeight - 8;
+			}
+		}
+
+		this.textToolbarEl.style.left = `${left}px`;
+		this.textToolbarEl.style.top = `${top}px`;
+		
+	}
+
+	/**
+	 * Renders a text toolbar at the middle of the given start and end positions in the editor. 
+	 * @param selectStartPos 
+	 * @param selectEndPos 
+	 * @returns nothing
+	 */
+	async renderTextToolbar(selectStartPos: Rect | null, selectEndPos: Rect | null): Promise<void> {
+
+		if (!selectStartPos || !selectEndPos) return;
+		
+		const toolbar = this.settingsManager.getToolbarById(this.settings.textToolbar);
+		if (!toolbar) {
+			// TODO: show an error if toolbar not found
+			return;
+		};
+
+		const activeFile = this.app.workspace.getActiveFile();
+		const activeView = this.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
+		if (!activeFile || !activeView) return;
+
+		// remove the existing toolbar because we're likely in a new position
+		if (this.textToolbarEl) {
+			this.debug('♻️ removing old toolbar - rendering new one');
+			this.textToolbarEl.remove();
+		}
+
+		this.textToolbarEl = activeDocument.createElement('div');
+		this.textToolbarEl.id = toolbar.uuid;
+		this.textToolbarEl.addClasses([
+			'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'
+		]);
+		this.textToolbarEl.setAttrs({
+			'data-name': toolbar.name,
+			'data-tbar-position': PositionType.Text,
+			'data-updated': toolbar.updated,
+			// 'data-view-mode': markdownViewMode,
+			'data-csstheme': this.app.vault.getConfig('cssTheme')
+		});
+		
+		const renderedToolbarEl = await this.renderToolbarAsCallout(toolbar, activeFile, activeView);
+		this.textToolbarEl.appendChild(renderedToolbarEl);
+		activeDocument.body.appendChild(this.textToolbarEl);
+
+		this.positionTextToolbar(selectStartPos, selectEndPos);
+
+		this.registerDomEvent(this.textToolbarEl, 'contextmenu', (e) => this.toolbarContextMenuHandler(e));
+		this.registerDomEvent(this.textToolbarEl, 'keydown', (e) => this.toolbarKeyboardHandler(e, true));
+
+		// plugin.debug('drew toolbar');
+
+		// TODO: need this for placing within modals?
+		// const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
+		// position relative to modal container if in a modal
+		// if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
+		// else ...
 
 	}
 
