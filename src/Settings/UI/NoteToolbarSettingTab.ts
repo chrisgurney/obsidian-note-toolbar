@@ -1,8 +1,8 @@
 import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import NoteToolbarPlugin from 'main';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
-import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr, setFieldHelp, removeFieldHelp } from "./Utils/SettingsUIUtils";
-import { FolderMapping, LocalVar, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarRule, ToolbarSettings } from 'Settings/NoteToolbarSettings';
+import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
+import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
 import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
 import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
@@ -849,6 +849,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setPlaceholder(t('setting.display-locations.option-text-placeholder'))
 					.setValue(this.plugin.settings.textToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.textToolbar) : '')
 					.onChange(debounce(async (name) => {
+						// let isValid = await updateItemComponentStatus(this.plugin, name, SettingType.Toolbar, cb.inputEl.parentElement);
 						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
 						this.plugin.settings.textToolbar = newToolbar?.uuid ?? null;
 						const hasTextToolbar = !!this.plugin.settings.textToolbar;
