@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { arraymove, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr, getToolbarUsageText, getDisclaimersFr } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr, getToolbarUsageText, getDisclaimersFr, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
 import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, SETTINGS_DISCLAIMERS } from 'Settings/NoteToolbarSettings';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
@@ -318,7 +318,8 @@ export default class ToolbarSettingsModal extends Modal {
 				// check if item previews are valid (non-empty + valid), and highlight if not
 				const itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
 				if (itemPreviewEl) {
-					this.toolbarItemUi.updateItemComponentStatus(
+					updateItemComponentStatus(
+						this.plugin,
 						(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
 						SettingFieldItemMap[toolbarItem.linkAttr.type], 
 						itemPreviewEl,
