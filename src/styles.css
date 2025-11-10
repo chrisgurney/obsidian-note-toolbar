@@ -608,7 +608,9 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     padding: 0;
     left: var(--cg-nt-fab-pos-x-desktop);
     right: unset;
-    z-index: var(--layer-status-bar);
+    /* fix: puts toolbar above popovers + Hover Editor plugin */
+    z-index: calc(var(--layer-slides) - 1);
+
     &[data-tbar-position="fabr"] {
         left: unset;
         right: var(--cg-nt-fab-pos-x-desktop);
@@ -716,7 +718,8 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         padding: var(--file-margins);
         padding-bottom: 0;
         padding-top: 0;
-        z-index: var(--layer-status-bar);
+        /* fix: puts toolbar above popovers + Hover Editor plugin */
+        z-index: calc(var(--layer-slides) - 1);
         &:hover {
             /* undoes fix (#14) which causes a layout shift on hover */
             overflow: visible !important;
@@ -742,7 +745,8 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 
     &[data-tbar-position="text"] {
         position: absolute;
-        z-index: var(--layer-status-bar);
+        /* fix: puts toolbar above popovers + Hover Editor plugin */
+        z-index: calc(var(--layer-slides) - 1);
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
         }
