@@ -598,19 +598,19 @@ export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
  */
 export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
     { [MobileStyleType.Border]: t('setting.styles.option-border') },
-    { [MobileStyleType.NoBorder]: t('setting.styles.option-noborder') },
 	{ [MobileStyleType.Button]: t('setting.styles.option-button') },
     { [MobileStyleType.Center]: t('setting.styles.option-center') },
-	{ [MobileStyleType.NoTab ]: t('setting.styles.option-notab') },
 	{ [MobileStyleType.NoWide]: t('setting.styles.option-nowide') },
 	{ [MobileStyleType.NoWrap]: t('setting.styles.option-nowrap') },
 	{ [MobileStyleType.Wide]: t('setting.styles.option-wide') },
     { [MobileStyleType.Left]: t('setting.styles.option-left') },
+    { [MobileStyleType.NoBorder]: t('setting.styles.option-noborder') },
+	{ [MobileStyleType.NoTab ]: t('setting.styles.option-notab') },
+    { [MobileStyleType.NoSticky]: t('setting.styles.option-notsticky') },
     { [MobileStyleType.Right]: t('setting.styles.option-right') },
 	{ [MobileStyleType.Between]: t('setting.styles.option-between') },
     { [MobileStyleType.Even]: t('setting.styles.option-even') },
     { [MobileStyleType.Sticky]: t('setting.styles.option-sticky') },
-    { [MobileStyleType.NoSticky]: t('setting.styles.option-notsticky') },
 	{ [MobileStyleType.Tab ]: t('setting.styles.option-tab') }
 ];
 
