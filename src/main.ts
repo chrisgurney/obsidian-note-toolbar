@@ -24,7 +24,7 @@ import { HotkeyHelper } from 'Utils/Hotkeys';
 import { GalleryView } from 'Gallery/GalleryView';
 import { HelpView } from 'Help/HelpView';
 import { TipView } from 'Help/TipView';
-import { TextToolbarView } from 'Utils/TextToolbarView';
+import { TextToolbarView } from 'Toolbar/TextToolbarView';
 import { Rect } from '@codemirror/view';
 
 export default class NoteToolbarPlugin extends Plugin {
