@@ -4,7 +4,7 @@ import { IItem } from "./IItem";
 
 /**
  * > [!note]
- * > This documentation is for version `1.25.18`.
+ * > This documentation is for version `1.26.01`.
  * 
  * The Note Toolbar API provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
  * 
@@ -36,6 +36,7 @@ import { IItem } from "./IItem";
  * - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
  * - [[ntb.getItem|Note-Toolbar-API#getitem]]
  * - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
+ * - [[ntb.getSelection|Note-Toolbar-API#getselection]]
  * - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
  * - [[ntb.menu|Note-Toolbar-API#menu]]
  * - [[ntb.modal|Note-Toolbar-API#modal]]
@@ -115,6 +116,13 @@ export interface INoteToolbarApi<T> {
      * const createdDate = ntb.getProperty('created');
      */
     getProperty: (property: string) => string | undefined;
+
+    /**
+     * Gets the currently selected text, or the word at the current cursor position, if nothing's selected.
+     * 
+     * @returns The selected text, or the word at the current cursor position. Otherwise returns an empty string.
+     */
+    getSelection: () => string;
 
     /**
      * Gets all toolbars.

@@ -126,6 +126,29 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
+     * Gets the selected text, or the word at the cursor position.
+     * 
+     * @see INoteToolbarApi.getSelection
+     */
+    getSelection(): string {
+
+        const editor = this.plugin.app.workspace.activeEditor?.editor;
+        if (!editor) return '';
+        
+        const selection = editor.getSelection();
+        
+        if (selection) return selection;
+
+        const cursor = editor.getCursor();
+        const wordRange = editor.wordAt(cursor);
+        
+        if (!wordRange) return '';
+    
+        return editor.getRange(wordRange.from, wordRange.to);
+
+    }
+
+    /**
      * Gets all toolbars (as {@link Toolbar} objects).
      * 
      * @see INoteToolbarApi.getToolbars

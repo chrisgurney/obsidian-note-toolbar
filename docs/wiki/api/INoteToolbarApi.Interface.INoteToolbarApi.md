@@ -1,7 +1,7 @@
 [obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / INoteToolbarApi
 
 > [!note]
-> This documentation is for version `1.25.18`.
+> This documentation is for version `1.26.01`.
 
 The Note Toolbar API provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
 
@@ -33,6 +33,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
 - [[ntb.getItem|Note-Toolbar-API#getitem]]
 - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
+- [[ntb.getSelection|Note-Toolbar-API#getselection]]
 - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
 - [[ntb.menu|Note-Toolbar-API#menu]]
 - [[ntb.modal|Note-Toolbar-API#modal]]
@@ -183,6 +184,20 @@ The frontmatter value for the given property, or `undefined` if it does not exis
 ```ts
 const createdDate = ntb.getProperty('created');
 ```
+
+***
+
+### getSelection()
+
+> **getSelection**: () => `string`
+
+Gets the currently selected text, or the word at the current cursor position, if nothing's selected.
+
+#### Returns
+
+`string`
+
+The selected text, or the word at the current cursor position. Otherwise returns an empty string.
 
 ***
 
