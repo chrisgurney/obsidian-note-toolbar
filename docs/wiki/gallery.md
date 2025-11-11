@@ -58,7 +58,7 @@ Change how text looks.
 | Item | Description |
 | --- | --- |
 | Toggle bold | Apply or remove bold formatting. |
-| Toggle italics | Apply or remove italic formatting. |
+| Toggle italic | Apply or remove italic formatting. |
 | Toggle strikethrough | Apply or remove strikethrough formatting. |
 | Toggle code | Apply or remove inline code formatting. |
 | Toggle blockquote | Apply or remove blockquote formatting. |
@@ -70,11 +70,11 @@ Organize items into lists and adjust structure.
 
 | Item | Description |
 | --- | --- |
-| Toggle bullet | Apply or remove bullet list formatting. |
-| Toggle check status | Toggle the status of checklist items. |
+| Toggle bullet list | Apply or remove bullet list formatting. |
+| Toggle checkbox status | Toggle the status of checklist items. |
 | Toggle numbered list | Apply or remove numbered list formatting. |
-| Indent | Increases indentation on the current line. |
-| Unindent | Decreases indentation on the current line. |
+| Indent list item | Increases indentation on the current line. |
+| Unindent list item | Decreases indentation on the current line. |
 | Cycle bullet/checkbox | Changes to bullet, checkbox, or unchecked. |
 
 ## Insertions
@@ -85,7 +85,7 @@ Add various types of content like links or media.
 | --- | --- |
 | Insert code block | Insert a code block. |
 | Insert callout | Insert a callout block. |
-| Insert markdown link | Insert a markdown link. |
+| Insert Markdown link | Insert a Markdown link. |
 | Insert tag | Insert a tag in the note. |
 | Insert horizontal rule | Insert a horizontal rule to separate sections. |
 | Add internal link | Add an internal link. |

@@ -562,7 +562,7 @@
         },
         "icon": "indent-increase",
         "tooltip": {
-            "en": "Indent",
+            "en": "Indent list item",
             "zh": "缩进",
             "uk": "Відступ"
         },
@@ -645,14 +645,14 @@
         "commandCheck": true,
         "commandId": "editor:insert-link",
         "description": {
-            "en": "Insert a markdown link.",
-            "zh": "插入一个 markdown 链接。",
+            "en": "Insert a Markdown link.",
+            "zh": "插入一个 Markdown 链接。",
             "uk": "Додайте посилання Markdown."
         },
         "focus": "editor",
         "icon": "link",
         "tooltip": {
-            "en": "Insert markdown link",
+            "en": "Insert Markdown link",
             "zh": "插入 markdown 链接",
             "uk": "Посилання Markdown"
         },
@@ -1488,7 +1488,7 @@
         "focus": "editor",
         "icon": "list",
         "tooltip": {
-            "en": "Toggle bullet",
+            "en": "Toggle bullet list",
             "zh": "切换无序列表",
             "uk": "Маркований список"
         },
@@ -1506,7 +1506,7 @@
         "focus": "editor",
         "icon": "list-checks",
         "tooltip": {
-            "en": "Toggle check status",
+            "en": "Toggle checkbox status",
             "zh": "切换任务状态",
             "uk": "Стан прапорця"
         },
@@ -1611,8 +1611,8 @@
         },
         "icon": "italic",
         "tooltip": {
-            "en": "Toggle italics",
-            "zh": "切换斜体（Italics）",
+            "en": "Toggle italic",
+            "zh": "切换斜体（Italic）",
             "uk": "Курсив"
         },
         "type": "command"
@@ -1729,7 +1729,7 @@
         },
         "icon": "indent-decrease",
         "tooltip": {
-            "en": "Unindent",
+            "en": "Unindent list item",
             "zh": "取消缩进",
             "uk": "Зменшити відступ"
         },
