@@ -70,6 +70,11 @@ export default class ToolbarStyleUi {
                 const key = Object.keys(option)[0];
                 return !this.toolbar.defaultStyles.includes(key) && !excludeFromDefault.includes(key);
             })
+            .sort((a, b) => {
+                const nameA = Object.values(a)[0];
+                const nameB = Object.values(b)[0];
+                return nameA.localeCompare(nameB);
+            })
             .reduce((acc, option) => ({ ...acc, ...option }), {});
 
         let defaultStyleDropdown = new Setting(defaultStyleDiv)
@@ -139,6 +144,11 @@ export default class ToolbarStyleUi {
             .filter((option) => {
                 const key = Object.keys(option)[0];
                 return !this.toolbar.mobileStyles.includes(key) && !excludeFromMobile.includes(key);
+            })
+            .sort((a, b) => {
+                const nameA = Object.values(a)[0];
+                const nameB = Object.values(b)[0];
+                return nameA.localeCompare(nameB);
             })
             .reduce((acc, option) => ({ ...acc, ...option }), {});
 
