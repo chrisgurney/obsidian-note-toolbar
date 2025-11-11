@@ -554,19 +554,19 @@
     },
     {
         "id": "indent",
+        "commandId": "editor:indent-list",
         "description": {
             "en": "Increases indentation on the current line.",
             "zh": "增加当前行的缩进。",
             "uk": "Збільшує відступ на поточному рядку."
         },
         "icon": "indent-increase",
-        "script": "app.workspace.activeLeaf.view?.editor.indentList()",
         "tooltip": {
             "en": "Indent",
             "zh": "缩进",
             "uk": "Відступ"
         },
-        "type": "javascript"
+        "type": "command"
     },
     {
         "id": "insert-callout",
@@ -1721,19 +1721,19 @@
     },
     {
         "id": "unindent",
+        "commandId": "editor:unindent-list",
         "description": {
             "en": "Decreases indentation on the current line.",
             "zh": "减少当前行的缩进。",
             "uk": "Зменшує відступ на поточному рядку."
         },
         "icon": "indent-decrease",
-        "script": "app.workspace.activeLeaf.view?.editor.unindentList()",
         "tooltip": {
             "en": "Unindent",
             "zh": "取消缩进",
             "uk": "Зменшити відступ"
         },
-        "type": "javascript"
+        "type": "command"
     },
     {
         "id": "vscode-open",
