@@ -1425,7 +1425,7 @@
     },
     {
         "id": "theme-toggle-light-dark",
-        "commandId": "theme:use-dark",
+        "commandId": "theme:toggle-light-dark",
         "description": {
             "en": "Toggle between light and dark modes.",
             "zh": "在浅色和深色模式之间切换。",
@@ -1439,38 +1439,6 @@
             "uk": "Світла/темна тема"
         },
         "type": "javascript"
-    },
-    {
-        "id": "theme-use-dark",
-        "commandId": "theme:use-dark",
-        "description": {
-            "en": "Enable dark mode.",
-            "zh": "启用深色模式。",
-            "uk": "Увімкнути темний режим."
-        },
-        "icon": "moon",
-        "tooltip": {
-            "en": "Use dark mode",
-            "zh": "使用深色模式",
-            "uk": "Темна тема"
-        },
-        "type": "command"
-    },
-    {
-        "id": "theme-use-light",
-        "commandId": "theme:use-light",
-        "description": {
-            "en": "Enable light mode.",
-            "zh": "启用浅色模式。",
-            "uk": "Увімкнути світлий режим."
-        },
-        "icon": "sun",
-        "tooltip": {
-            "en": "Use light mode",
-            "zh": "使用浅色模式",
-            "uk": "Світла тема"
-        },
-        "type": "command"
     },
     {
         "id": "toggle-blockquote",
