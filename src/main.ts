@@ -195,7 +195,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	/**
 	 * Cleanup when the plugin is unloaded (e.g., disabled in settings, or Obsidian is restarted).
 	 */
-	async onunload() {
+	onunload() {
 
 		// remove any toolbars
 		this.getAllToolbarEl().forEach((toolbarEl) => { toolbarEl.remove(); });
@@ -2405,8 +2405,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			item
 			  .setTitle(t('toolbar.menu-toolbar-settings'))
 			  .setIcon('gear')
-			  .onClick((menuEvent) => {
-				  this.commands.openSettings();
+			  .onClick(async (menuEvent) => {
+				  await this.commands.openSettings();
 			  });
 		  });
 
