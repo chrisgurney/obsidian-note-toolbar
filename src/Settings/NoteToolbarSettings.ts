@@ -218,7 +218,6 @@ export interface NoteToolbarSettings {
 	emptyViewToolbar: string | null;
 	export: ExportSettings;
 	folderMappings: Array<FolderMapping>;
-	hideTouchCalloutMenu: boolean;
 	icon: string;
 	keepPropsState: boolean;
 	lockCallouts: boolean;
@@ -249,7 +248,6 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	},
 	folderMappings: [],
 	icon: "circle-ellipsis",
-	hideTouchCalloutMenu: false,
 	keepPropsState: false,
 	lockCallouts: false,
 	onboarding: {},

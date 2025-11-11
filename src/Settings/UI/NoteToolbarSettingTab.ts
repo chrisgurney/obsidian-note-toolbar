@@ -852,28 +852,9 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 						// let isValid = await updateItemComponentStatus(this.plugin, name, SettingType.Toolbar, cb.inputEl.parentElement);
 						const newToolbar = this.plugin.settingsManager.getToolbarByName(name);
 						this.plugin.settings.textToolbar = newToolbar?.uuid ?? null;
-						const hasTextToolbar = !!this.plugin.settings.textToolbar;
-						const touchCalloutMenuSettingEl = this.containerEl.querySelector('#ntb-disable-touch-callout-setting');
-						touchCalloutMenuSettingEl?.setAttribute('data-active', hasTextToolbar.toString());
 						await this.plugin.settingsManager.save();
 					}, 250));
 			});
-
-			const touchCalloutMenuSetting = new Setting(containerEl)
-				.setName(t('setting.display-locations.option-hide-touch-callout-menu'))
-				.setDesc(t('setting.display-locations.option-hide-touch-callout-menu-description'))
-				.addToggle((cb: ToggleComponent) => {
-					cb.setValue(this.plugin.settings.hideTouchCalloutMenu)
-						.onChange(async (value: boolean) => {
-							this.plugin.settings.hideTouchCalloutMenu = value;
-							// apply the class per the setting
-							activeDocument.body.toggleClass('ntb-disable-touch-callout-menu', value);
-							await this.plugin.settingsManager.save();
-						});
-				});
-			touchCalloutMenuSetting.settingEl.id = 'ntb-disable-touch-callout-setting';
-			const hasTextToolbar = !!this.plugin.settings.textToolbar;
-			touchCalloutMenuSetting.settingEl.setAttribute('data-active', hasTextToolbar.toString());
 
 	}
 
