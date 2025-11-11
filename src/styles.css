@@ -799,6 +799,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 }
 
+/* disables the native selection menu if this class is applied (for use with text toolbars) */
+.cm-content .ntb-disable-touch-callout-menu {
+    -webkit-touch-callout: none;
+}
+
 /*****************************************************************************
 * Settings Styles (for Note Toolbar Plugin)
 ******************************************************************************/

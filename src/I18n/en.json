@@ -316,6 +316,8 @@
             "option-emptyview-tbar": "New tab toolbar",
             "option-emptyview-tbar-description": "Display a toolbar when no note is open.",
             "option-emptyview-tbar-placeholder": "Select toolbar...",
+            "option-hide-touch-callout-menu": "Hide touch callout menu",
+            "option-hide-touch-callout-menu-description": "On mobile, hide the native toolbar that appears on touch.",
             "option-launchpad": "Replace new tab view with toolbar",
             "option-launchpad-description": "Replace the new tab view with a large version of this toolbar. If not enabled, the toolbar will be in the position selected in its settings.",
             "option-text": "Text toolbar",

@@ -13,6 +13,8 @@ export function TextToolbarView(plugin: NoteToolbarPlugin) {
             constructor(view: EditorView) {
                 // plugin.debug('TextToolbarView initialized');
 
+                activeDocument.body.toggleClass('ntb-disable-touch-callout-menu', plugin.settings.hideTouchCalloutMenu);
+
                 plugin.registerDomEvent(view.dom, 'mousedown', () => {
                     this.isMouseDown = true;
                 });
