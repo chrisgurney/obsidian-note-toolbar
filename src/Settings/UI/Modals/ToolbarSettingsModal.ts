@@ -29,7 +29,7 @@ export const enum SettingsAttr {
 
 export default class ToolbarSettingsModal extends Modal {
 
-	public plugin: NoteToolbarPlugin;
+	public ntb: NoteToolbarPlugin;
 	public toolbar: ToolbarSettings;
 	private parent: NoteToolbarSettingTab | null;
 
@@ -42,23 +42,23 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Displays a new edit toolbar modal, for the given toolbar.
 	 * @param app reference to the app
-	 * @param plugin reference to the plugin
+	 * @param ntb reference to the plugin
 	 * @param parent NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
 	 * @param toolbar ToolbarSettings to edit
 	 */
-	constructor(app: App, plugin: NoteToolbarPlugin, parent: NoteToolbarSettingTab | null = null, toolbar: ToolbarSettings) {
+	constructor(app: App, ntb: NoteToolbarPlugin, parent: NoteToolbarSettingTab | null = null, toolbar: ToolbarSettings) {
 		super(app);
 		this.parent = parent;
-		this.plugin = plugin;
+		this.ntb = ntb;
 		this.toolbar = toolbar;
-		this.toolbarItemUi = new ToolbarItemUi(this.plugin, this, toolbar);
+		this.toolbarItemUi = new ToolbarItemUi(this.ntb, this, toolbar);
 	}
 
 	/**
 	 * Displays the toolbar item's settings within the modal window.
 	 */
 	onOpen() {
-		this.plugin.updateAdapters();
+		this.ntb.updateAdapters();
 		this.display();
 	}
 
@@ -97,55 +97,55 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	public display(focusItemId?: string) {
 
-		this.plugin.debug("🟡 REDRAWING MODAL 🟡");
+		this.ntb.debug("🟡 REDRAWING MODAL 🟡");
 
 		this.contentEl.empty();
 		this.modalEl.addClass('note-toolbar-setting-modal-container');
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-top-inset-fix');
 
 		// update status of installed plugins so we can display errors if needed
-		this.plugin.checkPlugins();
+		this.ntb.checkPlugins();
 
 		let settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
 
 		// show warning message about properties being changed
 		const onboardingId = 'new-toolbar-mapping';
-		if (!this.plugin.settings.onboarding[onboardingId]) {
-			let messageEl = createOnboardingMessageEl(this.plugin, 
+		if (!this.ntb.settings.onboarding[onboardingId]) {
+			let messageEl = createOnboardingMessageEl(this.ntb, 
 				onboardingId, 
 				t('onboarding.new-toolbar-mapping-title'),
-				t('onboarding.new-toolbar-mapping-content', { property: this.plugin.settings.toolbarProp }));
+				t('onboarding.new-toolbar-mapping-content', { property: this.ntb.settings.toolbarProp }));
 			settingsDiv.append(messageEl);
 		}
 
 		this.displayNameSetting(settingsDiv);
 		this.displayItemList(settingsDiv);
 		this.displayPositionSetting(settingsDiv);
-		let toolbarStyle = new ToolbarStyleUi(this.plugin, this, this.toolbar);
+		let toolbarStyle = new ToolbarStyleUi(this.ntb, this, this.toolbar);
 		toolbarStyle.displayStyleSetting(settingsDiv);
 		this.displayCommandButton(settingsDiv);
 		this.displayUsageSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
-		displayHelpSection(this.plugin, settingsDiv, true, () => {
+		displayHelpSection(this.ntb, settingsDiv, true, () => {
 			this.close();
 			if (this.parent) {
 				// @ts-ignore
-				this.plugin.app.setting.close();
+				this.ntb.app.setting.close();
 			}
 		});
 
 		this.contentEl.appendChild(settingsDiv);
 
 		// listen for clicks outside the list area, to collapse form that might be open
-		this.plugin.registerDomEvent(this.modalEl, 'click', (e) => {
+		this.ntb.registerDomEvent(this.modalEl, 'click', (e) => {
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
 			this.collapseItemForms(settingsDiv, rowClicked);
 		});
 
 		// listen for focus changes, to collapse form that might be open
-		this.plugin.registerDomEvent(settingsDiv, 'focusin', (e) => {
+		this.ntb.registerDomEvent(settingsDiv, 'focusin', (e) => {
 			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
 			this.collapseItemForms(settingsDiv, rowClicked);
 		});
@@ -160,7 +160,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
 
 		// show the What's New view once, if the user hasn't seen it yet
-		showWhatsNewIfNeeded(this.plugin);
+		showWhatsNewIfNeeded(this.ntb);
 
 	}
 
@@ -179,7 +179,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setValue(this.toolbar.name)
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
-					let existingToolbar = this.plugin.settingsManager.getToolbarByName(value);
+					let existingToolbar = this.ntb.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
 						setFieldError(this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
 					}
@@ -187,8 +187,8 @@ export default class ToolbarSettingsModal extends Modal {
 						removeFieldError(cb.inputEl, 'beforeend');
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
-						this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
-						await this.plugin.settingsManager.save();
+						this.ntb.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
+						await this.ntb.settingsManager.save();
 						this.setTitle(this.toolbar.name
 							? t('setting.title-edit-toolbar', { toolbar: this.toolbar.name }) 
 							: t('setting.title-edit-toolbar_none'));
@@ -197,7 +197,7 @@ export default class ToolbarSettingsModal extends Modal {
 		settingsDiv.append(toolbarNameDiv);
 
 		// allow keyboard navigation down to first toolbar item
-		this.plugin.registerDomEvent(
+		this.ntb.registerDomEvent(
 			toolbarNameSetting.controlEl, 'keydown', (e) => {
 				switch (e.key) {
 					case 'ArrowDown': {
@@ -239,16 +239,16 @@ export default class ToolbarSettingsModal extends Modal {
 				.setTooltip(t('import.button-import-into-tooltip'))
 				.onClick(async () => {
 					importFromModal(
-						this.plugin, 
+						this.ntb, 
 						this.toolbar
 					).then(async (importedToolbar: ToolbarSettings) => {
 						if (importedToolbar) {
-							await this.plugin.settingsManager.save();
+							await this.ntb.settingsManager.save();
 							this.display();
 						}
 					});
 				});
-				handleKeyClick(this.plugin, cb.extraSettingsEl);
+				handleKeyClick(this.ntb, cb.extraSettingsEl);
 			});
 
 		if (this.toolbar.items.length > 8) {
@@ -267,7 +267,7 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					handleKeyClick(this.plugin, cb.extraSettingsEl);
+					handleKeyClick(this.ntb, cb.extraSettingsEl);
 				});
 		}
 
@@ -289,8 +289,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 			const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-			this.plugin.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.plugin, this.toolbar, 'Default', this));
-			handleKeyClick(this.plugin, galleryLinkEl);
+			this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.ntb, this.toolbar, 'Default', this));
+			handleKeyClick(this.ntb, galleryLinkEl);
 
 			itemsSortableContainer.append(emptyMsgEl);
 
@@ -319,7 +319,7 @@ export default class ToolbarSettingsModal extends Modal {
 				const itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
 				if (itemPreviewEl) {
 					updateItemComponentStatus(
-						this.plugin,
+						this.ntb,
 						(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
 						SettingFieldItemMap[toolbarItem.linkAttr.type], 
 						itemPreviewEl,
@@ -328,7 +328,7 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 
 			// support up/down arrow keys
-			this.plugin.registerDomEvent(
+			this.ntb.registerDomEvent(
 				itemsSortableContainer, 'keydown', (keyEvent) => {
 					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
 					const currentFocussed = activeDocument.activeElement as HTMLElement;
@@ -370,10 +370,10 @@ export default class ToolbarSettingsModal extends Modal {
 			onChange: (item) => navigator.vibrate(50),
 			onChoose: (item) => navigator.vibrate(50),
 			onSort: async (item) => {
-				this.plugin.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+				this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 				if (item.oldIndex !== undefined && item.newIndex !== undefined) {
 					moveElement(this.toolbar.items, item.oldIndex, item.newIndex);
-					await this.plugin.settingsManager.save();
+					await this.ntb.settingsManager.save();
 				}
 			}
 		});
@@ -395,20 +395,20 @@ export default class ToolbarSettingsModal extends Modal {
 				icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
 				btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
 					.onClick(async () => this.addItemHandler(ItemType.Separator, itemsSortableContainer));
-				handleKeyClick(this.plugin, btn.extraSettingsEl);
+				handleKeyClick(this.ntb, btn.extraSettingsEl);
 			})
 			.addExtraButton((btn) => {
 				btn.setIcon('lucide-corner-down-left')
 					.setTooltip(t('setting.items.button-add-break-tooltip'))
 					.onClick(async () => this.addItemHandler(ItemType.Break, itemsSortableContainer));
-				handleKeyClick(this.plugin, btn.extraSettingsEl);
+				handleKeyClick(this.ntb, btn.extraSettingsEl);
 			});
 		itemsListButtonContainer.appendChild(formattingButtons);
 
 		new Setting(itemsListButtonContainer)
 			.addButton((btn) => {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-					.onClick(async () => openItemSuggestModal(this.plugin, this.toolbar, 'Default', this));
+					.onClick(async () => openItemSuggestModal(this.ntb, this.toolbar, 'Default', this));
 				btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
 			})
 			.addButton((btn) => {
@@ -417,7 +417,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.onClick(async () => {
 						if (Platform.isPhone) {
 							let newToolbarItem = await this.addItemHandler(ItemType.Command);
-							const itemModal = new ItemModal(this.plugin, this.toolbar, newToolbarItem, this);
+							const itemModal = new ItemModal(this.ntb, this.toolbar, newToolbarItem, this);
 							itemModal.open();
 						}
 						else await this.addItemHandler(ItemType.Command, itemsSortableContainer);
@@ -580,7 +580,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.extraSettingsEl.addClass('sortable-handle');
 				cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 				cb.extraSettingsEl.tabIndex = 0;
-				this.plugin.registerDomEvent(
+				this.ntb.registerDomEvent(
 					cb.extraSettingsEl,	'keydown', (e) => {
 						this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
 					} );
@@ -591,7 +591,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// listen for clicks within the list to expand the items
 		//
 
-		this.plugin.registerDomEvent(
+		this.ntb.registerDomEvent(
 			itemPreview, 'keydown', async (e: KeyboardEvent) => {
 				switch (e.key) {
 					case "d": {
@@ -599,8 +599,8 @@ export default class ToolbarSettingsModal extends Modal {
 						if (modifierPressed) {        
 							const index = this.toolbar.items.indexOf(toolbarItem);
 							const itemIndex = index >= 0 ? index + 1 : undefined;
-							const newItem = await this.plugin.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
-							this.plugin.settingsManager.save();
+							const newItem = await this.ntb.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
+							this.ntb.settingsManager.save();
 							this.display(newItem.uuid);
 						}
 						break;
@@ -611,10 +611,10 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toggleItemView(itemPreviewContainer, 'form');
 				}
 			});
-		this.plugin.registerDomEvent(
+		this.ntb.registerDomEvent(
 			itemPreview, 'click', (e) => {
 				if (Platform.isPhone) {
-					const itemModal = new ItemModal(this.plugin, this.toolbar, toolbarItem, this);
+					const itemModal = new ItemModal(this.ntb, this.toolbar, toolbarItem, this);
 					itemModal.open();
 				}
 				else {
@@ -676,16 +676,16 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 						// update disclaimers
 						desktopPosSetting.descEl.empty();
-						const isNativeMenusEnabled: boolean = !!this.plugin.app.vault.getConfig('nativeMenus');
+						const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
 						if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
 							desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
 						}
-						await this.plugin.settingsManager.save();
+						await this.ntb.settingsManager.save();
 						this.display();
 					})
 				);
 
-		const isNativeMenusEnabled: boolean = !!this.plugin.app.vault.getConfig('nativeMenus');
+		const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
 		if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
 			desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
 		}
@@ -712,22 +712,22 @@ export default class ToolbarSettingsModal extends Modal {
 						if (!this.hasDesktopFabPosition) {
 							defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
 						}
-						await this.plugin.settingsManager.save();
+						await this.ntb.settingsManager.save();
 						this.display();
 					})
 				);
 
-		const initialDefaultItem = this.plugin.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
+		const initialDefaultItem = this.ntb.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
 		let defaultItemSetting = new Setting(settingsDiv)
 			.setName(t('setting.position.option-defaultitem'))
 			.setDesc(t('setting.position.option-defaultitem-description'))
 			.setClass('note-toolbar-setting-item-full-width-phone')
 			.addSearch((cb) => {
-				new ItemSuggester(this.app, this.plugin, this.toolbar, cb.inputEl, async (item) => {
+				new ItemSuggester(this.app, this.ntb, this.toolbar, cb.inputEl, async (item) => {
 					removeFieldError(cb.inputEl, 'beforeend');
 					cb.inputEl.value = item.label || item.tooltip;
 					this.toolbar.defaultItem = item.uuid;
-					await this.plugin.settingsManager.save();
+					await this.ntb.settingsManager.save();
 				});
 				cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
 					.setValue(initialDefaultItem ? (initialDefaultItem.label || initialDefaultItem.tooltip) : '')
@@ -739,7 +739,7 @@ export default class ToolbarSettingsModal extends Modal {
 						else {
 							removeFieldError(cb.inputEl, 'beforeend');
 							this.toolbar.defaultItem = null;
-							await this.plugin.settingsManager.save();
+							await this.ntb.settingsManager.save();
 						}
 					}, 250));
 			});
@@ -769,15 +769,15 @@ export default class ToolbarSettingsModal extends Modal {
 					.setValue(this.toolbar.hasCommand)
 					.onChange(async (value) => {
 						this.toolbar.hasCommand = value;
-						await this.plugin.settingsManager.save();
+						await this.ntb.settingsManager.save();
 						// add or remove the command
 						if (value) {
-							this.plugin.addCommand({ 
+							this.ntb.addCommand({ 
 								id: COMMAND_PREFIX_TBAR + this.toolbar.uuid, 
 								name: t('command.name-open-toolbar', {toolbar: this.toolbar.name}), 
-								icon: this.plugin.settings.icon, 
+								icon: this.ntb.settings.icon, 
 								callback: async () => {
-									this.plugin.commands.openQuickTools(this.toolbar.uuid);
+									this.ntb.commands.openQuickTools(this.toolbar.uuid);
 								}
 							});
 							new Notice(t(
@@ -786,7 +786,7 @@ export default class ToolbarSettingsModal extends Modal {
 							));
 						}
 						else {
-							this.plugin.removeCommand(COMMAND_PREFIX_TBAR + this.toolbar.uuid);
+							this.ntb.removeCommand(COMMAND_PREFIX_TBAR + this.toolbar.uuid);
 							new Notice(t(
 								'setting.open-command.notice-command-removed', 
 								{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
@@ -802,7 +802,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayUsageSetting(settingsDiv: HTMLElement) {
 
-		let usageDescFr = getToolbarUsageFr(this.plugin, this.toolbar, this);
+		let usageDescFr = getToolbarUsageFr(this.ntb, this.toolbar, this);
 		
 		new Setting(settingsDiv)
 			.setName(t('setting.usage.name'))
@@ -835,19 +835,19 @@ export default class ToolbarSettingsModal extends Modal {
 					.setCta()
 					.onClick(() => {
 						confirmWithModal(
-							this.plugin.app, 
+							this.ntb.app, 
 							{ 
 								title: t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
 								questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
-								notes: getToolbarUsageText(this.plugin, this.toolbar) + '\n\n' + t('setting.delete-toolbar.label-usage-note', { propertyName: this.plugin.settings.toolbarProp, toolbarName: this.toolbar.name }),
+								notes: getToolbarUsageText(this.ntb, this.toolbar) + '\n\n' + t('setting.delete-toolbar.label-usage-note', { propertyName: this.ntb.settings.toolbarProp, toolbarName: this.toolbar.name }),
 								approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
 								denyLabel: t('setting.button-cancel'),
 								warning: true
 							}
 						).then((isConfirmed: boolean) => {
 							if (isConfirmed) {
-								this.plugin.settingsManager.deleteToolbar(this.toolbar.uuid);
-								this.plugin.settingsManager.save().then(() => {
+								this.ntb.settingsManager.deleteToolbar(this.toolbar.uuid);
+								this.ntb.settingsManager.save().then(() => {
 									this.close()
 								});
 							}
@@ -880,7 +880,7 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 		this.toolbar.items.push(newToolbarItem);
 		this.toolbar.updated = new Date().toISOString();
-		await this.plugin.settingsManager.save();
+		await this.ntb.settingsManager.save();
 
 		// add preview and form to the list
 		if (itemContainer) {
@@ -968,7 +968,7 @@ export default class ToolbarSettingsModal extends Modal {
 				this.toolbar.updated = new Date().toISOString();
 				break;
 		}
-		await this.plugin.settingsManager.save();
+		await this.ntb.settingsManager.save();
 		this.display();
 	}
 
@@ -986,7 +986,7 @@ export default class ToolbarSettingsModal extends Modal {
 		action?: 'up' | 'down' | 'delete'
 	): Promise<void> {	
 		let itemIndex = this.getIndexByUuid(itemUuid);
-		this.plugin.debug("listMoveHandlerById: moving index:", itemIndex);
+		this.ntb.debug("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
 	}
 
@@ -1007,7 +1007,7 @@ export default class ToolbarSettingsModal extends Modal {
 		});
 
         // listen to changes
-        this.plugin.registerDomEvent(containerEl, 'scroll', (event) => {
+        this.ntb.registerDomEvent(containerEl, 'scroll', (event) => {
             this.lastScrollPosition = containerEl.scrollTop;
 		});
 
@@ -1055,10 +1055,10 @@ export default class ToolbarSettingsModal extends Modal {
 				itemPreview.append(itemPreviewContent);
 				break;
 			case ItemType.Group: {
-				const groupToolbar = this.plugin.settingsManager.getToolbar(toolbarItem.link);
+				const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.plugin, groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
+				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.ntb, groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
 				break;
 			}
 			default: {
@@ -1070,14 +1070,14 @@ export default class ToolbarSettingsModal extends Modal {
 				itemPreviewContent.addClass('note-toolbar-setting-item-preview-label');
 				if (toolbarItem.label) {
 					itemPreviewContent.setText(toolbarItem.label);
-					if (this.plugin.vars.hasVars(toolbarItem.label)) {
+					if (this.ntb.vars.hasVars(toolbarItem.label)) {
 						itemPreviewContent.addClass('note-toolbar-setting-item-preview-code');
 					}
 				}
 				else if (toolbarItem.tooltip) {
 					itemPreviewContent.setText(toolbarItem.tooltip);
 					itemPreviewContent.addClass("note-toolbar-setting-item-preview-tooltip");
-					if (this.plugin.vars.hasVars(toolbarItem.tooltip)) {
+					if (this.ntb.vars.hasVars(toolbarItem.tooltip)) {
 						itemPreviewContent.addClass('note-toolbar-setting-item-preview-code');
 					}
 				}
@@ -1106,9 +1106,9 @@ export default class ToolbarSettingsModal extends Modal {
 
 		// show hotkey
 		if (!Platform.isPhone) {
-			const itemCommand = this.plugin.commands.getCommandFor(toolbarItem);
+			const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
 			if (itemCommand) {
-				const itemHotkeyEl = this.plugin.hotkeys.getHotkeyEl(itemCommand);
+				const itemHotkeyEl = this.ntb.hotkeys.getHotkeyEl(itemCommand);
 				if (itemHotkeyEl) {
 					itemPreviewContent.appendChild(itemHotkeyEl);
 				}

@@ -6,18 +6,17 @@ import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
 export default class ItemModal extends Modal {
 
-    public plugin: NoteToolbarPlugin;
     private toolbarItemUi: ToolbarItemUi;
 
     constructor(
-        plugin: NoteToolbarPlugin, 
+        public ntb: NoteToolbarPlugin, 
         toolbar: ToolbarSettings, 
         private toolbarItem: ToolbarItemSettings, 
         private parent?: ToolbarSettingsModal
     ) {
-        super(plugin.app);
-		this.plugin = plugin;
-        this.toolbarItemUi = new ToolbarItemUi(this.plugin, this, toolbar);
+        super(ntb.app);
+		this.ntb = ntb;
+        this.toolbarItemUi = new ToolbarItemUi(this.ntb, this, toolbar);
     }
 
     /**
@@ -46,7 +45,7 @@ export default class ItemModal extends Modal {
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
 		// update status of installed plugins so we can show available plugins and display errors if needed
-        this.plugin.checkPlugins();
+        this.ntb.checkPlugins();
 
         let itemForm = this.toolbarItemUi.generateItemForm(this.toolbarItem);
         this.contentEl.append(itemForm);
@@ -63,7 +62,7 @@ export default class ItemModal extends Modal {
         doneButton.settingEl.addClass('note-toolbar-setting-no-border');
 
         // let user close modal with Cmd/Ctrl + Enter
-        this.plugin.registerDomEvent(
+        this.ntb.registerDomEvent(
             this.modalEl, 'keydown', async (e: KeyboardEvent) => {
                 switch (e.key) {
                     case "Enter": {
