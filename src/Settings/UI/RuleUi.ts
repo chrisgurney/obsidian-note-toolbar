@@ -160,7 +160,7 @@ export default class RuleUi {
         new Setting(ruleEl)
             .setClass("note-toolbar-setting-mapping-field")
             .addSearch((cb) => {
-                new ToolbarSuggester(this.plugin.app, this.plugin, cb.inputEl);
+                new ToolbarSuggester(this.plugin, cb.inputEl);
                 cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
                     .setValue(this.plugin.settingsManager.getToolbarName(rule.toolbar))
                     .onChange(debounce(async (name) => {

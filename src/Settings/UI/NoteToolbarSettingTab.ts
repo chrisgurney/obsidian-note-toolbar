@@ -725,7 +725,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 		new Setting(textFieldsDiv)
 			.setClass("note-toolbar-setting-mapping-field")
 			.addSearch((cb) => {
-				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				new ToolbarSuggester(this.plugin, cb.inputEl);
 				cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
 					.setValue(this.plugin.settingsManager.getToolbarName(mapping.toolbar))
 					.onChange(debounce(async (name) => {
@@ -814,7 +814,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-locations.option-emptyview-tbar'))
 			.setDesc(learnMoreFr(t('setting.display-locations.option-emptyview-tbar-description'), 'New-tab-view'))
 			.addSearch((cb) => {
-				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				new ToolbarSuggester(this.plugin, cb.inputEl);
 				cb.setPlaceholder(t('setting.display-locations.option-emptyview-tbar-placeholder'))
 					.setValue(this.plugin.settings.emptyViewToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.emptyViewToolbar) : '')
 					.onChange(debounce(async (name) => {
@@ -845,7 +845,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.display-locations.option-text'))
 			.setDesc(t('setting.display-locations.option-text-description'))
 			.addSearch((cb) => {
-				new ToolbarSuggester(this.app, this.plugin, cb.inputEl);
+				new ToolbarSuggester(this.plugin, cb.inputEl);
 				cb.setPlaceholder(t('setting.display-locations.option-text-placeholder'))
 					.setValue(this.plugin.settings.textToolbar ? this.plugin.settingsManager.getToolbarName(this.plugin.settings.textToolbar) : '')
 					.onChange(debounce(async (name) => {

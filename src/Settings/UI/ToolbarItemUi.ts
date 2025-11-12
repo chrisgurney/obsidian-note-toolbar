@@ -732,7 +732,7 @@ export default class ToolbarItemUi {
                 const groupSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
-                        new ToolbarSuggester(this.plugin.app, this.plugin, cb.inputEl);
+                        new ToolbarSuggester(this.plugin, cb.inputEl);
                         cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
                             .setValue(initialGroupToolbar ? initialGroupToolbar.name : '')
                             .onChange(debounce(async (name) => {
@@ -759,7 +759,7 @@ export default class ToolbarItemUi {
                 const menuSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
-                        new ToolbarSuggester(this.plugin.app, this.plugin, cb.inputEl);
+                        new ToolbarSuggester(this.plugin, cb.inputEl);
                         cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
                             .setValue(initialMenuToolbar ? initialMenuToolbar.name : '')
                             .onChange(debounce(async (name) => {
