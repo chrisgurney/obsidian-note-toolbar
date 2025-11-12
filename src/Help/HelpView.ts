@@ -7,11 +7,8 @@ import { renderTipItems } from "./TipView";
 
 export class HelpView extends ItemView {
 
-    plugin: NoteToolbarPlugin;
-
-    constructor(plugin: NoteToolbarPlugin, leaf: WorkspaceLeaf) {
+    constructor(private ntb: NoteToolbarPlugin, leaf: WorkspaceLeaf) {
         super(leaf);
-        this.plugin = plugin;
     }
 
     getViewType(): string {

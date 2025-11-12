@@ -20,7 +20,7 @@ export class TipView extends ItemView {
 
     state: TipViewState;
 
-    constructor(readonly plugin: NoteToolbarPlugin, readonly leaf: WorkspaceLeaf) {
+    constructor(readonly ntb: NoteToolbarPlugin, readonly leaf: WorkspaceLeaf) {
         super(leaf);
     }
 
@@ -43,10 +43,10 @@ export class TipView extends ItemView {
         setIcon(bannerIconEl, tip.icon);
         const bannerTitleEl = bannerEl.createDiv();
         const bannerTitleComponent = new Component();
-        MarkdownRenderer.render(this.plugin.app, `# ${(tip as TipType).title[language]}`, bannerTitleEl, '/', bannerTitleComponent);
+        MarkdownRenderer.render(this.ntb.app, `# ${(tip as TipType).title[language]}`, bannerTitleEl, '/', bannerTitleComponent);
         const bannerDescEl = bannerEl.createDiv();
         const bannerDescComponent = new Component();
-        MarkdownRenderer.render(this.plugin.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', bannerDescComponent);
+        MarkdownRenderer.render(this.ntb.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', bannerDescComponent);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-tip-content', 'is-readable-line-width');
@@ -71,9 +71,9 @@ export class TipView extends ItemView {
             contentEl.empty();
         }
 
-        const rootPath = this.plugin.app.vault.getRoot().path;
+        const rootPath = this.ntb.app.vault.getRoot().path;
         const component = new Component();
-        MarkdownRenderer.render(this.plugin.app, tipText, contentEl, rootPath, component);
+        MarkdownRenderer.render(this.ntb.app, tipText, contentEl, rootPath, component);
 
         this.renderTipVideos(contentEl);
         this.renderGalleryCallouts(contentEl, tip.color as ColorType);
@@ -152,14 +152,14 @@ export class TipView extends ItemView {
             });
             calloutEl.textContent = '';
             calloutEl.className = '';
-            renderGalleryItems(this.plugin, calloutEl, items, TIP_COLORS[color]);
+            renderGalleryItems(this.ntb, calloutEl, items, TIP_COLORS[color]);
         });
 
-		this.plugin.registerDomEvent(contentEl, 'click', async (evt) => {
+		this.ntb.registerDomEvent(contentEl, 'click', async (evt) => {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-card-item');
 			if (galleryItemEl && galleryItemEl.id) {
-				const galleryItem = this.plugin.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
-				if (galleryItem) await this.plugin.gallery.addItem(galleryItem);
+				const galleryItem = this.ntb.gallery.getItems().find(item => item.uuid.includes(galleryItemEl.id));
+				if (galleryItem) await this.ntb.gallery.addItem(galleryItem);
 			}
 		});
     }
@@ -260,11 +260,11 @@ const createLinearGradient = (name: LinearGradientType): string => {
 
 /**
  * Renders the provided list of tip items in a scrollable container.
- * @param plugin NoteToolbarPlugin
+ * @param ntb NoteToolbarPlugin
  * @param containerEl HTMLDivElement container to render items into.
  * @param tipIds list of string IDs as defined in `tips.json`
  */
-export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivElement, tipIds: string[]) {
+export function renderTipItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivElement, tipIds: string[]) {
 
     const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
@@ -297,7 +297,7 @@ export function renderTipItems(plugin: NoteToolbarPlugin, containerEl: HTMLDivEl
 
     });
 
-    plugin.registerDomEvent(containerEl, 'click', (event) => { 
+    ntb.registerDomEvent(containerEl, 'click', (event) => { 
         const tipEl = (event.target as HTMLElement).closest('.note-toolbar-card-item');
         if (tipEl) {
             if (tipEl.id === 'gallery') {

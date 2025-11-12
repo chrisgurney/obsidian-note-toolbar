@@ -10,8 +10,9 @@ export default class GalleryManager {
 
     private items: ToolbarItemSettings[] = [];
 
-    constructor(private plugin: NoteToolbarPlugin) {
-    }
+    constructor(
+        private ntb: NoteToolbarPlugin
+    ) {}
 
     getItems(): ToolbarItemSettings[] {
         if (this.items.length === 0) this.loadItems();
@@ -23,36 +24,36 @@ export default class GalleryManager {
 	 * @param galleryItem Gallery item to add
 	 */
 	async addItem(galleryItem: ToolbarItemSettings): Promise<void> {
-		const toolbarModal = new ToolbarSuggestModal(this.plugin, true, false, true, async (selectedToolbar: ToolbarSettings) => {
+		const toolbarModal = new ToolbarSuggestModal(this.ntb, true, false, true, async (selectedToolbar: ToolbarSettings) => {
 			if (selectedToolbar && galleryItem) {
 				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
-					selectedToolbar = await this.plugin.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
+					selectedToolbar = await this.ntb.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
 				}
-				let newItem = await this.plugin.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
-                const isResolved = await this.plugin.settingsManager.resolveGalleryItem(newItem);
+				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
+                const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
                 if (!isResolved) return;
 				selectedToolbar.updated = new Date().toISOString();
-				await this.plugin.settingsManager.save();
-				this.plugin.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
+				await this.ntb.settingsManager.save();
+				this.ntb.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
                 new Notice(t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name, interpolation: { escapeValue: false } }));
 			}
 		});
 
         // confirm with user if they would like to enable scripting
-        const isScriptingEnabled = await openScriptPrompt(this.plugin, galleryItem);
+        const isScriptingEnabled = await openScriptPrompt(this.ntb, galleryItem);
         if (!isScriptingEnabled) return;
 
         switch (galleryItem.linkAttr.type) {
             case ItemType.Command: {
                 // check if the item's command exists, before displaying toolbar modal
-                const command = this.plugin.app.commands.commands[galleryItem.linkAttr.commandId];
+                const command = this.ntb.app.commands.commands[galleryItem.linkAttr.commandId];
                 const commandPluginId = galleryItem.linkAttr.commandId.split(':')[0];
                 if (!command) {
                     // prompt the user if they'd still like to add it
                     // get plugin name if known, otherwise show command ID
                     const pluginName = t(`plugin.${commandPluginId}`, { defaultValue: '' });
                     confirmWithModal(
-                        this.plugin.app, 
+                        this.ntb.app, 
                         {
                             title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
                             questionLabel: pluginName 
@@ -78,7 +79,7 @@ export default class GalleryManager {
                     if (hasFileUri) {
                         // prompt the user if they'd still like to add it
                         confirmWithModal(
-                            this.plugin.app, 
+                            this.ntb.app, 
                             {
                                 title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
                                 questionLabel: t('setting.add-item.label-confirm-mobile-uri', { uri: galleryItem.link }),
@@ -147,7 +148,7 @@ export default class GalleryManager {
         this.items.sort((a, b) => a.tooltip.localeCompare(b.tooltip));
 
         const endTime = performance.now();
-        this.plugin.debug(`Gallery loaded in ${endTime - startTime} ms`);
+        this.ntb.debug(`Gallery loaded in ${endTime - startTime} ms`);
     }
 
 }
