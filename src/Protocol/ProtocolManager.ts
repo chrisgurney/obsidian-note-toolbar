@@ -65,7 +65,7 @@ export class ProtocolManager {
 			if (activeFile) {
 				if (toolbar) {
 					this.ntb.render.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-						this.ntb.render.showMenuAtElement(menu, this.ntb.lastCalloutLink);
+						this.ntb.render.showMenuAtElement(menu, this.ntb.items.lastCalloutLink);
 					});
 				}
 				else {

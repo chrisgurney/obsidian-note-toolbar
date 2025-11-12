@@ -1,6 +1,6 @@
-import { Notice, Platform, Plugin, WorkspaceLeaf, addIcon } from 'obsidian';
+import { Platform, Plugin, WorkspaceLeaf, addIcon } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, ItemType, CalloutAttr, t, VIEW_TYPE_WHATS_NEW, ScriptConfig, SCRIPT_ATTRIBUTE_MAP, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
+import { NoteToolbarSettings, t, VIEW_TYPE_WHATS_NEW, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
 import { WhatsNewView } from 'Help/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandManager } from 'Commands/CommandManager';
@@ -38,16 +38,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	listeners: ToolbarEventListener;
 	render: ToolbarRenderer;
 	vars: VariableResolver;
-
-	// track the last used callout link, for the menu URI
-	lastCalloutLink: Element | null = null;
-	// track the last clicked element, for the menu API
-	lastClickedEl: Element | null = null;
-
-	// TODO: remove if not needed
-	// __onNoteChange__leafFiles: { [id: string]: TFile | null } = {};
-	// __onNoteChange__leafCallbacks: { [id: string]: (oldFile: TFile | null, newFile: TFile) => void } = {};
-	// __onNoteChange__eventCreated: boolean = false;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -113,7 +103,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// Note Toolbar Callout click handlers
 			this.registerEvent(this.app.workspace.on('window-open', (win) => {
 				this.registerDomEvent(win.doc, 'click', (e: MouseEvent) => {
-					this.calloutLinkHandler(e);
+					this.items.calloutLinkHandler(e);
 				});
 			}));
 			this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
@@ -121,7 +111,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				if (!target.matches('.cg-note-toolbar-container')) {
 					this.render.removeFocusStyle();
 				}
-				this.calloutLinkHandler(e);
+				this.items.calloutLinkHandler(e);
 			});
 
 			// add items to menus, when needed
@@ -185,107 +175,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
  
-	/*************************************************************************
-	 * HANDLERS
-	 *************************************************************************/
-
-	/**
-	 * Handles links followed from Note Toolbar Callouts, including handling commands, folders, and menus.
-	 * Links take the form [Tools]()<data data-ntb-menu="Tools"/>
-	 * @param MouseEvent 
-	 */
-	async calloutLinkHandler(e: MouseEvent) {
-
-		const target = e.target as HTMLElement | null;
-		const clickedCalloutEl = target?.closest('.callout[data-callout="note-toolbar"]');
-		
-		// only process clicks inside of Note Toolbar callouts
-		if (clickedCalloutEl) {
-
-			// remove any active item attributes from the main toolbar, so the API doesn't fetch the wrong item
-			// (not supported for Note Toolbar Callouts)
-			this.render.updateActiveToolbarItem();
-
-			// prevent expansion of callouts if setting is enabled
-			if (this.settings.lockCallouts) {
-				if (clickedCalloutEl.hasAttribute('data-callout-fold')) {
-					e.preventDefault();
-				}
-			}
-
-			const clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
-			if (clickedItemEl) {
-				// this.debug('calloutLinkHandler:', target, clickedItemEl);
-				this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
-				let dataEl = clickedItemEl?.nextElementSibling;
-				if (dataEl) {
-					// make sure it's a valid attribute, and get its value
-					const attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
-					attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
-					const value = attribute ? dataEl?.getAttribute(attribute) : null;
-					
-					switch (attribute) {
-						case CalloutAttr.Command:
-						case CalloutAttr.CommandNtb:
-							this.items.handleLinkCommand(value);
-							break;
-						case CalloutAttr.Dataview:
-						case CalloutAttr.JavaScript:
-						case CalloutAttr.JsEngine:
-						case CalloutAttr.Templater: {
-							const scriptConfig = {
-								pluginFunction: value,
-								expression: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['expression']) ?? undefined,
-								sourceFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFile']) ?? undefined,
-								sourceFunction: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceFunction']) ?? undefined,
-								sourceArgs: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['sourceArgs']) ?? undefined,
-								outputContainer: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputContainer']) ?? undefined,
-								outputFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputFile']) ?? undefined,
-							} as ScriptConfig;
-							switch (attribute) {
-								case CalloutAttr.Dataview:
-									this.items.handleLinkScript(ItemType.Dataview, scriptConfig);
-									break;
-								case CalloutAttr.JavaScript:
-									this.items.handleLinkScript(ItemType.JavaScript, scriptConfig);
-									break;
-								case CalloutAttr.JsEngine:
-									this.items.handleLinkScript(ItemType.JsEngine, scriptConfig);
-									break;
-								case CalloutAttr.Templater:
-									this.items.handleLinkScript(ItemType.Templater, scriptConfig);
-									break;	
-							}
-							break;
-						}
-						case CalloutAttr.Folder:
-						case CalloutAttr.FolderNtb:
-							this.items.handleLinkFolder(value);
-							break;
-						case CalloutAttr.Menu:
-						case CalloutAttr.MenuNtb: {
-							const activeFile = this.app.workspace.getActiveFile();
-							const toolbar: ToolbarSettings | undefined = this.settingsManager.getToolbar(value);
-							if (activeFile) {
-								if (toolbar) {
-									this.render.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
-										this.render.showMenuAtElement(menu, this.lastCalloutLink);
-									});
-								}
-								else {
-									new Notice(t('notice.error-item-menu-not-found', { toolbar: value }));
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-		}
-
-	}
-
 	/*************************************************************************
 	 * DEBUGGING
 	 *************************************************************************/

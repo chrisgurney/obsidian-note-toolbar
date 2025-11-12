@@ -16,6 +16,11 @@ export default class ToolbarEventHandler {
 	lastFileOpenedOnCacheChange: TFile | null;
 	lastNtbPropValue: string | undefined;
 
+	// TODO: remove if not needed
+	// __onNoteChange__leafFiles: { [id: string]: TFile | null } = {};
+	// __onNoteChange__leafCallbacks: { [id: string]: (oldFile: TFile | null, newFile: TFile) => void } = {};
+	// __onNoteChange__eventCreated: boolean = false;
+
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
