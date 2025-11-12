@@ -174,10 +174,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                 if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                     // ...and does not have a var link and label/tooltip that resolves to nothing
                     if (
-                        !(this.plugin.hasVars(item.link) && 
-                            await this.plugin.replaceVars(item.link, this.activeFile, ErrorBehavior.Ignore) === '') &&
-                        !(this.plugin.hasVars(itemName) && 
-                            await this.plugin.replaceVars(itemName, this.activeFile, ErrorBehavior.Ignore) === '')
+                        !(this.plugin.vars.hasVars(item.link) && 
+                            await this.plugin.vars.replaceVars(item.link, this.activeFile, ErrorBehavior.Ignore) === '') &&
+                        !(this.plugin.vars.hasVars(itemName) && 
+                            await this.plugin.vars.replaceVars(itemName, this.activeFile, ErrorBehavior.Ignore) === '')
                     ) {
                         return true;
                     }
@@ -236,10 +236,10 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
         sortedSuggestions.sort((a, b) => {
             const aItemNameRaw = this.cleanString(a.label || a.tooltip || '');
             const bItemNameRaw = this.cleanString(b.label || b.tooltip || '');
-            const aItemName = this.cleanString((!this.plugin.hasVars(a.label) ? a.label : '') || 
-                (!this.plugin.hasVars(a.tooltip) ? a.tooltip : '') || '');
-            const bItemName = this.cleanString((!this.plugin.hasVars(b.label) ? b.label : '') || 
-                (!this.plugin.hasVars(b.tooltip) ? b.tooltip : '') || '');
+            const aItemName = this.cleanString((!this.plugin.vars.hasVars(a.label) ? a.label : '') || 
+                (!this.plugin.vars.hasVars(a.tooltip) ? a.tooltip : '') || '');
+            const bItemName = this.cleanString((!this.plugin.vars.hasVars(b.label) ? b.label : '') || 
+                (!this.plugin.vars.hasVars(b.tooltip) ? b.tooltip : '') || '');
 
             const aStartsWith = aItemName.startsWith(searchString);
             const bStartsWith = bItemName.startsWith(searchString);

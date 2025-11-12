@@ -173,8 +173,8 @@ export function getCommandIdByName(plugin: NoteToolbarPlugin, commandName: strin
  */
 export function getItemText(plugin: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, ignoreVars: boolean = false): string {
 	if (ignoreVars) {
-		if (plugin.hasVars(toolbarItem.label)) {
-			return plugin.hasVars(toolbarItem.tooltip) ? '' : toolbarItem.tooltip ?? '';
+		if (plugin.vars.hasVars(toolbarItem.label)) {
+			return plugin.vars.hasVars(toolbarItem.tooltip) ? '' : toolbarItem.tooltip ?? '';
 		}
 	}
     return toolbarItem.label || toolbarItem.tooltip || '';

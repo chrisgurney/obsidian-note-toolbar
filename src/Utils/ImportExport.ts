@@ -66,13 +66,13 @@ async function exportToCalloutList(
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
         let itemText = options.replaceVars 
-            ? await plugin.replaceVars(item.label, activeFile) 
+            ? await plugin.vars.replaceVars(item.label, activeFile) 
             : replaceScriptDelimiters(plugin, item.label);
         let itemLink = options.replaceVars 
-            ? await plugin.replaceVars(item.link, activeFile) 
+            ? await plugin.vars.replaceVars(item.link, activeFile) 
             : replaceScriptDelimiters(plugin, item.link);
         let itemTooltip = options.replaceVars 
-            ? await plugin.replaceVars(item.tooltip, activeFile) 
+            ? await plugin.vars.replaceVars(item.tooltip, activeFile) 
             : replaceScriptDelimiters(plugin, item.tooltip);
 
         itemText = escapeTextForCallout(itemText);
@@ -119,7 +119,7 @@ async function exportToCalloutList(
             case ItemType.File: {
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = itemLink;
-                plugin.replaceVars(itemLink, activeFile).then((resolvedLink) => {
+                plugin.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
                     resolvedItemLink = resolvedLink;
                 });
                 let fileOrFolder = plugin.app.vault.getAbstractFileByPath(resolvedItemLink);

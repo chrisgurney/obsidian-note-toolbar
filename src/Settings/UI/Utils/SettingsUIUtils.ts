@@ -110,7 +110,7 @@ export function createToolbarPreviewFr(
 							if (item.label) {
 								const labelFr = createSpan();
 								labelFr.textContent = item.label;
-								if (item.label && plugin.hasVars(item.label)) {
+								if (item.label && plugin.vars.hasVars(item.label)) {
 									labelFr.addClass('note-toolbar-setting-item-preview-code');
 								}
 								defaultItemFr.append(labelFr);
@@ -519,7 +519,7 @@ export function renderItemSuggestion(
 	// replace variables in labels (or tooltip, if no label set)
 	const activeFile = plugin.app.workspace.getActiveFile();
 	if (replaceVars) {
-		plugin.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+		plugin.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
 			itemLabelEl.setText(resolvedName);
 		});
 	}

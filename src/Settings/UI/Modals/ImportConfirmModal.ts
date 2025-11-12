@@ -57,7 +57,7 @@ export class ImportConfirmModal extends Modal {
             //
 
             let importInvalidCommands = toolbarInvalidCommands(this.plugin, toolbar);
-            let importHasVars = this.plugin.toolbarHasVars(toolbar);
+            let importHasVars = this.plugin.vars.toolbarHasVars(toolbar);
 
             if (importInvalidCommands.length > 0 || importHasVars) {
 
