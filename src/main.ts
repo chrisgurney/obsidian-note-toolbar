@@ -1,7 +1,6 @@
-import { CachedMetadata, ItemView, MarkdownView, MarkdownViewModeType, Notice, Platform, Plugin, TFile, WorkspaceLeaf, addIcon, debounce } from 'obsidian';
+import { Notice, Platform, Plugin, WorkspaceLeaf, addIcon } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, ItemType, CalloutAttr, t, ToolbarItemSettings, VIEW_TYPE_WHATS_NEW, ScriptConfig, SCRIPT_ATTRIBUTE_MAP, VIEW_TYPE_GALLERY, LocalVar, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
-import { getViewId, checkToolbarForItemView, getActiveView } from 'Utils/Utils';
+import { ToolbarSettings, NoteToolbarSettings, ItemType, CalloutAttr, t, VIEW_TYPE_WHATS_NEW, ScriptConfig, SCRIPT_ATTRIBUTE_MAP, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
 import { WhatsNewView } from 'Help/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandManager } from 'Commands/CommandManager';
@@ -17,6 +16,7 @@ import { TextToolbarView } from 'Toolbar/TextToolbarView';
 import AdapterManager from 'Adapters/AdapterManager';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
+import ToolbarEventListener from 'Toolbar/ToolbarEventListener';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
@@ -35,24 +35,14 @@ export default class NoteToolbarPlugin extends Plugin {
 	el: ToolbarElementHelper;
 	events: ToolbarEventHandler;
 	items: ToolbarItemHandler;
+	listeners: ToolbarEventListener;
 	render: ToolbarRenderer;
 	vars: VariableResolver;
-
-	activeWorkspace: string; // track current workspace, to reduce unneccessary toolbar re-renders
-	workspacesPlugin: { instance: any; enabled: boolean } | null = null;
-
-	// track the last opened layout state, to reduce unneccessary re-renders 
-	lastFileOpenedOnLayoutChange: TFile | null | undefined;
-	lastViewModeOnLayoutChange: MarkdownViewModeType | undefined;
 
 	// track the last used callout link, for the menu URI
 	lastCalloutLink: Element | null = null;
 	// track the last clicked element, for the menu API
 	lastClickedEl: Element | null = null;
-
-	// track the last used file and property, to prompt if Note Toolbar property references unknown toolbar
-	lastFileOpenedOnCacheChange: TFile | null;
-	lastNtbPropValue: string | undefined;
 
 	// TODO: remove if not needed
 	// __onNoteChange__leafFiles: { [id: string]: TFile | null } = {};
@@ -71,6 +61,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.el = new ToolbarElementHelper(this);
 		this.events = new ToolbarEventHandler(this);
 		this.items = new ToolbarItemHandler(this);
+		this.listeners = new ToolbarEventListener(this);
 		this.render = new ToolbarRenderer(this);
 		this.vars = new VariableResolver(this);
 
@@ -111,13 +102,13 @@ export default class NoteToolbarPlugin extends Plugin {
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this));
 
-			this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
-			this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));
-			this.registerEvent(this.app.metadataCache.on('changed', this.metadataCacheListener));
-			this.registerEvent(this.app.workspace.on('layout-change', this.layoutChangeListener));
+			this.registerEvent(this.app.workspace.on('file-open', this.listeners.fileOpenListener));
+			this.registerEvent(this.app.workspace.on('active-leaf-change', this.listeners.leafChangeListener));
+			this.registerEvent(this.app.metadataCache.on('changed', this.listeners.metadataCacheListener));
+			this.registerEvent(this.app.workspace.on('layout-change', this.listeners.layoutChangeListener));
 
 			// monitor files being renamed to update menu items
-			this.registerEvent(this.app.vault.on('rename', this.fileRenameListener));
+			this.registerEvent(this.app.vault.on('rename', this.listeners.fileRenameListener));
 
 			// Note Toolbar Callout click handlers
 			this.registerEvent(this.app.workspace.on('window-open', (win) => {
@@ -194,270 +185,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
  
-	/**
-	 * Loads settings if the data file is changed externally (e.g., by Obsidian Sync).
-	 * FIXME: DISABLED DUE TO DATA LOSS ISSUES WITH USERS NOT EVEN USING SETTING (POTENTIAL CAUSE)
-	 * More info: https://github.com/chrisgurney/obsidian-note-toolbar/issues/340
-	 */
-	// async onExternalSettingsChange(): Promise<void> {
-	// 	const loadSettingsChanges = this.app.loadLocalStorage(LocalVar.LoadSettings) === 'true';
-	// 	if (loadSettingsChanges) {
-	// 		this.debug('onExternalSettingsChange: loading settings changes...');
-	// 		const loaded_settings = await this.loadData();
-	// 		if (typeof loaded_settings === 'object' && loaded_settings != null) {
-	// 			this.debug('onExternalSettingsChange: loaded:', loaded_settings);
-	// 			this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
-	// 			await this.settingsManager.save();
-	// 			// TODO: if we're in the settings tab and this occurs, should it refresh? show a refresh CTA? (if so, how?)
-	// 			// check if a settings tab or modal is open, and show a notice if so?
-	// 		}
-	// 		else {
-	// 			this.debug('onExternalSettingsChange: settings EMPTY, ignoring');
-	// 		}
-	// 	}
-	// }
-
-	/* keeping for potential future use
-	async storeLeafId(currentView: MarkdownView) {
-		// @ts-ignore
-		this.activeLeafIds.push(currentView?.file?.path + '_' + currentView?.leaf.id);
-	}
-
-	haveLeafId(currentView: MarkdownView): boolean {
-		// @ts-ignore
-		return this.activeLeafIds.contains(currentView?.file?.path + '_' + currentView?.leaf.id);
-	}
-
-	async removeLeafId(idToRemove: string) {
-		// not sure when to call this; can't find event that's fired when leaf closes
-		this.activeLeafIds.remove(idToRemove);
-	}
-	*/
-
-	/*************************************************************************
-	 * LISTENERS
-	 *************************************************************************/
-
-	/**
-	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
-	 * @param file TFile that was opened.
-	 */
-	fileOpenListener = async (file: TFile) => {
-		this.debug('FILE-OPEN: updating recent file list:', file?.name);
-		// update list of the most recently opened files
-		if (file) await this.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
-	};
-
-	/**
-	 * On rename of file, update any item links that reference the old name.
-	 * @param file TFile of the new file.
-	 * @param oldPath old path.
-	 */
-	fileRenameListener = async (file: TFile, oldPath: string) => {
-		let settingsChanged = false;
-		this.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
-			toolbar.items.forEach((item: ToolbarItemSettings) => {
-				if (item.link === oldPath) {
-					this.debug('fileRenameListener: changing', item.link, 'to', file.path);
-					item.link = file.path;
-					settingsChanged = true;
-				}
-				if (item.scriptConfig?.sourceFile === oldPath) {
-					this.debug('fileRenameListener: changing', item.scriptConfig?.sourceFile, 'to', file.path);
-					item.scriptConfig.sourceFile = file.path;
-					settingsChanged = true;
-				}
-			});
-		});
-		if (settingsChanged) await this.settingsManager.save();
-	}
-
-	/**
-	 * On layout changes, render and update toolbars as necessary.
-	 */
-	layoutChangeListener = async () => {
-		
-		// if workspace changed, render all toolbars, otherwise just render the toolbar for the active view (#367)
-		const workspace = this.workspacesPlugin?.instance.activeWorkspace;
-		if (workspace !== this.activeWorkspace) {
-			await this.render.renderToolbarForAllLeaves();
-			this.activeWorkspace = workspace;
-		}
-		else {
-			const currentView = this.app.workspace.getActiveViewOfType(ItemView);
-			if (currentView) await this.render.renderToolbarForView(currentView);
-		}
-
-		// const toolbarEl = this.getToolbarEl();
-		// const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		// const currentViewId = getViewId(currentView);
-		// const currentViewMode = currentView?.getMode();
-		// this.debug('===== LAYOUT-CHANGE ===== ', currentViewId, currentView, currentViewMode);
-
-		// // show empty view or other data type toolbar
-		// if (!currentView) {
-		// 	await this.renderToolbarForView();
-		// 	return;
-		// }
-
-		// // if we're in a popover, do nothing
-		// if (currentView?.containerEl.closest('popover')) return;
-
-		// // exit if the view has already been handled, after updating the toolbar
-		// if (toolbarEl && currentViewId && this.activeViewIds.contains(currentViewId)) {
-		// 	this.debug('LAYOUT-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
-		// 	this.updateActiveToolbar();
-		// 	return;
-		// }
-
-		// // partial fix for Hover Editor bug where toolbar is redrawn if in Properties position (#14)
-		// const fileChanged = this.lastFileOpenedOnLayoutChange !== currentView?.file;
-		// const viewModeChanged = this.lastViewModeOnLayoutChange !== currentViewMode;
-		// if (fileChanged || viewModeChanged) {
-		// 	this.lastFileOpenedOnLayoutChange = fileChanged ? currentView?.file : this.lastFileOpenedOnLayoutChange;
-		// 	this.lastViewModeOnLayoutChange = viewModeChanged ? currentViewMode : this.lastViewModeOnLayoutChange;
-		// }
-		// else {
-		// 	if (toolbarEl) return; // no changes, so do nothing
-		// }
-
-		// // check for editing or reading mode
-		// switch(currentViewMode) {
-		// 	case "source":
-		// 	case "preview":
-		// 		this.app.workspace.onLayoutReady(debounce(async () => {
-		// 			// keeping just in case:
-		// 			// the props position is the only case where we have to reset the toolbar, due to re-rendering order of the editor
-		// 			// const toolbarPos = toolbarEl?.getAttribute('data-tbar-position');
-		// 			// toolbarPos === 'props' ? this.removeActiveToolbar() : undefined;
-		// 			this.debug("LAYOUT-CHANGE: renderActiveToolbar");
-		// 			// this.updateActiveViewIds();
-		// 			await this.renderToolbarForView();
-		// 		}, (currentViewMode === "preview" ? 200 : 0)));
-		// 		break;
-		// 	default:
-		// 		return;
-		// }
-	};
-
-	/**
-	 * On leaf changes, delete, check and render toolbar if necessary. 
-	 */
-	leafChangeListener = async (leaf: any) => {
-		let renderToolbar = false;
-		// FIXME? what if there's more than one toolbar?
-		let toolbarEl = this.el.getToolbarEl();
-		let currentView = getActiveView(this);
-
-		const viewId = getViewId(currentView);
-		this.debug('===== LEAF-CHANGE ===== ', viewId);
-
-		// update the active toolbar if its configuration changed
-		if (toolbarEl) {
-			let activeToolbar = this.settingsManager.getToolbarById(toolbarEl.id);
-			if (activeToolbar && (activeToolbar.updated !== toolbarEl.getAttribute('data-updated'))) {
-				renderToolbar = true;
-			}
-		}
-
-		// exit if the view has already been handled, after updating the toolbar
-		if (!renderToolbar && viewId && this.render.activeViewIds.contains(viewId)) {
-			this.debug('LEAF-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
-			this.render.updateActiveToolbar();
-			return;
-		};
-
-		if (currentView) {
-			// check for editing or reading mode
-			if (currentView instanceof MarkdownView) {
-				renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
-			}
-		}
-		else {
-			currentView = this.app.workspace.getActiveViewOfType(ItemView);
-			if (currentView) {
-				renderToolbar = checkToolbarForItemView(this, currentView);
-				if (!renderToolbar) return;
-			}
-		}
-
-		if (renderToolbar) {
-			this.debug("LEAF-CHANGE: renderActiveToolbar");
-			// this.removeActiveToolbar();
-			// don't seem to need a delay before rendering for leaf changes
-			await this.render.renderToolbarForView();
-		}
-	}
-
-	/**
-	 * On changes to metadata, trigger the checks and rendering of a toolbar if necessary.
-	 * @param file TFile in which metadata changed.
-	 * @param data ??? (not used)
-	 * @param cache CachedMetadata, from which we look at the frontmatter.
-	 */
-	metadataCacheListener = async (file: TFile, data: any, cache: CachedMetadata) => {
-		const activeFile = this.app.workspace.getActiveFile();
-		// if the active file is the one that changed,
-		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
-		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
-			this.debug('===== METADATA-CHANGE ===== ', file.name);
-			debounce(async () => {
-				// FIXME: should this instead update all visible toolbars?
-				const toolbarView = this.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
-				await this.render.checkAndRenderToolbar(file, cache.frontmatter, toolbarView);
-	
-				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
-				const ntbPropValue = this.settingsManager.getToolbarNameFromProps(cache.frontmatter);
-				if (ntbPropValue && this.settings.toolbarProp !== 'tags') {
-					// make sure just the relevant property changed in the open file
-					if (this.lastFileOpenedOnCacheChange !== activeFile) this.lastNtbPropValue = undefined;
-					const ignoreToolbar = ntbPropValue.includes('none') ? true : false;
-					if (ntbPropValue !== this.lastNtbPropValue) {
-						const matchingToolbar = ignoreToolbar ? undefined : this.settingsManager.getToolbarByName(ntbPropValue);
-						if (!matchingToolbar && !ignoreToolbar) {
-							const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: ntbPropValue }), 7500);
-							notice.messageEl.addClass('note-toolbar-notice-with-cta');
-							this.registerDomEvent(notice.messageEl, 'click', async () => {
-								const newToolbar = await this.settingsManager.newToolbar(ntbPropValue);
-								this.settingsManager.openToolbarSettings(newToolbar);
-							});
-						}
-					}
-				}
-				// track current state to look for future Note Toolbar property changes
-				this.lastNtbPropValue = ntbPropValue;
-				this.lastFileOpenedOnCacheChange = activeFile;
-			}, 300)();
-		}
-	};
-
-	// TODO: remove if not needed
-	// onMarkdownViewFileChange(view: MarkdownView, callback: (oldFile: TFile, newFile: TFile) => void) {
-	// 	if (!(view.leaf.id in this.__onNoteChange__leafFiles)) {
-	// 		this.__onNoteChange__leafFiles[view.leaf.id] = view.file;
-	// 		this.__onNoteChange__leafCallbacks[view.leaf.id] = callback;
-	// 		this.debug('⭐️⭐️⭐️', this.__onNoteChange__leafFiles);
-	// 	}
-	//
-	// 	if (!this.__onNoteChange__eventCreated) {
-	// 		this.registerEvent(
-	// 			this.app.workspace.on('layout-change', () => {
-	// 				for (const leafId of Object.keys(this.__onNoteChange__leafFiles)) {
-	// 					const leaf: WorkspaceLeaf | null = this.app.workspace.getLeafById(leafId);
-	// 					// @ts-ignore
-	// 					if (leaf && leaf?.view?.file?.path !== this.__onNoteChange__leafFiles[leafId]?.path) {
-	// 						// @ts-ignore
-	// 						this.__onNoteChange__leafCallbacks[leafId](this.__onNoteChange__leafFiles[leafId], leaf.view.file);
-	// 						// @ts-ignore
-	// 						this.__onNoteChange__leafFiles[leafId] = leaf.view.file;
-	// 					}
-	// 				}
-	// 			})
-	// 		)
-	// 		this.__onNoteChange__eventCreated = true;
-	// 	}
-	// }
-
 	/*************************************************************************
 	 * HANDLERS
 	 *************************************************************************/
