@@ -11,12 +11,12 @@ const toIconizeFormat = (s: string) =>
 
 /**
  * Exports the given toolbar as a Note Toolbar Callout
- * @param plugin NoteToolbarPlugin
+ * @param ntb NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
  * @param options ExportSettings
  * @returns Note Toolbar Callout as a string
  */
-export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings, options: ExportSettings): Promise<string> {
+export async function exportToCallout(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings, options: ExportSettings): Promise<string> {
     
     // plugin.debug('exportToCallout()');
 
@@ -27,9 +27,9 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
     let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}] ${toolbar.name}`;
 
     // get the active file to provide context, and to replace vars if requested
-    let activeFile = plugin.app.workspace.getActiveFile();
+    let activeFile = ntb.app.workspace.getActiveFile();
 
-    calloutExport += await exportToCalloutList(plugin, toolbar, activeFile, options) + '\n';
+    calloutExport += await exportToCalloutList(ntb, toolbar, activeFile, options) + '\n';
 
     return calloutExport;
 
@@ -37,7 +37,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
 
 /**
  * Exports the items in a given toolbar to a list that can be used in a Note Toolbar Callout
- * @param plugin NoteToolbarPlugin
+ * @param ntb NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
  * @param activeFile TFile this export is being run from, for context if needed
  * @param options ExportSettings
@@ -45,7 +45,7 @@ export async function exportToCallout(plugin: NoteToolbarPlugin, toolbar: Toolba
  * @returns Note Toolbar Callout items as a bulleted list string
  */
 async function exportToCalloutList(
-    plugin: NoteToolbarPlugin,
+    ntb: NoteToolbarPlugin,
     toolbar: ToolbarSettings,
     activeFile: TFile | null,
     options: ExportSettings,
@@ -66,14 +66,14 @@ async function exportToCalloutList(
         itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
         let itemText = options.replaceVars 
-            ? await plugin.vars.replaceVars(item.label, activeFile) 
-            : replaceScriptDelimiters(plugin, item.label);
+            ? await ntb.vars.replaceVars(item.label, activeFile) 
+            : replaceScriptDelimiters(ntb, item.label);
         let itemLink = options.replaceVars 
-            ? await plugin.vars.replaceVars(item.link, activeFile) 
-            : replaceScriptDelimiters(plugin, item.link);
+            ? await ntb.vars.replaceVars(item.link, activeFile) 
+            : replaceScriptDelimiters(ntb, item.link);
         let itemTooltip = options.replaceVars 
-            ? await plugin.vars.replaceVars(item.tooltip, activeFile) 
-            : replaceScriptDelimiters(plugin, item.tooltip);
+            ? await ntb.vars.replaceVars(item.tooltip, activeFile) 
+            : replaceScriptDelimiters(ntb, item.tooltip);
 
         itemText = escapeTextForCallout(itemText);
         itemLink = escapeLinkForCallout(itemLink);
@@ -106,7 +106,7 @@ async function exportToCalloutList(
                             else {
                                 let encodedValue = String(value);
                                 if (key === 'outputFile') {
-                                    encodedValue = replaceScriptDelimiters(plugin, encodedValue);
+                                    encodedValue = replaceScriptDelimiters(ntb, encodedValue);
                                 }
                                 encodedValue = escapeAttribute(String(encodedValue));
                                 return encodedValue ? `${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"` : '';
@@ -119,10 +119,10 @@ async function exportToCalloutList(
             case ItemType.File: {
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = itemLink;
-                plugin.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
+                ntb.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
                     resolvedItemLink = resolvedLink;
                 });
-                let fileOrFolder = plugin.app.vault.getAbstractFileByPath(resolvedItemLink);
+                let fileOrFolder = ntb.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
                     itemsExport += options.useDataEls
                         ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`
@@ -134,15 +134,15 @@ async function exportToCalloutList(
                 break;
             }
             case ItemType.Group: {
-                let groupToolbar = plugin.settingsManager.getToolbar(item.link);
-                itemsExport += groupToolbar ? await exportToCalloutList(plugin, groupToolbar, activeFile, options, recursions + 1) : '';
+                let groupToolbar = ntb.settingsManager.getToolbar(item.link);
+                itemsExport += groupToolbar ? await exportToCalloutList(ntb, groupToolbar, activeFile, options, recursions + 1) : '';
                 // TODO: skipped/ignored message if toolbar not found
                 break;
             }
             case ItemType.Menu: {
                 let menuLink = itemLink;
                 if (!options.useIds) {
-                    let menuToolbar = plugin.settingsManager.getToolbar(item.link);
+                    let menuToolbar = ntb.settingsManager.getToolbar(item.link);
                     menuLink = menuToolbar ? menuToolbar.name : menuLink;
                     // TODO: skipped/ignored message if toolbar not found?
                 }
@@ -208,12 +208,12 @@ function unescapeLinkForCallout(str: string): string {
  * Returns a string that replaces Dataview + Templater delimeters with
  * Note Toolbar's agnostic {{ }} script delimiters.
  */
-function replaceScriptDelimiters(plugin: NoteToolbarPlugin, input: string): string {
-    if (plugin.hasPlugin[ItemType.Templater]) {
+function replaceScriptDelimiters(ntb: NoteToolbarPlugin, input: string): string {
+    if (ntb.hasPlugin[ItemType.Templater]) {
         input = input.replace(/<%\s*(.*?)\s*%?>/g, '{{tp: $1}}');
     }
-    if (plugin.hasPlugin[ItemType.Dataview]) {
-        const dvPrefix = plugin.dvAdapter?.getSetting('inlineQueryPrefix') || '=';
+    if (ntb.hasPlugin[ItemType.Dataview]) {
+        const dvPrefix = ntb.dvAdapter?.getSetting('inlineQueryPrefix') || '=';
         const regex = new RegExp(`^${dvPrefix}\\s*(.*)`, 'gm');
         input = input.replace(regex, '{{dv: $1}}');
     }
@@ -239,13 +239,13 @@ function unescapeTextForCallout(str: string): string {
 
 /**
  * Imports items from a callout string, adding them to a new toolbar, or the toolbar provided.
- * @param plugin NoteToolbarPlugin
+ * @param ntb NoteToolbarPlugin
  * @param callout Note Toolbar Calllout string to import
  * @param toolbar optional ToolbarSettings for existing toolbar to import into
  * @returns ToolbarSettings
  */
 export async function importFromCallout(
-    plugin: NoteToolbarPlugin, 
+    ntb: NoteToolbarPlugin, 
     callout: string, 
     toolbar?: ToolbarSettings, 
     fromShareUri: boolean = false
@@ -256,7 +256,7 @@ export async function importFromCallout(
     let errorLog = '';
 
     // get the active file to provide context
-    let activeFile = plugin.app.workspace.getActiveFile();
+    let activeFile = ntb.app.workspace.getActiveFile();
 
     // create a new toolbar to return, if one wasn't provided
     if (!toolbar) {
@@ -294,14 +294,14 @@ export async function importFromCallout(
                     style && !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
                 );
     
-                plugin.debug('• name?', name);
-                plugin.debug('• styles?', validDefaultStyles, validMobileStyles);
+                ntb.debug('• name?', name);
+                ntb.debug('• styles?', validDefaultStyles, validMobileStyles);
                 if (invalidStyles.length > 0) {
-                    plugin.debug('  • invalid:', invalidStyles);
+                    ntb.debug('  • invalid:', invalidStyles);
                     errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
-                toolbar.name = plugin.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.new-tbar-name'), false);
+                toolbar.name = ntb.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.new-tbar-name'), false);
                 toolbar.defaultStyles = validDefaultStyles;
                 toolbar.mobileStyles = validMobileStyles;
             }
@@ -313,7 +313,7 @@ export async function importFromCallout(
     // parse the rest
     lines.map((line, index) => {
 
-        plugin.debug(index + 1);
+        ntb.debug(index + 1);
         
         let itemType: ItemType | undefined = undefined;
 
@@ -341,9 +341,9 @@ export async function importFromCallout(
             // get the components of the external or internal link
             const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
-            plugin.debug(line);
-            plugin.debug('dataMatch:', dataMatch);
-            plugin.debug('linkMatch:', linkMatch);
+            ntb.debug(line);
+            ntb.debug('dataMatch:', dataMatch);
+            ntb.debug('linkMatch:', linkMatch);
 
             if (linkMatch) {
 
@@ -362,7 +362,7 @@ export async function importFromCallout(
                     link = unescapeLinkForCallout(linkMatch[3]);
                     // resolve the filename provided to one in this vault, if it exists
                     if (activeFile) {
-                        const linkFile = plugin.app.metadataCache.getFirstLinkpathDest(link, activeFile?.path);
+                        const linkFile = ntb.app.metadataCache.getFirstLinkpathDest(link, activeFile?.path);
                         link = linkFile ? linkFile.path : link;
                     }
                 }
@@ -389,13 +389,13 @@ export async function importFromCallout(
                 if (dataMatch || uriMatch) {
                     const dataUriType = dataMatch ? dataMatch[1] : (uriMatch ? uriMatch[1] : '');
                     const dataUriValue = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[2] : '');
-                    plugin.debug('• data?', dataUriType, link);
+                    ntb.debug('• data?', dataUriType, link);
         
                     switch (dataUriType) {
                         case ItemType.Command: {
                             itemType = ItemType.Command;
                             commandId = dataUriValue;
-                            const commandName = getCommandNameById(plugin, commandId);
+                            const commandName = getCommandNameById(ntb, commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
                             errorLog += commandName ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
@@ -408,7 +408,7 @@ export async function importFromCallout(
                         case ItemType.Templater: {
                             itemType = dataUriType;
                             const dataEl = line.match(/<data\s[^>]*\/?>/);
-                            plugin.debug(dataUriType, dataEl);
+                            ntb.debug(dataUriType, dataEl);
                             
                             if (dataEl) {
                                 const parser = new DOMParser();
@@ -432,7 +432,7 @@ export async function importFromCallout(
                             break;
                         case ItemType.Menu: {
                             itemType = ItemType.Menu;
-                            let menuToolbar = plugin.settingsManager.getToolbar(dataUriValue);
+                            let menuToolbar = ntb.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : dataUriValue;
                             errorLog += menuToolbar ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
@@ -446,13 +446,13 @@ export async function importFromCallout(
 
         }
 
-        plugin.debug('• icon?', icon);
-        plugin.debug('• label?', label);
-        plugin.debug('• tooltip?', tooltip);
-        plugin.debug('• link?', link);
-        plugin.debug('• commandId?', commandId);
-        plugin.debug('• scriptConfig?', scriptConfig);
-        plugin.debug(`=> ${itemType?.toUpperCase()}`);
+        ntb.debug('• icon?', icon);
+        ntb.debug('• label?', label);
+        ntb.debug('• tooltip?', tooltip);
+        ntb.debug('• link?', link);
+        ntb.debug('• commandId?', commandId);
+        ntb.debug('• scriptConfig?', scriptConfig);
+        ntb.debug(`=> ${itemType?.toUpperCase()}`);
 
         errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
