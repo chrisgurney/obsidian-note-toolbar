@@ -3,6 +3,7 @@ import chokidar from "chokidar";
 import { yamlInliner } from "./build/yaml-inliner.mjs";
 import { galleryDocs } from "./build/gallery-docs.mjs";
 import process from "process";
+import { spawn } from 'child_process';
 import builtins from "builtin-modules";
 
 const banner =
@@ -21,6 +22,27 @@ const prod = (process.argv[2] === "production");
 // 	bundle: false,
 // 	write: false
 // }).catch(() => process.exit(1));
+
+const typecheckPlugin = {
+	name: 'typecheck',
+	setup(build) {
+		build.onEnd(async () => {
+			return new Promise((resolve) => {
+				console.log('[typecheck] running...');
+				const tsc = spawn('tsc', ['-noEmit', '-skipLibCheck'], {
+					stdio: 'inherit' // Pipes stdout/stderr directly, preserving colors
+				});
+				
+				tsc.on('close', (code) => {
+					if (code === 0) {
+						console.log('[typecheck] ✓ passed');
+					}
+					resolve();
+				});
+			});
+		});
+	},
+};
 
 // bring in the Style Settings YAML
 const yamlInlinerPlugin = {
@@ -78,7 +100,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [yamlInlinerPlugin, galleryDocsPlugin],
+	plugins: [yamlInlinerPlugin, galleryDocsPlugin, typecheckPlugin],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,
@@ -99,7 +121,9 @@ if (prod) {
 			await context.rebuild();
 		} 
 		catch {
-			process.exit(1);
+			console.error('[watch] rebuild failed:', error);
 		}
 	});
+
+	console.log('[watch] watching for changes...');
 }
