@@ -432,7 +432,7 @@ export class SettingsManager {
 
 	}
 
-	async setPosition(toolbarSettings: ToolbarSettings | undefined, newPosition: PositionType) {
+	async updatePosition(toolbarSettings: ToolbarSettings | undefined, newPosition: PositionType) {
 		if (toolbarSettings?.position) {
 			Platform.isDesktop ?
 				toolbarSettings.position.desktop = { allViews: { position: newPosition } }

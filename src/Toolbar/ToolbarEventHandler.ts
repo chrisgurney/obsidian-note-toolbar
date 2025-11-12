@@ -115,7 +115,7 @@ export default class ToolbarEventHandler {
 							positionMenu.addItem((item: MenuItem) => {
 								item.setTitle(t('setting.position.option-centered'))
 									.setIcon('layout-grid')
-									.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.Props));
+									.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Props));
 							});
 						}
 					}
@@ -124,7 +124,7 @@ export default class ToolbarEventHandler {
 							positionMenu.addItem((item: MenuItem) => {
 								item.setTitle(t('setting.position.option-top'))
 									.setIcon('arrow-up-to-line')
-									.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.Top));
+									.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Top));
 							});
 						}
 					}
@@ -134,28 +134,28 @@ export default class ToolbarEventHandler {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t('setting.position.option-tabbar'))
 								.setIcon('panel-top')
-								.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.TabBar));
+								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.TabBar));
 						});
 					}
 					if (currentPosition !== PositionType.Top) {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t('setting.position.option-top'))
 								.setIcon('arrow-up-to-line')
-								.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.Top));
+								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Top));
 						});
 					}
 					if (currentPosition !== PositionType.Props) {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t('setting.position.option-props'))
 								.setIcon('arrow-down-narrow-wide')
-								.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.Props));
+								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Props));
 						});
 					}
 					if (currentPosition !== PositionType.Bottom) {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t('setting.position.option-bottom'))
 								.setIcon('arrow-down-to-line')
-								.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.Bottom));
+								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Bottom));
 						});
 					}
 				}
@@ -164,14 +164,14 @@ export default class ToolbarEventHandler {
 					positionMenu.addItem((item: MenuItem) => {
 						item.setTitle(t('setting.position.option-fabl'))
 							.setIcon('circle-chevron-left')
-							.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.FabLeft));
+							.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.FabLeft));
 					});
 				}
 				if (currentPosition !== PositionType.FabRight) {
 					positionMenu.addItem((item: MenuItem) => {
 						item.setTitle(t('setting.position.option-fabr'))
 							.setIcon('circle-chevron-right')
-							.onClick((menuEvent) => this.ntb.settingsManager.setPosition(toolbarSettings, PositionType.FabRight));
+							.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.FabRight));
 					});
 				}
 
