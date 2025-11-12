@@ -5,9 +5,9 @@ import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr } from "../Utils/Sett
 import { importFromCallout } from "Utils/ImportExport";
 import { toolbarInvalidCommands } from "Utils/Utils";
 
-export async function confirmImportWithModal(plugin: NoteToolbarPlugin, callout: string): Promise<boolean> {
+export async function confirmImportWithModal(ntb: NoteToolbarPlugin, callout: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-        const modal = new ImportConfirmModal(plugin, callout);
+        const modal = new ImportConfirmModal(ntb, callout);
         modal.onClose = () => {
             resolve(modal.isConfirmed);
         };
@@ -18,14 +18,13 @@ export async function confirmImportWithModal(plugin: NoteToolbarPlugin, callout:
 export class ImportConfirmModal extends Modal {
 
     public isConfirmed: boolean = false;
-    plugin: NoteToolbarPlugin;
-    callout: string;
 
-	constructor(plugin: NoteToolbarPlugin, callout: string) {
-        super(plugin.app);
+	constructor(
+        private ntb: NoteToolbarPlugin, 
+        private callout: string
+    ) {
+        super(ntb.app);
         this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
-        this.plugin = plugin;
-        this.callout = callout;
     }
 
     public onOpen() {
@@ -37,7 +36,7 @@ export class ImportConfirmModal extends Modal {
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
         // parse the callout to show a preview
-        let toolbar: ToolbarSettings = await importFromCallout(this.plugin, this.callout, undefined, true);
+        let toolbar: ToolbarSettings = await importFromCallout(this.ntb, this.callout, undefined, true);
 
         new Promise((resolve) => {
 
@@ -45,7 +44,7 @@ export class ImportConfirmModal extends Modal {
 
             this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
 
-            let previewFr = toolbar ? createToolbarPreviewFr(this.plugin, toolbar, undefined) : '';
+            let previewFr = toolbar ? createToolbarPreviewFr(this.ntb, toolbar, undefined) : '';
 
             let previewContainerEl = this.modalEl.createDiv();
             previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');
@@ -56,8 +55,8 @@ export class ImportConfirmModal extends Modal {
             // disclaimers, if any
             //
 
-            let importInvalidCommands = toolbarInvalidCommands(this.plugin, toolbar);
-            let importHasVars = this.plugin.vars.toolbarHasVars(toolbar);
+            let importInvalidCommands = toolbarInvalidCommands(this.ntb, toolbar);
+            let importHasVars = this.ntb.vars.toolbarHasVars(toolbar);
 
             if (importInvalidCommands.length > 0 || importHasVars) {
 

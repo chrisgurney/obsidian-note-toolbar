@@ -6,17 +6,14 @@ import { toolbarHasMenu } from "Utils/Utils";
 
 export class ShareModal extends Modal {
 
-    plugin: NoteToolbarPlugin;
-    shareUri: string;
-    toolbar: ToolbarSettings;
-
     private useObsidianUri = false;
 
-	constructor(plugin: NoteToolbarPlugin, shareUri: string, toolbar: ToolbarSettings) {
-        super(plugin.app);
-        this.plugin = plugin;
-        this.shareUri = shareUri;
-        this.toolbar = toolbar;
+	constructor(
+        private ntb: NoteToolbarPlugin, 
+        private shareUri: string, 
+        private toolbar: ToolbarSettings
+    ) {
+        super(ntb.app);
         this.modalEl.addClass('note-toolbar-share-dialog', 'note-toolbar-setting-dialog-phonefix');
     }
 
@@ -61,7 +58,7 @@ export class ShareModal extends Modal {
                     .setValue(this.useObsidianUri)
                     .onChange(async (value) => {
                         this.useObsidianUri = value;
-                        this.shareUri = await this.plugin.protocolManager.getShareUri(this.toolbar, this.useObsidianUri);
+                        this.shareUri = await this.ntb.protocolManager.getShareUri(this.toolbar, this.useObsidianUri);
                         this.display();
                     });
             });

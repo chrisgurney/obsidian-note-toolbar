@@ -4,9 +4,9 @@ import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
-export async function importFromModal(plugin: NoteToolbarPlugin, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
+export async function importFromModal(ntb: NoteToolbarPlugin, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
     return new Promise((resolve, reject) => {
-        const modal = new ImportModal(plugin, toolbar);
+        const modal = new ImportModal(ntb, toolbar);
         modal.onClose = () => {
             resolve(modal.importedToolbar);
         };
@@ -18,15 +18,14 @@ export class ImportModal extends Modal {
 
     public importedToolbar: ToolbarSettings;
 
-    plugin: NoteToolbarPlugin;
-    toolbar?: ToolbarSettings;
     callout: string = '';
 
-	constructor(plugin: NoteToolbarPlugin, toolbar?: ToolbarSettings) {
-        super(plugin.app);
+	constructor(
+        private ntb: NoteToolbarPlugin, 
+        private toolbar?: ToolbarSettings
+    ) {
+        super(ntb.app);
         this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
-        this.plugin = plugin;
-        this.toolbar = toolbar;
     }
 
     public onOpen() {
@@ -80,7 +79,7 @@ export class ImportModal extends Modal {
                 .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))
                 .setCta()
                 .onClick(async () => {
-                    this.importedToolbar = await importFromCallout(this.plugin, this.callout, this.toolbar);
+                    this.importedToolbar = await importFromCallout(this.ntb, this.callout, this.toolbar);
                     this.close();
                 });
             new ButtonComponent(btnContainerEl)
