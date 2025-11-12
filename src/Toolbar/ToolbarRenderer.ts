@@ -628,7 +628,7 @@ export default class ToolbarRenderer {
 		else {
 			if (this.ntb.settings.emptyViewToolbar) {
 				const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar);
-				const toolbarRemoved = this.ntb.removeToolbarIfNeeded(toolbar, toolbarView);
+				const toolbarRemoved = this.removeToolbarIfNeeded(toolbar, toolbarView);
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
 					if (toolbarRemoved) {
@@ -861,7 +861,7 @@ export default class ToolbarRenderer {
 			let matchingToolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getMappedToolbar(frontmatter, file);
 			
 			// remove existing toolbar if needed
-			let toolbarRemoved: boolean = this.ntb.removeToolbarIfNeeded(matchingToolbar, view);
+			let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar, view);
 
 			this.ntb.debug('checkAndRenderToolbar:', matchingToolbar?.name);
 
@@ -985,13 +985,104 @@ export default class ToolbarRenderer {
 		let openViewIds: string[] = [];
 		this.ntb.app.workspace.iterateAllLeaves((leaf) => {
 			if (leaf.view instanceof MarkdownView) {
-				// this.debug('🚚', leaf);
+				// this.ntb.debug('🚚', leaf);
 				const openViewId = getViewId(leaf.view);
 				if (openViewId) openViewIds.push(openViewId);
 			}
 		});
 		this.activeViewIds = this.activeViewIds.filter(item => openViewIds.includes(item));
-		// this.debug('🚗', this.activeViewIds);
+		// this.ntb.debug('🚗', this.activeViewIds);
+	}
+
+	/*************************************************************************
+	 * TOOLBAR REMOVAL
+	 *************************************************************************/
+
+	/**
+	 * Remove the toolbar on the active file.
+	 */
+	async removeActiveToolbar(): Promise<void> {
+		const toolbarEl = this.ntb.el.getToolbarEl();
+		toolbarEl?.remove();
+	}
+
+	/**
+	 * Removes toolbar in the current view only if needed: there is no valid toolbar to check against; 
+	 * the toolbar names don't match; it's out of date with the settings; or it's not in the correct DOM position. 
+	 * @param correctToolbar ToolbarSettings for the toolbar that should be used.
+	 * @param view view to check toolbar in; if not provided, uses the active view.
+	 * @returns true if the toolbar was removed (or doesn't exist), false otherwise.
+	 */
+	removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
+
+		this.ntb.debugGroup('removeToolbarIfNeeded');
+
+		let toolbarRemoved: boolean = false;
+
+		// get toolbar elements in current view, or active view if not provided
+		const existingToolbarEls = this.ntb.el.getAllToolbarEl(view);
+
+		this.ntb.debug("🛑 removeToolbarIfNeeded: correct:", correctToolbar?.name, "existing:", existingToolbarEls);
+		if (existingToolbarEls?.length > 0) {
+			// loop over elements and remove any that are not the correct one, ensuring there's only one (or none)
+			existingToolbarEls.forEach((toolbarEl) => {
+				if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements
+				else {
+					toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement, view);
+					if (toolbarRemoved) toolbarEl.remove();
+				}
+			});
+			this.ntb.debug(existingToolbarEls);
+		}
+		else {
+			this.ntb.debug("⛔️ no existing toolbar");
+			toolbarRemoved = true;
+		}
+
+		this.ntb.debugGroupEnd();
+		return toolbarRemoved;
+
+	}
+
+	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement, view?: ItemView): boolean {
+
+		let removeToolbar = false;
+		const toolbarView: ItemView | MarkdownView | null = view ? view : this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+
+		// this.ntb.debug('checkRemoveToolbarEl: existing toolbar');
+		const existingToolbarName = existingToolbarEl?.getAttribute('data-name');
+		const existingToolbarUpdated = existingToolbarEl.getAttribute('data-updated');
+		const existingToolbarHasSibling = existingToolbarEl.nextElementSibling;
+		const existingToolbarViewMode = existingToolbarEl.getAttribute('data-view-mode');
+
+		// if we don't have a toolbar to check against
+		if (!correctToolbar) {
+			this.ntb.debug("⛔️ toolbar not needed, removing existing toolbar: " + existingToolbarName);
+			removeToolbar = true;
+		}
+		// we need a toolbar BUT the name of the existing toolbar doesn't match
+		else if (correctToolbar.name !== existingToolbarName) {
+			this.ntb.debug("⛔️ removing existing toolbar (name does not match): " + existingToolbarName);
+			removeToolbar = true;
+		}
+		// we need a toolbar BUT it needs to be updated
+		else if (correctToolbar.updated !== existingToolbarUpdated) {
+			this.ntb.debug("⛔️ existing toolbar out of date, removing existing toolbar");
+			removeToolbar = true;
+		}
+		// existingToolbarEl is not in the correct position, in preview mode
+		else if (existingToolbarHasSibling?.hasClass('inline-title')) {
+			this.ntb.debug("⛔️ toolbar not in correct position (sibling is `inline-title`), removing existing toolbar");
+			removeToolbar = true;
+		}
+		// ensure the toolbar is for the correct view mode
+		else if (toolbarView instanceof MarkdownView && toolbarView?.getMode() !== existingToolbarViewMode) {
+			this.ntb.debug("⛔️ toolbar not for correct view mode");
+			removeToolbar = true;
+		}
+
+		return removeToolbar;
+
 	}
 
 }

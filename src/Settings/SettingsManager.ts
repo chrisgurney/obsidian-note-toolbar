@@ -745,7 +745,7 @@ export class SettingsManager {
 	async save(): Promise<void> {
 		await this.ntb.saveData(this.ntb.settings);
 
-		await this.ntb.removeActiveToolbar();
+		await this.ntb.render.removeActiveToolbar();
 		await this.ntb.render.renderToolbarForView();
 
 		this.debug("SETTINGS SAVED: " + new Date().getTime());
