@@ -2239,7 +2239,7 @@ export default class NoteToolbarPlugin extends Plugin {
 						.setTitle(t('toolbar.menu-style'))
 						.onClick(async () => {
 							if (toolbarSettings) {
-								const styleModal = new StyleModal(this.app, this, toolbarSettings);
+								const styleModal = new StyleModal(this, toolbarSettings);
 								styleModal.open();
 							}
 						});

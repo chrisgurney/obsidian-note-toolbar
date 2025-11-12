@@ -6,13 +6,11 @@ import ToolbarStyleUi from "../ToolbarStyleUi";
 
 export default class StyleModal extends Modal {
 
-    public plugin: NoteToolbarPlugin;
-    public toolbar: ToolbarSettings;
-
-    constructor(app: App, plugin: NoteToolbarPlugin, toolbar: ToolbarSettings) {
-        super(app);
-		this.plugin = plugin;
-		this.toolbar = toolbar;
+    constructor(
+		private ntb: NoteToolbarPlugin, 
+		private toolbar: ToolbarSettings
+	) {
+        super(ntb.app);
     }
 
 	/**
@@ -41,7 +39,7 @@ export default class StyleModal extends Modal {
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-top-inset-fix');
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-bottom-inset-fix');
 		
-        const toolbarStyleUi = new ToolbarStyleUi(this.plugin, this, this.toolbar);
+        const toolbarStyleUi = new ToolbarStyleUi(this.ntb, this, this.toolbar);
         toolbarStyleUi.displayStyleSetting(this.contentEl);
 
 		const doneButton = new Setting(this.contentEl)
@@ -64,7 +62,7 @@ export default class StyleModal extends Modal {
 		}
 
         // let user close modal with Cmd/Ctrl + Enter
-        this.plugin.registerDomEvent(
+        this.ntb.registerDomEvent(
             this.modalEl, 'keydown', async (e: KeyboardEvent) => {
                 switch (e.key) {
                     case "Enter": {
