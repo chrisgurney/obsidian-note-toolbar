@@ -5,13 +5,13 @@ import { LocalVar } from "Settings/NoteToolbarSettings";
 export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
     constructor(
-        private plugin: NoteToolbarPlugin,
+        private ntb: NoteToolbarPlugin,
         private inputEl: HTMLInputElement, 
         private showFilesOnly: boolean = false, 
         private fileExtension?: string, 
         private folderPath?: string
     ) {
-        super(plugin.app, inputEl);
+        super(ntb.app, inputEl);
     }
 
     getSuggestions(inputStr: string): TAbstractFile[] {
@@ -19,7 +19,7 @@ export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
-        const recentFiles = JSON.parse(this.plugin.app.loadLocalStorage(LocalVar.RecentFiles) || '[]');
+        const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) || '[]');
 
         files = abstractFiles.filter((file: TAbstractFile) => {
             const isFile = file instanceof TFile;

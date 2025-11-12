@@ -7,11 +7,9 @@ import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 
 export class ProtocolManager {
 
-    public plugin: NoteToolbarPlugin;
-
-    constructor(plugin: NoteToolbarPlugin) {
-        this.plugin = plugin;
-    }
+    constructor(
+		private ntb: NoteToolbarPlugin
+	) {}
 
 	/**
 	 * Handles calls to the obsidian://note-toolbar URI.
@@ -19,39 +17,39 @@ export class ProtocolManager {
 	 * @param data ObsidianProtocolData
 	 */
 	async handle(data: ObsidianProtocolData) {
-		this.plugin.debug('protocolHandler', data);
+		this.ntb.debug('protocolHandler', data);
 		// supports both commandid= and command= for backwards-compatability with Advanced URI
 		if (data.commandid || data.commandId || data.command) {
-			this.plugin.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
+			this.ntb.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
 		}
 		else if (data.folder) {
-			this.plugin.handleLinkFolder(data.folder);
+			this.ntb.handleLinkFolder(data.folder);
 		}
 		else if (data.gallery) {
-			this.plugin.app.workspace.getLeaf(true).setViewState({
+			this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_GALLERY,
 				active: true
 			});
-			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
+			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
 		else if (data.help) {
-			this.plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
-			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
+			this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
         else if (data.import) {
             const content = decodeURIComponent(data.import);
 			// double-check provided text is a Note Toolbar Callout
 			if (data.import.includes('[!note-toolbar')) {
 				confirmImportWithModal(
-					this.plugin, 
+					this.ntb, 
 					content
 				).then((isConfirmed: boolean) => {
 					if (isConfirmed) {
-						importFromCallout(this.plugin, content, undefined, true)
+						importFromCallout(this.ntb, content, undefined, true)
 							.then(toolbar => {
-								this.plugin.settingsManager.addToolbar(toolbar)
+								this.ntb.settingsManager.addToolbar(toolbar)
 									.then(res => {
-										this.plugin.commands.openToolbarSettingsForId(toolbar.uuid);
+										this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
 									});
 							});
 					}
@@ -62,12 +60,12 @@ export class ProtocolManager {
 			}
         }
 		else if (data.menu) {
-			const activeFile = this.plugin.app.workspace.getActiveFile();
-			const toolbar: ToolbarSettings | undefined = this.plugin.settingsManager.getToolbar(data.menu);
+			const activeFile = this.ntb.app.workspace.getActiveFile();
+			const toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getToolbar(data.menu);
 			if (activeFile) {
 				if (toolbar) {
-					this.plugin.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-						this.plugin.showMenuAtElement(menu, this.plugin.lastCalloutLink);
+					this.ntb.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+						this.ntb.showMenuAtElement(menu, this.ntb.lastCalloutLink);
 					});
 				}
 				else {
@@ -77,31 +75,31 @@ export class ProtocolManager {
 		}
 		else if (data.tip) {
 			if (data.tip.length > 0) {
-				this.plugin.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
+				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
 			}
 		}
 		else if (data.toolbarsettings) {
 			let toolbarSettings;
 			if (data.toolbarsettings.length > 0) {
-				toolbarSettings = this.plugin.settingsManager.getToolbarByName(data.toolbarsettings);
+				toolbarSettings = this.ntb.settingsManager.getToolbarByName(data.toolbarsettings);
 				!toolbarSettings ? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })) : undefined;
 			}
 			else {
-				let toolbarEl = this.plugin.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
-				toolbarSettings = toolbarEl ? this.plugin.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
+				let toolbarEl = this.ntb.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
+				toolbarSettings = toolbarEl ? this.ntb.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
 			}
 			if (toolbarSettings) {
-				const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, null, toolbarSettings);
+				const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbarSettings);
 				modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
 				modal.open();
 			}
 		}
 		else if (data.whatsnew) {
-			this.plugin.app.workspace.getLeaf(true).setViewState({
+			this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_WHATS_NEW,
 				active: true
 			});
-			if (Platform.isPhone) this.plugin.app.workspace.leftSplit?.collapse();
+			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
 		else {
 			new Notice(t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')}));
@@ -121,7 +119,7 @@ export class ProtocolManager {
 			useDataEls: true,
 			useIds: false
 		} as ExportSettings;
-        let callout = await exportToCallout(this.plugin, toolbar, options);
+        let callout = await exportToCallout(this.ntb, toolbar, options);
 		const shareUri = useObsidianUri 
 			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
 			: `https://chrisgurney.github.io/obsidian-note-toolbar/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`

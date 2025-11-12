@@ -10,19 +10,17 @@ export class SettingsManager {
 	
 	private DEBUG = false;
 	
-	public plugin: NoteToolbarPlugin;
-
-    constructor(plugin: NoteToolbarPlugin) {
-        this.plugin = plugin;
-    }
-
+	constructor(
+		private ntb: NoteToolbarPlugin
+	) {}
+	
 	/**
 	 * Adds the given toolbar to the plugin settings.
 	 * @param toolbar ToolbarSettings to add.
 	 */
 	public async addToolbar(toolbar: ToolbarSettings): Promise<void> {
-		this.plugin.settings.toolbars.push(toolbar);
-		this.plugin.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
+		this.ntb.settings.toolbars.push(toolbar);
+		this.ntb.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
 		await this.save();
 	}
 
@@ -31,20 +29,20 @@ export class SettingsManager {
 	 * @param id UUID of the toolbar to remove.
 	 */
 	public deleteToolbar(id: string) {
-		let toolbarToDelete = this.plugin.settingsManager.getToolbarById(id);
+		let toolbarToDelete = this.ntb.settingsManager.getToolbarById(id);
 		toolbarToDelete?.items.forEach((item) => {
-			if (item.hasCommand) this.plugin.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
+			if (item.hasCommand) this.ntb.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
 		});
-		this.plugin.removeCommand(COMMAND_PREFIX_TBAR + id);
-		this.plugin.settings.toolbars = this.plugin.settings.toolbars.filter(tbar => tbar.uuid !== id);
+		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
+		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
 	}
 
 	/** 
 	 * Removes the provided item from the toolbar; does nothing if it does not exist.
 	 */
 	public deleteToolbarItemById(uuid: string): void {
-		this.plugin.removeCommand(COMMAND_PREFIX_ITEM + uuid);
-		for (const toolbar of this.plugin.settings.toolbars) {
+		this.ntb.removeCommand(COMMAND_PREFIX_ITEM + uuid);
+		for (const toolbar of this.ntb.settings.toolbars) {
 			const index = toolbar.items.findIndex(item => item.uuid === uuid);
 			if (index !== -1) {
 				toolbar.items.splice(index, 1);
@@ -107,16 +105,16 @@ export class SettingsManager {
 	 * @returns ToolbarSettings or undefined, if we're not in the empty view or there is no toolbar set
 	 */
 	public getEmptyViewToolbar(): ToolbarSettings | undefined {
-		const itemView = this.plugin.app.workspace.getActiveViewOfType(ItemView);
+		const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		if (itemView) {
-			let renderToolbar = checkToolbarForItemView(this.plugin, itemView);
+			let renderToolbar = checkToolbarForItemView(this.ntb, itemView);
 			if (!renderToolbar) return;
 			switch (itemView.getViewType()) {
 				case 'empty':
 				case 'beautitab-react-view':
 				case 'home-tab-view':
-					if (this.plugin.settings.emptyViewToolbar) {
-						return this.getToolbarById(this.plugin.settings.emptyViewToolbar);
+					if (this.ntb.settings.emptyViewToolbar) {
+						return this.getToolbarById(this.ntb.settings.emptyViewToolbar);
 					}
 					break;
 			}
@@ -137,7 +135,7 @@ export class SettingsManager {
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
 		// this.debug('- frontmatter: ', frontmatter);
-		const propName = this.plugin.settings.toolbarProp;
+		const propName = this.ntb.settings.toolbarProp;
 		let ignoreToolbar = false;
 
 		const notetoolbarProp = this.getToolbarNameFromProps(frontmatter);
@@ -154,8 +152,8 @@ export class SettingsManager {
 			// check if the note is in a folder that's mapped, and if the mapping is valid
 			let mapping: FolderMapping;
 			let filePath: string;
-			for (let index = 0; index < this.plugin.settings.folderMappings.length; index++) {
-				mapping = this.plugin.settings.folderMappings[index];
+			for (let index = 0; index < this.ntb.settings.folderMappings.length; index++) {
+				mapping = this.ntb.settings.folderMappings[index];
 				filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
 				// this.debug('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
 				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
@@ -180,7 +178,7 @@ export class SettingsManager {
 	public getToolbar(nameOrUuid: string | null): ToolbarSettings | undefined {
 		if (!nameOrUuid) return undefined;
 		const isUuid = this.isUuid(nameOrUuid);
-		return this.plugin.settings.toolbars.find(tbar => 
+		return this.ntb.settings.toolbars.find(tbar => 
 			isUuid ? tbar.uuid === nameOrUuid : tbar.name.toLowerCase() === nameOrUuid.toLowerCase()
 		);
 	}
@@ -191,7 +189,7 @@ export class SettingsManager {
 	 * @returns property value (the first value if it's a list type) or undefined.
 	 */
 	public getToolbarNameFromProps(frontmatter: FrontMatterCache | undefined): string | undefined {
-		const propValue = frontmatter?.[this.plugin.settings.toolbarProp];
+		const propValue = frontmatter?.[this.ntb.settings.toolbarProp];
 		return Array.isArray(propValue) ? propValue[0] : typeof propValue === 'string' ? propValue : undefined;
 	}
 
@@ -206,7 +204,7 @@ export class SettingsManager {
 	 * @returns ToolbarSettings for the provided matched toolbar ID, undefined otherwise.
 	 */
 	public getToolbarById(uuid: string | null): ToolbarSettings | undefined {
-		return uuid ? this.plugin.settings.toolbars.find(tbar => tbar.uuid === uuid) : undefined;
+		return uuid ? this.ntb.settings.toolbars.find(tbar => tbar.uuid === uuid) : undefined;
 	}
 
 	/**
@@ -215,7 +213,7 @@ export class SettingsManager {
 	 * @returns ToolbarSettings for the provided matched toolbar name, undefined otherwise.
 	 */
 	public getToolbarByName(name: string | null): ToolbarSettings | undefined {
-		return name ? this.plugin.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
+		return name ? this.ntb.settings.toolbars.find(tbar => tbar.name.toLowerCase() === name.toLowerCase()) : undefined;
 	}
 
 	/**
@@ -225,7 +223,7 @@ export class SettingsManager {
 	 */
 	public getToolbarItemById(uuid: string | null): ToolbarItemSettings | undefined {
 		if (!uuid) return undefined;
-		for (const toolbar of this.plugin.settings.toolbars) {
+		for (const toolbar of this.ntb.settings.toolbars) {
 			const item = toolbar.items.find((item: ToolbarItemSettings) => item.uuid === uuid);
 			if (item) {
 				return item;
@@ -241,7 +239,7 @@ export class SettingsManager {
 	 */
 	public getToolbarByItemId(uuid: string | null): ToolbarSettings | undefined {
 		if (!uuid) return undefined;
-		for (const toolbar of this.plugin.settings.toolbars) {
+		for (const toolbar of this.ntb.settings.toolbars) {
 			const item = toolbar.items.find((item: ToolbarItemSettings) => item.uuid === uuid);
 			if (item) {
 				return toolbar;
@@ -256,7 +254,7 @@ export class SettingsManager {
 	 * @returns Name of the toolbar; empty string otherwise.
 	 */
 	public getToolbarName(uuid: string): string {
-		let toolbarName = this.plugin.settings.toolbars.find(tbar => tbar.uuid === uuid)?.name;
+		let toolbarName = this.ntb.settings.toolbars.find(tbar => tbar.uuid === uuid)?.name;
 		return toolbarName ? toolbarName : "";
 	}
 
@@ -286,7 +284,7 @@ export class SettingsManager {
 		let uniqueName = name;
 		let counter = 1;
 	
-		const existingNames = this.plugin.settings.toolbars.map(toolbar => toolbar.name);
+		const existingNames = this.ntb.settings.toolbars.map(toolbar => toolbar.name);
 	
 		while (existingNames.includes(uniqueName)) {
 			uniqueName = `${name}`;
@@ -329,7 +327,7 @@ export class SettingsManager {
 	 * @param parent provide the NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
 	 */
     public openToolbarSettings(toolbar: ToolbarSettings, parent: NoteToolbarSettingTab | null | undefined = null) {
-        const modal = new ToolbarSettingsModal(this.plugin.app, this.plugin, parent, toolbar);
+        const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, parent, toolbar);
 		modal.setTitle( toolbar.name 
 			? t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }) 
 			: t('setting.title-edit-toolbar_none'));
@@ -389,12 +387,12 @@ export class SettingsManager {
 				const pluginNames = plugins.map(p => {
 					const name = t(`plugin.${p}`);
 					if (!name) return; // ignore plugins that aren't supported
-					const isEnabled = !!this.plugin.getAdapterForItemType(p as ItemType);
+					const isEnabled = !!this.ntb.getAdapterForItemType(p as ItemType);
 					return isEnabled 
 						? t('gallery.select-plugin-suggestion', { plugin: name }) 
 						: t('gallery.select-plugin-suggestion-not-enabled', { plugin: name });
 				});
-				pluginType = await this.plugin.api.suggester(pluginNames, plugins, {
+				pluginType = await this.ntb.api.suggester(pluginNames, plugins, {
 					class: 'note-toolbar-setting-mini-dialog',
 					placeholder: t('gallery.select-plugin-placeholder')
 				});
@@ -440,13 +438,13 @@ export class SettingsManager {
 	 * @param value value to update the list with
 	 */
 	async updateRecentList(localVar: string, value: string): Promise<void> {
-		const list = JSON.parse(this.plugin.app.loadLocalStorage(localVar) || '[]');
+		const list = JSON.parse(this.ntb.app.loadLocalStorage(localVar) || '[]');
 		const maxSize = 10;
 		const i = list.indexOf(value);
 		if (i !== -1) list.splice(i, 1); // remove if it already exists
 		list.unshift(value); // add to top
 		if (list.length > maxSize) list.pop(); // remove oldest
-		this.plugin.app.saveLocalStorage(localVar, JSON.stringify(list));
+		this.ntb.app.saveLocalStorage(localVar, JSON.stringify(list));
 	}
 
 	/*************************************************************************
@@ -464,9 +462,9 @@ export class SettingsManager {
 	 */
 	async load(): Promise<void> {
 
-		const loaded_settings = await this.plugin.loadData();
+		const loaded_settings = await this.ntb.loadData();
 		this.debug("loadSettings: loaded settings: ", loaded_settings);
-		this.plugin.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
+		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 	
 		let old_version = loaded_settings?.version as number;
 		let new_version: number;
@@ -486,11 +484,11 @@ export class SettingsManager {
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					if (tb.styles) {
 						this.debug("\t- OLD SETTING: " + tb.styles);
-						this.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].defaultStyles: " + this.plugin.settings.toolbars[index].defaultStyles);
-						this.plugin.settings.toolbars[index].defaultStyles = tb.styles;
-						this.debug("\t\t- SET: " + this.plugin.settings.toolbars[index].defaultStyles);
+						this.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].defaultStyles: " + this.ntb.settings.toolbars[index].defaultStyles);
+						this.ntb.settings.toolbars[index].defaultStyles = tb.styles;
+						this.debug("\t\t- SET: " + this.ntb.settings.toolbars[index].defaultStyles);
 						this.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].mobileStyles = []");
-						this.plugin.settings.toolbars[index].mobileStyles = [];
+						this.ntb.settings.toolbars[index].mobileStyles = [];
 						delete tb.styles;
 					}
 				});
@@ -524,13 +522,13 @@ export class SettingsManager {
 				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
-						this.plugin.settings.toolbars[index].items[item_index].icon = "";
+						this.ntb.settings.toolbars[index].items[item_index].icon = "";
 						if (item.url) {
-							this.plugin.settings.toolbars[index].items[item_index].link = item.url;
+							this.ntb.settings.toolbars[index].items[item_index].link = item.url;
 							delete item.url;
 						}
 						if (item.urlAttr) {
-							this.plugin.settings.toolbars[index].items[item_index].linkAttr = {
+							this.ntb.settings.toolbars[index].items[item_index].linkAttr = {
 								commandCheck: false,
 								commandId: "",
 								hasVars: item.urlAttr.hasVars,
@@ -551,13 +549,13 @@ export class SettingsManager {
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						// convert hideOnDesktop + hideOnMobile to contexts
-						this.plugin.settings.toolbars[index].items[item_index].contexts = [{
+						this.ntb.settings.toolbars[index].items[item_index].contexts = [{
 							platform: this.migrateItemVisPlatform(item.hideOnDesktop, item.hideOnMobile), 
 							view: ViewType.All}];
 						delete item.hideOnDesktop;
 						delete item.hideOnMobile;
 					});
-					this.plugin.settings.toolbars[index].positions = [{
+					this.ntb.settings.toolbars[index].positions = [{
 						position: PositionType.Props, 
 						contexts: [{
 							platform: PlatformType.All, 
@@ -575,34 +573,34 @@ export class SettingsManager {
 				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					// toolbar position -> platform-specific positions
-					if (this.plugin.settings.toolbars[index].positions) {
-						this.plugin.settings.toolbars[index].positions?.forEach((pos, posIndex) => {
-							this.plugin.settings.toolbars[index].position = {} as Position;
+					if (this.ntb.settings.toolbars[index].positions) {
+						this.ntb.settings.toolbars[index].positions?.forEach((pos, posIndex) => {
+							this.ntb.settings.toolbars[index].position = {} as Position;
 							if (pos.contexts) {
 								pos.contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
 									if (pos.position) {
 										switch (ctx.platform) {
 											case PlatformType.Desktop:
-												this.plugin.settings.toolbars[index].position.desktop = {
+												this.ntb.settings.toolbars[index].position.desktop = {
 													allViews: { position: pos.position }
 												}
 												break;
 											case PlatformType.Mobile:
-												this.plugin.settings.toolbars[index].position.mobile = {
+												this.ntb.settings.toolbars[index].position.mobile = {
 													allViews: { position: pos.position }
 												}
-												this.plugin.settings.toolbars[index].position.tablet = {
+												this.ntb.settings.toolbars[index].position.tablet = {
 													allViews: { position: pos.position }
 												}
 												break;
 											case PlatformType.All:
-												this.plugin.settings.toolbars[index].position.desktop = {
+												this.ntb.settings.toolbars[index].position.desktop = {
 													allViews: { position: pos.position }
 												}
-												this.plugin.settings.toolbars[index].position.mobile = {
+												this.ntb.settings.toolbars[index].position.mobile = {
 													allViews: { position: pos.position }
 												}
-												this.plugin.settings.toolbars[index].position.tablet = {
+												this.ntb.settings.toolbars[index].position.tablet = {
 													allViews: { position: pos.position }
 												}
 												break;
@@ -611,36 +609,36 @@ export class SettingsManager {
 								});
 							}
 						});
-						delete this.plugin.settings.toolbars[index].positions;
+						delete this.ntb.settings.toolbars[index].positions;
 					}
 					// item contexts -> item / component visibility
 					tb.items.forEach((item: any, item_index: number) => {
-						if (this.plugin.settings.toolbars[index].items[item_index].contexts) {							
-							this.plugin.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
-								if (!this.plugin.settings.toolbars[index].items[item_index].visibility) {
-									this.plugin.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
+						if (this.ntb.settings.toolbars[index].items[item_index].contexts) {							
+							this.ntb.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+								if (!this.ntb.settings.toolbars[index].items[item_index].visibility) {
+									this.ntb.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
 									switch (ctx.platform) {
 										case PlatformType.Desktop:
-											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
+											this.ntb.settings.toolbars[index].items[item_index].visibility.desktop = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
 										case PlatformType.Mobile:
-											this.plugin.settings.toolbars[index].items[item_index].visibility.mobile = {
+											this.ntb.settings.toolbars[index].items[item_index].visibility.mobile = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
-											this.plugin.settings.toolbars[index].items[item_index].visibility.tablet = {
+											this.ntb.settings.toolbars[index].items[item_index].visibility.tablet = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
 										case PlatformType.All:
-											this.plugin.settings.toolbars[index].items[item_index].visibility.desktop = {
+											this.ntb.settings.toolbars[index].items[item_index].visibility.desktop = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
-											this.plugin.settings.toolbars[index].items[item_index].visibility.mobile = {
+											this.ntb.settings.toolbars[index].items[item_index].visibility.mobile = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
-											this.plugin.settings.toolbars[index].items[item_index].visibility.tablet = {
+											this.ntb.settings.toolbars[index].items[item_index].visibility.tablet = {
 												allViews: {	components: [ComponentType.Icon, ComponentType.Label] }
 											}
 											break;
@@ -650,7 +648,7 @@ export class SettingsManager {
 									}
 								}
 							});
-							delete this.plugin.settings.toolbars[index].items[item_index].contexts;
+							delete this.ntb.settings.toolbars[index].items[item_index].contexts;
 						}
 					});
 				});
@@ -664,22 +662,22 @@ export class SettingsManager {
 				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					// add UUIDs to toolbars first
-					this.plugin.settings.toolbars[index].uuid = this.plugin.settings.toolbars[index].uuid 
-						? this.plugin.settings.toolbars[index].uuid
+					this.ntb.settings.toolbars[index].uuid = this.ntb.settings.toolbars[index].uuid 
+						? this.ntb.settings.toolbars[index].uuid
 						: getUUID();
 				});
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						// add UUIDs to items
-						this.plugin.settings.toolbars[index].items[item_index].uuid = this.plugin.settings.toolbars[index].items[item_index].uuid
-							? this.plugin.settings.toolbars[index].items[item_index].uuid
+						this.ntb.settings.toolbars[index].items[item_index].uuid = this.ntb.settings.toolbars[index].items[item_index].uuid
+							? this.ntb.settings.toolbars[index].items[item_index].uuid
 							: getUUID();
 						// update item menu type references to use toolbar UUIDs
 						if (item.linkAttr.type === ItemType.Menu) {
 							let menuToIdToolbar = this.getToolbarByName(item.link);
 							// just skip if we can't find it
 							menuToIdToolbar 
-								? this.plugin.settings.toolbars[index].items[item_index].link = menuToIdToolbar?.uuid
+								? this.ntb.settings.toolbars[index].items[item_index].link = menuToIdToolbar?.uuid
 								: undefined;
 						}
 					});
@@ -688,7 +686,7 @@ export class SettingsManager {
 				loaded_settings.folderMappings?.forEach((mapping: any, index: number) => {
 					let mapToIdToolbar = this.getToolbarByName(mapping.toolbar);
 					// just skip if we can't find it
-					mapToIdToolbar ? this.plugin.settings.folderMappings[index].toolbar = mapToIdToolbar.uuid : undefined;
+					mapToIdToolbar ? this.ntb.settings.folderMappings[index].toolbar = mapToIdToolbar.uuid : undefined;
 				});
 				// for the next migration to run
 				old_version = new_version;
@@ -700,7 +698,7 @@ export class SettingsManager {
 				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				// don't show onboarding for new toolbars if user's already mapped stuff 
 				if (loaded_settings.folderMappings.length > 0) {
-					this.plugin.settings.onboarding['new-toolbar-mapping'] = true;
+					this.ntb.settings.onboarding['new-toolbar-mapping'] = true;
 				}
 				// for the next migration to run
 				old_version = new_version;
@@ -712,7 +710,7 @@ export class SettingsManager {
 				this.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
-						this.plugin.settings.toolbars[index].items[item_index].inGallery = false;
+						this.ntb.settings.toolbars[index].items[item_index].inGallery = false;
 					});
 				});
 				// for the next migration to run
@@ -720,8 +718,8 @@ export class SettingsManager {
 			}
 
 			// COMMENT THIS OUT while testing new migration code
-			this.plugin.settings.version = SETTINGS_VERSION;
-			this.debug("updated settings:", this.plugin.settings);
+			this.ntb.settings.version = SETTINGS_VERSION;
+			this.debug("updated settings:", this.ntb.settings);
 
 			// ensure that migrated settings are saved 
 			await this.save();
@@ -735,10 +733,10 @@ export class SettingsManager {
 	 * Sorts the toolbar list (by name) first.
 	 */
 	async save(): Promise<void> {
-		await this.plugin.saveData(this.plugin.settings);
+		await this.ntb.saveData(this.ntb.settings);
 
-		await this.plugin.removeActiveToolbar();
-		await this.plugin.renderToolbarForView();
+		await this.ntb.removeActiveToolbar();
+		await this.ntb.renderToolbarForView();
 
 		this.debug("SETTINGS SAVED: " + new Date().getTime());
 	}

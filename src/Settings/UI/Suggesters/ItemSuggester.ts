@@ -5,28 +5,19 @@ import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
 export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
 
-    private plugin: NoteToolbarPlugin;
-    private toolbar: ToolbarSettings | undefined;
-    private inputEl: HTMLInputElement;
-    private callback: (item: ToolbarItemSettings) => void
-
     constructor(
         app: App, 
-        plugin: NoteToolbarPlugin, 
-        toolbar: ToolbarSettings | undefined, 
-        inputEl: HTMLInputElement, 
-        callback: (item: ToolbarItemSettings) => void
+        private ntb: NoteToolbarPlugin, 
+        private toolbar: ToolbarSettings | undefined, 
+        private inputEl: HTMLInputElement, 
+        private callback: (item: ToolbarItemSettings) => void
     ) {
         super(app, inputEl);
-        this.plugin = plugin;
-        this.toolbar = toolbar;
-        this.inputEl = inputEl;
-        this.callback = callback;
     }
 
     getSuggestions(inputStr: string): ToolbarItemSettings[] {
         const itemSuggestions: ToolbarItemSettings[] = [];
-        const itemsToSearch = this.toolbar ? this.toolbar.items : this.plugin.gallery.getItems();
+        const itemsToSearch = this.toolbar ? this.toolbar.items : this.ntb.gallery.getItems();
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         itemsToSearch.forEach((item: ToolbarItemSettings) => {
@@ -71,7 +62,7 @@ export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
-        renderItemSuggestion(this.plugin, item, el, this.inputEl.value);
+        renderItemSuggestion(this.ntb, item, el, this.inputEl.value);
     }
 
     selectSuggestion(item: ToolbarItemSettings): void {
