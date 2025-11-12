@@ -519,7 +519,7 @@
                 "name": "Debugging"
             },
             "icon": {
-                "description": "Sets the icon for the floating button and navigation bar (on phone). Requires restart.",
+                "description": "Sets the icon for Note Toolbar when used in the tab bar, floating button, and navigation bar (on phone). Requires restart.",
                 "name": "Icon",
                 "tooltip": "Select icon"
             },
