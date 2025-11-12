@@ -432,6 +432,16 @@ export class SettingsManager {
 
 	}
 
+	async setPosition(toolbarSettings: ToolbarSettings | undefined, newPosition: PositionType) {
+		if (toolbarSettings?.position) {
+			Platform.isDesktop ?
+				toolbarSettings.position.desktop = { allViews: { position: newPosition } }
+				: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
+			toolbarSettings.updated = new Date().toISOString();
+			await this.save();
+		}
+	}
+
 	/**
 	 * Updates one of the recent_ settings, maintaining a maximum size of 10.
 	 * @param list the list to update (`recentFiles`, `recentItems`, `recentToolbars`)

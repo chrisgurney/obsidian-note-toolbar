@@ -1,31 +1,25 @@
-import { CachedMetadata, Editor, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { CachedMetadata, ItemView, MarkdownView, MarkdownViewModeType, Notice, Platform, Plugin, TFile, WorkspaceLeaf, addIcon, debounce } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
-import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
-import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
+import { ToolbarSettings, NoteToolbarSettings, ItemType, CalloutAttr, t, ToolbarItemSettings, VIEW_TYPE_WHATS_NEW, ScriptConfig, SCRIPT_ATTRIBUTE_MAP, VIEW_TYPE_GALLERY, LocalVar, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
+import { getViewId, checkToolbarForItemView, getActiveView } from 'Utils/Utils';
 import { WhatsNewView } from 'Help/WhatsNewView';
 import { SettingsManager } from 'Settings/SettingsManager';
 import { CommandManager } from 'Commands/CommandManager';
 import { NoteToolbarApi } from 'Api/NoteToolbarApi';
 import { INoteToolbarApi } from "Api/INoteToolbarApi";
-import { exportToCallout, importFromCallout } from 'Utils/ImportExport';
-import { learnMoreFr, openItemSuggestModal } from 'Settings/UI/Utils/SettingsUIUtils';
 import { ProtocolManager } from 'Protocol/ProtocolManager';
-import { ShareModal } from 'Settings/UI/Modals/ShareModal';
-import StyleModal from 'Settings/UI/Modals/StyleModal';
-import ItemModal from 'Settings/UI/Modals/ItemModal';
 import GalleryManager from 'Gallery/GalleryManager';
 import { HotkeyHelper } from 'Utils/Hotkeys';
 import { GalleryView } from 'Gallery/GalleryView';
 import { HelpView } from 'Help/HelpView';
 import { TipView } from 'Help/TipView';
 import { TextToolbarView } from 'Toolbar/TextToolbarView';
-import { Rect } from '@codemirror/view';
 import AdapterManager from 'Adapters/AdapterManager';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
-import VariableResolver from 'Toolbar/VariableResolver';
+import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
+import VariableResolver from 'Toolbar/VariableResolver';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -39,9 +33,10 @@ export default class NoteToolbarPlugin extends Plugin {
 	settingsManager: SettingsManager;
 	
 	el: ToolbarElementHelper;
-	vars: VariableResolver;
+	events: ToolbarEventHandler;
 	items: ToolbarItemHandler;
 	render: ToolbarRenderer;
+	vars: VariableResolver;
 
 	activeWorkspace: string; // track current workspace, to reduce unneccessary toolbar re-renders
 	workspacesPlugin: { instance: any; enabled: boolean } | null = null;
@@ -74,6 +69,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// initialize managers + helpers
 		this.el = new ToolbarElementHelper(this);
+		this.events = new ToolbarEventHandler(this);
 		this.items = new ToolbarItemHandler(this);
 		this.render = new ToolbarRenderer(this);
 		this.vars = new VariableResolver(this);
@@ -84,7 +80,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 		if (Platform.isPhone) {
-			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event) => this.ribbonMenuHandler(event));
+			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event) => this.events.ribbonMenuHandler(event));
 		}
 
 		this.api = new NoteToolbarApi(this);
@@ -132,14 +128,14 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
 				const target = e.target as HTMLElement;
 				if (!target.matches('.cg-note-toolbar-container')) {
-					this.removeFocusStyle();
+					this.render.removeFocusStyle();
 				}
 				this.calloutLinkHandler(e);
 			});
 
 			// add items to menus, when needed
-			this.registerEvent(this.app.workspace.on('file-menu', this.fileMenuHandler));
-			this.registerEvent(this.app.workspace.on('editor-menu', this.editorMenuHandler));
+			this.registerEvent(this.app.workspace.on('file-menu', this.events.fileMenuHandler));
+			this.registerEvent(this.app.workspace.on('editor-menu', this.events.editorMenuHandler));
 
 			// add commands
 			this.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: async () => this.commands.copyCommand(false) });
@@ -561,607 +557,6 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		}
 
-	}
-
-	/**
-	 * On opening of the editor menu, check what was selected and add relevant menu options.
-	 */
-	editorMenuHandler = (menu: Menu, editor: Editor, info: MarkdownView | MarkdownFileInfo) => {
-		const selection = editor.getSelection().trim();
-		const line = editor.getLine(editor.getCursor().line).trim();
-		if (selection.includes('[!note-toolbar') || line.includes('[!note-toolbar')) {
-			menu.addItem((item: MenuItem) => {
-				item
-					.setIcon('info')
-					.setTitle(t('import.option-help'))
-					.onClick(async () => {
-						window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts', '_blank');
-					});
-			});
-		}
-		if (selection.includes('[!note-toolbar')) {
-			menu.addItem((item: MenuItem) => {
-				item
-					.setIcon('import')
-					.setTitle(t('import.option-create'))
-					.onClick(async () => {
-						let toolbar = await importFromCallout(this, selection);
-						await this.settingsManager.addToolbar(toolbar);
-						await this.commands.openToolbarSettingsForId(toolbar.uuid);
-					});
-			});
-		}
-	}
-
-	/**
-	 * On opening of the file menu, check and render toolbar as a submenu.
-	 * @param menu the file Menu
-	 * @param file TFile for link that was clicked on
-	 */
-	fileMenuHandler = (menu: Menu, file: TFile) => {
-		if (this.settings.showToolbarInFileMenu) {
-			// don't bother showing in the file menu for the active file
-			let activeFile = this.app.workspace.getActiveFile();
-			if (activeFile && file !== activeFile) {
-				let cache = this.app.metadataCache.getFileCache(file);
-				if (cache) {
-					let toolbar = this.settingsManager.getMappedToolbar(cache.frontmatter, file);
-					if (toolbar) {
-						// the submenu UI doesn't appear to work on mobile, render items in menu
-						if (Platform.isMobile) {
-							toolbar ? this.render.renderMenuItems(menu, toolbar, file, 1) : undefined;
-						}
-						else {
-							menu.addItem((item: MenuItem) => {
-								item
-									.setIcon(this.settings.icon)
-									.setTitle(toolbar ? toolbar.name : '');
-								let subMenu = item.setSubmenu() as Menu;
-								toolbar ? this.render.renderMenuItems(subMenu, toolbar, file) : undefined;
-							});
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Handles what happens when the ribbon icon is used.
-	 * @param event MouseEvent
-	 */
-	async ribbonMenuHandler(event: MouseEvent) {
-		switch (this.settings.ribbonAction) {
-			case (RibbonAction.ItemSuggester):
-				await this.commands.openQuickTools();
-				break;
-			case (RibbonAction.ToolbarSuggester):
-				await this.commands.openToolbarSuggester();
-				break;
-			case (RibbonAction.Toolbar): {
-				let activeFile = this.app.workspace.getActiveFile();
-				if (activeFile) {
-					let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-					let toolbar: ToolbarSettings | undefined = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
-					if (toolbar) {
-						this.render.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-							menu.showAtPosition(event); 
-						});
-					}
-				}
-				break;
-			}
-		}
-	}
-
-	/**
-	 * Handles the floating action button.
-	 * @param event MouseEvent
-	 * @param posAtElement HTMLElement to position the menu at, which might be different from where the event originated
-	 */
-	async toolbarFabHandler(event: MouseEvent, posAtElement: HTMLElement) {
-
-		// this.debug("toolbarFabHandler: ", event);
-		event.preventDefault();
-
-		let activeFile = this.app.workspace.getActiveFile();
-		let toolbar: ToolbarSettings | undefined;
-		
-		// get toolbar to show
-		if (activeFile) {
-			let frontmatter = activeFile ? this.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			toolbar = this.settingsManager.getMappedToolbar(frontmatter, activeFile);
-		}
-		else {
-			toolbar = this.settingsManager.getEmptyViewToolbar();
-		}
-
-		if (toolbar) {
-			// if the default option is set, handle the item
-			if (toolbar.defaultItem) {
-				const toolbarItem = this.settingsManager.getToolbarItemById(toolbar.defaultItem);
-				if (toolbarItem) {
-					await this.items.handleItemLink(toolbarItem, event, activeFile);
-				}
-				else {
-					new Notice(t('setting.position.notice-defaultitem-invalid'));
-				}
-			}
-			else {
-				this.render.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-					let fabEl = this.el.getToolbarFabEl();
-					if (fabEl) {
-						let fabPos = fabEl.getAttribute('data-tbar-position');
-						// determine menu orientation based on button position
-						let elemRect = posAtElement.getBoundingClientRect();
-						let menuPos = { 
-							x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
-							y: (elemRect.top - 4),
-							overlap: true,
-							left: (fabPos === PositionType.FabLeft ? false : true)
-						};
-						// store menu position for sub-menu positioning
-						this.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
-						menu.showAtPosition(menuPos);
-					}
-					else {
-						// for Position.TabBar
-						menu.showAtMouseEvent(event);
-					}
-				});
-			}
-		}
-
-	}
-
-	/**
-	 * Handles keyboard navigation within the toolbar.
-	 * @param e KeyboardEvent
-	 * @param isTextToolbar set to true if this is for the text toolbar.
-	 */
-	async toolbarKeyboardHandler(e: KeyboardEvent, isTextToolbar: boolean = false) {
-
-		this.debugGroup("toolbarKeyboardHandler");
-
-		let itemsUl: HTMLElement | null = this.el.getToolbarListEl(isTextToolbar);
-		if (itemsUl) {
-
-			// not preventing default from 'Escape' for now (I think this helps)
-			e.key ? (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', 'Shift', 'Tab', ' '].includes(e.key) ? e.preventDefault() : undefined) : undefined;
-
-			// remove any items that are not visible (i.e., hidden on desktop/mobile) as they are not navigable
-			let items = Array.from(itemsUl.children);
-			const visibleItems = items.filter(item => {
-				const hasSpan = item.querySelector('span') !== null; // to filter out separators
-				const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
-				return hasSpan && isVisible;
-			});
-			let currentEl = activeDocument.activeElement?.parentElement as HTMLElement;
-			let currentIndex = visibleItems.indexOf(currentEl);
-
-			let key = e.key;
-			// need to capture tab in order to move the focus style across the toolbar
-			if (e.key === 'Tab') {
-				key = e.shiftKey ? 'ArrowLeft' : 'ArrowRight';
-			}
-
-			switch (key) {
-				case 'ArrowRight':
-				case 'ArrowDown': {
-					const nextIndex = (currentIndex + 1) % visibleItems.length;
-					this.debug(currentEl);
-					currentEl.removeClass(ToolbarStyle.ItemFocused);
-					visibleItems[nextIndex].addClass(ToolbarStyle.ItemFocused);
-					visibleItems[nextIndex].querySelector('span')?.focus();
-					break;
-				}
-				case 'ArrowLeft':
-				case 'ArrowUp': {
-					const prevIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
-					currentEl.removeClass(ToolbarStyle.ItemFocused);
-					visibleItems[prevIndex].addClass(ToolbarStyle.ItemFocused);
-					visibleItems[prevIndex].querySelector('span')?.focus();
-					break;
-				}
-				case 'Enter':
-				case ' ': {
-					let activeEl = activeDocument?.activeElement as HTMLElement;
-					let selectedItem = this.settingsManager.getToolbarItemById(activeEl?.id);
-					if (selectedItem) {
-						await this.items.handleItemLink(selectedItem, e);
-					}
-					break;
-				}
-				case 'Escape': {
-					// need this implemented for Reading mode, as escape does nothing
-					let currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
-					let viewMode = currentView?.getMode();
-					if (viewMode === 'preview') {
-						(activeDocument?.activeElement as HTMLElement).blur();
-					}
-					// put focus back on element if it's a toolbar item
-					if (currentEl.tagName === 'LI' && currentEl.closest('.cg-note-toolbar-callout')) {
-						currentEl.addClass(ToolbarStyle.ItemFocused);
-					}
-					else {
-						await this.removeFocusStyle();
-					}
-					break;
-				}
-			}
-
-		}
-
-		this.debugGroupEnd();
-
-	}
-
-	/**
-	 * Removes the focus class from all items in the toolbar.
-	 */
-	async removeFocusStyle() {
-		// remove focus effect from all toolbar items
-		let toolbarListEl = this.el.getToolbarListEl();
-		if (toolbarListEl) {
-			Array.from(toolbarListEl.children).forEach(element => {
-				element.removeClass(ToolbarStyle.ItemFocused);
-			});
-		}
-	}
-
-	/**
-	 * On click of an item in the toolbar, we replace any variables that might
-	 * be in the URL, and then open it.
-	 * @param event MouseEvent
-	 */
-	async toolbarClickHandler(event: MouseEvent) {
-
-		// this.debug('toolbarClickHandler:', event);
-
-		// allow standard and middle clicks through
-		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
-
-			let clickedEl = event.currentTarget as HTMLLinkElement;
-			let linkHref = clickedEl.getAttribute("href");
-	
-			if (linkHref != null) {
-				
-				const itemUuid = clickedEl.id;
-
-				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
-				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
-	
-				// this.debug('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
-	
-				let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
-				
-				// remove the focus effect if clicked with a mouse
-				if ((event as PointerEvent)?.pointerType === "mouse") {
-					clickedEl.blur();
-					await this.removeFocusStyle();
-				}
-
-				await this.items.handleLink(itemUuid, linkHref, linkType, linkCommandId, event);
-	
-			}
-
-		}
-
-	}
-	
-	/**
-	 * Shows a context menu with links to settings/configuration.
-	 * @param mouseEvent MouseEvent
-	 */
-	async toolbarContextMenuHandler(mouseEvent: MouseEvent) {
-
-		mouseEvent.preventDefault();
-
-		// figure out what toolbar we're in
-		let toolbarEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-container');
-		let toolbarSettings = toolbarEl?.id ? this.settingsManager.getToolbarById(toolbarEl.id) : undefined;
-
-		// figure out what item was clicked on (if any)
-		let toolbarItemEl: Element | null = null;
-		if (mouseEvent.target instanceof HTMLLIElement) {
-			toolbarItemEl = (mouseEvent.target as Element).querySelector('.cg-note-toolbar-item');
-		}
-		else {
-			toolbarItemEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-item');
-		}
-		let toolbarItem = toolbarItemEl?.id ? this.settingsManager.getToolbarItemById(toolbarItemEl.id) : undefined;
-
-		let contextMenu = new Menu();
-
-		const currentView = this.app.workspace.getActiveViewOfType(ItemView);
-		const currentPosition = toolbarSettings ? this.settingsManager.getToolbarPosition(toolbarSettings) : undefined;
-		const isTextToolbar = toolbarSettings ? (this.settings.textToolbar === toolbarSettings.uuid) : false;
-
-		if (toolbarSettings !== undefined) {
-
-			if (Platform.isPhone) {
-				contextMenu.addItem((item: MenuItem) => {
-					item
-						.setTitle(toolbarSettings.name)
-						.setIsLabel(true)
-				});
-			}
-
-			//
-			// position
-			//
-
-			if (!isTextToolbar) {
-
-				// workaround: sub-menus only work on non-tablet devices
-				let positionMenu = contextMenu;
-				if (!Platform.isTablet) {
-					contextMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('toolbar.menu-position'));
-						item.setIcon('move');
-						positionMenu = item.setSubmenu() as Menu;
-					});
-				}
-
-				if (currentView?.getViewType() === 'empty') {
-					if (this.settings.showLaunchpad) {
-						if (currentPosition !== PositionType.Top && currentPosition !== PositionType.Props) {
-							positionMenu.addItem((item: MenuItem) => {
-								item.setTitle(t('setting.position.option-centered'))
-									.setIcon('layout-grid')
-									.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
-							});
-						}
-					}
-					else {
-						if (currentPosition !== PositionType.Top) {
-							positionMenu.addItem((item: MenuItem) => {
-								item.setTitle(t('setting.position.option-top'))
-									.setIcon('arrow-up-to-line')
-									.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
-							});
-						}
-					}
-				} 
-				else {
-					if (currentPosition !== PositionType.TabBar) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-tabbar'))
-								.setIcon('panel-top')
-								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.TabBar));
-						});
-					}
-					if (currentPosition !== PositionType.Top) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-top'))
-								.setIcon('arrow-up-to-line')
-								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Top));
-						});
-					}
-					if (currentPosition !== PositionType.Props) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-props'))
-								.setIcon('arrow-down-narrow-wide')
-								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Props));
-						});
-					}
-					if (currentPosition !== PositionType.Bottom) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-bottom'))
-								.setIcon('arrow-down-to-line')
-								.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.Bottom));
-						});
-					}
-				}
-
-				if (currentPosition !== PositionType.FabLeft) {
-					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-fabl'))
-							.setIcon('circle-chevron-left')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabLeft));
-					});
-				}
-				if (currentPosition !== PositionType.FabRight) {
-					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-fabr'))
-							.setIcon('circle-chevron-right')
-							.onClick((menuEvent) => this.setPosition(toolbarSettings, PositionType.FabRight));
-					});
-				}
-
-				if (Platform.isTablet) contextMenu.addSeparator();
-
-			}
-
-			//
-			// style toolbar
-			//
-
-			if (currentPosition !== PositionType.TabBar) {
-				contextMenu.addItem((item: MenuItem) => {
-					item
-						.setIcon('palette')
-						.setTitle(t('toolbar.menu-style'))
-						.onClick(async () => {
-							if (toolbarSettings) {
-								const styleModal = new StyleModal(this, toolbarSettings);
-								styleModal.open();
-							}
-						});
-				});
-			}
-
-			//
-			// show/hide properties
-			//
-
-			const propsEl = this.el.getPropsEl();
-			if ((currentView?.getViewType() === 'markdown') && propsEl) {
-				const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
-				if (propsDisplayStyle === 'none') {
-					contextMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('toolbar.menu-show-properties'))
-							.setIcon('table-properties')
-							.onClick(async (menuEvent) => this.commands.toggleProps('show'));
-					});
-				}
-				else {
-					contextMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('toolbar.menu-hide-properties'))
-							.setIcon('table-properties')
-							.onClick(async (menuEvent) => this.commands.toggleProps('hide'));
-					});
-				}
-			}
-
-		}
-		
-		contextMenu.addSeparator();
-
-		//
-		// add item
-		//
-
-		contextMenu.addItem((item: MenuItem) => {
-			item
-				.setIcon('plus')
-				.setTitle(t('toolbar.menu-add-item'))
-				.onClick(async () => {
-					const toolbarItemIndex = calcMouseItemIndex(this, mouseEvent);
-					if (toolbarSettings) openItemSuggestModal(this, toolbarSettings, 'New', undefined, toolbarItemIndex);
-				});
-		});
-
-		//
-		// edit item
-		//
-
-		if (toolbarItem) {
-			const activeFile = this.app.workspace.getActiveFile();
-			let itemText = await this.items.getItemText(toolbarItem, activeFile, true);
-			if (!itemText && toolbarItem.linkAttr.type === ItemType.Separator) itemText = t('setting.item.option-separator');
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('lucide-pen-box')
-					.setTitle(itemText 
-						? t('toolbar.menu-edit-item', { text: itemText, interpolation: { escapeValue: false } }) 
-						: t('toolbar.menu-edit-item_none'))
-					.onClick(async () => {
-						if (toolbarSettings) {
-							const itemModal = new ItemModal(this, toolbarSettings, toolbarItem);
-							itemModal.open();
-						}
-					});
-			});
-
-			if (toolbarItem.linkAttr.type === ItemType.Menu) {
-				const menuToolbar = this.settingsManager.getToolbar(toolbarItem.link);
-				if (menuToolbar) {
-					contextMenu.addItem((item: MenuItem) => {
-						item
-							.setIcon('square-menu')
-							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name, interpolation: { escapeValue: false } }))
-							.onClick(async () => {
-								const modal = new ToolbarSettingsModal(this.app, this, null, menuToolbar as ToolbarSettings);
-								modal.setTitle(t('setting.title-edit-toolbar', { toolbar: menuToolbar.name, interpolation: { escapeValue: false } }));
-								modal.open();
-							});
-					});					
-				}
-			}
-		}
-
-		contextMenu.addSeparator();
-
-		//
-		// edit toolbar
-		//
-
-		if (toolbarSettings !== undefined) {
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }))
-					.setIcon('rectangle-ellipsis')
-					.onClick((menuEvent) => {
-						const modal = new ToolbarSettingsModal(this.app, this, null, toolbarSettings as ToolbarSettings);
-						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }));
-						modal.open();
-					});
-			  });
-		}
-
-		//
-		// swap toolbar
-		//
-
-		// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-		if (!isTextToolbar && currentView?.getViewType() === 'markdown' && this.settings.toolbarProp !== 'tags') {
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('repeat')
-					.setTitle(t('toolbar.menu-swap-toolbar'))
-					.onClick(() => this.commands.swapToolbar());
-			});
-		}
-
-		if (toolbarSettings !== undefined) {
-
-			contextMenu.addSeparator();
-
-			// share
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('share')
-					.setTitle(t('export.label-share'))
-					.onClick(async () => {
-						if (toolbarSettings) {
-							const shareUri = await this.protocolManager.getShareUri(toolbarSettings);
-							let shareModal = new ShareModal(this, shareUri, toolbarSettings);
-							shareModal.open();
-						}
-					});
-			});
-
-			// copy as callout
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setTitle(t('export.label-callout'))
-					.setIcon('copy')
-					.onClick(async (menuEvent) => {
-						if (toolbarSettings) {
-							let calloutExport = await exportToCallout(this, toolbarSettings, this.settings.export);
-							navigator.clipboard.writeText(calloutExport);
-							new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
-						}
-					})
-				});
-
-			contextMenu.addSeparator();
-
-		}
-
-		contextMenu.addItem((item: MenuItem) => {
-			item
-			  .setTitle(t('toolbar.menu-toolbar-settings'))
-			  .setIcon('gear')
-			  .onClick(async (menuEvent) => {
-				  await this.commands.openSettings();
-			  });
-		  });
-
-		navigator.vibrate(50);
-		contextMenu.showAtPosition(mouseEvent);
-
-	}
-
-	async setPosition(toolbarSettings: ToolbarSettings | undefined, newPosition: PositionType) {
-		if (toolbarSettings?.position) {
-			Platform.isDesktop ?
-				toolbarSettings.position.desktop = { allViews: { position: newPosition } }
-				: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
-			toolbarSettings.updated = new Date().toISOString();
-			await this.settingsManager.save();
-		}
 	}
 
 	/*************************************************************************
