@@ -16,8 +16,8 @@ export default class VariableResolver {
     hasVars(s: string): boolean {
         let hasVars = /{{.*?}}/g.test(s);
         if (this.ntb.settings.scriptingEnabled) {
-            if (!hasVars && this.ntb.hasPlugin[ItemType.Dataview]) {
-                let prefix = this.ntb.dvAdapter?.getSetting('inlineQueryPrefix');
+            if (!hasVars && this.ntb.adapters.hasPlugin(ItemType.Dataview)) {
+                let prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
                 hasVars = !!prefix && s.trim().startsWith(prefix);
                 if (!hasVars) hasVars = s.trim().startsWith('{{dv:');
                 // TODO? support dvjs? check for $= JS inline queries
@@ -26,7 +26,7 @@ export default class VariableResolver {
                 // 	hasVars = !!prefix && s.trim().startsWith(prefix);
                 // }
             }
-            if (!hasVars && this.ntb.hasPlugin[ItemType.Templater]) {
+            if (!hasVars && this.ntb.adapters.hasPlugin(ItemType.Templater)) {
                 hasVars = s.trim().startsWith('<%');
             }
         }
@@ -87,7 +87,7 @@ export default class VariableResolver {
 			// JAVASCRIPT
 			if (s.trim().startsWith('{{js:')) {
 				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
-				let result = await this.ntb.jsAdapter?.use({ 
+				let result = await this.ntb.adapters.js?.use({ 
 					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 					expression: s
 				});
@@ -95,14 +95,14 @@ export default class VariableResolver {
 			}
 
 			// PLUGIN EXPRESSIONS
-			if (this.ntb.hasPlugin[ItemType.Dataview]) {
-				let prefix = this.ntb.dvAdapter?.getSetting('inlineQueryPrefix');
+			if (this.ntb.adapters.hasPlugin(ItemType.Dataview)) {
+				let prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
 				if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
 					// strip prefix before evaluation
 					if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
 					if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
 					s = s.trim();
-					let result = await this.ntb.dvAdapter?.use({
+					let result = await this.ntb.adapters.dv?.use({
 						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 						expression: s
 					});
@@ -117,10 +117,10 @@ export default class VariableResolver {
 				// }
 			}
 
-			if (this.ntb.hasPlugin[ItemType.JsEngine]) {
+			if (this.ntb.adapters.hasPlugin(ItemType.JsEngine)) {
 				if (s.trim().startsWith('{{jse:')) {
 					s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
-					let result = await this.ntb.jsEngineAdapter?.use({ 
+					let result = await this.ntb.adapters.jsEngine?.use({ 
 						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 						expression: s
 					});
@@ -128,7 +128,7 @@ export default class VariableResolver {
 				}
 			}
 
-			if (this.ntb.hasPlugin[ItemType.Templater]) {
+			if (this.ntb.adapters.hasPlugin(ItemType.Templater)) {
 				if (s.trim().startsWith('<%') || s.trim().startsWith('{{tp:')) {
 					// strip all prefixes
 					if (s.trim().startsWith('{{tp:')) s = s.replace(/^{{tp:\s*|\s*}}$/g, '');
@@ -136,7 +136,7 @@ export default class VariableResolver {
 					// add Templater's prefix back in for evaluation
 					if (!s.startsWith('<%')) s = '<%' + s;
 					if (!s.endsWith('%>')) s += '%>';
-					let result = await this.ntb.tpAdapter?.use({ 
+					let result = await this.ntb.adapters.tp?.use({ 
 						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
 						expression: s
 					});

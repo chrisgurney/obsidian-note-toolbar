@@ -26,11 +26,13 @@ import { HelpView } from 'Help/HelpView';
 import { TipView } from 'Help/TipView';
 import { TextToolbarView } from 'Toolbar/TextToolbarView';
 import { Rect } from '@codemirror/view';
+import AdapterManager from 'Adapters/AdapterManager';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import VariableResolver from 'Toolbar/VariableResolver';
 
 export default class NoteToolbarPlugin extends Plugin {
 
+	adapters: AdapterManager;
 	api: INoteToolbarApi<any>;
 	commands: CommandManager;
 	hotkeys: HotkeyHelper;
@@ -61,24 +63,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	lastFileOpenedOnCacheChange: TFile | null;
 	lastNtbPropValue: string | undefined;
 
-	// for tracking other plugins available (for adapters and rendering edge cases)
-	hasPlugin: { [key: string]: boolean } = {
-		'dataview': false,
-		'js-engine': false,
-		'make-md': false,
-		'templater-obsidian': false,
-	}
-
-	isInternalPluginEnabled: { [key: string]: boolean } = {
-		'page-preview': false,
-		'webviewer': false,
-	}
-
-	jsAdapter: JavaScriptAdapter | undefined;
-	dvAdapter: DataviewAdapter | undefined;
-	jsEngineAdapter: JsEngineAdapter | undefined;
-	tpAdapter: TemplaterAdapter | undefined;
-
 	textToolbarEl: HTMLDivElement | null = null;
 
 	// TODO: remove if not needed
@@ -95,6 +79,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		// initialize managers + helpers
 		this.el = new ToolbarElementHelper(this);
 		this.vars = new VariableResolver(this);
+
+		this.adapters = new AdapterManager(this);
 
 		// load the settings
 		this.settingsManager = new SettingsManager(this);
@@ -117,8 +103,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
 
 			// check what other plugins are enabled that we need to know about
-			this.checkPlugins();
-			this.updateAdapters();
+			this.adapters.checkPlugins();
+			this.adapters.updateAdapters();
 			// @ts-ignore
 			this.workspacesPlugin = this.app.internalPlugins.getPluginById('workspaces');
 
@@ -1702,7 +1688,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			case ItemType.JavaScript:
 			case ItemType.JsEngine:
 			case ItemType.Templater:
-				this.updateAdapters();
+				this.adapters.updateAdapters();
 				if (this.settings.scriptingEnabled) {
 					(file && (file !== activeFile)) ? await this.handleLinkInSidebar(item, file) : await this.handleItemScript(item);
 				}
@@ -1749,7 +1735,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async handleLinkScript(type: ItemType, scriptConfig: ScriptConfig, focus?: ItemFocusType) {
 		type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JavaScript | ItemType.JsEngine | ItemType.Templater>;
-		const adapter = this.getAdapterForItemType(type);
+		const adapter = this.adapters.getAdapterForItemType(type);
 		if (!adapter) {
 			new Notice(t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[type as ScriptType] }));
 			return;
@@ -1757,16 +1743,16 @@ export default class NoteToolbarPlugin extends Plugin {
 		let result;
 		switch (type) {
 			case ItemType.Dataview:
-				result = await this.dvAdapter?.use(scriptConfig);
+				result = await this.adapters.dv?.use(scriptConfig);
 				break;
 			case ItemType.JavaScript:
-				result = await this.jsAdapter?.use(scriptConfig);
+				result = await this.adapters.js?.use(scriptConfig);
 				break;
 			case ItemType.JsEngine:
-				result = await this.jsEngineAdapter?.use(scriptConfig);
+				result = await this.adapters.jsEngine?.use(scriptConfig);
 				break;
 			case ItemType.Templater:
-				result = await this.tpAdapter?.use(scriptConfig);
+				result = await this.adapters.tp?.use(scriptConfig);
 				break;
 		}
 		result ? insertTextAtCursor(this.app, result) : undefined;
@@ -2538,47 +2524,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * UTILITIES
 	 *************************************************************************/
 
-	/** 
-	 * Updates status of other installed plugins we're interested in.
-	 */
-	checkPlugins() {
-		// @ts-ignore
-		const appPlugins = this.app.plugins.plugins;
-		// @ts-ignore
-		const internalPlugins = this.app.internalPlugins.plugins;
-
-		Object.keys(this.hasPlugin).forEach(key => {
-			this.hasPlugin[key] = key in appPlugins;
-		});
-		Object.keys(this.isInternalPluginEnabled).forEach(key => {
-			this.isInternalPluginEnabled[key] = internalPlugins[key]?.enabled ?? false;
-		});
-	}
-
-	/**
-	 * Returns the Adapter for the provided item type, if the plugin is available and the adapter instance exists.
-	 * @param type ItemType to get the Adapter for
-	 * @returns the Adapter or undefined
-	 */
-	getAdapterForItemType(type: ItemType): Adapter | undefined {
-		let adapter: Adapter | undefined;
-		switch (type) {
-			case ItemType.Dataview:
-				adapter = this.hasPlugin[ItemType.Dataview] ? this.dvAdapter : undefined;
-				break;
-			case ItemType.JavaScript:
-				adapter = this.jsAdapter; // built-in, doens't rely on plugin
-				break;
-			case ItemType.JsEngine:
-				adapter = this.hasPlugin[ItemType.JsEngine] ? this.jsEngineAdapter : undefined;
-				break;
-			case ItemType.Templater:
-				adapter = this.hasPlugin[ItemType.Templater] ? this.tpAdapter : undefined;
-				break;
-		}
-		return adapter;
-	}
-
 	/**
 	 * Gets the settings for the toolbar in the current view.
 	 * @returns ToolbarSettings for the current toolbar, or undefined if it doesn't exist.
@@ -2630,29 +2575,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			// this.debug('command available:', item.linkAttr.commandId, '→', isCommandAvailable);
 		}
 		return isCommandAvailable;
-	}
-
-	/**
-	 * Creates the adapters if scripting, and the plugins, are enabled; otherwise disables all adapters.
-	 */
-	updateAdapters() {
-		if (this.settings.scriptingEnabled) {
-			this.checkPlugins(); // update status of enabled plugins
-			this.dvAdapter = this.hasPlugin[ItemType.Dataview] ? (this.dvAdapter || new DataviewAdapter(this)) : undefined;
-			this.jsAdapter = this.jsAdapter || new JavaScriptAdapter(this);
-			this.jsEngineAdapter = this.hasPlugin[ItemType.JsEngine] ? (this.jsEngineAdapter || new JsEngineAdapter(this)) : undefined;
-			this.tpAdapter = this.hasPlugin[ItemType.Templater] ? (this.tpAdapter || new TemplaterAdapter(this)) : undefined;
-		}
-		else {
-			this.dvAdapter?.disable();
-			this.jsAdapter?.disable();
-			this.jsEngineAdapter?.disable();
-			this.tpAdapter?.disable();
-			this.dvAdapter = undefined;
-			this.jsAdapter = undefined;
-			this.jsEngineAdapter = undefined;
-			this.tpAdapter = undefined;
-		}
 	}
 
 }

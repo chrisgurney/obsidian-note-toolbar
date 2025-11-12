@@ -45,7 +45,7 @@ export default class ItemModal extends Modal {
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
 		// update status of installed plugins so we can show available plugins and display errors if needed
-        this.ntb.checkPlugins();
+        this.ntb.adapters.checkPlugins();
 
         let itemForm = this.toolbarItemUi.generateItemForm(this.toolbarItem);
         this.contentEl.append(itemForm);

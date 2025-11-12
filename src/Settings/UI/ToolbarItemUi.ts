@@ -134,7 +134,7 @@ export default class ToolbarItemUi {
                             // show enabled plugins and all other options
                             Object.fromEntries(
                                 Object.entries(LINK_OPTIONS).filter(
-                                    ([key]) => this.ntb.hasPlugin[key] || 
+                                    ([key]) => this.ntb.adapters.hasPlugin(key) || 
                                     ![ItemType.Dataview as string, ItemType.JsEngine as string, ItemType.Templater as string].includes(key)
                                 )
                             )
@@ -622,7 +622,7 @@ export default class ToolbarItemUi {
             case ItemType.JsEngine:
             case ItemType.Templater: {
                 if (this.ntb.settings.scriptingEnabled) {
-                    let adapter = this.ntb.getAdapterForItemType(type);
+                    let adapter = this.ntb.adapters.getAdapterForItemType(type);
                     if (adapter) {
                         const functionOptions = {
                             '': t('adapter.option-function-default'),
@@ -934,7 +934,7 @@ export default class ToolbarItemUi {
                                 let fileSuggesterFolder: string | undefined = undefined;
                                 let fileSuggesterExt: string | undefined = '.js';
                                 if (toolbarItem.linkAttr.type === ItemType.Templater) {
-                                    fileSuggesterFolder = this.ntb.tpAdapter?.getSetting('templates_folder');
+                                    fileSuggesterFolder = this.ntb.adapters.tp?.getSetting('templates_folder');
                                     fileSuggesterExt = undefined;
                                 }
                                 new FileSuggester(this.ntb, cb.inputEl, true, fileSuggesterExt, fileSuggesterFolder);

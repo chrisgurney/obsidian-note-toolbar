@@ -58,7 +58,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Displays the toolbar item's settings within the modal window.
 	 */
 	onOpen() {
-		this.ntb.updateAdapters();
+		this.ntb.adapters.updateAdapters();
 		this.display();
 	}
 
@@ -104,7 +104,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-top-inset-fix');
 
 		// update status of installed plugins so we can display errors if needed
-		this.ntb.checkPlugins();
+		this.ntb.adapters.checkPlugins();
 
 		let settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";

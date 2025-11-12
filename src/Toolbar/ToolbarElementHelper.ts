@@ -40,7 +40,7 @@ export default class ToolbarElementHelper {
         // get the props container based on view mode; fix for toolbar not showing below props in reading mode, in notes with an embed (#392)
         const propertiesContainer = currentViewEl?.querySelector(`.markdown-${currentMode === 'preview' ? 'reading' : 'source'}-view .metadata-container`) as HTMLElement;
         // fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
-        if (this.ntb.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
+        if (this.ntb.adapters.hasPlugin('make-md') && propertiesContainer?.closest('.mk-frame-edit')) {
             return null;
         }
         return propertiesContainer;

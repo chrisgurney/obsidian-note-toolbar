@@ -209,11 +209,11 @@ function unescapeLinkForCallout(str: string): string {
  * Note Toolbar's agnostic {{ }} script delimiters.
  */
 function replaceScriptDelimiters(ntb: NoteToolbarPlugin, input: string): string {
-    if (ntb.hasPlugin[ItemType.Templater]) {
+    if (ntb.adapters.hasPlugin(ItemType.Templater)) {
         input = input.replace(/<%\s*(.*?)\s*%?>/g, '{{tp: $1}}');
     }
-    if (ntb.hasPlugin[ItemType.Dataview]) {
-        const dvPrefix = ntb.dvAdapter?.getSetting('inlineQueryPrefix') || '=';
+    if (ntb.adapters.hasPlugin(ItemType.Dataview)) {
+        const dvPrefix = ntb.adapters.dv?.getSetting('inlineQueryPrefix') || '=';
         const regex = new RegExp(`^${dvPrefix}\\s*(.*)`, 'gm');
         input = input.replace(regex, '{{dv: $1}}');
     }

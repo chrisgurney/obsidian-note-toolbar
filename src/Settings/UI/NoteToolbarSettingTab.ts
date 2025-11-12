@@ -1123,7 +1123,7 @@ export class NoteToolbarSettingTab extends PluginSettingTab {
 					.setValue(this.ntb.settings.scriptingEnabled)
 					.onChange(async (value) => {
 						this.ntb.settings.scriptingEnabled = value;
-						this.ntb.updateAdapters();
+						this.ntb.adapters.updateAdapters();
 						await this.ntb.settingsManager.save();
 					});
 			});

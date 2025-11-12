@@ -387,7 +387,7 @@ export class SettingsManager {
 				const pluginNames = plugins.map(p => {
 					const name = t(`plugin.${p}`);
 					if (!name) return; // ignore plugins that aren't supported
-					const isEnabled = !!this.ntb.getAdapterForItemType(p as ItemType);
+					const isEnabled = !!this.ntb.adapters.getAdapterForItemType(p as ItemType);
 					return isEnabled 
 						? t('gallery.select-plugin-suggestion', { plugin: name }) 
 						: t('gallery.select-plugin-suggestion-not-enabled', { plugin: name });

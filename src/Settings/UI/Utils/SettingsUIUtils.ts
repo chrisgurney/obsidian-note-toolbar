@@ -693,7 +693,7 @@ export async function updateItemComponentStatus(
 			case SettingType.Script:
 				if (toolbarItem && toolbarItem.scriptConfig) {
 					// validate what the selected function for the adapter for this item requires
-					let adapter = ntb.getAdapterForItemType(toolbarItem.linkAttr.type);
+					let adapter = ntb.adapters.getAdapterForItemType(toolbarItem.linkAttr.type);
 					if (adapter) {
 						let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
 						const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
@@ -764,7 +764,7 @@ export async function openScriptPrompt(ntb: NoteToolbarPlugin, item: ToolbarItem
 		
 		if (isConfirmed) {
 			ntb.settings.scriptingEnabled = true;
-			ntb.updateAdapters();
+			ntb.adapters.updateAdapters();
 			await ntb.settingsManager.save();
 		}
 
