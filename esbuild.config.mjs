@@ -30,12 +30,14 @@ const typecheckPlugin = {
 			return new Promise((resolve) => {
 				console.log('[typecheck] running...');
 				const tsc = spawn('tsc', ['-noEmit', '-skipLibCheck'], {
-					stdio: 'inherit' // Pipes stdout/stderr directly, preserving colors
+					stdio: 'inherit' // pipes stdout/stderr directly, preserving colors
 				});
 				
 				tsc.on('close', (code) => {
 					if (code === 0) {
-						console.log('[typecheck] ✓ passed');
+						console.log('\x1b[32m[typecheck] ✓ passed\x1b[0m');
+					} else {
+						console.log('\x1b[31m[typecheck] ✗ failed\x1b[0m');
 					}
 					resolve();
 				});
