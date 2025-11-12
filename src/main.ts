@@ -1,6 +1,6 @@
 import { CachedMetadata, Command, Editor, FileSystemAdapter, FrontMatterCache, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, MenuPositionDef, Notice, PaneType, Platform, Plugin, TFile, TFolder, WorkspaceLeaf, addIcon, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP, DEFAULT_SETTINGS, ItemFocusType } from 'Settings/NoteToolbarSettings';
+import { ToolbarSettings, NoteToolbarSettings, PositionType, ItemType, CalloutAttr, t, ToolbarItemSettings, ToolbarStyle, RibbonAction, VIEW_TYPE_WHATS_NEW, ScriptConfig, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, DefaultStyleType, MobileStyleType, ErrorBehavior, VIEW_TYPE_GALLERY, LocalVar, PropsState, VIEW_TYPE_HELP, VIEW_TYPE_TIP, ItemFocusType } from 'Settings/NoteToolbarSettings';
 import { calcComponentVisToggles, calcItemVisToggles, isValidUri, putFocusInMenu, getLinkUiTarget, insertTextAtCursor, getViewId, hasStyle, checkToolbarForItemView, getActiveView, calcMouseItemIndex } from 'Utils/Utils';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 import { WhatsNewView } from 'Help/WhatsNewView';
@@ -26,6 +26,7 @@ import { HelpView } from 'Help/HelpView';
 import { TipView } from 'Help/TipView';
 import { TextToolbarView } from 'Toolbar/TextToolbarView';
 import { Rect } from '@codemirror/view';
+import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -37,6 +38,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
 	
+	el: ToolbarElementHelper;
+
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
 	isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
 
@@ -86,6 +89,9 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * adds listeners, settings, and renders the toolbar for the active file.
 	 */
 	async onload() {
+
+		// initialize managers + helpers
+		this.el = new ToolbarElementHelper(this);
 
 		// load the settings
 		this.settingsManager = new SettingsManager(this);
@@ -198,7 +204,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	onunload() {
 
 		// remove any toolbars
-		this.getAllToolbarEl().forEach((toolbarEl) => { toolbarEl.remove(); });
+		this.el.getAllToolbarEl().forEach((toolbarEl) => { toolbarEl.remove(); });
 		if (this.textToolbarEl) this.textToolbarEl.remove();
 		// remove the global API
 		if (window["ntb"]) delete window["ntb"];
@@ -359,7 +365,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	leafChangeListener = async (leaf: any) => {
 		let renderToolbar = false;
 		// FIXME? what if there's more than one toolbar?
-		let toolbarEl = this.getToolbarEl();
+		let toolbarEl = this.el.getToolbarEl();
 		let currentView = getActiveView();
 
 		const viewId = getViewId(currentView);
@@ -776,7 +782,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// default case includes Hidden and Props positions; Hidden is rendered for command reference
 				if (view instanceof MarkdownView) {
 					// inject it between the properties and content divs
-					let propsEl = this.getPropsEl(view);
+					let propsEl = this.el.getPropsEl(view);
 					if (!propsEl) {
 						this.debug("🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
 					}
@@ -1348,7 +1354,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 		}
 
-		const toolbarEl = this.getToolbarEl(toolbarView ?? undefined);
+		const toolbarEl = this.el.getToolbarEl(toolbarView ?? undefined);
 		const currentPosition = this.settingsManager.getToolbarPosition(toolbar);
 
 		// no need to run update for certain positions
@@ -1950,7 +1956,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			}
 			else {
 				this.renderToolbarAsMenu(toolbar, activeFile, this.settings.showEditInFabMenu).then(menu => { 
-					let fabEl = this.getToolbarFabEl();
+					let fabEl = this.el.getToolbarFabEl();
 					if (fabEl) {
 						let fabPos = fabEl.getAttribute('data-tbar-position');
 						// determine menu orientation based on button position
@@ -1984,7 +1990,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		this.debugGroup("toolbarKeyboardHandler");
 
-		let itemsUl: HTMLElement | null = this.getToolbarListEl(isTextToolbar);
+		let itemsUl: HTMLElement | null = this.el.getToolbarListEl(isTextToolbar);
 		if (itemsUl) {
 
 			// not preventing default from 'Escape' for now (I think this helps)
@@ -2062,7 +2068,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	async removeFocusStyle() {
 		// remove focus effect from all toolbar items
-		let toolbarListEl = this.getToolbarListEl();
+		let toolbarListEl = this.el.getToolbarListEl();
 		if (toolbarListEl) {
 			Array.from(toolbarListEl.children).forEach(element => {
 				element.removeClass(ToolbarStyle.ItemFocused);
@@ -2256,7 +2262,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// show/hide properties
 			//
 
-			const propsEl = this.getPropsEl();
+			const propsEl = this.el.getPropsEl();
 			if ((currentView?.getViewType() === 'markdown') && propsEl) {
 				const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
 				if (propsDisplayStyle === 'none') {
@@ -2426,97 +2432,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	}
 
 	/*************************************************************************
-	 * ELEMENT GETTERS
-	 *************************************************************************/
-
-	/**
-	 * Gets the active (last activated) item's ID.
-	 * @returns last activated toolbar item ID, or null if it can't be found.
-	 */
-	getActiveItemId(): string | null {
-		return this.app.loadLocalStorage(LocalVar.ActiveItem);
-	}
-
-	/**
-	 * Gets all toolbar elements in the current or provided view.
-	 * @returns all toolbar elements in the current view, or an empty NodeList if none found.
-	 */
-	getAllToolbarEl(view?: ItemView): NodeListOf<HTMLElement> {
-		let toolbarViewEl = view ? view.containerEl : this.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
-		toolbarViewEl = toolbarViewEl?.closest('.modal-container .note-toolbar-ui') ?? toolbarViewEl;
-		return toolbarViewEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
-	}
-
-	/**
-	 * Gets the Properties container for the active or provided view.
-	 * @param view optional MarkdownView to find the Properties container for; otherwise uses the active view.
-	 * @returns HTMLElement or null, if it doesn't exist.
-	 */
-	getPropsEl(view?: MarkdownView): HTMLElement | null {
-		const currentView = view ?? this.app.workspace.getActiveViewOfType(MarkdownView);
-		if (!currentView) return null;
-		const currentMode = currentView.getMode();
-		const currentViewEl = currentView.containerEl as HTMLElement;
-		// get the props container based on view mode; fix for toolbar not showing below props in reading mode, in notes with an embed (#392)
-		const propertiesContainer = currentViewEl?.querySelector(`.markdown-${currentMode === 'preview' ? 'reading' : 'source'}-view .metadata-container`) as HTMLElement;
-		// fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
-		if (this.hasPlugin['make-md'] && propertiesContainer?.closest('.mk-frame-edit')) {
-			return null;
-		}
-		return propertiesContainer;
-	}
-
-	/**
-	 * Gets the note-toolbar-output callout container in the current view, matching the provided metadata string.
-	 * @example
-	 * > [!note-toolbar-output|META]
-	 * @param calloutMeta string to match
-	 * @returns HTMLElement or null, if it doesn't exist.
-	 */
-	getOutputEl(calloutMeta: string): HTMLElement | null {
-		const currentViewEl = this.app.workspace.getActiveViewOfType(MarkdownView)?.leaf.containerEl as HTMLElement | null;
-		const containerEl = currentViewEl?.querySelector('.callout[data-callout="note-toolbar-output"][data-callout-metadata*="' + calloutMeta + '"]') as HTMLElement;
-		// this.debug("getScriptOutputEl:", containerEl);
-		return containerEl;
-	}
-
-	/**
-	 * Get the toolbar element, in the current view.
-	 * @param view optional ItemView to find the toolbar container for; otherwise uses the active view.
-	 * @param isTextToolbar set to true if this is for the text toolbar.
-	 * @returns HTMLElement or null, if it doesn't exist.
-	 */
-	getToolbarEl(view?: ItemView, isTextToolbar: boolean = false): HTMLElement | null {
-		if (isTextToolbar) {
-			return activeDocument.querySelector('.cg-note-toolbar-container[data-tbar-position="text"]') as HTMLElement;
-		}
-		else {
-			const toolbarView = view ? view : this.app.workspace.getActiveViewOfType(ItemView);
-			const toolbarViewEl = toolbarView?.containerEl as HTMLElement;
-			return toolbarViewEl?.querySelector('.cg-note-toolbar-container') as HTMLElement;
-		}
-	}
-
-	/**
-	 * Get the toolbar element's <ul> element, in the current view.
-	 * @param isTextToolbar set to true if this is for the text toolbar.
-	 * @returns HTMLElement or null, if it doesn't exist.
-	 */
-	getToolbarListEl(isTextToolbar: boolean = false): HTMLElement | null {
-		const toolbarEl = this.getToolbarEl(undefined, isTextToolbar);
-		return toolbarEl?.querySelector('.callout-content > ul') as HTMLElement;
-	}
-
-	/**
-	 * Get the floating action button, if it exists.
-	 * @returns HTMLElement or null, if it doesn't exist.
-	 */
-	getToolbarFabEl(): HTMLElement | null {
-		let existingToolbarFabEl = activeDocument.querySelector('.cg-note-toolbar-fab-container') as HTMLElement;
-		return existingToolbarFabEl;
-	}
-
-	/*************************************************************************
 	 * TOOLBAR REMOVAL
 	 *************************************************************************/
 
@@ -2524,7 +2439,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Remove the toolbar on the active file.
 	 */
 	async removeActiveToolbar(): Promise<void> {
-		const toolbarEl = this.getToolbarEl();
+		const toolbarEl = this.el.getToolbarEl();
 		toolbarEl?.remove();
 	}
 
@@ -2542,7 +2457,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let toolbarRemoved: boolean = false;
 
 		// get toolbar elements in current view, or active view if not provided
-		const existingToolbarEls = this.getAllToolbarEl(view);
+		const existingToolbarEls = this.el.getAllToolbarEl(view);
 
 		this.debug("🛑 removeToolbarIfNeeded: correct:", correctToolbar?.name, "existing:", existingToolbarEls);
 		if (existingToolbarEls?.length > 0) {
@@ -2681,7 +2596,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * @returns ToolbarSettings for the current toolbar, or undefined if it doesn't exist.
 	 */
 	getCurrentToolbar(): ToolbarSettings | undefined {
-		const noteToolbarEl = this.getToolbarEl();
+		const noteToolbarEl = this.el.getToolbarEl();
 		const noteToolbarSettings = noteToolbarEl ? this.settingsManager.getToolbarById(noteToolbarEl?.id) : undefined;
 		return noteToolbarSettings;
 	}

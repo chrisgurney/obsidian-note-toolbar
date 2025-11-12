@@ -87,7 +87,7 @@ export class ProtocolManager {
 				!toolbarSettings ? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })) : undefined;
 			}
 			else {
-				let toolbarEl = this.plugin.getToolbarEl(); // if not given, figure out what toolbar is on screen
+				let toolbarEl = this.plugin.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
 				toolbarSettings = toolbarEl ? this.plugin.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
 			}
 			if (toolbarSettings) {

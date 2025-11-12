@@ -173,7 +173,7 @@ export class CommandManager {
         }
 
         // need to get the type of toolbar first
-        let toolbarEl = this.plugin.getToolbarEl(undefined, true);
+        let toolbarEl = this.plugin.el.getToolbarEl(undefined, true);
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
         switch (toolbarPosition) {
             case PositionType.FabRight:
@@ -213,7 +213,7 @@ export class CommandManager {
             case PositionType.Text:
             case PositionType.Top: {
                 // get the list and set focus on the first visible item
-                const itemsUl: HTMLElement | null = this.plugin.getToolbarListEl(isTextToolbar);
+                const itemsUl: HTMLElement | null = this.plugin.el.getToolbarListEl(isTextToolbar);
                 if (itemsUl) {
                     this.plugin.debug("toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);
@@ -277,7 +277,7 @@ export class CommandManager {
      */
     async openToolbarSettings(): Promise<void> {
         // figure out what toolbar is on the screen
-        let toolbarEl = this.plugin.getToolbarEl();
+        let toolbarEl = this.plugin.el.getToolbarEl();
         toolbarEl?.id ? await this.openToolbarSettingsForId(toolbarEl.id) : undefined;
     }
 
@@ -344,7 +344,7 @@ export class CommandManager {
      */
     async toggleProps(visibility: PropsState, isAutoFold: boolean = false): Promise<void> {
 
-        let propsEl = this.plugin.getPropsEl();
+        let propsEl = this.plugin.el.getPropsEl();
         const activeFile = this.plugin.app.workspace.getActiveFile();
         const currentView = this.plugin.app.workspace.getActiveViewOfType(MarkdownView);
         // this.plugin.debug("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);

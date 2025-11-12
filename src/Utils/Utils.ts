@@ -47,7 +47,7 @@ export function calcComponentVisToggles(visibility: Visibility) {
  * @returns 
  */
 export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent): number | undefined {
-    const toolbarListEl = plugin.getToolbarListEl();
+    const toolbarListEl = plugin.el.getToolbarListEl();
     if (!toolbarListEl) return;
 
     const children = Array.from(toolbarListEl.children) as HTMLElement[];

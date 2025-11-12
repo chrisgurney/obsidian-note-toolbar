@@ -45,7 +45,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.noteToolbar?.getOutputEl(config.outputContainer);
+            containerEl = this.noteToolbar?.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
