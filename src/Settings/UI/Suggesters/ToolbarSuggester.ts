@@ -2,7 +2,7 @@ import { AbstractInputSuggest, App } from "obsidian";
 import { ToolbarSettings } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
 
-export class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettings> {
+export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettings> {
 
     constructor(
         private ntb: NoteToolbarPlugin, 

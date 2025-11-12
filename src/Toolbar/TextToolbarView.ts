@@ -1,7 +1,7 @@
-import { EditorView, PluginValue, ViewUpdate, ViewPlugin, Rect } from '@codemirror/view';
+import { EditorView, PluginValue, Rect, ViewPlugin, ViewUpdate } from '@codemirror/view';
 import NoteToolbarPlugin from 'main';
 
-export function TextToolbarView(ntb: NoteToolbarPlugin) {
+export default function TextToolbarView(ntb: NoteToolbarPlugin) {
 
     return ViewPlugin.fromClass(
         

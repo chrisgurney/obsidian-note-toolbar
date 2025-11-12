@@ -9,7 +9,7 @@ module FolderSuggester {
     }
 }
 
-export class FolderSuggester extends AbstractInputSuggest<string> {
+export default class FolderSuggester extends AbstractInputSuggest<string> {
 
     private inputEl: HTMLInputElement;
 

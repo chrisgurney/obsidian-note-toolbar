@@ -1,12 +1,11 @@
-import NoteToolbarPlugin from "main";
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
-import { FrontMatterCache, ItemView, Notice, Platform, TFile } from "obsidian";
 import { checkToolbarForItemView, getUUID } from "Utils/Utils";
+import NoteToolbarPlugin from "main";
+import { FrontMatterCache, ItemView, Platform, TFile } from "obsidian";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
-import { NoteToolbarSettingTab } from "./UI/NoteToolbarSettingTab";
+import NoteToolbarSettingTab from "./UI/NoteToolbarSettingTab";
 
-
-export class SettingsManager {
+export default class SettingsManager {
 	
 	private DEBUG = false;
 	

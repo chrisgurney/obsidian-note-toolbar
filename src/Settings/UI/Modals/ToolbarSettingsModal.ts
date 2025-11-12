@@ -1,15 +1,15 @@
-import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
-import { arraymove, moveElement, getUUID } from 'Utils/Utils';
-import { emptyMessageFr, learnMoreFr, createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, removeFieldError, setFieldError, createOnboardingMessageEl, iconTextFr, handleKeyClick, openItemSuggestModal, getToolbarUsageFr, getToolbarUsageText, getDisclaimersFr, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
 import NoteToolbarPlugin from 'main';
-import { ItemType, POSITION_OPTIONS, PositionType, ToolbarItemSettings, ToolbarSettings, t, SettingFieldItemMap, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, SETTINGS_DISCLAIMERS } from 'Settings/NoteToolbarSettings';
-import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
+import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, ItemType, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, SettingFieldItemMap, ToolbarItemSettings, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
+import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import Sortable from 'sortablejs';
-import { importFromModal } from './ImportModal';
-import ToolbarStyleUi from '../ToolbarStyleUi';
+import { arraymove, getUUID, moveElement } from 'Utils/Utils';
+import ItemSuggester from '../Suggesters/ItemSuggester';
 import ToolbarItemUi from '../ToolbarItemUi';
-import { ItemSuggester } from '../Suggesters/ItemSuggester';
+import ToolbarStyleUi from '../ToolbarStyleUi';
+import { createOnboardingMessageEl, createToolbarPreviewFr, displayHelpSection, emptyMessageFr, getDisclaimersFr, getToolbarUsageFr, getToolbarUsageText, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, removeFieldError, setFieldError, showWhatsNewIfNeeded, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
+import { importFromModal } from './ImportModal';
 import ItemModal from './ItemModal';
 
 const enum ItemFormComponent {

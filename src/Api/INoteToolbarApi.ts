@@ -1,6 +1,6 @@
 import { Modal, TAbstractFile, TFile } from "obsidian";
-import { IToolbar } from "./IToolbar";
-import { IItem } from "./IItem";
+import IItem from "./IItem";
+import IToolbar from "./IToolbar";
 
 /**
  * > [!note]
@@ -50,7 +50,7 @@ import { IItem } from "./IItem";
  * @privateRemarks
  * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
  */
-export interface INoteToolbarApi<T> {
+export default interface INoteToolbarApi<T> {
 
     // testCallback: (buttonId: string, callback: Callback) => Promise<void>;
 

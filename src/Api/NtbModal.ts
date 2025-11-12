@@ -6,7 +6,7 @@ import { t } from "Settings/NoteToolbarSettings";
 /**
  * Provides a modal that can be accessed from the Note Toolbar API.
  */
-export class NtbModal extends Modal {
+export default class NtbModal extends Modal {
 
     private title: string;
     private isEditable: boolean;

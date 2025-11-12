@@ -1,11 +1,9 @@
-import { ButtonComponent, ItemView, MarkdownRenderer, setIcon, Setting, WorkspaceLeaf } from "obsidian";
-import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
-import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import NoteToolbarPlugin from "main";
-import { renderTipItems } from "./TipView";
+import { ButtonComponent, ItemView, setIcon, Setting, WorkspaceLeaf } from "obsidian";
+import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 
-
-export class HelpView extends ItemView {
+export default class HelpView extends ItemView {
 
     constructor(private ntb: NoteToolbarPlugin, leaf: WorkspaceLeaf) {
         super(leaf);

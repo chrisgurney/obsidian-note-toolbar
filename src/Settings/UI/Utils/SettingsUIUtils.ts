@@ -1,14 +1,14 @@
-import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder } from "obsidian";
-import { ItemType, URL_RELEASES, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, VIEW_TYPE_GALLERY, IGNORE_PLUGIN_IDS, DEFAULT_ITEM_VISIBILITY_SETTINGS, VIEW_TYPE_HELP, SettingType, COMMAND_DOES_NOT_EXIST, ScriptConfig } from "Settings/NoteToolbarSettings";
-import { SettingsManager } from "Settings/SettingsManager";
 import NoteToolbarPlugin from "main";
-import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
-import ItemModal from "../Modals/ItemModal";
-import { ItemSuggestModal, ItemSuggestMode } from "../Modals/ItemSuggestModal";
-import { confirmWithModal } from "../Modals/ConfirmModal";
-import { PLUGIN_VERSION } from "version";
-import { ToolbarSuggestModal } from "../Modals/ToolbarSuggestModal";
+import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder } from "obsidian";
+import { COMMAND_DOES_NOT_EXIST, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import SettingsManager from "Settings/SettingsManager";
 import { importArgs } from "Utils/Utils";
+import { PLUGIN_VERSION } from "version";
+import { confirmWithModal } from "../Modals/ConfirmModal";
+import ItemModal from "../Modals/ItemModal";
+import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
+import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
+import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 
 /**
  * Returns an element contianing a dismissable onboarding message.

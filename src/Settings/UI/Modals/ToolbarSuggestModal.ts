@@ -3,7 +3,7 @@ import { SuggestModal, TFile } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { createOnboardingMessageEl, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
 
-export class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
+export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     /**
      * Creates a new modal.

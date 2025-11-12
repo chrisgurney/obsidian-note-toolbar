@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Menu, ItemView, Platform, MenuItem, Notice, Editor, MarkdownFileInfo, MarkdownView, TFile } from "obsidian";
 import { ItemType, t, PositionType, ToolbarSettings, LocalVar, RibbonAction, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ItemModal from "Settings/UI/Modals/ItemModal";
-import { ShareModal } from "Settings/UI/Modals/ShareModal";
+import ShareModal from "Settings/UI/Modals/ShareModal";
 import StyleModal from "Settings/UI/Modals/StyleModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { openItemSuggestModal, learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";

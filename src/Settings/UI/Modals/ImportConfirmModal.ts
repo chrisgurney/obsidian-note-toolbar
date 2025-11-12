@@ -15,7 +15,7 @@ export async function confirmImportWithModal(ntb: NoteToolbarPlugin, callout: st
     });
 }
 
-export class ImportConfirmModal extends Modal {
+export default class ImportConfirmModal extends Modal {
 
     public isConfirmed: boolean = false;
 

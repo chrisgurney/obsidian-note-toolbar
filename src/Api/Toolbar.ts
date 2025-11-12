@@ -1,9 +1,9 @@
 import NoteToolbarPlugin from "main";
 import { ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { exportToCallout } from "Utils/ImportExport";
-import { IToolbar } from "./IToolbar";
+import IToolbar from "./IToolbar";
 
-export class Toolbar implements IToolbar {
+export default class Toolbar implements IToolbar {
 
     public readonly id?: string;
 

@@ -3,11 +3,11 @@ import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIME
 import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
 import { Setting, debounce, ButtonComponent, setIcon, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice, PaneType } from "obsidian";
 import { removeComponentVisibility, addComponentVisibility, getElementPosition, getCommandIdByName, getCommandNameById } from "Utils/Utils";
-import { IconSuggestModal } from "./Modals/IconSuggestModal";
+import IconSuggestModal from "./Modals/IconSuggestModal";
 import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "./Utils/SettingsUIUtils";
-import { FileSuggester } from "./Suggesters/FileSuggester";
-import { CommandSuggester } from "./Suggesters/CommandSuggester";
-import { ToolbarSuggester } from "./Suggesters/ToolbarSuggester";
+import FileSuggester from "./Suggesters/FileSuggester";
+import CommandSuggester from "./Suggesters/CommandSuggester";
+import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
 import { Adapter } from "Adapters/Adapter";
 import ItemModal from "./Modals/ItemModal";
 

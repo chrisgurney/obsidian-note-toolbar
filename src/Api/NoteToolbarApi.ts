@@ -1,18 +1,18 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
-import { NtbSuggester } from "./NtbSuggester";
-import { NtbPrompt } from "./NtbPrompt";
-import { INoteToolbarApi, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
-import { NtbModal } from "./NtbModal";
 import { Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
-import { Toolbar } from "./Toolbar";
-import { Item } from "./Item";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
 import { putFocusInMenu } from "Utils/Utils";
+import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
+import Item from "./Item";
+import NtbModal from "./NtbModal";
+import NtbPrompt from "./NtbPrompt";
+import NtbSuggester from "./NtbSuggester";
+import Toolbar from "./Toolbar";
 
 export type Callback = (arg: string) => void;
 
-export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
+export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
     constructor(private ntb: NoteToolbarPlugin) {
     }

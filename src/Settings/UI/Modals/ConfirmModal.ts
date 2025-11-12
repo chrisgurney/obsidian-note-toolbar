@@ -19,7 +19,7 @@ export async function confirmWithModal(app: App, uiSettings: UiSettings): Promis
     });
 }
 
-export class ConfirmModal extends Modal {
+export default class ConfirmModal extends Modal {
 
     public isConfirmed: boolean = false;
     public uiSettings: UiSettings;

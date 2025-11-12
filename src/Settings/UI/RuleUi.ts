@@ -1,11 +1,10 @@
-import NoteToolbarPlugin from "main";
-import { NoteToolbarSettingTab } from "./NoteToolbarSettingTab";
 import { RuleConditionType, RuleConjunctionType, RuleOperatorType, t, ToolbarRule, ToolbarRuleCondition } from "Settings/NoteToolbarSettings";
-import { ButtonComponent, debounce, normalizePath, Setting } from "obsidian";
+import { getUUID } from "Utils/Utils";
+import NoteToolbarPlugin from "main";
+import { ButtonComponent, debounce, Setting } from "obsidian";
+import NoteToolbarSettingTab from "./NoteToolbarSettingTab";
+import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
 import { emptyMessageFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
-import Sortable from "sortablejs";
-import { getUUID, moveElement } from "Utils/Utils";
-import { ToolbarSuggester } from "./Suggesters/ToolbarSuggester";
 
 export default class RuleUi {
 

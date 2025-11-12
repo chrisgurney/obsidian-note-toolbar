@@ -9,7 +9,7 @@ import NoteToolbarPlugin from "main";
  * Adapted from Templater:
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/SuggesterModal.ts
  */
-export class NtbSuggester<T> extends FuzzySuggestModal<T> {
+export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     private resolve: (value: T) => void;
     private reject: (reason?: Error) => void;

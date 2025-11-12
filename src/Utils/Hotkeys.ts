@@ -49,7 +49,7 @@ export const HOTKEY_SEPARATOR = ' ';
  */
 export type HotkeyFunctionMap = Map<HotkeyKey | Hotkey[], (modifiers: Modifier[]) => void>;
 
-export class HotkeyHelper {
+export default class HotkeyHelper {
 
 	private ntb: NoteToolbarPlugin;
 

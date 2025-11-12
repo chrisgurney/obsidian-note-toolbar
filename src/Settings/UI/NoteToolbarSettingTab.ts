@@ -1,19 +1,19 @@
-import { App, ButtonComponent, Menu, MenuItem, Notice, Platform, PluginSettingTab, Setting, ToggleComponent, debounce, normalizePath, setIcon, setTooltip } from 'obsidian';
 import NoteToolbarPlugin from 'main';
-import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
-import { createToolbarPreviewFr, displayHelpSection, showWhatsNewIfNeeded, emptyMessageFr, learnMoreFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
+import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Notice, Platform, PluginSettingTab, setIcon, Setting, setTooltip, ToggleComponent } from 'obsidian';
 import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
-import { FolderSuggester } from 'Settings/UI/Suggesters/FolderSuggester';
-import { ToolbarSuggester } from 'Settings/UI/Suggesters/ToolbarSuggester';
-import { IconSuggestModal } from 'Settings/UI/Modals/IconSuggestModal'
+import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
+import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
+import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
 import Sortable from 'sortablejs';
 import { exportToCallout } from 'Utils/ImportExport';
+import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { confirmWithModal } from './Modals/ConfirmModal';
-import { ShareModal } from './Modals/ShareModal';
 import { importFromModal } from './Modals/ImportModal';
+import ShareModal from './Modals/ShareModal';
+import { createToolbarPreviewFr, displayHelpSection, emptyMessageFr, handleKeyClick, iconTextFr, learnMoreFr, showWhatsNewIfNeeded } from "./Utils/SettingsUIUtils";
 // import RuleUi from './RuleUi';
 
-export class NoteToolbarSettingTab extends PluginSettingTab {
+export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 	private itemListIdCounter: number = 0;
 

@@ -2,7 +2,7 @@ import { Platform, SuggestModal, TFile } from "obsidian";
 import NoteToolbarPlugin from "main";
 import { calcItemVisToggles } from "Utils/Utils";
 import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, LocalVar, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { ToolbarSuggestModal } from "./ToolbarSuggestModal";
+import ToolbarSuggestModal from "./ToolbarSuggestModal";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 import ItemModal from "./ItemModal";
 
@@ -13,7 +13,7 @@ import ItemModal from "./ItemModal";
  */
 export type ItemSuggestMode = 'Default' | 'New' | 'QuickTools';
 
-export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
+export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
     private activeFile: TFile | null;
 

@@ -1,9 +1,9 @@
-import { t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
-import { IItem } from "./IItem";
 import NoteToolbarPlugin from "main";
 import { getIcon } from "obsidian";
+import { t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import IItem from "./IItem";
 
-export class Item implements IItem {
+export default class Item implements IItem {
 
     public readonly id?: string;
 

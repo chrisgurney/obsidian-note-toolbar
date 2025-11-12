@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Command, SuggestModal } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
-export class CommandSuggestModal extends SuggestModal<Command> {
+export default class CommandSuggestModal extends SuggestModal<Command> {
 
     private commands: Command[];
 

@@ -1,25 +1,25 @@
-import { Platform, Plugin, WorkspaceLeaf, addIcon } from 'obsidian';
-import { NoteToolbarSettingTab } from 'Settings/UI/NoteToolbarSettingTab';
-import { NoteToolbarSettings, t, VIEW_TYPE_WHATS_NEW, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP } from 'Settings/NoteToolbarSettings';
-import { WhatsNewView } from 'Help/WhatsNewView';
-import { SettingsManager } from 'Settings/SettingsManager';
-import { CommandManager } from 'Commands/CommandManager';
-import { NoteToolbarApi } from 'Api/NoteToolbarApi';
-import { INoteToolbarApi } from "Api/INoteToolbarApi";
-import { ProtocolManager } from 'Protocol/ProtocolManager';
-import GalleryManager from 'Gallery/GalleryManager';
-import { HotkeyHelper } from 'Utils/Hotkeys';
-import { GalleryView } from 'Gallery/GalleryView';
-import { HelpView } from 'Help/HelpView';
-import { TipView } from 'Help/TipView';
-import { TextToolbarView } from 'Toolbar/TextToolbarView';
 import AdapterManager from 'Adapters/AdapterManager';
+import INoteToolbarApi from "Api/INoteToolbarApi";
+import NoteToolbarApi from 'Api/NoteToolbarApi';
+import CommandManager from 'Commands/CommandManager';
+import GalleryManager from 'Gallery/GalleryManager';
+import GalleryView from 'Gallery/GalleryView';
+import HelpView from 'Help/HelpView';
+import TipView from 'Help/TipView';
+import WhatsNewView from 'Help/WhatsNewView';
+import { addIcon, Platform, Plugin, WorkspaceLeaf } from 'obsidian';
+import ProtocolManager from 'Protocol/ProtocolManager';
+import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
+import SettingsManager from 'Settings/SettingsManager';
+import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
+import TextToolbarView from 'Toolbar/TextToolbarView';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
 import ToolbarEventListener from 'Toolbar/ToolbarEventListener';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
+import HotkeyHelper from 'Utils/Hotkeys';
 
 export default class NoteToolbarPlugin extends Plugin {
 

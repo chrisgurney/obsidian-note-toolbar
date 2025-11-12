@@ -1,14 +1,14 @@
 import { EditorView } from "@codemirror/view";
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, PropsState, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
-import { CommandSuggestModal } from "Settings/UI/Modals/CommandSuggestModal";
-import { ItemSuggestModal } from "Settings/UI/Modals/ItemSuggestModal";
+import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
+import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { ToolbarSuggestModal } from "Settings/UI/Modals/ToolbarSuggestModal";
+import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import { getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Command, MarkdownView, Notice } from "obsidian";
 
-export class CommandManager {
+export default class CommandManager {
 
     constructor(
         private ntb: NoteToolbarPlugin

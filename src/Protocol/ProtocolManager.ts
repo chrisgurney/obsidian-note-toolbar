@@ -5,7 +5,7 @@ import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 
-export class ProtocolManager {
+export default class ProtocolManager {
 
     constructor(
 		private ntb: NoteToolbarPlugin

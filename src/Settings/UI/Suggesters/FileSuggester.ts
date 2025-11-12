@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { AbstractInputSuggest, TAbstractFile, TFile } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 
-export class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
+export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
 
     constructor(
         private ntb: NoteToolbarPlugin,

@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, Component, ItemView, MarkdownRenderer, requestUrl, Setting, WorkspaceLeaf } from 'obsidian';
-import { URL_RELEASES, t, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION, URL_RELEASE_NOTES } from 'Settings/NoteToolbarSettings';
+import { t, URL_RELEASE_NOTES, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
 import { iconTextFr } from '../Settings/UI/Utils/SettingsUIUtils';
 
 type Release = { 
@@ -8,7 +8,7 @@ type Release = {
 	body: string;
 };
 
-export class WhatsNewView extends ItemView {
+export default class WhatsNewView extends ItemView {
 
     constructor(private ntb: NoteToolbarPlugin, leaf: WorkspaceLeaf) {
         super(leaf);

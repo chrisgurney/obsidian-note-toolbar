@@ -9,7 +9,7 @@ import NoteToolbarPlugin from "main";
  * Adapted from Templater:
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/PromptModal.ts
  */
-export class NtbPrompt extends Modal {
+export default class NtbPrompt extends Modal {
 
     private resolve: (value: string) => void;
     private reject: (reason?: Error) => void;

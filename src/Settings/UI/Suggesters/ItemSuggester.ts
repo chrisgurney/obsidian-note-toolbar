@@ -3,7 +3,7 @@ import { ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettin
 import NoteToolbarPlugin from "main";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
-export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
+export default class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
 
     constructor(
         private ntb: NoteToolbarPlugin, 

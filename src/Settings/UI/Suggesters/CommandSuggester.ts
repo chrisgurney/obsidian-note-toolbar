@@ -1,6 +1,6 @@
 import { AbstractInputSuggest, App, Command } from "obsidian";
 
-export class CommandSuggester extends AbstractInputSuggest<Command> {
+export default class CommandSuggester extends AbstractInputSuggest<Command> {
 
     private commands: Command[];
     private callback: (command: Command) => void

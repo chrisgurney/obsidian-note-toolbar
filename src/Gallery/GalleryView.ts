@@ -1,9 +1,9 @@
+import gallery from 'Gallery/gallery.json';
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
-import gallery from 'Gallery/gallery.json';
 import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import ItemSuggester from 'Settings/UI/Suggesters/ItemSuggester';
 import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
-import { ItemSuggester } from 'Settings/UI/Suggesters/ItemSuggester';
 
 interface Category {
 	name: { [key: string]: string };
@@ -29,7 +29,7 @@ const cssColors: string[] = [
     'var(--color-pink)',
 ];
 
-export class GalleryView extends ItemView {
+export default class GalleryView extends ItemView {
 
     constructor(
 		private ntb: NoteToolbarPlugin, 

@@ -1,10 +1,10 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal, Notice, Setting, ToggleComponent } from "obsidian";
-import { ItemType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { learnMoreFr } from "../Utils/SettingsUIUtils";
+import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { toolbarHasMenu } from "Utils/Utils";
+import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
-export class ShareModal extends Modal {
+export default class ShareModal extends Modal {
 
     private useObsidianUri = false;
 
