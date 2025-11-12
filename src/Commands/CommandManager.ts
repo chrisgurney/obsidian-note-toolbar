@@ -161,13 +161,13 @@ export class CommandManager {
         this.ntb.debugGroup("focus");
 
         // display the text toolbar at the current cursor position, if it's not already rendered
-        if (isTextToolbar && !this.ntb.textToolbarEl?.isConnected) {
+        if (isTextToolbar && !this.ntb.render.textToolbarEl?.isConnected) {
             const editor = this.ntb.app.workspace.activeEditor?.editor;
             if (!editor) return;
             const offset = editor.posToOffset(editor.getCursor());
             const cmView = (editor as any).cm as EditorView;
             const coords = cmView.coordsAtPos(offset);
-            await this.ntb.renderTextToolbar(coords, coords);
+            await this.ntb.render.renderTextToolbar(coords, coords);
         }
 
         // need to get the type of toolbar first
@@ -185,7 +185,7 @@ export class CommandManager {
                     if (toolbar?.defaultItem) {
                         // TODO: this is a copy of toolbarFabHandler() -- put in a function?
                         let activeFile = this.ntb.app.workspace.getActiveFile();
-                        this.ntb.renderToolbarAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+                        this.ntb.render.renderToolbarAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
                             let fabPos = toolbarFabEl.getAttribute('data-tbar-position');
                             // determine menu orientation based on button position
                             let elemRect = toolbarFabEl.getBoundingClientRect();

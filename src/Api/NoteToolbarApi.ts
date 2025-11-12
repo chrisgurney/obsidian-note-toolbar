@@ -203,7 +203,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         if (options?.class) menu.dom.addClasses([...options.class.split(' ')]);
 
         // this.plugin.debug('lastClickedEl', this.plugin.lastClickedEl);
-        this.ntb.showMenuAtElement(menu, this.ntb.lastClickedEl);
+        this.ntb.render.showMenuAtElement(menu, this.ntb.lastClickedEl);
 
         if (options?.focusInMenu) putFocusInMenu();
 

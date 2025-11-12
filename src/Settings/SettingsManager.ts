@@ -736,7 +736,7 @@ export class SettingsManager {
 		await this.ntb.saveData(this.ntb.settings);
 
 		await this.ntb.removeActiveToolbar();
-		await this.ntb.renderToolbarForView();
+		await this.ntb.render.renderToolbarForView();
 
 		this.debug("SETTINGS SAVED: " + new Date().getTime());
 	}

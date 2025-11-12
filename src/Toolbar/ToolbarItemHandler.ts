@@ -48,7 +48,7 @@ export default class ToolbarItemHandler {
         if (eventTarget) this.ntb.lastClickedEl = eventTarget.closest('.callout[data-callout="note-toolbar"] span.external-link');
 
         // update active item attributes in the toolbar, so the API can fetch the right active item
-        this.ntb.updateActiveToolbarItem(uuid);
+        this.ntb.render.updateActiveToolbarItem(uuid);
 
         if (this.ntb.vars.hasVars(linkHref)) {
             // TODO: expand to also replace vars in labels + tooltips
@@ -83,9 +83,9 @@ export default class ToolbarItemHandler {
             case ItemType.Menu: {
                 const toolbar = this.ntb.settingsManager.getToolbar(linkHref);
                 if (toolbar) {
-                    this.ntb.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
+                    this.ntb.render.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
                         let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
-                        this.ntb.showMenuAtElement(menu, clickedItemEl);
+                        this.ntb.render.showMenuAtElement(menu, clickedItemEl);
                         event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
                     });
                 }

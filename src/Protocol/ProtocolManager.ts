@@ -64,8 +64,8 @@ export class ProtocolManager {
 			const toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getToolbar(data.menu);
 			if (activeFile) {
 				if (toolbar) {
-					this.ntb.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
-						this.ntb.showMenuAtElement(menu, this.ntb.lastCalloutLink);
+					this.ntb.render.renderToolbarAsMenu(toolbar, activeFile).then(menu => { 
+						this.ntb.render.showMenuAtElement(menu, this.ntb.lastCalloutLink);
 					});
 				}
 				else {

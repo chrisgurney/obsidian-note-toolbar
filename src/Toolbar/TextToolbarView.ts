@@ -32,9 +32,9 @@ export function TextToolbarView(ntb: NoteToolbarPlugin) {
                     this.isMouseSelection = true;
                 });
                 ntb.registerDomEvent(view.scrollDOM, 'scroll', () => {
-                    if (ntb.textToolbarEl) {
+                    if (ntb.render.textToolbarEl) {
                         ntb.debug('⛔️ view scrolled - removing toolbar');
-                        ntb.textToolbarEl.remove();
+                        ntb.render.textToolbarEl.remove();
                     }
                 });
             }
@@ -44,7 +44,7 @@ export function TextToolbarView(ntb: NoteToolbarPlugin) {
                 // if there's no text toolbar set, there's nothing to do
                 if (!ntb.settings.textToolbar) {
                     // plugin.debug('no text toolbar setting');
-                    if (ntb.textToolbarEl) ntb.textToolbarEl.remove();
+                    if (ntb.render.textToolbarEl) ntb.render.textToolbarEl.remove();
                     return;
                 };
                 
@@ -57,7 +57,7 @@ export function TextToolbarView(ntb: NoteToolbarPlugin) {
                 const { state, view } = update;
 
                 // const isToolbarFocussed = plugin.textToolbarEl && plugin.textToolbarEl.querySelector(`.${ToolbarStyle.ItemFocused}`) !== null;
-                const isToolbarFocussed = ntb.textToolbarEl && ntb.textToolbarEl.contains(activeDocument.activeElement);
+                const isToolbarFocussed = ntb.render.textToolbarEl && ntb.render.textToolbarEl.contains(activeDocument.activeElement);
 
                 const selection = state.selection.main;
                 const selectFrom = selection.from;
@@ -70,10 +70,10 @@ export function TextToolbarView(ntb: NoteToolbarPlugin) {
                         return;
                     }
                     if (selectFrom === selectTo || !view.hasFocus) {
-                        if (ntb.textToolbarEl) {
+                        if (ntb.render.textToolbarEl) {
                             ntb.debug('⛔️ no selection or view out of focus - removing toolbar');
                             ntb.debug('selection empty:', selectFrom === selectTo, ' • has focus: view', view.hasFocus, 'toolbar', isToolbarFocussed);
-                            ntb.textToolbarEl.remove();
+                            ntb.render.textToolbarEl.remove();
                         }
                         return;
                     }
@@ -81,9 +81,9 @@ export function TextToolbarView(ntb: NoteToolbarPlugin) {
 
                 if (selection.empty) {
                     this.lastSelection = null;
-                    if (ntb.textToolbarEl) {
+                    if (ntb.render.textToolbarEl) {
                         ntb.debug('⛔️ selection empty - removing toolbar');
-                        ntb.textToolbarEl.remove();
+                        ntb.render.textToolbarEl.remove();
                     }
                     return;
                 }
@@ -102,7 +102,7 @@ export function TextToolbarView(ntb: NoteToolbarPlugin) {
 
                     const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
                     const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
-                    await ntb.renderTextToolbar(selectStartPos, selectEndPos);
+                    await ntb.render.renderTextToolbar(selectStartPos, selectEndPos);
 
                     // TODO: do we need this?
                     // if (!this.isMouseSelection) {
@@ -114,7 +114,7 @@ export function TextToolbarView(ntb: NoteToolbarPlugin) {
             }
 
             destroy() {
-                if (ntb.textToolbarEl) ntb.textToolbarEl.remove();
+                if (ntb.render.textToolbarEl) ntb.render.textToolbarEl.remove();
             }
 
         }
