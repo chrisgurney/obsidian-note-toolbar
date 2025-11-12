@@ -19,11 +19,11 @@ export class NtbModal extends Modal {
      * @see INoteToolbarApi.modal
      */
     constructor(
-        private plugin: NoteToolbarPlugin,
+        private ntb: NoteToolbarPlugin,
         private content: string | TFile,
         private options?: NtbModalOptions
     ) {
-        super(plugin.app);
+        super(ntb.app);
 
         const {
             title: title = '',
@@ -47,17 +47,17 @@ export class NtbModal extends Modal {
         if (this.title) {
             let containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
             const component = new Component();
-            MarkdownRenderer.render(this.plugin.app, this.title, containerEl, "", component);
+            MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", component);
         }
         if (this.isEditable && this.content instanceof TFile) {
             // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
-            this.leaf = this.plugin.app.workspace.createLeafInParent(this.plugin.app.workspace.rootSplit, 0);
+            this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
             if (this.leaf) (this.leaf as any).containerEl.hide();
             await this.leaf.openFile(this.content);
             this.contentEl.appendChild(this.leaf.view.containerEl);
         }
         else if (this.isWebviewer && typeof this.content === 'string') {
-            this.leaf = this.plugin.app.workspace.createLeafInParent(this.plugin.app.workspace.rootSplit, 0);
+            this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
             if (this.leaf) (this.leaf as any).containerEl.hide();
             await this.leaf.setViewState({type: 'webviewer', state: { url: this.content, navigate: true }, active: true});
             this.contentEl.appendChild(this.leaf.view.containerEl);
@@ -76,7 +76,7 @@ export class NtbModal extends Modal {
         // render content as markdown
         if (typeof this.content === 'string') {
             const component = new Component();
-            await MarkdownRenderer.render(this.plugin.app, this.content, containerEl, "", component);
+            await MarkdownRenderer.render(this.ntb.app, this.content, containerEl, "", component);
         } 
         else {
             try {
@@ -85,16 +85,16 @@ export class NtbModal extends Modal {
                 if (['md', 'markdown'].includes(ext)) {
                     const fileContent = await this.app.vault.cachedRead(this.content);
                     const component = new Component();
-                    await MarkdownRenderer.render(this.plugin.app, fileContent, containerEl, normalizePath(this.content.path), component);
+                    await MarkdownRenderer.render(this.ntb.app, fileContent, containerEl, normalizePath(this.content.path), component);
 
                     // make links tabbable
                     this.modalEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
                         (link as HTMLElement).tabIndex = 1;
                         if (link.hasClass('internal-link')) {
-                            this.plugin.registerDomEvent(link as HTMLElement, 'click', (event) => {
+                            this.ntb.registerDomEvent(link as HTMLElement, 'click', (event) => {
                                 event.preventDefault();
                                 const target = link.getAttribute('href');
-                                if (target) this.plugin.app.workspace.openLinkText(target, '', true);
+                                if (target) this.ntb.app.workspace.openLinkText(target, '', true);
                             });
                         }
                     });
@@ -108,7 +108,7 @@ export class NtbModal extends Modal {
                 else {
                     const embedMd = `![[${this.content.path}]]`;
                     const embedMdComponent = new Component();
-                    await MarkdownRenderer.render(this.plugin.app, embedMd, containerEl, "", embedMdComponent);
+                    await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, "", embedMdComponent);
                 };
             }
             catch (error) {

@@ -27,11 +27,11 @@ export class NtbPrompt extends Modal {
      * @see INoteToolbarApi.prompt
      */
     constructor(
-        private plugin: NoteToolbarPlugin,
+        private ntb: NoteToolbarPlugin,
         private options?: NtbPromptOptions
     ) {
 
-        super(plugin.app);
+        super(ntb.app);
 
         const {
             label: label_text = '',
@@ -56,7 +56,7 @@ export class NtbPrompt extends Modal {
     onOpen(): void {
         if (this.label) {
             const component = new Component();
-            MarkdownRenderer.render(this.plugin.app, this.label, this.titleEl, "", component);
+            MarkdownRenderer.render(this.ntb.app, this.label, this.titleEl, "", component);
         }
         this.createForm();
     }
@@ -79,7 +79,7 @@ export class NtbPrompt extends Modal {
             const submitButton = new ButtonComponent(buttonDiv);
             submitButton.buttonEl.addClass("mod-cta");
             submitButton.setButtonText(t('api.ui.button-submit'));
-            this.plugin.registerDomEvent(submitButton.buttonEl, 'click', (e: Event) =>
+            this.ntb.registerDomEvent(submitButton.buttonEl, 'click', (e: Event) =>
                 this.resolveAndClose(e)
             );
         } else {
@@ -92,7 +92,7 @@ export class NtbPrompt extends Modal {
         textInput.setValue(this.value);
         textInput.onChange((value) => (this.value = value));
         textInput.inputEl.focus();
-        this.plugin.registerDomEvent(textInput.inputEl, 'keydown', (evt: KeyboardEvent) =>
+        this.ntb.registerDomEvent(textInput.inputEl, 'keydown', (evt: KeyboardEvent) =>
             this.enterCallback(evt)
         );
     }

@@ -7,7 +7,7 @@ export class Item implements IItem {
 
     public readonly id?: string;
 
-    constructor(private plugin: NoteToolbarPlugin, private item: ToolbarItemSettings) {
+    constructor(private ntb: NoteToolbarPlugin, private item: ToolbarItemSettings) {
         this.id = this.item.uuid;
     }
 
@@ -47,9 +47,9 @@ export class Item implements IItem {
         const newIcon = getIcon(iconId);
         if (newIcon || iconId === '') {
             this.item.icon = iconId;
-            const toolbar = this.plugin.settingsManager.getToolbarByItemId(this.item.uuid);
+            const toolbar = this.ntb.settingsManager.getToolbarByItemId(this.item.uuid);
             if (toolbar) toolbar.updated = new Date().toISOString();
-            this.plugin.settingsManager.save();
+            this.ntb.settingsManager.save();
         }
         else {
             throw new Error(t('api.item.error-invalid-icon', { iconId: iconId }));
@@ -63,9 +63,9 @@ export class Item implements IItem {
      */
     setLabel(text: string): void {
         this.item.label = text;
-        const toolbar = this.plugin.settingsManager.getToolbarByItemId(this.item.uuid);
+        const toolbar = this.ntb.settingsManager.getToolbarByItemId(this.item.uuid);
         if (toolbar) toolbar.updated = new Date().toISOString();
-        this.plugin.settingsManager.save();
+        this.ntb.settingsManager.save();
     }
 
     /**
@@ -75,9 +75,9 @@ export class Item implements IItem {
      */
     setTooltip(text: string): void {
         this.item.tooltip = text;
-        const toolbar = this.plugin.settingsManager.getToolbarByItemId(this.item.uuid);
+        const toolbar = this.ntb.settingsManager.getToolbarByItemId(this.item.uuid);
         if (toolbar) toolbar.updated = new Date().toISOString();
-        this.plugin.settingsManager.save();
+        this.ntb.settingsManager.save();
     }
 
 }
