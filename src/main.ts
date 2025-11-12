@@ -131,7 +131,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			await this.renderToolbarForAllLeaves();
 
 			// add the settings UI
-			this.addSettingTab(new NoteToolbarSettingTab(this.app, this));
+			this.addSettingTab(new NoteToolbarSettingTab(this));
 
 			this.registerEvent(this.app.workspace.on('file-open', this.fileOpenListener));
 			this.registerEvent(this.app.workspace.on('active-leaf-change', this.leafChangeListener));

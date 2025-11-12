@@ -9,14 +9,12 @@ import { ToolbarSuggester } from "./Suggesters/ToolbarSuggester";
 
 export default class RuleUi {
 
-    public plugin: NoteToolbarPlugin;
-    private parent: NoteToolbarSettingTab;
     private rulesListOpen: boolean = true;
 
-    constructor(plugin: NoteToolbarPlugin, parent: NoteToolbarSettingTab) {
-        this.parent = parent;
-        this.plugin = plugin;
-    }
+    constructor(
+        private ntb: NoteToolbarPlugin, 
+        private parent: NoteToolbarSettingTab
+    ) {}
 
     /**
      * Displays rules for displaying toolbars.
@@ -32,7 +30,7 @@ export default class RuleUi {
             .setName(t('setting.rules.name'))
             .setDesc(t('setting.rules.description'));
 
-        if (this.plugin.settings.rules.length > 4) {
+        if (this.ntb.settings.rules.length > 4) {
             toolbarRulesSetting
                 .addExtraButton((cb) => {
                     cb.setIcon('right-triangle')
@@ -43,12 +41,12 @@ export default class RuleUi {
                             this.rulesListOpen = !this.rulesListOpen;
                             this.rulesListOpen ? rulesContainerEl.show() : rulesContainerEl.hide();
                             let heading = rulesContainerEl.querySelector('.setting-item-info .setting-item-name');
-                            this.rulesListOpen ? heading?.setText(t('setting.rules.name')) : heading?.setText(t('setting.rules.name-with-count', { count: this.plugin.settings.folderMappings.length }));
+                            this.rulesListOpen ? heading?.setText(t('setting.rules.name')) : heading?.setText(t('setting.rules.name-with-count', { count: this.ntb.settings.folderMappings.length }));
                             cb.setTooltip(this.rulesListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
                         }
                     });
                     cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-                    handleKeyClick(this.plugin, cb.extraSettingsEl);
+                    handleKeyClick(this.ntb, cb.extraSettingsEl);
                 });
         }
         else {
@@ -58,7 +56,7 @@ export default class RuleUi {
         const collapsibleContainer = createDiv();
         collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
 
-        if (this.plugin.settings.rules.length == 0) {
+        if (this.ntb.settings.rules.length == 0) {
             rulesContainer
                 .createEl("div", { text: emptyMessageFr(t('setting.rules.label-empty')) })
                 .className = "note-toolbar-setting-empty-message";
@@ -67,7 +65,7 @@ export default class RuleUi {
             let toolbarRuleListEl = createDiv();
             toolbarRuleListEl.addClass('note-toolbar-sortablejs-list');
 
-            this.plugin.settings.rules.forEach((rule: ToolbarRule, index) => {
+            this.ntb.settings.rules.forEach((rule: ToolbarRule, index) => {
                 let toolbarFolderListItemDiv = this.renderRuleForm(rule);
                 toolbarRuleListEl.append(toolbarFolderListItemDiv);
             });
@@ -110,8 +108,8 @@ export default class RuleUi {
                             conditions: [],
                             toolbar: ''
                         };
-                        this.plugin.settings.rules.push(newRule);
-                        await this.plugin.settingsManager.save();
+                        this.ntb.settings.rules.push(newRule);
+                        await this.ntb.settingsManager.save();
                         // TODO: add a form item to the existing list
                         // renderRuleForm(newRule);
                             // TODO: put the existing code in a function
@@ -160,14 +158,14 @@ export default class RuleUi {
         new Setting(ruleEl)
             .setClass("note-toolbar-setting-mapping-field")
             .addSearch((cb) => {
-                new ToolbarSuggester(this.plugin, cb.inputEl);
+                new ToolbarSuggester(this.ntb, cb.inputEl);
                 cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
-                    .setValue(this.plugin.settingsManager.getToolbarName(rule.toolbar))
+                    .setValue(this.ntb.settingsManager.getToolbarName(rule.toolbar))
                     .onChange(debounce(async (name) => {
-                        let mappedToolbar = this.plugin.settingsManager.getToolbarByName(name);
+                        let mappedToolbar = this.ntb.settingsManager.getToolbarByName(name);
                         if (mappedToolbar) {
                             rule.toolbar = mappedToolbar.uuid;
-                            await this.plugin.settingsManager.save();
+                            await this.ntb.settingsManager.save();
                         }
                         // TODO: if toolbar is not valid show error/warning
                     }, 250));
@@ -200,7 +198,7 @@ export default class RuleUi {
                             operator: RuleOperatorType.Is
                         };
                         rule.conditions.push(newCondition);
-                        await this.plugin.settingsManager.save();
+                        await this.ntb.settingsManager.save();
                         // TODO: add a form item to the existing list
                         // renderRuleForm(newRule);
                             // TODO: put the existing code in a function
@@ -258,7 +256,7 @@ export default class RuleUi {
                             document.getElementById("note-toolbar-name-error")?.remove();
                             conditionEl.children[0].removeClass("note-toolbar-setting-error");
                             // rule.folder = newRule ? normalizePath(newRule) : "";
-                            await this.plugin.settingsManager.save();
+                            await this.ntb.settingsManager.save();
                         }
                     }, 250));
             });
@@ -276,7 +274,7 @@ export default class RuleUi {
                     .extraSettingsEl.addClass('sortable-handle');
                 cb.extraSettingsEl.setAttribute('data-row-id', condition.id);
                 cb.extraSettingsEl.tabIndex = 0;
-                this.plugin.registerDomEvent(
+                this.ntb.registerDomEvent(
                     cb.extraSettingsEl,	'keydown', (e) => {
                         let currentEl = e.target as HTMLElement;
                         let rowId = currentEl.getAttribute('data-row-id');
