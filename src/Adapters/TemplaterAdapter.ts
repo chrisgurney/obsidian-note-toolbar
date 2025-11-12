@@ -59,7 +59,7 @@ export default class TemplaterAdapter extends Adapter {
         
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.noteToolbar?.el.getOutputEl(config.outputContainer);
+            containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
@@ -109,7 +109,7 @@ export default class TemplaterAdapter extends Adapter {
 
         if (config.postCommand) {
             try {
-                await this.noteToolbar?.app.commands.executeCommandById(config.postCommand);
+                await this.ntb?.app.commands.executeCommandById(config.postCommand);
             } 
             catch (error) {
                 throw new Error(error);
@@ -126,7 +126,7 @@ export default class TemplaterAdapter extends Adapter {
     async appendTemplate(filename: string): Promise<void> {
 
         if (this.adapterApi) {
-            let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
+            let templateFile = this.ntb?.app.vault.getFileByPath(filename);
             try {
                 if (templateFile) {
                     await this.adapterApi.append_template_to_active_file(templateFile);
@@ -149,9 +149,9 @@ export default class TemplaterAdapter extends Adapter {
      */
     async createFrom(filename: string, outputFile?: string): Promise<void> {
 
-		if (outputFile && this.noteToolbar?.vars.hasVars(outputFile)) {
-            const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
-			outputFile = await this.noteToolbar?.vars.replaceVars(outputFile, activeFile);
+		if (outputFile && this.ntb?.vars.hasVars(outputFile)) {
+            const activeFile = this.ntb?.app.workspace.getActiveFile();
+			outputFile = await this.ntb?.vars.replaceVars(outputFile, activeFile);
         }
 
         const { parsedFolder, parsedFilename } = this.parseOutputFile(outputFile);
@@ -159,7 +159,7 @@ export default class TemplaterAdapter extends Adapter {
         let outputFilename = outputFile ? parsedFilename : '';
 
         if (this.adapterApi) {
-            let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
+            let templateFile = this.ntb?.app.vault.getFileByPath(filename);
             try {
                 if (templateFile) {
                     await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
@@ -196,7 +196,7 @@ export default class TemplaterAdapter extends Adapter {
 
         let result = '';
 
-        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+        const activeFile = this.ntb?.app.workspace.getActiveFile();
         if (!activeFile && errorBehavior === ErrorBehavior.Display) {
             displayScriptError(t('adapter.error.expr-note-not-open'));
             return t('adapter.error.expr-note-not-open');
@@ -250,13 +250,13 @@ export default class TemplaterAdapter extends Adapter {
 
         let result = '';
 
-        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+        const activeFile = this.ntb?.app.workspace.getActiveFile();
         if (!activeFile) {
             displayScriptError(t('adapter.error.function-note-not-open'));
             return t('adapter.error.function-note-not-open');
         }
 
-        let templateFile = this.noteToolbar?.app.vault.getFileByPath(filename);
+        let templateFile = this.ntb?.app.vault.getFileByPath(filename);
         try {
             if (templateFile) {
                 const config = { 
@@ -267,7 +267,7 @@ export default class TemplaterAdapter extends Adapter {
                 };
                 if (this.adapterApi) {
                     result = await this.adapterApi.read_and_parse_template(config);
-                    this.noteToolbar?.debug("parseTemplateFile() result:", result);
+                    this.ntb?.debug("parseTemplateFile() result:", result);
                 }    
             }
             else {

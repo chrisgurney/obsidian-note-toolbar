@@ -57,7 +57,7 @@ export default class JsEngineAdapter extends Adapter {
         
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.noteToolbar?.el.getOutputEl(config.outputContainer);
+            containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
@@ -117,7 +117,7 @@ export default class JsEngineAdapter extends Adapter {
         let result = '';
         let resultEl = containerEl || createSpan();
 
-        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+        const activeFile = this.ntb?.app.workspace.getActiveFile();
 
         const component = new Component();
 		component.load();
@@ -202,7 +202,7 @@ export default class JsEngineAdapter extends Adapter {
                         else {
                             result = module[functionName](this.adapterApi);
                         }
-                        this.noteToolbar?.debug('importExec() result:', result);
+                        this.ntb?.debug('importExec() result:', result);
                     }
                     catch (error) {
                         displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
@@ -228,7 +228,7 @@ export default class JsEngineAdapter extends Adapter {
         let result = '';
         let resultEl = containerEl || createSpan();
 
-        const activeFile = this.noteToolbar?.app.workspace.getActiveFile();
+        const activeFile = this.ntb?.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path ?? '';
 
         const component = new Component();
@@ -237,12 +237,12 @@ export default class JsEngineAdapter extends Adapter {
             containerEl?.empty();
             const execution = await this.adapterApi.internal.executeFile(filename, {
                 container: resultEl,
-                component: this.noteToolbar,
+                component: this.ntb,
             });
-            this.noteToolbar?.debug('exec() result:', execution.result);
-            if (this.noteToolbar) {
+            this.ntb?.debug('exec() result:', execution.result);
+            if (this.ntb) {
                 if (containerEl) {
-                    const renderer = this.adapterApi.internal.createRenderer(resultEl, activeFilePath, this.noteToolbar);
+                    const renderer = this.adapterApi.internal.createRenderer(resultEl, activeFilePath, this.ntb);
                     renderer.render(execution.result);
                     // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
                 }

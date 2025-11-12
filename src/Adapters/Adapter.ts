@@ -6,7 +6,7 @@ export abstract class Adapter {
     
     abstract readonly FUNCTIONS: AdapterFunction[];
 
-    noteToolbar: NoteToolbarPlugin | null;
+    ntb: NoteToolbarPlugin | null;
     adapterApi: any | null;
     adapterPlugin: any | null;
 
@@ -17,7 +17,7 @@ export abstract class Adapter {
      * @param adapterApi API for the provided plugin.
      */
     constructor(notetoolbar: NoteToolbarPlugin, adapterPlugin: any, adapterApi: any) {
-        this.noteToolbar = notetoolbar;
+        this.ntb = notetoolbar;
         this.adapterApi = adapterApi;
         this.adapterPlugin = adapterPlugin;
     }
@@ -28,7 +28,7 @@ export abstract class Adapter {
     disable() {
         this.adapterApi = null;
         this.adapterPlugin = null;
-        this.noteToolbar = null;
+        this.ntb = null;
     }
 
     /**
