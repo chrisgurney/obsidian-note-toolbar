@@ -145,7 +145,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
 			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openQuickTools() });
 			this.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.settings.icon, callback: async () => {
-				const currentToolbar = this.getCurrentToolbar();
+				const currentToolbar = this.settingsManager.getCurrentToolbar();
 				if (currentToolbar) this.commands.openQuickTools(currentToolbar.uuid);
 			}});
 			this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
@@ -581,20 +581,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	debugGroupEnd(): void {
 		// eslint-disable-next-line
 		this.settings.debugEnabled && console.groupEnd();
-	}
-
-	/*************************************************************************
-	 * UTILITIES
-	 *************************************************************************/
-
-	/**
-	 * Gets the settings for the toolbar in the current view.
-	 * @returns ToolbarSettings for the current toolbar, or undefined if it doesn't exist.
-	 */
-	getCurrentToolbar(): ToolbarSettings | undefined {
-		const noteToolbarEl = this.el.getToolbarEl();
-		const noteToolbarSettings = noteToolbarEl ? this.settingsManager.getToolbarById(noteToolbarEl?.id) : undefined;
-		return noteToolbarSettings;
 	}
 
 }

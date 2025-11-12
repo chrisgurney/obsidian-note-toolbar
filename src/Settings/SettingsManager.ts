@@ -101,6 +101,16 @@ export class SettingsManager {
 	}
 
 	/**
+	 * Gets the settings for the toolbar in the current view.
+	 * @returns ToolbarSettings for the current toolbar, or undefined if it doesn't exist.
+	 */
+	getCurrentToolbar(): ToolbarSettings | undefined {
+		const noteToolbarEl = this.ntb.el.getToolbarEl();
+		const noteToolbarSettings = noteToolbarEl ? this.getToolbarById(noteToolbarEl?.id) : undefined;
+		return noteToolbarSettings;
+	}
+
+	/**
 	 * Gets the toolbar configured for the empty view, assuming we're actively in an empty view.
 	 * @returns ToolbarSettings or undefined, if we're not in the empty view or there is no toolbar set
 	 */
