@@ -176,7 +176,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                     .onClick(async () => {
                         switch (item.type) {
                             case 'command':
-                                await this.ntb.handleLinkCommand(item.value);
+                                await this.ntb.items.handleLinkCommand(item.value);
                                 break;
                             case 'file': {
                                 const activeFile = this.ntb.app.workspace.getActiveFile();
@@ -185,7 +185,7 @@ export class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                                 break;
                             }
                             case 'uri':
-                                await this.ntb.handleLinkUri(item.value);
+                                await this.ntb.items.handleLinkUri(item.value);
                                 break;
                             default:
                                 new Notice(t('api.ui.error-unsupported-property', {property: item.type}));

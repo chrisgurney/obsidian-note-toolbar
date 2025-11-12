@@ -27,7 +27,7 @@ export class CommandManager {
                 icon: item.icon ? item.icon : this.ntb.settings.icon, 
                 callback: async () => {
                     let activeFile = this.ntb.app.workspace.getActiveFile();
-                    await this.ntb.handleItemLink(item, undefined, activeFile);
+                    await this.ntb.items.handleItemLink(item, undefined, activeFile);
                 }
             });
             item.hasCommand = true;
@@ -81,7 +81,7 @@ export class CommandManager {
                             icon: item.icon ? item.icon : this.ntb.settings.icon,
                             callback: async () => {
                                 let activeFile = this.ntb.app.workspace.getActiveFile();
-                                await this.ntb.handleItemLink(item, undefined, activeFile);
+                                await this.ntb.items.handleItemLink(item, undefined, activeFile);
                             }
                         });
                     }

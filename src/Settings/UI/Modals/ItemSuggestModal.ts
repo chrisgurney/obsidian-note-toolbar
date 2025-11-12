@@ -341,7 +341,7 @@ export class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
                     }
                 }
                 // fall back to handling the item
-                await this.ntb.handleItemLink(selectedItem, event);
+                await this.ntb.items.handleItemLink(selectedItem, event);
             }
             else if (this.callback !== undefined) this.callback(selectedItem);
         }
