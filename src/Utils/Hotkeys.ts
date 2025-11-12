@@ -51,10 +51,10 @@ export type HotkeyFunctionMap = Map<HotkeyKey | Hotkey[], (modifiers: Modifier[]
 
 export class HotkeyHelper {
 
-	plugin: NoteToolbarPlugin;
+	private ntb: NoteToolbarPlugin;
 
-	constructor(plugin: NoteToolbarPlugin) {
-		this.plugin = plugin;
+	constructor(ntb: NoteToolbarPlugin) {
+		this.ntb = ntb;
 	}
 
 	parseModifiers(modifiers: string | string[] | null | undefined): Modifier[] {
@@ -78,7 +78,7 @@ export class HotkeyHelper {
 	}
 
 	getHotkeysForCommand(command: Command): (KeymapInfo | Hotkey)[] | undefined {
-		const commandManagerKeys = this.plugin.app.hotkeyManager.getHotkeys(command.id) as (KeymapInfo | Hotkey)[] | undefined;
+		const commandManagerKeys = this.ntb.app.hotkeyManager.getHotkeys(command.id) as (KeymapInfo | Hotkey)[] | undefined;
 		return commandManagerKeys ?? command.hotkeys;
 	}
 
@@ -95,7 +95,7 @@ export class HotkeyHelper {
 
     getHotkeyText(command: Command): string | undefined {
         let hotkeyText = undefined;
-        const hotkeys = this.plugin.hotkeys.stringifyHotkeysForCommand(command);
+        const hotkeys = this.ntb.hotkeys.stringifyHotkeysForCommand(command);
         if (hotkeys) {
             const formatFirstElement = (arr?: string[]): string => arr?.length ? `${arr[0]}` : '';
             hotkeyText = formatFirstElement(hotkeys);
