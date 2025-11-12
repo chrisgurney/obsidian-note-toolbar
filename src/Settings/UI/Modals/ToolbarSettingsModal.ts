@@ -723,7 +723,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(t('setting.position.option-defaultitem-description'))
 			.setClass('note-toolbar-setting-item-full-width-phone')
 			.addSearch((cb) => {
-				new ItemSuggester(this.app, this.ntb, this.toolbar, cb.inputEl, async (item) => {
+				new ItemSuggester(this.ntb, this.toolbar, cb.inputEl, async (item) => {
 					removeFieldError(cb.inputEl, 'beforeend');
 					cb.inputEl.value = item.label || item.tooltip;
 					this.toolbar.defaultItem = item.uuid;

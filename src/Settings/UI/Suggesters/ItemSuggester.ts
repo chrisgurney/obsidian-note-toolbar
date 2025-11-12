@@ -6,13 +6,12 @@ import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 export class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
 
     constructor(
-        app: App, 
         private ntb: NoteToolbarPlugin, 
         private toolbar: ToolbarSettings | undefined, 
         private inputEl: HTMLInputElement, 
         private callback: (item: ToolbarItemSettings) => void
     ) {
-        super(app, inputEl);
+        super(ntb.app, inputEl);
     }
 
     getSuggestions(inputStr: string): ToolbarItemSettings[] {

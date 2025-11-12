@@ -31,7 +31,10 @@ const cssColors: string[] = [
 
 export class GalleryView extends ItemView {
 
-    constructor(private ntb: NoteToolbarPlugin, leaf: WorkspaceLeaf) {
+    constructor(
+		private ntb: NoteToolbarPlugin, 
+		leaf: WorkspaceLeaf
+	) {
         super(leaf);
     }
 
@@ -84,7 +87,7 @@ export class GalleryView extends ItemView {
 			.setClass('note-toolbar-setting-no-border')
 			.setClass('note-toolbar-gallery-view-search')
 			.addSearch((cb) => {
-				new ItemSuggester(this.app, this.ntb, undefined, cb.inputEl, async (galleryItem) => {
+				new ItemSuggester(this.ntb, undefined, cb.inputEl, async (galleryItem) => {
 					this.ntb.gallery.addItem(galleryItem);
 					cb.inputEl.value = '';
 				});
