@@ -3,7 +3,7 @@ import { ItemView, MarkdownView } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 
 
-export default class ToolbarUi {
+export default class ToolbarElementHelper {
 
     public plugin: NoteToolbarPlugin;
     
