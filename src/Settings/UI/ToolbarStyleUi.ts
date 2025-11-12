@@ -8,15 +8,11 @@ import StyleModal from "./Modals/StyleModal";
 
 export default class ToolbarStyleUi {
 
-    public plugin: NoteToolbarPlugin;
-    public toolbar: ToolbarSettings;
-    private parent: ToolbarSettingsModal | StyleModal;
-
-    constructor(plugin: NoteToolbarPlugin, parent: ToolbarSettingsModal | StyleModal, toolbar: ToolbarSettings) {
-        this.parent = parent;
-		this.plugin = plugin;
-		this.toolbar = toolbar;
-	}
+    constructor(
+        private ntb: NoteToolbarPlugin, 
+        private parent: ToolbarSettingsModal | StyleModal, 
+        private toolbar: ToolbarSettings
+    ) {}
 
     /**
      * Displays the Style settings.
@@ -57,7 +53,7 @@ export default class ToolbarStyleUi {
                                 .setTooltip(t('setting.styles.style-remove-tooltip'))
                                 .onClick(async () => this.listMoveHandler(null, this.toolbar.defaultStyles, index, "delete"));
                             cb.extraSettingsEl.setAttribute("tabindex", "0");
-                            this.plugin.registerDomEvent(
+                            this.ntb.registerDomEvent(
                                 cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.defaultStyles, index, "delete"));
                         });
             });
@@ -90,7 +86,7 @@ export default class ToolbarStyleUi {
                         else {
                             this.toolbar.defaultStyles.push(val);
                         }
-                        await this.plugin.settingsManager.save();
+                        await this.ntb.settingsManager.save();
                         this.parent.display();
                     })
         );
@@ -132,7 +128,7 @@ export default class ToolbarStyleUi {
                                 .setTooltip("Remove")
                                 .onClick(async () => this.listMoveHandler(null, this.toolbar.mobileStyles, index, "delete"));
                             cb.extraSettingsEl.setAttribute("tabindex", "0");
-                            this.plugin.registerDomEvent(
+                            this.ntb.registerDomEvent(
                                 cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.mobileStyles, index, "delete"));
                         });
             });
@@ -165,7 +161,7 @@ export default class ToolbarStyleUi {
                         else {
                             this.toolbar.mobileStyles.push(val);
                         }
-                        await this.plugin.settingsManager.save();
+                        await this.ntb.settingsManager.save();
                         this.parent.display();
                     })
         );
@@ -189,7 +185,7 @@ export default class ToolbarStyleUi {
                 .setValue(this.toolbar.customClasses)
                 .onChange(debounce(async (value) => {
                     this.toolbar.customClasses = value.trim();
-                    await this.plugin.settingsManager.save();
+                    await this.ntb.settingsManager.save();
                 }, 750)));
 
         new Setting(settingsDiv)
@@ -259,10 +255,10 @@ export default class ToolbarStyleUi {
      * @returns true if the toolbar is being displayed in the Launchpad view, false otherwise.
      */
     isUsingLaunchpad(): boolean {
-        const toolbarView = this.plugin.app.workspace.getActiveViewOfType(ItemView);
+        const toolbarView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
         return Boolean(
             !(toolbarView instanceof MarkdownView) && toolbarView?.getViewType() === 'empty' 
-            && this.plugin.settings.showLaunchpad && this.plugin.settings.emptyViewToolbar
+            && this.ntb.settings.showLaunchpad && this.ntb.settings.emptyViewToolbar
         );
     }
 
@@ -316,7 +312,7 @@ export default class ToolbarStyleUi {
                 this.toolbar.updated = new Date().toISOString();
                 break;
         }
-        await this.plugin.settingsManager.save();
+        await this.ntb.settingsManager.save();
         this.parent.display();
     }
 
