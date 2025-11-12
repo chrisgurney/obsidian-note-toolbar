@@ -369,7 +369,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		let renderToolbar = false;
 		// FIXME? what if there's more than one toolbar?
 		let toolbarEl = this.el.getToolbarEl();
-		let currentView = getActiveView();
+		let currentView = getActiveView(this);
 
 		const viewId = getViewId(currentView);
 		this.debug('===== LEAF-CHANGE ===== ', viewId);

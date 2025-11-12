@@ -135,10 +135,10 @@ export function displayScriptError(message: string, error?: any, containerEl?: H
  * Returns the active view for markdown, empty tab, and other file types.
  * @returns FileView, MarkdownView, ItemView, or `null`.
  */
-export function getActiveView(): FileView | MarkdownView | ItemView | null {
-	let activeView: FileView | MarkdownView | ItemView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-	if (!activeView) activeView = this.app.workspace.getActiveViewOfType(ItemView);
-	if (!activeView) activeView = this.app.workspace.getActiveViewOfType(FileView);
+export function getActiveView(ntb: NoteToolbarPlugin): FileView | MarkdownView | ItemView | null {
+	let activeView: FileView | MarkdownView | ItemView | null = ntb.app.workspace.getActiveViewOfType(MarkdownView);
+	if (!activeView) activeView = ntb.app.workspace.getActiveViewOfType(ItemView);
+	if (!activeView) activeView = ntb.app.workspace.getActiveViewOfType(FileView);
 	return activeView;
 }
 
