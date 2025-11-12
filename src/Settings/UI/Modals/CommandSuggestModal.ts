@@ -4,13 +4,13 @@ import { t } from "Settings/NoteToolbarSettings";
 
 export class CommandSuggestModal extends SuggestModal<Command> {
 
-    public plugin: NoteToolbarPlugin;
+    public ntb: NoteToolbarPlugin;
     private commands: Command[];
     private callback: (command: Command) => void;
 
 	constructor(plugin: NoteToolbarPlugin, callback: (command: Command) => void) {
         super(plugin.app);
-        this.plugin = plugin;
+        this.ntb = plugin;
         this.callback = callback;
         this.commands = Object.values(plugin.app.commands.commands);
 

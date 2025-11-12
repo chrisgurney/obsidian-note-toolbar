@@ -42,12 +42,12 @@ export function calcComponentVisToggles(visibility: Visibility) {
 
 /**
  * Returns the index of the item in the toolbar that *would be* where the mouse was clicked.
- * @param plugin 
+ * @param ntb NoteToolbarPlugin
  * @param event 
  * @returns 
  */
-export function calcMouseItemIndex(plugin: NoteToolbarPlugin, event: MouseEvent): number | undefined {
-    const toolbarListEl = plugin.el.getToolbarListEl();
+export function calcMouseItemIndex(ntb: NoteToolbarPlugin, event: MouseEvent): number | undefined {
+    const toolbarListEl = ntb.el.getToolbarListEl();
     if (!toolbarListEl) return;
 
     const children = Array.from(toolbarListEl.children) as HTMLElement[];
@@ -87,25 +87,25 @@ export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, b
 
 /**
  * Determines whether a toolbar should be visible for the given view type.
- * @param plugin NoteToolbarPlugin instance containing toolbar visibility settings.
+ * @param ntb NoteToolbarPlugin instance containing toolbar visibility settings.
  * @param currentViewType Type of the current view.
  * @returns `true` if the toolbar should be visible, otherwise `false`.
  */
-export function checkToolbarForItemView(plugin: NoteToolbarPlugin, itemView: ItemView): boolean {
+export function checkToolbarForItemView(ntb: NoteToolbarPlugin, itemView: ItemView): boolean {
 	const currentViewType = itemView.getViewType();
-	if (plugin.settings.showToolbarInOther.includes(currentViewType)) return true;
+	if (ntb.settings.showToolbarInOther.includes(currentViewType)) return true;
 	
     const viewSettings: Record<string, boolean | undefined> = {
-        'audio': plugin.settings.showToolbarIn.audio,
-		'bases': plugin.settings.showToolbarIn.bases,
-        'beautitab-react-view': (plugin.settings.emptyViewToolbar !== undefined),
-        'canvas': plugin.settings.showToolbarIn.canvas,
-        'empty': (plugin.settings.emptyViewToolbar !== undefined),
-        'home-tab-view': (plugin.settings.emptyViewToolbar !== undefined),
-        'image': plugin.settings.showToolbarIn.image,
-		'kanban': plugin.settings.showToolbarIn.kanban,
-        'pdf': plugin.settings.showToolbarIn.pdf,
-        'video': plugin.settings.showToolbarIn.video,
+        'audio': ntb.settings.showToolbarIn.audio,
+		'bases': ntb.settings.showToolbarIn.bases,
+        'beautitab-react-view': (ntb.settings.emptyViewToolbar !== undefined),
+        'canvas': ntb.settings.showToolbarIn.canvas,
+        'empty': (ntb.settings.emptyViewToolbar !== undefined),
+        'home-tab-view': (ntb.settings.emptyViewToolbar !== undefined),
+        'image': ntb.settings.showToolbarIn.image,
+		'kanban': ntb.settings.showToolbarIn.kanban,
+        'pdf': ntb.settings.showToolbarIn.pdf,
+        'video': ntb.settings.showToolbarIn.video,
     };
 
     if (viewSettings[currentViewType] === false) return false;
@@ -147,8 +147,8 @@ export function getActiveView(): FileView | MarkdownView | ItemView | null {
  * @param commandId command ID to look up
  * @returns name of command; undefined otherwise
  */
-export function getCommandNameById(plugin: NoteToolbarPlugin, commandId: string): string | undefined {
-	const availableCommands: Command[] = Object.values(plugin.app.commands.commands);
+export function getCommandNameById(ntb: NoteToolbarPlugin, commandId: string): string | undefined {
+	const availableCommands: Command[] = Object.values(ntb.app.commands.commands);
 	const matchedCommand = availableCommands.find(command => command.id === commandId);
 	return matchedCommand ? matchedCommand.name : undefined;
 }
@@ -158,23 +158,23 @@ export function getCommandNameById(plugin: NoteToolbarPlugin, commandId: string)
  * @param commandName name of the command to look for.
  * @returns command ID or undefined.
  */
-export function getCommandIdByName(plugin: NoteToolbarPlugin, commandName: string): string {
-	const availableCommands: Command[] = Object.values(plugin.app.commands.commands);
+export function getCommandIdByName(ntb: NoteToolbarPlugin, commandName: string): string {
+	const availableCommands: Command[] = Object.values(ntb.app.commands.commands);
 	const matchedCommand = availableCommands.find(command => command.name === commandName);
 	return matchedCommand ? matchedCommand.id : COMMAND_DOES_NOT_EXIST;
 }
 
 /**
  * Returns the text for a toolbar item.
- * @param plugin Plugin instance.
+ * @param ntb Plugin instance.
  * @param toolbarItem Item to return text for.
  * @param ignoreVars If true, function tries to return any text that does not include vars/expressions.
  * @returns The resolved text for the toolbar item.
  */
-export function getItemText(plugin: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, ignoreVars: boolean = false): string {
+export function getItemText(ntb: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, ignoreVars: boolean = false): string {
 	if (ignoreVars) {
-		if (plugin.vars.hasVars(toolbarItem.label)) {
-			return plugin.vars.hasVars(toolbarItem.tooltip) ? '' : toolbarItem.tooltip ?? '';
+		if (ntb.vars.hasVars(toolbarItem.label)) {
+			return ntb.vars.hasVars(toolbarItem.tooltip) ? '' : toolbarItem.tooltip ?? '';
 		}
 	}
     return toolbarItem.label || toolbarItem.tooltip || '';
@@ -391,10 +391,10 @@ export function removeComponentVisibility(platform: { allViews?: { components: C
  * @param toolbar ToolbarSettings to check for command usage
  * @returns an array of plugin IDs that are invalid, or an empty array otherwise
  */
-export function toolbarInvalidCommands(plugin: NoteToolbarPlugin, toolbar: ToolbarSettings): string[] {
+export function toolbarInvalidCommands(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings): string[] {
 	return toolbar.items
 		.filter(item =>
-			item.linkAttr.type === ItemType.Command && !(item.linkAttr.commandId in plugin.app.commands.commands)
+			item.linkAttr.type === ItemType.Command && !(item.linkAttr.commandId in ntb.app.commands.commands)
 		)
 		.map(item => item.linkAttr.commandId.split(':')[0].trim());
 }
