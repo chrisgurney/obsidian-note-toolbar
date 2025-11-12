@@ -5,11 +5,9 @@ import { ErrorBehavior, ItemType, ToolbarSettings } from "Settings/NoteToolbarSe
 
 export default class VariableResolver {
 
-    private ntb: NoteToolbarPlugin;
-    
-    constructor(ntb: NoteToolbarPlugin) {
-        this.ntb = ntb;
-    }
+    constructor(
+		private ntb: NoteToolbarPlugin
+	) {}
 
     /**
      * Check if a string has vars {{ }} or expressions (Dataview or Templater)

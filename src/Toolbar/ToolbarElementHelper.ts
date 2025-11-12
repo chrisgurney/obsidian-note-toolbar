@@ -5,11 +5,9 @@ import { LocalVar } from "Settings/NoteToolbarSettings";
 
 export default class ToolbarElementHelper {
 
-    private ntb: NoteToolbarPlugin;
-    
-    constructor(ntb: NoteToolbarPlugin) {
-        this.ntb = ntb;
-    }
+    constructor(
+        private ntb: NoteToolbarPlugin
+    ) {}
 
 	/**
 	 * Gets the active (last activated) item's ID.
