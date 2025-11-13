@@ -49,6 +49,10 @@ export default class VariableResolver {
 	 */
 	async replaceVars(s: string, file: TFile | null, errorBehavior: ErrorBehavior = ErrorBehavior.Report): Promise<string> {
 
+		// SELECTION
+		const selection = this.ntb.api.getSelection();
+		if (selection) s = this.replaceVar(s, 'selection', selection);
+
 		// NOTE_TITLE
 		const noteTitle = file?.basename;
 		if (noteTitle) s = this.replaceVar(s, 'note_title', noteTitle);
