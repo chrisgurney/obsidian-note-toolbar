@@ -118,7 +118,7 @@ export default class ToolbarRenderer {
             case PositionType.FabRight:
                 noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
                 embedBlock.append(noteToolbarElement);
-                this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.events.toolbarFabHandler(e, noteToolbarElement!));
+                this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.events.fabHandler(e, noteToolbarElement!));
                 // render toolbar in context menu if a default item is set
                 if (toolbar.defaultItem) {
                     this.ntb.registerDomEvent(noteToolbarElement, 'contextmenu', (event) => {
@@ -130,15 +130,15 @@ export default class ToolbarRenderer {
                     });
                 }
                 else {
-                    this.ntb.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.ntb.events.toolbarContextMenuHandler(e));
+                    this.ntb.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
                 }
                 break;
             case PositionType.TabBar: {
                 setIcon(embedBlock, this.ntb.settings.icon);
                 setTooltip(embedBlock, toolbar.name);
                 embedBlock.addClasses(['clickable-icon', 'view-action']);
-                this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.events.toolbarFabHandler(e, noteToolbarElement!));
-                this.ntb.registerDomEvent(embedBlock, 'contextmenu', (e) => this.ntb.events.toolbarContextMenuHandler(e));
+                this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.events.fabHandler(e, noteToolbarElement!));
+                this.ntb.registerDomEvent(embedBlock, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
                 break;
             }
             case PositionType.Bottom:
@@ -150,8 +150,8 @@ export default class ToolbarRenderer {
                 div.append(noteToolbarElement);
                 embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
                 embedBlock.append(div);
-                this.ntb.registerDomEvent(embedBlock, 'contextmenu', (e) => this.ntb.events.toolbarContextMenuHandler(e));
-                this.ntb.registerDomEvent(embedBlock, 'keydown', (e) => this.ntb.events.toolbarKeyboardHandler(e));	
+                this.ntb.registerDomEvent(embedBlock, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
+                this.ntb.registerDomEvent(embedBlock, 'keydown', (e) => this.ntb.events.keyboardHandler(e));	
                 break;
             }
             case PositionType.Hidden:
@@ -355,8 +355,8 @@ export default class ToolbarRenderer {
 						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
 					}
 
-					this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.events.toolbarClickHandler(e));
-					this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.events.toolbarClickHandler(e));
+					this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.events.clickHandler(e));
+					this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.events.clickHandler(e));
 		
 					const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
 					if (item.label) {
@@ -958,8 +958,8 @@ export default class ToolbarRenderer {
 
 		this.positionTextToolbar(selectStartPos, selectEndPos);
 
-		this.ntb.registerDomEvent(this.textToolbarEl, 'contextmenu', (e) => this.ntb.events.toolbarContextMenuHandler(e));
-		this.ntb.registerDomEvent(this.textToolbarEl, 'keydown', (e) => this.ntb.events.toolbarKeyboardHandler(e, true));
+		this.ntb.registerDomEvent(this.textToolbarEl, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
+		this.ntb.registerDomEvent(this.textToolbarEl, 'keydown', (e) => this.ntb.events.keyboardHandler(e, true));
 
 		// plugin.debug('drew toolbar');
 

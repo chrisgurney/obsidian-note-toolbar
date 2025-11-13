@@ -20,9 +20,9 @@ export default class ToolbarEventHandler {
 	 * be in the URL, and then open it.
 	 * @param event MouseEvent
 	 */
-	async toolbarClickHandler(event: MouseEvent) {
+	async clickHandler(event: MouseEvent) {
 
-		// this.ntb.debug('toolbarClickHandler:', event);
+		// this.ntb.debug('clickHandler:', event);
 
 		// allow standard and middle clicks through
 		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
@@ -37,7 +37,7 @@ export default class ToolbarEventHandler {
 				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
 				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
 	
-				// this.ntb.debug('toolbarClickHandler: ', 'clickedEl: ', clickedEl);
+				// this.ntb.debug('clickHandler: ', 'clickedEl: ', clickedEl);
 	
 				let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
 				
@@ -59,7 +59,7 @@ export default class ToolbarEventHandler {
 	 * Shows a context menu with links to settings/configuration.
 	 * @param mouseEvent MouseEvent
 	 */
-	async toolbarContextMenuHandler(mouseEvent: MouseEvent) {
+	async contextMenuHandler(mouseEvent: MouseEvent) {
 
 		mouseEvent.preventDefault();
 
@@ -456,9 +456,9 @@ export default class ToolbarEventHandler {
 	 * @param event MouseEvent
 	 * @param posAtElement HTMLElement to position the menu at, which might be different from where the event originated
 	 */
-	async toolbarFabHandler(event: MouseEvent, posAtElement: HTMLElement) {
+	async fabHandler(event: MouseEvent, posAtElement: HTMLElement) {
 
-		// this.ntb.debug("toolbarFabHandler: ", event);
+		// this.ntb.debug("fabHandler: ", event);
 		event.preventDefault();
 
 		let activeFile = this.ntb.app.workspace.getActiveFile();
@@ -516,9 +516,9 @@ export default class ToolbarEventHandler {
 	 * @param e KeyboardEvent
 	 * @param isTextToolbar set to true if this is for the text toolbar.
 	 */
-	async toolbarKeyboardHandler(e: KeyboardEvent, isTextToolbar: boolean = false) {
+	async keyboardHandler(e: KeyboardEvent, isTextToolbar: boolean = false) {
 
-		this.ntb.debugGroup("toolbarKeyboardHandler");
+		this.ntb.debugGroup("keyboardHandler");
 
 		let itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isTextToolbar);
 		if (itemsUl) {
