@@ -32,7 +32,7 @@ export default class ChangeListener {
 	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
 	 * @param file TFile that was opened.
 	 */
-	fileOpenListener = async (file: TFile) => {
+	onFileOpen = async (file: TFile) => {
 		this.ntb.debug('FILE-OPEN: updating recent file list:', file?.name);
 		// update list of the most recently opened files
 		if (file) await this.ntb.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
@@ -43,7 +43,7 @@ export default class ChangeListener {
 	 * @param file TFile of the new file.
 	 * @param oldPath old path.
 	 */
-	fileRenameListener = async (file: TFile, oldPath: string) => {
+	onFileRename = async (file: TFile, oldPath: string) => {
 		let settingsChanged = false;
 		this.ntb.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
 			toolbar.items.forEach((item: ToolbarItemSettings) => {
@@ -65,7 +65,7 @@ export default class ChangeListener {
 	/**
 	 * On layout changes, render and update toolbars as necessary.
 	 */
-	layoutChangeListener = async () => {
+	onLayoutChange = async () => {
 		
 		// if workspace changed, render all toolbars, otherwise just render the toolbar for the active view (#367)
 		const workspace = this.workspacesPlugin?.instance.activeWorkspace;
@@ -133,7 +133,7 @@ export default class ChangeListener {
 	/**
 	 * On leaf changes, delete, check and render toolbar if necessary. 
 	 */
-	leafChangeListener = async (leaf: any) => {
+	onLeafChange = async (leaf: any) => {
 		let renderToolbar = false;
 		// FIXME? what if there's more than one toolbar?
 		let toolbarEl = this.ntb.el.getToolbarEl();
@@ -185,7 +185,7 @@ export default class ChangeListener {
 	 * @param data ??? (not used)
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
-	metadataCacheListener = async (file: TFile, data: any, cache: CachedMetadata) => {
+	onMetadataChange = async (file: TFile, data: any, cache: CachedMetadata) => {
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		// if the active file is the one that changed,
 		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
