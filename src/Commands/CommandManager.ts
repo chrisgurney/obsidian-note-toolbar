@@ -185,7 +185,7 @@ export default class CommandManager {
                     if (toolbar?.defaultItem) {
                         // TODO: this is a copy of toolbarFabHandler() -- put in a function?
                         let activeFile = this.ntb.app.workspace.getActiveFile();
-                        this.ntb.render.renderToolbarAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+                        this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
                             let fabPos = toolbarFabEl.getAttribute('data-tbar-position');
                             // determine menu orientation based on button position
                             let elemRect = toolbarFabEl.getBoundingClientRect();

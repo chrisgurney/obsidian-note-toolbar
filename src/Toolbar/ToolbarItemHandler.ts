@@ -30,7 +30,7 @@ export default class ToolbarItemHandler {
 
 			// remove any active item attributes from the main toolbar, so the API doesn't fetch the wrong item
 			// (not supported for Note Toolbar Callouts)
-			this.ntb.render.updateActiveToolbarItem();
+			this.ntb.render.updateActiveItem();
 
 			// prevent expansion of callouts if setting is enabled
 			if (this.ntb.settings.lockCallouts) {
@@ -94,7 +94,7 @@ export default class ToolbarItemHandler {
 							const toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getToolbar(value);
 							if (activeFile) {
 								if (toolbar) {
-									this.ntb.render.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
+									this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
 										this.ntb.render.showMenuAtElement(menu, this.lastCalloutLink);
 									});
 								}
@@ -151,7 +151,7 @@ export default class ToolbarItemHandler {
         if (eventTarget) this.lastClickedEl = eventTarget.closest('.callout[data-callout="note-toolbar"] span.external-link');
 
         // update active item attributes in the toolbar, so the API can fetch the right active item
-        this.ntb.render.updateActiveToolbarItem(uuid);
+        this.ntb.render.updateActiveItem(uuid);
 
         if (this.ntb.vars.hasVars(linkHref)) {
             // TODO: expand to also replace vars in labels + tooltips
@@ -186,7 +186,7 @@ export default class ToolbarItemHandler {
             case ItemType.Menu: {
                 const toolbar = this.ntb.settingsManager.getToolbar(linkHref);
                 if (toolbar) {
-                    this.ntb.render.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
+                    this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
                         let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
                         this.ntb.render.showMenuAtElement(menu, clickedItemEl);
                         event instanceof KeyboardEvent ? putFocusInMenu() : undefined;

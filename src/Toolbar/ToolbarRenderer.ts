@@ -71,7 +71,7 @@ export default class ToolbarRenderer {
      * @param file TFile for the note that the toolbar is being rendered for
      * @param view MarkdownView or ItemView to render toolbar in; if not provided uses active view
      */
-    async renderToolbar(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView): Promise<void> {
+    async render(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView): Promise<void> {
 
         this.ntb.debugGroup(`renderToolbar: ${toolbar.name}`);
 
@@ -116,13 +116,13 @@ export default class ToolbarRenderer {
         switch (position) {
             case PositionType.FabLeft:
             case PositionType.FabRight:
-                noteToolbarElement = await this.renderToolbarAsFab(toolbar, position);
+                noteToolbarElement = await this.renderAsFab(toolbar, position);
                 embedBlock.append(noteToolbarElement);
                 this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.events.fabHandler(e, noteToolbarElement!));
                 // render toolbar in context menu if a default item is set
                 if (toolbar.defaultItem) {
                     this.ntb.registerDomEvent(noteToolbarElement, 'contextmenu', (event) => {
-                        this.renderToolbarAsMenu(toolbar, file, this.ntb.settings.showEditInFabMenu).then(menu => {
+                        this.renderAsMenu(toolbar, file, this.ntb.settings.showEditInFabMenu).then(menu => {
                             navigator.vibrate(50);
                             menu.showAtPosition(event);
                             event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
@@ -144,7 +144,7 @@ export default class ToolbarRenderer {
             case PositionType.Bottom:
             case PositionType.Props:
             case PositionType.Top: {
-                noteToolbarElement = await this.renderToolbarAsCallout(toolbar, file, view);
+                noteToolbarElement = await this.renderAsCallout(toolbar, file, view);
                 // extra div workaround to emulate callout-in-content structure, to use same sticky css
                 let div = activeDocument.createElement("div");
                 div.append(noteToolbarElement);
@@ -228,13 +228,13 @@ export default class ToolbarRenderer {
      * @param view ItemView to render toolbar in, just used for context
      * @returns HTMLElement cg-note-toolbar-callout
      */
-    async renderToolbarAsCallout(toolbar: ToolbarSettings, file: TFile | null, view: ItemView): Promise<HTMLElement> {
+    async renderAsCallout(toolbar: ToolbarSettings, file: TFile | null, view: ItemView): Promise<HTMLElement> {
         
         /* create the unordered list of menu items */
         let noteToolbarUl = activeDocument.createElement("ul");
         noteToolbarUl.setAttribute("role", "menu");
 
-        let noteToolbarLiArray = await this.renderToolbarLItems(toolbar, file, view);
+        let noteToolbarLiArray = await this.renderLItems(toolbar, file, view);
         noteToolbarUl.append(...noteToolbarLiArray);
 
         let noteToolbarCallout = activeDocument.createElement("div");
@@ -290,7 +290,7 @@ export default class ToolbarRenderer {
 	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderToolbarLItems(toolbar: ToolbarSettings, file: TFile | null, view: ItemView, recursions: number = 0): Promise<HTMLLIElement[]> {
+	async renderLItems(toolbar: ToolbarSettings, file: TFile | null, view: ItemView, recursions: number = 0): Promise<HTMLLIElement[]> {
 
 		if (recursions >= 2) {
 			return []; // stop recursion
@@ -328,7 +328,7 @@ export default class ToolbarRenderer {
 					const groupToolbar = this.ntb.settingsManager.getToolbar(item.link);
 					if (groupToolbar) {
 						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-							const groupLItems = await this.renderToolbarLItems(groupToolbar, file, view, recursions + 1);
+							const groupLItems = await this.renderLItems(groupToolbar, file, view, recursions + 1);
 							noteToolbarLiArray.push(...groupLItems);
 						}
 					}
@@ -407,7 +407,7 @@ export default class ToolbarRenderer {
 	 * @param position button position (i.e., 'fabl' or 'fabr') 
 	 * @returns HTMLElement cg-note-toolbar-fab
 	 */
-	async renderToolbarAsFab(toolbar: ToolbarSettings, position: string): Promise<HTMLElement> {
+	async renderAsFab(toolbar: ToolbarSettings, position: string): Promise<HTMLElement> {
 
 		let noteToolbarFabContainer = activeDocument.createElement('div');
 		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
@@ -448,7 +448,7 @@ export default class ToolbarRenderer {
 	 * @param showToolbarName set true to show the menu toolbar's name at top of menu.
 	 * @returns Menu with toolbar's items
 	 */
-	async renderToolbarAsMenu(
+	async renderAsMenu(
 		toolbar: ToolbarSettings, 
 		activeFile: TFile | null, 
 		showEditToolbar: boolean = false
@@ -604,7 +604,7 @@ export default class ToolbarRenderer {
 	/**
 	 * Renders the toolbar in the provided view or active view, assuming it needs one.
 	 */
-	async renderToolbarForView(view?: ItemView) {
+	async renderForView(view?: ItemView) {
 
 		const toolbarView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
 
@@ -622,19 +622,19 @@ export default class ToolbarRenderer {
 		// for notes and other file types
 		if (activeFile) {
 			let frontmatter = activeFile ? this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			await this.checkAndRenderToolbar(activeFile, frontmatter, toolbarView);
+			await this.checkAndRender(activeFile, frontmatter, toolbarView);
 		}
 		// for New tab view
 		else {
 			if (this.ntb.settings.emptyViewToolbar) {
 				const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar);
-				const toolbarRemoved = this.removeToolbarIfNeeded(toolbar, toolbarView);
+				const toolbarRemoved = this.removeIfNeeded(toolbar, toolbarView);
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
 					if (toolbarRemoved) {
-						await this.renderToolbar(toolbar, null, toolbarView);	
+						await this.render(toolbar, null, toolbarView);	
 					}
-					await this.updateToolbar(toolbar, null, toolbarView);
+					await this.update(toolbar, null, toolbarView);
 				}
 			}
 		}
@@ -644,9 +644,9 @@ export default class ToolbarRenderer {
 	/**
 	 * Iterates all leaves and renders toolbars for all active leaves.
 	 */
-	async renderToolbarForAllLeaves() {
+	async renderForAllLeaves() {
 		this.ntb.app.workspace.iterateAllLeaves(leaf => {
-			if (leaf.view instanceof ItemView) this.renderToolbarForView(leaf.view as ItemView);
+			if (leaf.view instanceof ItemView) this.renderForView(leaf.view as ItemView);
 		});
 	}
 
@@ -715,7 +715,7 @@ export default class ToolbarRenderer {
 	 * @param activeFile TFile to update toolbar for.
 	 * @param view ItemView to update toolbar within; uses active view otherwise.
 	 */
-	async updateToolbar(toolbar: ToolbarSettings, activeFile: TFile | null, view?: ItemView) {
+	async update(toolbar: ToolbarSettings, activeFile: TFile | null, view?: ItemView) {
 
 		this.ntb.debugGroup(`updateToolbar: ${toolbar.name}`);
 		const toolbarView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
@@ -817,12 +817,12 @@ export default class ToolbarRenderer {
 	/**
 	 * Updates the toolbar for the active file.
 	 */
-	async updateActiveToolbar(): Promise<void> {
+	async updateActive(): Promise<void> {
 		let activeFile = this.ntb.app.workspace.getActiveFile();
 		if (activeFile) {
 			let frontmatter = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
 			let toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getMappedToolbar(frontmatter, activeFile);
-			if (toolbar) await this.updateToolbar(toolbar, activeFile);
+			if (toolbar) await this.update(toolbar, activeFile);
 		}
 	}
 
@@ -831,7 +831,7 @@ export default class ToolbarRenderer {
 	 * Used by the Note Toolbar API to expose the last activated item.
 	 * @param activeItemId UUID of the item that was clicked/tapped; provide nothing to unset.
 	 */
-	updateActiveToolbarItem(activeItemId?: string): void {
+	updateActiveItem(activeItemId?: string): void {
 		this.ntb.app.saveLocalStorage(LocalVar.ActiveItem, activeItemId ?? '');
 	}
 
@@ -842,7 +842,7 @@ export default class ToolbarRenderer {
 	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
 	 * @param view view to render toolbar in; defaults to active view if not provided.
 	 */
-	async checkAndRenderToolbar(file: TFile, frontmatter: FrontMatterCache | undefined, view?: ItemView): Promise<void> {
+	async checkAndRender(file: TFile, frontmatter: FrontMatterCache | undefined, view?: ItemView): Promise<void> {
 
 		this.ntb.debug('checkAndRenderToolbar: file:', file.name, 'view:', getViewId(view));
 
@@ -861,7 +861,7 @@ export default class ToolbarRenderer {
 			let matchingToolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getMappedToolbar(frontmatter, file);
 			
 			// remove existing toolbar if needed
-			let toolbarRemoved: boolean = this.removeToolbarIfNeeded(matchingToolbar, view);
+			let toolbarRemoved: boolean = this.removeIfNeeded(matchingToolbar, view);
 
 			this.ntb.debug('checkAndRenderToolbar:', matchingToolbar?.name);
 
@@ -869,9 +869,9 @@ export default class ToolbarRenderer {
 				// render the toolbar if we have one, and we don't have an existing toolbar to keep
 				if (toolbarRemoved) {
 					this.updateActiveViewIds();
-					await this.renderToolbar(matchingToolbar, file, view);	
+					await this.render(matchingToolbar, file, view);	
 				}
-				await this.updateToolbar(matchingToolbar, file, view);
+				await this.update(matchingToolbar, file, view);
 			}
 		}
 		finally {
@@ -952,7 +952,7 @@ export default class ToolbarRenderer {
 			'data-csstheme': this.ntb.app.vault.getConfig('cssTheme')
 		});
 		
-		const renderedToolbarEl = await this.renderToolbarAsCallout(toolbar, activeFile, activeView);
+		const renderedToolbarEl = await this.renderAsCallout(toolbar, activeFile, activeView);
 		this.textToolbarEl.appendChild(renderedToolbarEl);
 		activeDocument.body.appendChild(this.textToolbarEl);
 
@@ -1001,7 +1001,7 @@ export default class ToolbarRenderer {
 	/**
 	 * Remove the toolbar on the active file.
 	 */
-	async removeActiveToolbar(): Promise<void> {
+	async removeActive(): Promise<void> {
 		const toolbarEl = this.ntb.el.getToolbarEl();
 		toolbarEl?.remove();
 	}
@@ -1013,7 +1013,7 @@ export default class ToolbarRenderer {
 	 * @param view view to check toolbar in; if not provided, uses the active view.
 	 * @returns true if the toolbar was removed (or doesn't exist), false otherwise.
 	 */
-	removeToolbarIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
+	removeIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
 
 		this.ntb.debugGroup('removeToolbarIfNeeded');
 

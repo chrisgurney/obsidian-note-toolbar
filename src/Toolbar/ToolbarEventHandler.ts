@@ -441,7 +441,7 @@ export default class ToolbarEventHandler {
 					let frontmatter = activeFile ? this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 					let toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getMappedToolbar(frontmatter, activeFile);
 					if (toolbar) {
-						this.ntb.render.renderToolbarAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+						this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
 							menu.showAtPosition(event); 
 						});
 					}
@@ -485,7 +485,7 @@ export default class ToolbarEventHandler {
 				}
 			}
 			else {
-				this.ntb.render.renderToolbarAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+				this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
 					let fabEl = this.ntb.el.getToolbarFabEl();
 					if (fabEl) {
 						let fabPos = fabEl.getAttribute('data-tbar-position');

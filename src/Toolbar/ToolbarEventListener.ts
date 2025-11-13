@@ -67,12 +67,12 @@ export default class ToolbarEventHandler {
 		// if workspace changed, render all toolbars, otherwise just render the toolbar for the active view (#367)
 		const workspace = this.workspacesPlugin?.instance.activeWorkspace;
 		if (workspace !== this.activeWorkspace) {
-			await this.ntb.render.renderToolbarForAllLeaves();
+			await this.ntb.render.renderForAllLeaves();
 			this.activeWorkspace = workspace;
 		}
 		else {
 			const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-			if (currentView) await this.ntb.render.renderToolbarForView(currentView);
+			if (currentView) await this.ntb.render.renderForView(currentView);
 		}
 
 		// const toolbarEl = this.getToolbarEl();
@@ -150,7 +150,7 @@ export default class ToolbarEventHandler {
 		// exit if the view has already been handled, after updating the toolbar
 		if (!renderToolbar && viewId && this.ntb.render.activeViewIds.contains(viewId)) {
 			this.ntb.debug('LEAF-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
-			this.ntb.render.updateActiveToolbar();
+			this.ntb.render.updateActive();
 			return;
 		};
 
@@ -172,7 +172,7 @@ export default class ToolbarEventHandler {
 			this.ntb.debug("LEAF-CHANGE: renderActiveToolbar");
 			// this.removeActiveToolbar();
 			// don't seem to need a delay before rendering for leaf changes
-			await this.ntb.render.renderToolbarForView();
+			await this.ntb.render.renderForView();
 		}
 	}
 
@@ -191,7 +191,7 @@ export default class ToolbarEventHandler {
 			debounce(async () => {
 				// FIXME: should this instead update all visible toolbars?
 				const toolbarView = this.ntb.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
-				await this.ntb.render.checkAndRenderToolbar(file, cache.frontmatter, toolbarView);
+				await this.ntb.render.checkAndRender(file, cache.frontmatter, toolbarView);
 	
 				// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
 				const ntbPropValue = this.ntb.settingsManager.getToolbarNameFromProps(cache.frontmatter);
