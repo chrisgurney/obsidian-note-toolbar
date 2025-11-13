@@ -12,7 +12,7 @@ import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
-import TextToolbarView from 'Toolbar/TextToolbarView';
+import TextToolbar from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
 import ToolbarEventListener from 'Toolbar/ToolbarEventListener';
@@ -157,7 +157,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			this.registerEditorExtension(TextToolbarView(this));
+			this.registerEditorExtension(TextToolbar(this));
 
 		});
 
