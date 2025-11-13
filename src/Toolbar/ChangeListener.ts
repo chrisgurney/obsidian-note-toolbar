@@ -3,7 +3,10 @@ import { TFile, ItemView, MarkdownView, CachedMetadata, debounce, Notice, Markdo
 import { LocalVar, ToolbarSettings, ToolbarItemSettings, t } from "Settings/NoteToolbarSettings";
 import { getActiveView, getViewId, checkToolbarForItemView } from "Utils/Utils";
 
-export default class ToolbarEventHandler {
+/**
+ * Handles Obsidian changes registered with Obsidian's `registerEvent()`.
+ */
+export default class ChangeListener {
 
     workspacesPlugin: { instance: any; enabled: boolean } | null = null;
     

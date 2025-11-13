@@ -12,10 +12,10 @@ import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
+import ChangeListener from 'Toolbar/ChangeListener';
 import TextToolbar from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
-import ToolbarEventListener from 'Toolbar/ToolbarEventListener';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
@@ -35,7 +35,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	el: ToolbarElementHelper;
 	events: ToolbarEventHandler;
 	items: ToolbarItemHandler;
-	listeners: ToolbarEventListener;
+	obs: ChangeListener;
 	render: ToolbarRenderer;
 	vars: VariableResolver;
 
@@ -51,7 +51,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.el = new ToolbarElementHelper(this);
 		this.events = new ToolbarEventHandler(this);
 		this.items = new ToolbarItemHandler(this);
-		this.listeners = new ToolbarEventListener(this);
+		this.obs = new ChangeListener(this);
 		this.render = new ToolbarRenderer(this);
 		this.vars = new VariableResolver(this);
 
@@ -82,7 +82,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// has to be done on plugin load
 			// @ts-expect-error - internalPlugins is not in the public App type
 			const internalPlugins = this.app.internalPlugins;
-			this.listeners.workspacesPlugin = internalPlugins.getPluginById('workspaces');
+			this.obs.workspacesPlugin = internalPlugins.getPluginById('workspaces');
 
 			// add icons specific to the plugin
 			addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
@@ -95,13 +95,13 @@ export default class NoteToolbarPlugin extends Plugin {
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this));
 
-			this.registerEvent(this.app.workspace.on('file-open', this.listeners.fileOpenListener));
-			this.registerEvent(this.app.workspace.on('active-leaf-change', this.listeners.leafChangeListener));
-			this.registerEvent(this.app.metadataCache.on('changed', this.listeners.metadataCacheListener));
-			this.registerEvent(this.app.workspace.on('layout-change', this.listeners.layoutChangeListener));
+			this.registerEvent(this.app.workspace.on('file-open', this.obs.fileOpenListener));
+			this.registerEvent(this.app.workspace.on('active-leaf-change', this.obs.leafChangeListener));
+			this.registerEvent(this.app.metadataCache.on('changed', this.obs.metadataCacheListener));
+			this.registerEvent(this.app.workspace.on('layout-change', this.obs.layoutChangeListener));
 
 			// monitor files being renamed to update menu items
-			this.registerEvent(this.app.vault.on('rename', this.listeners.fileRenameListener));
+			this.registerEvent(this.app.vault.on('rename', this.obs.fileRenameListener));
 
 			// Note Toolbar Callout click handlers
 			this.registerEvent(this.app.workspace.on('window-open', (win) => {
