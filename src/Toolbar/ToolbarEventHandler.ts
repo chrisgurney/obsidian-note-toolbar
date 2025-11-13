@@ -67,7 +67,7 @@ export default class ToolbarEventHandler {
 		mouseEvent.preventDefault();
 
 		// figure out what toolbar we're in
-		let toolbarEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-container');
+		let toolbarEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-container') as HTMLElement;
 		let toolbarSettings = toolbarEl?.id ? this.ntb.settingsManager.getToolbarById(toolbarEl.id) : undefined;
 
 		// figure out what item was clicked on (if any)
