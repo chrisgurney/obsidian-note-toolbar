@@ -78,8 +78,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			// check what other plugins are enabled that we need to know about
 			this.adapters.checkPlugins();
 			this.adapters.updateAdapters();
-			// @ts-ignore
-			this.workspacesPlugin = this.app.internalPlugins.getPluginById('workspaces');
+		
+			// has to be done on plugin load
+			// @ts-expect-error - internalPlugins is not in the public App type
+			const internalPlugins = this.app.internalPlugins;
+			this.listeners.workspacesPlugin = internalPlugins.getPluginById('workspaces');
 
 			// add icons specific to the plugin
 			addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
