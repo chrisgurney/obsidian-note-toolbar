@@ -804,7 +804,7 @@ settings:
         title.uk: 'Колір рамки'
         title.de: 'Rand-Farbe'
         title.zh: '边框颜色'
-        description: 'Top + Bottom borders. The "border" style must be added to the toolbar first.'
+        description: 'Color of toolbar borders. The "border" style must be added to the toolbar first.'
         description.uk: 'Верхня та нижня рамки. Стиль "рамка" повинен бути додан до панелі.'
         description.de: 'Obere + untere Ränder'
         description.zh: '上下边框'
@@ -1040,6 +1040,30 @@ settings:
         level: 1
         collapsed: true
     -
+        id: toolbar-text-colors
+        title: '↳ 🎨 Colors'
+        title.uk: '↳ 🎨 Кольори'
+        title.de: '↳ 🎨 Farben'
+        title.zh: '↳ 🎨 颜色'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-text-border-color
+        title: 'Border color'
+        title.uk: 'Колір рамки'
+        title.de: 'Rand-Farbe'
+        title.zh: '边框颜色'
+        description: 'Color of toolbar border. The "border" style must be added to the toolbar first.'
+        description.uk: 'Верхня та нижня рамки. Стиль "рамка" повинен бути додан до панелі.'
+        description.de: 'Obere + untere Ränder'
+        description.zh: '上下边框'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
         id: tbar-text-item-sizing-spacing
         title: '↳ 📐 Item Sizing and Spacing'
         title.uk: '↳ 📐 Розміри та інтервали'
@@ -1093,6 +1117,16 @@ settings:
         type: heading
         level: 2
         collapsed: true
+    -
+        id: cg-nt-tbar-text-border-radius
+        title: 'Toolbar border radius (in px units)'
+        title.zh: '工具栏边框圆角（单位：px）'
+        title.uk: 'Радіус закруглення рамки панелі (пікселі)'
+        description: 'How rounded the toolbar is. The higher the number, the more rounded.'
+        description.uk: 'Закруглення панелі. Чим більше число, тим більше округлення.'
+        type: variable-number
+        default: 5
+        format: px
     -
         id: cg-nt-tbar-text-shadow
         title: 'Shadow'
