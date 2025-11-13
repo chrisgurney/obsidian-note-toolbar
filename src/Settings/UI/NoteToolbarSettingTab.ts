@@ -68,7 +68,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayPropertySetting(containerEl);
 		this.displayFolderMap(containerEl);
 		// this.ruleUi.displayRules(containerEl);
-		this.displayLocationSettings(containerEl);
+		this.displayAppToolbarSettings(containerEl);
 		this.displayFileTypeSettings(containerEl);
 
 		// other global settings
@@ -785,10 +785,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
-	 * Displays toolbar location settings.
+	 * Settings for toolbars displayed across the app.
 	 * @param containerEl HTMLElement to add the settings to.
 	 */
-	displayLocationSettings(containerEl: HTMLElement): void {
+	displayAppToolbarSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
 			.setHeading()
@@ -837,6 +837,19 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		launchpadSetting.settingEl.id = 'note-toolbar-launchpad-setting';
 		const hasEmptyViewToolbar = !!this.ntb.settings.emptyViewToolbar;
 		launchpadSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
+
+		new Setting(containerEl)
+			.setName(t('setting.display-locations.ribbon-action.name'))
+			.setDesc(learnMoreFr(t('setting.display-locations.ribbon-action.description'), 'Navigation-bar'))
+			.addDropdown((dropdown) => 
+				dropdown
+					.addOptions(RIBBON_ACTION_OPTIONS)
+					.setValue(this.ntb.settings.ribbonAction)
+					.onChange(async (value: RibbonAction) => {
+						this.ntb.settings.ribbonAction = value;
+						await this.ntb.settingsManager.save();
+					})
+				);
 
 		new Setting(containerEl)
 			.setName(t('setting.display-locations.option-text'))
@@ -1139,19 +1152,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					// TODO? force the re-rendering of the current toolbar to update the menu
 				});
 			});
-
-		new Setting(containerEl)
-			.setName(t('setting.other.ribbon-action.name'))
-			.setDesc(learnMoreFr(t('setting.other.ribbon-action.description'), 'Navigation-bar'))
-			.addDropdown((dropdown) => 
-				dropdown
-					.addOptions(RIBBON_ACTION_OPTIONS)
-					.setValue(this.ntb.settings.ribbonAction)
-					.onChange(async (value: RibbonAction) => {
-						this.ntb.settings.ribbonAction = value;
-						await this.ntb.settingsManager.save();
-					})
-				);
 
 		new Setting(containerEl)
 			.setName(t('setting.other.debugging.name'))
