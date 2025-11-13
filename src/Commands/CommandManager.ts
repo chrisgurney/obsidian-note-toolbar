@@ -240,7 +240,7 @@ export default class CommandManager {
     /**
      * Copies the selected command to the clipboard as a NTB URI or callout data element.
      */
-    async copyCommand(returnDataElement: boolean = false): Promise<void> {
+    async copy(returnDataElement: boolean = false): Promise<void> {
         const modal = new CommandSuggestModal(this.ntb, (command) => {
             const commandText = returnDataElement
                 ? `[]()<data data-ntb-command="${command.id}"/> <!-- ${command.name} -->`
