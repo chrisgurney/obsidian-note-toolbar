@@ -342,7 +342,7 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-item-text-color
-        title: 'Text color'
+        title: 'Icon + text color'
         title.uk: 'Колір тексту'
         title.de: 'Textfarbe'
         title.zh: '文本颜色'
@@ -353,7 +353,7 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-item-text-color-hover
-        title: 'Text color (on hover)'
+        title: 'Icon + text color (on hover)'
         title.uk: 'Колір тексту (при наведенні)'
         title.de: 'Textfarbe (beim Überfahren mit der Maus)'
         title.zh: '鼠标悬停时的文本颜色'
@@ -667,7 +667,7 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-quick-tools-item-text-color
-        title: '🎨 Text + Icon color'
+        title: '🎨 Icon + text color'
         title.uk: '🎨 Кольори тексту та іконки'
         title.de: '🎨 Text + Symbol-Farbe'
         title.zh: '🎨 文本和图标颜色'
@@ -678,7 +678,7 @@ settings:
         default-dark: '#'
     -
         id: cg-nt-quick-tools-item-text-color-hover
-        title: '🎨 Text + Icon color (on hover)'
+        title: '🎨 Icon + text color (on hover)'
         title.uk: '🎨 Кольори тексту та іконки (при наведенні)'
         title.de: '🎨 Text + Symbol-Farbe (beim Überfahren mit der Maus)'
         title.zh: '🎨 文字 + 图标颜色（悬停时）'
@@ -1058,6 +1058,50 @@ settings:
         description.uk: 'Верхня та нижня рамки. Стиль "рамка" повинен бути додан до панелі.'
         description.de: 'Obere + untere Ränder'
         description.zh: '上下边框'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-text-item-bg-color-hover
+        title: 'Item: Background color (on hover)'
+        title.uk: 'Колір фону (при наведенні)'
+        title.de: 'Hintergrundfarbe (beim Überfahren mit der Maus)'
+        title.zh: '鼠标悬停时的背景颜色'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-text-item-button-bg-color
+        title: 'Item: Background color (for button style)'
+        title.uk: 'Колір фону (стиль кнопки)'
+        title.de: 'Hintergrundfarbe (für Schaltflächen)'
+        title.zh: '按钮样式的背景颜色'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-text-item-text-color
+        title: 'Icon + text color'
+        title.uk: 'Колір тексту'
+        title.de: 'Textfarbe'
+        title.zh: '文本颜色'
+        type: variable-themed-color
+        opacity: true
+        format: hex
+        default-light: '#'
+        default-dark: '#'
+    -
+        id: cg-nt-tbar-text-item-text-color-hover
+        title: 'Icon + text color (on hover)'
+        title.uk: 'Колір тексту (при наведенні)'
+        title.de: 'Textfarbe (beim Überfahren mit der Maus)'
+        title.zh: '鼠标悬停时的文本颜色'
         type: variable-themed-color
         opacity: true
         format: hex
