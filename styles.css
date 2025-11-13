@@ -1017,22 +1017,6 @@ settings:
         level: 1
         collapsed: true
     -
-        id: cg-nt-tbar-text-shadow
-        title: '😎 Shadow'
-        description: 'Shadow behind the text toolbar'
-        type: variable-select
-        default: 'var(--shadow-s)'
-        options:
-            - 
-                label: 'None'
-                value: 'none'
-            - 
-                label: 'Input style'
-                value: 'var(--input-shadow)'
-            - 
-                label: 'Small style'
-                value: 'var(--shadow-s)'
-    -
         id: tbar-text-item-sizing-spacing
         title: '↳ 📐 Item Sizing and Spacing'
         title.uk: '↳ 📐 Розміри та інтервали'
@@ -1077,6 +1061,31 @@ settings:
         type: variable-number
         default: 0.5
         format: em
+    -
+        id: toolbar-text-styles
+        title: '↳ 😎 Style'
+        title.uk: '↳ 😎 Стиль'
+        title.de: '↳ 😎 Stil'
+        title.zh: '↳ 😎 样式'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-text-shadow
+        title: 'Shadow'
+        description: 'Shadow behind the text toolbar'
+        type: variable-select
+        default: 'var(--shadow-s)'
+        options:
+            - 
+                label: 'None'
+                value: 'none'
+            - 
+                label: 'Input style'
+                value: 'var(--input-shadow)'
+            - 
+                label: 'Small style'
+                value: 'var(--shadow-s)'
     -
         id: ui
         title: 'Other UI'
