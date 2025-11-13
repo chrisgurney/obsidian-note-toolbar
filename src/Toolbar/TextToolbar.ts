@@ -85,8 +85,9 @@ class TextToolbarClass implements PluginValue {
             }
             if (selectFrom === selectTo || !view.hasFocus) {
                 if (this.ntb.render.textToolbarEl) {
-                    this.ntb.debug('⛔️ no selection or view out of focus - removing toolbar');
+                    this.ntb.debugGroup('⛔️ no selection or view out of focus - removing toolbar');
                     this.ntb.debug('selection empty:', selectFrom === selectTo, ' • has focus: view', view.hasFocus, 'toolbar', isToolbarFocussed);
+                    this.ntb.debugGroupEnd();
                     this.ntb.render.textToolbarEl.remove();
                 }
                 return;

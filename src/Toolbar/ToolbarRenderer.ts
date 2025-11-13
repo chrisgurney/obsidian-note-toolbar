@@ -938,7 +938,7 @@ export default class ToolbarRenderer {
 
 		// remove the existing toolbar because we're likely in a new position
 		if (this.textToolbarEl) {
-			this.ntb.debug('♻️ removing old toolbar - rendering new one');
+			this.ntb.debug('♻️ rendering text toolbar (removing old toolbar)');
 			this.textToolbarEl.remove();
 		}
 
