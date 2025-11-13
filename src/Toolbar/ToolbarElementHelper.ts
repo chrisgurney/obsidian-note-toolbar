@@ -2,7 +2,9 @@ import NoteToolbarPlugin from "main";
 import { ItemView, MarkdownView } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 
-
+/**
+ * Provides utilities to access toolbar DOM elements.
+ */
 export default class ToolbarElementHelper {
 
     constructor(
