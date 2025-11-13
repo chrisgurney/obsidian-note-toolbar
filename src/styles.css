@@ -16,6 +16,11 @@ body {
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
     --cg-nt-tbar-bottom-pos-y-mobile: 1em;
+    --cg-nt-tbar-text-item-font-size: var(--metadata-label-font-size);
+    --cg-nt-tbar-text-item-icon-size: var(--icon-size);
+    --cg-nt-tbar-text-item-padding-x: 0.75em;
+    --cg-nt-tbar-text-item-padding-y: 0.5em;
+    --cg-nt-tbar-text-shadow: var(--shadow-s);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
     --cg-nt-fab-autohide-opacity: 0;
@@ -744,11 +749,21 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 
     &[data-tbar-position="text"] {
+        box-shadow: var(--cg-nt-tbar-text-shadow);
         position: absolute;
         /* fix: puts toolbar above popovers + Hover Editor plugin */
         z-index: calc(var(--layer-slides) - 1);
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
+            & a, span.external-link {
+                padding: var(--cg-nt-tbar-text-item-padding-y) var(--cg-nt-tbar-text-item-padding-x);
+                font-size: var(--cg-nt-tbar-text-item-font-size);
+                /* border-radius: var(--cg-nt-item-border-radius); */
+                & svg {
+                    height: var(--cg-nt-tbar-text-item-icon-size);
+                    width: var(--cg-nt-tbar-text-item-icon-size);
+                }
+            }
         }
     }
 

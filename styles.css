@@ -1010,6 +1010,74 @@ settings:
         default: 1
         format: em
     -
+        id: toolbar-text-tbar
+        title: 'Toolbars (text)'
+        description: 'Styles for text toolbars'
+        type: heading
+        level: 1
+        collapsed: true
+    -
+        id: cg-nt-tbar-text-shadow
+        title: '😎 Shadow'
+        description: 'Shadow behind the text toolbar'
+        type: variable-select
+        default: 'var(--shadow-s)'
+        options:
+            - 
+                label: 'None'
+                value: 'none'
+            - 
+                label: 'Input style'
+                value: 'var(--input-shadow)'
+            - 
+                label: 'Small style'
+                value: 'var(--shadow-s)'
+    -
+        id: tbar-text-item-sizing-spacing
+        title: '↳ 📐 Item Sizing and Spacing'
+        title.uk: '↳ 📐 Розміри та інтервали'
+        title.de: '↳ 📐 Größe und Abstände'
+        title.zh: '↳ 📐 大小和间距'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-text-item-font-size
+        title: 'Font size (in em units)'
+        title.uk: 'Розмір шрифту (em)'
+        title.de: 'Schriftgröße (in em)'
+        title.zh: '字体大小（单位：em）'
+        type: variable-number
+        default: 0.875
+        format: em
+    -
+        id: cg-nt-tbar-text-item-icon-size
+        title: 'Icon size (in px units)'
+        title.uk: 'Розмір іконки (пікселі)'
+        title.de: 'Symbolgröße (in px)'
+        title.zh: '图标大小（单位：px）'
+        type: variable-number
+        default: 18
+        format: px
+    -
+        id: cg-nt-tbar-text-item-padding-x
+        title: 'Left + Right padding (in em units)'
+        title.uk: 'Лівий та правий відступи (em)'
+        title.de: 'Linker + rechter Abstand (in em)'
+        title.zh: '左右内边距（单位：em）'
+        type: variable-number
+        default: 0.75
+        format: em
+    -
+        id: cg-nt-tbar-text-item-padding-y
+        title: 'Top + Bottom padding (in em units)'
+        title.uk: 'Верхній та нижній відступи (em)'
+        title.de: 'Oberer + unteren Abstand (in em)'
+        title.zh: '上下内边距（单位：em）'
+        type: variable-number
+        default: 0.5
+        format: em
+    -
         id: ui
         title: 'Other UI'
         title.zh: '其他 UI'
@@ -1044,6 +1112,11 @@ body {
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
     --cg-nt-tbar-bottom-pos-y-mobile: 1em;
+    --cg-nt-tbar-text-item-font-size: var(--metadata-label-font-size);
+    --cg-nt-tbar-text-item-icon-size: var(--icon-size);
+    --cg-nt-tbar-text-item-padding-x: 0.75em;
+    --cg-nt-tbar-text-item-padding-y: 0.5em;
+    --cg-nt-tbar-text-shadow: var(--shadow-s);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -1rem;
     --cg-nt-fab-autohide-opacity: 0;
@@ -1772,11 +1845,21 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 
     &[data-tbar-position="text"] {
+        box-shadow: var(--cg-nt-tbar-text-shadow);
         position: absolute;
         /* fix: puts toolbar above popovers + Hover Editor plugin */
         z-index: calc(var(--layer-slides) - 1);
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
+            & a, span.external-link {
+                padding: var(--cg-nt-tbar-text-item-padding-y) var(--cg-nt-tbar-text-item-padding-x);
+                font-size: var(--cg-nt-tbar-text-item-font-size);
+                /* border-radius: var(--cg-nt-item-border-radius); */
+                & svg {
+                    height: var(--cg-nt-tbar-text-item-icon-size);
+                    width: var(--cg-nt-tbar-text-item-icon-size);
+                }
+            }
         }
     }
 
