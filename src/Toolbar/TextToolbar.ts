@@ -4,7 +4,7 @@ import NoteToolbarPlugin from 'main';
 /**
  * Renders the configured toolbar when text is selected.
  * @param ntb NoteToolbarPlugin
- * @returns 
+ * @returns ViewPlugin class to pass to `registerEditorExtension()`
  */
 export default function TextToolbar(ntb: NoteToolbarPlugin): ViewPlugin<TextToolbarClass> {
 

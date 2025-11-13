@@ -2,7 +2,9 @@ import NoteToolbarPlugin from "main";
 import { TFile, FileSystemAdapter } from "obsidian";
 import { ErrorBehavior, ItemType, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
-
+/**
+ * Provides utilities to resolve variables.
+ */
 export default class VariableResolver {
 
     constructor(

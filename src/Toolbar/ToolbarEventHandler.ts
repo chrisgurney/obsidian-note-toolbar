@@ -9,6 +9,9 @@ import { openItemSuggestModal, learnMoreFr } from "Settings/UI/Utils/SettingsUIU
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 import { calcMouseItemIndex } from "Utils/Utils";
 
+/**
+ * Handles toolbar events registered with Obsidian's `registerEvent()`. 
+ */
 export default class ToolbarEventHandler {
 
     constructor(

@@ -3,6 +3,9 @@ import { TFile, PaneType, TFolder, Notice, MarkdownView, Command, ItemView } fro
 import { ToolbarItemSettings, ItemType, t, ItemFocusType, LINK_OPTIONS, ScriptConfig, CalloutAttr, SCRIPT_ATTRIBUTE_MAP, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from "Utils/Utils";
 
+/**
+ * Handles interactions with toolbar items.
+ */
 export default class ToolbarItemHandler {
 
     // track the last used callout link, for the menu URI

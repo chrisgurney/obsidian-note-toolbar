@@ -5,6 +5,9 @@ import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemT
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { hasStyle, checkToolbarForItemView, putFocusInMenu, getViewId, calcComponentVisToggles, calcItemVisToggles, isValidUri } from "Utils/Utils";
 
+/**
+ * Provides toolbar rendering, update, and cleanup functions.
+ */
 export default class ToolbarRenderer {
 
     textToolbarEl: HTMLDivElement | null = null;
