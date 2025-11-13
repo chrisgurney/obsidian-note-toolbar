@@ -957,7 +957,7 @@ settings:
         collapsed: true
     -
         id: cg-nt-tbar-bottom-border-radius
-        title: 'Toolbar border radius (in px units)'
+        title: '😎 Toolbar border radius (in px units)'
         title.zh: '工具栏边框圆角（单位：px）'
         title.uk: 'Радіус закруглення рамки панелі (пікселі)'
         description: 'How rounded the toolbar is. The higher the number, the more rounded.'
@@ -967,7 +967,7 @@ settings:
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-desktop
-        title: 'Left + Right toolbar padding on desktop (in px units)'
+        title: '📐 Left + Right toolbar padding on desktop (in px units)'
         title.zh: '桌面端左右工具栏的内边距（单位：px）'
         title.uk: "Лівий та правий відступи на комп'ютері (пікселі)"
         description: 'Spacing around the toolbar.'
@@ -978,7 +978,7 @@ settings:
         format: px
     -
         id: cg-nt-tbar-bottom-padding-x-mobile
-        title: 'Left + Right toolbar padding on mobile (in px units) 📱'
+        title: '📐 Left + Right toolbar padding on mobile (in px units) 📱'
         title.zh: '移动端左右工具栏的内边距（单位：px）📱'
         title.uk: 'Лівий та правий відступи на мобільному (пікселі) 📱'
         description: 'Spacing around the toolbar.'
@@ -989,7 +989,7 @@ settings:
         format: px
     -
         id: cg-nt-tbar-bottom-pos-y-desktop
-        title: 'Y position on desktop (in em units)'
+        title: '↕ Y position on desktop (in em units)'
         title.zh: '桌面端 Y 轴位置（单位：em）'
         title.uk: "Позиція Y на комп'ютері (em)"
         description: 'Distance from bottom edge.'
@@ -1000,7 +1000,7 @@ settings:
         format: em
     -
         id: cg-nt-tbar-bottom-pos-y-mobile
-        title: 'Y position on mobile (in em units) 📱'
+        title: '↕ Y position on mobile (in em units) 📱'
         title.zh: '移动端 Y 轴位置（单位：em）📱'
         title.uk: 'Позиція Y на мобільному (em) 📱'
         description: "Distance from bottom edge."
