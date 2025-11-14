@@ -268,6 +268,7 @@ export default class ToolbarSettingsModal extends Modal {
 						cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
+					cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 					handleKeyClick(this.ntb, cb.extraSettingsEl);
 				});
 		}
