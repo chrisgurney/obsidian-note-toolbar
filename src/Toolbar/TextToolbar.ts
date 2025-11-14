@@ -118,6 +118,12 @@ class TextToolbarClass implements PluginValue {
             const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
             await this.ntb.render.renderTextToolbar(selectStartPos, selectEndPos);
 
+            this.lastSelection = {
+                from: selectFrom,
+                to: selectTo,
+                text: selectText
+            };
+
             // TODO: do we need this?
             // if (!this.isMouseSelection) {
             //     this.isMouseDown = false;
