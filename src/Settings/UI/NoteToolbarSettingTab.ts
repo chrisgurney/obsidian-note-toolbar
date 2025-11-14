@@ -768,20 +768,32 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 * @param stateKey key in the context object that holds the toggle state.
 	 */
 	renderSettingToggle(setting: Setting, containerSelector: string, context: Record<string, any>, stateKey: string): void {
+		this.ntb.registerDomEvent(setting.infoEl, 'click', (event) => {
+			// ignore the "Learn more" link
+			if (!(event.target instanceof HTMLElement && 
+				event.target.matches('a.note-toolbar-setting-focussable-link'))) {
+				this.handleSettingToggle(containerSelector, context, stateKey);
+			}
+		});
 		setting.addExtraButton((cb) => {
 			cb.setIcon('right-triangle')
 				.setTooltip(t('setting.button-collapse-tooltip'))
 				.onClick(async () => {
-					let itemsContainer = this.containerEl.querySelector(containerSelector);
-					if (itemsContainer) {
-						context[stateKey] = !context[stateKey];
-						itemsContainer.setAttribute('data-active', context[stateKey].toString());
-						cb.setTooltip(context[stateKey] ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
-					}
+					this.handleSettingToggle(containerSelector, context, stateKey);
+					cb.setTooltip(context[stateKey] ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 				});
 			cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
+			cb.setTooltip(context[stateKey] ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 			handleKeyClick(this.ntb, cb.extraSettingsEl);
 		});
+	}
+
+	handleSettingToggle(containerSelector: string, context: Record<string, any>, stateKey: string) {
+		let itemsContainer = this.containerEl.querySelector(containerSelector);
+		if (itemsContainer) {
+			context[stateKey] = !context[stateKey];
+			itemsContainer.setAttribute('data-active', context[stateKey].toString());
+		}
 	}
 
 	/**
