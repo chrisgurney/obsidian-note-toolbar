@@ -167,19 +167,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			if (Platform.isPhone) this.renderSearchField(itemsContainer);
 		}
 
-		// collapse button
+		// make collapsible
 		if (this.ntb.settings.toolbars.length > 4) {
-			toolbarListSetting
-				.addExtraButton((cb) => {
-					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.button-collapse-tooltip'))
-					.onClick(async () => {
-						this.toggleToolbarList();
-					});
-					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					cb.extraSettingsEl.id = 'ntb-tbar-toggle-button';
-					handleKeyClick(this.ntb, cb.extraSettingsEl);
-				});
+			this.renderSettingToggle(toolbarListSetting, '.note-toolbar-setting-items-container', this, 'itemListOpen', () => {
+				toolbarListSetting.setName(
+					this.itemListOpen ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
+			});
 		}
 
 		if (this.ntb.settings.toolbars.length == 0) {
@@ -522,15 +515,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		if (itemsContainer) {
 			this.itemListOpen = !this.itemListOpen;
 			itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
-			// TODO: REMOVE? commented out as was causing problems with expand/collapse
-			// hide search field, if needed
-			// if (!Platform.isDesktop && !this.itemListOpen) this.toggleSearch(false);
-			// update heading (with toolbar count)
-			let heading = itemsContainer.querySelector('.setting-item-info .setting-item-name');
-			this.itemListOpen ? heading?.setText(t('setting.toolbars.name')) : heading?.setText(t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
-			// update button tooltip
-			let button = this.containerEl.querySelector('#ntb-tbar-toggle-button') as HTMLButtonElement;
-			button?.setAttribute('aria-label', this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
+			const headingEl = itemsContainer.querySelector('.setting-item-info .setting-item-name');
+			this.itemListOpen ? headingEl?.setText(t('setting.toolbars.name')) : headingEl?.setText(t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
 		}
 	}
 
@@ -569,28 +555,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.mappings.name'))
 			.setDesc(t('setting.mappings.description'));
 
+		// make collapsible
 		if (this.ntb.settings.folderMappings.length > 4) {
-			toolbarMapSetting
-				.addExtraButton((cb) => {
-					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.button-collapse-tooltip'))
-					.onClick(async () => {
-						let mappingsContainer = containerEl.querySelector('.note-toolbar-setting-mappings-container');
-						if (mappingsContainer) {
-							this.mappingListOpen = !this.mappingListOpen;
-							mappingsContainer.setAttribute('data-active', this.mappingListOpen.toString());
-							let heading = mappingsContainer.querySelector('.setting-item-info .setting-item-name');
-							this.mappingListOpen ? heading?.setText(t('setting.mappings.name')) : heading?.setText(t('setting.mappings.name-with-count', { count: this.ntb.settings.folderMappings.length }));
-							cb.setTooltip(this.mappingListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
-						}
-					});
-					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					handleKeyClick(this.ntb, cb.extraSettingsEl);
-				});
-		}
-		else {
-			// remove the area where the collapse button would be
-			toolbarMapSetting.controlEl.hide();
+			this.renderSettingToggle(toolbarMapSetting, '.note-toolbar-setting-mappings-container', this, 'mappingListOpen');
 		}
 
 		let collapsibleContainer = createDiv();
@@ -766,33 +733,39 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 * @param containerSelector CSS selector for the container to toggle.
 	 * @param context Object containing the state variable to change.
 	 * @param stateKey key in the context object that holds the toggle state.
+	 * @param callback optional callback to execute after performing the toggle.
 	 */
-	renderSettingToggle(setting: Setting, containerSelector: string, context: Record<string, any>, stateKey: string): void {
+	renderSettingToggle(
+		setting: Setting,
+		containerSelector: string,
+		context: Record<string, any>,
+		stateKey: string,
+		callback?: () => void
+	): void {
 		this.ntb.registerDomEvent(setting.infoEl, 'click', (event) => {
 			// ignore the "Learn more" link
 			if (!(event.target instanceof HTMLElement && 
 				event.target.matches('a.note-toolbar-setting-focussable-link'))) {
-				this.handleSettingToggle(containerSelector, context, stateKey);
+				this.handleSettingToggle(containerSelector, context, stateKey, callback);
 			}
 		});
 		setting.addExtraButton((cb) => {
 			cb.setIcon('right-triangle')
-				.setTooltip(t('setting.button-collapse-tooltip'))
+				.setTooltip(t('setting.button-expand-collapse-tooltip'))
 				.onClick(async () => {
-					this.handleSettingToggle(containerSelector, context, stateKey);
-					cb.setTooltip(context[stateKey] ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
+					this.handleSettingToggle(containerSelector, context, stateKey, callback);
 				});
 			cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-			cb.setTooltip(context[stateKey] ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 			handleKeyClick(this.ntb, cb.extraSettingsEl);
 		});
 	}
 
-	handleSettingToggle(containerSelector: string, context: Record<string, any>, stateKey: string) {
+	handleSettingToggle(containerSelector: string, context: Record<string, any>, stateKey: string, callback?: () => void) {
 		let itemsContainer = this.containerEl.querySelector(containerSelector);
 		if (itemsContainer) {
 			context[stateKey] = !context[stateKey];
 			itemsContainer.setAttribute('data-active', context[stateKey].toString());
+			callback?.();
 		}
 	}
 

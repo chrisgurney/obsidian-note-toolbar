@@ -258,6 +258,7 @@
         "button-delete-tooltip": "Delete",
         "button-drag-tooltip": "Drag to rearrange",
         "button-expand-tooltip": "Expand section",
+        "button-expand-collapse-tooltip": "Expand/Collapse section",
         "button-gallery": "Gallery",
         "button-gallery-tooltip": "Open the Gallery",
         "button-help": "Help",

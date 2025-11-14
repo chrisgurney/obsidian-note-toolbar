@@ -262,13 +262,11 @@ export default class ToolbarSettingsModal extends Modal {
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
-					.setTooltip(t('setting.button-collapse-tooltip'))
+					.setTooltip(t('setting.button-expand-collapse-tooltip'))
 					.onClick(async () => {
 						this.handleItemListToggle(settingsDiv);
-						cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-					cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 					handleKeyClick(this.ntb, cb.extraSettingsEl);
 				});
 		}
