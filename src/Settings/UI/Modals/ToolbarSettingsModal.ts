@@ -227,7 +227,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// Heading + expand/collapse button
 		//
 
-		let itemsSetting = new Setting(itemsContainer)
+		const itemsSetting = new Setting(itemsContainer)
 			.setName(t('setting.items.name'))
 			.setClass('note-toolbar-setting-items-header')
 			.setHeading()
@@ -252,19 +252,20 @@ export default class ToolbarSettingsModal extends Modal {
 			});
 
 		if (this.toolbar.items.length > 8) {
+			this.ntb.registerDomEvent(itemsSetting.infoEl, 'click', (event) => {
+				// ignore the "Learn more" link
+				if (!(event.target instanceof HTMLElement && 
+					event.target.matches('a.note-toolbar-setting-focussable-link'))) {
+					this.handleItemListToggle(settingsDiv);
+				}
+			});
 			itemsSetting
 				.addExtraButton((cb) => {
 					cb.setIcon('right-triangle')
 					.setTooltip(t('setting.button-collapse-tooltip'))
 					.onClick(async () => {
-						let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
-						if (itemsContainer) {
-							this.itemListOpen = !this.itemListOpen;
-							itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
-							let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
-							this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
-							cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
-						}
+						this.handleItemListToggle(settingsDiv);
+						cb.setTooltip(this.itemListOpen ? t('setting.button-collapse-tooltip') : t('setting.button-expand-tooltip'));
 					});
 					cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
 					handleKeyClick(this.ntb, cb.extraSettingsEl);
@@ -429,6 +430,20 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsContainer.appendChild(itemsListContainer);
 		settingsDiv.appendChild(itemsContainer);
 
+	}
+
+	/**
+	 * Toggles the item list in the items container.
+	 * @param settingsDiv settings HTMLElement
+	 */
+	handleItemListToggle(settingsDiv: HTMLElement) {
+		let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
+		if (itemsContainer) {
+			this.itemListOpen = !this.itemListOpen;
+			itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
+			let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
+			this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
+		}
 	}
 
 	/**
