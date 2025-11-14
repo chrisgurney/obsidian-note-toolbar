@@ -20,6 +20,22 @@ export default class ToolbarRenderer {
     ) {}
 
 	/**
+	 * Check to see if the text toolbar is present.
+	 * @returns true if the text toolbar is present and visible; false otherwise.
+	 */
+	hasTextToolbar(): boolean {
+		return this.textToolbarEl?.isConnected ?? false;
+	}
+
+	/**
+	 * Check to see if the text toolbar is in focus.
+	 * @returns true if the text toolbar is in focus; false otherwise.
+	 */
+	isTextToolbarFocussed(): boolean {
+		return this.ntb.render.textToolbarEl?.contains(activeDocument.activeElement) ?? false;
+	}
+
+	/**
 	 * Removes the focus class from all items in the toolbar.
 	 */
 	async removeFocusStyle() {
@@ -914,6 +930,13 @@ export default class ToolbarRenderer {
 		this.textToolbarEl.style.left = `${left}px`;
 		this.textToolbarEl.style.top = `${top}px`;
 		
+	}
+
+	/**
+	 * Removes the text toolbar if it's present.
+	 */
+	async removeTextToolbar() {
+		this.textToolbarEl?.remove();
 	}
 
 	/**

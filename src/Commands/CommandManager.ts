@@ -161,7 +161,7 @@ export default class CommandManager {
         this.ntb.debugGroup("focus");
 
         // display the text toolbar at the current cursor position, if it's not already rendered
-        if (isTextToolbar && !this.ntb.render.textToolbarEl?.isConnected) {
+        if (isTextToolbar && !this.ntb.render.hasTextToolbar()) {
             const editor = this.ntb.app.workspace.activeEditor?.editor;
             if (!editor) return;
             const offset = editor.posToOffset(editor.getCursor());
