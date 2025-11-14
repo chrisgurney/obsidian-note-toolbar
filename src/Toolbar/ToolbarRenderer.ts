@@ -1,6 +1,6 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { MarkdownView, ItemView, TFile, Platform, setIcon, setTooltip, FrontMatterCache, getIcon, Menu, MenuItem, MenuPositionDef, TFolder } from "obsidian";
+import { MarkdownView, ItemView, TFile, Platform, setIcon, setTooltip, FrontMatterCache, getIcon, Menu, MenuItem, MenuPositionDef, TFolder, Notice } from "obsidian";
 import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemType, LocalVar, PropsState, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { hasStyle, checkToolbarForItemView, putFocusInMenu, getViewId, calcComponentVisToggles, calcItemVisToggles, isValidUri } from "Utils/Utils";
@@ -951,7 +951,8 @@ export default class ToolbarRenderer {
 		
 		const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
 		if (!toolbar) {
-			// TODO: show an error if toolbar not found
+			this.ntb.debug('⚠️ error: no text toolbar with ID', this.ntb.settings.textToolbar);
+			new Notice(t('setting.error-invalid-text-toolbar'));
 			return;
 		};
 
