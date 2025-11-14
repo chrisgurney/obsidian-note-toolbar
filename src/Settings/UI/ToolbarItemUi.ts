@@ -1022,6 +1022,9 @@ export default class ToolbarItemUi {
                 handleKeyClick(this.ntb, button.extraSettingsEl);     
             });
         advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced');
+        this.ntb.registerDomEvent(advancedSetting.infoEl, 'click', (event) => {
+            advancedSettingsDiv.toggleAttribute('data-active');
+        });
 
         const advancedSettingsDiv = advancedDivEl.createDiv();
         advancedSettingsDiv.addClass('note-toolbar-setting-item-link-advanced');
