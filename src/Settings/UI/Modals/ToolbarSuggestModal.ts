@@ -120,6 +120,9 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
         let toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
+        if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
+            el.addClass('cm-em');
+        }
         if (this.showPreviews && toolbar.uuid !== EMPTY_TOOLBAR_ID) {
             let previewContainerEl = el.createDiv();
             previewContainerEl.addClass('setting-item-description');

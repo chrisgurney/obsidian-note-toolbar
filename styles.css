@@ -3377,6 +3377,9 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-item-suggester-dialog {
     width: calc(var(--dialog-width) / 1.5);
+    & .suggestion-empty {
+        padding: var(--size-4-4);
+    }
     & .note-toolbar-item-suggestion {
         & .note-toolbar-item-suggester-name, svg.svg-icon {
             color: var(--cg-nt-quick-tools-item-text-color);

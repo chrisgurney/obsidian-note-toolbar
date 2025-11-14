@@ -16,6 +16,21 @@ export type ItemSuggestMode = 'Default' | 'New' | 'QuickTools';
 export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> {
 
     private activeFile: TFile | null;
+    private hasResults: boolean = false;
+
+    private readonly NEW_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'NEW_ITEM',
+        label: t('setting.item-suggest-modal.option-new'),
+        icon: 'plus'
+    };
+
+    private readonly BROWSE_GALLERY_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'OPEN_GALLERY',
+        label: t('setting.item-suggest-modal.link-gallery'),
+        icon: 'layout-grid'
+    };
 
     /**
      * Creates a new modal.
@@ -114,39 +129,46 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
 
         let sortedSuggestions: ToolbarItemSettings[] = [];
 
-        // placeholder for creating a new item
-        if (this.mode === 'New') {
-            const newItem: ToolbarItemSettings = {
-                ...DEFAULT_ITEM_SETTINGS,
-                uuid: 'NEW_ITEM',
-                label: t('setting.item-suggest-modal.option-new')
-            };
-            sortedSuggestions.push(newItem);
-        }
-
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
             sortedSuggestions = sortedSuggestions.concat(this.sortSuggestions(itemSuggestions, lowerCaseInputStr));
         }
 
+        this.hasResults = sortedSuggestions.length > 0;
+
+        // placeholder for creating a new item
+        if (this.mode === 'New') {
+            if (inputStr.trim().length === 0) {
+                // put at the top if nothing's been entered
+                sortedSuggestions.unshift(this.NEW_ITEM);
+            }
+            else if (this.hasResults) {
+                // put at the bottom if there are results
+                sortedSuggestions.push(this.NEW_ITEM);
+            }
+        }
+
+        if (this.hasResults) {
+            if (this.mode !== 'QuickTools') {
+                // add gallery items
+                let gallerySuggestions: ToolbarItemSettings[] = [];
+                for (const galleryItem of this.ntb.gallery.getItems()) {
+                    if (await this.isSearchMatch(galleryItem, lowerCaseInputStr)) gallerySuggestions.push(galleryItem);
+                }
+                gallerySuggestions = this.sortSuggestions(gallerySuggestions, lowerCaseInputStr);
+                if (gallerySuggestions.length > 0) {
+                    sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
+                    sortedSuggestions.push(...gallerySuggestions);
+                }
+            }
+        }
+        else {
+            sortedSuggestions = [this.NEW_ITEM];
+        }
+
+        // always have the Gallery item at the end of any results (including empty)
         if (this.mode !== 'QuickTools') {
-            // add gallery items
-            let gallerySuggestions: ToolbarItemSettings[] = [];
-            for (const galleryItem of this.ntb.gallery.getItems()) {
-                if (await this.isSearchMatch(galleryItem, lowerCaseInputStr)) gallerySuggestions.push(galleryItem);
-            }
-            gallerySuggestions = this.sortSuggestions(gallerySuggestions, lowerCaseInputStr);
-            if (gallerySuggestions.length > 0) {
-                sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
-                sortedSuggestions.push(...gallerySuggestions);
-                const browseGallery: ToolbarItemSettings = {
-                    ...DEFAULT_ITEM_SETTINGS,
-                    uuid: 'OPEN_GALLERY',
-                    label: t('setting.item-suggest-modal.link-gallery'),
-                    icon: 'layout-grid'
-                };
-                sortedSuggestions.push(browseGallery);
-            }
+            sortedSuggestions.push(this.BROWSE_GALLERY_ITEM);
         }
 
         return this.toolbarId ? itemSuggestions : sortedSuggestions;
@@ -190,25 +212,6 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
 
         return false;
 
-    }
-
-    /**
-     * Handles case where there's no suggestions.
-     * If we're not in Quick Tools mode, it shows a link to the Gallery. 
-     */
-    onNoSuggestion(): void {
-        this.resultContainerEl.empty();
-        const emptyEl = this.resultContainerEl.createDiv();
-        emptyEl.addClass('suggestion-empty');
-        emptyEl.setText(t('setting.item-suggest-modal.label-empty-no-items'));
-        if (this.mode !== 'QuickTools') {
-            emptyEl.appendText(' ');
-            const galleryLinkEl = emptyEl.createEl('a', { 
-                href: 'obsidian://note-toolbar?gallery', 
-                text: t('setting.item-suggest-modal.link-gallery')
-            });
-            galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-        }
     }
 
     /**
@@ -286,6 +289,15 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         else {
             if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
+            }
+            if (item === this.NEW_ITEM || item === this.BROWSE_GALLERY_ITEM) {
+                el.addClass('cm-em');
+            }
+            if (!this.hasResults && item === this.NEW_ITEM) {
+                const emptyEl = this.resultContainerEl.createDiv();
+                emptyEl.addClass('suggestion-empty');
+                emptyEl.setText(t('setting.item-suggest-modal.label-empty-no-items'));
+                emptyEl.insertAdjacentElement('afterend', el);
             }
             renderItemSuggestion(this.ntb, item, el, this.inputEl.value, true, (this.mode === 'QuickTools'));
         }

@@ -470,7 +470,7 @@
             "label-empty-no-items": "No results found.",
             "link-gallery": "Explore the Gallery...",
             "link-search": "Search for an item",
-            "option-new": "+ Create a new item",
+            "option-new": "Create a new item...",
             "placeholder": "Search for an item to add...",
             "placeholder-toolbar": "{{toolbar}}: Search items...",
             "placeholder-use": "Search for an item to use..."
@@ -641,7 +641,7 @@
             "instruction-navigate": "to navigate",
             "instruction-use": "to open toolbar",
             "option-default": "Default (use toolbar mapping)",
-            "option-new": "+ Create a new toolbar",
+            "option-new": "Create a new toolbar...",
             "placeholder": "Search for a toolbar...",
             "placeholder-add": "Add item to which toolbar?"
         },
