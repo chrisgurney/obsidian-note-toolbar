@@ -1236,6 +1236,21 @@ input[type="text"].note-toolbar-setting-error,
     padding-bottom: 1em !important;
 }
 
+.note-toolbar-setting-heading-spacer {
+    padding-top: 0.75em;
+    & .setting-item-heading {
+        padding: 0.75em 0;
+        .is-mobile & {
+            & .setting-item-control {
+                gap: var(--size-4-4);
+            }
+        }
+        .is-phone & {
+            padding-top: 1.5em !important;
+        }
+    }
+}
+
 .note-toolbar-setting-no-border {
     border-top: none !important;
 }

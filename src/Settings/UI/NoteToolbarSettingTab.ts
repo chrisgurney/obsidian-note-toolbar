@@ -778,7 +778,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setHeading()
 			.setName(t('setting.display-locations.name'))
-			.setDesc(t('setting.display-locations.description'));
+			.setDesc(t('setting.display-locations.description'))
+			.setClass('note-toolbar-setting-heading-spacer');
 
 		new Setting(containerEl)
 			.setName(t('setting.display-contexts.option-filemenu'))
