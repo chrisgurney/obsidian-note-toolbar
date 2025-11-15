@@ -10,7 +10,7 @@ import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
-import { createToolbarPreviewFr, displayHelpSection, emptyMessageFr, handleKeyClick, iconTextFr, learnMoreFr, showWhatsNewIfNeeded } from "./Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, displayHelpSection, emptyMessageFr, handleKeyClick, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded } from "./Utils/SettingsUIUtils";
 // import RuleUi from './RuleUi';
 
 export default class NoteToolbarSettingTab extends PluginSettingTab {
@@ -793,9 +793,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 			});
 
-		new Setting(containerEl)
+		const emptyViewSetting = new Setting(containerEl)
 			.setName(t('setting.display-locations.option-emptyview-tbar'))
 			.setDesc(learnMoreFr(t('setting.display-locations.option-emptyview-tbar-description'), 'New-tab-view'))
+			.setClass('note-toolbar-setting-item-control-std-with-help')
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.ntb, cb.inputEl);
 				cb.setPlaceholder(t('setting.display-locations.option-emptyview-tbar-placeholder'))
@@ -806,9 +807,16 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						const hasEmptyViewToolbar = !!this.ntb.settings.emptyViewToolbar;
 						const launchpadSettingEl = this.containerEl.querySelector('#note-toolbar-launchpad-setting');
 						launchpadSettingEl?.setAttribute('data-active', hasEmptyViewToolbar.toString());
+						// update toolbar preview
+						const toolbarPreviewFr = newToolbar && createToolbarPreviewFr(this.ntb, newToolbar, undefined, false);
+						removeFieldHelp(emptyViewSetting.controlEl);
+						setFieldHelp(emptyViewSetting.controlEl, toolbarPreviewFr);
 						await this.ntb.settingsManager.save();
 					}, 250));
 			});
+		const emptyViewToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar);
+		let emptyViewToolbarFr = emptyViewToolbar && createToolbarPreviewFr(this.ntb, emptyViewToolbar, undefined, false);
+		setFieldHelp(emptyViewSetting.controlEl, emptyViewToolbarFr);
 
 		const launchpadSetting = new Setting(containerEl)
 			.setName(t('setting.display-locations.option-launchpad'))
@@ -837,9 +845,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					})
 				);
 
-		new Setting(containerEl)
+		const textToolbarSetting = new Setting(containerEl)
 			.setName(t('setting.display-locations.option-text'))
 			.setDesc(t('setting.display-locations.option-text-description'))
+			.setClass('note-toolbar-setting-item-control-std-with-help')
 			.addSearch((cb) => {
 				new ToolbarSuggester(this.ntb, cb.inputEl);
 				cb.setPlaceholder(t('setting.display-locations.option-text-placeholder'))
@@ -848,9 +857,16 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						// let isValid = await updateItemComponentStatus(this.plugin, name, SettingType.Toolbar, cb.inputEl.parentElement);
 						const newToolbar = this.ntb.settingsManager.getToolbarByName(name);
 						this.ntb.settings.textToolbar = newToolbar?.uuid ?? null;
+						// update toolbar preview
+						const toolbarPreviewFr = newToolbar && createToolbarPreviewFr(this.ntb, newToolbar, undefined, false);
+						removeFieldHelp(textToolbarSetting.controlEl);
+						setFieldHelp(textToolbarSetting.controlEl, toolbarPreviewFr);
 						await this.ntb.settingsManager.save();
 					}, 250));
 			});
+		const textToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
+		const textToolbarPreviewFr = textToolbar && createToolbarPreviewFr(this.ntb, textToolbar, undefined, false);
+		setFieldHelp(textToolbarSetting.controlEl, textToolbarPreviewFr);
 
 	}
 
