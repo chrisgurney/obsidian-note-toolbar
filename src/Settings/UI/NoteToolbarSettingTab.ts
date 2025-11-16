@@ -17,10 +17,13 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 	private itemListIdCounter: number = 0;
 
+	// track UI state
 	private calloutSettingsOpen: boolean = false;
 	private contextSettingsOpen: boolean = false;
 	private itemListOpen: boolean = true;
 	private mappingListOpen: boolean = true;
+	private lastScrollPosition: number;
+	private lastScrollListenerRegistered = false;
 
 	// private ruleUi: RuleUi;
 
@@ -75,27 +78,57 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayCopyAsCalloutSettings(containerEl);
 		this.displayOtherSettings(containerEl);
 
-		// if search is enabled (>4 toolbars), focus on search icon by default
-		if (!focusSelector && (this.ntb.settings.toolbars.length > 4)) {
-			focusSelector = Platform.isPhone ? focusSelector : '#tbar-search input';
-		}
-
-		if (focusSelector) {
-			let focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
-			// TODO: does this focus() need a setTimeout? 
-			focusEl?.focus();
-			if (scrollToFocus) {
-				setTimeout(() => { 
-					focusEl?.scrollIntoView(true);
-				}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard	
-			}
-		}
-
-		// scroll to the position when the modal was last open
-		this.rememberLastPosition(this.containerEl);
+		// scroll + focus view
+		this.displayFocusScroll(focusSelector, scrollToFocus);
 
 		// show the What's New view once, if the user hasn't seen it yet
 		showWhatsNewIfNeeded(this.ntb);
+
+	}
+
+	/**
+	 * Scrolls and optionally focusses on the given selector; otherwise scrolls to the previous view position.
+	 * @param focusSelector selector to focus on, after UI is rendered.
+	 * @param scrollToFocus set to true to scroll to the given selector; false otherwise.
+	 */
+	displayFocusScroll(focusSelector: string | undefined, scrollToFocus: boolean) {
+
+		// if search is enabled (>4 toolbars), focus on search field by default
+		this.ntb.debug('focusSelector', focusSelector, 'lastScrollPosition', this.lastScrollPosition);
+		if (!Platform.isPhone && (this.lastScrollPosition === undefined) && !focusSelector && (this.ntb.settings.toolbars.length > 4)) {
+			focusSelector = '#tbar-search input';
+		}
+
+		// scroll to provided selector, or last scroll position
+		if (focusSelector) {
+			requestAnimationFrame(() => {
+				const focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
+				// TODO: does this focus() need a setTimeout? 
+				focusEl?.focus();
+				if (scrollToFocus) {
+					setTimeout(() => { 
+						focusEl?.scrollIntoView(true);
+					}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard	
+				}
+			});
+		}
+		else if (this.lastScrollPosition != null && this.lastScrollPosition > 0) {
+			// wait for content to render before scrolling
+			const targetPosition = this.lastScrollPosition;
+			requestAnimationFrame(() => {
+				this.containerEl.scrollTo({ top: targetPosition, behavior: "auto" });
+				// this.ntb.debug("Restored scroll to:", targetPosition);
+			});
+		}
+
+		// listen to scroll changes
+		if (!this.lastScrollListenerRegistered) {
+			this.ntb.registerDomEvent(this.containerEl, 'scroll', (event) => {
+				this.lastScrollPosition = this.containerEl.scrollTop;
+				// this.ntb.debug("this.lastScrollPosition UPDATE:", this.lastScrollPosition);
+			});
+			this.lastScrollListenerRegistered = true;
+		}
 
 	}
 
@@ -1244,30 +1277,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		// this.plugin.debug("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemIndex, action);
 	}
-
-	private lastScrollPosition: number;
-
-	/**
-	 * Remembers the scrolling position of the user and jumps to it on display.
-	 * @author Taitava (Shell Commands plugin)
-	 * @link https://github.com/Taitava/obsidian-shellcommands/blob/8d030a23540d587a85bd0dfe2e08c8e6b6b955ab/src/settings/SC_MainSettingsTab.ts#L701 
-	*/
-    private rememberLastPosition(containerEl: HTMLElement) {
-
-		// this.plugin.debug("rememberLastPosition:", containerEl);
-
-        // go to the last position
-		containerEl.scrollTo({
-			top: this.lastScrollPosition,
-			behavior: "auto",
-		});
-
-        // listen to changes
-        this.ntb.registerDomEvent(containerEl, 'scroll', (event) => {
-            this.lastScrollPosition = containerEl.scrollTop;
-		});
-
-    }
 
 	/*************************************************************************
 	 * UTILITIES
