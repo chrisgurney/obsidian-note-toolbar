@@ -181,7 +181,7 @@ export default class ToolbarSettingsModal extends Modal {
 					// check for existing toolbar with this name
 					let existingToolbar = this.ntb.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
-						setFieldError(this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
+						setFieldError(this.ntb, this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
 					}
 					else {
 						removeFieldError(cb.inputEl, 'beforeend');
@@ -320,6 +320,7 @@ export default class ToolbarSettingsModal extends Modal {
 				if (itemPreviewEl) {
 					updateItemComponentStatus(
 						this.ntb,
+						this,
 						(toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
 						SettingFieldItemMap[toolbarItem.linkAttr.type], 
 						itemPreviewEl,
@@ -748,7 +749,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.onChange(debounce(async (itemText) => {
 						if (itemText) {
 							cb.inputEl.value = itemText;
-							setFieldError(this, cb.inputEl, 'beforeend', t('setting.position.option-defaultitem-error-invalid'));
+							setFieldError(this.ntb, this, cb.inputEl, 'beforeend', t('setting.position.option-defaultitem-error-invalid'));
 						}
 						else {
 							removeFieldError(cb.inputEl, 'beforeend');

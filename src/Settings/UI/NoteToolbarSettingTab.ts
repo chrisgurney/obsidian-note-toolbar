@@ -803,7 +803,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setPlaceholder(t('setting.display-locations.option-emptyview-tbar-placeholder'))
 					.setValue(existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '')
 					.onChange(debounce(async (name) => {
-						const isValid = await updateItemComponentStatus(this.ntb, name, SettingType.Toolbar, emptyViewSetting.controlEl, undefined, 'beforeend');
+						const isValid = await updateItemComponentStatus(this.ntb, this, name, SettingType.Toolbar, emptyViewSetting.controlEl, undefined, 'beforeend');
 						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 						this.ntb.settings.emptyViewToolbar = newToolbar?.uuid ?? null;
 						// toggle launchpad setting
@@ -816,7 +816,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						setFieldHelp(emptyViewSetting.controlEl, toolbarPreviewFr);
 						await this.ntb.settingsManager.save();
 					}, 250));
-				await updateItemComponentStatus(this.ntb, existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+				await updateItemComponentStatus(this.ntb, this, existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 			});
 		const emptyViewToolbarFr = existingEmptyViewToolbar && createToolbarPreviewFr(this.ntb, existingEmptyViewToolbar, undefined, false);
 		setFieldHelp(emptyViewSetting.controlEl, emptyViewToolbarFr);
@@ -858,7 +858,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setPlaceholder(t('setting.display-locations.option-text-placeholder'))
 					.setValue(existingTextToolbar ? existingTextToolbar.name : '')
 					.onChange(debounce(async (name) => {
-						const isValid = await updateItemComponentStatus(this.ntb, name, SettingType.Toolbar, textToolbarSetting.controlEl, undefined, 'beforeend');
+						const isValid = await updateItemComponentStatus(this.ntb, this, name, SettingType.Toolbar, textToolbarSetting.controlEl, undefined, 'beforeend');
 						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 						this.ntb.settings.textToolbar = newToolbar?.uuid ?? null;
 						// update toolbar preview
@@ -867,7 +867,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						setFieldHelp(textToolbarSetting.controlEl, toolbarPreviewFr);
 						await this.ntb.settingsManager.save();
 					}, 250));
-				await updateItemComponentStatus(this.ntb, existingTextToolbar ? existingTextToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+				await updateItemComponentStatus(this.ntb, this, existingTextToolbar ? existingTextToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 			});
 		const textToolbarPreviewFr = existingTextToolbar && createToolbarPreviewFr(this.ntb, existingTextToolbar, undefined, false);
 		setFieldHelp(textToolbarSetting.controlEl, textToolbarPreviewFr);

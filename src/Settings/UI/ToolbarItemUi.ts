@@ -87,7 +87,7 @@ export default class ToolbarItemUi {
                     .setValue(toolbarItem.label)
                     .onChange(
                         debounce(async (value) => {
-                            let isValid = updateItemComponentStatus(this.ntb, value, SettingType.Text, text.inputEl.parentElement);
+                            let isValid = updateItemComponentStatus(this.ntb, this.parent, value, SettingType.Text, text.inputEl.parentElement);
                             toolbarItem.label = value;
                             // TODO: if the label contains vars, set the flag to always rerender this toolbar
                             // however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
@@ -96,7 +96,7 @@ export default class ToolbarItemUi {
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
-                    updateItemComponentStatus(this.ntb, toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
+                    updateItemComponentStatus(this.ntb, this.parent, toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
                 });	
             labelField.settingEl.id = 'note-toolbar-item-field-label';
 
@@ -108,14 +108,14 @@ export default class ToolbarItemUi {
                     .setValue(toolbarItem.tooltip)
                     .onChange(
                         debounce(async (value) => {
-                            let isValid = updateItemComponentStatus(this.ntb, value, SettingType.Text, text.inputEl.parentElement);
+                            let isValid = updateItemComponentStatus(this.ntb, this.parent, value, SettingType.Text, text.inputEl.parentElement);
                             toolbarItem.tooltip = value;
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
-                    updateItemComponentStatus(this.ntb, toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
+                    updateItemComponentStatus(this.ntb, this.parent, toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
                 });
             tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
             
@@ -576,7 +576,7 @@ export default class ToolbarItemUi {
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new CommandSuggester(this.ntb.app, cb.inputEl, async (command) => {
-                            await updateItemComponentStatus(this.ntb, command.id, SettingType.Command, cb.inputEl.parentElement);
+                            await updateItemComponentStatus(this.ntb, this.parent, command.id, SettingType.Command, cb.inputEl.parentElement);
                             cb.inputEl.value = command.name;
                             toolbarItem.link = command.name;
                             toolbarItem.linkAttr.commandId = command.id;
@@ -588,14 +588,14 @@ export default class ToolbarItemUi {
                             .setValue(getCommandNameById(this.ntb, toolbarItem.linkAttr.commandId) || '')
                             .onChange(debounce(async (commandName) => {
                                 const commandId = commandName ? getCommandIdByName(this.ntb, commandName) : '';
-                                const isValid = await updateItemComponentStatus(this.ntb, commandId, SettingType.Command, cb.inputEl.parentElement);
+                                const isValid = await updateItemComponentStatus(this.ntb, this.parent, commandId, SettingType.Command, cb.inputEl.parentElement);
                                 toolbarItem.link = isValid && commandName ? commandName : '';
                                 toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
                                 toolbarItem.linkAttr.type = type;
                                 await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                             }, 500));
-                        updateItemComponentStatus(this.ntb, toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
+                        updateItemComponentStatus(this.ntb, this.parent, toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
                     });	
 
                 const commandAdvancedEl = fieldDiv.createDiv();
@@ -695,14 +695,14 @@ export default class ToolbarItemUi {
                         cb.setPlaceholder(t('setting.item.option-file-placeholder'))
                             .setValue(toolbarItem.link)
                             .onChange(debounce(async (value) => {
-                                let isValid = await updateItemComponentStatus(this.ntb, value, SettingType.File, cb.inputEl.parentElement);
+                                let isValid = await updateItemComponentStatus(this.ntb, this.parent, value, SettingType.File, cb.inputEl.parentElement);
                                 toolbarItem.link = isValid ? normalizePath(value) : '';
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
                                 await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                             }, 500));
-                        updateItemComponentStatus(this.ntb, toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
+                        updateItemComponentStatus(this.ntb, this.parent, toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
                     });
                 const fileAdvancedEl = fieldDiv.createDiv();
                 fileAdvancedEl.addClass('note-toolbar-setting-item-link-advanced');
@@ -732,7 +732,7 @@ export default class ToolbarItemUi {
                         cb.setPlaceholder(t('setting.item.option-item-group-placeholder'))
                             .setValue(initialGroupToolbar ? initialGroupToolbar.name : '')
                             .onChange(debounce(async (name) => {
-                                let isValid = await updateItemComponentStatus(this.ntb, name, SettingType.Toolbar, cb.inputEl.parentElement);
+                                let isValid = await updateItemComponentStatus(this.ntb, this.parent, name, SettingType.Toolbar, cb.inputEl.parentElement);
                                 let groupToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
                                 toolbarItem.link = groupToolbar ? groupToolbar.uuid : '';
                                 toolbarItem.linkAttr.commandId = '';
@@ -745,7 +745,7 @@ export default class ToolbarItemUi {
                                     : learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
                                 setFieldHelp(groupSetting.controlEl, groupPreviewFr);
                             }, 500));
-                        updateItemComponentStatus(this.ntb, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
+                        updateItemComponentStatus(this.ntb, this.parent, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
                     });
                 setFieldHelp(groupSetting.settingEl, helpTextFr);
                 break;
@@ -759,7 +759,7 @@ export default class ToolbarItemUi {
                         cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
                             .setValue(initialMenuToolbar ? initialMenuToolbar.name : '')
                             .onChange(debounce(async (name) => {
-                                updateItemComponentStatus(this.ntb, name, SettingType.Toolbar, cb.inputEl.parentElement);
+                                updateItemComponentStatus(this.ntb, this.parent, name, SettingType.Toolbar, cb.inputEl.parentElement);
                                 // TODO? return an ID from the suggester vs. the name
                                 let menuToolbar = this.ntb.settingsManager.getToolbarByName(name);
                                 toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
@@ -780,7 +780,7 @@ export default class ToolbarItemUi {
                                 }
                                 setFieldHelp(menuSetting.controlEl, menuHelpFr);
                             }, 500));
-                        updateItemComponentStatus(this.ntb, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
+                        updateItemComponentStatus(this.ntb, this.parent, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
                     });
                 setFieldHelp(menuSetting.controlEl, helpTextFr);
                 break;
@@ -793,7 +793,7 @@ export default class ToolbarItemUi {
                             .setValue(toolbarItem.link)
                             .onChange(
                                 debounce(async (value) => {
-                                    updateItemComponentStatus(this.ntb, value, SettingType.Text, cb.inputEl.parentElement);
+                                    updateItemComponentStatus(this.ntb, this.parent, value, SettingType.Text, cb.inputEl.parentElement);
                                     toolbarItem.link = value;
                                     toolbarItem.linkAttr.commandId = '';
                                     toolbarItem.linkAttr.type = type;
@@ -801,7 +801,7 @@ export default class ToolbarItemUi {
                                     await this.ntb.settingsManager.save();
                                     this.renderPreview(toolbarItem);
                                 }, 500));
-                        updateItemComponentStatus(this.ntb, toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
+                        updateItemComponentStatus(this.ntb, this.parent, toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
                     });
                 // unable to put help about vars below the field without restructuring; leaving out for now
                 // setFieldHelp(uriSetting.controlEl, helpTextFr);
@@ -910,7 +910,7 @@ export default class ToolbarItemUi {
                             .setClass("note-toolbar-setting-item-field-link")
                             .addSearch((cb) => {
                                 new CommandSuggester(this.ntb.app, cb.inputEl, async (command) => {
-                                    updateItemComponentStatus(this.ntb, command.id, param.type, cb.inputEl.parentElement);
+                                    updateItemComponentStatus(this.ntb, this.parent, command.id, param.type, cb.inputEl.parentElement);
                                     config[param.parameter as keyof ScriptConfig] = command.id;
                                     cb.inputEl.value = command.name;
                                     await this.ntb.settingsManager.save();
@@ -919,12 +919,12 @@ export default class ToolbarItemUi {
                                     .setValue(initialValue ? (getCommandNameById(this.ntb, initialValue) || '') : '')
                                     .onChange(debounce(async (commandName) => {
                                         const commandId = commandName ? getCommandIdByName(this.ntb, commandName) : '';
-                                        const isValid = await updateItemComponentStatus(this.ntb, commandId, param.type, cb.inputEl.parentElement);
+                                        const isValid = await updateItemComponentStatus(this.ntb, this.parent, commandId, param.type, cb.inputEl.parentElement);
                                         config[param.parameter as keyof ScriptConfig] = isValid && commandId ? commandId : '';
                                         await this.ntb.settingsManager.save();
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
-                                updateItemComponentStatus(this.ntb, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
+                                updateItemComponentStatus(this.ntb, this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         break;
                     case SettingType.File:
@@ -941,13 +941,13 @@ export default class ToolbarItemUi {
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(debounce(async (value) => {
-                                        let isValid = await updateItemComponentStatus(this.ntb, value, param.type, cb.inputEl.parentElement);
+                                        let isValid = await updateItemComponentStatus(this.ntb, this.parent, value, param.type, cb.inputEl.parentElement);
                                         config[param.parameter as keyof ScriptConfig] = isValid ? normalizePath(value) : '';
                                         this.toolbar.updated = new Date().toISOString();
                                         await this.ntb.settingsManager.save();
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
-                                updateItemComponentStatus(this.ntb, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
+                                updateItemComponentStatus(this.ntb, this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         break;
                     case SettingType.Text: {
@@ -962,13 +962,13 @@ export default class ToolbarItemUi {
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(
                                         debounce(async (value: string) => {
-                                            let isValid = await updateItemComponentStatus(this.ntb, value, param.type, cb.inputEl.parentElement);
+                                            let isValid = await updateItemComponentStatus(this.ntb, this.parent, value, param.type, cb.inputEl.parentElement);
                                             config[param.parameter as keyof ScriptConfig] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
                                             await this.ntb.settingsManager.save();
                                             this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
-                                updateItemComponentStatus(this.ntb, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
+                                updateItemComponentStatus(this.ntb, this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         // fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
                         break;
@@ -982,13 +982,13 @@ export default class ToolbarItemUi {
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(
                                         debounce(async (value: string) => {
-                                            let isValid = await updateItemComponentStatus(this.ntb, value, param.type, cb.inputEl.parentElement);
+                                            let isValid = await updateItemComponentStatus(this.ntb, this.parent, value, param.type, cb.inputEl.parentElement);
                                             config[param.parameter as keyof ScriptConfig] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
                                             await this.ntb.settingsManager.save();
                                             this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
-                                updateItemComponentStatus(this.ntb, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);					
+                                updateItemComponentStatus(this.ntb, this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);					
                             });
                         break;
                 }

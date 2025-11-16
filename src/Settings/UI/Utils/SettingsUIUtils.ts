@@ -9,6 +9,7 @@ import ItemModal from "../Modals/ItemModal";
 import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
+import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
 
 /**
  * Returns an element contianing a dismissable onboarding message.
@@ -594,6 +595,7 @@ export function renderItemSuggestion(
 /**
  * Updates the UI state of the given component if the value is invalid.
  * @param ntb NoteToolbarPlugin
+ * @param parent Setting UI tab/modal that the component is in
  * @param itemValue string value to check
  * @param fieldType SettingFieldType to check against
  * @param componentEl HTMLElement to update
@@ -603,6 +605,7 @@ export function renderItemSuggestion(
  */
 export async function updateItemComponentStatus(
 	ntb: NoteToolbarPlugin,
+	parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal,
 	itemValue: string, 
 	fieldType: SettingType, 
 	componentEl: HTMLElement | null, 
@@ -704,7 +707,7 @@ export async function updateItemComponentStatus(
 								// TODO? error if required parameter is empty?
 								const value = toolbarItem.scriptConfig?.[param.parameter as keyof ScriptConfig] ?? null;
 								if (value) {
-									const subfieldValid = await updateItemComponentStatus(ntb, value, param.type, componentEl);
+									const subfieldValid = await updateItemComponentStatus(ntb, this.parent, value, param.type, componentEl);
 									status = subfieldValid ? Status.Valid : Status.Invalid;
 								}
 							}
@@ -735,7 +738,7 @@ export async function updateItemComponentStatus(
 			isValid = false;
 			break;
 		case Status.Invalid:
-			setFieldError(this.parent, componentEl, errorPosition, statusMessage, statusLink);
+			setFieldError(ntb, parent, componentEl, errorPosition, statusMessage, statusLink);
 			isValid = false;
 			break;
 	}
@@ -840,6 +843,7 @@ export async function moveToolbarItem(ntb: NoteToolbarPlugin, fromToolbar: Toolb
 
 /**
  * Updates the given element with an error border and text.
+ * @param ntb NoteToolbarPlugin
  * @param parent ToolbarSettingsModal
  * @param fieldEl HTMLElement to update
  * @param position Position to insert the error text
@@ -847,7 +851,8 @@ export async function moveToolbarItem(ntb: NoteToolbarPlugin, fromToolbar: Toolb
  * @param errorLink Optional link to display after error text
  */
 export function setFieldError(
-	parent: ToolbarSettingsModal | ItemModal, 
+	ntb: NoteToolbarPlugin,
+	parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal, 
 	fieldEl: HTMLElement | null, 
 	position: 'afterend' | 'beforeend',
 	errorText?: string, 
@@ -870,13 +875,13 @@ export function setFieldError(
 				if (errorLink) {
 					// as it's not easy to listen for plugins being enabled,
 					// user will have to click a refresh link to dismiss the error
-					parent.ntb.registerDomEvent(errorLink, 'click', (event) => {
+					ntb.registerDomEvent(errorLink, 'click', (event) => {
 						let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
 						let refreshIcon = refreshLink.createSpan();
 						setIcon(refreshIcon, 'refresh-cw');
 						let oldLink = event.currentTarget as HTMLElement;
 						oldLink?.replaceWith(refreshLink);
-						parent.ntb.registerDomEvent(refreshLink, 'click', event => {
+						ntb.registerDomEvent(refreshLink, 'click', event => {
 							parent.display();
 						});
 					});
