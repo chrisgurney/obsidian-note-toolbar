@@ -598,6 +598,7 @@ export function renderItemSuggestion(
  * @param fieldType SettingFieldType to check against
  * @param componentEl HTMLElement to update
  * @param toolbarItem ToolbarItemSettings for the item if needed to provide more context
+ * @param [errorPosition='afterend'] where to add the error relative to the given componentEl
  * @returns true if the item is valid; false otherwise
  */
 export async function updateItemComponentStatus(
@@ -605,7 +606,8 @@ export async function updateItemComponentStatus(
 	itemValue: string, 
 	fieldType: SettingType, 
 	componentEl: HTMLElement | null, 
-	toolbarItem?: ToolbarItemSettings): Promise<boolean> 
+	toolbarItem?: ToolbarItemSettings,
+	errorPosition: 'beforeend' | 'afterend' = 'afterend'): Promise<boolean> 
 {
 
 	const enum Status {
@@ -726,14 +728,14 @@ export async function updateItemComponentStatus(
 		}
 	}
 
-	removeFieldError(componentEl, 'afterend');
+	removeFieldError(componentEl, errorPosition);
 	switch (status) {
 		case Status.Empty:
 			// TODO? flag for whether empty should show as an error or not
 			isValid = false;
 			break;
 		case Status.Invalid:
-			setFieldError(this.parent, componentEl, 'afterend', statusMessage, statusLink);
+			setFieldError(this.parent, componentEl, errorPosition, statusMessage, statusLink);
 			isValid = false;
 			break;
 	}
