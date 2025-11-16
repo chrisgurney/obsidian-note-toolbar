@@ -2127,6 +2127,7 @@ input[type="text"].note-toolbar-setting-error,
             display: flex;
             flex-direction: column;
             align-items: end;
+            max-width: 100%;
             /* don't wrap toolbar previews */
             & .note-toolbar-setting-tbar-preview {
                 flex-wrap: nowrap;
@@ -2134,6 +2135,9 @@ input[type="text"].note-toolbar-setting-error,
                 position: relative;
                 max-height: calc(var(--line-height-tight) * 1em);
                 max-width: 250px;
+                .is-mobile & {
+                    max-width: inherit;
+                }
                 & .note-toolbar-setting-toolbar-list-preview-item {
                     & .note-toolbar-setting-item-preview-code {
                         align-self: flex-start;
