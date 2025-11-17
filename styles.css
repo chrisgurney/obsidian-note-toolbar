@@ -1032,6 +1032,7 @@ settings:
         title.zh: '工具栏边框圆角（单位：px）'
         title.uk: 'Радіус закруглення рамки панелі (пікселі)'
         description: 'How rounded the toolbar is. The higher the number, the more rounded.'
+        description.zh: '工具栏的圆角程度。数值越高，圆角越明显。'
         description.uk: 'Закруглення панелі. Чим більше число, тим більше округлення.'
         type: variable-number
         default: 5
@@ -1039,7 +1040,9 @@ settings:
     -
         id: toolbar-text-tbar
         title: 'Toolbars (text)'
+        title.zh: '工具栏（文本）'
         description: 'Styles for text toolbars'
+        description.zh: '文本工具栏的样式'
         type: heading
         level: 1
         collapsed: true
@@ -1171,6 +1174,7 @@ settings:
         title.zh: '工具栏边框圆角（单位：px）'
         title.uk: 'Радіус закруглення рамки панелі (пікселі)'
         description: 'How rounded the toolbar is. The higher the number, the more rounded.'
+        description.zh: '工具栏的圆角程度。数值越高，圆角越明显。'
         description.uk: 'Закруглення панелі. Чим більше число, тим більше округлення.'
         type: variable-number
         default: 5
@@ -1178,7 +1182,9 @@ settings:
     -
         id: cg-nt-tbar-text-shadow
         title: 'Shadow'
+        title.zh: '阴影'
         description: 'Shadow behind the text toolbar'
+        description.zh: '文本工具栏背后的阴影'
         type: variable-select
         default: 'var(--shadow-s)'
         options:
