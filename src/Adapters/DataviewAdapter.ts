@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { displayScriptError, importArgs } from "Utils/Utils";
+import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -66,7 +66,7 @@ export default class DataviewAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
+                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -165,7 +165,7 @@ export default class DataviewAdapter extends Adapter {
         catch (error) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
-                    displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+                    this.displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
                     result = t('adapter.error.general', { error: error });
                     break;
                 case ErrorBehavior.Report:
@@ -203,7 +203,7 @@ export default class DataviewAdapter extends Adapter {
             args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
-            displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error, containerEl);
+            this.displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error, containerEl);
             return;
         }
         
@@ -216,7 +216,7 @@ export default class DataviewAdapter extends Adapter {
         let viewFile = this.ntb?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
-            displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
+            this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
 
@@ -248,7 +248,7 @@ export default class DataviewAdapter extends Adapter {
              }
          }
          catch (error) {
-             displayScriptError(t('adapter.error.exec-failed', { filename: viewFile.path }), error, containerEl);
+             this.displayScriptError(t('adapter.error.exec-failed', { filename: viewFile.path }), error, containerEl);
          }
          finally {
              component.unload();
@@ -298,7 +298,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+            this.displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
         }
         finally {
             component.unload();
@@ -323,7 +323,7 @@ export default class DataviewAdapter extends Adapter {
         const activeFile = this.ntb?.app.workspace.getActiveFile();
 
         if (!activeFile) {
-            displayScriptError(t('adapter.error.query-note-not-open'));
+            this.displayScriptError(t('adapter.error.query-note-not-open'));
             return t('adapter.error.query-note-not-open');
         }
 
@@ -354,7 +354,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(t('adapter.error.query-failed', { expression: expression }), error, containerEl);
+            this.displayScriptError(t('adapter.error.query-failed', { expression: expression }), error, containerEl);
             result = t('adapter.error.general', { error: error });
         }
         finally {

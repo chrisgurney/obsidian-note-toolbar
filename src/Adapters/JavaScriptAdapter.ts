@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { displayScriptError, importArgs } from "Utils/Utils";
+import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -47,7 +47,7 @@ export default class JavaScriptAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
+                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -109,7 +109,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         let viewFile = this.ntb?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
-            displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
+            this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
 
@@ -144,7 +144,7 @@ export default class JavaScriptAdapter extends Adapter {
             args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
-            displayScriptError(t('adapter.error.args-parsing'));
+            this.displayScriptError(t('adapter.error.args-parsing'));
             return t('adapter.error.args-parsing-error', { error: error });
         }
 
@@ -176,7 +176,7 @@ export default class JavaScriptAdapter extends Adapter {
             catch (error) {
                 switch (errorBehavior) {
                     case ErrorBehavior.Display:
-                        displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+                        this.displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
                         result = t('adapter.error.general', { error: error });
                         break;
                     case ErrorBehavior.Report:

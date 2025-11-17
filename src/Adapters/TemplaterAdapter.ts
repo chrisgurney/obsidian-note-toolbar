@@ -1,7 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { displayScriptError } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -61,7 +60,7 @@ export default class TemplaterAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
+                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -136,7 +135,7 @@ export default class TemplaterAdapter extends Adapter {
                 }
             }
             catch (error) {
-                displayScriptError(error);
+                this.displayScriptError(error);
             }
         }
 
@@ -169,7 +168,7 @@ export default class TemplaterAdapter extends Adapter {
                 }
             }
             catch (error) {
-                displayScriptError(error);
+                this.displayScriptError(error);
             }
         }
 
@@ -198,7 +197,7 @@ export default class TemplaterAdapter extends Adapter {
 
         const activeFile = this.ntb?.app.workspace.getActiveFile();
         if (!activeFile && errorBehavior === ErrorBehavior.Display) {
-            displayScriptError(t('adapter.error.expr-note-not-open'));
+            this.displayScriptError(t('adapter.error.expr-note-not-open'));
             return t('adapter.error.expr-note-not-open');
         }
 
@@ -221,7 +220,7 @@ export default class TemplaterAdapter extends Adapter {
         catch (error) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
-                    displayScriptError(error);
+                    this.displayScriptError(error);
                     break;
                 case ErrorBehavior.Report:
                     result = expression;
@@ -252,7 +251,7 @@ export default class TemplaterAdapter extends Adapter {
 
         const activeFile = this.ntb?.app.workspace.getActiveFile();
         if (!activeFile) {
-            displayScriptError(t('adapter.error.function-note-not-open'));
+            this.displayScriptError(t('adapter.error.function-note-not-open'));
             return t('adapter.error.function-note-not-open');
         }
 
@@ -275,7 +274,7 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
+            this.displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
         }
 
         return result;

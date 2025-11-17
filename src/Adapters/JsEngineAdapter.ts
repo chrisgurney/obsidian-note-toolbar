@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Component } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { displayScriptError, importArgs } from "Utils/Utils";
+import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 
@@ -59,7 +59,7 @@ export default class JsEngineAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
+                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -143,7 +143,7 @@ export default class JsEngineAdapter extends Adapter {
         catch (error) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
-                    displayScriptError(error);
+                    this.displayScriptError(error);
                     break;
                 case ErrorBehavior.Report:
                     console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
@@ -187,7 +187,7 @@ export default class JsEngineAdapter extends Adapter {
             args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
-            displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error);
+            this.displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error);
             return t('adapter.error.args-parsing-error', { filename: filename, error: error });
         }
         
@@ -205,11 +205,11 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb?.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
+                        this.displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
                     }
                 }
                 else {
-                    displayScriptError(t('adapter.error.function-not-found', { function: functionName }));
+                    this.displayScriptError(t('adapter.error.function-not-found', { function: functionName }));
                 }
             }
         }
@@ -252,7 +252,7 @@ export default class JsEngineAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error, containerEl);
+            this.displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error, containerEl);
         }
         finally {
             component.unload();
