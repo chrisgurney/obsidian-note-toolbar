@@ -200,24 +200,30 @@ export default class ToolbarEventHandler {
 			}
 
 			//
-			// show/hide properties
+			// show/hide properties + bases toolbars
 			//
 
-			const propsEl = this.ntb.el.getPropsEl();
-			if ((currentView?.getViewType() === 'markdown') && propsEl) {
-				const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
-				if (propsDisplayStyle === 'none') {
+			if (this.ntb.utils.hasView('markdown')) {
+				const propsEl = this.ntb.el.getPropsEl();
+				if (propsEl) {
+					const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
+					const uiHidden = propsDisplayStyle === 'none';
 					contextMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('toolbar.menu-show-properties'))
-							.setIcon('table-properties')
-							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('props', 'show'));
+						item.setTitle(uiHidden ? t('toolbar.menu-show-properties') : t('toolbar.menu-hide-properties'))
+							.setIcon(uiHidden ? 'captions' : 'captions-off')
+							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('props', uiHidden ? 'show' : 'hide'));
 					});
 				}
-				else {
+			}
+			else if (this.ntb.utils.hasView('bases')) {
+				const baseToolbarEl = activeDocument.querySelector('.bases-header');
+				if (baseToolbarEl) {
+					const baseToolbarDisplayStyle = getComputedStyle(baseToolbarEl).getPropertyValue('display');
+					const uiHidden = baseToolbarDisplayStyle === 'none';
 					contextMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('toolbar.menu-hide-properties'))
-							.setIcon('table-properties')
-							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('props', 'hide'));
+						item.setTitle(uiHidden ? t('toolbar.menu-show-base-toolbar') : t('toolbar.menu-hide-base-toolbar'))
+							.setIcon(uiHidden ? 'panel-top-open' : 'panel-top-close')
+							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('baseToolbar', uiHidden ? 'show' : 'hide'));
 					});
 				}
 			}

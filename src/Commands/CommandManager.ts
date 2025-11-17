@@ -453,9 +453,6 @@ export default class CommandManager {
             }
         }
 
-        // update the saved property fold state
-        this.ntb.app.saveLocalStorage(LocalVar.TogglePropsState, visibility);
-
     }
 
     // #endregion
@@ -472,14 +469,9 @@ export default class CommandManager {
         };
     }
 
-    checkView(viewType: string): boolean {
-        const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-        return currentView?.getViewType() === viewType;
-    }
-
     checkViewAndRun(viewType: string, callback: () => void): (checking: boolean) => boolean {
         return (checking: boolean) => {
-            const isCorrectView = this.checkView(viewType)
+            const isCorrectView = this.ntb.utils.hasView(viewType)
             if (!checking && isCorrectView) callback();
             return isCorrectView;
         };

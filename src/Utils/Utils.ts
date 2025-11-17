@@ -112,6 +112,16 @@ export default class PluginUtils {
 			.map(item => item.linkAttr.commandId.split(':')[0].trim());
 	}
 
+	/**
+	 * Returns true if the current view matches the given view type.
+	 * @param viewType type of view (e.g., `markdown`, `bases`).
+	 * @returns true if the current view type matches the given one.
+	 */
+    hasView(viewType: string): boolean {
+        const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        return currentView?.getViewType() === viewType;
+    }
+
 }
 
 /**
