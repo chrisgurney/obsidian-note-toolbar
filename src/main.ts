@@ -164,9 +164,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
  
-    //******************************************************************************
-    //#region DEBUGGING
-    //******************************************************************************
+    // *****************************************************************************
+    // #region DEBUGGING
+    // *****************************************************************************
 
     /**
      * Utility for debug logging.
@@ -188,6 +188,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settings.debugEnabled && console.groupEnd();
 	}
 
-	//#endregion
+	// #endregion
 
 }

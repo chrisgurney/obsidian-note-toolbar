@@ -5,12 +5,12 @@ import { getLanguage, PaneType } from "obsidian";
 export const SETTINGS_VERSION = 20250313.1;
 export const WHATSNEW_VERSION = '1.26';
 
-/******************************************************************************
- * TRANSLATIONS
- * 
- * Language codes used by Obsidian per:
- * https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages
- ******************************************************************************/
+// *****************************************************************************
+// #region TRANSLATIONS
+// 
+// Language codes used by Obsidian per:
+// https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages
+// *****************************************************************************
 
 import * as de from 'I18n/de.json';
 import * as en from 'I18n/en.json';
@@ -33,9 +33,11 @@ Locales.init();
 
 export const t = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
-/******************************************************************************
- CONSTANTS
- ******************************************************************************/
+//#endregion
+
+// *****************************************************************************
+// #region CONSTANTS
+//******************************************************************************
 
 export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
 export const COMMAND_PREFIX_ITEM = 'use-toolbar-item-';
@@ -50,9 +52,11 @@ export const GALLERY_DIVIDER_ID = 'GALLERY_DIVIDER';
 export const CORE_PLUGIN_IDS = ['bookmarks', 'daily-notes', 'file-explorer', 'global-search', 'workspace'];
 export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'open-with-default-app', 'theme', 'workspace'];
 
-/******************************************************************************
- TYPES
- ******************************************************************************/
+// #endregion
+
+// *****************************************************************************
+// #region TYPES
+// *****************************************************************************
 
 export const enum ComponentType {
 	Icon = 'icon',
@@ -501,9 +505,11 @@ export interface ScriptConfig {
 	postCommand?: string;
 };
 
-/******************************************************************************
- UI STRINGS
- ******************************************************************************/
+// #endregion
+
+// ****************************************************************************
+// #region UI STRINGS
+// ****************************************************************************
 
 export const URL_FEEDBACK_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform';
 export const URL_ISSUE_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform';
@@ -622,3 +628,5 @@ export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 export const SETTINGS_DISCLAIMERS: { [key: string]: string }[] = [
 	{ 'nativeMenus': t('setting.position.option-fab-desktop-native-menus-disclaimer') }
 ];
+
+// #endregion
