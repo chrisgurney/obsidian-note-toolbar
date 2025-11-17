@@ -13,7 +13,7 @@ export default class PluginUtils {
 	 * @param event 
 	 * @returns 
 	 */
-	calcMouseItemIndex(event: MouseEvent): number | undefined {
+	calcToolbarItemIndex(event: MouseEvent): number | undefined {
 		const toolbarListEl = this.ntb.el.getToolbarListEl();
 		if (!toolbarListEl) return;
 
@@ -104,7 +104,7 @@ export default class PluginUtils {
 	 * @param toolbar ToolbarSettings to check for command usage
 	 * @returns an array of plugin IDs that are invalid, or an empty array otherwise
 	 */
-	toolbarInvalidCommands(toolbar: ToolbarSettings): string[] {
+	getInvalidCommandsForToolbar(toolbar: ToolbarSettings): string[] {
 		return toolbar.items
 			.filter(item =>
 				item.linkAttr.type === ItemType.Command && !(item.linkAttr.commandId in this.ntb.app.commands.commands)

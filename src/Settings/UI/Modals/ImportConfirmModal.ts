@@ -54,7 +54,7 @@ export default class ImportConfirmModal extends Modal {
             // disclaimers, if any
             //
 
-            let importInvalidCommands = this.ntb.utils.toolbarInvalidCommands(toolbar);
+            let importInvalidCommands = this.ntb.utils.getInvalidCommandsForToolbar(toolbar);
             let importHasVars = this.ntb.vars.toolbarHasVars(toolbar);
 
             if (importInvalidCommands.length > 0 || importHasVars) {

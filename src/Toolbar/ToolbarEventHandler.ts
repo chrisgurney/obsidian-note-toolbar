@@ -235,7 +235,7 @@ export default class ToolbarEventHandler {
 				.setIcon('plus')
 				.setTitle(t('toolbar.menu-add-item'))
 				.onClick(async () => {
-					const toolbarItemIndex = this.ntb.utils.calcMouseItemIndex(mouseEvent);
+					const toolbarItemIndex = this.ntb.utils.calcToolbarItemIndex(mouseEvent);
 					if (toolbarSettings) openItemSuggestModal(this.ntb, toolbarSettings, 'New', undefined, toolbarItemIndex);
 				});
 		});
