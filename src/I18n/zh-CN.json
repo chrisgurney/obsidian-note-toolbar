@@ -119,6 +119,7 @@
       "file-suggester-placeholder": "选择一个文件（或文件夹）…",
       "file-suggester-placeholder_file": "选择一个文件…",
       "file-suggester-placeholder_folder": "选择一个文件夹…",
+      "instruction-autofill": "自动填充",
       "instruction-dismiss": "取消",
       "instruction-navigate": "导航",
       "instruction-select": "确认",
@@ -128,10 +129,13 @@
     }
   },
   "command": {
+    "callouts-locked-notice": "锁定笔记工具栏标注",
+    "callouts-unlocked-notice": "解锁笔记工具栏标注",
     "copy-command-notice": "命令已复制到剪贴板",
     "name-copy-cmd-as-data-element": "复制命令的 callout 项目",
     "name-copy-cmd-uri": "复制命令的 URI",
     "name-focus": "聚焦",
+    "name-focus-text-toolbar": "聚焦文本工具栏",
     "name-fold-properties": "折叠笔记属性",
     "name-hide-properties": "隐藏笔记属性",
     "name-item-suggester": "打开快速工具",
@@ -140,13 +144,12 @@
     "name-open-toolbar": "打开工具栏：{{toolbar}}",
     "name-settings": "打开插件设置",
     "name-show-properties": "显示笔记属性",
+    "name-toggle-base-toolbar": "切换数据库（Base）工具栏",
+    "name-toggle-lock-callouts": "切换笔记工具栏标注的锁定状态",
     "name-toggle-properties": "切换笔记属性的显示",
     "name-toolbar-settings": "打开工具栏设置",
     "name-toolbar-suggester": "打开快速工具栏",
-    "name-use-item": "调用 {{item}}",
-    "callouts-locked-notice": "锁定笔记工具栏标注",
-    "callouts-unlocked-notice": "解锁笔记工具栏标注",
-    "name-toggle-lock-callouts": "切换笔记工具栏标注的锁定状态"
+    "name-use-item": "调用 {{item}}"
   },
   "export": {
     "button-copy-link": "复制链接",
@@ -262,6 +265,7 @@
     "button-delete-tooltip": "删除",
     "button-drag-tooltip": "拖动以重新排序",
     "button-enable": "启用",
+    "button-expand-collapse-tooltip": "展开或收起该部分",
     "button-expand-tooltip": "展开",
     "button-gallery": "示例库",
     "button-gallery-tooltip": "打开示例库（Gallery）",
@@ -319,11 +323,23 @@
       "option-video": "视频"
     },
     "display-locations": {
+      "description": "定义工具栏在应用中的显示位置。",
+      "name": "应用内的工具栏",
       "option-emptyview-tbar": "新标签页的工具栏",
       "option-emptyview-tbar-description": "选择一个工具栏，在没有笔记打开的时显示",
       "option-emptyview-tbar-placeholder": "选择工具栏…",
       "option-launchpad": "使用工具栏替换视图（Launchpad 启动台）",
-      "option-launchpad-description": "使用该工具栏替换新标签页，作为启动台呈现。"
+      "option-launchpad-description": "使用该工具栏替换新标签页，作为启动台呈现。",
+      "option-text": "选中文本",
+      "option-text-description": "选中文本时显示工具栏。",
+      "option-text-placeholder": "选择工具栏...",
+      "ribbon-action": {
+        "description": "设置在手机上使用功能区图标时要执行的操作。",
+        "name": "功能区 📱",
+        "option-item-suggester": "显示所有工具",
+        "option-toolbar": "显示当前工具栏",
+        "option-toolbar-suggester": "显示所有工具栏"
+      }
     },
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
@@ -332,6 +348,7 @@
       "option-property-description": "如果在此属性中找到工具栏名称，则会在笔记上显示对应的工具栏。优先于任何文件夹映射的规则。设置为'none'则会隐藏工具栏。",
       "option-property-placeholder": "属性"
     },
+    "error-invalid-text-toolbar": "错误：所选文本工具栏不存在。请检查您的设置。",
     "error-old-settings-description": "加载了旧的设置文件（{{oldVersion}}），当前最新版本为 {{currentVersion}}",
     "error-old-settings-name": "⚠️ 错误：请重新启用笔记工具栏插件（或重启 Obsidian）",
     "help": {
@@ -537,6 +554,10 @@
         "description": "启用后，将在设置发生改动后立即生效。\n否则，需要重新启动 Obsidian 才能让改动生效。",
         "name": "加载设置变动"
       },
+      "lock-callouts": {
+        "description": "启用后，单击笔记工具栏标注时不会展开进入编辑状态。\n此时，请使用标注右键菜单中的“编辑”选项进行更改。",
+        "name": "锁定笔记工具栏标注"
+      },
       "name": "其他",
       "ribbon-action": {
         "description": "使用移动端的 ribbon 图标时进行的操作",
@@ -552,10 +573,6 @@
       "show-edit-tbar": {
         "description": "在工具栏菜单中添加一个项目，以快速访问工具栏的设置。",
         "name": "在工具栏菜单中显示'编辑工具栏'的链接"
-      },
-      "lock-callouts": {
-        "description": "启用后，单击笔记工具栏标注时不会展开进入编辑状态。\n此时，请使用标注右键菜单中的“编辑”选项进行更改。",
-        "name": "锁定笔记工具栏标注"
       }
     },
     "position": {
@@ -568,31 +585,32 @@
       "option-defaultitem-description": "将此项目显示为主要按钮（代替原来的工具栏菜单）；\n其他项目将会出现在右键（移动设备上则是长按按钮）的菜单中。",
       "option-defaultitem-error-invalid": "无效的工具栏项目",
       "option-defaultitem-placeholder": "项目…",
+      "option-fab-desktop-native-menus-disclaimer": "如果您希望浮动按钮菜单中显示图标，请禁用 Obsidian 的“外观”→“原生菜单”选项。",
       "option-fabl": "浮动按钮：左侧",
       "option-fabr": "浮动按钮：右侧",
       "option-hidden": "隐藏（不显示）",
       "option-hidden-mobile": "隐藏 / 导航栏",
       "option-mobile-help": "提示：你可以从导航栏访问工具栏。",
-      "option-props": "属性下方",
-      "option-top": "置顶（固定位置）",
-      "option-fab-desktop-native-menus-disclaimer": "如果您希望浮动按钮菜单中显示图标，请禁用 Obsidian 的“外观”→“原生菜单”选项。"
+      "option-props": "笔记属性下方",
+      "option-tabbar": "标题栏按钮",
+      "option-top": "置顶（固定位置）"
     },
     "rules": {
       "button-collapse-tooltip": "收起所有规则",
       "button-expand-tooltip": "展开所有规则",
       "button-new": "新规则",
       "button-new-tooltip": "增加新规则",
+      "button-newcondition": "新条件",
+      "button-newcondition-tooltip": "为此规则添加新的条件",
       "description": "决定笔记如何显示工具栏的规则",
       "error-folder-already-mapped": "该文件夹已存在一个关联的工具栏，将使用以从上到下的首个工具栏。",
       "label-empty": "使用该按钮创建规则",
       "name": "规则",
       "name-with-count": "规则 ({{count}})",
+      "option-folder-all": "所有文件夹",
       "option-folder-root": "仅根目录",
       "placeholder-folder": "文件夹",
-      "option-folder-all": "所有文件夹",
-      "placeholder-toolbar": "工具栏",
-      "button-newcondition-tooltip": "为此规则添加新的条件",
-      "button-newcondition": "新条件"
+      "placeholder-toolbar": "工具栏"
     },
     "search": {
       "button-tooltip": "搜索工具栏",
@@ -618,6 +636,7 @@
       "option-default-empty": "未设置默认样式。",
       "option-default-name": "默认",
       "option-even": "均匀分布项目",
+      "option-inactive": "在非活动视图中隐藏",
       "option-left": "左对齐项目",
       "option-mobile-description": "覆盖默认样式。",
       "option-mobile-empty": "未设置移动端样式。使用默认样式。",
@@ -676,6 +695,7 @@
     "use-item-command": {
       "error-noname": "请重新添加命令。\n至少需要填写一个标签或工具提示（或包含表达式）。",
       "name-add": "将该项目注册为命令（Command）",
+      "name-copy": "复制该项的命令URI",
       "name-remove": "移除该项目的命令",
       "notice-command-added": "命令现在可用：\n{{command}}",
       "notice-command-added-hotkeys": "打开热键设置 {{cta}} →",
@@ -684,8 +704,7 @@
       "notice-command-removed": "命令已移除：\n{{command}}",
       "notice-command-removed_empty": "项目的命令被移除",
       "notice-command-updated": "命令已更新：\n{{command}}",
-      "tooltip-command-indicator": "已存在命令：{{command}}",
-      "name-copy": "复制该项的命令URI"
+      "tooltip-command-indicator": "已存在命令：{{command}}"
     },
     "whats-new": {
       "button-read": "阅读 ↗",
@@ -700,6 +719,7 @@
     }
   },
   "toolbar": {
+    "item-unavailable-tooltip": "项目不可用",
     "menu-add-item": "添加项目…",
     "menu-edit-item": "编辑项目：{{text}}…",
     "menu-edit-item_none": "编辑项目…",
