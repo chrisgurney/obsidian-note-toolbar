@@ -745,7 +745,6 @@ export default class ToolbarRenderer {
 	async update(toolbar: ToolbarSettings, activeFile: TFile | null, view?: ItemView) {
 
 		this.ntb.debugGroup(`updateToolbar: ${toolbar.name}`);
-		const toolbarView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
 
 		if (this.ntb.settings.keepPropsState) {
 			// restore properties to the state they were before
@@ -755,7 +754,8 @@ export default class ToolbarRenderer {
 			}
 		}
 
-		const toolbarEl = this.ntb.el.getToolbarEl(toolbarView ?? undefined);
+		const currentView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		const toolbarEl = this.ntb.el.getToolbarEl(currentView ?? undefined);
 		const currentPosition = this.ntb.settingsManager.getToolbarPosition(toolbar);
 
 		// no need to run update for certain positions
@@ -783,7 +783,7 @@ export default class ToolbarRenderer {
 
 			let itemSetting = this.ntb.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
-				const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, toolbarView);
+				const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, currentView);
 				if (isCommandAvailable) {
 					itemEl.ariaDisabled = 'false';
 				}

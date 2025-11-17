@@ -472,10 +472,14 @@ export default class CommandManager {
         };
     }
 
+    checkView(viewType: string): boolean {
+        const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        return currentView?.getViewType() === viewType;
+    }
+
     checkViewAndRun(viewType: string, callback: () => void): (checking: boolean) => boolean {
         return (checking: boolean) => {
-            const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-            const isCorrectView = currentView?.getViewType() === viewType;
+            const isCorrectView = this.checkView(viewType)
             if (!checking && isCorrectView) callback();
             return isCorrectView;
         };
