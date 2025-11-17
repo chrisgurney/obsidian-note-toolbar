@@ -416,9 +416,6 @@ export default class CommandManager {
 
             if (component === 'props') this.toggleUiFoldProps(elToToggle, visibility, isAutoFold);
 
-            // update the saved state
-            this.ntb.app.saveLocalStorage(LocalVar.TogglePropsState, visibility);
-
         }
 
     }
@@ -455,6 +452,9 @@ export default class CommandManager {
                 break;
             }
         }
+
+        // update the saved property fold state
+        this.ntb.app.saveLocalStorage(LocalVar.TogglePropsState, visibility);
 
     }
 
