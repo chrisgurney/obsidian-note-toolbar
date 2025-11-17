@@ -481,10 +481,5 @@ export default class CommandManager {
         };
     }
 
-    isViewType(viewType: string): boolean {
-        const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-        return currentView?.getViewType() === viewType;
-    }
-
     //#endregion
 }
