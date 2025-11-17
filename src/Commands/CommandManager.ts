@@ -316,7 +316,7 @@ export default class CommandManager {
         let toolbarSettings = this.ntb.settingsManager.getToolbarById(uuid);
         if (toolbarSettings) {
             const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbarSettings);
-            modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name }));
+            modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name, interpolation: { escapeValue: false } }));
             modal.open();
             if (focusItemId) modal.display(focusItemId);
         }
