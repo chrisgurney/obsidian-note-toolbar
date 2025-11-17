@@ -591,8 +591,8 @@
       "option-hidden": "隐藏（不显示）",
       "option-hidden-mobile": "隐藏 / 导航栏",
       "option-mobile-help": "提示：你可以从导航栏访问工具栏。",
-      "option-props": "属性下方",
-      "option-tabbar": "标签栏",
+      "option-props": "笔记属性下方",
+      "option-tabbar": "标题栏按钮",
       "option-top": "置顶（固定位置）"
     },
     "rules": {
