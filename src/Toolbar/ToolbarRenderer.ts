@@ -26,6 +26,14 @@ export default class ToolbarRenderer {
 	hasTextToolbar(): boolean {
 		return this.textToolbarEl?.isConnected ?? false;
 	}
+	
+	/**
+	 * Check to see if a standard toolbar (non-text toolbar) is present.
+	 * @returns true if there's a toolbar; false otherwise.
+	 */
+	hasToolbar(): boolean {
+		return this.ntb.el.getToolbarEl() !== null;
+    }
 
 	/**
 	 * Check to see if the text toolbar is in focus.

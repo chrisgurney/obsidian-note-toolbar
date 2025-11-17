@@ -24,21 +24,22 @@ export default class CommandManager {
         this.ntb.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.focus() });
         this.ntb.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.focus(true) });
         this.ntb.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
+
         this.ntb.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.openQuickTools() });
-        this.ntb.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.ntb.settings.icon, callback: async () => {
+        this.ntb.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.ntb.settings.icon, checkCallback: this.checkHasToolbarAndRun(async () => { 
             const currentToolbar = this.ntb.settingsManager.getCurrentToolbar();
             if (currentToolbar) this.openQuickTools(currentToolbar.uuid);
-        }});
+        }) });
         this.ntb.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.openToolbarSuggester() });
         this.ntb.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.openSettings() });
-        this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.openToolbarSettings() });
+        this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), checkCallback: this.checkHasToolbarAndRun(async () => { this.openToolbarSettings(); }) });
 
-        this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.toggleUi('props', 'toggle'), checkCallback: () => { return this.isViewType('markdown'); } });
-        this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.toggleUi('props', 'show'), checkCallback: () => { return this.isViewType('markdown'); }  });
-        this.ntb.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.toggleUi('props', 'hide'), checkCallback: () => { return this.isViewType('markdown'); }  });
-        this.ntb.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.toggleUi('props', 'fold'), checkCallback: () => { return this.isViewType('markdown'); }  });
+        this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), checkCallback: this.checkViewAndRun('bases', async () => { this.toggleUi('baseToolbar', 'toggle'); }) });
 
-        this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), callback: async () => this.toggleUi('baseToolbar', 'toggle'), checkCallback: () => { return this.isViewType('bases'); } });
+        this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'toggle'); }) });
+        this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'),  checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'show'); }) });
+        this.ntb.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'hide'); }) });
+        this.ntb.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'fold'); }) });
 
         this.ntb.addCommand({ id: 'toggle-lock-callouts', name: t('command.name-toggle-lock-callouts'), callback: async () => this.toggleLockCallouts() });
 
@@ -462,6 +463,23 @@ export default class CommandManager {
     //******************************************************************************
     //#region UTILITIES
     //******************************************************************************
+
+    checkHasToolbarAndRun(callback: () => void): (checking: boolean) => boolean {
+        return (checking: boolean) => {
+            const hasToolbar = this.ntb.render.hasToolbar();
+            if (!checking && hasToolbar) callback();
+            return hasToolbar;
+        };
+    }
+
+    checkViewAndRun(viewType: string, callback: () => void): (checking: boolean) => boolean {
+        return (checking: boolean) => {
+            const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+            const isCorrectView = currentView?.getViewType() === viewType;
+            if (!checking && isCorrectView) callback();
+            return isCorrectView;
+        };
+    }
 
     isViewType(viewType: string): boolean {
         const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
