@@ -1,5 +1,5 @@
 import { EditorView } from "@codemirror/view";
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, ToggleUiStateType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, ToggleUiStateType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY } from "Settings/NoteToolbarSettings";
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -13,6 +13,39 @@ export default class CommandManager {
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
+
+    /**
+     * Adds plugin's commands. Called from plugin's `onLayoutReady()`.
+     */
+    addCommands(): void {
+
+        this.ntb.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: async () => this.copy(false) });
+        this.ntb.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: async () => this.copy(true) });
+        this.ntb.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.focus() });
+        this.ntb.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.focus(true) });
+        this.ntb.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
+        this.ntb.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.openQuickTools() });
+        this.ntb.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.ntb.settings.icon, callback: async () => {
+            const currentToolbar = this.ntb.settingsManager.getCurrentToolbar();
+            if (currentToolbar) this.openQuickTools(currentToolbar.uuid);
+        }});
+        this.ntb.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.openToolbarSuggester() });
+        this.ntb.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.openSettings() });
+        this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.openToolbarSettings() });
+
+        this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.toggleUi('props', 'toggle') });
+        this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.toggleUi('props', 'show') });
+        this.ntb.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.toggleUi('props', 'hide') });
+        this.ntb.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.toggleUi('props', 'fold') });
+
+        this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), callback: async () => this.toggleUi('baseToolbar', 'toggle'), checkCallback: () => {
+            const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+            return currentView?.getViewType() === 'bases';
+        }});
+
+        this.ntb.addCommand({ id: 'toggle-lock-callouts', name: t('command.name-toggle-lock-callouts'), callback: async () => this.toggleLockCallouts() });
+
+    }
 
     /**
      * Adds the toolbar item's command.

@@ -7,7 +7,7 @@ import GalleryView from 'Gallery/GalleryView';
 import HelpView from 'Help/HelpView';
 import TipView from 'Help/TipView';
 import WhatsNewView from 'Help/WhatsNewView';
-import { addIcon, ItemView, Platform, Plugin, WorkspaceLeaf } from 'obsidian';
+import { addIcon, Platform, Plugin, WorkspaceLeaf } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
@@ -122,31 +122,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.registerEvent(this.app.workspace.on('editor-menu', this.events.editorMenuHandler));
 
 			// add commands
-			this.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: async () => this.commands.copy(false) });
-			this.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: async () => this.commands.copy(true) });
-			this.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.commands.focus() });
-			this.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.commands.focus(true) });
-			this.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
-			this.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.commands.openQuickTools() });
-			this.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.settings.icon, callback: async () => {
-				const currentToolbar = this.settingsManager.getCurrentToolbar();
-				if (currentToolbar) this.commands.openQuickTools(currentToolbar.uuid);
-			}});
-			this.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.commands.openToolbarSuggester() });
-			this.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.commands.openSettings() });
-			this.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.commands.openToolbarSettings() });
-
-			this.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.commands.toggleUi('props', 'toggle') });
-			this.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.commands.toggleUi('props', 'show') });
-			this.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.commands.toggleUi('props', 'hide') });
-			this.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.commands.toggleUi('props', 'fold') });
-
-			this.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), callback: async () => this.commands.toggleUi('baseToolbar', 'toggle'), checkCallback: () => {
-				const currentView = this.app.workspace.getActiveViewOfType(ItemView);
-				return currentView?.getViewType() === 'bases';
-			}});
-
-			this.addCommand({ id: 'toggle-lock-callouts', name: t('command.name-toggle-lock-callouts'), callback: async () => this.commands.toggleLockCallouts() });
+			this.commands.addCommands();
 
 			// prototcol handler
 			this.registerObsidianProtocolHandler("note-toolbar", async (data) => this.protocolManager.handle(data));
