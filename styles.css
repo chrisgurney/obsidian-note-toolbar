@@ -1212,6 +1212,10 @@ settings:
         format: px
  */
 
+/*****************************************************************************/
+/* #region Variables */
+/*****************************************************************************/
+
 body {
     --cg-nt-tbar-autohide-opacity: 0;
     --cg-nt-tbar-bg-color: var(--background-primary);
@@ -1304,6 +1308,12 @@ body {
         --cg-nt-fab-border-color: var(--interactive-accent);
     }
 }
+
+/* #endregion */
+
+/*****************************************************************************/
+/* #region Toolbar Styles */
+/*****************************************************************************/
 
 .metadata-container {
     margin-block-end: 0;
@@ -2053,9 +2063,11 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
 }
 
-/*****************************************************************************
-* Settings Styles (for Note Toolbar Plugin)
-******************************************************************************/
+/* #endregion */
+
+/*****************************************************************************/
+/* #region Settings Styles (for Note Toolbar Plugin) */
+/*****************************************************************************/
 
 .setting-item-info {
     & .setting-item-description a:focus-within {
@@ -3799,9 +3811,11 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-/*************************************************************************
- * Components (Note Toolbar API)
- *************************************************************************/
+/* #endregion */
+
+/*****************************************************************************/
+/* #region Components (Note Toolbar API) */
+/*****************************************************************************/
 
  .note-toolbar-ui {
     min-height: unset;
@@ -3901,9 +3915,11 @@ input[type="text"].note-toolbar-setting-error,
     flex-grow: 1;
 }
 
-/*************************************************************************
- * Launchpad
- *************************************************************************/
+/* #endregion */
+
+/*****************************************************************************/
+/* #region New tab toolbar (Launchpad) */
+/*****************************************************************************/
 
 .note-toolbar-launchpad-container {
     display: flex;
@@ -3966,4 +3982,7 @@ input[type="text"].note-toolbar-setting-error,
         border-radius: var(--button-radius) !important;
         padding: 1em;
     }
+
+    /* #endregion */
+
 }

@@ -164,9 +164,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	}
  
-	/*************************************************************************
-	 * DEBUGGING
-	 *************************************************************************/
+    //******************************************************************************
+    //#region DEBUGGING
+    //******************************************************************************
 
     /**
      * Utility for debug logging.
@@ -187,5 +187,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// eslint-disable-next-line
 		this.settings.debugEnabled && console.groupEnd();
 	}
+
+	//#endregion
 
 }
