@@ -336,27 +336,38 @@ export default class CommandManager {
     }
 
     /**
-     * Shows, completely hides, folds, or toggles the visibility of Obsidian UI, including: this note's Properties.
+     * Shows, completely hides, folds, or toggles the visibility of Obsidian UI, including: this Base's toolbar, this note's Properties.
      * @param component component to toggle visibility of
      * @param visibility set to 'show', 'hide', 'fold', or 'toggle'
      * @param isAutoFold set to `true` if triggering automatically
      */
-    async toggleUi(component: 'props', visibility: ToggleUiStateType, isAutoFold: boolean = false): Promise<void> {
+    async toggleUi(component: 'baseToolbar' | 'props', visibility: ToggleUiStateType, isAutoFold: boolean = false): Promise<void> {
 
         let currentView: ItemView | null = null;
+        let elPropsToChange: string[] = [];
         let elToToggle: HTMLElement | null = null;
+        let elVisibleValue: string;
         let hasRightView: boolean = false;
-        let propsToChange: string[] = [];
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
         
         switch (component) {
+            case 'baseToolbar': {
+                currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+                hasRightView = currentView?.getViewType() === 'bases';
+                elToToggle = activeDocument.querySelector('.bases-header');
+                elPropsToChange = ['display'];
+                elVisibleValue = 'flex';
+                break;
+            }
             case 'props': {
                 currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
                 // @ts-ignore make sure we're not in source (code) view
                 hasRightView = !currentView?.editMode.sourceMode;
                 elToToggle = this.ntb.el.getPropsEl();
-                propsToChange = ['--metadata-display-reading', '--metadata-display-editing'];
+                elPropsToChange = ['--metadata-display-reading', '--metadata-display-editing'];
+                elVisibleValue = 'block';
+                break;
             }
         }
 
@@ -365,14 +376,14 @@ export default class CommandManager {
 
             const computedDisplay = getComputedStyle(elToToggle).getPropertyValue('display');
             visibility === 'toggle' ? (computedDisplay === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
-            propsToChange.forEach((prop) => {
+            elPropsToChange.forEach((prop) => {
                 elToToggle.style.setProperty(
-                    prop, ['show', 'fold'].contains(visibility) ? 'block' : 'none');
+                    prop, ['show', 'fold'].contains(visibility) ? elVisibleValue : 'none');
                 elToToggle.style.setProperty(
-                    prop, ['show', 'fold'].contains(visibility) ? 'block' : 'none');
+                    prop, ['show', 'fold'].contains(visibility) ? elVisibleValue : 'none');
             });
 
-            if (component === 'props') this.toggleUiForProps(elToToggle, visibility, isAutoFold);
+            if (component === 'props') this.toggleUiFoldProps(elToToggle, visibility, isAutoFold);
 
             // update the saved state
             this.ntb.app.saveLocalStorage(LocalVar.TogglePropsState, visibility);
@@ -382,12 +393,12 @@ export default class CommandManager {
     }
 
     /**
-     * 
+     * Toggles folding of the Properties section.
      * @param elToToggle 
      * @param visibility 
      * @param isAutoFold 
      */
-    async toggleUiForProps(elToToggle: HTMLElement, visibility: ToggleUiStateType, isAutoFold: boolean) {
+    async toggleUiFoldProps(elToToggle: HTMLElement, visibility: ToggleUiStateType, isAutoFold: boolean) {
 
         // click the element to trigger the code to fold the section, if needed
         switch (visibility) {
