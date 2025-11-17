@@ -1,7 +1,7 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { MarkdownView, ItemView, TFile, Platform, setIcon, setTooltip, FrontMatterCache, getIcon, Menu, MenuItem, MenuPositionDef, TFolder, Notice } from "obsidian";
-import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemType, LocalVar, PropsState, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemType, LocalVar, ToggleUiStateType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { hasStyle, checkToolbarForItemView, putFocusInMenu, getViewId, calcComponentVisToggles, calcItemVisToggles, isValidUri } from "Utils/Utils";
 
@@ -741,9 +741,9 @@ export default class ToolbarRenderer {
 
 		if (this.ntb.settings.keepPropsState) {
 			// restore properties to the state they were before
-			const propsState = this.ntb.app.loadLocalStorage(LocalVar.PropsState);
+			const propsState = this.ntb.app.loadLocalStorage(LocalVar.TogglePropsState);
 			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
-				this.ntb.commands.toggleProps(propsState as PropsState, true);
+				this.ntb.commands.toggleUi('props', propsState as ToggleUiStateType, true);
 			}
 		}
 

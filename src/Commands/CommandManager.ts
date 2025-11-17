@@ -1,12 +1,12 @@
 import { EditorView } from "@codemirror/view";
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, PropsState, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, ToggleUiStateType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import { getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { Command, MarkdownView, Notice } from "obsidian";
+import { Command, ItemView, MarkdownView, Notice } from "obsidian";
 
 export default class CommandManager {
 
@@ -336,44 +336,82 @@ export default class CommandManager {
     }
 
     /**
-     * Shows, completely hides, folds, or toggles the visibility of this note's Properties.
-     * @param visibility Set to 'show', 'hide', 'fold', or 'toggle'
-     * @param isAutoFold Set to `true` if triggering automatically
+     * Shows, completely hides, folds, or toggles the visibility of Obsidian UI, including: this note's Properties.
+     * @param component component to toggle visibility of
+     * @param visibility set to 'show', 'hide', 'fold', or 'toggle'
+     * @param isAutoFold set to `true` if triggering automatically
      */
-    async toggleProps(visibility: PropsState, isAutoFold: boolean = false): Promise<void> {
+    async toggleUi(component: 'props', visibility: ToggleUiStateType, isAutoFold: boolean = false): Promise<void> {
 
-        let propsEl = this.ntb.el.getPropsEl();
+        let currentView: ItemView | null = null;
+        let elToToggle: HTMLElement | null = null;
+        let hasRightView: boolean = false;
+        let propsToChange: string[] = [];
+
         const activeFile = this.ntb.app.workspace.getActiveFile();
-        const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
-        // this.plugin.debug("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
-        // @ts-ignore make sure we're not in source (code) view
-        if (activeFile && propsEl && !currentView?.editMode.sourceMode) {
-            const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
-            visibility === 'toggle' ? (propsDisplayStyle === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
-            propsEl.style.setProperty(
-                '--metadata-display-reading', ['show', 'fold'].contains(visibility) ? 'block' : 'none');
-            propsEl.style.setProperty(
-                '--metadata-display-editing', ['show', 'fold'].contains(visibility) ? 'block' : 'none');
-            switch (visibility) {
-                case 'fold':
-                    if (!propsEl.classList.contains('is-collapsed')) {
-                        (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
-                    }
-                    break;
-                case 'show':
-                    // expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
-                    if (propsEl.classList.contains('is-collapsed')) {
-                        (propsEl.querySelector('.metadata-properties-heading') as HTMLElement).click();
-                    }
-                    else if (!isAutoFold) {
-                        // if there's no properties, execute the Add property command
-                        const metadata = this.ntb.app.metadataCache.getFileCache(activeFile);
-                        const hasProperties = !!metadata?.frontmatter && Object.keys(metadata.frontmatter).length > 0;
-                        if (!hasProperties) await this.ntb.app.commands.executeCommandById('markdown:add-metadata-property');
-                    }
-                    break;
+        
+        switch (component) {
+            case 'props': {
+                currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+                // @ts-ignore make sure we're not in source (code) view
+                hasRightView = !currentView?.editMode.sourceMode;
+                elToToggle = this.ntb.el.getPropsEl();
+                propsToChange = ['--metadata-display-reading', '--metadata-display-editing'];
             }
-            this.ntb.app.saveLocalStorage(LocalVar.PropsState, visibility);
+        }
+
+        // this.plugin.debug("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
+        if (activeFile && elToToggle && hasRightView) {
+
+            const computedDisplay = getComputedStyle(elToToggle).getPropertyValue('display');
+            visibility === 'toggle' ? (computedDisplay === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
+            propsToChange.forEach((prop) => {
+                elToToggle.style.setProperty(
+                    prop, ['show', 'fold'].contains(visibility) ? 'block' : 'none');
+                elToToggle.style.setProperty(
+                    prop, ['show', 'fold'].contains(visibility) ? 'block' : 'none');
+            });
+
+            if (component === 'props') this.toggleUiForProps(elToToggle, visibility, isAutoFold);
+
+            // update the saved state
+            this.ntb.app.saveLocalStorage(LocalVar.TogglePropsState, visibility);
+
+        }
+
+    }
+
+    /**
+     * 
+     * @param elToToggle 
+     * @param visibility 
+     * @param isAutoFold 
+     */
+    async toggleUiForProps(elToToggle: HTMLElement, visibility: ToggleUiStateType, isAutoFold: boolean) {
+
+        // click the element to trigger the code to fold the section, if needed
+        switch (visibility) {
+            case 'fold': {
+                if (!elToToggle.classList.contains('is-collapsed')) {
+                    (elToToggle.querySelector('.metadata-properties-heading') as HTMLElement).click();
+                }
+                break;
+            }
+            case 'show': {
+                // expand the Properties heading if it's collapsed, because it will stay closed if the file is saved in that state
+                if (elToToggle.classList.contains('is-collapsed')) {
+                    (elToToggle.querySelector('.metadata-properties-heading') as HTMLElement).click();
+                }
+                else if (!isAutoFold) {
+                    // if there's no properties, execute the Add property command
+                    const activeFile = this.ntb.app.workspace.getActiveFile();
+                    if (!activeFile) break;
+                    const metadata = this.ntb.app.metadataCache.getFileCache(activeFile);
+                    const hasProperties = !!metadata?.frontmatter && Object.keys(metadata.frontmatter).length > 0;
+                    if (!hasProperties) await this.ntb.app.commands.executeCommandById('markdown:add-metadata-property');
+                }
+                break;
+            }
         }
 
     }

@@ -211,14 +211,14 @@ export default class ToolbarEventHandler {
 					contextMenu.addItem((item: MenuItem) => {
 						item.setTitle(t('toolbar.menu-show-properties'))
 							.setIcon('table-properties')
-							.onClick(async (menuEvent) => this.ntb.commands.toggleProps('show'));
+							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('props', 'show'));
 					});
 				}
 				else {
 					contextMenu.addItem((item: MenuItem) => {
 						item.setTitle(t('toolbar.menu-hide-properties'))
 							.setIcon('table-properties')
-							.onClick(async (menuEvent) => this.ntb.commands.toggleProps('hide'));
+							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('props', 'hide'));
 					});
 				}
 			}

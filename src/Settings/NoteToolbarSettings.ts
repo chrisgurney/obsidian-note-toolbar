@@ -177,13 +177,13 @@ export const enum LocalVar {
 	ActiveItem = 'note-toolbar-active-item',
 	LoadSettings = 'note-toolbar-load-settings-changes',
 	MenuPos = 'note-toolbar-menu-pos',
-	PropsState = 'note-toolbar-props-state',
 	RecentFiles = 'note-toolbar-recent-files',
 	RecentItems = 'note-toolbar-recent-items',
 	RecentToolbars = 'note-toolbar-recent-toolbars',
+	TogglePropsState = 'note-toolbar-toggle-props-state'
 }
 
-export type PropsState = 'show' | 'hide' | 'fold' | 'toggle';
+export type ToggleUiStateType = 'show' | 'hide' | 'fold' | 'toggle';
 
 // note: can't make this a constant as it's used in Object.values()
 export enum CalloutAttr {
