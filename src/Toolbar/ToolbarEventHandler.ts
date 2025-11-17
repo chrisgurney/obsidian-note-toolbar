@@ -7,7 +7,6 @@ import StyleModal from "Settings/UI/Modals/StyleModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { openItemSuggestModal, learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
-import { calcMouseItemIndex } from "Utils/Utils";
 
 /**
  * Handles toolbar events registered with Obsidian's `registerEvent()`. 
@@ -236,7 +235,7 @@ export default class ToolbarEventHandler {
 				.setIcon('plus')
 				.setTitle(t('toolbar.menu-add-item'))
 				.onClick(async () => {
-					const toolbarItemIndex = calcMouseItemIndex(this.ntb, mouseEvent);
+					const toolbarItemIndex = this.ntb.utils.calcMouseItemIndex(mouseEvent);
 					if (toolbarSettings) openItemSuggestModal(this.ntb, toolbarSettings, 'New', undefined, toolbarItemIndex);
 				});
 		});

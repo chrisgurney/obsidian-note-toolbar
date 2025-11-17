@@ -1,5 +1,5 @@
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTINGS, FolderMapping, ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings, ViewType, Visibility } from "Settings/NoteToolbarSettings";
-import { checkToolbarForItemView, getUUID } from "Utils/Utils";
+import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, Platform, TFile } from "obsidian";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
@@ -116,7 +116,7 @@ export default class SettingsManager {
 	public getEmptyViewToolbar(): ToolbarSettings | undefined {
 		const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		if (itemView) {
-			let renderToolbar = checkToolbarForItemView(this.ntb, itemView);
+			let renderToolbar = this.ntb.utils.checkToolbarForItemView(itemView);
 			if (!renderToolbar) return;
 			switch (itemView.getViewType()) {
 				case 'empty':

@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { TFile, ItemView, MarkdownView, CachedMetadata, debounce, Notice, MarkdownViewModeType } from "obsidian";
 import { LocalVar, ToolbarSettings, ToolbarItemSettings, t } from "Settings/NoteToolbarSettings";
-import { getActiveView, getViewId, checkToolbarForItemView } from "Utils/Utils";
+import { getViewId } from "Utils/Utils";
 
 /**
  * Handles Obsidian changes registered with Obsidian's `registerEvent()`.
@@ -137,7 +137,7 @@ export default class ChangeListener {
 		let renderToolbar = false;
 		// FIXME? what if there's more than one toolbar?
 		let toolbarEl = this.ntb.el.getToolbarEl();
-		let currentView = getActiveView(this.ntb);
+		let currentView = this.ntb.utils.getActiveView();
 
 		const viewId = getViewId(currentView);
 		this.ntb.debug('===== LEAF-CHANGE ===== ', viewId);
@@ -166,7 +166,7 @@ export default class ChangeListener {
 		else {
 			currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 			if (currentView) {
-				renderToolbar = checkToolbarForItemView(this.ntb, currentView);
+				renderToolbar = this.ntb.utils.checkToolbarForItemView(currentView);
 				if (!renderToolbar) return;
 			}
 		}

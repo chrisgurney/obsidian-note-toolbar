@@ -1,15 +1,15 @@
-import NoteToolbarPlugin from "main";
-import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
-import { Setting, debounce, ButtonComponent, setIcon, Menu, MenuItem, normalizePath, DropdownComponent, Platform, Notice, PaneType } from "obsidian";
-import { removeComponentVisibility, addComponentVisibility, getElementPosition, getCommandIdByName, getCommandNameById } from "Utils/Utils";
-import IconSuggestModal from "./Modals/IconSuggestModal";
-import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "./Utils/SettingsUIUtils";
-import FileSuggester from "./Suggesters/FileSuggester";
-import CommandSuggester from "./Suggesters/CommandSuggester";
-import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
 import { Adapter } from "Adapters/Adapter";
+import NoteToolbarPlugin from "main";
+import { ButtonComponent, debounce, DropdownComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting } from "obsidian";
+import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
+import IconSuggestModal from "./Modals/IconSuggestModal";
 import ItemModal from "./Modals/ItemModal";
+import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
+import CommandSuggester from "./Suggesters/CommandSuggester";
+import FileSuggester from "./Suggesters/FileSuggester";
+import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
+import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "./Utils/SettingsUIUtils";
 
 export default class ToolbarItemUi {
 
@@ -585,9 +585,9 @@ export default class ToolbarItemUi {
                             this.renderPreview(toolbarItem);
                         });
                         cb.setPlaceholder(t('setting.item.option-command-placeholder'))
-                            .setValue(getCommandNameById(this.ntb, toolbarItem.linkAttr.commandId) || '')
+                            .setValue(this.ntb.utils.getCommandNameById(toolbarItem.linkAttr.commandId) || '')
                             .onChange(debounce(async (commandName) => {
-                                const commandId = commandName ? getCommandIdByName(this.ntb, commandName) : '';
+                                const commandId = commandName ? this.ntb.utils.getCommandIdByName(commandName) : '';
                                 const isValid = await updateItemComponentStatus(this.ntb, this.parent, commandId, SettingType.Command, cb.inputEl.parentElement);
                                 toolbarItem.link = isValid && commandName ? commandName : '';
                                 toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
@@ -916,9 +916,9 @@ export default class ToolbarItemUi {
                                     await this.ntb.settingsManager.save();
                                 });
                                 cb.setPlaceholder(param.label)
-                                    .setValue(initialValue ? (getCommandNameById(this.ntb, initialValue) || '') : '')
+                                    .setValue(initialValue ? (this.ntb.utils.getCommandNameById(initialValue) || '') : '')
                                     .onChange(debounce(async (commandName) => {
-                                        const commandId = commandName ? getCommandIdByName(this.ntb, commandName) : '';
+                                        const commandId = commandName ? this.ntb.utils.getCommandIdByName(commandName) : '';
                                         const isValid = await updateItemComponentStatus(this.ntb, this.parent, commandId, param.type, cb.inputEl.parentElement);
                                         config[param.parameter as keyof ScriptConfig] = isValid && commandId ? commandId : '';
                                         await this.ntb.settingsManager.save();

@@ -2,6 +2,118 @@ import NoteToolbarPlugin from "main";
 import { App, Command, FileView, ItemView, MarkdownView, Notice, PaneType, Platform } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 
+export default class PluginUtils {
+
+	constructor(
+		private ntb: NoteToolbarPlugin
+	) {}
+
+	/**
+	 * Returns the index of the item in the toolbar that *would be* where the mouse was clicked.
+	 * @param event 
+	 * @returns 
+	 */
+	calcMouseItemIndex(event: MouseEvent): number | undefined {
+		const toolbarListEl = this.ntb.el.getToolbarListEl();
+		if (!toolbarListEl) return;
+
+		const children = Array.from(toolbarListEl.children) as HTMLElement[];
+		const rects = children.map(el => el.getBoundingClientRect());
+		const { clientX: x, clientY: y } = event;
+
+		const itemRow = rects.filter(r => y >= r.top && y <= r.bottom);
+		const findEl = (r: DOMRect | undefined): HTMLElement | undefined =>
+			r ? children[rects.indexOf(r)] : undefined; // helper
+
+		const mouseEl = findEl(itemRow.find(r => x >= r.left && x <= r.right));
+		const leftEl = findEl(itemRow.filter(r => r.right <= x).pop());
+		const rightEl = findEl(itemRow.find(r => r.left > x));
+
+		// plugin.debug('Item under cursor:', mouseEl || null);
+		// plugin.debug('Left:', leftEl || null);
+		// plugin.debug('Right:', rightEl || null);
+
+		const getIndex = (el?: HTMLElement): number | undefined =>
+			el?.dataset.index ? Number(el.dataset.index) : undefined;
+
+		return getIndex(mouseEl) ?? getIndex(leftEl) ?? getIndex(rightEl);
+	}
+
+	/**
+	 * Determines whether a toolbar should be visible for the given view type.
+	 * @param currentViewType Type of the current view.
+	 * @returns `true` if the toolbar should be visible, otherwise `false`.
+	 */
+	checkToolbarForItemView(itemView: ItemView): boolean {
+		const currentViewType = itemView.getViewType();
+		if (this.ntb.settings.showToolbarInOther.includes(currentViewType)) return true;
+		
+		const viewSettings: Record<string, boolean | undefined> = {
+			'audio': this.ntb.settings.showToolbarIn.audio,
+			'bases': this.ntb.settings.showToolbarIn.bases,
+			'beautitab-react-view': (this.ntb.settings.emptyViewToolbar !== undefined),
+			'canvas': this.ntb.settings.showToolbarIn.canvas,
+			'empty': (this.ntb.settings.emptyViewToolbar !== undefined),
+			'home-tab-view': (this.ntb.settings.emptyViewToolbar !== undefined),
+			'image': this.ntb.settings.showToolbarIn.image,
+			'kanban': this.ntb.settings.showToolbarIn.kanban,
+			'pdf': this.ntb.settings.showToolbarIn.pdf,
+			'video': this.ntb.settings.showToolbarIn.video,
+		};
+	
+		if (viewSettings[currentViewType] === false) return false;
+		if (!(currentViewType in viewSettings)) return false;
+		return true;
+	}
+
+	/**
+	 * Returns the active view for markdown, empty tab, and other file types.
+	 * @returns FileView, MarkdownView, ItemView, or `null`.
+	 */
+	getActiveView(): FileView | MarkdownView | ItemView | null {
+		let activeView: FileView | MarkdownView | ItemView | null = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+		if (!activeView) activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		if (!activeView) activeView = this.ntb.app.workspace.getActiveViewOfType(FileView);
+		return activeView;
+	}
+
+	/**
+	 * Returns the name of a command based on its ID, if known.
+	 * @param commandId command ID to look up
+	 * @returns name of command; undefined otherwise
+	 */
+	getCommandNameById(commandId: string): string | undefined {
+		const availableCommands: Command[] = Object.values(this.ntb.app.commands.commands);
+		const matchedCommand = availableCommands.find(command => command.id === commandId);
+		return matchedCommand ? matchedCommand.name : undefined;
+	}
+
+	/**
+	 * Get command ID by name.
+	 * @param commandName name of the command to look for.
+	 * @returns command ID or undefined.
+	 */
+	getCommandIdByName(commandName: string): string {
+		const availableCommands: Command[] = Object.values(this.ntb.app.commands.commands);
+		const matchedCommand = availableCommands.find(command => command.name === commandName);
+		return matchedCommand ? matchedCommand.id : COMMAND_DOES_NOT_EXIST;
+	}
+
+	/**
+	 * Returns a list of plugin IDs for any commands not recognized in the given toolbar.
+	 * @param toolbar ToolbarSettings to check for command usage
+	 * @returns an array of plugin IDs that are invalid, or an empty array otherwise
+	 */
+	toolbarInvalidCommands(toolbar: ToolbarSettings): string[] {
+		return toolbar.items
+			.filter(item =>
+				item.linkAttr.type === ItemType.Command && !(item.linkAttr.commandId in this.ntb.app.commands.commands)
+			)
+			.map(item => item.linkAttr.commandId.split(':')[0].trim());
+	}
+
+}
+
 /**
  * Adds the given component to the given visibility prop.
  * @param platform platform visibility to add to
@@ -41,127 +153,16 @@ export function calcComponentVisToggles(visibility: Visibility) {
 }
 
 /**
- * Returns the index of the item in the toolbar that *would be* where the mouse was clicked.
- * @param ntb NoteToolbarPlugin
- * @param event 
- * @returns 
- */
-export function calcMouseItemIndex(ntb: NoteToolbarPlugin, event: MouseEvent): number | undefined {
-    const toolbarListEl = ntb.el.getToolbarListEl();
-    if (!toolbarListEl) return;
-
-    const children = Array.from(toolbarListEl.children) as HTMLElement[];
-    const rects = children.map(el => el.getBoundingClientRect());
-    const { clientX: x, clientY: y } = event;
-
-    const itemRow = rects.filter(r => y >= r.top && y <= r.bottom);
-    const findEl = (r: DOMRect | undefined): HTMLElement | undefined =>
-        r ? children[rects.indexOf(r)] : undefined; // helper
-
-    const mouseEl = findEl(itemRow.find(r => x >= r.left && x <= r.right));
-    const leftEl = findEl(itemRow.filter(r => r.right <= x).pop());
-    const rightEl = findEl(itemRow.find(r => r.left > x));
-
-    // plugin.debug('Item under cursor:', mouseEl || null);
-    // plugin.debug('Left:', leftEl || null);
-    // plugin.debug('Right:', rightEl || null);
-
-    const getIndex = (el?: HTMLElement): number | undefined =>
-        el?.dataset.index ? Number(el.dataset.index) : undefined;
-
-    return getIndex(mouseEl) ?? getIndex(leftEl) ?? getIndex(rightEl);
-}
-
-/**
  * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
  * toggle values are the opposite of the Platform values.
  * @param Visibility
  * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
  */
 export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
-    const desktopHasComponents = hasVisibleComponents(visibility.desktop);
-    const mobileHasComponents = hasVisibleComponents(visibility.mobile);
-    const tabletHasComponents = hasVisibleComponents(visibility.tablet);
-    return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
-}
-
-/**
- * Determines whether a toolbar should be visible for the given view type.
- * @param ntb NoteToolbarPlugin instance containing toolbar visibility settings.
- * @param currentViewType Type of the current view.
- * @returns `true` if the toolbar should be visible, otherwise `false`.
- */
-export function checkToolbarForItemView(ntb: NoteToolbarPlugin, itemView: ItemView): boolean {
-	const currentViewType = itemView.getViewType();
-	if (ntb.settings.showToolbarInOther.includes(currentViewType)) return true;
-	
-    const viewSettings: Record<string, boolean | undefined> = {
-        'audio': ntb.settings.showToolbarIn.audio,
-		'bases': ntb.settings.showToolbarIn.bases,
-        'beautitab-react-view': (ntb.settings.emptyViewToolbar !== undefined),
-        'canvas': ntb.settings.showToolbarIn.canvas,
-        'empty': (ntb.settings.emptyViewToolbar !== undefined),
-        'home-tab-view': (ntb.settings.emptyViewToolbar !== undefined),
-        'image': ntb.settings.showToolbarIn.image,
-		'kanban': ntb.settings.showToolbarIn.kanban,
-        'pdf': ntb.settings.showToolbarIn.pdf,
-        'video': ntb.settings.showToolbarIn.video,
-    };
-
-    if (viewSettings[currentViewType] === false) return false;
-    if (!(currentViewType in viewSettings)) return false;
-    return true;
-}
-
-/**
- * Displays the provided scripting error as a console message, and is output to a container, if provided. 
- * @param message 
- * @param error 
- * @param containerEl 
- */
-export function displayScriptError(message: string, error?: any, containerEl?: HTMLElement) {
-	console.error(message, error);
-	if (containerEl) {
-		let errorEl = containerEl.createEl('pre');
-		errorEl.setText(message + '\n' + error);
-	}
-	let errorFr = createFragment();
-	errorFr.append(message);
-	error ? errorFr.append('\n', error) : undefined;
-	new Notice(errorFr, 5000);
-}
-
-/**
- * Returns the active view for markdown, empty tab, and other file types.
- * @returns FileView, MarkdownView, ItemView, or `null`.
- */
-export function getActiveView(ntb: NoteToolbarPlugin): FileView | MarkdownView | ItemView | null {
-	let activeView: FileView | MarkdownView | ItemView | null = ntb.app.workspace.getActiveViewOfType(MarkdownView);
-	if (!activeView) activeView = ntb.app.workspace.getActiveViewOfType(ItemView);
-	if (!activeView) activeView = ntb.app.workspace.getActiveViewOfType(FileView);
-	return activeView;
-}
-
-/**
- * Returns the name of a command based on its ID, if known.
- * @param commandId command ID to look up
- * @returns name of command; undefined otherwise
- */
-export function getCommandNameById(ntb: NoteToolbarPlugin, commandId: string): string | undefined {
-	const availableCommands: Command[] = Object.values(ntb.app.commands.commands);
-	const matchedCommand = availableCommands.find(command => command.id === commandId);
-	return matchedCommand ? matchedCommand.name : undefined;
-}
-
-/**
- * Get command ID by name.
- * @param commandName name of the command to look for.
- * @returns command ID or undefined.
- */
-export function getCommandIdByName(ntb: NoteToolbarPlugin, commandName: string): string {
-	const availableCommands: Command[] = Object.values(ntb.app.commands.commands);
-	const matchedCommand = availableCommands.find(command => command.name === commandName);
-	return matchedCommand ? matchedCommand.id : COMMAND_DOES_NOT_EXIST;
+	const desktopHasComponents = hasVisibleComponents(visibility.desktop);
+	const mobileHasComponents = hasVisibleComponents(visibility.mobile);
+	const tabletHasComponents = hasVisibleComponents(visibility.tablet);
+	return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
 }
 
 /**
@@ -384,19 +385,6 @@ export function removeComponentVisibility(platform: { allViews?: { components: C
             platform.allViews.components.splice(index, 1);
         }
     }
-}
-
-/**
- * Returns a list of plugin IDs for any commands not recognized in the given toolbar.
- * @param toolbar ToolbarSettings to check for command usage
- * @returns an array of plugin IDs that are invalid, or an empty array otherwise
- */
-export function toolbarInvalidCommands(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings): string[] {
-	return toolbar.items
-		.filter(item =>
-			item.linkAttr.type === ItemType.Command && !(item.linkAttr.commandId in ntb.app.commands.commands)
-		)
-		.map(item => item.linkAttr.commandId.split(':')[0].trim());
 }
 
 /**

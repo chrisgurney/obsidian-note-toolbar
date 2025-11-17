@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { getCommandNameById, getUUID } from "./Utils";
+import { getUUID } from "./Utils";
 import { getIcon, Notice, TFile, TFolder } from "obsidian";
 
 const toIconizeFormat = (s: string) => 
@@ -395,7 +395,7 @@ export async function importFromCallout(
                         case ItemType.Command: {
                             itemType = ItemType.Command;
                             commandId = dataUriValue;
-                            const commandName = getCommandNameById(ntb, commandId);
+                            const commandName = this.ntb.utils.getCommandNameById(commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
                             errorLog += commandName ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;

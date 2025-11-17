@@ -20,6 +20,7 @@ import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
 import HotkeyHelper from 'Utils/Hotkeys';
+import PluginUtils from 'Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -31,6 +32,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
+	utils: PluginUtils;
 	
 	el: ToolbarElementHelper;
 	events: ToolbarEventHandler;
@@ -53,6 +55,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.items = new ToolbarItemHandler(this);
 		this.listeners = new ChangeListener(this);
 		this.render = new ToolbarRenderer(this);
+		this.utils = new PluginUtils(this);
 		this.vars = new VariableResolver(this);
 
 		// load the settings

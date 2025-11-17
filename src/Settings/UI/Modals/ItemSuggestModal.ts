@@ -1,10 +1,10 @@
-import { Platform, SuggestModal, TFile } from "obsidian";
 import NoteToolbarPlugin from "main";
-import { calcItemVisToggles } from "Utils/Utils";
+import { Platform, SuggestModal, TFile } from "obsidian";
 import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, LocalVar, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import ToolbarSuggestModal from "./ToolbarSuggestModal";
+import { calcItemVisToggles } from "Utils/Utils";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 import ItemModal from "./ItemModal";
+import ToolbarSuggestModal from "./ToolbarSuggestModal";
 
 /**
  * `Default` = Just uses modal to select an item, with no additional changes to UI.

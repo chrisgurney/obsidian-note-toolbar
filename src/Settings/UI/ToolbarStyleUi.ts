@@ -1,10 +1,10 @@
-import { debounce, ItemView, MarkdownView, Setting } from "obsidian";
-import { emptyMessageFr, getDisclaimersFr, getValueForKey, learnMoreFr } from "./Utils/SettingsUIUtils";
 import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { arraymove } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import ToolbarSettingsModal from "./Modals/ToolbarSettingsModal";
+import { debounce, ItemView, MarkdownView, Setting } from "obsidian";
 import StyleModal from "./Modals/StyleModal";
+import ToolbarSettingsModal from "./Modals/ToolbarSettingsModal";
+import { emptyMessageFr, getDisclaimersFr, getValueForKey, learnMoreFr } from "./Utils/SettingsUIUtils";
 
 export default class ToolbarStyleUi {
 

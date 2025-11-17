@@ -1,9 +1,8 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, Modal, Setting } from "obsidian";
+import { ButtonComponent, Modal } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import { importFromCallout } from "Utils/ImportExport";
-import { toolbarInvalidCommands } from "Utils/Utils";
+import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 
 export async function confirmImportWithModal(ntb: NoteToolbarPlugin, callout: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -55,7 +54,7 @@ export default class ImportConfirmModal extends Modal {
             // disclaimers, if any
             //
 
-            let importInvalidCommands = toolbarInvalidCommands(this.ntb, toolbar);
+            let importInvalidCommands = this.ntb.utils.toolbarInvalidCommands(toolbar);
             let importHasVars = this.ntb.vars.toolbarHasVars(toolbar);
 
             if (importInvalidCommands.length > 0 || importHasVars) {

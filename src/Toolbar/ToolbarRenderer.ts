@@ -3,7 +3,7 @@ import NoteToolbarPlugin from "main";
 import { MarkdownView, ItemView, TFile, Platform, setIcon, setTooltip, FrontMatterCache, getIcon, Menu, MenuItem, MenuPositionDef, TFolder, Notice } from "obsidian";
 import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemType, LocalVar, ToggleUiStateType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { hasStyle, checkToolbarForItemView, putFocusInMenu, getViewId, calcComponentVisToggles, calcItemVisToggles, isValidUri } from "Utils/Utils";
+import { hasStyle, putFocusInMenu, getViewId, isValidUri, calcComponentVisToggles, calcItemVisToggles } from "Utils/Utils";
 
 /**
  * Provides toolbar rendering, update, and cleanup functions.
@@ -109,7 +109,7 @@ export default class ToolbarRenderer {
         }
 
         if (!(view instanceof MarkdownView)) {
-            const isToolbarVisible = checkToolbarForItemView(this.ntb, view);
+            const isToolbarVisible = this.ntb.utils.checkToolbarForItemView(view);
             if (!isToolbarVisible) {
                 this.ntb.debug("🛑 renderToolbar: nothing to render in this view");
                 this.ntb.debugGroupEnd();
