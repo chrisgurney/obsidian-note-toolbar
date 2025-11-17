@@ -33,15 +33,12 @@ export default class CommandManager {
         this.ntb.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.openSettings() });
         this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), callback: async () => this.openToolbarSettings() });
 
-        this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.toggleUi('props', 'toggle') });
-        this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.toggleUi('props', 'show') });
-        this.ntb.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.toggleUi('props', 'hide') });
-        this.ntb.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.toggleUi('props', 'fold') });
+        this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), callback: async () => this.toggleUi('props', 'toggle'), checkCallback: () => { return this.isViewType('markdown'); } });
+        this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'), callback: async () => this.toggleUi('props', 'show'), checkCallback: () => { return this.isViewType('markdown'); }  });
+        this.ntb.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), callback: async () => this.toggleUi('props', 'hide'), checkCallback: () => { return this.isViewType('markdown'); }  });
+        this.ntb.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), callback: async () => this.toggleUi('props', 'fold'), checkCallback: () => { return this.isViewType('markdown'); }  });
 
-        this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), callback: async () => this.toggleUi('baseToolbar', 'toggle'), checkCallback: () => {
-            const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-            return currentView?.getViewType() === 'bases';
-        }});
+        this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), callback: async () => this.toggleUi('baseToolbar', 'toggle'), checkCallback: () => { return this.isViewType('bases'); } });
 
         this.ntb.addCommand({ id: 'toggle-lock-callouts', name: t('command.name-toggle-lock-callouts'), callback: async () => this.toggleLockCallouts() });
 
@@ -181,9 +178,9 @@ export default class CommandManager {
         });
     }
 
-    /******************************************************************************
-     COMMANDS
-    ******************************************************************************/
+    //******************************************************************************
+    //#region COMMANDS
+    //******************************************************************************
 
     /**
      * Sets the keyboard's focus on the first visible item in the toolbar.
@@ -460,4 +457,16 @@ export default class CommandManager {
 
     }
 
+    //#endregion
+
+    //******************************************************************************
+    //#region UTILITIES
+    //******************************************************************************
+
+    isViewType(viewType: string): boolean {
+        const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        return currentView?.getViewType() === viewType;
+    }
+
+    //#endregion
 }
