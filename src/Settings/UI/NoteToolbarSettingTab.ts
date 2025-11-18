@@ -65,13 +65,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayToolbarList(containerEl);
 
 		// display rules
-		new Setting(containerEl)
-			.setName(t('setting.display-rules.name'))
-			.setDesc(learnMoreFr(t('setting.display-rules.description'), 'Defining-where-to-show-toolbars'))
-			.setHeading();
-		this.displayPropertySetting(containerEl);
-		this.displayFolderMap(containerEl);
+		this.displayRules(containerEl);
 		// this.ruleUi.displayRules(containerEl);
+
 		this.displayAppToolbarSettings(containerEl);
 		this.displayFileTypeSettings(containerEl);
 
@@ -555,6 +551,35 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	/**
+	 * Settings for Display rules.
+	 * @param containerEl HTMLElement to add the settings to.
+	 */
+	displayRules(containerEl: HTMLElement): void {
+
+		const settingsContainerEl = createDiv();
+		settingsContainerEl.addClasses(['note-toolbar-setting-mappings-container']);
+		settingsContainerEl.setAttribute('data-active', this.mappingListOpen.toString());
+
+		const rulesSetting = new Setting(settingsContainerEl)
+			.setHeading()
+			.setName(t('setting.display-rules.name'))
+			.setDesc(learnMoreFr(t('setting.display-rules.description'), 'Defining-where-to-show-toolbars'));
+
+		// make collapsible
+		this.renderSettingToggle(rulesSetting, '.note-toolbar-setting-mappings-container', this, 'mappingListOpen');
+
+		const collapsibleContainerEl = createDiv();
+		collapsibleContainerEl.addClass('note-toolbar-setting-items-list-container');
+
+		this.displayPropertySetting(collapsibleContainerEl);
+		this.displayFolderMap(collapsibleContainerEl);
+
+		settingsContainerEl.appendChild(collapsibleContainerEl);
+		containerEl.append(settingsContainerEl);
+
+	}
+
+	/**
 	 * Displays the property setting.
 	 * @param containerEl HTMLElement to add the settings to.
 	 */
@@ -581,39 +606,30 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayFolderMap(containerEl: HTMLElement): void {
 
-		let mappingsContainer = createDiv();
-		mappingsContainer.addClasses(['note-toolbar-setting-mappings-container', 'note-toolbar-setting-top-border']);
-		mappingsContainer.setAttribute('data-active', this.mappingListOpen.toString());
-
-		let toolbarMapSetting = new Setting(mappingsContainer)
+		new Setting(containerEl)
 			.setName(t('setting.mappings.name'))
 			.setDesc(t('setting.mappings.description'));
 
-		// make collapsible
-		if (this.ntb.settings.folderMappings.length > 4) {
-			this.renderSettingToggle(toolbarMapSetting, '.note-toolbar-setting-mappings-container', this, 'mappingListOpen');
-		}
-
-		let collapsibleContainer = createDiv();
-		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+		// let itemsContainerEl = createDiv();
+		// itemsContainerEl.addClass('note-toolbar-setting-items-list-container');
 
 		if (this.ntb.settings.folderMappings.length == 0) {
-			mappingsContainer
+			containerEl
 				.createEl("div", { text: emptyMessageFr(t('setting.mappings.label-empty')) })
 				.className = "note-toolbar-setting-empty-message";
 		}
 		else {
-			let toolbarFolderListDiv = createDiv();
-			toolbarFolderListDiv.addClass('note-toolbar-sortablejs-list');
+			const toolbarFolderListEl = createDiv();
+			toolbarFolderListEl.addClass('note-toolbar-sortablejs-list');
 
 			this.ntb.settings.folderMappings.forEach((mapping, index) => {
 				let rowId = this.itemListIdCounter.toString();
 				let toolbarFolderListItemDiv = this.generateMappingForm(mapping, rowId);
-				toolbarFolderListDiv.append(toolbarFolderListItemDiv);
+				toolbarFolderListEl.append(toolbarFolderListItemDiv);
 				this.itemListIdCounter++;
 			});
 
-			let sortable = Sortable.create(toolbarFolderListDiv, {
+			Sortable.create(toolbarFolderListEl, {
 				chosenClass: 'sortable-chosen',
 				ghostClass: 'sortable-ghost',
 				handle: '.sortable-handle',
@@ -628,7 +644,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				}
 			});
 
-			collapsibleContainer.appendChild(toolbarFolderListDiv)
+			containerEl.appendChild(toolbarFolderListEl)
 
 		}
 
@@ -636,7 +652,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		// "Add a new mapping" button
 		//
 
-		new Setting(collapsibleContainer)
+		new Setting(containerEl)
 			.setClass("note-toolbar-setting-button")
 			.addButton((button: ButtonComponent) => {
 				button
@@ -657,8 +673,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				button.buttonEl.setText(iconTextFr('plus', t('setting.mappings.button-new')));
 			});
 
-		mappingsContainer.appendChild(collapsibleContainer);
-		containerEl.append(mappingsContainer);
+		// containerEl.appendChild(itemsContainerEl);
 
 	}
 

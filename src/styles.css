@@ -1395,7 +1395,8 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
-.note-toolbar-setting-contexts-container {
+.note-toolbar-setting-contexts-container,
+.note-toolbar-setting-mappings-container {
     & .note-toolbar-setting-items-list-container {
         .setting-item:first-child {
             padding: 0.75em 0;
@@ -1409,7 +1410,8 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-app-toolbars-container,
-.note-toolbar-setting-contexts-container {
+.note-toolbar-setting-contexts-container,
+.note-toolbar-setting-mappings-container {
     &[data-active="false"] {
         & .setting-item-heading {
             border-bottom: solid 1px var(--background-modifier-border);
