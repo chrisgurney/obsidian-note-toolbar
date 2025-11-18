@@ -2561,6 +2561,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-rules-container {
     padding-top: 0.75em;
     & .setting-item-heading {
+        cursor: pointer;
         padding: 0.75em 0;
         .is-mobile & {
             & .setting-item-control {
