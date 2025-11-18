@@ -414,7 +414,11 @@ export default class CommandManager {
                     prop, ['show', 'fold'].contains(visibility) ? elVisibleValue : 'none');
             });
 
-            if (component === 'props') this.toggleUiFoldProps(elToToggle, visibility, isAutoFold);
+            if (component === 'props') {
+                this.toggleUiFoldProps(elToToggle, visibility, isAutoFold);
+                // update the saved state
+                this.ntb.app.saveLocalStorage(LocalVar.TogglePropsState, visibility);
+            }
 
         }
 
