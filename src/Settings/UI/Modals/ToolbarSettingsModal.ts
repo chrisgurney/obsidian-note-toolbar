@@ -157,7 +157,7 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 
 		// scroll to the position when the modal was last open
-		// this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
+		this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
 
 		// show the What's New view once, if the user hasn't seen it yet
 		showWhatsNewIfNeeded(this.ntb);
