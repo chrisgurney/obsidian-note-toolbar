@@ -2016,7 +2016,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         box-shadow: var(--cg-nt-tbar-text-shadow);
         position: absolute;
         max-width: var(--cg-nt-tbar-text-max-width-desktop);
-        .is-tabet & {
+        .is-tablet & {
             max-width: var(--cg-nt-tbar-text-max-width-tablet);
         }
         .is-phone & {
