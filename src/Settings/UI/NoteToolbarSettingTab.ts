@@ -18,6 +18,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	private itemListIdCounter: number = 0;
 
 	// track UI state
+	private appToolbarSettingsOpen: boolean = true;
 	private calloutSettingsOpen: boolean = false;
 	private contextSettingsOpen: boolean = false;
 	private itemListOpen: boolean = true;
@@ -808,13 +809,22 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayAppToolbarSettings(containerEl: HTMLElement): void {
 
-		new Setting(containerEl)
+		const settingsContainerEl = createDiv();
+		settingsContainerEl.addClasses(['note-toolbar-setting-app-toolbars-container']);
+		settingsContainerEl.setAttribute('data-active', this.appToolbarSettingsOpen.toString());
+
+		const appToolbarSetting = new Setting(settingsContainerEl)
 			.setHeading()
 			.setName(t('setting.display-locations.name'))
-			.setDesc(t('setting.display-locations.description'))
-			.setClass('note-toolbar-setting-heading-spacer');
+			.setDesc(t('setting.display-locations.description'));
 
-		new Setting(containerEl)
+		// make collapsible
+		this.renderSettingToggle(appToolbarSetting, '.note-toolbar-setting-app-toolbars-container', this, 'appToolbarSettingsOpen');
+
+		const collapsibleContainerEl = createDiv();
+		collapsibleContainerEl.addClass('note-toolbar-setting-items-list-container');
+
+		new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-contexts.option-filemenu'))
 			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Defining-where-to-show-toolbars#file-menu'))
 			.addToggle((cb) => {
@@ -827,7 +837,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 
 		const existingEmptyViewToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar)
-		const emptyViewSetting = new Setting(containerEl)
+		const emptyViewSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-emptyview-tbar'))
 			.setDesc(learnMoreFr(t('setting.display-locations.option-emptyview-tbar-description'), 'New-tab-view'))
 			.setClass('note-toolbar-setting-item-control-std-with-help')
@@ -854,7 +864,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const emptyViewToolbarFr = existingEmptyViewToolbar && createToolbarPreviewFr(this.ntb, existingEmptyViewToolbar, undefined, false);
 		setFieldHelp(emptyViewSetting.controlEl, emptyViewToolbarFr);
 
-		const launchpadSetting = new Setting(containerEl)
+		const launchpadSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-launchpad'))
 			.setDesc(t('setting.display-locations.option-launchpad-description'))
 			.addToggle((cb: ToggleComponent) => {
@@ -868,7 +878,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const hasEmptyViewToolbar = !!this.ntb.settings.emptyViewToolbar;
 		launchpadSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
 
-		new Setting(containerEl)
+		new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.ribbon-action.name'))
 			.setDesc(learnMoreFr(t('setting.display-locations.ribbon-action.description'), 'Navigation-bar'))
 			.addDropdown((dropdown) => 
@@ -882,7 +892,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				);
 
 		const existingTextToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
-		const textToolbarSetting = new Setting(containerEl)
+		const textToolbarSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-text'))
 			.setDesc(t('setting.display-locations.option-text-description'))
 			.setClass('note-toolbar-setting-item-control-std-with-help')
@@ -904,6 +914,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 		const textToolbarPreviewFr = existingTextToolbar && createToolbarPreviewFr(this.ntb, existingTextToolbar, undefined, false);
 		setFieldHelp(textToolbarSetting.controlEl, textToolbarPreviewFr);
+
+		settingsContainerEl.appendChild(collapsibleContainerEl);
+		containerEl.append(settingsContainerEl);
 
 	}
 
