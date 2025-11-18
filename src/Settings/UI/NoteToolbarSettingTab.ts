@@ -13,18 +13,22 @@ import ShareModal from './Modals/ShareModal';
 import { createToolbarPreviewFr, displayHelpSection, emptyMessageFr, handleKeyClick, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded, updateItemComponentStatus } from "./Utils/SettingsUIUtils";
 // import RuleUi from './RuleUi';
 
+type SettingsSectionType = 'appToolbars' | 'callouts' | 'contexts' | 'displayRules' | 'itemList';
+
 export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 	private itemListIdCounter: number = 0;
 
 	// track UI state
-	private appToolbarSettingsOpen: boolean = true;
-	private calloutSettingsOpen: boolean = false;
-	private contextSettingsOpen: boolean = false;
-	private itemListOpen: boolean = true;
-	private mappingListOpen: boolean = true;
 	private lastScrollPosition: number;
 	private lastScrollListenerRegistered = false;
+	private isSectionOpen: Record<SettingsSectionType, boolean> = {
+		'appToolbars': true,
+		'callouts': false,
+		'contexts': false,
+		'displayRules': true,
+		'itemList': true,
+	}
 
 	// private ruleUi: RuleUi;
 
@@ -140,9 +144,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const itemsContainer = createDiv();
 		itemsContainer.addClass('note-toolbar-setting-items-container');
-		itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+		itemsContainer.setAttribute('data-active', this.isSectionOpen['itemList'].toString());
 
-		const toolbarListHeading = this.itemListOpen ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length });
+		const toolbarListHeading = this.isSectionOpen['itemList'] ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length });
 		const toolbarListSetting = new Setting(itemsContainer)
 			.setName(toolbarListHeading)
 			.setHeading();
@@ -161,7 +165,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.onClick(async () => {
 							this.toggleSearch();
 							// un-collapse list container if it's collapsed
-							if (!this.itemListOpen) {
+							if (!this.isSectionOpen['itemList']) {
 								this.toggleToolbarList();
 							}
 						});
@@ -199,9 +203,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// make collapsible
 		if (this.ntb.settings.toolbars.length > 4) {
-			this.renderSettingToggle(toolbarListSetting, '.note-toolbar-setting-items-container', this, 'itemListOpen', () => {
+			this.renderSettingToggle(toolbarListSetting, '.note-toolbar-setting-items-container', 'itemList', () => {
 				toolbarListSetting.setName(
-					this.itemListOpen ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
+					this.isSectionOpen['itemList'] ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
 			});
 		}
 
@@ -402,7 +406,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			.addSearch((cb) => {
 				cb.setPlaceholder(t('setting.search.field-placeholder'))
 				.onChange((search: string) => {
-					if (!Platform.isPhone && !this.itemListOpen) {
+					if (!Platform.isPhone && !this.isSectionOpen['itemList']) {
 						this.toggleToolbarList();
 					}
 					const query = search.toLowerCase();
@@ -543,10 +547,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	toggleToolbarList() {
 		let itemsContainer = this.containerEl.querySelector('.note-toolbar-setting-items-container');
 		if (itemsContainer) {
-			this.itemListOpen = !this.itemListOpen;
-			itemsContainer.setAttribute('data-active', this.itemListOpen.toString());
+			this.isSectionOpen['itemList'] = !this.isSectionOpen['itemList'];
+			itemsContainer.setAttribute('data-active', this.isSectionOpen['itemList'].toString());
 			const headingEl = itemsContainer.querySelector('.setting-item-info .setting-item-name');
-			this.itemListOpen ? headingEl?.setText(t('setting.toolbars.name')) : headingEl?.setText(t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
+			this.isSectionOpen['itemList'] ? headingEl?.setText(t('setting.toolbars.name')) : headingEl?.setText(t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
 		}
 	}
 
@@ -558,7 +562,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const settingsContainerEl = createDiv();
 		settingsContainerEl.addClasses(['note-toolbar-setting-mappings-container']);
-		settingsContainerEl.setAttribute('data-active', this.mappingListOpen.toString());
+		settingsContainerEl.setAttribute('data-active', this.isSectionOpen['displayRules'].toString());
 
 		const rulesSetting = new Setting(settingsContainerEl)
 			.setHeading()
@@ -566,7 +570,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			.setDesc(learnMoreFr(t('setting.display-rules.description'), 'Defining-where-to-show-toolbars'));
 
 		// make collapsible
-		this.renderSettingToggle(rulesSetting, '.note-toolbar-setting-mappings-container', this, 'mappingListOpen');
+		this.renderSettingToggle(rulesSetting, '.note-toolbar-setting-mappings-container', 'displayRules');
 
 		const collapsibleContainerEl = createDiv();
 		collapsibleContainerEl.addClass('note-toolbar-setting-items-list-container');
@@ -780,40 +784,38 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 * Renders a setting that can be toggled open or closed.
 	 * @param setting Setting to add the toggle button to.
 	 * @param containerSelector CSS selector for the container to toggle.
-	 * @param context Object containing the state variable to change.
-	 * @param stateKey key in the context object that holds the toggle state.
+	 * @param section key in the context object that holds the toggle state.
 	 * @param callback optional callback to execute after performing the toggle.
 	 */
 	renderSettingToggle(
 		setting: Setting,
 		containerSelector: string,
-		context: Record<string, any>,
-		stateKey: string,
+		section: SettingsSectionType,
 		callback?: () => void
 	): void {
 		this.ntb.registerDomEvent(setting.infoEl, 'click', (event) => {
 			// ignore the "Learn more" link
 			if (!(event.target instanceof HTMLElement && 
 				event.target.matches('a.note-toolbar-setting-focussable-link'))) {
-				this.handleSettingToggle(containerSelector, context, stateKey, callback);
+				this.handleSettingToggle(containerSelector, section, callback);
 			}
 		});
 		setting.addExtraButton((cb) => {
 			cb.setIcon('right-triangle')
 				.setTooltip(t('setting.button-expand-collapse-tooltip'))
 				.onClick(async () => {
-					this.handleSettingToggle(containerSelector, context, stateKey, callback);
+					this.handleSettingToggle(containerSelector, section, callback);
 				});
 			cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
 			handleKeyClick(this.ntb, cb.extraSettingsEl);
 		});
 	}
 
-	handleSettingToggle(containerSelector: string, context: Record<string, any>, stateKey: string, callback?: () => void) {
+	handleSettingToggle(containerSelector: string, section: SettingsSectionType, callback?: () => void) {
 		let itemsContainer = this.containerEl.querySelector(containerSelector);
 		if (itemsContainer) {
-			context[stateKey] = !context[stateKey];
-			itemsContainer.setAttribute('data-active', context[stateKey].toString());
+			this.isSectionOpen[section] = !this.isSectionOpen[section];
+			itemsContainer.setAttribute('data-active', this.isSectionOpen[section].toString());
 			callback?.();
 		}
 	}
@@ -826,7 +828,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const settingsContainerEl = createDiv();
 		settingsContainerEl.addClasses(['note-toolbar-setting-app-toolbars-container']);
-		settingsContainerEl.setAttribute('data-active', this.appToolbarSettingsOpen.toString());
+		settingsContainerEl.setAttribute('data-active', this.isSectionOpen['appToolbars'].toString());
 
 		const appToolbarSetting = new Setting(settingsContainerEl)
 			.setHeading()
@@ -834,7 +836,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			.setDesc(t('setting.display-locations.description'));
 
 		// make collapsible
-		this.renderSettingToggle(appToolbarSetting, '.note-toolbar-setting-app-toolbars-container', this, 'appToolbarSettingsOpen');
+		this.renderSettingToggle(appToolbarSetting, '.note-toolbar-setting-app-toolbars-container', 'appToolbars');
 
 		const collapsibleContainerEl = createDiv();
 		collapsibleContainerEl.addClass('note-toolbar-setting-items-list-container');
@@ -942,14 +944,14 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	displayFileTypeSettings(containerEl: HTMLElement): void {
 
 		const collapsibleEl = createDiv('note-toolbar-setting-contexts-container');
-		collapsibleEl.setAttribute('data-active', this.contextSettingsOpen.toString());
+		collapsibleEl.setAttribute('data-active', this.isSectionOpen['contexts'].toString());
 
 		const otherContextSettings = new Setting(collapsibleEl)
 			.setHeading()
 			.setName(t('setting.display-contexts.name'))
 			.setDesc(t('setting.display-contexts.description'));
 
-		this.renderSettingToggle(otherContextSettings, '.note-toolbar-setting-contexts-container', this, 'contextSettingsOpen');
+		this.renderSettingToggle(otherContextSettings, '.note-toolbar-setting-contexts-container', 'contexts');
 
 		const collapsibleContainer = createDiv('note-toolbar-setting-items-list-container');
 
@@ -1054,14 +1056,14 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		let collapsibleEl = createDiv();
 		collapsibleEl.addClass('note-toolbar-setting-callout-container');
-		collapsibleEl.setAttribute('data-active', this.calloutSettingsOpen.toString());
+		collapsibleEl.setAttribute('data-active', this.isSectionOpen['callouts'].toString());
 
 		let copyAsCalloutSetting = new Setting(collapsibleEl)
 			.setName(t('setting.copy-as-callout.title'))
 			.setDesc(learnMoreFr(t('setting.copy-as-callout.description'), 'Creating-callouts-from-toolbars'))
 			.setHeading();
 
-		this.renderSettingToggle(copyAsCalloutSetting, '.note-toolbar-setting-callout-container', this, 'calloutSettingsOpen');
+		this.renderSettingToggle(copyAsCalloutSetting, '.note-toolbar-setting-callout-container', 'callouts');
 
 		let collapsibleContainer = createDiv();
 		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
