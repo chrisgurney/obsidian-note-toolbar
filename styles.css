@@ -3104,6 +3104,9 @@ input[type="text"].note-toolbar-setting-error,
     flex-wrap: wrap;
     & .setting-item-info {
         display: initial !important;
+        & .setting-item-name {
+            cursor: pointer;
+        }
     }
     & .setting-item-control {
         align-items: flex-end !important;
