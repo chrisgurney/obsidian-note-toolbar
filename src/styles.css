@@ -1331,6 +1331,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-rules-container {
     padding-top: 0.75em;
     & .setting-item-heading {
+        flex-direction: row !important;
         padding: 0.75em 0;
         & .setting-item-info {
             cursor: pointer;
@@ -1338,6 +1339,7 @@ input[type="text"].note-toolbar-setting-error,
         .is-mobile & {
             & .setting-item-control {
                 gap: var(--size-4-4);
+                width: unset !important;
             }
         }
         .is-phone & {
@@ -1354,6 +1356,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
     &[data-active="true"] {
+        & .note-toolbar-setting-items-collapsible-container,
         & .note-toolbar-setting-items-list-container {
             display: inherit !important;
             & .setting-item-name {
@@ -1366,6 +1369,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
     &[data-active="false"] {
+        & .note-toolbar-setting-items-collapsible-container,
         & .note-toolbar-setting-items-list-container {
             display: none !important;
         }
@@ -1382,39 +1386,38 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
-.note-toolbar-setting-items-container,
 .note-toolbar-setting-mappings-container,
 .note-toolbar-setting-rules-container {
     & .setting-item {
         .is-phone & {
-            flex-direction: unset !important;
             & .setting-item-control {
                 justify-content: flex-end !important;
-                width: unset !important;
             }
         }
     }
 }
 
+.note-toolbar-setting-items-container {
+    & .setting-item {
+        .is-phone & {
+            flex-direction: unset !important;
+        }
+    }
+}
+
+/* collapsible sections - bottom border */
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-mappings-container {
-    & .note-toolbar-setting-items-list-container {
-        .setting-item:first-child {
-            padding: 0.75em 0;
-            border-top: 1px solid var(--background-modifier-border);
-        }
-    }
     &[data-active="true"] {
         border-bottom: solid 1px var(--background-modifier-border);
         margin-bottom: 0.75em;
+        & .setting-item-heading {
+            border-bottom: solid 1px var(--background-modifier-border);
+            margin-bottom: 0.75em;
+        }
     }
-}
-
-.note-toolbar-setting-app-toolbars-container,
-.note-toolbar-setting-contexts-container,
-.note-toolbar-setting-mappings-container {
     &[data-active="false"] {
         & .setting-item-heading {
             border-bottom: solid 1px var(--background-modifier-border);
@@ -1432,6 +1435,10 @@ input[type="text"].note-toolbar-setting-error,
             }
         }
     }
+}
+
+.note-toolbar-setting-item-heading-top-spacing {
+    padding-top: 1.5em;
 }
 
 .is-phone .note-toolbar-setting-items-container,

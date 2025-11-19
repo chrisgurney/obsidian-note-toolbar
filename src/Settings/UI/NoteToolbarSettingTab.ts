@@ -573,7 +573,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.renderSettingToggle(rulesSetting, '.note-toolbar-setting-mappings-container', 'displayRules');
 
 		const collapsibleContainerEl = createDiv();
-		collapsibleContainerEl.addClass('note-toolbar-setting-items-list-container');
+		collapsibleContainerEl.addClass('note-toolbar-setting-items-collapsible-container');
 
 		this.displayPropertySetting(collapsibleContainerEl);
 		this.displayFolderMap(collapsibleContainerEl);
@@ -614,8 +614,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			.setName(t('setting.mappings.name'))
 			.setDesc(t('setting.mappings.description'));
 
-		// let itemsContainerEl = createDiv();
-		// itemsContainerEl.addClass('note-toolbar-setting-items-list-container');
+		let itemsContainerEl = createDiv();
+		itemsContainerEl.addClass('note-toolbar-setting-items-list-container');
 
 		if (this.ntb.settings.folderMappings.length == 0) {
 			containerEl
@@ -648,7 +648,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				}
 			});
 
-			containerEl.appendChild(toolbarFolderListEl)
+			itemsContainerEl.appendChild(toolbarFolderListEl)
+			containerEl.appendChild(itemsContainerEl);
 
 		}
 
@@ -677,8 +678,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				button.buttonEl.setText(iconTextFr('plus', t('setting.mappings.button-new')));
 			});
 
-		// containerEl.appendChild(itemsContainerEl);
-
 	}
 
 	/**
@@ -691,6 +690,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		let toolbarFolderListItemDiv = createDiv();
 		toolbarFolderListItemDiv.className = "note-toolbar-setting-folder-list-item-container";
+
 		toolbarFolderListItemDiv.setAttribute('data-row-id', rowId);
 		let textFieldsDiv = createDiv();
 		textFieldsDiv.id = "note-toolbar-setting-item-field-" + this.itemListIdCounter;
@@ -839,7 +839,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.renderSettingToggle(appToolbarSetting, '.note-toolbar-setting-app-toolbars-container', 'appToolbars');
 
 		const collapsibleContainerEl = createDiv();
-		collapsibleContainerEl.addClass('note-toolbar-setting-items-list-container');
+		collapsibleContainerEl.addClass('note-toolbar-setting-items-collapsible-container');
 
 		new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-contexts.option-filemenu'))
@@ -953,7 +953,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		this.renderSettingToggle(otherContextSettings, '.note-toolbar-setting-contexts-container', 'contexts');
 
-		const collapsibleContainer = createDiv('note-toolbar-setting-items-list-container');
+		const collapsibleContainer = createDiv();
+		collapsibleContainer.addClass('note-toolbar-setting-items-collapsible-container');
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-audio'))
@@ -1066,7 +1067,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.renderSettingToggle(copyAsCalloutSetting, '.note-toolbar-setting-callout-container', 'callouts');
 
 		let collapsibleContainer = createDiv();
-		collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
+		collapsibleContainer.addClass('note-toolbar-setting-items-collapsible-container');
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.copy-as-callout.option-icons'))
@@ -1129,7 +1130,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName(t('setting.other.name'))
-			.setHeading();
+			.setHeading()
+			.setClass('note-toolbar-setting-item-heading-top-spacing');
 
 		new Setting(containerEl)
 			.setName(t('setting.other.icon.name'))
