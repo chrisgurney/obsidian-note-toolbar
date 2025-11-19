@@ -3586,7 +3586,7 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-setting-help-section {
+.note-toolbar-setting-help-section-phone {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
     text-align: center;

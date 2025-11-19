@@ -158,7 +158,8 @@ export function displayHelpSection(ntb: NoteToolbarPlugin, settingsDiv: HTMLElem
 	if (Platform.isPhone || useTextVersion) {
 
 		let helpContainerEl = settingsDiv.createDiv();
-		helpContainerEl.addClass('note-toolbar-setting-help-section');
+		helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
+
 		const helpDesc = document.createDocumentFragment();
 		helpDesc.append("v" + PLUGIN_VERSION, " • ");
 		const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
