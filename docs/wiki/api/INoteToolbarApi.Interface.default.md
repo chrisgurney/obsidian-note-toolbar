@@ -1,4 +1,4 @@
-[obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / INoteToolbarApi
+[obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / default
 
 > [!note]
 > This documentation is for version `1.26.01`.
@@ -37,6 +37,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
 - [[ntb.menu|Note-Toolbar-API#menu]]
 - [[ntb.modal|Note-Toolbar-API#modal]]
+- [[ntb.o|Note-Toolbar-API#o]]
 - [[ntb.prompt|Note-Toolbar-API#prompt]]
 - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
 - [[ntb.suggester|Note-Toolbar-API#suggester]]
@@ -118,13 +119,13 @@ new Notice(folder.name);
 
 ### getActiveItem()
 
-> **getActiveItem**: () => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
+> **getActiveItem**: () => [`default`](IItem.Interface.default.md) \| `undefined`
 
 Gets the active (last activated) toolbar item.
 
 #### Returns
 
-[`IItem`](IItem.Interface.IItem.md) \| `undefined`
+[`default`](IItem.Interface.default.md) \| `undefined`
 
 The active (last activated) item.
 
@@ -136,7 +137,7 @@ This does not work with Note Toolbar Callouts.
 
 ### getItem()
 
-> **getItem**: (`id`) => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
+> **getItem**: (`id`) => [`default`](IItem.Interface.default.md) \| `undefined`
 
 Gets an item by its ID, if it exists.
 
@@ -148,7 +149,7 @@ Gets an item by its ID, if it exists.
 
 #### Returns
 
-[`IItem`](IItem.Interface.IItem.md) \| `undefined`
+[`default`](IItem.Interface.default.md) \| `undefined`
 
 The item, or undefined.
 
@@ -203,13 +204,13 @@ The selected text, or the word at the current cursor position. Otherwise returns
 
 ### getToolbars()
 
-> **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+> **getToolbars**: () => [`default`](IToolbar.Interface.default.md)[]
 
 Gets all toolbars.
 
 #### Returns
 
-[`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+[`default`](IToolbar.Interface.default.md)[]
 
 All toolbars.
 
@@ -312,6 +313,25 @@ else {
 #### See
 
 `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+
+***
+
+### o
+
+> **o**: `__module`
+
+Reference to the Obsidian API module for accessing Obsidian classes and utilities from scripts.
+
+#### See
+
+https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts
+
+#### Example
+
+```ts
+// get the current markdown view
+const view = app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+```
 
 ***
 

@@ -41,6 +41,7 @@ import IToolbar from "./IToolbar";
  * - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
  * - [[ntb.menu|Note-Toolbar-API#menu]]
  * - [[ntb.modal|Note-Toolbar-API#modal]]
+ * - [[ntb.o|Note-Toolbar-API#o]]
  * - [[ntb.prompt|Note-Toolbar-API#prompt]]
  * - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
  * - [[ntb.suggester|Note-Toolbar-API#suggester]]

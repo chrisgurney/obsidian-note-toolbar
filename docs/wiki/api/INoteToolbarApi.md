@@ -2,5 +2,5 @@
 
 ## Interfaces
 
-- [INoteToolbarApi](INoteToolbarApi.Interface.INoteToolbarApi.md)
+- [default](INoteToolbarApi.Interface.default.md)
 - [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md)

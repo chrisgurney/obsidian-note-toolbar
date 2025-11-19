@@ -2,4 +2,4 @@
 
 ## Interfaces
 
-- [IItem](IItem.Interface.IItem.md)
+- [default](IItem.Interface.default.md)
