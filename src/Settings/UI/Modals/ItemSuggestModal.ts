@@ -355,7 +355,11 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
                 // fall back to handling the item
                 await this.ntb.items.handleItemLink(selectedItem, event);
             }
-            else if (this.callback !== undefined) this.callback(selectedItem);
+            else {
+                // clear out the icon if it's the new item (which uses an icon for decoration in the suggester)
+                if (selectedItem.uuid === this.NEW_ITEM.uuid) selectedItem.icon = '';
+                if (this.callback !== undefined) this.callback(selectedItem);
+            }
         }
     }
 
