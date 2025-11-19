@@ -50,6 +50,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const { containerEl } = this;
 		containerEl.empty();
+		containerEl.addClass('note-toolbar-setting-ui');
 
 		if (this.ntb.settings.version !== SETTINGS_VERSION) {
 			new Setting(containerEl)

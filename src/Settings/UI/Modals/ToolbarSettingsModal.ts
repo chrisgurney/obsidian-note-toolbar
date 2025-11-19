@@ -100,6 +100,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.ntb.debug("🟡 REDRAWING MODAL 🟡");
 
 		this.contentEl.empty();
+		this.modalEl.addClass('note-toolbar-setting-ui');
 		this.modalEl.addClass('note-toolbar-setting-modal-container');
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-top-inset-fix');
 
