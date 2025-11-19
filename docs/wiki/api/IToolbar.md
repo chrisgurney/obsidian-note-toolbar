@@ -2,4 +2,4 @@
 
 ## Interfaces
 
-- [default](IToolbar.Interface.default.md)
+- [IToolbar](IToolbar.Interface.IToolbar.md)

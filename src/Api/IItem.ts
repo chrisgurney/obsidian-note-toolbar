@@ -4,7 +4,7 @@
  * @privateRemarks
  * API wrapper for ToolbarItemSettings methods.
  */
-export default interface IItem {
+export interface IItem {
 
     /**
      * Unique identifier for the item.

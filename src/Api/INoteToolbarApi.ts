@@ -1,7 +1,7 @@
 import * as Obsidian from "obsidian";
 import { Modal, TAbstractFile, TFile } from "obsidian";
-import IItem from "./IItem";
-import IToolbar from "./IToolbar";
+import { IItem } from "./IItem";
+import { IToolbar } from "./IToolbar";
 
 /**
  * > [!note]

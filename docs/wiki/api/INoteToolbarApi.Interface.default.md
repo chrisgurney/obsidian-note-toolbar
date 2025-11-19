@@ -119,13 +119,13 @@ new Notice(folder.name);
 
 ### getActiveItem()
 
-> **getActiveItem**: () => [`default`](IItem.Interface.default.md) \| `undefined`
+> **getActiveItem**: () => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
 
 Gets the active (last activated) toolbar item.
 
 #### Returns
 
-[`default`](IItem.Interface.default.md) \| `undefined`
+[`IItem`](IItem.Interface.IItem.md) \| `undefined`
 
 The active (last activated) item.
 
@@ -137,7 +137,7 @@ This does not work with Note Toolbar Callouts.
 
 ### getItem()
 
-> **getItem**: (`id`) => [`default`](IItem.Interface.default.md) \| `undefined`
+> **getItem**: (`id`) => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
 
 Gets an item by its ID, if it exists.
 
@@ -149,7 +149,7 @@ Gets an item by its ID, if it exists.
 
 #### Returns
 
-[`default`](IItem.Interface.default.md) \| `undefined`
+[`IItem`](IItem.Interface.IItem.md) \| `undefined`
 
 The item, or undefined.
 
@@ -204,13 +204,13 @@ The selected text, or the word at the current cursor position. Otherwise returns
 
 ### getToolbars()
 
-> **getToolbars**: () => [`default`](IToolbar.Interface.default.md)[]
+> **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
 
 Gets all toolbars.
 
 #### Returns
 
-[`default`](IToolbar.Interface.default.md)[]
+[`IToolbar`](IToolbar.Interface.IToolbar.md)[]
 
 All toolbars.
 

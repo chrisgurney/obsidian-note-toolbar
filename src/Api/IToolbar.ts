@@ -4,7 +4,7 @@
  * @privateRemarks
  * API wrapper for ToolbarSettings methods.
  */
-export default interface IToolbar {
+export interface IToolbar {
 
     /**
      * Unique identifier for the toolbar.

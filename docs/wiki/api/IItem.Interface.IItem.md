@@ -1,4 +1,4 @@
-[obsidian-note-toolbar](index.md) / [IItem](IItem.md) / default
+[obsidian-note-toolbar](index.md) / [IItem](IItem.md) / IItem
 
 The `IItem` interface provides basic API access to toolbar items, with more functions to be added.
 
