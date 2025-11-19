@@ -9,10 +9,18 @@ import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
 import NtbSuggester from "./NtbSuggester";
 import Toolbar from "./Toolbar";
+import * as Obsidian from "obsidian";
 
 export type Callback = (arg: string) => void;
 
 export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
+
+    /**
+     * Reference to the Obsidian API module for accessing Obsidian classes and utilities.
+     * 
+     * @see INoteToolbarApi.o;
+     */
+    readonly o = Obsidian;
 
     constructor(private ntb: NoteToolbarPlugin) {
     }

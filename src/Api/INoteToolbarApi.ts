@@ -1,3 +1,4 @@
+import * as Obsidian from "obsidian";
 import { Modal, TAbstractFile, TFile } from "obsidian";
 import IItem from "./IItem";
 import IToolbar from "./IToolbar";
@@ -51,6 +52,16 @@ import IToolbar from "./IToolbar";
  * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
  */
 export default interface INoteToolbarApi<T> {
+
+    /**
+     * Reference to the Obsidian API module for accessing Obsidian classes and utilities from scripts.
+     * @see https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts
+     * 
+     * @example
+     * // get the current markdown view
+     * const view = app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+     */
+    o: typeof Obsidian;
 
     // testCallback: (buttonId: string, callback: Callback) => Promise<void>;
 
