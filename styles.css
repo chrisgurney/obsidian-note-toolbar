@@ -2045,16 +2045,17 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
             }
         }
     }
+}
 
-    /* width fix for Minimal theme in props position #204 #216 */
-    &[data-csstheme="Minimal"][data-tbar-position="props"] {
+/* width fix for Minimal theme in props position #204 #216 */
+body[data-ntb-csstheme="Minimal"] {
+    & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
         .is-readable-line-width & {
             max-width: var(--max-width);
             width: var(--line-width);
             margin-inline: var(--content-margin) !important;
         }
     }
-
 }
 
 .note-toolbar-menu {

@@ -29,6 +29,15 @@ export default class ChangeListener {
     ) {}
 
 	/**
+	 * Track changes to the theme (for better CSS overrides when rendering toolbars).
+	 */
+	onCssChange = async () => {
+		this.ntb.debug('===== CSS-CHANGE =====');
+		// update the global theme attribute (for styling)
+		activeDocument.body.setAttr('data-ntb-csstheme', this.ntb.app.vault.getConfig('cssTheme'));
+	};
+
+	/**
 	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
 	 * @param file TFile that was opened.
 	 */

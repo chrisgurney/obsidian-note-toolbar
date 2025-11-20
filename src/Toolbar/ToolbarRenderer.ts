@@ -135,8 +135,7 @@ export default class ToolbarRenderer {
             'data-name': toolbar.name,
             'data-tbar-position': position,
             'data-updated': toolbar.updated,
-            'data-view-mode': markdownViewMode,
-            'data-csstheme': this.ntb.app.vault.getConfig('cssTheme')
+            'data-view-mode': markdownViewMode
         });
 
         // render the toolbar based on its position
@@ -983,8 +982,7 @@ export default class ToolbarRenderer {
 			'data-name': toolbar.name,
 			'data-tbar-position': PositionType.Text,
 			'data-updated': toolbar.updated,
-			// 'data-view-mode': markdownViewMode,
-			'data-csstheme': this.ntb.app.vault.getConfig('cssTheme')
+			// 'data-view-mode': markdownViewMode
 		});
 		
 		const renderedToolbarEl = await this.renderAsCallout(toolbar, activeFile, activeView);
