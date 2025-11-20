@@ -181,6 +181,7 @@ body {
 
 .callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
+    background-image: unset !important;
     margin: 0em !important;
     padding: 0em;
     &:has(> .callout-title) {
@@ -196,6 +197,9 @@ body {
         text-transform: uppercase;
         & .callout-icon {
             display: none;
+        }
+        & .callout-title-inner {
+            color: var(--background-secondary);
         }
     }
 }
