@@ -5,6 +5,15 @@ import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemT
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { hasStyle, putFocusInMenu, getViewId, isValidUri, calcComponentVisToggles, calcItemVisToggles } from "Utils/Utils";
 
+// note: make sure CSS is updated if these are changed
+export enum TbarData {
+	FabMeta = 'data-fab-metadata',
+	Name = 'data-name',
+	Position = 'data-tbar-position',
+	Updated = 'data-updated',
+	ViewMode = 'data-view-mode'
+}
+
 /**
  * Provides toolbar rendering, update, and cleanup functions.
  */
@@ -132,10 +141,10 @@ export default class ToolbarRenderer {
         toolbar.uuid ? embedBlock.id = toolbar.uuid : undefined;
         const markdownViewMode = (view instanceof MarkdownView) ? view.getMode() : '';
         embedBlock.setAttrs({
-            'data-name': toolbar.name,
-            'data-tbar-position': position,
-            'data-updated': toolbar.updated,
-            'data-view-mode': markdownViewMode
+            [TbarData.Name]: toolbar.name,
+            [TbarData.Position]: position,
+            [TbarData.Updated]: toolbar.updated,
+            [TbarData.ViewMode]: markdownViewMode
         });
 
         // render the toolbar based on its position
@@ -444,7 +453,7 @@ export default class ToolbarRenderer {
 
 		let noteToolbarFabButton = activeDocument.createElement('button');
 		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
-		noteToolbarFabButton.setAttribute("data-fab-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
+		noteToolbarFabButton.setAttribute(TbarData.FabMeta, [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 
 		const defaultItem = toolbar.defaultItem ? this.ntb.settingsManager.getToolbarItemById(toolbar.defaultItem) : undefined;
 		// show default item if set
@@ -764,8 +773,8 @@ export default class ToolbarRenderer {
 		}
 
 		// if we have a toolbarEl, double-check toolbar's name and updated stamp are as provided
-		let toolbarElName = toolbarEl?.getAttribute("data-name");
-		let toolbarElUpdated = toolbarEl?.getAttribute("data-updated");
+		let toolbarElName = toolbarEl?.getAttribute(TbarData.Name);
+		let toolbarElUpdated = toolbarEl?.getAttribute(TbarData.Updated);
 		if (toolbarEl === null || toolbar.name !== toolbarElName || toolbar.updated !== toolbarElUpdated) {
 			this.ntb.debugGroupEnd();
 			return;
@@ -979,10 +988,9 @@ export default class ToolbarRenderer {
 			'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'
 		]);
 		this.textToolbarEl.setAttrs({
-			'data-name': toolbar.name,
-			'data-tbar-position': PositionType.Text,
-			'data-updated': toolbar.updated,
-			// 'data-view-mode': markdownViewMode
+			[TbarData.Name]: toolbar.name,
+			[TbarData.Position]: PositionType.Text,
+			[TbarData.Updated]: toolbar.updated
 		});
 		
 		const renderedToolbarEl = await this.renderAsCallout(toolbar, activeFile, activeView);
@@ -1083,10 +1091,10 @@ export default class ToolbarRenderer {
 		const toolbarView: ItemView | MarkdownView | null = view ? view : this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// this.ntb.debug('checkRemoveToolbarEl: existing toolbar');
-		const existingToolbarName = existingToolbarEl?.getAttribute('data-name');
-		const existingToolbarUpdated = existingToolbarEl.getAttribute('data-updated');
+		const existingToolbarName = existingToolbarEl?.getAttribute(TbarData.Name);
+		const existingToolbarUpdated = existingToolbarEl.getAttribute(TbarData.Updated);
 		const existingToolbarHasSibling = existingToolbarEl.nextElementSibling;
-		const existingToolbarViewMode = existingToolbarEl.getAttribute('data-view-mode');
+		const existingToolbarViewMode = existingToolbarEl.getAttribute(TbarData.ViewMode);
 
 		// if we don't have a toolbar to check against
 		if (!correctToolbar) {

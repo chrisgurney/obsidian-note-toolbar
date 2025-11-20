@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { TFile, ItemView, MarkdownView, CachedMetadata, debounce, Notice, MarkdownViewModeType } from "obsidian";
 import { LocalVar, ToolbarSettings, ToolbarItemSettings, t } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
+import { TbarData } from "./ToolbarRenderer";
 
 /**
  * Handles Obsidian changes registered with Obsidian's `registerEvent()`.
@@ -154,7 +155,7 @@ export default class ChangeListener {
 		// update the active toolbar if its configuration changed
 		if (toolbarEl) {
 			let activeToolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
-			if (activeToolbar && (activeToolbar.updated !== toolbarEl.getAttribute('data-updated'))) {
+			if (activeToolbar && (activeToolbar.updated !== toolbarEl.getAttribute(TbarData.Updated))) {
 				renderToolbar = true;
 			}
 		}
