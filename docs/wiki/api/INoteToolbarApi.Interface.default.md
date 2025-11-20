@@ -28,6 +28,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 
 ## `ntb` API
 
+- [[ntb.app|Note-Toolbar-API#app]]
 - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
 - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
 - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
@@ -52,6 +53,25 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 | `T` |
 
 ## Properties
+
+### app
+
+> **app**: `App`
+
+The Obsidian app instance. Use this instead of the global `app` when writing JavaScript.
+
+#### See
+
+https://docs.obsidian.md/Reference/TypeScript+API/App
+
+#### Example
+
+```ts
+const currentFile = ntb.app.workspace.getActiveFile();
+new Notice(currentFile.name);
+```
+
+***
 
 ### clipboard()
 
@@ -249,10 +269,10 @@ await ntb.menu([
 
 ```ts
 // shows bookmarks in a menu
-const b = app.internalPlugins.plugins['bookmarks'];
+const b = ntb.app.internalPlugins.plugins['bookmarks'];
 if (!b?.enabled) return;
 const i = b.instance?.getBookmarks();
-const b = app.internalPlugins.plugins['bookmarks'];
+const b = ntb.app.internalPlugins.plugins['bookmarks'];
 const mi = i
   .filter(b => b.type === 'file' || b.type === 'folder')
   .map(b => ({
@@ -298,7 +318,7 @@ await ntb.modal("_Hello_ world!");
 ```ts
 // shows a modal with the rendered contents of a file
 const filename = "Welcome.md";
-const file = app.vault.getAbstractFileByPath(filename);
+const file = ntb.app.vault.getAbstractFileByPath(filename);
 
 if (file) {
   await ntb.modal(file, {
@@ -330,7 +350,7 @@ https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts
 
 ```ts
 // get the current markdown view
-const view = app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
 ```
 
 ***

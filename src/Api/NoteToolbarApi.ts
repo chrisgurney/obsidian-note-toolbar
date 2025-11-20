@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
-import { Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { App, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
@@ -15,19 +15,20 @@ export type Callback = (arg: string) => void;
 
 export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
-    /**
-     * Reference to the Obsidian API module for accessing Obsidian classes and utilities.
-     * 
-     * @see INoteToolbarApi.o;
-     */
-    readonly o = Obsidian;
-
     constructor(private ntb: NoteToolbarPlugin) {
+        this.app = ntb.app;
     }
 
     // async testCallback(buttonId: string, callback: Callback) {
     //     return await testCallback(this.plugin, buttonId, callback);
     // }
+
+    /**
+     * The Obsidian app instance.
+     * 
+     * @see INoteToolbarApi.app
+     */
+    readonly app: App;
 
     /**
      * Gets the clipboard value. 
@@ -229,6 +230,13 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         else await modal.displayMarkdown();
         return modal as Modal;
     }
+
+    /**
+     * Reference to the Obsidian API module for accessing Obsidian classes and utilities.
+     * 
+     * @see INoteToolbarApi.o;
+     */
+    readonly o = Obsidian;
 
     /**
      * Shows the prompt modal and waits for the user's input.

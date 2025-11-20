@@ -1,5 +1,5 @@
 import * as Obsidian from "obsidian";
-import { Modal, TAbstractFile, TFile } from "obsidian";
+import { App, Modal, TAbstractFile, TFile } from "obsidian";
 import { IItem } from "./IItem";
 import { IToolbar } from "./IToolbar";
 
@@ -32,6 +32,7 @@ import { IToolbar } from "./IToolbar";
  * 
  * ## `ntb` API
  * 
+ * - [[ntb.app|Note-Toolbar-API#app]]
  * - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
  * - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
  * - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
@@ -54,17 +55,17 @@ import { IToolbar } from "./IToolbar";
  */
 export default interface INoteToolbarApi<T> {
 
+    // testCallback: (buttonId: string, callback: Callback) => Promise<void>;
+
     /**
-     * Reference to the Obsidian API module for accessing Obsidian classes and utilities from scripts.
-     * @see https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts
+     * The Obsidian app instance. Use this instead of the global `app` when writing JavaScript.
+     * @see https://docs.obsidian.md/Reference/TypeScript+API/App
      * 
      * @example
-     * // get the current markdown view
-     * const view = app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+     * const currentFile = ntb.app.workspace.getActiveFile();
+     * new Notice(currentFile.name);
      */
-    o: typeof Obsidian;
-
-    // testCallback: (buttonId: string, callback: Callback) => Promise<void>;
+    app: App;
 
     /**
      * Gets the clipboard value.
@@ -159,10 +160,10 @@ export default interface INoteToolbarApi<T> {
      * 
      * @example
      * // shows bookmarks in a menu
-     * const b = app.internalPlugins.plugins['bookmarks'];
+     * const b = ntb.app.internalPlugins.plugins['bookmarks'];
      * if (!b?.enabled) return;
      * const i = b.instance?.getBookmarks();
-     * const b = app.internalPlugins.plugins['bookmarks'];
+     * const b = ntb.app.internalPlugins.plugins['bookmarks'];
      * const mi = i
      *   .filter(b => b.type === 'file' || b.type === 'folder')
      *   .map(b => ({
@@ -189,7 +190,7 @@ export default interface INoteToolbarApi<T> {
      * @example
      * // shows a modal with the rendered contents of a file
      * const filename = "Welcome.md";
-     * const file = app.vault.getAbstractFileByPath(filename);
+     * const file = ntb.app.vault.getAbstractFileByPath(filename);
      * 
      * if (file) {
      *   await ntb.modal(file, {
@@ -203,6 +204,16 @@ export default interface INoteToolbarApi<T> {
      * @see `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
     modal: (content: string | TFile, options?: NtbModalOptions) => Promise<Modal>;
+
+    /**
+     * Reference to the Obsidian API module for accessing Obsidian classes and utilities from scripts.
+     * @see https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts
+     * 
+     * @example
+     * // get the current markdown view
+     * const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+     */
+    o: typeof Obsidian;
 
     /**
      * Shows the prompt modal and waits for the user's input.
