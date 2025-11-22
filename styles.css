@@ -1334,6 +1334,9 @@ body {
     /* fix: adjustments for various themes #413 */
     &[data-ntb-csstheme="Cupertino"] {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+        &.is-mobile.theme-dark {
+            --cg-nt-tbar-bg-color: #000;
+        }
     }
     &[data-ntb-csstheme="Minimal"] {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
@@ -1431,6 +1434,12 @@ body {
         & .callout-title-inner {
             color: var(--background-secondary);
         }
+    }
+}
+
+body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
+    & .callout[data-callout="note-toolbar-output"] {
+        background-color: #000 !important;
     }
 }
 
