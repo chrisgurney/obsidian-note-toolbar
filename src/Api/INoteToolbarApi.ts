@@ -4,9 +4,6 @@ import { IItem } from "./IItem";
 import { IToolbar } from "./IToolbar";
 
 /**
- * > [!note]
- * > This documentation is for version `1.26.01`.
- * 
  * The Note Toolbar API provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
  * 
  * Using the `ntb` object, below are the functions that can be called in scripts that are [executed from Note Toolbar items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts).
@@ -64,6 +61,8 @@ export default interface INoteToolbarApi<T> {
      * @example
      * const currentFile = ntb.app.workspace.getActiveFile();
      * new Notice(currentFile.name);
+     * 
+     * @since 1.26
      */
     app: App;
 
@@ -134,6 +133,8 @@ export default interface INoteToolbarApi<T> {
      * Gets the currently selected text, or the word at the current cursor position, if nothing's selected.
      * 
      * @returns The selected text, or the word at the current cursor position. Otherwise returns an empty string.
+     * 
+     * @since 1.26
      */
     getSelection: () => string;
 
@@ -212,6 +213,8 @@ export default interface INoteToolbarApi<T> {
      * @example
      * // get the current markdown view
      * const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+     * 
+     * @since 1.26
      */
     o: typeof Obsidian;
 
