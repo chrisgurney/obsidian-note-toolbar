@@ -834,7 +834,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const appToolbarSetting = new Setting(settingsContainerEl)
 			.setHeading()
 			.setName(t('setting.display-locations.name'))
-			.setDesc(t('setting.display-locations.description'));
+			.setDesc(learnMoreFr(t('setting.display-locations.description'), 'Toolbars-within-the-app'));
 
 		// make collapsible
 		this.renderSettingToggle(appToolbarSetting, '.note-toolbar-setting-app-toolbars-container', 'appToolbars');
@@ -844,7 +844,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-contexts.option-filemenu'))
-			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Defining-where-to-show-toolbars#file-menu'))
+			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Toolbars-within-the-app#File-menu'))
 			.addToggle((cb) => {
 				cb.setValue(this.ntb.settings.showToolbarInFileMenu)
 				cb.onChange(async (value) => {
@@ -857,7 +857,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const existingEmptyViewToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar)
 		const emptyViewSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-emptyview-tbar'))
-			.setDesc(learnMoreFr(t('setting.display-locations.option-emptyview-tbar-description'), 'New-tab-view'))
+			.setDesc(t('setting.display-locations.option-emptyview-tbar-description'))
 			.setClass('note-toolbar-setting-item-control-std-with-help')
 			.addSearch(async (cb) => {
 				new ToolbarSuggester(this.ntb, cb.inputEl);
@@ -884,7 +884,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const launchpadSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-launchpad'))
-			.setDesc(t('setting.display-locations.option-launchpad-description'))
+			.setDesc(learnMoreFr(t('setting.display-locations.option-launchpad-description'), 'Toolbars-within-the-app#new-tab-view'))
 			.addToggle((cb: ToggleComponent) => {
 				cb.setValue(this.ntb.settings.showLaunchpad)
 					.onChange(async (value: boolean) => {
@@ -898,7 +898,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.ribbon-action.name'))
-			.setDesc(learnMoreFr(t('setting.display-locations.ribbon-action.description'), 'Navigation-bar'))
+			.setDesc(learnMoreFr(t('setting.display-locations.ribbon-action.description'), 'Toolbars-within-the-app#Ribbon-'))
 			.addDropdown((dropdown) => 
 				dropdown
 					.addOptions(RIBBON_ACTION_OPTIONS)
@@ -912,7 +912,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const existingTextToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
 		const textToolbarSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-text'))
-			.setDesc(t('setting.display-locations.option-text-description'))
+			.setDesc(learnMoreFr(t('setting.display-locations.option-text-description'), 'Toolbars-within-the-app#Selected-text'))
 			.setClass('note-toolbar-setting-item-control-std-with-help')
 			.addSearch(async (cb) => {
 				new ToolbarSuggester(this.ntb, cb.inputEl);
@@ -950,7 +950,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const otherContextSettings = new Setting(collapsibleEl)
 			.setHeading()
 			.setName(t('setting.display-contexts.name'))
-			.setDesc(t('setting.display-contexts.description'));
+			.setDesc(learnMoreFr(t('setting.display-contexts.description'), 'File-types'));
 
 		this.renderSettingToggle(otherContextSettings, '.note-toolbar-setting-contexts-container', 'contexts');
 
@@ -1036,7 +1036,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		new Setting(collapsibleContainer)
 			.setName(t('setting.display-contexts.option-other'))
-			.setDesc(t('setting.display-contexts.option-other-description'))
+			.setDesc(learnMoreFr(t('setting.display-contexts.option-other-description'), 'File-types#Other-data-types'))
 			.addText(text => text
 				.setPlaceholder(t('setting.display-contexts.option-other-placeholder'))
 				.setValue(this.ntb.settings.showToolbarInOther)
