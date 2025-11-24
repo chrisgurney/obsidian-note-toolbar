@@ -623,7 +623,10 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
         }
     }
     
-    /* custom class for Cupertino theme, thanks to @aaaaalexis */
+}
+
+/* custom class for Cupertino theme, thanks to @aaaaalexis */
+body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
     &.glass, &[data-callout-metadata*="glass"] {
         &[data-callout-metadata*="button"] ul {
             & a, span.external-link {
@@ -640,7 +643,6 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
             }
         }
     }
-
 }
 
 /* user feedback that toolbar interaction is not available; workaround for #69 */
