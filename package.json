@@ -24,7 +24,7 @@
 		"chokidar": "^3.6.0",
 		"esbuild": "^0.25.0",
 		"eslint": "^9.38.0",
-		"eslint-plugin-obsidianmd": "^0.1.6",
+		"eslint-plugin-obsidianmd": "^0.1.9",
 		"obsidian": "latest",
 		"postcss": "^8.4.45",
 		"tslib": "2.4.0",
