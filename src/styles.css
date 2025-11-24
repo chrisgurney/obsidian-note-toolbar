@@ -103,7 +103,7 @@ body {
 
     /* fix: adjustments for various themes #413 */
     &[data-ntb-csstheme="Cupertino"] {
-        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
         &.is-mobile.theme-dark {
             --cg-nt-tbar-bg-color: #000;
         }
@@ -623,6 +623,24 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
         }
     }
     
+    /* custom class for Cupertino theme, thanks to @aaaaalexis */
+    &.glass, &[data-callout-metadata*="glass"] {
+        &[data-callout-metadata*="button"] ul {
+            & a, span.external-link {
+                backdrop-filter: var(--blur-s);
+                box-shadow: var(--shadow-xs);
+                border: none;
+                background-color: var(--liquid-glass-background);
+                transition: var(--anim-duration-moderate);
+            }
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+
 }
 
 /* user feedback that toolbar interaction is not available; workaround for #69 */
