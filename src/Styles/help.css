@@ -1,0 +1,429 @@
+/*
+ * Help
+ */
+
+.note-toolbar-gallery-item-divider {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    color: var(--text-muted);
+    font-size: var(--font-ui-small);
+    font-weight: var(--font-semibold);
+}
+
+.note-toolbar-gallery-item-suggestion {
+    box-shadow: inset 0 0 0 2px var(--background-modifier-border);
+    margin-bottom: 0.5em;
+}
+
+.note-toolbar-gallery-view-search {
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        margin-top: 0 !important;
+        justify-content: flex-start;
+        & .search-input-container {
+            width: 250px;
+        }
+        & input[type='search']:focus-visible {
+            box-shadow: inset 0px 0px 0 2px var(--background-modifier-border-focus);
+        }
+    }
+}
+
+.note-toolbar-card-items {
+    align-items: stretch;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overscroll-behavior-x: none;
+    position: relative;
+    scroll-behavior: smooth;
+}
+
+.note-toolbar-gallery-card-items {
+    border-block-end: solid 1px var(--background-modifier-border);
+    padding-bottom: 2em;
+    padding-top: 1em;
+}
+
+.note-toolbar-tips-card-items {
+    padding-bottom: 2em;
+    & .note-toolbar-card-item {
+        background-blend-mode: overlay;
+        & h3, p, svg {
+            color: var(--text-on-accent);
+        }
+    }
+    @media (hover: hover) {
+        & button:hover {
+            box-shadow: inset 0 0 0 2px var(--text-normal);
+        }
+    }
+}
+
+.note-toolbar-view-heading {
+    display: flex;
+    flex-basis: fit-content;
+    justify-content: space-between;
+    vertical-align: top;
+    & h1 {
+        margin-block-start: 0;
+    }
+    .is-phone & {
+        flex-direction: column;
+        & h1 {
+            margin-block-end: 0;
+        }
+        & .setting-item {
+            padding-top: 0;
+        }
+    }
+}
+
+.note-toolbar-gallery-view-plugin-overview p {
+    margin-block-end: 0.25em;
+}
+
+.note-toolbar-gallery-view-cat-title h2 {
+    margin-block-end: 0.25em;
+    &::after {
+        display: none; /* fix for Border theme */
+    }
+}
+
+.note-toolbar-gallery-view-note,
+.note-toolbar-gallery-view-cat-description {
+    display: flex;
+    gap: 0.5em;
+    & p {
+        color: var(--text-muted);
+        font-size: var(--font-smaller);
+        margin-block-start: 0;
+    }
+    & svg {
+        height: 1em;
+        width: 1em;
+    }
+}
+
+.note-toolbar-card-item {
+    align-items: start;
+    box-shadow: var(--input-shadow);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    height: unset;
+    justify-content: flex-end;
+    min-height: 140px;
+    padding: 16px !important;
+    position: relative;
+    text-align: unset;
+    width: 200px;
+    &:focus-visible {
+        border-radius: var(--input-radius);
+        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        box-shadow: inset 0 0 0 3px var(--background-modifier-border-focus);
+    }
+    &:hover {
+        .is-mobile & {
+            background-color: var(--interactive-normal);
+        }
+    }
+    & .note-toolbar-card-item-icon {
+        align-items: center;
+        display: flex;
+        height: 30px;
+        justify-content: center;
+        left: 16px;
+        position: absolute;
+        top: 16px;
+        width: 30px;
+        & svg {
+            height: 30px;        
+            width: 30px;
+        }
+    }
+    .note-toolbar-card-item-plus {
+        position: absolute;
+        color: var(--interactive-accent);
+        top: 16px;
+        right: 16px;
+        opacity: 0;
+        & svg {
+            height: 24px;        
+            width: 24px;
+        }
+    }
+    &:hover .note-toolbar-card-item-plus {
+        opacity: 0.8;
+    }
+    & .note-toolbar-card-item-title {
+        font-size: 1.25em;
+        font-weight: var(--h3-weight);
+        .is-mobile & {
+            font-size: var(--font-ui-small);
+            font-weight: var(--font-bold);
+        }
+        line-height: var(--h3-line-height);
+        margin: 0;
+        margin-top: 46px; /* icon height */
+        text-wrap: wrap;
+        width: 100%;
+        &::after {
+            display: none; /* fix for Border theme */
+        }
+    }
+    & .note-toolbar-card-item-description {
+        align-self: start;
+        color: var(--text-muted);
+        .note-toolbar-tips-card-items & {
+            color: var(--text-normal);
+        }
+        display: flex;
+        font-size: var(--font-ui-small);
+        margin: 0 !important;
+        text-wrap: wrap;
+    }
+    & .note-toolbar-card-item-plugins {
+        display: flex;
+        vertical-align: middle;
+        gap: 0.25em;
+        margin-top: 0.5em !important;
+        & svg {
+            height: var(--font-ui-small);
+            width: var(--font-ui-small);
+        }
+    }
+}
+
+.note-toolbar-setting-help-section-phone {
+    color: var(--text-muted);
+    font-size: var(--font-ui-smaller);
+    text-align: center;
+    a {
+        color: var(--text-muted);
+        display: inline-flex;
+        &:focus-visible {
+            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
+    }
+    .note-toolbar-setting-text-with-icon {
+        column-gap: 0.25em;
+        & svg {
+            height: var(--font-ui-smaller);
+            width: var(--font-ui-smaller);
+        }
+    }
+}
+
+.note-toolbar-setting-gallery-view .is-readable-line-width,
+.note-toolbar-setting-help-view .is-readable-line-width,
+.note-toolbar-setting-whatsnew-view .is-readable-line-width {
+    max-width: var(--file-line-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.note-toolbar-setting-help-view {
+    & .note-toolbar-setting-view-banner {
+        .is-phone & {
+            padding: 1em 1em 2em 1em;
+        }
+    }
+}
+
+.note-toolbar-setting-help-view-title {
+    & h1, p, svg {
+        color: var(--text-normal) !important;
+    }
+}
+
+.note-toolbar-setting-help-view-section {
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin: 0em 0em 1em 0em;
+    padding: 0em 1em;
+    & .setting-item {
+        align-items: center !important;
+        padding: 1em 0em !important;
+    }
+    & .setting-item-control {
+        margin-top: 0 !important;
+    }
+}
+
+.note-toolbar-setting-help-video {
+    aspect-ratio: 8 / 5;
+    position: relative;
+    width: 100%;
+    & video {
+        border: 1px solid var(--background-modifier-border);
+        border-radius: 0.5em;
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+    & .note-toolbar-setting-help-video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+    & .note-toolbar-setting-help-video-play {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: color-mix(in srgb, var(--interactive-normal) 45%, transparent);
+        opacity: 0.8;
+        border: none;
+        border-radius: 50%;
+        width: 6em;
+        height: 6em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        svg {
+            color: var(--interactive-accent);
+            width: 5em;
+            height: 5em;
+            fill: var(--interactive-accent);
+        }
+    }
+}
+
+.note-toolbar-setting-gallery-view {
+    & .note-toolbar-setting-view-banner {
+        background-image: linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%), linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%);
+    }
+}
+
+.note-toolbar-setting-view-banner {
+    background-blend-mode: overlay;
+    font-size: var(--font-ui-medium);
+    padding: 2em;
+    .is-phone & {
+        padding: 2em 1em;
+    }
+    text-align: center;
+    vertical-align: middle;
+    & h1, p, svg {
+        color: var(--text-on-accent);
+    }
+    & h1, p {
+        margin-block-end: 0;
+    }
+    & svg {
+        height: 64px;
+        width: 64px;
+        animation: note-toolbar-tip-icon-animation 1s ease-in-out 1;
+        transform-origin: center;
+    }
+}
+
+@keyframes note-toolbar-tip-icon-animation {
+  0% { opacity: 0.5; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.note-toolbar-setting-view-cta {
+    & .setting-item {
+        border-top: 1px solid var(--background-modifier-border);
+        padding-top: 0.75em;
+        .is-phone & {
+            flex-direction: row !important;
+            & .setting-item-control {
+                width: auto !important;
+                & button {
+                    width: auto;
+                }
+            }
+        }
+    }
+}
+
+.note-toolbar-setting-gallery-content,
+.note-toolbar-setting-help-content,
+.note-toolbar-setting-tip-content,
+.note-toolbar-setting-whatsnew-content {
+    margin-bottom: 2rem;
+    user-select: text;
+    &.markdown-preview-view {
+        padding: unset;
+    }
+    pre {
+        &:has(code) {
+            overflow-x: auto;
+        }
+        & code {
+            font-size: calc(var(--font-ui-small) + 1px);
+            overflow: scroll;
+            white-space: pre;
+        }
+        & button.copy-code-button {
+            cursor: pointer;
+            margin: 1em;
+        }
+    }
+    hr {
+        border-top: 1px solid;
+        border-color: var(--hr-color);
+    }
+    img {
+        border: 1px solid var(--background-modifier-border);
+        border-radius: 0.5rem;
+        width: 100%;
+    }
+    table {
+        border-collapse: collapse;
+        & td, th {
+            border-collapse: collapse;
+            border-color: grey;
+            border-style: solid;
+            border-width: 1px;
+            padding: var(--size-2-2) var(--size-4-2);
+            text-align: start;
+        }
+    }
+}
+
+.note-toolbar-setting-whatsnew-content {
+    code:not(.language-ts) {
+        background-color: var(--code-background);
+        border-width: var(--code-border-width);
+        padding: 0.3em;
+    }
+    h2 {
+        border-bottom: 1px solid var(--background-modifier-border);
+        padding-bottom: .3em;
+        &::after {
+            display: none; /* fix for ITS theme */
+        }
+    }
+}
+
+.note-toolbar-setting-remote-skeleton {
+    background: linear-gradient(90deg, var(--text-normal) 25%, var(--text-muted) 50%, var(--text-normal) 75%);
+    opacity: 0.25;
+    background-size: 200% 100%;
+    animation: note-toolbar-setting-remote-shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes note-toolbar-setting-remote-shimmer {
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.note-toolbar-notice-with-cta {
+    cursor: pointer;
+}

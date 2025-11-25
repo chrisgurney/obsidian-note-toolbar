@@ -1,0 +1,101 @@
+/* 
+ * Note Toolbar API UI Components
+ */
+
+.note-toolbar-ui {
+    min-height: unset;
+    & .modal-close-button {
+        z-index: 2; /* fix for modal title overlapping close button */
+        .is-mobile & {
+            background-color: var(--background-secondary-alt);
+            border-radius: var(--radius-l);
+            inset-inline-end: var(--size-4-3);
+            top: var(--size-4-3);
+        }
+    }
+    &.prompt {
+        .is-mobile & {
+            border-radius: var(--radius-l);
+            height: unset;
+        }
+    }
+    & .modal-header > .modal-title, .ntb-suggester-header {
+        font-size: var(--font-ui-medium);
+        font-weight: var(--font-normal);
+    }
+    & .suggestion-item > p, .modal-title > p {
+        margin: 0;
+    }
+    & a.internal-link, a.external-link, div.modal-content,
+      .callout[data-callout="note-toolbar"] a.external-link, .callout[data-callout="note-toolbar"] a.internal-link {
+        &:is(:focus-visible) {
+            border-radius: var(--input-radius);
+            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
+    }
+    &[data-ntb-ui-mode*="noclose"] {
+        & .modal-close-button {
+            display: none;
+        }
+    }
+    &[data-ntb-ui-mode*="noheader"] {
+        & .modal-header {
+            display: none;
+        }
+    }
+    &[data-ntb-ui-type="modal"] {
+        height: 100%;
+        width: var(--cg-nt-ui-modal-width);
+        & .view-header-left, .view-actions {
+            display: none;
+        }
+        & .modal-content {
+            overflow-y: auto;
+            .is-phone & {
+                padding: var(--size-4-5);
+            }
+            /* hide the Web Viewer navigation bar */
+            & .workspace-leaf-content[data-type="webviewer"] .view-header {
+                display: none !important;
+            }
+        }
+        & .modal-title > .markdown-preview-view > * {
+            margin: unset;
+        }
+        & .modal-header, .modal-content {
+            & .markdown-preview-view {
+                padding: unset;
+            }
+        }
+    }
+    &[data-ntb-ui-type="suggester"] {
+        & .ntb-suggester-header {
+            border-bottom: 1px solid var(--background-secondary);
+            padding: var(--size-4-4) var(--size-4-4) 0.75em var(--size-4-4);
+            & p {
+                margin: unset;
+            }
+        }
+    }
+}
+
+.note-toolbar-ui-button-div {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-top: 1rem;
+}
+
+.note-toolbar-ui-div {
+    display: flex;
+}
+
+.note-toolbar-ui-form {
+    display: flex;
+    flex-grow: 1;
+}
+
+.note-toolbar-ui-input {
+    flex-grow: 1;
+}

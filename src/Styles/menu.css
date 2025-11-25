@@ -1,0 +1,39 @@
+/*
+ * Menu
+ */
+
+.note-toolbar-menu {
+    background-color: var(--cg-nt-menu-bg-color);
+    border-color: var(--cg-nt-menu-border-color);
+    border-radius: var(--cg-nt-menu-border-radius);
+    & .menu-item {
+        border-radius: var(--cg-nt-menu-item-border-radius);
+        color: var(--cg-nt-menu-item-text-color);
+        font-size: var(--cg-nt-menu-item-font-size);
+        &:hover {
+            background-color: var(--cg-nt-menu-item-bg-color-hover);
+        }
+        &.is-label {
+            font-size: var(--font-ui-small);
+            color: var(--text-muted);
+            & .menu-item-icon {
+                display: none;
+            }
+        }
+        & .menu-item-icon {
+            color: var(--cg-nt-menu-icon-color);
+            & svg {
+                height: var(--cg-nt-menu-icon-size);
+                width: var(--cg-nt-menu-icon-size);
+            }
+        }
+        /* fix for hotkeys not displaying next to text */
+        & .menu-item-title {
+            align-items: center;
+            display: flex;
+        }
+    }
+    & .menu-item.selected:not(.is-label):not(.is-disabled) {
+        background-color: var(--cg-nt-menu-item-bg-color-hover);
+    }
+}

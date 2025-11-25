@@ -1,4 +1,4 @@
-/* note: make any modifications to this file in src/Styles/styles.css */
+/* NOTE: make any modifications to this file in src/Styles/styles.css */
 
 /* @settings
 
@@ -1232,9 +1232,9 @@ settings:
         format: px
  */
 
-/* ************************************************************************* */
-/* #region Variables */
-/*****************************************************************************/
+/*
+ * Body (CSS Variables)
+ */
 
 body {
     --cg-nt-tbar-autohide-opacity: 0;
@@ -1347,16 +1347,12 @@ body {
 
 }
 
-/* #endregion */
-
-/* ************************************************************************* */
-/* #region Toolbar Styles */
-/* ************************************************************************* */
-
 .metadata-container {
     margin-block-end: 0;
 }
-
+/*
+ * Callouts
+ */
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
     &:hover {
         box-shadow: none !important; /* hide the border on hover of the toolbar callout */
@@ -1365,7 +1361,6 @@ body {
         }
     }
 }
-
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
     &:not([data-tbar-position="bottom"]) {
         position: sticky;
@@ -1376,7 +1371,6 @@ body {
         }
     }
 }
-
 .is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
     position: sticky;
     z-index: 2;
@@ -1386,32 +1380,27 @@ body {
         top: var(--cg-nt-tbar-top-sticky-pos-mobile);
     }
 }
-
 /* default, if not specified */
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
     top: inherit;
     position: relative;
 }
-
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
     .is-mobile &, .is-phone & {
         top: inherit;
         position: relative;
     }
 }
-
 .cm-embed-block[data-tbar-position="bottom"],
 .cm-embed-block[data-tbar-position="top"] {
     & .callout[data-callout="note-toolbar"] {
         max-width: var(--file-line-width);
     }
 }
-
 /* fixes header div getting squished when the toolbar's at the top position */
 .view-header:has(+ [data-tbar-position="top"]) {
     min-height: var(--header-height);
 }
-
 .callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
     background-image: unset !important;
@@ -1436,13 +1425,11 @@ body {
         }
     }
 }
-
 body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
     & .callout[data-callout="note-toolbar-output"] {
         background-color: #000 !important;
     }
 }
-
 .callout[data-callout="note-toolbar"] {
 
     /* fix: (#378) reset CSS rules applied by themes (e.g., Velocity) */
@@ -1854,7 +1841,6 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
     }
     
 }
-
 /* custom class for Cupertino theme, thanks to @aaaaalexis */
 body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
     &.glass, &[data-callout-metadata*="glass"] {
@@ -1874,7 +1860,6 @@ body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
         }
     }
 }
-
 /* user feedback that toolbar interaction is not available; workaround for #69 */
 body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .cg-note-toolbar-callout[data-callout="note-toolbar"] {
@@ -1884,7 +1869,9 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         }
     }
 }
-
+/*
+ * FAB (Floating Action Button)
+ */
 .cg-note-toolbar-fab-container {
     & button[data-fab-metadata*="autohide"] {
         box-shadow: none;
@@ -1906,15 +1893,6 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         }
     }
 }
-
-/*************************************************************************
- * Supporting Toolbar Styles
- *************************************************************************/
-
-#cg-note-toolbar-marker {
-    visibility: hidden;
-}
-
 .cg-note-toolbar-fab-container {
     bottom: var(--cg-nt-fab-pos-y-desktop);
     position: absolute;
@@ -1938,20 +1916,17 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         }
     }
 }
-
 /* user feedback that toolbar interaction is not available; workaround for #69 */
 body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .cg-note-toolbar-fab-container {
         opacity: var(--cg-nt-fab-inactive-opacity);
     }
 }
-
 @keyframes cg-note-toolbar-fab-anim {
     0% { transform: scale(1); }
     50% { transform: scale(1.75); }
     100% { transform: scale(1.5); }
 }
-
 .cg-note-toolbar-fab {
     aspect-ratio: 1;
     background-color: var(--cg-nt-fab-bg-color-desktop) !important;
@@ -2003,7 +1978,9 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         cursor: pointer;
     }
 }
-
+/*
+ * Toolbar Container
+ */
 .cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
     /* fix: (#90) box-shadow appearing over top of text */
@@ -2091,7 +2068,6 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         }
     }
 }
-
 /* width fix for Minimal theme in props position #204 #216 */
 body[data-ntb-csstheme="Minimal"] {
     & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
@@ -2102,7 +2078,9 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
 }
-
+/*
+ * Menu
+ */
 .note-toolbar-menu {
     background-color: var(--cg-nt-menu-bg-color);
     border-color: var(--cg-nt-menu-border-color);
@@ -2138,25 +2116,19 @@ body[data-ntb-csstheme="Minimal"] {
         background-color: var(--cg-nt-menu-item-bg-color-hover);
     }
 }
-
-/* #endregion */
-
-/* ************************************************************************* */
-/* #region Settings Styles (for Note Toolbar Plugin) */
-/* ************************************************************************* */
-
+/*
+ * Settings 
+ */
 .setting-item-info {
     & .setting-item-description a:focus-within {
         box-shadow: 0 0 0 2px;
     }
 }
-
 .setting-item-control .clickable-icon:focus-within {
     /* border-radius: var(--input-radius); */
     box-shadow: inset 0 0 0 1px var(--background-modifier-border);
     box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
 }
-
 .is-disabled {
     opacity: 0.6;
     & .setting-item-control:focus-within {
@@ -2166,20 +2138,17 @@ body[data-ntb-csstheme="Minimal"] {
         background-color: initial;
     }
 }
-
 .note-toolbar-setting-plugin-error,
 .note-toolbar-setting-plugin-onboarding {
     padding: 1em !important;
     border-radius: 8px;
 }
-
 .note-toolbar-setting-plugin-error {
     & .setting-item-name {
         color: var(--text-error);
     }
     border: solid 1px var(--text-error) !important;
 }
-
 .note-toolbar-setting-plugin-onboarding {
     border: solid 1px var(--color-accent-1) !important;
     position: relative;
@@ -2192,17 +2161,14 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
 }
-
 .note-toolbar-setting-plugin-onboarding-close {
     position: absolute;
     top: 8px;
     right: 8px;
 }
-
 .note-toolbar-setting-item-link-container > .note-toolbar-setting-plugin-error {
     font-size: var(--font-ui-small);
 }
-
 .note-toolbar-setting-toolbar-list {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
@@ -2242,14 +2208,12 @@ body[data-ntb-csstheme="Minimal"] {
             }
         }
     }
-} 
-
+}
 .mod-cta .note-toolbar-setting-text-with-icon {
     & svg {
         color: var(--text-on-accent);
     }
 }
-
 .note-toolbar-setting-text-with-icon {
     display: inline-flex;
     column-gap: 0.5em;
@@ -2259,7 +2223,6 @@ body[data-ntb-csstheme="Minimal"] {
         vertical-align: middle;
     }
 }
-
 .note-toolbar-setting-item {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
@@ -2278,7 +2241,6 @@ body[data-ntb-csstheme="Minimal"] {
         display: none !important;
     }
 }
-
 .note-toolbar-setting-item-preview-container {
     align-items: center;
     display: flex;
@@ -2300,7 +2262,6 @@ body[data-ntb-csstheme="Minimal"] {
         display: none !important;
     }
 }
-
 .note-toolbar-setting-ui {
     .setting-item {
         &[data-active="true"] {
@@ -2311,17 +2272,14 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
 }
-
 .note-toolbar-setting-item-preview-code {
     font-family: var(--font-monospace);
     white-space: normal !important;
     overflow-wrap: anywhere;
 }
-
 .note-toolbar-setting-item-preview .note-toolbar-setting-item-preview-code {
     font-size: var(--font-ui-small); 
 }
-
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
@@ -2398,7 +2356,6 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
 }
-
 .note-toolbar-setting-hotkey,
 .note-toolbar-setting-command-indicator {
     font-size: var(--font-ui-small);
@@ -2412,7 +2369,6 @@ body[data-ntb-csstheme="Minimal"] {
     display: flex;
     align-items: center;
 }
-
 .note-toolbar-setting-command-indicator {
     padding: 2px;
     & svg {
@@ -2420,30 +2376,25 @@ body[data-ntb-csstheme="Minimal"] {
         vertical-align: middle;
     }
 }
-
 .note-toolbar-setting-item-preview-edit-mobile {
     display: flex;
     column-gap: 0.5em;
     justify-content: space-between;
     width: 100%;
 }
-
 .note-toolbar-setting-icon-button-cta {
     & svg {
         color: var(--interactive-accent);
     }
 }
-
 .note-toolbar-setting-item-preview-icon:empty {
     display: none;
 }
-
 .note-toolbar-setting-item-preview-empty,
 .note-toolbar-setting-item-preview-tooltip {
     color: var(--color-base-60);
     font-style: italic;
 }
-
 .note-toolbar-setting-toolbar-list-preview-item {
     align-items: center;
     display: flex;
@@ -2461,7 +2412,6 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
 }
-
 .note-toolbar-setting-empty-message {
     align-items: center;
     color: var(--text-muted);
@@ -2477,23 +2427,19 @@ body[data-ntb-csstheme="Minimal"] {
         margin: auto;
     }
 }
-
 .note-toolbar-setting-error-message {
     color: var(--text-error);
     padding-bottom: 1em;
 }
-
 .setting-item-control:has(input[type="search"].note-toolbar-setting-error),
 .setting-item-control:has(input[type="text"].note-toolbar-setting-error) {
     flex-wrap: wrap;
 }
-
 input[type="search"].note-toolbar-setting-error,
 input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-error textarea {
     box-shadow: 0 0 0 1px var(--text-error);
 }
-
 .note-toolbar-setting-error {
     &.note-toolbar-setting-item-preview {
         border-radius: var(--input-radius);
@@ -2511,7 +2457,6 @@ input[type="text"].note-toolbar-setting-error,
         box-shadow: 0 0 0 1px var(--text-error);
     }
 }
-
 @keyframes note-toolbar-setting-error-grows {
     0% {
       box-shadow: 0 0 0 1px var(--text-error);
@@ -2520,7 +2465,6 @@ input[type="text"].note-toolbar-setting-error,
         box-shadow: 0 0 0 3px var(--text-error);
     }
 }
-  
 @keyframes note-toolbar-setting-error-shrinks {
     0% {
         box-shadow: 0 0 0 3px var(--text-error);
@@ -2529,29 +2473,23 @@ input[type="text"].note-toolbar-setting-error,
         box-shadow: 0 0 0 1px var(--text-error);
     }
 }
-
 .note-toolbar-setting-button {
     border-top: none;
     padding-top: 0 !important;
     padding-bottom: 1em !important;
 }
-
 .note-toolbar-setting-no-border {
     border-top: none !important;
 }
-
 .note-toolbar-setting-top-border {
     border-top: solid 1px var(--background-modifier-border) !important;
 }
-
 .note-toolbar-setting-top-spacing {
     margin-top: 2em !important;
 }
-
 .note-toolbar-setting-bottom-spacing {
     margin-bottom: 2em !important;
 }
-
 .note-toolbar-setting-item-full-width {
     align-items: flex-start;
     flex-direction: column;
@@ -2564,7 +2502,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-item-full-width-phone {
     & .setting-item-control > div {
         .is-mobile & {
@@ -2572,7 +2509,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
     border-top: 1px solid var(--background-modifier-border);
@@ -2594,13 +2530,11 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-items-header {
     border-bottom: 1px solid var(--background-modifier-border) !important;
     border-width: 0 0 var(--border-width) 0 !important;
     margin-bottom: 1em;
 }
-
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
@@ -2661,7 +2595,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-mappings-container,
@@ -2674,7 +2607,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-items-container {
     & .setting-item {
         .is-phone & {
@@ -2682,7 +2614,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 /* collapsible sections - bottom border */
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
@@ -2703,7 +2634,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 /* fix for mappings heading not being full width */
 .note-toolbar-setting-mappings-container {
     .is-phone & {
@@ -2714,11 +2644,9 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-item-heading-top-spacing {
     padding-top: 1.5em;
 }
-
 .is-phone .note-toolbar-setting-items-container,
 .is-phone .note-toolbar-setting-items-list-container {
     & .note-toolbar-setting-button {
@@ -2727,7 +2655,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }  
 }
-
 .note-toolbar-setting-items-button-container {
     align-items: center !important;
     display: flex;
@@ -2749,7 +2676,6 @@ input[type="text"].note-toolbar-setting-error,
         color: var(--interactive-accent);
     }
 }
-
 .note-toolbar-setting-item-top-container {
     display: flex;
     flex-flow: wrap;
@@ -2758,7 +2684,6 @@ input[type="text"].note-toolbar-setting-error,
         border-bottom: none !important;
     }
 }
-
 .note-toolbar-setting-item-visibility-container {
     display: flex;
     flex-wrap: wrap;
@@ -2767,7 +2692,6 @@ input[type="text"].note-toolbar-setting-error,
         border-bottom: none !important;
     }
 }
-
 .note-toolbar-setting-item-icon {
     padding-top: 0 !important;
     & .setting-item-info {
@@ -2795,7 +2719,570 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
+.note-toolbar-setting-mapping-field {
+    border-top: none !important;
+    padding: 0 !important;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        justify-content: flex-start;
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+.note-toolbar-setting-item-field {
+    border-top: none !important;
+    flex-grow: 1;
+    padding-top: 0 !important;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        width: 100%;
+        & input[type="text"] {
+            width: 100%;
+        }
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+.note-toolbar-setting-item-link-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+    gap: 0.75em;
+    width: 100%;
+    & .setting-item {
+        padding: 0 !important;
+        & .setting-item-info {
+            display: none;
+        }
+        & .setting-item-control {
+            justify-content: start;
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
+        }
+    }
+}
+.note-toolbar-setting-item-link-field,
+.note-toolbar-setting-item-link-subfield {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    column-gap: 1em;
+    row-gap: 1em;
+    & .setting-item {
+        padding: 0;
+    }
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+.note-toolbar-setting-subfield-advanced-container {
+    width: 100%;
+}
+.note-toolbar-setting-subfield-advanced {
+    align-items: center !important;
+    display: flex;
+    flex-direction: row !important;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    & .setting-item-info {
+        display: initial !important;
+        & .setting-item-name {
+            cursor: pointer;
+        }
+    }
+    & .setting-item-control {
+        align-items: flex-end !important;
+        width: auto !important;
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+.note-toolbar-setting-item-link-advanced {
+    display: none;
+    &[data-active] {
+        display: flex !important;
+    }
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1em;
+    & .setting-item {
+        border: none;
+        padding: 0;
+    }
+    & .setting-item-info {
+        display: initial !important;
+        & .setting-item-name {
+            font-size: var(--font-ui-small);
+        }
+    }
+    & .setting-item-control {
+        justify-content: end !important;
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+    }
+}
+.note-toolbar-setting-item-link {
+    width: 100%;
+}
+.note-toolbar-setting-item-field-link {
+    align-items: flex-start;
+    border-top: none !important;
+    flex-direction: column;
+    gap: 0.5em;
+    padding-top: 0 !important;
+    width: 100%;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        align-items: flex-start;
+        flex-direction: column;
+        /* for the advanced settings gear */
+        &.note-toolbar-setting-item-control-advanced {
+            align-items: center;
+            flex-direction: row
+        }
+    };
+    & .setting-item-control, .search-input-container {
+        width: 100%;
+        & input[type="text"] {
+            width: 100%;
+        }
+    }
+    & textarea {
+        height: 4rem;
+        width: 100%;
+    }
+}
+.note-toolbar-setting-focussable-link {
+    &:focus-within {
+        box-shadow: 0 0 0 2px;
+    }
+}
+.note-toolbar-setting-field-help,
+.note-toolbar-setting-field-error {
+    color: var(--text-muted);
+    font-size: var(--font-ui-smaller);
+    line-height: var(--line-height-tight);
+    display: block;
+    text-align: start;
+    & a:focus-within {
+        box-shadow: 0 0 0 2px;
+    }
+    & ol, ul {
+        margin-block-end: var(--font-ui-smaller);
+        padding-inline-start: 1em;
+    }
+    & svg {
+        height: var(--font-ui-smaller);
+        margin-inline-start: 0.25em;
+        width: var(--font-ui-smaller);
+        vertical-align: middle;
+    }
+    &[data-active="false"] {
+        display: none !important;
+    }
+}
+.note-toolbar-setting-tbar-preview {
+    display: flex;
+    gap: 2px 8px;
+    flex-wrap: wrap;
+    & svg {
+        height: var(--font-ui-smaller);
+        width: var(--font-ui-smaller);
+        display: block;
+    }
+    & i {
+        margin-inline-end: 6px;
+    }
+}
+.note-toolbar-setting-tbar-preview-edit {
+    margin-top: 6px;
+}
+.note-toolbar-setting-field-error {
+    color: var(--text-error);
+}
+.note-toolbar-sortablejs-list {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+    & .sortable-chosen {
+        background-color: var(--background-primary);
+    }
+    & .sortable-ghost {
+        & .setting-item {
+            opacity: 0;
+        }
+        background-color: var(--interactive-accent);
+        border-radius: var(--input-radius);
+        opacity: 0.4;
+    }
+    & .sortable-handle {
+        cursor: move;
+        cursor: -webkit-grabbing;
+    }
+    & .sortable-handle:hover {
+        cursor: grab;
+    }
+    & .sortable-handle:active {
+        cursor: grabbing;
+    }
+}
+.note-toolbar-setting-item-delete {
+    padding: 0 8px 0 0;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0 !important;
+        }
+        & button {
+            background: none;
+            box-shadow: none;
+            color: var(--icon-color);
+            gap: var(--size-4-2);
+            padding: var(--size-4-2);
+            &:hover {
+                opacity: var(--icon-opacity-hover);
+                color: var(--icon-color-hover);
+                background-color: var(--background-modifier-hover);
+            }
+            &:focus-visible {
+                border-radius: var(--input-radius);
+                box-shadow: 0 0 0 1px var(--background-modifier-border);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            }
+        }
+    }
+    & svg {
+        color: var(--text-error);
+    }
+}
+.note-toolbar-setting-item-visibility {
+    display: flex;
+    & button {
+        font-size: var(--font-ui-smaller);
+    }
+}
+.note-toolbar-setting-item-controls {
+    display: flex;
+    gap: var(--size-4-2);
+    & .setting-item {
+        border-bottom: none !important;
+        padding: 0 !important;
+        & .setting-item-control {
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
+        }
+        & .setting-item-info {
+            display: none;
+        }
+    }
+}
+.note-toolbar-setting-item-visibility-and-controls {
+    border-top: none !important;
+    display: flex;
+    padding-top: 0.75em !important;
+    justify-content: space-between;
+    & .setting-item {
+        padding-bottom: 0 !important;
+        & .setting-item-info {
+            display: none;
+        }
+        .is-mobile & {
+            padding-top: 0 !important;
+        }
+        & .setting-item-control {
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
+            & button {
+                background: none;
+                box-shadow: none;
+                color: var(--icon-color);
+                gap: var(--size-4-2);
+                padding: var(--size-4-2);
+                &:hover {
+                    opacity: var(--icon-opacity-hover);
+                    color: var(--icon-color-hover);
+                    background-color: var(--background-modifier-hover);
+                }
+                &:focus-visible {
+                    border-radius: var(--input-radius);
+                    box-shadow: 0 0 0 1px var(--background-modifier-border);
+                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+                }
+                & span:last-child {
+                    font-size: var(--font-smaller);
+                }
+            }
+        }
+    }
+    &[data-item-type="break"],
+    &[data-item-type="separator"] {
+        padding-top: 0 !important;
+        & span {
+            align-content: center;
+            color: var(--text-muted);
+            margin-left: 0.25em;
+        }
+    }
+}
+.note-toolbar-setting-item-control-std-with-help {
+    & .setting-item-control {
+        flex-direction: column;
+        align-items: end;
+        max-width: 50%;
+        .is-phone & {
+            max-width: 100%;
+            .search-input-container {
+                width: 100%;
+            }
+        }
+        & .note-toolbar-setting-field-help {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            max-width: 100%;
+            /* don't wrap toolbar previews */
+            & .note-toolbar-setting-tbar-preview {
+                flex-wrap: nowrap;
+                overflow: hidden;
+                position: relative;
+                max-height: calc(var(--line-height-tight) * 1em);
+                max-width: 250px;
+                .is-mobile & {
+                    max-width: inherit;
+                }
+                & .note-toolbar-setting-toolbar-list-preview-item {
+                    & .note-toolbar-setting-item-preview-code {
+                        align-self: flex-start;
+                    }
+                }
+            }
+            /* fade overflow */
+            & .note-toolbar-setting-tbar-preview::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 33%;
+                background: linear-gradient(to right, transparent, var(--modal-background));
+                pointer-events: none;
+            }
+        }
+    }
+}
+.note-toolbar-setting-item-fields {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    gap: 0.5em 1em;
+}
+.note-toolbar-setting-item-styles {
+    & > .setting-item-info {
+        align-self: flex-start;
+    }
+}
+.note-toolbar-setting-item-style {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: end;
+    gap: 0.25em;
+    width: 100%;
+    .setting-item {
+        border-top: none !important;
+        border: dashed 1px var(--pill-color-remove) !important;
+        border-radius: var(--pill-radius);
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding-inline: 0.75em 0.25em !important;
+        flex-wrap: nowrap;
+        height: var(--input-height);
+        .is-mobile & {
+            flex-direction: row !important;
+            align-items: center !important;
+        }
+        &:first-child {
+            border: dashed 1px var(--pill-color-remove) !important;
+        }
+        &:last-child {
+            border: none !important;
+            padding: 0em !important;
+            flex: 0 0 100%;
+        }
+        & .setting-item-info {
+            align-self: unset !important;
+            margin-inline-end: 0.25em;
+            color: var(--pill-color);
+            & .setting-item-name {
+                font-size: var(--metadata-input-font-size);
+            }
+        }
+        & .setting-item-control {
+            --icon-size: var(--icon-xs);
+            --icon-stroke: var(--icon-xs-stroke-width);
+            .is-mobile & {
+                margin-top: 0 !important;
+            }
+            .is-phone & {
+                width: inherit !important;
+            }
+            & select.dropdown, 
+            & select.dropdown:active,
+            & select.dropdown:focus {
+                border-radius: 2em;
+                font-size: var(--metadata-input-font-size);
+            }
+        }
+    }
+}
+.note-toolbar-setting-item-suggester-dialog {
+    width: calc(var(--dialog-width) / 1.5);
+    & .suggestion-empty {
+        padding: var(--size-4-4);
+    }
+    & .note-toolbar-item-suggestion {
+        & .note-toolbar-item-suggester-name, svg.svg-icon {
+            color: var(--cg-nt-quick-tools-item-text-color);
+        }
+        & .note-toolbar-item-suggester-name {
+            font-size: var(--cg-nt-quick-tools-item-font-size);
+        }
+        & svg.svg-icon {
+            height: var(--cg-nt-quick-tools-icon-size);
+            width: var(--cg-nt-quick-tools-icon-size);
+        }
+        &.is-selected {
+            background-color: var(--cg-nt-quick-tools-item-bg-color-hover);
+            border-radius: var(--cg-nt-quick-tools-item-border-radius);
+            & .note-toolbar-item-suggester-name, svg.svg-icon {
+                color: var(--cg-nt-quick-tools-item-text-color-hover);
+            }
+        }
+    }
+    & .note-toolbar-setting-plugin-onboarding {
+        margin: var(--size-4-3);
+        margin-bottom: 0;
+    }
+}
+.is-phone .note-toolbar-setting-dialog-phonefix {
+    padding: 1em;
+}
+.note-toolbar-setting-mini-dialog {
+    width: calc(var(--dialog-width) / 1.5);
+}
+.note-toolbar-setting-small-heading {
+    color: var(--color-base-50);
+    font-size: var(--font-ui-smaller);
+    font-variant: small-caps;
+    line-height: 1em;
+    margin-block-end: 0.5em;
+}
+.note-toolbar-setting-spacer {
+    margin-block-start: 2em;    
+}
+.note-toolbar-setting-import-confirm-preview {
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 0em 1em 1em 1em;
+    & .note-toolbar-setting-tbar-preview {
+        & svg {
+            height: var(--font-ui-medium);
+            width: var(--font-ui-medium);            
+        }
+    }
+}
+.note-toolbar-setting-import-text-area {
+    border-top: none;
+    .setting-item-info {
+        display: none;
+    }
+    textarea {
+        flex: 1 1 auto;
+        min-height: 16em !important;
+    }
+}
+.note-toolbar-setting-confirm-dialog-buttons {
+    column-gap: 0.5em;
+    display: flex;
+    justify-content: flex-end;
+}
+.note-toolbar-setting-confirm-dialog-note {
+    font-size: var(--font-ui-small);
+}
+.note-toolbar-share-dialog {
+    .setting-item:first-of-type {
+        border-top: none;
+        overflow: hidden;
+        .setting-item-info {
+            overflow: auto;
+            .setting-item-name {
+                font-family: var(--font-monospace) !important;
+                font-size: var(--font-ui-smaller) !important;
+                text-wrap: nowrap !important;
+            }
+        }
+    }
+}
+.note-toolbar-setting-modal-phone-top-inset-fix {
+    .is-phone & {
+        /* fix/workaround for Obsidian v1.5.11 bug: tall modals opened from settings have an inaccessible close button */
+        top: var(--safe-area-inset-top);
+    }
+}
+.note-toolbar-setting-modal-phone-bottom-inset-fix {
+    .is-phone & {
+        padding-bottom: var(--safe-area-inset-bottom);
+    }
+}
+.note-toolbar-setting-modal-container {
+    & .modal-close-button {
+        z-index: 2; /* fix for modal title overlapping close button */
+        /* general ux improvement for small screens */
+        .is-mobile & {
+            background-color: var(--background-secondary-alt);
+            border-radius: var(--radius-l);
+            inset-inline-end: var(--size-4-3);
+            top: var(--size-4-3);
+        }
+    }
+}
+.vertical-tab-content.note-toolbar-setting-modal {
+    padding-bottom: var(--size-4-5);
+    padding-inline-start: var(--size-4-5);
+    padding-inline-end: var(--size-4-5);
+    .is-phone & {
+        padding-top: 0;
+        padding-bottom: var(--size-4-12);
+    }
+    & .note-toolbar-setting-plugin-onboarding {
+        margin-bottom: 0.75em;
+    }
+}
+/*
+ * Suggesters
+ */
 .note-toolbar-item-suggester-name {
     align-items: center;
     justify-content: space-between;
@@ -2803,7 +3290,6 @@ input[type="text"].note-toolbar-setting-error,
     column-gap: 1em;
     width: 100%;
 }
-
 .note-toolbar-item-suggester-note {
     color: var(--text-muted);
     display: flex;
@@ -2818,17 +3304,14 @@ input[type="text"].note-toolbar-setting-error,
         width: var(--font-ui-smaller) !important;
     }
 }
-
 .note-toolbar-item-suggester-type {
     opacity: 0.4;
 }
-
 .note-toolbar-item-suggestion-container {
     column-gap: 0.5em;
     display: flex;
     width: 100%;
 }
-
 .note-toolbar-item-suggestion {
     align-items: center;
     display: flex;
@@ -2839,7 +3322,29 @@ input[type="text"].note-toolbar-setting-error,
         margin: 0 auto;
     }
 }
-
+.note-toolbar-icon-suggestion {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    & svg {
+        display: block;
+        margin: 0 auto;
+    }
+}
+.note-toolbar-icon-action-button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 0 1em;
+}
+.note-toolbar-setting-folder-suggestion-item-muted {
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    color: var(--text-muted);
+}
+/*
+ * Help
+ */
 .note-toolbar-gallery-item-divider {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -2847,12 +3352,10 @@ input[type="text"].note-toolbar-setting-error,
     font-size: var(--font-ui-small);
     font-weight: var(--font-semibold);
 }
-
 .note-toolbar-gallery-item-suggestion {
     box-shadow: inset 0 0 0 2px var(--background-modifier-border);
     margin-bottom: 0.5em;
 }
-
 .note-toolbar-gallery-view-search {
     & .setting-item-info {
         display: none;
@@ -2868,7 +3371,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-card-items {
     align-items: stretch;
     display: flex;
@@ -2878,13 +3380,11 @@ input[type="text"].note-toolbar-setting-error,
     position: relative;
     scroll-behavior: smooth;
 }
-
 .note-toolbar-gallery-card-items {
     border-block-end: solid 1px var(--background-modifier-border);
     padding-bottom: 2em;
     padding-top: 1em;
 }
-
 .note-toolbar-tips-card-items {
     padding-bottom: 2em;
     & .note-toolbar-card-item {
@@ -2899,7 +3399,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-view-heading {
     display: flex;
     flex-basis: fit-content;
@@ -2918,18 +3417,15 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-gallery-view-plugin-overview p {
     margin-block-end: 0.25em;
 }
-
 .note-toolbar-gallery-view-cat-title h2 {
     margin-block-end: 0.25em;
     &::after {
         display: none; /* fix for Border theme */
     }
 }
-
 .note-toolbar-gallery-view-note,
 .note-toolbar-gallery-view-cat-description {
     display: flex;
@@ -2944,7 +3440,6 @@ input[type="text"].note-toolbar-setting-error,
         width: 1em;
     }
 }
-
 .note-toolbar-card-item {
     align-items: start;
     box-shadow: var(--input-shadow);
@@ -3036,605 +3531,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
-.note-toolbar-icon-suggestion {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    & svg {
-        display: block;
-        margin: 0 auto;
-    }
-}
-
-.note-toolbar-icon-action-button-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 0 1em;
-}
-
-.note-toolbar-notice-with-cta {
-    cursor: pointer;
-}
-
-.note-toolbar-setting-folder-suggestion-item-muted {
-    display: flex;
-    gap: 1em;
-    justify-content: space-between;
-    color: var(--text-muted);
-}
-
-.note-toolbar-setting-mapping-field {
-    border-top: none !important;
-    padding: 0 !important;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        justify-content: flex-start;
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-    }
-}
-
-.note-toolbar-setting-item-field {
-    border-top: none !important;
-    flex-grow: 1;
-    padding-top: 0 !important;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        width: 100%;
-        & input[type="text"] {
-            width: 100%;
-        }
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-    }
-}
-
-.note-toolbar-setting-item-link-container {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    @media (max-width: 600px) {
-        grid-template-columns: 1fr;
-    }
-    gap: 0.75em;
-    width: 100%;
-    & .setting-item {
-        padding: 0 !important;
-        & .setting-item-info {
-            display: none;
-        }
-        & .setting-item-control {
-            justify-content: start;
-            .is-mobile & {
-                margin-top: 0 !important;
-            }
-        }
-    }
-}
-
-.note-toolbar-setting-item-link-field,
-.note-toolbar-setting-item-link-subfield {
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    column-gap: 1em;
-    row-gap: 1em;
-    & .setting-item {
-        padding: 0;
-    }
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-    }
-}
-
-.note-toolbar-setting-subfield-advanced-container {
-    width: 100%;
-}
-
-.note-toolbar-setting-subfield-advanced {
-    align-items: center !important;
-    display: flex;
-    flex-direction: row !important;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    & .setting-item-info {
-        display: initial !important;
-        & .setting-item-name {
-            cursor: pointer;
-        }
-    }
-    & .setting-item-control {
-        align-items: flex-end !important;
-        width: auto !important;
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-    }
-}
-
-.note-toolbar-setting-item-link-advanced {
-    display: none;
-    &[data-active] {
-        display: flex !important;
-    }
-    flex-direction: column;
-    flex-grow: 1;
-    gap: 1em;
-    & .setting-item {
-        border: none;
-        padding: 0;
-    }
-    & .setting-item-info {
-        display: initial !important;
-        & .setting-item-name {
-            font-size: var(--font-ui-small);
-        }
-    }
-    & .setting-item-control {
-        justify-content: end !important;
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-    }
-}
-
-.note-toolbar-setting-item-link {
-    width: 100%;
-}
-
-.note-toolbar-setting-item-field-link {
-    align-items: flex-start;
-    border-top: none !important;
-    flex-direction: column;
-    gap: 0.5em;
-    padding-top: 0 !important;
-    width: 100%;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        align-items: flex-start;
-        flex-direction: column;
-        /* for the advanced settings gear */
-        &.note-toolbar-setting-item-control-advanced {
-            align-items: center;
-            flex-direction: row
-        }
-    };
-    & .setting-item-control, .search-input-container {
-        width: 100%;
-        & input[type="text"] {
-            width: 100%;
-        }
-    }
-    & textarea {
-        height: 4rem;
-        width: 100%;
-    }
-}
-
-/* hides the field help text while keeping it tabbable, if the container does not have focus within it
-   CG: commenting as this conflicts with expandable list items, but CSS still might be useful
-.note-toolbar-setting-item:not(:focus-within) .note-toolbar-setting-field-help {
-    clip-path: rect(1px, 1px, 1px, 1px);
-    overflow: hidden;
-    position: absolute;
-    height: 1px;
-    width: 1px;
-    margin: -1px;
-}
-*/
-
-.note-toolbar-setting-focussable-link {
-    &:focus-within {
-        box-shadow: 0 0 0 2px;
-    }
-}
-
-.note-toolbar-setting-field-help,
-.note-toolbar-setting-field-error {
-    color: var(--text-muted);
-    font-size: var(--font-ui-smaller);
-    line-height: var(--line-height-tight);
-    display: block;
-    text-align: start;
-    & a:focus-within {
-        box-shadow: 0 0 0 2px;
-    }
-    & ol, ul {
-        margin-block-end: var(--font-ui-smaller);
-        padding-inline-start: 1em;
-    }
-    & svg {
-        height: var(--font-ui-smaller);
-        margin-inline-start: 0.25em;
-        width: var(--font-ui-smaller);
-        vertical-align: middle;
-    }
-    &[data-active="false"] {
-        display: none !important;
-    }
-}
-
-.note-toolbar-setting-tbar-preview {
-    display: flex;
-    gap: 2px 8px;
-    flex-wrap: wrap;
-    & svg {
-        height: var(--font-ui-smaller);
-        width: var(--font-ui-smaller);
-        display: block;
-    }
-    & i {
-        margin-inline-end: 6px;
-    }
-}
-
-.note-toolbar-setting-tbar-preview-edit {
-    margin-top: 6px;
-}
-
-.note-toolbar-setting-field-error {
-    color: var(--text-error);
-}
-
-.note-toolbar-sortablejs-list {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1em;
-    & .sortable-chosen {
-        background-color: var(--background-primary);
-    }
-    & .sortable-ghost {
-        & .setting-item {
-            opacity: 0;
-        }
-        background-color: var(--interactive-accent);
-        border-radius: var(--input-radius);
-        opacity: 0.4;
-    }
-    & .sortable-handle {
-        cursor: move;
-        cursor: -webkit-grabbing;
-    }
-    & .sortable-handle:hover {
-        cursor: grab;
-    }
-    & .sortable-handle:active {
-        cursor: grabbing;
-    }
-}
-
-.note-toolbar-setting-item-delete {
-    padding: 0 8px 0 0;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-        & button {
-            background: none;
-            box-shadow: none;
-            color: var(--icon-color);
-            gap: var(--size-4-2);
-            padding: var(--size-4-2);
-            &:hover {
-                opacity: var(--icon-opacity-hover);
-                color: var(--icon-color-hover);
-                background-color: var(--background-modifier-hover);
-            }
-            &:focus-visible {
-                border-radius: var(--input-radius);
-                box-shadow: 0 0 0 1px var(--background-modifier-border);
-                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-            }
-        }
-    }
-    & svg {
-        color: var(--text-error);
-    }
-}
-
-.note-toolbar-setting-item-visibility {
-    display: flex;
-    & button {
-        font-size: var(--font-ui-smaller);
-    }
-}
-
-.note-toolbar-setting-item-controls {
-    display: flex;
-    gap: var(--size-4-2);
-    & .setting-item {
-        border-bottom: none !important;
-        padding: 0 !important;
-        & .setting-item-control {
-            .is-mobile & {
-                margin-top: 0 !important;
-            }
-        }
-        & .setting-item-info {
-            display: none;
-        }
-    }
-}
-
-.note-toolbar-setting-item-visibility-and-controls {
-    border-top: none !important;
-    display: flex;
-    padding-top: 0.75em !important;
-    justify-content: space-between;
-    & .setting-item {
-        padding-bottom: 0 !important;
-        & .setting-item-info {
-            display: none;
-        }
-        .is-mobile & {
-            padding-top: 0 !important;
-        }
-        & .setting-item-control {
-            .is-mobile & {
-                margin-top: 0 !important;
-            }
-            & button {
-                background: none;
-                box-shadow: none;
-                color: var(--icon-color);
-                gap: var(--size-4-2);
-                padding: var(--size-4-2);
-                &:hover {
-                    opacity: var(--icon-opacity-hover);
-                    color: var(--icon-color-hover);
-                    background-color: var(--background-modifier-hover);
-                }
-                &:focus-visible {
-                    border-radius: var(--input-radius);
-                    box-shadow: 0 0 0 1px var(--background-modifier-border);
-                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-                }
-                & span:last-child {
-                    font-size: var(--font-smaller);
-                }
-            }
-        }
-    }
-    &[data-item-type="break"],
-    &[data-item-type="separator"] {
-        padding-top: 0 !important;
-        & span {
-            align-content: center;
-            color: var(--text-muted);
-            margin-left: 0.25em;
-        }
-    }
-}
-
-.note-toolbar-setting-item-control-std-with-help {
-    & .setting-item-control {
-        flex-direction: column;
-        align-items: end;
-        max-width: 50%;
-        .is-phone & {
-            max-width: 100%;
-            .search-input-container {
-                width: 100%;
-            }
-        }
-        & .note-toolbar-setting-field-help {
-            display: flex;
-            flex-direction: column;
-            align-items: end;
-            max-width: 100%;
-            /* don't wrap toolbar previews */
-            & .note-toolbar-setting-tbar-preview {
-                flex-wrap: nowrap;
-                overflow: hidden;
-                position: relative;
-                max-height: calc(var(--line-height-tight) * 1em);
-                max-width: 250px;
-                .is-mobile & {
-                    max-width: inherit;
-                }
-                & .note-toolbar-setting-toolbar-list-preview-item {
-                    & .note-toolbar-setting-item-preview-code {
-                        align-self: flex-start;
-                    }
-                }
-            }
-            /* fade overflow */
-            & .note-toolbar-setting-tbar-preview::after {
-                content: '';
-                position: absolute;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                width: 33%;
-                background: linear-gradient(to right, transparent, var(--modal-background));
-                pointer-events: none;
-            }
-        }
-    }
-}
-
-.note-toolbar-setting-item-fields {
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    gap: 0.5em 1em;
-}
-
-.note-toolbar-setting-item-styles {
-    & > .setting-item-info {
-        align-self: flex-start;
-    }
-}
-
-.note-toolbar-setting-item-style {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: end;
-    gap: 0.25em;
-    width: 100%;
-    .setting-item {
-        border-top: none !important;
-        border: dashed 1px var(--pill-color-remove) !important;
-        border-radius: var(--pill-radius);
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        padding-inline: 0.75em 0.25em !important;
-        flex-wrap: nowrap;
-        height: var(--input-height);
-        .is-mobile & {
-            flex-direction: row !important;
-            align-items: center !important;
-        }
-        &:first-child {
-            border: dashed 1px var(--pill-color-remove) !important;
-        }
-        &:last-child {
-            border: none !important;
-            padding: 0em !important;
-            flex: 0 0 100%;
-        }
-        & .setting-item-info {
-            align-self: unset !important;
-            margin-inline-end: 0.25em;
-            color: var(--pill-color);
-            & .setting-item-name {
-                font-size: var(--metadata-input-font-size);
-            }
-        }
-        & .setting-item-control {
-            --icon-size: var(--icon-xs);
-            --icon-stroke: var(--icon-xs-stroke-width);
-            .is-mobile & {
-                margin-top: 0 !important;
-            }
-            .is-phone & {
-                width: inherit !important;
-            }
-            & select.dropdown, 
-            & select.dropdown:active,
-            & select.dropdown:focus {
-                border-radius: 2em;
-                font-size: var(--metadata-input-font-size);
-            }
-        }
-    }
-}
-
-.note-toolbar-setting-item-suggester-dialog {
-    width: calc(var(--dialog-width) / 1.5);
-    & .suggestion-empty {
-        padding: var(--size-4-4);
-    }
-    & .note-toolbar-item-suggestion {
-        & .note-toolbar-item-suggester-name, svg.svg-icon {
-            color: var(--cg-nt-quick-tools-item-text-color);
-        }
-        & .note-toolbar-item-suggester-name {
-            font-size: var(--cg-nt-quick-tools-item-font-size);
-        }
-        & svg.svg-icon {
-            height: var(--cg-nt-quick-tools-icon-size);
-            width: var(--cg-nt-quick-tools-icon-size);
-        }
-        &.is-selected {
-            background-color: var(--cg-nt-quick-tools-item-bg-color-hover);
-            border-radius: var(--cg-nt-quick-tools-item-border-radius);
-            & .note-toolbar-item-suggester-name, svg.svg-icon {
-                color: var(--cg-nt-quick-tools-item-text-color-hover);
-            }
-        }
-    }
-    & .note-toolbar-setting-plugin-onboarding {
-        margin: var(--size-4-3);
-        margin-bottom: 0;
-    }
-}
-
-.is-phone .note-toolbar-setting-dialog-phonefix {
-    padding: 1em;
-}
-
-.note-toolbar-setting-mini-dialog {
-    width: calc(var(--dialog-width) / 1.5);
-}
-
-.note-toolbar-setting-small-heading {
-    color: var(--color-base-50);
-    font-size: var(--font-ui-smaller);
-    font-variant: small-caps;
-    line-height: 1em;
-    margin-block-end: 0.5em;
-}
-
-.note-toolbar-setting-spacer {
-    margin-block-start: 2em;    
-}
-
-.note-toolbar-setting-import-confirm-preview {
-    border: 1px solid var(--background-modifier-border);
-    border-radius: 8px;
-    padding: 0em 1em 1em 1em;
-    & .note-toolbar-setting-tbar-preview {
-        & svg {
-            height: var(--font-ui-medium);
-            width: var(--font-ui-medium);            
-        }
-    }
-}
-
-.note-toolbar-setting-import-text-area {
-    border-top: none;
-    .setting-item-info {
-        display: none;
-    }
-    textarea {
-        flex: 1 1 auto;
-        min-height: 16em !important;
-    }
-}
-
-.note-toolbar-setting-confirm-dialog-buttons {
-    column-gap: 0.5em;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.note-toolbar-setting-confirm-dialog-note {
-    font-size: var(--font-ui-small);
-}
-
-.note-toolbar-share-dialog {
-    .setting-item:first-of-type {
-        border-top: none;
-        overflow: hidden;
-        .setting-item-info {
-            overflow: auto;
-            .setting-item-name {
-                font-family: var(--font-monospace) !important;
-                font-size: var(--font-ui-smaller) !important;
-                text-wrap: nowrap !important;
-            }
-        }
-    }
-}
-
 .note-toolbar-setting-help-section-phone {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
@@ -3655,7 +3551,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-gallery-view .is-readable-line-width,
 .note-toolbar-setting-help-view .is-readable-line-width,
 .note-toolbar-setting-whatsnew-view .is-readable-line-width {
@@ -3663,7 +3558,6 @@ input[type="text"].note-toolbar-setting-error,
     margin-left: auto;
     margin-right: auto;
 }
-
 .note-toolbar-setting-help-view {
     & .note-toolbar-setting-view-banner {
         .is-phone & {
@@ -3671,13 +3565,11 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-help-view-title {
     & h1, p, svg {
         color: var(--text-normal) !important;
     }
 }
-
 .note-toolbar-setting-help-view-section {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
@@ -3691,7 +3583,6 @@ input[type="text"].note-toolbar-setting-error,
         margin-top: 0 !important;
     }
 }
-
 .note-toolbar-setting-help-video {
     aspect-ratio: 8 / 5;
     position: relative;
@@ -3735,13 +3626,11 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-gallery-view {
     & .note-toolbar-setting-view-banner {
         background-image: linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%), linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%);
     }
 }
-
 .note-toolbar-setting-view-banner {
     background-blend-mode: overlay;
     font-size: var(--font-ui-medium);
@@ -3764,12 +3653,10 @@ input[type="text"].note-toolbar-setting-error,
         transform-origin: center;
     }
 }
-
 @keyframes note-toolbar-tip-icon-animation {
   0% { opacity: 0.5; transform: scale(0.95); }
   100% { opacity: 1; transform: scale(1); }
 }
-
 .note-toolbar-setting-view-cta {
     & .setting-item {
         border-top: 1px solid var(--background-modifier-border);
@@ -3785,7 +3672,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-gallery-content,
 .note-toolbar-setting-help-content,
 .note-toolbar-setting-tip-content,
@@ -3830,7 +3716,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-whatsnew-content {
     code:not(.language-ts) {
         background-color: var(--code-background);
@@ -3845,7 +3730,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-setting-remote-skeleton {
     background: linear-gradient(90deg, var(--text-normal) 25%, var(--text-muted) 50%, var(--text-normal) 75%);
     opacity: 0.25;
@@ -3853,59 +3737,18 @@ input[type="text"].note-toolbar-setting-error,
     animation: note-toolbar-setting-remote-shimmer 1.5s infinite;
     border-radius: 4px;
 }
-
 @keyframes note-toolbar-setting-remote-shimmer {
     100% {
         background-position: -200% 0;
     }
 }
-
-.note-toolbar-setting-modal-phone-top-inset-fix {
-    .is-phone & {
-        /* fix/workaround for Obsidian v1.5.11 bug: tall modals opened from settings have an inaccessible close button */
-        top: var(--safe-area-inset-top);
-    }
+.note-toolbar-notice-with-cta {
+    cursor: pointer;
 }
-
-.note-toolbar-setting-modal-phone-bottom-inset-fix {
-    .is-phone & {
-        padding-bottom: var(--safe-area-inset-bottom);
-    }
-}
-
-.note-toolbar-setting-modal-container {
-    & .modal-close-button {
-        z-index: 2; /* fix for modal title overlapping close button */
-        /* general ux improvement for small screens */
-        .is-mobile & {
-            background-color: var(--background-secondary-alt);
-            border-radius: var(--radius-l);
-            inset-inline-end: var(--size-4-3);
-            top: var(--size-4-3);
-        }
-    }
-}
-
-.vertical-tab-content.note-toolbar-setting-modal {
-    padding-bottom: var(--size-4-5);
-    padding-inline-start: var(--size-4-5);
-    padding-inline-end: var(--size-4-5);
-    .is-phone & {
-        padding-top: 0;
-        padding-bottom: var(--size-4-12);
-    }
-    & .note-toolbar-setting-plugin-onboarding {
-        margin-bottom: 0.75em;
-    }
-}
-
-/* #endregion */
-
-/* ************************************************************************* */
-/* #region Components (Note Toolbar API) */
-/* ************************************************************************* */
-
- .note-toolbar-ui {
+/* 
+ * Note Toolbar API UI Components
+ */
+.note-toolbar-ui {
     min-height: unset;
     & .modal-close-button {
         z-index: 2; /* fix for modal title overlapping close button */
@@ -3982,33 +3825,25 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 .note-toolbar-ui-button-div {
     display: flex;
     flex-direction: column;
     align-items: end;
     margin-top: 1rem;
 }
-
 .note-toolbar-ui-div {
     display: flex;
 }
-
 .note-toolbar-ui-form {
     display: flex;
     flex-grow: 1;
 }
-
 .note-toolbar-ui-input {
     flex-grow: 1;
 }
-
-/* #endregion */
-
-/* ************************************************************************* */
-/* #region New tab toolbar (Launchpad) */
-/* ************************************************************************* */
-
+/*
+ * New tab toolbar (Launchpad) 
+ */
 .note-toolbar-launchpad-container {
     display: flex;
     flex-direction: column;
@@ -4020,7 +3855,6 @@ input[type="text"].note-toolbar-setting-error,
         display: none;
     }
 }
-
 .note-toolbar-launchpad {
     & .callout-content {
         margin-left: auto;
@@ -4070,7 +3904,5 @@ input[type="text"].note-toolbar-setting-error,
         border-radius: var(--button-radius) !important;
         padding: 1em;
     }
-
-    /* #endregion */
 
 }

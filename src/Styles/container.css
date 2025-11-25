@@ -1,0 +1,102 @@
+/*
+ * Toolbar Container
+ */
+
+.cg-note-toolbar-bar-container {
+    border-radius: var(--cg-nt-tbar-border-radius);
+    /* fix: (#90) box-shadow appearing over top of text */
+    /* box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color); */
+    &:has(.callout[data-callout-metadata*="autohide"]) {
+        box-shadow: none;
+    }
+    margin-bottom: 1em;
+    .is-mobile & {
+        margin-inline-start: 0;
+        margin-inline-end: 0;
+    }
+    &:hover {
+        /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
+        overflow: inherit !important;
+    }
+    /* width: var(--var-max-width);
+    max-width: var(--var-max-width); */
+
+    &[data-tbar-position="bottom"],
+    &[data-tbar-position="top"] {
+        background-color: var(--cg-nt-tbar-bg-color);
+        font-size: var(--font-text-size);
+        margin-bottom: 0;
+        padding: var(--file-margins);
+        padding-bottom: 0;
+        padding-top: 0;
+        /* fix: puts toolbar above popovers + Hover Editor plugin */
+        z-index: calc(var(--layer-slides) - 1);
+        &:hover {
+            /* undoes fix (#14) which causes a layout shift on hover */
+            overflow: visible !important;
+        }
+        & .cg-note-toolbar-callout {
+            margin-bottom: 0;
+            margin-inline: auto auto !important;
+            transition: border-top 0.5s ease-out;
+        }
+    }
+
+    &[data-tbar-position="bottom"] {
+        background-color: unset; /* fixes issue with padding color; but when tbar not in focus it's transparent */
+        border-radius: var(--cg-nt-tbar-bottom-border-radius);
+        bottom: var(--cg-nt-tbar-bottom-pos-y-desktop);
+        position: absolute;
+        padding: 0 var(--cg-nt-tbar-bottom-padding-x-desktop);
+        .is-mobile & {
+            bottom: var(--cg-nt-tbar-bottom-pos-y-mobile);
+            padding: 0 var(--cg-nt-tbar-bottom-padding-x-mobile);
+        }
+    }
+
+    &[data-tbar-position="text"] {
+        border-radius: var(--cg-nt-tbar-text-border-radius);
+        box-shadow: var(--cg-nt-tbar-text-shadow);
+        position: absolute;
+        max-width: var(--cg-nt-tbar-text-max-width-desktop);
+        .is-tablet & {
+            max-width: var(--cg-nt-tbar-text-max-width-tablet);
+        }
+        .is-phone & {
+            max-width: var(--cg-nt-tbar-text-max-width-phone);
+        }
+        /* fix: puts toolbar above popovers + Hover Editor plugin */
+        z-index: calc(var(--layer-slides) - 1);
+        & .cg-note-toolbar-callout {
+            margin-bottom: 0;
+            & a, span.external-link {
+                color: var(--cg-nt-tbar-text-item-text-color);
+                font-size: var(--cg-nt-tbar-text-item-font-size);
+                padding: var(--cg-nt-tbar-text-item-padding-y) var(--cg-nt-tbar-text-item-padding-x);
+                & svg {
+                    height: var(--cg-nt-tbar-text-item-icon-size);
+                    width: var(--cg-nt-tbar-text-item-icon-size);
+                }
+            }
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    box-shadow: none;
+                    opacity: var(--icon-opacity-hover);
+                    background-color: var(--cg-nt-tbar-text-item-bg-color-hover);
+                    color: var(--cg-nt-tbar-text-item-text-color-hover);
+                }
+            }
+        }
+    }
+}
+
+/* width fix for Minimal theme in props position #204 #216 */
+body[data-ntb-csstheme="Minimal"] {
+    & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
+        .is-readable-line-width & {
+            max-width: var(--max-width);
+            width: var(--line-width);
+            margin-inline: var(--content-margin) !important;
+        }
+    }
+}

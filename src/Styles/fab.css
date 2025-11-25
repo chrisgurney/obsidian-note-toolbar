@@ -1,0 +1,114 @@
+/*
+ * FAB (Floating Action Button)
+ */
+
+.cg-note-toolbar-fab-container {
+    & button[data-fab-metadata*="autohide"] {
+        box-shadow: none;
+        &:not(.is-mobile &) {
+            opacity: var(--cg-nt-fab-autohide-opacity);
+            transition: all 0.2s ease-in-out;
+            -webkit-transition: all 0.2s ease-in-out;
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+    & button[data-fab-metadata*="border"] {
+        border: solid 1px var(--cg-nt-fab-border-color);
+    }
+    & button[data-fab-metadata*="mbrder"] {
+        .is-mobile & {
+            border: solid 1px var(--cg-nt-fab-border-color);
+        }
+    }
+}
+
+.cg-note-toolbar-fab-container {
+    bottom: var(--cg-nt-fab-pos-y-desktop);
+    position: absolute;
+    padding: 0;
+    left: var(--cg-nt-fab-pos-x-desktop);
+    right: unset;
+    /* fix: puts toolbar above popovers + Hover Editor plugin */
+    z-index: calc(var(--layer-slides) - 1);
+
+    &[data-tbar-position="fabr"] {
+        left: unset;
+        right: var(--cg-nt-fab-pos-x-desktop);
+    }
+    .is-mobile & {
+        bottom: var(--cg-nt-fab-pos-y-mobile);
+        left: var(--cg-nt-fab-pos-x-mobile);
+        right: unset;
+        &[data-tbar-position="fabr"] {
+            left: unset;
+            right: var(--cg-nt-fab-pos-x-mobile);
+        }
+    }
+}
+
+/* user feedback that toolbar interaction is not available; workaround for #69 */
+body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
+    & .cg-note-toolbar-fab-container {
+        opacity: var(--cg-nt-fab-inactive-opacity);
+    }
+}
+
+@keyframes cg-note-toolbar-fab-anim {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.75); }
+    100% { transform: scale(1.5); }
+}
+
+.cg-note-toolbar-fab {
+    aspect-ratio: 1;
+    background-color: var(--cg-nt-fab-bg-color-desktop) !important;
+    color: var(--cg-nt-fab-icon-color-desktop);
+    border-radius: var(--cg-nt-fab-border-radius-desktop);
+    height: auto !important;
+    padding: var(--cg-nt-fab-padding-desktop) !important;
+    &:is(:active, :hover, :focus-visible) {
+        color: var(--cg-nt-fab-icon-color-desktop) !important;
+        background-color: var(--cg-nt-fab-bg-color-hover-desktop) !important;
+    }
+    .is-mobile & {
+        background-color: var(--cg-nt-fab-bg-color) !important;
+        border-radius: var(--cg-nt-fab-border-radius);
+        color: var(--cg-nt-fab-icon-color);
+        padding: var(--cg-nt-fab-padding) !important;
+        transition: transform 0.2s ease-out;
+        &:is(:active, :hover, :focus-visible) {
+            background-color: var(--cg-nt-fab-bg-color) !important;
+            color: var(--cg-nt-fab-icon-color) !important;
+        }
+        &:is(:active) {
+            @media (prefers-reduced-motion: no-preference) {
+                animation: cg-note-toolbar-fab-anim 0.25s ease-out forwards;
+            }
+        }
+    }
+    -webkit-tap-highlight-color: transparent;
+    & > svg {
+        inline-size: var(--cg-nt-fab-icon-size-desktop);
+        block-size: var(--cg-nt-fab-icon-size-desktop);
+        stroke-width: var(--cg-nt-fab-icon-stroke-width-desktop);
+        .is-mobile & {
+            inline-size: var(--cg-nt-fab-icon-size);
+            block-size: var(--cg-nt-fab-icon-size);    
+            stroke-width: var(--cg-nt-fab-icon-stroke-width);
+        }
+        @media (prefers-reduced-motion: no-preference) {
+          will-change: transform;
+          transition: transform .5s var(--ease-squish-3);
+        }
+    }
+    &:active {
+        @media (prefers-reduced-motion: no-preference) {
+            transform: translateY(2%);
+        }
+    }
+    &:hover {
+        cursor: pointer;
+    }
+}

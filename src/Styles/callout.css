@@ -1,0 +1,531 @@
+/*
+ * Callouts
+ */
+
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
+    &:hover {
+        box-shadow: none !important; /* hide the border on hover of the toolbar callout */
+        & .edit-block-button {
+            display: none; /* hide the edit icon that appears */
+        }
+    }
+}
+
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
+    &:not([data-tbar-position="bottom"]) {
+        position: sticky;
+        top: var(--cg-nt-tbar-top-sticky-pos-desktop);
+        z-index: 2;
+        .is-mobile &, .is-phone & {
+            top: var(--cg-nt-tbar-top-sticky-pos-mobile);
+        }
+    }
+}
+
+.is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
+    position: sticky;
+    z-index: 2;
+}
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
+    .is-mobile &, .is-phone & {
+        top: var(--cg-nt-tbar-top-sticky-pos-mobile);
+    }
+}
+
+/* default, if not specified */
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
+    top: inherit;
+    position: relative;
+}
+
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
+    .is-mobile &, .is-phone & {
+        top: inherit;
+        position: relative;
+    }
+}
+
+.cm-embed-block[data-tbar-position="bottom"],
+.cm-embed-block[data-tbar-position="top"] {
+    & .callout[data-callout="note-toolbar"] {
+        max-width: var(--file-line-width);
+    }
+}
+
+/* fixes header div getting squished when the toolbar's at the top position */
+.view-header:has(+ [data-tbar-position="top"]) {
+    min-height: var(--header-height);
+}
+
+.callout[data-callout="note-toolbar-output"] {
+    background-color: var(--background-primary) !important;
+    background-image: unset !important;
+    margin: 0em !important;
+    padding: 0em;
+    &:has(> .callout-title) {
+        border: 4px dashed var(--background-secondary);
+        padding: 1em;
+    }
+    & .callout-content {
+        color: var(--background-secondary);       
+    }
+    & .callout-title {
+        color: var(--background-secondary);
+        display: inherit;
+        text-transform: uppercase;
+        & .callout-icon {
+            display: none;
+        }
+        & .callout-title-inner {
+            color: var(--background-secondary);
+        }
+    }
+}
+
+body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
+    & .callout[data-callout="note-toolbar-output"] {
+        background-color: #000 !important;
+    }
+}
+
+.callout[data-callout="note-toolbar"] {
+
+    /* fix: (#378) reset CSS rules applied by themes (e.g., Velocity) */
+    background-image: unset !important;
+    box-shadow: unset !important;
+
+    background-color: var(--cg-nt-tbar-bg-color) !important;
+    border-radius: var(--cg-nt-tbar-border-radius);
+    border-style: none;
+    padding: 0;
+    padding-inline: var(--cg-nt-tbar-padding-inline);
+    width: 100%;
+
+    & .callout-title {
+        display: none;
+    }
+
+    & .callout-content {
+
+        /* fix: (#378) reset CSS rules applied by themes (e.g., Primary) */
+        box-shadow: unset !important;
+
+        & ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0rem;
+            margin: var(--cg-nt-tbar-margin-y) 0;
+            padding-inline-start: 0;
+            [data-tbar-position="bottom"] &, [data-tbar-position="text"] & {
+                margin: var(--cg-nt-tbar-margin-y);
+            }
+        }
+    
+        & li {
+            align-items: center;
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            
+            &[aria-disabled="true"] {
+                color: var(--text-muted);
+                opacity: 0.4;
+                > span:hover {
+                    background-color: unset;
+                    cursor: default;
+                }
+            }
+            & .list-bullet {
+                display: none; /* remove for reading mode */
+            }
+            &.hide {
+                display: none;
+            }
+            &.hide-on-mobile {
+                .is-mobile & {
+                    display: none;
+                }
+            }
+            &.hide-on-desktop {
+                display: none;
+                .is-mobile & {
+                    display: block !important;
+                }
+            }
+            & span.hide {
+                display: none;
+            }
+            & span.hide-on-mobile {
+                .is-mobile & {
+                    display: none;
+                }
+            }
+            & span.hide-on-desktop {
+                display: none;
+                .is-mobile & {
+                    display: block !important;
+                }
+            }
+            &::before {
+                content: none !important; /* removes decoration added by ITS theme */
+            }
+        }
+
+        & li:has(> hr),
+        & li:has(> data[data-sep]),
+        & li:has(> a.external-link + data[data-sep]) {
+            border-left: var(--cg-nt-item-sep-width) solid var(--cg-nt-item-sep-color);
+            margin: var(--cg-nt-item-sep-margin-y) var(--cg-nt-item-sep-margin-x);
+            width: 1px;
+            & a:hover {
+                background: none;
+            }
+            hr {
+                margin: initial;
+            }
+        }
+        & li:has(> br),
+        & li:has(> data[data-break]),
+        & li:has(> a.external-link + data[data-break]) {
+            flex-basis: 100%;
+            height: 0;
+        }
+
+        & a, span.external-link {
+            color: var(--cg-nt-item-text-color);
+            padding: var(--cg-nt-item-padding-y) var(--cg-nt-item-padding-x);
+            display: flex;
+            text-decoration: none;
+            font-size: var(--cg-nt-item-font-size);
+            border-radius: var(--cg-nt-item-border-radius);
+            height: 100%;
+            &.cg-note-toolbar-item-label,
+            & .cg-note-toolbar-item-label {
+                white-space: nowrap;
+            }
+            & svg {
+                height: var(--cg-nt-item-icon-size);
+                width: var(--cg-nt-item-icon-size);
+            }
+        }
+
+        & li.tbar-item-focused {
+            border-radius: var(--cg-nt-item-border-radius);
+            box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+            box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
+        }
+
+        @media (hover: hover) {
+            & a:hover, span.external-link:hover {
+                box-shadow: none;
+                opacity: var(--icon-opacity-hover);
+                background-color: var(--cg-nt-item-bg-color-hover);
+                color: var(--cg-nt-item-text-color-hover);
+            }
+        }
+
+        & a.external-link, span.external-link, a.internal-link {
+            background-image: none; /* hide the external link icon */
+            gap: 0 0.5em;
+            &::after {
+                content: none !important; /* removes decoration added by ITS theme */
+            }
+        }
+
+        & span.cm-iconize-icon, span.iconize-icon-in-link {
+            transform: unset !important;
+            align-items: center;
+            vertical-align: middle;
+            margin-right: unset;
+            /* fix for bold Iconize icons #162 */
+            & svg svg[stroke-width='16px'] {
+                stroke-width: 2;
+            }
+        }
+
+    }
+
+    /*************************************************************************
+     * Toolbar Styles (sticky's further up in this file)
+     *************************************************************************/
+
+    &[data-callout-metadata*="autohide"] {
+        &:not(.is-mobile &) {
+            opacity: var(--cg-nt-tbar-autohide-opacity);
+            transition: all 0.2s ease-in-out;
+            -webkit-transition: all 0.2s ease-in-out;
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="between"] ul {
+        justify-content: space-between;
+    }
+    
+    &[data-callout-metadata*="mbtwn"] ul {
+        .is-mobile & {
+            justify-content: space-between;
+        }
+    }
+
+    &[data-callout-metadata*="border"] {
+        border-bottom: solid 1px var(--cg-nt-tbar-border-color);
+        border-top: solid 1px var(--cg-nt-tbar-border-color);
+        border-radius: 0;
+        [data-tbar-position="top"] & {
+            border-top: none;
+        }
+        [data-tbar-position="bottom"] & {
+            border: solid 1px var(--cg-nt-tbar-border-color);
+            border-radius: var(--cg-nt-tbar-bottom-border-radius);
+        }
+        [data-tbar-position="text"] & {
+            border: solid 1px var(--cg-nt-tbar-text-border-color);
+            border-radius: var(--cg-nt-tbar-text-border-radius);
+        }
+    }
+
+    &[data-callout-metadata*="mbrder"] {
+        .is-mobile & {
+            border-top: solid 1px var(--cg-nt-tbar-border-color);
+            border-bottom: solid 1px var(--cg-nt-tbar-border-color);
+            border-radius: 0;
+            [data-tbar-position="bottom"] & {
+                border: solid 1px var(--cg-nt-tbar-border-color);
+                border-radius: var(--cg-nt-tbar-bottom-border-radius);
+            }
+            [data-tbar-position="text"] & {
+                border: solid 1px var(--cg-nt-tbar-text-border-color);
+                border-radius: var(--cg-nt-tbar-text-border-radius);
+            }
+        }
+    }
+
+    &[data-callout-metadata*="noborder"] {
+        border: inherit;
+    }
+
+    &[data-callout-metadata*="mnbrder"] {
+        .is-mobile & {
+            border: inherit;
+        }
+    }
+
+    &[data-callout-metadata*="center"] ul {
+        justify-content: center;
+    }
+    
+    &[data-callout-metadata*="mctr"] ul {
+        .is-mobile & {
+            justify-content: center;
+        }
+    }
+
+    &[data-callout-metadata*="even"] ul {
+        justify-content: space-evenly;
+    }
+    
+    &[data-callout-metadata*="mevn"] ul {
+        .is-mobile & {
+            justify-content: space-evenly;
+        }
+    }
+
+    &[data-callout-metadata*="floatl"] {
+        float: left;
+        width: inherit;
+    }
+
+    &[data-callout-metadata*="mfltl"] {
+        .is-mobile & {
+            float: left;
+            width: inherit;
+        }
+    }
+
+    &[data-callout-metadata*="floatr"] {
+        float: right;
+        width: inherit;
+    }
+
+    &[data-callout-metadata*="mfltr"] {
+        .is-mobile & {
+            float: right;
+            width: inherit;
+        }
+    }
+
+    &[data-callout-metadata*="nofloat"] {
+        float: inherit;
+    }
+
+    &[data-callout-metadata*="mnflt"] {
+        .is-mobile & {
+            float: inherit;
+        }
+    }
+
+    &[data-callout-metadata*="inactive"] {
+        body:not(.is-mobile):not(.is-focused) &, .workspace-leaf:not(.mod-active) & {
+            display: none;
+        }
+    }
+
+    &[data-callout-metadata*="left"] ul {
+        justify-content: left;
+    }
+
+    &[data-callout-metadata*="mlft"] ul {
+        .is-mobile & {
+            justify-content: left;
+        }
+    }
+
+    &[data-callout-metadata*="right"] ul {
+        justify-content: right;
+    }
+
+    &[data-callout-metadata*="mrght"] ul {
+        .is-mobile & {
+            justify-content: right;
+        }
+    }
+
+    &[data-callout-metadata*="mnwrp"] ul {
+        .is-mobile & {
+            flex-wrap: nowrap;
+        }
+    }
+
+    &[data-callout-metadata*="wide"] {
+        max-width: none !important;
+    }
+
+    &[data-callout-metadata*="mwd"] {
+        .is-mobile & {
+            max-width: none;
+        }
+    }
+
+    &[data-callout-metadata*="mnwd"] {
+        .is-mobile & {
+            max-width: var(--file-line-width);
+        }
+    }
+
+    &[data-callout-metadata*="button"] ul {
+        gap: var(--size-4-2);
+        & a, span.external-link {
+            background-color: var(--cg-nt-item-button-bg-color);
+            box-shadow: var(--input-shadow);
+            [data-tbar-position="text"] & {
+                background-color: var(--cg-nt-tbar-text-item-button-bg-color);
+            }
+        }
+    }
+
+    &[data-callout-metadata*="mbtn"] ul {
+        .is-mobile & {
+            gap: var(--size-4-2);
+            & a, span.external-link {
+                background-color: var(--cg-nt-item-button-bg-color);
+                box-shadow: var(--input-shadow);
+                [data-tbar-position="text"] & {
+                    background-color: var(--cg-nt-tbar-text-item-button-bg-color);
+                }
+            }
+        }
+    }
+
+    &[data-callout-metadata*="tab"] ul {
+        & li[data-active-file] {
+            box-shadow: inset 0 -1px 0 var(--link-color);
+            & span.external-link {
+                color: var(--link-color);
+                filter: unset;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="mtb"] ul {
+        .is-mobile & {
+            & li[data-active-file] {
+                box-shadow: inset 0 -1px 0 var(--link-color);
+                & span.external-link {
+                    color: var(--link-color);
+                    filter: unset;
+                }
+            }
+        }
+    }
+
+    &[data-callout-metadata*="mntb"] ul {
+        .is-mobile & {
+            & li[data-active-file] {
+                box-shadow: none;
+                & span.external-link {
+                    color: var(--cg-nt-item-text-color);
+                    filter: var(--link-external-filter);
+                }
+            }
+        }
+    }
+
+    &.cg-note-toolbar-callout {
+        /* margin-top: fix for reading mode */
+        box-shadow: none;
+        line-height: normal;
+        margin-top: 0; 
+        & a, span.external-link {
+            display: flex;
+            gap: 0 0.5em;
+            & svg {
+                display: block;
+                margin: 0 auto;
+            }
+        }
+        & .callout-content {
+            box-shadow: none;
+            background-color: unset;
+            border-radius: unset;
+        }
+        &:hover {
+            /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
+            background-color: unset;
+        }
+    }
+    
+}
+
+/* custom class for Cupertino theme, thanks to @aaaaalexis */
+body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
+    &.glass, &[data-callout-metadata*="glass"] {
+        &[data-callout-metadata*="button"] ul {
+            & a, span.external-link {
+                backdrop-filter: var(--blur-s);
+                box-shadow: var(--shadow-xs);
+                border: none;
+                background-color: var(--liquid-glass-background);
+                transition: var(--anim-duration-moderate);
+            }
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+}
+
+/* user feedback that toolbar interaction is not available; workaround for #69 */
+body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
+    & .cg-note-toolbar-callout[data-callout="note-toolbar"] {
+        opacity: var(--cg-nt-tbar-inactive-opacity-desktop);
+        .is-mobile & {
+            opacity: var(--cg-nt-tbar-inactive-opacity-mobile);
+        }
+    }
+}

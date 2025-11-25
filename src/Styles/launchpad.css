@@ -1,0 +1,67 @@
+/*
+ * New tab toolbar (Launchpad) 
+ */
+
+.note-toolbar-launchpad-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    & .cg-note-toolbar-container {
+        margin: auto 0;
+    }
+    & .empty-state {
+        display: none;
+    }
+}
+
+.note-toolbar-launchpad {
+    & .callout-content {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: var(--cg-nt-launchpad-max-width);
+        & ul[role="menu"] {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(var(--cg-nt-launchpad-cols-desktop), 1fr);
+            .is-mobile & {
+                grid-template-columns: repeat(var(--cg-nt-launchpad-cols-mobile), 1fr);
+            }
+            margin: 0 auto;
+            & li {
+                background-color: var(--cg-nt-launchpad-item-bg-color);
+                border-radius: var(--cg-nt-launchpad-item-border-radius);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                & .cg-note-toolbar-item {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    font-size: var(--cg-nt-launchpad-item-font-size);
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    min-height: 100px;
+                    gap: 4px;
+                    & .cg-note-toolbar-item-label {
+                        white-space: wrap;
+                    }
+                    .is-phone & {
+                        color: var(--interactive-accent);
+                    }
+                    & svg {
+                        height: var(--cg-nt-launchpad-item-icon-size);
+                        width: var(--cg-nt-launchpad-item-icon-size);
+                    }
+                }
+            }
+        }
+    }
+    &[data-callout-metadata*="border"] {
+        border: solid 1px var(--cg-nt-tbar-border-color) !important;
+        border-radius: var(--button-radius) !important;
+        padding: 1em;
+    }
+
+}

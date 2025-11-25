@@ -1,0 +1,70 @@
+/*
+ * Suggesters
+ */
+
+.note-toolbar-item-suggester-name {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    column-gap: 1em;
+    width: 100%;
+}
+
+.note-toolbar-item-suggester-note {
+    color: var(--text-muted);
+    display: flex;
+    gap: 0.25em;
+    font-size: var(--font-ui-smaller);
+    margin-top: 0.25em;
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+    width: 100%;
+    & svg {
+        height: var(--font-ui-smaller) !important;
+        width: var(--font-ui-smaller) !important;
+    }
+}
+
+.note-toolbar-item-suggester-type {
+    opacity: 0.4;
+}
+
+.note-toolbar-item-suggestion-container {
+    column-gap: 0.5em;
+    display: flex;
+    width: 100%;
+}
+
+.note-toolbar-item-suggestion {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    column-gap: 0.5rem;
+    & svg {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.note-toolbar-icon-suggestion {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    & svg {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.note-toolbar-icon-action-button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 0 1em;
+}
+
+.note-toolbar-setting-folder-suggestion-item-muted {
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    color: var(--text-muted);
+}
