@@ -1,31 +1,34 @@
-// Imports YAML files into the provided CSS.
+// Imports files into the provided CSS.
 // usage: @import "./style-settings.yaml";
 
 import fs from 'fs/promises';
 import path from 'path';
 import postcss from 'postcss';
 
-export async function yamlInliner(inputCssPath, outputCssPath) {
-  const yamlInlinerPlugin = () => {
+export async function fileInliner(inputCssPath, outputCssPath) {
+  const fileInlinerPlugin = () => {
     return {
-      postcssPlugin: 'yaml-inliner',
+      postcssPlugin: 'file-inliner',
       async Once(root) {
         const promises = [];
 
         root.walkAtRules('import', (rule) => {
-          if (rule.params.endsWith('.yaml"') || rule.params.endsWith('.yaml\'')) {
-            const yamlPath = rule.params.replace(/['"]/g, '');
-            const fullPath = path.resolve(path.dirname(inputCssPath), yamlPath);
+          // extract the file path from the import statement
+          const match = rule.params.match(/['"]([^'"]+)['"]/);
+
+          if (match) {
+            const filePath = match[1];
+            const fullPath = path.resolve(path.dirname(inputCssPath), filePath);
 
             promises.push(
               fs.readFile(fullPath, 'utf8')
-                .then(yamlContent => {
+                .then(fileContent => {
                   rule.replaceWith({
-                    text: `@settings\n\n${yamlContent}\n`
+                    text: `@settings\n\n${fileContent}\n`
                   });
                 })
                 .catch(err => {
-                  console.error(`[yaml-inliner] error reading YAML file: ${fullPath}`, err);
+                  console.error(`[file-inliner] error reading file: ${fullPath}`, err);
                 })
             );
           }
@@ -36,11 +39,11 @@ export async function yamlInliner(inputCssPath, outputCssPath) {
     };
   };
 
-  yamlInlinerPlugin.postcss = true;
+  fileInlinerPlugin.postcss = true;
 
   try {
     const css = await fs.readFile(inputCssPath, 'utf8');
-    const result = await postcss([yamlInlinerPlugin()]).process(css, {
+    const result = await postcss([fileInlinerPlugin()]).process(css, {
       from: inputCssPath,
       to: outputCssPath,
     });

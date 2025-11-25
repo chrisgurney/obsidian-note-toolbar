@@ -1,6 +1,6 @@
 import esbuild from "esbuild";
 import chokidar from "chokidar";
-import { yamlInliner } from "./build/yaml-inliner.mjs";
+import { fileInliner } from "./build/file-inliner.mjs";
 import { galleryDocs } from "./build/gallery-docs.mjs";
 import process from "process";
 import { spawn } from 'child_process';
@@ -46,13 +46,13 @@ const typecheckPlugin = {
 	},
 };
 
-// bring in the Style Settings YAML
-const yamlInlinerPlugin = {
-	name: 'yaml-inliner-plugin',
+// inline files into CSS
+const fileInlinerPlugin = {
+	name: 'file-inliner-plugin',
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await yamlInliner('src/Styles/styles.css', 'styles.css');
+			await fileInliner('src/Styles/styles.css', 'styles.css');
 		} catch {
 			process.exit(1);
 		}
@@ -102,7 +102,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [yamlInlinerPlugin, galleryDocsPlugin, typecheckPlugin],
+	plugins: [fileInlinerPlugin, galleryDocsPlugin, typecheckPlugin],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,
