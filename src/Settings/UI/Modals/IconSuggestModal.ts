@@ -1,6 +1,6 @@
 import { IconName, SuggestModal, getIconIds, setIcon } from "obsidian";
 import NoteToolbarPlugin from "main";
-import { NoteToolbarSettings, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { t } from "Settings/NoteToolbarSettings";
 
 export default class IconSuggestModal extends SuggestModal<IconName> {
 
