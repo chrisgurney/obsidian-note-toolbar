@@ -19,13 +19,26 @@ export async function fileInliner(inputCssPath, outputCssPath) {
           if (match) {
             const filePath = match[1];
             const fullPath = path.resolve(path.dirname(inputCssPath), filePath);
+            const isYaml = filePath.endsWith('.yaml') || filePath.endsWith('.yml');
+            const isCss = filePath.endsWith('.css');
 
             promises.push(
               fs.readFile(fullPath, 'utf8')
                 .then(fileContent => {
-                  rule.replaceWith({
-                    text: `${fileContent}\n`
-                  });
+                  if (isCss) {
+                    const parsed = postcss.parse(fileContent);
+                    rule.replaceWith(parsed.nodes);
+                  } 
+                  else if (isYaml) {
+                    rule.replaceWith({
+                      text: `@settings\n\n${fileContent}\n`
+                    });
+                  } 
+                  else {
+                    rule.replaceWith({
+                      text: fileContent
+                    });
+                  }
                 })
                 .catch(err => {
                   console.error(`[file-inliner] error reading file: ${fullPath}`, err);
