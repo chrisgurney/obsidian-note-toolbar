@@ -24,7 +24,7 @@ export async function fileInliner(inputCssPath, outputCssPath) {
               fs.readFile(fullPath, 'utf8')
                 .then(fileContent => {
                   rule.replaceWith({
-                    text: `@settings\n\n${fileContent}\n`
+                    text: `${fileContent}\n`
                   });
                 })
                 .catch(err => {
@@ -50,9 +50,9 @@ export async function fileInliner(inputCssPath, outputCssPath) {
 
     await fs.writeFile(outputCssPath, result.css);
 
-    console.log('[yaml-inliner] CSS processing complete');
+    console.log('[file-inliner] CSS processing complete');
   } catch (error) {
-    console.error('[yaml-inliner] PostCSS processing failed:', error);
+    console.error('[file-inliner] PostCSS processing failed:', error);
     throw error;
   }
 }
