@@ -41,7 +41,7 @@ export async function fileInliner(inputCssPath, outputCssPath) {
                   }
                 })
                 .catch(err => {
-                  console.error(`[file-inliner] error reading file: ${fullPath}`, err);
+                  console.error(`\x1b[31m[file-inliner] error reading file:\x1b[0m ${fullPath}`, err);
                 })
             );
           }
