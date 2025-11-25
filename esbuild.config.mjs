@@ -52,7 +52,7 @@ const yamlInlinerPlugin = {
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await yamlInliner('src/styles.css', 'styles.css');
+			await yamlInliner('src/Styles/styles.css', 'styles.css');
 		} catch {
 			process.exit(1);
 		}
@@ -116,7 +116,7 @@ if (prod) {
 	await context.watch();
 
 	// watch for changes to files outside the build process
-	const watcher = chokidar.watch(['src/style-settings.yaml', 'src/styles.css']);
+	const watcher = chokidar.watch(['src/Styles/*']);
 	watcher.on('change', async (path) => {
 		console.log(`[watch] file changed: ${path}`);
 		try {
