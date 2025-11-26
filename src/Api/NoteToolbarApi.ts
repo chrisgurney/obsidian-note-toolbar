@@ -276,6 +276,25 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
+     * Replaces the selected text with the provided string, or the word at the cursor position.
+     * 
+     * @see INoteToolbarApi.setSelection
+     */
+    setSelection(replacement: string) {
+        const editor = this.ntb.app.workspace.activeEditor?.editor;
+        if (!editor) return;
+        
+        const selection = editor.getSelection();
+
+        if (selection) {
+            editor.replaceSelection(replacement);
+        } else {
+            const wordRange = editor.wordAt(editor.getCursor());
+            if (wordRange) editor.replaceRange(replacement, wordRange.from, wordRange.to);
+        }
+    }
+
+    /**
      * Shows a suggester modal and waits for the user's selection. 
      * 
      * @see INoteToolbarApi.suggester

@@ -38,6 +38,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 - [[ntb.o|Note-Toolbar-API#o]]
 - [[ntb.prompt|Note-Toolbar-API#prompt]]
 - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
+- [[ntb.setSelection|Note-Toolbar-API#setselection]]
 - [[ntb.suggester|Note-Toolbar-API#suggester]]
 - [[ntb.t|Note-Toolbar-API#t]]
 
@@ -440,6 +441,35 @@ await ntb.setProperty('A Link', '[[Some Note]]');
 await ntb.setProperty('A Number', 1234);
 await ntb.setProperty('A List', ['asdf', 'asdf2']);
 ```
+
+***
+
+### setSelection()
+
+> **setSelection**: (`replacement`) => `void`
+
+Replaces the selected text, or the word at the cursor position, with the provided string.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `replacement` | `string` | The text to replace the selection with. |
+
+#### Returns
+
+`void`
+
+#### Example
+
+```ts
+// makes the selected text or the current word red
+ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</span>`);
+```
+
+#### Since
+
+1.26
 
 ***
 

@@ -42,6 +42,7 @@ import { IToolbar } from "./IToolbar";
  * - [[ntb.o|Note-Toolbar-API#o]]
  * - [[ntb.prompt|Note-Toolbar-API#prompt]]
  * - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
+ * - [[ntb.setSelection|Note-Toolbar-API#setselection]]
  * - [[ntb.suggester|Note-Toolbar-API#suggester]]
  * - [[ntb.t|Note-Toolbar-API#t]]
  * 
@@ -259,6 +260,19 @@ export default interface INoteToolbarApi<T> {
      * await ntb.setProperty('A List', ['asdf', 'asdf2']);
      */
     setProperty: (property: string, value: any) => Promise<void>;
+
+    /**
+     * Replaces the selected text, or the word at the cursor position, with the provided string.
+     * 
+     * @param replacement The text to replace the selection with.
+     * 
+     * @example
+     * // makes the selected text or the current word red
+     * ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</span>`);
+     * 
+     * @since 1.26
+     */
+    setSelection: (replacement: string) => void;
 
     /**
      * Shows a suggester modal and waits for the user's selection.
