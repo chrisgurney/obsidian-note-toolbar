@@ -2010,6 +2010,12 @@ body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
             box-shadow: none;
         }
     }
+    .is-mobile & {
+        &:is(:active, :hover, :focus-visible) {
+            background-color: var(--liquid-glass-background) !important;
+             color: var(--text-normal) !important;
+        }
+    }
 }
 /*
  * Toolbar Container
