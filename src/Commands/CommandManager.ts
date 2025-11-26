@@ -34,7 +34,7 @@ export default class CommandManager {
         this.ntb.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.openSettings() });
         this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), checkCallback: this.checkHasToolbarAndRun(async () => { this.openToolbarSettings(); }) });
 
-        this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), checkCallback: this.checkViewAndRun('bases', async () => { this.toggleUi('baseToolbar', 'toggle'); }) });
+        this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), callback: () => this.toggleUi('baseToolbar', 'toggle') });
 
         this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'toggle'); }) });
         this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'),  checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'show'); }) });
@@ -374,52 +374,34 @@ export default class CommandManager {
      */
     async toggleUi(component: 'baseToolbar' | 'props', visibility: ToggleUiStateType, isAutoFold: boolean = false): Promise<void> {
 
-        let currentView: ItemView | null = null;
-        let elPropsToChange: string[] = [];
-        let elToToggle: HTMLElement | null = null;
-        let elVisibleValue: string;
-        let hasRightView: boolean = false;
-
         const activeFile = this.ntb.app.workspace.getActiveFile();
-        
-        switch (component) {
-            case 'baseToolbar': {
-                currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-                hasRightView = currentView?.getViewType() === 'bases';
-                elToToggle = activeDocument.querySelector('.bases-header');
-                elPropsToChange = ['display'];
-                elVisibleValue = 'flex';
-                break;
-            }
-            case 'props': {
-                currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
-                // @ts-ignore make sure we're not in source (code) view
-                hasRightView = !currentView?.editMode.sourceMode;
-                elToToggle = this.ntb.el.getPropsEl();
-                elPropsToChange = ['--metadata-display-reading', '--metadata-display-editing'];
-                elVisibleValue = 'block';
-                break;
-            }
+        const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        // @ts-ignore make sure we're not in source (code) view
+        const isSourceView = currentView?.editMode?.sourceMode;
+        if (!activeFile || !currentView || isSourceView) return;
+
+        if (component === 'baseToolbar') {
+            const shouldHide = visibility === 'toggle' 
+                ? !activeDocument.body.classList.contains('ntb-hide-bases-header')
+                : visibility === 'hide';
+            activeDocument.body.toggleClass('ntb-hide-bases-header', shouldHide);
         }
+        else if (component === 'props') {
+            const propsEl = this.ntb.el.getPropsEl();
+            if (!propsEl) return;
 
-        // this.plugin.debug("togglePropsCommand: ", "visibility: ", visibility, "props: ", propsEl);
-        if (activeFile && elToToggle && hasRightView) {
-
-            const computedDisplay = getComputedStyle(elToToggle).getPropertyValue('display');
+            const computedDisplay = getComputedStyle(propsEl).getPropertyValue('display');
             visibility === 'toggle' ? (computedDisplay === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
-            elPropsToChange.forEach((prop) => {
-                elToToggle.style.setProperty(
-                    prop, ['show', 'fold'].contains(visibility) ? elVisibleValue : 'none');
-                elToToggle.style.setProperty(
-                    prop, ['show', 'fold'].contains(visibility) ? elVisibleValue : 'none');
+            ['--metadata-display-reading', '--metadata-display-editing'].forEach((prop) => {
+                propsEl.style.setProperty(
+                    prop, ['show', 'fold'].contains(visibility) ? 'block' : 'none');
             });
 
             if (component === 'props') {
-                this.toggleUiFoldProps(elToToggle, visibility, isAutoFold);
+                this.toggleUiFoldProps(propsEl, visibility, isAutoFold);
                 // update the saved state
                 this.ntb.app.saveLocalStorage(LocalVar.TogglePropsState, visibility);
             }
-
         }
 
     }

@@ -97,7 +97,7 @@ body {
         --cg-nt-fab-border-color: var(--interactive-accent);
     }
 
-    /* fix: adjustments for various themes #413 */
+    /* default adjustments for various themes */
     &[data-ntb-csstheme="Cupertino"] {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
         &.is-mobile.theme-dark {
@@ -109,6 +109,13 @@ body {
     }
     &[data-ntb-csstheme="Velocity"] {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 22px);      
+    }
+
+    /* added in the Toggle Base toolbar command */
+    &.ntb-hide-bases-header {
+        .bases-header {
+            display: none !important;
+        }
     }
 
 }
