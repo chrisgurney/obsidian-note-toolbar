@@ -1860,7 +1860,7 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
     }
     
 }
-/* custom class for Cupertino theme, thanks to @aaaaalexis */
+/* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
 body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
     &[data-callout-metadata*="button"] ul {
         & a, span.external-link {
@@ -1993,6 +1993,22 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     }
     &:hover {
         cursor: pointer;
+    }
+}
+/* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
+    backdrop-filter: var(--blur-s);
+    border: var(--border-width) solid var(--background-modifier-border);
+    box-shadow: var(--shadow-xs);
+    background-color: var(--liquid-glass-background);
+    transition: var(--anim-duration-moderate);
+    & svg {
+        color: var(--text-normal);
+    }
+    @media (hover: hover) {
+        &:hover {
+            box-shadow: none;
+        }
     }
 }
 /*

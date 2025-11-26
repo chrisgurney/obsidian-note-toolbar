@@ -500,7 +500,7 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
     
 }
 
-/* custom class for Cupertino theme, thanks to @aaaaalexis */
+/* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
 body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
     &[data-callout-metadata*="button"] ul {
         & a, span.external-link {
