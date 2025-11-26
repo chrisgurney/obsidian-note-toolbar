@@ -39,11 +39,14 @@ export abstract class Adapter {
      * @param containerEl 
      */
     displayScriptError(message: string, error?: any, containerEl?: HTMLElement) {
-        console.error(message, error);
+        console.error(message)
+        console.error(error);
+        // output the error to the Note Toolbar Output container, if provided
         if (containerEl) {
             let errorEl = containerEl.createEl('pre');
             errorEl.setText(message + '\n' + error);
         }
+        // show notice
         let errorFr = createFragment();
         errorFr.append(message);
         error ? errorFr.append('\n', error) : undefined;

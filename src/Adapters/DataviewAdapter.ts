@@ -166,7 +166,7 @@ export default class DataviewAdapter extends Adapter {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
                     this.displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
-                    result = t('adapter.error.general', { error: error });
+                    result = t('adapter.error.general', { error: error }) + '\n';
                     break;
                 case ErrorBehavior.Report:
                     result = expression;
@@ -355,7 +355,7 @@ export default class DataviewAdapter extends Adapter {
         }
         catch (error) {
             this.displayScriptError(t('adapter.error.query-failed', { expression: expression }), error, containerEl);
-            result = t('adapter.error.general', { error: error });
+            result = t('adapter.error.general', { error: error }) + '\n';
         }
         finally {
 			component.unload();
