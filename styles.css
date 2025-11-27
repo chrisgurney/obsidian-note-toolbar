@@ -1138,8 +1138,17 @@ settings:
         default: 650
         format: px
     -
+        id: cg-nt-tbar-text-margin-y
+        title: 'Top + Bottom margin (in em units)'
+        title.uk: 'Верхній та нижній відступи (em)'
+        title.de: 'Oberer + unterer Abstand (in em-Einheiten)'
+        title.zh: '上下边距（单位：em）'
+        type: variable-number
+        default: 0.5
+        format: em
+    -
         id: cg-nt-tbar-text-item-font-size
-        title: 'Font size (in em units)'
+        title: 'Item: Font size (in em units)'
         title.uk: 'Розмір шрифту (em)'
         title.de: 'Schriftgröße (in em)'
         title.zh: '字体大小（单位：em）'
@@ -1148,7 +1157,7 @@ settings:
         format: em
     -
         id: cg-nt-tbar-text-item-icon-size
-        title: 'Icon size (in px units)'
+        title: 'Item: Icon size (in px units)'
         title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
         title.zh: '图标大小（单位：px）'
@@ -1260,6 +1269,7 @@ body {
     --cg-nt-tbar-text-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-tbar-text-item-text-color: var(--metadata-label-text-color);
     --cg-nt-tbar-text-item-text-color-hover: var(--text-normal);
+    --cg-nt-tbar-text-margin-y: 0.5em;
     --cg-nt-tbar-text-max-width-desktop: 900px;
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
     --cg-nt-tbar-text-max-width-tablet: 650px;
@@ -1477,8 +1487,11 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
             gap: 0rem;
             margin: var(--cg-nt-tbar-margin-y) 0;
             padding-inline-start: 0;
-            [data-tbar-position="bottom"] &, [data-tbar-position="text"] & {
+            [data-tbar-position="bottom"] & {
                 margin: var(--cg-nt-tbar-margin-y);
+            }
+            [data-tbar-position="text"] & {
+                margin: var(--cg-nt-tbar-text-margin-y) 0;
             }
         }
     

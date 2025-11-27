@@ -116,8 +116,11 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
             gap: 0rem;
             margin: var(--cg-nt-tbar-margin-y) 0;
             padding-inline-start: 0;
-            [data-tbar-position="bottom"] &, [data-tbar-position="text"] & {
+            [data-tbar-position="bottom"] & {
                 margin: var(--cg-nt-tbar-margin-y);
+            }
+            [data-tbar-position="text"] & {
+                margin: var(--cg-nt-tbar-text-margin-y) 0;
             }
         }
     

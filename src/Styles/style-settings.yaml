@@ -1134,8 +1134,17 @@ settings:
         default: 650
         format: px
     -
+        id: cg-nt-tbar-text-margin-y
+        title: 'Top + Bottom margin (in em units)'
+        title.uk: 'Верхній та нижній відступи (em)'
+        title.de: 'Oberer + unterer Abstand (in em-Einheiten)'
+        title.zh: '上下边距（单位：em）'
+        type: variable-number
+        default: 0.5
+        format: em
+    -
         id: cg-nt-tbar-text-item-font-size
-        title: 'Font size (in em units)'
+        title: 'Item: Font size (in em units)'
         title.uk: 'Розмір шрифту (em)'
         title.de: 'Schriftgröße (in em)'
         title.zh: '字体大小（单位：em）'
@@ -1144,7 +1153,7 @@ settings:
         format: em
     -
         id: cg-nt-tbar-text-item-icon-size
-        title: 'Icon size (in px units)'
+        title: 'Item: Icon size (in px units)'
         title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
         title.zh: '图标大小（单位：px）'
