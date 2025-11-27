@@ -10,8 +10,6 @@ npm run dev
 
 ## Linting
 
-Periodically run ESLint to check for issues:
-
 ```sh
 npm run lint
 ```
@@ -20,17 +18,13 @@ npm run lint
 
 ### API
 
-API documentation can be generated, if the API itself is updated, using:
-
-```sh
-npm run apidocs
-```
+API documentation should automatically be generated, when any cahnges are made to the API's interfaces in `src/Api`.
 
 Once complete, update the [API wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
 
 ### Gallery
 
-Gallery documentation should automatically be generated when any changes are made to the Gallery JSON files.
+Gallery documentation should automatically be generated, when any changes are made to the Gallery JSON files in `src/Gallery`.
 
 Once generated, update the [Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery).
 

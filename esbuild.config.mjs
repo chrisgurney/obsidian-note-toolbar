@@ -46,6 +46,24 @@ const typecheckPlugin = {
 	},
 };
 
+const typedocPlugin = {
+	name: 'api-docs',
+	setup(build) {
+		build.onEnd(() => {
+			const typedoc = spawn('typedoc', [
+				'src/Api/INoteToolbarApi.ts',
+				'src/Api/IToolbar.ts',
+				'src/Api/IItem.ts',
+				'--readme',
+				'none'
+			]);
+			typedoc.stderr.on('data', (data) => {
+				console.error(`\x1b[31m[api-docs]\x1b[0m ${data}`);
+			});
+		});
+  	},
+};
+
 // inline files into CSS
 const fileInlinerPlugin = {
 	name: 'file-inliner-plugin',
@@ -68,7 +86,7 @@ const galleryDocsPlugin = {
 			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', 'docs/wiki/gallery.md');
 		} 
 		catch (error) {
-			console.log("[esbuild] Error generating Gallery docs:", error);
+			console.log("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
 			process.exit(1);
 		}
 	  });
@@ -102,7 +120,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [fileInlinerPlugin, galleryDocsPlugin, typecheckPlugin],
+	plugins: [fileInlinerPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,
@@ -116,7 +134,7 @@ if (prod) {
 	await context.watch();
 
 	// watch for changes to files outside the build process
-	const watcher = chokidar.watch(['src/Styles/*']);
+	const watcher = chokidar.watch(['src/Api/*', 'src/Styles/*']);
 	watcher.on('change', async (path) => {
 		console.log(`[watch] file changed: ${path}`);
 		try {

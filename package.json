@@ -4,7 +4,6 @@
 	"description": "Obsidian plugin that adds customizable toolbars to your notes.",
 	"main": "main.js",
 	"scripts": {
-		"apidocs": "typedoc src/Api/INoteToolbarApi.ts src/Api/IToolbar.ts src/Api/IItem.ts --readme none",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"dev": "npm run prebuild && node esbuild.config.mjs",
 		"lint": "eslint .",
