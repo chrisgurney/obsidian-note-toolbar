@@ -616,6 +616,7 @@
             "option-default-empty": "No default styles set.",
             "option-default-name": "Default",
             "option-even": "space items evenly",
+            "option-glass": "glass",
             "option-inactive": "hide in inactive views",
             "option-left": "left align items",
             "option-mobile-description": "Override default styles.",
