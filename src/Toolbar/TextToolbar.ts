@@ -38,6 +38,10 @@ class TextToolbarClass implements PluginValue {
         ntb.registerDomEvent(view.dom, 'mouseup', () => {
             this.isMouseDown = false;
         });
+        // also listen to mouseup on the document to catch releases outside the editor
+        ntb.registerDomEvent(activeDocument, 'mouseup', () => {
+            this.isMouseDown = false;
+        });
         ntb.registerDomEvent(view.dom, 'keydown', () => {
             this.isMouseSelection = false;
             this.isMouseDown = false;
@@ -64,7 +68,7 @@ class TextToolbarClass implements PluginValue {
         
         // don't show toolbar until selection is complete
         if (this.isMouseDown) {
-            // plugin.debug('mousedown');
+            // this.ntb.debug('mousedown - exiting');
             return;
         };
 
