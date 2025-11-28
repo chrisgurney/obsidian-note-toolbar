@@ -504,6 +504,7 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
 }
 
 /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"],
 body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"],
 body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
     background: unset !important;
