@@ -18,11 +18,13 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 - [Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
-![Demo of a sticky toolbar](./docs/images/note_toolbar_demo.gif)
+<img width="600" src="./docs/images/note_toolbar_demo.gif" title="Demo of a sticky toolbar"/>
+
+<img width="600" src="./docs/images/demo_text_toolbar.gif" title="Demo of a sticky toolbar"/>
 
 More options on mobile:
 
-![Mobile options for accessing the toolbar](./docs/images/mobile_options.png)
+<img width="800" src="./docs/images/mobile_options.png" title="Mobile options for accessing the toolbar"/>
 
 # Features
 
