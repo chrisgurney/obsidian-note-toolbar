@@ -100,6 +100,7 @@ body {
 
     /*
      * Glass effect variables (thanks to @aaaaalexis)
+     * Licensed under the MIT License; see the LICENSE file.
      */
     --ntb-anim-duration-moderate: 320ms;
     --ntb-blur-s: blur(2px) saturate(1.5) brightness(1.05);
