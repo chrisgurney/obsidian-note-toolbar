@@ -477,27 +477,6 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
         }
     }
 
-    /* TODO: when supported on desktop, add: :is([data-callout-metadata*="glass"], ...) */
-    &:is(body.is-mobile [data-callout-metadata*="mgls"]) {
-        background: unset !important;
-        & ul {
-            gap: var(--size-4-2);
-            & a, span.external-link {
-                background-color: var(--ntb-liquid-glass-background) !important;
-                backdrop-filter: var(--ntb-blur-s);
-                border: var(--border-width) solid var(--background-modifier-border);;
-                box-shadow: var(--ntb-shadow-xs);
-                transition: var(--ntb-anim-duration-moderate);
-                /* background: var(--ntb-liquid-glass-background) !important; */
-            }
-            @media (hover: hover) {
-                & a:hover, span.external-link:hover {
-                    box-shadow: none;
-                }
-            }
-        }
-    }
-
     &.cg-note-toolbar-callout {
         /* margin-top: fix for reading mode */
         box-shadow: none;
@@ -525,14 +504,18 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
 }
 
 /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"],
 body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
-    &[data-callout-metadata*="button"] ul {
+    background: unset !important;
+    mix-blend-mode: normal !important;
+    & ul {
+        gap: var(--size-4-2);
         & a, span.external-link {
-            backdrop-filter: var(--blur-s);
-            box-shadow: var(--shadow-xs);
-            border: none;
-            background-color: var(--liquid-glass-background);
-            transition: var(--anim-duration-moderate);
+            background-color: var(--ntb-liquid-glass-background) !important;
+            backdrop-filter: var(--ntb-blur-s);
+            border: var(--border-width) solid var(--background-modifier-border);
+            box-shadow: var(--ntb-shadow-xs);
+            transition: var(--ntb-anim-duration-moderate);
         }
         @media (hover: hover) {
             & a:hover, span.external-link:hover {
