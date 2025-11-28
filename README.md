@@ -18,11 +18,15 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 - [Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
-<img width="600" src="./docs/images/note_toolbar_demo.gif" title="Demo of a sticky toolbar"/>
+*Toolbars can stick to the top on scroll:*
 
-<img width="600" src="./docs/images/demo_text_toolbar.gif" title="Demo of a sticky toolbar"/>
+<img width="600" src="./docs/images/note_toolbar_demo.gif" title="Toolbars can stick to the top on scroll"/>
 
-More options on mobile:
+*Have a toolbar appear when text is selected:*
+
+<img width="600" src="./docs/images/demo_text_toolbar.gif" title="Have a toolbar appear when text is selected"/>
+
+*More options on mobile:*
 
 <img width="800" src="./docs/images/mobile_options.png" title="Mobile options for accessing the toolbar"/>
 
