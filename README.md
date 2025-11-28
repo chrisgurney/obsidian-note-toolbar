@@ -18,6 +18,8 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 - [Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
+# Screenshots
+
 *Toolbars can stick to the top on scroll:*
 
 <img width="600" src="./docs/images/note_toolbar_demo.gif" title="Toolbars can stick to the top on scroll"/>
