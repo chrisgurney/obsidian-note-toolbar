@@ -1343,21 +1343,21 @@ body {
 
     /* default adjustments for various themes */
     &[data-ntb-csstheme="Baseline"] {
-        --cg-nt-fab-pos-x-mobile: var(--navbar-side-padding);
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
         --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
-        &.is-phone {
-            --cg-nt-fab-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
-        }
     }
     &[data-ntb-csstheme="Cupertino"] {
-        --cg-nt-fab-pos-x-mobile: var(--navbar-side-padding);
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
+        --cg-nt-tbar-top-sticky-pos-mobile: calc(96px);
         &.is-mobile.theme-dark {
-            --cg-nt-tbar-bg-color: #000;
+            --cg-nt-tbar-bg-color: unset !important;
         }
+    }
+    &[data-ntb-csstheme="Baseline"], &[data-ntb-csstheme="Cupertino"] {        
+        --cg-nt-fab-pos-x-mobile: var(--navbar-side-padding);
         &.is-phone {
             --cg-nt-fab-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
+            --cg-nt-tbar-bottom-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
         }
     }
     &[data-ntb-csstheme="Minimal"] {
