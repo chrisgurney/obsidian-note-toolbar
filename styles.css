@@ -1341,13 +1341,36 @@ body {
         --cg-nt-fab-border-color: var(--interactive-accent);
     }
 
-    /* default adjustments for various themes */
+    /*
+     * Glass effect variables (thanks to @aaaaalexis)
+     */
+    --ntb-anim-duration-moderate: 320ms;
+    --ntb-blur-s: blur(2px) saturate(1.5) brightness(1.05);
+    &.theme-light {
+        --ntb-liquid-glass-background: rgba(255, 255, 255, 0.5);
+        --ntb-shadow-base: inset 1px 1px 2px rgba(255, 255, 255, 0.5), inset -1px -1px 2px rgba(255, 255, 255, 0.5), inset 0 4px 16px rgba(255, 255, 255, 0.025);
+        --ntb-shadow-xs: var(--ntb-shadow-base), inset 0 -8px 48px rgba(0, 0, 0, 0.02), 0 0 8px rgba(0, 0, 0, 0.025), 0 4px 48px rgba(0, 0, 0, 0.15);
+    }
+    &.theme-dark {
+        --ntb-liquid-glass-background: rgba(255, 255, 255, 0.075);
+        --ntb-shadow-base: inset 1px 1.5px 1px -1px rgba(255, 255, 255, 0.2), inset -1px -1.5px 1px -1px rgba(255, 255, 255, 0.15), inset 0 4px 16px rgba(255, 255, 255, 0.025);
+        --ntb-shadow-xs: var(--ntb-shadow-base);
+    }
+
+    /*
+     * Default adjustments for various themes
+     */
     &[data-ntb-csstheme="Baseline"] {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
         --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
     }
     &[data-ntb-csstheme="Cupertino"] {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
+        --ntb-anim-duration-moderate: var(--anim-duration-moderate);
+        --ntb-blur-s: var(--blur-s);
+        --ntb-liquid-glass-background: var(--liquid-glass-background);
+        --ntb-shadow-base: var(--shadow-base);
+        --ntb-shadow-xs: var(--shadow-xs);
     }
     &[data-ntb-csstheme="Baseline"], &[data-ntb-csstheme="Cupertino"] {        
         --cg-nt-fab-pos-x-mobile: var(--navbar-side-padding);
@@ -1854,23 +1877,12 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
         & ul {
             gap: var(--size-4-2);
             & a, span.external-link {
-                --ntb-anim-duration-moderate: 320ms;
-                --ntb-blur-s: blur(2px) saturate(1.5) brightness(1.05);
-                .theme-light & {
-                    --ntb-liquid-glass-background: rgba(255, 255, 255, 0.5);
-                    --ntb-shadow-base: inset 1px 1px 2px rgba(255, 255, 255, 0.5), inset -1px -1px 2px rgba(255, 255, 255, 0.5), inset 0 4px 16px rgba(255, 255, 255, 0.025);
-                    --ntb-shadow-xs: var(--ntb-shadow-base), inset 0 -8px 48px rgba(0, 0, 0, 0.02), 0 0 8px rgba(0, 0, 0, 0.025), 0 4px 48px rgba(0, 0, 0, 0.15);
-                }
-                .theme-dark & {
-                    --ntb-liquid-glass-background: rgba(255, 255, 255, 0.075);
-                    --ntb-shadow-base: inset 1px 1.5px 1px -1px rgba(255, 255, 255, 0.2), inset -1px -1.5px 1px -1px rgba(255, 255, 255, 0.15), inset 0 4px 16px rgba(255, 255, 255, 0.025);
-                    --ntb-shadow-xs: var(--ntb-shadow-base);
-                }
+                background-color: var(--ntb-liquid-glass-background) !important;
                 backdrop-filter: var(--ntb-blur-s);
+                border: var(--border-width) solid var(--background-modifier-border);;
                 box-shadow: var(--ntb-shadow-xs);
-                border: none;
-                background: var(--ntb-liquid-glass-background) !important;
                 transition: var(--ntb-anim-duration-moderate);
+                /* background: var(--ntb-liquid-glass-background) !important; */
             }
             @media (hover: hover) {
                 & a:hover, span.external-link:hover {
@@ -2040,13 +2052,14 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         cursor: pointer;
     }
 }
-/* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
-body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
-    background-color: var(--liquid-glass-background) !important;
-    backdrop-filter: var(--blur-s) !important;
+/* Liquid Glass effect for the Cupertino (thanks to @aaaaalexis) */
+body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab,
+body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
+    background-color: var(--ntb-liquid-glass-background) !important;
+    backdrop-filter: var(--ntb-blur-s) !important;
     border: var(--border-width) solid var(--background-modifier-border);
-    box-shadow: var(--shadow-xs);
-    transition: var(--anim-duration-moderate);
+    box-shadow: var(--ntb-shadow-xs);
+    transition: var(--ntb-anim-duration-moderate);
     & svg {
         color: var(--text-normal);
     }
@@ -2057,8 +2070,8 @@ body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
     }
     .is-mobile & {
         &:is(:active, :hover, :focus-visible) {
-            background-color: var(--liquid-glass-background) !important;
-             color: var(--text-normal) !important;
+            background-color: var(--ntb-liquid-glass-background) !important;
+            color: var(--text-normal) !important;
         }
     }
 }

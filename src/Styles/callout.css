@@ -483,23 +483,12 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
         & ul {
             gap: var(--size-4-2);
             & a, span.external-link {
-                --ntb-anim-duration-moderate: 320ms;
-                --ntb-blur-s: blur(2px) saturate(1.5) brightness(1.05);
-                .theme-light & {
-                    --ntb-liquid-glass-background: rgba(255, 255, 255, 0.5);
-                    --ntb-shadow-base: inset 1px 1px 2px rgba(255, 255, 255, 0.5), inset -1px -1px 2px rgba(255, 255, 255, 0.5), inset 0 4px 16px rgba(255, 255, 255, 0.025);
-                    --ntb-shadow-xs: var(--ntb-shadow-base), inset 0 -8px 48px rgba(0, 0, 0, 0.02), 0 0 8px rgba(0, 0, 0, 0.025), 0 4px 48px rgba(0, 0, 0, 0.15);
-                }
-                .theme-dark & {
-                    --ntb-liquid-glass-background: rgba(255, 255, 255, 0.075);
-                    --ntb-shadow-base: inset 1px 1.5px 1px -1px rgba(255, 255, 255, 0.2), inset -1px -1.5px 1px -1px rgba(255, 255, 255, 0.15), inset 0 4px 16px rgba(255, 255, 255, 0.025);
-                    --ntb-shadow-xs: var(--ntb-shadow-base);
-                }
+                background-color: var(--ntb-liquid-glass-background) !important;
                 backdrop-filter: var(--ntb-blur-s);
+                border: var(--border-width) solid var(--background-modifier-border);;
                 box-shadow: var(--ntb-shadow-xs);
-                border: none;
-                background: var(--ntb-liquid-glass-background) !important;
                 transition: var(--ntb-anim-duration-moderate);
+                /* background: var(--ntb-liquid-glass-background) !important; */
             }
             @media (hover: hover) {
                 & a:hover, span.external-link:hover {
