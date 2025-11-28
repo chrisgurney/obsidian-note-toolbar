@@ -514,6 +514,7 @@ body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
             background-color: var(--ntb-liquid-glass-background) !important;
             backdrop-filter: var(--ntb-blur-s);
             border: var(--border-width) solid var(--background-modifier-border);
+            border-radius: 32px;
             box-shadow: var(--ntb-shadow-xs);
             transition: var(--ntb-anim-duration-moderate);
         }
