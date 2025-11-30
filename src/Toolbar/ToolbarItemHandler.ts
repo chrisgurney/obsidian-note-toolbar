@@ -388,12 +388,19 @@ export default class ToolbarItemHandler {
 	 * @param toolbarItem ToolbarItemSettings to get the text for.
 	 * @param file TFile of the note that the toolbar is being rendered within, or null.
 	 * @param truncate if true, truncate the text; defaults to false.
+     * @param resolveVars set to false to skip variable resolution; defaults to true.
 	 * @returns string to display on the toolbar
 	 */
-	async getItemText(toolbarItem: ToolbarItemSettings, file: TFile | null, truncate: boolean = false): Promise<string> {
-		let itemText = toolbarItem.label ? 
-			(this.ntb.vars.hasVars(toolbarItem.label) ? await this.ntb.vars.replaceVars(toolbarItem.label, file) : toolbarItem.label) : 
-			(this.ntb.vars.hasVars(toolbarItem.tooltip) ? await this.ntb.vars.replaceVars(toolbarItem.tooltip, file) : toolbarItem.tooltip);
+	async getItemText(toolbarItem: ToolbarItemSettings, file: TFile | null, truncate: boolean = false, resolveVars = true): Promise<string> {
+        let itemText: string;
+        if (resolveVars) {
+            itemText = toolbarItem.label ? 
+                (this.ntb.vars.hasVars(toolbarItem.label) ? await this.ntb.vars.replaceVars(toolbarItem.label, file) : toolbarItem.label) : 
+                (this.ntb.vars.hasVars(toolbarItem.tooltip) ? await this.ntb.vars.replaceVars(toolbarItem.tooltip, file) : toolbarItem.tooltip);
+        }
+        else {
+            itemText = toolbarItem.label || toolbarItem.tooltip || '';
+        }
 		if (truncate) itemText = itemText.slice(0, 24);
 		return itemText;
 	}

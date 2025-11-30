@@ -532,9 +532,10 @@ export default class ToolbarRenderer {
 	 * @param toolbar ToolbarSettings to add menu items for.
 	 * @param file TFile to show menu for.
 	 * @param recursions tracks how deep we are to stop recursion.
+	 * @param resolveVars set to false to skip variable resolution.
 	 * @returns 
 	 */
-	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0): Promise<void> {
+	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0, resolveVars = true): Promise<void> {
 
 		if (recursions >= 2) {
 			return; // stop recursion
@@ -554,7 +555,9 @@ export default class ToolbarRenderer {
 			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
-				const title = await this.ntb.items.getItemText(toolbarItem, file);
+				const title = resolveVars 
+					? await this.ntb.items.getItemText(toolbarItem, file, false, resolveVars)
+					: (toolbarItem.label || toolbarItem.tooltip || '');
 				switch(toolbarItem.linkAttr.type) {
 					case ItemType.Break:
 						// show breaks as separators in menus
@@ -565,7 +568,14 @@ export default class ToolbarRenderer {
 						break;
 					case ItemType.Group: {
 						const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
-						groupToolbar ? await this.renderMenuItems(menu, groupToolbar, file, recursions + 1) : undefined;
+						if (groupToolbar) {
+							if (resolveVars) {
+								await this.renderMenuItems(menu, groupToolbar, file, recursions + 1, resolveVars);
+							}
+							else {
+								this.renderMenuItems(menu, groupToolbar, file, recursions + 1, resolveVars);
+							}
+						}
 						break;
 					}
 					case ItemType.Menu:
@@ -573,7 +583,7 @@ export default class ToolbarRenderer {
 						if (!Platform.isMobile) {
 							// display menus in sub-menus, but only if we're not more than a level deep
 							if (recursions >= 1) break;
-							menu.addItem((item: MenuItem) => {
+							menu.addItem(async (item: MenuItem) => {
 								item
 									.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon)
 										? toolbarItem.icon 
@@ -587,16 +597,24 @@ export default class ToolbarRenderer {
 								if (activeToolbar && activeToolbar.customClasses) subMenu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
 								// render the sub-menu items
 								let menuToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
-								menuToolbar ? this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1) : undefined;
+								if (menuToolbar) {
+									if (resolveVars) {
+										await this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1, resolveVars);
+									}
+									else {
+										this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1, resolveVars);
+									}
+								}
 							});
 							break;
 						}
 						// fall through
 					default: {
 						// don't show the item if the link has variables and resolves to nothing
-						if (this.ntb.vars.hasVars(toolbarItem.link) && await this.ntb.vars.replaceVars(toolbarItem.link, file) === "") {
-							break;
-						}						
+						if (resolveVars && this.ntb.vars.hasVars(toolbarItem.link)) {
+							const resolvedLink = await this.ntb.vars.replaceVars(toolbarItem.link, file);
+							if (resolvedLink === "") break;
+						}	
 						// don't show command if not available
 						const isCommandAvailable = this.ntb.items.isCommandItemAvailable(toolbarItem, toolbarView);
 						if (!isCommandAvailable) break;
