@@ -842,6 +842,30 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const collapsibleContainerEl = createDiv();
 		collapsibleContainerEl.addClass('note-toolbar-setting-items-collapsible-container');
 
+		const existingEditorMenuToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar)
+		const editorMenuSetting = new Setting(collapsibleContainerEl)
+			.setName(t('setting.display-locations.option-editor-menu'))
+			.setDesc(t('setting.display-locations.option-editor-menu-description'))
+			.setClass('note-toolbar-setting-item-control-std-with-help')
+			.addSearch(async (cb) => {
+				new ToolbarSuggester(this.ntb, cb.inputEl);
+				cb.setPlaceholder(t('setting.display-locations.option-editor-menu-placeholder'))
+					.setValue(existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '')
+					.onChange(debounce(async (name) => {
+						const isValid = await updateItemComponentStatus(this.ntb, this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
+						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+						this.ntb.settings.editorMenuToolbar = newToolbar?.uuid ?? null;
+						// update toolbar preview
+						const toolbarPreviewFr = newToolbar && createToolbarPreviewFr(this.ntb, newToolbar, undefined, false);
+						removeFieldHelp(editorMenuSetting.controlEl);
+						setFieldHelp(editorMenuSetting.controlEl, toolbarPreviewFr);
+						await this.ntb.settingsManager.save();
+					}, 250));
+				await updateItemComponentStatus(this.ntb, this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+			});
+		const editorMenuToolbarFr = existingEditorMenuToolbar && createToolbarPreviewFr(this.ntb, existingEditorMenuToolbar, undefined, false);
+		setFieldHelp(editorMenuSetting.controlEl, editorMenuToolbarFr);
+
 		new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-contexts.option-filemenu'))
 			.setDesc(learnMoreFr(t('setting.display-contexts.option-filemenu-description'), 'Toolbars-within-the-app#File-menu'))
