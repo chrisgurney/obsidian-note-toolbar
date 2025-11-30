@@ -20,6 +20,7 @@ export default function TextToolbar(ntb: NoteToolbarPlugin): ViewPlugin<TextTool
 }
 
 class TextToolbarClass implements PluginValue {
+    private isContextOpening: boolean = false;
     private isMouseDown: boolean = false;
     private isMouseSelection: boolean = false;
     private lastSelection: { from: number; to: number; text: string } | null = null;
@@ -55,6 +56,10 @@ class TextToolbarClass implements PluginValue {
                 ntb.render.removeTextToolbar();
             }
         });
+        ntb.registerDomEvent(view.dom, 'contextmenu', () => {
+            this.isContextOpening = true;
+        });
+
     }
 
     update(update: ViewUpdate) {
@@ -78,6 +83,14 @@ class TextToolbarClass implements PluginValue {
         const selectFrom = selection.from;
         const selectTo = selection.to;
         const selectText = state.doc.sliceString(selection.from, selection.to);
+        // this.ntb.debug('selection:', selection);
+
+        // right-clicking for some reason selects the current line if it's empty
+        if (this.isContextOpening && selectTo === selectFrom + 1) {
+            this.ntb.debug('⛔️ selection is just new line - exiting');
+            this.isContextOpening = false;
+            return;
+        }
 
         if (!update.selectionSet) {
             if (this.ntb.render.isTextToolbarFocussed()) {
