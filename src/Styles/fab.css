@@ -22,6 +22,11 @@
             border: solid 1px var(--cg-nt-fab-border-color);
         }
     }
+    & button[data-fab-metadata*="inactive"] {
+        body:not(.is-mobile):not(.is-focused) &, .workspace-leaf:not(.mod-active) & {
+            display: none;
+        }
+    }
 }
 
 .cg-note-toolbar-fab-container {
