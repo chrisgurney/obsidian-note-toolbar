@@ -63,5 +63,10 @@
         border-radius: var(--button-radius) !important;
         padding: 1em;
     }
+    &[data-callout-metadata*="glass"] {
+        & .callout-content ul[role="menu"] li {
+            background-color: unset;
+        }
+    }
 
 }
