@@ -845,7 +845,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const existingEditorMenuToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar)
 		const editorMenuSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-editor-menu'))
-			.setDesc(t('setting.display-locations.option-editor-menu-description'))
+			.setDesc(learnMoreFr(t('setting.display-locations.option-editor-menu-description'), 'Toolbars-within-the-app#Editor-menu'))
 			.setClass('note-toolbar-setting-item-control-std-with-help')
 			.addSearch(async (cb) => {
 				new ToolbarSuggester(this.ntb, cb.inputEl);
