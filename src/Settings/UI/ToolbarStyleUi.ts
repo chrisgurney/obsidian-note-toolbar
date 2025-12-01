@@ -86,6 +86,7 @@ export default class ToolbarStyleUi {
                         else {
                             this.toolbar.defaultStyles.push(val);
                         }
+                        this.toolbar.updated = new Date().toISOString();
                         await this.ntb.settingsManager.save();
                         this.parent.display();
                     })
@@ -161,6 +162,7 @@ export default class ToolbarStyleUi {
                         else {
                             this.toolbar.mobileStyles.push(val);
                         }
+                        this.toolbar.updated = new Date().toISOString();
                         await this.ntb.settingsManager.save();
                         this.parent.display();
                     })
