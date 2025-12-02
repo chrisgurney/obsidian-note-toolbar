@@ -1140,6 +1140,7 @@ settings:
     -
         id: cg-nt-tbar-text-margin-x
         title: 'Left + Right margin (in em units)'
+        title.zh: '左右边距（单位：em）'
         type: variable-number
         default: 0.5
         format: em
