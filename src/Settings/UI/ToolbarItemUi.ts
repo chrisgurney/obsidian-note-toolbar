@@ -747,7 +747,7 @@ export default class ToolbarItemUi {
                             }, 500));
                         updateItemComponentStatus(this.ntb, this.parent, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
                     });
-                setFieldHelp(groupSetting.settingEl, helpTextFr);
+                setFieldHelp(groupSetting.controlEl, helpTextFr);
                 break;
             }
             case ItemType.Menu: {
@@ -759,9 +759,9 @@ export default class ToolbarItemUi {
                         cb.setPlaceholder(t('setting.item.option-item-menu-placeholder'))
                             .setValue(initialMenuToolbar ? initialMenuToolbar.name : '')
                             .onChange(debounce(async (name) => {
-                                updateItemComponentStatus(this.ntb, this.parent, name, SettingType.Toolbar, cb.inputEl.parentElement);
+                                let isValid = await updateItemComponentStatus(this.ntb, this.parent, name, SettingType.Toolbar, cb.inputEl.parentElement);
                                 // TODO? return an ID from the suggester vs. the name
-                                let menuToolbar = this.ntb.settingsManager.getToolbarByName(name);
+                                let menuToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
                                 toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
