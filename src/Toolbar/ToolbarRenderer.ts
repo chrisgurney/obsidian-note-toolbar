@@ -987,15 +987,19 @@ export default class ToolbarRenderer {
 
 	/**
 	 * Renders a text toolbar at the middle of the given start and end positions in the editor. 
+	 * @param toolbar
 	 * @param selectStartPos 
 	 * @param selectEndPos 
 	 * @returns nothing
 	 */
-	async renderTextToolbar(selectStartPos: Rect | null, selectEndPos: Rect | null): Promise<void> {
+	async renderTextToolbar(
+		toolbar: ToolbarSettings | undefined, 
+		selectStartPos: Rect | null, 
+		selectEndPos: Rect | null
+	): Promise<void> {
 
-		if (!selectStartPos || !selectEndPos) return;
-		
-		const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
+		if (!selectStartPos || !selectEndPos || !toolbar) return;
+
 		if (!toolbar) {
 			this.ntb.debug('⚠️ error: no text toolbar with ID', this.ntb.settings.textToolbar);
 			new Notice(t('setting.error-invalid-text-toolbar'));
@@ -1012,25 +1016,31 @@ export default class ToolbarRenderer {
 			this.textToolbarEl.remove();
 		}
 
-		this.textToolbarEl = activeDocument.createElement('div');
-		this.textToolbarEl.id = toolbar.uuid;
-		this.textToolbarEl.addClasses([
+		/*
+		 * render new toolbar
+		 */
+
+		let toolbarContainerEl = activeDocument.createElement('div');
+		toolbarContainerEl.id = toolbar.uuid;
+		toolbarContainerEl.addClasses([
 			'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'
 		]);
-		this.textToolbarEl.setAttrs({
+		toolbarContainerEl.setAttrs({
 			[TbarData.Name]: toolbar.name,
 			[TbarData.Position]: PositionType.Text,
 			[TbarData.Updated]: toolbar.updated
 		});
 		
 		const renderedToolbarEl = await this.renderAsCallout(toolbar, activeFile, activeView);
-		this.textToolbarEl.appendChild(renderedToolbarEl);
-		activeDocument.body.appendChild(this.textToolbarEl);
+		toolbarContainerEl.appendChild(renderedToolbarEl);
+		activeDocument.body.appendChild(toolbarContainerEl);
 
-		this.positionFloatingToolbar(this.textToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
+		this.positionFloatingToolbar(toolbarContainerEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
 
-		this.ntb.registerDomEvent(this.textToolbarEl, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
-		this.ntb.registerDomEvent(this.textToolbarEl, 'keydown', (e) => this.ntb.events.keyboardHandler(e, true));
+		this.ntb.registerDomEvent(toolbarContainerEl, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
+		this.ntb.registerDomEvent(toolbarContainerEl, 'keydown', (e) => this.ntb.events.keyboardHandler(e, true));
+
+		this.textToolbarEl = toolbarContainerEl;
 
 		// plugin.debug('drew toolbar');
 

@@ -198,7 +198,8 @@ export default class CommandManager {
             const offset = editor.posToOffset(editor.getCursor());
             const cmView = (editor as any).cm as EditorView;
             const coords = cmView.coordsAtPos(offset);
-            await this.ntb.render.renderTextToolbar(coords, coords);
+            const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
+            await this.ntb.render.renderTextToolbar(toolbar, coords, coords);
         }
 
         // need to get the type of toolbar first

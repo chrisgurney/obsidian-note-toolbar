@@ -133,7 +133,8 @@ class TextToolbarClass implements PluginValue {
 
             const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
             const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
-            await this.ntb.render.renderTextToolbar(selectStartPos, selectEndPos);
+            const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
+            await this.ntb.render.renderTextToolbar(toolbar, selectStartPos, selectEndPos);
 
             this.lastSelection = {
                 from: selectFrom,
