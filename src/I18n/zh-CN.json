@@ -661,7 +661,7 @@
       "option-wide": "编辑器宽度*",
       "style-remove-tooltip": "移除",
       "style-tooltip-use-class": "在 Callout 或 CSS 中使用：{{class}}",
-      "title": "Style toolbar: {{toolbar}}"
+      "title": "工具栏样式：{{toolbar}}"
     },
     "title-edit-toolbar": "编辑工具栏：{{toolbar}}",
     "title-edit-toolbar_none": "编辑工具栏",
