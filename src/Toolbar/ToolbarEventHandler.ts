@@ -8,6 +8,7 @@ import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { openItemSuggestModal, learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 import { TbarData } from "./ToolbarRenderer";
+import { EditorView } from "@codemirror/view";
 
 /**
  * Handles toolbar events registered with Obsidian's `registerEvent()`. 
@@ -384,6 +385,13 @@ export default class ToolbarEventHandler {
 				menu.items = [];
 				// not replacing variables here, because we need to call it synchronously
 				this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
+				// const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
+				// const editor = this.ntb.app.workspace.activeEditor?.editor;
+				// if (!editor) return;
+				// const offset = editor.posToOffset(editor.getCursor());
+				// const cmView = (editor as any).cm as EditorView;
+				// const coords = cmView.coordsAtPos(offset);
+				// await this.ntb.render.renderTextToolbar(toolbar, coords, coords);
 				return;
 			}
 			else {
