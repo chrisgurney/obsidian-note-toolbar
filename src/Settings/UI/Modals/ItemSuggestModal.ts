@@ -170,14 +170,13 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         // always have the Gallery item at the end of any results (including empty)
         if (this.mode !== 'QuickTools') {
             sortedSuggestions.push(this.BROWSE_GALLERY_ITEM);
-        }
-
-        // add gallery items as suggestions if nothing's been entered yet
-        if (isInputEmpty) {
-            let gallerySuggestions: ToolbarItemSettings[] = [];
-            gallerySuggestions.push(...this.ntb.gallery.getItems());
-            sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
-            sortedSuggestions.push(...gallerySuggestions);
+            // add gallery items as suggestions if nothing's been entered yet
+            if (isInputEmpty) {
+                let gallerySuggestions: ToolbarItemSettings[] = [];
+                gallerySuggestions.push(...this.ntb.gallery.getItems());
+                sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
+                sortedSuggestions.push(...gallerySuggestions);
+            }
         }
 
         return this.toolbarId ? itemSuggestions : sortedSuggestions;
