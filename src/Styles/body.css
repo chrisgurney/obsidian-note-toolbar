@@ -26,6 +26,7 @@ body {
     --cg-nt-tbar-text-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-tbar-text-item-text-color: var(--metadata-label-text-color);
     --cg-nt-tbar-text-item-text-color-hover: var(--text-normal);
+    --cg-nt-tbar-text-margin-x: 0.5em;
     --cg-nt-tbar-text-margin-y: 0.5em;
     --cg-nt-tbar-text-max-width-desktop: 900px;
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);

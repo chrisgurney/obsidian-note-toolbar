@@ -1138,6 +1138,12 @@ settings:
         default: 650
         format: px
     -
+        id: cg-nt-tbar-text-margin-x
+        title: 'Left + Right margin (in em units)'
+        type: variable-number
+        default: 0.5
+        format: em
+    -
         id: cg-nt-tbar-text-margin-y
         title: 'Top + Bottom margin (in em units)'
         title.uk: 'Верхній та нижній відступи (em)'
@@ -1269,6 +1275,7 @@ body {
     --cg-nt-tbar-text-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-tbar-text-item-text-color: var(--metadata-label-text-color);
     --cg-nt-tbar-text-item-text-color-hover: var(--text-normal);
+    --cg-nt-tbar-text-margin-x: 0.5em;
     --cg-nt-tbar-text-margin-y: 0.5em;
     --cg-nt-tbar-text-max-width-desktop: 900px;
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
@@ -1515,7 +1522,7 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
                 margin: var(--cg-nt-tbar-margin-y);
             }
             [data-tbar-position="text"] & {
-                margin: var(--cg-nt-tbar-text-margin-y) 0;
+                margin: var(--cg-nt-tbar-text-margin-y) var(--cg-nt-tbar-text-margin-x);
             }
         }
     

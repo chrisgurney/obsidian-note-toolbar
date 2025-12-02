@@ -120,7 +120,7 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
                 margin: var(--cg-nt-tbar-margin-y);
             }
             [data-tbar-position="text"] & {
-                margin: var(--cg-nt-tbar-text-margin-y) 0;
+                margin: var(--cg-nt-tbar-text-margin-y) var(--cg-nt-tbar-text-margin-x);
             }
         }
     

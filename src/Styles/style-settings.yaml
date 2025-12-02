@@ -1134,6 +1134,12 @@ settings:
         default: 650
         format: px
     -
+        id: cg-nt-tbar-text-margin-x
+        title: 'Left + Right margin (in em units)'
+        type: variable-number
+        default: 0.5
+        format: em
+    -
         id: cg-nt-tbar-text-margin-y
         title: 'Top + Bottom margin (in em units)'
         title.uk: 'Верхній та нижній відступи (em)'
