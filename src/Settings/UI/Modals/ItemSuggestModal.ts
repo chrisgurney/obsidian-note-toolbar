@@ -108,7 +108,13 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
      */
     async getSuggestions(inputStr: string): Promise<ToolbarItemSettings[]> {
 
+        const itemSuggestions: ToolbarItemSettings[] = [];
+        const lowerCaseInputStr = inputStr.trim().toLowerCase();
+        const isInputEmpty = lowerCaseInputStr.length === 0;
+        let sortedSuggestions: ToolbarItemSettings[] = [];
         let toolbarsToSearch = [];
+
+        // scope search to toolbar if applicable
         if (this.toolbarId) {
             let toolbar = this.ntb.settingsManager.getToolbarById(this.toolbarId);
             toolbarsToSearch = toolbar ? [toolbar] : [];
@@ -117,17 +123,12 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             toolbarsToSearch = this.ntb.settings.toolbars
         }
 
-        const itemSuggestions: ToolbarItemSettings[] = [];
-        const lowerCaseInputStr = inputStr.toLowerCase();
-
         // get matching items
         for (const toolbar of toolbarsToSearch) {
             for (const item of toolbar.items) {
                 if (await this.isSearchMatch(item, lowerCaseInputStr)) itemSuggestions.push(item);
             }
         }
-
-        let sortedSuggestions: ToolbarItemSettings[] = [];
 
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
@@ -138,7 +139,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
 
         // placeholder for creating a new item
         if (this.mode === 'New') {
-            if (inputStr.trim().length === 0) {
+            if (isInputEmpty) {
                 // put at the top if nothing's been entered
                 sortedSuggestions.unshift(this.NEW_ITEM);
             }
@@ -149,7 +150,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         }
 
         if (this.hasResults) {
-            if (this.mode !== 'QuickTools') {
+            if (this.mode !== 'QuickTools' && !isInputEmpty) {
                 // add gallery items
                 let gallerySuggestions: ToolbarItemSettings[] = [];
                 for (const galleryItem of this.ntb.gallery.getItems()) {
@@ -169,6 +170,14 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         // always have the Gallery item at the end of any results (including empty)
         if (this.mode !== 'QuickTools') {
             sortedSuggestions.push(this.BROWSE_GALLERY_ITEM);
+        }
+
+        // add gallery items as suggestions if nothing's been entered yet
+        if (isInputEmpty) {
+            let gallerySuggestions: ToolbarItemSettings[] = [];
+            gallerySuggestions.push(...this.ntb.gallery.getItems());
+            sortedSuggestions.push(ITEM_GALLERY_DIVIDER);
+            sortedSuggestions.push(...gallerySuggestions);
         }
 
         return this.toolbarId ? itemSuggestions : sortedSuggestions;
