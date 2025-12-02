@@ -322,7 +322,6 @@
       "option-pdf": "PDF 文档",
       "option-video": "视频"
     },
-<<<<<<< ours
     "display-locations": {
       "description": "定义工具栏在应用中的显示位置。",
       "name": "应用内的工具栏",
@@ -346,28 +345,6 @@
       "option-editor-menu-error": "错误：找不到编辑器菜单工具栏。检查您的设置。",
       "option-editor-menu-placeholder": "选择工具栏..."
     },
-||||||| ancestor
-=======
-    "display-locations": {
-      "description": "定义工具栏在应用中的显示位置。",
-      "name": "应用内的工具栏",
-      "option-emptyview-tbar": "新标签页的工具栏",
-      "option-emptyview-tbar-description": "选择一个工具栏，在没有笔记打开的时显示",
-      "option-emptyview-tbar-placeholder": "选择工具栏…",
-      "option-launchpad": "使用工具栏替换视图（Launchpad 启动台）",
-      "option-launchpad-description": "使用该工具栏替换新标签页，作为启动台呈现。",
-      "option-text": "选中文本",
-      "option-text-description": "选中文本时显示工具栏。",
-      "option-text-placeholder": "选择工具栏...",
-      "ribbon-action": {
-        "description": "设置在手机上使用功能区图标时要执行的操作。",
-        "name": "功能区 📱",
-        "option-item-suggester": "显示所有工具",
-        "option-toolbar": "显示当前工具栏",
-        "option-toolbar-suggester": "显示所有工具栏"
-      }
-    },
->>>>>>> theirs
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
       "name": "特定笔记显示规则",
