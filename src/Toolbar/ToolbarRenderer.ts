@@ -934,43 +934,48 @@ export default class ToolbarRenderer {
 	}
 
 	/**
-	 * Positions the text toolbar, ensuring it doesn't go over the edge of the window.
+	 * Positions floating toolbars (e.g., text toolbar), ensuring it doesn't go over the edge of the window.
 	 */
-	positionTextToolbar(selectStartPos: Rect, selectEndPos: Rect, position: 'above' | 'below' = 'above'): void {
+	positionFloatingToolbar(
+		toolbarEl: HTMLDivElement | null, 
+		selectStartPos: Rect, 
+		selectEndPos: Rect, 
+		position: 'above' | 'below' = 'above'
+	): void {
 
-		if (!this.textToolbarEl) return;
+		if (!toolbarEl) return;
 
 		const centerX = (selectStartPos.left + selectEndPos.right) / 2;
-		let left = centerX - (this.textToolbarEl.offsetWidth / 2);
+		let left = centerX - (toolbarEl.offsetWidth / 2);
 		// TODO? make offset via CSS variable instead of subtracting here?
 		let top: number;
 
 		if (position === 'below') {
 			top = selectEndPos.bottom + 8;
-			if (top + this.textToolbarEl.offsetHeight > window.innerHeight - 8) {
-				top = selectStartPos.top - this.textToolbarEl.offsetHeight - 8;
+			if (top + toolbarEl.offsetHeight > window.innerHeight - 8) {
+				top = selectStartPos.top - toolbarEl.offsetHeight - 8;
 				// if still overflows above, clamp to top
 				if (top < 8) top = 8;
 			}
 		}
 		else {
-			top = selectStartPos.top - this.textToolbarEl.offsetHeight - 8;
+			top = selectStartPos.top - toolbarEl.offsetHeight - 8;
 			if (top < 8) {
 				top = selectEndPos.bottom + 8;
 				// if still overflows below, clamp to bottom
-				if (top + this.textToolbarEl.offsetHeight > window.innerHeight - 8) {
-					top = window.innerHeight - this.textToolbarEl.offsetHeight - 8;
+				if (top + toolbarEl.offsetHeight > window.innerHeight - 8) {
+					top = window.innerHeight - toolbarEl.offsetHeight - 8;
 				}
 			}
 		}
 
 		// prevent horizontal overflow
 		const minLeft = 8;
-		const maxLeft = window.innerWidth - this.textToolbarEl.offsetWidth - 8;
+		const maxLeft = window.innerWidth - toolbarEl.offsetWidth - 8;
 		left = Math.max(minLeft, Math.min(left, maxLeft));
 
-		this.textToolbarEl.style.left = `${left}px`;
-		this.textToolbarEl.style.top = `${top}px`;
+		toolbarEl.style.left = `${left}px`;
+		toolbarEl.style.top = `${top}px`;
 	}
 
 	/**
@@ -1022,7 +1027,7 @@ export default class ToolbarRenderer {
 		this.textToolbarEl.appendChild(renderedToolbarEl);
 		activeDocument.body.appendChild(this.textToolbarEl);
 
-		this.positionTextToolbar(selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
+		this.positionFloatingToolbar(this.textToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
 
 		this.ntb.registerDomEvent(this.textToolbarEl, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
 		this.ntb.registerDomEvent(this.textToolbarEl, 'keydown', (e) => this.ntb.events.keyboardHandler(e, true));
