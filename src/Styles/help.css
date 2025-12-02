@@ -359,6 +359,12 @@
     &.markdown-preview-view {
         padding: unset;
     }
+    blockquote {
+        margin-inline-start: 0;
+        padding: 0 0.75em;
+        color: var(--text-muted);
+        border-left: .25em solid var(--background-modifier-border);
+    }
     pre {
         &:has(code) {
             overflow-x: auto;

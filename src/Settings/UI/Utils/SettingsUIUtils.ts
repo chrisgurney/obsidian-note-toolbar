@@ -587,7 +587,7 @@ export function renderItemSuggestion(
 				const pluginDescEl = el.createDiv();
 				pluginDescEl.addClass('note-toolbar-item-suggester-note');	
 				setIcon(pluginDescEl.createSpan(), 'puzzle');		
-				pluginDescEl.createSpan().setText(t('gallery.label-plugin', { plugin: itemPluginText }));
+				pluginDescEl.createSpan().setText(t('gallery.label-requires-plugin', { plugin: itemPluginText }));
 			}
 		}
 	}
