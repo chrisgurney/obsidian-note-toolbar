@@ -936,34 +936,41 @@ export default class ToolbarRenderer {
 	/**
 	 * Positions the text toolbar, ensuring it doesn't go over the edge of the window.
 	 */
-	positionTextToolbar(selectStartPos: Rect, selectEndPos: Rect): void {
+	positionTextToolbar(selectStartPos: Rect, selectEndPos: Rect, position: 'above' | 'below' = 'above'): void {
 
 		if (!this.textToolbarEl) return;
 
 		const centerX = (selectStartPos.left + selectEndPos.right) / 2;
 		let left = centerX - (this.textToolbarEl.offsetWidth / 2);
 		// TODO? make offset via CSS variable instead of subtracting here?
-		let top = selectStartPos.top - this.textToolbarEl.offsetHeight - 8;
+		let top: number;
+
+		if (position === 'below') {
+			top = selectEndPos.bottom + 8;
+			if (top + this.textToolbarEl.offsetHeight > window.innerHeight - 8) {
+				top = selectStartPos.top - this.textToolbarEl.offsetHeight - 8;
+				// if still overflows above, clamp to top
+				if (top < 8) top = 8;
+			}
+		}
+		else {
+			top = selectStartPos.top - this.textToolbarEl.offsetHeight - 8;
+			if (top < 8) {
+				top = selectEndPos.bottom + 8;
+				// if still overflows below, clamp to bottom
+				if (top + this.textToolbarEl.offsetHeight > window.innerHeight - 8) {
+					top = window.innerHeight - this.textToolbarEl.offsetHeight - 8;
+				}
+			}
+		}
 
 		// prevent horizontal overflow
 		const minLeft = 8;
 		const maxLeft = window.innerWidth - this.textToolbarEl.offsetWidth - 8;
 		left = Math.max(minLeft, Math.min(left, maxLeft));
 
-		// prevent vertical overflow
-		if (top < 8) {
-			// try below selection
-			top = selectEndPos.bottom + 8;
-			
-			// if still overflows below, clamp to bottom
-			if (top + this.textToolbarEl.offsetHeight > window.innerHeight - 8) {
-				top = window.innerHeight - this.textToolbarEl.offsetHeight - 8;
-			}
-		}
-
 		this.textToolbarEl.style.left = `${left}px`;
 		this.textToolbarEl.style.top = `${top}px`;
-		
 	}
 
 	/**
@@ -1015,7 +1022,7 @@ export default class ToolbarRenderer {
 		this.textToolbarEl.appendChild(renderedToolbarEl);
 		activeDocument.body.appendChild(this.textToolbarEl);
 
-		this.positionTextToolbar(selectStartPos, selectEndPos);
+		this.positionTextToolbar(selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
 
 		this.ntb.registerDomEvent(this.textToolbarEl, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
 		this.ntb.registerDomEvent(this.textToolbarEl, 'keydown', (e) => this.ntb.events.keyboardHandler(e, true));
