@@ -345,7 +345,7 @@ settings:
         title: 'Icon + text color'
         title.uk: 'Колір тексту'
         title.de: 'Textfarbe'
-        title.zh: '文本颜色'
+        title.zh: '图标和文本颜色'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -356,7 +356,7 @@ settings:
         title: 'Icon + text color (on hover)'
         title.uk: 'Колір тексту (при наведенні)'
         title.de: 'Textfarbe (beim Überfahren mit der Maus)'
-        title.zh: '鼠标悬停时的文本颜色'
+        title.zh: '图标和文本颜色（悬停时）'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -1060,7 +1060,7 @@ settings:
         description: 'Color of toolbar border. The "border" style must be added to the toolbar first.'
         description.uk: 'Верхня та нижня рамки. Стиль "рамка" повинен бути додан до панелі.'
         description.de: 'Obere + untere Ränder'
-        description.zh: '上下边框'
+        description.zh: '工具栏边框的颜色。需要先在工具栏添加「边框」样式。'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -1071,7 +1071,7 @@ settings:
         title: 'Item: Background color (on hover)'
         title.uk: 'Колір фону (при наведенні)'
         title.de: 'Hintergrundfarbe (beim Überfahren mit der Maus)'
-        title.zh: '鼠标悬停时的背景颜色'
+        title.zh: '项目：鼠标悬停时的背景颜色'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -1082,7 +1082,7 @@ settings:
         title: 'Item: Background color (for button style)'
         title.uk: 'Колір фону (стиль кнопки)'
         title.de: 'Hintergrundfarbe (für Schaltflächen)'
-        title.zh: '按钮样式的背景颜色'
+        title.zh: '项目：按钮样式的背景颜色'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -1093,7 +1093,7 @@ settings:
         title: 'Icon + text color'
         title.uk: 'Колір тексту'
         title.de: 'Textfarbe'
-        title.zh: '文本颜色'
+        title.zh: '图标和文本颜色'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -1104,7 +1104,7 @@ settings:
         title: 'Icon + text color (on hover)'
         title.uk: 'Колір тексту (при наведенні)'
         title.de: 'Textfarbe (beim Überfahren mit der Maus)'
-        title.zh: '鼠标悬停时的文本颜色'
+        title.zh: '图标和文本颜色（悬停时）'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -1122,20 +1122,25 @@ settings:
     -
         id: cg-nt-tbar-text-max-width-desktop
         title: 'Max width on desktop (in px units)'
+        title.zh: '桌面端最大宽度（单位：px）'
         description: 'How wide the toolbar is allowed to be.'
+        description.zh: '工具栏允许的最大宽度。'
         type: variable-number
         default: 900
         format: px
     -
         id: cg-nt-tbar-text-max-width-tablet
         title: 'Max width on tablets (in px units)'
+        title.zh: '平板端最大宽度（单位：px）'
         description: 'How wide the toolbar is allowed to be.'
+        description.zh: '工具栏允许的最大宽度。'
         type: variable-number
         default: 650
         format: px
     -
         id: cg-nt-tbar-text-margin-x
         title: 'Left + Right margin (in em units)'
+        title.zh: '左右边距（单位：em）'
         type: variable-number
         default: 0.5
         format: em
@@ -1171,7 +1176,7 @@ settings:
         title: 'Item: Left + Right padding (in em units)'
         title.uk: 'Лівий та правий відступи (em)'
         title.de: 'Linker + rechter Abstand (in em)'
-        title.zh: '左右内边距（单位：em）'
+        title.zh: '项目：左右内边距（单位：em）'
         type: variable-number
         default: 0.75
         format: em
@@ -1179,6 +1184,7 @@ settings:
         id: cg-nt-tbar-text-item-padding-y
         title: 'Item: Top + Bottom padding (in em units)'
         title.uk: 'Верхній та нижній відступи (em)'
+        title.zh: '项目：上下内边距（单位：em）'
         title.de: 'Oberer + unteren Abstand (in em)'
         title.zh: '上下内边距（单位：em）'
         type: variable-number
@@ -1215,12 +1221,15 @@ settings:
         options:
             - 
                 label: 'None'
+                label.zh: '无'
                 value: 'none'
             - 
                 label: 'Input style'
+                label.zh: '输入框样式'
                 value: 'var(--input-shadow)'
             - 
                 label: 'Small style'
+                label.zh: '小型样式'
                 value: 'var(--shadow-s)'
     -
         id: ui

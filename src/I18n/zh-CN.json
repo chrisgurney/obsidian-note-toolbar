@@ -173,6 +173,7 @@
     "error-missing-property": "示例项目数据中含有缺失的插件或脚本属性。",
     "label-add-item": "点击以将其中一项添加到工具栏中：",
     "label-plugin": "{{plugin}}",
+    "label-requires-plugin": "需启用插件：{{plugin}}",
     "label-suggestions": "来自示例库的建议",
     "select-plugin-placeholder": "选择一个插件…",
     "select-plugin-suggestion": "{{plugin}}",
@@ -325,6 +326,10 @@
     "display-locations": {
       "description": "定义工具栏在应用中的显示位置。",
       "name": "应用内的工具栏",
+      "option-editor-menu": "编辑器菜单",
+      "option-editor-menu-description": "用所选工具栏替换编辑器菜单。",
+      "option-editor-menu-error": "错误：找不到编辑器菜单工具栏。检查您的设置。",
+      "option-editor-menu-placeholder": "选择工具栏...",
       "option-emptyview-tbar": "新标签页的工具栏",
       "option-emptyview-tbar-description": "选择一个工具栏，在没有笔记打开的时显示",
       "option-emptyview-tbar-placeholder": "选择工具栏…",
@@ -636,6 +641,7 @@
       "option-default-empty": "未设置默认样式。",
       "option-default-name": "默认",
       "option-even": "均匀分布项目",
+      "option-glass": "玻璃质感",
       "option-inactive": "在非活动视图中隐藏",
       "option-left": "左对齐项目",
       "option-mobile-description": "覆盖默认样式。",
@@ -655,7 +661,7 @@
       "option-wide": "编辑器宽度*",
       "style-remove-tooltip": "移除",
       "style-tooltip-use-class": "在 Callout 或 CSS 中使用：{{class}}",
-      "title": "Style toolbar: {{toolbar}}"
+      "title": "工具栏样式：{{toolbar}}"
     },
     "title-edit-toolbar": "编辑工具栏：{{toolbar}}",
     "title-edit-toolbar_none": "编辑工具栏",
