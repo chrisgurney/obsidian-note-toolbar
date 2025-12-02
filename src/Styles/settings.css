@@ -671,6 +671,9 @@ input[type="text"].note-toolbar-setting-error,
     border-top: none !important;
     flex-grow: 1;
     padding-top: 0 !important;
+    .is-mobile & {
+        padding-bottom: 0.75em;            
+    }
     & .setting-item-info {
         display: none;
     }
