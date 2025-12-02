@@ -938,30 +938,30 @@ export default class ToolbarRenderer {
 	 */
 	positionFloatingToolbar(
 		toolbarEl: HTMLDivElement | null, 
-		selectStartPos: Rect, 
-		selectEndPos: Rect, 
+		startPos: Rect, 
+		endPos: Rect, 
 		position: 'above' | 'below' = 'above'
 	): void {
 
 		if (!toolbarEl) return;
 
-		const centerX = (selectStartPos.left + selectEndPos.right) / 2;
+		const centerX = (startPos.left + endPos.right) / 2;
 		let left = centerX - (toolbarEl.offsetWidth / 2);
 		// TODO? make offset via CSS variable instead of subtracting here?
 		let top: number;
 
 		if (position === 'below') {
-			top = selectEndPos.bottom + 8;
+			top = endPos.bottom + 8;
 			if (top + toolbarEl.offsetHeight > window.innerHeight - 8) {
-				top = selectStartPos.top - toolbarEl.offsetHeight - 8;
+				top = startPos.top - toolbarEl.offsetHeight - 8;
 				// if still overflows above, clamp to top
 				if (top < 8) top = 8;
 			}
 		}
 		else {
-			top = selectStartPos.top - toolbarEl.offsetHeight - 8;
+			top = startPos.top - toolbarEl.offsetHeight - 8;
 			if (top < 8) {
-				top = selectEndPos.bottom + 8;
+				top = endPos.bottom + 8;
 				// if still overflows below, clamp to bottom
 				if (top + toolbarEl.offsetHeight > window.innerHeight - 8) {
 					top = window.innerHeight - toolbarEl.offsetHeight - 8;
