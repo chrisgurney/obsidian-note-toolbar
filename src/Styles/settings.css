@@ -1234,7 +1234,7 @@ input[type="text"].note-toolbar-setting-error,
         /* general ux improvement for small screens */
         .is-mobile & {
             background-color: var(--background-secondary-alt);
-            border-radius: var(--radius-l);
+            border-radius: var(--radius-xl);
             inset-inline-end: var(--size-4-3);
             top: var(--size-4-3);
         }
