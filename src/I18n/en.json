@@ -173,6 +173,7 @@
         "error-missing-property": "Missing plugin or script property in Gallery data.",
         "label-add-item": "Click or tap to add any of these to a toolbar:",
         "label-plugin": "{{plugin}}",
+        "label-requires-plugin": "Requires plugin: {{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
         "select-plugin-placeholder": "Select plugin to use...",
         "select-plugin-suggestion": "{{plugin}}",
