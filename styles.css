@@ -1190,7 +1190,6 @@ settings:
         title.uk: 'Верхній та нижній відступи (em)'
         title.zh: '项目：上下内边距（单位：em）'
         title.de: 'Oberer + unteren Abstand (in em)'
-        title.zh: '上下内边距（单位：em）'
         type: variable-number
         default: 0.5
         format: em
