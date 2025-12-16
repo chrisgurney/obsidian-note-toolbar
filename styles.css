@@ -2800,6 +2800,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 .note-toolbar-setting-item-icon {
     padding-top: 0 !important;
+    padding-bottom: 0 !important;
     & .setting-item-info {
         display: none;
     }
@@ -2842,6 +2843,7 @@ input[type="text"].note-toolbar-setting-error,
     border-top: none !important;
     flex-grow: 1;
     padding-top: 0 !important;
+    padding-bottom: 0 !important;
     .is-mobile & {
         padding-bottom: 0.75em;            
     }
@@ -2867,7 +2869,7 @@ input[type="text"].note-toolbar-setting-error,
     gap: 0.75em;
     width: 100%;
     & .setting-item {
-        padding: 0 !important;
+        /* padding: 0 !important; */
         & .setting-item-info {
             display: none;
         }
@@ -2885,7 +2887,7 @@ input[type="text"].note-toolbar-setting-error,
     flex-grow: 1;
     flex-wrap: wrap;
     column-gap: 1em;
-    row-gap: 1em;
+    /* row-gap: 1em; */
     & .setting-item {
         padding: 0;
     }
@@ -3206,6 +3208,7 @@ input[type="text"].note-toolbar-setting-error,
     flex-grow: 1;
     flex-wrap: wrap;
     gap: 0.5em 1em;
+    padding-bottom: 0.25em;
 }
 .note-toolbar-setting-item-styles {
     & > .setting-item-info {

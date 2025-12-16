@@ -1,6 +1,6 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, DropdownComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting } from "obsidian";
+import { ButtonComponent, debounce, DropdownComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import IconSuggestModal from "./Modals/IconSuggestModal";
@@ -829,67 +829,82 @@ export default class ToolbarItemUi {
 
     getCommandSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
 
+        const subSettings = new SettingGroup(fieldDiv);
+
         // hide if not available
-         new Setting(fieldDiv)
-            .setName(t('setting.item.option-command-check'))
-            .setDesc(t('setting.item.option-command-check-description'))
-            .addToggle((toggle) => {
-                toggle
-                    .setValue(item.linkAttr.commandCheck)
-                    .onChange(async (value: boolean) => {
-                        item.linkAttr.commandCheck = value;
-                        await this.ntb.settingsManager.save();
-                    });
-            });       
+        subSettings.addSetting((commandCheckSetting) => {
+            commandCheckSetting
+                .setName(t('setting.item.option-command-check'))
+                .setDesc(t('setting.item.option-command-check-description'))
+                .addToggle((toggle) => {
+                    toggle
+                        .setValue(item.linkAttr.commandCheck)
+                        .onChange(async (value: boolean) => {
+                            item.linkAttr.commandCheck = value;
+                            await this.ntb.settingsManager.save();
+                        });
+                });       
+        });
 
         // focus
-        new Setting(fieldDiv)
-            .setName(t('setting.item.option-command-focus'))
-            .setDesc(t('setting.item.option-command-focus-description'))
-            .addToggle((toggle) => {
-                toggle
-                    .setValue(item.linkAttr.focus === 'editor')
-                    .onChange(async (value: boolean) => {
-                        item.linkAttr.focus = value ? 'editor' : undefined;
-                        await this.ntb.settingsManager.save();
-                    });
-            });
+        subSettings.addSetting((focusSetting) => {
+            focusSetting
+                .setName(t('setting.item.option-command-focus'))
+                .setDesc(t('setting.item.option-command-focus-description'))
+                .addToggle((toggle) => {
+                    toggle
+                        .setValue(item.linkAttr.focus === 'editor')
+                        .onChange(async (value: boolean) => {
+                            item.linkAttr.focus = value ? 'editor' : undefined;
+                            await this.ntb.settingsManager.save();
+                        });
+                });
+        });
 
         // target
-        const targetsToExclude = new Set(['window', 'modal']);
-        const targetOptions = Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => !targetsToExclude.has(key)));
-        new Setting(fieldDiv)
-            .setName(t('setting.item.option-command-target'))
-            .setDesc(t('setting.item.option-command-target-description'))
-            .addDropdown((dropdown) =>
-                dropdown
-                    .addOptions(targetOptions)
-                    .setValue(item.linkAttr.target || 'default')
-                    .onChange(async (value) => {
-                        if (value === 'default') item.linkAttr.target = undefined
-                        else item.linkAttr.target = value as PaneType;
-                        this.toolbar.updated = new Date().toISOString();
-                        await this.ntb.settingsManager.save();
-                    })
-                );
+        subSettings.addSetting((targetSetting) => {
+            const targetsToExclude = new Set(['window', 'modal']);
+            const targetOptions = Object.fromEntries(Object.entries(TARGET_OPTIONS).filter(([key]) => !targetsToExclude.has(key)));
+            targetSetting            
+                .setName(t('setting.item.option-command-target'))
+                .setDesc(t('setting.item.option-command-target-description'))
+                .addDropdown((dropdown) =>
+                    dropdown
+                        .addOptions(targetOptions)
+                        .setValue(item.linkAttr.target || 'default')
+                        .onChange(async (value) => {
+                            if (value === 'default') item.linkAttr.target = undefined
+                            else item.linkAttr.target = value as PaneType;
+                            this.toolbar.updated = new Date().toISOString();
+                            await this.ntb.settingsManager.save();
+                        })
+                    );
+        });
+
     }
 
     getFileSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
-        new Setting(fieldDiv)
-            .setName(t('setting.item.option-file-target'))
-            .setDesc(t('setting.item.option-file-target-description'))
-            .addDropdown((dropdown) =>
-                dropdown
-                    .addOptions(TARGET_OPTIONS)
-                    .setValue(item.linkAttr.target || 'default')
-                    .onChange(async (value) => {
-                        if (value === 'default') item.linkAttr.target = undefined
-                        else item.linkAttr.target = value as PaneType | 'modal';
-                        
-                        this.toolbar.updated = new Date().toISOString();
-                        await this.ntb.settingsManager.save();
-                    })
-                );
+
+        const subSettings = new SettingGroup(fieldDiv);
+
+        subSettings.addSetting((targetSetting) => {
+            targetSetting
+                .setName(t('setting.item.option-file-target'))
+                .setDesc(t('setting.item.option-file-target-description'))
+                .addDropdown((dropdown) =>
+                    dropdown
+                        .addOptions(TARGET_OPTIONS)
+                        .setValue(item.linkAttr.target || 'default')
+                        .onChange(async (value) => {
+                            if (value === 'default') item.linkAttr.target = undefined
+                            else item.linkAttr.target = value as PaneType | 'modal';
+                            
+                            this.toolbar.updated = new Date().toISOString();
+                            await this.ntb.settingsManager.save();
+                        })
+                    );
+        });
+
     }
 
     getScriptSubfields(
@@ -898,7 +913,7 @@ export default class ToolbarItemUi {
         fieldDiv: HTMLDivElement)
     {
         if (toolbarItem.scriptConfig) {
-            let outputContainerSettingEl: HTMLDivElement | undefined = undefined;
+            let outputContainerSettingEl: HTMLElement | undefined = undefined;
             const config = toolbarItem.scriptConfig;
             const selectedFunction = adapter.getFunctions().get(toolbarItem.scriptConfig.pluginFunction);
             selectedFunction?.parameters.forEach(param => {
@@ -951,11 +966,7 @@ export default class ToolbarItemUi {
                             });
                         break;
                     case SettingType.Text: {
-                        // outputContainer setting is shown in Advanced settings section below
-                        const textFieldDiv = param.parameter === 'outputContainer'
-                            ? (outputContainerSettingEl = createDiv())
-                            : fieldDiv;
-                        setting = new Setting(textFieldDiv)
+                        setting = new Setting(fieldDiv)
                            .setClass("note-toolbar-setting-item-field-link")
                             .addText(cb => {
                                 cb.setPlaceholder(param.label)
@@ -970,6 +981,10 @@ export default class ToolbarItemUi {
                                         }, 500));
                                 updateItemComponentStatus(this.ntb, this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
+                        // outputContainer setting is shown in Advanced settings section below
+                        if (param.parameter === 'outputContainer') {
+                            outputContainerSettingEl = setting.settingEl;
+                        }
                         // fieldHelp ? textSetting.controlEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
                         break;
                     }
@@ -1005,6 +1020,7 @@ export default class ToolbarItemUi {
     }
 
     getScriptAdvancedSubfields(toolbarItem: ToolbarItemSettings, fieldDiv: HTMLDivElement, outputContainerSettingEl?: HTMLDivElement) {
+
         const advancedDivEl = fieldDiv.createDiv();
         advancedDivEl.addClass('note-toolbar-setting-subfield-advanced-container');
 
@@ -1029,39 +1045,55 @@ export default class ToolbarItemUi {
         const advancedSettingsDiv = advancedDivEl.createDiv();
         advancedSettingsDiv.addClass('note-toolbar-setting-item-link-advanced');
 
-        // show output container setting here instead
-        if (outputContainerSettingEl !== undefined) advancedSettingsDiv.append(outputContainerSettingEl);
+        const subSettings = new SettingGroup(advancedSettingsDiv);
 
-        new Setting(advancedSettingsDiv)
-            .setName(t('setting.item.option-script-focus'))
-            .setDesc(t('setting.item.option-script-focus-description'))
-            .addToggle((toggle) => {
-                toggle
-                    .setValue(!toolbarItem.linkAttr.focus || toolbarItem.linkAttr.focus === 'editor')
-                    .onChange(async (value: boolean) => {
-                        value ? toolbarItem.linkAttr.focus = 'editor' : toolbarItem.linkAttr.focus = 'none';
-                        this.toolbar.updated = new Date().toISOString();
-                        await this.ntb.settingsManager.save();
-                    });
-            });
+        // show output container setting here instead
+        if (outputContainerSettingEl !== undefined) {
+            const settingItemsEl = advancedSettingsDiv.querySelector('.setting-group .setting-items');
+            if (settingItemsEl) {
+                settingItemsEl.append(outputContainerSettingEl);
+            }
+        }
+
+        subSettings.addSetting((focusSetting) => {
+            focusSetting
+                .setName(t('setting.item.option-script-focus'))
+                .setDesc(t('setting.item.option-script-focus-description'))
+                .addToggle((toggle) => {
+                    toggle
+                        .setValue(!toolbarItem.linkAttr.focus || toolbarItem.linkAttr.focus === 'editor')
+                        .onChange(async (value: boolean) => {
+                            value ? toolbarItem.linkAttr.focus = 'editor' : toolbarItem.linkAttr.focus = 'none';
+                            this.toolbar.updated = new Date().toISOString();
+                            await this.ntb.settingsManager.save();
+                        });
+                });
+        });
+
     }
 
     getUriSubfields(item: ToolbarItemSettings, fieldDiv: HTMLDivElement) {
-        const uriTargetSetting = new Setting(fieldDiv)
-            .setName(t('setting.item.option-uri-target'))
-            .setDesc(this.getUriTargetDescription(item.linkAttr.target || 'default'))
-            .addDropdown((dropdown) =>
-                dropdown
-                    .addOptions(TARGET_OPTIONS)
-                    .setValue(item.linkAttr.target || 'default')
-                    .onChange(async (value) => {
-                        if (value === 'default') item.linkAttr.target = undefined
-                        else item.linkAttr.target = value as PaneType | 'modal';
-                        uriTargetSetting.setDesc(this.getUriTargetDescription(item.linkAttr.target || 'default'));
-                        this.toolbar.updated = new Date().toISOString();
-                        await this.ntb.settingsManager.save();
-                    })
-                );
+
+        const subSettings = new SettingGroup(fieldDiv);
+
+        subSettings.addSetting((uriTargetSetting) => {
+            uriTargetSetting
+                .setName(t('setting.item.option-uri-target'))
+                .setDesc(this.getUriTargetDescription(item.linkAttr.target || 'default'))
+                .addDropdown((dropdown) =>
+                    dropdown
+                        .addOptions(TARGET_OPTIONS)
+                        .setValue(item.linkAttr.target || 'default')
+                        .onChange(async (value) => {
+                            if (value === 'default') item.linkAttr.target = undefined
+                            else item.linkAttr.target = value as PaneType | 'modal';
+                            uriTargetSetting.setDesc(this.getUriTargetDescription(item.linkAttr.target || 'default'));
+                            this.toolbar.updated = new Date().toISOString();
+                            await this.ntb.settingsManager.save();
+                        })
+                    );
+        });
+
     }
 
     getUriTargetDescription(target: PaneType | 'default' | 'modal'): DocumentFragment {
