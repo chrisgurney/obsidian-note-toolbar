@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Notice, Platform, PluginSettingTab, setIcon, Setting, setTooltip, ToggleComponent } from 'obsidian';
+import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Notice, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
 import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
@@ -1171,38 +1171,38 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayOtherSettings(containerEl: HTMLElement): void {
 
-		new Setting(containerEl)
-			.setName(t('setting.other.name'))
-			.setHeading()
-			.setClass('note-toolbar-setting-item-heading-top-spacing');
+		const other = new SettingGroup(containerEl);
+		other.setHeading(t('setting.other.name'));
 
-		new Setting(containerEl)
-			.setName(t('setting.other.icon.name'))
-			.setDesc(t('setting.other.icon.description'))
-			.addButton((cb) => {
-				cb.setIcon(this.ntb.settings.icon)
-					.setTooltip(t('setting.other.icon.tooltip'))
-					.onClick(async (e) => {
-						e.preventDefault();
-						const modal = new IconSuggestModal(
-							this.ntb, this.ntb.settings.icon, false, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
-						modal.open();
-					});
-				cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.ntb.settings.icon ? "true" : "false");
-				cb.buttonEl.setAttribute("tabindex", "0");
-				this.ntb.registerDomEvent(
-					cb.buttonEl, 'keydown', (e) => {
-						switch (e.key) {
-							case "Enter":
-							case " ": {
-								e.preventDefault();					
-								const modal = new IconSuggestModal(
-									this.ntb, this.ntb.settings.icon, false, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
-								modal.open();
+		other.addSetting((iconSetting) => {
+			iconSetting
+				.setName(t('setting.other.icon.name'))
+				.setDesc(t('setting.other.icon.description'))
+				.addButton((cb) => {
+					cb.setIcon(this.ntb.settings.icon)
+						.setTooltip(t('setting.other.icon.tooltip'))
+						.onClick(async (e) => {
+							e.preventDefault();
+							const modal = new IconSuggestModal(
+								this.ntb, this.ntb.settings.icon, false, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
+							modal.open();
+						});
+					cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.ntb.settings.icon ? "true" : "false");
+					cb.buttonEl.setAttribute("tabindex", "0");
+					this.ntb.registerDomEvent(
+						cb.buttonEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ": {
+									e.preventDefault();					
+									const modal = new IconSuggestModal(
+										this.ntb, this.ntb.settings.icon, false, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
+									modal.open();
+								}
 							}
-						}
-					});
-			});
+						});
+				});
+		});
 
 		// sync setting (stored locally only)
 		//  * FIXME: DISABLED DUE TO DATA LOSS ISSUES WITH USERS NOT EVEN USING SETTING (POTENTIAL CAUSE)
@@ -1218,65 +1218,75 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		// 		});
 		// 	});
 
-		new Setting(containerEl)
-			.setName(t('setting.other.keep-props-state.name'))
-			.setDesc(t('setting.other.keep-props-state.description'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(this.ntb.settings.keepPropsState)
-					.onChange(async (value) => {
-						this.ntb.settings.keepPropsState = value;
-						await this.ntb.settingsManager.save();
-					});
-			});
+		other.addSetting((keepPropsStateSetting) => {
+			keepPropsStateSetting
+				.setName(t('setting.other.keep-props-state.name'))
+				.setDesc(t('setting.other.keep-props-state.description'))
+				.addToggle((cb: ToggleComponent) => {
+					cb
+						.setValue(this.ntb.settings.keepPropsState)
+						.onChange(async (value) => {
+							this.ntb.settings.keepPropsState = value;
+							await this.ntb.settingsManager.save();
+						});
+				});
+		});
 
-		new Setting(containerEl)
-			.setName(t('setting.other.lock-callouts.name'))
-			.setDesc(t('setting.other.lock-callouts.description'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(this.ntb.settings.lockCallouts)
-					.onChange(async (value) => {
-						this.ntb.settings.lockCallouts = value;
-						await this.ntb.settingsManager.save();
-					});
-			});
+		other.addSetting((lockCalloutsSetting) => {
+			lockCalloutsSetting
+				.setName(t('setting.other.lock-callouts.name'))
+				.setDesc(t('setting.other.lock-callouts.description'))
+				.addToggle((cb: ToggleComponent) => {
+					cb
+						.setValue(this.ntb.settings.lockCallouts)
+						.onChange(async (value) => {
+							this.ntb.settings.lockCallouts = value;
+							await this.ntb.settingsManager.save();
+						});
+				});
+		});
+
+		other.addSetting((scriptingSetting) => {
+			scriptingSetting
+				.setName(t('setting.other.scripting.name'))
+				.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
+				.addToggle((cb: ToggleComponent) => {
+					cb
+						.setValue(this.ntb.settings.scriptingEnabled)
+						.onChange(async (value) => {
+							this.ntb.settings.scriptingEnabled = value;
+							this.ntb.adapters.updateAdapters();
+							await this.ntb.settingsManager.save();
+						});
+				});
+		});
 			
-		new Setting(containerEl)
-			.setName(t('setting.other.scripting.name'))
-			.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
-			.addToggle((cb: ToggleComponent) => {
-				cb
-					.setValue(this.ntb.settings.scriptingEnabled)
-					.onChange(async (value) => {
-						this.ntb.settings.scriptingEnabled = value;
-						this.ntb.adapters.updateAdapters();
+		other.addSetting((showEditInFabMenuSetting) => {
+			showEditInFabMenuSetting
+				.setName(t('setting.other.show-edit-tbar.name'))
+				.setDesc(t('setting.other.show-edit-tbar.description'))
+				.addToggle((cb) => {
+					cb.setValue(this.ntb.settings.showEditInFabMenu)
+					cb.onChange(async (value) => {
+						this.ntb.settings.showEditInFabMenu = value;
+						await this.ntb.settingsManager.save();
+						// TODO? force the re-rendering of the current toolbar to update the menu
+					});
+				});
+		});
+
+		other.addSetting((debugSetting) => {
+			debugSetting
+				.setName(t('setting.other.debugging.name'))
+				.setDesc(t('setting.other.debugging.description'))
+				.addToggle((cb) => {
+					cb.setValue(this.ntb.settings.debugEnabled)
+					cb.onChange(async (value) => {
+						this.ntb.settings.debugEnabled = value;
 						await this.ntb.settingsManager.save();
 					});
-			});
-
-		new Setting(containerEl)
-			.setName(t('setting.other.show-edit-tbar.name'))
-			.setDesc(t('setting.other.show-edit-tbar.description'))
-			.addToggle((cb) => {
-				cb.setValue(this.ntb.settings.showEditInFabMenu)
-				cb.onChange(async (value) => {
-					this.ntb.settings.showEditInFabMenu = value;
-					await this.ntb.settingsManager.save();
-					// TODO? force the re-rendering of the current toolbar to update the menu
 				});
-			});
-
-		new Setting(containerEl)
-			.setName(t('setting.other.debugging.name'))
-			.setDesc(t('setting.other.debugging.description'))
-			.addToggle((cb) => {
-				cb.setValue(this.ntb.settings.debugEnabled)
-				cb.onChange(async (value) => {
-					this.ntb.settings.debugEnabled = value;
-					await this.ntb.settingsManager.save();
-				});
-			});
+		});
 
 	}
 
