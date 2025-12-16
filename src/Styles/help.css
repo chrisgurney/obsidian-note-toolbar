@@ -23,7 +23,7 @@
         margin-top: 0 !important;
         justify-content: flex-start;
         & .search-input-container {
-            width: 250px;
+            width: 100%;
         }
         & input[type='search']:focus-visible {
             box-shadow: inset 0px 0px 0 2px var(--background-modifier-border-focus);
@@ -336,6 +336,8 @@
 
 .note-toolbar-setting-view-cta {
     & .setting-item {
+        background: transparent !important;
+        border-radius: 0%;
         border-top: 1px solid var(--background-modifier-border);
         padding-top: 0.75em;
         .is-phone & {
