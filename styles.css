@@ -2280,8 +2280,8 @@ body[data-ntb-csstheme="Minimal"] {
     font-size: var(--font-ui-small);
 }
 .note-toolbar-setting-toolbar-list {
-    border-radius: 8px;
-    border: 1px solid var(--background-modifier-border);
+    background-color: var(--setting-items-background);
+    border-radius: var(--setting-items-radius);
     margin: 0em 0em 1em 0em;
     padding: 1em 1em;
     .is-mobile & {
@@ -2291,6 +2291,7 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
     & .setting-item {
+        background-color: transparent !important;
         padding: 0.5em;
         margin: 0.25em;
         /* options button */
@@ -2588,6 +2589,9 @@ input[type="text"].note-toolbar-setting-error,
     padding-top: 0 !important;
     padding-bottom: 1em !important;
 }
+.note-toolbar-setting-no-background {
+    background-color: transparent !important;
+}
 .note-toolbar-setting-no-border {
     border-top: none !important;
 }
@@ -2700,7 +2704,6 @@ input[type="text"].note-toolbar-setting-error,
             transition: 0.1s;
         }
         & .setting-item-heading {
-            border-bottom: solid 1px var(--background-modifier-border);
             margin-bottom: 0.75em;
         }
     }
@@ -2730,18 +2733,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-mappings-container {
     &[data-active="true"] {
-        border-bottom: solid 1px var(--background-modifier-border);
         margin-bottom: 0.75em;
-        & .setting-item-heading {
-            border-bottom: solid 1px var(--background-modifier-border);
-            margin-bottom: 0.75em;
-        }
-    }
-    &[data-active="false"] {
-        & .setting-item-heading {
-            border-bottom: solid 1px var(--background-modifier-border);
-            margin-bottom: 0;
-        }
     }
 }
 /* fix for mappings heading not being full width */

@@ -380,7 +380,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// add toolbar
 		new Setting(itemsContainer)
-			.setClass("note-toolbar-setting-button")
+			.setClass('note-toolbar-setting-button')
+			.setClass('note-toolbar-setting-no-background')
 			.addButton((button: ButtonComponent) => {
 				button
 					.setTooltip(t('setting.toolbars.button-new-tbar-tooltip'))
@@ -404,6 +405,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const toolbarSearchSetting = new Setting(containerEl);
 		toolbarSearchSetting
 			.setClass('note-toolbar-setting-no-border')
+			.setClass('note-toolbar-setting-no-background')
 			.addSearch((cb) => {
 				cb.setPlaceholder(t('setting.search.field-placeholder'))
 				.onChange((search: string) => {
@@ -659,7 +661,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		//
 
 		new Setting(containerEl)
-			.setClass("note-toolbar-setting-button")
+			.setClass('note-toolbar-setting-button')
+			.setClass('note-toolbar-setting-no-background')
 			.addButton((button: ButtonComponent) => {
 				button
 					.setTooltip(t('setting.mappings.button-new-tooltip'))
