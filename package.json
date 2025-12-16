@@ -27,7 +27,7 @@
 		"obsidian": "latest",
 		"postcss": "^8.4.45",
 		"tslib": "2.4.0",
-		"typedoc": "^0.28.14",
+		"typedoc": "^0.28.15",
 		"typedoc-plugin-markdown": "^4.9.0",
 		"typescript": "^5.7.3"
 	},
