@@ -223,6 +223,7 @@ export const enum ErrorBehavior {
 
 export interface NoteToolbarSettings {
 	debugEnabled: boolean;
+	editorMenuAsToolbar: boolean;
 	editorMenuToolbar: string | null;
 	emptyViewToolbar: string | null;
 	export: ExportSettings;
@@ -248,6 +249,7 @@ export interface NoteToolbarSettings {
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	debugEnabled: false,
+	editorMenuAsToolbar: false,
 	editorMenuToolbar: null,
 	emptyViewToolbar: null,
 	export: {

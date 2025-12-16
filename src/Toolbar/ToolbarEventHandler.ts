@@ -383,15 +383,25 @@ export default class ToolbarEventHandler {
 			if (toolbar) {
 				// @ts-ignore
 				menu.items = [];
-				// not replacing variables here, because we need to call it synchronously
-				this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
-				// const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
-				// const editor = this.ntb.app.workspace.activeEditor?.editor;
-				// if (!editor) return;
-				// const offset = editor.posToOffset(editor.getCursor());
-				// const cmView = (editor as any).cm as EditorView;
-				// const coords = cmView.coordsAtPos(offset);
-				// await this.ntb.render.renderTextToolbar(toolbar, coords, coords);
+				if (this.ntb.settings.editorMenuAsToolbar) {
+					const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
+					const editor = this.ntb.app.workspace.activeEditor?.editor;
+					if (!editor) return;
+					const offset = editor.posToOffset(editor.getCursor());
+					const cmView = (editor as any).cm as EditorView;
+					const coords = cmView.coordsAtPos(offset);
+					const mouseRect = {
+						left: this.ntb.render.mouseX,
+						top: this.ntb.render.mouseY,
+						right: this.ntb.render.mouseX,
+						bottom: this.ntb.render.mouseY
+					}
+					await this.ntb.render.renderTextToolbar(toolbar, mouseRect, mouseRect);
+				}
+				else {
+					// not replacing variables here, because we need to call it synchronously
+					this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
+				}
 				return;
 			}
 			else {

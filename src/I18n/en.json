@@ -320,6 +320,8 @@
             "option-editor-menu-description": "Replaces the Editor menu with the chosen toolbar.",
             "option-editor-menu-error": "Error: Editor menu toolbar not found. Check your settings.",
             "option-editor-menu-placeholder": "Select toolbar...",
+            "option-editor-menu-as-tbar": "Display Editor menu as a toolbar",
+            "option-editor-menu-as-tbar-description": "By default the toolbar is shown as a menu. Enable to show as a toolbar instead.",
             "option-emptyview-tbar": "New tab view",
             "option-emptyview-tbar-description": "Display a toolbar when no note is open.",
             "option-emptyview-tbar-placeholder": "Select toolbar...",

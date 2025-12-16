@@ -120,6 +120,12 @@ export default class NoteToolbarPlugin extends Plugin {
 				}
 				this.items.calloutLinkHandler(e);
 			});
+			
+			// track mouse position for Editor menu toolbar placement
+			this.registerDomEvent(activeDocument, 'mousemove', (e: MouseEvent) => {
+				this.render.mouseX = e.clientX;
+				this.render.mouseY = e.clientY;
+			});
 
 			// add items to menus, when needed
 			this.registerEvent(this.app.workspace.on('file-menu', this.events.fileMenuHandler));

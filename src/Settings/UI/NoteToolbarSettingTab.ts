@@ -842,7 +842,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const collapsibleContainerEl = createDiv();
 		collapsibleContainerEl.addClass('note-toolbar-setting-items-collapsible-container');
 
-		const existingEditorMenuToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar)
+		const existingEditorMenuToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
 		const editorMenuSetting = new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-locations.option-editor-menu'))
 			.setDesc(learnMoreFr(t('setting.display-locations.option-editor-menu-description'), 'Toolbars-within-the-app#Editor-menu'))
@@ -855,6 +855,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						const isValid = await updateItemComponentStatus(this.ntb, this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
 						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 						this.ntb.settings.editorMenuToolbar = newToolbar?.uuid ?? null;
+						// toggle editor menu as toolbar setting
+						const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
+						const editorMenuAsTbarSettingEl = this.containerEl.querySelector('#note-toolbar-editor-menu-as-tbar-setting');
+						editorMenuAsTbarSettingEl?.setAttribute('data-active', hasEditorMenuToolbar.toString());
 						// update toolbar preview
 						const toolbarPreviewFr = newToolbar && createToolbarPreviewFr(this.ntb, newToolbar, undefined, false);
 						removeFieldHelp(editorMenuSetting.controlEl);
@@ -865,6 +869,20 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 		const editorMenuToolbarFr = existingEditorMenuToolbar && createToolbarPreviewFr(this.ntb, existingEditorMenuToolbar, undefined, false);
 		setFieldHelp(editorMenuSetting.controlEl, editorMenuToolbarFr);
+
+		const editorMenuAsTbarSetting = new Setting(collapsibleContainerEl)
+			.setName(t('setting.display-locations.option-editor-menu-as-tbar'))
+			.setDesc(t('setting.display-locations.option-editor-menu-as-tbar-description'))
+			.addToggle((cb: ToggleComponent) => {
+				cb.setValue(this.ntb.settings.editorMenuAsToolbar)
+					.onChange(async (value: boolean) => {
+						this.ntb.settings.editorMenuAsToolbar = value;
+						await this.ntb.settingsManager.save();
+					});
+			});
+		editorMenuAsTbarSetting.settingEl.id = 'note-toolbar-editor-menu-as-tbar-setting';
+		const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
+		editorMenuAsTbarSetting.settingEl.setAttribute('data-active', hasEditorMenuToolbar.toString());
 
 		new Setting(collapsibleContainerEl)
 			.setName(t('setting.display-contexts.option-filemenu'))

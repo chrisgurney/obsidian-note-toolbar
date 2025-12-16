@@ -19,6 +19,8 @@ export enum TbarData {
  */
 export default class ToolbarRenderer {
 
+	mouseX: number = 0;
+	mouseY: number = 0;
     textToolbarEl: HTMLDivElement | null = null;
     
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
