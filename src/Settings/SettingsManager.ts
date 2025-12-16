@@ -105,6 +105,7 @@ export default class SettingsManager {
 	 */
 	getCurrentToolbar(): ToolbarSettings | undefined {
 		const noteToolbarEl = this.ntb.el.getToolbarEl();
+		// TODO: return replaced toolbar if set?
 		const noteToolbarSettings = noteToolbarEl ? this.getToolbarById(noteToolbarEl?.id) : undefined;
 		return noteToolbarSettings;
 	}

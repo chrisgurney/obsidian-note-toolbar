@@ -10,6 +10,7 @@ export enum TbarData {
 	FabMeta = 'data-fab-metadata',
 	Name = 'data-name',
 	Position = 'data-tbar-position',
+	Replace = 'data-replace',
 	Updated = 'data-updated',
 	ViewMode = 'data-view-mode'
 }
@@ -795,6 +796,7 @@ export default class ToolbarRenderer {
 		// if we have a toolbarEl, double-check toolbar's name and updated stamp are as provided
 		let toolbarElName = toolbarEl?.getAttribute(TbarData.Name);
 		let toolbarElUpdated = toolbarEl?.getAttribute(TbarData.Updated);
+		let toolbarElOverride = toolbarEl?.getAttribute(TbarData.Replace);
 		if (toolbarEl === null || toolbar.name !== toolbarElName || toolbar.updated !== toolbarElUpdated) {
 			this.ntb.debugGroupEnd();
 			return;
@@ -1133,6 +1135,7 @@ export default class ToolbarRenderer {
 		const toolbarView: ItemView | MarkdownView | null = view ? view : this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// this.ntb.debug('checkRemoveToolbarEl: existing toolbar');
+		const existingToolbarOverride = existingToolbarEl.getAttribute(TbarData.Replace);
 		const existingToolbarName = existingToolbarEl?.getAttribute(TbarData.Name);
 		const existingToolbarUpdated = existingToolbarEl.getAttribute(TbarData.Updated);
 		const existingToolbarHasSibling = existingToolbarEl.nextElementSibling;

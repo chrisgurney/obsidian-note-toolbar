@@ -261,6 +261,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
     };
 
+    async replaceToolbar(toolbarId: string): Promise<void> {
+        // TODO: flag to replace the text toolbar (vs the note's toolbar)
+        // TODO: if ID not set, revert to original toolbar
+        const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
+    }
+
     /**
      * Sets the given property's value in the active note. 
      * 
