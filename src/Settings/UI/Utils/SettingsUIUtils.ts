@@ -373,6 +373,26 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
 }
 
 /**
+ * Creates a text fragment for use in settings headings, with description text and a Learn More link.
+ * @param title Heading text.
+ * @param desc Description text.
+ * @param page Documentation page (i.e., URL after `.../wiki/`).
+ * @returns DocumentFragment containing the message and styling.
+ */
+export function headingLearnMoreFr(title: string, desc: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
+	let messageFr = document.createDocumentFragment();
+	messageFr.append(title);
+
+	// description + learn more link
+	let descFr = messageFr.createEl('div', 'setting-item-description');
+	descFr.append(desc, ' ');
+	let learnMoreLink = descFr.createEl('a', { href: URL_USER_GUIDE + page, text: linkText });
+	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
+
+	return messageFr;
+}
+
+/**
  * Opens an item suggester that then adds the selected item to this toolbar.
  */
 export function openItemSuggestModal(

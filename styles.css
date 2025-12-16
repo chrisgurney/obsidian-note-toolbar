@@ -2630,6 +2630,8 @@ input[type="text"].note-toolbar-setting-error,
     & .setting-item {
         align-items: center !important;
         border-bottom: none !important;
+        margin-bottom: 0 !important;
+        padding: unset;
     }
     & .note-toolbar-setting-item-fields {
         padding-right: 8px;
@@ -2658,7 +2660,6 @@ input[type="text"].note-toolbar-setting-error,
     padding-top: 0.75em;
     & .setting-item-heading {
         flex-direction: row !important;
-        padding: 0.75em 0;
         & .setting-item-info {
             cursor: pointer;
         }
@@ -2674,6 +2675,7 @@ input[type="text"].note-toolbar-setting-error,
     }
     & #tbar-search {
         padding-top: 0;
+        margin-bottom: 0;
         & .setting-item-info {
             display: none;
         }
@@ -3191,7 +3193,7 @@ input[type="text"].note-toolbar-setting-error,
                 top: 0;
                 bottom: 0;
                 width: 33%;
-                background: linear-gradient(to right, transparent, var(--modal-background));
+                background: linear-gradient(to right, transparent, var(--setting-items-background));
                 pointer-events: none;
             }
         }
