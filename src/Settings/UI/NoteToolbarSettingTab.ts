@@ -1174,10 +1174,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayOtherSettings(containerEl: HTMLElement): void {
 
-		const other = new SettingGroup(containerEl);
-		other.setHeading(t('setting.other.name'));
+		const otherGroup = new SettingGroup(containerEl);
+		otherGroup.setHeading(t('setting.other.name'));
 
-		other.addSetting((iconSetting) => {
+		otherGroup.addSetting((iconSetting) => {
 			iconSetting
 				.setName(t('setting.other.icon.name'))
 				.setDesc(t('setting.other.icon.description'))
@@ -1221,7 +1221,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		// 		});
 		// 	});
 
-		other.addSetting((keepPropsStateSetting) => {
+		otherGroup.addSetting((keepPropsStateSetting) => {
 			keepPropsStateSetting
 				.setName(t('setting.other.keep-props-state.name'))
 				.setDesc(t('setting.other.keep-props-state.description'))
@@ -1235,7 +1235,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 		});
 
-		other.addSetting((lockCalloutsSetting) => {
+		otherGroup.addSetting((lockCalloutsSetting) => {
 			lockCalloutsSetting
 				.setName(t('setting.other.lock-callouts.name'))
 				.setDesc(t('setting.other.lock-callouts.description'))
@@ -1249,7 +1249,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 		});
 
-		other.addSetting((scriptingSetting) => {
+		otherGroup.addSetting((scriptingSetting) => {
 			scriptingSetting
 				.setName(t('setting.other.scripting.name'))
 				.setDesc(learnMoreFr(t('setting.other.scripting.description'), 'Executing-scripts'))
@@ -1264,7 +1264,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 		});
 			
-		other.addSetting((showEditInFabMenuSetting) => {
+		otherGroup.addSetting((showEditInFabMenuSetting) => {
 			showEditInFabMenuSetting
 				.setName(t('setting.other.show-edit-tbar.name'))
 				.setDesc(t('setting.other.show-edit-tbar.description'))
@@ -1278,7 +1278,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 		});
 
-		other.addSetting((debugSetting) => {
+		otherGroup.addSetting((debugSetting) => {
 			debugSetting
 				.setName(t('setting.other.debugging.name'))
 				.setDesc(t('setting.other.debugging.description'))
