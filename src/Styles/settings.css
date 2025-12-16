@@ -462,6 +462,8 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-items-header {
     border-bottom: 1px solid var(--background-modifier-border) !important;
     border-width: 0 0 var(--border-width) 0 !important;
+    border-radius: 0%;
+    padding-bottom: 1em;
     margin-bottom: 1em;
 }
 
@@ -1067,7 +1069,7 @@ input[type="text"].note-toolbar-setting-error,
     .setting-item {
         border-top: none !important;
         border: dashed 1px var(--pill-color-remove) !important;
-        border-radius: var(--pill-radius);
+        border-radius: var(--pill-radius) !important;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         padding-inline: 0.75em 0.25em !important;
@@ -1224,6 +1226,10 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-modal-container {
+    .setting-item-heading {
+        padding-left: 0;
+        padding-right: 0;
+    }
     & .modal-close-button {
         z-index: 2; /* fix for modal title overlapping close button */
         /* general ux improvement for small screens */

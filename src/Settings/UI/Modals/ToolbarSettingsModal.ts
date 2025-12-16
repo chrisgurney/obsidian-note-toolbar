@@ -171,8 +171,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
-		const toolbarNameDiv = createDiv();
-		const toolbarNameSetting = new Setting(toolbarNameDiv)
+		const toolbarNameSetting = new Setting(settingsDiv)
 			.setName(t('setting.name.name'))
 			.setDesc(t('setting.name.description'))
 			.addText(cb => cb
@@ -195,7 +194,6 @@ export default class ToolbarSettingsModal extends Modal {
 							: t('setting.title-edit-toolbar_none'));
 					}
 				}, 750)));
-		settingsDiv.append(toolbarNameDiv);
 
 		// allow keyboard navigation down to first toolbar item
 		this.ntb.registerDomEvent(
@@ -408,6 +406,7 @@ export default class ToolbarSettingsModal extends Modal {
 		itemsListButtonContainer.appendChild(formattingButtons);
 
 		new Setting(itemsListButtonContainer)
+			.setClass('note-toolbar-setting-no-border')
 			.addButton((btn) => {
 				btn.setTooltip(t('setting.items.button-find-item-tooltip'))
 					.onClick(async () => openItemSuggestModal(this.ntb, this.toolbar, 'Default', this));
