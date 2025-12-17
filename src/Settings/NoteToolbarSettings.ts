@@ -2,7 +2,7 @@ import { getUUID } from "Utils/Utils";
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
-export const WHATSNEW_VERSION = '1.26';
+export const WHATSNEW_VERSION = '1.27';
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20250313.1;
