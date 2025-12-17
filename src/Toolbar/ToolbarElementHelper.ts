@@ -73,9 +73,17 @@ export default class ToolbarElementHelper {
             return activeDocument.querySelector('.cg-note-toolbar-container[data-tbar-position="text"]') as HTMLElement;
         }
         else {
+            var toolbarEl: HTMLElement | null = null;
             const toolbarView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
             const toolbarViewEl = toolbarView?.containerEl as HTMLElement;
-            return toolbarViewEl?.querySelector('.cg-note-toolbar-container') as HTMLElement;
+            if (toolbarViewEl) {
+                toolbarEl = toolbarViewEl?.querySelector('.cg-note-toolbar-container');
+            }
+            if (!toolbarEl) {
+                // check for floating buttons
+                toolbarEl = activeDocument.querySelector('.cg-note-toolbar-container[data-tbar-position*="fab"]');
+            }
+            return toolbarEl;
         }
     }
 

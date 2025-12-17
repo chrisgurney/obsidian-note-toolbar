@@ -2,6 +2,7 @@
  * FAB (Floating Action Button)
  */
 
+/* toolbar styles */
 .cg-note-toolbar-fab-container {
     & button[data-fab-metadata*="autohide"] {
         box-shadow: none;
@@ -29,6 +30,7 @@
     }
 }
 
+/* positioning */
 .cg-note-toolbar-fab-container {
     bottom: var(--cg-nt-fab-pos-y-desktop);
     position: absolute;
@@ -49,6 +51,27 @@
         &[data-tbar-position="fabr"] {
             left: unset;
             right: var(--cg-nt-fab-pos-x-mobile);
+        }
+    }
+}
+
+.is-phone {
+    /* Navbar overrides to create space for the floating button. */
+    & .note-toolbar-navbar-left {
+        margin-left: var(--size-4-3);
+    }
+    & .note-toolbar-navbar-right {
+        margin-right: var(--size-4-3);
+    }
+    /* use animations consistent with Navbar */
+    & .cg-note-toolbar-container {
+        transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+    }
+    &.is-hidden-nav {
+        & .cg-note-toolbar-container {
+            transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+            transform: translateY(calc(var(--navbar-height) + var(--safe-area-inset-bottom)));
+            opacity: 0;
         }
     }
 }
@@ -78,13 +101,13 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         background-color: var(--cg-nt-fab-bg-color-hover-desktop) !important;
     }
     .is-mobile & {
-        background-color: var(--cg-nt-fab-bg-color) !important;
+        background: var(--cg-nt-fab-bg-color) !important;
         border-radius: var(--cg-nt-fab-border-radius);
         color: var(--cg-nt-fab-icon-color);
         padding: var(--cg-nt-fab-padding) !important;
         transition: transform 0.2s ease-out;
         &:is(:active, :hover, :focus-visible) {
-            background-color: var(--cg-nt-fab-bg-color) !important;
+            background: var(--cg-nt-fab-bg-color) !important;
             color: var(--cg-nt-fab-icon-color) !important;
         }
         &:is(:active) {

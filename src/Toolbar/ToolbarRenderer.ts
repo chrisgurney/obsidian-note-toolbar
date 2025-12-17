@@ -213,6 +213,10 @@ export default class ToolbarRenderer {
         // add the toolbar to the editor or modal UI
         const viewEl = view?.containerEl as HTMLElement | null;
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
+		const navbarEl = activeDocument.querySelector('.mobile-navbar');
+		// move Navbar left/right to make room for the FAB
+		navbarEl?.toggleClass('note-toolbar-navbar-right', position === PositionType.FabLeft);
+		navbarEl?.toggleClass('note-toolbar-navbar-left', position === PositionType.FabRight);
         switch(position) {
             case PositionType.Bottom:
                 // position relative to modal container if in a modal
@@ -224,8 +228,14 @@ export default class ToolbarRenderer {
             case PositionType.FabLeft:
             case PositionType.FabRight:
                 // position relative to modal container if in a modal
-                if (modalEl) modalEl.appendChild(embedBlock)
-                else viewEl?.appendChild(embedBlock);
+                if (modalEl) modalEl.appendChild(embedBlock);
+                else if (Platform.isPhone) {
+					// TODO: remove Navbar configured items if needed
+					navbarEl?.insertAdjacentElement('afterend', embedBlock);
+				}
+				else {
+					viewEl?.appendChild(embedBlock);
+				}
                 break;
             case PositionType.TabBar: {
                 const viewActionsEl = viewEl?.querySelector('.view-actions') as HTMLElement;
