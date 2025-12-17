@@ -26,7 +26,8 @@ export default class ToolbarRenderer {
     
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
-    
+	mobileNavbarMargin: number;
+
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
@@ -875,6 +876,23 @@ export default class ToolbarRenderer {
 		// re-align bottom toolbar in case width changed 
 		if (currentPosition === PositionType.Bottom) {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
+		}
+
+		// position Obsidian Navbar above toolbar, if necessary
+		if (Platform.isPhone) {
+			const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
+			if (mobileNavbarEl) {
+				if (currentPosition === PositionType.Bottom) {
+					if (!this.mobileNavbarMargin) {
+						// only calculate this once, so we don't keep adding it
+						this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(mobileNavbarEl).marginBottom);
+					}
+					mobileNavbarEl.style.marginBottom = (this.mobileNavbarMargin + toolbarEl.offsetHeight) + 'px';	
+				}
+				else {
+					mobileNavbarEl.style.marginBottom = ''; // reset style
+				}
+			}
 		}
 
 		this.ntb.debugGroupEnd();
