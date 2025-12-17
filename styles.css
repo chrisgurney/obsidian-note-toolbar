@@ -1272,7 +1272,7 @@ body {
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
-    --cg-nt-tbar-bottom-pos-y-mobile: 0;
+    --cg-nt-tbar-bottom-pos-y-mobile: var(--safe-area-inset-bottom);
     --cg-nt-tbar-text-item-font-size: var(--metadata-label-font-size);
     --cg-nt-tbar-text-item-icon-size: var(--icon-size);
     --cg-nt-tbar-text-item-padding-x: 0.75em;
