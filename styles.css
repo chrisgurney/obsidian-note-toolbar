@@ -1289,6 +1289,7 @@ body {
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
     --cg-nt-tbar-text-max-width-tablet: 650px;
     --cg-nt-tbar-text-shadow: var(--shadow-s);
+    --cg-nt-tbar-top-padding-mobile: var(--safe-area-inset-top);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -0.5rem;
     --cg-nt-fab-autohide-opacity: 0;
@@ -1460,6 +1461,9 @@ body {
     & .callout[data-callout="note-toolbar"] {
         max-width: var(--file-line-width);
     }
+}
+.is-phone .cm-embed-block[data-tbar-position="top"] {
+    padding-top: var(--cg-nt-tbar-top-padding-mobile);
 }
 /* fixes header div getting squished when the toolbar's at the top position */
 .view-header:has(+ [data-tbar-position="top"]) {

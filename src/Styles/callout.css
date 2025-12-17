@@ -52,6 +52,10 @@
     }
 }
 
+.is-phone .cm-embed-block[data-tbar-position="top"] {
+    padding-top: var(--cg-nt-tbar-top-padding-mobile);
+}
+
 /* fixes header div getting squished when the toolbar's at the top position */
 .view-header:has(+ [data-tbar-position="top"]) {
     min-height: var(--header-height);
