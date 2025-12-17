@@ -27,6 +27,7 @@ export default class ToolbarRenderer {
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
 	mobileNavbarMargin: number;
+	viewHeaderMargin: number;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -878,8 +879,10 @@ export default class ToolbarRenderer {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
 
-		// position Obsidian Navbar above toolbar, if necessary
+		// on phoness, reposition the header and navigation bars
 		if (Platform.isPhone) {
+
+			// position Obsidian Navbar above toolbar
 			const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 			if (mobileNavbarEl) {
 				if (currentPosition === PositionType.Bottom) {
@@ -891,6 +894,21 @@ export default class ToolbarRenderer {
 				}
 				else {
 					mobileNavbarEl.style.marginBottom = ''; // reset style
+				}
+			}
+
+			// position header bar below toolbar
+			const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
+			if (viewHeaderEl) {
+				if (currentPosition === PositionType.Top) {
+					if (!this.viewHeaderMargin) {
+						// only calculate this once, so we don't keep adding it
+						this.viewHeaderMargin = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
+					}
+					viewHeaderEl.style.marginTop = (this.viewHeaderMargin + toolbarEl.offsetHeight) + 'px';
+				}
+				else {
+					viewHeaderEl.style.marginTop = ''; // reset style
 				}
 			}
 		}
