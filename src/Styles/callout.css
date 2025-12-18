@@ -53,7 +53,7 @@
 }
 
 .is-phone .cm-embed-block[data-tbar-position="top"] {
-    padding-top: var(--cg-nt-tbar-top-padding-mobile);
+    padding-top: var(--cg-nt-tbar-top-padding-top-phone);
 }
 
 /* fixes header div getting squished when the toolbar's at the top position */

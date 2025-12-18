@@ -56,6 +56,11 @@
             bottom: var(--cg-nt-tbar-bottom-pos-y-mobile);
             padding: 0 var(--cg-nt-tbar-bottom-padding-x-mobile);
         }
+        & .cg-note-toolbar-callout {
+            .is-phone & {
+                padding-bottom: var(--cg-nt-tbar-bottom-padding-bottom-phone);
+            }
+        }
     }
 
     &[data-tbar-position="text"] {
