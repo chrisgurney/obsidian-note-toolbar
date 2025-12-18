@@ -394,6 +394,10 @@ input[type="text"].note-toolbar-setting-error,
     padding-bottom: 1em !important;
 }
 
+.is-phone .note-toolbar-setting-header-phone {
+    padding-top: 2.25em !important
+}
+
 .note-toolbar-setting-no-background {
     background-color: transparent !important;
 }
