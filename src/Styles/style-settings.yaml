@@ -7,6 +7,7 @@ settings:
         title.uk: 'Плаваюча кнопка'
         title.de: 'Schwebende Schaltfläche'
         title.zh: '浮动按钮'
+        title.ja: 'フローティングボタン'
         description: 'Styles for the "floating button" position'
         description.uk: 'Стилі плаваючих кнопок (встановіть позицію панелі "Плаваюча кнопка")'
         description.de: 'Stile für schwebende Schaltflächen (Position der Symbolleiste auf „schwebende Schaltfläche" setzen)'
