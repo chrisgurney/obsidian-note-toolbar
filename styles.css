@@ -3254,6 +3254,7 @@ input[type="text"].note-toolbar-setting-error,
         border-top: none !important;
         border: dashed 1px var(--pill-color-remove) !important;
         border-radius: var(--pill-radius) !important;
+        gap: 0 !important;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         padding-inline: 0.75em 0.25em !important;
