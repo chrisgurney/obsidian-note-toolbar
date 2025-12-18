@@ -846,7 +846,7 @@ settings:
         description.de: Siehe oben.
         description.zh: '参见上面的说明。'
         type: variable-number
-        default: -1
+        default: -0.5
         format: rem
     -
         id: toolbar-sizing-spacing
@@ -980,7 +980,7 @@ settings:
         description.zh: '距编辑器视图底部的距离。'
         description.uk: 'Відстань від нижнього краю.'
         type: variable-number
-        default: 1
+        default: 0
         format: em
     -
         id: toolbar-bottom-sizing-spacing
