@@ -3714,6 +3714,7 @@ input[type="text"].note-toolbar-setting-error,
     padding: 0em 1em;
     & .setting-item {
         align-items: center !important;
+        margin-bottom: 0 !important;
         padding: 1em 0em !important;
     }
     & .setting-item-control {
