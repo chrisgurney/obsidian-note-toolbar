@@ -27,7 +27,7 @@ export default class ToolbarRenderer {
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
 	mobileNavbarMargin: number;
-	viewHeaderMargin: number;
+	viewActionsHeight: number;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -220,6 +220,7 @@ export default class ToolbarRenderer {
 		if (Platform.isPhone) {	
 			if (navbarEl) navbarEl.style.marginBottom = ''; // reset spacing
 			if (viewHeaderEl) viewHeaderEl.style.marginTop = ''; // reset spacing
+			activeDocument.body.style.removeProperty('--view-top-spacing-markdown'); // reset spacing
 			// move Navbar left/right to make room for the FAB
 			navbarEl?.toggleClass('note-toolbar-navbar-right', position === PositionType.FabLeft);
 			navbarEl?.toggleClass('note-toolbar-navbar-left', position === PositionType.FabRight);
@@ -906,14 +907,25 @@ export default class ToolbarRenderer {
 			const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
 			if (viewHeaderEl) {
 				if (currentPosition === PositionType.Top) {
-					if (!this.viewHeaderMargin) {
+					if (!this.viewActionsHeight) {
 						// only calculate this once, so we don't keep adding it
-						this.viewHeaderMargin = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
+						this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
 					}
-					viewHeaderEl.style.marginTop = (this.viewHeaderMargin + toolbarEl.offsetHeight) + 'px';
+					viewHeaderEl.style.marginTop = toolbarEl.offsetHeight + 'px';
 				}
 				else {
 					viewHeaderEl.style.marginTop = ''; // reset style
+				}
+			}
+
+			// reduce top spacing
+			const viewActionsEl = viewHeaderEl.querySelector('.view-actions') as HTMLElement;
+			if (viewActionsEl) {
+				if (currentPosition === PositionType.Top) {
+					activeDocument.body.style.setProperty('--view-top-spacing-markdown', viewActionsEl.offsetHeight + 'px');
+				}
+				else {
+					activeDocument.body.style.removeProperty('--view-top-spacing-markdown');
 				}
 			}
 		}
