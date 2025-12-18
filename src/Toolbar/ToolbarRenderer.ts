@@ -213,14 +213,16 @@ export default class ToolbarRenderer {
         }
 
         // add the toolbar to the editor or modal UI
-        const viewEl = view?.containerEl as HTMLElement | null;
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
 		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
-		if (Platform.isPhone && navbarEl) {
-			navbarEl.style.marginBottom = ''; // reset style
+        const viewEl = view?.containerEl as HTMLElement | null;
+		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
+		if (Platform.isPhone) {	
+			if (navbarEl) navbarEl.style.marginBottom = ''; // reset spacing
+			if (viewHeaderEl) viewHeaderEl.style.marginTop = ''; // reset spacing
 			// move Navbar left/right to make room for the FAB
-			navbarEl.toggleClass('note-toolbar-navbar-right', position === PositionType.FabLeft);
-			navbarEl.toggleClass('note-toolbar-navbar-left', position === PositionType.FabRight);
+			navbarEl?.toggleClass('note-toolbar-navbar-right', position === PositionType.FabLeft);
+			navbarEl?.toggleClass('note-toolbar-navbar-left', position === PositionType.FabRight);
 		}
         switch(position) {
             case PositionType.Bottom:
