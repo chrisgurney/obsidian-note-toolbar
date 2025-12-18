@@ -1340,7 +1340,7 @@ body {
     --cg-nt-menu-icon-color: var(--text-muted);
     --cg-nt-menu-icon-size: var(--icon-size);
     --cg-nt-menu-item-bg-color-hover: var(--background-modifier-hover);
-    --cg-nt-menu-item-border-radius: var(--radius-s);
+    --cg-nt-menu-item-border-radius: 0;
     --cg-nt-menu-item-font-size: var(--font-ui-small);
     --cg-nt-menu-item-text-color: var(--text-normal);
     --cg-nt-quick-tools-icon-size: var(--icon-size);
