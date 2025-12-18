@@ -150,7 +150,8 @@ body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
     backdrop-filter: var(--ntb-blur-s) !important;
     border: var(--border-width) solid var(--background-modifier-border);
     box-shadow: var(--ntb-shadow-xs);
-    transition: var(--ntb-anim-duration-moderate);
+    /* fix: ghosting effect with overlays when glass style is being used */
+    /* transition: var(--ntb-anim-duration-moderate); */
     & svg {
         color: var(--text-normal);
     }
