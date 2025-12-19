@@ -4,7 +4,7 @@
 
 [English](./README.md) | [中文文档](./README-ZH.md) | [日本語](./README-JA.md)
 
-The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsidian](https://obsidian.md) lets you create context-aware toolbars for your notes, which can include commands, file and folder links, websites/URIs, menus, and scripts (Dataview, Templater, and JavaScript).
+[Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsidian](https://obsidian.md) を使用すると、ノートごとに最適なツールバーを作成できます。ツールバーには、コマンド、ファイルやフォルダへのリンク、ウェブサイト（URI）、メニュー、さらにはスクリプト（Dataview、Templater、JavaScript）を自由に配置することが可能です。
 
 > 更新情報？ [リリースノート](https://github.com/chrisgurney/obsidian-note-toolbar/releases)をご覧ください
 > 
@@ -36,31 +36,31 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 
 # 機能
 
-_🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
+_🏆 2024年 Obsidian Gems of the Year（新規プラグイン部門） ランナーアップ_
 
-- [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to commands, files/folders, URIs/URLs, menus, and [scripts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts) (Dataview, JS Engine, Templater, and built-in support for JavaScript).
-  - Built-in [Gallery of 100+ items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery) that can be added to your toolbars in just a couple clicks/taps.
-- [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property.
-  - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) below the Properties section, at the top or bottom of notes, in the tab bar, or as a floating button.
-  - [Show a toolbar when text is selected.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#Selected-text)
-  - Add a toolbar to the _New tab_ view, or [completely replace the New tab view](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#New-tab-view) as a launchpad for your vault.
-  - Access the toolbar from the navigation bar (on mobile).
-- Use Obsidian's built-in icons, labels (which can include emojis), or a mix of both.
-  - Set optional tooltips for each item.
-  - Show items specifically on mobile, desktop, or both.
-  - Choose whether the icon, label, or both are displayed.
-- Use [variables](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables) or script experssions to sub in the note's title or properties and more into toolbar item labels, tooltips, and URIs.
-- [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) let you create and place toolbars anywhere within your notes.
-- [Share toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars) with other users with a link, or [as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars).
-- [Style toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars) by adding borders, sticking to the top of your note on scroll, auto-hiding, choosing whether or not the toolbar should wrap (on mobile), making items look like buttons or act like tabs, and aligning items (left, right, centered, evenly spaced).
-  - Change or override these styles on mobile (i.e, phone and tablet).
-  - Use any icon for the floating button or [nav bar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bar) (on mobile).
-  - Or use the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support) for even more options (colors, positioning, sizing, etc.).
-- Add [commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to open any toolbar, or to execute any item. Built-in commands _completely_ hide note properties, quickly access toolbars with [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools), get command URIs, and more.
-- [Note Toolbar URIs](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) let you execute commands, focus on folders, open menus (within Note Toolbar Callouts), and open toolbar settings, from mostly anywhere within your notes.
-- [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
-- Right-click toolbars to swap with other toolbars, quickly change the position, style, or to access configuration.
-- The [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
+- [ツールバーの作成](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars): コマンド、ファイル/フォルダ、URI/URL、メニュー、[scripts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts)（Dataview、JS Engine、Templater、組み込みのJavaScript）などへのリンクを持つアイテムでツールバーを作成できます。
+  - 内蔵の[ギャラリー（100個以上のアイテム）](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)から、数回のクリックで項目をツールバーに追加できます。
+- [ツールバーの見えかたを定義](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): フォルダやユーザー定義のプロパティに基づいて、ツールバーをどこにどのように表示するかを定義できます。
+  - [各ツールバーの位置](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars)を、プロパティ欄の下、ノートの上部や下部、タブバー、フローティングボタンなどから選べます。
+  - [テキスト選択時に表示されるツールバーを設定](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#Selected-text)できます。
+  - _新規タブ_ ビューにツールバーを追加したり、[新規タブビュー自体をランチパッドとして完全に置き換えること](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#New-tab-view) もできます。
+  - モバイルではナビゲーションバーからツールバーへアクセスできます。
+- Obsidianの組み込みアイコン、絵文字を含むラベル、またはその両方を使用できます。
+  - 各項目に任意のツールチップを設定できます。
+  - 項目の表示をモバイル／デスクトップで個別に指定できます。
+  - アイコンのみ／ラベルのみ／両方を表示するか選べます。
+- [変数](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables)やスクリプト式を使って、ノートのタイトルやプロパティなどを項目ラベル、ツールチップ、URIに差し込めます。
+- [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts)を使えば、ノート内の任意の場所にツールバーを作成・配置できます。
+- ツールバーをリンクやコールアウトとして他のユーザーと[共有](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars)できます（共有リンク／[コールアウト](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars)として）。
+- 境界線の追加、スクロール時の上部固定、自動非表示、モバイルでの折り返し設定、ボタン風やタブ風の表示、左寄せ・中央・右寄せ・均等配置など、[スタイルを細かく設定](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars)できます。
+  - モバイル用のスタイルを個別に上書きできます。
+  - フローティングボタンや[ナビゲーションバー](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bar)で任意のアイコンを使用できます（モバイル）。
+  - [Style Settings Plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support)と連携して、色・位置・サイズ等をさらに細かくカスタマイズできます。
+- 任意のツールバーや項目を開く[コマンドを追加](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands)できます。組み込みコマンドでノートプロパティを完全に非表示にしたり、 [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools)でツールバーへ素早くアクセスしたり、コマンドURIを取得することが可能です。
+- [Note Toolbar URIs](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) により、コマンド実行、フォルダへのフォーカス、メニュー表示（Callouts内）、ツールバー設定の表示などをノート内の様々な場所から行えます。
+- [キーボード操作](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility)（_Note Toolbar: Focus_ コマンド）でのアクセシビリティをサポートします。
+- ツールバーを右クリックして他のツールバーと入れ替えたり、位置・スタイルの変更や設定へのクイックアクセスができます。
+- [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API)により、ツールバーの操作やサジェスター／プロンプト／メニュー／モーダルなどのUI表示が可能です。これにより Dataview JS、JS Engine、Templater のスクリプトがユーザー入力を求めたり情報を表示したりできます。
 
 # 翻訳 🌐
 
@@ -71,6 +71,7 @@ Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも�
 |中国語（簡体字）|简体中文|[@Moyf](https://github.com/Moyf)|
 |ドイツ語|Deutsch|[@hartimd](https://github.com/hartimd)|
 |ウクライナ語|Український|[@Laktiv](https://github.com/laktiv)|
+|日本語|Japanese|[@dai](https://github.com/dai)|
 
 [翻訳の追加にご協力ください。](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
@@ -78,10 +79,10 @@ Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも�
 
 [こちらをクリック](https://obsidian.md/plugins?id=note-toolbar)するか、以下の手順に従ってください：
 
-1. Obsidianの設定を開き、_コミュニティプラグイン_をクリックします
-2. _Note Toolbar_を検索して選択します
-3. _インストール_をクリックします
-4. プラグインを_有効化_してください
+1. Obsidianの設定を開き、_コミュニティプラグイン_ をクリックします
+2. _Note Toolbar_ を検索して選択します
+3. _インストール_ をクリックします
+4. プラグインを _有効化_ してください
 
 <details>
 <summary>BRATを使用してベータ版をインストール</summary>
@@ -90,11 +91,11 @@ Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも�
 <br/>
 ベータ版が利用可能になったら、<a href="https://github.com/chrisgurney/obsidian-note-toolbar/discussions">フィードバック</a>や見つけた<a href="https://github.com/chrisgurney/obsidian-note-toolbar/issues">問題</a>をお寄せください！<br/>
 <br/>
-<em>免責事項：ベータ版はプラグインのプレリリース版です。作業を進める前に、Note Toolbarの<code>data.json</code>ファイルのバックアップを作成するか、別のVault内でテストすることを強くお勧めします（ベータ版の性質によります）。</em><br/>
+<em>免責事項: ベータ版はプラグインのプレリリース版です。作業を進める前に、Note Toolbarの<code>data.json</code>ファイルのバックアップを作成するか、別のVault内でテストすることを強くお勧めします（ベータ版の性質によります）。</em><br/>
 <br/>
 <blockquote>
   <ol>
-    <li>BRATプラグインをインストール：
+    <li>BRATプラグインをインストール: 
       <ul>
         <li><i>設定 > コミュニティプラグイン</i>を開きます</li>
         <li>有効になっている場合は、<i>セーフモードを無効化</i>します</li>
@@ -104,7 +105,7 @@ Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも�
     <li>BRATの設定を開きます（<i>設定 -> Obsidian 42 - BRAT</i>）</li>
     <li><i>Beta Plugin List</i>セクションまでスクロールします</li>
     <li><i>Add Beta Plugin</i>をクリックします</li>
-    <li>このリポジトリを指定：<code>chrisgurney/obsidian-note-toolbar</code></li>
+    <li>このリポジトリを指定: <code>chrisgurney/obsidian-note-toolbar</code></li>
     <li><i>Note Toolbarプラグインを有効化</i>します（<i>設定 &gt; コミュニティプラグイン</i>）</li>
     <li>Obsidianを再起動するか、Vaultを再度開きます。</li>
     <li>Note Toolbarの設定で、上部のバージョン番号が最新のベータ版であることを確認します。</li>
@@ -114,15 +115,15 @@ Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも�
 
 # はじめに 🚀
 
-有効化したら、Note Toolbarの設定を開きます：
+有効化したら、Note Toolbarの設定を開きます: 
 
-1. _+ 新しいツールバー_を作成します
-2. ツールバーに_名前_を付けます。
-3. _+ 追加_をクリックします（または[ギャラリー](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)を検索）
-4. 設定を閉じて、_ノートを開きます_。
+1. _+ 新しいツールバー_ を作成します
+2. ツールバーに _名前_ を付けます。
+3. _+ 追加_ をクリックします（または[ギャラリー](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)を検索）
+4. 設定を閉じて、_ノートを開きます_ 。
 5. `notetoolbar`プロパティを追加します。ツールバーの名前に設定します。
 
-プロパティを使用_せずに_ツールバーを表示したい場合は、フォルダ（デイリーノートが保存されている場所など）を新しいツールバーにマッピングしてみてください。
+プロパティを**使用せずに** ツールバーを表示したい場合は、フォルダ（デイリーノートが保存されている場所など）を新しいツールバーにマッピングしてみてください。
 
 # 例
 
@@ -132,7 +133,7 @@ Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも�
 
 # ギャラリー
 
-ギャラリーでは、数回のクリック/タップでツールバーに追加できる**[100個以上のアイテム](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)を探索**できます。
+ギャラリーでは、数回のクリック/タップでツールバーに追加できる **[100個以上のアイテム](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)を探索** できます。
 
 ![ギャラリーのスクリーンショット](./docs/images/gallery.png)
 
@@ -140,7 +141,7 @@ Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも�
 
 📖 詳細な手順、ヒント、その他の情報については、**[ユーザーガイド](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)をご覧ください**。
 
-Note Toolbarの設定のスクリーンショット：
+Note Toolbarの設定のスクリーンショット: 
 
 ![設定の例](./docs/images/settings.png)
 
@@ -168,7 +169,7 @@ Note ToolbarはGPL 3.0の下でライセンスされています。詳細は[LIC
 
 # サポート 🛟
 
-📖 **[ユーザーガイド](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)の[トラブルシューティング](https://github.com/chrisgurney/obsidian-note-toolbar/Troubleshooting)をご覧ください。**
+📖  **[ユーザーガイド](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)の[トラブルシューティング](https://github.com/chrisgurney/obsidian-note-toolbar/Troubleshooting)をご覧ください。** 
 
 [質問はこちら](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)または[機能をリクエスト](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/ideas)してください。バグと思われるものに遭遇した場合は、[問題を報告](https://github.com/chrisgurney/obsidian-note-toolbar/issues)してください。
 
