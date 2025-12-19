@@ -66,12 +66,12 @@ _🏆 2024年 Obsidian Gems of the Year（新規プラグイン部門） ラン�
 
 Note ToolbarのUIとStyle Settingsのオプションは、以下の言語でも利用できます：
 
-|言語名|母語名|貢献者|
+|Language name|Native name|Contributors|
 |---|---|---|
-|中国語（簡体字）|简体中文|[@Moyf](https://github.com/Moyf)|
-|ドイツ語|Deutsch|[@hartimd](https://github.com/hartimd)|
-|ウクライナ語|Український|[@Laktiv](https://github.com/laktiv)|
-|日本語|Japanese|[@dai](https://github.com/dai)|
+|Chinese (Simplified)|简体中文|[@Moyf](https://github.com/Moyf)|
+|German|Deutsch|[@hartimd](https://github.com/hartimd)|
+|Ukrainian|Український|[@Laktiv](https://github.com/laktiv)|
+|Japanese|日本語|[@dai](https://github.com/dai)|
 
 [翻訳の追加にご協力ください。](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 

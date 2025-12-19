@@ -331,7 +331,7 @@
                 "ja": "Obsidian のプラグインでできることを広げましょう。",
                 "zh": "通过 Obsidian 的插件实现更多妙妙功能。",
                 "uk": "Робіть більше з додатками Obsidian."
-            }
+            },
             "itemIds": [
                 "obsidian-sync-version-history", "obsidian-excalidraw-create", "obsidian-tasks-edit"
             ]
