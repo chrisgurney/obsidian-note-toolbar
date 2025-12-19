@@ -203,7 +203,7 @@ export default class CommandManager {
         }
 
         // need to get the type of toolbar first
-        let toolbarEl = this.ntb.el.getToolbarEl(undefined, true);
+        let toolbarEl = this.ntb.el.getToolbarEl(undefined, isTextToolbar);
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
         switch (toolbarPosition) {
             case PositionType.FabRight:

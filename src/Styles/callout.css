@@ -53,7 +53,7 @@
 }
 
 .is-phone .cm-embed-block[data-tbar-position="top"] {
-    padding-top: var(--cg-nt-tbar-top-padding-mobile);
+    padding-top: var(--cg-nt-tbar-top-padding-top-phone);
 }
 
 /* fixes header div getting squished when the toolbar's at the top position */
@@ -522,7 +522,8 @@ body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
             border: var(--border-width) solid var(--background-modifier-border);
             border-radius: 32px;
             box-shadow: var(--ntb-shadow-xs);
-            transition: var(--ntb-anim-duration-moderate);
+            /* fix: ghosting effect with overlays when glass style is being used */
+            /* transition: var(--ntb-anim-duration-moderate); */
         }
         @media (hover: hover) {
             & a:hover, span.external-link:hover {

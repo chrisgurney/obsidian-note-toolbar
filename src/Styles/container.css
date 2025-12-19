@@ -56,6 +56,11 @@
             bottom: var(--cg-nt-tbar-bottom-pos-y-mobile);
             padding: 0 var(--cg-nt-tbar-bottom-padding-x-mobile);
         }
+        & .cg-note-toolbar-callout {
+            .is-phone & {
+                padding-bottom: var(--cg-nt-tbar-bottom-padding-bottom-phone);
+            }
+        }
     }
 
     &[data-tbar-position="text"] {
@@ -103,4 +108,9 @@ body[data-ntb-csstheme="Minimal"] {
             margin-inline: var(--content-margin) !important;
         }
     }
+}
+
+/* remove spacing after props section, only if toolbar is in props position */
+.metadata-container:has(+ .cg-note-toolbar-bar-container[data-tbar-position="props"]) {
+    margin-block-end: 0;
 }

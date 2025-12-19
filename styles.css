@@ -850,7 +850,7 @@ settings:
         description.de: Siehe oben.
         description.zh: '参见上面的说明。'
         type: variable-number
-        default: -1
+        default: -0.5
         format: rem
     -
         id: toolbar-sizing-spacing
@@ -984,7 +984,7 @@ settings:
         description.zh: '距编辑器视图底部的距离。'
         description.uk: 'Відстань від нижнього краю.'
         type: variable-number
-        default: 1
+        default: 0
         format: em
     -
         id: toolbar-bottom-sizing-spacing
@@ -1269,10 +1269,11 @@ body {
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
+    --cg-nt-tbar-bottom-padding-bottom-phone: var(--safe-area-inset-bottom);
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
-    --cg-nt-tbar-bottom-pos-y-mobile: var(--safe-area-inset-bottom);
+    --cg-nt-tbar-bottom-pos-y-mobile: 0;
     --cg-nt-tbar-text-item-font-size: var(--metadata-label-font-size);
     --cg-nt-tbar-text-item-icon-size: var(--icon-size);
     --cg-nt-tbar-text-item-padding-x: 0.75em;
@@ -1289,7 +1290,7 @@ body {
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
     --cg-nt-tbar-text-max-width-tablet: 650px;
     --cg-nt-tbar-text-shadow: var(--shadow-s);
-    --cg-nt-tbar-top-padding-mobile: var(--safe-area-inset-top);
+    --cg-nt-tbar-top-padding-top-phone: var(--safe-area-inset-top);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -0.5rem;
     --cg-nt-fab-autohide-opacity: 0;
@@ -1339,7 +1340,7 @@ body {
     --cg-nt-menu-icon-color: var(--text-muted);
     --cg-nt-menu-icon-size: var(--icon-size);
     --cg-nt-menu-item-bg-color-hover: var(--background-modifier-hover);
-    --cg-nt-menu-item-border-radius: var(--radius-s);
+    --cg-nt-menu-item-border-radius: 0;
     --cg-nt-menu-item-font-size: var(--font-ui-small);
     --cg-nt-menu-item-text-color: var(--text-normal);
     --cg-nt-quick-tools-icon-size: var(--icon-size);
@@ -1463,7 +1464,7 @@ body {
     }
 }
 .is-phone .cm-embed-block[data-tbar-position="top"] {
-    padding-top: var(--cg-nt-tbar-top-padding-mobile);
+    padding-top: var(--cg-nt-tbar-top-padding-top-phone);
 }
 /* fixes header div getting squished when the toolbar's at the top position */
 .view-header:has(+ [data-tbar-position="top"]) {
@@ -1927,7 +1928,8 @@ body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
             border: var(--border-width) solid var(--background-modifier-border);
             border-radius: 32px;
             box-shadow: var(--ntb-shadow-xs);
-            transition: var(--ntb-anim-duration-moderate);
+            /* fix: ghosting effect with overlays when glass style is being used */
+            /* transition: var(--ntb-anim-duration-moderate); */
         }
         @media (hover: hover) {
             & a:hover, span.external-link:hover {
@@ -2090,7 +2092,8 @@ body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
     backdrop-filter: var(--ntb-blur-s) !important;
     border: var(--border-width) solid var(--background-modifier-border);
     box-shadow: var(--ntb-shadow-xs);
-    transition: var(--ntb-anim-duration-moderate);
+    /* fix: ghosting effect with overlays when glass style is being used */
+    /* transition: var(--ntb-anim-duration-moderate); */
     & svg {
         color: var(--text-normal);
     }
@@ -2163,6 +2166,11 @@ body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
             bottom: var(--cg-nt-tbar-bottom-pos-y-mobile);
             padding: 0 var(--cg-nt-tbar-bottom-padding-x-mobile);
         }
+        & .cg-note-toolbar-callout {
+            .is-phone & {
+                padding-bottom: var(--cg-nt-tbar-bottom-padding-bottom-phone);
+            }
+        }
     }
 
     &[data-tbar-position="text"] {
@@ -2209,6 +2217,10 @@ body[data-ntb-csstheme="Minimal"] {
             margin-inline: var(--content-margin) !important;
         }
     }
+}
+/* remove spacing after props section, only if toolbar is in props position */
+.metadata-container:has(+ .cg-note-toolbar-bar-container[data-tbar-position="props"]) {
+    margin-block-end: 0;
 }
 /*
  * Menu
@@ -2610,6 +2622,9 @@ input[type="text"].note-toolbar-setting-error,
     border-top: none;
     padding-top: 0 !important;
     padding-bottom: 1em !important;
+}
+.is-phone .note-toolbar-setting-header-phone {
+    padding-top: 2.25em !important
 }
 .note-toolbar-setting-no-background {
     background-color: transparent !important;
@@ -3248,6 +3263,7 @@ input[type="text"].note-toolbar-setting-error,
         border-top: none !important;
         border: dashed 1px var(--pill-color-remove) !important;
         border-radius: var(--pill-radius) !important;
+        gap: 0 !important;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         padding-inline: 0.75em 0.25em !important;
@@ -3707,6 +3723,7 @@ input[type="text"].note-toolbar-setting-error,
     padding: 0em 1em;
     & .setting-item {
         align-items: center !important;
+        margin-bottom: 0 !important;
         padding: 1em 0em !important;
     }
     & .setting-item-control {
@@ -3988,6 +4005,10 @@ input[type="text"].note-toolbar-setting-error,
     overflow-y: auto;
     & .cg-note-toolbar-container {
         margin: auto 0;
+        .is-phone & {
+            margin-top: unset;
+            padding-top: auto;
+        }
     }
     & .empty-state {
         display: none;
