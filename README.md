@@ -99,13 +99,13 @@ As beta versions become available, I welcome <a href="https://github.com/chrisgu
         <li>Open <i>Settings > Community Plugins</i></li>
         <li><i>Disable safe mode</i>, if enabled</li>
         <li>Browse, and <i>search for "BRAT"</i></li>
-        <li>Install the latest version of <i>Obsidian 42 - BRAT</i></li>
+        <li>Install the latest version of <i>BRAT</i></li>
       </ul></li>
-    <li>Open BRAT settings (<i>Settings -> Obsidian 42 - BRAT</i>)</li>
-    <li>Scroll to the <i>Beta Plugin List</i> section</li>
-    <li><i>Add Beta Plugin</i></li>
+    <li>Open BRAT settings (<i>Settings -> BRAT</i>)</li>
+    <li>Scroll to the <i>Beta plugin list</i> section</li>
+    <li><i>Add beta plugin</i></li>
     <li>Specify this repository: <code>chrisgurney/obsidian-note-toolbar</code></li>
-    <li><i>Enable the Note Toolbar plugin</i> (<i>Settings &gt; Community plugins</i>)</li>
+    <li><i>Enable the Note Toolbar plugin</i> (<i>Settings -> Community plugins</i>)</li>
     <li>Restart Obsidian, or re-open your vault.</li>
     <li>In Note Toolbar's settings, confirm the version number at the top is the latest beta version.</li>
   </ol>

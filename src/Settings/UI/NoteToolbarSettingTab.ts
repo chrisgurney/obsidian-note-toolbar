@@ -1222,6 +1222,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	displayOtherSettings(containerEl: HTMLElement): void {
 
 		new Setting(containerEl)
+			.setClass('note-toolbar-setting-header-phone')
 			.setHeading()
 			.setName(t('setting.other.name'));
 

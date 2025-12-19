@@ -316,7 +316,7 @@
         "display-locations": {
             "description": "Define where toolbars are shown across the app.",
             "name": "Toolbars within the app",
-            "option-editor-menu": "Editor menu",
+            "option-editor-menu": "Editor menu 🖥️",
             "option-editor-menu-description": "Replaces the Editor menu with the chosen toolbar.",
             "option-editor-menu-error": "Error: Editor menu toolbar not found. Check your settings.",
             "option-editor-menu-placeholder": "Select toolbar...",

@@ -12,10 +12,11 @@ body {
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
+    --cg-nt-tbar-bottom-padding-bottom-phone: var(--safe-area-inset-bottom);
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
-    --cg-nt-tbar-bottom-pos-y-mobile: var(--safe-area-inset-bottom);
+    --cg-nt-tbar-bottom-pos-y-mobile: 0;
     --cg-nt-tbar-text-item-font-size: var(--metadata-label-font-size);
     --cg-nt-tbar-text-item-icon-size: var(--icon-size);
     --cg-nt-tbar-text-item-padding-x: 0.75em;
@@ -32,7 +33,7 @@ body {
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
     --cg-nt-tbar-text-max-width-tablet: 650px;
     --cg-nt-tbar-text-shadow: var(--shadow-s);
-    --cg-nt-tbar-top-padding-mobile: var(--safe-area-inset-top);
+    --cg-nt-tbar-top-padding-top-phone: var(--safe-area-inset-top);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -0.5rem;
     --cg-nt-fab-autohide-opacity: 0;
@@ -82,7 +83,7 @@ body {
     --cg-nt-menu-icon-color: var(--text-muted);
     --cg-nt-menu-icon-size: var(--icon-size);
     --cg-nt-menu-item-bg-color-hover: var(--background-modifier-hover);
-    --cg-nt-menu-item-border-radius: var(--radius-s);
+    --cg-nt-menu-item-border-radius: 0;
     --cg-nt-menu-item-font-size: var(--font-ui-small);
     --cg-nt-menu-item-text-color: var(--text-normal);
     --cg-nt-quick-tools-icon-size: var(--icon-size);

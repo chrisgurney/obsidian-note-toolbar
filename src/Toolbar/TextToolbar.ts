@@ -1,5 +1,6 @@
 import { EditorView, PluginValue, Rect, ViewPlugin, ViewUpdate } from '@codemirror/view';
 import NoteToolbarPlugin from 'main';
+import { Platform } from 'obsidian';
 
 /**
  * Renders the configured toolbar when text is selected.
@@ -23,7 +24,9 @@ class TextToolbarClass implements PluginValue {
     private isContextOpening: boolean = false;
     private isMouseDown: boolean = false;
     private isMouseSelection: boolean = false;
+
     private lastSelection: { from: number; to: number; text: string } | null = null;
+    private selection: { from: number; to: number; text: string } | null = null;
 
     constructor(view: EditorView, private ntb: NoteToolbarPlugin) {
         // plugin.debug('TextToolbarView initialized');
@@ -52,8 +55,11 @@ class TextToolbarClass implements PluginValue {
         });
         ntb.registerDomEvent(view.scrollDOM, 'scroll', () => {
             if (ntb.render.hasTextToolbar()) {
-                ntb.debug('⛔️ view scrolled - removing toolbar');
-                ntb.render.removeTextToolbar();
+                if (!this.selection) return;
+                const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
+                const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
+                if (!selectStartPos || !selectEndPos) return;
+                ntb.render.positionFloatingToolbar(ntb.render.textToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
             }
         });
         ntb.registerDomEvent(view.dom, 'contextmenu', () => {
@@ -80,13 +86,15 @@ class TextToolbarClass implements PluginValue {
         const { state, view } = update;
 
         const selection = state.selection.main;
-        const selectFrom = selection.from;
-        const selectTo = selection.to;
-        const selectText = state.doc.sliceString(selection.from, selection.to);
+        this.selection = {
+            from: selection.from,
+            to: selection.to,
+            text: state.doc.sliceString(selection.from, selection.to)
+        };
         // this.ntb.debug('selection:', selection);
 
         // right-clicking for some reason selects the current line if it's empty
-        if (this.isContextOpening && selectTo === selectFrom + 1) {
+        if (this.isContextOpening && this.selection.from === this.selection.from + 1) {
             this.ntb.debug('⛔️ selection is just new line - exiting');
             this.isContextOpening = false;
             return;
@@ -97,11 +105,11 @@ class TextToolbarClass implements PluginValue {
                 this.ntb.debug('toolbar in focus - exiting');
                 return;
             }
-            if (selectFrom === selectTo || !view.hasFocus) {
+            if (this.selection.from === this.selection.to || !view.hasFocus) {
                 if (this.ntb.render.hasTextToolbar()) {
                     this.ntb.debugGroup('⛔️ no selection or view out of focus - removing toolbar');
                     this.ntb.debug(
-                        'selection empty:', selectFrom === selectTo, ' • has focus: view', view.hasFocus, 'toolbar', 
+                        'selection empty:', this.selection.from === this.selection.to, ' • has focus: view', view.hasFocus, 'toolbar', 
                         this.ntb.render.isTextToolbarFocussed());
                     this.ntb.debugGroupEnd();
                     this.ntb.render.removeTextToolbar();
@@ -122,24 +130,26 @@ class TextToolbarClass implements PluginValue {
         // if the selection hasn't changed, do nothing
         if (
             this.lastSelection &&
-            this.lastSelection.from === selectFrom &&
-            this.lastSelection.to === selectTo &&
-            this.lastSelection.text === selectText
+            this.lastSelection.from === this.selection.from &&
+            this.lastSelection.to === this.selection.to &&
+            this.lastSelection.text === this.selection.text
         ) {
             return;
         }
 
         requestAnimationFrame(async () => {
 
-            const selectStartPos: Rect | null = view.coordsAtPos(selectFrom);
-            const selectEndPos: Rect | null = view.coordsAtPos(selectTo);
+            if (!this.selection) return;
+
+            const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
+            const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             await this.ntb.render.renderTextToolbar(toolbar, selectStartPos, selectEndPos);
 
             this.lastSelection = {
-                from: selectFrom,
-                to: selectTo,
-                text: selectText
+                from: this.selection.from,
+                to: this.selection.to,
+                text: this.selection.text
             };
 
             // TODO: do we need this?
