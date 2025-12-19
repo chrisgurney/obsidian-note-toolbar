@@ -8,10 +8,12 @@ settings:
     -
         id: toolbar-fab-styles
         title: 'Floating Button'
+        title.ja: 'フローティングボタン'
         title.uk: 'Плаваюча кнопка'
         title.de: 'Schwebende Schaltfläche'
         title.zh: '浮动按钮'
         description: 'Styles for the "floating button" position'
+        description.ja: '「フローティングボタン」位置のスタイル'
         description.uk: 'Стилі плаваючих кнопок (встановіть позицію панелі "Плаваюча кнопка")'
         description.de: 'Stile für schwebende Schaltflächen (Position der Symbolleiste auf „schwebende Schaltfläche" setzen)'
         description.zh: '浮动按钮的样式（工具栏位置为「浮动按钮」时）'
@@ -21,6 +23,7 @@ settings:
     -
         id: toolbar-fab-colors
         title: '↳ 🎨 Colors'
+        title.ja: '↳ 🎨 色'
         title.uk: '↳ 🎨 Кольори'
         title.de: '↳ 🎨 Farben'
         title.zh: '↳ 🎨 颜色'
@@ -30,6 +33,7 @@ settings:
     -
         id: cg-nt-fab-bg-color-desktop
         title: 'Background color on desktop'
+        title.ja: 'デスクトップの背景色'
         title.uk: "Колір фону на комп'ютері"
         title.de: 'Hintergrundfarbe am PC'
         title.zh: '桌面端背景颜色'
@@ -41,6 +45,7 @@ settings:
     -
         id: cg-nt-fab-bg-color
         title: 'Background color on mobile 📱'
+        title.ja: 'モバイルの背景色 📱'
         title.uk: 'Колір фону на мобільному 📱'
         title.de: 'Hintergrundfarbe am Handy 📱'
         title.zh: '移动端背景颜色 📱'
@@ -52,6 +57,7 @@ settings:
     -
         id: cg-nt-fab-bg-color-hover-desktop
         title: 'Background color on desktop (on hover)'
+        title.ja: 'デスクトップの背景色（ホバー時）'
         title.uk: "Колір фону на комп'ютері (при наведенні)"
         title.de: 'Hintergrundfarbe am PC (beim Überfahren mit der Maus)'
         title.zh: '桌面端背景颜色（悬停）'
@@ -63,6 +69,7 @@ settings:
     -
         id: cg-nt-fab-bg-color-hover
         title: 'Background color on mobile (on press) 📱'
+        title.ja: 'モバイルの背景色（押下時）📱'
         title.uk: 'Колір фону на мобільному (при натисканні) 📱'
         title.de: 'Hintergrundfarbe am Handy (bei Drücken) 📱'
         title.zh: '移动端背景颜色（按下） 📱'
@@ -74,9 +81,11 @@ settings:
     -
         id: cg-nt-fab-border-color
         title: 'Border color'
+        title.ja: '枠線の色'
         title.zh: '边框颜色'
         title.uk: 'Колір рамки'
         description: 'Border around button. The "border" style must be added to the toolbar first.'
+        description.ja: 'ボタンの周囲の枠線。「border」スタイルをツールバーに追加してから有効になります。'
         description.zh: '按钮周围的边框。必须先将“边框”样式添加到工具栏才会生效。'
         description.uk: 'Рамка навколо кнопки. Стиль "рамка" повинен бути додан до панелі.'
         type: variable-themed-color
@@ -87,6 +96,7 @@ settings:
     -
         id: cg-nt-fab-icon-color-desktop
         title: 'Icon color on desktop'
+        title.ja: 'デスクトップのアイコン色'
         title.uk: "Колір іконок на комп'ютері"
         title.de: 'Symbolfarbe am PC'
         title.zh: '桌面端图标颜色'
@@ -98,6 +108,7 @@ settings:
     -
         id: cg-nt-fab-icon-color
         title: 'Icon color on mobile 📱'
+        title.ja: 'モバイルのアイコン色 📱'
         title.uk: 'Колір іконки на мобільному 📱'
         title.de: 'Symbolfarbe am Handy 📱'
         title.zh: '移动端图标颜色 📱'
@@ -109,6 +120,7 @@ settings:
     -
         id: toolbar-fab-positioning
         title: '↳ ↕ Positioning'
+        title.ja: '↳ ↕ 位置調整'
         title.uk: '↳ ↕ Позиціонування'
         title.de: '↳ ↕ Positionierung'
         title.zh: '↳ ↕ 位置'
@@ -118,10 +130,12 @@ settings:
     -
         id: cg-nt-fab-pos-x-desktop
         title: 'X position on desktop (in px units)'
+        title.ja: 'デスクトップのX位置（px）'
         title.uk: "Позиція X на комп'ютері (пікселі)"
         title.de: 'X-Position am PC (in px-Einheiten)'
         title.zh: '桌面端X轴位置（单位：px）'
         description: 'Distance from the edge of the editor view.'
+        description.ja: 'エディタビューの端からの距離。'
         description.uk: 'Відстань від краю вікна редактора.'
         description.de: 'Abstand vom Rand der Editoransicht.'
         description.zh: '距编辑器视图边缘的距离'
@@ -131,10 +145,12 @@ settings:
     -
         id: cg-nt-fab-pos-x-mobile
         title: 'X position on mobile (in px units) 📱'
+        title.ja: 'モバイルのX位置（px）📱'
         title.uk: 'Позиція X на мобільному (пікселі) 📱'
         title.de: 'X-Position am Handy (in px-Einheiten) 📱'
         title.zh: '移动端X轴位置（单位：px）📱'
         description: "Distance from the edge of the editor view."
+        description.ja: 'エディタビューの端からの距離。'
         description.uk: 'Відстань від краю вікна редактора.'
         description.de: 'Als Prozentsatz der Breite des Editors, ausgehend vom linken Rand (umgekehrt, wenn sich die Schaltfläche rechts befindet).'
         description.zh: '距编辑器视图边缘的距离。'
@@ -144,10 +160,12 @@ settings:
     -
         id: cg-nt-fab-pos-y-desktop
         title: 'Y position on desktop (in px units)'
+        title.ja: 'デスクトップのY位置（px）'
         title.uk: "Позиція Y на комп'ютері (пікселі)"
         title.de: 'Y-Position am PC (in px-Einheiten)'
         title.zh: '桌面端Y轴位置（单位：px）'
         description: "Distance from the bottom of the editor view."
+        description.ja: 'エディタビューの下端からの距離。'
         description.uk: 'Відстань від нижнього краю вікна редактора.'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '距编辑器视图底部的距离。'
@@ -157,10 +175,12 @@ settings:
     -
         id: cg-nt-fab-pos-y-mobile
         title: 'Y position on mobile (in px units) 📱'
+        title.ja: 'モバイルのY位置（px）📱'
         title.uk: 'Позиція Y на мобільному (пікселі) 📱'
         title.de: 'Y-Position am Handy (in px-Einheiten) 📱'
         title.zh: '移动端Y轴位置（单位：px）📱'
         description: "Distance from the bottom of the editor view."
+        description.ja: 'エディタビューの下端からの距離。'
         description.uk: 'Відстань від нижнього краю вікна редактора.'
         description.de: 'Als Prozentsatz der Höhe des Editors, vom oberen Rand aus.'
         description.zh: '距编辑器视图底部的距离。'
@@ -170,6 +190,7 @@ settings:
     -
         id: toolbar-fab-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
+        title.ja: '↳ 📐 サイズと間隔'
         title.uk: '↳ 📐 Розміри та інтервали'
         title.de: '↳ 📐 Größe und Abstände'
         title.zh: '↳ 📐 大小和间距'
@@ -179,10 +200,12 @@ settings:
     -
         id: cg-nt-fab-padding-desktop
         title: 'Padding on desktop (in px units)'
+        title.ja: 'デスクトップのパディング（px）'
         title.uk: "Відступи на комп'ютері (пікселі)"
         title.de: 'Abstand am PC (in px)'
         title.zh: '桌面端内边距（单位：px）'
         description: 'Spacing around the icon.'
+        description.ja: 'アイコンの周囲のスペース。'
         description.uk: 'Відстань навколо іконки.'
         description.de: 'Abstand um das Symbol herum'
         description.zh: '图标周围的间距（Padding）'
@@ -192,10 +215,12 @@ settings:
     -
         id: cg-nt-fab-padding
         title: 'Padding on mobile (in px units) 📱'
+        title.ja: 'モバイルのパディング（px）📱'
         title.uk: 'Відступи на мобільному (пікселі) 📱'
         title.de: 'Abstand am Handy (in px) 📱'
         title.zh: '移动端内边距（单位：px）📱'
         description: 'Spacing around the icon.'
+        description.ja: 'アイコンの周囲のスペース。'
         description.uk: 'Відстань навколо іконки.'
         description.zh: '图标周围的间距（Padding）'
         type: variable-number
@@ -204,6 +229,7 @@ settings:
     -
         id: cg-nt-fab-icon-size-desktop
         title: 'Icon size on desktop (in px units)'
+        title.ja: 'デスクトップのアイコンサイズ（px）'
         title.uk: "Розмір іконки на комп'ютері (пікселі)"
         title.de: 'Symbolgröße am PC (in px) 📱'
         title.zh: '桌面端图标大小（单位：px）'
@@ -213,6 +239,7 @@ settings:
     -
         id: cg-nt-fab-icon-size
         title: 'Icon size on mobile (in px units) 📱'
+        title.ja: 'モバイルのアイコンサイズ（px）📱'
         title.uk: 'Розмір іконки на мобільному (пікселі) 📱'
         title.de: 'Symbolgröße am Handy (in px) 📱'
         title.zh: '移动端图标大小（单位：px）📱'
@@ -222,6 +249,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width-desktop
         title: 'Icon stroke width on desktop (in px units)'
+        title.ja: 'デスクトップのアイコン線幅（px）'
         title.uk: "Ширина контуру іконки на комп'ютері (пікселі)"
         title.de: 'Symbol-Strichstärke am PC (in px)'
         title.zh: '桌面端图标描边宽度（单位：px）'
@@ -231,6 +259,7 @@ settings:
     -
         id: cg-nt-fab-icon-stroke-width
         title: 'Icon stroke width on mobile (in px units) 📱'
+        title.ja: 'モバイルのアイコン線幅（px）📱'
         title.uk: 'Ширина контуру іконки на мобільному (пікселі) 📱'
         title.de: 'Symbol-Strichstärke am Handy (in px) 📱'
         title.zh: '移动端图标描边宽度（单位：px）📱'
@@ -240,6 +269,7 @@ settings:
     -
         id: toolbar-fab-style
         title: '↳ 😎 Style'
+        title.ja: '↳ 😎 スタイル'
         title.uk: '↳ 😎 Стиль'
         title.de: '↳ 😎 Stil'
         title.zh: '↳ 😎 样式'
@@ -249,9 +279,11 @@ settings:
     -
         id: cg-nt-fab-autohide-opacity
         title: 'Autohide opacity'
+        title.ja: '自動非表示時の不透明度'
         title.zh: '自动隐藏的透明度'
         title.uk: 'Прозорість при автоприховуванні'
         description: 'When autohide style is enabled, how transparent the button is when hidden'
+        description.ja: '自動非表示スタイル有効時、非表示状態のボタンの透明度'
         description.zh: '当启用自动隐藏样式时，隐藏状态的按钮的透明度'
         description.uk: 'Якщо увімкнено автоприховування, наскільки прозорою буде кнопка, коли вона прихована'
         type: variable-number-slider
@@ -262,10 +294,12 @@ settings:
     -
         id: cg-nt-fab-border-radius-desktop
         title: 'Border radius on desktop (in px units)'
+        title.ja: 'デスクトップの角丸（px）'
         title.uk: "Круглість рамки на комп'ютері (пікселі)"
         title.de: 'Rahmenabrundung am PC (in px)'
         title.zh: '桌面端边框圆角（单位：px）'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
+        description.ja: 'ボタンの角丸の度合い。数値が大きいほど丸くなります。（プラグインの初期値：Android = 16、iOS = 999）'
         description.uk: 'Наскільки круглою є кнопка. Чим більше число, тим більше округлення.'
         description.de: 'Wie abgerundet die Schaltfläche ist. Je höher die Zahl, desto runder.'
         description.zh: '按钮的圆角设置；数值越大，圆角越明显（默认值：Android = 16，iOS = 999）'
@@ -275,10 +309,12 @@ settings:
     -
         id: cg-nt-fab-border-radius
         title: 'Border radius on mobile (in px units) 📱'
+        title.ja: 'モバイルの角丸（px）📱'
         title.uk: 'Круглість рамки на мобільному (пікселі) 📱'
         title.de: 'Rahmenabrundung am Handy (in px) 📱'
         title.zh: '移动端边框圆角（单位：px）📱'
         description: 'How rounded the button is. The higher the number the more rounded. (Plugin defaults: Android = 16, iOS = 999)'
+        description.ja: 'ボタンの角丸の度合い。数値が大きいほど丸くなります。（プラグインの初期値：Android = 16、iOS = 999）'
         description.uk: 'Наскільки круглою є кнопка. Чим більше число, тим більше округлення.'
         description.de: 'Wie abgerundet die Schaltfläche ist. Je höher die Zahl, desto runder. (Plugin-Standardwerte: Android = 16, iOS = 999)'
         description.zh: '按钮的圆角设置；数值越大，圆角越明显（默认值：Android = 16，iOS = 999）'
@@ -288,10 +324,12 @@ settings:
     -
         id: cg-nt-fab-inactive-opacity
         title: 'Inactive opacity'
+        title.ja: '非アクティブ時の不透明度'
         title.uk: 'Прозорість у неактивному режимі'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
         description: 'When focus is in another tab, dim the floating button'
+        description.ja: 'フォーカスが他のタブにあるとき、フローティングボタンを暗くします'
         description.uk: 'Коли фокус знаходиться на іншій вкладці, затемніть плаваючу кнопку'
         description.de: 'Wenn der Fokus auf einer anderen Registerkarte liegt, wird die schwebende Schaltfläche abgeblendet'
         description.zh: '当焦点在其他标签页时，降低浮动按钮的亮度'
@@ -303,10 +341,12 @@ settings:
     -
         id: item
         title: 'Items'
+        title.ja: '項目'
         title.uk: 'Елементи'
         title.de: 'Elemente'
         title.zh: '项目'
         description: 'Styles for items within toolbars'
+        description.ja: 'ツールバー内の項目のスタイル'
         description.uk: 'Стилі елементів панелей'
         description.de: 'Stile für Elemente von Toolbars'
         description.zh: '工具栏内项目的样式'
@@ -316,6 +356,7 @@ settings:
     -
         id: item-colors
         title: '↳ 🎨 Colors'
+        title.ja: '↳ 🎨 色'
         title.uk: '↳ 🎨 Кольори'
         title.de: '↳ 🎨 Farben'
         title.zh: '↳ 🎨 颜色'
@@ -325,6 +366,7 @@ settings:
     -
         id: cg-nt-item-bg-color-hover
         title: 'Background color (on hover)'
+        title.ja: '背景色（ホバー時）'
         title.uk: 'Колір фону (при наведенні)'
         title.de: 'Hintergrundfarbe (beim Überfahren mit der Maus)'
         title.zh: '鼠标悬停时的背景颜色'
@@ -336,6 +378,7 @@ settings:
     -
         id: cg-nt-item-button-bg-color
         title: 'Background color (for button style)'
+        title.ja: '背景色（ボタンスタイル用）'
         title.uk: 'Колір фону (стиль кнопки)'
         title.de: 'Hintergrundfarbe (für Schaltflächen)'
         title.zh: '按钮样式的背景颜色'
@@ -347,6 +390,7 @@ settings:
     -
         id: cg-nt-item-text-color
         title: 'Icon + text color'
+        title.ja: 'アイコン＋テキストの色'
         title.uk: 'Колір тексту'
         title.de: 'Textfarbe'
         title.zh: '图标和文本颜色'
@@ -358,6 +402,7 @@ settings:
     -
         id: cg-nt-item-text-color-hover
         title: 'Icon + text color (on hover)'
+        title.ja: 'アイコン＋テキストの色（ホバー時）'
         title.uk: 'Колір тексту (при наведенні)'
         title.de: 'Textfarbe (beim Überfahren mit der Maus)'
         title.zh: '图标和文本颜色（悬停时）'
@@ -369,6 +414,7 @@ settings:
     -
         id: item-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
+        title.ja: '↳ 📐 サイズと間隔'
         title.uk: '↳ 📐 Розміри та інтервали'
         title.de: '↳ 📐 Größe und Abstände'
         title.zh: '↳ 📐 大小和间距'
@@ -378,6 +424,7 @@ settings:
     -
         id: cg-nt-item-font-size
         title: 'Font size (in em units)'
+        title.ja: 'フォントサイズ（em）'
         title.uk: 'Розмір шрифту (em)'
         title.de: 'Schriftgröße (in em)'
         title.zh: '字体大小（单位：em）'
@@ -387,6 +434,7 @@ settings:
     -
         id: cg-nt-item-icon-size
         title: 'Icon size (in px units)'
+        title.ja: 'アイコンサイズ（px）'
         title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
         title.zh: '图标大小（单位：px）'
@@ -396,6 +444,7 @@ settings:
     -
         id: cg-nt-item-padding-x
         title: 'Left + Right padding (in em units)'
+        title.ja: '左右のパディング（em）'
         title.uk: 'Лівий та правий відступи (em)'
         title.de: 'Linker + rechter Abstand (in em)'
         title.zh: '左右内边距（单位：em）'
@@ -405,6 +454,7 @@ settings:
     -
         id: cg-nt-item-padding-y
         title: 'Top + Bottom padding (in em units)'
+        title.ja: '上下のパディング（em）'
         title.uk: 'Верхній та нижній відступи (em)'
         title.de: 'Oberer + unteren Abstand (in em)'
         title.zh: '上下内边距（单位：em）'
@@ -414,6 +464,7 @@ settings:
     -
         id: item-styles
         title: '↳ 😎 Style'
+        title.ja: '↳ 😎 スタイル'
         title.uk: '↳ 😎 Стиль'
         title.de: '↳ 😎 Stil'
         title.zh: '↳ 😎 样式'
@@ -423,6 +474,7 @@ settings:
     -
         id: cg-nt-item-border-radius
         title: 'Border radius (in px units)'
+        title.ja: '角丸（px）'
         title.uk: 'Закруглення рамок (пікселі)'
         title.de: 'Rahmenrundung (in px)'
         title.zh: '边框圆角（单位：px）'
@@ -432,10 +484,12 @@ settings:
     -
         id: toolbar-menus
         title: 'Menus'
+        title.ja: 'メニュー'
         title.uk: 'Меню'
         title.de: 'Menüs'
         title.zh: '菜单'
         description: "Styles for toolbars shown as menus. (In Obsidian's settings, first disable: Appearance → Native menus)"
+        description.ja: 'メニューとして表示されるツールバーのスタイル。（Obsidianの設定で「外観 → ネイティブメニュー」を無効にしてください）'
         description.uk: "Стилі елементів меню. (Спочатку відключіть у налаштунках Obsidian: Оформлення → Нативні меню)"
         description.de: 'Stile für Element-Menüs'
         description.zh: '项目菜单类型的样式'
@@ -445,6 +499,7 @@ settings:
     -
         id: toolbar-menu-colors
         title: '↳ 🎨 Colors'
+        title.ja: '↳ 🎨 色'
         title.uk: '↳ 🎨 Кольори'
         title.de: '↳ 🎨 Farben'
         title.zh: '↳ 🎨 颜色'
@@ -454,6 +509,7 @@ settings:
     -
         id: cg-nt-menu-bg-color
         title: 'Menu: Background color'
+        title.ja: 'メニュー：背景色'
         title.uk: 'Меню: Колір фону'
         title.de: 'Menü: Hintergrundfarbe'
         title.zh: '菜单：背景颜色'
@@ -465,6 +521,7 @@ settings:
     -
         id: cg-nt-menu-border-color
         title: 'Menu: Border color'
+        title.ja: 'メニュー：枠線の色'
         title.uk: 'Меню: Колір рамки'
         title.de: 'Menü: Rahmenfarbe'
         title.zh: '菜单：边框颜色'
@@ -476,6 +533,7 @@ settings:
     -
         id: cg-nt-menu-item-bg-color-hover
         title: 'Item: Background color (hover)'
+        title.ja: '項目：背景色（ホバー時）'
         title.uk: 'Елемент: Колір фону (при наведенні)'
         title.de: 'Element: Hintergrundfarbe (beim Überfahren mit der Maus)'
         title.zh: '项目：鼠标悬停时的背景颜色'
@@ -487,6 +545,7 @@ settings:
     -
         id: cg-nt-menu-icon-color
         title: 'Icon color'
+        title.ja: 'アイコン色'
         title.uk: 'Колір іконки'
         title.de: 'Symbolfarbe'
         title.zh: '图标颜色'
@@ -498,6 +557,7 @@ settings:
     -
         id: cg-nt-menu-item-text-color
         title: 'Text color'
+        title.ja: 'テキスト色'
         title.uk: 'Колір тексту'
         title.de: 'Textfarbe'
         title.zh: '文本颜色'
@@ -509,6 +569,7 @@ settings:
     -
         id: toolbar-menu-sizing
         title: '↳ 📐 Sizing'
+        title.ja: '↳ 📐 サイズ'
         title.uk: '↳ 📐 Розміри'
         title.de: '↳ 📐 Skalierung'
         title.zh: '↳ 📐 尺寸'
@@ -518,6 +579,7 @@ settings:
     -
         id: cg-nt-menu-item-font-size
         title: 'Font size (in em units)'
+        title.ja: 'フォントサイズ（em）'
         title.uk: 'Розмір тексту (em)'
         title.de: 'Schriftgröße (in em)'
         title.zh: '字体大小（单位：em）'
@@ -527,6 +589,7 @@ settings:
     -
         id: cg-nt-menu-icon-size
         title: 'Icon size (in px units)'
+        title.ja: 'アイコンサイズ（px）'
         title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
         title.zh: '图标大小（单位：px）'
@@ -536,6 +599,7 @@ settings:
     -
         id: toolbar-menu-styles
         title: '↳ 😎 Style'
+        title.ja: '↳ 😎 スタイル'
         title.uk: '↳ 😎 Стиль'
         title.de: '↳ 😎 Stil'
         title.zh: '↳ 😎 样式'
@@ -545,6 +609,7 @@ settings:
     -
         id: cg-nt-menu-border-radius
         title: 'Menu: Border radius (in px units)'
+        title.ja: 'メニュー：角丸（px）'
         title.uk: 'Меню: Закруглення рамки (пікселі)'
         title.de: 'Menü: Randabrundung (in px)'
         title.zh: '菜单：边框圆角（单位：px）'
@@ -554,6 +619,7 @@ settings:
     -
         id: cg-nt-menu-item-border-radius
         title: 'Item: Border radius (in px units)'
+        title.ja: '項目：角丸（px）'
         title.uk: 'Елемент: Закруглення рамки (пікселі)'
         title.de: 'Element: Randabrundung (in px)'
         title.zh: '项目：边框圆角（单位：px）'
@@ -563,8 +629,10 @@ settings:
     -
         id: launchpad
         title: 'New tab view (Launchpad)'
+        title.ja: '新規タブビュー（Launchpad）'
         title.zh: '新标签页视图（Launchpad 启动台）'
         description: 'Style the toolbar replacing the New tab view'
+        description.ja: '新規タブビューを置き換えるツールバーのスタイル'
         description.zh: '为替换新标签页视图的工具栏设置样式'
         type: heading
         level: 1
@@ -572,6 +640,7 @@ settings:
     -
         id: launchpad-colors
         title: '↳ 🎨 Colors'
+        title.ja: '↳ 🎨 色'
         title.uk: '↳ 🎨 Кольори'
         title.de: '↳ 🎨 Farben'
         title.zh: '↳ 🎨 颜色'
@@ -581,6 +650,7 @@ settings:
     -
         id: cg-nt-launchpad-item-bg-color
         title: 'Item: Background color'
+        title.ja: '項目：背景色'
         title.zh: '项目：背景颜色'
         type: variable-themed-color
         opacity: true
@@ -590,6 +660,7 @@ settings:
     -
         id: launchpad-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
+        title.ja: '↳ 📐 サイズと間隔'
         title.uk: '↳ 📐 Розміри та інтервали'
         title.de: '↳ 📐 Größe und Abstände'
         title.zh: '↳ 📐 大小和间距'
@@ -599,18 +670,21 @@ settings:
     -
         id: cg-nt-launchpad-cols-desktop
         title: 'Number of columns on desktop'
+        title.ja: 'デスクトップの列数'
         title.zh: '桌面端列数'
         type: variable-number
         default: 2
     -
         id: cg-nt-launchpad-cols-mobile
         title: 'Number of columns on mobile 📱'
+        title.ja: 'モバイルの列数 📱'
         title.zh: '移动端列数 📱'
         type: variable-number
         default: 2
     -
         id: cg-nt-launchpad-max-width
         title: 'Max width (in px units)'
+        title.ja: '最大幅（px）'
         title.zh: '最大宽度（单位：px）'
         type: variable-number
         default: 0
@@ -618,6 +692,7 @@ settings:
     -
         id: cg-nt-launchpad-item-font-size
         title: 'Item: Font size (in em units)'
+        title.ja: '項目：フォントサイズ（em）'
         title.zh: '项目：字体大小（单位：em）'
         type: variable-number
         default: 0
@@ -625,6 +700,7 @@ settings:
     -
         id: cg-nt-launchpad-item-icon-size
         title: 'Item: Icon size (in px units)'
+        title.ja: '項目：アイコンサイズ（px）'
         title.zh: '项目：图标大小（单位：px）'
         type: variable-number
         default: 0
@@ -632,6 +708,7 @@ settings:
     -
         id: launchpad-styles
         title: '↳ 😎 Style'
+        title.ja: '↳ 😎 スタイル'
         title.uk: '↳ 😎 Стиль'
         title.de: '↳ 😎 Stil'
         title.zh: '↳ 😎 样式'
@@ -641,6 +718,7 @@ settings:
     -
         id: cg-nt-launchpad-item-border-radius
         title: 'Item: Border radius (in px units)'
+        title.ja: '項目：角丸（px）'
         title.zh: '项目：边框圆角（单位：px）'
         type: variable-number
         default: 0
@@ -648,10 +726,12 @@ settings:
     -
         id: quick-tools
         title: 'Quick Tools'
+        title.ja: 'クイックツール'
         title.uk: 'Швидкі інструменти'
         title.de: 'Schnellwahl'
         title.zh: '快速工具'
         description: 'Styles for the Quick Tools window'
+        description.ja: 'クイックツールウィンドウのスタイル'
         description.uk: 'Стилі вікна швидкого доступу'
         description.de: 'Stile für das Schnellwahlfenster'
         description.zh: '快速工具窗口的样式'
@@ -661,6 +741,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-bg-color-hover
         title: '🎨 Background color (hover)'
+        title.ja: '🎨 背景色（ホバー時）'
         title.uk: '🎨 Колір фону (при наведенні)'
         title.de: '🎨 Hintergrundfarbe (beim Überfahren mit der Maus)'
         title.zh: '🎨 鼠标悬停时的背景颜色'
@@ -672,6 +753,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-text-color
         title: '🎨 Icon + text color'
+        title.ja: '🎨 アイコン＋テキストの色'
         title.uk: '🎨 Кольори тексту та іконки'
         title.de: '🎨 Text + Symbol-Farbe'
         title.zh: '🎨 文本和图标颜色'
@@ -683,6 +765,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-text-color-hover
         title: '🎨 Icon + text color (on hover)'
+        title.ja: '🎨 アイコン＋テキストの色（ホバー時）'
         title.uk: '🎨 Кольори тексту та іконки (при наведенні)'
         title.de: '🎨 Text + Symbol-Farbe (beim Überfahren mit der Maus)'
         title.zh: '🎨 文字 + 图标颜色（悬停时）'
@@ -694,6 +777,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-font-size
         title: '📐 Font size (in em units)'
+        title.ja: '📐 フォントサイズ（em）'
         title.uk: '📐 Розмір шрифту (em)'
         title.de: '📐 Schriftgröße (in em)'
         title.zh: '📐 字体大小（单位：em）'
@@ -703,6 +787,7 @@ settings:
     -
         id: cg-nt-quick-tools-icon-size
         title: '📐 Icon size (in px units)'
+        title.ja: '📐 アイコンサイズ（px）'
         title.uk: '📐 Розмір іконки (пікселі)'
         title.de: '📐 Symbolgröße (in px)'
         title.zh: '📐 图标大小（单位：px）'
@@ -712,6 +797,7 @@ settings:
     -
         id: cg-nt-quick-tools-item-border-radius
         title: '😎 Border radius (in px units)'
+        title.ja: '😎 角丸（px）'
         title.uk: '😎 Закруглення рамки (пікселі)'
         title.de: '😎 Randabrundung (in px)'
         title.zh: '😎 边框圆角（单位：px）'
@@ -721,10 +807,12 @@ settings:
     -
         id: sep
         title: 'Separators'
+        title.ja: 'セパレーター'
         title.uk: 'Роздільники'
         title.de: 'Trenner'
         title.zh: '分隔符'
         description: 'Styles for toolbar separators'
+        description.ja: 'ツールバーの区切りのスタイル'
         description.uk: 'Стилі роздільників у панелях'
         description.de: 'Stile für Toolbar-Trenner'
         description.zh: '工具栏分隔符的样式'
@@ -734,6 +822,7 @@ settings:
     -
         id: cg-nt-item-sep-color
         title: '🎨 Color'
+        title.ja: '🎨 色'
         title.uk: '🎨 Колір'
         title.de: '🎨 Farbe'
         title.zh: '🎨 颜色'
@@ -745,6 +834,7 @@ settings:
     -
         id: cg-nt-item-sep-margin-x
         title: '📐 Left + Right margin (in em units)'
+        title.ja: '📐 左右の余白（em）'
         title.uk: '📐 Лівий та правий відступи (em)'
         title.de: '📐 Linker und rechter Abstand (in em)'
         title.zh: '📐 左右边距（单位：em）'
@@ -754,6 +844,7 @@ settings:
     -
         id: cg-nt-item-sep-margin-y
         title: '📐 Top + Bottom margin (in em units)'
+        title.ja: '📐 上下の余白（em）'
         title.uk: '📐 Верхній та нижній відступи (em)'
         title.de: '📐 Oberer und unterer Abstand (in em)'
         title.zh: '📐 上下边距（单位：em）'
@@ -763,6 +854,7 @@ settings:
     -
         id: cg-nt-item-sep-width
         title: '📐 Width'
+        title.ja: '📐 幅'
         title.uk: '📐 Ширина'
         title.de: '📐 Breite'
         title.zh: '📐 宽度'
@@ -772,10 +864,12 @@ settings:
     -
         id: toolbar
         title: 'Toolbars'
+        title.ja: 'ツールバー'
         title.uk: 'Панелі'
         title.de: 'Toolbars'
         title.zh: '工具栏'
         description: 'Styles for standard toolbars'
+        description.ja: '標準ツールバーのスタイル'
         description.uk: 'Стилі стандартних панелей'
         description.de: 'Stile für die Standard-Toolbars'
         description.zh: '标准工具栏的样式'
@@ -785,6 +879,7 @@ settings:
     -
         id: toolbar-colors
         title: '↳ 🎨 Colors'
+        title.ja: '↳ 🎨 色'
         title.uk: '↳ 🎨 Кольори'
         title.de: '↳ 🎨 Farben'
         title.zh: '↳ 🎨 颜色'
@@ -794,6 +889,7 @@ settings:
     -
         id: cg-nt-tbar-bg-color
         title: 'Background color'
+        title.ja: '背景色'
         title.uk: 'Колір фону'
         title.de: 'Hintergrundfarbe'
         title.zh: '背景颜色'
@@ -805,10 +901,12 @@ settings:
     -
         id: cg-nt-tbar-border-color
         title: 'Border color'
+        title.ja: '枠線の色'
         title.uk: 'Колір рамки'
         title.de: 'Rand-Farbe'
         title.zh: '边框颜色'
         description: 'Color of toolbar borders. The "border" style must be added to the toolbar first.'
+        description.ja: 'ツールバーの枠線の色。まず「border」スタイルをツールバーに追加してください。'
         description.uk: 'Верхня та нижня рамки. Стиль "рамка" повинен бути додан до панелі.'
         description.de: 'Obere + untere Ränder'
         description.zh: '上下边框'
@@ -820,6 +918,7 @@ settings:
     -
         id: toolbar-positioning
         title: '↳ ↕ Positioning'
+        title.ja: '↳ ↕ 位置調整'
         title.uk: '↳ ↕ Позиціонування'
         title.de: '↳ ↕ Positionierung'
         title.zh: '↳ ↕ 定位'
@@ -829,10 +928,12 @@ settings:
     -
         id: cg-nt-tbar-top-sticky-pos-desktop
         title: 'Top sticky offset on desktop (in px units)'
+        title.ja: 'デスクトップの上部スティッキーオフセット（px）'
         title.uk: "Верхнє липке зміщення на комп'ютері (пікселі)"
         title.de: 'Oberer Sticky-Offset am PC (in rem-Einheiten) 📱'
         title.zh: '桌面端顶部 Sticky 附着的偏移量（单位：px）'
         description: "For some themes, the toolbar doesn't quite stick to the top (larger = further from the top). Note, this will not apply when Position = Top (fixed)."
+        description.ja: '一部のテーマでは、ツールバーが完全に上部に貼り付きません（値が大きいほど上から離れます）。注意：位置が「上（固定）」のときは適用されません。'
         description.uk: 'У деяких темах панель не прилипає до верху (чим більше значення, тим далі від верху). Це не застосовується, якщо позиція = Фіксовано зверху.'
         description.de: 'Bei einigen Themes klebt die Symbolleiste nicht ganz oben (größer = weiter von oben). Beachten Sie, dass dies nicht gilt, wenn Position = Oben (fixiert)'
         description.zh: '对于某些主题，工具栏并不能完全贴在顶部（数值越大，离顶部越远）。注意，当位置为「置顶（固定）」时，此设置不适用。'
@@ -842,10 +943,12 @@ settings:
     -
         id: cg-nt-tbar-top-sticky-pos-mobile
         title: 'Top sticky offset on mobile (in rem units) 📱'
+        title.ja: 'モバイルの上部スティッキーオフセット（rem）📱'
         title.uk: 'Верхній липкий офсет на мобільному (rem) 📱'
         title.de: 'Oberer Sticky-Offset am Handy (in rem-Einheiten) 📱'
         title.zh: '移动端顶部 Sticky 附着的偏移量（单位：rem）📱'
         description: 'See above.'
+        description.ja: '上記参照。'
         description.uk: 'Дивіться вище.'
         description.de: Siehe oben.
         description.zh: '参见上面的说明。'
@@ -855,6 +958,7 @@ settings:
     -
         id: toolbar-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
+        title.ja: '↳ 📐 サイズと間隔'
         title.uk: '↳ 📐 Розміри та інтервали'
         title.de: '↳ 📐 Größe und Abstand'
         title.zh: '↳ 📐 尺寸和间距'
@@ -864,6 +968,7 @@ settings:
     -
         id: cg-nt-tbar-margin-y
         title: 'Top + Bottom margin (in em units)'
+        title.ja: '上下の余白（em）'
         title.uk: 'Верхній та нижній відступи (em)'
         title.de: 'Oberer + unterer Abstand (in em-Einheiten)'
         title.zh: '上下边距（单位：em）'
@@ -873,10 +978,12 @@ settings:
     -
         id: cg-nt-tbar-padding-inline
         title: 'Left + Right padding (in em units)'
+        title.ja: '左右のパディング（em）'
         title.uk: 'Лівий та правий відступи (em)'
         title.de: 'Linker + rechter Abstand (in em-Einheiten)'
         title.zh: '左右内边距（单位：em）'
         description: "Helpful if you've set a background color for the toolbar, or are using buttons. Larger = more indented."
+        description.ja: 'ツールバーに背景色を設定した場合やボタンを使用している場合に便利です。値が大きいほどインデントが増えます。'
         description.uk: 'Корисно, якщо встановлено колір фону для панелі або використовуються кнопки. Чим більше значення, тим більше відступ.'
         description.de: 'Hilfreich, wenn Sie eine Hintergrundfarbe für die Symbolleiste festgelegt haben oder Schaltflächen verwenden. Größer = mehr eingerückt.'
         description.zh: '当您为工具栏设置了背景色、或者使用按钮时会很有用。数值越大，缩进越多。'
@@ -886,6 +993,7 @@ settings:
     -
         id: toolbar-styles
         title: '↳ 😎 Style'
+        title.ja: '↳ 😎 スタイル'
         title.uk: '↳ 😎 Стиль'
         title.de: '↳ 😎 Stil'
         title.zh: '↳ 😎 样式'
@@ -895,9 +1003,11 @@ settings:
     -    
         id: cg-nt-tbar-autohide-opacity
         title: 'Autohide opacity'
+        title.ja: '自動非表示時の不透明度'
         title.zh: '自动隐藏的透明度'
         title.uk: 'Прозорість автоприховування'
         description: 'When autohide style is enabled, how transparent the toolbar is when hidden'
+        description.ja: '自動非表示スタイル有効時、非表示状態のツールバーの透明度'
         description.zh: '当启用自动隐藏样式时，隐藏状态的工具栏的透明度'
         description.uk: 'Якщо автоприховування увімкнено, наскільки прозорою буде панель, коли її приховано'
         type: variable-number-slider
@@ -908,6 +1018,7 @@ settings:
     -
         id: cg-nt-tbar-border-radius
         title: 'Border radius (in px units)'
+        title.ja: '角丸（px）'
         title.uk: 'Закруглення рамок (пікселі)'
         title.de: 'Rahmenrundung (in px)'
         title.zh: '边框圆角（单位：px）'
@@ -917,10 +1028,12 @@ settings:
     -
         id: cg-nt-tbar-inactive-opacity-desktop
         title: 'Inactive opacity on desktop'
+        title.ja: 'デスクトップの非アクティブ時の不透明度'
         title.uk: "Прозорість у неактивному режимі на комп'ютері"
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
         description: 'When focus is in another view, dim the toolbar'
+        description.ja: 'フォーカスが他のビューにあるとき、ツールバーを暗くします'
         description.uk: 'Коли фокус знаходиться на іншій вкладці, затемнення панелі'
         description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
         description.zh: '当焦点在其他标签页时，使工具栏变暗'
@@ -932,10 +1045,12 @@ settings:
     -
         id: cg-nt-tbar-inactive-opacity-mobile
         title: 'Inactive opacity on mobile 📱'
+        title.ja: 'モバイルの非アクティブ時の不透明度 📱'
         title.uk: 'Прозорість у неактивному режимі на мобільному 📱'
         title.de: 'Inaktive Deckkraft'
         title.zh: '非活动状态透明度'
         description: 'When focus is in another view, dim the toolbar'
+        description.ja: 'フォーカスが他のビューにあるとき、ツールバーを暗くします'
         description.uk: 'Коли фокус знаходиться на іншій вкладці, затемнення панелі'
         description.de: 'Wenn der Fokus auf einem anderen Tab liegt, die Symbolleiste abdunkeln'
         description.zh: '当焦点在其他标签页时，使工具栏变暗'
@@ -947,9 +1062,11 @@ settings:
     -
         id: toolbar-bottom-tbar
         title: 'Toolbars (bottom)'
+        title.ja: 'ツールバー（下部）'
         title.zh: '底部工具栏'
         title.uk: 'Панелі (внизу)'
         description: 'Styles for toolbars in the "bottom" position'
+        description.ja: '「下部」位置のツールバーのスタイル'
         description.zh: '位于「底部」位置的工具栏样式'
         description.uk: 'Стилі панелей у положенні "Внизу"'
         type: heading
@@ -958,6 +1075,7 @@ settings:
     -
         id: toolbar-bottom-positioning
         title: '↳ ↕ Positioning'
+        title.ja: '↳ ↕ 位置調整'
         title.uk: '↳ ↕ Позиціонування'
         title.de: '↳ ↕ Positionierung'
         title.zh: '↳ ↕ 位置'
@@ -967,9 +1085,11 @@ settings:
     -
         id: cg-nt-tbar-bottom-pos-y-desktop
         title: 'Y position on desktop (in em units)'
+        title.ja: 'デスクトップのY位置（em）'
         title.zh: '桌面端 Y 轴位置（单位：em）'
         title.uk: "Позиція Y на комп'ютері (em)"
         description: 'Distance from bottom edge.'
+        description.ja: '下端からの距離。'
         description.zh: '距编辑器视图底部的距离。'
         description.uk: 'Відстань від нижнього краю.'
         type: variable-number
@@ -978,9 +1098,11 @@ settings:
     -
         id: cg-nt-tbar-bottom-pos-y-mobile
         title: 'Y position on mobile (in em units) 📱'
+        title.ja: 'モバイルのY位置（em）📱'
         title.zh: '移动端 Y 轴位置（单位：em）📱'
         title.uk: 'Позиція Y на мобільному (em) 📱'
         description: "Distance from bottom edge."
+        description.ja: '下端からの距離。'
         description.zh: '距编辑器视图底部的距离。'
         description.uk: 'Відстань від нижнього краю.'
         type: variable-number
@@ -989,6 +1111,7 @@ settings:
     -
         id: toolbar-bottom-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
+        title.ja: '↳ 📐 サイズと間隔'
         title.uk: '↳ 📐 Розміри та інтервали'
         title.de: '↳ 📐 Größe und Abstand'
         title.zh: '↳ 📐 尺寸和间距'
@@ -998,9 +1121,11 @@ settings:
     -
         id: cg-nt-tbar-bottom-padding-x-desktop
         title: 'Left + Right toolbar padding on desktop (in px units)'
+        title.ja: 'デスクトップのツールバー左右のパディング（px）'
         title.zh: '桌面端左右工具栏的内边距（单位：px）'
         title.uk: "Лівий та правий відступи на комп'ютері (пікселі)"
         description: 'Spacing around the toolbar.'
+        description.ja: 'ツールバー周囲のスペース。'
         description.zh: '工具栏周围的间距。'
         description.uk: 'Проміжки навколо панелі.'
         type: variable-number
@@ -1009,9 +1134,11 @@ settings:
     -
         id: cg-nt-tbar-bottom-padding-x-mobile
         title: 'Left + Right toolbar padding on mobile (in px units) 📱'
+        title.ja: 'モバイルのツールバー左右のパディング（px）📱'
         title.zh: '移动端左右工具栏的内边距（单位：px）📱'
         title.uk: 'Лівий та правий відступи на мобільному (пікселі) 📱'
         description: 'Spacing around the toolbar.'
+        description.ja: 'ツールバー周囲のスペース。'
         description.zh: '工具栏周围的间距。'
         description.uk: 'Проміжки навколо панелі.'
         type: variable-number
@@ -1020,6 +1147,7 @@ settings:
     -
         id: toolbar-bottom-styles
         title: '↳ 😎 Style'
+        title.ja: '↳ 😎 スタイル'
         title.uk: '↳ 😎 Стиль'
         title.de: '↳ 😎 Stil'
         title.zh: '↳ 😎 样式'
@@ -1029,9 +1157,11 @@ settings:
     -
         id: cg-nt-tbar-bottom-border-radius
         title: 'Toolbar border radius (in px units)'
+        title.ja: 'ツールバーの角丸（px）'
         title.zh: '工具栏边框圆角（单位：px）'
         title.uk: 'Радіус закруглення рамки панелі (пікселі)'
         description: 'How rounded the toolbar is. The higher the number, the more rounded.'
+        description.ja: 'ツールバーの角丸の度合い。数値が大きいほど丸くなります。'
         description.zh: '工具栏的圆角程度。数值越高，圆角越明显。'
         description.uk: 'Закруглення панелі. Чим більше число, тим більше округлення.'
         type: variable-number
@@ -1040,8 +1170,10 @@ settings:
     -
         id: toolbar-text-tbar
         title: 'Toolbars (text)'
+        title.ja: 'ツールバー（テキスト）'
         title.zh: '工具栏（文本）'
         description: 'Styles for text toolbars'
+        description.ja: 'テキストツールバーのスタイル'
         description.zh: '文本工具栏的样式'
         type: heading
         level: 1
@@ -1049,6 +1181,7 @@ settings:
     -
         id: toolbar-text-colors
         title: '↳ 🎨 Colors'
+        title.ja: '↳ 🎨 色'
         title.uk: '↳ 🎨 Кольори'
         title.de: '↳ 🎨 Farben'
         title.zh: '↳ 🎨 颜色'
@@ -1058,10 +1191,12 @@ settings:
     -
         id: cg-nt-tbar-text-border-color
         title: 'Border color'
+        title.ja: '枠線の色'
         title.uk: 'Колір рамки'
         title.de: 'Rand-Farbe'
         title.zh: '边框颜色'
         description: 'Color of toolbar border. The "border" style must be added to the toolbar first.'
+        description.ja: 'ツールバーの枠線の色。まず「border」スタイルをツールバーに追加してください。'
         description.uk: 'Верхня та нижня рамки. Стиль "рамка" повинен бути додан до панелі.'
         description.de: 'Obere + untere Ränder'
         description.zh: '工具栏边框的颜色。需要先在工具栏添加「边框」样式。'
@@ -1073,6 +1208,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-bg-color-hover
         title: 'Item: Background color (on hover)'
+        title.ja: '項目：背景色（ホバー時）'
         title.uk: 'Колір фону (при наведенні)'
         title.de: 'Hintergrundfarbe (beim Überfahren mit der Maus)'
         title.zh: '项目：鼠标悬停时的背景颜色'
@@ -1084,6 +1220,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-button-bg-color
         title: 'Item: Background color (for button style)'
+        title.ja: '項目：背景色（ボタンスタイル用）'
         title.uk: 'Колір фону (стиль кнопки)'
         title.de: 'Hintergrundfarbe (für Schaltflächen)'
         title.zh: '项目：按钮样式的背景颜色'
@@ -1095,6 +1232,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-text-color
         title: 'Icon + text color'
+        title.ja: 'アイコン＋テキストの色'
         title.uk: 'Колір тексту'
         title.de: 'Textfarbe'
         title.zh: '图标和文本颜色'
@@ -1106,6 +1244,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-text-color-hover
         title: 'Icon + text color (on hover)'
+        title.ja: 'アイコン＋テキストの色（ホバー時）'
         title.uk: 'Колір тексту (при наведенні)'
         title.de: 'Textfarbe (beim Überfahren mit der Maus)'
         title.zh: '图标和文本颜色（悬停时）'
@@ -1117,6 +1256,7 @@ settings:
     -
         id: tbar-text-item-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
+        title.ja: '↳ 📐 サイズと間隔'
         title.uk: '↳ 📐 Розміри та інтервали'
         title.de: '↳ 📐 Größe und Abstände'
         title.zh: '↳ 📐 大小和间距'
@@ -1126,8 +1266,10 @@ settings:
     -
         id: cg-nt-tbar-text-max-width-desktop
         title: 'Max width on desktop (in px units)'
+        title.ja: 'デスクトップの最大幅（px）'
         title.zh: '桌面端最大宽度（单位：px）'
         description: 'How wide the toolbar is allowed to be.'
+        description.ja: 'ツールバーの許容最大幅。'
         description.zh: '工具栏允许的最大宽度。'
         type: variable-number
         default: 900
@@ -1135,8 +1277,10 @@ settings:
     -
         id: cg-nt-tbar-text-max-width-tablet
         title: 'Max width on tablets (in px units)'
+        title.ja: 'タブレットの最大幅（px）'
         title.zh: '平板端最大宽度（单位：px）'
         description: 'How wide the toolbar is allowed to be.'
+        description.ja: 'ツールバーの許容最大幅。'
         description.zh: '工具栏允许的最大宽度。'
         type: variable-number
         default: 650
@@ -1144,6 +1288,7 @@ settings:
     -
         id: cg-nt-tbar-text-margin-x
         title: 'Left + Right margin (in em units)'
+        title.ja: '左右の余白（em）'
         title.zh: '左右边距（单位：em）'
         type: variable-number
         default: 0.5
@@ -1151,6 +1296,7 @@ settings:
     -
         id: cg-nt-tbar-text-margin-y
         title: 'Top + Bottom margin (in em units)'
+        title.ja: '上下の余白（em）'
         title.uk: 'Верхній та нижній відступи (em)'
         title.de: 'Oberer + unterer Abstand (in em-Einheiten)'
         title.zh: '上下边距（单位：em）'
@@ -1160,6 +1306,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-font-size
         title: 'Item: Font size (in em units)'
+        title.ja: '項目：フォントサイズ（em）'
         title.uk: 'Розмір шрифту (em)'
         title.de: 'Schriftgröße (in em)'
         title.zh: '字体大小（单位：em）'
@@ -1169,6 +1316,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-icon-size
         title: 'Item: Icon size (in px units)'
+        title.ja: '項目：アイコンサイズ（px）'
         title.uk: 'Розмір іконки (пікселі)'
         title.de: 'Symbolgröße (in px)'
         title.zh: '图标大小（单位：px）'
@@ -1178,6 +1326,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-padding-x
         title: 'Item: Left + Right padding (in em units)'
+        title.ja: '項目：左右のパディング（em）'
         title.uk: 'Лівий та правий відступи (em)'
         title.de: 'Linker + rechter Abstand (in em)'
         title.zh: '项目：左右内边距（单位：em）'
@@ -1187,6 +1336,7 @@ settings:
     -
         id: cg-nt-tbar-text-item-padding-y
         title: 'Item: Top + Bottom padding (in em units)'
+        title.ja: '項目：上下のパディング（em）'
         title.uk: 'Верхній та нижній відступи (em)'
         title.zh: '项目：上下内边距（单位：em）'
         title.de: 'Oberer + unteren Abstand (in em)'
@@ -1196,6 +1346,7 @@ settings:
     -
         id: toolbar-text-styles
         title: '↳ 😎 Style'
+        title.ja: '↳ 😎 スタイル'
         title.uk: '↳ 😎 Стиль'
         title.de: '↳ 😎 Stil'
         title.zh: '↳ 😎 样式'
@@ -1205,9 +1356,11 @@ settings:
     -
         id: cg-nt-tbar-text-border-radius
         title: 'Toolbar border radius (in px units)'
+        title.ja: 'ツールバーの角丸（px）'
         title.zh: '工具栏边框圆角（单位：px）'
         title.uk: 'Радіус закруглення рамки панелі (пікселі)'
         description: 'How rounded the toolbar is. The higher the number, the more rounded.'
+        description.ja: 'ツールバーの角丸の度合い。数値が大きいほど丸くなります。'
         description.zh: '工具栏的圆角程度。数值越高，圆角越明显。'
         description.uk: 'Закруглення панелі. Чим більше число, тим більше округлення.'
         type: variable-number
@@ -1216,8 +1369,10 @@ settings:
     -
         id: cg-nt-tbar-text-shadow
         title: 'Shadow'
+        title.ja: '影'
         title.zh: '阴影'
         description: 'Shadow behind the text toolbar'
+        description.ja: 'テキストツールバーの背面の影'
         description.zh: '文本工具栏背后的阴影'
         type: variable-select
         default: 'var(--shadow-s)'
@@ -1237,9 +1392,11 @@ settings:
     -
         id: ui
         title: 'Other UI'
+        title.ja: 'その他のUI'
         title.zh: '其他 UI'
         title.uk: 'Додатковий UI'
         description: 'Styles for other Note Toolbar UI elements'
+        description.ja: 'Note Toolbarのその他UI要素のスタイル'
         description.zh: '其他 Note Toolbar UI 元素的样式'
         description.uk: 'Стилі додаткових елементів Note Toolbar'
         type: heading
@@ -1248,6 +1405,7 @@ settings:
     -
         id: cg-nt-ui-modal-width
         title: 'Modal width on desktop (in px units)'
+        title.ja: 'デスクトップのモーダル幅（px）'
         title.zh: '桌面端 Modal 模态框宽度（单位：px）'
         title.uk: "Ширина модального вікна на комп'ютері (пікселі)"
         type: variable-number
