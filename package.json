@@ -24,7 +24,7 @@
 		"esbuild": "^0.27.0",
 		"eslint": "^9.38.0",
 		"eslint-plugin-obsidianmd": "^0.1.9",
-		"obsidian": "latest",
+		"obsidian": "1.11.0",
 		"postcss": "^8.4.45",
 		"tslib": "2.4.0",
 		"typedoc": "^0.28.14",
@@ -32,7 +32,7 @@
 		"typescript": "^5.7.3"
 	},
 	"dependencies": {
-		"@codemirror/view": "^6.39.4",
+		"@codemirror/view": "6.38.6",
 		"sortablejs": "^1.15.2"
 	}
 }

@@ -4,6 +4,8 @@ import { fileInliner } from "./build/file-inliner.mjs";
 import { galleryDocs } from "./build/gallery-docs.mjs";
 import process from "process";
 import { spawn } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 import builtins from "builtin-modules";
 
 const banner =
@@ -29,10 +31,30 @@ const typecheckPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[typecheck] running...');
-				const tsc = spawn('tsc', ['-noEmit', '-skipLibCheck'], {
-					stdio: 'inherit' // pipes stdout/stderr directly, preserving colors
+				const tscBin = path.join(
+					process.cwd(),
+					'node_modules',
+					'.bin',
+					process.platform === 'win32' ? 'tsc.cmd' : 'tsc'
+				);
+				if (!fs.existsSync(tscBin)) {
+					console.warn('\x1b[33m[typecheck]\x1b[0m skipped: tsc not found (run npm install)');
+					return resolve();
+				}
+				let tsc;
+				try {
+					tsc = spawn(tscBin, ['-noEmit', '-skipLibCheck'], {
+						stdio: 'inherit' // pipes stdout/stderr directly, preserving colors
+					});
+				} catch (error) {
+					console.warn('\x1b[33m[typecheck]\x1b[0m skipped: failed to spawn tsc', error);
+					return resolve();
+				}
+				tsc.on('error', (error) => {
+					console.warn('\x1b[33m[typecheck]\x1b[0m skipped: failed to spawn tsc', error);
+					return resolve();
 				});
-				
+
 				tsc.on('close', (code) => {
 					if (code === 0) {
 						console.log('\x1b[32m[typecheck] ✓ passed\x1b[0m');
@@ -50,13 +72,32 @@ const typedocPlugin = {
 	name: 'api-docs',
 	setup(build) {
 		build.onEnd(() => {
-			const typedoc = spawn('typedoc', [
-				'src/Api/INoteToolbarApi.ts',
-				'src/Api/IToolbar.ts',
-				'src/Api/IItem.ts',
-				'--readme',
-				'none'
-			]);
+			const typedocBin = path.join(
+				process.cwd(),
+				'node_modules',
+				'.bin',
+				process.platform === 'win32' ? 'typedoc.cmd' : 'typedoc'
+			);
+			if (!fs.existsSync(typedocBin)) {
+				console.warn('\x1b[33m[api-docs]\x1b[0m skipped: typedoc not found (run npm install)');
+				return;
+			}
+			let typedoc;
+			try {
+				typedoc = spawn(typedocBin, [
+					'src/Api/INoteToolbarApi.ts',
+					'src/Api/IToolbar.ts',
+					'src/Api/IItem.ts',
+					'--readme',
+					'none'
+				]);
+			} catch (error) {
+				console.warn('\x1b[33m[api-docs]\x1b[0m skipped: failed to spawn typedoc', error);
+				return;
+			}
+			typedoc.on('error', (error) => {
+				console.warn('\x1b[33m[api-docs]\x1b[0m skipped: failed to spawn typedoc', error);
+			});
 			typedoc.stderr.on('data', (data) => {
 				console.error(`\x1b[31m[api-docs]\x1b[0m ${data}`);
 			});
