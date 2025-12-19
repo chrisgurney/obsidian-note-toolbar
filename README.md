@@ -2,7 +2,7 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases/latest) [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?include_prereleases&label=latest)](https://github.com/chrisgurney/obsidian-note-toolbar/releases) [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22note-toolbar%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://www.moritzjung.dev/obsidian-stats/plugins/note-toolbar/#downloads) [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-English | [中文文档](./README-ZH.md)
+[English](./README.md) | [中文文档](./README-ZH.md) | [日本語](./README-JA.md)
 
 The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsidian](https://obsidian.md) lets you create context-aware toolbars for your notes, which can include commands, file and folder links, websites/URIs, menus, and scripts (Dataview, Templater, and JavaScript).
 
@@ -71,6 +71,7 @@ Note Toolbar's UI, and Style Settings options, are also available in:
 |Chinese (Simplified)|简体中文|[@Moyf](https://github.com/Moyf)|
 |German|Deutsch|[@hartimd](https://github.com/hartimd)|
 |Ukrainian|Український|[@Laktiv](https://github.com/laktiv)|
+|Japanese|日本語|[@dai](https://github.com/dai)|
 
 [Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
