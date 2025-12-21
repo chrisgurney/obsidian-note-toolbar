@@ -150,6 +150,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
+			// FIXME? perhaps required for backwards compat? (#451)
+			// To reconfigure cm6 extensions for a plugin on the fly, an array should be passed in, and modified dynamically.
+     		// Once this array is modified, calling {@link Workspace.updateOptions} will apply the changes.
 			this.registerEditorExtension(TextToolbar(this));
 
 		});
