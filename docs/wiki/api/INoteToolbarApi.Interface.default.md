@@ -253,9 +253,10 @@ Shows a menu with the provided items.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or UUID; or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
-| `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `showAtCursor?`: `boolean`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
+| `options.showAtCursor?` | `boolean` | If `true`, the menu will be shown at the cursor position; defaults to `false`. |
 
 #### Returns
 

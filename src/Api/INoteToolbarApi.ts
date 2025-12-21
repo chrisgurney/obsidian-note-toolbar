@@ -361,6 +361,10 @@ export interface NtbMenuOptions {
      * If `true`, the menu item will be focused when the menu opens; defaults to `false`.
      */
     focusInMenu?: boolean;
+    /**
+     * If `true`, the menu will be shown at the cursor position; defaults to `false`.
+     */
+    showAtCursor?: boolean;
 }
 
 /**

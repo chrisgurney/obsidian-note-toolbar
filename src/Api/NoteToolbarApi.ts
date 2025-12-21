@@ -1,6 +1,8 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
-import { App, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { EditorView } from "@codemirror/view";
+import * as Obsidian from "obsidian";
+import { App, MarkdownView, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
@@ -9,7 +11,6 @@ import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
 import NtbSuggester from "./NtbSuggester";
 import Toolbar from "./Toolbar";
-import * as Obsidian from "obsidian";
 
 export type Callback = (arg: string) => void;
 
@@ -218,8 +219,25 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
         if (options?.class) menu.dom.addClasses([...options.class.split(' ')]);
 
-        // TODO: check if toolbar item was clicked, or show at cursor position otherwise
-        this.ntb.render.showMenuAtElement(menu, this.ntb.items.lastClickedEl);
+        if (options?.showAtCursor) {
+            const activeLeaf = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+            const activeEditor = activeLeaf ? activeLeaf.editor : null;
+            if (activeEditor) {
+                const cursor = activeEditor.getCursor();
+                const cm = (activeEditor as any).cm as EditorView;
+                if (cm) {
+                    const offset = activeEditor.posToOffset(cursor);
+                    const coords = cm.coordsAtPos(offset);
+                    if (coords) {
+                        const menuPos = { x: coords.left, y: coords.top };
+                        menu.showAtPosition(menuPos);
+                    }
+                }
+            }
+        }
+        else {
+            this.ntb.render.showMenuAtElement(menu, this.ntb.items.lastClickedEl);
+        }
 
         if (options?.focusInMenu) putFocusInMenu();
 
