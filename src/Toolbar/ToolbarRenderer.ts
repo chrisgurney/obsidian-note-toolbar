@@ -749,7 +749,7 @@ export default class ToolbarRenderer {
 	 */
 	async showMenuAtElement(menu: Menu, clickedItemEl: Element | null) {
 
-		this.ntb.debug('showMenuAtElement', clickedItemEl);
+		this.ntb.debug('showMenuAtElement', menu, clickedItemEl);
 		let menuPos: MenuPositionDef | undefined = undefined;
 
 		// store menu position for sub-menu positioning

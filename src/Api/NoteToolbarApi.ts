@@ -171,38 +171,45 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.menu
      */
-    async menu(items: NtbMenuItem[], options?: NtbMenuOptions): Promise<void> {
+    async menu(toolbarOrItems: string | NtbMenuItem[], options?: NtbMenuOptions): Promise<void> {
 
-        const menu = new Menu();
+        let menu = new Menu();
         const requiredProps: (keyof NtbMenuItem)[] = ['type', 'value'];
-        items.map((item: NtbMenuItem) => {
-            const missingProp = requiredProps.find(p => !item[p]);
-            if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type}));
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(item.label)
-                    .setIcon(item.icon ? item.icon : null)
-                    .onClick(async () => {
-                        switch (item.type) {
-                            case 'command':
-                                await this.ntb.items.handleLinkCommand(item.value);
-                                break;
-                            case 'file': {
-                                const activeFile = this.ntb.app.workspace.getActiveFile();
-                                const activeFilePath = activeFile ? activeFile.path : '';
-                                this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
-                                break;
+        if (typeof toolbarOrItems === 'string') {
+            const toolbar = this.ntb.settingsManager.getToolbar(toolbarOrItems);
+            const activeFile = this.ntb.app.workspace.getActiveFile();
+            if (toolbar) menu = await this.ntb.render.renderAsMenu(toolbar, activeFile);
+        }
+        else {
+            toolbarOrItems.map((item: NtbMenuItem) => {
+                const missingProp = requiredProps.find(p => !item[p]);
+                if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type}));
+                menu.addItem((menuItem: MenuItem) => {
+                    menuItem
+                        .setTitle(item.label)
+                        .setIcon(item.icon ? item.icon : null)
+                        .onClick(async () => {
+                            switch (item.type) {
+                                case 'command':
+                                    await this.ntb.items.handleLinkCommand(item.value);
+                                    break;
+                                case 'file': {
+                                    const activeFile = this.ntb.app.workspace.getActiveFile();
+                                    const activeFilePath = activeFile ? activeFile.path : '';
+                                    this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
+                                    break;
+                                }
+                                case 'uri':
+                                    await this.ntb.items.handleLinkUri(item.value);
+                                    break;
+                                default:
+                                    new Notice(t('api.ui.error-unsupported-property', {property: item.type}));
+                                    break;
                             }
-                            case 'uri':
-                                await this.ntb.items.handleLinkUri(item.value);
-                                break;
-                            default:
-                                new Notice(t('api.ui.error-unsupported-property', {property: item.type}));
-                                break;
-                        }
-                    });
+                        });
+                });
             });
-        });
+        }
 
         menu.dom.addClass('note-toolbar-menu');
 
@@ -211,7 +218,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
         if (options?.class) menu.dom.addClasses([...options.class.split(' ')]);
 
-        // this.plugin.debug('lastClickedEl', this.ntb.items.lastClickedEl);
+        // TODO: check if toolbar item was clicked, or show at cursor position otherwise
         this.ntb.render.showMenuAtElement(menu, this.ntb.items.lastClickedEl);
 
         if (options?.focusInMenu) putFocusInMenu();

@@ -149,11 +149,16 @@ export default interface INoteToolbarApi<T> {
     /**
      * Shows a menu with the provided items.
      * 
-     * @param {NtbMenuItem[]} items Array of items to display. See {@link NtbMenuItem}.
+     * @param {string | NtbMenuItem[]} toolbarOrItems Toolbar name or UUID; or an array of items to display. See {@link NtbMenuItem}.
      * @param options Optional display options.
      * @returns Nothing. Displays the menu.
      * 
      * @example
+     * // show the "Daily Notes" toolbar as a menu
+     * await ntb.menu('Daily Notes');
+     * 
+     * @example
+     * // create a menu from scratch
      * await ntb.menu([
      *   { type: 'command', value: 'editor:toggle-bold', label: 'Toggle Bold', icon: 'bold' },
      *   { type: 'file', value: 'Home.md', label: 'Open File' },
@@ -176,7 +181,7 @@ export default interface INoteToolbarApi<T> {
      *   }));
      * ntb.menu(mi);
      */
-    menu: (items: NtbMenuItem[], options?: NtbMenuOptions) => Promise<void>;
+    menu: (toolbarOrItems: string | NtbMenuItem[], options?: NtbMenuOptions) => Promise<void>;
 
     /**
      * Shows a modal with the provided content.
