@@ -212,10 +212,8 @@ export default class ToolbarRenderer {
             return;
         }
 
-        // add the toolbar to the editor or modal UI
-        const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
+		// reposition Obsidian's navbar and view header if necessary
 		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
-        const viewEl = view?.containerEl as HTMLElement | null;
 		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
 		if (Platform.isPhone) {	
 			if (navbarEl) navbarEl.style.marginBottom = ''; // reset spacing
@@ -225,6 +223,10 @@ export default class ToolbarRenderer {
 			navbarEl?.toggleClass('note-toolbar-navbar-right', position === PositionType.FabLeft);
 			navbarEl?.toggleClass('note-toolbar-navbar-left', position === PositionType.FabRight);
 		}
+
+        // add the toolbar to the editor or modal UI
+        const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
+        const viewEl = view?.containerEl as HTMLElement | null;
         switch(position) {
             case PositionType.Bottom:
                 // position relative to modal container if in a modal
