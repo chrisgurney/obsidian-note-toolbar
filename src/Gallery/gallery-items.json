@@ -76,7 +76,7 @@
             "uk": "Копіює вибраний текст у буфер обміну."
         },
         "icon": "clipboard-copy",
-        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Copy",
             "zh": "复制",
@@ -92,7 +92,7 @@
             "uk": "Копіює посилання на поточний блок до буфера обміну."
         },
         "icon": "link-2",
-        "script": "const { metadataCache: m } = app, e = app.workspace.activeEditor?.editor, f = app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
+        "script": "const { metadataCache: m } = app, e = ntb.app.workspace.activeEditor?.editor, f = ntb.app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
         "tooltip": {
             "en": "Copy link to block",
             "zh": "复制块链接（Block ID）",
@@ -108,7 +108,7 @@
             "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
         },
         "icon": "clipboard-check",
-        "script": "const e = app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
         "tooltip": {
             "en": "Copy note content",
             "zh": "复制笔记内容",
@@ -140,7 +140,7 @@
             "uk": "Вирізає вибраний текст у буфер обміну."
         },
         "icon": "scissors",
-        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Cut",
             "zh": "剪切",
@@ -174,7 +174,7 @@
             "uk": "Циклічно перемикає теми, включаючи тему за замовчуванням."
         },
         "icon": "venetian-mask",
-        "script": "const i = ntb.getActiveItem();\nconst t = [...Object.values(app.customCss.themes), { name: '' }];\nconst n = t[(t.findIndex(theme => theme.name === app.vault.getConfig('cssTheme')) + 1) % t.length].name;\napp.customCss.setTheme(n);\nif (n) new Notice(n);",
+        "script": "const i = ntb.getActiveItem();\nconst t = [...Object.values(ntb.app.customCss.themes), { name: '' }];\nconst n = t[(t.findIndex(theme => theme.name === ntb.app.vault.getConfig('cssTheme')) + 1) % t.length].name;\nntb.app.customCss.setTheme(n);\nif (n) new Notice(n);",
         "tooltip": {
             "en": "Cycle themes",
             "zh": "切换主题",
@@ -190,7 +190,7 @@
             "uk": "Циклічно перемикає простори."
         },
         "icon": "layout-grid",
-        "script": "const p = app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
+        "script": "const p = ntb.app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
         "tooltip": {
             "en": "Cycle workspaces",
             "zh": "切换工作区",
@@ -287,7 +287,7 @@
             "uk": "Додайте текст через запит до вказаного файлу."
         },
         "icon": "file-plus-2",
-        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\\n\\n' + txt); }",
+        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = ntb.app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await ntb.app.vault.read(f); await ntb.app.vault.modify(f, c + '\\n\\n' + txt); }",
         "tooltip": {
             "en": "Append text",
             "zh": "附加文本",
@@ -368,7 +368,7 @@
             "uk": "Відкрийте обраний файл в новій вкладці."
         },
         "icon": "file-plus",
-        "script": "const file = await ntb.fileSuggester({filesonly: true});\nif (file) app.workspace.getLeaf(true).openFile(file);",
+        "script": "const file = await ntb.fileSuggester({filesonly: true});\nif (file) ntb.app.workspace.getLeaf(true).openFile(file);",
         "tooltip": {
             "en": "Open file in new tab",
             "zh": "在新标签页中打开文件",
@@ -384,7 +384,7 @@
             "uk": "Відкрийте наступний файл у теці згідно сортировки за алфавітом (А–Я). Повертається до першого файлу."
         },
         "icon": "square-arrow-right",
-        "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(nf)); }",
+        "script": "const cf = ntb.app.workspace.getActiveFile(); if (!cf) return; const cfp = ntb.app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; ntb.app.workspace.activeLeaf.openFile(ntb.app.vault.getAbstractFileByPath(nf)); }",
         "tooltip": {
             "en": "Next file",
             "zh": "下一个文件",
@@ -400,7 +400,7 @@
             "uk": "Відкрийте попередній файл у теці згідно сортировки за алфавітом (А–Я). Повертається до останнього файлу."
         },
         "icon": "square-arrow-left",
-        "script": "const cf = app.workspace.getActiveFile(); if (!cf) return; const cfp = app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);\nif (sfl.length>1) { const pf = ci===0?sfl[sfl.length-1]:sfl[ci-1]; app.workspace.activeLeaf.openFile(app.vault.getAbstractFileByPath(pf)); }",
+        "script": "const cf = ntb.app.workspace.getActiveFile(); if (!cf) return; const cfp = ntb.app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);\nif (sfl.length>1) { const pf = ci===0?sfl[sfl.length-1]:sfl[ci-1]; ntb.app.workspace.activeLeaf.openFile(ntb.app.vault.getAbstractFileByPath(pf)); }",
         "tooltip": {
             "en": "Previous file",
             "zh": "上一个文件",
@@ -416,7 +416,7 @@
             "uk": "Відкрийте пошук у поточній теці, або серед усіх файлів у її корені."
         },
         "icon": "folder-search",
-        "script": "const p = app.workspace.getActiveFile()?.parent.path ?? '/';\nawait app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
+        "script": "const p = ntb.app.workspace.getActiveFile()?.parent.path ?? '/';\nawait ntb.app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = ntb.app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
         "tooltip": {
             "en": "Search folder",
             "zh": "搜索文件夹",
@@ -448,7 +448,7 @@
             "uk": "Перемістіть курсор у кінець поточної нотатки."
         },
         "icon": "arrow-down-to-line",
-        "script": "app.workspace.activeEditor?.editor?.setCursor(app.workspace.activeEditor.editor.lineCount(), 0)",
+        "script": "ntb.app.workspace.activeEditor?.editor?.setCursor(ntb.app.workspace.activeEditor.editor.lineCount(), 0)",
         "tooltip": {
             "en": "Jump to bottom",
             "zh": "跳到底部",
@@ -480,7 +480,7 @@
             "uk": "Перемістіть курсор на початок поточної нотатки."
         },
         "icon": "arrow-up-to-line",
-        "script": "app.workspace.activeEditor?.editor?.setCursor(0, 0)",
+        "script": "ntb.app.workspace.activeEditor?.editor?.setCursor(0, 0)",
         "tooltip": {
             "en": "Jump to top",
             "zh": "跳到顶部",
@@ -512,7 +512,7 @@
             "uk": "Перемістіть курсор до наступної виноски в нотатці."
         },
         "icon": "chevrons-down",
-        "script": "const ed = app.workspace.activeEditor?.editor;\nconst ln = ed.getValue().split('\\n');\nlet idx = ed.getCursor().line;\nconst r = /^\\s*>/;\nwhile (idx < ln.length && r.test(ln[idx])) idx++;\nwhile (idx < ln.length && !r.test(ln[idx])) idx++;\nif (idx >= ln.length) { idx = 0; while (idx < ln.length && !r.test(ln[idx])) idx++; }\nif (idx < ln.length) { ed.setCursor({ line: idx, ch: 0 }); }",
+        "script": "const ed = ntb.app.workspace.activeEditor?.editor;\nconst ln = ed.getValue().split('\\n');\nlet idx = ed.getCursor().line;\nconst r = /^\\s*>/;\nwhile (idx < ln.length && r.test(ln[idx])) idx++;\nwhile (idx < ln.length && !r.test(ln[idx])) idx++;\nif (idx >= ln.length) { idx = 0; while (idx < ln.length && !r.test(ln[idx])) idx++; }\nif (idx < ln.length) { ed.setCursor({ line: idx, ch: 0 }); }",
         "tooltip": {
             "en": "Next callout",
             "zh": "下一个标注（Callout）",
@@ -528,7 +528,7 @@
             "uk": "Перемістіть курсор до наступного заголовка в нотатці."
         },
         "icon": "a-arrow-down",
-        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = c.line + 1; i !== c.line; i = (i + 1) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "script": "const e = ntb.app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = c.line + 1; i !== c.line; i = (i + 1) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
         "tooltip": {
             "en": "Next heading",
             "zh": "下一个标题",
@@ -544,7 +544,7 @@
             "uk": "Перемістіть курсор до попереднього заголовка в нотатці."
         },
         "icon": "a-arrow-up",
-        "script": "const e = app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "script": "const e = ntb.app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
         "tooltip": {
             "en": "Previous heading",
             "zh": "上一个标题",
@@ -764,7 +764,7 @@
     },
     {
         "id": "note-toolbar-backup-data",
-        "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
+        "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\nntb.app.vault.adapter.read(src).then(data => { ntb.app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
         "description": {
             "en": "Copy Note Toolbar's settings (data.json) file into the vault.",
             "zh": "将 Note Toolbar 的设置（data.json）文件复制到库中。",
@@ -1010,7 +1010,7 @@
             "uk": "Вставте текст з буфера обміну."
         },
         "icon": "clipboard-paste",
-        "script": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Paste",
             "zh": "粘贴",
@@ -1203,7 +1203,7 @@
             "uk": "Увімкнути вказаний простір"
         },
         "icon": "layout-template",
-        "script": "const w = 'My Workspace'; // CHANGE THIS\napp.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
+        "script": "const w = 'My Workspace'; // CHANGE THIS\nntb.app.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
         "tooltip": {
             "en": "My workspace",
             "zh": "我的工作区",
@@ -1250,7 +1250,7 @@
             "zh": "打开一个新的空标签页。",
             "uk": "Відкрийте нову вкладку."
         },
-        "script": "app.workspace.getLeaf(true)",
+        "script": "ntb.app.workspace.getLeaf(true)",
         "icon": "plus",
         "tooltip": {
             "en": "New tab",
@@ -1331,7 +1331,7 @@
             "uk": "Повторіть останню скасовану дію."
         },
         "icon": "lucide-redo-2",
-        "script": "app.workspace.activeLeaf.view?.editor.redo()",
+        "script": "ntb.app.workspace.activeLeaf.view?.editor.redo()",
         "tooltip": {
             "en": "Redo",
             "zh": "重做",
@@ -1383,7 +1383,7 @@
             "uk": "Відкрийте теку сніпетів (користувацьких CSS) у провіднику."
         },
         "icon": "folder-code",
-        "script": "let v = this.app.vault.adapter.getBasePath() + '/' + app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
+        "script": "let v = ntb.app.vault.adapter.getBasePath() + '/' + ntb.app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
         "tooltip": {
             "en": "Open snippets folder",
             "zh": "在系统中显示 CSS 片段（Snippets）",
@@ -1399,7 +1399,7 @@
             "uk": "Відкрийте теку сховища у провіднику."
         },
         "icon": "folder-heart",
-        "script": "let v = this.app.vault.adapter.getBasePath(); window.open('file://' + encodeURI(v));",
+        "script": "let v = ntb.app.vault.adapter.getBasePath(); window.open('file://' + encodeURI(v));",
         "tooltip": {
             "en": "Show vault in system",
             "zh": "在系统中显示库",
@@ -1432,7 +1432,7 @@
             "uk": "Перемикайте між світлим і темним режимами."
         },
         "icon": "sun-moon",
-        "script": "const i = ntb.getActiveItem();\nif (app.vault.getConfig('theme') === 'obsidian') { app.vault.setConfig('theme', 'obsidian-light'); i?.setIcon('moon'); }\nelse { app.vault.setConfig('theme', 'obsidian'); i?.setIcon('sun'); }",
+        "script": "const i = ntb.getActiveItem();\nif (ntb.app.vault.getConfig('theme') === 'obsidian') { ntb.app.vault.setConfig('theme', 'obsidian-light'); i?.setIcon('moon'); }\nelse { ntb.app.vault.setConfig('theme', 'obsidian'); i?.setIcon('sun'); }",
         "tooltip": {
             "en": "Toggle light/dark",
             "zh": "切换浅色/深色",
@@ -1556,7 +1556,7 @@
             "uk": "Додайте, або видаліть вказаний клас CSS у властивості cssclasses."
         },
         "icon": "paintbrush",
-        "script": "let tc = 'myclass'; // CHANGE THIS\nconst af = app.workspace.getActiveFile(); if (!af) return;\nawait app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
+        "script": "let tc = 'myclass'; // CHANGE THIS\nconst af = ntb.app.workspace.getActiveFile(); if (!af) return;\nawait ntb.app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
         "tooltip": {
             "en": "Toggle CSS class",
             "zh": "切换 CSS 类",
@@ -1637,7 +1637,7 @@
     },
     {
         "id": "toggle-ui",
-        "script": "const h = activeDocument.querySelector('.view-header'), s = activeDocument.querySelector('.status-bar');\nif (h && s) {\n if (h.style.display === 'none') {\n h.style.display = '';\n s.style.display = '';\n app.workspace.leftSplit?.expand();\n // app.workspace.rightSplit?.expand();\n await app.commands.executeCommandById('note-toolbar:show-properties');\n }\n else {\n h.style.display = 'none';\n s.style.display = 'none';\n app.workspace.leftSplit?.collapse();\n // app.workspace.rightSplit?.collapse();\n await app.commands.executeCommandById('note-toolbar:hide-properties');\n }\n }",
+        "script": "const h = activeDocument.querySelector('.view-header'), s = activeDocument.querySelector('.status-bar');\nif (h && s) {\n if (h.style.display === 'none') {\n h.style.display = '';\n s.style.display = '';\n ntb.app.workspace.leftSplit?.expand();\n // ntb.app.workspace.rightSplit?.expand();\n await ntb.app.commands.executeCommandById('note-toolbar:show-properties');\n }\n else {\n h.style.display = 'none';\n s.style.display = 'none';\n ntb.app.workspace.leftSplit?.collapse();\n // ntb.app.workspace.rightSplit?.collapse();\n await ntb.app.commands.executeCommandById('note-toolbar:hide-properties');\n }\n }",
         "description": {
             "en": "Shows or hides Obsidian's status bar, note properties, sidebar, and view header.",
             "zh": "显示或隐藏 Obsidian 的状态栏、笔记属性、侧边栏和视图标题。",
@@ -1695,7 +1695,7 @@
             "uk": "Перемикає режим Vim."
         },
         "icon": "keyboard",
-        "script": "const vm = app.vault.getConfig('vimMode');\napp.vault.setConfig('vimMode', !vm);\nntb.getActiveItem()?.setIcon(vm ? 'keyboard' : 'edit-2');",
+        "script": "const vm = ntb.app.vault.getConfig('vimMode');\nntb.app.vault.setConfig('vimMode', !vm);\nntb.getActiveItem()?.setIcon(vm ? 'keyboard' : 'edit-2');",
         "tooltip": {
             "en": "Toggle Vim mode",
             "zh": "切换 Vim 模式",
@@ -1711,7 +1711,7 @@
             "uk": "Скасуйте останню дію."
         },
         "icon": "lucide-undo-2",
-        "script": "app.workspace.activeLeaf.view?.editor.undo()",
+        "script": "ntb.app.workspace.activeLeaf.view?.editor.undo()",
         "tooltip": {
             "en": "Undo",
             "zh": "撤销",
