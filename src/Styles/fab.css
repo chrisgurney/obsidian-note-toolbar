@@ -56,6 +56,9 @@
 }
 
 .is-phone {
+    & .note-toolbar-navbar-action-hidden {
+        display: none !important;
+    }
     /* Navbar overrides to create space for the floating button. */
     & .note-toolbar-navbar-left {
         margin-left: var(--size-4-3);

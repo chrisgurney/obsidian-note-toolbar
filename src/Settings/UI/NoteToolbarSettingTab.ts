@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Notice, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
-import { FolderMapping, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -1300,6 +1300,21 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 		});
 
+		otherGroup.addSetting((navbarVisibilitySetting) => {
+			navbarVisibilitySetting
+				.setName(t('setting.other.navbar-visibility.name'))
+				.setDesc(t('setting.other.navbar-visibility.description'))
+				.addButton((button: ButtonComponent) => {
+					button
+						.setIcon('more-horizontal')
+						.setTooltip(t('setting.toolbars.button-more-tooltip'))
+						.onClick((cb) => {
+							let visibilityMenu = this.getNavbarVisibilityMenu();
+							visibilityMenu.showAtPosition(getElementPosition(button.buttonEl));
+						});
+				});
+		});
+
 		otherGroup.addSetting((scriptingSetting) => {
 			scriptingSetting
 				.setName(t('setting.other.scripting.name'))
@@ -1428,6 +1443,41 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 	getItemListEls(): NodeListOf<HTMLElement> {
 		return this.containerEl.querySelectorAll('.note-toolbar-sortablejs-list > div[data-row-id]');
+	}
+
+	/**
+	 * Shows the menu where you can customize Obsidian's mobile navigation bar.
+	 */
+	getNavbarVisibilityMenu(): Menu {
+		const menu = new Menu();
+
+		const obsidianUiEls = new Map(
+			OBSIDIAN_UI_ELEMENTS.map(el => [el.key, el])
+		);
+
+		const obsidianUiSetting = new Map(
+			Object.entries(this.ntb.settings.obsidianUiVisibility)
+				.filter(([key]) => key.startsWith('mobile.navbar.'))
+		);
+
+		OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS.forEach((key) => {
+			const uiEl = obsidianUiEls.get(key);
+			if (uiEl) {
+				menu.addItem((menuItem: MenuItem) => {
+					menuItem
+						.setTitle(uiEl.label)
+						.setIcon(uiEl.icon ? uiEl.icon : null)
+						.setChecked(obsidianUiSetting.get(uiEl.key) ?? true)
+						.onClick(async (menuEvent) => {
+							const currentValue = this.ntb.settings.obsidianUiVisibility[uiEl.key] ?? true;
+							this.ntb.settings.obsidianUiVisibility[uiEl.key] = !currentValue;
+							await this.ntb.settingsManager.save();
+						});
+				});
+			}
+		});
+
+		return menu;
 	}
 
 }

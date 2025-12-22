@@ -1,7 +1,7 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { MarkdownView, ItemView, TFile, Platform, setIcon, setTooltip, FrontMatterCache, getIcon, Menu, MenuItem, MenuPositionDef, TFolder, Notice } from "obsidian";
-import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemType, LocalVar, ToggleUiStateType, t, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { ToolbarSettings, DefaultStyleType, MobileStyleType, PositionType, ItemType, LocalVar, ToggleUiStateType, t, ToolbarStyle, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { hasStyle, putFocusInMenu, getViewId, isValidUri, calcComponentVisToggles, calcItemVisToggles } from "Utils/Utils";
 
@@ -117,10 +117,10 @@ export default class ToolbarRenderer {
         this.ntb.debugGroup(`renderToolbar: ${toolbar.name}`);
 
         // get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
-        let position;
+        let position: PositionType;
         Platform.isMobile
-            ? position = toolbar.position.mobile?.allViews?.position ?? 'props'
-            : position = toolbar.position.desktop?.allViews?.position ?? 'props';
+            ? position = toolbar.position.mobile?.allViews?.position ?? PositionType.Props
+            : position = toolbar.position.desktop?.allViews?.position ?? PositionType.Props;
 
         // if no view is provided, get the active view
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
@@ -137,7 +137,7 @@ export default class ToolbarRenderer {
                 this.ntb.debugGroupEnd();
                 return;
             }
-            if (position === 'props') position = 'top';
+            if (position === PositionType.Props) position = PositionType.Top;
         }
 
         let noteToolbarElement: HTMLElement | undefined;
@@ -212,18 +212,8 @@ export default class ToolbarRenderer {
             return;
         }
 
-		// reposition Obsidian's navbar and view header if necessary
-		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
-		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
-		if (Platform.isPhone) {	
-			if (navbarEl) navbarEl.style.marginBottom = ''; // reset spacing
-			if (viewHeaderEl) viewHeaderEl.style.marginTop = ''; // reset spacing
-			activeDocument.body.style.removeProperty('--view-top-spacing-markdown'); // reset spacing
-			// move Navbar left/right to make room for the FAB
-			navbarEl?.toggleClass('note-toolbar-navbar-right', position === PositionType.FabLeft);
-			navbarEl?.toggleClass('note-toolbar-navbar-left', position === PositionType.FabRight);
-		}
-
+		if (noteToolbarElement) this.updatePhoneNavigation(position, noteToolbarElement.offsetHeight);
+		
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
         const viewEl = view?.containerEl as HTMLElement | null;
@@ -240,7 +230,7 @@ export default class ToolbarRenderer {
                 // position relative to modal container if in a modal
                 if (modalEl) modalEl.appendChild(embedBlock);
                 else if (Platform.isPhone) {
-					// TODO: remove Navbar configured items if needed
+					const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 					navbarEl?.insertAdjacentElement('afterend', embedBlock);
 				}
 				else {
@@ -887,49 +877,8 @@ export default class ToolbarRenderer {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
 
-		// on phoness, reposition the header and navigation bars
-		if (Platform.isPhone) {
-
-			// position Obsidian Navbar above toolbar
-			const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
-			if (mobileNavbarEl) {
-				if (currentPosition === PositionType.Bottom) {
-					if (!this.mobileNavbarMargin) {
-						// only calculate this once, so we don't keep adding it
-						this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(mobileNavbarEl).marginBottom);
-					}
-					mobileNavbarEl.style.marginBottom = (this.mobileNavbarMargin + toolbarEl.offsetHeight) + 'px';	
-				}
-				else {
-					mobileNavbarEl.style.marginBottom = ''; // reset style
-				}
-			}
-
-			// position header bar below toolbar
-			const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
-			if (viewHeaderEl) {
-				if (currentPosition === PositionType.Top) {
-					if (!this.viewActionsHeight) {
-						// only calculate this once, so we don't keep adding it
-						this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
-					}
-					viewHeaderEl.style.marginTop = toolbarEl.offsetHeight + 'px';
-				}
-				else {
-					viewHeaderEl.style.marginTop = ''; // reset style
-				}
-			}
-
-			// reduce top spacing
-			const viewActionsEl = viewHeaderEl.querySelector('.view-actions') as HTMLElement;
-			if (viewActionsEl) {
-				if (currentPosition === PositionType.Top) {
-					activeDocument.body.style.setProperty('--view-top-spacing-markdown', viewActionsEl.offsetHeight + 'px');
-				}
-				else {
-					activeDocument.body.style.removeProperty('--view-top-spacing-markdown');
-				}
-			}
+		if (currentPosition === PositionType.Bottom || currentPosition === PositionType.Top) {
+			this.updatePhoneNavigation(currentPosition, toolbarEl.offsetHeight);
 		}
 
 		this.ntb.debugGroupEnd();
@@ -955,6 +904,85 @@ export default class ToolbarRenderer {
 	 */
 	updateActiveItem(activeItemId?: string): void {
 		this.ntb.app.saveLocalStorage(LocalVar.ActiveItem, activeItemId ?? '');
+	}
+
+	/** 
+	 * Repositions Obsidian's navbar if necessary, and hides actions if configured.
+	 * @param toolbarPosition position of current toolbar.
+	 * @param toolbarHeight height of the current toolbar.
+	 */ 
+	updatePhoneNavigation(toolbarPosition: PositionType, toolbarHeight: number): void {
+
+		if (!Platform.isPhone) return;
+
+		// position Obsidian Navbar above toolbar
+		const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
+		if (mobileNavbarEl) {
+			if (toolbarPosition === PositionType.Bottom) {
+				if (!this.mobileNavbarMargin) {
+					// only calculate this once, so we don't keep adding it
+					this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(mobileNavbarEl).marginBottom);
+				}
+				mobileNavbarEl.style.marginBottom = (this.mobileNavbarMargin + toolbarHeight) + 'px';	
+			}
+			else {
+				mobileNavbarEl.style.marginBottom = ''; // reset style
+			}
+		}
+
+		// position header bar below toolbar
+		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
+		if (viewHeaderEl) {
+			if (toolbarPosition === PositionType.Top) {
+				if (!this.viewActionsHeight) {
+					// only calculate this once, so we don't keep adding it
+					this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
+				}
+				viewHeaderEl.style.marginTop = toolbarHeight + 'px';
+			}
+			else {
+				viewHeaderEl.style.marginTop = ''; // reset style
+			}
+		}
+
+		// reduce top spacing
+		const viewActionsEl = viewHeaderEl.querySelector('.view-actions') as HTMLElement;
+		if (viewActionsEl) {
+			if (toolbarPosition === PositionType.Top) {
+				activeDocument.body.style.setProperty('--view-top-spacing-markdown', viewActionsEl.offsetHeight + 'px');
+			}
+			else {
+				activeDocument.body.style.removeProperty('--view-top-spacing-markdown');
+			}
+		}
+
+		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
+		if (!navbarEl) return;
+
+		navbarEl.style.marginBottom = ''; // reset spacing
+
+		// move Navbar left/right to make room for the FAB
+		navbarEl.toggleClass('note-toolbar-navbar-right', toolbarPosition === PositionType.FabLeft);
+		navbarEl.toggleClass('note-toolbar-navbar-left', toolbarPosition === PositionType.FabRight);
+
+		// hide actions on the navbar
+		if (this.ntb.settings.obsidianUiVisibility) {
+			const uiElements = new Map(
+				OBSIDIAN_UI_ELEMENTS.map(el => [el.key, el])
+			);
+			const uiElementsVisibility = new Map(
+				Object.entries(this.ntb.settings.obsidianUiVisibility)
+					.filter(([key]) => key.startsWith('mobile.navbar.'))
+			);
+			// TODO: hide entire navbar if they're all hidden
+			uiElementsVisibility.forEach((visible, key) => {
+				const elDefinition = uiElements.get(key);
+				if (!elDefinition) return;
+				const elToHide = navbarEl.querySelector(elDefinition.selector) as HTMLElement;
+				if (elToHide) elToHide.toggleClass('note-toolbar-navbar-action-hidden', !visible);
+			});
+		}
+
 	}
 
 	/**

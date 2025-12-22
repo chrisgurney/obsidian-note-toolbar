@@ -231,6 +231,7 @@ export interface NoteToolbarSettings {
 	icon: string;
 	keepPropsState: boolean;
 	lockCallouts: boolean;
+	obsidianUiVisibility: Record<string, boolean>;
 	onboarding: OnboardingState;
 	ribbonAction: RibbonAction;
 	rules: Array<ToolbarRule>;
@@ -262,6 +263,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	icon: "circle-ellipsis",
 	keepPropsState: false,
 	lockCallouts: false,
+	obsidianUiVisibility: {},
 	onboarding: {},
 	ribbonAction: RibbonAction.Toolbar,
 	rules: [],
@@ -637,6 +639,62 @@ export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 
 export const SETTINGS_DISCLAIMERS: { [key: string]: string }[] = [
 	{ 'nativeMenus': t('setting.position.option-fab-desktop-native-menus-disclaimer') }
+];
+
+export interface ObsidianUIElement {
+	key: string;
+	icon?: string;
+	label: string;
+	selector: string;
+}
+
+export const OBSIDIAN_UI_ELEMENTS: ObsidianUIElement[] = [
+	{
+		key: 'mobile.navbar.back',
+		icon: 'chevron-left',
+		label: t('setting.navbar.option-back'),
+		selector: '.mobile-navbar-action-back'
+	},
+	{
+		key: 'mobile.navbar.forward',
+		icon: 'chevron-right',
+		label: t('setting.navbar.option-forward'),
+		selector: '.mobile-navbar-action-forward'
+	},
+	{
+		key: 'mobile.navbar.quickswitcher',
+		icon: 'search',
+		label: t('setting.navbar.option-quick-switcher'),
+		selector: '.mobile-navbar-action-quick-switcher'
+	},
+	{
+		key: 'mobile.navbar.newtab',
+		icon: 'plus',
+		label: t('setting.navbar.option-new-tab'),
+		selector: '.mobile-navbar-action-new-tab'
+	},
+	{
+		key: 'mobile.navbar.tabs',
+		icon: 'tab-frame',
+		label: t('setting.navbar.option-tabs'),
+		selector: '.mobile-navbar-action-tabs'
+	},
+	{
+		key: 'mobile.navbar.menu',
+		icon: 'menu',
+		label: t('setting.navbar.option-menu'),
+		selector: '.mobile-navbar-action-menu'
+	},
+];
+
+// order to display UI options in the settings UI
+export const OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS = [
+	'mobile.navbar.back',
+	'mobile.navbar.forward',
+	'mobile.navbar.quickswitcher',
+	'mobile.navbar.newtab',
+	'mobile.navbar.tabs',
+	'mobile.navbar.menu'
 ];
 
 // #endregion

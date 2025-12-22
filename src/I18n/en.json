@@ -522,6 +522,14 @@
             "error-toolbar-already-exists": "A toolbar already exists with this name.",
             "name": "Name"
         },
+        "navbar": {
+            "option-back": "Back",
+            "option-forward": "Forward",
+            "option-quick-switcher": "Quick switcher",
+            "option-new-tab": "New tab",
+            "option-tabs": "Tabs",
+            "option-menu": "Menu"
+        },
         "open-command": {
             "description": "Add a command that opens this toolbar in a Quick Tools window.",
             "name": "Add toolbar command",
@@ -553,6 +561,10 @@
                 "name": "Lock Note Toolbar Callouts"
             },
             "name": "Other",
+            "navbar-visibility": {
+                "description": "Hides actions in Obsidian's mobile navigation bar.",
+                "name": "Navbar item visibility 📱"
+            },
             "scripting": {
                 "description": "Adds support for Dataview, JS Engine, and Templater, which must be installed and enabled.",
                 "name": "Scripting"
