@@ -256,7 +256,7 @@ Shows a menu with the provided items.
 | `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `position`: `"cursor"` \| `"toolbar"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
-| `options.position?` | `"cursor"` \| `"toolbar"` | Sets the position in which the menu will appear; defaults to `toolbar`. |
+| `options.position?` | `"cursor"` \| `"toolbar"` | Sets the position in which the menu will appear; defaults to `toolbar`. **Since** 1.27 |
 
 #### Returns
 
