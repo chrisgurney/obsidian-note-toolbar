@@ -219,7 +219,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
         if (options?.class) menu.dom.addClasses([...options.class.split(' ')]);
 
-        if (options?.showAtCursor) {
+        if (options?.position === 'cursor') {
             const activeLeaf = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
             const activeEditor = activeLeaf ? activeLeaf.editor : null;
             if (activeEditor) {
@@ -235,6 +235,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 }
             }
         }
+        // default position is 'toolbar'
         else {
             this.ntb.render.showMenuAtElement(menu, this.ntb.items.lastClickedEl);
         }

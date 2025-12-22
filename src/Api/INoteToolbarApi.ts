@@ -362,9 +362,9 @@ export interface NtbMenuOptions {
      */
     focusInMenu?: boolean;
     /**
-     * If `true`, the menu will be shown at the cursor position; defaults to `false`.
+     * Sets the position in which the menu will appear; defaults to `toolbar`.
      */
-    showAtCursor?: boolean;
+    position: 'cursor' | 'toolbar';
 }
 
 /**
