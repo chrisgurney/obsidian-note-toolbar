@@ -3887,6 +3887,9 @@ input[type="text"].note-toolbar-setting-error,
             display: none; /* fix for ITS theme */
         }
     }
+    img {
+        width: unset;
+    }
 }
 .note-toolbar-setting-remote-skeleton {
     background: linear-gradient(90deg, var(--text-normal) 25%, var(--text-muted) 50%, var(--text-normal) 75%);

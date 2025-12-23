@@ -417,6 +417,9 @@
             display: none; /* fix for ITS theme */
         }
     }
+    img {
+        width: unset;
+    }
 }
 
 .note-toolbar-setting-remote-skeleton {
