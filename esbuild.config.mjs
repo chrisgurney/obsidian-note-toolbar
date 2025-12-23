@@ -134,7 +134,10 @@ if (prod) {
 	await context.watch();
 
 	// watch for changes to files outside the build process
-	const watcher = chokidar.watch(['src/Api/*', 'src/Styles/*']);
+	const watcher = chokidar.watch(['src/Api', 'src/Styles']);
+	watcher.on('ready', () => {
+		console.log('[watch] watching for changes...');
+	});
 	watcher.on('change', async (path) => {
 		console.log(`[watch] file changed: ${path}`);
 		try {
@@ -144,6 +147,4 @@ if (prod) {
 			console.error('[watch] rebuild failed:', error);
 		}
 	});
-
-	console.log('[watch] watching for changes...');
 }
