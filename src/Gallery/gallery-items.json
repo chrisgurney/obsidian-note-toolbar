@@ -1757,6 +1757,19 @@
         "type": "command"
     },
     {
+        "id": "toggle-keyboard",
+        "commandId": "editor:toggle-keyboard",
+        "description": {
+            "en": "Toggles the keyboard"
+        },
+        "excludeOn": ["desktop", "tablet"],
+        "icon": "keyboard-toggle",
+        "tooltip": {
+            "en": "Toggle keyboard"
+        },
+        "type": "command"
+    },
+    {
         "id": "toggle-ui",
         "script": "const h = activeDocument.querySelector('.view-header'), s = activeDocument.querySelector('.status-bar');\nif (h && s) {\n if (h.style.display === 'none') {\n h.style.display = '';\n s.style.display = '';\n ntb.app.workspace.leftSplit?.expand();\n // ntb.app.workspace.rightSplit?.expand();\n await ntb.app.commands.executeCommandById('note-toolbar:show-properties');\n }\n else {\n h.style.display = 'none';\n s.style.display = 'none';\n ntb.app.workspace.leftSplit?.collapse();\n // ntb.app.workspace.rightSplit?.collapse();\n await ntb.app.commands.executeCommandById('note-toolbar:hide-properties');\n }\n }",
         "description": {
