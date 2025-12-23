@@ -974,13 +974,25 @@ export default class ToolbarRenderer {
 				Object.entries(this.ntb.settings.obsidianUiVisibility)
 					.filter(([key]) => key.startsWith('mobile.navbar.'))
 			);
-			// TODO: hide entire navbar if they're all hidden
-			uiElementsVisibility.forEach((visible, key) => {
-				const elDefinition = uiElements.get(key);
-				if (!elDefinition) return;
-				const elToHide = navbarEl.querySelector(elDefinition.selector) as HTMLElement;
-				if (elToHide) elToHide.toggleClass('note-toolbar-hidden', !visible);
-			});
+
+			// check if all navbar items are hidden
+			const allNavbarKeys = Array.from(
+				uiElements.keys()).filter(key => key.startsWith('mobile.navbar.')
+			);
+			const allHidden = allNavbarKeys.every(key => 
+				uiElementsVisibility.get(key) === false
+			);
+			navbarEl.toggleClass('note-toolbar-hidden', allHidden);
+
+			// hide items individually if not all are hidden
+			if (!allHidden) {
+				uiElementsVisibility.forEach((visible, key) => {
+					const elDefinition = uiElements.get(key);
+					if (!elDefinition) return;
+					const elToHide = navbarEl.querySelector(elDefinition.selector) as HTMLElement;
+					if (elToHide) elToHide.toggleClass('note-toolbar-hidden', !visible);
+				});
+			}
 		}
 
 	}
