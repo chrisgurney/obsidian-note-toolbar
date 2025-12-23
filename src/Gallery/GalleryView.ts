@@ -105,7 +105,14 @@ export default class GalleryView extends ItemView {
 			return false;
 		});
 
-		(gallery as Gallery).categories.forEach((category, i) => {
+		let sortedCategories: Category[] = [] as Category[];
+		sortedCategories = (gallery as Gallery).categories.sort((a, b) => {
+			const nameA = (a.name[language] || a.name['en']).toLowerCase();
+			const nameB = (b.name[language] || b.name['en']).toLowerCase();
+			return nameA.localeCompare(nameB);
+		});
+		
+		sortedCategories.forEach((category, i) => {
 
 			const cssColor = cssColors[i % cssColors.length];
 			
