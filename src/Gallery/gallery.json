@@ -219,7 +219,7 @@
                 "uk": "Шукайте в нотатках і по всьому сховищу."
             },
             "itemIds": [
-                "search-replace-open", "global-search-open", "folder-search"
+                "search-selection", "search-replace-open", "global-search-open", "folder-search"
             ]
         },
         {

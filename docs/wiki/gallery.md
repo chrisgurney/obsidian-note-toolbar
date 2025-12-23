@@ -181,6 +181,7 @@ Search in notes and across your vault.
 
 | Item | Description |
 | --- | --- |
+| Search for selection | Search the vault for the currently selected text. |
 | Find & Replace | Open the find/replace panel in the current note. |
 | Search all files | Opens the search sidebar. |
 | Search folder | Search in the current folder, or all files if currently in the root. |

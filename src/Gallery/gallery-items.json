@@ -1208,6 +1208,18 @@
         "type": "command"
     },
     {
+        "id": "search-selection",
+        "description": {
+            "en": "Search the vault for the currently selected text."
+        },
+        "icon": "search",
+        "tooltip": {
+            "en": "Search for selection"
+        },
+        "type": "uri",
+        "uri": "obsidian://search?query={{encode:selection}}"
+    },
+    {
         "id": "set-workspace",
         "description": {
             "en": "Changes to a specific workspace you provide.",
