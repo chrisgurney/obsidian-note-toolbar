@@ -409,6 +409,18 @@
         "type": "javascript"
     },
     {
+        "id": "file-switcher-open",
+        "description": {
+            "en": "Open the file switcher."
+        },
+        "icon": "search",
+        "script": "ntb.app.internalPlugins.getPluginById('switcher')?.instance?.onOpen();",
+        "tooltip": {
+            "en": "File switcher"
+        },
+        "type": "javascript"
+    },
+    {
         "id": "folder-search",
         "description": {
             "en": "Search in the current folder, or all files if currently in the root.",
@@ -1290,6 +1302,19 @@
             "uk": "Попередня вкладка"
         },
         "type": "command"
+    },
+    {
+        "id": "tab-switcher-open",
+        "description": {
+            "en": "Open the mobile tab switcher."
+        },
+        "excludeOn": "desktop",
+        "icon": "tab-frame",
+        "script": "ntb.app.mobileTabSwitcher.show()",
+        "tooltip": {
+            "en": "Tab switcher"
+        },
+        "type": "javascript"
     },
     {
         "id": "templater-insert-template",

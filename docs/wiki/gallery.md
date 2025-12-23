@@ -133,16 +133,18 @@ Remove Obsidian's UI and focus on your writing.
 
 ## Vault Navigation
 
-Navigate between files and directories.
+Navigate between notes and files.
 
 | Item | Description |
 | --- | --- |
 | Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
 | Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
 | Open file in new tab | Opens the selected file in a new tab. |
-| New tab | Opens a new empty tab. |
+| File switcher | Open the file switcher. |
 | Previous tab | Go to the previous tab. |
 | Next tab | Go to the next tab. |
+| Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
+| New tab | Opens a new empty tab. |
 | Close tab | Close the current tab. |
 | Home | Go to your home note. (Enter your home note in the URL.) |
 | Go up | Uses your note's "up" property to link to a parent note. |

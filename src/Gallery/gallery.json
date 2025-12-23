@@ -170,12 +170,12 @@
                 "uk": "Навігація по сховищу"
             },
             "description": { 
-                "en": "Navigate between files and directories.",
+                "en": "Navigate between notes and files.",
                 "zh": "在不同的文件和目录之间导航。",
                 "uk": "Переміщуйтесь між файлами та каталогами."
             },
             "itemIds": [
-                "file-prev", "file-next", "file-new-tab", "tab-new", "tab-prev", "tab-next", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+                "file-prev", "file-next", "file-new-tab", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
             ]
         },
         {
