@@ -87,7 +87,7 @@
                 "uk": "Змініть вигляд тексту."
             },
             "itemIds": [
-                "toggle-bold", "toggle-italics", "toggle-strikethrough", "toggle-code", "toggle-blockquote", "toggle-highlight"
+                "toggle-blockquote", "toggle-bold", "toggle-code", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough"
             ]
         },
         {
@@ -122,20 +122,7 @@
         },
         {
             "name": { 
-                "en": "New tab view",
-                "zh": "新标签页视图"
-            },
-            "description": {
-                "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
-                "zh": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
-            },
-            "itemIds": [
-                "go-home", "daily-notes-today", "file-new", "file-new-tab", "templater-new-note-from-template", "bookmarks-open"
-            ]
-        },
-        {
-            "name": { 
-                "en": "Editor Navigation",
+                "en": "Navigating the Editor",
                 "zh": "编辑器导航",
                 "uk": "Навігація редактора"
             },
@@ -146,6 +133,45 @@
             },
             "itemIds": [
                 "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "go-next-callout", "toggle-vim-mode"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Navigating on Mobile"
+            },
+            "description": { 
+                "en": "Use these after hiding Obsidian's Navigation actions (on phones)."
+            },
+            "itemIds": [
+                "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Navigating the Vault",
+                "zh": "库导航",
+                "uk": "Навігація по сховищу"
+            },
+            "description": { 
+                "en": "Navigate between notes and files.",
+                "zh": "在不同的文件和目录之间导航。",
+                "uk": "Переміщуйтесь між файлами та каталогами."
+            },
+            "itemIds": [
+                "file-prev", "file-next", "file-new-tab", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "New Tab View",
+                "zh": "新标签页视图"
+            },
+            "description": {
+                "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
+                "zh": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
+            },
+            "itemIds": [
+                "go-home", "daily-notes-today", "file-new", "file-new-tab", "templater-new-note-from-template", "bookmarks-open"
             ]
         },
         {
@@ -160,22 +186,7 @@
                 "uk": "Сховати зайві елементи інтерфейсу та зосередитися на написанні."
             },
             "itemIds": [
-                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace"
-            ]
-        },
-        {
-            "name": { 
-                "en": "Vault Navigation",
-                "zh": "库导航",
-                "uk": "Навігація по сховищу"
-            },
-            "description": { 
-                "en": "Navigate between notes and files.",
-                "zh": "在不同的文件和目录之间导航。",
-                "uk": "Переміщуйтесь між файлами та каталогами."
-            },
-            "itemIds": [
-                "file-prev", "file-next", "file-new-tab", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
             ]
         },
         {
@@ -282,12 +293,12 @@
         },
         {
             "name": { 
-                "en": "Explore More",
+                "en": "Plugins",
                 "zh": "探索更多",
                 "uk": "Знайти більше"
             },
             "description": { 
-                "en": "Do more with Obsidian's plugins.",
+                "en": "Do even more with other Obsidian plugins.",
                 "zh": "通过 Obsidian 的插件实现更多妙妙功能。",
                 "uk": "Робіть більше з додатками Obsidian."
             },

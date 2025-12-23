@@ -57,12 +57,18 @@ Change how text looks.
 
 | Item | Description |
 | --- | --- |
+| Toggle blockquote | Apply or remove blockquote formatting. |
 | Toggle bold | Apply or remove bold formatting. |
+| Toggle code | Apply or remove inline code formatting. |
+| Heading 1 | Set as heading 1 |
+| Heading 2 | Set as heading 2 |
+| Heading 3 | Set as heading 3 |
+| Heading 4 | Set as heading 4 |
+| Heading 5 | Set as heading 5 |
+| Heading 6 | Set as heading 6 |
+| Toggle highlight | Apply or remove text highlighting. |
 | Toggle italic | Apply or remove italic formatting. |
 | Toggle strikethrough | Apply or remove strikethrough formatting. |
-| Toggle code | Apply or remove inline code formatting. |
-| Toggle blockquote | Apply or remove blockquote formatting. |
-| Toggle highlight | Apply or remove text highlighting. |
 
 ## Lists & Indentation
 
@@ -94,20 +100,7 @@ Add various types of content like links or media.
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 
-## New tab view
-
-Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)
-
-| Item | Description |
-| --- | --- |
-| Home | Go to your home note. (Enter your home note in the URL.) |
-| Today's daily note | Go to today's daily note. |
-| New note | Creates a new note. |
-| Open file in new tab | Opens the selected file in a new tab. |
-| New from template | Create a new note from a template you select. |
-| Show bookmarks | Opens the bookmarks sidebar. |
-
-## Editor Navigation
+## Navigating the Editor
 
 Get around the text editor faster.
 
@@ -120,18 +113,20 @@ Get around the text editor faster.
 | Next callout | Moves the cursor to the next callout in the note. |
 | Toggle Vim mode | Turns Vim mode on and off. |
 
-## Reduce Distractions
+## Navigating on Mobile
 
-Remove Obsidian's UI and focus on your writing.
+Use these after hiding Obsidian's Navigation actions (on phones).
 
 | Item | Description |
 | --- | --- |
-| Toggle Properties | Toggle the visibility of note properties. |
-| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
-| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
-| Load workspace | Select and load a configured workspace. |
+| Previous tab | Go to the previous tab. |
+| Next tab | Go to the next tab. |
+| File switcher | Open the file switcher. |
+| New tab | Opens a new empty tab. |
+| Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
+| Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
 
-## Vault Navigation
+## Navigating the Vault
 
 Navigate between notes and files.
 
@@ -150,6 +145,31 @@ Navigate between notes and files.
 | Go up | Uses your note's "up" property to link to a parent note. |
 | Show bookmarks | Opens the bookmarks sidebar. |
 | Show vault in system | Opens the vault's folder in the system's file explorer. |
+
+## New Tab View
+
+Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)
+
+| Item | Description |
+| --- | --- |
+| Home | Go to your home note. (Enter your home note in the URL.) |
+| Today's daily note | Go to today's daily note. |
+| New note | Creates a new note. |
+| Open file in new tab | Opens the selected file in a new tab. |
+| New from template | Create a new note from a template you select. |
+| Show bookmarks | Opens the bookmarks sidebar. |
+
+## Reduce Distractions
+
+Remove Obsidian's UI and focus on your writing.
+
+| Item | Description |
+| --- | --- |
+| Toggle Properties | Toggle the visibility of note properties. |
+| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
+| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
+| Load workspace | Select and load a configured workspace. |
+| Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
 
 ## Note Toolbar
 
@@ -235,9 +255,9 @@ Insert or create notes from templates. Requires the [Templater](obsidian://show-
 | Insert template | Inserts the chosen template. |
 | New from template | Create a new note from a template you select. |
 
-## Explore More
+## Plugins
 
-Do more with Obsidian's plugins.
+Do even more with other Obsidian plugins.
 
 | Item | Description |
 | --- | --- |
