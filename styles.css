@@ -3018,7 +3018,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
     & textarea {
-        height: 4rem;
+        height: 6rem;
         width: 100%;
     }
 }
