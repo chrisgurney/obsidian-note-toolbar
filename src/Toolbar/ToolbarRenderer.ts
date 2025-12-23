@@ -504,7 +504,7 @@ export default class ToolbarRenderer {
 
 		let menu = new Menu();
 
-		if (Platform.isMobile) {
+		if (Platform.isPhone) {
 			menu.addItem((item: MenuItem) => {
 				item
 					.setTitle(toolbar.name)
