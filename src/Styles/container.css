@@ -60,6 +60,10 @@
             .is-phone & {
                 padding-bottom: var(--cg-nt-tbar-bottom-padding-bottom-phone);
             }
+            /* fix: bottom padding needs to be removed when keyboard is open on phone */
+            .is-phone.mod-toolbar-open & {
+                padding-bottom: unset;
+            }
         }
     }
 
