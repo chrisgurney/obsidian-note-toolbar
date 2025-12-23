@@ -2359,7 +2359,7 @@ body[data-ntb-csstheme="Minimal"] {
         }
         &:focus-within {
             outline: solid 2px var(--background-modifier-border-focus);
-            border-radius: var(--button-radius);
+            border-radius: var(--radius-m);
             & button:first-child {
                 opacity: 1;
             }
@@ -2500,13 +2500,13 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
     &:focus-within {
-        border-radius: var(--input-radius);
+        border-radius: var(--radius-m);
         box-shadow: inset 0 0 0 1px var(--background-modifier-border);
         box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
     @media (hover: hover) {
         &:hover {
-            border-radius: var(--input-radius);
+            border-radius: var(--radius-m);
             box-shadow: inset 0 0 0 1px var(--background-modifier-border);
             box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
             cursor: text;    
@@ -2599,7 +2599,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 .note-toolbar-setting-error {
     &.note-toolbar-setting-item-preview {
-        border-radius: var(--input-radius);
+        border-radius: var(--radius-m);
         box-shadow: 0 0 0 1px var(--text-error);
         animation-duration: 1s, 1s;
         animation-delay: 0s, .1s;
@@ -3084,13 +3084,14 @@ input[type="text"].note-toolbar-setting-error,
     margin-bottom: 1em;
     & .sortable-chosen {
         background-color: var(--background-primary);
+        border-radius: var(--radius-m);
     }
     & .sortable-ghost {
         & .setting-item {
             opacity: 0;
         }
         background-color: var(--interactive-accent);
-        border-radius: var(--input-radius);
+        border-radius: var(--radius-m);
         opacity: 0.4;
     }
     & .sortable-handle {
@@ -3601,7 +3602,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-card-item {
     align-items: start;
     box-shadow: var(--input-shadow);
-    border-radius: 8px;
+    border-radius: var(--radius-m);
     cursor: pointer;
     display: flex;
     flex: 0 0 auto;
@@ -3614,7 +3615,7 @@ input[type="text"].note-toolbar-setting-error,
     text-align: unset;
     width: 200px;
     &:focus-visible {
-        border-radius: var(--input-radius);
+        border-radius: var(--radius-m);
         box-shadow: inset 0 0 0 1px var(--background-modifier-border);
         box-shadow: inset 0 0 0 3px var(--background-modifier-border-focus);
     }
