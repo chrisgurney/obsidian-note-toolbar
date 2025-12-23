@@ -2683,6 +2683,7 @@ input[type="text"].note-toolbar-setting-error,
         padding: unset;
     }
     & .note-toolbar-setting-item-fields {
+        padding: unset;
         padding-right: 8px;
         & .setting-item {
             flex-grow: 1;
