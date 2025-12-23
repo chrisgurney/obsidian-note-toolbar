@@ -159,3 +159,7 @@ body {
     }
 
 }
+
+.note-toolbar-hidden {
+    display: none !important;
+}

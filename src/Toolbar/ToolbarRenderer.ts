@@ -979,7 +979,7 @@ export default class ToolbarRenderer {
 				const elDefinition = uiElements.get(key);
 				if (!elDefinition) return;
 				const elToHide = navbarEl.querySelector(elDefinition.selector) as HTMLElement;
-				if (elToHide) elToHide.toggleClass('note-toolbar-navbar-action-hidden', !visible);
+				if (elToHide) elToHide.toggleClass('note-toolbar-hidden', !visible);
 			});
 		}
 
