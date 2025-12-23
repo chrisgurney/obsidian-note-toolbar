@@ -1308,7 +1308,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.setDesc(t('setting.other.navbar-visibility.description'))
 				.addButton((button: ButtonComponent) => {
 					button
-						.setIcon('more-horizontal')
+						.setIcon('gear')
 						.setTooltip(t('setting.toolbars.button-more-tooltip'))
 						.onClick((cb) => {
 							let visibilityMenu = this.getNavbarVisibilityMenu();
