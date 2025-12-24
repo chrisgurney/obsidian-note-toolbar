@@ -119,7 +119,10 @@ export default class ToolbarEventHandler {
 							positionMenu.addItem((item: MenuItem) => {
 								item.setTitle(t('setting.position.option-centered'))
 									.setIcon('layout-grid')
-									.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Props));
+									.onClick(async (menuEvent) => {
+										await this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Props);
+										contextMenu.close();
+									});
 							});
 						}
 					}
@@ -128,56 +131,53 @@ export default class ToolbarEventHandler {
 							positionMenu.addItem((item: MenuItem) => {
 								item.setTitle(t('setting.position.option-top'))
 									.setIcon('arrow-up-to-line')
-									.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Top));
+									.onClick(async (menuEvent) => {
+										await this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Top);
+										contextMenu.close();
+									});
 							});
 						}
 					}
 				} 
 				else {
-					if (currentPosition !== PositionType.TabBar) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-tabbar'))
-								.setIcon('panel-top')
-								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.TabBar));
-						});
-					}
-					if (currentPosition !== PositionType.Top) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-top'))
-								.setIcon('arrow-up-to-line')
-								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Top));
-						});
-					}
-					if (currentPosition !== PositionType.Props) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-props'))
-								.setIcon('arrow-down-narrow-wide')
-								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Props));
-						});
-					}
-					if (currentPosition !== PositionType.Bottom) {
-						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t('setting.position.option-bottom'))
-								.setIcon('arrow-down-to-line')
-								.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.Bottom));
-						});
-					}
+					const positions = [
+						{ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' },
+						{ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' },
+						{ type: PositionType.Props, titleKey: 'setting.position.option-props', icon: 'arrow-down-narrow-wide' },
+						{ type: PositionType.Bottom, titleKey: 'setting.position.option-bottom', icon: 'arrow-down-to-line' }
+					];
+
+					positions.forEach(({ type, titleKey, icon }) => {
+						if (currentPosition !== type) {
+							positionMenu.addItem((item: MenuItem) => {
+								item.setTitle(t(titleKey))
+									.setIcon(icon)
+									.onClick(async () => {
+										await this.ntb.settingsManager.updatePosition(toolbarSettings, type);
+										contextMenu.close();
+									});
+							});
+						}
+					});
 				}
 
-				if (currentPosition !== PositionType.FabLeft) {
-					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-fabl'))
-							.setIcon('circle-chevron-left')
-							.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.FabLeft));
-					});
-				}
-				if (currentPosition !== PositionType.FabRight) {
-					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t('setting.position.option-fabr'))
-							.setIcon('circle-chevron-right')
-							.onClick((menuEvent) => this.ntb.settingsManager.updatePosition(toolbarSettings, PositionType.FabRight));
-					});
-				}
+				const fabPositions = [
+					{ type: PositionType.FabLeft, titleKey: 'setting.position.option-fabl', icon: 'circle-chevron-left' },
+					{ type: PositionType.FabRight, titleKey: 'setting.position.option-fabr', icon: 'circle-chevron-right' }
+				];
+
+				fabPositions.forEach(({ type, titleKey, icon }) => {
+					if (currentPosition !== type) {
+						positionMenu.addItem((item: MenuItem) => {
+							item.setTitle(t(titleKey))
+								.setIcon(icon)
+								.onClick(async () => {
+									await this.ntb.settingsManager.updatePosition(toolbarSettings, type);
+									contextMenu.close();
+								});
+						});
+					}
+				});
 
 				if (Platform.isTablet) contextMenu.addSeparator();
 
