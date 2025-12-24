@@ -100,17 +100,20 @@ export default class WhatsNewView extends ItemView {
 	 * @returns Release or null.
 	 */
 	async getReleaseNote(version: string, language: string = 'en'): Promise<Release | null> {
-		let url = `${URL_RELEASE_NOTES}/${language}/${version}.md`;
-		let res = await requestUrl(url);
-	
-		if ((!res || res.status !== 200) && language !== 'en') {
-			url = `${URL_RELEASE_NOTES}/en/${version}.md`;
-			res = await requestUrl(url);
+		try {
+			const res = await requestUrl(`${URL_RELEASE_NOTES}/${language}/${version}.md`);
+			if (res.status !== 200) return null;
+			return { tag_name: version, body: res.text ?? '' };
+		} catch (e) {
+			this.ntb.debug(`Error fetching release notes for language (${language}). Falling back to English.\n${e}`);
+			try {
+				const res = await requestUrl(`${URL_RELEASE_NOTES}/en/${version}.md`);
+				if (res.status !== 200) return null;
+				return { tag_name: version, body: res.text ?? '' };
+			} catch {
+				return null;
+			}
 		}
-	
-		if (!res || res.status !== 200) return null;
-
-		return { tag_name: version, body: res.text };
 	}
 
 	/**
