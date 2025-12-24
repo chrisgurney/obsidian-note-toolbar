@@ -1,8 +1,7 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
-import { EditorView } from "@codemirror/view";
 import * as Obsidian from "obsidian";
-import { App, MarkdownView, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { App, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
@@ -220,20 +219,9 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         if (options?.class) menu.dom.addClasses([...options.class.split(' ')]);
 
         if (options?.position === 'cursor') {
-            const activeLeaf = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
-            const activeEditor = activeLeaf ? activeLeaf.editor : null;
-            if (activeEditor) {
-                const cursor = activeEditor.getCursor();
-                const cm = (activeEditor as any).cm as EditorView;
-                if (cm) {
-                    const offset = activeEditor.posToOffset(cursor);
-                    const coords = cm.coordsAtPos(offset);
-                    if (coords) {
-                        const menuPos = { x: coords.left, y: coords.top };
-                        menu.showAtPosition(menuPos);
-                    }
-                }
-            }
+            const cursorPosition = this.ntb.utils.getCursorPosition();
+            if (!cursorPosition) return;
+            menu.showAtPosition({x: cursorPosition.left, y: cursorPosition.top});
         }
         // default position is 'toolbar'
         else {
@@ -349,7 +337,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             return null as unknown as T;
         }
 
-    };
+    }
 
    /**
      * The i18next T function, scoped to Note Toolbar's localized strings.

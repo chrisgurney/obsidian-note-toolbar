@@ -1,3 +1,4 @@
+import { EditorView, Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { App, Command, FileView, ItemView, MarkdownView, Notice, PaneType, Platform } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
@@ -97,6 +98,25 @@ export default class PluginUtils {
 		const availableCommands: Command[] = Object.values(this.ntb.app.commands.commands);
 		const matchedCommand = availableCommands.find(command => command.name === commandName);
 		return matchedCommand ? matchedCommand.id : COMMAND_DOES_NOT_EXIST;
+	}
+
+	/**
+	 * Get the current cursor position.
+	 * @returns cursor position, or undefined.
+	 */
+	getCursorPosition(): Rect | undefined {
+		const editor = this.ntb.app.workspace.activeEditor?.editor;
+		if (!editor) return;
+		const offset = editor.posToOffset(editor.getCursor());
+		const cmView = (editor as any).cm as EditorView;
+		const coords = cmView.coordsAtPos(offset);
+		if (!coords) return;
+		return {
+			top: coords.top,
+			bottom: coords.bottom,
+			left: coords.left,
+			right: coords.right
+		};
 	}
 
 	/**
