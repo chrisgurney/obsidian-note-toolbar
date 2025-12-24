@@ -144,8 +144,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 /* Liquid Glass effect for the Cupertino (thanks to @aaaaalexis) */
 /* Licensed under the MIT License; see the LICENSE file */
 body button.cg-note-toolbar-fab[data-fab-metadata*="glass"],
-body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"],
-body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
+body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     background-color: var(--ntb-liquid-glass-background) !important;
     backdrop-filter: var(--ntb-blur-s) !important;
     border: var(--border-width) solid var(--background-modifier-border);

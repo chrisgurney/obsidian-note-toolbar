@@ -1375,9 +1375,23 @@ body {
         --ntb-shadow-xs: var(--ntb-shadow-base);
     }
 
-    /*
-     * Default adjustments for various themes
-     */
+    /* class is added in the Toggle Base toolbar command */
+    &.ntb-hide-bases-header {
+        .bases-header {
+            display: none !important;
+        }
+    }
+
+}
+
+.note-toolbar-hidden {
+    display: none !important;
+}
+/*
+ * Default adjustments for various themes (CSS variables)
+ */
+body {
+
     &[data-ntb-csstheme="Baseline"] {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
         --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
@@ -1408,21 +1422,12 @@ body {
         --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 22px);      
     }
 
-    /* class is added in the Toggle Base toolbar command */
-    &.ntb-hide-bases-header {
-        .bases-header {
-            display: none !important;
-        }
-    }
-
 }
 
-.note-toolbar-hidden {
-    display: none !important;
-}
 /*
  * Callouts
  */
+
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
     &:hover {
         box-shadow: none !important; /* hide the border on hover of the toolbar callout */
@@ -1431,6 +1436,7 @@ body {
         }
     }
 }
+
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
     &:not([data-tbar-position="bottom"]) {
         position: sticky;
@@ -1445,39 +1451,49 @@ body {
         }
     }
 }
+
 .is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
     position: sticky;
     z-index: 2;
 }
+
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
     .is-mobile &, .is-phone & {
         top: var(--cg-nt-tbar-top-sticky-pos-mobile);
     }
 }
+
 /* default, if not specified */
+
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
     top: inherit;
     position: relative;
 }
+
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
     .is-mobile &, .is-phone & {
         top: inherit;
         position: relative;
     }
 }
+
 .cm-embed-block[data-tbar-position="bottom"],
 .cm-embed-block[data-tbar-position="top"] {
     & .callout[data-callout="note-toolbar"] {
         max-width: var(--file-line-width);
     }
 }
+
 .is-phone .cm-embed-block[data-tbar-position="top"] {
     padding-top: var(--cg-nt-tbar-top-padding-top-phone);
 }
+
 /* fixes header div getting squished when the toolbar's at the top position */
+
 .view-header:has(+ [data-tbar-position="top"]) {
     min-height: var(--header-height);
 }
+
 .callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
     background-image: unset !important;
@@ -1502,11 +1518,7 @@ body {
         }
     }
 }
-body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
-    & .callout[data-callout="note-toolbar-output"] {
-        background-color: #000 !important;
-    }
-}
+
 .callout[data-callout="note-toolbar"] {
 
     /* fix: (#378) reset CSS rules applied by themes (e.g., Velocity) */
@@ -1921,11 +1933,13 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
     }
     
 }
+
 /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+
 /* Licensed under the MIT License; see the LICENSE file */
+
 body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"],
-body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"],
-body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
+body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"] {
     background: unset !important;
     mix-blend-mode: normal !important;
     & ul {
@@ -1946,7 +1960,9 @@ body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
         }
     }
 }
+
 /* user feedback that toolbar interaction is not available; workaround for #69 */
+
 body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .cg-note-toolbar-callout[data-callout="note-toolbar"] {
         opacity: var(--cg-nt-tbar-inactive-opacity-desktop);
@@ -2094,8 +2110,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 /* Liquid Glass effect for the Cupertino (thanks to @aaaaalexis) */
 /* Licensed under the MIT License; see the LICENSE file */
 body button.cg-note-toolbar-fab[data-fab-metadata*="glass"],
-body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"],
-body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
+body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     background-color: var(--ntb-liquid-glass-background) !important;
     backdrop-filter: var(--ntb-blur-s) !important;
     border: var(--border-width) solid var(--background-modifier-border);
@@ -2149,10 +2164,6 @@ body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
         padding-top: 0;
         /* fix: puts toolbar above popovers + Hover Editor plugin */
         z-index: calc(var(--layer-slides) - 1);
-        body[data-ntb-csstheme="Border"] & {
-            /* fix: (#429) Border theme: Toolbar in Top (fixed) position overlaps the native "Find/Replace" UI */
-            z-index: calc(var(--layer-popover) - 1);
-        }
         &:hover {
             /* undoes fix (#14) which causes a layout shift on hover */
             overflow: visible !important;
@@ -2217,16 +2228,6 @@ body[data-ntb-csstheme="Cupertino"] button.cg-note-toolbar-fab {
                     color: var(--cg-nt-tbar-text-item-text-color-hover);
                 }
             }
-        }
-    }
-}
-/* width fix for Minimal theme in props position #204 #216 */
-body[data-ntb-csstheme="Minimal"] {
-    & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
-        .is-readable-line-width & {
-            max-width: var(--max-width);
-            width: var(--line-width);
-            margin-inline: var(--content-margin) !important;
         }
     }
 }
@@ -4086,4 +4087,81 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 
+}
+
+/* theme overrides: needs to be imported last */
+/*
+ * Any necessary overrides for specific themes (otherwise not possible by just changing variables).
+ * Needs to be imported last.
+ */
+body[data-ntb-csstheme="Border"] {
+    & .cg-note-toolbar-container[data-tbar-position="bottom"],
+    & .cg-note-toolbar-container[data-tbar-position="top"] {
+        /* fix: (#429) Border theme: Toolbar in Top (fixed) position overlaps the native "Find/Replace" UI */
+        z-index: calc(var(--layer-popover) - 1);
+    }
+}
+body[data-ntb-csstheme="Cupertino"] {
+    &.is-mobile.theme-dark {
+        & .callout[data-callout="note-toolbar-output"] {
+            background-color: #000 !important;
+        }
+    }
+    /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+    /* Licensed under the MIT License; see the LICENSE file */
+    & .callout[data-callout="note-toolbar"] {
+        background: unset !important;
+        mix-blend-mode: normal !important;
+        & ul {
+            gap: var(--size-4-2);
+            & a, span.external-link {
+                background-color: var(--ntb-liquid-glass-background) !important;
+                backdrop-filter: var(--ntb-blur-s);
+                border: var(--border-width) solid var(--background-modifier-border);
+                border-radius: 32px;
+                box-shadow: var(--ntb-shadow-xs);
+                /* fix: ghosting effect with overlays when glass style is being used */
+                /* transition: var(--ntb-anim-duration-moderate); */
+            }
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+    /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+    /* Licensed under the MIT License; see the LICENSE file */
+    & button.cg-note-toolbar-fab {
+        background-color: var(--ntb-liquid-glass-background) !important;
+        backdrop-filter: var(--ntb-blur-s) !important;
+        border: var(--border-width) solid var(--background-modifier-border);
+        box-shadow: var(--ntb-shadow-xs);
+        /* fix: ghosting effect with overlays when glass style is being used */
+        /* transition: var(--ntb-anim-duration-moderate); */
+        & svg {
+            color: var(--text-normal);
+        }
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: none;
+            }
+        }
+        .is-mobile & {
+            &:is(:active, :hover, :focus-visible) {
+                background-color: var(--ntb-liquid-glass-background) !important;
+                color: var(--text-normal) !important;
+            }
+        }
+    }
+}
+/* width fix for Minimal theme in props position #204 #216 */
+body[data-ntb-csstheme="Minimal"] {
+    & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
+        .is-readable-line-width & {
+            max-width: var(--max-width);
+            width: var(--line-width);
+            margin-inline: var(--content-margin) !important;
+        }
+    }
 }

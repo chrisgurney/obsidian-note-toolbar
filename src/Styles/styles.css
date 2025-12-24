@@ -3,6 +3,8 @@
 @import "./style-settings.yaml";
 
 @import "./body.css";
+@import "./body-themes.css";
+
 @import "./callout.css";
 @import "./fab.css";
 @import "./container.css";
@@ -12,3 +14,6 @@
 @import './help.css';
 @import './api.css';
 @import './launchpad.css';
+
+/* theme overrides: needs to be imported last */
+@import "./overrides-themes.css";

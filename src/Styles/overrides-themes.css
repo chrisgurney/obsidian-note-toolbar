@@ -1,0 +1,78 @@
+/*
+ * Any necessary overrides for specific themes (otherwise not possible by just changing variables).
+ * Needs to be imported last.
+ */
+
+body[data-ntb-csstheme="Border"] {
+    & .cg-note-toolbar-container[data-tbar-position="bottom"],
+    & .cg-note-toolbar-container[data-tbar-position="top"] {
+        /* fix: (#429) Border theme: Toolbar in Top (fixed) position overlaps the native "Find/Replace" UI */
+        z-index: calc(var(--layer-popover) - 1);
+    }
+}
+
+body[data-ntb-csstheme="Cupertino"] {
+    &.is-mobile.theme-dark {
+        & .callout[data-callout="note-toolbar-output"] {
+            background-color: #000 !important;
+        }
+    }
+    /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+    /* Licensed under the MIT License; see the LICENSE file */
+    & .callout[data-callout="note-toolbar"] {
+        background: unset !important;
+        mix-blend-mode: normal !important;
+        & ul {
+            gap: var(--size-4-2);
+            & a, span.external-link {
+                background-color: var(--ntb-liquid-glass-background) !important;
+                backdrop-filter: var(--ntb-blur-s);
+                border: var(--border-width) solid var(--background-modifier-border);
+                border-radius: 32px;
+                box-shadow: var(--ntb-shadow-xs);
+                /* fix: ghosting effect with overlays when glass style is being used */
+                /* transition: var(--ntb-anim-duration-moderate); */
+            }
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+    /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
+    /* Licensed under the MIT License; see the LICENSE file */
+    & button.cg-note-toolbar-fab {
+        background-color: var(--ntb-liquid-glass-background) !important;
+        backdrop-filter: var(--ntb-blur-s) !important;
+        border: var(--border-width) solid var(--background-modifier-border);
+        box-shadow: var(--ntb-shadow-xs);
+        /* fix: ghosting effect with overlays when glass style is being used */
+        /* transition: var(--ntb-anim-duration-moderate); */
+        & svg {
+            color: var(--text-normal);
+        }
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: none;
+            }
+        }
+        .is-mobile & {
+            &:is(:active, :hover, :focus-visible) {
+                background-color: var(--ntb-liquid-glass-background) !important;
+                color: var(--text-normal) !important;
+            }
+        }
+    }
+}
+
+/* width fix for Minimal theme in props position #204 #216 */
+body[data-ntb-csstheme="Minimal"] {
+    & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
+        .is-readable-line-width & {
+            max-width: var(--max-width);
+            width: var(--line-width);
+            margin-inline: var(--content-margin) !important;
+        }
+    }
+}

@@ -1,0 +1,37 @@
+/*
+ * Default adjustments for various themes (CSS variables)
+ */
+
+body {
+
+    &[data-ntb-csstheme="Baseline"] {
+        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+        --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
+    }
+    &[data-ntb-csstheme="Cupertino"] {
+        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
+        --ntb-anim-duration-moderate: var(--anim-duration-moderate);
+        /* --ntb-blur-s: var(--blur-s); */
+        --ntb-liquid-glass-background: var(--liquid-glass-background);
+        --ntb-shadow-base: var(--shadow-base);
+        --ntb-shadow-xs: var(--shadow-xs);
+    }
+    &[data-ntb-csstheme="Baseline"], &[data-ntb-csstheme="Cupertino"] {        
+        --cg-nt-fab-pos-x-mobile: var(--navbar-side-padding);
+        &.is-phone {
+            --cg-nt-fab-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
+            --cg-nt-tbar-bottom-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
+            --cg-nt-tbar-top-sticky-pos-mobile: calc(98px);
+        }
+        &.is-mobile.theme-dark {
+            --cg-nt-tbar-bg-color: unset !important;
+        }
+    }
+    &[data-ntb-csstheme="Minimal"] {
+        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+    }
+    &[data-ntb-csstheme="Velocity"] {
+        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 22px);      
+    }
+
+}

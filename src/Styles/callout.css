@@ -90,12 +90,6 @@
     }
 }
 
-body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
-    & .callout[data-callout="note-toolbar-output"] {
-        background-color: #000 !important;
-    }
-}
-
 .callout[data-callout="note-toolbar"] {
 
     /* fix: (#378) reset CSS rules applied by themes (e.g., Velocity) */
@@ -514,8 +508,7 @@ body[data-ntb-csstheme="Cupertino"].is-mobile.theme-dark {
 /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
 /* Licensed under the MIT License; see the LICENSE file */
 body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"],
-body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"],
-body[data-ntb-csstheme="Cupertino"] .callout[data-callout="note-toolbar"] {
+body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"] {
     background: unset !important;
     mix-blend-mode: normal !important;
     & ul {

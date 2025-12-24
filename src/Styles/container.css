@@ -31,10 +31,6 @@
         padding-top: 0;
         /* fix: puts toolbar above popovers + Hover Editor plugin */
         z-index: calc(var(--layer-slides) - 1);
-        body[data-ntb-csstheme="Border"] & {
-            /* fix: (#429) Border theme: Toolbar in Top (fixed) position overlaps the native "Find/Replace" UI */
-            z-index: calc(var(--layer-popover) - 1);
-        }
         &:hover {
             /* undoes fix (#14) which causes a layout shift on hover */
             overflow: visible !important;
@@ -99,17 +95,6 @@
                     color: var(--cg-nt-tbar-text-item-text-color-hover);
                 }
             }
-        }
-    }
-}
-
-/* width fix for Minimal theme in props position #204 #216 */
-body[data-ntb-csstheme="Minimal"] {
-    & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
-        .is-readable-line-width & {
-            max-width: var(--max-width);
-            width: var(--line-width);
-            margin-inline: var(--content-margin) !important;
         }
     }
 }
