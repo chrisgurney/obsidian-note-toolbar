@@ -1212,7 +1212,7 @@
         "description": {
             "en": "Search the vault for the currently selected text."
         },
-        "icon": "search",
+        "icon": "text-search",
         "tooltip": {
             "en": "Search for selection"
         },
