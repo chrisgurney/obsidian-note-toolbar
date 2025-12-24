@@ -1,26 +1,28 @@
 /*
  * Settings 
  */
-
-.setting-item-info {
-    & .setting-item-description a:focus-within {
-        box-shadow: 0 0 0 2px;
+.note-toolbar-setting-ui, .note-toolbar-setting-modal-container {
+    & .setting-item-info {
+        & .setting-item-description {
+            overflow: visible;
+        }
+        & .setting-item-description a:focus-within {
+            box-shadow: var(--cg-nt-settings-link-focus-box-shadow);
+        }
     }
-}
-
-.setting-item-control .clickable-icon:focus-within {
-    /* border-radius: var(--input-radius); */
-    box-shadow: inset 0 0 0 1px var(--background-modifier-border);
-    box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
-}
-
-.is-disabled {
-    opacity: 0.6;
-    & .setting-item-control:focus-within {
-        box-shadow: none !important;
+    & .setting-item-control .clickable-icon:focus-within {
+        /* border-radius: var(--input-radius); */
+        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
-    &:hover {
-        background-color: initial;
+    & .is-disabled {
+        opacity: 0.6;
+        & .setting-item-control:focus-within {
+            box-shadow: none !important;
+        }
+        &:hover {
+            background-color: initial;
+        }
     }
 }
 
@@ -828,7 +830,7 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-focussable-link {
     &:focus-within {
-        box-shadow: 0 0 0 2px;
+        box-shadow: var(--cg-nt-settings-link-focus-box-shadow);
     }
 }
 
@@ -840,7 +842,7 @@ input[type="text"].note-toolbar-setting-error,
     display: block;
     text-align: start;
     & a:focus-within {
-        box-shadow: 0 0 0 2px;
+        box-shadow: var(--cg-nt-settings-link-focus-box-shadow);
     }
     & ol, ul {
         margin-block-end: var(--font-ui-smaller);
