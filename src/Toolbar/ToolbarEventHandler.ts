@@ -384,12 +384,6 @@ export default class ToolbarEventHandler {
 				// @ts-ignore
 				menu.items = [];
 				if (this.ntb.settings.editorMenuAsToolbar) {
-					const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
-					const editor = this.ntb.app.workspace.activeEditor?.editor;
-					if (!editor) return;
-					const offset = editor.posToOffset(editor.getCursor());
-					const cmView = (editor as any).cm as EditorView;
-					const coords = cmView.coordsAtPos(offset);
 					const mouseRect = {
 						left: this.ntb.render.mouseX,
 						top: this.ntb.render.mouseY,
