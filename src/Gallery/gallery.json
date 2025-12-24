@@ -1,16 +1,19 @@
 {
     "title": { 
         "en": "Note Toolbar Gallery",
+        "ja": "Note Toolbar ギャラリー",
         "zh": "Note Toolbar 示例库",
         "uk": "Галерея Note Toolbar"
     },
     "overview": { 
         "en": "Browse examples of items, and click/tap to add them to a toolbar.",
+        "ja": "アイテムの例を閲覧し、クリック/タップでツールバーに追加します。",
         "zh": "浏览项目示例，点击以将其添加到工具栏。",
         "uk": "Перегляньте приклади елементів, та натисніть щоб додати їх до панелі."
     },
     "pluginNote": { 
         "en": "Some items require plugins for more sophisticated behavior. ",
+        "ja": "一部のアイテムは、より高度な動作のためにプラグインが必要です。 ",
         "zh": "某些项目需要特定插件以实现更复杂的功能。",
         "uk": "Деякі елементи потребують наявність додатків для більш функціональної обробки. "
     },
@@ -18,11 +21,13 @@
         {
             "name": { 
                 "en": "Daily Notes",
+                "ja": "デイリーノート",
                 "zh": "Daily Notes 每日笔记",
                 "uk": "Щоденні нотатки"
             },
             "description": { 
                 "en": "Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.",
+                "ja": "デイリーノート間をすばやく移動します。コアプラグイン「Daily Notes」が必要です。",
                 "zh": "快速在每日笔记之间导航。需要启用 _日记_ 核心插件。",
                 "uk": "Швидко переміщуйтесь між щоденними нотатками. Потрібен вбудований додаток _Щоденні нотатки_."
             },
@@ -33,11 +38,13 @@
         {
             "name": { 
                 "en": "Basic Actions",
+                "ja": "基本操作",
                 "zh": "基本操作",
                 "uk": "Основні дії"
             },
             "description": { 
                 "en": "For quick text editing and history control.",
+                "ja": "テキストの簡易編集と履歴の操作に。",
                 "zh": "用于快速文本编辑和操作历史。",
                 "uk": "Для швидкого редагування тексту та керування історією."
             },
@@ -48,11 +55,13 @@
         {
             "name": { 
                 "en": "Editing",
+                "ja": "編集",
                 "zh": "编辑",
                 "uk": "Редактор"
             },
             "description": { 
                 "en": "Adjust the order and arrangement of content.",
+                "ja": "内容の順序や配置を調整します。",
                 "zh": "调整内容的顺序和格式。",
                 "uk": "Працюйте швидше з текстовим редактором."
             },
@@ -63,11 +72,13 @@
         {
             "name": { 
                 "en": "Files",
+                "ja": "ファイル",
                 "zh": "文件",
                 "uk": "Файли"
             },
             "description": { 
                 "en": "Tools for working with files.",
+                "ja": "ファイル操作のためのツール。",
                 "zh": "用于处理文件的工具。",
                 "uk": "Інструменти роботи з файлами."
             },
@@ -78,11 +89,13 @@
         {
             "name": { 
                 "en": "Formatting",
+                "ja": "書式",
                 "zh": "格式化",
                 "uk": "Форматування"
             },
             "description": { 
                 "en": "Change how text looks.",
+                "ja": "テキストの見た目を変更します。",
                 "zh": "更改文本的外观。",
                 "uk": "Змініть вигляд тексту."
             },
@@ -93,11 +106,13 @@
         {
             "name": { 
                 "en": "Lists & Indentation",
+                "ja": "リストとインデント",
                 "zh": "列表与缩进",
                 "uk": "Списки та відступи"
             },
             "description": { 
                 "en": "Organize items into lists and adjust structure.",
+                "ja": "項目をリストに整理し、構造を調整します。",
                 "zh": "将项目组织成列表并调整结构。",
                 "uk": "Упорядкуйте елементи у списки та налаштуйте структуру."
             },
@@ -108,11 +123,13 @@
         {
             "name": { 
                 "en": "Insertions",
+                "ja": "挿入",
                 "zh": "插入",
                 "uk": "Вставки"
             },
             "description": { 
                 "en": "Add various types of content like links or media.",
+                "ja": "リンクやメディアなど、さまざまなコンテンツを追加します。",
                 "zh": "添加各种类型的内容，如链接或媒体。",
                 "uk": "Додайте різні типи вмісту, такі як посилання, або медіа."
             },
@@ -123,11 +140,13 @@
         {
             "name": { 
                 "en": "Navigating the Editor",
+                "ja": "エディターのナビゲーション",
                 "zh": "编辑器导航",
                 "uk": "Навігація редактора"
             },
             "description": { 
                 "en": "Get around the text editor faster.",
+                "ja": "テキストエディター内を素早く移動します。",
                 "zh": "更快地在文本编辑器中导航。",
                 "uk": "Швидше працюйте з текстовим редактором."
             },
@@ -149,11 +168,13 @@
         {
             "name": { 
                 "en": "Navigating the Vault",
+                "ja": "ボールトのナビゲーション",
                 "zh": "库导航",
                 "uk": "Навігація по сховищу"
             },
             "description": { 
                 "en": "Navigate between notes and files.",
+                "ja": "ファイルやディレクトリ間を移動します。",
                 "zh": "在不同的文件和目录之间导航。",
                 "uk": "Переміщуйтесь між файлами та каталогами."
             },
@@ -164,10 +185,12 @@
         {
             "name": { 
                 "en": "New Tab View",
+                "ja": "新しいタブビュー",
                 "zh": "新标签页视图"
             },
             "description": {
                 "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
+                "ja": "新しいタブビューをツールバーに置き換えます。 [詳細](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
                 "zh": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
             },
             "itemIds": [
@@ -177,11 +200,13 @@
         {
             "name": {
                 "en": "Reduce Distractions",
+                "ja": "集中モード",
                 "zh": "减少干扰",
                 "uk": "Зменшити відволікання"
             },
             "description": {
                 "en": "Remove Obsidian's UI and focus on your writing.",
+                "ja": "Obsidian の UI を非表示にして執筆に集中します。",
                 "zh": "隐藏 Obsidian 的 UI 元素，专注于写作。",
                 "uk": "Сховати зайві елементи інтерфейсу та зосередитися на написанні."
             },
@@ -192,10 +217,12 @@
         {
             "name": { 
                 "en": "Note Toolbar",
+                "ja": "Note Toolbar",
                 "zh": "笔记工具栏"
             },
             "description": { 
                 "en": "Get access to Note Toolbar settings and tools quickly.",
+                "ja": "Note Toolbar の設定やツールへ素早くアクセスします。",
                 "zh": "快速访问笔记工具栏设置和工具。",
                 "uk": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
             },
@@ -206,11 +233,13 @@
         {
             "name": { 
                 "en": "Obsidian Support",
+                "ja": "Obsidian サポート",
                 "zh": "Obsidian 支持",
                 "uk": "Підтримка Obsidian"
             },
             "description": { 
                 "en": "Get help from Obsidian community resources.",
+                "ja": "Obsidian コミュニティのリソースからヘルプを得ます。",
                 "zh": "从 Obsidian 社区资源中获取帮助。",
                 "uk": "Отримайте допомогу від спільноти Obsidian."
             },
@@ -221,11 +250,13 @@
         {
             "name": { 
                 "en": "Search",
+                "ja": "検索",
                 "zh": "搜索",
                 "uk": "Пошук"
             },
             "description": { 
                 "en": "Search in notes and across your vault.",
+                "ja": "ノートやボールト全体を検索します。",
                 "zh": "在笔记和整个库中搜索。",
                 "uk": "Шукайте в нотатках і по всьому сховищу."
             },
@@ -236,11 +267,13 @@
         {
             "name": { 
                 "en": "Views and Themes",
+                "ja": "ビューとテーマ",
                 "zh": "视图与主题",
                 "uk": "Теми та режими перегляду"
             },
             "description": { 
                 "en": "Switch themes and toggle views.",
+                "ja": "テーマ切り替えや表示モードの切替。",
                 "zh": "切换主题和视图。",
                 "uk": "Перемикайте теми та режими перегляду."
             },
@@ -251,11 +284,13 @@
         {
             "name": { 
                 "en": "Workspaces",
+                "ja": "ワークスペース",
                 "zh": "工作区",
                 "uk": "Простори"
             },
             "description": { 
                 "en": "Switch between workspaces. Requires the _Workspaces_ core plugin.",
+                "ja": "ワークスペースを切り替えます。コアプラグイン「Workspaces」が必要です。",
                 "zh": "在工作区之间切换。需要启用 _工作区_ 核心插件。",
                 "uk": "Перемикання між робочими просторами. Потрібен вбудований додаток _Простори_."
             },
@@ -266,10 +301,12 @@
         {
             "name": { 
                 "en": "Periodic Notes",
+                "ja": "Periodic Notes（周期ノート）",
                 "zh": "Periodic Notes 周期性笔记"
             },
             "description": { 
                 "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin.",
+                "ja": "週次・月次・年次ノートをナビゲートします。必要なプラグイン：[Periodic Notes](obsidian://show-plugin?id=periodic-notes)。",
                 "zh": "导航到每周、每月和每年的笔记。需要 [Periodic Notes](obsidian://show-plugin?id=periodic-notes) 插件。",
                 "uk": "Перехід до щотижневих, щомісячних та річних нотаток. Потрібен додаток [Periodic Notes](obsidian://show-plugin?id=periodic-notes)."
             },
@@ -280,10 +317,12 @@
         {
             "name": { 
                 "en": "Templater",
+                "ja": "Templater（テンプレート）",
                 "zh": "Templater 模板"
             },
             "description": { 
                 "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater).",
+                "ja": "テンプレートからノートを挿入/作成します。必要なプラグイン：[Templater](obsidian://show-plugin?id=templater-obsidian)。ユーザーガイドではさらに多くの使い方を紹介しています。",
                 "zh": "从模板中插入或创建笔记。需要 [Templater](obsidian://show-plugin?id=templater-obsidian) 插件。请参阅用户指南以了解 [更多使用 Templater 的方法](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)。",
                 "uk": "Вставляйте, або створюйте нотатки з шаблонів. Потрібен додаток [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)."
             },
@@ -294,11 +333,13 @@
         {
             "name": { 
                 "en": "Plugins",
+                "ja": "プラグイン",
                 "zh": "探索更多",
                 "uk": "Знайти більше"
             },
             "description": { 
                 "en": "Do even more with other Obsidian plugins.",
+                "ja": "Obsidian のプラグインでできることを広げましょう。",
                 "zh": "通过 Obsidian 的插件实现更多妙妙功能。",
                 "uk": "Робіть більше з додатками Obsidian."
             },

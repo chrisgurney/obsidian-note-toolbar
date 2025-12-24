@@ -16,6 +16,7 @@ export const SETTINGS_VERSION = 20250313.1;
 
 import * as de from 'I18n/de.json';
 import * as en from 'I18n/en.json';
+import * as ja from 'I18n/ja.json';
 import * as uk from 'I18n/uk.json';
 import * as zh_CN from 'I18n/zh-CN.json';
 
@@ -24,10 +25,11 @@ const Locales = i18next.createInstance({
 	lng: getLanguage(),
 	fallbackLng: 'en',
 	resources: {
-		de: { 'plugin-note-toolbar': de }, // load localized strings for German
-		en: { 'plugin-note-toolbar': en }, // load localized strings for English
-		uk: { 'plugin-note-toolbar': uk }, // load localized strings for Ukrainian
-		zh: { 'plugin-note-toolbar': zh_CN } // load localized strings for Chinese Simplified
+		de: { 'plugin-note-toolbar': de }, // German
+		en: { 'plugin-note-toolbar': en }, // English
+		ja: { 'plugin-note-toolbar': ja }, // Japanese
+		uk: { 'plugin-note-toolbar': uk }, // Ukrainian
+		zh: { 'plugin-note-toolbar': zh_CN } // Chinese Simplified
 	}
 });
 
