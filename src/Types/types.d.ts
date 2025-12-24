@@ -41,8 +41,6 @@ declare module "obsidian" {
     // allows access to sub-menus, and setting warning style
     interface MenuItem {
         setSubmenu: () => Menu;
-        // TODO: remove in next version; looks like it's now in official API
-        // setWarning(warning: boolean): void;
     }
 
     interface Vault {
