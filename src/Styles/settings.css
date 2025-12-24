@@ -119,7 +119,7 @@
 }
 
 .note-toolbar-setting-item {
-    border-radius: 8px;
+    border-radius: var(--radius-m);
     border: 1px solid var(--background-modifier-border);
     padding: 1.5em;
     .is-mobile & {
@@ -767,6 +767,12 @@ input[type="text"].note-toolbar-setting-error,
     flex-direction: column;
     flex-grow: 1;
     gap: 1em;
+    & .setting-group {
+        .is-mobile & {
+            border: var(--border-width) solid var(--background-modifier-border);
+            border-radius: var(--radius-m);
+        }
+    }
     & .setting-item {
         border: none;
         padding: 0;
