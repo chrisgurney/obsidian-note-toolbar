@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { App, ButtonComponent, Modal, Notice, Platform, Setting, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
+import { App, ButtonComponent, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
 import { COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, ItemType, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, SettingFieldItemMap, ToolbarItemSettings, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
@@ -126,7 +126,6 @@ export default class ToolbarSettingsModal extends Modal {
 		let toolbarStyle = new ToolbarStyleUi(this.ntb, this, this.toolbar);
 		toolbarStyle.displayStyleSetting(settingsDiv);
 		this.displayCommandButton(settingsDiv);
-		this.displayUsageSetting(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
 		displayHelpSection(this.ntb, settingsDiv, true, () => {
@@ -667,105 +666,121 @@ export default class ToolbarSettingsModal extends Modal {
 			.setDesc(learnMoreFr(t('setting.position.description'), 'Positioning-toolbars'))
 			.setHeading();
 
+		const positionGroup = new SettingGroup(settingsDiv);
+
+		// 	.setDesc(learnMoreFr(t('setting.position.description'), 'Positioning-toolbars'))
+
 		const initialDesktopPosition = this.toolbar.position.desktop?.allViews?.position ?? PositionType.Props;
 		const initialMobilePosition = this.toolbar.position.mobile?.allViews?.position ?? PositionType.Props;
-		this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialMobilePosition);
-		this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialDesktopPosition);
 
-		const desktopPosSetting = new Setting(settingsDiv)
-			.setName(t('setting.option-platform-desktop'))
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOptions(
-						POSITION_OPTIONS.desktop.reduce((acc, option) => {
-							return { ...acc, ...option };
-						}, {}))
-					.setValue(initialDesktopPosition)
-					.onChange(async (val: PositionType) => {
-						this.toolbar.position.desktop = { allViews: { position: val } };
-						this.toolbar.updated = new Date().toISOString();
-						this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
-						let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
-						if (!this.hasMobileFabPosition) {
-							defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
-						}
-						// update disclaimers
-						desktopPosSetting.descEl.empty();
-						const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
-						if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
-							desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
-						}
-						await this.ntb.settingsManager.save();
-						this.display();
-					})
-				);
+		positionGroup.addSetting((desktopPosSetting) => {
 
-		const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
-		if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
-			desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
-		}
+			this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialMobilePosition);
+			this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialDesktopPosition);
 
-		new Setting(settingsDiv)
-			.setName(t('setting.option-platform-mobile'))
-			.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden'
-				? learnMoreFr(t('setting.position.option-mobile-help'), 'Navigation-bar')
-				: ''
-			)
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOptions(
-						POSITION_OPTIONS.mobile.reduce((acc, option) => {
-							return { ...acc, ...option };
-						}, {}))
-					.setValue(initialMobilePosition)
-					.onChange(async (val: PositionType) => {
-						this.toolbar.position.mobile = { allViews: { position: val } };
-						this.toolbar.position.tablet = { allViews: { position: val } };
-						this.toolbar.updated = new Date().toISOString();
-						this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
-						let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
-						if (!this.hasDesktopFabPosition) {
-							defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
-						}
-						await this.ntb.settingsManager.save();
-						this.display();
-					})
-				);
-
-		const initialDefaultItem = this.ntb.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
-		let defaultItemSetting = new Setting(settingsDiv)
-			.setName(t('setting.position.option-defaultitem'))
-			.setDesc(t('setting.position.option-defaultitem-description'))
-			.setClass('note-toolbar-setting-item-full-width-phone')
-			.addSearch((cb) => {
-				new ItemSuggester(this.ntb, this.toolbar, cb.inputEl, async (item) => {
-					removeFieldError(cb.inputEl, 'beforeend');
-					cb.inputEl.value = item.label || item.tooltip;
-					this.toolbar.defaultItem = item.uuid;
-					await this.ntb.settingsManager.save();
-				});
-				cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
-					.setValue(initialDefaultItem ? (initialDefaultItem.label || initialDefaultItem.tooltip) : '')
-					.onChange(debounce(async (itemText) => {
-						if (itemText) {
-							cb.inputEl.value = itemText;
-							setFieldError(this.ntb, this, cb.inputEl, 'beforeend', t('setting.position.option-defaultitem-error-invalid'));
-						}
-						else {
-							removeFieldError(cb.inputEl, 'beforeend');
-							this.toolbar.defaultItem = null;
+			desktopPosSetting
+				.setName(t('setting.option-platform-desktop'))
+				.addDropdown((dropdown) =>
+					dropdown
+						.addOptions(
+							POSITION_OPTIONS.desktop.reduce((acc, option) => {
+								return { ...acc, ...option };
+							}, {}))
+						.setValue(initialDesktopPosition)
+						.onChange(async (val: PositionType) => {
+							this.toolbar.position.desktop = { allViews: { position: val } };
+							this.toolbar.updated = new Date().toISOString();
+							this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
+							if (!this.hasMobileFabPosition) {
+								defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
+							}
+							// update disclaimers
+							desktopPosSetting.descEl.empty();
+							const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
+							if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
+								desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
+							}
 							await this.ntb.settingsManager.save();
-						}
-					}, 250));
-			});
-		defaultItemSetting.settingEl.id = 'note-toolbar-default-item';
-		defaultItemSetting.settingEl.setAttribute('data-active', 
-			(this.hasMobileFabPosition || this.hasDesktopFabPosition) ? 'true' : 'false');
+							this.display();
+						})
+					);
 
-		// fallback if item is invalid
-		if (this.toolbar.defaultItem && !initialDefaultItem) {
-			this.toolbar.defaultItem = null;
-		}
+			const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
+			if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
+				desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
+			}
+
+		});
+
+		positionGroup.addSetting((mobilePosSetting) => {
+			mobilePosSetting
+				.setName(t('setting.option-platform-mobile'))
+				.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden'
+					? learnMoreFr(t('setting.position.option-mobile-help'), 'Navigation-bar')
+					: ''
+				)
+				.addDropdown((dropdown) =>
+					dropdown
+						.addOptions(
+							POSITION_OPTIONS.mobile.reduce((acc, option) => {
+								return { ...acc, ...option };
+							}, {}))
+						.setValue(initialMobilePosition)
+						.onChange(async (val: PositionType) => {
+							this.toolbar.position.mobile = { allViews: { position: val } };
+							this.toolbar.position.tablet = { allViews: { position: val } };
+							this.toolbar.updated = new Date().toISOString();
+							this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
+							if (!this.hasDesktopFabPosition) {
+								defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
+							}
+							await this.ntb.settingsManager.save();
+							this.display();
+						})
+					);
+		});
+
+		positionGroup.addSetting((defaultItemSetting) => {
+
+			const initialDefaultItem = this.ntb.settingsManager.getToolbarItemById(this.toolbar.defaultItem);
+
+			defaultItemSetting
+				.setName(t('setting.position.option-defaultitem'))
+				.setDesc(t('setting.position.option-defaultitem-description'))
+				.setClass('note-toolbar-setting-item-full-width-phone')
+				.addSearch((cb) => {
+					new ItemSuggester(this.ntb, this.toolbar, cb.inputEl, async (item) => {
+						removeFieldError(cb.inputEl, 'beforeend');
+						cb.inputEl.value = item.label || item.tooltip;
+						this.toolbar.defaultItem = item.uuid;
+						await this.ntb.settingsManager.save();
+					});
+					cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
+						.setValue(initialDefaultItem ? (initialDefaultItem.label || initialDefaultItem.tooltip) : '')
+						.onChange(debounce(async (itemText) => {
+							if (itemText) {
+								cb.inputEl.value = itemText;
+								setFieldError(this.ntb, this, cb.inputEl, 'beforeend', t('setting.position.option-defaultitem-error-invalid'));
+							}
+							else {
+								removeFieldError(cb.inputEl, 'beforeend');
+								this.toolbar.defaultItem = null;
+								await this.ntb.settingsManager.save();
+							}
+						}, 250));
+				});
+			defaultItemSetting.settingEl.id = 'note-toolbar-default-item';
+			defaultItemSetting.settingEl.setAttribute('data-active', 
+				(this.hasMobileFabPosition || this.hasDesktopFabPosition) ? 'true' : 'false');
+
+			// fallback if item is invalid
+			if (this.toolbar.defaultItem && !initialDefaultItem) {
+				this.toolbar.defaultItem = null;
+			}
+
+		});
 
 	}
 
@@ -812,34 +827,17 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
-	 * Displays the Usage setting section.
-	 * @param settingsDiv HTMLElement to add the setting to.
-	 */
-	displayUsageSetting(settingsDiv: HTMLElement) {
-
-		let usageDescFr = getToolbarUsageFr(this.ntb, this.toolbar, this);
-		
-		new Setting(settingsDiv)
-			.setName(t('setting.usage.name'))
-			.setDesc(usageDescFr)
-			.setHeading();
-		
-		// let iconEl = createSpan();
-		// setIcon(iconEl, 'line-chart');
-		// usageSetting.nameEl.insertAdjacentElement('afterbegin', iconEl);
-
-	}
-
-	/**
 	 * Displays the Delete button.
 	 * @param settingsDiv HTMLElement to add the settings to.
 	 */
 	displayDeleteButton(settingsDiv: HTMLElement) {
 
+		let usageDescFr = getToolbarUsageFr(this.ntb, this.toolbar, this);
+
 		new Setting(settingsDiv)
 			.setName(t('setting.delete-toolbar.name'))
 			.setHeading()
-			.setDesc(t('setting.delete-toolbar.description'))
+			.setDesc(usageDescFr)
 			.setClass("note-toolbar-setting-top-spacing")
 			.setClass("note-toolbar-setting-bottom-spacing")
 			.addButton((button: ButtonComponent) => {

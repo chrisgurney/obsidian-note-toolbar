@@ -1,7 +1,7 @@
 import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { arraymove } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { debounce, ItemView, MarkdownView, Setting } from "obsidian";
+import { debounce, ItemView, MarkdownView, Setting, SettingGroup } from "obsidian";
 import StyleModal from "./Modals/StyleModal";
 import ToolbarSettingsModal from "./Modals/ToolbarSettingsModal";
 import { emptyMessageFr, getDisclaimersFr, getValueForKey, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -26,6 +26,8 @@ export default class ToolbarStyleUi {
         if (this.parent instanceof ToolbarSettingsModal) {
             heading.setName(t('setting.styles.name')).setHeading();
         }
+
+        const styleGroup = new SettingGroup(settingsDiv);
 
         //
         // Default
@@ -97,11 +99,13 @@ export default class ToolbarStyleUi {
         defaultDesc.append(t('setting.styles.option-default-description'), document.createElement('br'));
         defaultDesc.append(getDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
 
-        new Setting(settingsDiv)
-            .setName(t('setting.styles.option-default-name'))
-            .setDesc(defaultDesc)
-            .setClass("note-toolbar-setting-item-styles")
-            .settingEl.append(defaultStyleDiv);
+        styleGroup.addSetting((defaultSetting) => {
+            defaultSetting
+                .setName(t('setting.styles.option-default-name'))
+                .setDesc(defaultDesc)
+                .setClass("note-toolbar-setting-item-styles")
+                .settingEl.append(defaultStyleDiv);
+        });
 
         //
         // Mobile
@@ -172,26 +176,34 @@ export default class ToolbarStyleUi {
         mobileDesc.append(t('setting.styles.option-mobile-description'), document.createElement('br'));
         mobileDesc.append(getDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
 
-        new Setting(settingsDiv)
-            .setName(t('setting.styles.option-mobile-name'))
-            .setDesc(mobileDesc)
-            .setClass("note-toolbar-setting-item-styles")
-            .settingEl.append(mobileStyleDiv);
+        styleGroup.addSetting((mobileSetting) => {
+            mobileSetting
+                .setName(t('setting.styles.option-mobile-name'))
+                .setDesc(mobileDesc)
+                .setClass("note-toolbar-setting-item-styles")
+                .settingEl.append(mobileStyleDiv);
+        });
 
-        new Setting(settingsDiv)
-            .setName(t('setting.styles.option-custom-name'))
-            .setDesc(learnMoreFr(t('setting.styles.option-custom-description'), 'Custom-styling'))
-            .setClass('note-toolbar-setting-item-full-width')
-            .addText(text => text
-                .setPlaceholder(t('setting.styles.option-custom-empty'))
-                .setValue(this.toolbar.customClasses)
-                .onChange(debounce(async (value) => {
-                    this.toolbar.customClasses = value.trim();
-                    await this.ntb.settingsManager.save();
-                }, 750)));
+        styleGroup.addSetting((customSetting) => {
+            customSetting
+                .setName(t('setting.styles.option-custom-name'))
+                .setDesc(learnMoreFr(t('setting.styles.option-custom-description'), 'Custom-styling'))
+                .setClass('note-toolbar-setting-item-full-width')
+                .addText(text => text
+                    .setPlaceholder(t('setting.styles.option-custom-empty'))
+                    .setValue(this.toolbar.customClasses)
+                    .onChange(debounce(async (value) => {
+                        this.toolbar.customClasses = value.trim();
+                        await this.ntb.settingsManager.save();
+                    }, 750)));
 
-        new Setting(settingsDiv)
-            .setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
+            // add message below about using custom styles
+            const styleSettingsMsg = settingsDiv.createEl('div');
+            new Setting(styleSettingsMsg)
+                .setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
+            customSetting.settingEl.insertAdjacentElement('afterend', styleSettingsMsg);
+
+        });
 
     }
 

@@ -2282,6 +2282,18 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
  * Settings 
  */
 .note-toolbar-setting-ui, .note-toolbar-setting-modal-container {
+    & .setting-group {
+        .is-mobile & {
+            border: var(--border-width) solid var(--background-modifier-border);
+            border-radius: var(--radius-m);
+        }
+        & .setting-items {
+            border-radius: var(--radius-m);
+            &:focus-within {
+                box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
+            }
+        }
+    }
     & .setting-item-info {
         & .setting-item-description {
             overflow: visible;

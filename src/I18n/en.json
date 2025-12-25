@@ -292,7 +292,7 @@
             "button-delete-confirm": "Delete",
             "button-delete-tooltip": "Delete this toolbar",
             "description": "This action cannot be undone.",
-            "label-delete-confirm": "Are you sure you want to delete this toolbar?",
+            "label-delete-confirm": "Are you sure you want to delete this toolbar? This action cannot be undone.",
             "label-usage-note": "This toolbar may be used in a `{{propertyName}}` property. If you want to make sure, close this window and search for `[{{propertyName}}:\u00A0{{toolbarName}}]`",
             "name": "Delete this toolbar",
             "title": "Delete toolbar: {{toolbar}}"
