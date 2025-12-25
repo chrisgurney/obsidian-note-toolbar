@@ -2,7 +2,7 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases/latest) [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?include_prereleases&label=latest)](https://github.com/chrisgurney/obsidian-note-toolbar/releases) [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22note-toolbar%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://www.moritzjung.dev/obsidian-stats/plugins/note-toolbar/#downloads) [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-[English](./README.md) | [中文文档](./README-ZH.md) | [日本語](./README-JA.md)
+**[English](./README.md) | [中文文档](./README-ZH.md) | [日本語](./README-JA.md)**
 
 [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsidian](https://obsidian.md) を使用すると、ノートごとに最適なツールバーを作成できます。ツールバーには、コマンド、ファイルやフォルダへのリンク、ウェブサイト（URI）、メニュー、さらにはスクリプト（Dataview、Templater、JavaScript）を自由に配置することが可能です。
 

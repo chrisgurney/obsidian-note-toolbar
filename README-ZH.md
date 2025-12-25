@@ -2,7 +2,7 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?sort=semver)](https://github.com/chrisgurney/obsidian-note-toolbar/releases/latest) [![GitHub Release](https://img.shields.io/github/v/release/chrisgurney/obsidian-note-toolbar?include_prereleases&label=latest)](https://github.com/chrisgurney/obsidian-note-toolbar/releases) [![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%22note-toolbar%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json)](https://obsidian.md/plugins?id=note-toolbar) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [!["Buy Me A Coffee"](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/cheznine)
 
-[English](./README.md) | 中文文档
+**[English](./README.md) | [中文文档](./README-ZH.md) | [日本語](./README-JA.md)**
 
 这是一个为 [Obsidian](https://obsidian.md) 设计的笔记工具栏插件，用于创建基于上下文感知的工具栏（根据当前笔记灵活显示不同的操作项）；工具栏提供执行命令、快速跳转库内文件/文件夹、打开网站/URI、显示菜单甚至运行脚本（支持 Dataview, Templater 和 JavaScript）等功能。
 
