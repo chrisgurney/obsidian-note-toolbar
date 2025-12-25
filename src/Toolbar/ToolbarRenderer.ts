@@ -140,6 +140,17 @@ export default class ToolbarRenderer {
             if (position === PositionType.Props) position = PositionType.Top;
         }
 
+        const useLaunchpad = Boolean(
+            !(view instanceof MarkdownView) && view.getViewType() === 'empty' 
+            && this.ntb.settings.showLaunchpad && this.ntb.settings.emptyViewToolbar
+        );
+		if (useLaunchpad) {
+			// make sure toolbar is in a valid position for launchpad
+			if (![PositionType.Props, PositionType.FabLeft, PositionType.FabRight].includes(position)) {
+				position = PositionType.Props;
+			}
+		}
+
         let noteToolbarElement: HTMLElement | undefined;
         let embedBlock = activeDocument.createElement((position === PositionType.TabBar) ? 'button' : 'div');
         embedBlock.addClass('cg-note-toolbar-container');
@@ -200,10 +211,6 @@ export default class ToolbarRenderer {
                 break;
         }
 
-        const useLaunchpad = Boolean(
-            !(view instanceof MarkdownView) && view.getViewType() === 'empty' 
-            && this.ntb.settings.showLaunchpad && this.ntb.settings.emptyViewToolbar
-        );
         view.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
         if (useLaunchpad && noteToolbarElement) {
             noteToolbarElement.addClass('note-toolbar-launchpad');
