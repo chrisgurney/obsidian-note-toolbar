@@ -515,7 +515,7 @@
             "uk": "Перемістіть курсор у кінець поточної нотатки."
         },
         "icon": "arrow-down-to-line",
-        "script": "ntb.app.workspace.activeEditor?.editor?.setCursor(ntb.app.workspace.activeEditor.editor.lineCount(), 0)",
+        "script": "const {editor, currentMode} = ntb.app.workspace.activeLeaf?.view; currentMode.applyScroll(editor.lineCount()-1);",
         "tooltip": {
             "en": "Jump to bottom",
             "ja": "最下部にジャンプ",
@@ -551,7 +551,7 @@
             "uk": "Перемістіть курсор на початок поточної нотатки."
         },
         "icon": "arrow-up-to-line",
-        "script": "ntb.app.workspace.activeEditor?.editor?.setCursor(0, 0)",
+        "script": "ntb.app.workspace.activeLeaf?.view.currentMode.applyScroll(1);",
         "tooltip": {
             "en": "Jump to top",
             "ja": "最上部にジャンプ",
