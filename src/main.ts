@@ -1,3 +1,4 @@
+import { ViewPlugin } from '@codemirror/view';
 import AdapterManager from 'Adapters/AdapterManager';
 import INoteToolbarApi from "Api/INoteToolbarApi";
 import NoteToolbarApi from 'Api/NoteToolbarApi';
@@ -13,7 +14,7 @@ import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TI
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import ChangeListener from 'Toolbar/ChangeListener';
-import TextToolbar from 'Toolbar/TextToolbar';
+import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
@@ -40,6 +41,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	listeners: ChangeListener;
 	render: ToolbarRenderer;
 	vars: VariableResolver;
+
+	textToolbar: ViewPlugin<TextToolbarClass> | null = null;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -150,10 +153,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			// FIXME? perhaps required for backwards compat? (#451)
-			// To reconfigure cm6 extensions for a plugin on the fly, an array should be passed in, and modified dynamically.
-     		// Once this array is modified, calling {@link Workspace.updateOptions} will apply the changes.
-			this.registerEditorExtension(TextToolbar(this));
+			// set up the text toolbar if enabled; this might be required for backwards compat (#451)
+			if (this.settings.textToolbar) {
+				this.textToolbar = TextToolbar(this);
+				this.registerEditorExtension(this.textToolbar);
+			}
 
 		});
 

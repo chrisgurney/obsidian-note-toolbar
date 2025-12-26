@@ -5,12 +5,13 @@ import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
 import Sortable from 'sortablejs';
+import TextToolbar from 'Toolbar/TextToolbar';
 import { exportToCallout } from 'Utils/ImportExport';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
-import { createToolbarPreviewFr, displayHelpSection, emptyMessageFr, handleKeyClick, headingLearnMoreFr, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded, updateItemComponentStatus } from "./Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, displayHelpSection, emptyMessageFr, handleKeyClick, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded, updateItemComponentStatus } from "./Utils/SettingsUIUtils";
 // import RuleUi from './RuleUi';
 
 type SettingsSectionType = 'appToolbars' | 'callouts' | 'contexts' | 'displayRules' | 'itemList';
@@ -987,6 +988,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							const isValid = await updateItemComponentStatus(this.ntb, this, name, SettingType.Toolbar, textToolbarSetting.controlEl, undefined, 'beforeend');
 							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 							this.ntb.settings.textToolbar = newToolbar?.uuid ?? null;
+							if (this.ntb.settings.textToolbar && !this.ntb.textToolbar) {
+								this.ntb.textToolbar = TextToolbar(this.ntb);
+								this.ntb.registerEditorExtension(this.ntb.textToolbar);
+							}
 							// update toolbar preview
 							const toolbarPreviewFr = newToolbar && createToolbarPreviewFr(this.ntb, newToolbar, undefined, false);
 							removeFieldHelp(textToolbarSetting.controlEl);

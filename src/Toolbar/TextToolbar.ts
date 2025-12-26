@@ -20,7 +20,7 @@ export default function TextToolbar(ntb: NoteToolbarPlugin): ViewPlugin<TextTool
 
 }
 
-class TextToolbarClass implements PluginValue {
+export class TextToolbarClass implements PluginValue {
     private isContextOpening: boolean = false;
     private isMouseDown: boolean = false;
     private isMouseSelection: boolean = false;
