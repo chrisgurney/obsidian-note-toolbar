@@ -150,7 +150,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     backdrop-filter: var(--ntb-blur-s) !important;
     border: var(--border-width) solid var(--background-modifier-border);
     box-shadow: var(--ntb-shadow-xs);
-    /* fix: ghosting effect with overlays when glass style is being used */
+    /* fix? ghosting effect with overlays when glass style is being used; happens on desktop */
     /* transition: var(--ntb-anim-duration-moderate); */
     & svg {
         color: var(--text-normal);
