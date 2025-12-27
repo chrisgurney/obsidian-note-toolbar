@@ -2133,6 +2133,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     }
     .is-mobile & {
         &:is(:active, :hover, :focus-visible) {
+            background: unset !important;
             background-color: var(--ntb-liquid-glass-background) !important;
             color: var(--text-normal) !important;
         }
