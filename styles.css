@@ -4067,10 +4067,6 @@ input[type="text"].note-toolbar-setting-error,
     overflow-y: auto;
     & .cg-note-toolbar-container {
         margin: auto 0;
-        .is-phone & {
-            margin-top: unset;
-            padding-top: auto;
-        }
     }
     & .empty-state {
         display: none;
