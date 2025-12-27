@@ -1249,7 +1249,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							modal.open();
 						});
 					cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.ntb.settings.icon ? "true" : "false");
-					cb.buttonEl.setAttribute("tabindex", "0");
 					this.ntb.registerDomEvent(
 						cb.buttonEl, 'keydown', (e) => {
 							switch (e.key) {
