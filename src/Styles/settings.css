@@ -94,6 +94,11 @@
     }
     & .setting-item {
         background-color: transparent !important;
+        border-radius: 0;
+        border-top: var(--border-width) solid var(--background-modifier-border);
+        &:first-child {
+            border-top: none;
+        }
         padding: 0.5em;
         margin: 0.25em;
         /* options button */
@@ -462,7 +467,10 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
-    border-top: 1px solid var(--background-modifier-border);
+    border-top: var(--border-width) solid var(--background-modifier-border);
+    &:first-child {
+        border-top: none;
+    }
     padding: 8px 0;
     & .setting-item {
         align-items: center !important;
