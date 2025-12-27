@@ -667,6 +667,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setHeading();
 
 		const positionGroup = new SettingGroup(settingsDiv);
+		positionGroup.addClass('note-toolbar-setting-position-group');
 
 		// 	.setDesc(learnMoreFr(t('setting.position.description'), 'Positioning-toolbars'))
 

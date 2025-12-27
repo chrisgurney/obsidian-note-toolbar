@@ -1197,6 +1197,12 @@ input[type="text"].note-toolbar-setting-error,
     width: calc(var(--dialog-width) / 1.5);
 }
 
+.note-toolbar-setting-position-group {
+    & .setting-item:has(+ .setting-item[data-active="false"]) {
+        padding-bottom: 0;
+    }
+}
+
 .note-toolbar-setting-small-heading {
     color: var(--color-base-50);
     font-size: var(--font-ui-smaller);
