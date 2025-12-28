@@ -56,7 +56,6 @@
     .is-phone.mod-toolbar-open & {
         bottom: unset;
         top: calc(100vh - var(--keyboard-height) - var(--mobile-toolbar-height) - var(--cg-nt-fab-icon-size) - var(--cg-nt-fab-padding) * 2 - 8px);
-        transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
     }
 }
 
