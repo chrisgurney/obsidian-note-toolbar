@@ -187,6 +187,7 @@ export default class ToolbarEventHandler {
 			// style toolbar
 			//
 
+			// no need to show it for the tab bar position, as it can't be styled there
 			if (currentPosition !== PositionType.TabBar) {
 				contextMenu.addItem((item: MenuItem) => {
 					item
