@@ -116,7 +116,7 @@ export default class ToolbarRenderer {
      */
     async render(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView): Promise<void> {
 
-        this.ntb.debugGroup(`renderToolbar: ${toolbar.name}`);
+        this.ntb.debugGroup(`render: ${toolbar.name}`);
 
         // get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
         let position: PositionType;
@@ -168,7 +168,7 @@ export default class ToolbarRenderer {
         // render the toolbar based on its position
         switch (position) {
             case PositionType.FabLeft:
-            case PositionType.FabRight:
+            case PositionType.FabRight: {
                 noteToolbarElement = await this.renderAsFab(toolbar, position);
                 embedBlock.append(noteToolbarElement);
                 this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.events.fabHandler(e, noteToolbarElement!));
@@ -186,6 +186,7 @@ export default class ToolbarRenderer {
                     this.ntb.registerDomEvent(noteToolbarElement, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
                 }
                 break;
+			}
             case PositionType.TabBar: {
                 setIcon(embedBlock, this.ntb.settings.icon);
                 setTooltip(embedBlock, toolbar.name);
