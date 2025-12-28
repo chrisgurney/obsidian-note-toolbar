@@ -54,7 +54,12 @@
         }
         & .cg-note-toolbar-callout {
             .is-phone & {
-                padding-bottom: var(--cg-nt-tbar-bottom-padding-bottom-phone);
+                padding-bottom: calc(var(--navbar-height) + var(--cg-nt-tbar-bottom-padding-bottom-phone));
+                /* use animation consistent with Navbar */
+                transition: padding-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+                .is-hidden-nav & {
+                    padding-bottom: var(--cg-nt-tbar-bottom-padding-bottom-phone);
+                }
             }
             /* fix: bottom padding needs to be removed when keyboard is open on phone */
             .is-phone.mod-toolbar-open & {
