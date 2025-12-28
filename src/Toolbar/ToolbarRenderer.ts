@@ -213,6 +213,7 @@ export default class ToolbarRenderer {
                 break;
         }
 
+		// render as a launchpad toolbar if applicable
         view.contentEl.toggleClass('note-toolbar-launchpad-container', useLaunchpad);
         if (useLaunchpad && noteToolbarElement) {
             noteToolbarElement.addClass('note-toolbar-launchpad');
