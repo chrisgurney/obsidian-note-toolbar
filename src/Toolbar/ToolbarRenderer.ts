@@ -223,7 +223,7 @@ export default class ToolbarRenderer {
             return;
         }
 
-		if (noteToolbarElement) this.updatePhoneNavigation(position, noteToolbarElement.offsetHeight);
+		this.updatePhoneNavigation(position, noteToolbarElement?.offsetHeight ?? 0);
 		
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
