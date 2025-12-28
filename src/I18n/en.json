@@ -347,6 +347,7 @@
         },
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
         "error-old-settings-name": "⚠️ Error: Please disable and renable Note Toolbar, or restart Obsidian.",
+        "error-invalid-floating-toolbar": "Error: Selected toolbar does not exist. Check your settings.",
         "error-invalid-text-toolbar": "Error: Selected text toolbar does not exist. Check your settings.",
         "help": {
             "button-donate": "Donate ↗",

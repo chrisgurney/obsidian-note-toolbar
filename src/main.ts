@@ -153,7 +153,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
-			// set up the text toolbar if enabled; this might be required for backwards compat (#451)
+			// register the text toolbar if enabled; this might be required for backwards compat (#451)
 			if (this.settings.textToolbar) {
 				this.textToolbar = TextToolbar(this);
 				this.registerEditorExtension(this.textToolbar);
@@ -170,7 +170,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// remove any toolbars
 		this.el.getAllToolbarEl().forEach((toolbarEl) => { toolbarEl.remove(); });
-		if (this.render.textToolbarEl) this.render.textToolbarEl.remove();
+		if (this.render.floatingToolbarEl) this.render.floatingToolbarEl.remove();
 		// remove the global API
 		if (window["ntb"]) delete window["ntb"];
 

@@ -102,10 +102,10 @@ export const enum PositionType {
 	Bottom = 'bottom',
 	FabLeft = 'fabl',
 	FabRight = 'fabr',
+	Floating = 'float',
 	Hidden = 'hidden',
 	Props = 'props',
 	TabBar = 'tabbar',
-	Text = 'text',
 	Top = 'top'
 }
 export const enum RibbonAction {

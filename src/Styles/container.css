@@ -63,7 +63,7 @@
         }
     }
 
-    &[data-tbar-position="text"] {
+    &[data-tbar-position="float"] {
         border-radius: var(--cg-nt-tbar-text-border-radius);
         box-shadow: var(--cg-nt-tbar-text-shadow);
         position: absolute;

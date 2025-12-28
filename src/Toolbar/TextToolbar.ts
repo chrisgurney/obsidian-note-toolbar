@@ -1,6 +1,7 @@
 import { EditorView, PluginValue, Rect, ViewPlugin, ViewUpdate } from '@codemirror/view';
 import NoteToolbarPlugin from 'main';
-import { Platform } from 'obsidian';
+import { Notice, Platform } from 'obsidian';
+import { t } from 'Settings/NoteToolbarSettings';
 
 /**
  * Renders the configured toolbar when text is selected.
@@ -54,12 +55,12 @@ export class TextToolbarClass implements PluginValue {
             this.isMouseSelection = true;
         });
         ntb.registerDomEvent(view.scrollDOM, 'scroll', () => {
-            if (ntb.render.hasTextToolbar()) {
+            if (ntb.render.hasFloatingToolbar()) {
                 if (!this.selection) return;
                 const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
                 const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
                 if (!selectStartPos || !selectEndPos) return;
-                ntb.render.positionFloatingToolbar(ntb.render.textToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
+                ntb.render.positionFloating(ntb.render.floatingToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
             }
         });
         ntb.registerDomEvent(view.dom, 'contextmenu', () => {
@@ -73,7 +74,7 @@ export class TextToolbarClass implements PluginValue {
         // if there's no text toolbar set, there's nothing to do
         if (!this.ntb.settings.textToolbar) {
             // plugin.debug('no text toolbar setting');
-            if (this.ntb.render.hasTextToolbar()) this.ntb.render.removeTextToolbar();
+            if (this.ntb.render.hasFloatingToolbar()) this.ntb.render.removeFloatingToolbar();
             return;
         };
         
@@ -101,18 +102,18 @@ export class TextToolbarClass implements PluginValue {
         }
 
         if (!update.selectionSet) {
-            if (this.ntb.render.isTextToolbarFocussed()) {
+            if (this.ntb.render.isFloatingToolbarFocussed()) {
                 this.ntb.debug('toolbar in focus - exiting');
                 return;
             }
             if (this.selection.from === this.selection.to || !view.hasFocus) {
-                if (this.ntb.render.hasTextToolbar()) {
+                if (this.ntb.render.hasFloatingToolbar()) {
                     this.ntb.debugGroup('⛔️ no selection or view out of focus - removing toolbar');
                     this.ntb.debug(
                         'selection empty:', this.selection.from === this.selection.to, ' • has focus: view', view.hasFocus, 'toolbar', 
-                        this.ntb.render.isTextToolbarFocussed());
+                        this.ntb.render.isFloatingToolbarFocussed());
                     this.ntb.debugGroupEnd();
-                    this.ntb.render.removeTextToolbar();
+                    this.ntb.render.removeFloatingToolbar();
                 }
                 return;
             }
@@ -120,9 +121,9 @@ export class TextToolbarClass implements PluginValue {
 
         if (selection.empty) {
             this.lastSelection = null;
-            if (this.ntb.render.hasTextToolbar()) {
+            if (this.ntb.render.hasFloatingToolbar()) {
                 this.ntb.debug('⛔️ selection empty - removing toolbar');
-                this.ntb.render.removeTextToolbar();
+                this.ntb.render.removeFloatingToolbar();
             }
             return;
         }
@@ -144,7 +145,12 @@ export class TextToolbarClass implements PluginValue {
             const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
             const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
-            await this.ntb.render.renderTextToolbar(toolbar, selectStartPos, selectEndPos);
+            if (!toolbar) {
+                this.ntb.debug('⚠️ error: no text toolbar with ID', this.ntb.settings.textToolbar);
+                new Notice(t('setting.error-invalid-text-toolbar'));
+                return;
+            };
+            await this.ntb.render.renderFloatingToolbar(toolbar, selectStartPos, selectEndPos);
 
             this.lastSelection = {
                 from: this.selection.from,
@@ -162,7 +168,7 @@ export class TextToolbarClass implements PluginValue {
     }
 
     destroy() {
-        if (this.ntb.render.hasTextToolbar()) this.ntb.render.removeTextToolbar();
+        if (this.ntb.render.hasFloatingToolbar()) this.ntb.render.removeFloatingToolbar();
     }
 
 }

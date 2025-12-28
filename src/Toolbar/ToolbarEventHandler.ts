@@ -70,7 +70,7 @@ export default class ToolbarEventHandler {
 		// figure out what toolbar we're in
 		let toolbarEl = (mouseEvent.target as Element).closest('.cg-note-toolbar-container') as HTMLElement;
 		let toolbarSettings = toolbarEl?.id ? this.ntb.settingsManager.getToolbarById(toolbarEl.id) : undefined;
-		const isTextToolbar = toolbarEl.getAttribute(TbarData.Position) === PositionType.Text;
+		const isFloatingToolbar = toolbarEl.getAttribute(TbarData.Position) === PositionType.Floating;
 
 		// figure out what item was clicked on (if any)
 		let toolbarItemEl: Element | null = null;
@@ -101,7 +101,7 @@ export default class ToolbarEventHandler {
 			// position
 			//
 
-			if (!isTextToolbar) {
+			if (!isFloatingToolbar) {
 
 				// workaround: sub-menus only work on non-tablet devices
 				let positionMenu = contextMenu;
@@ -311,7 +311,7 @@ export default class ToolbarEventHandler {
 		//
 
 		// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-		if (!isTextToolbar && currentView?.getViewType() === 'markdown' && this.ntb.settings.toolbarProp !== 'tags') {
+		if (!isFloatingToolbar && currentView?.getViewType() === 'markdown' && this.ntb.settings.toolbarProp !== 'tags') {
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('repeat')
@@ -390,7 +390,7 @@ export default class ToolbarEventHandler {
 						right: this.ntb.render.mouseX,
 						bottom: this.ntb.render.mouseY
 					}
-					await this.ntb.render.renderTextToolbar(toolbar, mouseRect, mouseRect);
+					await this.ntb.render.renderFloatingToolbar(toolbar, mouseRect, mouseRect);
 				}
 				else {
 					// not replacing variables here, because we need to call it synchronously
@@ -556,13 +556,13 @@ export default class ToolbarEventHandler {
 	/**
 	 * Handles keyboard navigation within the toolbar.
 	 * @param e KeyboardEvent
-	 * @param isTextToolbar set to true if this is for the text toolbar.
+	 * @param isFloatingToolbar set to true if this is for a floating toolbar.
 	 */
-	async keyboardHandler(e: KeyboardEvent, isTextToolbar: boolean = false) {
+	async keyboardHandler(e: KeyboardEvent, isFloatingToolbar: boolean = false) {
 
 		this.ntb.debugGroup("keyboardHandler");
 
-		let itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isTextToolbar);
+		let itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
 		if (itemsUl) {
 
 			// not preventing default from 'Escape' for now (I think this helps)

@@ -185,25 +185,25 @@ export default class CommandManager {
 
     /**
      * Sets the keyboard's focus on the first visible item in the toolbar.
-     * @param isTextToolbar set to true if this is for the text toolbar.
+     * @param isFloatingToolbar set to true if this is for the floating toolbar.
      */
-    async focus(isTextToolbar: boolean = false): Promise<void> {
+    async focus(isFloatingToolbar: boolean = false): Promise<void> {
 
         this.ntb.debugGroup("focus");
 
         // display the text toolbar at the current cursor position, if it's not already rendered
-        if (isTextToolbar && !this.ntb.render.hasTextToolbar()) {
+        if (isFloatingToolbar && !this.ntb.render.hasFloatingToolbar()) {
             const editor = this.ntb.app.workspace.activeEditor?.editor;
             if (!editor) return;
             const offset = editor.posToOffset(editor.getCursor());
             const cmView = (editor as any).cm as EditorView;
             const coords = cmView.coordsAtPos(offset);
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
-            await this.ntb.render.renderTextToolbar(toolbar, coords, coords);
+            await this.ntb.render.renderFloatingToolbar(toolbar, coords, coords);
         }
 
         // need to get the type of toolbar first
-        let toolbarEl = this.ntb.el.getToolbarEl(undefined, isTextToolbar);
+        let toolbarEl = this.ntb.el.getToolbarEl(undefined, isFloatingToolbar);
         let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
         switch (toolbarPosition) {
             case PositionType.FabRight:
@@ -240,10 +240,10 @@ export default class CommandManager {
             }
             case PositionType.Bottom:
             case PositionType.Props:
-            case PositionType.Text:
+            case PositionType.Floating:
             case PositionType.Top: {
                 // get the list and set focus on the first visible item
-                const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isTextToolbar);
+                const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
                 if (itemsUl) {
                     this.ntb.debug("toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);

@@ -65,12 +65,12 @@ export default class ToolbarElementHelper {
     /**
      * Get the toolbar element, in the current view.
      * @param view optional ItemView to find the toolbar container for; otherwise uses the active view.
-     * @param isTextToolbar set to true if this is for the text toolbar.
+     * @param isFloatingToolbar true if we should look for a floating toolbar.
      * @returns HTMLElement or null, if it doesn't exist.
      */
-    getToolbarEl(view?: ItemView, isTextToolbar: boolean = false): HTMLElement | null {
-        if (isTextToolbar) {
-            return activeDocument.querySelector('.cg-note-toolbar-container[data-tbar-position="text"]') as HTMLElement;
+    getToolbarEl(view?: ItemView, isFloatingToolbar: boolean = false): HTMLElement | null {
+        if (isFloatingToolbar) {
+            return activeDocument.querySelector('.cg-note-toolbar-container[data-tbar-position="float"]') as HTMLElement;
         }
         else {
             var toolbarEl: HTMLElement | null = null;
@@ -89,11 +89,11 @@ export default class ToolbarElementHelper {
 
     /**
      * Get the toolbar element's <ul> element, in the current view.
-     * @param isTextToolbar set to true if this is for the text toolbar.
+     * @param isFloatingToolbar true if we should look for a floating toolbar.
      * @returns HTMLElement or null, if it doesn't exist.
      */
-    getToolbarListEl(isTextToolbar: boolean = false): HTMLElement | null {
-        const toolbarEl = this.getToolbarEl(undefined, isTextToolbar);
+    getToolbarListEl(isFloatingToolbar: boolean = false): HTMLElement | null {
+        const toolbarEl = this.getToolbarEl(undefined, isFloatingToolbar);
         return toolbarEl?.querySelector('.callout-content > ul') as HTMLElement;
     }
 

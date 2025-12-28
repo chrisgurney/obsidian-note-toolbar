@@ -22,7 +22,9 @@ export default class ToolbarRenderer {
 
 	mouseX: number = 0;
 	mouseY: number = 0;
-    textToolbarEl: HTMLDivElement | null = null;
+
+	// floating toolbar element, of which there can be only one
+    floatingToolbarEl: HTMLDivElement | null = null;
     
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
@@ -34,11 +36,11 @@ export default class ToolbarRenderer {
     ) {}
 
 	/**
-	 * Check to see if the text toolbar is present.
-	 * @returns true if the text toolbar is present and visible; false otherwise.
+	 * Check to see if a floating toolbar is present.
+	 * @returns true if a floating toolbar is present and visible; false otherwise.
 	 */
-	hasTextToolbar(): boolean {
-		return this.textToolbarEl?.isConnected ?? false;
+	hasFloatingToolbar(): boolean {
+		return this.floatingToolbarEl?.isConnected ?? false;
 	}
 	
 	/**
@@ -50,11 +52,11 @@ export default class ToolbarRenderer {
     }
 
 	/**
-	 * Check to see if the text toolbar is in focus.
-	 * @returns true if the text toolbar is in focus; false otherwise.
+	 * Check to see if a floating toolbar is in focus.
+	 * @returns true if a floating toolbar is in focus; false otherwise.
 	 */
-	isTextToolbarFocussed(): boolean {
-		return this.ntb.render.textToolbarEl?.contains(activeDocument.activeElement) ?? false;
+	isFloatingToolbarFocussed(): boolean {
+		return this.ntb.render.floatingToolbarEl?.contains(activeDocument.activeElement) ?? false;
 	}
 
 	/**
@@ -1052,7 +1054,7 @@ export default class ToolbarRenderer {
 	/**
 	 * Positions floating toolbars (e.g., text toolbar), ensuring it doesn't go over the edge of the window.
 	 */
-	positionFloatingToolbar(
+	positionFloating(
 		toolbarEl: HTMLDivElement | null, 
 		startPos: Rect, 
 		endPos: Rect, 
@@ -1095,20 +1097,20 @@ export default class ToolbarRenderer {
 	}
 
 	/**
-	 * Removes the text toolbar if it's present.
+	 * Removes the floating toolbar if it's present.
 	 */
-	async removeTextToolbar() {
-		this.textToolbarEl?.remove();
+	async removeFloatingToolbar() {
+		this.floatingToolbarEl?.remove();
 	}
 
 	/**
-	 * Renders a text toolbar at the middle of the given start and end positions in the editor. 
+	 * Renders a floating toolbar at the middle of the given start and end positions in the editor. 
 	 * @param toolbar
 	 * @param selectStartPos 
 	 * @param selectEndPos 
 	 * @returns nothing
 	 */
-	async renderTextToolbar(
+	async renderFloatingToolbar(
 		toolbar: ToolbarSettings | undefined, 
 		selectStartPos: Rect | null, 
 		selectEndPos: Rect | null
@@ -1117,8 +1119,8 @@ export default class ToolbarRenderer {
 		if (!selectStartPos || !selectEndPos || !toolbar) return;
 
 		if (!toolbar) {
-			this.ntb.debug('⚠️ error: no text toolbar with ID', this.ntb.settings.textToolbar);
-			new Notice(t('setting.error-invalid-text-toolbar'));
+			this.ntb.debug('⚠️ error: no floating toolbar provided');
+			new Notice(t('setting.error-invalid-floating-toolbar'));
 			return;
 		};
 
@@ -1127,9 +1129,9 @@ export default class ToolbarRenderer {
 		if (!activeFile || !activeView) return;
 
 		// remove the existing toolbar because we're likely in a new position
-		if (this.textToolbarEl) {
-			this.ntb.debug('♻️ rendering text toolbar (removing old toolbar)');
-			this.textToolbarEl.remove();
+		if (this.floatingToolbarEl) {
+			this.ntb.debug('♻️ rendering floating toolbar (removing old toolbar)');
+			this.floatingToolbarEl.remove();
 		}
 
 		/*
@@ -1143,7 +1145,7 @@ export default class ToolbarRenderer {
 		]);
 		toolbarContainerEl.setAttrs({
 			[TbarData.Name]: toolbar.name,
-			[TbarData.Position]: PositionType.Text,
+			[TbarData.Position]: PositionType.Floating,
 			[TbarData.Updated]: toolbar.updated
 		});
 		
@@ -1151,12 +1153,12 @@ export default class ToolbarRenderer {
 		toolbarContainerEl.appendChild(renderedToolbarEl);
 		activeDocument.body.appendChild(toolbarContainerEl);
 
-		this.positionFloatingToolbar(toolbarContainerEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
+		this.positionFloating(toolbarContainerEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
 
 		this.ntb.registerDomEvent(toolbarContainerEl, 'contextmenu', (e) => this.ntb.events.contextMenuHandler(e));
 		this.ntb.registerDomEvent(toolbarContainerEl, 'keydown', (e) => this.ntb.events.keyboardHandler(e, true));
 
-		this.textToolbarEl = toolbarContainerEl;
+		this.floatingToolbarEl = toolbarContainerEl;
 
 		// plugin.debug('drew toolbar');
 
