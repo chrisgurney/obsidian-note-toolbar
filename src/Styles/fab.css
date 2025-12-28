@@ -53,6 +53,9 @@
             right: var(--cg-nt-fab-pos-x-mobile);
         }
     }
+    .is-phone.mod-toolbar-open & {
+        bottom: calc(100vh - var(--keyboard-height) - var(--mobile-toolbar-height) - 18px);
+    }
 }
 
 .is-phone {
