@@ -1053,6 +1053,10 @@ export default class ToolbarRenderer {
 
 	/**
 	 * Positions floating toolbars (e.g., text toolbar), ensuring it doesn't go over the edge of the window.
+	 * @param toolbarEl toolbar element to position.
+	 * @param startPos start of range to position toolbar at.
+	 * @param endPos end of range to position toolbar at.
+	 * @param position position the toolbar above or below the provided position.
 	 */
 	positionFloating(
 		toolbarEl: HTMLDivElement | null, 
