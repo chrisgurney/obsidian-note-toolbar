@@ -12,7 +12,7 @@ body {
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
-    --cg-nt-tbar-bottom-padding-bottom-phone: var(--safe-area-inset-bottom);
+    --cg-nt-tbar-bottom-margin-bottom-phone: var(--safe-area-inset-bottom);
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;

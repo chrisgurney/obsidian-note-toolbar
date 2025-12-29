@@ -54,16 +54,16 @@
         }
         & .cg-note-toolbar-callout {
             .is-phone & {
-                padding-bottom: calc(var(--navbar-height) + var(--cg-nt-tbar-bottom-padding-bottom-phone));
+                margin-bottom: calc(var(--navbar-height) + var(--cg-nt-tbar-bottom-margin-bottom-phone));
                 /* use animation consistent with Navbar */
-                transition: padding-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+                transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
                 .is-hidden-nav & {
-                    padding-bottom: var(--cg-nt-tbar-bottom-padding-bottom-phone);
+                    margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
                 }
             }
-            /* fix: bottom padding needs to be removed when keyboard is open on phone */
+            /* fix: bottom margin needs to be removed when keyboard is open on phone */
             .is-phone.mod-toolbar-open & {
-                padding-bottom: unset;
+                margin-bottom: unset;
             }
         }
     }
