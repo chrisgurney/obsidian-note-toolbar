@@ -97,9 +97,6 @@ body {
     &.is-android {
         --cg-nt-fab-border-radius: var(--radius-xl);
     }
-    &.is-mobile {
-        --cg-nt-fab-border-color: var(--interactive-accent);
-    }
 
     /*
      * Other styles not customizable via Style Settings
