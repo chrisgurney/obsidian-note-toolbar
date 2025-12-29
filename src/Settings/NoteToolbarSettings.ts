@@ -299,6 +299,7 @@ export interface ExportSettings {
 
 export interface ToolbarSettings {
 	uuid: string;
+	commandPosition: PositionType;
 	customClasses: string;
 	defaultItem: string | null;
 	defaultStyles: string[];
@@ -316,6 +317,7 @@ export interface ToolbarSettings {
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	uuid: getUUID(),
+	commandPosition: PositionType.Floating,
 	customClasses: "",
 	defaultItem: null,
 	defaultStyles: [DefaultStyleType.Border, DefaultStyleType.Even, DefaultStyleType.Sticky],
@@ -333,6 +335,7 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 
 export const EMPTY_TOOLBAR: ToolbarSettings = {
 	uuid: EMPTY_TOOLBAR_ID,
+	commandPosition: PositionType.Floating,
 	customClasses: '',
 	defaultItem: null,
 	defaultStyles: [],

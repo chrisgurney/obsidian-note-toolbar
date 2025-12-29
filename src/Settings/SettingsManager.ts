@@ -59,6 +59,7 @@ export default class SettingsManager {
 		this.debug('duplicateToolbar', toolbar);
 		let newToolbar = {
 			uuid: getUUID(),
+			commandPosition: toolbar.commandPosition,
 			customClasses: "",
 			defaultItem: toolbar.defaultItem,
 			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)),
@@ -314,6 +315,7 @@ export default class SettingsManager {
 	public async newToolbar(name: string = ""): Promise<ToolbarSettings> {
 		let newToolbar = {
 			uuid: getUUID(),
+			commandPosition: PositionType.Floating,
 			customClasses: "",
 			defaultItem: null,
 			defaultStyles: ["border", "even", "sticky"],

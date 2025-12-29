@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, PositionType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID } from "./Utils";
 import { getIcon, Notice, TFile, TFolder } from "obsidian";
 
@@ -262,6 +262,7 @@ export async function importFromCallout(
     if (!toolbar) {
         toolbar = {
             uuid: getUUID(),
+            commandPosition: PositionType.Floating,
             customClasses: "",
             defaultItem: null,
             defaultStyles: ["border", "even", "sticky"],
