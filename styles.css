@@ -1628,6 +1628,10 @@ body {
             height: 0;
         }
 
+        & span.cg-note-toolbar-item {
+            align-items: center;
+        }
+
         & a, span.external-link {
             color: var(--cg-nt-item-text-color);
             padding: var(--cg-nt-item-padding-y) var(--cg-nt-item-padding-x);
