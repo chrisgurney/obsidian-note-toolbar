@@ -104,7 +104,9 @@ export const enum PositionType {
 	FabRight = 'fabr',
 	Floating = 'float',
 	Hidden = 'hidden',
+	Menu = 'menu',
 	Props = 'props',
+	QuickTools = 'quicktools',
 	TabBar = 'tabbar',
 	Top = 'top'
 }
@@ -589,6 +591,12 @@ export const TARGET_OPTIONS = {
 	'tab': t('setting.item.option-target-tab'),
 	'window': t('setting.item.option-target-window'),
 	'split': t('setting.item.option-target-split')
+}
+
+export const TOOLBAR_COMMAND_POSITION_OPTIONS = {
+	[PositionType.Floating]: t('setting.position.option-floating'),
+	[PositionType.Menu]: t('setting.position.option-menu'),
+	[PositionType.QuickTools]: t('setting.position.option-quicktools')
 }
 
 /**

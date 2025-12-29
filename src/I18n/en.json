@@ -535,7 +535,9 @@
             "description": "Add a command that opens this toolbar in a Quick Tools window.",
             "name": "Add toolbar command",
             "notice-command-added": "Command now available:\n{{command}}",
-            "notice-command-removed": "Command removed:\n{{command}}"
+            "notice-command-removed": "Command removed:\n{{command}}",
+            "option-position": "Where to open",
+            "option-position-description": "By default the toolbar opens as a floating toolbar at the cursor position."
         },
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
@@ -588,10 +590,13 @@
             "option-fab-desktop-native-menus-disclaimer": "Disable Obsidian's Appearance → Native menus option, if you want icons to appear floating button menus.",
             "option-fabl": "Floating button: left",
             "option-fabr": "Floating button: right",
+            "option-floating": "Floating toolbar",
             "option-hidden": "Hidden (do not display)",
             "option-hidden-mobile": "Hidden / Navigation bar",
+            "option-menu": "Menu",
             "option-mobile-help": "Tip: Access toolbars from the navigation bar.",
             "option-props": "Below Properties",
+            "option-quicktools": "Quick Tools window",
             "option-tabbar": "Tab bar",
             "option-top": "Top (fixed)"
         },

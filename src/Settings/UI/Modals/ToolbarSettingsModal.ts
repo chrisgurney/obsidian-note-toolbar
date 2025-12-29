@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { App, ButtonComponent, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce, getIcon, setIcon, setTooltip } from 'obsidian';
-import { COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, ItemType, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, SettingFieldItemMap, ToolbarItemSettings, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
+import { COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, ItemType, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, SettingFieldItemMap, TOOLBAR_COMMAND_POSITION_OPTIONS, ToolbarItemSettings, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import Sortable from 'sortablejs';
@@ -692,6 +692,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.position.desktop = { allViews: { position: val } };
 							this.toolbar.updated = new Date().toISOString();
 							this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+							// toggle display of the default item setting
 							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasMobileFabPosition) {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
@@ -733,6 +734,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.position.tablet = { allViews: { position: val } };
 							this.toolbar.updated = new Date().toISOString();
 							this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+							// toggle display of the default item setting
 							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasDesktopFabPosition) {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
@@ -800,7 +802,9 @@ export default class ToolbarSettingsModal extends Modal {
 					.setValue(this.toolbar.hasCommand)
 					.onChange(async (value) => {
 						this.toolbar.hasCommand = value;
-						await this.ntb.settingsManager.save();
+						// toggle display of the position setting
+						let commandPositionSettingEl = this.containerEl.querySelector('#note-toolbar-command-position-setting');
+						commandPositionSettingEl?.toggleClass('data-active', value);
 						// add or remove the command
 						if (value) {
 							this.ntb.addCommand({ 
@@ -823,8 +827,28 @@ export default class ToolbarSettingsModal extends Modal {
 								{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
 							));
 						}
+						// save the setting
+						await this.ntb.settingsManager.save();
+						this.display();
 					});
 			});
+
+		const initialCommandPosition = this.toolbar.commandPosition || PositionType.Floating;
+		const commandPositionSetting = new Setting(settingsDiv)
+			.setName(t('setting.open-command.option-position'))
+			.setDesc(t('setting.open-command.option-position-description'))
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOptions(TOOLBAR_COMMAND_POSITION_OPTIONS)
+					.setValue(initialCommandPosition)
+					.onChange(async (value: PositionType) => {
+						this.toolbar.commandPosition = value;
+						await this.ntb.settingsManager.save();
+					});
+				});
+		commandPositionSetting.settingEl.id = 'note-toolbar-command-position-setting';
+		commandPositionSetting.settingEl.setAttribute('data-active', this.toolbar.hasCommand ? 'true' : 'false');
+
 	}
 
 	/**

@@ -163,16 +163,34 @@ export default class CommandManager {
                     name: t('command.name-open-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }),
                     icon: this.ntb.settings.icon,
                     callback: async () => {
-                        // TODO? SETTING? on phones, show the toolbar as a menu instead
-                        // if (Platform.isPhone) {
-                        //     const activeFile = this.plugin.app.workspace.getActiveFile();
-                        //     this.plugin.renderToolbarAsMenu(toolbar, activeFile).then(menu => {
-                        //         menu.showAtMouseEvent(new MouseEvent('click'));
-                        //     });
-                        // }
-                        // else {
-                        this.ntb.commands.openQuickTools(toolbar.uuid);
-                        // }
+                        // if no cursor position (or editor not in focus), fall back to mouse position
+                        // TODO: fall back to Quick Tools necessary, for tablets?
+                        const cursorPosition = this.ntb.utils.getCursorPosition();
+                        const showAtPosition = cursorPosition 
+                            ? cursorPosition 
+                            : { left: this.ntb.render.mouseX, right: this.ntb.render.mouseX,
+                                top: this.ntb.render.mouseY, bottom: this.ntb.render.mouseY };
+                        switch (toolbar.commandPosition) {
+                            case PositionType.Menu: {
+                                const activeFile = this.ntb.app.workspace.getActiveFile();
+                                this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
+                                    menu.showAtPosition({x: showAtPosition.left, y: showAtPosition.top});
+                                });
+                                // TODO? is there a need to put the focus in the menu? test on tablet
+                                break;
+                            }
+                            case PositionType.QuickTools: {
+                                this.ntb.commands.openQuickTools(toolbar.uuid);
+                                break;
+                            }
+                            case PositionType.Floating:
+                            default: {
+                                const activeFile = this.ntb.app.workspace.getActiveFile();
+                                this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, showAtPosition);
+                                // TODO: put focus in toolbar
+                                break;
+                            }
+                        }
                     }}
                 );
             }
