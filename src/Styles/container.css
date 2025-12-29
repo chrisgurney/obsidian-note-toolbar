@@ -66,6 +66,18 @@
                 margin-bottom: unset;
             }
         }
+
+        /* remove the background color for toolbars using the button style */
+        & .cg-note-toolbar-callout[data-callout-metadata*="button"],
+        & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
+            background-color: unset !important;
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    background-color: var(--interactive-hover);
+                    opacity: 1;
+                }
+            }
+        }
     }
 
     &[data-tbar-position="float"] {
@@ -98,6 +110,20 @@
                     opacity: var(--icon-opacity-hover);
                     background-color: var(--cg-nt-tbar-text-item-bg-color-hover);
                     color: var(--cg-nt-tbar-text-item-text-color-hover);
+                }
+            }
+        }
+    }
+
+    &[data-tbar-position="props"] {
+        /* remove the background color for toolbars using the button style */
+        & .cg-note-toolbar-callout[data-callout-metadata*="button"],
+        & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
+            background-color: unset !important;
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    background-color: var(--interactive-hover);
+                    opacity: 1;
                 }
             }
         }
