@@ -102,11 +102,11 @@ export default class PluginUtils {
 
 	/**
 	 * Get the current cursor position.
-	 * @returns cursor position, or undefined.
+	 * @returns cursor position, or `undefined` if we're not showing an editor, or it does not have focus.
 	 */
 	getCursorPosition(): Rect | undefined {
 		const editor = this.ntb.app.workspace.activeEditor?.editor;
-		if (!editor) return;
+		if (!editor || !editor.hasFocus()) return;
 		const offset = editor.posToOffset(editor.getCursor());
 		const cmView = (editor as any).cm as EditorView;
 		const coords = cmView.coordsAtPos(offset);
