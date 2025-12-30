@@ -566,7 +566,7 @@
             },
             "name": "Other",
             "navbar-visibility": {
-                "description": "Hides actions in Obsidian's mobile navigation bar.",
+                "description": "Hides actions in Obsidian's phone navigation bar.",
                 "name": "Navbar item visibility 📱"
             },
             "scripting": {
