@@ -1652,7 +1652,6 @@ body {
 
         & li.tbar-item-focused {
             border-radius: var(--cg-nt-item-border-radius);
-            box-shadow: inset 0 0 0 1px var(--background-modifier-border);
             box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
         }
 
@@ -1865,6 +1864,9 @@ body {
                 background-color: var(--cg-nt-tbar-text-item-button-bg-color);
             }
         }
+        & li.tbar-item-focused {
+            box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+        }
     }
 
     &[data-callout-metadata*="mbtn"] ul {
@@ -1876,6 +1878,9 @@ body {
                 [data-tbar-position="float"] & {
                     background-color: var(--cg-nt-tbar-text-item-button-bg-color);
                 }
+            }
+            & li.tbar-item-focused {
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
             }
         }
     }
