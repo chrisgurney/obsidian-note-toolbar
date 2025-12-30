@@ -444,6 +444,12 @@ input[type="text"].note-toolbar-setting-error,
     margin-bottom: 2em !important;
 }
 
+.note-toolbar-setting-group-container {
+    &[data-active="false"] {
+        display: none !important;
+    }
+}
+
 .note-toolbar-setting-item-full-width {
     align-items: flex-start;
     flex-direction: column;

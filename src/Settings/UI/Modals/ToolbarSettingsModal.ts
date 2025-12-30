@@ -793,6 +793,8 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayCommandButton(settingsDiv: HTMLElement) {
 
+		const SUB_OPTIONS_ID = 'command-options-group';
+
 		new Setting(settingsDiv)
 			.setName(t('setting.open-command.name'))
 			.setHeading()
@@ -803,8 +805,8 @@ export default class ToolbarSettingsModal extends Modal {
 					.onChange(async (value) => {
 						this.toolbar.hasCommand = value;
 						// toggle display of the position setting
-						let commandPositionSettingEl = this.containerEl.querySelector('#note-toolbar-command-position-setting');
-						commandPositionSettingEl?.toggleClass('data-active', value);
+						const commandGroupEl = this.contentEl.querySelector(`#${SUB_OPTIONS_ID}`);
+						commandGroupEl?.setAttribute('data-active', value.toString());
 						// add or remove the command
 						if (value) {
 							this.ntb.addCommand({ 
@@ -833,21 +835,27 @@ export default class ToolbarSettingsModal extends Modal {
 					});
 			});
 
-		const initialCommandPosition = this.toolbar.commandPosition || PositionType.Floating;
-		const commandPositionSetting = new Setting(settingsDiv)
-			.setName(t('setting.open-command.option-position'))
-			.setDesc(t('setting.open-command.option-position-description'))
-			.addDropdown((dropdown) => {
-				dropdown
-					.addOptions(TOOLBAR_COMMAND_POSITION_OPTIONS)
-					.setValue(initialCommandPosition)
-					.onChange(async (value: PositionType) => {
-						this.toolbar.commandPosition = value;
-						await this.ntb.settingsManager.save();
+		// command options: hot key + position
+		const commandOptionsGroupEl = settingsDiv.createDiv('note-toolbar-setting-group-container');
+		commandOptionsGroupEl.id = SUB_OPTIONS_ID;
+		commandOptionsGroupEl.setAttribute('data-active', this.toolbar.hasCommand.toString());
+		const commandOptionsGroup = new SettingGroup(commandOptionsGroupEl);
+
+		commandOptionsGroup.addSetting((commandPositionSetting) => {
+			const initialCommandPosition = this.toolbar.commandPosition || PositionType.Floating;
+			commandPositionSetting
+				.setName(t('setting.open-command.option-position'))
+				.setDesc(t('setting.open-command.option-position-description'))
+				.addDropdown((dropdown) => {
+					dropdown
+						.addOptions(TOOLBAR_COMMAND_POSITION_OPTIONS)
+						.setValue(initialCommandPosition)
+						.onChange(async (value: PositionType) => {
+							this.toolbar.commandPosition = value;
+							await this.ntb.settingsManager.save();
+						});
 					});
-				});
-		commandPositionSetting.settingEl.id = 'note-toolbar-command-position-setting';
-		commandPositionSetting.settingEl.setAttribute('data-active', this.toolbar.hasCommand ? 'true' : 'false');
+		});
 
 	}
 
