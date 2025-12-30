@@ -178,7 +178,13 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         if (typeof toolbarOrItems === 'string') {
             const toolbar = this.ntb.settingsManager.getToolbar(toolbarOrItems);
             const activeFile = this.ntb.app.workspace.getActiveFile();
-            if (toolbar) menu = await this.ntb.render.renderAsMenu(toolbar, activeFile);
+            if (toolbar) {
+                menu = await this.ntb.render.renderAsMenu(toolbar, activeFile);
+            }
+            else {
+                new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarOrItems}));
+                return;
+            }
         }
         else {
             toolbarOrItems.map((item: NtbMenuItem) => {
