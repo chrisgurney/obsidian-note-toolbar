@@ -234,6 +234,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							const hotkeyEl = this.ntb.hotkeys.getHotkeyEl(tbarCommand);
 							if (hotkeyEl) {
 								toolbarNameFr.appendChild(hotkeyEl);
+								setTooltip(hotkeyEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
 							}
 							else {
 								let commandIconEl = toolbarNameFr.createSpan();
