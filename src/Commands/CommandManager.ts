@@ -185,7 +185,6 @@ export default class CommandManager {
                             }
                             case PositionType.Floating:
                             default: {
-                                const activeFile = this.ntb.app.workspace.getActiveFile();
                                 await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, showAtPosition);
                                 await this.focus(true);
                                 break;
