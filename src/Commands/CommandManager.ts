@@ -211,7 +211,10 @@ export default class CommandManager {
         // display the text toolbar at the current cursor position, if it's not already rendered
         if (isFloatingToolbar && !this.ntb.render.hasFloatingToolbar()) {
             const editor = this.ntb.app.workspace.activeEditor?.editor;
-            if (!editor) return;
+            if (!editor) {
+                this.ntb.debugGroupEnd();
+                return;
+            };
             const offset = editor.posToOffset(editor.getCursor());
             const cmView = (editor as any).cm as EditorView;
             const coords = cmView.coordsAtPos(offset);
