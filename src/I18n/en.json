@@ -532,11 +532,12 @@
             "option-menu": "Menu"
         },
         "open-command": {
-            "description": "Add a command that opens this toolbar in a Quick Tools window.",
+            "description": "Add a command that opens this toolbar.",
             "name": "Add toolbar command",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}",
-            "option-position": "Where to open",
+            "option-hotkey-description": "Open Obsidian's hotkey settings.",
+            "option-position": "Where to open toolbar",
             "option-position-description": "By default the toolbar opens as a floating toolbar at the cursor position."
         },
         "option-platform-desktop": "Desktop",

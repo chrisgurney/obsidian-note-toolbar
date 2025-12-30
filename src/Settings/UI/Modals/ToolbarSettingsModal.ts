@@ -841,6 +841,26 @@ export default class ToolbarSettingsModal extends Modal {
 		commandOptionsGroupEl.setAttribute('data-active', this.toolbar.hasCommand.toString());
 		const commandOptionsGroup = new SettingGroup(commandOptionsGroupEl);
 
+		const toolbarCommand = this.ntb.commands.getCommandFor(this.toolbar);
+		if (toolbarCommand) {
+			const hotkey = this.ntb.hotkeys.getHotkeyText(toolbarCommand);
+			commandOptionsGroup.addSetting((commandHotkeySetting) => {
+				const commandNameFr = document.createDocumentFragment();
+				commandNameFr.createEl('code', { text: toolbarCommand.name });
+				commandHotkeySetting
+					.setName(commandNameFr)
+					.setDesc(t('setting.open-command.option-hotkey-description'))
+					.addButton((button) => {
+						button
+							.setButtonText(hotkey ?? "Set hotkey")
+							.onClick(async () => {
+								this.close();
+								await this.ntb.commands.openSettings('hotkeys');
+							});
+						});
+			});
+		}
+		
 		commandOptionsGroup.addSetting((commandPositionSetting) => {
 			const initialCommandPosition = this.toolbar.commandPosition || PositionType.Floating;
 			commandPositionSetting
