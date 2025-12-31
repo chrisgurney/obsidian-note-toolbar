@@ -431,7 +431,7 @@
             "uk": "Відкрийте наступний файл у теці згідно сортировки за алфавітом (А–Я). Повертається до першого файлу."
         },
         "icon": "square-arrow-right",
-        "script": "const cf = ntb.app.workspace.getActiveFile(); if (!cf) return; const cfp = ntb.app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e==cf.path);\nif (sfl.length>1) { let nf = ci==sfl.length-1?sfl[0]:sfl[ci+1]; ntb.app.workspace.activeLeaf.openFile(ntb.app.vault.getAbstractFileByPath(nf)); }",
+        "script": "const go = s => { const cf = app.workspace.getActiveFile(), fs = cf?.parent?.children?.filter(f => !f.children).sort((a, b) => a.basename.localeCompare(b.basename, undefined, {numeric: true, sensitivity: 'base'})) || [], ci = fs.findIndex(f => f.path === cf.path); if (fs.length > 1) app.workspace.activeLeaf.openFile(fs[((ci + s) % fs.length + fs.length) % fs.length]); }; go(1);",
         "tooltip": {
             "en": "Next file",
             "ja": "次のファイル",
@@ -449,7 +449,7 @@
             "uk": "Відкрийте попередній файл у теці згідно сортировки за алфавітом (А–Я). Повертається до останнього файлу."
         },
         "icon": "square-arrow-left",
-        "script": "const cf = ntb.app.workspace.getActiveFile(); if (!cf) return; const cfp = ntb.app.vault.getAbstractFileByPath(cf.parent.path), cfl = cfp.children.filter(f=>f.basename), sfl = cfl.sort((a,b)=>a.basename.localeCompare(b.basename,undefined,{numeric:true,sensitivity:'base'})).map(f=>f.path),ci=sfl.findIndex(e=>e===cf.path);\nif (sfl.length>1) { const pf = ci===0?sfl[sfl.length-1]:sfl[ci-1]; ntb.app.workspace.activeLeaf.openFile(ntb.app.vault.getAbstractFileByPath(pf)); }",
+        "script": "const go = s => { const cf = app.workspace.getActiveFile(), fs = cf?.parent?.children?.filter(f => !f.children).sort((a, b) => a.basename.localeCompare(b.basename, undefined, {numeric: true, sensitivity: 'base'})) || [], ci = fs.findIndex(f => f.path === cf.path); if (fs.length > 1) app.workspace.activeLeaf.openFile(fs[((ci + s) % fs.length + fs.length) % fs.length]); }; go(-1);",
         "tooltip": {
             "en": "Previous file",
             "ja": "前のファイル",
