@@ -385,13 +385,8 @@ export default class ToolbarEventHandler {
 				// @ts-ignore
 				menu.items = [];
 				if (this.ntb.settings.editorMenuAsToolbar) {
-					const mouseRect = {
-						left: this.ntb.render.mouseX,
-						top: this.ntb.render.mouseY,
-						right: this.ntb.render.mouseX,
-						bottom: this.ntb.render.mouseY
-					}
-					await this.ntb.render.renderFloatingToolbar(toolbar, mouseRect, mouseRect);
+					const pointerPos = this.ntb.utils.getPosition('pointer');
+					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos, pointerPos);
 				}
 				else {
 					// not replacing variables here, because we need to call it synchronously

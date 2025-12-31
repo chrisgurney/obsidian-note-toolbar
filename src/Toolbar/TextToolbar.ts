@@ -142,8 +142,8 @@ export class TextToolbarClass implements PluginValue {
 
             if (!this.selection) return;
 
-            const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
-            const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
+            const selectStartPos: Rect | undefined = view.coordsAtPos(this.selection.from) ?? undefined;
+            const selectEndPos: Rect | undefined = view.coordsAtPos(this.selection.to) ?? undefined;
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             if (!toolbar) {
                 this.ntb.debug('⚠️ error: no text toolbar with ID', this.ntb.settings.textToolbar);

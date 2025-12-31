@@ -226,12 +226,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         // show at text cursor, with a fallback to the mouse position
         if (options?.position === 'cursor') {
-            const cursorPosition = this.ntb.utils.getCursorPosition();
-            const showAtPosition = cursorPosition 
-                ? cursorPosition 
-                : { left: this.ntb.render.mouseX, right: this.ntb.render.mouseX,
-                    top: this.ntb.render.mouseY, bottom: this.ntb.render.mouseY };
-            menu.showAtPosition({x: showAtPosition.left, y: showAtPosition.top});
+            const position = this.ntb.utils.getPosition('cursor');
+            if (position) menu.showAtPosition({x: position.left, y: position.top});
         }
         // default position is 'toolbar'
         else {

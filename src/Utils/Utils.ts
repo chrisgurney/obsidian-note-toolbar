@@ -133,6 +133,29 @@ export default class PluginUtils {
 	}
 
 	/**
+	 * Get the coordinates for the provided position.
+	 * 
+	 * @returns position, or `undefined` if it's not available.
+	 */
+	getPosition(position: 'cursor' | 'pointer' | 'toolbar'): Rect | undefined {
+		// 'pointer' position
+		const pointerPos: Rect = { 
+			left: this.ntb.render.pointerX, right: this.ntb.render.pointerX,
+			top: this.ntb.render.pointerY, bottom: this.ntb.render.pointerY 
+		};
+		if (position === 'pointer') return pointerPos;
+
+		// 'cursor' position, with fallback to 'pointer' (Reading mode, editor not in focus, etc.)
+		if (position === 'cursor') return this.getCursorPosition() ?? pointerPos;
+
+		// 'toolbar' position (i.e., last clicked element), with fallback to 'pointer'
+		const lastClickedPos = this.ntb.items.lastClickedEl?.getBoundingClientRect();
+		return lastClickedPos
+			? {	left: lastClickedPos.x, right: lastClickedPos.x, top: lastClickedPos.bottom, bottom: lastClickedPos.bottom }
+			: pointerPos;
+	}
+
+	/**
 	 * Returns true if the current view matches the given view type.
 	 * @param viewType type of view (e.g., `markdown`, `bases`).
 	 * @returns true if the current view type matches the given one.

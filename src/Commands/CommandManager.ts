@@ -165,13 +165,10 @@ export default class CommandManager {
                     callback: async () => {
                         // if no cursor position (or editor not in focus), fall back to mouse position
                         // TODO: fall back to Quick Tools necessary, for tablets?
-                        const cursorPosition = this.ntb.utils.getCursorPosition();
-                        const showAtPosition = cursorPosition 
-                            ? cursorPosition 
-                            : { left: this.ntb.render.mouseX, right: this.ntb.render.mouseX,
-                                top: this.ntb.render.mouseY, bottom: this.ntb.render.mouseY };
+                        const showAtPosition = this.ntb.utils.getPosition('cursor');
                         switch (toolbar.commandPosition) {
                             case PositionType.Menu: {
+                                if (!showAtPosition) break;
                                 const activeFile = this.ntb.app.workspace.getActiveFile();
                                 this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
                                     menu.showAtPosition({x: showAtPosition.left, y: showAtPosition.top});
@@ -185,6 +182,7 @@ export default class CommandManager {
                             }
                             case PositionType.Floating:
                             default: {
+                                if (!showAtPosition) break;
                                 await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, showAtPosition);
                                 await this.focus(true);
                                 break;
@@ -210,16 +208,15 @@ export default class CommandManager {
 
         // display the text toolbar at the current cursor position, if it's not already rendered
         if (isFloatingToolbar && !this.ntb.render.hasFloatingToolbar()) {
+            // FIXME? remove this check because of Reading/Preview mode?
             const editor = this.ntb.app.workspace.activeEditor?.editor;
             if (!editor) {
                 this.ntb.debugGroupEnd();
                 return;
             };
-            const offset = editor.posToOffset(editor.getCursor());
-            const cmView = (editor as any).cm as EditorView;
-            const coords = cmView.coordsAtPos(offset);
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
-            await this.ntb.render.renderFloatingToolbar(toolbar, coords, coords);
+            const showAtPosition = this.ntb.utils.getPosition('cursor');
+            await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, showAtPosition);
         }
 
         // need to get the type of toolbar first

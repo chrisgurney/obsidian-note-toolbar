@@ -20,8 +20,9 @@ export enum TbarData {
  */
 export default class ToolbarRenderer {
 
-	mouseX: number = 0;
-	mouseY: number = 0;
+	// for tracking current pointer position, for placing UI
+	pointerX: number = 0;
+	pointerY: number = 0;
 
 	// floating toolbar element, of which there can be only one
     floatingToolbarEl: HTMLDivElement | null = null;
@@ -1118,8 +1119,8 @@ export default class ToolbarRenderer {
 	 */
 	async renderFloatingToolbar(
 		toolbar: ToolbarSettings | undefined, 
-		selectStartPos: Rect | null, 
-		selectEndPos: Rect | null
+		selectStartPos: Rect | undefined, 
+		selectEndPos: Rect | undefined
 	): Promise<void> {
 
 		if (!selectStartPos || !selectEndPos || !toolbar) return;
