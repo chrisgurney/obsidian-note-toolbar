@@ -4,7 +4,7 @@ import * as Obsidian from "obsidian";
 import { App, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
 import { putFocusInMenu } from "Utils/Utils";
-import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions } from "./INoteToolbarApi";
+import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
 import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
@@ -351,5 +351,31 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.t
      */
     t: string = t;
+
+    /**
+     * Shows a toolbar by its name or ID.
+     * 
+     * @see INoteToolbarApi.toolbar
+     */
+    async toolbar(toolbarNameOrId: string, options?: NtbToolbarOptions): Promise<void> {
+
+        const toolbar = this.ntb.settingsManager.getToolbar(toolbarNameOrId);
+        if (!toolbar) {
+            new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarNameOrId}));
+            return;
+        }
+
+        // position option; defaults to 'toolbar' as scripts are typically executed from clicked items
+        const showAtPosition = this.ntb.utils.getPosition(options?.position ?? 'toolbar');
+
+        await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, showAtPosition);
+
+        // apply custom classes
+        if (options?.class) this.ntb.render.floatingToolbarEl?.addClasses([...options.class.split(' ')]);
+
+        // focus is required, or the toolbar doesn't stay up
+        await this.ntb.commands.focus(true);
+
+    }
 
 }

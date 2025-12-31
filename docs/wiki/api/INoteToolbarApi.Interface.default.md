@@ -253,10 +253,10 @@ Shows a menu with the provided items.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or UUID; or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
-| `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `position`: `"cursor"` \| `"toolbar"`; \} | Optional display options. |
+| `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `position`: `"cursor"` \| `"toolbar"` \| `"pointer"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
-| `options.position?` | `"cursor"` \| `"toolbar"` | Sets the position in which the menu will appear; defaults to `toolbar`. **Since** 1.27 |
+| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer) **Since** 1.27 |
 
 #### Returns
 
@@ -557,3 +557,42 @@ new Notice(ntb.t('api.msg.clipboard-copied'));
 
  - For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
  - `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+
+***
+
+### toolbar()
+
+> **toolbar**: (`toolbarNameOrId`, `options?`) => `Promise`\<`void`\>
+
+Shows a (floating) toolbar. Defaults to the 'toolbar' position.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `toolbarNameOrId` | `string` | Toolbar name or UUID. |
+| `options?` | \{ `class?`: `string`; `position`: `"cursor"` \| `"toolbar"` \| `"pointer"`; \} | Optional display options. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer) |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing. Displays the toolbar.
+
+#### Examples
+
+```ts
+// show the "Daily Notes" toolbar at the toolbar button (default)
+await ntb.toolbar('Daily Notes');
+```
+
+```ts
+// show the "Daily Notes" toolbar at the cursor position
+await ntb.toolbar('Daily Notes', { position: 'cursor' });
+```
+
+#### Since
+
+1.27

@@ -324,6 +324,25 @@ export default interface INoteToolbarApi<T> {
      */
     t: string;
 
+    /**
+     * Shows a (floating) toolbar. Defaults to the 'toolbar' position. 
+     * 
+     * @param {string} toolbarNameOrId Toolbar name or UUID.
+     * @param options Optional display options.
+     * @returns Nothing. Displays the toolbar.
+     * 
+     * @example
+     * // show the "Daily Notes" toolbar at the toolbar button (default)
+     * await ntb.toolbar('Daily Notes');
+     * 
+     * @example
+     * // show the "Daily Notes" toolbar at the cursor position
+     * await ntb.toolbar('Daily Notes', { position: 'cursor' });
+     * 
+     * @since 1.27
+     */
+    toolbar: (toolbarNameOrId: string, options?: NtbToolbarOptions) => Promise<void>;
+
 }
 
 /**
@@ -363,10 +382,13 @@ export interface NtbMenuOptions {
     focusInMenu?: boolean;
     /**
      * Sets the position in which the menu will appear; defaults to `toolbar`.
+     * `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus);
+	 * `pointer`: mouse/pointer position;
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
      * 
      * @since 1.27
      */
-    position: 'cursor' | 'toolbar';
+    position: 'cursor' | 'pointer' | 'toolbar';
 }
 
 /**
@@ -453,6 +475,24 @@ export interface NtbSuggesterOptions {
      * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
      */
     rendermd?: boolean;
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbToolbarOptions {
+    /**
+     * Optional CSS class(es) to add to the component.
+     */
+    class?: string;
+    /**
+     * Sets the position in which the toolbar will appear; defaults to `toolbar`.
+     * `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus);
+	 * `pointer`: mouse/pointer position;
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
+     */
+    position: 'cursor' | 'pointer' | 'toolbar';
 }
 
 /**
