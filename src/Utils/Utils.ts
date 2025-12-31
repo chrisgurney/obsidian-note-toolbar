@@ -106,7 +106,7 @@ export default class PluginUtils {
 	 */
 	getCursorPosition(): Rect | undefined {
 		const editor = this.ntb.app.workspace.activeEditor?.editor;
-		if (!editor || !editor.hasFocus()) return;
+		if (!editor) return;
 		const offset = editor.posToOffset(editor.getCursor());
 		const cmView = (editor as any).cm as EditorView;
 		const coords = cmView.coordsAtPos(offset);
@@ -134,10 +134,10 @@ export default class PluginUtils {
 
 	/**
 	 * Get the position for displaying UI elements.
-	 * @param position The type of position to retrieve. Defaults to 'pointer'.
-	 *   - 'cursor': Editor cursor position (falls back to pointer in reading mode)
-	 *   - 'pointer': Mouse/pointer position (always available)
-	 *   - 'toolbar': Last clicked toolbar element position (falls back to pointer)
+	 * @param position The type of position to retrieve. Defaults to `pointer`.
+     * `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus);
+	 * `pointer`: mouse/pointer position;
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
 	 * @returns A Rect object with the position coordinates, or undefined if unable to determine
 	 */
 	getPosition(position: 'cursor' | 'pointer' | 'toolbar' = 'pointer'): Rect | undefined {
