@@ -838,7 +838,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// command options: hot key + position
 		const commandOptionsGroupEl = settingsDiv.createDiv('note-toolbar-setting-group-container');
 		commandOptionsGroupEl.id = SUB_OPTIONS_ID;
-		commandOptionsGroupEl.setAttribute('data-active', this.toolbar.hasCommand.toString());
+		commandOptionsGroupEl.setAttribute('data-active', (this.toolbar.hasCommand ?? false).toString());
 		const commandOptionsGroup = new SettingGroup(commandOptionsGroupEl);
 
 		const toolbarCommand = this.ntb.commands.getCommandFor(this.toolbar);
