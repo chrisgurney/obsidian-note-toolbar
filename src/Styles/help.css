@@ -228,12 +228,15 @@
     margin-right: auto;
 }
 
-.note-toolbar-setting-help-view {
+.is-phone .note-toolbar-setting-help-view {
     & .note-toolbar-setting-view-banner {
-        .is-phone & {
-            padding: 1em 1em 2em 1em;
-        }
+        padding: 1em 1em 2em 1em;
     }
+}
+
+.is-phone .note-toolbar-setting-help-view,
+.is-phone .note-toolbar-setting-whatsnew-view {
+    padding-bottom: var(--navbar-height);
 }
 
 .note-toolbar-setting-help-view-title {
