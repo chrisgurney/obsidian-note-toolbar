@@ -213,6 +213,7 @@ export default class CommandManager {
             // FIXME? remove this check because of Reading/Preview mode?
             const editor = this.ntb.app.workspace.activeEditor?.editor;
             if (!editor) {
+                this.ntb.debug('editor not available - exiting');
                 this.ntb.debugGroupEnd();
                 return;
             };
