@@ -900,12 +900,16 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
 					.onClick(() => {
+						let usageStats = getToolbarUsageText(this.ntb, this.toolbar);
+						let usageText = usageStats 
+							? t('setting.usage.description') + '\n' + usageStats 
+							: t('setting.usage.description_none');
 						confirmWithModal(
-							this.ntb.app, 
+							this.ntb.app,
 							{ 
 								title: t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
 								questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
-								notes: getToolbarUsageText(this.ntb, this.toolbar) + '\n\n' + t('setting.delete-toolbar.label-usage-note', { propertyName: this.ntb.settings.toolbarProp, toolbarName: this.toolbar.name }),
+								notes: usageText + '\n\n' + t('setting.delete-toolbar.label-usage-note', { propertyName: this.ntb.settings.toolbarProp, toolbarName: this.toolbar.name }),
 								approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
 								denyLabel: t('setting.button-cancel'),
 								warning: true

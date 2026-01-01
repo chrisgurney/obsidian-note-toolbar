@@ -291,33 +291,37 @@ export function getToolbarSettingsUsage(ntb: NoteToolbarPlugin, id: string): [nu
 	return [mappingCount, itemCount];
 }
 
-export function getToolbarUsageFr(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings, parent?: ToolbarSettingsModal): DocumentFragment {
+export function getToolbarUsageFr(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings, parent: ToolbarSettingsModal): DocumentFragment {
 	let usageFr = document.createDocumentFragment();
-	let usageText = getToolbarUsageText(ntb, toolbar) || t('setting.usage.description_none');
-	usageFr.append(usageText);
-	
-	if (parent) {
-		if (usageText) usageFr.append(usageFr.createEl("br")); 
-		const descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
-		usageFr.append(descLinkFr);
-		ntb.registerDomEvent(descLinkFr, 'click', () => {
-			parent.close();
-			// @ts-ignore
-			ntb.app.setting.close();
-			window.open(getToolbarPropSearchUri(ntb, toolbar.name));
-		});
+	let usageStats = getToolbarUsageText(ntb, toolbar);
+	if (usageStats) {
+		usageFr.append(t('setting.usage.description'));
+		usageFr.append(usageFr.createEl("br"));
+		usageFr.append(usageStats);
 	}
+	else {
+		usageFr.append(t('setting.usage.description_none'));
+	}
+	
+	usageFr.append(usageFr.createEl("br"));
+	const descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
+	usageFr.append(descLinkFr);
+	ntb.registerDomEvent(descLinkFr, 'click', () => {
+		parent?.close();
+		// @ts-ignore
+		ntb.app.setting.close();
+		window.open(getToolbarPropSearchUri(ntb, toolbar.name));
+	});
 
 	return usageFr;
 }
 
 export function getToolbarUsageText(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings): string {
 	const [ mappingCount, itemCount ] = getToolbarSettingsUsage(ntb, toolbar.uuid);
-	let label = t('setting.usage.description');
 	let usage: String[] = [];
 	if (mappingCount > 0) usage.push(t('setting.usage.description-mappings', { count: mappingCount }));
 	if (itemCount > 0) usage.push(t('setting.usage.description-toolbar-items', { count: itemCount }));
-	return (usage.length > 0) ? label + usage.join(', ') : '';
+	return (usage.length > 0) ? usage.join(', ') : '';
 }
 
 /**
