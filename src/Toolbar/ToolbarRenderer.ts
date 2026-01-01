@@ -1127,7 +1127,7 @@ export default class ToolbarRenderer {
 
 		if (!toolbar) {
 			this.ntb.debug('⚠️ error: no floating toolbar provided');
-			new Notice(t('setting.error-invalid-floating-toolbar'));
+			new Notice(t('setting.error-invalid-floating-toolbar')).containerEl.addClass('mod-warning');
 			return;
 		};
 

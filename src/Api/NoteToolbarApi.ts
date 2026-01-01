@@ -182,14 +182,14 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 menu = await this.ntb.render.renderAsMenu(toolbar, activeFile);
             }
             else {
-                new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarOrItems}));
+                new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarOrItems})).containerEl.addClass('mod-warning');
                 return;
             }
         }
         else {
             toolbarOrItems.map((item: NtbMenuItem) => {
                 const missingProp = requiredProps.find(p => !item[p]);
-                if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type}));
+                if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type})).containerEl.addClass('mod-warning');
                 menu.addItem((menuItem: MenuItem) => {
                     menuItem
                         .setTitle(item.label)
@@ -209,7 +209,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                                     await this.ntb.items.handleLinkUri(item.value);
                                     break;
                                 default:
-                                    new Notice(t('api.ui.error-unsupported-property', {property: item.type}));
+                                    new Notice(t('api.ui.error-unsupported-property', {property: item.type})).containerEl.addClass('mod-warning');
                                     break;
                             }
                         });
@@ -361,7 +361,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         const toolbar = this.ntb.settingsManager.getToolbar(toolbarNameOrId);
         if (!toolbar) {
-            new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarNameOrId}));
+            new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarNameOrId})).containerEl.addClass('mod-warning');
             return;
         }
 

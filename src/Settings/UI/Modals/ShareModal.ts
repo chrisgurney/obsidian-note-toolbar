@@ -45,7 +45,7 @@ export default class ShareModal extends Modal {
 					.setCta()
 					.onClick(() => {
                         navigator.clipboard.writeText(this.shareUri);
-                        new Notice(t('export.notice-shared'));
+                        new Notice(t('export.notice-shared')).containerEl.addClass('mod-success');
                         this.close();
 					});
 			});

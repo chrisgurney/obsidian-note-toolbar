@@ -50,7 +50,7 @@ export abstract class Adapter {
         let errorFr = createFragment();
         errorFr.append(message);
         error ? errorFr.append('\n', error) : undefined;
-        new Notice(errorFr, 5000);
+        new Notice(errorFr, 5000).containerEl.addClass('mod-warning');
     }
     
     /**

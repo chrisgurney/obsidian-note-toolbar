@@ -488,7 +488,7 @@ export async function importFromCallout(
     // show errors to the user
     if (!fromShareUri && errorLog) {
         errorLog = `${t('import.errorlog-heading')}\n${errorLog}`;
-        new Notice(errorLog, 10000);
+        new Notice(errorLog, 10000).containerEl.addClass('mod-warning');
     }
 
     return toolbar;

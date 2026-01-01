@@ -281,7 +281,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											.onClick(async () => {
 												let calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
 												navigator.clipboard.writeText(calloutExport);
-												new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
+												new Notice(
+													learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
+												).containerEl.addClass('mod-success');
 											});
 									});
 									menu.addSeparator();

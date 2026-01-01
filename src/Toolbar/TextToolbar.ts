@@ -147,7 +147,7 @@ export class TextToolbarClass implements PluginValue {
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             if (!toolbar) {
                 this.ntb.debug('⚠️ error: no text toolbar with ID', this.ntb.settings.textToolbar);
-                new Notice(t('setting.error-invalid-text-toolbar'));
+                new Notice(t('setting.error-invalid-text-toolbar')).containerEl.addClass('mod-warning');
                 return;
             };
             await this.ntb.render.renderFloatingToolbar(toolbar, selectStartPos, selectEndPos);

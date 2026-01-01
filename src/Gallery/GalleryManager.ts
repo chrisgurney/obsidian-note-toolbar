@@ -35,7 +35,9 @@ export default class GalleryManager {
 				selectedToolbar.updated = new Date().toISOString();
 				await this.ntb.settingsManager.save();
 				this.ntb.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
-                new Notice(t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name, interpolation: { escapeValue: false } }));
+                new Notice(
+                    t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name, interpolation: { escapeValue: false } })
+                ).containerEl.addClass('mod-success');
 			}
 		});
 

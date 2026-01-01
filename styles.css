@@ -4010,7 +4010,7 @@ input[type="text"].note-toolbar-setting-error,
         background-position: -200% 0;
     }
 }
-.note-toolbar-notice-with-cta {
+.note-toolbar-notice-pointer {
     cursor: pointer;
 }
 /* 

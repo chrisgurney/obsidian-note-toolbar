@@ -56,7 +56,7 @@ export default class ProtocolManager {
 				});
 			}
 			else {
-				new Notice(t('import.error-invalid-uri-content'));
+				new Notice(t('import.error-invalid-uri-content')).containerEl.addClass('mod-warning');
 			}
         }
 		else if (data.menu) {
@@ -69,7 +69,7 @@ export default class ProtocolManager {
 					});
 				}
 				else {
-					new Notice(t('notice.error-item-menu-not-found', { toolbar: data.menu }));
+					new Notice(t('notice.error-item-menu-not-found', { toolbar: data.menu })).containerEl.addClass('mod-warning');
 				}
 			}
 		}
@@ -82,7 +82,9 @@ export default class ProtocolManager {
 			let toolbarSettings;
 			if (data.toolbarsettings.length > 0) {
 				toolbarSettings = this.ntb.settingsManager.getToolbarByName(data.toolbarsettings);
-				!toolbarSettings ? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })) : undefined;
+				!toolbarSettings 
+					? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })).containerEl.addClass('mod-warning') 
+					: undefined;
 			}
 			else {
 				let toolbarEl = this.ntb.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
@@ -102,7 +104,9 @@ export default class ProtocolManager {
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
 		else {
-			new Notice(t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')}));
+			new Notice(
+				t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')})
+			).containerEl.addClass('mod-warning');
 		}
 	}
 

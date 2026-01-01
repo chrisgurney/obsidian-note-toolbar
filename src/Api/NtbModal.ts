@@ -101,7 +101,7 @@ export default class NtbModal extends Modal {
                 }
                 // FIXME: PDF viewer not rendering correctly; display notice for now
                 else if (['pdf'].includes(ext)) {
-                    new Notice(t('api.ui.error-file-unsupported', {filetype: ext}));
+                    new Notice(t('api.ui.error-file-unsupported', {filetype: ext})).containerEl.addClass('mod-warning');
                     return;
                 }
                 // attempt to embed everything else
@@ -112,7 +112,7 @@ export default class NtbModal extends Modal {
                 };
             }
             catch (error) {
-                new Notice(error);
+                new Notice(error).containerEl.addClass('mod-warning');
             }
         }
 

@@ -348,7 +348,9 @@ export default class ToolbarEventHandler {
 						if (toolbarSettings) {
 							let calloutExport = await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export);
 							navigator.clipboard.writeText(calloutExport);
-							new Notice(learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars'));
+							new Notice(
+								learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
+							).containerEl.addClass('mod-success');
 						}
 					})
 				});
@@ -395,7 +397,7 @@ export default class ToolbarEventHandler {
 				return;
 			}
 			else {
-				new Notice(t('setting.display-locations.option-editor-menu-error'));
+				new Notice(t('setting.display-locations.option-editor-menu-error')).containerEl.addClass('mod-warning');
 			}
 		}
 		// otherwise, add callout helper items to the standard Editor menu
@@ -519,7 +521,7 @@ export default class ToolbarEventHandler {
 					await this.ntb.items.handleItemLink(toolbarItem, event, activeFile);
 				}
 				else {
-					new Notice(t('setting.position.notice-defaultitem-invalid'));
+					new Notice(t('setting.position.notice-defaultitem-invalid')).containerEl.addClass('mod-warning');
 				}
 			}
 			else {

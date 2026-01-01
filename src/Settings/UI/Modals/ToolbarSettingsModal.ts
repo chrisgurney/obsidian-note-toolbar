@@ -820,14 +820,14 @@ export default class ToolbarSettingsModal extends Modal {
 							new Notice(t(
 								'setting.open-command.notice-command-added', 
 								{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
-							));
+							)).containerEl.addClass('mod-success');
 						}
 						else {
 							this.ntb.removeCommand(COMMAND_PREFIX_TBAR + this.toolbar.uuid);
 							new Notice(t(
 								'setting.open-command.notice-command-removed', 
 								{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
-							));
+							)).containerEl.addClass('mod-success');
 						}
 						// save the setting
 						await this.ntb.settingsManager.save();

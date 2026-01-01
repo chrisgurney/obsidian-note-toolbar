@@ -216,7 +216,7 @@ export default class ChangeListener {
 						const matchingToolbar = ignoreToolbar ? undefined : this.ntb.settingsManager.getToolbarByName(ntbPropValue);
 						if (!matchingToolbar && !ignoreToolbar) {
 							const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: ntbPropValue }), 7500);
-							notice.messageEl.addClass('note-toolbar-notice-with-cta');
+							notice.messageEl.addClass('note-toolbar-notice-pointer');
 							this.ntb.registerDomEvent(notice.messageEl, 'click', async () => {
 								const newToolbar = await this.ntb.settingsManager.newToolbar(ntbPropValue);
 								this.ntb.settingsManager.openToolbarSettings(newToolbar);

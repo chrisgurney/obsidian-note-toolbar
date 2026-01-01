@@ -431,7 +431,7 @@ export function openItemSuggestModal(
 			await ntb.settingsManager.save();
 
 			if (isEmptyItem) new ItemModal(ntb, toolbar, newItem).open()
-			else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } }));
+			else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
 
 			if (parent) parent.display(newItem.uuid);
 
@@ -839,7 +839,7 @@ export async function copyToolbarItem(ntb: NoteToolbarPlugin, fromToolbar: Toolb
 		if (toToolbar) {
 			await ntb.settingsManager.duplicateToolbarItem(toToolbar, item);
 			await ntb.settingsManager.save();
-			new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name }));
+			new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
 		}
 	});
 	modal.open();
@@ -856,7 +856,7 @@ export async function moveToolbarItem(ntb: NoteToolbarPlugin, fromToolbar: Toolb
 			fromToolbar.items.remove(item);
 			toToolbar.items.push(item);
 			await ntb.settingsManager.save();
-			new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name }));
+			new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
 		}
 	});
 	modal.open();

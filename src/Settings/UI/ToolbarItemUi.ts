@@ -407,7 +407,7 @@ export default class ToolbarItemUi {
                             .onClick(async (menuEvent) => {
                                 const commandText = `obsidian://note-toolbar?command=${itemCommand.id}`;
                                 navigator.clipboard.writeText(commandText);
-                                new Notice(t('command.copy-command-notice'));
+                                new Notice(t('command.copy-command-notice')).containerEl.addClass('mod-success');
                             });
                     });
                 }
@@ -427,8 +427,9 @@ export default class ToolbarItemUi {
                                     t('setting.use-item-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } }) +
                                     (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
                                 const notice = new Notice(message, 10000);
+                                notice.containerEl.addClass('mod-success');
                                 const noticeEl = notice.messageEl;
-                                noticeEl.addClass('note-toolbar-notice-with-cta');
+                                noticeEl.addClass('note-toolbar-notice-pointer');
                                 this.ntb.registerDomEvent(noticeEl, 'click', async () => {
                                     notice.hide();
                                     this.parent.close();
@@ -451,7 +452,7 @@ export default class ToolbarItemUi {
                 .setIcon('code')
                 .onClick(async (menuEvent) => {
                     navigator.clipboard.writeText(toolbarItem.uuid);
-                    new Notice(t('setting.item.menu-copy-id-notice'));
+                    new Notice(t('setting.item.menu-copy-id-notice')).containerEl.addClass('mod-success');
                 });
         });
 

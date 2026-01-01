@@ -102,7 +102,9 @@ export default class ToolbarItemHandler {
 									});
 								}
 								else {
-									new Notice(t('notice.error-item-menu-not-found', { toolbar: value }));
+									new Notice(
+                                        t('notice.error-item-menu-not-found', { toolbar: value })
+                                    ).containerEl.addClass('mod-warning');
 								}
 							}
 							break;
@@ -196,7 +198,9 @@ export default class ToolbarItemHandler {
                     });
                 }
                 else if (!toolbar) {
-                    new Notice(t('notice.error-item-menu-not-found', { toolbar: linkHref }));
+                    new Notice(
+                        t('notice.error-item-menu-not-found', { toolbar: linkHref })
+                    ).containerEl.addClass('mod-warning');
                 }
                 break;
             }
@@ -209,7 +213,7 @@ export default class ToolbarItemHandler {
                     (file && (file !== activeFile)) ? await this.handleLinkInSidebar(item, file) : await this.handleItemScript(item);
                 }
                 else {
-                    new Notice(t('notice.error-scripting-not-enabled'));
+                    new Notice(t('notice.error-scripting-not-enabled')).containerEl.addClass('mod-warning');
                 }
                 break;
             case ItemType.Uri:
@@ -228,7 +232,7 @@ export default class ToolbarItemHandler {
         // this.debug('handleLinkCommand:', commandId);
         if (commandId) {
             if (!(commandId in this.ntb.app.commands.commands)) {
-                new Notice(t('notice.error-command-not-found', { command: commandId }));
+                new Notice(t('notice.error-command-not-found', { command: commandId })).containerEl.addClass('mod-warning');
                 return;
             }
             try {
@@ -238,7 +242,7 @@ export default class ToolbarItemHandler {
             } 
             catch (error) {
                 console.error(error);
-                new Notice(error);
+                new Notice(error).containerEl.addClass('mod-warning');
             }
         }
     }
@@ -253,7 +257,9 @@ export default class ToolbarItemHandler {
         type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JavaScript | ItemType.JsEngine | ItemType.Templater>;
         const adapter = this.ntb.adapters.getAdapterForItemType(type);
         if (!adapter) {
-            new Notice(t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[type as ScriptType] }));
+            new Notice(
+                t('notice.error-scripting-plugin-not-enabled', { plugin: LINK_OPTIONS[type as ScriptType] })
+            ).containerEl.addClass('mod-warning');
             return;
         }
         let result;
@@ -340,7 +346,9 @@ export default class ToolbarItemHandler {
                 case ItemType.Command: {
                     const commandId = toolbarItem?.linkAttr.commandId;
                     if (!(commandId in this.ntb.app.commands.commands)) {
-                        new Notice(t('notice.error-command-not-found', { command: commandId }));
+                        new Notice(
+                            t('notice.error-command-not-found', { command: commandId })
+                        ).containerEl.addClass('mod-warning');
                         return;
                     }
                     try {
@@ -348,7 +356,7 @@ export default class ToolbarItemHandler {
                     } 
                     catch (error) {
                         console.error(error);
-                        new Notice(error);
+                        new Notice(error).containerEl.addClass('mod-warning');
                     }
                     break;
                 }
@@ -379,7 +387,9 @@ export default class ToolbarItemHandler {
             this.ntb.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(tFileOrFolder);
         }
         else {
-            new Notice(t('notice.error-folder-not-found', { folder: folder }));
+            new Notice(
+                t('notice.error-folder-not-found', { folder: folder })
+            ).containerEl.addClass('mod-warning');
         }
     }
 

@@ -68,7 +68,7 @@ export default class CommandManager {
         else {
             item.hasCommand = false;
             await this.ntb.settingsManager.save();
-            new Notice(t('setting.use-item-command.notice-command-error-noname'), 10000);
+            new Notice(t('setting.use-item-command.notice-command-error-noname'), 10000).containerEl.addClass('mod-warning');
         }
     }
 
@@ -124,7 +124,9 @@ export default class CommandManager {
             });
         });
         if (hasIgnoredCommands) {
-            new Notice(t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 10000);
+            new Notice(
+                t('setting.use-item-command.notice-command-error-startup-noname', { toolbars: [...ignoredCommandToolbars].join(', ') }), 10000
+            ).containerEl.addClass('mod-warning');
         }
     }
 
@@ -295,7 +297,7 @@ export default class CommandManager {
                 ? `[]()<data data-ntb-command="${command.id}"/> <!-- ${command.name} -->`
                 : `obsidian://note-toolbar?command=${command.id}`;
             navigator.clipboard.writeText(commandText);
-            new Notice(t('command.copy-command-notice'));
+            new Notice(t('command.copy-command-notice')).containerEl.addClass('mod-success');
         });
         modal.open();
     }
@@ -381,7 +383,7 @@ export default class CommandManager {
             this.ntb.settings.lockCallouts
                 ? t('command.callouts-locked-notice')
                 : t('command.callouts-unlocked-notice')
-        );
+        ).containerEl.addClass('mod-success');
     }
 
     /**
