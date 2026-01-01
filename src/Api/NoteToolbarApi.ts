@@ -376,6 +376,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // focus is required, or the toolbar doesn't stay up
         await this.ntb.commands.focus(true);
 
+        // this.ntb.debug('ntb.toolbar() is toolbar focussed?', this.ntb.render.isFloatingToolbarFocussed());
+
     }
 
 }
