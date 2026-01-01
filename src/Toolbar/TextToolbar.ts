@@ -32,6 +32,7 @@ export class TextToolbarClass implements PluginValue {
     constructor(view: EditorView, private ntb: NoteToolbarPlugin) {
         // plugin.debug('TextToolbarView initialized');
 
+        // view state tracking
         ntb.registerDomEvent(view.dom, 'mousedown', () => {
             this.isMouseDown = true;
         });
@@ -54,6 +55,11 @@ export class TextToolbarClass implements PluginValue {
         ntb.registerDomEvent(view.dom, 'dblclick', () => {
             this.isMouseSelection = true;
         });
+        ntb.registerDomEvent(view.dom, 'contextmenu', () => {
+            this.isContextOpening = true;
+        });
+
+        // scroll tracking
         ntb.registerDomEvent(view.scrollDOM, 'scroll', () => {
             if (ntb.render.hasFloatingToolbar()) {
                 if (!this.selection) return;
@@ -63,10 +69,6 @@ export class TextToolbarClass implements PluginValue {
                 ntb.render.positionFloating(ntb.render.floatingToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
             }
         });
-        ntb.registerDomEvent(view.dom, 'contextmenu', () => {
-            this.isContextOpening = true;
-        });
-
     }
 
     update(update: ViewUpdate) {
@@ -80,7 +82,7 @@ export class TextToolbarClass implements PluginValue {
         
         // don't show toolbar until selection is complete
         if (this.isMouseDown) {
-            // this.ntb.debug('mousedown - exiting');
+            this.ntb.debug('TextToolbar: mousedown - exiting');
             return;
         };
 
@@ -96,22 +98,23 @@ export class TextToolbarClass implements PluginValue {
 
         // right-clicking for some reason selects the current line if it's empty
         if (this.isContextOpening && this.selection.from === this.selection.from + 1) {
-            this.ntb.debug('⛔️ selection is just new line - exiting');
+            this.ntb.debug('TextToolbar: selection is just new line - exiting');
             this.isContextOpening = false;
             return;
         }
 
         if (!update.selectionSet) {
             if (this.ntb.render.isFloatingToolbarFocussed()) {
-                this.ntb.debug('toolbar in focus - exiting');
+                this.ntb.debug('TextToolbar: toolbar in focus - exiting');
                 return;
             }
+            // no text selected, or the view no longer has focus
             if (this.selection.from === this.selection.to || !view.hasFocus) {
                 if (this.ntb.render.hasFloatingToolbar()) {
-                    this.ntb.debugGroup('⛔️ no selection or view out of focus - removing toolbar');
+                    this.ntb.debugGroup('TextToolbar: ⛔️ no selection or view out of focus - removing toolbar');
                     this.ntb.debug(
-                        'selection empty:', this.selection.from === this.selection.to, ' • has focus: view', view.hasFocus, 'toolbar', 
-                        this.ntb.render.isFloatingToolbarFocussed());
+                        ' • selection empty:', this.selection.from === this.selection.to, 
+                        ' • view focussed:', view.hasFocus);
                     this.ntb.debugGroupEnd();
                     this.ntb.render.removeFloatingToolbar();
                 }
@@ -122,7 +125,7 @@ export class TextToolbarClass implements PluginValue {
         if (selection.empty) {
             this.lastSelection = null;
             if (this.ntb.render.hasFloatingToolbar()) {
-                this.ntb.debug('⛔️ selection empty - removing toolbar');
+                this.ntb.debug('TextToolbar: ⛔️ selection empty - removing toolbar');
                 this.ntb.render.removeFloatingToolbar();
             }
             return;
@@ -146,7 +149,7 @@ export class TextToolbarClass implements PluginValue {
             const selectEndPos: Rect | undefined = view.coordsAtPos(this.selection.to) ?? undefined;
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             if (!toolbar) {
-                this.ntb.debug('⚠️ error: no text toolbar with ID', this.ntb.settings.textToolbar);
+                this.ntb.debug('⚠️ TextToolbar: Error: toolbar with ID', this.ntb.settings.textToolbar);
                 new Notice(t('setting.error-invalid-text-toolbar')).containerEl.addClass('mod-warning');
                 return;
             };
