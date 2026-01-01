@@ -13,7 +13,7 @@ import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
-import ChangeListener from 'Toolbar/ChangeListener';
+import PluginListener from 'Toolbar/PluginListener';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
@@ -38,7 +38,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	el: ToolbarElementHelper;
 	events: ToolbarEventHandler;
 	items: ToolbarItemHandler;
-	listeners: ChangeListener;
+	listeners: PluginListener;
 	render: ToolbarRenderer;
 	vars: VariableResolver;
 
@@ -60,7 +60,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.el = new ToolbarElementHelper(this);
 		this.events = new ToolbarEventHandler(this);
 		this.items = new ToolbarItemHandler(this);
-		this.listeners = new ChangeListener(this);
+		this.listeners = new PluginListener(this);
 		this.render = new ToolbarRenderer(this);
 		this.utils = new PluginUtils(this);
 		this.vars = new VariableResolver(this);

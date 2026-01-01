@@ -7,7 +7,7 @@ import { TbarData } from "./ToolbarRenderer";
 /**
  * Handles Obsidian changes registered with Obsidian's `registerEvent()`.
  */
-export default class ChangeListener {
+export default class PluginListener {
 
     workspacesPlugin: { instance: any; enabled: boolean } | null = null;
     
