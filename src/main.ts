@@ -44,6 +44,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	textToolbar: ViewPlugin<TextToolbarClass> | null = null;
 
+	debug!: (...args: any[]) => void;
+	debugGroup!: (...args: any[]) => void;
+	debugGroupEnd!: (...args: any[]) => void;
+
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
 	 * adds listeners, settings, and renders the toolbar for the active file.
@@ -182,24 +186,22 @@ export default class NoteToolbarPlugin extends Plugin {
     // #region DEBUGGING
     // *****************************************************************************
 
-    /**
-     * Utility for debug logging.
-     * @param message Message to output to console for debugging.
-     */
-    debug(message?: any, ...optionalParams: any[]): void {
-        this.settings.debugEnabled && console.debug(message, ...optionalParams);
-        // const stack = new Error().stack;
-        // this.settings.debugEnabled && console.debug('Call stack:', stack);
-    }
-
-	debugGroup(label: string): void {
-		// eslint-disable-next-line
-		this.settings.debugEnabled && console.group(label);
-	}
-
-	debugGroupEnd(): void {
-		// eslint-disable-next-line
-		this.settings.debugEnabled && console.groupEnd();
+	/** 
+	 * Toggle debugging based on user setting.
+	 */
+	toggleDebugging() {
+		// setup debug functions, preserving line numbers
+		if (this.settings.debugEnabled) {
+			this.debug = console.debug.bind(console);
+			this.debugGroup = console.group.bind(console);
+			this.debugGroupEnd = console.groupEnd.bind(console);
+		}
+		// otherwise do nothing when debug functions are called
+		else {
+			this.debug = (...args: any[]) => {};
+			this.debugGroup = (...args: any[]) => {};
+			this.debugGroupEnd = (...args: any[]) => {};
+		}
 	}
 
 	// #endregion

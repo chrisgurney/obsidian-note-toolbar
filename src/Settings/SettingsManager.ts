@@ -2,12 +2,11 @@ import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, ComponentType, DEFAULT_SETTIN
 import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, Platform, TFile } from "obsidian";
+import { PLUGIN_VERSION } from "version";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
 import NoteToolbarSettingTab from "./UI/NoteToolbarSettingTab";
 
 export default class SettingsManager {
-	
-	private DEBUG = false;
 	
 	constructor(
 		private ntb: NoteToolbarPlugin
@@ -56,7 +55,7 @@ export default class SettingsManager {
 	 * @returns string UUID of the new toolbar.
 	 */
 	public async duplicateToolbar(toolbar: ToolbarSettings): Promise<string> {
-		this.debug('duplicateToolbar', toolbar);
+		this.ntb.debug('duplicateToolbar', toolbar);
 		let newToolbar = {
 			uuid: getUUID(),
 			commandPosition: toolbar.commandPosition,
@@ -73,7 +72,7 @@ export default class SettingsManager {
 		toolbar.items.forEach((item) => {
 			this.duplicateToolbarItem(newToolbar, item);
 		});
-		this.debug('duplicateToolbar: duplicated', newToolbar);
+		this.ntb.debug('duplicateToolbar: duplicated', newToolbar);
 		await this.addToolbar(newToolbar);
 		return newToolbar.uuid;
 	}
@@ -485,8 +484,11 @@ export default class SettingsManager {
 	async load(): Promise<void> {
 
 		const loaded_settings = await this.ntb.loadData();
-		this.debug("loadSettings: loaded settings: ", loaded_settings);
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
+		
+		// initialize debugging based on user preference
+		this.ntb.toggleDebugging();
+		this.ntb.debug(`Note Toolbar ${PLUGIN_VERSION}: loading with settings:`, loaded_settings);
 	
 		let old_version = loaded_settings?.version as number;
 		let new_version: number;
@@ -494,22 +496,22 @@ export default class SettingsManager {
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 
-			this.debug("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
-			this.debug("running migrations...");
+			this.ntb.debug("loadSettings: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
+			this.ntb.debug("running migrations...");
 
 			// first version without update (i.e., version is `undefined`)
 			// MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
 			if (!old_version) {
 				new_version = 20240318.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				// for each: double-check setting to migrate is there
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					if (tb.styles) {
-						this.debug("\t- OLD SETTING: " + tb.styles);
-						this.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].defaultStyles: " + this.ntb.settings.toolbars[index].defaultStyles);
+						this.ntb.debug("\t- OLD SETTING: " + tb.styles);
+						this.ntb.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].defaultStyles: " + this.ntb.settings.toolbars[index].defaultStyles);
 						this.ntb.settings.toolbars[index].defaultStyles = tb.styles;
-						this.debug("\t\t- SET: " + this.ntb.settings.toolbars[index].defaultStyles);
-						this.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].mobileStyles = []");
+						this.ntb.debug("\t\t- SET: " + this.ntb.settings.toolbars[index].defaultStyles);
+						this.ntb.debug("\t\t- SETTING: this.plugin.settings.toolbars[index].mobileStyles = []");
 						this.ntb.settings.toolbars[index].mobileStyles = [];
 						delete tb.styles;
 					}
@@ -521,11 +523,11 @@ export default class SettingsManager {
 			// MIGRATION: added urlAttr setting
 			if (old_version === 20240318.1) {
 				new_version = 20240322.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						if (!item?.urlAttr) {
-							this.debug("  - add urlAttr for: ", tb.name, item.label);
+							this.ntb.debug("  - add urlAttr for: ", tb.name, item.label);
 							// assume old urls are indeed urls and have variables
 							item.urlAttr = {
 								hasVars: true,
@@ -541,7 +543,7 @@ export default class SettingsManager {
 			// MIGRATION: support for icons + generic links with types
 			if (old_version === 20240322.1) {
 				new_version = 20240330.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						this.ntb.settings.toolbars[index].items[item_index].icon = "";
@@ -567,7 +569,7 @@ export default class SettingsManager {
 			// MIGRATION: support for position + contexts
 			if (old_version === 20240330.1) {
 				new_version = 20240416.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						// convert hideOnDesktop + hideOnMobile to contexts
@@ -592,7 +594,7 @@ export default class SettingsManager {
 			// MIGRATION: platform-specific positions + item/component visibiility
 			if (old_version === 20240416.1) {
 				new_version = 20240426.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					// toolbar position -> platform-specific positions
 					if (this.ntb.settings.toolbars[index].positions) {
@@ -681,7 +683,7 @@ export default class SettingsManager {
 			// MIGRATION: add and use IDs for toolbars and items
 			if (old_version === 20240426.1) {
 				new_version = 20240727.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					// add UUIDs to toolbars first
 					this.ntb.settings.toolbars[index].uuid = this.ntb.settings.toolbars[index].uuid 
@@ -717,7 +719,7 @@ export default class SettingsManager {
 			// MIGRATION: add and use IDs for toolbars and items
 			if (old_version === 20240727.1) {
 				new_version = 20250302.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				// don't show onboarding for new toolbars if user's already mapped stuff 
 				if (loaded_settings.folderMappings.length > 0) {
 					this.ntb.settings.onboarding['new-toolbar-mapping'] = true;
@@ -729,7 +731,7 @@ export default class SettingsManager {
 			// MIGRATION: set gallery flag on existing items
 			if (old_version === 20250302.1) {
 				new_version = 20250313.1;
-				this.debug("- starting migration: " + old_version + " -> " + new_version);
+				this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
 				loaded_settings.toolbars?.forEach((tb: any, index: number) => {
 					tb.items.forEach((item: any, item_index: number) => {
 						this.ntb.settings.toolbars[index].items[item_index].inGallery = false;
@@ -741,7 +743,7 @@ export default class SettingsManager {
 
 			// COMMENT THIS OUT while testing new migration code
 			this.ntb.settings.version = SETTINGS_VERSION;
-			this.debug("updated settings:", this.ntb.settings);
+			this.ntb.debug("updated settings:", this.ntb.settings);
 
 			// ensure that migrated settings are saved 
 			await this.save();
@@ -760,16 +762,12 @@ export default class SettingsManager {
 		await this.ntb.render.removeActive();
 		await this.ntb.render.renderForView();
 
-		this.debug("SETTINGS SAVED: " + new Date().getTime());
+		this.ntb.debug("SETTINGS SAVED: " + new Date().getTime());
 	}
 
 	/*************************************************************************
 	 * HELPERS
 	 *************************************************************************/
-
-	debug(message: string, ...args: any[]) {
-		this.DEBUG && console.debug(message, ...args);
-	}
 
 	/**
 	 * Migration: Returns the platform visibility value corresponding to the UI flags set for hideOnDesktop, hideOnMobile;
