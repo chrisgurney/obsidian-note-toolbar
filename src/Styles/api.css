@@ -7,8 +7,6 @@
     & .modal-close-button {
         z-index: 2; /* fix for modal title overlapping close button */
         .is-mobile & {
-            background-color: var(--background-secondary-alt);
-            border-radius: var(--radius-l);
             inset-inline-end: var(--size-4-3);
             top: var(--size-4-3);
         }
@@ -54,6 +52,7 @@
             overflow-y: auto;
             .is-phone & {
                 padding: var(--size-4-5);
+                margin-bottom: var(--safe-area-inset-bottom);
             }
             /* hide the Web Viewer navigation bar */
             & .workspace-leaf-content[data-type="webviewer"] .view-header {
