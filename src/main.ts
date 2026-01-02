@@ -14,16 +14,16 @@ import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TI
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import CalloutHandler from 'Toolbar/CalloutHandler';
-import MetadataListeners from 'Toolbar/MetadataListeners';
+import MetadataListeners from 'Listeners/MetadataListeners';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarHandler from 'Toolbar/ToolbarHandler';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
-import VaultListeners from 'Toolbar/VaultListeners';
-import ViewListeners from 'Toolbar/ViewListeners';
-import WorkspaceListeners from 'Toolbar/WorkspaceListeners';
+import VaultListeners from 'Listeners/VaultListeners';
+import ViewListeners from 'Listeners/ViewListeners';
+import WorkspaceListeners from 'Listeners/WorkspaceListeners';
 import HotkeyHelper from 'Utils/Hotkeys';
 import PluginUtils from 'Utils/Utils';
 

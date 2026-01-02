@@ -2,10 +2,10 @@ import NoteToolbarPlugin from "main";
 import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, TFile } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
-import EditorMenu from "./EditorMenu";
-import FileMenu from "./FileMenu";
-import RibbonMenu from "./RibbonMenu";
-import { TbarData } from "./ToolbarRenderer";
+import EditorMenu from "../Toolbar/EditorMenu";
+import FileMenu from "../Toolbar/FileMenu";
+import RibbonMenu from "../Toolbar/RibbonMenu";
+import { TbarData } from "../Toolbar/ToolbarRenderer";
 
 /**
  * Handles Obsidian changes registered with Obsidian's `registerEvent()`.
