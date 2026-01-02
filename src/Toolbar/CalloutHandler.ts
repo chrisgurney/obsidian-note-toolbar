@@ -8,17 +8,12 @@ export default class DomListeners {
         private ntb: NoteToolbarPlugin
     ) {}
 
-    onClick = (event: MouseEvent) => {
+    onClick = async (event: MouseEvent) => {
         const target = event.target as HTMLElement;
         if (!target.matches('.cg-note-toolbar-container')) {
             this.ntb.render.removeFocusStyle();
         }
-        this.ntb.items.calloutLinkHandler(event);
-    }
-
-    onMouseMove = (event: MouseEvent) => {
-        this.ntb.render.pointerX = event.clientX;
-        this.ntb.render.pointerY = event.clientY;
+        await this.ntb.items.calloutLinkHandler(event);
     }
 
 	onWindowOpen = (window: WorkspaceWindow) => {

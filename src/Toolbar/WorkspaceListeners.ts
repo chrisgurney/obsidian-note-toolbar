@@ -1,14 +1,17 @@
 import NoteToolbarPlugin from "main";
-import { TFile, ItemView, MarkdownView, CachedMetadata, debounce, Notice, MarkdownViewModeType, Menu, Platform, MenuItem, Editor, MarkdownFileInfo } from "obsidian";
-import { LocalVar, ToolbarSettings, ToolbarItemSettings, t } from "Settings/NoteToolbarSettings";
-import { getViewId } from "Utils/Utils";
-import { TbarData } from "./ToolbarRenderer";
+import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, Notice, Platform, TFile } from "obsidian";
+import { LocalVar, t } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
+import { getViewId } from "Utils/Utils";
+import RibbonMenu from "./RibbonMenu";
+import { TbarData } from "./ToolbarRenderer";
 
 /**
  * Handles Obsidian changes registered with Obsidian's `registerEvent()`.
  */
 export default class WorkspaceListeners {
+
+	private ribbonMenu: RibbonMenu;
 
     workspacesPlugin: { instance: any; enabled: boolean } | null = null;
     
@@ -24,7 +27,9 @@ export default class WorkspaceListeners {
 
     constructor(
         private ntb: NoteToolbarPlugin
-    ) {}
+    ) {
+		this.ribbonMenu = new RibbonMenu(ntb);
+	}
 
 	/**
 	 * Track changes to the theme (for better CSS overrides when rendering toolbars).
@@ -160,6 +165,14 @@ export default class WorkspaceListeners {
 			// don't seem to need a delay before rendering for leaf changes
 			await this.ntb.render.renderForView();
 		}
+	}
+
+	/**
+	 * Handles what happens when the ribbon icon is used.
+	 * @param event MouseEvent
+	 */
+	onRibbonMenu = async (event: MouseEvent) => {
+		await this.ribbonMenu.render(event);
 	}
 
 	/**

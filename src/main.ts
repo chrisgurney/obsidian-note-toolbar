@@ -13,15 +13,16 @@ import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
-import DomListeners from 'Toolbar/DomListeners';
+import CalloutHandler from 'Toolbar/CalloutHandler';
 import MetadataListeners from 'Toolbar/MetadataListeners';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
-import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
+import ToolbarHandler from 'Toolbar/ToolbarHandler';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
 import VaultListeners from 'Toolbar/VaultListeners';
+import ViewListeners from 'Toolbar/ViewListeners';
 import WorkspaceListeners from 'Toolbar/WorkspaceListeners';
 import HotkeyHelper from 'Utils/Hotkeys';
 import PluginUtils from 'Utils/Utils';
@@ -38,16 +39,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	settingsManager: SettingsManager;
 	utils: PluginUtils;
 	
+	callouts: CalloutHandler;
 	el: ToolbarElementHelper;
-	events: ToolbarEventHandler;
 	items: ToolbarItemHandler;
 	listeners: {
-		dom: DomListeners;
+		view: ViewListeners;
 		metadata: MetadataListeners;
 		vault: VaultListeners;
 		workspace: WorkspaceListeners;
 	};
 	render: ToolbarRenderer;
+	toolbars: ToolbarHandler;
 	vars: VariableResolver;
 
 	textToolbar: ViewPlugin<TextToolbarClass> | null = null;
@@ -65,16 +67,17 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.adapters = new AdapterManager(this);
 
 		// initialize managers + helpers
+		this.callouts = new CalloutHandler(this);
 		this.el = new ToolbarElementHelper(this);
-		this.events = new ToolbarEventHandler(this);
 		this.items = new ToolbarItemHandler(this);
 		this.listeners = {
-			dom: new DomListeners(this),
 			metadata: new MetadataListeners(this),
 			vault: new VaultListeners(this),
+			view: new ViewListeners(this),
 			workspace: new WorkspaceListeners(this),
 		}
 		this.render = new ToolbarRenderer(this);
+		this.toolbars = new ToolbarHandler(this);
 		this.utils = new PluginUtils(this);
 		this.vars = new VariableResolver(this);
 
@@ -84,7 +87,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 		if (Platform.isPhone) {
-			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event) => this.events.ribbonMenuHandler(event));
+			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event) => this.listeners.workspace.onRibbonMenu(event));
 		}
 
 		this.api = new NoteToolbarApi(this);
@@ -128,11 +131,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.registerEvent(this.app.vault.on('rename', this.listeners.vault.onFileRename));
 
 			// Note Toolbar Callout click handlers
-			this.registerEvent(this.app.workspace.on('window-open', this.listeners.dom.onWindowOpen));
-			this.registerDomEvent(activeDocument, 'click', this.listeners.dom.onClick);
+			this.registerEvent(this.app.workspace.on('window-open', this.callouts.onWindowOpen));
+			this.registerDomEvent(activeDocument, 'click', this.callouts.onClick);
 			
 			// track mouse position for Editor menu toolbar placement
-			this.registerDomEvent(activeDocument, 'mousemove', this.listeners.dom.onMouseMove);
+			this.registerDomEvent(activeDocument, 'mousemove', this.listeners.view.onMouseMove);
 
 			// add items to menus, when needed
 			this.registerEvent(this.app.workspace.on('file-menu', this.listeners.workspace.fileMenuHandler));

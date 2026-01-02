@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
-import { TFile, PaneType, TFolder, Notice, MarkdownView, Command, ItemView } from "obsidian";
-import { ToolbarItemSettings, ItemType, t, ItemFocusType, LINK_OPTIONS, ScriptConfig, CalloutAttr, SCRIPT_ATTRIBUTE_MAP, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { Command, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder } from "obsidian";
+import { CalloutAttr, ItemFocusType, ItemType, LINK_OPTIONS, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 /**
@@ -17,6 +17,46 @@ export default class ToolbarItemHandler {
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
+
+	/**
+	 * On click of an item in the toolbar, we replace any variables that might
+	 * be in the URL, and then open it.
+	 * @param event MouseEvent
+	 */
+	onClick = async (event: MouseEvent) => {
+
+		// this.ntb.debug('clickHandler:', event);
+
+		// allow standard and middle clicks through
+		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
+
+			let clickedEl = event.currentTarget as HTMLLinkElement;
+			let linkHref = clickedEl.getAttribute("href");
+	
+			if (linkHref != null) {
+				
+				const itemUuid = clickedEl.id;
+
+				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
+				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
+	
+				// this.ntb.debug('clickHandler: ', 'clickedEl: ', clickedEl);
+	
+				let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
+				
+				// remove the focus effect if clicked with a mouse
+				if ((event as PointerEvent)?.pointerType === "mouse") {
+					clickedEl.blur();
+					await this.ntb.render.removeFocusStyle();
+				}
+
+				await this.ntb.items.handleLink(itemUuid, linkHref, linkType, linkCommandId, event);
+	
+			}
+
+		}
+
+	}
 
 	/**
 	 * Handles links followed from Note Toolbar Callouts, including handling commands, folders, and menus.
