@@ -138,8 +138,8 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.registerDomEvent(activeDocument, 'mousemove', this.listeners.view.onMouseMove);
 
 			// add items to menus, when needed
-			this.registerEvent(this.app.workspace.on('file-menu', this.listeners.workspace.fileMenuHandler));
-			this.registerEvent(this.app.workspace.on('editor-menu', this.listeners.workspace.editorMenuHandler));
+			this.registerEvent(this.app.workspace.on('file-menu', this.listeners.workspace.onFileMenu));
+			this.registerEvent(this.app.workspace.on('editor-menu', this.listeners.workspace.onEditorMenu));
 
 			// add commands
 			this.commands.addCommands();

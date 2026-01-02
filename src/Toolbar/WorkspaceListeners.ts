@@ -1,8 +1,9 @@
 import NoteToolbarPlugin from "main";
-import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, MenuItem, Notice, Platform, TFile } from "obsidian";
-import { LocalVar, t } from "Settings/NoteToolbarSettings";
-import { importFromCallout } from "Utils/ImportExport";
+import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, TFile } from "obsidian";
+import { LocalVar } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
+import EditorMenu from "./EditorMenu";
+import FileMenu from "./FileMenu";
 import RibbonMenu from "./RibbonMenu";
 import { TbarData } from "./ToolbarRenderer";
 
@@ -11,6 +12,8 @@ import { TbarData } from "./ToolbarRenderer";
  */
 export default class WorkspaceListeners {
 
+	private editorMenu: EditorMenu;
+	private fileMenu: FileMenu;
 	private ribbonMenu: RibbonMenu;
 
     workspacesPlugin: { instance: any; enabled: boolean } | null = null;
@@ -28,6 +31,8 @@ export default class WorkspaceListeners {
     constructor(
         private ntb: NoteToolbarPlugin
     ) {
+		this.editorMenu = new EditorMenu(ntb);
+		this.fileMenu = new FileMenu(ntb);
 		this.ribbonMenu = new RibbonMenu(ntb);
 	}
 
@@ -39,6 +44,22 @@ export default class WorkspaceListeners {
 		// update the global theme attribute (for styling)
 		activeDocument.body.setAttr('data-ntb-csstheme', this.ntb.app.vault.getConfig('cssTheme'));
 	};
+
+	/**
+	 * On opening of the editor menu, check what was selected and add relevant menu options.
+	 */
+	onEditorMenu = async (menu: Menu, editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
+		await this.editorMenu.render(menu, editor, view);
+	}
+
+	/**
+	 * On opening of the file menu, check and render toolbar as a submenu.
+	 * @param menu the file Menu
+	 * @param file TFile for link that was clicked on
+	 */
+	onFileMenu = (menu: Menu, file: TFile) => {
+		this.fileMenu.render(menu, file);
+	}
 
 	/**
 	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
@@ -173,96 +194,6 @@ export default class WorkspaceListeners {
 	 */
 	onRibbonMenu = async (event: MouseEvent) => {
 		await this.ribbonMenu.render(event);
-	}
-
-	/**
-	 * On opening of the editor menu, check what was selected and add relevant menu options.
-	 */
-	editorMenuHandler = async (menu: Menu, editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
-
-		// replace Editor menu with the selected toolbar
-		if (this.ntb.settings.editorMenuToolbar) {
-			// FIXME? should we check if the active file is what we're viewing? might be confusing otherwise
-			const activeFile = this.ntb.app.workspace.getActiveFile();
-			const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
-			if (toolbar) {
-				// @ts-ignore
-				menu.items = [];
-				if (this.ntb.settings.editorMenuAsToolbar) {
-					const pointerPos = this.ntb.utils.getPosition('pointer');
-					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos, pointerPos);
-				}
-				else {
-					// not replacing variables here, because we need to call it synchronously
-					this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
-				}
-				return;
-			}
-			else {
-				new Notice(t('setting.display-locations.option-editor-menu-error')).containerEl.addClass('mod-warning');
-			}
-		}
-		// otherwise, add callout helper items to the standard Editor menu
-		else {
-			const selection = editor.getSelection().trim();
-			const line = editor.getLine(editor.getCursor().line).trim();
-			if (selection.includes('[!note-toolbar') || line.includes('[!note-toolbar')) {
-				menu.addItem((item: MenuItem) => {
-					item
-						.setIcon('info')
-						.setTitle(t('import.option-help'))
-						.onClick(async () => {
-							window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts', '_blank');
-						});
-				});
-			}
-			if (selection.includes('[!note-toolbar')) {
-				menu.addItem((item: MenuItem) => {
-					item
-						.setIcon('import')
-						.setTitle(t('import.option-create'))
-						.onClick(async () => {
-							let toolbar = await importFromCallout(this.ntb, selection);
-							await this.ntb.settingsManager.addToolbar(toolbar);
-							await this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
-						});
-				});
-			}
-		}
-
-	}
-
-	/**
-	 * On opening of the file menu, check and render toolbar as a submenu.
-	 * @param menu the file Menu
-	 * @param file TFile for link that was clicked on
-	 */
-	fileMenuHandler = (menu: Menu, file: TFile) => {
-		if (this.ntb.settings.showToolbarInFileMenu) {
-			// don't bother showing in the file menu for the active file
-			let activeFile = this.ntb.app.workspace.getActiveFile();
-			if (activeFile && file !== activeFile) {
-				let cache = this.ntb.app.metadataCache.getFileCache(file);
-				if (cache) {
-					let toolbar = this.ntb.settingsManager.getMappedToolbar(cache.frontmatter, file);
-					if (toolbar) {
-						// the submenu UI doesn't appear to work on mobile, render items in menu
-						if (Platform.isMobile) {
-							toolbar ? this.ntb.render.renderMenuItems(menu, toolbar, file, 1) : undefined;
-						}
-						else {
-							menu.addItem((item: MenuItem) => {
-								item
-									.setIcon(this.ntb.settings.icon)
-									.setTitle(toolbar ? toolbar.name : '');
-								let subMenu = item.setSubmenu() as Menu;
-								toolbar ? this.ntb.render.renderMenuItems(subMenu, toolbar, file) : undefined;
-							});
-						}
-					}
-				}
-			}
-		}
 	}
 	
 	// TODO: remove if not needed
