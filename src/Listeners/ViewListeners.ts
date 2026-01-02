@@ -8,6 +8,10 @@ export default class ViewListeners {
     public isMouseDown: boolean = false;
     public isMouseSelection: boolean = false;
 
+	// for tracking current pointer position, for placing UI
+	public pointerX: number = 0;
+	public pointerY: number = 0;
+
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
@@ -45,8 +49,8 @@ export default class ViewListeners {
     }
 
     onMouseMove = (event: MouseEvent) => {
-        this.ntb.render.pointerX = event.clientX;
-        this.ntb.render.pointerY = event.clientY;
+        this.pointerX = event.clientX;
+        this.pointerY = event.clientY;
         if (this.isMouseDown) {
             this.isMouseSelection = true;
         }

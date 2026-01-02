@@ -143,8 +143,8 @@ export default class PluginUtils {
 	getPosition(position: 'cursor' | 'pointer' | 'toolbar' = 'pointer'): Rect | undefined {
 		// 'pointer' position
 		const pointerPos: Rect = { 
-			left: this.ntb.render.pointerX, right: this.ntb.render.pointerX,
-			top: this.ntb.render.pointerY, bottom: this.ntb.render.pointerY 
+			left: this.ntb.listeners.view.pointerX, right: this.ntb.listeners.view.pointerX,
+			top: this.ntb.listeners.view.pointerY, bottom: this.ntb.listeners.view.pointerY 
 		};
 		if (position === 'pointer') return pointerPos;
 

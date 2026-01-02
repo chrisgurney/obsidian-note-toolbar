@@ -20,10 +20,6 @@ export enum TbarData {
  */
 export default class ToolbarRenderer {
 
-	// for tracking current pointer position, for placing UI
-	pointerX: number = 0;
-	pointerY: number = 0;
-
 	// floating toolbar element, of which there can be only one
     floatingToolbarEl: HTMLDivElement | null = null;
     
