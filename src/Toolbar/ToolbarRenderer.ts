@@ -415,8 +415,8 @@ export default class ToolbarRenderer {
 						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
 					}
 
-					this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.items.onClick(e));
-					this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.items.onClick(e));
+					this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.items.onItemClick(e));
+					this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.items.onItemClick(e));
 		
 					const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, tabHasIcon, tabHasLabel] = calcComponentVisToggles(item.visibility);
 					if (item.label) {
