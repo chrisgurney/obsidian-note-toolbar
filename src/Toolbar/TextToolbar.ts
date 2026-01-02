@@ -22,53 +22,31 @@ export default function TextToolbar(ntb: NoteToolbarPlugin): ViewPlugin<TextTool
 }
 
 export class TextToolbarClass implements PluginValue {
-    private isContextOpening: boolean = false;
-    private isMouseDown: boolean = false;
-    private isMouseSelection: boolean = false;
 
     private lastSelection: { from: number; to: number; text: string } | null = null;
     private selection: { from: number; to: number; text: string } | null = null;
 
     constructor(view: EditorView, private ntb: NoteToolbarPlugin) {
-        // plugin.debug('TextToolbarView initialized');
 
         // view state tracking
-        ntb.registerDomEvent(view.dom, 'mousedown', () => {
-            this.isMouseDown = true;
-        });
-        ntb.registerDomEvent(view.dom, 'mousemove', () => {
-            if (this.isMouseDown) {
-                this.isMouseSelection = true;
-            }
-        });
-        ntb.registerDomEvent(view.dom, 'mouseup', () => {
-            this.isMouseDown = false;
-        });
-        // also listen to mouseup on the document to catch releases outside the editor
-        ntb.registerDomEvent(activeDocument, 'mouseup', () => {
-            this.isMouseDown = false;
-        });
-        ntb.registerDomEvent(view.dom, 'keydown', () => {
-            this.isMouseSelection = false;
-            this.isMouseDown = false;
-        });
-        ntb.registerDomEvent(view.dom, 'dblclick', () => {
-            this.isMouseSelection = true;
-        });
-        ntb.registerDomEvent(view.dom, 'contextmenu', () => {
-            this.isContextOpening = true;
-        });
+        this.ntb.listeners.view.registerForView(view);
 
         // scroll tracking
-        ntb.registerDomEvent(view.scrollDOM, 'scroll', () => {
-            if (ntb.render.hasFloatingToolbar()) {
-                if (!this.selection) return;
-                const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
-                const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
-                if (!selectStartPos || !selectEndPos) return;
-                ntb.render.positionFloating(ntb.render.floatingToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
-            }
-        });
+        ntb.registerDomEvent(view.scrollDOM, 'scroll', () => this.onScroll(view));
+
+    }
+
+    /**
+     * Updates the position of the floating toolbar, if there is one.
+     */ 
+    onScroll = (view: EditorView) => {
+        if (this.ntb.render.hasFloatingToolbar()) {
+            if (!this.selection) return;
+            const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
+            const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
+            if (!selectStartPos || !selectEndPos) return;
+            this.ntb.render.positionFloating(this.ntb.render.floatingToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
+        }
     }
 
     update(update: ViewUpdate) {
@@ -81,7 +59,7 @@ export class TextToolbarClass implements PluginValue {
         };
         
         // don't show toolbar until selection is complete
-        if (this.isMouseDown) {
+        if (this.ntb.listeners.view.isMouseDown) {
             this.ntb.debug('TextToolbar: mousedown - exiting');
             return;
         };
@@ -97,9 +75,9 @@ export class TextToolbarClass implements PluginValue {
         // this.ntb.debug('selection:', selection);
 
         // right-clicking for some reason selects the current line if it's empty
-        if (this.isContextOpening && this.selection.from === this.selection.from + 1) {
+        if (this.ntb.listeners.view.isContextOpening && this.selection.from === this.selection.from + 1) {
             this.ntb.debug('TextToolbar: selection is just new line - exiting');
-            this.isContextOpening = false;
+            this.ntb.listeners.view.isContextOpening = false;
             return;
         }
 

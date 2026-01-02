@@ -132,9 +132,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.callout.register();
 			this.listeners.metadata.register();
 			this.listeners.vault.register();
-			
-			// track mouse position for Editor menu toolbar placement
-			this.registerDomEvent(activeDocument, 'mousemove', this.listeners.view.onMouseMove);
+			this.listeners.view.register();	
 
 			// add commands
 			this.commands.addCommands();
