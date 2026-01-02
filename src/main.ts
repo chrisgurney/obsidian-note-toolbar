@@ -8,22 +8,23 @@ import GalleryView from 'Gallery/GalleryView';
 import HelpView from 'Help/HelpView';
 import TipView from 'Help/TipView';
 import WhatsNewView from 'Help/WhatsNewView';
+import CalloutListeners from 'Listeners/CalloutListeners';
+import MetadataListeners from 'Listeners/MetadataListeners';
+import VaultListeners from 'Listeners/VaultListeners';
+import ViewListeners from 'Listeners/ViewListeners';
+import WorkspaceListeners from 'Listeners/WorkspaceListeners';
 import { addIcon, Platform, Plugin, WorkspaceLeaf } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import CalloutHandler from 'Toolbar/CalloutHandler';
-import MetadataListeners from 'Listeners/MetadataListeners';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarHandler from 'Toolbar/ToolbarHandler';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
-import VaultListeners from 'Listeners/VaultListeners';
-import ViewListeners from 'Listeners/ViewListeners';
-import WorkspaceListeners from 'Listeners/WorkspaceListeners';
 import HotkeyHelper from 'Utils/Hotkeys';
 import PluginUtils from 'Utils/Utils';
 
@@ -42,15 +43,17 @@ export default class NoteToolbarPlugin extends Plugin {
 	callouts: CalloutHandler;
 	el: ToolbarElementHelper;
 	items: ToolbarItemHandler;
+	render: ToolbarRenderer;
+	toolbars: ToolbarHandler;
+	vars: VariableResolver;
+
 	listeners: {
+		callout: CalloutListeners;
 		view: ViewListeners;
 		metadata: MetadataListeners;
 		vault: VaultListeners;
 		workspace: WorkspaceListeners;
 	};
-	render: ToolbarRenderer;
-	toolbars: ToolbarHandler;
-	vars: VariableResolver;
 
 	textToolbar: ViewPlugin<TextToolbarClass> | null = null;
 
@@ -70,16 +73,19 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.callouts = new CalloutHandler(this);
 		this.el = new ToolbarElementHelper(this);
 		this.items = new ToolbarItemHandler(this);
+		this.render = new ToolbarRenderer(this);
+		this.toolbars = new ToolbarHandler(this);
+		this.utils = new PluginUtils(this);
+		this.vars = new VariableResolver(this);
+
+		// listeners
 		this.listeners = {
+			callout: new CalloutListeners(this),
 			metadata: new MetadataListeners(this),
 			vault: new VaultListeners(this),
 			view: new ViewListeners(this),
 			workspace: new WorkspaceListeners(this),
 		}
-		this.render = new ToolbarRenderer(this);
-		this.toolbars = new ToolbarHandler(this);
-		this.utils = new PluginUtils(this);
-		this.vars = new VariableResolver(this);
 
 		// load the settings
 		this.settingsManager = new SettingsManager(this);
@@ -123,11 +129,9 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// setup listeners
 			this.listeners.workspace.register();
+			this.listeners.callout.register();
 			this.listeners.metadata.register();
 			this.listeners.vault.register();
-
-			// setup listeners for Note Toolbar callouts
-			this.callouts.register();
 			
 			// track mouse position for Editor menu toolbar placement
 			this.registerDomEvent(activeDocument, 'mousemove', this.listeners.view.onMouseMove);

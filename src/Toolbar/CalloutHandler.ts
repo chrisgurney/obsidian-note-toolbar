@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Notice, WorkspaceWindow } from "obsidian";
+import { Notice } from "obsidian";
 import { CalloutAttr, ItemType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
 
 
@@ -11,25 +11,6 @@ export default class CalloutHandler {
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
-
-    register() {
-        this.ntb.registerEvent(this.ntb.app.workspace.on('window-open', this.onWindowOpen));
-        this.ntb.registerDomEvent(activeDocument, 'click', this.onClick);
-    }
-
-    onClick = async (event: MouseEvent) => {
-        const target = event.target as HTMLElement;
-        if (!target.matches('.cg-note-toolbar-container')) {
-            this.ntb.render.removeFocusStyle();
-        }
-        await this.calloutLinkHandler(event);
-    }
-
-	onWindowOpen = (window: WorkspaceWindow) => {
-		this.ntb.registerDomEvent(window.doc, 'click', (event: MouseEvent) => {
-			this.calloutLinkHandler(event);
-		});
-	}
 
     /**
      * Handles links followed from Note Toolbar Callouts, including handling commands, folders, and menus.
