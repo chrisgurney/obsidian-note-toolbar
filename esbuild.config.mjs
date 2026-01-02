@@ -32,7 +32,6 @@ const typecheckPlugin = {
 				const tsc = spawn('tsc', ['-noEmit', '-skipLibCheck'], {
 					stdio: 'inherit' // pipes stdout/stderr directly, preserving colors
 				});
-				
 				tsc.on('close', (code) => {
 					if (code === 0) {
 						console.log('\x1b[32m[typecheck] ✓ passed\x1b[0m');
@@ -58,7 +57,7 @@ const typedocPlugin = {
 				'none'
 			]);
 			typedoc.stderr.on('data', (data) => {
-				console.error(`\x1b[31m[api-docs]\x1b[0m ${data}`);
+				console.error(`${data}`);
 			});
 		});
   	},
@@ -86,7 +85,7 @@ const galleryDocsPlugin = {
 			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', 'docs/wiki/gallery.md');
 		} 
 		catch (error) {
-			console.log("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
+			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
 			process.exit(1);
 		}
 	  });
