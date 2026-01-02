@@ -17,19 +17,16 @@ export default class ViewListeners {
     ) {}
 
     register() {
+        this.ntb.registerDomEvent(activeDocument, 'contextmenu', this.onContextMenu);
+        this.ntb.registerDomEvent(activeDocument, 'dblclick', this.onDoubleClick);
+        this.ntb.registerDomEvent(activeDocument, 'keydown', this.onKeyDown);
+        this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
         // to track mouse position
         this.ntb.registerDomEvent(activeDocument, 'mousemove', this.onMouseMove);
         // listen on the document to catch mouse releases outside of the editor
         this.ntb.registerDomEvent(activeDocument, 'mouseup', this.onMouseUp);
     }
     
-    registerForView(view: EditorView) {
-        this.ntb.registerDomEvent(view.dom, 'contextmenu', this.onContextMenu); 
-        this.ntb.registerDomEvent(view.dom, 'dblclick', this.onDoubleClick);        
-        this.ntb.registerDomEvent(view.dom, 'keydown', this.onKeyDown);
-        this.ntb.registerDomEvent(view.dom, 'mousedown', this.onMouseDown);
-    }
-
     onContextMenu = () => {
         this.isContextOpening = true;
     }

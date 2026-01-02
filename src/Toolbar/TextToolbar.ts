@@ -27,13 +27,8 @@ export class TextToolbarClass implements PluginValue {
     private selection: { from: number; to: number; text: string } | null = null;
 
     constructor(view: EditorView, private ntb: NoteToolbarPlugin) {
-
-        // view state tracking
-        this.ntb.listeners.view.registerForView(view);
-
         // scroll tracking
         ntb.registerDomEvent(view.scrollDOM, 'scroll', () => this.onScroll(view));
-
     }
 
     /**
