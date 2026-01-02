@@ -9,6 +9,10 @@ export default class VaultListeners {
         private ntb: NoteToolbarPlugin
     ) {}
 
+    register() {
+        this.ntb.registerEvent(this.ntb.app.vault.on('rename', this.onFileRename));
+    }
+
     /**
      * On rename of file, update any item links that reference the old name.
      * @param file TFile of the new file.

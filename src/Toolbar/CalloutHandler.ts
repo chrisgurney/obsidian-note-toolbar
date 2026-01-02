@@ -8,6 +8,11 @@ export default class DomListeners {
         private ntb: NoteToolbarPlugin
     ) {}
 
+    register() {
+        this.ntb.registerEvent(this.ntb.app.workspace.on('window-open', this.onWindowOpen));
+        this.ntb.registerDomEvent(activeDocument, 'click', this.onClick);
+    }
+
     onClick = async (event: MouseEvent) => {
         const target = event.target as HTMLElement;
         if (!target.matches('.cg-note-toolbar-container')) {

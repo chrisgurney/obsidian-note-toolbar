@@ -36,6 +36,17 @@ export default class WorkspaceListeners {
 		this.ribbonMenu = new RibbonMenu(ntb);
 	}
 
+	register() {
+		this.ntb.registerEvent(this.ntb.app.workspace.on('file-open', this.onFileOpen));
+		this.ntb.registerEvent(this.ntb.app.workspace.on('active-leaf-change', this.onLeafChange));
+		this.ntb.registerEvent(this.ntb.app.workspace.on('layout-change', this.onLayoutChange));
+		this.ntb.registerEvent(this.ntb.app.workspace.on('css-change', this.onCssChange));
+
+		// add items to menus
+		this.ntb.registerEvent(this.ntb.app.workspace.on('file-menu', this.onFileMenu));
+		this.ntb.registerEvent(this.ntb.app.workspace.on('editor-menu', this.onEditorMenu));
+	}
+
 	/**
 	 * Track changes to the theme (for better CSS overrides when rendering toolbars).
 	 */

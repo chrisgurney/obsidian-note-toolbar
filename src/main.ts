@@ -121,25 +121,16 @@ export default class NoteToolbarPlugin extends Plugin {
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this));
 
-			this.registerEvent(this.app.workspace.on('file-open', this.listeners.workspace.onFileOpen));
-			this.registerEvent(this.app.workspace.on('active-leaf-change', this.listeners.workspace.onLeafChange));
-			this.registerEvent(this.app.metadataCache.on('changed', this.listeners.metadata.onMetadataChange));
-			this.registerEvent(this.app.workspace.on('layout-change', this.listeners.workspace.onLayoutChange));
-			this.registerEvent(this.app.workspace.on('css-change', this.listeners.workspace.onCssChange));
+			// setup listeners
+			this.listeners.workspace.register();
+			this.listeners.metadata.register();
+			this.listeners.vault.register();
 
-			// monitor files being renamed to update menu items
-			this.registerEvent(this.app.vault.on('rename', this.listeners.vault.onFileRename));
-
-			// Note Toolbar Callout click handlers
-			this.registerEvent(this.app.workspace.on('window-open', this.callouts.onWindowOpen));
-			this.registerDomEvent(activeDocument, 'click', this.callouts.onClick);
+			// setup listeners for Note Toolbar callouts
+			this.callouts.register();
 			
 			// track mouse position for Editor menu toolbar placement
 			this.registerDomEvent(activeDocument, 'mousemove', this.listeners.view.onMouseMove);
-
-			// add items to menus, when needed
-			this.registerEvent(this.app.workspace.on('file-menu', this.listeners.workspace.onFileMenu));
-			this.registerEvent(this.app.workspace.on('editor-menu', this.listeners.workspace.onEditorMenu));
 
 			// add commands
 			this.commands.addCommands();

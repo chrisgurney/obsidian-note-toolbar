@@ -13,6 +13,10 @@ export default class WorkspaceListeners {
         private ntb: NoteToolbarPlugin
     ) {}
 
+	register() {
+		this.ntb.registerEvent(this.ntb.app.metadataCache.on('changed', this.onMetadataChange));
+	}
+
 	/**
 	 * On changes to metadata, trigger the checks and rendering of a toolbar if necessary.
 	 * @param file TFile in which metadata changed.
