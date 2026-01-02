@@ -13,13 +13,16 @@ import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
-import PluginListeners from 'Toolbar/PluginListeners';
+import DomListeners from 'Toolbar/DomListeners';
+import MetadataListeners from 'Toolbar/MetadataListeners';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarEventHandler from 'Toolbar/ToolbarEventHandler';
 import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
+import VaultListeners from 'Toolbar/VaultListeners';
+import WorkspaceListeners from 'Toolbar/WorkspaceListeners';
 import HotkeyHelper from 'Utils/Hotkeys';
 import PluginUtils from 'Utils/Utils';
 
@@ -38,7 +41,12 @@ export default class NoteToolbarPlugin extends Plugin {
 	el: ToolbarElementHelper;
 	events: ToolbarEventHandler;
 	items: ToolbarItemHandler;
-	listeners: PluginListeners;
+	listeners: {
+		dom: DomListeners;
+		metadata: MetadataListeners;
+		vault: VaultListeners;
+		workspace: WorkspaceListeners;
+	};
 	render: ToolbarRenderer;
 	vars: VariableResolver;
 
@@ -60,7 +68,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.el = new ToolbarElementHelper(this);
 		this.events = new ToolbarEventHandler(this);
 		this.items = new ToolbarItemHandler(this);
-		this.listeners = new PluginListeners(this);
+		this.listeners = {
+			dom: new DomListeners(this),
+			metadata: new MetadataListeners(this),
+			vault: new VaultListeners(this),
+			workspace: new WorkspaceListeners(this),
+		}
 		this.render = new ToolbarRenderer(this);
 		this.utils = new PluginUtils(this);
 		this.vars = new VariableResolver(this);
@@ -92,7 +105,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			// has to be done on plugin load
 			// @ts-expect-error - internalPlugins is not in the public App type
 			const internalPlugins = this.app.internalPlugins;
-			this.listeners.workspacesPlugin = internalPlugins.getPluginById('workspaces');
+			this.listeners.workspace.workspacesPlugin = internalPlugins.getPluginById('workspaces');
 
 			// add icons specific to the plugin
 			addIcon('note-toolbar-empty', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="svg-icon note-toolbar-empty”></svg>');
@@ -105,38 +118,25 @@ export default class NoteToolbarPlugin extends Plugin {
 			// add the settings UI
 			this.addSettingTab(new NoteToolbarSettingTab(this));
 
-			this.registerEvent(this.app.workspace.on('file-open', this.listeners.onFileOpen));
-			this.registerEvent(this.app.workspace.on('active-leaf-change', this.listeners.onLeafChange));
-			this.registerEvent(this.app.metadataCache.on('changed', this.listeners.onMetadataChange));
-			this.registerEvent(this.app.workspace.on('layout-change', this.listeners.onLayoutChange));
-			this.registerEvent(this.app.workspace.on('css-change', this.listeners.onCssChange));
+			this.registerEvent(this.app.workspace.on('file-open', this.listeners.workspace.onFileOpen));
+			this.registerEvent(this.app.workspace.on('active-leaf-change', this.listeners.workspace.onLeafChange));
+			this.registerEvent(this.app.metadataCache.on('changed', this.listeners.metadata.onMetadataChange));
+			this.registerEvent(this.app.workspace.on('layout-change', this.listeners.workspace.onLayoutChange));
+			this.registerEvent(this.app.workspace.on('css-change', this.listeners.workspace.onCssChange));
 
 			// monitor files being renamed to update menu items
-			this.registerEvent(this.app.vault.on('rename', this.listeners.onFileRename));
+			this.registerEvent(this.app.vault.on('rename', this.listeners.vault.onFileRename));
 
 			// Note Toolbar Callout click handlers
-			this.registerEvent(this.app.workspace.on('window-open', (win) => {
-				this.registerDomEvent(win.doc, 'click', (e: MouseEvent) => {
-					this.items.calloutLinkHandler(e);
-				});
-			}));
-			this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
-				const target = e.target as HTMLElement;
-				if (!target.matches('.cg-note-toolbar-container')) {
-					this.render.removeFocusStyle();
-				}
-				this.items.calloutLinkHandler(e);
-			});
+			this.registerEvent(this.app.workspace.on('window-open', this.listeners.dom.onWindowOpen));
+			this.registerDomEvent(activeDocument, 'click', this.listeners.dom.onClick);
 			
 			// track mouse position for Editor menu toolbar placement
-			this.registerDomEvent(activeDocument, 'mousemove', (e: MouseEvent) => {
-				this.render.pointerX = e.clientX;
-				this.render.pointerY = e.clientY;
-			});
+			this.registerDomEvent(activeDocument, 'mousemove', this.listeners.dom.onMouseMove);
 
 			// add items to menus, when needed
-			this.registerEvent(this.app.workspace.on('file-menu', this.events.fileMenuHandler));
-			this.registerEvent(this.app.workspace.on('editor-menu', this.events.editorMenuHandler));
+			this.registerEvent(this.app.workspace.on('file-menu', this.listeners.workspace.fileMenuHandler));
+			this.registerEvent(this.app.workspace.on('editor-menu', this.listeners.workspace.editorMenuHandler));
 
 			// add commands
 			this.commands.addCommands();
