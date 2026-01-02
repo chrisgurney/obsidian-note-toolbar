@@ -87,7 +87,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
 		if (Platform.isPhone) {
-			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event) => this.listeners.workspace.onRibbonMenu(event));
+			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event: MouseEvent) => this.listeners.workspace.onRibbonMenu(event));
 		}
 
 		this.api = new NoteToolbarApi(this);
