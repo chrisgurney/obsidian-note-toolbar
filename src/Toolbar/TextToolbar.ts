@@ -54,7 +54,7 @@ export class TextToolbarClass implements PluginValue {
         };
         
         // don't show toolbar until selection is complete
-        if (this.ntb.listeners.view.isMouseDown) {
+        if (this.ntb.listeners.document.isMouseDown) {
             this.ntb.debug('TextToolbar: mousedown - exiting');
             return;
         };
@@ -70,9 +70,9 @@ export class TextToolbarClass implements PluginValue {
         // this.ntb.debug('selection:', selection);
 
         // right-clicking for some reason selects the current line if it's empty
-        if (this.ntb.listeners.view.isContextOpening && this.selection.from === this.selection.from + 1) {
+        if (this.ntb.listeners.document.isContextOpening && this.selection.from === this.selection.from + 1) {
             this.ntb.debug('TextToolbar: selection is just new line - exiting');
-            this.ntb.listeners.view.isContextOpening = false;
+            this.ntb.listeners.document.isContextOpening = false;
             return;
         }
 

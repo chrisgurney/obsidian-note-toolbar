@@ -1,8 +1,7 @@
-import { EditorView } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 
 
-export default class ViewListeners {
+export default class DocumentListeners {
 
     public isContextOpening: boolean = false;
     public isMouseDown: boolean = false;

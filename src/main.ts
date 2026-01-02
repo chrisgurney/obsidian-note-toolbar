@@ -9,9 +9,9 @@ import HelpView from 'Help/HelpView';
 import TipView from 'Help/TipView';
 import WhatsNewView from 'Help/WhatsNewView';
 import CalloutListeners from 'Listeners/CalloutListeners';
+import DocumentListeners from 'Listeners/DocumentListeners';
 import MetadataListeners from 'Listeners/MetadataListeners';
 import VaultListeners from 'Listeners/VaultListeners';
-import ViewListeners from 'Listeners/ViewListeners';
 import WorkspaceListeners from 'Listeners/WorkspaceListeners';
 import { addIcon, Platform, Plugin, WorkspaceLeaf } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
@@ -49,7 +49,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	listeners: {
 		callout: CalloutListeners;
-		view: ViewListeners;
+		document: DocumentListeners;
 		metadata: MetadataListeners;
 		vault: VaultListeners;
 		workspace: WorkspaceListeners;
@@ -81,9 +81,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		// listeners
 		this.listeners = {
 			callout: new CalloutListeners(this),
+			document: new DocumentListeners(this),
 			metadata: new MetadataListeners(this),
 			vault: new VaultListeners(this),
-			view: new ViewListeners(this),
 			workspace: new WorkspaceListeners(this),
 		}
 
@@ -132,7 +132,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.callout.register();
 			this.listeners.metadata.register();
 			this.listeners.vault.register();
-			this.listeners.view.register();	
+			this.listeners.document.register();	
 
 			// add commands
 			this.commands.addCommands();
