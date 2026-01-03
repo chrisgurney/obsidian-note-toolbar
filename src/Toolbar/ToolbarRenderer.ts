@@ -539,6 +539,9 @@ export default class ToolbarRenderer {
 		// add class so we can style the menu
 		menu.dom.addClass('note-toolbar-menu');
 
+		// add ID in case it's needed for styling
+		menu.dom.id = toolbar.uuid;
+
 		// apply custom classes to the sub-menu by getting the note's toolbar 
 		const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
 		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
@@ -619,6 +622,7 @@ export default class ToolbarRenderer {
 								// render the sub-menu items
 								let menuToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 								if (menuToolbar) {
+									subMenu.dom.id = menuToolbar.uuid; // add ID in case it's needed for styling
 									if (resolveVars) {
 										await this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1, resolveVars);
 									}
@@ -641,7 +645,6 @@ export default class ToolbarRenderer {
 						if (!isCommandAvailable) break;
 
 						menu.addItem((item: MenuItem) => {
-
 							const itemTitleFr = document.createDocumentFragment();
 							itemTitleFr.append(title);
 							// show hotkey
@@ -652,7 +655,7 @@ export default class ToolbarRenderer {
 									if (itemHotkeyEl) itemTitleFr.appendChild(itemHotkeyEl);
 								}
 							}
-							
+							// create the item
 							item
 								.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon)
 									? toolbarItem.icon 
@@ -666,7 +669,9 @@ export default class ToolbarRenderer {
 										this.ntb.app.workspace.activeEditor?.editor?.focus();
 									}
 								});
-							});
+							// set its ID, just for styling purposes
+							item.dom.id = toolbarItem.uuid;
+						});
 						break;
 					}
 				}

@@ -38,8 +38,10 @@ declare module "obsidian" {
 		dom: HTMLDivElement
 	}
 
-    // allows access to sub-menus, and setting warning style
     interface MenuItem {
+        // allows access to MenuItem DOM, to set item IDs for styling
+		dom: HTMLDivElement;
+        // allows access to sub-menus, and setting warning style
         setSubmenu: () => Menu;
     }
 
