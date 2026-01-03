@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
 import * as Obsidian from "obsidian";
-import { App, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { App, ItemView, MarkdownView, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, t } from "Settings/NoteToolbarSettings";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
@@ -142,18 +142,32 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     getSelection(): string {
 
         const editor = this.ntb.app.workspace.activeEditor?.editor;
+        const view = this.app.workspace.getActiveViewOfType(ItemView);
+        
+        // TODO: support other file types here?
         if (!editor) return '';
-        
-        const selection = editor.getSelection();
-        
-        if (selection) return selection;
 
-        const cursor = editor.getCursor();
-        const wordRange = editor.wordAt(cursor);
-        
-        if (!wordRange) return '';
-    
-        return editor.getRange(wordRange.from, wordRange.to);
+        if (view instanceof MarkdownView) {
+            const mode = view.getMode();
+            // check if we're in Preview mode, and return the document selection
+            if (mode === 'preview') {
+                const documentSelection = activeDocument.getSelection();
+                const selectedText = documentSelection?.toString().trim();
+                if (selectedText) return selectedText;
+            }
+            // otherwise, return editor's selected text, if it's available
+            else {
+                const selection = editor.getSelection();
+                if (selection) return selection;
+
+                // or return word at cursor, if there is one
+                const cursor = editor.getCursor();
+                const wordRange = editor.wordAt(cursor);
+                if (wordRange) return editor.getRange(wordRange.from, wordRange.to);
+            }
+        }
+
+        return '';
 
     }
 
