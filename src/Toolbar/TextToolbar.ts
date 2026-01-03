@@ -37,6 +37,7 @@ export class TextToolbarClass implements PluginValue {
     onScroll = (view: EditorView) => {
         if (this.ntb.render.hasFloatingToolbar()) {
             if (!this.selection) return;
+            // place the toolbar above the cursor, which takes the selection into account
             const cursorPos = this.ntb.utils.getPosition('cursor');
             if (!cursorPos) return;
             this.ntb.render.positionFloating(this.ntb.render.floatingToolbarEl, cursorPos, Platform.isAndroidApp ? 'below' : 'above');
@@ -124,6 +125,7 @@ export class TextToolbarClass implements PluginValue {
                 return;
             };
 
+            // place the toolbar above the cursor, which takes the selection into account
             const cursorPos = this.ntb.utils.getPosition('cursor');
             await this.ntb.render.renderFloatingToolbar(toolbar, cursorPos);
 
