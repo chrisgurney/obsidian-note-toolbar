@@ -20,11 +20,12 @@ import { IToolbar } from "./IToolbar";
  * - for toolbars, go to Note Toolbar's main settings, and use **More options → Copy developer ID**; and
  * - for toolbar items, go to each item's settings, and use **More actions... → Copy developer ID**. 
  * 
- * From CSS or code you can then target specific toolbars and items, and style or make changes to them.
+ * Use this as another method to uniquely style toolbars or items, or reference them in the API, without worrying if their names might change.
  * 
  * Here's a code examples with items:
  * 
  * ```js
+ * // update this item's icon
  * const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
  * item.setIcon('alert');
  * 
