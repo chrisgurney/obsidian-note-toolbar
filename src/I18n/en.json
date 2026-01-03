@@ -571,7 +571,7 @@
                 "name": "Navbar item visibility 📱"
             },
             "scripting": {
-                "description": "Adds support for Dataview, JS Engine, and Templater, which must be installed and enabled.",
+                "description": "Adds support for Dataview, JavaScript, JS Engine, and Templater. Plugins must be installed and enabled.",
                 "name": "Scripting"
             },
             "show-edit-tbar": {
