@@ -162,9 +162,9 @@ export default class PluginUtils {
 	/**
 	 * Get the position for displaying UI elements.
 	 * @param position The type of position to retrieve. Defaults to `pointer`.
-     * `cursor`: editor cursor or selection position (falls back to pointer, e.g., if editor is not in focus);
+     * `cursor`: editor cursor or selection position (falls back to pointer position, e.g., if editor is not in focus);
 	 * `pointer`: mouse/pointer position;
-	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer position)
 	 * @returns A Rect object with the position coordinates, or undefined if unable to determine
 	 */
 	getPosition(position: 'cursor' | 'pointer' | 'toolbar' = 'pointer'): Rect | undefined {
