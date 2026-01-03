@@ -686,6 +686,8 @@
             "duplicated-tbar-suffix": "copy",
             "label-empty-create-tbar": "Use the button to create a toolbar.",
             "label-tbar-name-not-set": "Toolbar name not set",
+            "menu-copy-id": "Copy developer ID",
+            "menu-copy-id-notice": "Toolbar ID copied to clipboard.",
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
             "new-tbar-name": "New toolbar"
