@@ -343,7 +343,7 @@ export default interface INoteToolbarApi<T> {
      * await ntb.toolbar('Daily Notes');
      * 
      * @example
-     * // show the "Daily Notes" toolbar at the cursor position
+     * // show the "Daily Notes" toolbar at the cursor position (or above the text selection)
      * await ntb.toolbar('Daily Notes', { position: 'cursor' });
      * 
      * @since 1.27
@@ -401,7 +401,7 @@ export interface NtbMenuOptions {
     id?: string;
     /**
      * Sets the position in which the menu will appear; defaults to `toolbar`.
-     * `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus);
+     * `cursor`: editor cursor or selected text position (falls back to pointer, e.g., if editor is not in focus);
 	 * `pointer`: mouse/pointer position;
 	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
      * 
@@ -507,7 +507,7 @@ export interface NtbToolbarOptions {
     class?: string;
     /**
      * Sets the position in which the toolbar will appear; defaults to `toolbar`.
-     * `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus);
+     * `cursor`: editor cursor or selected text position (falls back to pointer, e.g., if editor is not in focus);
 	 * `pointer`: mouse/pointer position;
 	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
      */
