@@ -71,7 +71,7 @@ export default class DocumentListeners {
      */ 
     onScroll = () => {
         if (this.ntb.render.hasFloatingToolbar()) {
-            // place the toolbar above the cursor, which takes the selection into account
+            // places the toolbar near the cursor (which takes text selection into account)
             const cursorPos = this.ntb.utils.getPosition('cursor');
             if (!cursorPos) return;
             this.ntb.render.positionFloating(this.ntb.render.floatingToolbarEl, cursorPos, Platform.isAndroidApp ? 'below' : 'above');
