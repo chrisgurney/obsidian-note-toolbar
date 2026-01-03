@@ -411,7 +411,7 @@
             "option-command-error-not-available-search": "This command cannot be found. Try searching again.",
             "option-command-error-refresh": "Refresh",
             "option-command-check": "Disable if not available",
-            "option-command-check-description": "If the command cannot be performed in the current context, the item will be disabled in the toolbar.",
+            "option-command-check-description": "If the command indicates that it cannot be performed in the current context, the item will be disabled in the toolbar.",
             "option-command-focus": "Focus in editor",
             "option-command-focus-description": "Set focus in editor after the command is executed.",
             "option-command-help": "Runs a command when this item is used.",
