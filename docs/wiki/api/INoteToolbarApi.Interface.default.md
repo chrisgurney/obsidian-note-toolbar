@@ -47,6 +47,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 - [[ntb.setSelection|Note-Toolbar-API#setselection]]
 - [[ntb.suggester|Note-Toolbar-API#suggester]]
 - [[ntb.t|Note-Toolbar-API#t]]
+- [[ntb.toolbar|Note-Toolbar-API#toolbar]]
 
 ---
 

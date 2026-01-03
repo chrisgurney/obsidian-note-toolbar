@@ -51,6 +51,7 @@ import { IToolbar } from "./IToolbar";
  * - [[ntb.setSelection|Note-Toolbar-API#setselection]]
  * - [[ntb.suggester|Note-Toolbar-API#suggester]]
  * - [[ntb.t|Note-Toolbar-API#t]]
+ * - [[ntb.toolbar|Note-Toolbar-API#toolbar]]
  * 
  * ---
  * 
