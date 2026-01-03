@@ -105,18 +105,45 @@ export default class PluginUtils {
 	 * @returns cursor position, or `undefined` if we're not showing an editor, or it does not have focus.
 	 */
 	getCursorPosition(): Rect | undefined {
+
 		const editor = this.ntb.app.workspace.activeEditor?.editor;
+
+		// TODO: possible to support Reading mode?
 		if (!editor) return;
-		const offset = editor.posToOffset(editor.getCursor());
 		const cmView = (editor as any).cm as EditorView;
-		const coords = cmView.coordsAtPos(offset);
-		if (!coords) return;
-		return {
-			top: coords.top,
-			bottom: coords.bottom,
-			left: coords.left,
-			right: coords.right
+		const cursorOffset = editor.posToOffset(editor.getCursor());
+		const cursorCoords = cmView.coordsAtPos(cursorOffset);
+
+		if (!cursorCoords) return;
+
+		let result = {
+			top: cursorCoords.top,
+			bottom: cursorCoords.bottom,
+			left: cursorCoords.left,
+			right: cursorCoords.right
 		};
+
+		// if there's a selection, return the bounding box of the selection
+		const selection = editor.getSelection();
+		if (selection) {
+			const selectionRange = editor.listSelections()[0];
+			const fromOffset = editor.posToOffset(selectionRange.anchor);
+			const toOffset = editor.posToOffset(selectionRange.head);
+			
+			const startCoords = cmView.coordsAtPos(fromOffset);
+			const endCoords = cmView.coordsAtPos(toOffset);
+			
+			if (startCoords && endCoords) {
+				result = {
+					top: Math.min(startCoords.top, endCoords.top),
+					bottom: Math.max(endCoords.top, endCoords.bottom),
+					left: Math.min(startCoords.left, endCoords.left),
+					right: Math.max(startCoords.right, endCoords.right)
+				}
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -149,7 +176,11 @@ export default class PluginUtils {
 		if (position === 'pointer') return pointerPos;
 
 		// 'cursor' position, with fallback to 'pointer' (Reading mode, editor not in focus, etc.)
-		if (position === 'cursor') return this.getCursorPosition() ?? pointerPos;
+		if (position === 'cursor') {
+			const cursorPos = this.getCursorPosition();
+			if (!position) this.ntb.debug('getPosition: cursor not found, falling back to pointer position');
+			return cursorPos ?? pointerPos;
+		};
 
 		// 'toolbar' position (i.e., last clicked element), with fallback to 'pointer'
 		const lastClickedPos = this.ntb.items.lastClickedEl?.getBoundingClientRect();

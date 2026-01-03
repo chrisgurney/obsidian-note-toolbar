@@ -22,7 +22,7 @@ export default class EditorMenu {
 				menu.items = [];
 				if (this.ntb.settings.editorMenuAsToolbar) {
 					const pointerPos = this.ntb.utils.getPosition('pointer');
-					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos, pointerPos);
+					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos);
 				}
 				else {
 					// not replacing variables here, because we need to call it synchronously

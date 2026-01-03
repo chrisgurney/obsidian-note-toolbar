@@ -1053,46 +1053,45 @@ export default class ToolbarRenderer {
 	/**
 	 * Positions floating toolbars (e.g., text toolbar), ensuring it doesn't go over the edge of the window.
 	 * @param toolbarEl toolbar element to position.
-	 * @param startPos start of range to position toolbar at.
-	 * @param endPos end of range to position toolbar at.
-	 * @param position position the toolbar above or below the provided position.
+	 * @param position coords to position toolbar at.
+	 * @param orientation puts the toolbar above or below the provided position.
 	 */
 	positionFloating(
 		toolbarEl: HTMLDivElement | null, 
-		startPos: Rect, 
-		endPos: Rect, 
-		position: 'above' | 'below' = 'above'
+		position: Rect, 
+		orientation: 'above' | 'below' = 'above'
 	): void {
-
 		if (!toolbarEl) return;
 
-		const centerX = (startPos.left + endPos.right) / 2;
-		let left = centerX - (toolbarEl.offsetWidth / 2);
+		// vertically: orient relative to position, and prevent overflow
 		// TODO? make offset via CSS variable instead of subtracting here?
 		let top: number;
-
-		if (position === 'below') {
-			top = endPos.bottom + 8;
-			if (top + toolbarEl.offsetHeight > window.innerHeight - 8) {
-				top = startPos.top - toolbarEl.offsetHeight - 8;
+		if (orientation === 'below') {
+			top = position.bottom + 8;
+			if (top + toolbarEl.offsetHeight > activeWindow.innerHeight - 8) {
+				top = position.top - toolbarEl.offsetHeight - 8;
 				// if still overflows above, clamp to top
 				if (top < 8) top = 8;
 			}
 		}
 		else {
-			top = startPos.top - toolbarEl.offsetHeight - 8;
+			top = position.top - toolbarEl.offsetHeight - 8;
 			if (top < 8) {
-				top = endPos.bottom + 8;
+				top = position.bottom + 8;
 				// if still overflows below, clamp to bottom
-				if (top + toolbarEl.offsetHeight > window.innerHeight - 8) {
-					top = window.innerHeight - toolbarEl.offsetHeight - 8;
+				if (top + toolbarEl.offsetHeight > activeWindow.innerHeight - 8) {
+					top = activeWindow.innerHeight - toolbarEl.offsetHeight - 8;
 				}
 			}
 		}
 
-		// prevent horizontal overflow
+		// horizontally: use center of provided position (handles text selections)
+		const centerX = (position.left + position.right) / 2;
+		let left = centerX - (toolbarEl.offsetWidth / 2);
+
+		// ...and prevent horizontal overflow
 		const minLeft = 8;
-		const maxLeft = window.innerWidth - toolbarEl.offsetWidth - 8;
+		const maxLeft = activeWindow.innerWidth - toolbarEl.offsetWidth - 8;
 		left = Math.max(minLeft, Math.min(left, maxLeft));
 
 		toolbarEl.style.left = `${left}px`;
@@ -1109,17 +1108,15 @@ export default class ToolbarRenderer {
 	/**
 	 * Renders a floating toolbar at the middle of the given start and end positions in the editor. 
 	 * @param toolbar
-	 * @param selectStartPos 
-	 * @param selectEndPos 
+	 * @param position start position
 	 * @returns nothing
 	 */
 	async renderFloatingToolbar(
 		toolbar: ToolbarSettings | undefined, 
-		selectStartPos: Rect | undefined, 
-		selectEndPos: Rect | undefined
+		position: Rect | undefined
 	): Promise<void> {
 
-		if (!selectStartPos || !selectEndPos || !toolbar) return;
+		if (!position || !toolbar) return;
 
 		if (!toolbar) {
 			this.ntb.debug('⚠️ error: no floating toolbar provided');
@@ -1134,7 +1131,7 @@ export default class ToolbarRenderer {
 		// remove the existing toolbar because we're likely in a new position
 		if (this.floatingToolbarEl) {
 			this.ntb.debug('♻️ rendering floating toolbar (removing old toolbar)');
-			this.floatingToolbarEl.remove();
+			this.removeFloatingToolbar();
 		}
 
 		/*
@@ -1156,7 +1153,7 @@ export default class ToolbarRenderer {
 		toolbarContainerEl.appendChild(renderedToolbarEl);
 		activeDocument.body.appendChild(toolbarContainerEl);
 
-		this.positionFloating(toolbarContainerEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
+		this.positionFloating(toolbarContainerEl, position, Platform.isAndroidApp ? 'below' : 'above');
 
 		this.ntb.registerDomEvent(toolbarContainerEl, 'contextmenu', (e) => this.ntb.toolbars.onContextMenu(e));
 		this.ntb.registerDomEvent(toolbarContainerEl, 'keydown', (e) => this.ntb.toolbars.onKeyDown(e, true));

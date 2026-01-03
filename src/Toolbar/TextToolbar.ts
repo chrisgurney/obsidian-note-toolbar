@@ -37,10 +37,9 @@ export class TextToolbarClass implements PluginValue {
     onScroll = (view: EditorView) => {
         if (this.ntb.render.hasFloatingToolbar()) {
             if (!this.selection) return;
-            const selectStartPos: Rect | null = view.coordsAtPos(this.selection.from);
-            const selectEndPos: Rect | null = view.coordsAtPos(this.selection.to);
-            if (!selectStartPos || !selectEndPos) return;
-            this.ntb.render.positionFloating(this.ntb.render.floatingToolbarEl, selectStartPos, selectEndPos, Platform.isAndroidApp ? 'below' : 'above');
+            const cursorPos = this.ntb.utils.getPosition('cursor');
+            if (!cursorPos) return;
+            this.ntb.render.positionFloating(this.ntb.render.floatingToolbarEl, cursorPos, Platform.isAndroidApp ? 'below' : 'above');
         }
     }
 
@@ -118,15 +117,15 @@ export class TextToolbarClass implements PluginValue {
 
             if (!this.selection) return;
 
-            const selectStartPos: Rect | undefined = view.coordsAtPos(this.selection.from) ?? undefined;
-            const selectEndPos: Rect | undefined = view.coordsAtPos(this.selection.to) ?? undefined;
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             if (!toolbar) {
                 this.ntb.debug('⚠️ TextToolbar: Error: toolbar with ID', this.ntb.settings.textToolbar);
                 new Notice(t('setting.error-invalid-text-toolbar')).containerEl.addClass('mod-warning');
                 return;
             };
-            await this.ntb.render.renderFloatingToolbar(toolbar, selectStartPos, selectEndPos);
+
+            const cursorPos = this.ntb.utils.getPosition('cursor');
+            await this.ntb.render.renderFloatingToolbar(toolbar, cursorPos);
 
             this.lastSelection = {
                 from: this.selection.from,

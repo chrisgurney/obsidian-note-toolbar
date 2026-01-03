@@ -368,7 +368,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // position option; defaults to 'toolbar' as scripts are typically executed from clicked items
         const showAtPosition = this.ntb.utils.getPosition(options?.position ?? 'toolbar');
 
-        await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, showAtPosition);
+        await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition);
 
         // apply custom classes
         if (options?.class) this.ntb.render.floatingToolbarEl?.addClasses([...options.class.split(' ')]);
