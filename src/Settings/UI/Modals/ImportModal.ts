@@ -56,7 +56,8 @@ export default class ImportModal extends Modal {
                             this.callout = value;
                         });
                 })
-                .setClass('note-toolbar-setting-import-text-area');
+                .setClass('note-toolbar-setting-import-text-area')
+                .setClass('note-toolbar-setting-no-border');
 
             //
             // help
