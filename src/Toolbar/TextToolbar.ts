@@ -26,23 +26,10 @@ export class TextToolbarClass implements PluginValue {
     private lastSelection: { from: number; to: number; text: string } | null = null;
     private selection: { from: number; to: number; text: string } | null = null;
 
-    constructor(view: EditorView, private ntb: NoteToolbarPlugin) {
-        // scroll tracking
-        ntb.registerDomEvent(view.scrollDOM, 'scroll', () => this.onScroll(view));
-    }
-
-    /**
-     * Updates the position of the floating toolbar, if there is one.
-     */ 
-    onScroll = (view: EditorView) => {
-        if (this.ntb.render.hasFloatingToolbar()) {
-            if (!this.selection) return;
-            // place the toolbar above the cursor, which takes the selection into account
-            const cursorPos = this.ntb.utils.getPosition('cursor');
-            if (!cursorPos) return;
-            this.ntb.render.positionFloating(this.ntb.render.floatingToolbarEl, cursorPos, Platform.isAndroidApp ? 'below' : 'above');
-        }
-    }
+    constructor(
+        view: EditorView, 
+        private ntb: NoteToolbarPlugin
+    ) {}
 
     update(update: ViewUpdate) {
 

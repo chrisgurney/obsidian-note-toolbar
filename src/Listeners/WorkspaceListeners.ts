@@ -162,6 +162,12 @@ export default class WorkspaceListeners {
 		const viewId = getViewId(currentView);
 		this.ntb.debug('===== LEAF-CHANGE ===== ', viewId);
 
+		// listen to scroll events for floating toolbars
+		const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		if (itemView && this.ntb.utils.checkToolbarForItemView(itemView)) {
+			this.ntb.listeners.document.setupScrollListener(leaf);
+		}
+
 		// update the active toolbar if its configuration changed
 		if (toolbarEl) {
 			let activeToolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);

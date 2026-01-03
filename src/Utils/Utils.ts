@@ -58,6 +58,7 @@ export default class PluginUtils {
 			'home-tab-view': (this.ntb.settings.emptyViewToolbar !== undefined),
 			'image': this.ntb.settings.showToolbarIn.image,
 			'kanban': this.ntb.settings.showToolbarIn.kanban,
+			'markdown': true,
 			'pdf': this.ntb.settings.showToolbarIn.pdf,
 			'video': this.ntb.settings.showToolbarIn.video,
 		};
