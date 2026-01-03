@@ -9,11 +9,16 @@ I would appreciate your feedback, which you can leave in [the discussions](https
 > [!warning]
 > While you could also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
 
-## Copy developer ID for items
+## Copy developer ID for toolbars and items
 
-In each item's _More actions..._ menu, use `Copy developer ID` to copy the unique identifier (UUID) for any toolbar item to the clipboard. 
+To get a unique identifier (UUID):
 
-From code you can then target the item and make changes to it:
+- for toolbars, go to Note Toolbar's main settings, and use **More options → Copy developer ID**; and
+- for toolbar items, go to each item's settings, and use **More actions... → Copy developer ID**. 
+
+From CSS or code you can then target specific toolbars and items, and style or make changes to them.
+
+Here's a code examples with items:
 
 ```js
 const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
