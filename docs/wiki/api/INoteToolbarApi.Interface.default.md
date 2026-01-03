@@ -264,7 +264,7 @@ Shows a menu with the provided items.
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
 | `options.id?` | `string` | Optional ID to add to the menu when it's rendered. **Since** 1.27 |
-| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer) **Since** 1.27 |
+| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) **Since** 1.27 |
 
 #### Returns
 
@@ -581,7 +581,7 @@ Shows a (floating) toolbar. Defaults to the 'toolbar' position.
 | `toolbarNameOrId` | `string` | Toolbar name or UUID. |
 | `options?` | \{ `class?`: `string`; `position`: `"cursor"` \| `"toolbar"` \| `"pointer"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
-| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer) |
+| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |
 
 #### Returns
 

@@ -401,9 +401,9 @@ export interface NtbMenuOptions {
     id?: string;
     /**
      * Sets the position in which the menu will appear; defaults to `toolbar`.
-     * `cursor`: editor cursor or selected text position (falls back to pointer, e.g., if editor is not in focus);
+     * `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus);
 	 * `pointer`: mouse/pointer position;
-	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer position)
      * 
      * @since 1.27
      */
@@ -507,9 +507,9 @@ export interface NtbToolbarOptions {
     class?: string;
     /**
      * Sets the position in which the toolbar will appear; defaults to `toolbar`.
-     * `cursor`: editor cursor or selected text position (falls back to pointer, e.g., if editor is not in focus);
+     * `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus);
 	 * `pointer`: mouse/pointer position;
-	 * `toolbar`: last clicked toolbar element position (falls back to pointer)
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer position)
      */
     position: 'cursor' | 'pointer' | 'toolbar';
 }
