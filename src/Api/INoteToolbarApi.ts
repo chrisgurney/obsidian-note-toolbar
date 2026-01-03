@@ -354,6 +354,12 @@ export interface NtbMenuItem {
      */
     icon?: string;
     /**
+     * Optional ID to add to the menu item when it's rendered.
+     * 
+     * @since 1.27
+     */
+    id?: string;
+    /**
      * Label for the menu item.
      */
     label: string;
@@ -380,6 +386,12 @@ export interface NtbMenuOptions {
      * If `true`, the menu item will be focused when the menu opens; defaults to `false`.
      */
     focusInMenu?: boolean;
+    /**
+     * Optional ID to add to the menu when it's rendered.
+     * 
+     * @since 1.27
+     */
+    id?: string;
     /**
      * Sets the position in which the menu will appear; defaults to `toolbar`.
      * `cursor`: editor cursor position (falls back to pointer, e.g., if editor is not in focus);

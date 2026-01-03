@@ -213,11 +213,16 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                                     break;
                             }
                         });
+                    // add an ID if provided, for styling purposes
+                    if (item.id) menuItem.dom.id = item.id;
                 });
             });
         }
 
         menu.dom.addClass('note-toolbar-menu');
+
+        // add an ID if provided, for styling purposes
+        if (options?.id) menu.dom.id = options.id;
 
 		// apply custom classes to the sub-menu by getting the note's toolbar 
 		const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();

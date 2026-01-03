@@ -12,6 +12,18 @@ Optional icon to display in the menu item.
 
 ***
 
+### id?
+
+> `optional` **id**: `string`
+
+Optional ID to add to the menu item when it's rendered.
+
+#### Since
+
+1.27
+
+***
+
 ### label
 
 > **label**: `string`
