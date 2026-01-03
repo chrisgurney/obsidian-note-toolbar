@@ -108,23 +108,25 @@ export default class PluginUtils {
 	getCursorPosition(): Rect | undefined {
 
 		const editor = this.ntb.app.workspace.activeEditor?.editor;
+		let result: Rect;
 
-		// TODO: possible to support Reading mode?
+		// TODO: support other file types here?
 		if (!editor) return;
+
 		const cmView = (editor as any).cm as EditorView;
 		const cursorOffset = editor.posToOffset(editor.getCursor());
 		const cursorCoords = cmView.coordsAtPos(cursorOffset);
 
 		if (!cursorCoords) return;
 
-		let result = {
+		result = {
 			top: cursorCoords.top,
 			bottom: cursorCoords.bottom,
 			left: cursorCoords.left,
 			right: cursorCoords.right
 		};
 
-		// if there's a selection, return the bounding box of the selection
+		// if there's an editor selection, return the bounding box of the selection
 		const selection = editor.getSelection();
 		if (selection) {
 			const selectionRange = editor.listSelections()[0];
@@ -142,6 +144,22 @@ export default class PluginUtils {
 					right: Math.max(startCoords.right, endCoords.right)
 				}
 			}
+		}
+
+		// fallback for Reading mode (and other views?)
+		if (!selection) {
+			const documentSelection = activeDocument.getSelection();
+			if (documentSelection && documentSelection.rangeCount > 0 && !documentSelection.isCollapsed) {
+				const range = documentSelection.getRangeAt(0);
+				const rect = range.getBoundingClientRect();
+				this.ntb.debug(rect);
+				result = {
+					top: rect.top,
+					bottom: rect.bottom,
+					left: rect.left,
+					right: rect.right
+				};
+			}			
 		}
 
 		return result;
