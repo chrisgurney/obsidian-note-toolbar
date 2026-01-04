@@ -396,7 +396,7 @@ export async function importFromCallout(
                         case ItemType.Command: {
                             itemType = ItemType.Command;
                             commandId = dataUriValue;
-                            const commandName = this.ntb.utils.getCommandNameById(commandId);
+                            const commandName = ntb.utils.getCommandNameById(commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
                             errorLog += commandName ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
