@@ -732,7 +732,7 @@ export async function updateItemComponentStatus(
 								// TODO? error if required parameter is empty?
 								const value = toolbarItem.scriptConfig?.[param.parameter as keyof ScriptConfig] ?? null;
 								if (value) {
-									const subfieldValid = await updateItemComponentStatus(ntb, this.parent, value, param.type, componentEl);
+									const subfieldValid = await updateItemComponentStatus(ntb, parent, value, param.type, componentEl);
 									status = subfieldValid ? Status.Valid : Status.Invalid;
 								}
 							}
