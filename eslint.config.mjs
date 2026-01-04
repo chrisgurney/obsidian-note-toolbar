@@ -47,6 +47,8 @@ export default defineConfig([
 			...Object.fromEntries(
 				Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
 			),
+
+			"@typescript-eslint/no-invalid-this": "error",
 			
 			// COMMENT BACK IN BELOW SUGGESTED LIST TO TACKLE ONE-BY-ONE
 

@@ -7,6 +7,7 @@
     "target": "ES2018",
     "allowJs": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
