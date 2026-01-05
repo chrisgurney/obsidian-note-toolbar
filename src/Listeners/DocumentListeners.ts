@@ -79,7 +79,6 @@ export default class DocumentListeners {
         this.ntb.debug('onMouseUp');
         this.isMouseDown = false;
         this.renderPreviewTextToolbar();
-        this.previewSelection = null;
     }
 
     /**
