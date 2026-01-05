@@ -86,7 +86,9 @@ export default class WorkspaceListeners {
 	 * On layout changes, render and update toolbars as necessary.
 	 */
 	onLayoutChange = async () => {
-		
+
+		this.ntb.debug('===== LAYOUT-CHANGE =====');
+
 		// if workspace changed, render all toolbars, otherwise just render the toolbar for the active view (#367)
 		const workspace = this.workspacesPlugin?.instance.activeWorkspace;
 		if (workspace !== this.activeWorkspace) {
