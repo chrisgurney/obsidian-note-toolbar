@@ -45,9 +45,10 @@ export default class DocumentListeners {
         this.isContextOpening = true;
     }
 
-    onDoubleClick = (event: MouseEvent) => {
+    onDoubleClick = async (event: MouseEvent) => {
         // possible issue? not always true?
         this.isMouseSelection = true;
+        this.renderPreviewTextToolbar();
     }
 
     onKeyDown = (event: KeyboardEvent) => {
@@ -56,6 +57,7 @@ export default class DocumentListeners {
     }
     
     onMouseDown = (event: MouseEvent) => {
+        this.ntb.debug('onMouseDown', event.target);
         this.isMouseDown = true;
         // TODO? dismiss floating toolbar if click is not inside a floating toolbar? (or its menus, etc?)
         // const clickTarget = event.target as Node;
@@ -74,15 +76,9 @@ export default class DocumentListeners {
     }
 
     onMouseUp = async (event: MouseEvent) => {
+        this.ntb.debug('onMouseUp');
         this.isMouseDown = false;
-        // show text toolbar for selection in Preview mode
-        if (this.ntb.settings.textToolbar && this.previewSelection) {
-            const textToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
-            if (textToolbar) {
-                const cursorPos = this.ntb.utils.getPosition('cursor');
-                await this.ntb.render.renderFloatingToolbar(textToolbar, cursorPos);
-            }
-        }
+        this.renderPreviewTextToolbar();
         this.previewSelection = null;
     }
 
@@ -101,12 +97,9 @@ export default class DocumentListeners {
     /**
      * Track any document selections, but only for Preview mode.
      */
-    onSelection = (event: any) => {
-        const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-        const selection = (activeView instanceof MarkdownView && activeView.getMode() === 'preview')
-            ? activeDocument.getSelection()
-            : null;
-        this.previewSelection = (selection && selection.toString().trim().length > 0) ? selection : null;
+    onSelection = async (event: any) => {
+        this.ntb.debug('onSelection');
+        await this.updatePreviewSelection();
     }
 
     /**
@@ -149,9 +142,6 @@ export default class DocumentListeners {
 
     /**
      * Listens to changes on scroll using {@link onScroll}.
-     * 
-     * @param leaf 
-     * @returns 
      */
     public setupScrollListener(leaf: WorkspaceLeaf): void {
         // remove existing
@@ -169,6 +159,30 @@ export default class DocumentListeners {
 
         // add scroll listener
         this.ntb.registerDomEvent(this.scrollContainer, 'scroll', this.onScroll);
+    }
+
+    /**
+     * Show text toolbar for selection in Preview mode.
+     */
+    private async renderPreviewTextToolbar() {
+        await this.updatePreviewSelection();
+        if (this.ntb.settings.textToolbar && this.previewSelection) {
+            this.ntb.debug('renderPreviewTextToolbar', this.previewSelection.toString());
+            const textToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
+            if (textToolbar) {
+                const cursorPos = this.ntb.utils.getPosition('cursor');
+                await this.ntb.render.renderFloatingToolbar(textToolbar, cursorPos);
+            }
+        }
+    }
+
+    private async updatePreviewSelection() {
+        const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        const selection = (activeView instanceof MarkdownView && activeView.getMode() === 'preview')
+            ? activeDocument.getSelection()
+            : null;
+        this.previewSelection = (selection && selection.toString().trim().length > 0) ? selection : null;
+        this.ntb.debug('updatePreviewSelection', this.previewSelection?.toString());
     }
 
 }
