@@ -102,29 +102,30 @@ export default class PluginUtils {
 	}
 
 	/**
-	 * Get the current cursor position.
+	 * Get the current cursor position, or editor selection (with a fallback to Preview mode).
+	 * 
 	 * @returns cursor position, or `undefined` if we're not showing an editor, or it does not have focus.
 	 */
 	getCursorPosition(): Rect | undefined {
 
 		const editor = this.ntb.app.workspace.activeEditor?.editor;
-		let result: Rect;
+		let result: Rect | undefined;
 
 		// TODO: support other file types here?
 		if (!editor) return;
 
-		const cmView = (editor as any).cm as EditorView;
+		const editorView = (editor as any).cm as EditorView;
 		const cursorOffset = editor.posToOffset(editor.getCursor());
-		const cursorCoords = cmView.coordsAtPos(cursorOffset);
+		const cursorCoords = editorView.coordsAtPos(cursorOffset);
 
-		if (!cursorCoords) return;
-
-		result = {
-			top: cursorCoords.top,
-			bottom: cursorCoords.bottom,
-			left: cursorCoords.left,
-			right: cursorCoords.right
-		};
+		if (cursorCoords) {
+			result = {
+				top: cursorCoords.top,
+				bottom: cursorCoords.bottom,
+				left: cursorCoords.left,
+				right: cursorCoords.right
+			}
+		}
 
 		// if there's an editor selection, return the bounding box of the selection
 		const selection = editor.getSelection();
@@ -133,8 +134,8 @@ export default class PluginUtils {
 			const fromOffset = editor.posToOffset(selectionRange.anchor);
 			const toOffset = editor.posToOffset(selectionRange.head);
 			
-			const startCoords = cmView.coordsAtPos(fromOffset);
-			const endCoords = cmView.coordsAtPos(toOffset);
+			const startCoords = editorView.coordsAtPos(fromOffset);
+			const endCoords = editorView.coordsAtPos(toOffset);
 			
 			if (startCoords && endCoords) {
 				result = {
@@ -152,7 +153,6 @@ export default class PluginUtils {
 			if (documentSelection && documentSelection.rangeCount > 0 && !documentSelection.isCollapsed) {
 				const range = documentSelection.getRangeAt(0);
 				const rect = range.getBoundingClientRect();
-				this.ntb.debug(rect);
 				result = {
 					top: rect.top,
 					bottom: rect.bottom,
@@ -194,7 +194,7 @@ export default class PluginUtils {
 		};
 		if (position === 'pointer') return pointerPos;
 
-		// 'cursor' position, with fallback to 'pointer' (Reading mode, editor not in focus, etc.)
+		// 'cursor' position, with fallback to 'pointer'
 		if (position === 'cursor') {
 			const cursorPos = this.getCursorPosition();
 			if (!position) this.ntb.debug('getPosition: cursor not found, falling back to pointer position');
