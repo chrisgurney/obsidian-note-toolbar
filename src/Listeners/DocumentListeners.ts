@@ -21,7 +21,7 @@ export default class DocumentListeners {
         private ntb: NoteToolbarPlugin
     ) {}
 
-    register() {
+    public register() {
         this.ntb.registerDomEvent(activeDocument, 'contextmenu', this.onContextMenu);
         this.ntb.registerDomEvent(activeDocument, 'dblclick', this.onDoubleClick);
         this.ntb.registerDomEvent(activeDocument, 'keydown', this.onKeyDown);
@@ -38,6 +38,27 @@ export default class DocumentListeners {
 
     }
     
+    /**
+     * Listens to changes on scroll using {@link onScroll}.
+     */
+    public setupScrollListener(leaf: WorkspaceLeaf): void {
+        // remove existing
+        if (this.scrollContainer) {
+            this.scrollContainer.removeEventListener('scroll', this.onScroll);
+            this.scrollContainer = null;
+        }
+
+        // get the scrollable container based on view type
+        this.scrollContainer = this.getScrollContainer(leaf);
+        if (!this.scrollContainer) {
+            console.log('No scroll container found for this view type');
+            return;
+        }
+
+        // add scroll listener
+        this.ntb.registerDomEvent(this.scrollContainer, 'scroll', this.onScroll);
+    }
+
     onContextMenu = () => {
         this.isContextOpening = true;
     }
@@ -81,7 +102,9 @@ export default class DocumentListeners {
     onMouseUp = async (event: MouseEvent) => {
         this.ntb.debug('onMouseUp');
         this.isMouseDown = false;
-        this.renderPreviewTextToolbar();
+        if (this.isMouseSelection) {
+            setTimeout(() => this.renderPreviewTextToolbar(), 10);
+        }
     }
 
     /**
@@ -101,7 +124,7 @@ export default class DocumentListeners {
      */
     onSelection = async (event: any) => {
         this.ntb.debug('onSelection');
-        await this.updatePreviewSelection();
+        this.updatePreviewSelection();
     }
 
     /**
@@ -143,31 +166,9 @@ export default class DocumentListeners {
     }
 
     /**
-     * Listens to changes on scroll using {@link onScroll}.
-     */
-    public setupScrollListener(leaf: WorkspaceLeaf): void {
-        // remove existing
-        if (this.scrollContainer) {
-            this.scrollContainer.removeEventListener('scroll', this.onScroll);
-            this.scrollContainer = null;
-        }
-
-        // get the scrollable container based on view type
-        this.scrollContainer = this.getScrollContainer(leaf);
-        if (!this.scrollContainer) {
-            console.log('No scroll container found for this view type');
-            return;
-        }
-
-        // add scroll listener
-        this.ntb.registerDomEvent(this.scrollContainer, 'scroll', this.onScroll);
-    }
-
-    /**
      * Show text toolbar for selection in Preview mode.
      */
     private async renderPreviewTextToolbar() {
-        await this.updatePreviewSelection();
         if (this.ntb.settings.textToolbar && this.previewSelection) {
             this.ntb.debug('renderPreviewTextToolbar', this.previewSelection.toString());
             const textToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
@@ -175,17 +176,17 @@ export default class DocumentListeners {
                 const cursorPos = this.ntb.utils.getPosition('cursor');
                 await this.ntb.render.renderFloatingToolbar(textToolbar, cursorPos);
             }
-            this.previewSelection = null;
         }
     }
 
-    private async updatePreviewSelection() {
+    private updatePreviewSelection() {
         const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
         const selection = (activeView instanceof MarkdownView && activeView.getMode() === 'preview')
             ? activeDocument.getSelection()
             : null;
-        this.previewSelection = (selection && selection.toString().trim().length > 0) ? selection : null;
-        this.ntb.debug('updatePreviewSelection', this.previewSelection?.toString());
+        const hasSelection = selection && !selection.isCollapsed && selection.toString().trim().length > 0;
+        this.previewSelection = hasSelection ? selection : null;
+        // this.ntb.debug('updatePreviewSelection', this.previewSelection?.toString());
     }
 
 }
