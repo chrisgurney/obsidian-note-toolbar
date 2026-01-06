@@ -573,12 +573,15 @@ export default class ToolbarItemUi {
 
         switch(type) {
             case ItemType.Command: {
+                const initialCommandId = toolbarItem.linkAttr.commandId;
+                const isInitialCommandValid = (initialCommandId === '') || this.ntb.utils.getCommandNameById(initialCommandId) ? true : false;
                 const commandSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new CommandSuggester(this.ntb.app, cb.inputEl, async (command) => {
                             // below code is executed when user selects from list
-                            await updateItemComponentStatus(this.ntb, this.parent, command.id, SettingType.Command, cb.inputEl.parentElement);
+                            const isValid = await updateItemComponentStatus(this.ntb, this.parent, command.id, SettingType.Command, cb.inputEl.parentElement);
+                            if (isValid) cb.setPlaceholder(t('setting.item.option-command-placeholder'));
                             cb.inputEl.value = command.name;
                             toolbarItem.link = command.name;
                             toolbarItem.linkAttr.commandId = command.id;
@@ -586,12 +589,13 @@ export default class ToolbarItemUi {
                             await this.ntb.settingsManager.save();
                             this.renderPreview(toolbarItem);
                         });
-                        cb.setPlaceholder(t('setting.item.option-command-placeholder'))
+                        cb.setPlaceholder(isInitialCommandValid ? t('setting.item.option-command-placeholder') : initialCommandId)
                             .setValue(this.ntb.utils.getCommandNameById(toolbarItem.linkAttr.commandId) || '')
                             .onChange(debounce(async (commandName) => {
                                 // below code is executed as user types
                                 const commandId = commandName ? this.ntb.utils.getCommandIdByName(commandName) : '';
                                 const isValid = await updateItemComponentStatus(this.ntb, this.parent, commandId, SettingType.Command, cb.inputEl.parentElement);
+                                if (isValid) cb.setPlaceholder(t('setting.item.option-command-placeholder'));
                                 toolbarItem.link = isValid && commandName ? commandName : '';
                                 toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
                                 toolbarItem.linkAttr.type = type;
