@@ -17,12 +17,12 @@ import { IToolbar } from "./IToolbar";
  * 
  * To get a unique identifier (UUID):
  * 
- * - for toolbars, go to Note Toolbar's main settings, and use **More options → Copy developer ID**; and
+ * - for toolbars, go to Note Toolbar's main settings (in `1.27` or later), and use **More options → Copy developer ID**; and
  * - for toolbar items, go to each item's settings, and use **More actions... → Copy developer ID**. 
  * 
  * Use this as another method to uniquely style toolbars or items, or reference them in the API, without worrying if their names might change.
  * 
- * Here's a code examples with items:
+ * Here's some examples with items:
  * 
  * ```js
  * // update this item's icon
