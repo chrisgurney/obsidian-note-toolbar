@@ -39,6 +39,14 @@ export default class ToolbarRenderer {
 	hasFloatingToolbar(): boolean {
 		return this.floatingToolbarEl?.isConnected ?? false;
 	}
+
+	/**
+	 * Check to see if a floating toolbar is present, and is a text toolbar.
+	 * @returns true if a text toolbar is present and visible; false otherwise.
+	 */
+	hasFloatingTextToolbar(): boolean {
+		return this.hasFloatingToolbar() && this.floatingToolbarEl?.getAttribute('data-tbar-position') === PositionType.Text;
+	}
 	
 	/**
 	 * Check to see if a standard toolbar (non-text toolbar) is present.

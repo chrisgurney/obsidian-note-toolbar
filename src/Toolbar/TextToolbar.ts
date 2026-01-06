@@ -70,7 +70,7 @@ export class TextToolbarClass implements PluginValue {
             }
             // no text selected, or the view no longer has focus
             if (this.selection.from === this.selection.to || !view.hasFocus) {
-                if (this.ntb.render.hasFloatingToolbar()) {
+                if (this.ntb.render.hasFloatingTextToolbar()) {
                     this.ntb.debugGroup('TextToolbar: ⛔️ no selection or view out of focus - removing toolbar');
                     this.ntb.debug(
                         ' • selection empty:', this.selection.from === this.selection.to, 
@@ -84,7 +84,7 @@ export class TextToolbarClass implements PluginValue {
 
         if (selection.empty) {
             this.lastSelection = null;
-            if (this.ntb.render.hasFloatingToolbar()) {
+            if (this.ntb.render.hasFloatingTextToolbar()) {
                 this.ntb.debug('TextToolbar: ⛔️ selection empty - removing toolbar');
                 this.ntb.render.removeFloatingToolbar();
             }
