@@ -122,11 +122,6 @@ export class TextToolbarClass implements PluginValue {
                 text: this.selection.text
             };
 
-            // TODO: do we need this?
-            // if (!this.isMouseSelection) {
-            //     this.isMouseDown = false;
-            // }
-            
         });
 
     }

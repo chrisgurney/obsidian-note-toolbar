@@ -5,8 +5,9 @@ import { ItemView, MarkdownView, Platform, WorkspaceLeaf } from "obsidian";
 export default class DocumentListeners {
 
     public isContextOpening: boolean = false;
+    public isKeyboardSelection: boolean = false;
     public isMouseDown: boolean = false;
-    public isMouseSelection: boolean = false;
+    public isMouseSelecting: boolean = false;
 
 	// for tracking current pointer position, for placing UI
 	public pointerX: number = 0;
@@ -64,17 +65,19 @@ export default class DocumentListeners {
 
     onDoubleClick = async (event: MouseEvent) => {
         // possible issue? not always true?
-        this.isMouseSelection = true;
+        this.isMouseSelecting = true;
         this.renderPreviewTextToolbar();
     }
 
     onKeyDown = (event: KeyboardEvent) => {
-        this.isMouseSelection = false;
-        this.isMouseDown = false;        
+        this.isKeyboardSelection = true;
+        this.isMouseSelecting = false;
+        this.isMouseDown = false; 
     }
     
     onMouseDown = (event: MouseEvent) => {
         this.ntb.debug('onMouseDown', event.target);
+        this.isKeyboardSelection = false;
         this.isMouseDown = true;
         // TODO? dismiss floating toolbar if click is not inside a floating toolbar? (or its menus, etc?)
         // const clickTarget = event.target as Node;
@@ -91,7 +94,8 @@ export default class DocumentListeners {
         this.pointerX = event.clientX;
         this.pointerY = event.clientY;
         if (this.isMouseDown) {
-            this.isMouseSelection = true;
+            this.isKeyboardSelection = false;
+            this.isMouseSelecting = true;
         }
     }
 
@@ -104,9 +108,9 @@ export default class DocumentListeners {
         if (this.ntb.settings.textToolbar && this.previewSelection) {
             // selectionchange event is asynchronous and might not fire before mouseup
             // a small delay should ensure selectionchange has processed
-            if (this.isMouseSelection) setTimeout(() => this.renderPreviewTextToolbar(), 10);
+            if (this.isMouseSelecting) setTimeout(() => this.renderPreviewTextToolbar(), 10);
         }
-        this.isMouseSelection = false;
+        this.isMouseSelecting = false;
     }
 
     /**
