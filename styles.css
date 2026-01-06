@@ -1041,7 +1041,7 @@ settings:
         id: toolbar-text-tbar
         title: 'Toolbars (text)'
         title.zh: '工具栏（文本）'
-        description: 'Styles for text toolbars'
+        description: 'Styles for floating toolbars (including text toolbars)'
         description.zh: '文本工具栏的样式'
         type: heading
         level: 1
@@ -1552,7 +1552,7 @@ body {
             [data-tbar-position="bottom"] & {
                 margin: var(--cg-nt-tbar-margin-y);
             }
-            [data-tbar-position="float"] & {
+            [data-tbar-position="float"] &, [data-tbar-position="text"] & {
                 margin: var(--cg-nt-tbar-text-margin-y) var(--cg-nt-tbar-text-margin-x);
             }
         }
@@ -1721,7 +1721,7 @@ body {
             border: solid 1px var(--cg-nt-tbar-border-color);
             border-radius: var(--cg-nt-tbar-bottom-border-radius);
         }
-        [data-tbar-position="float"] & {
+        [data-tbar-position="float"] &, [data-tbar-position="text"] & {
             border: solid 1px var(--cg-nt-tbar-text-border-color);
             border-radius: var(--cg-nt-tbar-text-border-radius);
         }
@@ -1736,7 +1736,7 @@ body {
                 border: solid 1px var(--cg-nt-tbar-border-color);
                 border-radius: var(--cg-nt-tbar-bottom-border-radius);
             }
-            [data-tbar-position="float"] & {
+            [data-tbar-position="float"] &, [data-tbar-position="text"] & {
                 border: solid 1px var(--cg-nt-tbar-text-border-color);
                 border-radius: var(--cg-nt-tbar-text-border-radius);
             }
@@ -1860,7 +1860,7 @@ body {
         & a, span.external-link {
             background-color: var(--cg-nt-item-button-bg-color);
             box-shadow: var(--input-shadow);
-            [data-tbar-position="float"] & {
+            [data-tbar-position="float"] &, [data-tbar-position="text"] & {
                 background-color: var(--cg-nt-tbar-text-item-button-bg-color);
             }
         }
@@ -1875,7 +1875,7 @@ body {
             & a, span.external-link {
                 background-color: var(--cg-nt-item-button-bg-color);
                 box-shadow: var(--input-shadow);
-                [data-tbar-position="float"] & {
+                [data-tbar-position="float"] &, [data-tbar-position="text"] & {
                     background-color: var(--cg-nt-tbar-text-item-button-bg-color);
                 }
             }
@@ -2230,7 +2230,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         }
     }
 
-    &[data-tbar-position="float"] {
+    &[data-tbar-position="float"], &[data-tbar-position="text"] {
         border-radius: var(--cg-nt-tbar-text-border-radius);
         box-shadow: var(--cg-nt-tbar-text-shadow);
         position: absolute;

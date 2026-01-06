@@ -70,7 +70,9 @@ export default class ToolbarElementHelper {
      */
     getToolbarEl(view?: ItemView, isFloatingToolbar: boolean = false): HTMLElement | null {
         if (isFloatingToolbar) {
-            return activeDocument.querySelector('.cg-note-toolbar-container[data-tbar-position="float"]') as HTMLElement;
+            return activeDocument.querySelector(
+                '.cg-note-toolbar-container[data-tbar-position="float"], .cg-note-toolbar-container[data-tbar-position="text"]'
+            ) as HTMLElement;
         }
         else {
             var toolbarEl: HTMLElement | null = null;

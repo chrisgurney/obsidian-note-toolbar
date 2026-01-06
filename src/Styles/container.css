@@ -80,7 +80,7 @@
         }
     }
 
-    &[data-tbar-position="float"] {
+    &[data-tbar-position="float"], &[data-tbar-position="text"] {
         border-radius: var(--cg-nt-tbar-text-border-radius);
         box-shadow: var(--cg-nt-tbar-text-shadow);
         position: absolute;

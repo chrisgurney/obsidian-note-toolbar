@@ -1037,7 +1037,7 @@ settings:
         id: toolbar-text-tbar
         title: 'Toolbars (text)'
         title.zh: '工具栏（文本）'
-        description: 'Styles for text toolbars'
+        description: 'Styles for floating toolbars (including text toolbars)'
         description.zh: '文本工具栏的样式'
         type: heading
         level: 1
