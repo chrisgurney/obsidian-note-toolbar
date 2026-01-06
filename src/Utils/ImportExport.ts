@@ -172,13 +172,11 @@ async function exportToCalloutList(
  * Returns a string that shouldn't break an attribute value portion.
  */
 function escapeAttribute(str: string): string {
-    /* eslint-disable no-useless-escape */
     return str
         .replace(/\"/g, '&quot;')
         .replace(/\>/g, '&gt;')
         .replace(/\</g, '&lt;')
         .replace(/\s+/g, ' '); // replace newlines with spaces
-    /* eslint-enable no-useless-escape */
 }
 
 /**
