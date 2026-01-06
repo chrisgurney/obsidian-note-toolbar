@@ -172,6 +172,7 @@ export default class DocumentListeners {
                 const cursorPos = this.ntb.utils.getPosition('cursor');
                 await this.ntb.render.renderFloatingToolbar(textToolbar, cursorPos);
             }
+            this.previewSelection = null;
         }
     }
 
