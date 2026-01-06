@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-note-toolbar",
-	"version": "1.27-beta-14",
+	"version": "1.27-beta-15",
 	"description": "Obsidian plugin that adds customizable toolbars to your notes.",
 	"main": "main.js",
 	"scripts": {
