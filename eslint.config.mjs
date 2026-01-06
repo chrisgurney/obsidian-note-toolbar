@@ -36,23 +36,19 @@ export default defineConfig([
 			obsidianmd,
 			"@typescript-eslint": tsPlugin
 		},
-	},
-
-	// bring in Obsidian's recommended rules
-	...obsidianmd.configs.recommended,
-
-	{
 		rules: {
+			// bring in Obsidian's recommended rules
+			...(obsidianmd.configs.recommended.rules || {}),
+
 			// IGNORE TS-ESLINT BASIC RULES FOR NOW
 			...Object.fromEntries(
 				Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
 			),
 
 			"@typescript-eslint/no-invalid-this": "error",
+			// "@typescript-eslint/no-unused-vars": "error",
 			
 			// COMMENT BACK IN BELOW SUGGESTED LIST TO TACKLE ONE-BY-ONE
-
-			// '@typescript-eslint/no-unused-vars': 'error',
 
 			// MEMORY
 			// Prevents forgetting to unsubscribe/cleanup

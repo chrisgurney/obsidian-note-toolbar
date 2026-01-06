@@ -63,6 +63,29 @@ const typedocPlugin = {
   	},
 };
 
+const eslintPlugin = {
+	name: 'eslint',
+	setup(build) {
+		build.onEnd(async () => {
+			return new Promise((resolve) => {
+				console.log('[eslint] running...');
+				const eslint = spawn('npx', ['eslint', '.', '--ext', '.ts'], {
+					stdio: 'inherit',
+					shell: true // needed for Windows
+				});
+				eslint.on('close', (code) => {
+					if (code === 0) {
+						console.log('\x1b[32m[eslint] ✓ passed\x1b[0m');
+					} else {
+						console.log('\x1b[33m[eslint] ⚠ warnings/errors found\x1b[0m');
+					}
+					resolve();
+				});
+			});
+		});
+	},
+};
+
 // inline files into CSS
 const fileInlinerPlugin = {
 	name: 'file-inliner-plugin',
@@ -119,7 +142,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [fileInlinerPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin],
+	plugins: [fileInlinerPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin, eslintPlugin],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,
