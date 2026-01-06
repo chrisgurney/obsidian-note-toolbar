@@ -35,7 +35,6 @@ export default class DocumentListeners {
         if (activeView && this.ntb.utils.checkToolbarForItemView(activeView)) {
             this.setupScrollListener(activeView.leaf);
         }
-
     }
     
     /**
@@ -102,9 +101,12 @@ export default class DocumentListeners {
     onMouseUp = async (event: MouseEvent) => {
         this.ntb.debug('onMouseUp');
         this.isMouseDown = false;
-        if (this.isMouseSelection) {
-            setTimeout(() => this.renderPreviewTextToolbar(), 10);
+        if (this.ntb.settings.textToolbar && this.previewSelection) {
+            // selectionchange event is asynchronous and might not fire before mouseup
+            // a small delay should ensure selectionchange has processed
+            if (this.isMouseSelection) setTimeout(() => this.renderPreviewTextToolbar(), 10);
         }
+        this.isMouseSelection = false;
     }
 
     /**
@@ -122,7 +124,7 @@ export default class DocumentListeners {
     /**
      * Track any document selections, but only for Preview mode.
      */
-    onSelection = async (event: any) => {
+    onSelection = (event: any) => {
         this.ntb.debug('onSelection');
         this.updatePreviewSelection();
     }
