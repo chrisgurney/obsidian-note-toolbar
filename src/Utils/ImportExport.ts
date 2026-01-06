@@ -249,6 +249,8 @@ export async function importFromCallout(
     fromShareUri: boolean = false
 ): Promise<ToolbarSettings> {
 
+    ntb.debugGroup('importFromCallout');
+
     const lines = callout.trim().split('\n');
     const isToolbarProvided = toolbar ? true : false;
     let errorLog = '';
@@ -312,7 +314,7 @@ export async function importFromCallout(
     // parse the rest
     lines.map((line, index) => {
 
-        ntb.debug(index + 1);
+        ntb.debugGroup(index + 1);
         
         let itemType: ItemType | undefined = undefined;
 
@@ -445,13 +447,15 @@ export async function importFromCallout(
 
         }
 
-        ntb.debug('• icon?', icon);
-        ntb.debug('• label?', label);
-        ntb.debug('• tooltip?', tooltip);
-        ntb.debug('• link?', link);
-        ntb.debug('• commandId?', commandId);
-        ntb.debug('• scriptConfig?', scriptConfig);
+        ntb.debugGroup('RESULT →');
+        ntb.debug('icon?', icon);
+        ntb.debug('label?', label);
+        ntb.debug('tooltip?', tooltip);
+        ntb.debug('link?', link);
+        ntb.debug('commandId?', commandId);
+        ntb.debug('scriptConfig?', scriptConfig);
         ntb.debug(`=> ${itemType?.toUpperCase()}`);
+        ntb.debugGroupEnd();
 
         errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
@@ -481,6 +485,8 @@ export async function importFromCallout(
 
         }
 
+        ntb.debugGroupEnd();
+
     });
 
     // show errors to the user
@@ -488,6 +494,8 @@ export async function importFromCallout(
         errorLog = `${t('import.errorlog-heading')}\n${errorLog}`;
         new Notice(errorLog, 10000).containerEl.addClass('mod-warning');
     }
+
+    ntb.debugGroupEnd();
 
     return toolbar;
 
