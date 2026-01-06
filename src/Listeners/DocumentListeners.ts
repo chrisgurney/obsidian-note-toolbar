@@ -25,12 +25,9 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'contextmenu', this.onContextMenu);
         this.ntb.registerDomEvent(activeDocument, 'dblclick', this.onDoubleClick);
         this.ntb.registerDomEvent(activeDocument, 'keydown', this.onKeyDown);
-        this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
-        // to track mouse position
         this.ntb.registerDomEvent(activeDocument, 'mousemove', this.onMouseMove);
-        // listen on the document to catch mouse releases outside of the editor
         this.ntb.registerDomEvent(activeDocument, 'mouseup', this.onMouseUp);
-
+        this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelection);
 
         // setup initial scroll listener; subsequently done in onLeafChange
@@ -67,6 +64,9 @@ export default class DocumentListeners {
         }
     }
 
+    /**
+     * To track mouse position.
+     */
     onMouseMove = (event: MouseEvent) => {
         this.pointerX = event.clientX;
         this.pointerY = event.clientY;
@@ -75,6 +75,9 @@ export default class DocumentListeners {
         }
     }
 
+    /**
+     * We listen on the document to catch mouse releases outside of the editor as well.
+     */
     onMouseUp = async (event: MouseEvent) => {
         this.ntb.debug('onMouseUp');
         this.isMouseDown = false;
