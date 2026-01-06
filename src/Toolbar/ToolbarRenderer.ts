@@ -1114,11 +1114,13 @@ export default class ToolbarRenderer {
 	 * Renders a floating toolbar at the middle of the given start and end positions in the editor. 
 	 * @param toolbar
 	 * @param position start position
+	 * @param positionType indicate if it's a floating or text toolbar
 	 * @returns nothing
 	 */
 	async renderFloatingToolbar(
 		toolbar: ToolbarSettings | undefined, 
-		position: Rect | undefined
+		position: Rect | undefined,
+		positionType: PositionType.Floating | PositionType.Text
 	): Promise<void> {
 
 		if (!position || !toolbar) return;
@@ -1150,7 +1152,7 @@ export default class ToolbarRenderer {
 		]);
 		toolbarContainerEl.setAttrs({
 			[TbarData.Name]: toolbar.name,
-			[TbarData.Position]: PositionType.Floating,
+			[TbarData.Position]: positionType,
 			[TbarData.Updated]: toolbar.updated
 		});
 		

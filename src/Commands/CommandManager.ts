@@ -185,7 +185,7 @@ export default class CommandManager {
                             case PositionType.Floating:
                             default: {
                                 if (!showAtPosition) break;
-                                await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition);
+                                await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Floating);
                                 await this.focus(true);
                                 break;
                             }
@@ -219,7 +219,7 @@ export default class CommandManager {
             };
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             const showAtPosition = this.ntb.utils.getPosition('cursor');
-            await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition);
+            await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Text);
         }
 
         // need to get the type of toolbar first
@@ -259,8 +259,9 @@ export default class CommandManager {
                 break;
             }
             case PositionType.Bottom:
-            case PositionType.Props:
             case PositionType.Floating:
+            case PositionType.Props:
+            case PositionType.Text:
             case PositionType.Top: {
                 // get the list and set focus on the first visible item
                 const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);

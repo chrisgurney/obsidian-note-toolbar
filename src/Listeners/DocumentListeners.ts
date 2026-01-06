@@ -1,5 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ItemView, MarkdownView, Platform, WorkspaceLeaf } from "obsidian";
+import { PositionType } from "Settings/NoteToolbarSettings";
 
 
 export default class DocumentListeners {
@@ -180,7 +181,7 @@ export default class DocumentListeners {
             const textToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             if (textToolbar) {
                 const cursorPos = this.ntb.utils.getPosition('cursor');
-                await this.ntb.render.renderFloatingToolbar(textToolbar, cursorPos);
+                await this.ntb.render.renderFloatingToolbar(textToolbar, cursorPos, PositionType.Text);
             }
         }
     }

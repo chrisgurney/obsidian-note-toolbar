@@ -23,7 +23,9 @@ export default class ContextMenu {
 		// figure out what toolbar we're in
 		let toolbarEl = (event.target as Element).closest('.cg-note-toolbar-container') as HTMLElement;
 		let toolbarSettings = toolbarEl?.id ? this.ntb.settingsManager.getToolbarById(toolbarEl.id) : undefined;
-		const isFloatingToolbar = toolbarEl.getAttribute(TbarData.Position) === PositionType.Floating;
+		const isFloatingToolbar = 
+			toolbarEl.getAttribute(TbarData.Position) === PositionType.Floating || 
+			toolbarEl.getAttribute(TbarData.Position) === PositionType.Text;
 
 		// figure out what item was clicked on (if any)
 		let toolbarItemEl: Element | null = null;

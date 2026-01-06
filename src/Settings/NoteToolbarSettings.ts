@@ -108,6 +108,7 @@ export const enum PositionType {
 	Props = 'props',
 	QuickTools = 'quicktools',
 	TabBar = 'tabbar',
+	Text = 'text',
 	Top = 'top'
 }
 export const enum RibbonAction {

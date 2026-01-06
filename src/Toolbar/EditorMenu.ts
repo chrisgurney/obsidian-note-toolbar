@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Editor, MarkdownFileInfo, MarkdownView, Menu, MenuItem, Notice } from "obsidian";
-import { t } from "Settings/NoteToolbarSettings";
+import { PositionType, t } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 
 
@@ -22,7 +22,7 @@ export default class EditorMenu {
 				menu.items = [];
 				if (this.ntb.settings.editorMenuAsToolbar) {
 					const pointerPos = this.ntb.utils.getPosition('pointer');
-					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos);
+					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos, PositionType.Floating);
 				}
 				else {
 					// not replacing variables here, because we need to call it synchronously

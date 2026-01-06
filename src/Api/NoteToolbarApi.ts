@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
 import * as Obsidian from "obsidian";
 import { App, ItemView, MarkdownView, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
-import { LocalVar, t } from "Settings/NoteToolbarSettings";
+import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
@@ -387,7 +387,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // position option; defaults to 'toolbar' as scripts are typically executed from clicked items
         const showAtPosition = this.ntb.utils.getPosition(options?.position ?? 'toolbar');
 
-        await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition);
+        await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Floating);
 
         // apply custom classes
         if (options?.class) this.ntb.render.floatingToolbarEl?.addClasses([...options.class.split(' ')]);
