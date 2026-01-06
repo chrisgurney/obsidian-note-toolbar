@@ -577,6 +577,7 @@ export default class ToolbarItemUi {
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
                         new CommandSuggester(this.ntb.app, cb.inputEl, async (command) => {
+                            // below code is executed when user selects from list
                             await updateItemComponentStatus(this.ntb, this.parent, command.id, SettingType.Command, cb.inputEl.parentElement);
                             cb.inputEl.value = command.name;
                             toolbarItem.link = command.name;
@@ -588,6 +589,7 @@ export default class ToolbarItemUi {
                         cb.setPlaceholder(t('setting.item.option-command-placeholder'))
                             .setValue(this.ntb.utils.getCommandNameById(toolbarItem.linkAttr.commandId) || '')
                             .onChange(debounce(async (commandName) => {
+                                // below code is executed as user types
                                 const commandId = commandName ? this.ntb.utils.getCommandIdByName(commandName) : '';
                                 const isValid = await updateItemComponentStatus(this.ntb, this.parent, commandId, SettingType.Command, cb.inputEl.parentElement);
                                 toolbarItem.link = isValid && commandName ? commandName : '';
