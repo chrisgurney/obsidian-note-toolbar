@@ -159,6 +159,13 @@ export default class ToolbarItemHandler {
                 break;
         }
         
+        // dismiss any floating toolbars
+        if (event && this.ntb.render.hasFloatingToolbar()) {
+            if (type !== ItemType.Menu) {
+                this.ntb.render.removeFloatingToolbar();
+            }
+        }
+
     }
 
     /**
