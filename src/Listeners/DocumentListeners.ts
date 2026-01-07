@@ -81,7 +81,7 @@ export default class DocumentListeners {
     }
     
     onMouseDown = (event: MouseEvent) => {
-        this.ntb.debug('onMouseDown', event.target);
+        // this.ntb.debug('onMouseDown', event.target);
         this.isKeyboardSelection = false;
         this.isMouseDown = true;
         // TODO? dismiss floating toolbar if click is not inside a floating toolbar? (or its menus, etc?)
@@ -108,7 +108,7 @@ export default class DocumentListeners {
      * We listen on the document to catch mouse releases outside of the editor as well.
      */
     onMouseUp = async (event: MouseEvent) => {
-        this.ntb.debug('onMouseUp');
+        // this.ntb.debug('onMouseUp');
         this.isMouseDown = false;
         if (this.ntb.settings.textToolbar && this.previewSelection) {
             // timeout is because selectionchange event is asynchronous and might not fire before mouseup
@@ -133,7 +133,7 @@ export default class DocumentListeners {
      * Track any document selections, but only for Preview mode.
      */
     onSelection = (event: any) => {
-        this.ntb.debug('onSelection');
+        // this.ntb.debug('onSelection');
         this.updatePreviewSelection();
     }
 
@@ -179,7 +179,7 @@ export default class DocumentListeners {
      */
     private async renderPreviewTextToolbar() {
         if (this.ntb.settings.textToolbar && this.previewSelection) {
-            this.ntb.debug('renderPreviewTextToolbar', this.previewSelection.toString());
+            // this.ntb.debug('renderPreviewTextToolbar', this.previewSelection.toString());
             const textToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             if (textToolbar) {
                 const cursorPos = this.ntb.utils.getPosition('cursor');

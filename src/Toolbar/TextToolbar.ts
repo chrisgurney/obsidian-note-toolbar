@@ -47,7 +47,7 @@ export class TextToolbarClass implements PluginValue {
 
         // don't show toolbar until mouse selection is complete
         if (this.ntb.listeners.document.isMouseDown) {
-            this.ntb.debug('TextToolbar: mousedown - exiting');
+            // this.ntb.debug('TextToolbar: mousedown - exiting');
             return;
         };
 
@@ -63,14 +63,14 @@ export class TextToolbarClass implements PluginValue {
 
         // right-clicking for some reason selects the current line if it's empty
         if (this.ntb.listeners.document.isContextOpening && this.selection.from === this.selection.from + 1) {
-            this.ntb.debug('TextToolbar: selection is just new line - exiting');
+            // this.ntb.debug('TextToolbar: selection is just new line - exiting');
             this.ntb.listeners.document.isContextOpening = false;
             return;
         }
 
         if (!update.selectionSet) {
             if (this.ntb.render.isFloatingToolbarFocussed()) {
-                this.ntb.debug('TextToolbar: toolbar in focus - exiting');
+                // this.ntb.debug('TextToolbar: toolbar in focus - exiting');
                 return;
             }
             // no text selected, or the view no longer has focus
