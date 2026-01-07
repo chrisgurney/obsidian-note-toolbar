@@ -362,7 +362,7 @@ export default class ToolbarRenderer {
 
 		let noteToolbarLiArray: HTMLLIElement[] = [];
 
-		const resolvedLabels: string[] = await this.ntb.vars.resolveLabels(toolbar, file);
+		const { resolvedLabels, resolvedTooltips } = await this.ntb.vars.resolveText(toolbar, file);
 
 		for (let i = 0; i < toolbar.items.length; i++) {
 
@@ -415,7 +415,7 @@ export default class ToolbarRenderer {
 					if (!Platform.isPhone) {
 						const itemCommand = this.ntb.commands.getCommandFor(item);
 						let hotkeyText = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
-						let tooltipText = item.tooltip ? item.tooltip + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '';
+						let tooltipText = resolvedTooltips[i] ? resolvedTooltips[i] + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '';
 						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
 					}
 

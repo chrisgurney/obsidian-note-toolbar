@@ -160,18 +160,21 @@ export default class VariableResolver {
 	}
 
 	/** 
-	 * Replaces all vars in all labels for the given toolbar, so they can be replaced before render.
-	 * @param toolbar toolbar to replace labels for
+	 * Replaces all vars in all labels and tooltips for the given toolbar, so they can be replaced before render.
+	 * @param toolbar toolbar to replace labels and tooltips for
 	 * @param file TFile to render the toolbar within (for context to resolve variables and expressions)
-	 * @returns string array of labels with resolved values 
+	 * @returns string arrays of labels and tooltips with resolved values 
 	 */
-	async resolveLabels(toolbar: ToolbarSettings, file: TFile | null): Promise<string[]> {
-		let resolvedLabels: string[] = [];
+	async resolveText(toolbar: ToolbarSettings, file: TFile | null): Promise<{ resolvedLabels: string[], resolvedTooltips: string[] }> {
+		let labels: string[] = [];
+		let tooltips: string[] = [];
 		for (const item of toolbar.items) {
 			const resolvedLabel = await this.replaceVars(item.label, file);
-			resolvedLabels.push(resolvedLabel);
+			const resolvedTooltip = await this.replaceVars(item.tooltip, file);
+			labels.push(resolvedLabel);
+			tooltips.push(resolvedTooltip);
 		}
-		return resolvedLabels;
+		return { resolvedLabels: labels, resolvedTooltips: tooltips };
 	}
 
 	/**
