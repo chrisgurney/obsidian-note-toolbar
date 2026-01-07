@@ -138,7 +138,7 @@ export default interface INoteToolbarApi<T> {
     getProperty: (property: string) => string | undefined;
 
     /**
-     * Gets the currently selected text, or the word at the current cursor position, if nothing's selected.
+     * Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
      * 
      * @returns The selected text, or the word at the current cursor position. Otherwise returns an empty string.
      * 

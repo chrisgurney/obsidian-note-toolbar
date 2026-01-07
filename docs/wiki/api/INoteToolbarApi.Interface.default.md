@@ -221,7 +221,7 @@ const createdDate = ntb.getProperty('created');
 
 > **getSelection**: () => `string`
 
-Gets the currently selected text, or the word at the current cursor position, if nothing's selected.
+Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
 
 #### Returns
 

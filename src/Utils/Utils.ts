@@ -237,8 +237,9 @@ export default class PluginUtils {
 	}
 
     /**
-     * Gets the selected text, or the word at the cursor position.
+     * Gets the selected text, or the word at the cursor position. Only works in markdown editing or reading modes.
 	 * 
+	 * @see INoteToolbarApi.getSelection
 	 * @param previewOnly set to `true` to only return select text in Preview mode or in embeds (useful for text toolbars). 
 	 */
 	getSelection(previewOnly: boolean = false): string {
