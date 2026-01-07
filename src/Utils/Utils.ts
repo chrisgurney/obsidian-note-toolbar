@@ -236,6 +236,57 @@ export default class PluginUtils {
 			: pointerPos;
 	}
 
+    /**
+     * Gets the selected text, or the word at the cursor position.
+	 * 
+	 * @param previewOnly set to `true` to only return select text in Preview mode or in embeds (useful for text toolbars). 
+	 */
+	getSelection(previewOnly: boolean = false): string {
+
+		const editor = this.ntb.app.workspace.activeEditor?.editor;
+		const view = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		
+		if (view instanceof MarkdownView) {
+			const mode = view.getMode();
+			const isPreviewMode = mode === 'preview';
+			
+			// check if selection is in an embed (for editing mode)
+			let isInEmbed = false;
+			if (!isPreviewMode) {
+				const selectionNode = activeDocument.getSelection()?.focusNode;
+				const element = (selectionNode as HTMLElement)?.closest ? 
+					(selectionNode as HTMLElement) : 
+					(selectionNode as Node)?.parentElement;
+				isInEmbed = !!element?.closest('.markdown-embed');
+			}
+			
+			// if previewOnly flag is set, only return selection for preview mode or embeds
+			if (previewOnly && !isPreviewMode && !isInEmbed) {
+				return '';
+			}
+			
+			// in preview mode or in an embed, use document selection
+			if (isPreviewMode || isInEmbed) {
+				const documentSelection = activeDocument.getSelection();
+				const selectedText = documentSelection?.toString().trim();
+				if (selectedText) return selectedText;
+			}
+			
+			// in editing mode (not in embed), use editor selection
+			if (!isPreviewMode && !isInEmbed && editor) {
+				const selection = editor.getSelection();
+				if (selection) return selection;
+
+				// or return word at cursor, if there is one
+				const cursor = editor.getCursor();
+				const wordRange = editor.wordAt(cursor);
+				if (wordRange) return editor.getRange(wordRange.from, wordRange.to);
+			}
+		}
+
+		return '';
+	}
+
 	/**
 	 * Returns true if the current view matches the given view type.
 	 * @param viewType type of view (e.g., `markdown`, `bases`).
