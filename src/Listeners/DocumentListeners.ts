@@ -182,6 +182,7 @@ export default class DocumentListeners {
             // this.ntb.debug('renderPreviewTextToolbar', this.previewSelection.toString());
             const textToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
             if (textToolbar) {
+                this.ntb.debug('🎨 DocumentListeners: Rendering text toolbar', textToolbar.name);
                 const cursorPos = this.ntb.utils.getPosition('cursor');
                 await this.ntb.render.renderFloatingToolbar(textToolbar, cursorPos, PositionType.Text);
             }

@@ -1,6 +1,6 @@
-import { EditorView, PluginValue, Rect, ViewPlugin, ViewUpdate } from '@codemirror/view';
+import { EditorView, PluginValue, ViewPlugin, ViewUpdate } from '@codemirror/view';
 import NoteToolbarPlugin from 'main';
-import { Notice, Platform } from 'obsidian';
+import { MarkdownView, Notice } from 'obsidian';
 import { PositionType, t } from 'Settings/NoteToolbarSettings';
 
 /**
@@ -47,10 +47,12 @@ export class TextToolbarClass implements PluginValue {
 
         // don't show toolbar until mouse selection is complete
         if (this.ntb.listeners.document.isMouseDown) {
-            // this.ntb.debug('TextToolbar: mousedown - exiting');
-            return;
+            // fix: in source mode the mouse up event doesn't seem to fire after selection
+            const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+            const isSourceMode = currentView?.getState().source;
+            if (!isSourceMode) return;
         };
-
+        
         const { state, view } = update;
 
         const selection = state.selection.main;
@@ -85,7 +87,7 @@ export class TextToolbarClass implements PluginValue {
                 }
                 return;
             }
-        };
+        }
 
         if (selection.empty) {
             this.lastSelection = null;
@@ -118,6 +120,7 @@ export class TextToolbarClass implements PluginValue {
             };
 
             // place the toolbar above the cursor, which takes the selection into account
+            this.ntb.debug('🎨 TextToolbar: Rendering toolbar', toolbar.name);
             const cursorPos = this.ntb.utils.getPosition('cursor');
             await this.ntb.render.renderFloatingToolbar(toolbar, cursorPos, PositionType.Text);
 
