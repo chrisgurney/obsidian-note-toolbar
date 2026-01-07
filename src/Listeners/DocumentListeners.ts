@@ -73,7 +73,10 @@ export default class DocumentListeners {
     onKeyDown = (event: KeyboardEvent) => {
         this.isKeyboardSelection = true;
         this.isMouseSelecting = false;
-        this.isMouseDown = false; 
+        this.isMouseDown = false;
+        if (event.key === 'Escape' && this.ntb.render.hasFloatingToolbar()) {
+            this.ntb.render.removeFloatingToolbar();
+        }
     }
     
     onMouseDown = (event: MouseEvent) => {
