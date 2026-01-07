@@ -4068,11 +4068,15 @@ input[type="text"].note-toolbar-setting-error,
             overflow-y: auto;
             .is-phone & {
                 padding: var(--size-4-5);
-                margin-bottom: var(--safe-area-inset-bottom);
             }
             /* hide the Web Viewer navigation bar */
             & .workspace-leaf-content[data-type="webviewer"] .view-header {
                 display: none !important;
+            }
+            & .markdown-preview-view {
+                .is-phone & {
+                    margin-bottom: var(--safe-area-inset-bottom);
+                }
             }
         }
         & .modal-title > .markdown-preview-view > * {
