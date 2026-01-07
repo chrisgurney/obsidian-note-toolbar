@@ -35,14 +35,14 @@ export default class DocumentListeners {
         // setup initial scroll listener; subsequently done in onLeafChange
         const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
         if (activeView && this.ntb.utils.checkToolbarForItemView(activeView)) {
-            this.setupScrollListener(activeView.leaf);
+            this.setupScrollListener(activeView);
         }
     }
     
     /**
      * Listens to changes on scroll using {@link onScroll}.
      */
-    public setupScrollListener(leaf: WorkspaceLeaf): void {
+    public setupScrollListener(view: ItemView): void {
         // remove existing
         if (this.scrollContainer) {
             this.scrollContainer.removeEventListener('scroll', this.onScroll);
@@ -50,9 +50,9 @@ export default class DocumentListeners {
         }
 
         // get the scrollable container based on view type
-        this.scrollContainer = this.getScrollContainer(leaf);
+        this.scrollContainer = this.getScrollContainer(view);
         if (!this.scrollContainer) {
-            console.log('No scroll container found for this view type');
+            this.ntb.debug('⚠️ No scroll container found for this view type');
             return;
         }
 
@@ -140,18 +140,17 @@ export default class DocumentListeners {
     /**
      * Get the scrollable container based on the view type.
      */
-    private getScrollContainer(leaf: WorkspaceLeaf): HTMLElement | null {
-        const activeView = leaf.view;
-        const viewType = activeView.getViewType();
-        const containerEl = leaf.view.containerEl;
+    private getScrollContainer(view: ItemView): HTMLElement | null {
+        const viewType = view.getViewType();
+        const containerEl = view.containerEl;
         
         let scrollEl: HTMLElement | null = null;
         
         switch (viewType) {
             case 'markdown': {
-                scrollEl = containerEl.querySelector('.cm-scroller');
-                // reading mode fallback
-                if (!scrollEl) scrollEl = containerEl.querySelector('.markdown-preview-view');
+                scrollEl = (view as MarkdownView).getMode() === 'preview' 
+                    ? containerEl.querySelector('.markdown-reading-view .markdown-preview-view') as HTMLElement
+                    : containerEl.querySelector('.cm-scroller') as HTMLElement;
                 break;
             }
             // TODO: check setting if toolbars are to be shown for other types
