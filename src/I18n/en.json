@@ -322,7 +322,7 @@
             "option-editor-menu-error": "Error: Editor menu toolbar not found. Check your settings.",
             "option-editor-menu-placeholder": "Select toolbar...",
             "option-editor-menu-as-tbar": "Display Editor menu as a toolbar",
-            "option-editor-menu-as-tbar-description": "By default the toolbar is shown as a menu. Enable to show as a toolbar instead.",
+            "option-editor-menu-as-tbar-description": "By default this toolbar is shown as a menu. Enable to show as a toolbar instead.",
             "option-emptyview-tbar": "New tab view",
             "option-emptyview-tbar-description": "Display a toolbar when no note is open.",
             "option-emptyview-tbar-placeholder": "Select toolbar...",
@@ -330,6 +330,8 @@
             "option-launchpad-description": "Replace the new tab view with a large version of this toolbar. If not enabled, the toolbar will be in the position selected in its settings.",
             "option-text": "Selected text",
             "option-text-description": "Display a toolbar when text is selected.",
+            "option-text-on-keyboard": "Display for keyboard selections",
+            "option-text-on-keyboard-description": "Show this toolbar when text is selected with the keyboard.",
             "option-text-placeholder": "Select toolbar...",
             "ribbon-action": {
                 "description": "Set the action to take when the ribbon icon (on phones) is used.",

@@ -246,6 +246,7 @@ export interface NoteToolbarSettings {
 	showToolbarInFileMenu: boolean;
 	showToolbarInOther: string;
 	textToolbar: string | null;
+	textToolbarOnKeyboard: boolean;
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
@@ -286,6 +287,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	showToolbarInFileMenu: false,
 	showToolbarInOther: "",
 	textToolbar: null,
+	textToolbarOnKeyboard: true,
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,

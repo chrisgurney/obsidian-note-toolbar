@@ -40,6 +40,11 @@ export class TextToolbarClass implements PluginValue {
             return;
         };
 
+        // if disabled, do not display for keyboard selections
+        if (!this.ntb.settings.textToolbarOnKeyboard && this.ntb.listeners.document.isKeyboardSelection) {
+            return;
+        }
+
         // don't show toolbar until mouse selection is complete
         if (this.ntb.listeners.document.isMouseDown) {
             this.ntb.debug('TextToolbar: mousedown - exiting');

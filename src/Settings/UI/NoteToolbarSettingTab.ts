@@ -1005,6 +1005,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 								this.ntb.textToolbar = TextToolbar(this.ntb);
 								this.ntb.registerEditorExtension(this.ntb.textToolbar);
 							}
+							// toggle keyboard setting
+							const hasTextToolbar = !!this.ntb.settings.textToolbar;
+							const textToolbarOnKeyboardSettingEl = this.containerEl.querySelector('#ntb-text-tbar-keyboard-setting');
+							textToolbarOnKeyboardSettingEl?.setAttribute('data-active', hasTextToolbar.toString());
 							// update toolbar preview
 							const toolbarPreviewFr = newToolbar && createToolbarPreviewFr(this.ntb, newToolbar, undefined, false);
 							removeFieldHelp(textToolbarSetting.controlEl);
@@ -1017,6 +1021,22 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			setFieldHelp(textToolbarSetting.controlEl, textToolbarPreviewFr);
 		});
 
+		appToolbarGroup.addSetting((textToolbarOnKeyboardSetting) => {
+			textToolbarOnKeyboardSetting
+				.setName(t('setting.display-locations.option-text-on-keyboard'))
+				.setDesc(t('setting.display-locations.option-text-on-keyboard-description'))
+				.addToggle((cb: ToggleComponent) => {
+					cb.setValue(this.ntb.settings.textToolbarOnKeyboard)
+						.onChange(async (value: boolean) => {
+							this.ntb.settings.textToolbarOnKeyboard = value;
+							await this.ntb.settingsManager.save();
+						});
+				});
+			textToolbarOnKeyboardSetting.settingEl.id = 'ntb-text-tbar-keyboard-setting';
+			const hasTextToolbar = !!this.ntb.settings.textToolbar;
+			textToolbarOnKeyboardSetting.settingEl.setAttribute('data-active', hasTextToolbar.toString());
+		});
+		
 		settingsContainerEl.appendChild(collapsibleContainerEl);
 		containerEl.append(settingsContainerEl);
 
