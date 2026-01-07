@@ -30,7 +30,7 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'mousemove', this.onMouseMove);
         this.ntb.registerDomEvent(activeDocument, 'mouseup', this.onMouseUp);
         this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
-        this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelection);
+        this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
 
         // setup initial scroll listener; subsequently done in onLeafChange and onLayoutChange
         const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
@@ -132,7 +132,7 @@ export default class DocumentListeners {
     /**
      * Track any document selections, but only for Preview mode.
      */
-    onSelection = (event: any) => {
+    onSelectionChange = (event: any) => {
         // this.ntb.debug('onSelection');
         this.updatePreviewSelection();
     }
