@@ -448,14 +448,27 @@ export default class ToolbarRenderer {
 				}
 			}
 
+			// we have a valid item element setup...
 			if (toolbarItem) {
+				// set the element's ID
 				item.uuid ? toolbarItem.id = item.uuid : undefined;
 				toolbarItem.addClass('cg-note-toolbar-item');
-
+				// create its list item container 
 				let noteToolbarLi = activeDocument.createElement("li");
 				noteToolbarLi.dataset.index = i.toString();
+				// set its platform visibility
 				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
 				!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
+				// disable if it's a command that's not available
+				if (item.linkAttr.type === ItemType.Command) {
+					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(item, view);
+					if (!isCommandAvailable) {
+						noteToolbarLi.ariaDisabled = 'true';
+						setTooltip(toolbarItem, t('toolbar.item-unavailable-tooltip'));
+					}
+				}
+
+				// add it to the list container
 				noteToolbarLi.append(toolbarItem);
 				noteToolbarLiArray.push(noteToolbarLi);
 			}
@@ -844,14 +857,18 @@ export default class ToolbarRenderer {
 
 			let itemSetting = this.ntb.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
-				const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, currentView);
-				if (isCommandAvailable) {
-					itemEl.ariaDisabled = 'false';
-				}
-				else {
-					itemEl.ariaDisabled = 'true';
-					setTooltip(itemSpanEl, t('toolbar.item-unavailable-tooltip'));
-					continue;
+
+				// disable/re-enable any command items based on availability
+				if (itemSetting.linkAttr.type === ItemType.Command) {
+					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, currentView);
+					if (isCommandAvailable) {
+						itemEl.ariaDisabled = 'false';
+					}
+					else {
+						itemEl.ariaDisabled = 'true';
+						setTooltip(itemSpanEl, t('toolbar.item-unavailable-tooltip'));
+						continue;
+					}
 				}
 
 				// update tooltip + label
