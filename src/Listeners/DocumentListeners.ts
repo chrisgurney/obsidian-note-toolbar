@@ -188,12 +188,27 @@ export default class DocumentListeners {
         }
     }
 
+    /**
+     * Updates local variable with any text that is selected within either Preview mode or within a markdown embed.
+     */
     private updatePreviewSelection() {
         const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-        const selection = (activeView instanceof MarkdownView && activeView.getMode() === 'preview')
-            ? activeDocument.getSelection()
-            : null;
+
+        let isPreviewEmbed = false;
+        const isPreviewMode = (activeView instanceof MarkdownView && activeView.getMode() === 'preview');
+
+        // check for selections within embeds
+        if (!isPreviewMode) {
+            const selectionNode = activeDocument.getSelection()?.focusNode;
+            const element = (selectionNode as HTMLElement)?.closest ? 
+                (selectionNode as HTMLElement) : 
+                (selectionNode as Node)?.parentElement;
+            isPreviewEmbed = !!element?.closest('.markdown-embed');
+        }
+
+        const selection = (isPreviewMode || isPreviewEmbed) ? activeDocument.getSelection() : null;
         const hasSelection = selection && !selection.isCollapsed && selection.toString().trim().length > 0;
+
         this.previewSelection = hasSelection ? selection : null;
         // this.ntb.debug('updatePreviewSelection', this.previewSelection?.toString());
     }

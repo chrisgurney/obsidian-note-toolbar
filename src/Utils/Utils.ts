@@ -127,43 +127,67 @@ export default class PluginUtils {
 		}
 		// editor (editing mode) cursor, or selection
 		else {
-			const editor = this.ntb.app.workspace.activeEditor?.editor;
-			
-			// TODO: support other file types here?
-			if (!editor) return;
-			
-			const editorView = (editor as any).cm as EditorView;
-			const cursorOffset = editor.posToOffset(editor.getCursor());
-			const cursorCoords = editorView.coordsAtPos(cursorOffset);
-	
-			if (cursorCoords) {
-				result = {
-					top: cursorCoords.top,
-					bottom: cursorCoords.bottom,
-					left: cursorCoords.left,
-					right: cursorCoords.right
+			// check if selection is in an embed
+			const selectionNode = activeDocument.getSelection()?.focusNode;
+			const element = (selectionNode as HTMLElement)?.closest ? 
+				(selectionNode as HTMLElement) : 
+				(selectionNode as Node)?.parentElement;
+			const embedElement = element?.closest('.markdown-embed');
+
+			if (embedElement) {
+				// for embeds, use document selection like in preview mode
+				const documentSelection = activeDocument.getSelection();
+				if (documentSelection && documentSelection.rangeCount > 0 && !documentSelection.isCollapsed) {
+					const range = documentSelection.getRangeAt(0);
+					const rect = range.getBoundingClientRect();
+					result = {
+						top: rect.top,
+						bottom: rect.bottom,
+						left: rect.left,
+						right: rect.right
+					};
 				}
 			}
-	
-			// if there's an editor selection, return the bounding box of the selection
-			const selection = editor.getSelection();
-			if (selection) {
-				const selectionRange = editor.listSelections()[0];
-				const fromOffset = editor.posToOffset(selectionRange.anchor);
-				const toOffset = editor.posToOffset(selectionRange.head);
+			else {
+				const editor = this.ntb.app.workspace.activeEditor?.editor;
 				
-				const startCoords = editorView.coordsAtPos(fromOffset);
-				const endCoords = editorView.coordsAtPos(toOffset);
+				// TODO: support other file types here?
+				if (!editor) return;
 				
-				if (startCoords && endCoords) {
+				const editorView = (editor as any).cm as EditorView;
+				const cursorOffset = editor.posToOffset(editor.getCursor());
+				const cursorCoords = editorView.coordsAtPos(cursorOffset);
+		
+				if (cursorCoords) {
 					result = {
-						top: Math.min(startCoords.top, endCoords.top),
-						bottom: Math.max(startCoords.bottom, endCoords.bottom),
-						left: Math.min(startCoords.left, endCoords.left),
-						right: Math.max(startCoords.right, endCoords.right)
+						top: cursorCoords.top,
+						bottom: cursorCoords.bottom,
+						left: cursorCoords.left,
+						right: cursorCoords.right
+					}
+				}
+		
+				// if there's an editor selection, return the bounding box of the selection
+				const selection = editor.getSelection();
+				if (selection) {
+					const selectionRange = editor.listSelections()[0];
+					const fromOffset = editor.posToOffset(selectionRange.anchor);
+					const toOffset = editor.posToOffset(selectionRange.head);
+					
+					const startCoords = editorView.coordsAtPos(fromOffset);
+					const endCoords = editorView.coordsAtPos(toOffset);
+					
+					if (startCoords && endCoords) {
+						result = {
+							top: Math.min(startCoords.top, endCoords.top),
+							bottom: Math.max(startCoords.bottom, endCoords.bottom),
+							left: Math.min(startCoords.left, endCoords.left),
+							right: Math.max(startCoords.right, endCoords.right)
+						}
 					}
 				}
 			}
+
 		}
 
 		return result;
