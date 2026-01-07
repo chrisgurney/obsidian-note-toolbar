@@ -32,7 +32,7 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelection);
 
-        // setup initial scroll listener; subsequently done in onLeafChange
+        // setup initial scroll listener; subsequently done in onLeafChange and onLayoutChange
         const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
         if (activeView && this.ntb.utils.checkToolbarForItemView(activeView)) {
             this.setupScrollListener(activeView);
