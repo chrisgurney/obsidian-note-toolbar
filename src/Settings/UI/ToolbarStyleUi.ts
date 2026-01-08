@@ -48,7 +48,7 @@ export default class ToolbarStyleUi {
                 (style, index) => {
                     let styleDisclaimer = getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
                     new Setting(defaultStyleDiv)
-                        .setName(getValueForKey(DEFAULT_STYLE_OPTIONS, style))
+                        .setName(getValueForKey(DEFAULT_STYLE_OPTIONS, style) || style)
                         .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
                         .addExtraButton((cb) => {
                             cb.setIcon("cross")
@@ -126,8 +126,8 @@ export default class ToolbarStyleUi {
                 (style, index) => {
                     let styleDisclaimer = getValueForKey(MOBILE_STYLE_DISCLAIMERS, style);
                     new Setting(mobileStyleDiv)
-                        .setName(getValueForKey(MOBILE_STYLE_OPTIONS, style))
-                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + 'Use in Callout or CSS: ' + style)
+                        .setName(getValueForKey(MOBILE_STYLE_OPTIONS, style) || style)
+                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
                         .addExtraButton((cb) => {
                             cb.setIcon("cross")
                                 .setTooltip("Remove")
