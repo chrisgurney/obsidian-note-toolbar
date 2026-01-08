@@ -101,13 +101,9 @@ export default class WorkspaceListeners {
 			if (currentView) await this.ntb.render.renderForView(currentView);
 		}
 
-		// setup scroll listener for current view
+		// listen to scroll events for floating toolbars
 		// (layout change is fired when switching between reading and editing modes) 
-		if (currentView) {
-			if (this.ntb.utils.checkToolbarForItemView(currentView)) {
-				this.ntb.listeners.document.setupScrollListener(currentView);
-			}
-		}
+		this.ntb.listeners.view.register();
 
 		// const toolbarEl = this.getToolbarEl();
 		// const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
@@ -174,9 +170,7 @@ export default class WorkspaceListeners {
 		this.ntb.debug('===== LEAF-CHANGE ===== ', viewId);
 
 		// listen to scroll events for floating toolbars
-		if (currentView && this.ntb.utils.checkToolbarForItemView(currentView)) {
-			this.ntb.listeners.document.setupScrollListener(currentView);
-		}
+		this.ntb.listeners.view.register();
 
 		// update the active toolbar if its configuration changed
 		if (toolbarEl) {

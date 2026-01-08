@@ -1,5 +1,4 @@
 import NoteToolbarPlugin from "main";
-import { ItemView, MarkdownView, Platform, WorkspaceLeaf } from "obsidian";
 import { PositionType } from "Settings/NoteToolbarSettings";
 
 
@@ -13,9 +12,6 @@ export default class DocumentListeners {
 	// for tracking current pointer position, for placing UI
 	public pointerX: number = 0;
 	public pointerY: number = 0;
-
-    // we only need to listen to one scroll container at a time
-    private scrollContainer: HTMLElement | null = null;
 
     private previewSelection: Selection | null = null;
 
@@ -31,33 +27,6 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'mouseup', this.onMouseUp);
         this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
-
-        // setup initial scroll listener; subsequently done in onLeafChange and onLayoutChange
-        const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-        if (activeView && this.ntb.utils.checkToolbarForItemView(activeView)) {
-            this.setupScrollListener(activeView);
-        }
-    }
-    
-    /**
-     * Listens to changes on scroll using {@link onScroll}.
-     */
-    public setupScrollListener(view: ItemView): void {
-        // remove existing
-        if (this.scrollContainer) {
-            this.scrollContainer.removeEventListener('scroll', this.onScroll);
-            this.scrollContainer = null;
-        }
-
-        // get the scrollable container based on view type
-        this.scrollContainer = this.getScrollContainer(view);
-        if (!this.scrollContainer) {
-            this.ntb.debug('⚠️ No scroll container found for this view type');
-            return;
-        }
-
-        // add scroll listener
-        this.ntb.registerDomEvent(this.scrollContainer, 'scroll', this.onScroll);
     }
 
     onContextMenu = () => {
@@ -118,60 +87,11 @@ export default class DocumentListeners {
     }
 
     /**
-     * Updates the position of the floating toolbar, if there is one.
-     */ 
-    onScroll = () => {
-        if (this.ntb.render.hasFloatingToolbar()) {
-            // places the toolbar near the cursor (which takes text selection into account)
-            const cursorPos = this.ntb.utils.getPosition('cursor');
-            if (!cursorPos) return;
-            this.ntb.render.positionFloating(this.ntb.render.floatingToolbarEl, cursorPos, Platform.isAndroidApp ? 'below' : 'above');
-        }
-    }
-
-    /**
      * Track any document selections, but only for Preview mode.
      */
     onSelectionChange = (event: any) => {
         // this.ntb.debug('onSelection');
         this.updatePreviewSelection();
-    }
-
-    /**
-     * Get the scrollable container based on the view type.
-     */
-    private getScrollContainer(view: ItemView): HTMLElement | null {
-        const viewType = view.getViewType();
-        const containerEl = view.containerEl;
-        
-        let scrollEl: HTMLElement | null = null;
-        
-        switch (viewType) {
-            case 'markdown': {
-                scrollEl = (view as MarkdownView).getMode() === 'preview' 
-                    ? containerEl.querySelector('.markdown-reading-view .markdown-preview-view') as HTMLElement
-                    : containerEl.querySelector('.cm-scroller') as HTMLElement;
-                break;
-            }
-            // TODO: check setting if toolbars are to be shown for other types
-            // case 'canvas': {
-            //     scrollEl = containerEl.querySelector('.canvas-wrapper');
-            //     break;
-            // }
-            // case 'pdf': {
-            //     scrollEl = containerEl.querySelector('.pdf-container');
-            //     break;
-            // }
-            default: {
-                // do nothing
-                // TODO: needed? generic fallback - look for common scrollable containers
-                // scrollEl = containerEl.querySelector('.view-content') ||
-                //           containerEl.querySelector('.workspace-leaf-content') ||
-                //           containerEl;                
-            }
-        }
-        
-        return scrollEl;
     }
 
     /**
