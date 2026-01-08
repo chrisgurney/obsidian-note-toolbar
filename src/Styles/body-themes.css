@@ -21,7 +21,7 @@ body {
         &.is-phone {
             --cg-nt-fab-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
             --cg-nt-tbar-bottom-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
-            --cg-nt-tbar-top-sticky-pos-mobile: calc(98px);
+            /* --cg-nt-tbar-top-sticky-pos-mobile: calc(98px); */
         }
         &.is-mobile.theme-dark {
             --cg-nt-tbar-bg-color: unset !important;

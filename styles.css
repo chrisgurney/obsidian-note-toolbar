@@ -1411,7 +1411,7 @@ body {
         &.is-phone {
             --cg-nt-fab-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
             --cg-nt-tbar-bottom-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
-            --cg-nt-tbar-top-sticky-pos-mobile: calc(98px);
+            /* --cg-nt-tbar-top-sticky-pos-mobile: calc(98px); */
         }
         &.is-mobile.theme-dark {
             --cg-nt-tbar-bg-color: unset !important;
@@ -1439,29 +1439,15 @@ body {
     }
 }
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
-    &:not([data-tbar-position="bottom"]) {
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]),
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
+    &[data-tbar-position="props"] {
         position: sticky;
         top: var(--cg-nt-tbar-top-sticky-pos-desktop);
         z-index: 2;
         .is-mobile &, .is-phone & {
             top: var(--cg-nt-tbar-top-sticky-pos-mobile);
         }
-        /* fix: move sticky toolbar up when header actions are hidden */
-        .is-phone.is-hidden-nav & {
-            top: calc(var(--view-header-height) * -1 + var(--cg-nt-tbar-top-sticky-pos-mobile));
-        }
-    }
-}
-
-.is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-    position: sticky;
-    z-index: 2;
-}
-
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-    .is-mobile &, .is-phone & {
-        top: var(--cg-nt-tbar-top-sticky-pos-mobile);
     }
 }
 
@@ -4248,7 +4234,7 @@ body[data-ntb-csstheme="Cupertino"] {
         }
     }
 }
-/* width fix for Minimal theme in props position #204 #216 */
+/* Minimal: width fix for props position #204 #216 */
 body[data-ntb-csstheme="Minimal"] {
     & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
         .is-readable-line-width & {

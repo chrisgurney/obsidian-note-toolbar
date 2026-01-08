@@ -11,28 +11,15 @@
     }
 }
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]) {
-    &:not([data-tbar-position="bottom"]) {
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]),
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
+    &[data-tbar-position="props"] {
         position: sticky;
         top: var(--cg-nt-tbar-top-sticky-pos-desktop);
         z-index: 2;
         .is-mobile &, .is-phone & {
             top: var(--cg-nt-tbar-top-sticky-pos-mobile);
         }
-        /* fix: move sticky toolbar up when header actions are hidden */
-        .is-phone.is-hidden-nav & {
-            top: calc(var(--view-header-height) * -1 + var(--cg-nt-tbar-top-sticky-pos-mobile));
-        }
-    }
-}
-
-.is-mobile .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-    position: sticky;
-    z-index: 2;
-}
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-    .is-mobile &, .is-phone & {
-        top: var(--cg-nt-tbar-top-sticky-pos-mobile);
     }
 }
 
