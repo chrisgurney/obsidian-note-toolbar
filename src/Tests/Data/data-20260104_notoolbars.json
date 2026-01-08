@@ -1,0 +1,92 @@
+{
+  "debugEnabled": true,
+  "editorMenuAsToolbar": true,
+  "editorMenuToolbar": "f24d1356-6dd3-4a21-87b3-3b2477f9591d",
+  "emptyViewToolbar": "50366365-9db3-4f1a-b42e-ef3d0027aa35",
+  "export": {
+    "includeIcons": true,
+    "preserveVars": true,
+    "useDataEls": true,
+    "useIds": false,
+    "replaceVars": false
+  },
+  "folderMappings": [
+    {
+      "folder": "Daily Notes",
+      "toolbar": "831f7098-3479-49b2-b0e5-223d26ff6612"
+    },
+    {
+      "folder": "Attachments",
+      "toolbar": "efedb1e7-2fda-4bbb-9316-ec6fb47bc0cd"
+    },
+    {
+      "folder": "*",
+      "toolbar": "3d578058-e1da-4fcf-badc-b6af189ffb2c"
+    }
+  ],
+  "icon": "lucide-circle-ellipsis",
+  "keepPropsState": true,
+  "lockCallouts": true,
+  "obsidianUiVisibility": {
+    "mobile.navbar.back": true,
+    "mobile.navbar.menu": true,
+    "mobile.navbar.quickswitcher": true,
+    "mobile.navbar.newtab": true,
+    "mobile.navbar.forward": true,
+    "mobile.navbar.tabs": true
+  },
+  "onboarding": {
+    "new-toolbar-mapping": true,
+    "swap-toolbars-prop": true
+  },
+  "ribbonAction": "toolbar",
+  "rules": [],
+  "scriptingEnabled": true,
+  "showEditInFabMenu": false,
+  "showLaunchpad": true,
+  "showToolbarIn": {
+    "audio": true,
+    "canvas": true,
+    "image": true,
+    "pdf": true,
+    "video": true,
+    "kanban": true,
+    "bases": true
+  },
+  "showToolbarInFileMenu": true,
+  "showToolbarInOther": "excalidraw",
+  "textToolbar": "a4a0a898-2726-4ee1-8dcc-7f4074fc50fa",
+  "toolbarProp": "notetoolbar",
+  "toolbars": [],
+  "version": 20250313.1,
+  "whatsnew_version": "1.27",
+  "hideTouchCalloutMenu": true,
+  "recentFiles": [
+    "Welcome.md",
+    "Daily Notes/2024-03-10.md",
+    "Daily Notes/2024-03-16.md",
+    "2024-03-11.md",
+    "Daily Notes/2024-04-02.md",
+    "Daily Notes/2024-04-07.md",
+    "Daily Notes/2024-04-08.md",
+    "Daily Notes/Untitled.md",
+    "Check This Out.md",
+    "Home.md"
+  ],
+  "recentItems": [
+    "bookmarks",
+    "choosefile",
+    "dateformatdatetodaycccmmmd",
+    "clearformatting"
+  ],
+  "recentToolbars": [
+    "+ Create a new toolbar",
+    "#Gallery 3"
+  ],
+  "loadSettingsChanges": false,
+  "showToolbarInAudio": true,
+  "showToolbarInCanvas": true,
+  "showToolbarInImage": true,
+  "showToolbarInPdf": true,
+  "showToolbarInVideo": true
+}
