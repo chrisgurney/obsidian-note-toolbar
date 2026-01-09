@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ItemView, MarkdownView, Platform } from "obsidian";
 
 
-export default class DocumentListeners {
+export default class ViewListeners {
 
     // we only need to listen to one scroll container at a time
     private scrollContainer: HTMLElement | null = null;
