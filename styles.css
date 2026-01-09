@@ -4244,3 +4244,10 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
 }
+/* Velocity: fix: margins and padding incorrect */
+body[data-ntb-csstheme="Velocity"] {
+    & .callout[data-callout="note-toolbar"] .callout-content {
+        margin-block-end: var(--cg-nt-tbar-margin-y);
+        padding-inline: unset;
+    }
+}
