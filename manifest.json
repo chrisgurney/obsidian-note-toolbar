@@ -1,8 +1,8 @@
 {
 	"id": "note-toolbar",
 	"name": "Note Toolbar",
-	"version": "1.26.10",
-	"minAppVersion": "1.8.3",
+	"version": "1.27.01",
+	"minAppVersion": "1.11.0",
 	"description": "Add customizable toolbars to your notes.",
 	"author": "Chris Gurney",
 	"authorUrl": "https://chrisgurney.ca",
