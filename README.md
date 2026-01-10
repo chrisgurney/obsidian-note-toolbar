@@ -70,6 +70,7 @@ Note Toolbar's UI, and Style Settings options, are also available in:
 |---|---|---|
 |Chinese (Simplified)|简体中文|[@Moyf](https://github.com/Moyf)|
 |German|Deutsch|[@hartimd](https://github.com/hartimd)|
+|Japanese|日本語|[@dai](https://github.com/dai)|
 |Ukrainian|Український|[@Laktiv](https://github.com/laktiv)|
 
 [Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
