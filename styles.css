@@ -1933,7 +1933,7 @@ body {
 
 /* on phones, hide the top border when properties is open */
 
-.is-phone .metadata-container[style*="--metadata-display-reading: block"] ~ .cg-note-toolbar-container {
+.is-phone .metadata-container:not([data-property-count="0"])[style*="--metadata-display-reading: block"] ~ .cg-note-toolbar-container {
   & .callout[data-callout="note-toolbar"]:not([data-callout-metadata*="mnbrder"])[data-callout-metadata*="border"],
   & .callout[data-callout="note-toolbar"][data-callout-metadata*="mbrder"] {
     border-top: unset;
