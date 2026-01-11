@@ -18,8 +18,6 @@
         }
     }
     & .setting-item-control .clickable-icon:focus-within {
-        /* border-radius: var(--input-radius); */
-        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
         box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
     & .is-disabled {
@@ -152,7 +150,6 @@
         padding: 1em;
     }
     &:focus-within {
-        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
         box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
     &[data-active="true"] {
@@ -270,13 +267,11 @@
     }
     &:focus-within {
         border-radius: var(--radius-m);
-        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
         box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
     @media (hover: hover) {
         &:hover {
             border-radius: var(--radius-m);
-            box-shadow: inset 0 0 0 1px var(--background-modifier-border);
             box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
             cursor: text;    
         }
@@ -684,7 +679,6 @@ input[type="text"].note-toolbar-setting-error,
         }
         &:focus-within {
             border-radius: var(--input-radius);
-            box-shadow: 0 0 0 1px var(--background-modifier-border);
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
             transition: box-shadow 0.15s ease-in-out, border 0.15s ease-in-out;
         }
@@ -964,7 +958,6 @@ input[type="text"].note-toolbar-setting-error,
             }
             &:focus-visible {
                 border-radius: var(--input-radius);
-                box-shadow: 0 0 0 1px var(--background-modifier-border);
                 box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
             }
         }
@@ -1028,7 +1021,6 @@ input[type="text"].note-toolbar-setting-error,
                 }
                 &:focus-visible {
                     border-radius: var(--input-radius);
-                    box-shadow: 0 0 0 1px var(--background-modifier-border);
                     box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
                 }
                 & span:last-child {
