@@ -277,6 +277,7 @@ export default interface INoteToolbarApi<T> {
      * Replaces the selected text, or the word at the cursor position, with the provided string.
      * 
      * @param replacement The text to replace the selection with.
+     * @remarks This does not do anything in Reading mode.
      * 
      * @example
      * // makes the selected text or the current word red

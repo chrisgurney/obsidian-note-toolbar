@@ -475,6 +475,10 @@ Replaces the selected text, or the word at the cursor position, with the provide
 
 `void`
 
+#### Remarks
+
+This does not do anything in Reading mode.
+
 #### Example
 
 ```ts
