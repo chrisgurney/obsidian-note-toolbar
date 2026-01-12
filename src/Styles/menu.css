@@ -27,6 +27,12 @@
                 width: var(--cg-nt-menu-icon-size);
             }
         }
+        &.is-disabled {
+            color: var(--text-faint);
+            & .menu-item-icon {
+                color: var(--text-faint);
+            }
+        }
         /* fix for hotkeys not displaying next to text */
         & .menu-item-title {
             align-items: center;

@@ -2309,6 +2309,12 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
                 width: var(--cg-nt-menu-icon-size);
             }
         }
+        &.is-disabled {
+            color: var(--text-faint);
+            & .menu-item-icon {
+                color: var(--text-faint);
+            }
+        }
         /* fix for hotkeys not displaying next to text */
         & .menu-item-title {
             align-items: center;
