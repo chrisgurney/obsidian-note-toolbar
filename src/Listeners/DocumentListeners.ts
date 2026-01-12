@@ -56,7 +56,7 @@ export default class DocumentListeners {
         // TODO? dismiss floating toolbar if click is not inside a floating toolbar? (or its menus, etc?)
         // const clickTarget = event.target as Node;
         // const toolbarEl = this.ntb.render.floatingToolbarEl;
-        if (!this.ntb.render.floatingToolbarEl?.contains(event.target as Node)) {
+        if (this.ntb.render.floatingToolbarEl && !this.ntb.render.floatingToolbarEl.contains(event.target as Node)) {
             this.ntb.render.removeFloatingToolbar();
         }
     }

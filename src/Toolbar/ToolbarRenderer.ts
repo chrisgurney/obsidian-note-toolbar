@@ -1139,6 +1139,7 @@ export default class ToolbarRenderer {
 	 */
 	async removeFloatingToolbar() {
 		this.floatingToolbarEl?.remove();
+		this.floatingToolbarEl = null;
 	}
 
 	/**
