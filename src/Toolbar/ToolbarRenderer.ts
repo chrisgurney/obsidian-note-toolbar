@@ -1253,14 +1253,14 @@ export default class ToolbarRenderer {
 	 */
 	removeIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
 
-		this.ntb.debugGroup('removeToolbarIfNeeded');
+		this.ntb.debugGroup('removeIfNeeded');
 
 		let toolbarRemoved: boolean = false;
 
 		// get toolbar elements in current view, or active view if not provided
 		const existingToolbarEls = this.ntb.el.getAllToolbarEl(view);
 
-		this.ntb.debug("🛑 removeToolbarIfNeeded: correct:", correctToolbar?.name, "existing:", existingToolbarEls);
+		this.ntb.debug("🛑 removeIfNeeded: correct:", correctToolbar?.name, "existing:", existingToolbarEls);
 		if (existingToolbarEls?.length > 0) {
 			// loop over elements and remove any that are not the correct one, ensuring there's only one (or none)
 			existingToolbarEls.forEach((toolbarEl) => {
@@ -1273,7 +1273,7 @@ export default class ToolbarRenderer {
 			this.ntb.debug(existingToolbarEls);
 		}
 		else {
-			this.ntb.debug("⛔️ no existing toolbar");
+			this.ntb.debug("⛔️ removeIfNeeded: no existing toolbar");
 			toolbarRemoved = true;
 		}
 
