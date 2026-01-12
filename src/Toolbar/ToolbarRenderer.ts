@@ -670,12 +670,6 @@ export default class ToolbarRenderer {
 								break;
 							};
 						}	
-						// don't show command if not available
-						const isCommandAvailable = this.ntb.items.isCommandItemAvailable(toolbarItem, toolbarView);
-						if (!isCommandAvailable) {
-							this.ntb.debug('renderMenuItems: item command not available - skipping');
-							break;
-						}
 
 						menu.addItem((item: MenuItem) => {
 							const itemTitleFr = document.createDocumentFragment();
@@ -702,6 +696,9 @@ export default class ToolbarRenderer {
 										this.ntb.app.workspace.activeEditor?.editor?.focus();
 									}
 								});
+							// disable item if it's not available
+							const isCommandAvailable = this.ntb.items.isCommandItemAvailable(toolbarItem, toolbarView);
+							item.setDisabled(!isCommandAvailable);
 							// set its ID, just for styling purposes
 							item.dom.id = toolbarItem.uuid;
 						});
