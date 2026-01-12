@@ -665,11 +665,17 @@ export default class ToolbarRenderer {
 						// don't show the item if the link has variables and resolves to nothing
 						if (resolveVars && this.ntb.vars.hasVars(toolbarItem.link)) {
 							const resolvedLink = await this.ntb.vars.replaceVars(toolbarItem.link, file);
-							if (resolvedLink === "") break;
+							if (resolvedLink === "") {
+								this.ntb.debug('renderMenuItems: resolved link is empty - skipping');
+								break;
+							};
 						}	
 						// don't show command if not available
 						const isCommandAvailable = this.ntb.items.isCommandItemAvailable(toolbarItem, toolbarView);
-						if (!isCommandAvailable) break;
+						if (!isCommandAvailable) {
+							this.ntb.debug('renderMenuItems: item command not available - skipping');
+							break;
+						}
 
 						menu.addItem((item: MenuItem) => {
 							const itemTitleFr = document.createDocumentFragment();
