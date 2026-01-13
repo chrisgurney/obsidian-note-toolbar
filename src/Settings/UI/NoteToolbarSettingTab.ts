@@ -214,17 +214,14 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			});
 		}
 
+		const toolbarListDiv = createDiv();
+		toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 		if (this.ntb.settings.toolbars.length == 0) {
-			const toolbarListDiv = createDiv();
-			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			toolbarListDiv
 				.createEl("div", { text: emptyMessageFr(t('setting.toolbars.label-empty-create-tbar')) })
 				.className = "note-toolbar-setting-empty-message";
-			itemsListContainer.appendChild(toolbarListDiv);
 		}
 		else {
-			const toolbarListDiv = createDiv();
-			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 			this.ntb.settings.toolbars.forEach(
 				(toolbar) => {
 					
@@ -391,11 +388,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					}
 				}
 			);
-
-			itemsListContainer.appendChild(toolbarListDiv);
-
 		}
-
+		
+		itemsListContainer.appendChild(toolbarListDiv);
 		itemsContainer.appendChild(itemsListContainer);
 
 		// add toolbar
