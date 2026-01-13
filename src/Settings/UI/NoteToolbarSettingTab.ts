@@ -636,7 +636,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			itemsContainerEl.addClass('note-toolbar-setting-items-list-container');
 
 			if (this.ntb.settings.folderMappings.length == 0) {
-				containerEl
+				itemsContainerEl
 					.createEl("div", { text: emptyMessageFr(t('setting.mappings.label-empty')) })
 					.className = "note-toolbar-setting-empty-message";
 			}
@@ -666,10 +666,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					}
 				});
 
-				itemsContainerEl.appendChild(toolbarFolderListEl)
-				settingItemsEl.appendChild(itemsContainerEl);
-
+				itemsContainerEl.appendChild(toolbarFolderListEl);
 			}
+			
+			settingItemsEl.appendChild(itemsContainerEl);
 
 		//
 		// "Add a new mapping" button
