@@ -218,11 +218,19 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // show at text cursor, with a fallback to the mouse position
         if (options?.position === 'cursor') {
             const position = this.ntb.utils.getPosition('cursor');
-            if (position) menu.showAtPosition({x: position.left, y: position.top});
+            if (position) this.ntb.render.showMenuAtPosition(menu, { x: position.left, y: position.top });
         }
         // default position is 'toolbar'
         else {
-            this.ntb.render.showMenuAtElement(menu, this.ntb.items.lastClickedEl);
+            if (this.ntb.render.lastClickedPos) {
+                this.ntb.render.showMenuAtPosition(menu, 
+                    { x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
+                );
+            }
+            else {
+                // TODO: display an error
+                this.ntb.debug('⚠️ ntb.menu: Not opening window - No toolbar position available.');
+            }
         }
 
         if (options?.focusInMenu) putFocusInMenu();

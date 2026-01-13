@@ -4,9 +4,6 @@ import { WorkspaceWindow } from "obsidian";
 
 export default class CalloutListeners {
 
-    // track the last used callout link, for the menu URI
-    lastCalloutLink: Element | null = null;
-
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}

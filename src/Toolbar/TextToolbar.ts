@@ -75,17 +75,19 @@ export class TextToolbarClass implements PluginValue {
                 // this.ntb.debug('TextToolbar: toolbar in focus - exiting');
                 return;
             }
-            // no text selected, or the view no longer has focus
-            if (this.selection.from === this.selection.to || !view.hasFocus) {
-                if (this.ntb.render.hasFloatingTextToolbar()) {
-                    this.ntb.debugGroup('TextToolbar: ⛔️ no selection or view out of focus - removing toolbar');
-                    this.ntb.debug(
-                        ' • selection empty:', this.selection.from === this.selection.to, 
-                        ' • view focussed:', view.hasFocus);
-                    this.ntb.debugGroupEnd();
+            if (this.ntb.render.hasFloatingTextToolbar()) {
+                // no text selected
+                if (this.selection.from === this.selection.to) {
+                    this.ntb.debug('TextToolbar: ⛔️ no selection - removing toolbar');
                     this.ntb.render.removeFloatingToolbar();
+                    return;
                 }
-                return;
+                // view no longer has focus
+                // if (!view.hasFocus) {
+                //     this.ntb.debug('TextToolbar: ⛔️ view out of focus - removing toolbar');
+                //     this.ntb.render.removeFloatingToolbar();
+                //     return;
+                // }
             }
         }
 

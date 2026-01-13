@@ -1,3 +1,4 @@
+import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { Command, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder } from "obsidian";
 import { ItemFocusType, ItemType, LINK_OPTIONS, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
@@ -7,9 +8,6 @@ import { getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from 
  * Handles interactions with toolbar items.
  */
 export default class ToolbarItemHandler {
-
-    // track the last clicked element, for the menu API
-    lastClickedEl: Element | null = null;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -90,8 +88,17 @@ export default class ToolbarItemHandler {
         let activeFile = this.ntb.app.workspace.getActiveFile();
         const item = this.ntb.settingsManager.getToolbarItemById(uuid);
 
-        const eventTarget = event?.target as HTMLElement | null;
-        if (eventTarget) this.lastClickedEl = eventTarget.closest('.callout[data-callout="note-toolbar"] span.external-link');
+        // determine where event originated from so we know where to position menus
+        let eventPos;
+        if (event instanceof MouseEvent) {
+            eventPos = (event?.currentTarget as HTMLElement)?.getBoundingClientRect();
+        }
+        else if (event instanceof KeyboardEvent) {
+            eventPos = activeDocument.activeElement?.getBoundingClientRect();
+        }
+        if (eventPos) {
+            this.ntb.render.lastClickedPos = { left: eventPos.x, right: eventPos.x, top: eventPos.bottom, bottom: eventPos.bottom };
+        }
 
         // update active item attributes in the toolbar, so the API can fetch the right active item
         this.ntb.render.updateActiveItem(uuid);
@@ -130,8 +137,9 @@ export default class ToolbarItemHandler {
                 const toolbar = this.ntb.settingsManager.getToolbar(linkHref);
                 if (toolbar) {
                     this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
-                        let clickedItemEl = (event?.targetNode as HTMLLinkElement).closest('.external-link');
-                        this.ntb.render.showMenuAtElement(menu, clickedItemEl);
+                        this.ntb.render.showMenuAtPosition(menu,
+                            { x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
+                        );
                         event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
                     });
                 }

@@ -1,12 +1,10 @@
+import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { Notice } from "obsidian";
 import { CalloutAttr, ItemType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
 
 
 export default class CalloutHandler {
-
-    // track the last used callout link, for the menu URI
-    lastCalloutLink: Element | null = null;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -39,7 +37,9 @@ export default class CalloutHandler {
             const clickedItemEl = target?.closest('.callout[data-callout="note-toolbar"] a.external-link');
             if (clickedItemEl) {
                 // this.debug('calloutLinkHandler:', target, clickedItemEl);
-                this.lastCalloutLink = clickedItemEl as HTMLLinkElement;
+                const targetPos = clickedItemEl.getBoundingClientRect();
+                this.ntb.render.lastClickedPos = { left: targetPos.x, right: targetPos.x, top: targetPos.bottom, bottom: targetPos.bottom };
+
                 let dataEl = clickedItemEl?.nextElementSibling;
                 if (dataEl) {
                     // make sure it's a valid attribute, and get its value
@@ -92,7 +92,9 @@ export default class CalloutHandler {
                             if (activeFile) {
                                 if (toolbar) {
                                     this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
-                                        this.ntb.render.showMenuAtElement(menu, this.lastCalloutLink);
+                                        this.ntb.render.showMenuAtPosition(menu,
+                                            { x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
+                                        );
                                     });
                                 }
                                 else {

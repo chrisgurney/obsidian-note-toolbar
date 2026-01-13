@@ -23,6 +23,9 @@ export default class ToolbarRenderer {
 	// floating toolbar element, of which there can be only one
     floatingToolbarEl: HTMLDivElement | null = null;
     
+	// for tracking the last clicked element position (which can include callouts)
+	lastClickedPos: Rect;
+
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
 	mobileNavbarMargin: number;
@@ -802,19 +805,27 @@ export default class ToolbarRenderer {
 
 		// position (and potentially offset) the menu, and then set focus in it if necessary
 		if (menuPos) {
-			menu.showAtPosition(menuPos);
-			if (!menuPos.left) {
-				// reposition if the menu overlaps the right edge
-				let menuOverflow = activeWindow.innerWidth - (menuPos.x + menu.dom.offsetWidth);
-				// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
-				if (menuOverflow <= 2) {
-					this.ntb.debug('⬅️ repositioned menu');
-					// show the menu along the right edge of the window instead
-					menu.showAtPosition( { x: activeWindow.innerWidth, y: menuPos.y, overlap: true, left: true } );
-				}
-			}
+			this.showMenuAtPosition(menu, menuPos);
 		}
 
+	}
+
+	/**
+	 * Shows a menu at the given position, but also repositions it if it's too close to the window edge.
+	 */
+	showMenuAtPosition(menu: Menu, position: MenuPositionDef) {
+		menu.showAtPosition(position);
+		// if the menu does not open to the left (=default?)
+		if (!position.left) {
+			// reposition if the menu overlaps the right edge
+			let menuOverflow = activeWindow.innerWidth - (position.x + menu.dom.offsetWidth);
+			// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
+			if (menuOverflow <= 2) {
+				this.ntb.debug('⬅️ repositioned menu');
+				// show the menu along the right edge of the window instead
+				menu.showAtPosition( { x: activeWindow.innerWidth, y: position.y, overlap: true, left: true } );
+			}
+		}
 	}
 
 	/**

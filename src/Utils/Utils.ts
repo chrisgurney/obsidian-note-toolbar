@@ -230,10 +230,7 @@ export default class PluginUtils {
 		};
 
 		// 'toolbar' position (i.e., last clicked element), with fallback to 'pointer'
-		const lastClickedPos = this.ntb.items.lastClickedEl?.getBoundingClientRect();
-		return lastClickedPos
-			? {	left: lastClickedPos.x, right: lastClickedPos.x, top: lastClickedPos.bottom, bottom: lastClickedPos.bottom }
-			: pointerPos;
+		return this.ntb.render.lastClickedPos ?? pointerPos;
 	}
 
     /**
