@@ -266,7 +266,7 @@ export default class CommandManager {
                 // get the list and set focus on the first visible item
                 const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
                 if (itemsUl) {
-                    this.ntb.debug("toolbar: ", itemsUl);
+                    // this.ntb.debug("toolbar: ", itemsUl);
                     let items = Array.from(itemsUl.children);
                     const visibleItems = items.filter(item => {
                         const hasSpan = item.querySelector('span') !== null; // to filter out separators
@@ -274,7 +274,7 @@ export default class CommandManager {
                         return hasSpan && isVisible;
                     });
                     const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-                    this.ntb.debug("focussed item: ", linkEl);
+                    // this.ntb.debug("focussed item: ", linkEl);
                     visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
                     linkEl?.focus();
                 }

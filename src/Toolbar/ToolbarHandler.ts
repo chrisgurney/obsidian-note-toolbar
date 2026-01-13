@@ -91,8 +91,6 @@ export default class ToolbarHandler {
 	 */
 	onKeyDown = async (e: KeyboardEvent, isFloatingToolbar: boolean = false) => {
 
-		this.ntb.debugGroup('onKeyDown');
-
 		let itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
 		if (itemsUl) {
 
@@ -119,7 +117,6 @@ export default class ToolbarHandler {
 				case 'ArrowRight':
 				case 'ArrowDown': {
 					const nextIndex = (currentIndex + 1) % visibleItems.length;
-					this.ntb.debug(currentEl);
 					currentEl.removeClass(ToolbarStyle.ItemFocused);
 					visibleItems[nextIndex].addClass(ToolbarStyle.ItemFocused);
 					visibleItems[nextIndex].querySelector('span')?.focus();
@@ -161,8 +158,6 @@ export default class ToolbarHandler {
 			}
 
 		}
-
-		this.ntb.debugGroupEnd();
 
 	}
 
