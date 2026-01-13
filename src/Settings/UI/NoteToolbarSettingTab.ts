@@ -215,9 +215,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 
 		if (this.ntb.settings.toolbars.length == 0) {
-			itemsListContainer
+			const toolbarListDiv = createDiv();
+			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
+			toolbarListDiv
 				.createEl("div", { text: emptyMessageFr(t('setting.toolbars.label-empty-create-tbar')) })
 				.className = "note-toolbar-setting-empty-message";
+			itemsListContainer.appendChild(toolbarListDiv);
 		}
 		else {
 			const toolbarListDiv = createDiv();
