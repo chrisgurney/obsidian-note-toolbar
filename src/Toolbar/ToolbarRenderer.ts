@@ -473,7 +473,10 @@ export default class ToolbarRenderer {
 					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(item, view);
 					if (!isCommandAvailable) {
 						noteToolbarLi.ariaDisabled = 'true';
-						setTooltip(toolbarItem, t('toolbar.item-unavailable-tooltip'));
+						setTooltip(
+							toolbarItem, 
+							item.tooltip ? `${item.tooltip} (${t('toolbar.item-unavailable-tooltip')})` : t('toolbar.item-unavailable-tooltip')
+						);
 					}
 				}
 
@@ -878,23 +881,11 @@ export default class ToolbarRenderer {
 			let itemSetting = this.ntb.settingsManager.getToolbarItemById(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 
-				// disable/re-enable any command items based on availability
-				if (itemSetting.linkAttr.type === ItemType.Command) {
-					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, currentView);
-					if (isCommandAvailable) {
-						itemEl.ariaDisabled = 'false';
-					}
-					else {
-						itemEl.ariaDisabled = 'true';
-						setTooltip(itemSpanEl, t('toolbar.item-unavailable-tooltip'));
-						continue;
-					}
-				}
-
 				// update tooltip + label
+				let itemTooltip = itemSetting.tooltip;
 				if (this.ntb.vars.hasVars(itemSetting.tooltip)) {
-					let newTooltip = await this.ntb.vars.replaceVars(itemSetting.tooltip, activeFile);
-					setTooltip(itemSpanEl, newTooltip, { placement: "top" });
+					itemTooltip = await this.ntb.vars.replaceVars(itemSetting.tooltip, activeFile);
+					setTooltip(itemSpanEl, itemTooltip, { placement: "top" });
 				}
 				if (this.ntb.vars.hasVars(itemSetting.label)) {
 					let newLabel = await this.ntb.vars.replaceVars(itemSetting.label, activeFile);
@@ -906,6 +897,22 @@ export default class ToolbarRenderer {
 					else {
 						itemElLabel?.addClass('hide');
 						itemElLabel?.setText('');
+					}
+				}
+
+				// disable/re-enable any command items based on availability
+				if (itemSetting.linkAttr.type === ItemType.Command) {
+					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, currentView);
+					if (isCommandAvailable) {
+						itemEl.ariaDisabled = 'false';
+					}
+					else {
+						itemEl.ariaDisabled = 'true';
+						setTooltip(
+							itemSpanEl, 
+							itemTooltip ? `${itemTooltip} (${t('toolbar.item-unavailable-tooltip')})` : t('toolbar.item-unavailable-tooltip')
+						);
+						continue;
 					}
 				}
 
