@@ -37,9 +37,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		private ntb: NoteToolbarPlugin
 	) {
 		super(ntb.app, ntb);
-		// TODO: use the user-configured icon with this fallback
-		// TODO: update icon when setting changes
-		this.icon = 'circle-ellipsis';
+		// TODO? add back in when more plugins have icons
+		// this.icon = 'circle-ellipsis';
 		// this.ruleUi = new RuleUi(this.plugin, this);
 	}
 
