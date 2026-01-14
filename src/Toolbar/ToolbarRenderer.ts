@@ -289,7 +289,7 @@ export default class ToolbarRenderer {
                 break;
         }
 
-        this.ntb.debug(`⭐️ Rendered: ${toolbar.name} in view:`, getViewId(view));
+        this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
         this.ntb.debugGroupEnd();
 
     }
@@ -1322,7 +1322,7 @@ export default class ToolbarRenderer {
 		}
 		// we need a toolbar BUT the name of the existing toolbar doesn't match
 		else if (correctToolbar.name !== existingToolbarName) {
-			this.ntb.debug("⛔️ removing existing toolbar (name does not match): " + existingToolbarName);
+			this.ntb.debug('⛔️ removing existing toolbar (name does not match) correct:"', correctToolbar.name, '" existing: "', existingToolbarName, '"');
 			removeToolbar = true;
 		}
 		// we need a toolbar BUT it needs to be updated
