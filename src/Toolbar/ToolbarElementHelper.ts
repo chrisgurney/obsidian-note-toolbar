@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ItemView, MarkdownView } from "obsidian";
+import { ItemView, MarkdownView, Platform } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 
 /**
@@ -26,7 +26,18 @@ export default class ToolbarElementHelper {
     getAllToolbarEl(view?: ItemView): NodeListOf<HTMLElement> {
         let toolbarViewEl = view ? view.containerEl : this.ntb.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
         toolbarViewEl = toolbarViewEl?.closest('.modal-container .note-toolbar-ui') ?? toolbarViewEl;
-        return toolbarViewEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+        const viewToolbarEls = toolbarViewEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+        // on phones, also check for floating buttons in the document DOM
+        if (Platform.isPhone) {
+            const fabs = activeDocument.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+            if (fabs.length > 0) {
+                const allToolbarEls: HTMLElement[] = [];
+                viewToolbarEls?.forEach(el => allToolbarEls.push(el));
+                fabs.forEach(el => allToolbarEls.push(el));
+                return allToolbarEls as unknown as NodeListOf<HTMLElement>;
+            }
+        }
+        return viewToolbarEls || ([] as unknown as NodeListOf<HTMLElement>);
     }
 
     /**
