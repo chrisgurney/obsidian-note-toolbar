@@ -1071,12 +1071,12 @@ export default class ToolbarRenderer {
 	 */
 	async checkAndRender(file: TFile, frontmatter: FrontMatterCache | undefined, view?: ItemView): Promise<void> {
 
-		this.ntb.debug('checkAndRenderToolbar: file:', file.name, 'view:', getViewId(view));
+		this.ntb.debug('checkAndRender: file:', file.name, 'view:', getViewId(view));
 
 		const viewId = getViewId(view);
 		if (viewId) {	
 			if (this.isRendering[viewId]) {
-				this.ntb.debug('checkAndRenderToolbar: SKIPPED: ALREADY RENDERING', viewId);
+				this.ntb.debug('checkAndRender: SKIPPED: ALREADY RENDERING', viewId);
 				return;
 			};
 			this.isRendering[viewId] = true;
@@ -1090,7 +1090,7 @@ export default class ToolbarRenderer {
 			// remove existing toolbar if needed
 			let toolbarRemoved: boolean = this.removeIfNeeded(matchingToolbar, view);
 
-			this.ntb.debug('checkAndRenderToolbar:', matchingToolbar?.name);
+			this.ntb.debug('checkAndRender:', matchingToolbar?.name);
 
 			if (matchingToolbar) {
 				// render the toolbar if we have one, and we don't have an existing toolbar to keep
