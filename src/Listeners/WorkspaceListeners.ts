@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, TFile } from "obsidian";
+import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, Platform, TFile } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
 import EditorMenu from "../Toolbar/EditorMenu";
@@ -92,8 +92,9 @@ export default class WorkspaceListeners {
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 
 		// if workspace changed, render all toolbars, otherwise just render the toolbar for the active view (#367)
+		// on phones we can just render for the active view
 		const workspace = this.workspacesPlugin?.instance.activeWorkspace;
-		if (workspace !== this.activeWorkspace) {
+		if (!Platform.isPhone && workspace !== this.activeWorkspace) {
 			await this.ntb.render.renderForAllLeaves();
 			this.activeWorkspace = workspace;
 		}
@@ -181,7 +182,7 @@ export default class WorkspaceListeners {
 		}
 
 		// exit if the view has already been handled, after updating the toolbar
-		if (!renderToolbar && viewId && this.ntb.render.activeViewIds.contains(viewId)) {
+		if (!renderToolbar && !Platform.isPhone && viewId && this.ntb.render.activeViewIds.contains(viewId)) {
 			this.ntb.debug('LEAF-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
 			this.ntb.render.updateActive();
 			return;
@@ -189,20 +190,14 @@ export default class WorkspaceListeners {
 
 		if (currentView) {
 			// check for editing or reading mode
-			if (currentView instanceof MarkdownView) {
-				renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
-			}
-		}
-		else {
-			currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-			if (currentView) {
-				renderToolbar = this.ntb.utils.checkToolbarForItemView(currentView);
-				if (!renderToolbar) return;
-			}
+			// if (currentView instanceof MarkdownView) {
+			// 	renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
+			// }
+			if (!renderToolbar) renderToolbar = this.ntb.utils.checkToolbarForItemView(currentView);
 		}
 
 		if (renderToolbar) {
-			this.ntb.debug("LEAF-CHANGE: renderActiveToolbar");
+			this.ntb.debug("LEAF-CHANGE: renderForView...");
 			// this.removeActiveToolbar();
 			// don't seem to need a delay before rendering for leaf changes
 			await this.ntb.render.renderForView();

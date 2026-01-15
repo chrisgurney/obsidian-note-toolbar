@@ -22,6 +22,9 @@ export default class ToolbarRenderer {
 
 	// floating toolbar element, of which there can be only one
     floatingToolbarEl: HTMLDivElement | null = null;
+
+	// phone FAB element, of which there can be only one
+	phoneFabEl: HTMLButtonElement | HTMLDivElement | null = null;
     
 	// for tracking the last clicked element position (which can include callouts)
 	lastClickedPos: Rect;
@@ -251,6 +254,7 @@ export default class ToolbarRenderer {
                 else if (Platform.isPhone) {
 					const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 					navbarEl?.insertAdjacentElement('afterend', embedBlock);
+					this.phoneFabEl = embedBlock;
 				}
 				else {
 					viewEl?.appendChild(embedBlock);
@@ -746,9 +750,11 @@ export default class ToolbarRenderer {
 				const toolbarRemoved = this.removeIfNeeded(toolbar, toolbarView);
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
-					if (toolbarRemoved) {
+					if (Platform.isPhone || toolbarRemoved) {
+						this.ntb.debug('renderForView: rendering...');
 						await this.render(toolbar, null, toolbarView);	
 					}
+					this.ntb.debug('renderForView: updating...');
 					await this.update(toolbar, null, toolbarView);
 				}
 			}
@@ -1281,26 +1287,31 @@ export default class ToolbarRenderer {
 		// get toolbar elements in current view, or active view if not provided
 		const existingToolbarEls = this.ntb.el.getAllToolbarEl(view);
 
-		this.ntb.debug("🛑 removeIfNeeded: correct:", correctToolbar?.name, "existing:", existingToolbarEls);
+		this.ntb.debug("removeIfNeeded: correct:", correctToolbar?.name);
 		if (existingToolbarEls?.length > 0) {
-			// loop over elements and remove any that are not the correct one, ensuring there's only one (or none)
-			existingToolbarEls.forEach((toolbarEl) => {
-				if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements
-				else {
-					toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement, view);
-					if (toolbarRemoved) toolbarEl.remove();
-				}
-			});
-			this.ntb.debug(existingToolbarEls);
+			// remove everything on phones
+			if (Platform.isPhone) {
+				existingToolbarEls.forEach((toolbarEl) => toolbarEl.remove());
+				toolbarRemoved = true;
+			}
+			// otherwise, loop over elements and remove any that are not the correct one, ensuring there's only one (or none)
+			else {
+				existingToolbarEls.forEach((toolbarEl) => {
+					if (toolbarRemoved) toolbarEl.remove() // remove any other toolbar elements
+					else {
+						toolbarRemoved = this.checkRemoveToolbarEl(correctToolbar, toolbarEl as HTMLElement, view);
+						if (toolbarRemoved) toolbarEl.remove();
+					}
+				});
+			}
 		}
 		else {
-			this.ntb.debug("⛔️ removeIfNeeded: no existing toolbar");
+			this.ntb.debug("removeIfNeeded: no existing toolbar");
 			toolbarRemoved = true;
 		}
 
 		this.ntb.debugGroupEnd();
 		return toolbarRemoved;
-
 	}
 
 	private checkRemoveToolbarEl(correctToolbar: ToolbarSettings | undefined, existingToolbarEl: HTMLElement, view?: ItemView): boolean {
