@@ -63,8 +63,7 @@ export default interface INoteToolbarApi<T> {
     // testCallback: (buttonId: string, callback: Callback) => Promise<void>;
 
     /**
-     * The Obsidian app instance. Use this instead of the global `app` when writing JavaScript.
-     * @see https://docs.obsidian.md/Reference/TypeScript+API/App
+     * The [Obsidian app instance](https://docs.obsidian.md/Reference/TypeScript+API/App). Use this instead of the global `app` when writing JavaScript.
      * 
      * @example
      * const currentFile = ntb.app.workspace.getActiveFile();

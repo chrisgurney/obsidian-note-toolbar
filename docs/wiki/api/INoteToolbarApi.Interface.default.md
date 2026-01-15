@@ -63,11 +63,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 
 > **app**: `App`
 
-The Obsidian app instance. Use this instead of the global `app` when writing JavaScript.
-
-#### See
-
-https://docs.obsidian.md/Reference/TypeScript+API/App
+The [Obsidian app instance](https://docs.obsidian.md/Reference/TypeScript+API/App). Use this instead of the global `app` when writing JavaScript.
 
 #### Example
 
