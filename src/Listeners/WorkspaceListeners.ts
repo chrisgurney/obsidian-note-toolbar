@@ -77,7 +77,7 @@ export default class WorkspaceListeners {
 	 * @param file TFile that was opened.
 	 */
 	onFileOpen = async (file: TFile) => {
-		this.ntb.debug('FILE-OPEN: updating recent file list:', file?.name);
+		// this.ntb.debug('FILE-OPEN: updating recent file list:', file?.name);
 		// update list of the most recently opened files
 		if (file) await this.ntb.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
 	};
