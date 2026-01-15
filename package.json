@@ -32,7 +32,7 @@
 		"typescript": "^5.7.3"
 	},
 	"dependencies": {
-		"@codemirror/view": "6.38.6",
+		"@codemirror/view": "6.39.9",
 		"sortablejs": "^1.15.2"
 	}
 }
