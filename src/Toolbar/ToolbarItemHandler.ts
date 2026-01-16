@@ -33,7 +33,7 @@ export default class ToolbarItemHandler {
 				const itemUuid = clickedEl.id;
 
 				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
-				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined
+				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined;
 	
 				// this.ntb.debug('clickHandler: ', 'clickedEl: ', clickedEl);
 	
