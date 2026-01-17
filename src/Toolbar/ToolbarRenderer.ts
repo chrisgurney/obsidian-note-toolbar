@@ -136,6 +136,7 @@ export default class ToolbarRenderer {
         Platform.isMobile
             ? position = toolbar.position.mobile?.allViews?.position ?? PositionType.Props
             : position = toolbar.position.desktop?.allViews?.position ?? PositionType.Props;
+		if (Platform.isPhone) this.phoneTbarPosition = position;
 
         // if no view is provided, get the active view
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
