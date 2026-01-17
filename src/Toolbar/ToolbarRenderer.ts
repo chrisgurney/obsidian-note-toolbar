@@ -725,7 +725,12 @@ export default class ToolbarRenderer {
 	 */
 	async renderForView(view?: ItemView) {
 
-		const toolbarView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		let toolbarView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		// fix: if Backlinks was previously open it becomes an active view, so fall back to most recent
+		if (!toolbarView && Platform.isPhone) {
+			const leaf = this.ntb.app.workspace.getMostRecentLeaf();
+			toolbarView = (leaf?.view instanceof ItemView) ? leaf.view : null;
+		}
 
 		let activeFile: TFile | null = null;
 		if (!toolbarView) return;

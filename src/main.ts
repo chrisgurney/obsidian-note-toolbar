@@ -126,8 +126,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// render the initial toolbar
 			if (Platform.isPhone) {
-				const currentView = this.app.workspace.getActiveViewOfType(ItemView);
-				if (currentView) await this.render.renderForView(currentView);
+				await this.render.renderForView();
 			}
 			else {
 				await this.render.renderForAllLeaves();
