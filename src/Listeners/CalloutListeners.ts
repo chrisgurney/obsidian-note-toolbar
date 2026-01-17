@@ -15,10 +15,12 @@ export default class CalloutListeners {
 
     onClick = async (event: MouseEvent) => {
         const target = event.target as HTMLElement;
-        if (!target.matches('.cg-note-toolbar-container')) {
+        const isToolbar = (target.closest('.cg-note-toolbar-container') !== null);
+        const isNtbCallout = !isToolbar && (target.closest('.callout[data-callout="note-toolbar"]') !== null);
+        if (isNtbCallout) {
             this.ntb.render.removeFocusStyle();
+            await this.ntb.callouts.calloutLinkHandler(event);
         }
-        await this.ntb.callouts.calloutLinkHandler(event);
     }
 
 	onWindowOpen = (window: WorkspaceWindow) => {
