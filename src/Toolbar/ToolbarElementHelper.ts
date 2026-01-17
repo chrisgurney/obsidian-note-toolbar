@@ -29,7 +29,6 @@ export default class ToolbarElementHelper {
             const allToolbarEls: HTMLElement[] = [];
             const viewToolbarEls = activeDocument.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
             viewToolbarEls?.forEach(el => allToolbarEls.push(el));
-            if (this.ntb.render.phoneFabEl) allToolbarEls.push(this.ntb.render.phoneFabEl);
             return allToolbarEls as unknown as NodeListOf<HTMLElement>;
         }
         // otherwise, scope to the view if provided

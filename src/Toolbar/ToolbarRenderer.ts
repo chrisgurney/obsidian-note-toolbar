@@ -23,9 +23,6 @@ export default class ToolbarRenderer {
 	// floating toolbar element, of which there can be only one
     floatingToolbarEl: HTMLDivElement | null = null;
 
-	// phone FAB element, of which there can be only one
-	phoneFabEl: HTMLButtonElement | HTMLDivElement | null = null;
-
 	phoneTbarPosition: PositionType | null = null;
 
 	// for tracking the last clicked element position (which can include callouts)
@@ -257,7 +254,6 @@ export default class ToolbarRenderer {
                 else if (Platform.isPhone) {
 					const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 					navbarEl?.insertAdjacentElement('afterend', embedBlock);
-					this.phoneFabEl = embedBlock;
 				}
 				else {
 					viewEl?.appendChild(embedBlock);
