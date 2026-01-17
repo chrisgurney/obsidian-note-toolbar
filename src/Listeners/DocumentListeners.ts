@@ -1,4 +1,5 @@
 import NoteToolbarPlugin from "main";
+import { Platform } from "obsidian";
 import { PositionType } from "Settings/NoteToolbarSettings";
 
 
@@ -50,7 +51,10 @@ export default class DocumentListeners {
     }
     
     onMouseDown = (event: MouseEvent) => {
-        // this.ntb.debug('onMouseDown', event.target);
+        // prevent phone Navbar from appearing when tapping items, for bottom toolbars
+        if (Platform.isPhone && this.ntb.render.phoneTbarPosition === PositionType.Bottom) {
+            event.stopPropagation();            
+        }
         this.isKeyboardSelection = false;
         this.isMouseDown = true;
         // TODO? dismiss floating toolbar if click is not inside a floating toolbar? (or its menus, etc?)

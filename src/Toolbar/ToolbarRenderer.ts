@@ -25,7 +25,9 @@ export default class ToolbarRenderer {
 
 	// phone FAB element, of which there can be only one
 	phoneFabEl: HTMLButtonElement | HTMLDivElement | null = null;
-    
+
+	phoneTbarPosition: PositionType | null = null;
+
 	// for tracking the last clicked element position (which can include callouts)
 	lastClickedPos: Rect;
 
