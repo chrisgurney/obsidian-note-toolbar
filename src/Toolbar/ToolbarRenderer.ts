@@ -952,9 +952,7 @@ export default class ToolbarRenderer {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
 
-		if (currentPosition === PositionType.Bottom || currentPosition === PositionType.Top) {
-			this.updatePhoneNavigation(currentPosition, toolbarEl.offsetHeight);
-		}
+		this.updatePhoneNavigation(currentPosition, toolbarEl.offsetHeight);
 
 		this.ntb.debugGroupEnd();
 
@@ -986,9 +984,9 @@ export default class ToolbarRenderer {
 	 * @param toolbarPosition position of current toolbar.
 	 * @param toolbarHeight height of the current toolbar.
 	 */ 
-	updatePhoneNavigation(toolbarPosition: PositionType, toolbarHeight: number): void {
+	updatePhoneNavigation(toolbarPosition: PositionType | undefined, toolbarHeight: number): void {
 
-		if (!Platform.isPhone) return;
+		if (!Platform.isPhone || !toolbarPosition) return;
 
 		// position Obsidian Navbar above toolbar
 		const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
