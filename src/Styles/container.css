@@ -130,6 +130,13 @@
     }
 }
 
+/* if Navbar is completely hidden by Note Toolbar, don't shift bottom toolbars */
+.is-phone .app-container:has(.mobile-navbar.note-toolbar-hidden) .cg-note-toolbar-container[data-tbar-position*="bottom"] {
+    & .cg-note-toolbar-callout {
+        margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
+    }
+}
+
 /* hides the FAB when a sidebar is open on phones */
 .is-phone .app-container:has(.workspace.is-left-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"],
 .is-phone .app-container:has(.workspace.is-right-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"] {
