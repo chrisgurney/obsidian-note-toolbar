@@ -392,6 +392,8 @@
     &[data-callout-metadata*="mnwrp"] ul {
         .is-mobile & {
             flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
     }
 
