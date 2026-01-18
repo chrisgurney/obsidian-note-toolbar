@@ -53,7 +53,9 @@ export default class DocumentListeners {
     onMouseDown = (event: MouseEvent) => {
         // prevent phone Navbar from appearing when tapping items, for bottom toolbars
         if (Platform.isPhone && this.ntb.render.phoneTbarPosition === PositionType.Bottom) {
-            event.stopPropagation();            
+            const target = event.target as HTMLElement;
+            const isToolbar = (target.closest('.cg-note-toolbar-container') !== null);
+            if (isToolbar) event.stopPropagation();
         }
         this.isKeyboardSelection = false;
         this.isMouseDown = true;
