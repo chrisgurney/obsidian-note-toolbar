@@ -162,6 +162,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     @media (hover: hover) {
         &:hover {
             box-shadow: none;
+            opacity: unset;
         }
     }
     .is-mobile & {

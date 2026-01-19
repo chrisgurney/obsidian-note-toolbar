@@ -534,6 +534,7 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
         @media (hover: hover) {
             & a:hover, span.external-link:hover {
                 box-shadow: none;
+                opacity: unset;
             }
         }
     }

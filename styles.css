@@ -1974,6 +1974,7 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
         @media (hover: hover) {
             & a:hover, span.external-link:hover {
                 box-shadow: none;
+                opacity: unset;
             }
         }
     }
@@ -2146,6 +2147,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     @media (hover: hover) {
         &:hover {
             box-shadow: none;
+            opacity: unset;
         }
     }
     .is-mobile & {
