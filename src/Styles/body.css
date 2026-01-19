@@ -108,7 +108,6 @@ body {
      * Licensed under the MIT License; see the LICENSE file.
      */
     --ntb-anim-duration-moderate: 320ms;
-    --ntb-blur-s: blur(2px) saturate(1.5) brightness(1.05);
     &.theme-light {
         --ntb-liquid-glass-background: rgba(255, 255, 255, 0.5);
         --ntb-shadow-base: inset 1px 1px 2px rgba(255, 255, 255, 0.5), inset -1px -1px 2px rgba(255, 255, 255, 0.5), inset 0 4px 16px rgba(255, 255, 255, 0.025);

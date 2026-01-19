@@ -26,7 +26,7 @@ body[data-ntb-csstheme="Cupertino"] {
             gap: var(--size-4-2);
             & a, span.external-link {
                 background-color: var(--ntb-liquid-glass-background) !important;
-                backdrop-filter: var(--ntb-blur-s);
+                backdrop-filter: var(--raised-blur);
                 border: var(--border-width) solid var(--background-modifier-border);
                 border-radius: 32px;
                 box-shadow: var(--ntb-shadow-xs);
@@ -44,7 +44,7 @@ body[data-ntb-csstheme="Cupertino"] {
     /* Licensed under the MIT License; see the LICENSE file */
     & button.cg-note-toolbar-fab {
         background-color: var(--ntb-liquid-glass-background) !important;
-        backdrop-filter: var(--ntb-blur-s) !important;
+        backdrop-filter: var(--raised-blur) !important;
         border: var(--border-width) solid var(--background-modifier-border);
         box-shadow: var(--ntb-shadow-xs);
         /* fix: ghosting effect with overlays when glass style is being used */
