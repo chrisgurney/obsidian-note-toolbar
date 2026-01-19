@@ -62,8 +62,7 @@
                 }
                 /* fix: bottom margin needs to be removed when keyboard is open on phone */
                 .ntb-is-keyboard-open & {
-                    margin-bottom: unset;
-                    transition: unset;
+                    margin-bottom: 0;
                 }
             }
         }
