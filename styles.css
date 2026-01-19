@@ -1386,8 +1386,16 @@ body {
 
 }
 
-.note-toolbar-hidden {
+.ntb-hidden {
     display: none !important;
+}
+
+.is-phone.ntb-remove-nav .mobile-navbar {
+    display: none !important;
+}
+
+body.is-phone.ntb-remove-nav {
+    --navbar-height: 0;
 }
 /*
  * Default adjustments for various themes (CSS variables)
@@ -2281,7 +2289,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     }
 }
 /* if Navbar is completely hidden by Note Toolbar, don't shift bottom toolbars */
-.is-phone .app-container:has(.mobile-navbar.note-toolbar-hidden) .cg-note-toolbar-container[data-tbar-position*="bottom"] {
+.is-phone.ntb-remove-nav .cg-note-toolbar-container[data-tbar-position*="bottom"] {
     & .cg-note-toolbar-callout {
         margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
     }

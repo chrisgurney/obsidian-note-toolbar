@@ -129,6 +129,14 @@ body {
 
 }
 
-.note-toolbar-hidden {
+.ntb-hidden {
     display: none !important;
+}
+
+.is-phone.ntb-remove-nav .mobile-navbar {
+    display: none !important;
+}
+
+body.is-phone.ntb-remove-nav {
+    --navbar-height: 0;
 }

@@ -1060,7 +1060,7 @@ export default class ToolbarRenderer {
 			const allHidden = allNavbarKeys.every(key => 
 				uiElementsVisibility.get(key) === false
 			);
-			navbarEl.toggleClass('note-toolbar-hidden', allHidden);
+			activeDocument.body.toggleClass('ntb-remove-nav', allHidden);
 
 			// hide items individually if not all are hidden
 			if (!allHidden) {
@@ -1068,7 +1068,7 @@ export default class ToolbarRenderer {
 					const elDefinition = uiElements.get(key);
 					if (!elDefinition) return;
 					const elToHide = navbarEl.querySelector(elDefinition.selector) as HTMLElement;
-					if (elToHide) elToHide.toggleClass('note-toolbar-hidden', !visible);
+					if (elToHide) elToHide.toggleClass('ntb-hidden', !visible);
 				});
 			}
 		}
