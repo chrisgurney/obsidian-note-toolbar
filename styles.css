@@ -2210,10 +2210,10 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
                 .is-hidden-nav & {
                     margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
                 }
-            }
-            /* fix: bottom margin needs to be removed when keyboard is open on phone */
-            .is-phone.mod-toolbar-open & {
-                margin-bottom: unset;
+                /* fix: bottom margin needs to be removed when keyboard is open on phone */
+                @container style(--keyboard-height > 0px) {
+                    margin-bottom: unset;
+                }
             }
         }
 
