@@ -571,8 +571,8 @@
             "navbar-visibility": {
                 "description": "Hides actions in Obsidian's phone navigation bar.",
                 "name": "Navbar item visibility 📱",
-                "option-hide-all": "Hide all",
-                "option-unhide-all": "Unhide all"
+                "option-hide-all": "Hide all actions",
+                "option-unhide-all": "Unhide all actions"
             },
             "scripting": {
                 "description": "Adds support for Dataview, JavaScript, JS Engine, and Templater. Plugins must be installed and enabled.",
