@@ -30,18 +30,12 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
 
         if (Platform.isPhone) {
-            this.ntb.registerDomEvent(activeDocument, 'focusin', () => {
-                setTimeout(this.onAppResize, 0);
-            });
-            this.ntb.registerDomEvent(activeDocument, 'focusout', () => {
-                setTimeout(this.onAppResize, 0);
-            });
-            // const container = activeDocument.querySelector('.app-container');
-            // if (container) {
-            //     const observer = new ResizeObserver(this.onAppResize);
-            //     observer.observe(container);
-            //     this.ntb.register(() => observer.disconnect());
-            // }
+            const container = activeDocument.querySelector('.app-container');
+            if (container) {
+                const observer = new ResizeObserver(this.onAppResize);
+                observer.observe(container);
+                this.ntb.register(() => observer.disconnect());
+            }
         }
     }
 
