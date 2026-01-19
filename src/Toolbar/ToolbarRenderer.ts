@@ -310,6 +310,11 @@ export default class ToolbarRenderer {
         let noteToolbarUl = activeDocument.createElement("ul");
         noteToolbarUl.setAttribute("role", "menu");
 
+		// don't open the sidebars if the toolbar is not wrapping items
+		if (Platform.isMobile && toolbar.mobileStyles.includes(MobileStyleType.NoWrap)) {
+			noteToolbarUl.setAttribute('data-ignore-swipe', 'true');
+		}
+
         let noteToolbarLiArray = await this.renderLItems(toolbar, file, view);
         noteToolbarUl.append(...noteToolbarLiArray);
 
