@@ -28,6 +28,8 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'mouseup', this.onMouseUp);
         this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
+
+        if (Platform.isPhone) this.ntb.registerDomEvent(activeWindow, 'resize', this.onResize);
     }
 
     onContextMenu = () => {
@@ -98,6 +100,13 @@ export default class DocumentListeners {
     onSelectionChange = (event: any) => {
         // this.ntb.debug('onSelection');
         this.updatePreviewSelection();
+    }
+
+    onResize = () => {
+        if (Platform.isPhone) {
+            const keyboardHeight = getComputedStyle(activeDocument.documentElement).getPropertyValue('--keyboard-height');
+            activeDocument.documentElement.classList.toggle('ntb-is-keyboard-open', !!keyboardHeight && parseFloat(keyboardHeight) > 0);
+        }
     }
 
     /**
