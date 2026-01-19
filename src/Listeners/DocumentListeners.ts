@@ -30,12 +30,18 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
 
         if (Platform.isPhone) {
-            const container = activeDocument.querySelector('.app-container');
-            if (container) {
-                const observer = new ResizeObserver(this.onAppResize);
-                observer.observe(container);
-                this.ntb.register(() => observer.disconnect());
-            }
+            this.ntb.registerDomEvent(activeDocument, 'focusin', () => {
+                setTimeout(this.onAppResize, 0);
+            });
+            this.ntb.registerDomEvent(activeDocument, 'focusout', () => {
+                setTimeout(this.onAppResize, 0);
+            });
+            // const container = activeDocument.querySelector('.app-container');
+            // if (container) {
+            //     const observer = new ResizeObserver(this.onAppResize);
+            //     observer.observe(container);
+            //     this.ntb.register(() => observer.disconnect());
+            // }
         }
     }
 
@@ -110,7 +116,7 @@ export default class DocumentListeners {
     }
 
     /**
-     * Adds a class to the body when the keyboard is showing, on phones.
+     * Adds a class to the body if the keyboard is showing, on phones.
      */
     onAppResize = () => {
         if (Platform.isPhone) {
