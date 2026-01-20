@@ -168,6 +168,12 @@ settings:
         default: 24
         format: px
     -
+        id: cg-nt-fab-z-index
+        title: 'Z-index'
+        description: "Controls stacking order relative to other elements. Increase if the button appears behind other components, or decrease if it covers them."
+        type: variable-number
+        default: 44
+    -
         id: toolbar-fab-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
         title.uk: '↳ 📐 Розміри та інтервали'
@@ -853,6 +859,12 @@ settings:
         default: -0.5
         format: rem
     -
+        id: cg-nt-tbar-z-index
+        title: 'Z-index'
+        description: "Controls stacking order relative to other elements. Increase if bottom or top-positioned toolbars appear behind other components, or decrease if it covers them."
+        type: variable-number
+        default: 44
+    -
         id: toolbar-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
         title.uk: '↳ 📐 Розміри та інтервали'
@@ -1046,7 +1058,7 @@ settings:
         format: px
     -
         id: toolbar-text-tbar
-        title: 'Toolbars (text)'
+        title: 'Toolbars (floating)'
         title.zh: '工具栏（文本）'
         description: 'Styles for floating toolbars (including text toolbars)'
         description.zh: '文本工具栏的样式'
@@ -1121,6 +1133,21 @@ settings:
         format: hex
         default-light: '#'
         default-dark: '#'
+    -
+        id: toolbar-text-positioning
+        title: '↳ ↕ Positioning'
+        title.uk: '↳ ↕ Позиціонування'
+        title.de: '↳ ↕ Positionierung'
+        title.zh: '↳ ↕ 位置'
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: cg-nt-tbar-text-z-index
+        title: 'Z-index'
+        description: "Controls stacking order relative to other elements. Increase if floating toolbars appear behind other components, or decrease if it covers them."
+        type: variable-number
+        default: 44
     -
         id: tbar-text-item-sizing-spacing
         title: '↳ 📐 Sizing and Spacing'
@@ -1297,10 +1324,12 @@ body {
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
     --cg-nt-tbar-text-max-width-tablet: 650px;
     --cg-nt-tbar-text-shadow: var(--shadow-s);
+    --cg-nt-tbar-text-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
     --cg-nt-tbar-top-padding-x-mobile: var(--size-4-3);
     --cg-nt-tbar-top-padding-top-phone: var(--safe-area-inset-top);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -0.5rem;
+    --cg-nt-tbar-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
     --cg-nt-fab-autohide-opacity: 0;
     --cg-nt-fab-bg-color: var(--raised-background);
     --cg-nt-fab-bg-color-desktop: var(--interactive-normal);
@@ -1322,6 +1351,7 @@ body {
     --cg-nt-fab-border-radius-desktop: 999px;
     --cg-nt-fab-padding: calc(var(--icon-l) / 2);
     --cg-nt-fab-padding-desktop: calc(var(--cg-nt-fab-icon-size-desktop) / 1.3);
+    --cg-nt-fab-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
     --cg-nt-item-bg-color-hover: var(--background-modifier-hover);
     --cg-nt-item-border-radius: var(--button-radius);
     --cg-nt-item-button-bg-color: var(--interactive-normal);
@@ -2036,7 +2066,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     left: var(--cg-nt-fab-pos-x-desktop);
     right: unset;
     /* fix: puts toolbar above popovers + Hover Editor plugin */
-    z-index: calc(var(--layer-slides) - 1);
+    z-index: var(--cg-nt-fab-z-index);
 
     &[data-tbar-position="fabr"] {
         left: unset;
@@ -2196,8 +2226,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         padding: var(--file-margins);
         padding-bottom: 0;
         padding-top: 0;
-        /* fix: puts toolbar above popovers + Hover Editor plugin */
-        z-index: calc(var(--layer-slides) - 1);
+        z-index: var(--cg-nt-tbar-z-index);
         &:hover {
             /* undoes fix (#14) which causes a layout shift on hover */
             overflow: visible !important;
@@ -2266,7 +2295,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
             max-width: var(--cg-nt-tbar-text-max-width-phone);
         }
         /* fix: puts toolbar above popovers + Hover Editor plugin */
-        z-index: calc(var(--layer-slides) - 1);
+        z-index: var(--cg-nt-tbar-text-z-index);
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
             & a, span.external-link {

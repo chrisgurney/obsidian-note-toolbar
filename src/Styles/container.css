@@ -29,8 +29,7 @@
         padding: var(--file-margins);
         padding-bottom: 0;
         padding-top: 0;
-        /* fix: puts toolbar above popovers + Hover Editor plugin */
-        z-index: calc(var(--layer-slides) - 1);
+        z-index: var(--cg-nt-tbar-z-index);
         &:hover {
             /* undoes fix (#14) which causes a layout shift on hover */
             overflow: visible !important;
@@ -99,7 +98,7 @@
             max-width: var(--cg-nt-tbar-text-max-width-phone);
         }
         /* fix: puts toolbar above popovers + Hover Editor plugin */
-        z-index: calc(var(--layer-slides) - 1);
+        z-index: var(--cg-nt-tbar-text-z-index);
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
             & a, span.external-link {

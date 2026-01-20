@@ -38,7 +38,7 @@
     left: var(--cg-nt-fab-pos-x-desktop);
     right: unset;
     /* fix: puts toolbar above popovers + Hover Editor plugin */
-    z-index: calc(var(--layer-slides) - 1);
+    z-index: var(--cg-nt-fab-z-index);
 
     &[data-tbar-position="fabr"] {
         left: unset;
