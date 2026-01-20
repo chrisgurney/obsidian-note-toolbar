@@ -52,15 +52,23 @@ try {
     console.log('✓ Files added to git');
 
     // ask before committing and pushing the version files
-    await prompt('\nPress Enter to commit and push with message "build: updated release version"...');
-    execSync('git commit -m "build: updated release version"', { stdio: 'inherit' });
-    execSync('git push', { stdio: 'inherit' });
+    await prompt('\nPress Enter to commit and push...');
+    const cmdCommitVersions = 'git commit -m "build: updated release version"';
+    const cmdPushVersions = 'git push'
+    console.log(cmdCommitVersions);
+    execSync(cmdCommitVersions, { stdio: 'inherit' });
+    console.log(cmdPushVersions);
+    execSync(cmdPushVersions, { stdio: 'inherit' });
     console.log('✓ Committed and pushed');
 
     // ask before creating and pushing tag
     await prompt(`\nPress Enter to create and push tag "${newVersion}"...`);
-    execSync(`git tag -a "${newVersion}" -m "${newVersion}"`, { stdio: 'inherit' });
-    execSync(`git push origin "${newVersion}"`, { stdio: 'inherit' });
+    const cmdTag = `git tag -a "${newVersion}" -m "${newVersion}"`;
+    const cmdPushOrigin = `git push origin "${newVersion}"`;
+    console.log(cmdTag);
+    execSync(cmdTag, { stdio: 'inherit' });
+    console.log(cmdPushOrigin);
+    execSync(cmdPushOrigin, { stdio: 'inherit' });
     console.log('✓ Tag created and pushed');
 } 
 catch (error) {
