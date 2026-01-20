@@ -131,6 +131,11 @@
     }
 }
 
+/* if bottom toolbar doesn't wrap, make sure the container has a constrained width so it's scrollable */
+.cg-note-toolbar-container:has(.cg-note-toolbar-callout[data-callout-metadata*="mnwrp"])[data-tbar-position*="bottom"] {
+    max-width: 100%;
+}
+
 /* if Navbar is completely hidden by Note Toolbar, don't shift bottom toolbars */
 .is-phone.ntb-remove-nav .cg-note-toolbar-container[data-tbar-position*="bottom"] {
     & .cg-note-toolbar-callout {
