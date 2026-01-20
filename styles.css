@@ -853,7 +853,7 @@ settings:
         title.zh: '移动端顶部 Sticky 附着的偏移量（单位：rem）📱'
         description: 'See above.'
         description.uk: 'Дивіться вище.'
-        description.de: Siehe oben.
+        description.de: 'Siehe oben.'
         description.zh: '参见上面的说明。'
         type: variable-number
         default: -0.5
