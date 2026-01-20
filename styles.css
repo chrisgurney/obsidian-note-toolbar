@@ -884,6 +884,13 @@ settings:
         default: 0
         format: em
     -
+        id: cg-nt-tbar-top-padding-x-mobile
+        title: 'Top toolbar horizontal padding on mobile (in px units) 📱'
+        description: 'Horizontal spacing around top-positioned toolbars.'
+        type: variable-number
+        default: 12
+        format: px
+    -
         id: toolbar-styles
         title: '↳ 😎 Style'
         title.uk: '↳ 😎 Стиль'
@@ -1015,7 +1022,7 @@ settings:
         description.zh: '工具栏周围的间距。'
         description.uk: 'Проміжки навколо панелі.'
         type: variable-number
-        default: 24
+        default: 12
         format: px
     -
         id: toolbar-bottom-styles
@@ -1271,7 +1278,7 @@ body {
     --cg-nt-tbar-bottom-border-radius: 5px;
     --cg-nt-tbar-bottom-margin-bottom-phone: var(--safe-area-inset-bottom);
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
-    --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-6);
+    --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-3);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
     --cg-nt-tbar-bottom-pos-y-mobile: 0;
     --cg-nt-tbar-text-item-font-size: var(--metadata-label-font-size);
@@ -1290,6 +1297,7 @@ body {
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
     --cg-nt-tbar-text-max-width-tablet: 650px;
     --cg-nt-tbar-text-shadow: var(--shadow-s);
+    --cg-nt-tbar-top-padding-x-mobile: var(--size-4-3);
     --cg-nt-tbar-top-padding-top-phone: var(--safe-area-inset-top);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -0.5rem;
@@ -2237,6 +2245,12 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
                     opacity: 1;
                 }
             }
+        }
+    }
+
+    &[data-tbar-position="top"] {
+        .is-mobile & {
+            padding-inline: var(--cg-nt-tbar-top-padding-x-mobile);
         }
     }
 

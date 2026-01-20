@@ -81,6 +81,12 @@
         }
     }
 
+    &[data-tbar-position="top"] {
+        .is-mobile & {
+            padding-inline: var(--cg-nt-tbar-top-padding-x-mobile);
+        }
+    }
+
     &[data-tbar-position="float"], &[data-tbar-position="text"] {
         border-radius: var(--cg-nt-tbar-text-border-radius);
         box-shadow: var(--cg-nt-tbar-text-shadow);

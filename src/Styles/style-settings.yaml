@@ -880,6 +880,13 @@ settings:
         default: 0
         format: em
     -
+        id: cg-nt-tbar-top-padding-x-mobile
+        title: 'Top toolbar horizontal padding on mobile (in px units) 📱'
+        description: 'Horizontal spacing around top-positioned toolbars.'
+        type: variable-number
+        default: 12
+        format: px
+    -
         id: toolbar-styles
         title: '↳ 😎 Style'
         title.uk: '↳ 😎 Стиль'
@@ -1011,7 +1018,7 @@ settings:
         description.zh: '工具栏周围的间距。'
         description.uk: 'Проміжки навколо панелі.'
         type: variable-number
-        default: 24
+        default: 12
         format: px
     -
         id: toolbar-bottom-styles
