@@ -524,7 +524,7 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
         gap: var(--size-4-2);
         & a, span.external-link {
             background-color: var(--ntb-liquid-glass-background) !important;
-            backdrop-filter: var(--raised-blur);
+            backdrop-filter: var(--raised-blur) !important;
             border: var(--border-width) solid var(--background-modifier-border);
             border-radius: 32px;
             box-shadow: var(--ntb-shadow-xs);

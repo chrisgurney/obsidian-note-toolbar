@@ -20,15 +20,17 @@ body[data-ntb-csstheme="Cupertino"] {
     /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
     /* Licensed under the MIT License; see the LICENSE file */
     & .callout[data-callout="note-toolbar"] {
-        background: unset !important;
+        background-color: var(--cg-nt-tbar-bg-color);
         mix-blend-mode: normal !important;
         & ul {
             gap: var(--size-4-2);
             & a, span.external-link {
-                background-color: var(--ntb-liquid-glass-background) !important;
-                backdrop-filter: var(--raised-blur);
-                border: var(--border-width) solid var(--background-modifier-border);
-                border-radius: 32px;
+                background-color: var(--cg-nt-item-button-bg-color);
+                backdrop-filter: var(--raised-blur) !important;
+                border-color: var(--background-modifier-border);
+                border-radius: var(--cg-nt-item-border-radius);
+                border-style: solid;
+                border-width: var(--border-width);
                 box-shadow: var(--ntb-shadow-xs);
                 /* fix: ghosting effect with overlays when glass style is being used */
                 /* transition: var(--ntb-anim-duration-moderate); */
@@ -43,9 +45,11 @@ body[data-ntb-csstheme="Cupertino"] {
     /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
     /* Licensed under the MIT License; see the LICENSE file */
     & button.cg-note-toolbar-fab {
-        background-color: var(--ntb-liquid-glass-background) !important;
+        background-color: var(--cg-nt-item-button-bg-color);
         backdrop-filter: var(--raised-blur) !important;
-        border: var(--border-width) solid var(--background-modifier-border);
+        border-color: var(--background-modifier-border);
+        border-radius: var(--cg-nt-item-border-radius);
+        border-style: solid;
         box-shadow: var(--ntb-shadow-xs);
         /* fix: ghosting effect with overlays when glass style is being used */
         /* transition: var(--ntb-anim-duration-moderate); */
