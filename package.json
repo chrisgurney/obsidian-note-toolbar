@@ -1,38 +1,38 @@
 {
-	"name": "obsidian-note-toolbar",
-	"version": "1.27.20",
-	"description": "Obsidian plugin that adds customizable toolbars to your notes.",
-	"main": "main.js",
-	"scripts": {
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"dev": "npm run prebuild && node esbuild.config.mjs",
-		"lint": "eslint .",
-		"prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
-	},
-	"keywords": [],
-	"author": "Chris Gurney",
-	"license": "GPL-3.0",
-	"devDependencies": {
-		"@types/node": "^25.0.3",
-		"@types/sortablejs": "^1.15.8",
-		"@typescript-eslint/eslint-plugin": "^8.50.0",
-		"@typescript-eslint/parser": "^8.47.0",
-		"@typescript-eslint/utils": "^8.46.2",
-		"builtin-modules": "3.3.0",
-		"chokidar": "^5.0.0",
-		"esbuild": "^0.27.0",
-		"eslint": "^9.38.0",
-		"eslint-plugin-obsidianmd": "^0.1.9",
-		"obsidian": "latest",
-		"postcss": "^8.4.45",
-		"tslib": "2.4.0",
-		"typedoc": "^0.28.14",
-		"typedoc-plugin-markdown": "^4.9.0",
-		"typescript": "^5.7.3"
-	},
-	"dependencies": {
-		"@codemirror/view": "6.38.6",
-		"sortablejs": "^1.15.2"
-	}
+  "name": "obsidian-note-toolbar",
+  "version": "1.27.20",
+  "description": "Obsidian plugin that adds customizable toolbars to your notes.",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "dev": "npm run prebuild && node esbuild.config.mjs",
+    "lint": "eslint .",
+    "prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
+    "version": "node version-bump.mjs"
+  },
+  "keywords": [],
+  "author": "Chris Gurney",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/sortablejs": "^1.15.8",
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.47.0",
+    "@typescript-eslint/utils": "^8.46.2",
+    "builtin-modules": "3.3.0",
+    "chokidar": "^5.0.0",
+    "esbuild": "^0.27.0",
+    "eslint": "^9.38.0",
+    "eslint-plugin-obsidianmd": "^0.1.9",
+    "obsidian": "latest",
+    "postcss": "^8.4.45",
+    "tslib": "2.4.0",
+    "typedoc": "^0.28.14",
+    "typedoc-plugin-markdown": "^4.9.0",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@codemirror/view": "6.38.6",
+    "sortablejs": "^1.15.2"
+  }
 }
