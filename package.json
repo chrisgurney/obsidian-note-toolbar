@@ -8,7 +8,7 @@
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "eslint .",
     "prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
-    "version": "node version-bump.mjs"
+    "release": "node release.mjs"
   },
   "keywords": [],
   "author": "Chris Gurney",

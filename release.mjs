@@ -46,22 +46,22 @@ try {
     writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
     console.log('✓ versions.json updated');
 
-    // git add the updated files
+    // git add the version files
     console.log('\nAdding files to git...');
     execSync('git add manifest.json package.json versions.json', { stdio: 'inherit' });
     console.log('✓ Files added to git');
 
-    // // ask before committing and pushing
-    // await prompt('\nPress Enter to commit and push with message "build: updated release version"...');
-    // execSync('git commit -m "build: updated release version"', { stdio: 'inherit' });
-    // execSync('git push', { stdio: 'inherit' });
-    // console.log('✓ Committed and pushed');
+    // ask before committing and pushing the version files
+    await prompt('\nPress Enter to commit and push with message "build: updated release version"...');
+    execSync('git commit -m "build: updated release version"', { stdio: 'inherit' });
+    execSync('git push', { stdio: 'inherit' });
+    console.log('✓ Committed and pushed');
 
-    // // ask before creating and pushing tag
-    // await prompt(`\nPress Enter to create and push tag "${newVersion}"...`);
-    // execSync(`git tag -a "${newVersion}" -m "${newVersion}"`, { stdio: 'inherit' });
-    // execSync(`git push origin "${newVersion}"`, { stdio: 'inherit' });
-    // console.log('✓ Tag created and pushed');
+    // ask before creating and pushing tag
+    await prompt(`\nPress Enter to create and push tag "${newVersion}"...`);
+    execSync(`git tag -a "${newVersion}" -m "${newVersion}"`, { stdio: 'inherit' });
+    execSync(`git push origin "${newVersion}"`, { stdio: 'inherit' });
+    console.log('✓ Tag created and pushed');
 } 
 catch (error) {
     console.error('Error:', error.message);
