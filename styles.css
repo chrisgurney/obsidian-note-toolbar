@@ -2303,9 +2303,15 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         }
     }
 }
-/* if bottom toolbar doesn't wrap, make sure the container has a constrained width so it's scrollable */
-.is-phone .cg-note-toolbar-container:has(.cg-note-toolbar-callout[data-callout-metadata*="mnwrp"])[data-tbar-position*="bottom"] {
-    max-width: 100%;
+.is-phone .cg-note-toolbar-container[data-tbar-position*="bottom"] {
+    /* if toolbar doesn't wrap, container needs a constrained width so it's scrollable */
+    &:has(.cg-note-toolbar-callout[data-callout-metadata*="mnwrp"]) {
+        max-width: 100%;
+    }
+    /* reduce padding to better align with formatting toolbar */
+    .ntb-is-keyboard-open & {
+        padding-inline: 0;
+    }
 }
 /* if Navbar is completely hidden by Note Toolbar, don't shift bottom toolbars */
 .is-phone.ntb-remove-nav .cg-note-toolbar-container[data-tbar-position*="bottom"] {
