@@ -36,6 +36,15 @@ export default class DocumentListeners {
                 observer.observe(container);
                 this.ntb.register(() => observer.disconnect());
             }
+            activeWindow.addEventListener('keyboardWillHide', (event) => {
+                this.ntb.debug('window keyboardWillHide');
+            });
+            activeWindow.addEventListener('keyboardWillShow', (event) => {
+                this.ntb.debug('window keyboardWillShow');
+            });
+            activeWindow.addEventListener('mousedown', (event) => {
+                this.ntb.debug('window mousedown');
+            });
         }
     }
 
