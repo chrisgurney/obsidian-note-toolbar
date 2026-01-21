@@ -41,7 +41,7 @@ export default class PluginUtils {
 	}
 
 	/**
-	 * Determines whether a toolbar should be visible for the given view type.
+	 * Determines whether any toolbar should be visible for the given view type.
 	 * @param currentViewType Type of the current view.
 	 * @returns `true` if the toolbar should be visible, otherwise `false`.
 	 */
