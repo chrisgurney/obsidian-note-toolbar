@@ -30,20 +30,19 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
 
         if (Platform.isPhone) {
-            const container = activeDocument.querySelector('.app-container');
-            if (container) {
-                const observer = new ResizeObserver(this.onAppResize);
-                observer.observe(container);
-                this.ntb.register(() => observer.disconnect());
-            }
-            activeWindow.addEventListener('keyboardWillHide', (event) => {
+            // const container = activeDocument.querySelector('.app-container');
+            // if (container) {
+            //     const observer = new ResizeObserver(this.onAppResize);
+            //     observer.observe(container);
+            //     this.ntb.register(() => observer.disconnect());
+            // }
+            window.addEventListener('keyboardWillHide', (event) => {
                 this.ntb.debug('window keyboardWillHide');
+                activeDocument.body.classList.toggle('ntb-is-keyboard-open', false);
             });
-            activeWindow.addEventListener('keyboardWillShow', (event) => {
+            window.addEventListener('keyboardWillShow', (event) => {
                 this.ntb.debug('window keyboardWillShow');
-            });
-            activeWindow.addEventListener('mousedown', (event) => {
-                this.ntb.debug('window mousedown');
+                activeDocument.body.classList.toggle('ntb-is-keyboard-open', true);
             });
         }
     }
