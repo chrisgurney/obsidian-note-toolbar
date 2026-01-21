@@ -31,47 +31,47 @@ try {
     const packageJson = JSON.parse(readFileSync('package.json', 'utf-8'));
     packageJson.version = newVersion;
     writeFileSync('package.json', JSON.stringify(packageJson, null, 2) + '\n');
-    console.log('✓ package.json updated');
+    console.log('\x1b[32m✓ package.json updated\x1b[0m');
 
     // read minAppVersion from manifest.json and bump version to target version
     let manifest = JSON.parse(readFileSync("manifest.json", "utf8"));
     const { minAppVersion } = manifest;
     manifest.version = newVersion;
     writeFileSync("manifest.json", JSON.stringify(manifest, null, "\t"));
-    console.log('✓ manifest.json updated');
+    console.log('\x1b[32m✓ manifest.json updated\x1b[0m');
 
     // update versions.json with target version and minAppVersion from manifest.json
     let versions = JSON.parse(readFileSync("versions.json", "utf8"));
     versions[newVersion] = minAppVersion;
     writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
-    console.log('✓ versions.json updated');
+    console.log('\x1b[32m✓ versions.json updated\x1b[0m');
 
     // git add the version files
     console.log('\nAdding files to git...');
     execSync('git add manifest.json package.json versions.json', { stdio: 'inherit' });
-    console.log('✓ Files added to git');
+    console.log('\x1b[32m✓ Files added to git\x1b[0m');
 
     // ask before committing and pushing the version files
-    await prompt('\nPress Enter to commit and push...');
+    await prompt('\nCommit and push... (press ENTER):');
     const cmdCommitVersions = 'git commit -m "build: updated release version"';
     const cmdPushVersions = 'git push'
     console.log(cmdCommitVersions);
     execSync(cmdCommitVersions, { stdio: 'inherit' });
     console.log(cmdPushVersions);
     execSync(cmdPushVersions, { stdio: 'inherit' });
-    console.log('✓ Committed and pushed');
+    console.log('\x1b[32m✓ Committed and pushed\x1b[0m');
 
     // ask before creating and pushing tag
-    await prompt(`\nPress Enter to create and push tag "${newVersion}"...`);
+    await prompt(`\nCreate and push tag "${newVersion}"... (press ENTER):`);
     const cmdTag = `git tag -a "${newVersion}" -m "${newVersion}"`;
     const cmdPushOrigin = `git push origin "${newVersion}"`;
     console.log(cmdTag);
     execSync(cmdTag, { stdio: 'inherit' });
     console.log(cmdPushOrigin);
     execSync(cmdPushOrigin, { stdio: 'inherit' });
-    console.log('✓ Tag created and pushed');
+    console.log('\x1b[32m✓ Tag created and pushed\x1b[0m');
 } 
 catch (error) {
-    console.error('Error:', error.message);
+    console.error('\x1b[31mError:\x1b[0m', error.message);
     process.exit(1);
 }
