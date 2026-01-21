@@ -30,6 +30,9 @@ try {
     console.log('[release] Updating JSON files...');
     // update package.json
     const packageJson = JSON.parse(readFileSync('package.json', 'utf-8'));
+    if (packageJson.version === newVersion) {
+        throw Error('Provided version is the same as the existing version.');
+    }
     packageJson.version = newVersion;
     writeFileSync('package.json', JSON.stringify(packageJson, null, 2) + '\n');
     console.log('\x1b[32m✓ package.json updated\x1b[0m');
