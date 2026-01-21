@@ -1,3 +1,4 @@
+import esx from "eslint-plugin-es-x";
 import globals from "globals";
 import { defineConfig, globalIgnores } from "eslint/config";
 import obsidianmd from "eslint-plugin-obsidianmd";
@@ -34,7 +35,8 @@ export default defineConfig([
 		},
 		plugins: { 
 			obsidianmd,
-			"@typescript-eslint": tsPlugin
+			"@typescript-eslint": tsPlugin,
+			"es-x": esx
 		},
 		rules: {
 			// bring in Obsidian's recommended rules
@@ -46,6 +48,10 @@ export default defineConfig([
 			),
 
 			"@typescript-eslint/no-invalid-this": "error",
+
+			// for support of older versions of iOS (15 and earlier)
+			"es-x/no-regexp-lookbehind-assertions": "error",
+
 			// "@typescript-eslint/no-unused-vars": "error",
 			
 			// COMMENT BACK IN BELOW SUGGESTED LIST TO TACKLE ONE-BY-ONE
