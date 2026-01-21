@@ -27,6 +27,7 @@ if (!newVersion) {
 }
 
 try {
+    console.log('[release] Updating JSON files...');
     // update package.json
     const packageJson = JSON.parse(readFileSync('package.json', 'utf-8'));
     packageJson.version = newVersion;
@@ -47,12 +48,12 @@ try {
     console.log('\x1b[32m✓ versions.json updated\x1b[0m');
 
     // git add the version files
-    console.log('\nAdding files to git...');
+    console.log('\n[release] Adding JSON files to git...');
     execSync('git add manifest.json package.json versions.json', { stdio: 'inherit' });
     console.log('\x1b[32m✓ Files added to git\x1b[0m');
 
     // ask before committing and pushing the version files
-    await prompt('\nCommit and push... (press ENTER):');
+    await prompt('\n[release] Commit and push JSON files... (press ENTER):');
     const cmdCommitVersions = 'git commit -m "build: updated release version"';
     const cmdPushVersions = 'git push'
     console.log(cmdCommitVersions);
@@ -62,7 +63,7 @@ try {
     console.log('\x1b[32m✓ Committed and pushed\x1b[0m');
 
     // ask before creating and pushing tag
-    await prompt(`\nCreate and push tag "${newVersion}"... (press ENTER):`);
+    await prompt(`\n[release] Create and push tag "${newVersion}"... (press ENTER):`);
     const cmdTag = `git tag -a "${newVersion}" -m "${newVersion}"`;
     const cmdPushOrigin = `git push origin "${newVersion}"`;
     console.log(cmdTag);
@@ -72,6 +73,6 @@ try {
     console.log('\x1b[32m✓ Tag created and pushed\x1b[0m');
 } 
 catch (error) {
-    console.error('\x1b[31mError:\x1b[0m', error.message);
+    console.error('\x1b[31m[release] Error:\x1b[0m', error.message);
     process.exit(1);
 }
