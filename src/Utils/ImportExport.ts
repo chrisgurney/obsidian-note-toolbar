@@ -198,8 +198,13 @@ function unescapeLinkForCallout(str: string): string {
         .replace(/\\\]/g, '[')
         .replace(/\\\)/g, ')')
         .replace(/\\\(/g, '(')
-        .replace(/^<(?!%)/g, '')   // replace < but not <%
-        .replace(/(?<!%)>$/g, ''); // replace > but not %>
+        .replace(/^<(?!%)/g, '')  // replace < but not <%
+        // replace > but not %> (without using regex lookbehinds)
+        .replace(/>$/g, (match, offset, fullString) => {
+            // check if the character before the match is '%'
+            const charBefore = fullString[offset - 1];
+            return charBefore === '%' ? match : '';
+        });
 }
 
 /**
