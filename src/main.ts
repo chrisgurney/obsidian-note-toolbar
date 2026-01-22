@@ -13,8 +13,9 @@ import DocumentListeners from 'Listeners/DocumentListeners';
 import MetadataListeners from 'Listeners/MetadataListeners';
 import VaultListeners from 'Listeners/VaultListeners';
 import ViewListeners from 'Listeners/ViewListeners';
+import WindowListeners from 'Listeners/WindowListeners';
 import WorkspaceListeners from 'Listeners/WorkspaceListeners';
-import { addIcon, ItemView, Platform, Plugin, WorkspaceLeaf } from 'obsidian';
+import { addIcon, Platform, Plugin, WorkspaceLeaf } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsManager from 'Settings/SettingsManager';
@@ -54,6 +55,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		metadata: MetadataListeners;
 		vault: VaultListeners;
 		view: ViewListeners;
+		window: WindowListeners;
 		workspace: WorkspaceListeners;
 	};
 
@@ -87,6 +89,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			metadata: new MetadataListeners(this),
 			vault: new VaultListeners(this),
 			view: new ViewListeners(this),
+			window: new WindowListeners(this),
 			workspace: new WorkspaceListeners(this),
 		}
 
@@ -142,6 +145,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.vault.register();
 			this.listeners.view.register();
 			this.listeners.document.register();	
+			this.listeners.window.register();
 
 			// add commands
 			this.commands.addCommands();
