@@ -62,7 +62,7 @@ export default defineConfig([
 			// Catches promises that should be awaited (prevents unhandled rejections)
 			// "@typescript-eslint/no-floating-promises": "error",
 			// Prevents creating functions inside loops (new function instance each iteration)
-			// "@typescript-eslint/no-loop-func": "error",
+			"@typescript-eslint/no-loop-func": "error",
  
 			// PERFORMANCE
 			// Prevents unnecessary async/await overhead
