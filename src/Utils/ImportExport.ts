@@ -267,14 +267,14 @@ export async function importFromCallout(
     if (!toolbar) {
         toolbar = {
             uuid: getUUID(),
+            name: '',
             commandPosition: PositionType.Floating,
-            customClasses: "",
+            customClasses: '',
             defaultItem: null,
-            defaultStyles: ["border", "even", "sticky"],
+            defaultStyles: ['border', 'even', 'sticky'],
             hasCommand: false,
             items: [],
             mobileStyles: [],
-            name: "",
             position: { 
                 desktop: { allViews: { position: 'props' } }, 
                 mobile: { allViews: { position: 'props' } }, 
@@ -470,10 +470,11 @@ export async function importFromCallout(
             let toolbarItem: ToolbarItemSettings =
 			{
 				uuid: getUUID(),
-                hasCommand: false,
 				icon: icon.trim(),
-                inGallery: false,
 				label: label.trim(),
+                tooltip: tooltip,
+                hasCommand: false,
+                inGallery: false,
 				link: link.trim(),
 				linkAttr: {
                     commandCheck: false,
@@ -482,7 +483,6 @@ export async function importFromCallout(
 					type: itemType
 				},
                 scriptConfig: scriptConfig,
-				tooltip: tooltip,
 				visibility: JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)),
 			};
 

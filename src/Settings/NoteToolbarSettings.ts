@@ -303,6 +303,7 @@ export interface ExportSettings {
 
 export interface ToolbarSettings {
 	uuid: string;
+	name: string;
 	commandPosition: PositionType;
 	customClasses: string;
 	defaultItem: string | null;
@@ -310,7 +311,6 @@ export interface ToolbarSettings {
 	hasCommand: boolean;
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
-	name: string;
 	/**
 	 * @deprecated positions property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
 	 */
@@ -321,14 +321,14 @@ export interface ToolbarSettings {
 
 export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 	uuid: getUUID(),
+	name: '',
 	commandPosition: PositionType.Floating,
-	customClasses: "",
+	customClasses: '',
 	defaultItem: null,
 	defaultStyles: [DefaultStyleType.Border, DefaultStyleType.Even, DefaultStyleType.Sticky],
 	hasCommand: false,
 	items: [],
 	mobileStyles: [],
-	name: "",
 	position: {
 		desktop: { allViews: { position: PositionType.Props } },
 		tablet: { allViews: { position: PositionType.Props } },
@@ -339,6 +339,7 @@ export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
 
 export const EMPTY_TOOLBAR: ToolbarSettings = {
 	uuid: EMPTY_TOOLBAR_ID,
+	name: '',
 	commandPosition: PositionType.Floating,
 	customClasses: '',
 	defaultItem: null,
@@ -346,7 +347,6 @@ export const EMPTY_TOOLBAR: ToolbarSettings = {
 	hasCommand: false,
 	items: [], 
 	mobileStyles: [],
-	name: '',
 	position: {},
 	updated: ''
 }
@@ -439,28 +439,29 @@ export interface ToolbarRuleCondition {
 
 export interface ToolbarItemSettings {
 	uuid: string;
+	icon: string;
+	label: string;
+	tooltip: string;
 	/**	@deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration) */
 	contexts?: ViewContext[];
 	description?: string;
 	hasCommand: boolean;	
-	icon: string;
 	inGallery: boolean;
-	label: string;
 	link: string;
 	linkAttr: ToolbarItemLinkAttr;
 	/** Used for importing Gallery items that rely on plugins */
 	plugin?: string | string[];
 	scriptConfig?: ScriptConfig;
-	tooltip: string;
 	visibility: Visibility;
 }
 
 export const DEFAULT_ITEM_SETTINGS: ToolbarItemSettings = {
 	uuid: '',
-	hasCommand: false,
 	icon: '',
-	inGallery: false,
 	label: '',
+	tooltip: '',
+	hasCommand: false,
+	inGallery: false,
 	link: '',
 	linkAttr: {
 		commandCheck: false,
@@ -468,16 +469,16 @@ export const DEFAULT_ITEM_SETTINGS: ToolbarItemSettings = {
 		hasVars: false,
 		type: ItemType.Command
 	},
-	tooltip: '',
 	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS },
 }
 
 export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 	uuid: GALLERY_DIVIDER_ID,
-	hasCommand: false,
 	icon: '',
-	inGallery: true,
 	label: '',
+	tooltip: '',
+	hasCommand: false,
+	inGallery: true,
 	link: '',
 	linkAttr: {
 		commandCheck: false,
@@ -485,7 +486,6 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 		hasVars: false,
 		type: ItemType.Separator
 	},
-	tooltip: '',
 	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
 }
 
