@@ -57,7 +57,7 @@ try {
 
     // ask before committing and pushing the version files
     await prompt('\n[release] Commit and push JSON files... (press ENTER):');
-    const cmdCommitVersions = `git commit -m "build: updated release to ${newVersion}"`;
+    const cmdCommitVersions = `git commit -m "build: release ${newVersion} update"`;
     const cmdPushVersions = 'git push'
     console.log(cmdCommitVersions);
     execSync(cmdCommitVersions, { stdio: 'inherit' });
