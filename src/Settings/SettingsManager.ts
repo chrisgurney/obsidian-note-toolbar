@@ -498,8 +498,8 @@ export default class SettingsManager {
 			this.ntb.debug("SettingsManager: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
 			const migrator = new SettingsMigrator(this.ntb);
 			migrator.run(loaded_settings, old_version);
-			await this.save();
-			this.ntb.debug("SettingsManager: updated settings:", this.ntb.settings);
+			// don't render the initial toolbar, as managers + helpers may not be initialized yet
+			await this.save(false);
 		}
 
 	}
@@ -508,11 +508,13 @@ export default class SettingsManager {
 	 * Saves settings.
 	 * Sorts the toolbar list (by name) first.
 	 */
-	async save(): Promise<void> {
+	async save(renderToolbar: boolean = true): Promise<void> {
 		await this.ntb.saveData(this.ntb.settings);
 
-		await this.ntb.render.removeActive();
-		await this.ntb.render.renderForView();
+		if (renderToolbar) {
+			await this.ntb.render.removeActive();
+			await this.ntb.render.renderForView();
+		}
 
 		this.ntb.debug("SETTINGS SAVED: " + new Date().getTime());
 	}

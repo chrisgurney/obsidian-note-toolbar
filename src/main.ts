@@ -102,6 +102,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event: MouseEvent) => this.listeners.workspace.onRibbonMenu(event));
 		}
 
+		// initialize managers + helpers that require settings to be loaded
 		this.api = new NoteToolbarApi(this);
 		this.commands = new CommandManager(this);
 		this.hotkeys = new HotkeyHelper(this);
