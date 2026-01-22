@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { getUUID } from "Utils/Utils";
-import { ItemType, ViewType, PositionType, PlatformType, Position, ItemViewContext, Visibility } from "./NoteToolbarSettings";
+import { ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ViewType, Visibility } from "./NoteToolbarSettings";
 
 
 export default class SettingsMigrator {
@@ -258,14 +258,21 @@ export default class SettingsMigrator {
             old_version = new_version;
         }
 
-        // MIGRATION: separated view `mode` visibility setting
+        // MIGRATION: separated view `mode` visibility setting (remove "allViews" level)
         if (old_version === 20250313.1) {
             new_version = 20260122.1;
-            this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: any, index: number) => {
                 tb.items.forEach((item: any, item_index: number) => {
-                    this.ntb.debug(this.ntb.settings.toolbars[index].items[item_index].visibility);
-                    // this.ntb.settings.toolbars[index].items[item_index].inGallery = false;
+                    // @ts-ignore
+                    let desktop = this.ntb.settings.toolbars[index].items[item_index].visibility.desktop?.allViews;
+                    // @ts-ignore
+                    let mobile = this.ntb.settings.toolbars[index].items[item_index].visibility.mobile?.allViews;
+                    // @ts-ignore
+                    let tablet = this.ntb.settings.toolbars[index].items[item_index].visibility.tablet?.allViews;
+                    if (desktop) this.ntb.settings.toolbars[index].items[item_index].visibility.desktop = desktop;
+                    if (mobile) this.ntb.settings.toolbars[index].items[item_index].visibility.mobile = mobile;
+                    if (tablet) this.ntb.settings.toolbars[index].items[item_index].visibility.tablet = tablet;
                 });
             });
             // for the next migration to run
@@ -273,7 +280,9 @@ export default class SettingsMigrator {
         }
 
         // COMMENT THIS OUT while testing new migration code
-        // this.ntb.settings.version = SETTINGS_VERSION;
+        this.ntb.settings.version = SETTINGS_VERSION;
+
+        this.ntb.debug("migrated settings:", this.ntb.settings);
         this.ntb.debugGroupEnd();
 
     }

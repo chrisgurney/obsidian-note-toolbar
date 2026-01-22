@@ -302,10 +302,10 @@ export default class PluginUtils {
  * @param platform platform visibility to add to
  * @param component component to add
  */
-export function addComponentVisibility(platform: { allViews?: { components: ComponentType[] }}, component: ComponentType) {
-	if (platform && platform.allViews) {
-		if (!platform.allViews.components.includes(component)) {
-			platform.allViews.components.push(component);
+export function addComponentVisibility(platform: { components: ComponentType[] }, component: ComponentType) {
+	if (platform) {
+		if (!platform.components.includes(component)) {
+			platform.components.push(component);
 		}
 	}
 }
@@ -428,13 +428,13 @@ export function getViewId(view: ItemView | null | undefined): string | undefined
  * @param platform platform visibiliity to get
  * @returns booleans indicating whether there's an icon and a label, for each desktop, mobile, and tablet
  */
-function hasComponents(platform: { allViews?: { components: string[] } }): [boolean, boolean] {
+function hasComponents(platform: { components: string[] }): [boolean, boolean] {
     let hasIcon = false;
     let hasLabel = false;
 
-    if (platform && platform.allViews) {
-        hasIcon = platform.allViews.components.includes(ComponentType.Icon);
-        hasLabel = platform.allViews.components.includes(ComponentType.Label);
+    if (platform) {
+        hasIcon = platform.components.includes(ComponentType.Icon);
+        hasLabel = platform.components.includes(ComponentType.Label);
     }
 
     return [hasIcon, hasLabel];
@@ -446,8 +446,8 @@ function hasComponents(platform: { allViews?: { components: string[] } }): [bool
  * @param platform platform visibility to check
  * @returns true if it has components; false otherwise
  */
-function hasVisibleComponents(platform: { allViews?: { components: ComponentType[] } }): boolean {
-    return !!platform && !!platform.allViews && platform.allViews.components.length > 0;
+function hasVisibleComponents(platform: { components: ComponentType[] }): boolean {
+    return !!platform && platform.components.length > 0;
 }
 
 /**
@@ -561,11 +561,11 @@ export function putFocusInMenu() {
  * @param platform platform visibility to remove from
  * @param component component to remove
  */
-export function removeComponentVisibility(platform: { allViews?: { components: ComponentType[] }}, component: ComponentType) {
-	if (platform && platform.allViews) {
-        const index = platform.allViews.components.indexOf(component);
+export function removeComponentVisibility(platform: { components: ComponentType[] }, component: ComponentType) {
+	if (platform) {
+        const index = platform.components.indexOf(component);
         if (index !== -1) {
-            platform.allViews.components.splice(index, 1);
+            platform.components.splice(index, 1);
         }
     }
 }

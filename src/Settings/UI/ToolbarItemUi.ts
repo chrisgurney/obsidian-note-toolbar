@@ -265,14 +265,14 @@ export default class ToolbarItemUi {
                 cb.setTooltip(tooltip)
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
-                        toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
+                        toolbarItem.visibility.desktop ??= { components: [] };
                         // toggle (instead of menu) for breaks + separators
                         if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
                             let platform = toolbarItem.visibility.desktop;
 
                             let isComponentVisible = {
-                                icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
-                                label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+                                icon: platform ? platform.components.includes(ComponentType.Icon) : false,
+                                label: platform ? platform.components.includes(ComponentType.Label) : false,
                             };
                             if (isComponentVisible.icon && isComponentVisible.label) {
                                 removeComponentVisibility(platform, ComponentType.Icon);
@@ -305,14 +305,14 @@ export default class ToolbarItemUi {
                 cb.setTooltip(tooltip)
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
-                        toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
+                        toolbarItem.visibility.mobile ??= { components: [] };
                         // toggle (instead of menu) for breaks + separators
                         if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
                             let platform = toolbarItem.visibility.mobile;
 
                             let isComponentVisible = {
-                                icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
-                                label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+                                icon: platform ? platform.components.includes(ComponentType.Icon) : false,
+                                label: platform ? platform.components.includes(ComponentType.Label) : false,
                             };
                             if (isComponentVisible.icon && isComponentVisible.label) {
                                 removeComponentVisibility(platform, ComponentType.Icon);
@@ -510,8 +510,8 @@ export default class ToolbarItemUi {
 	getItemVisibilityMenu(platform: any, platformLabel: string, button: ButtonComponent): Menu {
 
 		let isComponentVisible = {
-			icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
-			label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+			icon: platform ? platform.components.includes(ComponentType.Icon) : false,
+			label: platform ? platform.components.includes(ComponentType.Label) : false,
 		};
 
 		let menu = new Menu();
@@ -1163,8 +1163,8 @@ export default class ToolbarItemUi {
 	 */
 	getPlatformStateLabel(platform: any, platformLabel: string): [string, string] {
 
-		if (platform && platform.allViews) {
-			let dkComponents = platform.allViews?.components;
+		if (platform) {
+			let dkComponents = platform?.components;
 			if (dkComponents) {
 				if (dkComponents.length === 2) {
 					return ['', t('setting.item.option-visibility-visible-platform', { platform: platformLabel })];

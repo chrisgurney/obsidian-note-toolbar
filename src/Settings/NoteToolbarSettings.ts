@@ -5,7 +5,7 @@ import { getLanguage, PaneType } from "obsidian";
 export const WHATSNEW_VERSION = '1.27';
 
 /* only update when settings structure changes to trigger migrations */
-export const SETTINGS_VERSION = 20250313.1;
+export const SETTINGS_VERSION = 20260122.1;
 
 // *****************************************************************************
 // #region TRANSLATIONS
@@ -352,9 +352,9 @@ export const EMPTY_TOOLBAR: ToolbarSettings = {
 }
 
 export const DEFAULT_ITEM_VISIBILITY_SETTINGS = {
-	desktop: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-	mobile: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } },
-	tablet: { allViews: { components: [ComponentType.Icon, ComponentType.Label] } }
+	desktop: { components: [ComponentType.Icon, ComponentType.Label] },
+	mobile: { components: [ComponentType.Icon, ComponentType.Label] },
+	tablet: { components: [ComponentType.Icon, ComponentType.Label] }
 }
 
 export interface Position {
@@ -390,19 +390,13 @@ export interface ViewContext {
 
 export interface Visibility {
 	desktop: {
-		allViews?: { components: ComponentType[] }
-		editingView?: { components: ComponentType[] },
-		readingView?: { components: ComponentType[] }
+		components: ComponentType[]
 	},
 	tablet: {
-		allViews?: { components: ComponentType[] }
-		editingView?: { components: ComponentType[] },
-		readingView?: { components: ComponentType[] }
+		components: ComponentType[]
 	},
 	mobile: {
-		allViews?: { components: ComponentType[] }
-		editingView?: { components: ComponentType[] },
-		readingView?: { components: ComponentType[] }
+		components: ComponentType[]
 	}
 }
 
