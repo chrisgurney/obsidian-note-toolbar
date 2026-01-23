@@ -306,7 +306,7 @@ export default class ToolbarItemUi {
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', t('setting.item.option-visibility-platform-desktop'), cb);
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', cb);
                             visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));	
                         }
                     });
@@ -345,7 +345,7 @@ export default class ToolbarItemUi {
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', t('setting.item.option-visibility-platform-mobile'), cb);
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
                             visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
                         }
                     });
@@ -525,12 +525,13 @@ export default class ToolbarItemUi {
 	/**
 	 * Returns the visibility menu to display, for the given platform.
 	 * @param visibility visibility to check for component visibility
-	 * @param platformLabel string to show in the menu 
 	 * @returns Menu
 	 */
-	getItemVisibilityMenu(visibility: any, platform: 'desktop' | 'mobile', platformLabel: string, button: ButtonComponent): Menu {
+	getItemVisibilityMenu(visibility: any, platform: 'desktop' | 'mobile', button: ButtonComponent): Menu {
 
-		let isComponentVisible = {
+        const platformLabel = platform === 'desktop' ? t('setting.item.option-visibility-platform-desktop') : t('setting.item.option-visibility-platform-mobile');
+
+		const isComponentVisible = {
 			icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
 			label: visibility ? visibility.components.includes(ComponentType.Label) : false,
 		};
