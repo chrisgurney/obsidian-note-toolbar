@@ -274,7 +274,6 @@ export default class ToolbarItemUi {
             .setClass("note-toolbar-setting-item-visibility")
             .addButton((cb) => {
                 let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'));
-                setIcon(cb.buttonEl, 'monitor');
                 this.updateItemVisButton(cb, 'desktop', state, tooltip);
                 cb.setTooltip(tooltip)
                     .onClick(async () => {
@@ -314,7 +313,6 @@ export default class ToolbarItemUi {
             })
             .addButton((cb) => {
                 let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, t('setting.item.option-visibility-platform-mobile'));
-                setIcon(cb.buttonEl, 'tablet-smartphone');
                 this.updateItemVisButton(cb, 'mobile', state, tooltip);
                 cb.setTooltip(tooltip)
                     .onClick(async () => {
@@ -1215,20 +1213,17 @@ export default class ToolbarItemUi {
 	 * @param tooltip string tooltip to add to the button (i.e., the visibility state, or none)
 	 */
 	private updateItemVisButton(button: ButtonComponent, platform: 'desktop' | 'mobile', label: string, tooltip: string): void {
-		const children = Array.from(button.buttonEl.childNodes);
-		const labelNode = children.find(node => node.nodeType === Node.TEXT_NODE);
-	
-		if (label) {
-			if (labelNode) {
-				labelNode.textContent = label;
-			} else {
-				button.buttonEl.appendChild(document.createTextNode(label));
-			}
-		} 
-		else if (labelNode) {
-			button.buttonEl.removeChild(labelNode);
-		}
-		button.setTooltip(tooltip);
+        button.buttonEl.empty();
+        switch (platform) {
+            case 'desktop':
+                setIcon(button.buttonEl, 'monitor');
+                break;
+            case 'mobile':
+                setIcon(button.buttonEl, 'tablet-smartphone');
+                break;
+        }
+        if (label) button.buttonEl.appendChild(document.createTextNode(label));
+        button.setTooltip(tooltip);
 	}
 
 }
