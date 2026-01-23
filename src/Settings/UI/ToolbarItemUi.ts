@@ -273,7 +273,7 @@ export default class ToolbarItemUi {
         let visButtons = new Setting(visibilityControlsContainer)
             .setClass("note-toolbar-setting-item-visibility")
             .addButton((btn: ButtonComponent) => {
-                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'));
+                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
                 this.updateItemVisButton(btn, 'desktop', state, tooltip);
                 btn
                     .onClick(async () => {
@@ -281,25 +281,25 @@ export default class ToolbarItemUi {
                         toolbarItem.visibility.desktop ??= { components: [] };
                         // toggle (instead of menu) for breaks + separators
                         if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-                            let platform = toolbarItem.visibility.desktop;
+                            let visibility = toolbarItem.visibility.desktop;
 
                             let isComponentVisible = {
-                                icon: platform ? platform.components.includes(ComponentType.Icon) : false,
-                                label: platform ? platform.components.includes(ComponentType.Label) : false,
+                                icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
+                                label: visibility ? visibility.components.includes(ComponentType.Label) : false,
                             };
                             if (isComponentVisible.icon && isComponentVisible.label) {
-                                removeComponentVisibility(platform, ComponentType.Icon);
-                                removeComponentVisibility(platform, ComponentType.Label);
+                                removeComponentVisibility(visibility, ComponentType.Icon);
+                                removeComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = false;
                                 isComponentVisible.label = false;
                             }
                             else {
-                                addComponentVisibility(platform, ComponentType.Icon);
-                                addComponentVisibility(platform, ComponentType.Label);
+                                addComponentVisibility(visibility, ComponentType.Icon);
+                                addComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = true;
                                 isComponentVisible.label = true;						
                             }
-                            let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-desktop'));
+                            let [state, tooltip] = this.getPlatformStateLabel(visibility, 'desktop');
                             this.updateItemVisButton(btn, 'desktop', state, tooltip);
 
                             this.toolbar.updated = new Date().toISOString();
@@ -312,7 +312,7 @@ export default class ToolbarItemUi {
                     });
             })
             .addButton((btn: ButtonComponent) => {
-                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, t('setting.item.option-visibility-platform-mobile'));
+                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
                 this.updateItemVisButton(btn, 'mobile', state, tooltip);
                 btn
                     .onClick(async () => {
@@ -320,25 +320,25 @@ export default class ToolbarItemUi {
                         toolbarItem.visibility.mobile ??= { components: [] };
                         // toggle (instead of menu) for breaks + separators
                         if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-                            let platform = toolbarItem.visibility.mobile;
+                            let visibility = toolbarItem.visibility.mobile;
 
                             let isComponentVisible = {
-                                icon: platform ? platform.components.includes(ComponentType.Icon) : false,
-                                label: platform ? platform.components.includes(ComponentType.Label) : false,
+                                icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
+                                label: visibility ? visibility.components.includes(ComponentType.Label) : false,
                             };
                             if (isComponentVisible.icon && isComponentVisible.label) {
-                                removeComponentVisibility(platform, ComponentType.Icon);
-                                removeComponentVisibility(platform, ComponentType.Label);
+                                removeComponentVisibility(visibility, ComponentType.Icon);
+                                removeComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = false;
                                 isComponentVisible.label = false;
                             }
                             else {
-                                addComponentVisibility(platform, ComponentType.Icon);
-                                addComponentVisibility(platform, ComponentType.Label);
+                                addComponentVisibility(visibility, ComponentType.Icon);
+                                addComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = true;
                                 isComponentVisible.label = true;						
                             }
-                            let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-mobile'));
+                            let [state, tooltip] = this.getPlatformStateLabel(visibility, 'mobile');
                             this.updateItemVisButton(btn, 'mobile', state, tooltip);
 
                             this.toolbar.updated = new Date().toISOString();
@@ -555,7 +555,7 @@ export default class ToolbarItemUi {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
-					let [state, tooltip] = this.getPlatformStateLabel(visibility, platformLabel);
+					let [state, tooltip] = this.getPlatformStateLabel(visibility, platform);
 					this.updateItemVisButton(button, platform, state, tooltip);
 				});
 		});
@@ -577,7 +577,7 @@ export default class ToolbarItemUi {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
-					let [state, tooltip] = this.getPlatformStateLabel(visibility, platformLabel);
+					let [state, tooltip] = this.getPlatformStateLabel(visibility, platform);
 					this.updateItemVisButton(button, platform, state, tooltip);
 				});
 		});
@@ -1180,13 +1180,15 @@ export default class ToolbarItemUi {
 
 	/**
 	 * Gets the current state of visibility for a given platform.
-	 * @param platform visibility to check
+	 * @param visibility visibility to check
 	 * @returns a single word (hidden, visible, or the component name), and a sentence for the tooltip
 	 */
-	getPlatformStateLabel(platform: any, platformLabel: string): [string, string] {
+	getPlatformStateLabel(visibility: any, platform: 'desktop' | 'mobile'): [string, string] {
 
-		if (platform) {
-			let dkComponents = platform?.components;
+        const platformLabel = platform === 'desktop' ? t('setting.item.option-visibility-platform-desktop') : t('setting.item.option-visibility-platform-mobile');
+
+		if (visibility) {
+			let dkComponents = visibility?.components;
 			if (dkComponents) {
 				if (dkComponents.length === 2) {
 					return ['', t('setting.item.option-visibility-visible-platform', { platform: platformLabel })];
