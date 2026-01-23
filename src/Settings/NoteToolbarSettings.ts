@@ -91,6 +91,11 @@ export enum ItemType {
 	Templater = 'templater-obsidian',
 	Uri = 'uri'
 }
+export const enum ViewModeType {
+	Both = 'both',
+	Editing = 'editing',
+	Reading = 'reading'
+}
 export const enum PlatformType {
 	All = 'all',
 	Desktop = 'desktop',
@@ -351,10 +356,11 @@ export const EMPTY_TOOLBAR: ToolbarSettings = {
 	updated: ''
 }
 
-export const DEFAULT_ITEM_VISIBILITY_SETTINGS = {
+export const DEFAULT_ITEM_VISIBILITY_SETTINGS: Visibility = {
 	desktop: { components: [ComponentType.Icon, ComponentType.Label] },
 	mobile: { components: [ComponentType.Icon, ComponentType.Label] },
-	tablet: { components: [ComponentType.Icon, ComponentType.Label] }
+	tablet: { components: [ComponentType.Icon, ComponentType.Label] },
+	viewMode: ViewModeType.Both
 }
 
 export interface Position {
@@ -397,7 +403,8 @@ export interface Visibility {
 	},
 	mobile: {
 		components: ComponentType[]
-	}
+	},
+	viewMode: ViewModeType
 }
 
 export interface ItemViewContext extends ViewContext {
