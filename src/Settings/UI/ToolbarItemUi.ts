@@ -274,7 +274,7 @@ export default class ToolbarItemUi {
             .setClass("note-toolbar-setting-item-visibility")
             .addButton((btn: ButtonComponent) => {
                 let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, 'desktop');
-                this.updateItemVisButton(btn, 'desktop', state, tooltip);
+                this.updateItemVisButton(toolbarItem, btn, 'desktop', state, tooltip);
                 btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
@@ -300,20 +300,20 @@ export default class ToolbarItemUi {
                                 isComponentVisible.label = true;						
                             }
                             let [state, tooltip] = this.getPlatformStateLabel(visibility, 'desktop');
-                            this.updateItemVisButton(btn, 'desktop', state, tooltip);
+                            this.updateItemVisButton(toolbarItem, btn, 'desktop', state, tooltip);
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', btn);
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem, toolbarItem.visibility.desktop, 'desktop', btn);
                             visibilityMenu.showAtPosition(getElementPosition(btn.buttonEl));	
                         }
                     });
             })
             .addButton((btn: ButtonComponent) => {
                 let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, 'mobile');
-                this.updateItemVisButton(btn, 'mobile', state, tooltip);
+                this.updateItemVisButton(toolbarItem, btn, 'mobile', state, tooltip);
                 btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
@@ -339,13 +339,13 @@ export default class ToolbarItemUi {
                                 isComponentVisible.label = true;						
                             }
                             let [state, tooltip] = this.getPlatformStateLabel(visibility, 'mobile');
-                            this.updateItemVisButton(btn, 'mobile', state, tooltip);
+                            this.updateItemVisButton(toolbarItem, btn, 'mobile', state, tooltip);
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', btn);
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem, toolbarItem.visibility.mobile, 'mobile', btn);
                             visibilityMenu.showAtPosition(getElementPosition(btn.buttonEl));
                         }
                     });
@@ -527,7 +527,7 @@ export default class ToolbarItemUi {
 	 * @param visibility visibility to check for component visibility
 	 * @returns Menu
 	 */
-	getItemVisibilityMenu(visibility: any, platform: 'desktop' | 'mobile', button: ButtonComponent): Menu {
+	getItemVisibilityMenu(item: ToolbarItemSettings, visibility: any, platform: 'desktop' | 'mobile', button: ButtonComponent): Menu {
 
         const platformLabel = platform === 'desktop' ? t('setting.item.option-visibility-platform-desktop') : t('setting.item.option-visibility-platform-mobile');
 
@@ -556,7 +556,7 @@ export default class ToolbarItemUi {
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
 					let [state, tooltip] = this.getPlatformStateLabel(visibility, platform);
-					this.updateItemVisButton(button, platform, state, tooltip);
+					this.updateItemVisButton(item, button, platform, state, tooltip);
 				});
 		});
 		menu.addItem((menuItem: MenuItem) => {
@@ -578,7 +578,7 @@ export default class ToolbarItemUi {
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
 					let [state, tooltip] = this.getPlatformStateLabel(visibility, platform);
-					this.updateItemVisButton(button, platform, state, tooltip);
+					this.updateItemVisButton(item, button, platform, state, tooltip);
 				});
 		});
 
@@ -1215,7 +1215,7 @@ export default class ToolbarItemUi {
 	 * @param label string label to add to the button (i.e., the visibility state, or none)
 	 * @param tooltip string tooltip to add to the button (i.e., the visibility state, or none)
 	 */
-	private updateItemVisButton(button: ButtonComponent, platform: 'desktop' | 'mobile', label: string, tooltip: string): void {
+	private updateItemVisButton(item: ToolbarItemSettings, button: ButtonComponent, platform: 'desktop' | 'mobile', label: string, tooltip: string): void {
         button.buttonEl.empty();
         switch (platform) {
             case 'desktop':
