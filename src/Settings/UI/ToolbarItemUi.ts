@@ -273,8 +273,7 @@ export default class ToolbarItemUi {
         let visButtons = new Setting(visibilityControlsContainer)
             .setClass("note-toolbar-setting-item-visibility")
             .addButton((btn: ButtonComponent) => {
-                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem, 'desktop');
-                this.updateItemVisButton(toolbarItem, btn, 'desktop', state, tooltip);
+                this.updateItemVisButton(toolbarItem, btn, 'desktop');
                 btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
@@ -299,8 +298,7 @@ export default class ToolbarItemUi {
                                 isComponentVisible.icon = true;
                                 isComponentVisible.label = true;						
                             }
-                            let [state, tooltip] = this.getPlatformStateLabel(toolbarItem, 'desktop');
-                            this.updateItemVisButton(toolbarItem, btn, 'desktop', state, tooltip);
+                            this.updateItemVisButton(toolbarItem, btn, 'desktop');
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
@@ -312,8 +310,7 @@ export default class ToolbarItemUi {
                     });
             })
             .addButton((btn: ButtonComponent) => {
-                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem, 'mobile');
-                this.updateItemVisButton(toolbarItem, btn, 'mobile', state, tooltip);
+                this.updateItemVisButton(toolbarItem, btn, 'mobile');
                 btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
@@ -338,8 +335,7 @@ export default class ToolbarItemUi {
                                 isComponentVisible.icon = true;
                                 isComponentVisible.label = true;						
                             }
-                            let [state, tooltip] = this.getPlatformStateLabel(toolbarItem, 'mobile');
-                            this.updateItemVisButton(toolbarItem, btn, 'mobile', state, tooltip);
+                            this.updateItemVisButton(toolbarItem, btn, 'mobile');
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
@@ -555,8 +551,7 @@ export default class ToolbarItemUi {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
-					let [state, tooltip] = this.getPlatformStateLabel(item, platform);
-					this.updateItemVisButton(item, button, platform, state, tooltip);
+					this.updateItemVisButton(item, button, platform);
 				});
 		});
 		menu.addItem((menuItem: MenuItem) => {
@@ -577,8 +572,7 @@ export default class ToolbarItemUi {
 					}
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
-					let [state, tooltip] = this.getPlatformStateLabel(item, platform);
-					this.updateItemVisButton(item, button, platform, state, tooltip);
+					this.updateItemVisButton(item, button, platform);
 				});
 		});
 
@@ -1212,10 +1206,9 @@ export default class ToolbarItemUi {
 	/**
 	 * Updates the appearance of the provided item form visibility button.
 	 * @param button ButtonComponent for the visibility button
-	 * @param label string label to add to the button (i.e., the visibility state, or none)
-	 * @param tooltip string tooltip to add to the button (i.e., the visibility state, or none)
 	 */
-	private updateItemVisButton(item: ToolbarItemSettings, button: ButtonComponent, platform: 'desktop' | 'mobile', label: string, tooltip: string): void {
+	private updateItemVisButton(item: ToolbarItemSettings, button: ButtonComponent, platform: 'desktop' | 'mobile'): void {
+        let [label, tooltip] = this.getPlatformStateLabel(item, platform);
         button.buttonEl.empty();
         switch (platform) {
             case 'desktop':
