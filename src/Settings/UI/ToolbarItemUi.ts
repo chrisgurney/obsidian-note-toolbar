@@ -1182,14 +1182,14 @@ export default class ToolbarItemUi {
         const visibility = item.visibility ? (platform === 'desktop' ? item.visibility.desktop : item.visibility.mobile) : undefined;
 
 		if (visibility) {
-			let dkComponents = visibility?.components;
-			if (dkComponents) {
-				if (dkComponents.length === 2) {
+			let components = visibility?.components;
+			if (components) {
+				if (components.length === 2) {
 					return ['', t('setting.item.option-visibility-visible-platform', { platform: platformLabel })];
-				} else if (dkComponents.length === 1) {
+				} else if (components.length === 1) {
 					return [
-						(dkComponents[0] === ComponentType.Icon) ? t('setting.item.option-component-icon') : (dkComponents[0] === ComponentType.Label) ? t('setting.item.option-component-label') : dkComponents[0],
-						t('setting.item.option-visibility-component-visible-platform', { component: dkComponents[0], platform: platformLabel })];
+						(components[0] === ComponentType.Icon) ? t('setting.item.option-component-icon') : (components[0] === ComponentType.Label) ? t('setting.item.option-component-label') : components[0],
+						t('setting.item.option-visibility-component-visible-platform', { component: components[0], platform: platformLabel })];
 				} else {
 					return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
 				}
