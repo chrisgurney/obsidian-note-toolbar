@@ -465,6 +465,9 @@
             "option-visibility-hidden-platform": "hidden on {{platform}}",
             "option-visibility-platform-desktop": "desktop",
             "option-visibility-platform-mobile": "mobile",
+            "option-visibility-view-editing": "visible in editing view",
+            "option-visibility-view-editing-reading": "visible in editing and reading views",
+            "option-visibility-view-reading": "visible in reading view",
             "option-visibility-visible-platform": "visible on {{platform}}",
             "title": "Edit toolbar item"
         },

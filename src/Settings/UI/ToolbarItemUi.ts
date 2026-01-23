@@ -1,7 +1,7 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
-import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import IconSuggestModal from "./Modals/IconSuggestModal";
 import ItemModal from "./Modals/ItemModal";
@@ -253,6 +253,20 @@ export default class ToolbarItemUi {
         // visibility controls
         // 
 
+        // setup for the view mode visibility button
+        const viewModeOptions = {
+            [ViewModeType.Both]: { icon: 'note-toolbar-pen-book', tooltip: t('setting.item.option-visibility-view-editing-reading'), next: ViewModeType.Editing },
+            [ViewModeType.Editing]: { icon: 'pen-line', tooltip: t('setting.item.option-visibility-view-editing'), next: ViewModeType.Reading },
+            [ViewModeType.Reading]: { icon: 'book-open', tooltip: t('setting.item.option-visibility-view-reading'), next: ViewModeType.Both }
+        };
+
+        const updateViewModeButton = (button: ButtonComponent, mode: ViewModeType) => {
+            const config = viewModeOptions[mode];
+            setIcon(button.buttonEl, config.icon);
+            button.setTooltip(config.tooltip);
+        };
+
+        // add controls
         let visibilityControlsContainer = createDiv();
         visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
 
@@ -337,6 +351,15 @@ export default class ToolbarItemUi {
                             visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
                         }
                     });
+            })
+            .addButton((button: ButtonComponent) => {
+                updateViewModeButton(button, toolbarItem.visibility.viewMode ?? ViewModeType.Both);
+                button.onClick(async () => {
+                    toolbarItem.visibility.viewMode = viewModeOptions[toolbarItem.visibility.viewMode ?? ViewModeType.Both].next;
+                    updateViewModeButton(button, toolbarItem.visibility.viewMode);
+                    this.toolbar.updated = new Date().toISOString();
+                    await this.ntb.settingsManager.save();                  
+                });
             });
 
         if (this.parent instanceof ToolbarSettingsModal) {
