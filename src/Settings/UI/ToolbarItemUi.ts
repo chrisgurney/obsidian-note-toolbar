@@ -1,6 +1,6 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, DropdownComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
+import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import IconSuggestModal from "./Modals/IconSuggestModal";
@@ -42,8 +42,8 @@ export default class ToolbarItemUi {
 
             let iconField = new Setting(textFieldsContainer)
                 .setClass("note-toolbar-setting-item-icon")
-                .addExtraButton((cb) => {
-                    cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
+                .addExtraButton((btn: ExtraButtonComponent) => {
+                    btn.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(async () => {
                             let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
@@ -55,10 +55,10 @@ export default class ToolbarItemUi {
                             });
                             modal.open();
                         });
-                    cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
-                    cb.extraSettingsEl.setAttribute("tabindex", "0");
+                    btn.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
+                    btn.extraSettingsEl.setAttribute("tabindex", "0");
                     this.ntb.registerDomEvent(
-                        cb.extraSettingsEl, 'keydown', (e) => {
+                        btn.extraSettingsEl, 'keydown', (e) => {
                             switch (e.key) {
                                 case "Enter":
                                 case " ": {
@@ -203,18 +203,18 @@ export default class ToolbarItemUi {
 
             new Setting(itemControlsContainer)
 			.setClass("note-toolbar-setting-item-delete")
-			.addButton((button: ButtonComponent) => {
-				button
+			.addButton((btn: ButtonComponent) => {
+				btn
                     .setIcon("minus-circle")
 					.setTooltip(t('setting.button-delete-tooltip'))
 					.onClick(async () => this.handleItemDelete(toolbarItem));
-				button.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
+				btn.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 			});
 
             new Setting(itemControlsContainer)
                 .setClass('note-toolbar-setting-item-visibility-and-controls')
-                .addButton((button: ButtonComponent) => {
-                    button
+                .addButton((btn: ButtonComponent) => {
+                    btn
                         .setIcon('copy-plus')
                         .setTooltip(t('setting.item.button-duplicate-tooltip'))
                         .onClick(async () => this.handleItemDuplicate(toolbarItem));
@@ -260,10 +260,10 @@ export default class ToolbarItemUi {
             [ViewModeType.Reading]: { icon: 'book-open', tooltip: t('setting.item.option-visibility-view-reading'), next: ViewModeType.Both }
         };
 
-        const updateViewModeButton = (button: ButtonComponent, mode: ViewModeType) => {
+        const updateViewModeButton = (btn: ButtonComponent, mode: ViewModeType) => {
             const config = viewModeOptions[mode];
-            setIcon(button.buttonEl, config.icon);
-            button.setTooltip(config.tooltip);
+            setIcon(btn.buttonEl, config.icon);
+            btn.setTooltip(config.tooltip);
         };
 
         // add controls
@@ -272,10 +272,10 @@ export default class ToolbarItemUi {
 
         let visButtons = new Setting(visibilityControlsContainer)
             .setClass("note-toolbar-setting-item-visibility")
-            .addButton((cb) => {
+            .addButton((btn: ButtonComponent) => {
                 let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'));
-                this.updateItemVisButton(cb, 'desktop', state, tooltip);
-                cb.setTooltip(tooltip)
+                this.updateItemVisButton(btn, 'desktop', state, tooltip);
+                btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
                         toolbarItem.visibility.desktop ??= { components: [] };
@@ -300,21 +300,21 @@ export default class ToolbarItemUi {
                                 isComponentVisible.label = true;						
                             }
                             let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-desktop'));
-                            this.updateItemVisButton(cb, 'desktop', state, tooltip);
+                            this.updateItemVisButton(btn, 'desktop', state, tooltip);
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', cb);
-                            visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));	
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, 'desktop', btn);
+                            visibilityMenu.showAtPosition(getElementPosition(btn.buttonEl));	
                         }
                     });
             })
-            .addButton((cb) => {
+            .addButton((btn: ButtonComponent) => {
                 let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, t('setting.item.option-visibility-platform-mobile'));
-                this.updateItemVisButton(cb, 'mobile', state, tooltip);
-                cb.setTooltip(tooltip)
+                this.updateItemVisButton(btn, 'mobile', state, tooltip);
+                btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
                         toolbarItem.visibility.mobile ??= { components: [] };
@@ -339,36 +339,36 @@ export default class ToolbarItemUi {
                                 isComponentVisible.label = true;						
                             }
                             let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-mobile'));
-                            this.updateItemVisButton(cb, 'mobile', state, tooltip);
+                            this.updateItemVisButton(btn, 'mobile', state, tooltip);
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', cb);
-                            visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, 'mobile', btn);
+                            visibilityMenu.showAtPosition(getElementPosition(btn.buttonEl));
                         }
                     });
             })
-            .addButton((button: ButtonComponent) => {
-                updateViewModeButton(button, toolbarItem.visibility.viewMode ?? ViewModeType.Both);
-                button.onClick(async () => {
+            .addButton((btn: ButtonComponent) => {
+                updateViewModeButton(btn, toolbarItem.visibility.viewMode ?? ViewModeType.Both);
+                btn.onClick(async () => {
                     toolbarItem.visibility.viewMode = viewModeOptions[toolbarItem.visibility.viewMode ?? ViewModeType.Both].next;
-                    updateViewModeButton(button, toolbarItem.visibility.viewMode);
+                    updateViewModeButton(btn, toolbarItem.visibility.viewMode);
                     this.toolbar.updated = new Date().toISOString();
                     await this.ntb.settingsManager.save();                  
                 });
             });
 
         if (this.parent instanceof ToolbarSettingsModal) {
-            visButtons.addExtraButton((cb) => {
-                cb.setIcon('grip-horizontal')
+            visButtons.addExtraButton((btn: ExtraButtonComponent) => {
+                btn.setIcon('grip-horizontal')
                     .setTooltip(t('setting.button-drag-tooltip'))
                     .extraSettingsEl.addClass('sortable-handle');
-                cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
-                cb.extraSettingsEl.tabIndex = 0;
+                btn.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
+                btn.extraSettingsEl.tabIndex = 0;
                 this.ntb.registerDomEvent(
-                    cb.extraSettingsEl,	'keydown', (e) => {
+                    btn.extraSettingsEl,	'keydown', (e) => {
                         if (this.parent instanceof ToolbarSettingsModal) this.parent.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
                     } );
             });
