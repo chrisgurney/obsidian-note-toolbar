@@ -11,6 +11,8 @@ import FileSuggester from "./Suggesters/FileSuggester";
 import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
 import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "./Utils/SettingsUIUtils";
 
+type ItemVisibilityState = 'visible' | 'hidden' | 'component';
+
 export default class ToolbarItemUi {
 
     constructor(
@@ -1176,27 +1178,26 @@ export default class ToolbarItemUi {
 	 * Gets the current state of visibility for a given platform.
 	 * @returns a single word (hidden, visible, or the component name), and a sentence for the tooltip
 	 */
-	getPlatformStateLabel(item: ToolbarItemSettings, platform: 'desktop' | 'mobile'): [string, string] {
+	getPlatformStateLabel(item: ToolbarItemSettings, platform: 'desktop' | 'mobile'): [ItemVisibilityState, string, string] {
 
-        const platformLabel = platform === 'desktop' ? t('setting.item.option-visibility-platform-desktop') : t('setting.item.option-visibility-platform-mobile');
+        const labelPlatform = platform === 'desktop' ? t('setting.item.option-visibility-platform-desktop') : t('setting.item.option-visibility-platform-mobile');
         const visibility = item.visibility ? (platform === 'desktop' ? item.visibility.desktop : item.visibility.mobile) : undefined;
 
 		if (visibility) {
 			let components = visibility?.components;
 			if (components) {
 				if (components.length === 2) {
-					return ['', t('setting.item.option-visibility-visible-platform', { platform: platformLabel })];
+					return ['visible', '', t('setting.item.option-visibility-visible-platform', { platform: labelPlatform })];
 				} else if (components.length === 1) {
-					return [
+					return ['component',
 						(components[0] === ComponentType.Icon) ? t('setting.item.option-component-icon') : (components[0] === ComponentType.Label) ? t('setting.item.option-component-label') : components[0],
-						t('setting.item.option-visibility-component-visible-platform', { component: components[0], platform: platformLabel })];
+						t('setting.item.option-visibility-component-visible-platform', { component: components[0], platform: labelPlatform })];
 				} else {
-					return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
+					return ['hidden', '', t('setting.item.option-visibility-hidden-platform', { platform: labelPlatform })];
 				}
 			}
 		}
-		return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
-
+		return ['hidden', '', t('setting.item.option-visibility-hidden-platform', { platform: labelPlatform })];
 	}
 
     renderPreview(toolbarItem: ToolbarItemSettings) {
@@ -1208,14 +1209,14 @@ export default class ToolbarItemUi {
 	 * @param button ButtonComponent for the visibility button
 	 */
 	private updateItemVisButton(item: ToolbarItemSettings, button: ButtonComponent, platform: 'desktop' | 'mobile'): void {
-        let [label, tooltip] = this.getPlatformStateLabel(item, platform);
+        let [state, label, tooltip] = this.getPlatformStateLabel(item, platform);
         button.buttonEl.empty();
         switch (platform) {
             case 'desktop':
-                setIcon(button.buttonEl, 'monitor');
+                setIcon(button.buttonEl, state === 'hidden' ? 'monitor-off' : 'monitor');
                 break;
             case 'mobile':
-                setIcon(button.buttonEl, 'tablet-smartphone');
+                setIcon(button.buttonEl, state === 'hidden' ? 'note-toolbar-tablet-smartphone-off' : 'tablet-smartphone');
                 break;
         }
         if (label) button.buttonEl.appendChild(document.createTextNode(label));
