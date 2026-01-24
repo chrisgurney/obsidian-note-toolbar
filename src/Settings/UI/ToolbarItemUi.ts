@@ -11,7 +11,7 @@ import FileSuggester from "./Suggesters/FileSuggester";
 import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
 import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "./Utils/SettingsUIUtils";
 
-type ItemVisibilityState = 'visible' | 'hidden' | 'component';
+type ItemComponentVisibility = 'visible' | 'hidden' | 'icon' | 'label';
 
 export default class ToolbarItemUi {
 
@@ -561,7 +561,7 @@ export default class ToolbarItemUi {
 				.setTitle(isComponentVisible.label 
 					? t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-label'), platform: platformLabel })
 					: t('setting.item.option-visibility-component-hidden-platform', { component: t('setting.item.option-component-label'), platform: platformLabel }))
-				.setIcon("whole-word")
+				.setIcon("text-align-start")
 				.setChecked(isComponentVisible.label)
 				.onClick(async (menuEvent) => {
 					if (isComponentVisible.label) {
@@ -1178,7 +1178,7 @@ export default class ToolbarItemUi {
 	 * Gets the current state of visibility for a given platform.
 	 * @returns a single word (hidden, visible, or the component name), and a sentence for the tooltip
 	 */
-	getPlatformStateLabel(item: ToolbarItemSettings, platform: 'desktop' | 'mobile'): [ItemVisibilityState, string, string] {
+	getPlatformStateLabel(item: ToolbarItemSettings, platform: 'desktop' | 'mobile'): [ItemComponentVisibility, string, string] {
 
         const labelPlatform = platform === 'desktop' ? t('setting.item.option-visibility-platform-desktop') : t('setting.item.option-visibility-platform-mobile');
         const visibility = item.visibility ? (platform === 'desktop' ? item.visibility.desktop : item.visibility.mobile) : undefined;
@@ -1188,11 +1188,15 @@ export default class ToolbarItemUi {
 			if (components) {
 				if (components.length === 2) {
 					return ['visible', '', t('setting.item.option-visibility-visible-platform', { platform: labelPlatform })];
-				} else if (components.length === 1) {
-					return ['component',
-						(components[0] === ComponentType.Icon) ? t('setting.item.option-component-icon') : (components[0] === ComponentType.Label) ? t('setting.item.option-component-label') : components[0],
-						t('setting.item.option-visibility-component-visible-platform', { component: components[0], platform: labelPlatform })];
-				} else {
+				} 
+                else if (components.length === 1) {
+                    if (components[0] === ComponentType.Icon) {
+                        return ['icon', '', t('setting.item.option-component-icon', { platform: labelPlatform })];
+                    } else if (components[0] === ComponentType.Label) {
+                        return ['label', '', t('setting.item.option-component-label', { platform: labelPlatform })];
+                    }
+				} 
+                else {
 					return ['hidden', '', t('setting.item.option-visibility-hidden-platform', { platform: labelPlatform })];
 				}
 			}
@@ -1211,14 +1215,23 @@ export default class ToolbarItemUi {
 	private updateItemVisButton(item: ToolbarItemSettings, button: ButtonComponent, platform: 'desktop' | 'mobile'): void {
         let [state, label, tooltip] = this.getPlatformStateLabel(item, platform);
         button.buttonEl.empty();
-        switch (platform) {
-            case 'desktop':
-                setIcon(button.buttonEl, state === 'hidden' ? 'monitor-off' : 'monitor');
-                break;
-            case 'mobile':
-                setIcon(button.buttonEl, state === 'hidden' ? 'note-toolbar-tablet-smartphone-off' : 'tablet-smartphone');
-                break;
-        }
+
+        const visIcons = {
+            desktop: {
+                hidden: 'monitor-off',
+                icon: 'note-toolbar-monitor-circle',
+                label: 'note-toolbar-monitor-text',
+                visible: 'monitor'
+            },
+            mobile: {
+                hidden: 'note-toolbar-tablet-smartphone-off',
+                icon: 'note-toolbar-tablet-smartphone-circle',
+                label: 'note-toolbar-tablet-smartphone-text',
+                visible: 'tablet-smartphone'
+            }
+        };
+        setIcon(button.buttonEl, visIcons[platform][state]);
+
         if (label) button.buttonEl.appendChild(document.createTextNode(label));
         button.setTooltip(tooltip);
 	}
