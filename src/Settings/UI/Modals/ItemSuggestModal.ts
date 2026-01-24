@@ -1,7 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Platform, SuggestModal, TFile } from "obsidian";
 import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, LocalVar, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { calcItemVisToggles } from "Utils/Utils";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 import ItemModal from "./ItemModal";
 import ToolbarSuggestModal from "./ToolbarSuggestModal";
@@ -199,7 +198,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             if (this.mode === 'QuickTools') {
                 // menu items can't be "used"
                 if (item.linkAttr.type === ItemType.Menu) return false;
-                const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+                const [showOnDesktop, showOnMobile, showOnTablet] = this.ntb.utils.calcItemVisToggles(item.visibility);
                 // ...and is visible on this platform
                 if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
                     // ...and does not have a var link and label/tooltip that resolves to nothing

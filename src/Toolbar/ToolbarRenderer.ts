@@ -3,7 +3,7 @@ import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { calcComponentVisToggles, calcItemVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
+import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
@@ -393,7 +393,7 @@ export default class ToolbarRenderer {
 			}
 
 			let toolbarItem: HTMLElement | undefined = undefined;
-			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+			const [showOnDesktop, showOnMobile, showOnTablet] = this.ntb.utils.calcItemVisToggles(item.visibility);
 
 			switch (item.linkAttr.type) {
 				case ItemType.Break:
@@ -617,7 +617,7 @@ export default class ToolbarRenderer {
 			if (![ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type) &&
 				!toolbarItem.icon && !toolbarItem.label && !toolbarItem.tooltip) continue;
 		
-			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
+			const [showOnDesktop, showOnMobile, showOnTablet] = this.ntb.utils.calcItemVisToggles(toolbarItem.visibility);
 			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 				// replace variables in labels (or tooltip, if no label set)
 				const title = resolveVars 

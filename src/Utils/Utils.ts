@@ -10,6 +10,19 @@ export default class PluginUtils {
 	) {}
 
 	/**
+	 * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
+	 * toggle values are the opposite of the Platform values.
+	 * @param Visibility
+	 * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
+	 */
+	calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
+		const desktopHasComponents = hasVisibleComponents(visibility.desktop);
+		const mobileHasComponents = hasVisibleComponents(visibility.mobile);
+		const tabletHasComponents = hasVisibleComponents(visibility.tablet);
+		return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
+	}
+
+	/**
 	 * Returns the index of the item in the toolbar that *would be* where the mouse was clicked.
 	 * @param event 
 	 * @returns 
@@ -333,19 +346,6 @@ export function calcComponentVisToggles(visibility: Visibility) {
 	const mobileComponents = hasComponents(visibility.mobile);
 	const tabletComponents = hasComponents(visibility.tablet);
 	return desktopComponents.concat(mobileComponents, tabletComponents);
-}
-
-/**
- * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
- * toggle values are the opposite of the Platform values.
- * @param Visibility
- * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
- */
-export function calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
-	const desktopHasComponents = hasVisibleComponents(visibility.desktop);
-	const mobileHasComponents = hasVisibleComponents(visibility.mobile);
-	const tabletHasComponents = hasVisibleComponents(visibility.tablet);
-	return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
 }
 
 /**
