@@ -533,8 +533,30 @@ export default class ToolbarItemUi {
 			icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
 			label: visibility ? visibility.components.includes(ComponentType.Label) : false,
 		};
+        const isVisible = visibility.components.length > 0;
 
 		let menu = new Menu();
+
+        // whole item visibility toggle
+        const visIcons = {
+            desktop: { hidden: 'monitor-off', visible: 'monitor' },
+            mobile: { hidden: 'note-toolbar-tablet-smartphone-off', visible: 'tablet-smartphone' }
+        };
+
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(isVisible ? t('setting.item.option-visibility-hide-platform', { platform: platformLabel }) : t('setting.item.option-visibility-show-platform', { platform: platformLabel }))
+                .setIcon(isVisible ? visIcons[platform].hidden : visIcons[platform].visible)
+                .onClick(async (menuEvent) => {
+                    item.visibility[platform].components = isVisible ? [] : [ComponentType.Icon, ComponentType.Label];
+                    this.toolbar.updated = new Date().toISOString();
+                    await this.ntb.settingsManager.save();
+                    this.updateItemVisButton(item, button, platform);
+                });
+        });
+        menu.addSeparator();
+
+        // component toggles
 		menu.addItem((menuItem: MenuItem) => {
 			menuItem
 				.setTitle(isComponentVisible.icon 
