@@ -1210,12 +1210,12 @@ export default class ToolbarItemUi {
 			if (components) {
 				if (components.length === 2) {
 					return ['visible', '', t('setting.item.option-visibility-visible-platform', { platform: labelPlatform })];
-				} 
+				}
                 else if (components.length === 1) {
                     if (components[0] === ComponentType.Icon) {
-                        return ['icon', '', t('setting.item.option-component-icon', { platform: labelPlatform })];
+                        return ['icon', '', t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-icon'), platform: labelPlatform })];
                     } else if (components[0] === ComponentType.Label) {
-                        return ['label', '', t('setting.item.option-component-label', { platform: labelPlatform })];
+                        return ['label', '', t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-label'), platform: labelPlatform })];
                     }
 				} 
                 else {
