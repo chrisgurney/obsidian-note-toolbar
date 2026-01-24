@@ -257,9 +257,9 @@ export default class ToolbarItemUi {
 
         // setup for the view mode visibility button
         const viewModeOptions = {
-            [ViewModeType.Both]: { icon: 'note-toolbar-pen-book', tooltip: t('setting.item.option-visibility-view-editing-reading'), next: ViewModeType.Editing },
+            [ViewModeType.All]: { icon: 'note-toolbar-pen-book', tooltip: t('setting.item.option-visibility-view-editing-reading'), next: ViewModeType.Editing },
             [ViewModeType.Editing]: { icon: 'pen-line', tooltip: t('setting.item.option-visibility-view-editing'), next: ViewModeType.Reading },
-            [ViewModeType.Reading]: { icon: 'book-open', tooltip: t('setting.item.option-visibility-view-reading'), next: ViewModeType.Both }
+            [ViewModeType.Reading]: { icon: 'book-open', tooltip: t('setting.item.option-visibility-view-reading'), next: ViewModeType.All }
         };
 
         const updateViewModeButton = (btn: ButtonComponent, mode: ViewModeType) => {
@@ -349,9 +349,9 @@ export default class ToolbarItemUi {
                     });
             })
             .addButton((btn: ButtonComponent) => {
-                updateViewModeButton(btn, toolbarItem.visibility.viewMode ?? ViewModeType.Both);
+                updateViewModeButton(btn, toolbarItem.visibility.viewMode ?? ViewModeType.All);
                 btn.onClick(async () => {
-                    toolbarItem.visibility.viewMode = viewModeOptions[toolbarItem.visibility.viewMode ?? ViewModeType.Both].next;
+                    toolbarItem.visibility.viewMode = viewModeOptions[toolbarItem.visibility.viewMode ?? ViewModeType.All].next;
                     updateViewModeButton(btn, toolbarItem.visibility.viewMode);
                     this.toolbar.updated = new Date().toISOString();
                     await this.ntb.settingsManager.save();                  

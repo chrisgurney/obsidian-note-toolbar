@@ -92,9 +92,9 @@ export enum ItemType {
 	Uri = 'uri'
 }
 export const enum ViewModeType {
-	Both = 'both',
-	Editing = 'editing',
-	Reading = 'reading'
+	All = 'all',
+	Editing = 'source',
+	Reading = 'preview'
 }
 export const enum PlatformType {
 	All = 'all',
@@ -360,7 +360,7 @@ export const DEFAULT_ITEM_VISIBILITY_SETTINGS: Visibility = {
 	desktop: { components: [ComponentType.Icon, ComponentType.Label] },
 	mobile: { components: [ComponentType.Icon, ComponentType.Label] },
 	tablet: { components: [ComponentType.Icon, ComponentType.Label] },
-	viewMode: ViewModeType.Both
+	viewMode: ViewModeType.All
 }
 
 export interface Position {
