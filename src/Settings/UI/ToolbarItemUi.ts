@@ -42,7 +42,24 @@ export default class ToolbarItemUi {
         let textFieldsContainer = createDiv();
         textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
-        if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+        // show a preview only for breaks and separators
+        if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+
+            let type = toolbarItem.linkAttr.type;
+            const itemPreview = createDiv();
+            itemPreview.className = "note-toolbar-setting-item-preview";
+            itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
+            const itemPreviewContent = createSpan();
+            itemPreviewContent.setText(type === ItemType.Break ? t('setting.item.option-break') : t('setting.item.option-separator'));
+            itemPreview.append(itemPreviewContent);
+
+            textFieldsContainer.append(itemPreview);
+            itemTopContainer.appendChild(textFieldsContainer);
+            itemDiv.appendChild(itemTopContainer);
+
+        }
+        // generate form for all other types
+        else {
 
             //
             // Item icon, name, and tooltip
@@ -245,17 +262,6 @@ export default class ToolbarItemUi {
                         menu.showAtPosition(getElementPosition(cb.buttonEl));
                     });
             });
-
-        //
-        // separators + breaks: show these types after the buttons, to keep the UI minimal
-        //
-
-        if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-            let type = toolbarItem.linkAttr.type;
-            let separatorTitle = createSpan();
-            separatorTitle.setText(type === ItemType.Break ? t('setting.item.option-break') : t('setting.item.option-separator'));
-            itemControlsContainer.append(separatorTitle);
-        }
 
         //
         // visibility controls
