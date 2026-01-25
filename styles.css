@@ -2263,11 +2263,11 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
                 .is-hidden-nav & {
                     margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
                 }
-                /* fix: bottom margin needs to be removed when keyboard is open on phone */
-                .ntb-is-keyboard-open & {
-                    margin-bottom: unset;
-                    transition: unset;
-                }
+            }
+            /* fix: bottom margin needs to be removed when keyboard is open on phone */
+            .is-phone.ntb-is-keyboard-open & {
+                margin-bottom: unset !important;
+                transition: unset !important;
             }
         }
 
