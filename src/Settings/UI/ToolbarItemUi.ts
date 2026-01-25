@@ -610,21 +610,16 @@ export default class ToolbarItemUi {
         let menu = new Menu();
 
         const handleMenuClick = async (viewMode: ViewModeType) => {
-            if (item.visibility.viewMode === undefined || viewMode === ViewModeType.All) {
-                item.visibility.viewMode = ViewModeType.All;
-            }
-            else {
-                item.visibility.viewMode = item.visibility.viewMode === ViewModeType.Reading
-                    ? ViewModeType.Editing
-                    : ViewModeType.Reading;
-            }
+            item.visibility.viewMode = viewMode === ViewModeType.All 
+                ? ViewModeType.All
+                : (item.visibility.viewMode === ViewModeType.Reading ? ViewModeType.Editing : ViewModeType.Reading);
             this.updateViewModeButton(button, item.visibility.viewMode);
             this.toolbar.updated = new Date().toISOString();
             await this.ntb.settingsManager.save();                     
         }
 
 		menu.addItem((menuItem: MenuItem) => {
-            const isEnabled = item.visibility.viewMode === ViewModeType.All;
+            const isEnabled = !item.visibility.viewMode || item.visibility.viewMode === ViewModeType.All;
             menuItem
                 .setTitle(isEnabled ? t('setting.item.option-visibility-view-editing-reading') : t('setting.item.option-visibility-show-editing-reading'))
                 // .setDisabled(isEnabled)
@@ -633,7 +628,7 @@ export default class ToolbarItemUi {
         	});
         menu.addSeparator();
 		menu.addItem((menuItem: MenuItem) => {
-            const isEnabled = item.visibility.viewMode === ViewModeType.Editing || item.visibility.viewMode === ViewModeType.All;
+            const isEnabled = !item.visibility.viewMode || item.visibility.viewMode === ViewModeType.Editing || item.visibility.viewMode === ViewModeType.All;
             menuItem
                 .setTitle(isEnabled ? t('setting.item.option-visibility-view-editing') : t('setting.item.option-visibility-hidden-editing'))
                 .setIcon(this.viewModeOptions[ViewModeType.Editing].icon)
@@ -641,7 +636,7 @@ export default class ToolbarItemUi {
                 .onClick(async () => handleMenuClick(ViewModeType.Editing))
         	});
 		menu.addItem((menuItem: MenuItem) => {
-            const isEnabled = item.visibility.viewMode === ViewModeType.Reading || item.visibility.viewMode === ViewModeType.All;
+            const isEnabled = !item.visibility.viewMode || item.visibility.viewMode === ViewModeType.Reading || item.visibility.viewMode === ViewModeType.All;
             menuItem
                 .setTitle(isEnabled ? t('setting.item.option-visibility-view-reading') : t('setting.item.option-visibility-hidden-reading'))
                 .setIcon(this.viewModeOptions[ViewModeType.Reading].icon)
