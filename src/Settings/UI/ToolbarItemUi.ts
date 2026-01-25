@@ -21,6 +21,12 @@ export default class ToolbarItemUi {
         private toolbar: ToolbarSettings
     ) {}
 
+    private viewModeOptions = {
+        [ViewModeType.All]: { icon: 'note-toolbar-pen-book', tooltip: t('setting.item.option-visibility-view-editing-reading'), next: ViewModeType.Editing },
+        [ViewModeType.Editing]: { icon: 'pen-line', tooltip: t('setting.item.option-visibility-view-editing'), next: ViewModeType.Reading },
+        [ViewModeType.Reading]: { icon: 'book-open', tooltip: t('setting.item.option-visibility-view-reading'), next: ViewModeType.All }
+    };
+
     /**
      * Returns the form to edit a given toolbar item.
      * @param toolbarItem item to return the form for
@@ -255,19 +261,6 @@ export default class ToolbarItemUi {
         // visibility controls
         // 
 
-        // setup for the view mode visibility button
-        const viewModeOptions = {
-            [ViewModeType.All]: { icon: 'note-toolbar-pen-book', tooltip: t('setting.item.option-visibility-view-editing-reading'), next: ViewModeType.Editing },
-            [ViewModeType.Editing]: { icon: 'pen-line', tooltip: t('setting.item.option-visibility-view-editing'), next: ViewModeType.Reading },
-            [ViewModeType.Reading]: { icon: 'book-open', tooltip: t('setting.item.option-visibility-view-reading'), next: ViewModeType.All }
-        };
-
-        const updateViewModeButton = (btn: ButtonComponent, mode: ViewModeType) => {
-            const config = viewModeOptions[mode];
-            setIcon(btn.buttonEl, config.icon);
-            btn.setTooltip(config.tooltip);
-        };
-
         // add controls
         let visibilityControlsContainer = createDiv();
         visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
@@ -349,12 +342,10 @@ export default class ToolbarItemUi {
                     });
             })
             .addButton((btn: ButtonComponent) => {
-                updateViewModeButton(btn, toolbarItem.visibility.viewMode ?? ViewModeType.All);
+                this.updateViewModeButton(btn, toolbarItem.visibility.viewMode ?? ViewModeType.All);
                 btn.onClick(async () => {
-                    toolbarItem.visibility.viewMode = viewModeOptions[toolbarItem.visibility.viewMode ?? ViewModeType.All].next;
-                    updateViewModeButton(btn, toolbarItem.visibility.viewMode);
-                    this.toolbar.updated = new Date().toISOString();
-                    await this.ntb.settingsManager.save();                  
+                    const menu = this.getModeVisibilityMenu(toolbarItem, btn);
+                    menu.showAtPosition(getElementPosition(btn.buttonEl));               
                 });
             });
 
@@ -603,6 +594,51 @@ export default class ToolbarItemUi {
 		return menu;
 
 	}
+
+	/**
+	 * Returns the mode visibility menu to display, for the given item.
+	 * @returns Menu
+	 */
+	getModeVisibilityMenu(item: ToolbarItemSettings, button: ButtonComponent): Menu {
+
+        let menu = new Menu();
+
+        const handleMenuClick = async (viewMode: ViewModeType) => {
+            item.visibility.viewMode = viewMode;
+            this.updateViewModeButton(button, item.visibility.viewMode);
+            this.toolbar.updated = new Date().toISOString();
+            await this.ntb.settingsManager.save();                     
+        }
+
+		menu.addItem((menuItem: MenuItem) => {
+            const isEnabled = item.visibility.viewMode === ViewModeType.All;
+            menuItem
+                .setTitle(isEnabled ? t('setting.item.option-visibility-view-editing-reading') : t('setting.item.option-visibility-show-editing-reading'))
+                .setIcon(this.viewModeOptions[ViewModeType.All].icon)
+                .setChecked(isEnabled)
+                .onClick(async () => handleMenuClick(ViewModeType.All))
+        	});
+        menu.addSeparator();
+		menu.addItem((menuItem: MenuItem) => {
+            const isEnabled = item.visibility.viewMode === ViewModeType.Editing;
+            menuItem
+                .setTitle(isEnabled ? t('setting.item.option-visibility-view-editing') : t('setting.item.option-visibility-show-editing'))
+                .setIcon(this.viewModeOptions[ViewModeType.Editing].icon)
+                .setChecked(isEnabled)
+                .onClick(async () => handleMenuClick(ViewModeType.Editing))
+        	});
+		menu.addItem((menuItem: MenuItem) => {
+            const isEnabled = item.visibility.viewMode === ViewModeType.Reading;
+            menuItem
+                .setTitle(isEnabled ? t('setting.item.option-visibility-view-reading') : t('setting.item.option-visibility-show-reading'))
+                .setIcon(this.viewModeOptions[ViewModeType.Reading].icon)
+                .setChecked(isEnabled)
+                .onClick(async () => handleMenuClick(ViewModeType.Reading))
+        	});
+
+        return menu;
+
+    }
 
     getLinkSetting(
         type: ItemType, 
@@ -1257,5 +1293,15 @@ export default class ToolbarItemUi {
         if (label) button.buttonEl.appendChild(document.createTextNode(label));
         button.setTooltip(tooltip);
 	}
+
+	/**
+	 * Updates the appearance of the provided item mode visibility button.
+	 * @param button ButtonComponent for the visibility button
+	 */
+    private updateViewModeButton(button: ButtonComponent, mode: ViewModeType) {
+        const config = this.viewModeOptions[mode];
+        setIcon(button.buttonEl, config.icon);
+        button.setTooltip(config.tooltip);
+    };
 
 }
