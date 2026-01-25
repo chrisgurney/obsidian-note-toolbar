@@ -1,7 +1,7 @@
 import { EditorView, Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { App, Command, FileView, ItemView, MarkdownView, Notice, PaneType, Platform } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { App, Command, FileView, ItemView, MarkdownView, PaneType, Platform } from "obsidian";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
 
 export default class PluginUtils {
 
@@ -13,13 +13,23 @@ export default class PluginUtils {
 	 * Item visibility: Returns the values of the toggles to show in the UI based on the platform value provided;
 	 * toggle values are the opposite of the Platform values.
 	 * @param Visibility
-	 * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet
+	 * @returns booleans indicating whether to showOnDesktop, showOnMobile, showOnTablet, showInMode
 	 */
-	calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean] {
+	calcItemVisToggles(visibility: Visibility): [boolean, boolean, boolean, boolean] {
 		const desktopHasComponents = hasVisibleComponents(visibility.desktop);
 		const mobileHasComponents = hasVisibleComponents(visibility.mobile);
 		const tabletHasComponents = hasVisibleComponents(visibility.tablet);
-		return [desktopHasComponents, mobileHasComponents, tabletHasComponents];
+
+		let isVisibleInMode = true;
+		const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+		if (currentView) {
+			const currentMode = currentView.getMode();
+			if (visibility.viewMode && visibility.viewMode != ViewModeType.All && visibility.viewMode !== currentMode) {
+				isVisibleInMode = false;
+			}
+		}
+
+		return [desktopHasComponents, mobileHasComponents, tabletHasComponents, isVisibleInMode];
 	}
 
 	/**

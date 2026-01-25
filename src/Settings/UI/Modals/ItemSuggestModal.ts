@@ -198,9 +198,9 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             if (this.mode === 'QuickTools') {
                 // menu items can't be "used"
                 if (item.linkAttr.type === ItemType.Menu) return false;
-                const [showOnDesktop, showOnMobile, showOnTablet] = this.ntb.utils.calcItemVisToggles(item.visibility);
+                const [showOnDesktop, showOnMobile, showOnTablet, showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
                 // ...and is visible on this platform
-                if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+                if (showInMode && ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop))) {
                     // ...and does not have a var link and label/tooltip that resolves to nothing
                     if (
                         !(this.ntb.vars.hasVars(item.link) && 

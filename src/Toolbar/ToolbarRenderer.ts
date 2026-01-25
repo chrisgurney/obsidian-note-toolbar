@@ -393,8 +393,8 @@ export default class ToolbarRenderer {
 			}
 
 			let toolbarItem: HTMLElement | undefined = undefined;
-			const [showOnDesktop, showOnMobile, showOnTablet] = this.ntb.utils.calcItemVisToggles(item.visibility);
-
+			const [showOnDesktop, showOnMobile, showOnTablet, showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
+			
 			switch (item.linkAttr.type) {
 				case ItemType.Break:
 				case ItemType.Separator: {
@@ -408,7 +408,7 @@ export default class ToolbarRenderer {
 				case ItemType.Group: {
 					const groupToolbar = this.ntb.settingsManager.getToolbar(item.link);
 					if (groupToolbar) {
-						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+						if (showInMode && (Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 							const groupLItems = await this.renderLItems(groupToolbar, file, view, recursions + 1);
 							noteToolbarLiArray.push(...groupLItems);
 						}
@@ -473,7 +473,8 @@ export default class ToolbarRenderer {
 				// create its list item container 
 				let noteToolbarLi = activeDocument.createElement("li");
 				noteToolbarLi.dataset.index = i.toString();
-				// set its platform visibility
+				// set its visibility
+				!showInMode ? noteToolbarLi.addClass('hide-in-mode') : false;
 				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
 				!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 				// disable if it's a command that's not available
@@ -617,8 +618,9 @@ export default class ToolbarRenderer {
 			if (![ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type) &&
 				!toolbarItem.icon && !toolbarItem.label && !toolbarItem.tooltip) continue;
 		
-			const [showOnDesktop, showOnMobile, showOnTablet] = this.ntb.utils.calcItemVisToggles(toolbarItem.visibility);
-			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+			const [showOnDesktop, showOnMobile, showOnTablet, showInMode] = this.ntb.utils.calcItemVisToggles(toolbarItem.visibility);
+
+			if (showInMode && ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop))) {
 				// replace variables in labels (or tooltip, if no label set)
 				const title = resolveVars 
 					? await this.ntb.items.getItemText(toolbarItem, file, false, resolveVars)
