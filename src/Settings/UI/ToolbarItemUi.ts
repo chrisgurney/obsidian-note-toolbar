@@ -622,7 +622,7 @@ export default class ToolbarItemUi {
             const isEnabled = !item.visibility.viewMode || item.visibility.viewMode === ViewModeType.All;
             menuItem
                 .setTitle(isEnabled ? t('setting.item.option-visibility-view-editing-reading') : t('setting.item.option-visibility-show-editing-reading'))
-                // .setDisabled(isEnabled)
+                .setDisabled(isEnabled)
                 .setIcon(this.viewModeOptions[ViewModeType.All].icon)
                 .onClick(async () => handleMenuClick(ViewModeType.All))
         	});
