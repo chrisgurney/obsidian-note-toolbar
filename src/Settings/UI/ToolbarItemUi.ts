@@ -21,6 +21,30 @@ export default class ToolbarItemUi {
         private toolbar: ToolbarSettings
     ) {}
 
+    // private visComponentOptions = {
+    //     [ComponentType.Icon]: { 
+    //         iconHidden: '',
+    //         iconVisible: 'note-toolbar-pen-book',
+    //         label: t('setting.item.option-component-icon') },
+    //     [ComponentType.Label]: { 
+    //         iconHidden: 'pen-line',
+    //         iconVisible: '', 
+    //         label: t('setting.item.option-component-label') }
+    // };
+
+    // private visPlatformOptions = {
+    //     desktop: {
+    //         iconHidden: 'monitor-off',
+    //         iconVisible: 'monitor',
+    //         labelHidden: t('setting.item.option-visibility-hide-platform', { platform: 'desktop' }),
+    //         labelVisible: t('setting.item.option-visibility-show-platform', { platform: 'desktop' }) },
+    //     mobile: {
+    //         iconHidden: 'note-toolbar-tablet-smartphone-off',
+    //         iconVisible: 'tablet-smartphone',
+    //         labelHidden: t('setting.item.option-visibility-hide-platform', { platform: 'mobile' }),
+    //         labelVisible: t('setting.item.option-visibility-show-platform', { platform: 'mobile' }) }
+    // };
+
     private visIcons = {
         desktop: {
             hidden: 'monitor-off',
