@@ -7,7 +7,7 @@ import Sortable from 'sortablejs';
 import { arraymove, getUUID, moveElement } from 'Utils/Utils';
 import ItemSuggester from '../Suggesters/ItemSuggester';
 import ToolbarItemUi from '../Components/ToolbarItemUi';
-import ToolbarStyleUi from '../ToolbarStyleUi';
+import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import { createOnboardingMessageEl, createToolbarPreviewFr, displayHelpSection, emptyMessageFr, getDisclaimersFr, getToolbarUsageFr, getToolbarUsageText, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, removeFieldError, setFieldError, showWhatsNewIfNeeded, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
 import { importFromModal } from './ImportModal';
 import ItemModal from './ItemModal';
