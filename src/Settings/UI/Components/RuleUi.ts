@@ -2,9 +2,9 @@ import { RuleConditionType, RuleConjunctionType, RuleOperatorType, t, ToolbarRul
 import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Setting } from "obsidian";
-import NoteToolbarSettingTab from "./NoteToolbarSettingTab";
-import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
-import { emptyMessageFr, handleKeyClick, iconTextFr } from "./Utils/SettingsUIUtils";
+import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
+import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
+import { emptyMessageFr, handleKeyClick, iconTextFr } from "../Utils/SettingsUIUtils";
 
 export default class RuleUi {
 
