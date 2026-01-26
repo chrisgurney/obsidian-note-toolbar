@@ -662,6 +662,7 @@ export default class ToolbarItemUi {
                 .setChecked(isEnabled)
                 .onClick(async () => handleMenuClick(ViewModeType.All))
         	});
+        menu.addSeparator();
 		menu.addItem((menuItem: MenuItem) => {
             const isEnabled = item.visibility.viewMode === ViewModeType.Editing;
             menuItem
