@@ -3,13 +3,13 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
-import IconSuggestModal from "./Modals/IconSuggestModal";
-import ItemModal from "./Modals/ItemModal";
-import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
-import CommandSuggester from "./Suggesters/CommandSuggester";
-import FileSuggester from "./Suggesters/FileSuggester";
-import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
-import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "./Utils/SettingsUIUtils";
+import IconSuggestModal from "../Modals/IconSuggestModal";
+import ItemModal from "../Modals/ItemModal";
+import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
+import CommandSuggester from "../Suggesters/CommandSuggester";
+import FileSuggester from "../Suggesters/FileSuggester";
+import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
+import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
 
 type ItemComponentVisibility = 'visible' | 'hidden' | 'icon' | 'label';
 
