@@ -463,8 +463,6 @@
                 "label-editing-visible": "Visible only in Editing mode",
                 "label-editing-reading-visible": "Visible in Editing and Reading modes",
                 "label-reading-visible": "Visible only in Reading mode",
-                "label-item-hidden": "Hidden on {{platform}}",
-                "label-item-visible": "Visible on {{platform}}",
                 "option-component-show": "Show {{component}} only on {{platform}}",
                 "option-editing-show": "Show only in Editing mode",
                 "option-editing-reading-show": "Show in Editing and Reading modes",

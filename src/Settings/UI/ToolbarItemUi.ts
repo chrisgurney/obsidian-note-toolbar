@@ -579,33 +579,31 @@ export default class ToolbarItemUi {
         };
 
         // show item
-        if (visibility.components.length < 2) {
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('setting.item.visibility.option-item-show', { platform: platformLabel }))
-                    .setIcon(visIcons[platform].visible)
-                    .onClick(async (menuEvent) => {
-                        item.visibility[platform].components = [ComponentType.Icon, ComponentType.Label];
-                        this.toolbar.updated = new Date().toISOString();
-                        await this.ntb.settingsManager.save();
-                        this.updateItemVisButton(item, button, platform);
-                    });
-            });
-        }
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.visibility.option-item-show', { platform: platformLabel }))
+                .setIcon(visIcons[platform].visible)
+                .setChecked(visibility.components.length === 2)
+                .onClick(async (menuEvent) => {
+                    item.visibility[platform].components = [ComponentType.Icon, ComponentType.Label];
+                    this.toolbar.updated = new Date().toISOString();
+                    await this.ntb.settingsManager.save();
+                    this.updateItemVisButton(item, button, platform);
+                });
+        });
         // hide item
-        if (visibility.components.length > 0) {
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('setting.item.visibility.option-item-hide', { platform: platformLabel }))
-                    .setIcon(visIcons[platform].hidden)
-                    .onClick(async (menuEvent) => {
-                        item.visibility[platform].components = [];
-                        this.toolbar.updated = new Date().toISOString();
-                        await this.ntb.settingsManager.save();
-                        this.updateItemVisButton(item, button, platform);
-                    });
-            });
-        }
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.visibility.option-item-hide', { platform: platformLabel }))
+                .setIcon(visIcons[platform].hidden)
+                .setChecked(visibility.components.length === 0)
+                .onClick(async (menuEvent) => {
+                    item.visibility[platform].components = [];
+                    this.toolbar.updated = new Date().toISOString();
+                    await this.ntb.settingsManager.save();
+                    this.updateItemVisButton(item, button, platform);
+                });
+        });
 
         menu.addSeparator();
 
@@ -1290,7 +1288,7 @@ export default class ToolbarItemUi {
 			let components = visibility?.components;
 			if (components) {
 				if (components.length === 2) {
-					return ['visible', '', t('setting.item.visibility.label-item-visible', { platform: labelPlatform })];
+					return ['visible', '', t('setting.item.visibility.option-item-show', { platform: labelPlatform })];
 				}
                 else if (components.length === 1) {
                     if (components[0] === ComponentType.Icon) {
@@ -1300,11 +1298,11 @@ export default class ToolbarItemUi {
                     }
 				} 
                 else {
-					return ['hidden', '', t('setting.item.visibility.label-item-hidden', { platform: labelPlatform })];
+					return ['hidden', '', t('setting.item.visibility.option-item-hide', { platform: labelPlatform })];
 				}
 			}
 		}
-		return ['hidden', '', t('setting.item.visibility.label-item-hidden', { platform: labelPlatform })];
+		return ['hidden', '', t('setting.item.visibility.option-item-hide', { platform: labelPlatform })];
 	}
 
     renderPreview(toolbarItem: ToolbarItemSettings) {
