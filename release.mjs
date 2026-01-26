@@ -2,7 +2,14 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from "fs";
 import * as readline from 'readline';
 
-// helper function to prompt user
+
+// displays command to console, then executes it
+function cmd(command) {
+    console.log(command);
+    execSync(command, { stdio: 'inherit' });
+}
+
+// helper function to prompt user (hit enter before continuing)
 function prompt(question) {
     const rl = readline.createInterface({
         input: process.stdin,
@@ -52,27 +59,19 @@ try {
 
     // git add the version files
     console.log('\n[release] Adding JSON files to git...');
-    execSync('git add manifest.json package.json versions.json', { stdio: 'inherit' });
+    cmd(`git add manifest.json package.json versions.json`);
     console.log('\x1b[32m✓ Files added to git\x1b[0m');
 
     // ask before committing and pushing the version files
     await prompt('\n[release] Commit and push JSON files... (press ENTER):');
-    const cmdCommitVersions = `git commit -m "build: release ${newVersion} update"`;
-    const cmdPushVersions = 'git push'
-    console.log(cmdCommitVersions);
-    execSync(cmdCommitVersions, { stdio: 'inherit' });
-    console.log(cmdPushVersions);
-    execSync(cmdPushVersions, { stdio: 'inherit' });
+    cmd(`git commit -m "build: release ${newVersion} update"`);
+    cmd('git push');
     console.log('\x1b[32m✓ Committed and pushed\x1b[0m');
 
     // ask before creating and pushing tag
     await prompt(`\n[release] Create and push tag "${newVersion}"... (press ENTER):`);
-    const cmdTag = `git tag -a "${newVersion}" -m "${newVersion}"`;
-    const cmdPushOrigin = `git push origin "${newVersion}"`;
-    console.log(cmdTag);
-    execSync(cmdTag, { stdio: 'inherit' });
-    console.log(cmdPushOrigin);
-    execSync(cmdPushOrigin, { stdio: 'inherit' });
+    cmd(`git tag -a "${newVersion}" -m "${newVersion}"`);
+    cmd(`git push origin "${newVersion}"`);
     console.log('\x1b[32m✓ Tag created and pushed\x1b[0m');
 } 
 catch (error) {
