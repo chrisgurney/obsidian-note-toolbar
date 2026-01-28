@@ -27,16 +27,18 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
     private readonly SEPARATOR_ITEM: ToolbarItemSettings = {
         ...DEFAULT_ITEM_SETTINGS,
         uuid: 'NEW_ITEM',
-        label: t('setting.item.option-separator'),
         icon: 'note-toolbar-separator',
+        label: t('setting.item.option-separator'),
+        tooltip: t('setting.items."button-add-separator-tooltip'),
         linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Separator }
     };
 
     private readonly BREAK_ITEM: ToolbarItemSettings = {
         ...DEFAULT_ITEM_SETTINGS,
         uuid: 'NEW_ITEM',
-        label: t('setting.item.option-break'),
         icon: 'lucide-corner-down-left',
+        label: t('setting.item.option-break'),
+        tooltip: t('setting.items."button-add-break-tooltip'),
         linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Break }
     };
 
@@ -147,6 +149,10 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
 
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
+            if (this.mode !== 'QuickTools') {
+                itemSuggestions.push(this.SEPARATOR_ITEM);
+                itemSuggestions.push(this.BREAK_ITEM);
+            }
             sortedSuggestions = sortedSuggestions.concat(this.sortSuggestions(itemSuggestions, lowerCaseInputStr));
         }
 
@@ -155,8 +161,6 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         // placeholder for creating a new item
         if (this.mode === 'New') {
             if (isInputEmpty) {
-                sortedSuggestions.unshift(this.BREAK_ITEM);
-                sortedSuggestions.unshift(this.SEPARATOR_ITEM);
                 // put at the top if nothing's been entered
                 sortedSuggestions.unshift(this.NEW_ITEM);
             }
