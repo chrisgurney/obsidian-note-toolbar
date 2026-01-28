@@ -1,10 +1,16 @@
 import { addIcon } from "obsidian";
 
 
+/**
+ * Note Toolbar's custom icons.
+ * 
+ * How I built these icons:
+ * https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/BUILD.md 
+ */
 export default class SettingsIcons {
     
     /** 
-     * Adds icons specific to the plugin.
+     * Adds icons to Obsidian's library. Call once on plugin initialization.
      */
     static register(): void {
 
