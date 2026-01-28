@@ -139,6 +139,7 @@ export default class ToolbarRenderer {
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
         if (!view) {
+			this.ntb.debug("🛑 renderToolbar: can not find active view → exiting");
             this.ntb.debugGroupEnd();
             return;
         }
@@ -146,12 +147,17 @@ export default class ToolbarRenderer {
         if (!(view instanceof MarkdownView)) {
             const isToolbarVisible = this.ntb.utils.checkToolbarForItemView(view);
             if (!isToolbarVisible) {
-                this.ntb.debug("🛑 renderToolbar: nothing to render in this view");
+                this.ntb.debug("🛑 renderToolbar: nothing to render in this view → exiting");
                 this.ntb.debugGroupEnd();
                 return;
             }
             if (position === PositionType.Props) position = PositionType.Top;
         }
+
+		if (!this.ntb.utils.hasVisibleItems(toolbar)) {
+			this.ntb.debug("renderToolbar: toolbar has no visible items → rendering as hidden");
+			position = PositionType.Hidden;
+		}
 
         const useLaunchpad = Boolean(
             !(view instanceof MarkdownView) && view.getViewType() === 'empty' 

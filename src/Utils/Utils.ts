@@ -318,6 +318,24 @@ export default class PluginUtils {
         return currentView?.getViewType() === viewType;
     }
 
+	/**
+	 * Returns true if the given toolbar has any visible items for the current platform and view mode.
+	 * @param toolbar ToolbarSettings to check.
+	 * @returns true if there are visible items; false otherwise.
+	 */
+	hasVisibleItems(toolbar: ToolbarSettings): boolean {
+		const platform = Platform.isDesktop ? 'desktop' : (Platform.isTablet ? 'tablet' : 'mobile');
+		const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+		let currentMode: string | undefined = undefined;
+		if (currentView) currentMode = currentView.getMode();
+		return toolbar.items.some(item => {
+			const platformComponents = item.visibility[platform]?.components || [];
+			const hasVisibleComponents = platformComponents.length > 0;
+			const modeVisible = !currentMode || item.visibility.viewMode === ViewModeType.All || item.visibility.viewMode === currentMode;
+			return hasVisibleComponents && modeVisible;
+		});
+	}
+
 }
 
 /**
