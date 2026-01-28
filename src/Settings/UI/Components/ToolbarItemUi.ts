@@ -104,19 +104,23 @@ export default class ToolbarItemUi {
             // Item icon, name, and tooltip
             //
 
+            const handleIconSelected = async (icon: string) => {
+                toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
+                this.ntb.settingsManager.save();
+                let itemRow = (this.parent instanceof ToolbarSettingsModal) 
+                    ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid) 
+                    : this.parent.getItemRowEl(toolbarItem.uuid);
+                updateItemIcon(this.parent, itemRow, icon);
+                if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
+            }
+
             let iconField = new Setting(textFieldsContainer)
                 .setClass("note-toolbar-setting-item-icon")
                 .addExtraButton((btn: ExtraButtonComponent) => {
                     btn.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(async () => {
-                            let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, async (icon) => {
-                                toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
-                                this.ntb.settingsManager.save();
-                                updateItemIcon(this.parent, itemRow, icon);
-                                if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
-                            });
+                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, async (icon) => handleIconSelected(icon));
                             modal.open();
                         });
                     btn.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -129,12 +133,7 @@ export default class ToolbarItemUi {
                                     const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
                                     if (!modifierPressed) {
                                         e.preventDefault();
-                                        let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => {
-                                            toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
-                                            this.ntb.settingsManager.save();
-                                            updateItemIcon(this.parent, itemRow, icon);
-                                        });
+                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => handleIconSelected(icon));
                                         modal.open();
                                     }
                                 }
@@ -153,8 +152,6 @@ export default class ToolbarItemUi {
                         debounce(async (value) => {
                             let isValid = updateItemComponentStatus(this.ntb, this.parent, value, SettingType.Text, text.inputEl.parentElement);
                             toolbarItem.label = value;
-                            // TODO: if the label contains vars, set the flag to always rerender this toolbar
-                            // however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
@@ -205,7 +202,9 @@ export default class ToolbarItemUi {
                         )
                         .setValue(toolbarItem.linkAttr.type)
                         .onChange(async (value) => {
-                            let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
+                            let itemRow = (this.parent instanceof ToolbarSettingsModal) 
+                                ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid)
+                                : this.parent.getItemRowEl(toolbarItem.uuid);
                             let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
                             // if there's an error instead, remove it
                             if (!itemLinkFieldDiv) {
@@ -402,8 +401,8 @@ export default class ToolbarItemUi {
                 btn.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
                 btn.extraSettingsEl.tabIndex = 0;
                 this.ntb.registerDomEvent(
-                    btn.extraSettingsEl,	'keydown', (e) => {
-                        if (this.parent instanceof ToolbarSettingsModal) this.parent.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
+                    btn.extraSettingsEl, 'keydown', (e) => {
+                        if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
                     } );
             });
         }
@@ -531,7 +530,7 @@ export default class ToolbarItemUi {
 
     async handleItemDelete(toolbarItem: ToolbarItemSettings) {
         if (this.parent instanceof ToolbarSettingsModal) {
-            this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
+            this.parent.itemListUi.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
         }
         else {
             this.ntb.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
@@ -1307,7 +1306,7 @@ export default class ToolbarItemUi {
 	}
 
     renderPreview(toolbarItem: ToolbarItemSettings) {
-        if (this.parent instanceof ToolbarSettingsModal) this.parent.renderPreview(toolbarItem);
+        if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.renderPreview(toolbarItem);
     }
 
 	/**
