@@ -1452,15 +1452,13 @@ body {
         --ntb-shadow-xs: var(--shadow-xs);
     }
     &[data-ntb-csstheme="Baseline"], &[data-ntb-csstheme="Cupertino"] {        
-        --cg-nt-fab-pos-x-mobile: var(--navbar-side-padding);
         --cg-nt-fab-inactive-opacity: 0.5;
         --cg-nt-tbar-inactive-opacity-desktop: 0.5;
         --cg-nt-tbar-inactive-opacity-mobile: 0.5;
         --cg-nt-tbar-bg-color: rgba(0,0,0,0);
         &.is-phone {
-            --cg-nt-fab-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
-            --cg-nt-tbar-bottom-pos-y-mobile: calc(48px + var(--navbar-bottom-padding) + 1rem);
-            /* --cg-nt-tbar-top-sticky-pos-mobile: calc(98px); */
+            --cg-nt-fab-pos-x-mobile: var(--navbar-side-offset);
+            --cg-nt-fab-pos-y-mobile: var(--navbar-bottom-offset);
         }
         &.is-mobile.theme-dark {
             --cg-nt-tbar-bg-color: unset !important;
