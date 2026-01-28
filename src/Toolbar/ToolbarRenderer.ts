@@ -286,11 +286,11 @@ export default class ToolbarRenderer {
                     let propsEl = this.ntb.el.getPropsEl(view);
                     if (!propsEl) {
 						// fix: (#464) insert delays in case properties hasn't been rendered in Preview mode yet
-						// for (const delay of [50, 100, 200]) {
-						// 	await sleep(delay);
-						// 	propsEl = this.ntb.el.getPropsEl(view);
-						// 	if (propsEl) break;
-						// }
+						for (const delay of [50, 100, 200]) {
+							await sleep(delay);
+							propsEl = this.ntb.el.getPropsEl(view);
+							if (propsEl) break;
+						}
                         this.ntb.debug("🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
                     }
                     propsEl?.insertAdjacentElement("afterend", embedBlock);
