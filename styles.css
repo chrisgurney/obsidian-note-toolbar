@@ -1563,6 +1563,7 @@ body {
     background-color: var(--cg-nt-tbar-bg-color) !important;
     border-radius: var(--cg-nt-tbar-border-radius);
     border-style: none;
+    outline: none !important;
     padding: 0;
     padding-inline: var(--cg-nt-tbar-padding-inline);
     width: 100%;
