@@ -24,6 +24,22 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         icon: 'plus'
     };
 
+    private readonly SEPARATOR_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'NEW_ITEM',
+        label: t('setting.item.option-separator'),
+        icon: 'note-toolbar-separator',
+        linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Separator }
+    };
+
+    private readonly BREAK_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'NEW_ITEM',
+        label: t('setting.item.option-break'),
+        icon: 'lucide-corner-down-left',
+        linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Break }
+    };
+
     private readonly BROWSE_GALLERY_ITEM: ToolbarItemSettings = {
         ...DEFAULT_ITEM_SETTINGS,
         uuid: 'OPEN_GALLERY',
@@ -139,6 +155,8 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         // placeholder for creating a new item
         if (this.mode === 'New') {
             if (isInputEmpty) {
+                sortedSuggestions.unshift(this.BREAK_ITEM);
+                sortedSuggestions.unshift(this.SEPARATOR_ITEM);
                 // put at the top if nothing's been entered
                 sortedSuggestions.unshift(this.NEW_ITEM);
             }
@@ -297,7 +315,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
             }
-            if (item === this.NEW_ITEM || item === this.BROWSE_GALLERY_ITEM) {
+            if ([this.NEW_ITEM, this.BROWSE_GALLERY_ITEM, this.BREAK_ITEM, this.SEPARATOR_ITEM].contains(item)) {
                 el.addClass('cm-em');
             }
             if (!this.hasResults && item === this.NEW_ITEM) {
