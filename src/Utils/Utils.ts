@@ -331,7 +331,7 @@ export default class PluginUtils {
 		return toolbar.items.some(item => {
 			const platformComponents = item.visibility[platform]?.components || [];
 			const hasVisibleComponents = platformComponents.length > 0;
-			const modeVisible = !currentMode || item.visibility.viewMode === ViewModeType.All || item.visibility.viewMode === currentMode;
+			const modeVisible = !currentMode || !item.visibility.viewMode || (item.visibility.viewMode === ViewModeType.All || item.visibility.viewMode === currentMode);
 			return hasVisibleComponents && modeVisible;
 		});
 	}
