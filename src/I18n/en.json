@@ -443,6 +443,7 @@
             "option-separator": "Separator",
             "option-script-focus": "Focus in editor",
             "option-script-focus-description": "Set focus in editor after the script is executed.",
+            "option-spreader": "Spreader",
             "option-target-default": "Default",
             "option-target-modal": "Modal",
             "option-target-split": "Split pane",
@@ -498,6 +499,7 @@
         "items": {
             "button-add-break-tooltip": "Add a line break to the toolbar",
             "button-add-separator-tooltip": "Add a separator to the toolbar",
+            "button-add-spreader-tooltip": "Add to spead between items in the toolbar",
             "button-find-item": "Search",
             "button-find-item-tooltip": "Find an item to add to the toolbar",
             "button-new-item": "Add",

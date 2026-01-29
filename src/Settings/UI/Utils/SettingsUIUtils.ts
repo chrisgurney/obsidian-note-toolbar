@@ -73,7 +73,7 @@ export function createToolbarPreviewFr(
 
 				// ignore all empty toolbar items (no label or icon)
 				return ((item.label === "" && item.icon === "" && 
-					![ItemType.Break, ItemType.Group, ItemType.Separator].includes(item.linkAttr.type)) ? false : true);
+					![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) ? false : true);
 	 
 			})
 			.map(item => {
@@ -81,6 +81,7 @@ export function createToolbarPreviewFr(
 				switch (item.linkAttr.type) {
 					case ItemType.Break:
 					case ItemType.Separator:
+					case ItemType.Spreader:
 						break;
 					case ItemType.Group:
 						if (settingsManager) {

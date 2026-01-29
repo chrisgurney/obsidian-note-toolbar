@@ -218,7 +218,8 @@
         line-height: var(--line-height-tight);
     }
     &[data-item-type="break"],
-    &[data-item-type="separator"] {
+    &[data-item-type="separator"],
+    &[data-item-type="spreader"] {
         & span {
             color: var(--color-base-50);
             display: flex;
@@ -239,6 +240,19 @@
             &:after {
                 margin-left: 6px;
             }
+        }
+    }
+    &[data-item-type="spreader"] > span {
+        &:before, &:after {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        &:before {
+            content: "|←";
+        }
+        &:after {
+            content: "→|";
+            text-align: right;
         }
     }
     &[data-item-type="separator"] > span {
@@ -1034,7 +1048,8 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
     &[data-item-type="break"],
-    &[data-item-type="separator"] {
+    &[data-item-type="separator"],
+    &[data-item-type="spreader"]  {
         padding-top: 0 !important;
         & span {
             align-content: center;

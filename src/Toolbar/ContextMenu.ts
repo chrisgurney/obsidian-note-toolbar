@@ -211,7 +211,8 @@ export default class ContextMenu {
 		if (toolbarItem) {
 			const activeFile = this.ntb.app.workspace.getActiveFile();
 			let itemText = await this.ntb.items.getItemText(toolbarItem, activeFile, true);
-			if (!itemText && toolbarItem.linkAttr.type === ItemType.Separator) itemText = t('setting.item.option-separator');
+			if (toolbarItem.linkAttr.type === ItemType.Separator) itemText = t('setting.item.option-separator');
+			if (toolbarItem.linkAttr.type === ItemType.Spreader) itemText = t('setting.item.option-spreader');
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('lucide-pen-box')

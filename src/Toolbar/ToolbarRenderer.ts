@@ -394,7 +394,7 @@ export default class ToolbarRenderer {
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
 			if (item.label === "" && item.icon === "" 
-				&& ![ItemType.Break, ItemType.Group, ItemType.Separator].includes(item.linkAttr.type)) {
+				&& ![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) {
 				continue;
 			}
 
@@ -403,11 +403,12 @@ export default class ToolbarRenderer {
 			
 			switch (item.linkAttr.type) {
 				case ItemType.Break:
-				case ItemType.Separator: {
+				case ItemType.Separator:
+				case ItemType.Spreader: {
 					if (view.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) continue;
 					toolbarItem = activeDocument.createElement('data');
 					toolbarItem.setAttribute(
-						item.linkAttr.type === ItemType.Break ? 'data-break' : 'data-sep', '');
+						item.linkAttr.type === ItemType.Break ? 'data-break' : item.linkAttr.type === ItemType.Separator ? 'data-sep' : 'data-spread', '');
 					toolbarItem.setAttribute('role', 'separator');
 					break;
 				}
@@ -621,7 +622,7 @@ export default class ToolbarRenderer {
 
 		for (const toolbarItem of toolbar.items) { 
 			// skip empty items
-			if (![ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type) &&
+			if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(toolbarItem.linkAttr.type) &&
 				!toolbarItem.icon && !toolbarItem.label && !toolbarItem.tooltip) continue;
 		
 			const [showOnDesktop, showOnMobile, showOnTablet, showInMode] = this.ntb.utils.calcItemVisToggles(toolbarItem.visibility);
@@ -632,11 +633,10 @@ export default class ToolbarRenderer {
 					? await this.ntb.items.getItemText(toolbarItem, file, false, resolveVars)
 					: (toolbarItem.label || toolbarItem.tooltip || '');
 				switch(toolbarItem.linkAttr.type) {
+					// show breaks and spreaders as separators in menus
 					case ItemType.Break:
-						// show breaks as separators in menus
-						menu.addSeparator();
-						break;
 					case ItemType.Separator:
+					case ItemType.Spreader:
 						menu.addSeparator();
 						break;
 					case ItemType.Group: {

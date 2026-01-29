@@ -168,6 +168,13 @@
             }
         }
 
+        & li:has(> data[data-spread]),
+        & li:has(> a.external-link + data[data-spread]) {
+            flex: auto;
+            & a:hover {
+                background: none;
+            }
+        }
         & li:has(> hr),
         & li:has(> data[data-sep]),
         & li:has(> a.external-link + data[data-sep]) {

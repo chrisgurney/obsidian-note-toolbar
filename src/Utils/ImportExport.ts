@@ -152,6 +152,8 @@ async function exportToCalloutList(
                 break;
             }
             case ItemType.Separator:
+            case ItemType.Spreader:
+                // TODO: possible to display spreaders in callouts?
                 itemsExport += `${BULLET} <hr/>`;
                 break;
             case ItemType.Uri:

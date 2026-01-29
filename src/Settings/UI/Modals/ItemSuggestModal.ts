@@ -24,22 +24,31 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         icon: 'plus'
     };
 
-    private readonly SEPARATOR_ITEM: ToolbarItemSettings = {
-        ...DEFAULT_ITEM_SETTINGS,
-        uuid: 'NEW_ITEM',
-        icon: 'note-toolbar-separator',
-        label: t('setting.item.option-separator'),
-        tooltip: t('setting.items."button-add-separator-tooltip'),
-        linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Separator }
-    };
-
     private readonly BREAK_ITEM: ToolbarItemSettings = {
         ...DEFAULT_ITEM_SETTINGS,
         uuid: 'NEW_ITEM',
         icon: 'lucide-corner-down-left',
         label: t('setting.item.option-break'),
-        tooltip: t('setting.items."button-add-break-tooltip'),
+        tooltip: t('setting.items.button-add-break-tooltip'),
         linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Break }
+    };
+
+    private readonly SEPARATOR_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'NEW_ITEM',
+        icon: 'note-toolbar-separator',
+        label: t('setting.item.option-separator'),
+        tooltip: t('setting.items.button-add-separator-tooltip'),
+        linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Separator }
+    };
+
+    private readonly SPREADER_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'NEW_ITEM',
+        icon: 'move-horizontal',
+        label: t('setting.item.option-spreader'),
+        tooltip: t('setting.items.button-add-spreader-tooltip'),
+        linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Spreader }
     };
 
     private readonly BROWSE_GALLERY_ITEM: ToolbarItemSettings = {
@@ -150,6 +159,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
             if (this.mode !== 'QuickTools') {
+                itemSuggestions.push(this.SPREADER_ITEM);                
                 itemSuggestions.push(this.SEPARATOR_ITEM);
                 itemSuggestions.push(this.BREAK_ITEM);
             }
@@ -319,7 +329,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
             }
-            if ([this.NEW_ITEM, this.BROWSE_GALLERY_ITEM, this.BREAK_ITEM, this.SEPARATOR_ITEM].contains(item)) {
+            if ([this.NEW_ITEM, this.BROWSE_GALLERY_ITEM, this.BREAK_ITEM, this.SEPARATOR_ITEM, this.SPREADER_ITEM].contains(item)) {
                 el.addClass('cm-em');
             }
             if (!this.hasResults && item === this.NEW_ITEM) {

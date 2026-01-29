@@ -88,6 +88,7 @@ export enum ItemType {
 	Menu = 'menu',
 	Plugin = 'plugin', // used for Gallery items that rely on plugins
 	Separator = 'separator',
+	Spreader = 'spreader',
 	Templater = 'templater-obsidian',
 	Uri = 'uri'
 }
@@ -181,6 +182,7 @@ export const SettingFieldItemMap: Record<ItemType, SettingType> = {
 	[ItemType.Menu]: SettingType.Toolbar,
 	[ItemType.Plugin]: SettingType.Ignore,
 	[ItemType.Separator]: SettingType.Ignore,
+	[ItemType.Spreader]: SettingType.Ignore,
 	[ItemType.Uri]: SettingType.Text,
 	[ItemType.Templater]: SettingType.Script
 }

@@ -82,14 +82,14 @@ export default class ToolbarItemUi {
         textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
         // show a preview only for breaks and separators
-        if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+        if ([ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(toolbarItem.linkAttr.type)) {
 
             let type = toolbarItem.linkAttr.type;
             const itemPreview = createDiv();
             itemPreview.className = "note-toolbar-setting-item-preview";
             itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
             const itemPreviewContent = createSpan();
-            itemPreviewContent.setText(type === ItemType.Break ? t('setting.item.option-break') : t('setting.item.option-separator'));
+            itemPreviewContent.setText(type === ItemType.Break ? t('setting.item.option-break') : type === ItemType.Separator ? t('setting.item.option-separator') : t('setting.item.option-spreader'));
             itemPreview.append(itemPreviewContent);
 
             textFieldsContainer.append(itemPreview);
@@ -318,7 +318,7 @@ export default class ToolbarItemUi {
                         // create the setting if it doesn't exist or was removed
                         toolbarItem.visibility.desktop ??= { components: [] };
                         // toggle (instead of menu) for breaks + separators
-                        if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+                        if ([ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(toolbarItem.linkAttr.type)) {
                             let visibility = toolbarItem.visibility.desktop;
 
                             let isComponentVisible = {
@@ -354,8 +354,8 @@ export default class ToolbarItemUi {
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
                         toolbarItem.visibility.mobile ??= { components: [] };
-                        // toggle (instead of menu) for breaks + separators
-                        if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+                        // toggle (instead of menu) for breaks, separators, and spreaders
+                        if ([ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(toolbarItem.linkAttr.type)) {
                             let visibility = toolbarItem.visibility.mobile;
 
                             let isComponentVisible = {
@@ -448,7 +448,7 @@ export default class ToolbarItemUi {
 
         menu.addSeparator();
 
-        if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator].contains(toolbarItem.linkAttr.type)) {
+        if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
 
             // copy item command URI
             if (toolbarItem.hasCommand) {

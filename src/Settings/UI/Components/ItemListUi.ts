@@ -431,6 +431,7 @@ export default class ItemListUi {
                 switch (itemType) {
                     case ItemType.Break:
                     case ItemType.Separator:
+                    case ItemType.Spreader:
                         focusOn = Platform.isPhone ? ItemFormComponent.Actions : ItemFormComponent.Delete;
                         break;
                     case ItemType.Group:
@@ -638,13 +639,10 @@ export default class ItemListUi {
 		itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
 		switch(toolbarItem.linkAttr.type) {
 			case ItemType.Break:
+            case ItemType.Separator:
+            case ItemType.Spreader:
 				setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
-				itemPreviewContent.setText(t('setting.item.option-break'));
-				itemPreview.append(itemPreviewContent);
-				break;
-			case ItemType.Separator:
-				setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
-				itemPreviewContent.setText(t('setting.item.option-separator'));
+				itemPreviewContent.setText(toolbarItem.linkAttr.type === ItemType.Break ? t('setting.item.option-break') : toolbarItem.linkAttr.type === ItemType.Separator ? t('setting.item.option-separator') : t('setting.item.option-spreader'));
 				itemPreview.append(itemPreviewContent);
 				break;
 			case ItemType.Group: {
