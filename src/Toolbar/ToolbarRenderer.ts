@@ -3,7 +3,7 @@ import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { calcComponentVisToggles, calcItemVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
+import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
@@ -139,6 +139,7 @@ export default class ToolbarRenderer {
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
         if (!view) {
+			this.ntb.debug("🛑 renderToolbar: can not find active view → exiting");
             this.ntb.debugGroupEnd();
             return;
         }
@@ -146,12 +147,17 @@ export default class ToolbarRenderer {
         if (!(view instanceof MarkdownView)) {
             const isToolbarVisible = this.ntb.utils.checkToolbarForItemView(view);
             if (!isToolbarVisible) {
-                this.ntb.debug("🛑 renderToolbar: nothing to render in this view");
+                this.ntb.debug("🛑 renderToolbar: nothing to render in this view → exiting");
                 this.ntb.debugGroupEnd();
                 return;
             }
             if (position === PositionType.Props) position = PositionType.Top;
         }
+
+		if (!this.ntb.utils.hasVisibleItems(toolbar)) {
+			this.ntb.debug("renderToolbar: toolbar has no visible items → rendering as hidden");
+			position = PositionType.Hidden;
+		}
 
         const useLaunchpad = Boolean(
             !(view instanceof MarkdownView) && view.getViewType() === 'empty' 
@@ -280,11 +286,11 @@ export default class ToolbarRenderer {
                     let propsEl = this.ntb.el.getPropsEl(view);
                     if (!propsEl) {
 						// fix: (#464) insert delays in case properties hasn't been rendered in Preview mode yet
-						// for (const delay of [50, 100, 200]) {
-						// 	await sleep(delay);
-						// 	propsEl = this.ntb.el.getPropsEl(view);
-						// 	if (propsEl) break;
-						// }
+						for (const delay of [50, 100, 200]) {
+							await sleep(delay);
+							propsEl = this.ntb.el.getPropsEl(view);
+							if (propsEl) break;
+						}
                         this.ntb.debug("🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
                     }
                     propsEl?.insertAdjacentElement("afterend", embedBlock);
@@ -393,8 +399,8 @@ export default class ToolbarRenderer {
 			}
 
 			let toolbarItem: HTMLElement | undefined = undefined;
-			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
-
+			const [showOnDesktop, showOnMobile, showOnTablet, showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
+			
 			switch (item.linkAttr.type) {
 				case ItemType.Break:
 				case ItemType.Separator: {
@@ -408,7 +414,7 @@ export default class ToolbarRenderer {
 				case ItemType.Group: {
 					const groupToolbar = this.ntb.settingsManager.getToolbar(item.link);
 					if (groupToolbar) {
-						if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+						if (showInMode && (Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
 							const groupLItems = await this.renderLItems(groupToolbar, file, view, recursions + 1);
 							noteToolbarLiArray.push(...groupLItems);
 						}
@@ -473,7 +479,8 @@ export default class ToolbarRenderer {
 				// create its list item container 
 				let noteToolbarLi = activeDocument.createElement("li");
 				noteToolbarLi.dataset.index = i.toString();
-				// set its platform visibility
+				// set its visibility
+				!showInMode ? noteToolbarLi.addClass('hide-in-mode') : false;
 				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
 				!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
 				// disable if it's a command that's not available
@@ -617,8 +624,9 @@ export default class ToolbarRenderer {
 			if (![ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type) &&
 				!toolbarItem.icon && !toolbarItem.label && !toolbarItem.tooltip) continue;
 		
-			const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(toolbarItem.visibility);
-			if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+			const [showOnDesktop, showOnMobile, showOnTablet, showInMode] = this.ntb.utils.calcItemVisToggles(toolbarItem.visibility);
+
+			if (showInMode && ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop))) {
 				// replace variables in labels (or tooltip, if no label set)
 				const title = resolveVars 
 					? await this.ntb.items.getItemText(toolbarItem, file, false, resolveVars)

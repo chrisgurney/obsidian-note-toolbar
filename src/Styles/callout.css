@@ -146,6 +146,9 @@
                     display: block !important;
                 }
             }
+            &.hide-in-mode {
+                display: none !important;
+            }
             & span.hide {
                 display: none;
             }

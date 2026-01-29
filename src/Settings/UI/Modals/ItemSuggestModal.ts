@@ -1,7 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Platform, SuggestModal, TFile } from "obsidian";
 import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, LocalVar, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { calcItemVisToggles } from "Utils/Utils";
 import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 import ItemModal from "./ItemModal";
 import ToolbarSuggestModal from "./ToolbarSuggestModal";
@@ -23,6 +22,24 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         uuid: 'NEW_ITEM',
         label: t('setting.item-suggest-modal.option-new'),
         icon: 'plus'
+    };
+
+    private readonly SEPARATOR_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'NEW_ITEM',
+        icon: 'note-toolbar-separator',
+        label: t('setting.item.option-separator'),
+        tooltip: t('setting.items."button-add-separator-tooltip'),
+        linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Separator }
+    };
+
+    private readonly BREAK_ITEM: ToolbarItemSettings = {
+        ...DEFAULT_ITEM_SETTINGS,
+        uuid: 'NEW_ITEM',
+        icon: 'lucide-corner-down-left',
+        label: t('setting.item.option-break'),
+        tooltip: t('setting.items."button-add-break-tooltip'),
+        linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: ItemType.Break }
     };
 
     private readonly BROWSE_GALLERY_ITEM: ToolbarItemSettings = {
@@ -132,6 +149,10 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
 
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
+            if (this.mode !== 'QuickTools') {
+                itemSuggestions.push(this.SEPARATOR_ITEM);
+                itemSuggestions.push(this.BREAK_ITEM);
+            }
             sortedSuggestions = sortedSuggestions.concat(this.sortSuggestions(itemSuggestions, lowerCaseInputStr));
         }
 
@@ -199,9 +220,9 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             if (this.mode === 'QuickTools') {
                 // menu items can't be "used"
                 if (item.linkAttr.type === ItemType.Menu) return false;
-                const [showOnDesktop, showOnMobile, showOnTablet] = calcItemVisToggles(item.visibility);
+                const [showOnDesktop, showOnMobile, showOnTablet, showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
                 // ...and is visible on this platform
-                if ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+                if (showInMode && ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop))) {
                     // ...and does not have a var link and label/tooltip that resolves to nothing
                     if (
                         !(this.ntb.vars.hasVars(item.link) && 
@@ -298,7 +319,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
             }
-            if (item === this.NEW_ITEM || item === this.BROWSE_GALLERY_ITEM) {
+            if ([this.NEW_ITEM, this.BROWSE_GALLERY_ITEM, this.BREAK_ITEM, this.SEPARATOR_ITEM].contains(item)) {
                 el.addClass('cm-em');
             }
             if (!this.hasResults && item === this.NEW_ITEM) {

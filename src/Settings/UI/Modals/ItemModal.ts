@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal, Platform, Setting } from "obsidian";
 import { t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import ToolbarItemUi from "../ToolbarItemUi";
+import ToolbarItemUi from "../Components/ToolbarItemUi";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
 export default class ItemModal extends Modal {

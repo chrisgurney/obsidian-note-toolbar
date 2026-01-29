@@ -1623,6 +1623,9 @@ body {
                     display: block !important;
                 }
             }
+            &.hide-in-mode {
+                display: none !important;
+            }
             & span.hide {
                 display: none;
             }
@@ -2665,6 +2668,10 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
             border-radius: var(--radius-m);
             box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
             cursor: text;    
+        }
+        .note-toolbar-setting-item-fields & {
+            box-shadow: none;
+            cursor: default;
         }
     }
 }

@@ -1,15 +1,17 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, DropdownComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
-import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
+import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
-import IconSuggestModal from "./Modals/IconSuggestModal";
-import ItemModal from "./Modals/ItemModal";
-import ToolbarSettingsModal, { SettingsAttr } from "./Modals/ToolbarSettingsModal";
-import CommandSuggester from "./Suggesters/CommandSuggester";
-import FileSuggester from "./Suggesters/FileSuggester";
-import ToolbarSuggester from "./Suggesters/ToolbarSuggester";
-import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "./Utils/SettingsUIUtils";
+import IconSuggestModal from "../Modals/IconSuggestModal";
+import ItemModal from "../Modals/ItemModal";
+import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
+import CommandSuggester from "../Suggesters/CommandSuggester";
+import FileSuggester from "../Suggesters/FileSuggester";
+import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
+import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
+
+type ItemComponentVisibility = 'visible' | 'hidden' | 'icon' | 'label';
 
 export default class ToolbarItemUi {
 
@@ -18,6 +20,51 @@ export default class ToolbarItemUi {
         private parent: ToolbarSettingsModal | ItemModal, 
         private toolbar: ToolbarSettings
     ) {}
+
+    // private visComponentOptions = {
+    //     [ComponentType.Icon]: { 
+    //         iconHidden: '',
+    //         iconVisible: 'note-toolbar-pen-book',
+    //         label: t('setting.item.option-component-icon') },
+    //     [ComponentType.Label]: { 
+    //         iconHidden: 'pen-line',
+    //         iconVisible: '', 
+    //         label: t('setting.item.option-component-label') }
+    // };
+
+    // private visPlatformOptions = {
+    //     desktop: {
+    //         iconHidden: 'monitor-off',
+    //         iconVisible: 'monitor',
+    //         labelHidden: t('setting.item.option-visibility-hide-platform', { platform: 'desktop' }),
+    //         labelVisible: t('setting.item.option-visibility-show-platform', { platform: 'desktop' }) },
+    //     mobile: {
+    //         iconHidden: 'note-toolbar-tablet-smartphone-off',
+    //         iconVisible: 'tablet-smartphone',
+    //         labelHidden: t('setting.item.option-visibility-hide-platform', { platform: 'mobile' }),
+    //         labelVisible: t('setting.item.option-visibility-show-platform', { platform: 'mobile' }) }
+    // };
+
+    private visIcons = {
+        desktop: {
+            hidden: 'monitor-off',
+            icon: 'note-toolbar-monitor-circle',
+            label: 'note-toolbar-monitor-text',
+            visible: 'monitor'
+        },
+        mobile: {
+            hidden: 'note-toolbar-tablet-smartphone-off',
+            icon: 'note-toolbar-tablet-smartphone-circle',
+            label: 'note-toolbar-tablet-smartphone-text',
+            visible: 'tablet-smartphone'
+        }
+    };
+
+    private visViewModeOptions = {
+        [ViewModeType.All]: { icon: 'note-toolbar-pen-book', tooltip: t('setting.item.visibility.option-editing-reading-show') },
+        [ViewModeType.Editing]: { icon: 'pen-line', tooltip: t('setting.item.visibility.option-editing-show') },
+        [ViewModeType.Reading]: { icon: 'book-open', tooltip: t('setting.item.visibility.option-reading-show') }
+    };
 
     /**
      * Returns the form to edit a given toolbar item.
@@ -34,43 +81,59 @@ export default class ToolbarItemUi {
         let textFieldsContainer = createDiv();
         textFieldsContainer.className = "note-toolbar-setting-item-fields";
 
-        if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+        // show a preview only for breaks and separators
+        if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+
+            let type = toolbarItem.linkAttr.type;
+            const itemPreview = createDiv();
+            itemPreview.className = "note-toolbar-setting-item-preview";
+            itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
+            const itemPreviewContent = createSpan();
+            itemPreviewContent.setText(type === ItemType.Break ? t('setting.item.option-break') : t('setting.item.option-separator'));
+            itemPreview.append(itemPreviewContent);
+
+            textFieldsContainer.append(itemPreview);
+            itemTopContainer.appendChild(textFieldsContainer);
+            itemDiv.appendChild(itemTopContainer);
+
+        }
+        // generate form for all other types
+        else {
 
             //
             // Item icon, name, and tooltip
             //
 
+            const handleIconSelected = async (icon: string) => {
+                toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
+                this.ntb.settingsManager.save();
+                let itemRow = (this.parent instanceof ToolbarSettingsModal) 
+                    ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid) 
+                    : this.parent.getItemRowEl(toolbarItem.uuid);
+                updateItemIcon(this.parent, itemRow, icon);
+                if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
+            }
+
             let iconField = new Setting(textFieldsContainer)
                 .setClass("note-toolbar-setting-item-icon")
-                .addExtraButton((cb) => {
-                    cb.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
+                .addExtraButton((btn: ExtraButtonComponent) => {
+                    btn.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(async () => {
-                            let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, async (icon) => {
-                                toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
-                                this.ntb.settingsManager.save();
-                                updateItemIcon(this.parent, itemRow, icon);
-                                if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
-                            });
+                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, async (icon) => handleIconSelected(icon));
                             modal.open();
                         });
-                    cb.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
-                    cb.extraSettingsEl.setAttribute("tabindex", "0");
+                    btn.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
+                    btn.extraSettingsEl.setAttribute("tabindex", "0");
                     this.ntb.registerDomEvent(
-                        cb.extraSettingsEl, 'keydown', (e) => {
+                        btn.extraSettingsEl, 'keydown', (e) => {
                             switch (e.key) {
                                 case "Enter":
                                 case " ": {
                                     const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
                                     if (!modifierPressed) {
                                         e.preventDefault();
-                                        let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
-                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => {
-                                            toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
-                                            this.ntb.settingsManager.save();
-                                            updateItemIcon(this.parent, itemRow, icon);
-                                        });
+                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => handleIconSelected(icon));
                                         modal.open();
                                     }
                                 }
@@ -89,8 +152,6 @@ export default class ToolbarItemUi {
                         debounce(async (value) => {
                             let isValid = updateItemComponentStatus(this.ntb, this.parent, value, SettingType.Text, text.inputEl.parentElement);
                             toolbarItem.label = value;
-                            // TODO: if the label contains vars, set the flag to always rerender this toolbar
-                            // however, if vars are removed, make sure there aren't any other label vars, and only then unset the flag
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
@@ -141,7 +202,9 @@ export default class ToolbarItemUi {
                         )
                         .setValue(toolbarItem.linkAttr.type)
                         .onChange(async (value) => {
-                            let itemRow = this.parent.getItemRowEl(toolbarItem.uuid);
+                            let itemRow = (this.parent instanceof ToolbarSettingsModal) 
+                                ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid)
+                                : this.parent.getItemRowEl(toolbarItem.uuid);
                             let itemLinkFieldDiv = itemRow?.querySelector('.note-toolbar-setting-item-link-field') as HTMLDivElement;
                             // if there's an error instead, remove it
                             if (!itemLinkFieldDiv) {
@@ -203,18 +266,18 @@ export default class ToolbarItemUi {
 
             new Setting(itemControlsContainer)
 			.setClass("note-toolbar-setting-item-delete")
-			.addButton((button: ButtonComponent) => {
-				button
+			.addButton((btn: ButtonComponent) => {
+				btn
                     .setIcon("minus-circle")
 					.setTooltip(t('setting.button-delete-tooltip'))
 					.onClick(async () => this.handleItemDelete(toolbarItem));
-				button.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
+				btn.buttonEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
 			});
 
             new Setting(itemControlsContainer)
                 .setClass('note-toolbar-setting-item-visibility-and-controls')
-                .addButton((button: ButtonComponent) => {
-                    button
+                .addButton((btn: ButtonComponent) => {
+                    btn
                         .setIcon('copy-plus')
                         .setTooltip(t('setting.item.button-duplicate-tooltip'))
                         .onClick(async () => this.handleItemDuplicate(toolbarItem));
@@ -239,116 +302,107 @@ export default class ToolbarItemUi {
             });
 
         //
-        // separators + breaks: show these types after the buttons, to keep the UI minimal
-        //
-
-        if ([ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-            let type = toolbarItem.linkAttr.type;
-            let separatorTitle = createSpan();
-            separatorTitle.setText(type === ItemType.Break ? t('setting.item.option-break') : t('setting.item.option-separator'));
-            itemControlsContainer.append(separatorTitle);
-        }
-
-        //
         // visibility controls
         // 
 
+        // add controls
         let visibilityControlsContainer = createDiv();
         visibilityControlsContainer.className = "note-toolbar-setting-item-visibility-container";
 
         let visButtons = new Setting(visibilityControlsContainer)
             .setClass("note-toolbar-setting-item-visibility")
-            .addButton((cb) => {
-                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'));
-                setIcon(cb.buttonEl, 'monitor');
-                this.updateItemVisButton(cb, state, tooltip);
-                cb.setTooltip(tooltip)
+            .addButton((btn: ButtonComponent) => {
+                this.updateItemVisButton(toolbarItem, btn, 'desktop');
+                btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
-                        toolbarItem.visibility.desktop ??= { allViews: { components: [] } };
+                        toolbarItem.visibility.desktop ??= { components: [] };
                         // toggle (instead of menu) for breaks + separators
                         if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-                            let platform = toolbarItem.visibility.desktop;
+                            let visibility = toolbarItem.visibility.desktop;
 
                             let isComponentVisible = {
-                                icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
-                                label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+                                icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
+                                label: visibility ? visibility.components.includes(ComponentType.Label) : false,
                             };
                             if (isComponentVisible.icon && isComponentVisible.label) {
-                                removeComponentVisibility(platform, ComponentType.Icon);
-                                removeComponentVisibility(platform, ComponentType.Label);
+                                removeComponentVisibility(visibility, ComponentType.Icon);
+                                removeComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = false;
                                 isComponentVisible.label = false;
                             }
                             else {
-                                addComponentVisibility(platform, ComponentType.Icon);
-                                addComponentVisibility(platform, ComponentType.Label);
+                                addComponentVisibility(visibility, ComponentType.Icon);
+                                addComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = true;
                                 isComponentVisible.label = true;						
                             }
-                            let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-desktop'));
-                            this.updateItemVisButton(cb, state, tooltip);
+                            this.updateItemVisButton(toolbarItem, btn, 'desktop');
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.desktop, t('setting.item.option-visibility-platform-desktop'), cb);
-                            visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));	
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem, toolbarItem.visibility.desktop, 'desktop', btn);
+                            visibilityMenu.showAtPosition(getElementPosition(btn.buttonEl));	
                         }
                     });
             })
-            .addButton((cb) => {
-                let [state, tooltip] = this.getPlatformStateLabel(toolbarItem.visibility.mobile, t('setting.item.option-visibility-platform-mobile'));
-                setIcon(cb.buttonEl, 'tablet-smartphone');
-                this.updateItemVisButton(cb, state, tooltip);
-                cb.setTooltip(tooltip)
+            .addButton((btn: ButtonComponent) => {
+                this.updateItemVisButton(toolbarItem, btn, 'mobile');
+                btn
                     .onClick(async () => {
                         // create the setting if it doesn't exist or was removed
-                        toolbarItem.visibility.mobile ??= { allViews: { components: [] } };
+                        toolbarItem.visibility.mobile ??= { components: [] };
                         // toggle (instead of menu) for breaks + separators
                         if ([ItemType.Break, ItemType.Group, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-                            let platform = toolbarItem.visibility.mobile;
+                            let visibility = toolbarItem.visibility.mobile;
 
                             let isComponentVisible = {
-                                icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
-                                label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+                                icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
+                                label: visibility ? visibility.components.includes(ComponentType.Label) : false,
                             };
                             if (isComponentVisible.icon && isComponentVisible.label) {
-                                removeComponentVisibility(platform, ComponentType.Icon);
-                                removeComponentVisibility(platform, ComponentType.Label);
+                                removeComponentVisibility(visibility, ComponentType.Icon);
+                                removeComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = false;
                                 isComponentVisible.label = false;
                             }
                             else {
-                                addComponentVisibility(platform, ComponentType.Icon);
-                                addComponentVisibility(platform, ComponentType.Label);
+                                addComponentVisibility(visibility, ComponentType.Icon);
+                                addComponentVisibility(visibility, ComponentType.Label);
                                 isComponentVisible.icon = true;
                                 isComponentVisible.label = true;						
                             }
-                            let [state, tooltip] = this.getPlatformStateLabel(platform, t('setting.item.option-visibility-platform-mobile'));
-                            this.updateItemVisButton(cb, state, tooltip);
+                            this.updateItemVisButton(toolbarItem, btn, 'mobile');
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         }
                         else {
-                            let visibilityMenu = this.getItemVisibilityMenu(toolbarItem.visibility.mobile, t('setting.item.option-visibility-platform-mobile'), cb);
-                            visibilityMenu.showAtPosition(getElementPosition(cb.buttonEl));
+                            const visibilityMenu = this.getItemVisibilityMenu(toolbarItem, toolbarItem.visibility.mobile, 'mobile', btn);
+                            visibilityMenu.showAtPosition(getElementPosition(btn.buttonEl));
                         }
                     });
+            })
+            .addButton((btn: ButtonComponent) => {
+                this.updateViewModeButton(btn, toolbarItem.visibility.viewMode ?? ViewModeType.All);
+                btn.onClick(async () => {
+                    const menu = this.getModeVisibilityMenu(toolbarItem, btn);
+                    menu.showAtPosition(getElementPosition(btn.buttonEl));               
+                });
             });
 
         if (this.parent instanceof ToolbarSettingsModal) {
-            visButtons.addExtraButton((cb) => {
-                cb.setIcon('grip-horizontal')
+            visButtons.addExtraButton((btn: ExtraButtonComponent) => {
+                btn.setIcon('grip-horizontal')
                     .setTooltip(t('setting.button-drag-tooltip'))
                     .extraSettingsEl.addClass('sortable-handle');
-                cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
-                cb.extraSettingsEl.tabIndex = 0;
+                btn.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
+                btn.extraSettingsEl.tabIndex = 0;
                 this.ntb.registerDomEvent(
-                    cb.extraSettingsEl,	'keydown', (e) => {
-                        if (this.parent instanceof ToolbarSettingsModal) this.parent.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
+                    btn.extraSettingsEl, 'keydown', (e) => {
+                        if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
                     } );
             });
         }
@@ -476,7 +530,7 @@ export default class ToolbarItemUi {
 
     async handleItemDelete(toolbarItem: ToolbarItemSettings) {
         if (this.parent instanceof ToolbarSettingsModal) {
-            this.parent.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
+            this.parent.itemListUi.listMoveHandlerById(null, this.toolbar.items, toolbarItem.uuid, 'delete');                            
         }
         else {
             this.ntb.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
@@ -503,66 +557,131 @@ export default class ToolbarItemUi {
 
 	/**
 	 * Returns the visibility menu to display, for the given platform.
-	 * @param platform visibility to check for component visibility
-	 * @param platformLabel string to show in the menu 
+	 * @param visibility visibility to check for component visibility
 	 * @returns Menu
 	 */
-	getItemVisibilityMenu(platform: any, platformLabel: string, button: ButtonComponent): Menu {
+	getItemVisibilityMenu(item: ToolbarItemSettings, visibility: any, platform: 'desktop' | 'mobile', button: ButtonComponent): Menu {
 
-		let isComponentVisible = {
-			icon: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Icon) : false,
-			label: (platform && platform.allViews) ? platform.allViews.components.includes(ComponentType.Label) : false,
+        const platformLabel = platform === 'desktop' ? t('setting.item.visibility.platform-desktop') : t('setting.item.visibility.platform-mobile');
+
+		const isComponentVisible = {
+			icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
+			label: visibility ? visibility.components.includes(ComponentType.Label) : false,
 		};
 
 		let menu = new Menu();
+
+        // whole item visibility toggle
+        const visIcons = {
+            desktop: { hidden: 'monitor-off', visible: 'monitor' },
+            mobile: { hidden: 'note-toolbar-tablet-smartphone-off', visible: 'tablet-smartphone' }
+        };
+
+        // show item
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.visibility.option-item-show', { platform: platformLabel }))
+                .setIcon(visIcons[platform].visible)
+                .setChecked(visibility.components.length === 2)
+                .onClick(async (menuEvent) => {
+                    item.visibility[platform].components = [ComponentType.Icon, ComponentType.Label];
+                    this.toolbar.updated = new Date().toISOString();
+                    await this.ntb.settingsManager.save();
+                    this.updateItemVisButton(item, button, platform);
+                });
+        });
+        // hide item
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.visibility.option-item-hide', { platform: platformLabel }))
+                .setIcon(visIcons[platform].hidden)
+                .setChecked(visibility.components.length === 0)
+                .onClick(async (menuEvent) => {
+                    item.visibility[platform].components = [];
+                    this.toolbar.updated = new Date().toISOString();
+                    await this.ntb.settingsManager.save();
+                    this.updateItemVisButton(item, button, platform);
+                });
+        });
+
+        menu.addSeparator();
+
+        // component toggles
 		menu.addItem((menuItem: MenuItem) => {
+            const isIconOnly = visibility.components.length === 1 && visibility.components.includes(ComponentType.Icon);
 			menuItem
-				.setTitle(isComponentVisible.icon 
-					? t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-icon'), platform: platformLabel })
-					: t('setting.item.option-visibility-component-hidden-platform', { component: t('setting.item.option-component-icon'), platform: platformLabel }))
-				.setIcon("image")
-				.setChecked(isComponentVisible.icon)
+				.setTitle(t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-icon'), platform: platformLabel }))
+				.setIcon('image')
+				.setChecked(isIconOnly)
 				.onClick(async (menuEvent) => {
-					if (isComponentVisible.icon) {
-						removeComponentVisibility(platform, ComponentType.Icon);
-						isComponentVisible.icon = false;
-					}
-					else {
-						addComponentVisibility(platform, ComponentType.Icon);
-						isComponentVisible.icon = true;
-					}
+                    visibility.components = [ComponentType.Icon];
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
-					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
-					this.updateItemVisButton(button, state, tooltip);
+					this.updateItemVisButton(item, button, platform);
 				});
 		});
 		menu.addItem((menuItem: MenuItem) => {
+            const isLabelOnly = visibility.components.length === 1 && visibility.components.includes(ComponentType.Label);
 			menuItem
-				.setTitle(isComponentVisible.label 
-					? t('setting.item.option-visibility-component-visible-platform', { component: t('setting.item.option-component-label'), platform: platformLabel })
-					: t('setting.item.option-visibility-component-hidden-platform', { component: t('setting.item.option-component-label'), platform: platformLabel }))
-				.setIcon("whole-word")
-				.setChecked(isComponentVisible.label)
+				.setTitle(t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-label'), platform: platformLabel }))
+				.setIcon('text-align-start')
+				.setChecked(isLabelOnly)
 				.onClick(async (menuEvent) => {
-					if (isComponentVisible.label) {
-						removeComponentVisibility(platform, ComponentType.Label);
-						isComponentVisible.label = false;
-					}
-					else {
-						addComponentVisibility(platform, ComponentType.Label);
-						isComponentVisible.label = true;
-					}
+                    visibility.components = [ComponentType.Label];
 					this.toolbar.updated = new Date().toISOString();
 					await this.ntb.settingsManager.save();
-					let [state, tooltip] = this.getPlatformStateLabel(platform, platformLabel);
-					this.updateItemVisButton(button, state, tooltip);
+					this.updateItemVisButton(item, button, platform);
 				});
 		});
 
 		return menu;
 
 	}
+
+	/**
+	 * Returns the mode visibility menu to display, for the given item.
+	 * @returns Menu
+	 */
+	getModeVisibilityMenu(item: ToolbarItemSettings, button: ButtonComponent): Menu {
+
+        let menu = new Menu();
+
+        const handleMenuClick = async (viewMode: ViewModeType) => {
+            item.visibility.viewMode = viewMode;
+            this.updateViewModeButton(button, item.visibility.viewMode);
+            this.toolbar.updated = new Date().toISOString();
+            await this.ntb.settingsManager.save();                     
+        }
+
+		menu.addItem((menuItem: MenuItem) => {
+            const isEnabled = !item.visibility.viewMode || item.visibility.viewMode === ViewModeType.All;
+            menuItem
+                .setTitle(t('setting.item.visibility.option-editing-reading-show'))
+                .setIcon(this.visViewModeOptions[ViewModeType.All].icon)
+                .setChecked(isEnabled)
+                .onClick(async () => handleMenuClick(ViewModeType.All))
+        	});
+        menu.addSeparator();
+		menu.addItem((menuItem: MenuItem) => {
+            const isEnabled = item.visibility.viewMode === ViewModeType.Editing;
+            menuItem
+                .setTitle(t('setting.item.visibility.option-editing-show'))
+                .setIcon(this.visViewModeOptions[ViewModeType.Editing].icon)
+                .setChecked(isEnabled)
+                .onClick(async () => handleMenuClick(ViewModeType.Editing))
+        	});
+		menu.addItem((menuItem: MenuItem) => {
+            const isEnabled = item.visibility.viewMode === ViewModeType.Reading;
+            menuItem
+                .setTitle(t('setting.item.visibility.option-reading-show'))
+                .setIcon(this.visViewModeOptions[ViewModeType.Reading].icon)
+                .setChecked(isEnabled)
+                .onClick(async () => handleMenuClick(ViewModeType.Reading))
+        	});
+
+        return menu;
+
+    }
 
     getLinkSetting(
         type: ItemType, 
@@ -1158,54 +1277,58 @@ export default class ToolbarItemUi {
 
 	/**
 	 * Gets the current state of visibility for a given platform.
-	 * @param platform visibility to check
 	 * @returns a single word (hidden, visible, or the component name), and a sentence for the tooltip
 	 */
-	getPlatformStateLabel(platform: any, platformLabel: string): [string, string] {
+	getPlatformStateLabel(item: ToolbarItemSettings, platform: 'desktop' | 'mobile'): [ItemComponentVisibility, string, string] {
 
-		if (platform && platform.allViews) {
-			let dkComponents = platform.allViews?.components;
-			if (dkComponents) {
-				if (dkComponents.length === 2) {
-					return ['', t('setting.item.option-visibility-visible-platform', { platform: platformLabel })];
-				} else if (dkComponents.length === 1) {
-					return [
-						(dkComponents[0] === ComponentType.Icon) ? t('setting.item.option-component-icon') : (dkComponents[0] === ComponentType.Label) ? t('setting.item.option-component-label') : dkComponents[0],
-						t('setting.item.option-visibility-component-visible-platform', { component: dkComponents[0], platform: platformLabel })];
-				} else {
-					return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
+        const labelPlatform = platform === 'desktop' ? t('setting.item.visibility.platform-desktop') : t('setting.item.visibility.platform-mobile');
+        const visibility = item.visibility ? (platform === 'desktop' ? item.visibility.desktop : item.visibility.mobile) : undefined;
+
+		if (visibility) {
+			let components = visibility?.components;
+			if (components) {
+				if (components.length === 2) {
+					return ['visible', '', t('setting.item.visibility.option-item-show', { platform: labelPlatform })];
+				}
+                else if (components.length === 1) {
+                    if (components[0] === ComponentType.Icon) {
+                        return ['icon', '', t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-icon'), platform: labelPlatform })];
+                    } else if (components[0] === ComponentType.Label) {
+                        return ['label', '', t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-label'), platform: labelPlatform })];
+                    }
+				} 
+                else {
+					return ['hidden', '', t('setting.item.visibility.option-item-hide', { platform: labelPlatform })];
 				}
 			}
 		}
-		return [t('setting.item.option-visibility-hidden'), t('setting.item.option-visibility-hidden-platform', { platform: platformLabel })];
-
+		return ['hidden', '', t('setting.item.visibility.option-item-hide', { platform: labelPlatform })];
 	}
 
     renderPreview(toolbarItem: ToolbarItemSettings) {
-        if (this.parent instanceof ToolbarSettingsModal) this.parent.renderPreview(toolbarItem);
+        if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.renderPreview(toolbarItem);
     }
 
 	/**
 	 * Updates the appearance of the provided item form visibility button.
 	 * @param button ButtonComponent for the visibility button
-	 * @param label string label to add to the button (i.e., the visibility state, or none)
-	 * @param tooltip string tooltip to add to the button (i.e., the visibility state, or none)
 	 */
-	private updateItemVisButton(button: ButtonComponent, label: string, tooltip: string): void {
-		const children = Array.from(button.buttonEl.childNodes);
-		const labelNode = children.find(node => node.nodeType === Node.TEXT_NODE);
-	
-		if (label) {
-			if (labelNode) {
-				labelNode.textContent = label;
-			} else {
-				button.buttonEl.appendChild(document.createTextNode(label));
-			}
-		} 
-		else if (labelNode) {
-			button.buttonEl.removeChild(labelNode);
-		}
-		button.setTooltip(tooltip);
+	private updateItemVisButton(item: ToolbarItemSettings, button: ButtonComponent, platform: 'desktop' | 'mobile'): void {
+        let [state, label, tooltip] = this.getPlatformStateLabel(item, platform);
+        button.buttonEl.empty();
+        setIcon(button.buttonEl, this.visIcons[platform][state]);
+        if (label) button.buttonEl.appendChild(document.createTextNode(label));
+        button.setTooltip(tooltip);
 	}
+
+	/**
+	 * Updates the appearance of the provided item mode visibility button.
+	 * @param button ButtonComponent for the visibility button
+	 */
+    private updateViewModeButton(button: ButtonComponent, mode: ViewModeType) {
+        const config = this.visViewModeOptions[mode];
+        setIcon(button.buttonEl, config.icon);
+        button.setTooltip(config.tooltip);
+    };
 
 }
