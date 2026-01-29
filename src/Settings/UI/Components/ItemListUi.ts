@@ -216,6 +216,12 @@ export default class ItemListUi {
                 handleKeyClick(this.ntb, btn.extraSettingsEl);
             })
             .addExtraButton((btn) => {
+                btn.setIcon('move-horizontal')
+                    .setTooltip(t('setting.items.button-add-spreader-tooltip'))
+                    .onClick(async () => this.addItemHandler(ItemType.Spreader, itemsSortableContainer));
+                handleKeyClick(this.ntb, btn.extraSettingsEl);
+            })
+            .addExtraButton((btn) => {
                 btn.setIcon('lucide-corner-down-left')
                     .setTooltip(t('setting.items.button-add-break-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Break, itemsSortableContainer));
