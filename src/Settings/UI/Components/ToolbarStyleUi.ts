@@ -239,8 +239,9 @@ export default class ToolbarStyleUi {
     getExcludedMobileStyles(): string[] {
         const excludedStyles: string[] = [];
         
-        if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Top) excludedStyles.push('mnwd', 'mwd');
-        if (this.toolbar.position.mobile?.allViews?.position !== PositionType.Props) excludedStyles.push('mstcky', 'mnstcky');
+        const position: PositionType | undefined = this.toolbar.position.mobile?.allViews?.position;
+        if (position !== PositionType.Top && position !== PositionType.Bottom) excludedStyles.push('mnwd', 'mwd');
+        if (position !== PositionType.Props) excludedStyles.push('mstcky', 'mnstcky');
 
         if (this.isUsingLaunchpad()) {
             excludedStyles.push('mctr', 'mlft', 'mrght', 'mbtwn', 'mevn', 'mstcky', 'mnstcky', 'mntb', 'mnwrp', 'mtb');
