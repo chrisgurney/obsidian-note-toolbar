@@ -1933,10 +1933,19 @@ body {
 
     &[data-callout-metadata*="tab"] ul {
         & li[data-active-file] {
-            box-shadow: inset 0 -1px 0 var(--link-color);
             & span.external-link {
                 color: var(--link-color);
                 filter: unset;
+            }            
+        }
+    }
+    &[data-callout-metadata*="tab"]:not([data-callout-metadata*="button"]):not([data-callout-metadata*="glass"]) ul {
+        & li[data-active-file] {
+            box-shadow: inset 0 -1px 0 var(--link-color);
+        }
+        .is-mobile & {
+            & li[data-active-file] {
+                box-shadow: none;
             }
         }
     }
@@ -1944,11 +1953,17 @@ body {
     &[data-callout-metadata*="mtb"] ul {
         .is-mobile & {
             & li[data-active-file] {
-                box-shadow: inset 0 -1px 0 var(--link-color);
                 & span.external-link {
                     color: var(--link-color);
                     filter: unset;
                 }
+            }
+        }
+    }
+    &[data-callout-metadata*="mtb"]:not([data-callout-metadata*="mbtn"]):not([data-callout-metadata*="mgls"]) ul {
+        .is-mobile & {
+            & li[data-active-file] {
+                box-shadow: inset 0 -1px 0 var(--link-color);
             }
         }
     }
