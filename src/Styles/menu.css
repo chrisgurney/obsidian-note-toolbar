@@ -43,3 +43,20 @@
         background-color: var(--cg-nt-menu-item-bg-color-hover);
     }
 }
+
+body.is-tablet[data-ntb-csstheme="Cupertino"],
+body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]) {
+    & .note-toolbar-menu {
+        background-color: var(--ntb-liquid-glass-background);
+        backdrop-filter: var(--raised-blur) !important;
+        border-color: var(--background-modifier-border);
+        border-radius: 20px;
+        border-style: solid;
+        border-width: var(--border-width);
+        box-shadow: var(--ntb-shadow-xs);
+        mix-blend-mode: normal !important;
+        & .menu-item {
+            border-radius: 24px;
+        }
+    }
+}
