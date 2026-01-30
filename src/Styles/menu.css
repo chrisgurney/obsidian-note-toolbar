@@ -44,7 +44,7 @@
     }
 }
 
-body.is-tablet[data-ntb-csstheme="Cupertino"],
+body[data-ntb-csstheme="Cupertino"],
 body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]) {
     & .note-toolbar-menu {
         background-color: var(--ntb-liquid-glass-background);
