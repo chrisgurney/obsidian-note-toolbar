@@ -119,6 +119,7 @@ export const enum PositionType {
 }
 export const enum RibbonAction {
 	ItemSuggester = 'item-suggester',
+	ToolbarSelected = 'toolbar-selected',
 	ToolbarSuggester = 'toolbar-suggester',
 	Toolbar = 'toolbar'
 }
@@ -245,6 +246,7 @@ export interface NoteToolbarSettings {
 	obsidianUiVisibility: Record<string, boolean>;
 	onboarding: OnboardingState;
 	ribbonAction: RibbonAction;
+	ribbonToolbar: string | null;
 	rules: Array<ToolbarRule>;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
@@ -278,6 +280,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	obsidianUiVisibility: {},
 	onboarding: {},
 	ribbonAction: RibbonAction.Toolbar,
+	ribbonToolbar: null,
 	rules: [],
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
@@ -585,9 +588,10 @@ export const POSITION_OPTIONS = {
 }
 
 export const RIBBON_ACTION_OPTIONS = {
+	[RibbonAction.Toolbar]: (t('setting.display-locations.ribbon-action.option-toolbar')),
+	[RibbonAction.ToolbarSelected]: t('setting.display-locations.ribbon-action.option-toolbar-selected'),
 	[RibbonAction.ItemSuggester]: t('setting.display-locations.ribbon-action.option-item-suggester'),
 	[RibbonAction.ToolbarSuggester]: t('setting.display-locations.ribbon-action.option-toolbar-suggester'),
-	[RibbonAction.Toolbar]: (t('setting.display-locations.ribbon-action.option-toolbar')),
 }
 
 export const TARGET_OPTIONS = {

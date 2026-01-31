@@ -937,7 +937,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		//
 
 		appToolbarGroup.addSetting((emptyViewSetting) => {
-			const existingEmptyViewToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar)
+			const existingEmptyViewToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar);
 			emptyViewSetting
 				.setName(t('setting.display-locations.option-emptyview-tbar'))
 				.setDesc(t('setting.display-locations.option-emptyview-tbar-description'))
@@ -997,9 +997,45 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.setValue(this.ntb.settings.ribbonAction)
 						.onChange(async (value: RibbonAction) => {
 							this.ntb.settings.ribbonAction = value;
+							// toggle toolbar setting, if necessary
+							const hasRibbonToolbar = (value === RibbonAction.ToolbarSelected);
+							const ribbonToolbarEl = this.containerEl.querySelector('#note-toolbar-ribbon-toolbar-setting');
+							ribbonToolbarEl?.setAttribute('data-active', hasRibbonToolbar.toString());
 							await this.ntb.settingsManager.save();
 						})
 					);
+		});
+
+		appToolbarGroup.addSetting((ribbonToolbarSetting) => {
+			const existingRibbonToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.ribbonToolbar);
+			ribbonToolbarSetting
+				.setName(t('setting.display-locations.ribbon-action.option-toolbar-selected-name'))
+				.setDesc(t('setting.display-locations.ribbon-action.option-toolbar-selected-description'))
+				.setClass('note-toolbar-sub-setting-item')
+				.setClass('note-toolbar-setting-item-control-std-with-help')
+				.addSearch(async (cb) => {
+					new ToolbarSuggester(this.ntb, cb.inputEl);
+					cb.setPlaceholder(t('setting.display-locations.ribbon-action.option-toolbar-selected-placeholder'))
+					.setValue(existingRibbonToolbar ? existingRibbonToolbar.name : '')
+					.onChange(debounce(async (name) => {
+						const isValid = await updateItemComponentStatus(this.ntb, this, name, SettingType.Toolbar, ribbonToolbarSetting.controlEl, undefined, 'beforeend');
+						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+						this.ntb.settings.ribbonToolbar = newToolbar?.uuid ?? null;
+						// update toolbar preview
+						const toolbarPreviewFr = newToolbar && createToolbarPreviewFr(this.ntb, newToolbar, undefined, false);
+						removeFieldHelp(ribbonToolbarSetting.controlEl);
+						setFieldHelp(ribbonToolbarSetting.controlEl, toolbarPreviewFr);
+						await this.ntb.settingsManager.save();
+					}, 250));
+					await updateItemComponentStatus(this.ntb, this, existingRibbonToolbar ? existingRibbonToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+				});
+			// show the sub-setting if needed
+			ribbonToolbarSetting.settingEl.id = 'note-toolbar-ribbon-toolbar-setting';
+			const hasRibbonToolbar = (this.ntb.settings.ribbonAction === RibbonAction.ToolbarSelected);
+			ribbonToolbarSetting.settingEl.setAttribute('data-active', hasRibbonToolbar.toString());
+			// show the toolbar preview
+			const ribbonToolbarFr = existingRibbonToolbar && createToolbarPreviewFr(this.ntb, existingRibbonToolbar, undefined, false);
+			setFieldHelp(ribbonToolbarSetting.controlEl, ribbonToolbarFr);
 		});
 
 		//

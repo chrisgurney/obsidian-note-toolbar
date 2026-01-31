@@ -334,10 +334,14 @@
             "option-text-on-keyboard-description": "Show this toolbar when text is selected with the keyboard.",
             "option-text-placeholder": "Select toolbar...",
             "ribbon-action": {
-                "description": "Set the action to take when the ribbon icon (on phones) is used.",
-                "name": "Ribbon 📱",
+                "description": "Set the action to take when the ribbon button in the navigation bar (on phones) is used.",
+                "name": "Navigation bar 📱",
                 "option-item-suggester": "Show all tools",
                 "option-toolbar": "Show current toolbar",
+                "option-toolbar-selected": "Show selected toolbar",
+                "option-toolbar-selected-name": "Ribbon button toolbar",
+                "option-toolbar-selected-description": "Show this toolbar when using the ribbon button.",
+                "option-toolbar-selected-placeholder":  "Select toolbar...",
                 "option-toolbar-suggester": "Show all toolbars"
             }
         },
