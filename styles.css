@@ -2598,6 +2598,12 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         display: none !important;
     }
 }
+.note-toolbar-sub-setting-item {
+    & .setting-item-info {
+        border-left: var(--border-width) solid var(--background-modifier-border);
+        padding-inline-start: 1em;
+    }
+}
 .note-toolbar-setting-item-preview-container {
     align-items: center;
     display: flex;

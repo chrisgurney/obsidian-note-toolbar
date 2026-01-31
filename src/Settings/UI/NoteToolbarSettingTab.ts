@@ -863,6 +863,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const appToolbarGroup = new SettingGroup(collapsibleContainerEl);
 
+		//
+		// Editor menu
+		//
+
 		appToolbarGroup.addSetting((editorMenuSetting) => {
 			const existingEditorMenuToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
 			editorMenuSetting
@@ -897,6 +901,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			editorMenuAsTbarSetting
 				.setName(t('setting.display-locations.option-editor-menu-as-tbar'))
 				.setDesc(t('setting.display-locations.option-editor-menu-as-tbar-description'))
+				.setClass('note-toolbar-sub-setting-item')
 				.addToggle((cb: ToggleComponent) => {
 					cb.setValue(this.ntb.settings.editorMenuAsToolbar)
 						.onChange(async (value: boolean) => {
@@ -908,6 +913,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
 			editorMenuAsTbarSetting.settingEl.setAttribute('data-active', hasEditorMenuToolbar.toString());
 		});
+
+		//
+		// File menu
+		//
 
 		appToolbarGroup.addSetting((showToolbarInFileMenuSetting) => {
 			showToolbarInFileMenuSetting
@@ -922,6 +931,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 				});
 		});
+
+		//
+		// New tab view
+		//
 
 		appToolbarGroup.addSetting((emptyViewSetting) => {
 			const existingEmptyViewToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar)
@@ -957,6 +970,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			launchpadSetting
 				.setName(t('setting.display-locations.option-launchpad'))
 				.setDesc(learnMoreFr(t('setting.display-locations.option-launchpad-description'), 'Toolbars-within-the-app#new-tab-view'))
+				.setClass('note-toolbar-sub-setting-item')
 				.addToggle((cb: ToggleComponent) => {
 					cb.setValue(this.ntb.settings.showLaunchpad)
 						.onChange(async (value: boolean) => {
@@ -968,6 +982,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			const hasEmptyViewToolbar = !!this.ntb.settings.emptyViewToolbar;
 			launchpadSetting.settingEl.setAttribute('data-active', hasEmptyViewToolbar.toString());
 		});
+
+		//
+		// Ribbon
+		//
 
 		appToolbarGroup.addSetting((ribbonActionSetting) => {
 			ribbonActionSetting
@@ -983,6 +1001,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						})
 					);
 		});
+
+		//
+		// Selected text
+		//
 
 		appToolbarGroup.addSetting((textToolbarSetting) => {
 			const existingTextToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
@@ -1022,6 +1044,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			textToolbarOnKeyboardSetting
 				.setName(t('setting.display-locations.option-text-on-keyboard'))
 				.setDesc(t('setting.display-locations.option-text-on-keyboard-description'))
+				.setClass('note-toolbar-sub-setting-item')
 				.addToggle((cb: ToggleComponent) => {
 					cb.setValue(this.ntb.settings.textToolbarOnKeyboard)
 						.onChange(async (value: boolean) => {
