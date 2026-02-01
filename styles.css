@@ -2601,7 +2601,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
 .note-toolbar-sub-setting-item {
     & .setting-item-info {
         border-left: var(--border-width) solid var(--background-modifier-border);
-        padding-inline-start: 1em;
+        padding-inline-start: var(--size-4-4);
     }
 }
 .note-toolbar-setting-item-preview-container {
