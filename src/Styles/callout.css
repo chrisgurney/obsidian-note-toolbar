@@ -52,6 +52,11 @@
     min-height: var(--header-height);
 }
 
+/* removes padding above the top navigation, when Obsidian's Floating navigation setting is disabled */
+.is-phone .view-header:has(+ [data-tbar-position="top"]) {
+    padding-top: 0;
+}
+
 .callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
     background-image: unset !important;
