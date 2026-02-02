@@ -1396,7 +1396,8 @@ body {
     /*
      * Other styles not customizable via Style Settings
      */
-    --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
+     --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
+     --ntb-callout-card-flex: 1 1 200px;
 
     /*
      * Glass effect variables (thanks to @aaaaalexis)
@@ -1796,6 +1797,110 @@ body {
     &[data-callout-metadata*="mnbrder"] {
         .is-mobile & {
             border: inherit;
+        }
+    }
+
+    &[data-callout-metadata*="card"] {
+        &[data-callout-metadata*="nowrap"] ul {
+            flex-wrap: nowrap;
+            scrollbar-width: none;
+            & li {
+                flex: 0 0 auto;
+                width: 200px;
+            }
+        }
+        & ul {
+            align-items: stretch;
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            overscroll-behavior-x: none;
+            padding-bottom: 4px;
+            position: relative;
+            scroll-behavior: smooth;
+            & li {
+                align-items: start;
+                background-blend-mode: overlay;
+                box-shadow: var(--input-shadow);
+                border-radius: var(--radius-m);
+                cursor: pointer;
+                display: flex;
+                flex: var(--ntb-callout-card-flex);
+                flex-direction: column;
+                height: unset;
+                justify-content: flex-end;
+                min-height: 140px;
+                position: relative;
+                text-align: unset;
+                width: auto;
+                .is-mobile & {
+                    border: var(--border-width) solid var(--background-modifier-border);
+                }
+                & a, span.external-link {
+                    padding: 16px !important;
+                    align-items: center;
+                    border-radius: var(--radius-m);
+                    color: var(--cg-nt-item-text-color);
+                    width: 100%;
+                    text-wrap: wrap;
+                    user-select: none;
+                    & span.cm-iconize-icon {
+                        align-items: center;
+                        display: flex;
+                        height: 30px;
+                        justify-content: center;
+                        left: 16px;
+                        position: absolute;
+                        top: 16px;
+                        width: 30px;
+                        & svg {
+                            height: 30px;        
+                            width: 30px;
+                        }
+                    }
+                    .is-mobile & {
+                        font-size: var(--font-ui-small);
+                        font-weight: var(--font-bold);
+                    }
+                    &::after {
+                        display: none; /* fix for Border theme */
+                    }
+                }
+                [data-callout-metadata*="glass"] &, [data-callout-metadata*="mgls"] & {
+                    border-radius: 32px;
+                    box-shadow: inherit;
+                }
+            }
+            @media (hover: hover) {
+                & a:hover, span.external-link:hover {
+                    background-color: var(--cg-nt-item-bg-color-hover);
+                    box-shadow: inset 0 0 0 2px var(--background-modifier-hover);
+                }
+            }
+        }
+        &[data-callout-metadata*="red"] svg {
+            color: var(--color-red) !important;
+        }
+        &[data-callout-metadata*="orange"] svg {
+            color: var(--color-orange) !important;
+        }
+        &[data-callout-metadata*="yellow"] svg {
+            color: var(--color-yellow) !important;
+        }
+        &[data-callout-metadata*="green"] svg {
+            color: var(--color-green) !important;
+        }
+        &[data-callout-metadata*="cyan"] svg {
+            color: var(--color-cyan) !important;
+        }
+        &[data-callout-metadata*="blue"] svg {
+            color: var(--color-blue) !important;
+        }
+        &[data-callout-metadata*="purple"] svg {
+            color: var(--color-purple) !important;
+        }
+        &[data-callout-metadata*="pink"] svg {
+            color: var(--color-pink) !important;
         }
     }
 

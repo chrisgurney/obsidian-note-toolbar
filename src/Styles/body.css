@@ -105,7 +105,8 @@ body {
     /*
      * Other styles not customizable via Style Settings
      */
-    --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
+     --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
+     --ntb-callout-card-flex: 1 1 200px;
 
     /*
      * Glass effect variables (thanks to @aaaaalexis)
