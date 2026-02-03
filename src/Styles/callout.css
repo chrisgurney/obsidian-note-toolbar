@@ -370,6 +370,7 @@
                 width: auto;
                 .is-mobile & {
                     border: var(--border-width) solid var(--background-modifier-border);
+                    flex: var(--ntb-callout-card-flex-mobile);
                 }
                 & a, span.external-link {
                     padding: 16px !important;
