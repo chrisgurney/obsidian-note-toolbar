@@ -334,6 +334,16 @@
                 width: 200px;
             }
         }
+        &[data-callout-metadata*="mnwrp"] ul {
+            .is-mobile & {
+                flex-wrap: nowrap;
+                scrollbar-width: none;
+                & li {
+                    flex: 0 0 auto;
+                    width: 200px;
+                }
+            }
+        }
         & ul {
             align-items: stretch;
             display: flex;
