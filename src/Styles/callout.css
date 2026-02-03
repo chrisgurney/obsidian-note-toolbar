@@ -140,15 +140,15 @@
             &.hide {
                 display: none;
             }
-            &.hide-on-mobile {
-                .is-mobile & {
-                    display: none;
-                }
-            }
             &.hide-on-desktop {
                 display: none;
                 .is-mobile & {
-                    display: block !important;
+                    display: block;
+                }
+            }
+            &.hide-on-mobile {
+                .is-mobile & {
+                    display: none;
                 }
             }
             &.hide-in-mode {
