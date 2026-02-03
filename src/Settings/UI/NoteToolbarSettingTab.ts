@@ -1401,12 +1401,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.setDesc(t('setting.other.navbar-visibility.description'))
 				.addButton((button: ButtonComponent) => {
 					button
-						.setIcon('gear')
-						.setTooltip(t('setting.toolbars.button-more-tooltip'))
 						.onClick((cb) => {
-							let visibilityMenu = this.getNavbarVisibilityMenu();
+							let visibilityMenu = this.getNavbarVisibilityMenu(button);
 							visibilityMenu.showAtPosition(getElementPosition(button.buttonEl));
 						});
+					this.updateNavbarVisibilityButton(button);
 				});
 		});
 
@@ -1544,35 +1543,23 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 	/**
 	 * Shows the menu where you can customize Obsidian's mobile navigation bar.
+	 * @param button ButtonComponent that triggered the menu, for status updates.
 	 */
-	getNavbarVisibilityMenu(): Menu {
+	getNavbarVisibilityMenu(button: ButtonComponent): Menu {
 		const menu = new Menu();
 
-		const obsidianUiEls = new Map(
-			OBSIDIAN_UI_ELEMENTS.map(el => [el.key, el])
-		);
-
-		const obsidianUiSetting = new Map(
-			Object.entries(this.ntb.settings.obsidianUiVisibility)
-				.filter(([key]) => key.startsWith('mobile.navbar.'))
-		);
-
-		// check if all actions are hidden
-		const allNavbarKeys = Array.from(
-			obsidianUiEls.keys()).filter(key => key.startsWith('mobile.navbar.')
-		);
-		const allHidden = allNavbarKeys.every(key => 
-			obsidianUiSetting.get(key) === false
-		);
+		const { obsidianUiEls, obsidianUiSetting, allNavbarKeys, allHidden } = this.getNavbarState();
 
 		// toggle to hide/unhide all actions
 		menu.addItem((menuItem: MenuItem) => {
 			menuItem
 				.setTitle(allHidden ? t('setting.other.navbar-visibility.option-unhide-all') : t('setting.other.navbar-visibility.option-hide-all'))
+				.setIcon(allHidden ? 'eye' : 'eye-off')
 				.onClick(async (menuEvent) => { 
 					allNavbarKeys.forEach((key) => {
 						this.ntb.settings.obsidianUiVisibility[key] = allHidden ? true : false;
 					});
+					this.updateNavbarVisibilityButton(button);
 					await this.ntb.settingsManager.save();
 				});
 		});
@@ -1590,6 +1577,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.onClick(async (menuEvent) => {
 							const currentValue = this.ntb.settings.obsidianUiVisibility[uiEl.key] ?? true;
 							this.ntb.settings.obsidianUiVisibility[uiEl.key] = !currentValue;
+							this.updateNavbarVisibilityButton(button);
 							await this.ntb.settingsManager.save();
 						});
 				});
@@ -1597,6 +1585,53 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		});
 
 		return menu;
+	}
+
+	getNavbarState() {
+		const obsidianUiEls = new Map(
+			OBSIDIAN_UI_ELEMENTS.map(el => [el.key, el])
+		);
+
+		const obsidianUiSetting = new Map(
+			Object.entries(this.ntb.settings.obsidianUiVisibility)
+				.filter(([key]) => key.startsWith('mobile.navbar.'))
+		);
+
+		// check if all actions are hidden
+		const allNavbarKeys = Array.from(
+			obsidianUiEls.keys()).filter(key => key.startsWith('mobile.navbar.')
+		);
+		const allHidden = allNavbarKeys.every(key => 
+			obsidianUiSetting.get(key) === false
+		);
+
+		return {
+			obsidianUiEls,
+			obsidianUiSetting,
+			allNavbarKeys,
+			allHidden
+		};
+	}
+
+	updateNavbarVisibilityButton(button: ButtonComponent) {
+		const { obsidianUiEls, obsidianUiSetting, allNavbarKeys, allHidden } = this.getNavbarState();
+		if (allHidden) {
+			button.setIcon('eye-off');
+			button.setTooltip(t('setting.other.navbar-visibility.label-hidden'));
+			return;
+		}
+		// if some are hidden
+		else if (allNavbarKeys.some(key => obsidianUiSetting.get(key) === false)) {
+			button.setIcon('note-toolbar-eye-dashed');
+			button.setTooltip(t('setting.other.navbar-visibility.label-partial'));
+			return;
+		}
+		// all are visible
+		else {
+			button.setIcon('eye');
+			button.setTooltip(t('setting.other.navbar-visibility.label-visible'));
+			return;
+		}
 	}
 
 }

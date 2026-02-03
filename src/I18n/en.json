@@ -582,6 +582,9 @@
             "name": "Other",
             "navbar-visibility": {
                 "description": "Hides actions in Obsidian's phone navigation bar.",
+                "label-hidden": "Navbar is hidden",
+                "label-partial": "Some navbar actions are hidden",
+                "label-visible": "Navbar is visible",
                 "name": "Navbar item visibility 📱",
                 "option-hide-all": "Hide all actions",
                 "option-unhide-all": "Unhide all actions"
