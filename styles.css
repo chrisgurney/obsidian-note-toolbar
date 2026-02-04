@@ -1397,8 +1397,11 @@ body {
      * Other styles not customizable via Style Settings
      */
      --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
-     --ntb-callout-card-flex: 1 1 150px;
-     --ntb-callout-card-flex-mobile: 1 1 125px;
+
+     --ntb-callout-card-width: 150px;
+     --ntb-callout-card-width-mobile: 125px;
+     --ntb-callout-card-flex: 1 1 var(--ntb-callout-card-width);
+     --ntb-callout-card-flex-mobile: 1 1 var(--ntb-callout-card-width-mobile);
 
     /*
      * Glass effect variables (thanks to @aaaaalexis)
@@ -1849,10 +1852,12 @@ body {
                 min-height: 140px;
                 position: relative;
                 text-align: unset;
+                min-width: var(--ntb-callout-card-width);
                 width: auto;
                 .is-mobile & {
                     border: var(--border-width) solid var(--background-modifier-border);
                     flex: var(--ntb-callout-card-flex-mobile);
+                    min-width: var(--ntb-callout-card-width-mobile);
                 }
                 & a, span.external-link {
                     padding: 16px !important;
@@ -1862,6 +1867,10 @@ body {
                     width: 100%;
                     text-wrap: wrap;
                     user-select: none;
+                    &:has(span.cm-iconize-icon) {                        
+                        align-items: start;
+                        margin-top: 48px;
+                    }
                     & span.cm-iconize-icon {
                         align-items: center;
                         display: flex;
@@ -1885,14 +1894,32 @@ body {
                     }
                 }
                 [data-callout-metadata*="glass"] &, [data-callout-metadata*="mgls"] & {
+                    background-color: var(--ntb-liquid-glass-background);
+                    backdrop-filter: var(--raised-blur);
+                    border: var(--border-width) solid var(--background-modifier-border);
                     border-radius: 32px;
-                    box-shadow: inherit;
+                    box-shadow: var(--ntb-shadow-xs);
+                    & a, span.external-link {
+                        background-color: unset;
+                        box-shadow: unset;
+                    }
+                }
+                [data-callout-metadata*="button"] & {
+                    background-color: var(--interactive-hover);
+                    opacity: 1;
+                    & a, span.external-link {
+                        background-color: inherit;
+                        box-shadow: unset;
+                    }
                 }
             }
             @media (hover: hover) {
-                & a:hover, span.external-link:hover {
+                & li:hover {
                     background-color: var(--cg-nt-item-bg-color-hover);
                     box-shadow: inset 0 0 0 2px var(--background-modifier-hover);
+                    & a, span.external-link {
+                        background-color: unset;
+                    }
                 }
             }
         }
@@ -2147,8 +2174,8 @@ body {
 
 /* Licensed under the MIT License; see the LICENSE file */
 
-body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"],
-body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"] {
+body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([data-callout-metadata*="card"]),
+body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]:not([data-callout-metadata*="card"]) {
     background: unset !important;
     mix-blend-mode: normal !important;
     & ul {
