@@ -367,10 +367,12 @@
                 min-height: 140px;
                 position: relative;
                 text-align: unset;
+                min-width: var(--ntb-callout-card-width);
                 width: auto;
                 .is-mobile & {
                     border: var(--border-width) solid var(--background-modifier-border);
                     flex: var(--ntb-callout-card-flex-mobile);
+                    min-width: var(--ntb-callout-card-width-mobile);
                 }
                 & a, span.external-link {
                     padding: 16px !important;
