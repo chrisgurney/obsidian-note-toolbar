@@ -21,7 +21,7 @@ function BookmarkCards() {
     }));
 
     // build the callout
-    let callout = '> [!note-toolbar|card-nowrap-red]\n';
+    let callout = '> [!note-toolbar|card-nowrap-purple]\n';
     mi.forEach(item => {
         callout += `> - [[${item.value}|:${item.icon}: ${item.label}]]\n`;
     });
