@@ -156,13 +156,14 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             }
         }
 
+        if (this.mode !== 'QuickTools') {
+            for (const item of [this.SPREADER_ITEM, this.SEPARATOR_ITEM, this.BREAK_ITEM]) {
+                if (await this.isSearchMatch(item, lowerCaseInputStr)) itemSuggestions.push(item);
+            }
+        }
+
         // if we're scoped to a single toolbar, leave the results as-is, otherwise sort and remove dupes
         if (!this.toolbarId) {
-            if (this.mode !== 'QuickTools') {
-                itemSuggestions.push(this.SPREADER_ITEM);                
-                itemSuggestions.push(this.SEPARATOR_ITEM);
-                itemSuggestions.push(this.BREAK_ITEM);
-            }
             sortedSuggestions = sortedSuggestions.concat(this.sortSuggestions(itemSuggestions, lowerCaseInputStr));
         }
 
