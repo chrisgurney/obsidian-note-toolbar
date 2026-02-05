@@ -3204,6 +3204,9 @@ input[type="text"].note-toolbar-setting-error,
     flex-direction: row !important;
     flex-wrap: wrap;
     justify-content: space-between;
+    .is-phone & {
+        justify-content: end;
+    }
     & .setting-item {
         border-top: none;
         padding: 0 !important;
