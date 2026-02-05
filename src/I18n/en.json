@@ -506,7 +506,7 @@
             "button-add-spreader-tooltip": "Add a flexible gap that spreads items apart in the toolbar",
             "button-find-item": "Search",
             "button-find-item-tooltip": "Find an item to add to the toolbar",
-            "button-new-item": "Add",
+            "button-new-item": "New",
             "button-new-item-tooltip": "Add a new item to the toolbar",
             "description": "Add items to the toolbar, in order.",
             "label-empty-no-items": "No toolbar items.",
