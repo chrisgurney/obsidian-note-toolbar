@@ -38,7 +38,7 @@ export default class ToolbarStyleUi {
 
         if (this.toolbar.defaultStyles.length == 0) {
             let emptyMsg = this.parent.containerEl.createEl("div", 
-                { text: emptyMessageFr(t('setting.styles.option-default-empty')) });
+                { text: emptyMessageFr(this.ntb, t('setting.styles.option-default-empty')) });
             emptyMsg.className = "note-toolbar-setting-empty-message";
             defaultStyleDiv.append(emptyMsg);
         }
@@ -116,7 +116,7 @@ export default class ToolbarStyleUi {
 
         if (this.toolbar.mobileStyles.length == 0) {
             let emptyMsg = this.parent.containerEl.createEl("div", 
-                { text: emptyMessageFr(t('setting.styles.option-mobile-empty')) });
+                { text: emptyMessageFr(this.ntb, t('setting.styles.option-mobile-empty')) });
             emptyMsg.className = "note-toolbar-setting-empty-message";
             mobileStyleDiv.append(emptyMsg);
         }

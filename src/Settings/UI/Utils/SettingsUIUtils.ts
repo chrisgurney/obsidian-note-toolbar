@@ -130,7 +130,7 @@ export function createToolbarPreviewFr(
 			});
 	}
 	else {
-		itemsFr.appendChild(emptyMessageFr(t('setting.item.label-preview-empty-no-items')));
+		itemsFr.appendChild(emptyMessageFr(ntb, t('setting.item.label-preview-empty-no-items')));
 	}
 	previewContainer.appendChild(itemsFr);
 
@@ -239,11 +239,21 @@ export function displayHelpSection(ntb: NoteToolbarPlugin, settingsDiv: HTMLElem
  * @param message Message to return as a fragment.
  * @returns DocumentFragment containing the message and styling.
  */
-export function emptyMessageFr(message: string): DocumentFragment {
+export function emptyMessageFr(ntb: NoteToolbarPlugin, message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
+
 	let messageFr = document.createDocumentFragment();
 	let messageFrText = document.createElement("i");
 	messageFrText.textContent = message;
 	messageFr.append(messageFrText);
+
+	if (linkText && linkCallback) {
+		messageFr.append('\u00A0');
+		const createLinkEl = messageFr.createEl('a', { href: '#', text: linkText });
+		createLinkEl.addClass('note-toolbar-setting-focussable-link');
+		ntb.registerDomEvent(createLinkEl, 'click', linkCallback);
+		handleKeyClick(ntb, createLinkEl);
+	}
+
 	return messageFr;
 }
 

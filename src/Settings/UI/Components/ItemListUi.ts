@@ -101,7 +101,7 @@ export default class ItemListUi {
 
             // display empty state
             const emptyMsgEl = this.parent.containerEl.createEl('div', 
-                { text: emptyMessageFr(t('setting.items.label-empty-no-items') + '\u00A0') });
+                { text: emptyMessageFr(this.ntb, t('setting.items.label-empty-no-items') + '\u00A0') });
             emptyMsgEl.addClass('note-toolbar-setting-empty-message');
 
             const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
@@ -655,7 +655,7 @@ export default class ItemListUi {
 				const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.ntb, groupToolbar) : emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
+				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.ntb, groupToolbar) : emptyMessageFr(this.ntb, t('setting.item.option-item-group-error-invalid')));
 				break;
 			}
 			default: {

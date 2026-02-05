@@ -216,9 +216,15 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const toolbarListDiv = createDiv();
 		toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 		if (this.ntb.settings.toolbars.length == 0) {
-			toolbarListDiv
-				.createEl("div", { text: emptyMessageFr(t('setting.toolbars.label-empty-create-tbar')) })
-				.className = "note-toolbar-setting-empty-message";
+
+			const emptyMsgEl = createDiv({ text: 
+				emptyMessageFr(this.ntb, t('setting.toolbars.label-empty-create-tbar'), t('setting.toolbars.link-create'), async () => {
+					const newToolbar = await this.ntb.settingsManager.newToolbar();
+					this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
+				}) });
+			emptyMsgEl.addClass('note-toolbar-setting-empty-message');
+			toolbarListDiv.append(emptyMsgEl);
+
 		}
 		else {
 			this.ntb.settings.toolbars.forEach(
@@ -472,7 +478,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					toolbarListEl?.querySelector('.note-toolbar-setting-empty-message')?.remove();
 					if (!hasMatch && query.length > 0) {
 						toolbarListEl?.createDiv({ 
-							text: emptyMessageFr(t('setting.search.label-no-results')), 
+							text: emptyMessageFr(this.ntb, t('setting.search.label-no-results')), 
 							cls: 'note-toolbar-setting-empty-message' 
 						});
 					}
@@ -635,9 +641,18 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			itemsContainerEl.addClass('note-toolbar-setting-items-list-container');
 
 			if (this.ntb.settings.folderMappings.length == 0) {
-				itemsContainerEl
-					.createEl("div", { text: emptyMessageFr(t('setting.mappings.label-empty')) })
-					.className = "note-toolbar-setting-empty-message";
+
+				const emptyMsgEl = createDiv({ text: 
+					emptyMessageFr(this.ntb, t('setting.mappings.label-empty'), t('setting.mappings.link-create'), async () => {
+						let newMapping = { folder: "", toolbar: "" };
+						this.ntb.settings.folderMappings.push(newMapping);
+						await this.ntb.settingsManager.save();
+						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
+					}) });
+				emptyMsgEl.addClass('note-toolbar-setting-empty-message');
+				
+				itemsContainerEl.append(emptyMsgEl);
+
 			}
 			else {
 				const toolbarFolderListEl = createDiv();
@@ -682,10 +697,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip(t('setting.mappings.button-new-tooltip'))
 					.setCta()
 					.onClick(async () => {
-						let newMapping = {
-							folder: "",
-							toolbar: ""
-						};
+						let newMapping = { folder: "", toolbar: "" };
 						this.ntb.settings.folderMappings.push(newMapping);
 						await this.ntb.settingsManager.save();
 						// TODO: add a form item to the existing list

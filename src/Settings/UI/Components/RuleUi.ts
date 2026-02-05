@@ -57,7 +57,7 @@ export default class RuleUi {
 
         if (this.ntb.settings.rules.length == 0) {
             rulesContainer
-                .createEl("div", { text: emptyMessageFr(t('setting.rules.label-empty')) })
+                .createEl("div", { text: emptyMessageFr(this.ntb, t('setting.rules.label-empty')) })
                 .className = "note-toolbar-setting-empty-message";
         }
         else {

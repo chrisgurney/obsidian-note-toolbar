@@ -2947,13 +2947,16 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
     display: flex;
     font-style: italic;
     height: var(--input-height);
-    padding-bottom: 1em;
+    justify-content: center;
     .note-toolbar-setting-item-styles & {
         padding-bottom: 0;    
     }
     .note-toolbar-setting-items-list-container & {
-        padding: 0;
         margin: auto;
+    }
+    .note-toolbar-setting-mappings-container & {
+        padding-bottom: 1em;
+        justify-content: left;
     }
 }
 .note-toolbar-setting-error-message {
