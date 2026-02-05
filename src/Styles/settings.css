@@ -29,6 +29,10 @@
             background-color: initial;
         }
     }
+    /* fix: Settings: Keyboard focus is not visible after tabbing away from toggle control (#501) */
+    & .checkbox-container:has(input:focus) {
+        box-shadow: 0 0 0 var(--input-border-width-focus) var(--background-modifier-border-focus);
+    }
 }
 
 .note-toolbar-setting-modal-container {

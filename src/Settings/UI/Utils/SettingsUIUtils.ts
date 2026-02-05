@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder } from "obsidian";
+import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { importArgs } from "Utils/Utils";
@@ -255,6 +255,15 @@ export function emptyMessageFr(ntb: NoteToolbarPlugin, message: string, linkText
 	}
 
 	return messageFr;
+}
+
+/**
+ * This is to fix a bug with Obsidian where toggle component labels can be tabbed into. #501
+ * @param toggle ToggleComponent
+ * @see https://discord.com/channels/686053708261228577/716028884885307432/1454335099545059389
+ */
+export function fixToggleTab(toggle: ToggleComponent) {
+	toggle.toggleEl.tabIndex = -1;
 }
 
 /**

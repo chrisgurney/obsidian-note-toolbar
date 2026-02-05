@@ -1,6 +1,6 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup } from "obsidian";
+import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import IconSuggestModal from "../Modals/IconSuggestModal";
@@ -9,7 +9,7 @@ import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsMod
 import CommandSuggester from "../Suggesters/CommandSuggester";
 import FileSuggester from "../Suggesters/FileSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { copyToolbarItem, createToolbarPreviewFr, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
+import { copyToolbarItem, createToolbarPreviewFr, fixToggleTab, getDisclaimersFr, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
 
 type ItemComponentVisibility = 'visible' | 'hidden' | 'icon' | 'label';
 
@@ -962,13 +962,14 @@ export default class ToolbarItemUi {
             commandCheckSetting
                 .setName(t('setting.item.option-command-check'))
                 .setDesc(t('setting.item.option-command-check-description'))
-                .addToggle((toggle) => {
+                .addToggle((toggle: ToggleComponent) => {
                     toggle
                         .setValue(item.linkAttr.commandCheck)
                         .onChange(async (value: boolean) => {
                             item.linkAttr.commandCheck = value;
                             await this.ntb.settingsManager.save();
                         });
+                    fixToggleTab(toggle);
                 });       
         });
 
@@ -977,13 +978,14 @@ export default class ToolbarItemUi {
             focusSetting
                 .setName(t('setting.item.option-command-focus'))
                 .setDesc(t('setting.item.option-command-focus-description'))
-                .addToggle((toggle) => {
+                .addToggle((toggle: ToggleComponent) => {
                     toggle
                         .setValue(item.linkAttr.focus === 'editor')
                         .onChange(async (value: boolean) => {
                             item.linkAttr.focus = value ? 'editor' : undefined;
                             await this.ntb.settingsManager.save();
                         });
+                    fixToggleTab(toggle);
                 });
         });
 
@@ -1185,7 +1187,7 @@ export default class ToolbarItemUi {
             focusSetting
                 .setName(t('setting.item.option-script-focus'))
                 .setDesc(t('setting.item.option-script-focus-description'))
-                .addToggle((toggle) => {
+                .addToggle((toggle: ToggleComponent) => {
                     toggle
                         .setValue(!toolbarItem.linkAttr.focus || toolbarItem.linkAttr.focus === 'editor')
                         .onChange(async (value: boolean) => {
@@ -1193,6 +1195,7 @@ export default class ToolbarItemUi {
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         });
+                    fixToggleTab(toggle);
                 });
         });
 

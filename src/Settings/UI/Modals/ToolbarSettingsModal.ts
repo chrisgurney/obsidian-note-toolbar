@@ -7,7 +7,7 @@ import ItemListUi from '../Components/ItemListUi';
 import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
-import { createOnboardingMessageEl, displayHelpSection, getDisclaimersFr, getToolbarUsageFr, getToolbarUsageText, learnMoreFr, removeFieldError, setFieldError, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
+import { createOnboardingMessageEl, displayHelpSection, fixToggleTab, getDisclaimersFr, getToolbarUsageFr, getToolbarUsageText, learnMoreFr, removeFieldError, setFieldError, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -378,6 +378,7 @@ export default class ToolbarSettingsModal extends Modal {
 						await this.ntb.settingsManager.save();
 						this.display();
 					});
+				fixToggleTab(toggle);
 			});
 
 		// command options: hot key + position

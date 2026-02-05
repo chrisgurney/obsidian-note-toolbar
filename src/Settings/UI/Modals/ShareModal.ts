@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal, Notice, Setting, ToggleComponent } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { toolbarHasMenu } from "Utils/Utils";
-import { learnMoreFr } from "../Utils/SettingsUIUtils";
+import { fixToggleTab, learnMoreFr } from "../Utils/SettingsUIUtils";
 
 export default class ShareModal extends Modal {
 
@@ -53,14 +53,15 @@ export default class ShareModal extends Modal {
         new Setting(this.contentEl)
             .setName(t('export.option-uri'))
             .setDesc(t('export.option-uri-description'))
-            .addToggle((cb: ToggleComponent) => {
-                cb
+            .addToggle((toggle: ToggleComponent) => {
+                toggle
                     .setValue(this.useObsidianUri)
                     .onChange(async (value) => {
                         this.useObsidianUri = value;
                         this.shareUri = await this.ntb.protocolManager.getShareUri(this.toolbar, this.useObsidianUri);
                         this.display();
                     });
+                fixToggleTab(toggle);
             });
 
         //
