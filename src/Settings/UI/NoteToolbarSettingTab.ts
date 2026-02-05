@@ -112,7 +112,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				focusEl?.focus();
 				if (scrollToFocus) {
 					setTimeout(() => { 
-						focusEl?.scrollIntoView(true);
+						focusEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 					}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard	
 				}
 			});
