@@ -106,7 +106,7 @@ export default class ItemListUi {
 
             const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-            this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.ntb, this.toolbar, 'Default', this.parent));
+            this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.ntb, this.toolbar, 'New', this.parent));
             handleKeyClick(this.ntb, galleryLinkEl);
 
             itemsSortableContainer.append(emptyMsgEl);
@@ -233,20 +233,13 @@ export default class ItemListUi {
             .setClass('note-toolbar-setting-no-border')
             .addButton((btn) => {
                 btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-                    .onClick(async () => openItemSuggestModal(this.ntb, this.toolbar, 'Default', this.parent));
+                    .onClick(async () => openItemSuggestModal(this.ntb, this.toolbar, 'New', this.parent));
                 btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
             })
             .addButton((btn) => {
                 btn.setTooltip(t('setting.items.button-new-item-tooltip'))
                     .setCta()
-                    .onClick(async () => {
-                        if (Platform.isPhone) {
-                            let newToolbarItem = await this.addItemHandler(ItemType.Command);
-                            const itemModal = new ItemModal(this.ntb, this.toolbar, newToolbarItem, this.parent);
-                            itemModal.open();
-                        }
-                        else await this.addItemHandler(ItemType.Command, itemsSortableContainer);
-                    });
+                    .onClick(async () => this.addItemHandler(ItemType.Command, itemsSortableContainer));
                 btn.buttonEl.setText(iconTextFr('plus', t('setting.items.button-new-item')));
             });
 
@@ -489,7 +482,7 @@ export default class ItemListUi {
      * Adds a new empty item to the given container (and settings).
      * @param itemContainer optional HTMLElement to add the new item to.
      */
-    async addItemHandler(itemType: ItemType, itemContainer?: HTMLElement): Promise<ToolbarItemSettings> {
+    async addItemHandler(itemType: ItemType, itemContainer?: HTMLElement) {
 
         // removes the item list empty state message before we add anything to it
         if (itemContainer && (this.toolbar.items.length === 0)) {
@@ -505,6 +498,13 @@ export default class ItemListUi {
         this.toolbar.items.push(newToolbarItem);
         this.toolbar.updated = new Date().toISOString();
         await this.ntb.settingsManager.save();
+
+        // show the modal on phones and return
+        if (Platform.isPhone) {
+            const itemModal = new ItemModal(this.ntb, this.toolbar, newToolbarItem, this.parent);
+            itemModal.open();
+            return;
+        }
 
         // add preview and form to the list
         if (itemContainer) {

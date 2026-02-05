@@ -440,6 +440,13 @@ export function openItemSuggestModal(
 
 			const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
 			if (isEmptyItem) selectedItem.label = '';
+			if (isEmptyItem && parent) {
+				const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
+				if (itemContainer) {
+					await parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+					return;
+				}
+			}
 
 			let newItem = await ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
 			// reset the visibility setting, as there's no prior indication to the user as to its visibility
