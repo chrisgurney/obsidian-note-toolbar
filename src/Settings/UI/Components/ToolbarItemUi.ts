@@ -551,18 +551,21 @@ export default class ToolbarItemUi {
             mobile: { hidden: 'note-toolbar-tablet-smartphone-off', visible: 'tablet-smartphone' }
         };
 
+        const handleMenuClick = async (visibleComponents: ComponentType[]) => {
+            item.visibility[platform].components = visibleComponents;
+            this.updateItemVisButton(item, button, platform);
+            if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.updateItemVisStatus(item);
+            this.toolbar.updated = new Date().toISOString();
+            await this.ntb.settingsManager.save();
+        }
+
         // show item
         menu.addItem((menuItem: MenuItem) => {
             menuItem
                 .setTitle(t('setting.item.visibility.option-item-show', { platform: platformLabel }))
                 .setIcon(visIcons[platform].visible)
                 .setChecked(visibility.components.length === 2)
-                .onClick(async (menuEvent) => {
-                    item.visibility[platform].components = [ComponentType.Icon, ComponentType.Label];
-                    this.toolbar.updated = new Date().toISOString();
-                    await this.ntb.settingsManager.save();
-                    this.updateItemVisButton(item, button, platform);
-                });
+                .onClick(async (menuEvent) => handleMenuClick([ComponentType.Icon, ComponentType.Label]));
         });
         // hide item
         menu.addItem((menuItem: MenuItem) => {
@@ -570,12 +573,7 @@ export default class ToolbarItemUi {
                 .setTitle(t('setting.item.visibility.option-item-hide', { platform: platformLabel }))
                 .setIcon(visIcons[platform].hidden)
                 .setChecked(visibility.components.length === 0)
-                .onClick(async (menuEvent) => {
-                    item.visibility[platform].components = [];
-                    this.toolbar.updated = new Date().toISOString();
-                    await this.ntb.settingsManager.save();
-                    this.updateItemVisButton(item, button, platform);
-                });
+                .onClick(async (menuEvent) => handleMenuClick([]));
         });
 
         menu.addSeparator();
@@ -587,12 +585,7 @@ export default class ToolbarItemUi {
 				.setTitle(t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-icon'), platform: platformLabel }))
 				.setIcon('image')
 				.setChecked(isIconOnly)
-				.onClick(async (menuEvent) => {
-                    visibility.components = [ComponentType.Icon];
-					this.toolbar.updated = new Date().toISOString();
-					await this.ntb.settingsManager.save();
-					this.updateItemVisButton(item, button, platform);
-				});
+				.onClick(async (menuEvent) => handleMenuClick([ComponentType.Icon]));
 		});
 		menu.addItem((menuItem: MenuItem) => {
             const isLabelOnly = visibility.components.length === 1 && visibility.components.includes(ComponentType.Label);
@@ -600,12 +593,7 @@ export default class ToolbarItemUi {
 				.setTitle(t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-label'), platform: platformLabel }))
 				.setIcon('text-align-start')
 				.setChecked(isLabelOnly)
-				.onClick(async (menuEvent) => {
-                    visibility.components = [ComponentType.Label];
-					this.toolbar.updated = new Date().toISOString();
-					await this.ntb.settingsManager.save();
-					this.updateItemVisButton(item, button, platform);
-				});
+				.onClick(async (menuEvent) => handleMenuClick([ComponentType.Label]));
 		});
 
 		return menu;
@@ -623,6 +611,7 @@ export default class ToolbarItemUi {
         const handleMenuClick = async (viewMode: ViewModeType) => {
             item.visibility.viewMode = viewMode;
             this.updateViewModeButton(button, item.visibility.viewMode);
+            if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.updateItemVisStatus(item);
             this.toolbar.updated = new Date().toISOString();
             await this.ntb.settingsManager.save();                     
         }

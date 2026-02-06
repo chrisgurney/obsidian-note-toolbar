@@ -296,7 +296,7 @@ export default class ItemListUi {
         this.renderPreview(toolbarItem, itemPreviewContainer);
 
         //
-        // show the item's visibility state
+        // add the initial icon for the item's visibility state
         //
 
         let visibilityStatusEl = createDiv();
@@ -379,19 +379,32 @@ export default class ItemListUi {
 
     }
 
-    private updateItemVisStatus(toolbarItem: ToolbarItemSettings, visibilityStatusEl: HTMLDivElement) {
-        visibilityStatusEl.empty();
-        const [itemVisState, itemVisTooltip] = getItemVisState(this.ntb, toolbarItem);
-        visibilityStatusEl.toggleClass("note-toolbar-item-visibility-indicator", !!itemVisState);
-        if (itemVisState) {
-            setIcon(
-                visibilityStatusEl,
-                itemVisState === 'hidden' ? 'eye-off' :
-                    itemVisState === 'mobile' ? 'tablet-smartphone' :
-                        itemVisState === 'desktop' ? 'monitor' :
-                            itemVisState === 'reading' ? 'book-open' : 'pencil'
-            );
-            setTooltip(visibilityStatusEl, itemVisTooltip);
+    /**
+     * Updates the visibility status indicator for a toolbar item in the settings list.
+     * Shows an icon indicating if the item is hidden or restricted by platform/view mode.
+     * @param toolbarItem The toolbar item to update the visibility status for.
+     * @param visibilityStatusEl Optional element to update. If not provided, searches for it in the item row.
+     */
+    updateItemVisStatus(toolbarItem: ToolbarItemSettings, visibilityStatusEl?: HTMLElement) {
+
+        // if it's not provided for initial update, find the item in the list
+        const itemRowEl = this.getItemRowEl(toolbarItem.uuid);
+        if (!visibilityStatusEl) visibilityStatusEl = itemRowEl.querySelector('#ntb-item-visibility-indicator') as HTMLElement;
+
+        if (visibilityStatusEl) {
+            visibilityStatusEl.empty();
+            const [itemVisState, itemVisTooltip] = getItemVisState(this.ntb, toolbarItem);
+            visibilityStatusEl.toggleClass("note-toolbar-item-visibility-indicator", !!itemVisState);
+            if (itemVisState) {
+                setIcon(
+                    visibilityStatusEl,
+                    itemVisState === 'hidden' ? 'eye-off' :
+                        itemVisState === 'mobile' ? 'tablet-smartphone' :
+                            itemVisState === 'desktop' ? 'monitor' :
+                                itemVisState === 'reading' ? 'book-open' : 'pencil'
+                );
+                setTooltip(visibilityStatusEl, itemVisTooltip);
+            }
         }
     }
 
