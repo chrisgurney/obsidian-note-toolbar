@@ -1024,6 +1024,12 @@ input[type="text"].note-toolbar-setting-error,
             display: none;
         }
     }
+    &.note-toolbar-item-visibility-indicator {
+        padding-inline: var(--size-4-2);
+        & svg {
+            color: var(--color-base-60);
+        }
+    }
 }
 
 .note-toolbar-setting-item-visibility-and-controls {

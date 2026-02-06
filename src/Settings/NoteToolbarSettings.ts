@@ -97,6 +97,7 @@ export const enum ViewModeType {
 	Editing = 'source',
 	Reading = 'preview'
 }
+export type ItemComponentVisibility = 'visible' | 'hidden' | 'icon' | 'label';
 export const enum PlatformType {
 	All = 'all',
 	Desktop = 'desktop',

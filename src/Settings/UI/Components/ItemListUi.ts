@@ -6,7 +6,7 @@ import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import { importFromModal } from "../Modals/ImportModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
-import { createToolbarPreviewFr, emptyMessageFr, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
+import { createToolbarPreviewFr, emptyMessageFr, getItemVisState, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
 
 
 const enum ItemFormComponent {
@@ -296,6 +296,16 @@ export default class ItemListUi {
         this.renderPreview(toolbarItem, itemPreviewContainer);
 
         //
+        // show the item's visibility state
+        //
+
+        let visibilityStatusEl = createDiv();
+        visibilityStatusEl.id = 'ntb-item-visibility-indicator';
+        visibilityStatusEl.addClass("note-toolbar-setting-item-controls");
+        this.updateItemVisStatus(toolbarItem, visibilityStatusEl);
+        itemPreviewContainer.append(visibilityStatusEl);
+
+        //
         // add the preview drag-and-drop handle
         //
 
@@ -367,6 +377,22 @@ export default class ItemListUi {
 
         return itemPreviewContainer;
 
+    }
+
+    private updateItemVisStatus(toolbarItem: ToolbarItemSettings, visibilityStatusEl: HTMLDivElement) {
+        visibilityStatusEl.empty();
+        const [itemVisState, itemVisTooltip] = getItemVisState(this.ntb, toolbarItem);
+        visibilityStatusEl.toggleClass("note-toolbar-item-visibility-indicator", !!itemVisState);
+        if (itemVisState) {
+            setIcon(
+                visibilityStatusEl,
+                itemVisState === 'hidden' ? 'eye-off' :
+                    itemVisState === 'mobile' ? 'tablet-smartphone' :
+                        itemVisState === 'desktop' ? 'monitor' :
+                            itemVisState === 'reading' ? 'book-open' : 'pencil'
+            );
+            setTooltip(visibilityStatusEl, itemVisTooltip);
+        }
     }
 
 	/**

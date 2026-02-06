@@ -1,8 +1,8 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ButtonComponent, getIcon, MarkdownView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
-import { importArgs } from "Utils/Utils";
+import { hasVisibleComponents, importArgs } from "Utils/Utils";
 import { PLUGIN_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
 import ItemModal from "../Modals/ItemModal";
@@ -287,6 +287,36 @@ export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToC
 }
 
 /**
+ * Gets the current state of visibility for a given platform.
+ * @returns a single word (hidden, visible, or the component name), and a sentence for the tooltip
+ */
+export function getPlatformVisState(item: ToolbarItemSettings, platform: 'desktop' | 'mobile'): [ItemComponentVisibility, string, string] {
+
+	const labelPlatform = platform === 'desktop' ? t('setting.item.visibility.platform-desktop') : t('setting.item.visibility.platform-mobile');
+	const visibility = item.visibility ? (platform === 'desktop' ? item.visibility.desktop : item.visibility.mobile) : undefined;
+
+	if (visibility) {
+		let components = visibility?.components;
+		if (components) {
+			if (components.length === 2) {
+				return ['visible', '', t('setting.item.visibility.option-item-show', { platform: labelPlatform })];
+			}
+			else if (components.length === 1) {
+				if (components[0] === ComponentType.Icon) {
+					return ['icon', '', t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-icon'), platform: labelPlatform })];
+				} else if (components[0] === ComponentType.Label) {
+					return ['label', '', t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-label'), platform: labelPlatform })];
+				}
+			} 
+			else {
+				return ['hidden', '', t('setting.item.visibility.option-item-hide', { platform: labelPlatform })];
+			}
+		}
+	}
+	return ['hidden', '', t('setting.item.visibility.option-item-hide', { platform: labelPlatform })];
+}
+
+/**
  * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
  * @param toolbarName name of the toolbar to look for.
  * @returns string 'obsidian://' URI.
@@ -353,6 +383,60 @@ export function getToolbarUsageText(ntb: NoteToolbarPlugin, toolbar: ToolbarSett
 export function getValueForKey(dict: {[key: string]: string}[], key: string): string {
 	const option = dict.find(option => key in option);
 	return option ? Object.values(option)[0] : '';
+}
+
+/**
+ * Determines if an item should display a visibility warning based on platform or view mode restrictions.
+ * @param ntb NoteToolbarPlugin
+ * @param item Item settings to check
+ * @returns A tuple containing the visibility state and tooltip text. State is undefined if the item is fully visible.
+ */
+export function getItemVisState(ntb: NoteToolbarPlugin, item: ToolbarItemSettings): [state: 'mobile' | 'desktop' | 'reading' | 'preview' | 'hidden' | undefined, tooltip: string] {
+
+	let state: 'mobile' | 'desktop' | 'reading' | 'preview' | 'hidden' | undefined = undefined;
+	let tooltip = '';
+
+	const isVisibleOnDesktop = hasVisibleComponents(item.visibility.desktop);
+	const isVisibleOnMobile = hasVisibleComponents(item.visibility.mobile);
+
+	if (!isVisibleOnDesktop && !isVisibleOnMobile) {
+		state = 'hidden';
+		tooltip = 'Hidden';
+	}
+	else if (Platform.isDesktop && !isVisibleOnDesktop && isVisibleOnMobile) {
+		state = 'mobile';
+		tooltip = 'Mobile only';
+	}
+	else if (Platform.isMobile && !isVisibleOnMobile && isVisibleOnDesktop) {
+		state = 'desktop';
+		tooltip = 'Desktop only';
+	}
+
+	// check view mode if platform is OK
+	if (!state) {
+		const visibility = item.visibility ? (Platform.isDesktop ? item.visibility.desktop : item.visibility.mobile) : undefined;
+		
+		if (visibility && item.visibility.viewMode) {
+			const leaves = ntb.app.workspace.getLeavesOfType('markdown');
+			const activeView = leaves.length > 0 ? leaves[0].view as MarkdownView : null;
+			if (activeView) {
+				const currentMode = activeView.getMode();
+				if (item.visibility.viewMode !== ViewModeType.All && item.visibility.viewMode !== currentMode) {
+					if (item.visibility.viewMode === 'source') {
+						state = 'preview';
+						tooltip = t('setting.item.visibility.label-editing-visible');
+					} 
+					else {
+						state = 'reading';
+						tooltip = t('setting.item.visibility.label-reading-visible');
+					}
+				}
+			}
+		}
+	}
+
+	return [ state, tooltip ];
+
 }
 
 export function handleKeyClick(ntb: NoteToolbarPlugin, el: HTMLElement) {

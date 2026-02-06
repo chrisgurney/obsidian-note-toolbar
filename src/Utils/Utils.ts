@@ -474,7 +474,7 @@ function hasComponents(platform: { components: string[] }): [boolean, boolean] {
  * @param platform platform visibility to check
  * @returns true if it has components; false otherwise
  */
-function hasVisibleComponents(platform: { components: ComponentType[] }): boolean {
+export function hasVisibleComponents(platform: { components: ComponentType[] }): boolean {
     return !!platform && platform.components.length > 0;
 }
 
