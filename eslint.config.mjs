@@ -47,6 +47,7 @@ export default defineConfig([
 				Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
 			),
 
+			"no-console": ["warn", { "allow": ["warn", "error"] }],
 			"@typescript-eslint/no-invalid-this": "error",
 
 			// for support of older versions of iOS (15 and earlier)
