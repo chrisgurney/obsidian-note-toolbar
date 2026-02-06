@@ -48,6 +48,8 @@ export default defineConfig([
 			),
 
 			"no-console": ["warn", { "allow": ["warn", "error"] }],
+			"no-debugger": "warn",
+			
 			"@typescript-eslint/no-invalid-this": "error",
 
 			// for support of older versions of iOS (15 and earlier)
