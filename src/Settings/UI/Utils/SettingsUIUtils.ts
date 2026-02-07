@@ -401,15 +401,15 @@ export function getItemVisState(ntb: NoteToolbarPlugin, item: ToolbarItemSetting
 
 	if (!isVisibleOnDesktop && !isVisibleOnMobile) {
 		state = 'hidden';
-		tooltip = 'Hidden';
+		tooltip = t('setting.item.visibility.tooltip-hidden');
 	}
 	else if (Platform.isDesktop && !isVisibleOnDesktop && isVisibleOnMobile) {
 		state = 'mobile';
-		tooltip = 'Mobile only';
+		tooltip = t('setting.item.visibility.tooltip-mobile-visible');
 	}
 	else if (Platform.isMobile && !isVisibleOnMobile && isVisibleOnDesktop) {
 		state = 'desktop';
-		tooltip = 'Desktop only';
+		tooltip = t('setting.item.visibility.tooltip-desktop-visible');
 	}
 
 	// check view mode if platform is OK
@@ -424,11 +424,11 @@ export function getItemVisState(ntb: NoteToolbarPlugin, item: ToolbarItemSetting
 				if (item.visibility.viewMode !== ViewModeType.All && item.visibility.viewMode !== currentMode) {
 					if (item.visibility.viewMode === 'source') {
 						state = 'preview';
-						tooltip = t('setting.item.visibility.label-editing-visible');
+						tooltip = t('setting.item.visibility.tooltip-editing-visible');
 					} 
 					else {
 						state = 'reading';
-						tooltip = t('setting.item.visibility.label-reading-visible');
+						tooltip = t('setting.item.visibility.tooltip-reading-visible');
 					}
 				}
 			}
