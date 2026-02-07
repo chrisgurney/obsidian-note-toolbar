@@ -675,9 +675,6 @@ input[type="text"].note-toolbar-setting-error,
             margin-top: 0 !important;
         }
     }
-    & svg {
-        color: var(--interactive-accent);
-    }
 }
 
 .note-toolbar-setting-item-top-container {
@@ -1033,7 +1030,7 @@ input[type="text"].note-toolbar-setting-error,
     &.note-toolbar-item-visibility-indicator {
         padding-inline: var(--size-4-2);
         & svg {
-            color: var(--color-base-60);
+           color: var(--interactive-accent);
         }
     }
 }
