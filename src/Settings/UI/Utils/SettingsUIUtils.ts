@@ -419,7 +419,7 @@ export function getItemVisState(ntb: NoteToolbarPlugin, item: ToolbarItemSetting
 		if (visibility && item.visibility.viewMode) {
 			const leaves = ntb.app.workspace.getLeavesOfType('markdown');
 			const activeView = leaves.length > 0 ? leaves[0].view as MarkdownView : null;
-			if (activeView) {
+			if (activeView && activeView instanceof MarkdownView) {
 				const currentMode = activeView.getMode();
 				if (item.visibility.viewMode !== ViewModeType.All && item.visibility.viewMode !== currentMode) {
 					if (item.visibility.viewMode === 'source') {
