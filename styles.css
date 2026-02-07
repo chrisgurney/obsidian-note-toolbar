@@ -2720,6 +2720,11 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
             }
         }
     }
+    & .setting-item-control {
+        .is-phone & {
+            width: unset !important;
+        }
+    }
 }
 .mod-cta .note-toolbar-setting-text-with-icon {
     & svg {
