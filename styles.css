@@ -2722,6 +2722,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
     }
     & .setting-item-control {
         .is-phone & {
+            justify-content: flex-end !important;
             width: unset !important;
         }
     }
@@ -2805,7 +2806,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     font-size: var(--font-ui-medium);
     column-gap: 0.5em;
     padding: 8px;
