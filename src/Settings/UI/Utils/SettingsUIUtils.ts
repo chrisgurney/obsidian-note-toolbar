@@ -260,6 +260,35 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Gets a list of plugin names required by this item, derived from the commandId or plugin property.
+	 * @param item ToolbarItemSettings to get plugin list from
+	 * @returns list of plugin names
+	 */
+	getPluginNames(item: ToolbarItemSettings): string | undefined {
+		if (item.linkAttr.type === ItemType.Plugin) {
+			const itemPluginType = (Array.isArray(item.plugin) ? item.plugin : [item.plugin]);
+			// replace known commands with user-friendly strings (if supported), and create a list
+			if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')
+				else return undefined;
+		}
+		else if (item.linkAttr.type === ItemType.Command) {
+			// make sure the command exists
+			const command = this.ntb.app.commands.commands[item.linkAttr.commandId];
+			const commandPluginId = item.linkAttr.commandId.split(':')[0];
+			if (!command) {
+				// show plugin name if known, otherwise show command ID
+				const pluginName = t(`plugin.${commandPluginId}`, { defaultValue: '' });
+				return pluginName || t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
+			}
+			// we can ignore built-in commands
+			const itemPluginType = !IGNORE_PLUGIN_IDS.includes(commandPluginId) ? commandPluginId : undefined;
+			// replace known commands with user-friendly string (if supported)
+			if (itemPluginType) return t(`plugin.${itemPluginType}`)
+				else return undefined;
+		}
+	}
+
+	/**
 	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
 	 * @param toolbarName name of the toolbar to look for.
 	 * @returns string 'obsidian://' URI.
@@ -561,7 +590,7 @@ export default class SettingsUIUtils {
 
 			// show the plugin(s) supported, or the command ID used
 			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
-				let itemPluginText = getPluginNames(this.ntb, item);
+				let itemPluginText = this.getPluginNames(item);
 				if (itemPluginText) {
 					const pluginDescEl = el.createDiv();
 					pluginDescEl.addClass('note-toolbar-item-suggester-note');	
@@ -942,35 +971,6 @@ export async function updateItemComponentStatus(
 
 	return isValid;
 
-}
-
-/**
- * Gets a list of plugin names required by this item, derived from the commandId or plugin property.
- * @param item ToolbarItemSettings to get plugin list from
- * @returns list of plugin names
- */
-export function getPluginNames(ntb: NoteToolbarPlugin, item: ToolbarItemSettings): string | undefined {
-	if (item.linkAttr.type === ItemType.Plugin) {
-		const itemPluginType = (Array.isArray(item.plugin) ? item.plugin : [item.plugin]);
-		// replace known commands with user-friendly strings (if supported), and create a list
-		if (itemPluginType) return itemPluginType.map(p => t(`plugin.${p}`)).join(', ')
-			else return undefined;
-	}
-	else if (item.linkAttr.type === ItemType.Command) {
-		// make sure the command exists
-		const command = ntb.app.commands.commands[item.linkAttr.commandId];
-		const commandPluginId = item.linkAttr.commandId.split(':')[0];
-        if (!command) {
-			// show plugin name if known, otherwise show command ID
-			const pluginName = t(`plugin.${commandPluginId}`, { defaultValue: '' });
-			return pluginName || t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
-		}
-		// we can ignore built-in commands
-		const itemPluginType = !IGNORE_PLUGIN_IDS.includes(commandPluginId) ? commandPluginId : undefined;
-		// replace known commands with user-friendly string (if supported)
-		if (itemPluginType) return t(`plugin.${itemPluginType}`)
-			else return undefined;
-	}
 }
 
 /**
