@@ -602,6 +602,57 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Updates the given element with an error border and text.
+	 * @param parent ToolbarSettingsModal
+	 * @param fieldEl HTMLElement to update
+	 * @param position Position to insert the error text
+	 * @param errorText Optional error text to display
+	 * @param errorLink Optional link to display after error text
+	 */
+	setFieldError(
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal, 
+		fieldEl: HTMLElement | null, 
+		position: 'afterend' | 'beforeend',
+		errorText?: string, 
+		errorLink?: HTMLAnchorElement
+	) {
+		if (fieldEl) {
+			let fieldContainerEl = fieldEl.closest('.setting-item-control');
+			if (!fieldContainerEl) {
+				fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview-container');
+			}
+			const hasError = 
+				(position === 'afterend') 
+					? fieldContainerEl?.nextElementSibling?.classList.contains('note-toolbar-setting-field-error') === true
+					: fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') !== null;
+			if (fieldContainerEl && !hasError) {
+				if (errorText) {
+					let errorDiv = createEl('div', { 
+						text: errorText, 
+						cls: 'note-toolbar-setting-field-error' });
+					if (errorLink) {
+						// as it's not easy to listen for plugins being enabled,
+						// user will have to click a refresh link to dismiss the error
+						this.ntb.registerDomEvent(errorLink, 'click', (event) => {
+							let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
+							let refreshIcon = refreshLink.createSpan();
+							setIcon(refreshIcon, 'refresh-cw');
+							let oldLink = event.currentTarget as HTMLElement;
+							oldLink?.replaceWith(refreshLink);
+							this.ntb.registerDomEvent(refreshLink, 'click', event => {
+								parent.display();
+							});
+						});
+						errorDiv.append(' ', errorLink);
+					}
+					fieldContainerEl.insertAdjacentElement(position, errorDiv);
+				}
+				fieldEl.addClass('note-toolbar-setting-error');
+			}
+		}
+	}
+
+	/**
 	 * Shows the What's New dialog if the user hasn't seen it yet.
 	 */
 	showWhatsNewIfNeeded() {
@@ -616,7 +667,7 @@ export default class SettingsUIUtils {
 			});
 		}
 	}
-
+	
 	/**
 	 * Updates the UI state of the given component if the value is invalid.
 	 * @param parent Setting UI tab/modal that the component is in
@@ -761,7 +812,7 @@ export default class SettingsUIUtils {
 				isValid = false;
 				break;
 			case Status.Invalid:
-				setFieldError(this.ntb, parent, componentEl, errorPosition, statusMessage, statusLink);
+				this.setFieldError(parent, componentEl, errorPosition, statusMessage, statusLink);
 				isValid = false;
 				break;
 		}
@@ -984,59 +1035,6 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 
 		errorEl?.remove();
 		el?.removeClass('note-toolbar-setting-error');
-	}
-}
-
-/**
- * Updates the given element with an error border and text.
- * @param ntb NoteToolbarPlugin
- * @param parent ToolbarSettingsModal
- * @param fieldEl HTMLElement to update
- * @param position Position to insert the error text
- * @param errorText Optional error text to display
- * @param errorLink Optional link to display after error text
- */
-export function setFieldError(
-	ntb: NoteToolbarPlugin,
-	parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal, 
-	fieldEl: HTMLElement | null, 
-	position: 'afterend' | 'beforeend',
-	errorText?: string, 
-	errorLink?: HTMLAnchorElement
-) {
-	if (fieldEl) {
-		let fieldContainerEl = fieldEl.closest('.setting-item-control');
-		if (!fieldContainerEl) {
-			fieldContainerEl = fieldEl.closest('.note-toolbar-setting-item-preview-container');
-		}
-		const hasError = 
-			(position === 'afterend') 
-				? fieldContainerEl?.nextElementSibling?.classList.contains('note-toolbar-setting-field-error') === true
-				: fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') !== null;
-		if (fieldContainerEl && !hasError) {
-			if (errorText) {
-				let errorDiv = createEl('div', { 
-					text: errorText, 
-					cls: 'note-toolbar-setting-field-error' });
-				if (errorLink) {
-					// as it's not easy to listen for plugins being enabled,
-					// user will have to click a refresh link to dismiss the error
-					ntb.registerDomEvent(errorLink, 'click', (event) => {
-						let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
-						let refreshIcon = refreshLink.createSpan();
-						setIcon(refreshIcon, 'refresh-cw');
-						let oldLink = event.currentTarget as HTMLElement;
-						oldLink?.replaceWith(refreshLink);
-						ntb.registerDomEvent(refreshLink, 'click', event => {
-							parent.display();
-						});
-					});
-					errorDiv.append(' ', errorLink);
-				}
-				fieldContainerEl.insertAdjacentElement(position, errorDiv);
-			}
-			fieldEl.addClass('note-toolbar-setting-error');
-		}
 	}
 }
 

@@ -7,7 +7,7 @@ import ItemListUi from '../Components/ItemListUi';
 import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
-import { fixToggleTab, getDisclaimersFr, learnMoreFr, removeFieldError, setFieldError } from "../Utils/SettingsUIUtils";
+import { fixToggleTab, getDisclaimersFr, learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -169,7 +169,7 @@ export default class ToolbarSettingsModal extends Modal {
 					// check for existing toolbar with this name
 					let existingToolbar = this.ntb.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
-						setFieldError(this.ntb, this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
+						this.ntb.settingsUtils.setFieldError(this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
 					}
 					else {
 						removeFieldError(cb.inputEl, 'beforeend');
@@ -310,7 +310,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.onChange(debounce(async (itemText) => {
 							if (itemText) {
 								cb.inputEl.value = itemText;
-								setFieldError(this.ntb, this, cb.inputEl, 'beforeend', t('setting.position.option-defaultitem-error-invalid'));
+								this.ntb.settingsUtils.setFieldError(this, cb.inputEl, 'beforeend', t('setting.position.option-defaultitem-error-invalid'));
 							}
 							else {
 								removeFieldError(cb.inputEl, 'beforeend');
