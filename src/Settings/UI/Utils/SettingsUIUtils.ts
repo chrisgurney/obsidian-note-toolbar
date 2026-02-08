@@ -821,6 +821,55 @@ export default class SettingsUIUtils {
 
 	}
 
+	/**
+	 * Determines if an item should display a visibility warning based on platform or view mode restrictions.
+	 * @param item Item settings to check
+	 * @returns A tuple containing the visibility state and tooltip text. State is undefined if the item is fully visible.
+	 */
+	getItemVisState(item: ToolbarItemSettings): [state: 'mobile' | 'desktop' | 'reading' | 'preview' | 'hidden' | undefined, tooltip: string] {
+
+		let state: 'mobile' | 'desktop' | 'reading' | 'preview' | 'hidden' | undefined = undefined;
+		let tooltip = '';
+
+		const isVisibleOnDesktop = hasVisibleComponents(item.visibility.desktop);
+		const isVisibleOnMobile = hasVisibleComponents(item.visibility.mobile);
+
+		if (!isVisibleOnDesktop && !isVisibleOnMobile) {
+			state = 'hidden';
+			tooltip = t('setting.item.visibility.tooltip-hidden');
+		}
+		else if (Platform.isDesktop && !isVisibleOnDesktop && isVisibleOnMobile) {
+			state = 'mobile';
+			tooltip = t('setting.item.visibility.tooltip-mobile-visible');
+		}
+		else if (Platform.isMobile && !isVisibleOnMobile && isVisibleOnDesktop) {
+			state = 'desktop';
+			tooltip = t('setting.item.visibility.tooltip-desktop-visible');
+		}
+
+		// check view mode if platform is OK
+		if (!state) {
+			const visibility = item.visibility ? (Platform.isDesktop ? item.visibility.desktop : item.visibility.mobile) : undefined;
+			
+			if (visibility && item.visibility.viewMode && item.visibility.viewMode !== ViewModeType.All) {
+				const latestMode = this.ntb.utils.getLatestViewMode();
+				if (latestMode && item.visibility.viewMode !== latestMode) {
+					if (item.visibility.viewMode === 'source') {
+						state = 'preview';
+						tooltip = t('setting.item.visibility.tooltip-editing-visible');
+					} 
+					else {
+						state = 'reading';
+						tooltip = t('setting.item.visibility.tooltip-reading-visible');
+					}
+				}
+			}
+		}
+
+		return [ state, tooltip ];
+
+	}
+
 }
 
 /**
@@ -891,56 +940,6 @@ export function getPlatformVisState(item: ToolbarItemSettings, platform: 'deskto
 export function getValueForKey(dict: {[key: string]: string}[], key: string): string {
 	const option = dict.find(option => key in option);
 	return option ? Object.values(option)[0] : '';
-}
-
-/**
- * Determines if an item should display a visibility warning based on platform or view mode restrictions.
- * @param ntb NoteToolbarPlugin
- * @param item Item settings to check
- * @returns A tuple containing the visibility state and tooltip text. State is undefined if the item is fully visible.
- */
-export function getItemVisState(ntb: NoteToolbarPlugin, item: ToolbarItemSettings): [state: 'mobile' | 'desktop' | 'reading' | 'preview' | 'hidden' | undefined, tooltip: string] {
-
-	let state: 'mobile' | 'desktop' | 'reading' | 'preview' | 'hidden' | undefined = undefined;
-	let tooltip = '';
-
-	const isVisibleOnDesktop = hasVisibleComponents(item.visibility.desktop);
-	const isVisibleOnMobile = hasVisibleComponents(item.visibility.mobile);
-
-	if (!isVisibleOnDesktop && !isVisibleOnMobile) {
-		state = 'hidden';
-		tooltip = t('setting.item.visibility.tooltip-hidden');
-	}
-	else if (Platform.isDesktop && !isVisibleOnDesktop && isVisibleOnMobile) {
-		state = 'mobile';
-		tooltip = t('setting.item.visibility.tooltip-mobile-visible');
-	}
-	else if (Platform.isMobile && !isVisibleOnMobile && isVisibleOnDesktop) {
-		state = 'desktop';
-		tooltip = t('setting.item.visibility.tooltip-desktop-visible');
-	}
-
-	// check view mode if platform is OK
-	if (!state) {
-		const visibility = item.visibility ? (Platform.isDesktop ? item.visibility.desktop : item.visibility.mobile) : undefined;
-		
-		if (visibility && item.visibility.viewMode && item.visibility.viewMode !== ViewModeType.All) {
-			const latestMode = ntb.utils.getLatestViewMode();
-			if (latestMode && item.visibility.viewMode !== latestMode) {
-				if (item.visibility.viewMode === 'source') {
-					state = 'preview';
-					tooltip = t('setting.item.visibility.tooltip-editing-visible');
-				} 
-				else {
-					state = 'reading';
-					tooltip = t('setting.item.visibility.tooltip-reading-visible');
-				}
-			}
-		}
-	}
-
-	return [ state, tooltip ];
-
 }
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {

@@ -6,7 +6,7 @@ import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import { importFromModal } from "../Modals/ImportModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
-import { getItemVisState, iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
+import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
 
 
 const enum ItemFormComponent {
@@ -392,7 +392,7 @@ export default class ItemListUi {
 
         if (visibilityStatusEl) {
             visibilityStatusEl.empty();
-            const [itemVisState, itemVisTooltip] = getItemVisState(this.ntb, toolbarItem);
+            const [itemVisState, itemVisTooltip] = this.ntb.settingsUtils.getItemVisState(toolbarItem);
             visibilityStatusEl.toggleClass("note-toolbar-item-visibility-indicator", !!itemVisState);
             if (itemVisState) {
                 setIcon(
