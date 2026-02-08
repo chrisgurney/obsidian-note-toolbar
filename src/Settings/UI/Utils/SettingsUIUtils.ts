@@ -416,6 +416,129 @@ export default class SettingsUIUtils {
 		return true;
 	}
 
+	/**
+	 * Renders the item suggestion into the given element, for use in item suggesters and Quick Tools.
+	 * @param item ToolbarItemSettings to render
+	 * @param el HEMLElement to render suggestion into
+	 * @param inputStr string that was used to search for this item
+	 * @param showMeta boolean to set true if the meta icon should be shown (for Quick Tools)
+	 * @param replaceVars boolean to set true if vars should be replaced; false to leave as-is (default)
+	 */
+	renderItemSuggestion(
+		item: ToolbarItemSettings, 
+		el: HTMLElement, 
+		inputStr: string, 
+		showMeta: boolean = false,
+		replaceVars: boolean = false
+	) {
+		if (!item) { return }
+		el.addClass("note-toolbar-item-suggestion");
+		el.setAttribute('id', item.uuid);
+
+		const itemMainEl = el.createDiv();
+		itemMainEl.addClass('note-toolbar-item-suggestion-container');
+
+		if (item.icon) {
+			let svgExists = getIcon(item.icon);
+			if (svgExists) {
+				let iconGlyphEl = itemMainEl.createSpan();
+				setIcon(iconGlyphEl, item.icon);
+			}
+		}
+		let itemNameEl = itemMainEl.createSpan();
+		let itemName = item.label || item.tooltip;
+
+		// fallback if no label or tooltip
+		let isItemNameLink = false;
+		if (!itemName) {
+			if (item.icon) {
+				isItemNameLink = true;
+				itemName = item.link;
+			}
+			else {
+				itemName = '';
+			}
+		}
+
+		itemNameEl.addClass("note-toolbar-item-suggester-name");
+		const itemLabelEl = itemNameEl.createSpan();
+
+		let title = itemName;
+		// replace variables in labels (or tooltip, if no label set)
+		const activeFile = this.ntb.app.workspace.getActiveFile();
+		if (replaceVars) {
+			this.ntb.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+				itemLabelEl.setText(resolvedName);
+			});
+		}
+		else {
+			itemLabelEl.setText(itemName);
+		}
+		
+		if (showMeta) {
+			let itemMeta = itemNameEl.createSpan();
+			itemMeta.addClass("note-toolbar-item-suggester-type");
+			switch (item.linkAttr.type) {
+				case ItemType.Command:
+					setTooltip(itemMeta, t('setting.item.option-command'));
+					break;
+				case ItemType.File:
+					setIcon(itemMeta, 'file');
+					setTooltip(itemMeta, t('setting.item.option-file'));
+					break;
+				case ItemType.Menu:
+					setIcon(itemMeta, 'menu');
+					setTooltip(itemMeta, t('setting.item.option-menu'));
+					break;
+				case ItemType.Uri:
+					setIcon(itemMeta, 'globe');
+					setTooltip(itemMeta, t('setting.item.option-uri'));
+					break;
+				case ItemType.Dataview:
+				case ItemType.JavaScript:
+				case ItemType.JsEngine:
+					setIcon(itemMeta, 'scroll');
+					setTooltip(itemMeta, "Script");
+					break;
+				case ItemType.Templater:
+					setIcon(itemMeta, 'templater-icon');
+					setTooltip(itemMeta, "Templater");
+					break;
+			}
+		}
+		
+		const inputStrLower = inputStr.toLowerCase();
+		// if what's shown doesn't already contain the searched string, show it below
+		if (!title.toLowerCase().includes(inputStrLower)) {
+			let inputMatch = 
+				item.label.toLowerCase().includes(inputStrLower)
+					? item.label
+					: item.tooltip.toLowerCase().includes(inputStrLower) 
+						? item.tooltip 
+						: item.link;
+			const itemNoteEl = el.createDiv();
+			itemNoteEl.addClass('note-toolbar-item-suggester-note');
+			itemNoteEl.setText(inputMatch);
+		}
+		// show the description if one is set
+		if (item.description) {
+			const itemDescEl = el.createDiv();
+			itemDescEl.addClass('note-toolbar-item-suggester-note');
+			itemDescEl.setText(item.description);
+
+			// show the plugin(s) supported, or the command ID used
+			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
+				let itemPluginText = getPluginNames(this.ntb, item);
+				if (itemPluginText) {
+					const pluginDescEl = el.createDiv();
+					pluginDescEl.addClass('note-toolbar-item-suggester-note');	
+					setIcon(pluginDescEl.createSpan(), 'puzzle');		
+					pluginDescEl.createSpan().setText(t('gallery.label-requires-plugin', { plugin: itemPluginText }));
+				}
+			}
+		}
+	}
+
 }
 
 /**
@@ -630,131 +753,6 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 
 		errorEl?.remove();
 		el?.removeClass('note-toolbar-setting-error');
-	}
-}
-
-/**
- * Renders the item suggestion into the given element, for use in item suggesters and Quick Tools.
- * @param ntb NoteToolbarPlugin
- * @param item ToolbarItemSettings to render
- * @param el HEMLElement to render suggestion into
- * @param inputStr string that was used to search for this item
- * @param showMeta boolean to set true if the meta icon should be shown (for Quick Tools)
- * @param replaceVars boolean to set true if vars should be replaced; false to leave as-is (default)
- */
-export function renderItemSuggestion(
-	ntb: NoteToolbarPlugin, 
-	item: ToolbarItemSettings, 
-	el: HTMLElement, 
-	inputStr: string, 
-	showMeta: boolean = false,
-	replaceVars: boolean = false
-) {
-	if (!item) { return }
-	el.addClass("note-toolbar-item-suggestion");
-	el.setAttribute('id', item.uuid);
-
-	const itemMainEl = el.createDiv();
-	itemMainEl.addClass('note-toolbar-item-suggestion-container');
-
-	if (item.icon) {
-		let svgExists = getIcon(item.icon);
-		if (svgExists) {
-			let iconGlyphEl = itemMainEl.createSpan();
-			setIcon(iconGlyphEl, item.icon);
-		}
-	}
-	let itemNameEl = itemMainEl.createSpan();
-	let itemName = item.label || item.tooltip;
-
-	// fallback if no label or tooltip
-	let isItemNameLink = false;
-	if (!itemName) {
-		if (item.icon) {
-			isItemNameLink = true;
-			itemName = item.link;
-		}
-		else {
-			itemName = '';
-		}
-	}
-
-	itemNameEl.addClass("note-toolbar-item-suggester-name");
-	const itemLabelEl = itemNameEl.createSpan();
-
-	let title = itemName;
-	// replace variables in labels (or tooltip, if no label set)
-	const activeFile = ntb.app.workspace.getActiveFile();
-	if (replaceVars) {
-		ntb.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
-			itemLabelEl.setText(resolvedName);
-		});
-	}
-	else {
-		itemLabelEl.setText(itemName);
-	}
-	
-	if (showMeta) {
-		let itemMeta = itemNameEl.createSpan();
-		itemMeta.addClass("note-toolbar-item-suggester-type");
-		switch (item.linkAttr.type) {
-			case ItemType.Command:
-				setTooltip(itemMeta, t('setting.item.option-command'));
-				break;
-			case ItemType.File:
-				setIcon(itemMeta, 'file');
-				setTooltip(itemMeta, t('setting.item.option-file'));
-				break;
-			case ItemType.Menu:
-				setIcon(itemMeta, 'menu');
-				setTooltip(itemMeta, t('setting.item.option-menu'));
-				break;
-			case ItemType.Uri:
-				setIcon(itemMeta, 'globe');
-				setTooltip(itemMeta, t('setting.item.option-uri'));
-				break;
-			case ItemType.Dataview:
-			case ItemType.JavaScript:
-			case ItemType.JsEngine:
-				setIcon(itemMeta, 'scroll');
-				setTooltip(itemMeta, "Script");
-				break;
-			case ItemType.Templater:
-				setIcon(itemMeta, 'templater-icon');
-				setTooltip(itemMeta, "Templater");
-				break;
-		}
-	}
-	
-	const inputStrLower = inputStr.toLowerCase();
-	// if what's shown doesn't already contain the searched string, show it below
-	if (!title.toLowerCase().includes(inputStrLower)) {
-		let inputMatch = 
-			item.label.toLowerCase().includes(inputStrLower)
-				? item.label
-				: item.tooltip.toLowerCase().includes(inputStrLower) 
-					? item.tooltip 
-					: item.link;
-		const itemNoteEl = el.createDiv();
-		itemNoteEl.addClass('note-toolbar-item-suggester-note');
-		itemNoteEl.setText(inputMatch);
-	}
-	// show the description if one is set
-	if (item.description) {
-		const itemDescEl = el.createDiv();
-		itemDescEl.addClass('note-toolbar-item-suggester-note');
-		itemDescEl.setText(item.description);
-
-		// show the plugin(s) supported, or the command ID used
-		if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
-			let itemPluginText = getPluginNames(ntb, item);
-			if (itemPluginText) {
-				const pluginDescEl = el.createDiv();
-				pluginDescEl.addClass('note-toolbar-item-suggester-note');	
-				setIcon(pluginDescEl.createSpan(), 'puzzle');		
-				pluginDescEl.createSpan().setText(t('gallery.label-requires-plugin', { plugin: itemPluginText }));
-			}
-		}
 	}
 }
 
