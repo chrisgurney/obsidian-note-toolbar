@@ -342,10 +342,8 @@
     width: 100%;
 }
 
-.note-toolbar-setting-icon-button-cta {
-    & svg {
-        color: var(--interactive-accent);
-    }
+.note-toolbar-setting-state-active svg {
+    color: var(--interactive-accent);
 }
 
 .note-toolbar-setting-item-preview-icon:empty {

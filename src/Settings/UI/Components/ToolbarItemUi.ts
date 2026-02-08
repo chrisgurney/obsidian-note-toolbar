@@ -1,6 +1,6 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
+import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import IconSuggestModal from "../Modals/IconSuggestModal";
@@ -1252,12 +1252,11 @@ export default class ToolbarItemUi {
 	private updateItemVisButton(item: ToolbarItemSettings, button: ButtonComponent, platform: 'desktop' | 'mobile'): void {
         let [state, label, tooltip] = getPlatformVisState(item, platform);
         button.buttonEl.empty();
-        // TODO: highlight the button if the item's currently hidden
-        // if (state === 'hidden') {
-        //     if ((Platform.isDesktop && platform === 'desktop') || (Platform.isMobile && platform === 'mobile')) {
-        //         button.setClass('');
-        //     }
-        // }
+
+        // highlight the button if the item's currently hidden
+        const isCurrentlyHidden = state === 'hidden' && ((Platform.isDesktop && platform === 'desktop') || (Platform.isMobile && platform === 'mobile'));
+        button.buttonEl.toggleClass('note-toolbar-setting-state-active', isCurrentlyHidden);
+
         setIcon(button.buttonEl, this.visIcons[platform][state]);
         if (label) button.buttonEl.appendChild(document.createTextNode(label));
         button.setTooltip(tooltip);
@@ -1269,11 +1268,12 @@ export default class ToolbarItemUi {
 	 */
     private updateViewModeButton(button: ButtonComponent, mode: ViewModeType) {
         const config = this.visViewModeOptions[mode];
-        // TODO: highlight the button if we're currently in the other mode
-        // const latestViewMode: MarkdownViewModeType | undefined = getLatestViewMode(ntb);
-        // if (latestViewMode && latestViewMode !== mode) {
-        //     button.setClass('');
-        // }
+
+        // highlight the button if we're currently in the other mode
+        const latestViewMode: MarkdownViewModeType | undefined = this.ntb.utils.getLatestViewMode();
+        const isCurrentlyHidden = (mode !== ViewModeType.All) && !!latestViewMode && latestViewMode !== mode;
+        button.buttonEl.toggleClass('note-toolbar-setting-state-active', isCurrentlyHidden);
+
         setIcon(button.buttonEl, config.icon);
         button.setTooltip(config.tooltip);
     };
