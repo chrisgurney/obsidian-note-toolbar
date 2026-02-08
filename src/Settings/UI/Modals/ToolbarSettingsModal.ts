@@ -7,7 +7,7 @@ import ItemListUi from '../Components/ItemListUi';
 import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
-import { fixToggleTab, getDisclaimersFr, learnMoreFr, removeFieldError, setFieldError, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
+import { fixToggleTab, getDisclaimersFr, learnMoreFr, removeFieldError, setFieldError } from "../Utils/SettingsUIUtils";
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -149,7 +149,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
 
 		// show the What's New view once, if the user hasn't seen it yet
-		showWhatsNewIfNeeded(this.ntb);
+		this.ntb.settingsUtils.showWhatsNewIfNeeded();
 
 	}
 

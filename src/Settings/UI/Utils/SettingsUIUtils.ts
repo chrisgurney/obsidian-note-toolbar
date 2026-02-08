@@ -602,6 +602,22 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Shows the What's New dialog if the user hasn't seen it yet.
+	 */
+	showWhatsNewIfNeeded() {
+		// show the What's New dialog once if the user hasn't seen it yet
+		if (this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
+			this.ntb.settings.whatsnew_version = WHATSNEW_VERSION;
+			this.ntb.settingsManager.save().then(() => {
+				this.ntb.app.workspace.getLeaf(true).setViewState({
+					type: VIEW_TYPE_WHATS_NEW,
+					active: true
+				});
+			});
+		}
+	}
+
+	/**
 	 * Updates the UI state of the given component if the value is invalid.
 	 * @param parent Setting UI tab/modal that the component is in
 	 * @param itemValue string value to check
@@ -1045,24 +1061,6 @@ export function setFieldHelp(fieldEl: HTMLElement, helpText: DocumentFragment | 
 	fieldHelp.addClass('note-toolbar-setting-field-help');
 	(helpText instanceof DocumentFragment) ? fieldHelp.append(helpText) : fieldHelp.setText(helpText);
 	fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
-}
-
-/**
- * Shows the What's New dialog if the user hasn't seen it yet.
- */
-export function showWhatsNewIfNeeded(ntb: NoteToolbarPlugin) {
-
-	// show the What's New dialog once if the user hasn't seen it yet
-	if (ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
-		ntb.settings.whatsnew_version = WHATSNEW_VERSION;
-		ntb.settingsManager.save().then(() => {
-			ntb.app.workspace.getLeaf(true).setViewState({
-				type: VIEW_TYPE_WHATS_NEW,
-				active: true
-			});
-		});
-	}
-
 }
 
 /**
