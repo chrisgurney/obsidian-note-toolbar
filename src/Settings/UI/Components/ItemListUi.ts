@@ -398,8 +398,8 @@ export default class ItemListUi {
                 setIcon(
                     visibilityStatusEl,
                     itemVisState === 'hidden' ? 'eye-off' :
-                        itemVisState === 'mobile' ? 'tablet-smartphone' :
-                            itemVisState === 'desktop' ? 'monitor' :
+                        itemVisState === 'mobile' ? 'monitor-off' :
+                            itemVisState === 'desktop' ? 'note-toolbar-tablet-smartphone-off' :
                                 itemVisState === 'reading' ? 'book-open' : 'pencil'
                 );
                 setTooltip(visibilityStatusEl, itemVisTooltip);
