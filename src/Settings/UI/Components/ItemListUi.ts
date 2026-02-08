@@ -6,7 +6,7 @@ import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import { importFromModal } from "../Modals/ImportModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
-import { getItemVisState, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
+import { getItemVisState, iconTextFr, learnMoreFr, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
 
 
 const enum ItemFormComponent {
@@ -106,7 +106,7 @@ export default class ItemListUi {
 
             const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-            this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.ntb, this.toolbar, 'New', this.parent));
+            this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
             this.ntb.settingsUtils.handleKeyClick(galleryLinkEl);
 
             itemsSortableContainer.append(emptyMsgEl);
@@ -233,7 +233,7 @@ export default class ItemListUi {
             .setClass('note-toolbar-setting-no-border')
             .addButton((btn) => {
                 btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-                    .onClick(async () => openItemSuggestModal(this.ntb, this.toolbar, 'New', this.parent));
+                    .onClick(async () => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
                 btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
             })
             .addButton((btn) => {

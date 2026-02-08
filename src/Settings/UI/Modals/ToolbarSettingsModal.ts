@@ -7,7 +7,7 @@ import ItemListUi from '../Components/ItemListUi';
 import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
-import { displayHelpSection, fixToggleTab, getDisclaimersFr, getToolbarUsageFr, getToolbarUsageText, learnMoreFr, removeFieldError, setFieldError, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
+import { fixToggleTab, getDisclaimersFr, learnMoreFr, removeFieldError, setFieldError, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -117,7 +117,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayCommandButton(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
-		displayHelpSection(this.ntb, settingsDiv, true, () => {
+		this.ntb.settingsUtils.displayHelpSection(settingsDiv, true, () => {
 			this.close();
 			if (this.parent) {
 				// @ts-ignore
@@ -431,7 +431,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayDeleteButton(settingsDiv: HTMLElement) {
 
-		let usageDescFr = getToolbarUsageFr(this.ntb, this.toolbar, this);
+		let usageDescFr = this.ntb.settingsUtils.getToolbarUsageFr(this.toolbar, this);
 
 		new Setting(settingsDiv)
 			.setName(t('setting.delete-toolbar.name'))
@@ -446,7 +446,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
 					.onClick(() => {
-						let usageStats = getToolbarUsageText(this.ntb, this.toolbar);
+						let usageStats = this.ntb.settingsUtils.getToolbarUsageText(this.toolbar);
 						let usageText = usageStats 
 							? t('setting.usage.description') + '\n' + usageStats 
 							: t('setting.usage.description_none');

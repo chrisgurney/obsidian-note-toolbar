@@ -11,7 +11,7 @@ import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
-import { displayHelpSection, fixToggleTab, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded, updateItemComponentStatus } from "./Utils/SettingsUIUtils";
+import { fixToggleTab, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded, updateItemComponentStatus } from "./Utils/SettingsUIUtils";
 // import RuleUi from './RuleUi';
 
 type SettingsSectionType = 'appToolbars' | 'callouts' | 'contexts' | 'displayRules' | 'itemList';
@@ -64,7 +64,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 
 		// help
-		displayHelpSection(this.ntb, containerEl, undefined, () => {
+		this.ntb.settingsUtils.displayHelpSection(containerEl, undefined, () => {
 			// @ts-ignore
 			this.ntb.app.setting.close();
 		});

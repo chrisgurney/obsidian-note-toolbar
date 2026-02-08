@@ -4,7 +4,6 @@ import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, Toolba
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import { Notice, Platform } from "obsidian";
-import { openScriptPrompt } from "Settings/UI/Utils/SettingsUIUtils";
 
 export default class GalleryManager {
 
@@ -42,7 +41,7 @@ export default class GalleryManager {
 		});
 
         // confirm with user if they would like to enable scripting
-        const isScriptingEnabled = await openScriptPrompt(this.ntb, galleryItem);
+        const isScriptingEnabled = await this.ntb.settingsUtils.openScriptPrompt(galleryItem);
         if (!isScriptingEnabled) return;
 
         switch (galleryItem.linkAttr.type) {

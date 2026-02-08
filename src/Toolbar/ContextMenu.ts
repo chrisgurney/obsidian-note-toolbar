@@ -5,7 +5,7 @@ import ItemModal from "Settings/UI/Modals/ItemModal";
 import ShareModal from "Settings/UI/Modals/ShareModal";
 import StyleModal from "Settings/UI/Modals/StyleModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { learnMoreFr, openItemSuggestModal } from "Settings/UI/Utils/SettingsUIUtils";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { exportToCallout } from "Utils/ImportExport";
 import { TbarData } from "./ToolbarRenderer";
 
@@ -200,7 +200,7 @@ export default class ContextMenu {
 				.setTitle(t('toolbar.menu-add-item'))
 				.onClick(async () => {
 					const toolbarItemIndex = this.ntb.utils.calcToolbarItemIndex(event);
-					if (toolbarSettings) openItemSuggestModal(this.ntb, toolbarSettings, 'New', undefined, toolbarItemIndex);
+					if (toolbarSettings) this.ntb.settingsUtils.openItemSuggestModal(toolbarSettings, 'New', undefined, toolbarItemIndex);
 				});
 		});
 

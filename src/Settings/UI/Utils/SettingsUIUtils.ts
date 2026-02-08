@@ -151,6 +151,92 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Displays the help section.
+	 * @param containerEl HTMLElement to add the content to.
+	 * @param useTextVersion set to true to just use the small text version.
+	 * @param closeCallback function to close the settings window, which will depend on where it was launched from
+	 */
+	displayHelpSection(settingsDiv: HTMLElement, useTextVersion: boolean = false, closeCallback: () => void) {
+		
+		if (Platform.isPhone || useTextVersion) {
+
+			let helpContainerEl = settingsDiv.createDiv();
+			helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
+
+			const helpDesc = document.createDocumentFragment();
+			helpDesc.append("v" + PLUGIN_VERSION, " • ");
+			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
+			this.ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
+				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+				closeCallback();
+			});
+			helpDesc.append(' • ');
+			const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
+			this.ntb.registerDomEvent(galleryLink, 'click', (event) => { 
+				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+				closeCallback();
+			});
+			helpDesc.append(' • ');
+			const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
+			this.ntb.registerDomEvent(helpLink, 'click', (event) => { 
+				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+				closeCallback();
+			});
+			helpContainerEl.append(helpDesc);
+			
+		}
+		else {
+
+			const helpDesc = document.createDocumentFragment();
+			helpDesc.append(
+				helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + PLUGIN_VERSION })
+			);
+
+			new Setting(settingsDiv)
+				.setName(t('plugin.note-toolbar') + ' • v' + PLUGIN_VERSION)
+				.setDesc(t('setting.help.description'))
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.button-whats-new-tooltip'))
+						.onClick(() => {
+							this.ntb.app.workspace.getLeaf(true).setViewState({
+								type: VIEW_TYPE_WHATS_NEW,
+								active: true
+							});
+							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+							closeCallback();
+						})
+						.buttonEl.setText(t('setting.button-whats-new'));
+				})
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.button-gallery-tooltip'))
+						.onClick(() => {
+							this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+							closeCallback();
+						})
+						.buttonEl.setText(iconTextFr('layout-grid', t('setting.button-gallery')));
+				})
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.button-help-tooltip'))
+						.onClick(() => {
+							this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+							closeCallback();
+						})
+						.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
+				});
+
+		}
+
+	}
+
+	/**
 	 * Creates a text fragment with the given message, for an empty state.
 	 * @param message Message to return as a fragment.
 	 * @returns DocumentFragment containing the message and styling.
@@ -173,6 +259,64 @@ export default class SettingsUIUtils {
 		return messageFr;
 	}
 
+	/**
+	 * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
+	 * @param toolbarName name of the toolbar to look for.
+	 * @returns string 'obsidian://' URI.
+	 */
+	private getToolbarPropSearchUri(toolbarName: string): string {
+		let searchUri = 'obsidian://search?vault=' + this.ntb.app.vault.getName() + '&query=[' + this.ntb.settings.toolbarProp + ': ' + toolbarName + ']';
+		return encodeURI(searchUri);
+	}
+
+	/**
+	 * Search through settings to find out where this toolbar is referenced.
+	 * @param id UUID of the toolbar to check usage for.
+	 * @returns mappingCount and itemCount
+	 */
+	private getToolbarSettingsUsage(id: string): [number, number] {
+		let mappingCount = this.ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
+		let itemCount = this.ntb.settings.toolbars.reduce((count, toolbar) => {
+			return count + toolbar.items.filter(item => 
+				item.link === id && (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu)
+			).length;
+		}, 0);
+		return [mappingCount, itemCount];
+	}
+
+	getToolbarUsageFr(toolbar: ToolbarSettings, parent: ToolbarSettingsModal): DocumentFragment {
+		let usageFr = document.createDocumentFragment();
+		let usageStats = this.getToolbarUsageText(toolbar);
+		if (usageStats) {
+			usageFr.append(t('setting.usage.description'));
+			usageFr.append(usageFr.createEl("br"));
+			usageFr.append(usageStats);
+		}
+		else {
+			usageFr.append(t('setting.usage.description_none'));
+		}
+		
+		usageFr.append(usageFr.createEl("br"));
+		const descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
+		usageFr.append(descLinkFr);
+		this.ntb.registerDomEvent(descLinkFr, 'click', () => {
+			parent?.close();
+			// @ts-ignore
+			ntb.app.setting.close();
+			window.open(this.getToolbarPropSearchUri(toolbar.name));
+		});
+
+		return usageFr;
+	}
+
+	getToolbarUsageText(toolbar: ToolbarSettings): string {
+		const [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(toolbar.uuid);
+		let usage: String[] = [];
+		if (mappingCount > 0) usage.push(t('setting.usage.description-mappings', { count: mappingCount }));
+		if (itemCount > 0) usage.push(t('setting.usage.description-toolbar-items', { count: itemCount }));
+		return (usage.length > 0) ? usage.join(', ') : '';
+	}
+
 	handleKeyClick(el: HTMLElement) {
 		el.tabIndex = 0;
 		this.ntb.registerDomEvent(
@@ -186,90 +330,90 @@ export default class SettingsUIUtils {
 			});
 	}
 
-}
+	/**
+	 * Opens an item suggester that then adds the selected item to this toolbar.
+	 */
+	openItemSuggestModal(
+		toolbar: ToolbarSettings, 
+		mode: ItemSuggestMode, 
+		parent?: ToolbarSettingsModal, 
+		toolbarInsertIndex?: number
+	) {
+		const modal = new ItemSuggestModal(
+			this.ntb, 
+			undefined, 
+			async (selectedItem: ToolbarItemSettings) => {
+				
+				const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
+				if (isBrowseGalleryItem) {
+					this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+					if (parent) parent.close();
+					return;
+				}
 
-/**
- * Displays the help section.
- * @param containerEl HTMLElement to add the content to.
- * @param useTextVersion set to true to just use the small text version.
- * @param closeCallback function to close the settings window, which will depend on where it was launched from
- */
-export function displayHelpSection(ntb: NoteToolbarPlugin, settingsDiv: HTMLElement, useTextVersion: boolean = false, closeCallback: () => void) {
-	
-	if (Platform.isPhone || useTextVersion) {
+				const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
+				if (isEmptyItem) selectedItem.label = '';
+				if (isEmptyItem && parent) {
+					const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
+					if (itemContainer) {
+						await parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+						return;
+					}
+				}
 
-		let helpContainerEl = settingsDiv.createDiv();
-		helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
+				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
+				// reset the visibility setting, as there's no prior indication to the user as to its visibility
+				newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS));
 
-		const helpDesc = document.createDocumentFragment();
-		helpDesc.append("v" + PLUGIN_VERSION, " • ");
-		const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
-		ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
-			ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
-			if (Platform.isPhone) ntb.app.workspace.leftSplit?.collapse();
-			closeCallback();
-		});
-		helpDesc.append(' • ');
-		const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
-		ntb.registerDomEvent(galleryLink, 'click', (event) => { 
-			ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
-			if (Platform.isPhone) ntb.app.workspace.leftSplit?.collapse();
-			closeCallback();
-		});
-		helpDesc.append(' • ');
-		const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
-		ntb.registerDomEvent(helpLink, 'click', (event) => { 
-			ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
-			if (Platform.isPhone) ntb.app.workspace.leftSplit?.collapse();
-			closeCallback();
-		});
-		helpContainerEl.append(helpDesc);
-		
-	}
-	else {
+				// confirm with user if they would like to enable scripting
+				const isScriptingEnabled = await this.openScriptPrompt(newItem);
+				if (!isScriptingEnabled) return;
 
-		const helpDesc = document.createDocumentFragment();
-		helpDesc.append(
-			helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + PLUGIN_VERSION })
+				if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
+				
+				toolbar.updated = new Date().toISOString();
+				await this.ntb.settingsManager.save();
+
+				if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
+				else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
+
+				if (parent) parent.display(newItem.uuid);
+
+			}, 
+			mode
 		);
+		modal.open();
+	}
 
-		new Setting(settingsDiv)
-			.setName(t('plugin.note-toolbar') + ' • v' + PLUGIN_VERSION)
-			.setDesc(t('setting.help.description'))
-			.addButton((button: ButtonComponent) => {
-				button
-					.setTooltip(t('setting.button-whats-new-tooltip'))
-					.onClick(() => {
-						ntb.app.workspace.getLeaf(true).setViewState({
-							type: VIEW_TYPE_WHATS_NEW,
-							active: true
-						});
-						if (Platform.isPhone) ntb.app.workspace.leftSplit?.collapse();
-						closeCallback();
-					})
-					.buttonEl.setText(t('setting.button-whats-new'));
-			})
-			.addButton((button: ButtonComponent) => {
-				button
-					.setTooltip(t('setting.button-gallery-tooltip'))
-					.onClick(() => {
-						ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
-						if (Platform.isPhone) ntb.app.workspace.leftSplit?.collapse();
-						closeCallback();
-					})
-					.buttonEl.setText(iconTextFr('layout-grid', t('setting.button-gallery')));
-			})
-			.addButton((button: ButtonComponent) => {
-				button
-					.setTooltip(t('setting.button-help-tooltip'))
-					.onClick(() => {
-						ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
-						if (Platform.isPhone) ntb.app.workspace.leftSplit?.collapse();
-						closeCallback();
-					})
-					.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
-			});
+	/**
+	 * Prompts the user if they want to enable scripting, if the item requires it.
+	 * @param item 
+	 * @returns true if the user confirmed, false if they cancelled
+	 */
+	async openScriptPrompt(item: ToolbarItemSettings): Promise<boolean> {
+		const isScript = [ItemType.Dataview,  ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type);
 
+		if (isScript && !this.ntb.settings.scriptingEnabled) {
+			const isConfirmed = await confirmWithModal(
+				this.ntb.app, 
+				{
+					title: t('setting.add-item.title-confirm-scripting'),
+					questionLabel: t('setting.add-item.label-confirm-scripting'),
+					approveLabel: t('setting.button-enable'),
+					denyLabel: t('setting.button-cancel')
+				}
+			);
+			
+			if (isConfirmed) {
+				this.ntb.settings.scriptingEnabled = true;
+				this.ntb.adapters.updateAdapters();
+				await this.ntb.settingsManager.save();
+			}
+
+			return isConfirmed;
+		}
+
+		return true;
 	}
 
 }
@@ -331,64 +475,6 @@ export function getPlatformVisState(item: ToolbarItemSettings, platform: 'deskto
 		}
 	}
 	return ['hidden', '', t('setting.item.visibility.option-item-hide', { platform: labelPlatform })];
-}
-
-/**
- * Returns a URI that opens a search of the toolbar name in the toolbar property across all notes.
- * @param toolbarName name of the toolbar to look for.
- * @returns string 'obsidian://' URI.
- */
-export function getToolbarPropSearchUri(ntb: NoteToolbarPlugin, toolbarName: string): string {
-	let searchUri = 'obsidian://search?vault=' + ntb.app.vault.getName() + '&query=[' + ntb.settings.toolbarProp + ': ' + toolbarName + ']';
-	return encodeURI(searchUri);
-}
-
-/**
- * Search through settings to find out where this toolbar is referenced.
- * @param id UUID of the toolbar to check usage for.
- * @returns mappingCount and itemCount
- */
-export function getToolbarSettingsUsage(ntb: NoteToolbarPlugin, id: string): [number, number] {
-	let mappingCount = ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
-	let itemCount = ntb.settings.toolbars.reduce((count, toolbar) => {
-		return count + toolbar.items.filter(item => 
-			item.link === id && (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu)
-		).length;
-	}, 0);
-	return [mappingCount, itemCount];
-}
-
-export function getToolbarUsageFr(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings, parent: ToolbarSettingsModal): DocumentFragment {
-	let usageFr = document.createDocumentFragment();
-	let usageStats = getToolbarUsageText(ntb, toolbar);
-	if (usageStats) {
-		usageFr.append(t('setting.usage.description'));
-		usageFr.append(usageFr.createEl("br"));
-		usageFr.append(usageStats);
-	}
-	else {
-		usageFr.append(t('setting.usage.description_none'));
-	}
-	
-	usageFr.append(usageFr.createEl("br"));
-	const descLinkFr = usageFr.createEl('a', {href: '#', text: t('setting.usage.description-search')});
-	usageFr.append(descLinkFr);
-	ntb.registerDomEvent(descLinkFr, 'click', () => {
-		parent?.close();
-		// @ts-ignore
-		ntb.app.setting.close();
-		window.open(getToolbarPropSearchUri(ntb, toolbar.name));
-	});
-
-	return usageFr;
-}
-
-export function getToolbarUsageText(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings): string {
-	const [ mappingCount, itemCount ] = getToolbarSettingsUsage(ntb, toolbar.uuid);
-	let usage: String[] = [];
-	if (mappingCount > 0) usage.push(t('setting.usage.description-mappings', { count: mappingCount }));
-	if (itemCount > 0) usage.push(t('setting.usage.description-toolbar-items', { count: itemCount }));
-	return (usage.length > 0) ? usage.join(', ') : '';
 }
 
 /**
@@ -498,62 +584,6 @@ export function headingLearnMoreFr(title: string, desc: string, page: string, li
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 
 	return messageFr;
-}
-
-/**
- * Opens an item suggester that then adds the selected item to this toolbar.
- */
-export function openItemSuggestModal(
-	ntb: NoteToolbarPlugin, 
-	toolbar: ToolbarSettings, 
-	mode: ItemSuggestMode, 
-	parent?: ToolbarSettingsModal, 
-	toolbarInsertIndex?: number
-) {
-	const modal = new ItemSuggestModal(
-		ntb, 
-		undefined, 
-		async (selectedItem: ToolbarItemSettings) => {
-			
-			const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
-			if (isBrowseGalleryItem) {
-				ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
-				if (parent) parent.close();
-				return;
-			}
-
-			const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
-			if (isEmptyItem) selectedItem.label = '';
-			if (isEmptyItem && parent) {
-				const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
-				if (itemContainer) {
-					await parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
-					return;
-				}
-			}
-
-			let newItem = await ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
-			// reset the visibility setting, as there's no prior indication to the user as to its visibility
-			newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS));
-
-			// confirm with user if they would like to enable scripting
-			const isScriptingEnabled = await openScriptPrompt(ntb, newItem);
-			if (!isScriptingEnabled) return;
-
-			if (selectedItem.inGallery && !(await ntb.settingsManager.resolveGalleryItem(newItem))) return;
-			
-			toolbar.updated = new Date().toISOString();
-			await ntb.settingsManager.save();
-
-			if (isEmptyItem) new ItemModal(ntb, toolbar, newItem).open()
-			else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
-
-			if (parent) parent.display(newItem.uuid);
-
-		}, 
-		mode
-	);
-	modal.open();
 }
 
 /**
@@ -881,38 +911,6 @@ export async function updateItemComponentStatus(
 
 	return isValid;
 
-}
-
-/**
- * Prompts the user if they want to enable scripting, if the item requires it.
- * @param ntb NoteToolbarPlugin
- * @param item 
- * @returns true if the user confirmed, false if they cancelled
- */
-export async function openScriptPrompt(ntb: NoteToolbarPlugin, item: ToolbarItemSettings): Promise<boolean> {
-	const isScript = [ItemType.Dataview,  ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type);
-
-	if (isScript && !ntb.settings.scriptingEnabled) {
-		const isConfirmed = await confirmWithModal(
-			ntb.app, 
-			{
-				title: t('setting.add-item.title-confirm-scripting'),
-				questionLabel: t('setting.add-item.label-confirm-scripting'),
-				approveLabel: t('setting.button-enable'),
-				denyLabel: t('setting.button-cancel')
-			}
-		);
-		
-		if (isConfirmed) {
-			ntb.settings.scriptingEnabled = true;
-			ntb.adapters.updateAdapters();
-			await ntb.settingsManager.save();
-		}
-
-		return isConfirmed;
-	}
-
-	return true;
 }
 
 /**
