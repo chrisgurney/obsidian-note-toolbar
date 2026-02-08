@@ -44,7 +44,7 @@ export default class SettingsUIUtils {
 						this.ntb.settingsManager.save();
 					});
 				button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
-				handleKeyClick(this.ntb, button.extraSettingsEl);
+				this.handleKeyClick(button.extraSettingsEl);
 			});
 		return setting.settingEl;
 	}
@@ -132,7 +132,7 @@ export default class SettingsUIUtils {
 				});
 		}
 		else {
-			itemsFr.appendChild(emptyMessageFr(this.ntb, t('setting.item.label-preview-empty-no-items')));
+			itemsFr.appendChild(this.emptyMessageFr(t('setting.item.label-preview-empty-no-items')));
 		}
 		previewContainer.appendChild(itemsFr);
 
@@ -148,6 +148,42 @@ export default class SettingsUIUtils {
 
 		return toolbarFr;
 
+	}
+
+	/**
+	 * Creates a text fragment with the given message, for an empty state.
+	 * @param message Message to return as a fragment.
+	 * @returns DocumentFragment containing the message and styling.
+	 */
+	emptyMessageFr(message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
+
+		let messageFr = document.createDocumentFragment();
+		let messageFrText = document.createElement("i");
+		messageFrText.textContent = message;
+		messageFr.append(messageFrText);
+
+		if (linkText && linkCallback) {
+			messageFr.append('\u00A0');
+			const createLinkEl = messageFr.createEl('a', { href: '#', text: linkText });
+			createLinkEl.addClass('note-toolbar-setting-focussable-link');
+			this.ntb.registerDomEvent(createLinkEl, 'click', linkCallback);
+			this.handleKeyClick(createLinkEl);
+		}
+
+		return messageFr;
+	}
+
+	handleKeyClick(el: HTMLElement) {
+		el.tabIndex = 0;
+		this.ntb.registerDomEvent(
+			el, 'keydown', (evt) => {
+				switch (evt.key) {
+					case 'Enter':
+					case ' ':
+						evt.preventDefault();
+						el.click();
+				}
+			});
 	}
 
 }
@@ -236,29 +272,6 @@ export function displayHelpSection(ntb: NoteToolbarPlugin, settingsDiv: HTMLElem
 
 	}
 
-}
-
-/**
- * Creates a text fragment with the given message, for an empty state.
- * @param message Message to return as a fragment.
- * @returns DocumentFragment containing the message and styling.
- */
-export function emptyMessageFr(ntb: NoteToolbarPlugin, message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
-
-	let messageFr = document.createDocumentFragment();
-	let messageFrText = document.createElement("i");
-	messageFrText.textContent = message;
-	messageFr.append(messageFrText);
-
-	if (linkText && linkCallback) {
-		messageFr.append('\u00A0');
-		const createLinkEl = messageFr.createEl('a', { href: '#', text: linkText });
-		createLinkEl.addClass('note-toolbar-setting-focussable-link');
-		ntb.registerDomEvent(createLinkEl, 'click', linkCallback);
-		handleKeyClick(ntb, createLinkEl);
-	}
-
-	return messageFr;
 }
 
 /**
@@ -437,19 +450,6 @@ export function getItemVisState(ntb: NoteToolbarPlugin, item: ToolbarItemSetting
 
 	return [ state, tooltip ];
 
-}
-
-export function handleKeyClick(ntb: NoteToolbarPlugin, el: HTMLElement) {
-	el.tabIndex = 0;
-	ntb.registerDomEvent(
-		el, 'keydown', (evt) => {
-			switch (evt.key) {
-				case 'Enter':
-				case ' ':
-					evt.preventDefault();
-					el.click();
-			}
-		});
 }
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {

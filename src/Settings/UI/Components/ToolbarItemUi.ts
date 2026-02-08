@@ -9,7 +9,7 @@ import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsMod
 import CommandSuggester from "../Suggesters/CommandSuggester";
 import FileSuggester from "../Suggesters/FileSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { copyToolbarItem, fixToggleTab, getDisclaimersFr, getPlatformVisState, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
+import { copyToolbarItem, fixToggleTab, getDisclaimersFr, getPlatformVisState, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
 
 export default class ToolbarItemUi {
 
@@ -700,7 +700,7 @@ export default class ToolbarItemUi {
                             commandAdvancedEl.toggleAttribute('data-active');
                         });
                     button.extraSettingsEl.tabIndex = 0;
-                    handleKeyClick(this.ntb, button.extraSettingsEl);     
+                    this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
                 });
 
                 setFieldHelp(commandSetting.settingEl, helpTextFr);
@@ -806,7 +806,7 @@ export default class ToolbarItemUi {
                             fileAdvancedEl.toggleAttribute('data-active');
                         });
                     button.extraSettingsEl.tabIndex = 0;
-                    handleKeyClick(this.ntb, button.extraSettingsEl);      
+                    this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);      
                 });
 
                 setFieldHelp(fileSetting.settingEl, helpTextFr);
@@ -907,7 +907,7 @@ export default class ToolbarItemUi {
                             uriAdvancedEl.toggleAttribute('data-active');
                         });
                     button.extraSettingsEl.tabIndex = 0;
-                    handleKeyClick(this.ntb, button.extraSettingsEl);
+                    this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);
                 });
                 setFieldHelp(uriSetting.settingEl, helpTextFr);
                 break;
@@ -1126,7 +1126,7 @@ export default class ToolbarItemUi {
                     advancedSettingsDiv.toggleAttribute('data-active');
                 });
                 button.extraSettingsEl.tabIndex = 0;
-                handleKeyClick(this.ntb, button.extraSettingsEl);     
+                this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
             });
         advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced');
         this.ntb.registerDomEvent(advancedSetting.infoEl, 'click', (event) => {

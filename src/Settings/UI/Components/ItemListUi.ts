@@ -6,7 +6,7 @@ import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import { importFromModal } from "../Modals/ImportModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
-import { emptyMessageFr, getItemVisState, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
+import { getItemVisState, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
 
 
 const enum ItemFormComponent {
@@ -65,7 +65,7 @@ export default class ItemListUi {
                         }
                     });
                 });
-                handleKeyClick(this.ntb, cb.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
             });
 
         if (this.toolbar.items.length > 8) {
@@ -84,7 +84,7 @@ export default class ItemListUi {
                         this.handleItemListToggle(settingsDiv);
                     });
                     cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-                    handleKeyClick(this.ntb, cb.extraSettingsEl);
+                    this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
                 });
         }
 
@@ -101,13 +101,13 @@ export default class ItemListUi {
 
             // display empty state
             const emptyMsgEl = this.parent.containerEl.createEl('div', 
-                { text: emptyMessageFr(this.ntb, t('setting.items.label-empty-no-items') + '\u00A0') });
+                { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.items.label-empty-no-items') + '\u00A0') });
             emptyMsgEl.addClass('note-toolbar-setting-empty-message');
 
             const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
             this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.ntb, this.toolbar, 'New', this.parent));
-            handleKeyClick(this.ntb, galleryLinkEl);
+            this.ntb.settingsUtils.handleKeyClick(galleryLinkEl);
 
             itemsSortableContainer.append(emptyMsgEl);
 
@@ -213,19 +213,19 @@ export default class ItemListUi {
                 icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
                 btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Separator, itemsSortableContainer));
-                handleKeyClick(this.ntb, btn.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
             })
             .addExtraButton((btn) => {
                 btn.setIcon('move-horizontal')
                     .setTooltip(t('setting.items.button-add-spreader-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Spreader, itemsSortableContainer));
-                handleKeyClick(this.ntb, btn.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
             })
             .addExtraButton((btn) => {
                 btn.setIcon('lucide-corner-down-left')
                     .setTooltip(t('setting.items.button-add-break-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Break, itemsSortableContainer));
-                handleKeyClick(this.ntb, btn.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
             });
         itemsListButtonContainer.appendChild(formattingButtons);
 
@@ -694,7 +694,7 @@ export default class ItemListUi {
 				const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				itemPreviewContent.appendChild(groupToolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : emptyMessageFr(this.ntb, t('setting.item.option-item-group-error-invalid')));
+				itemPreviewContent.appendChild(groupToolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : this.ntb.settingsUtils.emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
 				break;
 			}
 			default: {

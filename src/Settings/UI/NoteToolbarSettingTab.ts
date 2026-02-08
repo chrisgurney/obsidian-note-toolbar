@@ -11,7 +11,7 @@ import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import { confirmWithModal } from './Modals/ConfirmModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
-import { displayHelpSection, emptyMessageFr, fixToggleTab, handleKeyClick, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded, updateItemComponentStatus } from "./Utils/SettingsUIUtils";
+import { displayHelpSection, fixToggleTab, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp, showWhatsNewIfNeeded, updateItemComponentStatus } from "./Utils/SettingsUIUtils";
 // import RuleUi from './RuleUi';
 
 type SettingsSectionType = 'appToolbars' | 'callouts' | 'contexts' | 'displayRules' | 'itemList';
@@ -173,7 +173,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 								this.toggleToolbarList();
 							}
 						});
-						handleKeyClick(this.ntb, cb.extraSettingsEl);
+						this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
 						// used to set focus on settings display
 						cb.extraSettingsEl.id = 'ntb-tbar-search-button';
 					});
@@ -197,7 +197,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						}
 					});
 				});
-				handleKeyClick(this.ntb, cb.extraSettingsEl);
+				this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
 			});
 
 		// search field (phone)
@@ -218,7 +218,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		if (this.ntb.settings.toolbars.length == 0) {
 
 			const emptyMsgEl = createDiv({ text: 
-				emptyMessageFr(this.ntb, t('setting.toolbars.label-empty-create-tbar'), t('setting.toolbars.link-create'), async () => {
+				this.ntb.settingsUtils.emptyMessageFr(t('setting.toolbars.label-empty-create-tbar'), t('setting.toolbars.link-create'), async () => {
 					const newToolbar = await this.ntb.settingsManager.newToolbar();
 					this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
 				}) });
@@ -478,7 +478,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					toolbarListEl?.querySelector('.note-toolbar-setting-empty-message')?.remove();
 					if (!hasMatch && query.length > 0) {
 						toolbarListEl?.createDiv({ 
-							text: emptyMessageFr(this.ntb, t('setting.search.label-no-results')), 
+							text: this.ntb.settingsUtils.emptyMessageFr(t('setting.search.label-no-results')), 
 							cls: 'note-toolbar-setting-empty-message' 
 						});
 					}
@@ -643,7 +643,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			if (this.ntb.settings.folderMappings.length == 0) {
 
 				const emptyMsgEl = createDiv({ text: 
-					emptyMessageFr(this.ntb, t('setting.mappings.label-empty'), t('setting.mappings.link-create'), async () => {
+					this.ntb.settingsUtils.emptyMessageFr(
+						t('setting.mappings.label-empty'), t('setting.mappings.link-create'), async () => {
 						let newMapping = { folder: "", toolbar: "" };
 						this.ntb.settings.folderMappings.push(newMapping);
 						await this.ntb.settingsManager.save();
@@ -839,7 +840,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					this.handleSettingToggle(containerSelector, section, callback);
 				});
 			cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-			handleKeyClick(this.ntb, cb.extraSettingsEl);
+			this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
 		});
 	}
 
