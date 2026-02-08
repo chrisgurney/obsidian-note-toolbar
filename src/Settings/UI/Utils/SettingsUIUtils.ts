@@ -601,6 +601,159 @@ export default class SettingsUIUtils {
 		}
 	}
 
+	/**
+	 * Updates the UI state of the given component if the value is invalid.
+	 * @param parent Setting UI tab/modal that the component is in
+	 * @param itemValue string value to check
+	 * @param fieldType SettingFieldType to check against
+	 * @param componentEl HTMLElement to update
+	 * @param toolbarItem ToolbarItemSettings for the item if needed to provide more context
+	 * @param [errorPosition='afterend'] where to add the error relative to the given componentEl
+	 * @returns true if the item is valid; false otherwise
+	 */
+	async updateItemComponentStatus(
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal,
+		itemValue: string, 
+		fieldType: SettingType, 
+		componentEl: HTMLElement | null, 
+		toolbarItem?: ToolbarItemSettings,
+		errorPosition: 'beforeend' | 'afterend' = 'afterend'): Promise<boolean> 
+	{
+
+		const enum Status {
+			Empty = 'empty',
+			Invalid = 'invalid',
+			Valid = 'valid'
+		}
+
+		let status: Status = Status.Valid;
+		let statusMessage: string = '';
+		let statusLink: HTMLAnchorElement | undefined = undefined;
+		let isValid = true;
+
+		// FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
+		if (toolbarItem?.hasCommand) {
+			// check if a command was actually created for this item
+			const command = this.ntb.commands.getCommandFor(toolbarItem);
+			if (!command) {
+				status = Status.Invalid;
+				statusMessage = t('setting.use-item-command.error-noname');
+			}
+		}
+
+		if (itemValue) {
+			switch(fieldType) {
+				case SettingType.Args: {
+					const parsedArgs = importArgs(itemValue);
+					if (!parsedArgs) {
+						status = Status.Invalid;
+						statusMessage = t('adapter.error.args-format');
+					}
+					break;
+				}
+				case SettingType.Command:
+					if (!(itemValue in this.ntb.app.commands.commands)) {
+						status = Status.Invalid;
+						if (itemValue === COMMAND_DOES_NOT_EXIST) {
+							statusMessage = t('setting.item.option-command-error-does-not-exist');
+						}
+						else {
+							statusMessage = t('setting.item.option-command-error-not-available-search');
+							let pluginLinkFragment = pluginLinkFr(itemValue);
+							let pluginLink = pluginLinkFragment?.querySelector('a');
+							if (pluginLink) {
+								statusMessage = t('setting.item.option-command-error-not-available-install');
+								pluginLink.addClass('note-toolbar-setting-focussable-link');
+								statusLink = pluginLink;
+							}
+						}
+					}
+					break;
+				case SettingType.File: {
+					const file = this.ntb.app.vault.getAbstractFileByPath(itemValue);
+					if (!(file instanceof TFile) && !(file instanceof TFolder)) {
+						status = Status.Invalid;
+						statusMessage = t('setting.item.option-file-error-does-not-exist');
+					}
+					break;
+				}
+				case SettingType.Text:
+					// if (plugin.hasVars(itemValue)) {
+					// 	plugin.debug('VALIDATING TEXT', itemValue);
+					// 	const activeFile = plugin.app.workspace.getActiveFile();
+					// 	plugin.replaceVars(itemValue, activeFile).then((resolvedText) => {
+							
+					// 	});
+					// }
+					break;
+				case SettingType.Toolbar: {
+					let toolbar = this.ntb.settingsManager.getToolbarByName(itemValue);
+					if (!toolbar) {
+						toolbar = this.ntb.settingsManager.getToolbar(itemValue);
+						if (!toolbar) {
+							status = Status.Invalid;
+							statusMessage = t('setting.item.option-item-menu-error-does-not-exist');
+						}
+					}
+					break;
+				}
+			}
+		}
+		// empty fields and script items (which don't have values)
+		else {
+			switch (fieldType) {
+				case SettingType.Script:
+					if (toolbarItem && toolbarItem.scriptConfig) {
+						// validate what the selected function for the adapter for this item requires
+						let adapter = this.ntb.adapters.getAdapterForItemType(toolbarItem.linkAttr.type);
+						if (adapter) {
+							let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
+							const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
+							if (params) {
+								for (const [index, param] of params.entries()) {
+									// TODO? error if required parameter is empty?
+									const value = toolbarItem.scriptConfig?.[param.parameter as keyof ScriptConfig] ?? null;
+									if (value) {
+										const subfieldValid = await this.updateItemComponentStatus(parent, value, param.type, componentEl);
+										status = subfieldValid ? Status.Valid : Status.Invalid;
+									}
+								}
+							}
+						}
+						else {
+							status = Status.Invalid;
+							statusMessage = (this.ntb.settings.scriptingEnabled)
+								? t('adapter.error.plugin-not-installed') 
+								: t('adapter.error.scripting-disabled');
+						}
+					}
+					break;
+				default:
+					// if the status isn't already invalid (e.g., for a command that doesn't exist)
+					if (status !== Status.Invalid) {
+						status = Status.Empty;
+						statusMessage = '';
+					}
+					break;
+			}
+		}
+
+		removeFieldError(componentEl, errorPosition);
+		switch (status) {
+			case Status.Empty:
+				// TODO? flag for whether empty should show as an error or not
+				isValid = false;
+				break;
+			case Status.Invalid:
+				setFieldError(this.ntb, parent, componentEl, errorPosition, statusMessage, statusLink);
+				isValid = false;
+				break;
+		}
+
+		return isValid;
+
+	}
+
 }
 
 /**
@@ -816,161 +969,6 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 		errorEl?.remove();
 		el?.removeClass('note-toolbar-setting-error');
 	}
-}
-
-/**
- * Updates the UI state of the given component if the value is invalid.
- * @param ntb NoteToolbarPlugin
- * @param parent Setting UI tab/modal that the component is in
- * @param itemValue string value to check
- * @param fieldType SettingFieldType to check against
- * @param componentEl HTMLElement to update
- * @param toolbarItem ToolbarItemSettings for the item if needed to provide more context
- * @param [errorPosition='afterend'] where to add the error relative to the given componentEl
- * @returns true if the item is valid; false otherwise
- */
-export async function updateItemComponentStatus(
-	ntb: NoteToolbarPlugin,
-	parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal,
-	itemValue: string, 
-	fieldType: SettingType, 
-	componentEl: HTMLElement | null, 
-	toolbarItem?: ToolbarItemSettings,
-	errorPosition: 'beforeend' | 'afterend' = 'afterend'): Promise<boolean> 
-{
-
-	const enum Status {
-		Empty = 'empty',
-		Invalid = 'invalid',
-		Valid = 'valid'
-	}
-
-	let status: Status = Status.Valid;
-	let statusMessage: string = '';
-	let statusLink: HTMLAnchorElement | undefined = undefined;
-	let isValid = true;
-
-	// FIXME: this isn't happening if there's no value, (e.g., URI with no link set)
-	if (toolbarItem?.hasCommand) {
-		// check if a command was actually created for this item
-		const command = ntb.commands.getCommandFor(toolbarItem);
-		if (!command) {
-			status = Status.Invalid;
-			statusMessage = t('setting.use-item-command.error-noname');
-		}
-	}
-
-	if (itemValue) {
-		switch(fieldType) {
-			case SettingType.Args: {
-				const parsedArgs = importArgs(itemValue);
-				if (!parsedArgs) {
-					status = Status.Invalid;
-					statusMessage = t('adapter.error.args-format');
-				}
-				break;
-			}
-			case SettingType.Command:
-				if (!(itemValue in ntb.app.commands.commands)) {
-					status = Status.Invalid;
-					if (itemValue === COMMAND_DOES_NOT_EXIST) {
-						statusMessage = t('setting.item.option-command-error-does-not-exist');
-					}
-					else {
-						statusMessage = t('setting.item.option-command-error-not-available-search');
-						let pluginLinkFragment = pluginLinkFr(itemValue);
-						let pluginLink = pluginLinkFragment?.querySelector('a');
-						if (pluginLink) {
-							statusMessage = t('setting.item.option-command-error-not-available-install');
-							pluginLink.addClass('note-toolbar-setting-focussable-link');
-							statusLink = pluginLink;
-						}
-					}
-				}
-				break;
-			case SettingType.File: {
-				const file = ntb.app.vault.getAbstractFileByPath(itemValue);
-				if (!(file instanceof TFile) && !(file instanceof TFolder)) {
-					status = Status.Invalid;
-					statusMessage = t('setting.item.option-file-error-does-not-exist');
-				}
-				break;
-			}
-			case SettingType.Text:
-				// if (plugin.hasVars(itemValue)) {
-				// 	plugin.debug('VALIDATING TEXT', itemValue);
-				// 	const activeFile = plugin.app.workspace.getActiveFile();
-				// 	plugin.replaceVars(itemValue, activeFile).then((resolvedText) => {
-						
-				// 	});
-				// }
-				break;
-			case SettingType.Toolbar: {
-				let toolbar = ntb.settingsManager.getToolbarByName(itemValue);
-				if (!toolbar) {
-					toolbar = ntb.settingsManager.getToolbar(itemValue);
-					if (!toolbar) {
-						status = Status.Invalid;
-						statusMessage = t('setting.item.option-item-menu-error-does-not-exist');
-					}
-				}
-				break;
-			}
-		}
-	}
-	// empty fields and script items (which don't have values)
-	else {
-		switch (fieldType) {
-			case SettingType.Script:
-				if (toolbarItem && toolbarItem.scriptConfig) {
-					// validate what the selected function for the adapter for this item requires
-					let adapter = ntb.adapters.getAdapterForItemType(toolbarItem.linkAttr.type);
-					if (adapter) {
-						let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
-						const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
-						if (params) {
-							for (const [index, param] of params.entries()) {
-								// TODO? error if required parameter is empty?
-								const value = toolbarItem.scriptConfig?.[param.parameter as keyof ScriptConfig] ?? null;
-								if (value) {
-									const subfieldValid = await updateItemComponentStatus(ntb, parent, value, param.type, componentEl);
-									status = subfieldValid ? Status.Valid : Status.Invalid;
-								}
-							}
-						}
-					}
-					else {
-						status = Status.Invalid;
-						statusMessage = (ntb.settings.scriptingEnabled)
-							? t('adapter.error.plugin-not-installed') 
-							: t('adapter.error.scripting-disabled');
-					}
-				}
-				break;
-			default:
-				// if the status isn't already invalid (e.g., for a command that doesn't exist)
-				if (status !== Status.Invalid) {
-					status = Status.Empty;
-					statusMessage = '';
-				}
-				break;
-		}
-	}
-
-	removeFieldError(componentEl, errorPosition);
-	switch (status) {
-		case Status.Empty:
-			// TODO? flag for whether empty should show as an error or not
-			isValid = false;
-			break;
-		case Status.Invalid:
-			setFieldError(ntb, parent, componentEl, errorPosition, statusMessage, statusLink);
-			isValid = false;
-			break;
-	}
-
-	return isValid;
-
 }
 
 /**
