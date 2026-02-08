@@ -231,14 +231,13 @@ export default class PluginUtils {
 
 
 	/**
-	 * Gets the view mode of the latest markdown view.
-	 * @param ntb NoteToolbarPlugin
+	 * Gets the view mode of the most recent leaf.
 	 * @returns MarkdownViewModeType or undefined, if not available.
 	 */
-	getLatestViewMode(): MarkdownViewModeType | undefined {
+	getRecentViewMode(): MarkdownViewModeType | undefined {
 		let latestMode: MarkdownViewModeType | undefined = undefined;
-		const leaves = this.ntb.app.workspace.getLeavesOfType('markdown');
-		const activeView = leaves.length > 0 ? leaves[0].view as MarkdownView : null;
+		const leaf = this.ntb.app.workspace.getMostRecentLeaf();
+		const activeView = leaf ? leaf.view as MarkdownView : null;
 		if (activeView && activeView instanceof MarkdownView) {
 			latestMode = activeView.getMode();
 		}

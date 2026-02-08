@@ -852,7 +852,7 @@ export default class SettingsUIUtils {
 			const visibility = item.visibility ? (Platform.isDesktop ? item.visibility.desktop : item.visibility.mobile) : undefined;
 			
 			if (visibility && item.visibility.viewMode && item.visibility.viewMode !== ViewModeType.All) {
-				const latestMode = this.ntb.utils.getLatestViewMode();
+				const latestMode = this.ntb.utils.getRecentViewMode();
 				if (latestMode && item.visibility.viewMode !== latestMode) {
 					if (item.visibility.viewMode === 'source') {
 						state = 'preview';

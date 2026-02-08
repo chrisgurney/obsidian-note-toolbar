@@ -1270,8 +1270,8 @@ export default class ToolbarItemUi {
         const config = this.visViewModeOptions[mode];
 
         // highlight the button if we're currently in the other mode
-        const latestViewMode: MarkdownViewModeType | undefined = this.ntb.utils.getLatestViewMode();
-        const isCurrentlyHidden = (mode !== ViewModeType.All) && !!latestViewMode && latestViewMode !== mode;
+        const recentViewMode: MarkdownViewModeType | undefined = this.ntb.utils.getRecentViewMode();
+        const isCurrentlyHidden = (mode !== ViewModeType.All) && !!recentViewMode && recentViewMode !== mode;
         button.buttonEl.toggleClass('note-toolbar-setting-state-active', isCurrentlyHidden);
 
         setIcon(button.buttonEl, config.icon);
