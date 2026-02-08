@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, getIcon, MarkdownView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
+import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
@@ -11,140 +11,144 @@ import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
 
-/**
- * Returns an element contianing a dismissable onboarding message.
- * @param ntb NoteToolbarPlugin
- * @param messageId unique identifier for the message, so it's not shown again
- * @param title title of the message
- * @param content content of the message
- * @returns 
- */
-export function createOnboardingMessageEl(
-	ntb: NoteToolbarPlugin,
-	messageId: string,
-	title: string,
-	content: string,
-): HTMLElement {
-	let containerEl = createDiv();
-	let setting = new Setting(containerEl)
-		.setName(title)
-		.setDesc(content)
-		.setClass('note-toolbar-setting-plugin-onboarding')
-		.addExtraButton((button) => {
-			button
-				.setIcon('cross')
-				.setTooltip("Dismiss") // FIXME: localize string
-				.onClick(() => {
-					setting.settingEl.remove();
-					ntb.settings.onboarding[messageId] = true;
-					ntb.settingsManager.save();
-				});
-			button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
-			handleKeyClick(ntb, button.extraSettingsEl);
-		});
-	return setting.settingEl;
-}
+export default class SettingsUIUtils {
 
-/**
- * Constructs a preview of the given toolbar, including the icons used.
- * @param ntb NoteToolbarPlugin reference
- * @param toolbar ToolbarSettings to display in the preview.
- * @param settingsManager Optional SettingsManager if Groups need to be expanded within previews. 
- * @param showEditLink set to true to add a link to edit the toolbar, after the preview; default is false.
- * @returns DocumentFragment
- */
-export function createToolbarPreviewFr(
-	ntb: NoteToolbarPlugin, 
-	toolbar: ToolbarSettings, 
-	settingsManager?: SettingsManager, 
-	showEditLink: boolean = false
-): DocumentFragment {
+	constructor(
+		private ntb: NoteToolbarPlugin
+	) {}
 
-	const toolbarFr: DocumentFragment = document.createDocumentFragment();
+	/**
+	 * Returns an element contianing a dismissable onboarding message.
+	 * @param messageId unique identifier for the message, so it's not shown again
+	 * @param title title of the message
+	 * @param content content of the message
+	 * @returns 
+	 */
+	createOnboardingMessageEl(
+		messageId: string,
+		title: string,
+		content: string,
+	): HTMLElement {
+		let containerEl = createDiv();
+		let setting = new Setting(containerEl)
+			.setName(title)
+			.setDesc(content)
+			.setClass('note-toolbar-setting-plugin-onboarding')
+			.addExtraButton((button) => {
+				button
+					.setIcon('cross')
+					.setTooltip("Dismiss") // FIXME: localize string
+					.onClick(() => {
+						setting.settingEl.remove();
+						this.ntb.settings.onboarding[messageId] = true;
+						this.ntb.settingsManager.save();
+					});
+				button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
+				handleKeyClick(this.ntb, button.extraSettingsEl);
+			});
+		return setting.settingEl;
+	}
 
-	const previewContainer = toolbarFr.createDiv();
-	previewContainer.addClass('note-toolbar-setting-tbar-preview');
+	/**
+	 * Constructs a preview of the given toolbar, including the icons used.
+	 * @param toolbar ToolbarSettings to display in the preview.
+	 * @param settingsManager Optional SettingsManager if Groups need to be expanded within previews. 
+	 * @param showEditLink set to true to add a link to edit the toolbar, after the preview; default is false.
+	 * @returns DocumentFragment
+	 */
+	createToolbarPreviewFr(
+		toolbar: ToolbarSettings, 
+		settingsManager?: SettingsManager, 
+		showEditLink: boolean = false
+	): DocumentFragment {
 
-	const itemsFr: DocumentFragment = document.createDocumentFragment();
+		const toolbarFr: DocumentFragment = document.createDocumentFragment();
 
-	if (toolbar.items.length > 0) {
-		toolbar.items
-			.filter((item: ToolbarItemSettings) => {
+		const previewContainer = toolbarFr.createDiv();
+		previewContainer.addClass('note-toolbar-setting-tbar-preview');
 
-				// ignore all empty toolbar items (no label or icon)
-				return ((item.label === "" && item.icon === "" && 
-					![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) ? false : true);
-	 
-			})
-			.map(item => {
+		const itemsFr: DocumentFragment = document.createDocumentFragment();
 
-				switch (item.linkAttr.type) {
-					case ItemType.Break:
-					case ItemType.Separator:
-					case ItemType.Spreader:
-						break;
-					case ItemType.Group:
-						if (settingsManager) {
-							const groupToolbar = settingsManager.getToolbar(item.link);
-							if (groupToolbar) {
-								const groupItemEl = createDiv();
-								groupItemEl.addClass("note-toolbar-setting-toolbar-list-preview-item");
-								const groupNameEl = createSpan();
-								groupNameEl.addClass('note-toolbar-setting-group-preview');
-								groupNameEl.setText(groupToolbar.name);
-								groupItemEl.append(groupNameEl);
-								itemsFr.append(groupItemEl);
-							}
-						}
-						break;
-					default: {
-						const itemIcon = item.icon ? getIcon(item.icon) : null;
-						if (itemIcon || item.label) {
-							const defaultItemFr = createDiv();
-							defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
-							if (item.icon) {
-								if (itemIcon) {
-									const iconFr = document.createDocumentFragment();
-									iconFr.appendChild(itemIcon.cloneNode(true) as SVGSVGElement);
-									defaultItemFr.append(iconFr);
+		if (toolbar.items.length > 0) {
+			toolbar.items
+				.filter((item: ToolbarItemSettings) => {
+
+					// ignore all empty toolbar items (no label or icon)
+					return ((item.label === "" && item.icon === "" && 
+						![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) ? false : true);
+		
+				})
+				.map(item => {
+
+					switch (item.linkAttr.type) {
+						case ItemType.Break:
+						case ItemType.Separator:
+						case ItemType.Spreader:
+							break;
+						case ItemType.Group:
+							if (settingsManager) {
+								const groupToolbar = settingsManager.getToolbar(item.link);
+								if (groupToolbar) {
+									const groupItemEl = createDiv();
+									groupItemEl.addClass("note-toolbar-setting-toolbar-list-preview-item");
+									const groupNameEl = createSpan();
+									groupNameEl.addClass('note-toolbar-setting-group-preview');
+									groupNameEl.setText(groupToolbar.name);
+									groupItemEl.append(groupNameEl);
+									itemsFr.append(groupItemEl);
 								}
 							}
-							if (item.label) {
-								const labelFr = createSpan();
-								labelFr.textContent = item.label;
-								if (item.label && ntb.vars.hasVars(item.label)) {
-									labelFr.addClass('note-toolbar-setting-item-preview-code');
+							break;
+						default: {
+							const itemIcon = item.icon ? getIcon(item.icon) : null;
+							if (itemIcon || item.label) {
+								const defaultItemFr = createDiv();
+								defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
+								if (item.icon) {
+									if (itemIcon) {
+										const iconFr = document.createDocumentFragment();
+										iconFr.appendChild(itemIcon.cloneNode(true) as SVGSVGElement);
+										defaultItemFr.append(iconFr);
+									}
 								}
-								defaultItemFr.append(labelFr);
+								if (item.label) {
+									const labelFr = createSpan();
+									labelFr.textContent = item.label;
+									if (item.label && this.ntb.vars.hasVars(item.label)) {
+										labelFr.addClass('note-toolbar-setting-item-preview-code');
+									}
+									defaultItemFr.append(labelFr);
+								}
+								if (item.tooltip) {
+									setTooltip(defaultItemFr, item.tooltip);
+								}
+								itemsFr.append(defaultItemFr);
 							}
-							if (item.tooltip) {
-								setTooltip(defaultItemFr, item.tooltip);
-							}
-							itemsFr.append(defaultItemFr);
+							break;
 						}
-						break;
+
 					}
 
-				}
+				});
+		}
+		else {
+			itemsFr.appendChild(emptyMessageFr(this.ntb, t('setting.item.label-preview-empty-no-items')));
+		}
+		previewContainer.appendChild(itemsFr);
 
-			});
-	}
-	else {
-		itemsFr.appendChild(emptyMessageFr(ntb, t('setting.item.label-preview-empty-no-items')));
-	}
-	previewContainer.appendChild(itemsFr);
+		if (showEditLink) {
+			let toolbarLinkContainer = createDiv();
+			toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
+			let toolbarLink = createEl('a');
+			toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
+			toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
+			toolbarLinkContainer.appendChild(toolbarLink);
+			toolbarFr.appendChild(toolbarLinkContainer);
+		}
 
-	if (showEditLink) {
-		let toolbarLinkContainer = createDiv();
-		toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
-		let toolbarLink = createEl('a');
-		toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
-		toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
-		toolbarLinkContainer.appendChild(toolbarLink);
-		toolbarFr.appendChild(toolbarLinkContainer);
-	}
+		return toolbarFr;
 
-	return toolbarFr;
+	}
 
 }
 

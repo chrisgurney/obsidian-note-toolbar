@@ -21,6 +21,7 @@ import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TI
 import SettingsIcons from 'Settings/SettingsIcons';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
+import SettingsUIUtils from 'Settings/UI/Utils/SettingsUIUtils';
 import CalloutHandler from 'Toolbar/CalloutHandler';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
@@ -41,6 +42,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
+	settingsUtils: SettingsUIUtils;
 	utils: PluginUtils;
 	
 	callouts: CalloutHandler;
@@ -79,6 +81,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.el = new ToolbarElementHelper(this);
 		this.items = new ToolbarItemHandler(this);
 		this.render = new ToolbarRenderer(this);
+		this.settingsUtils = new SettingsUIUtils(this);
 		this.toolbars = new ToolbarHandler(this);
 		this.utils = new PluginUtils(this);
 		this.vars = new VariableResolver(this);

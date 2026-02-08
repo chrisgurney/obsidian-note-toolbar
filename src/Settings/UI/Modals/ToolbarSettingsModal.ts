@@ -7,7 +7,7 @@ import ItemListUi from '../Components/ItemListUi';
 import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
-import { createOnboardingMessageEl, displayHelpSection, fixToggleTab, getDisclaimersFr, getToolbarUsageFr, getToolbarUsageText, learnMoreFr, removeFieldError, setFieldError, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
+import { displayHelpSection, fixToggleTab, getDisclaimersFr, getToolbarUsageFr, getToolbarUsageText, learnMoreFr, removeFieldError, setFieldError, showWhatsNewIfNeeded } from "../Utils/SettingsUIUtils";
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -102,7 +102,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// show warning message about properties being changed
 		const onboardingId = 'new-toolbar-mapping';
 		if (!this.ntb.settings.onboarding[onboardingId]) {
-			let messageEl = createOnboardingMessageEl(this.ntb, 
+			let messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
 				onboardingId, 
 				t('onboarding.new-toolbar-mapping-title'),
 				t('onboarding.new-toolbar-mapping-content', { property: this.ntb.settings.toolbarProp }));

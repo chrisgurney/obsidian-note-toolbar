@@ -6,7 +6,7 @@ import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import { importFromModal } from "../Modals/ImportModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
-import { createToolbarPreviewFr, emptyMessageFr, getItemVisState, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
+import { emptyMessageFr, getItemVisState, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
 
 
 const enum ItemFormComponent {
@@ -694,7 +694,7 @@ export default class ItemListUi {
 				const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.ntb, groupToolbar) : emptyMessageFr(this.ntb, t('setting.item.option-item-group-error-invalid')));
+				itemPreviewContent.appendChild(groupToolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : emptyMessageFr(this.ntb, t('setting.item.option-item-group-error-invalid')));
 				break;
 			}
 			default: {

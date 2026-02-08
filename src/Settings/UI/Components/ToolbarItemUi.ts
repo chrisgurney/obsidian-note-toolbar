@@ -9,7 +9,7 @@ import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsMod
 import CommandSuggester from "../Suggesters/CommandSuggester";
 import FileSuggester from "../Suggesters/FileSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { copyToolbarItem, createToolbarPreviewFr, fixToggleTab, getDisclaimersFr, getPlatformVisState, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
+import { copyToolbarItem, fixToggleTab, getDisclaimersFr, getPlatformVisState, handleKeyClick, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
 
 export default class ToolbarItemUi {
 
@@ -830,7 +830,7 @@ export default class ToolbarItemUi {
                                 this.renderPreview(toolbarItem);
                                 // update help text with toolbar preview or default if none selected
                                 let groupPreviewFr = groupToolbar 
-                                    ? createToolbarPreviewFr(this.ntb, groupToolbar, undefined, true) 
+                                    ? this.ntb.settingsUtils.createToolbarPreviewFr(groupToolbar, undefined, true) 
                                     : learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
                                 setFieldHelp(groupSetting.controlEl, groupPreviewFr);
                             }, 500));
@@ -858,7 +858,7 @@ export default class ToolbarItemUi {
                                 this.renderPreview(toolbarItem);
                                 // update help text with toolbar preview or default if none selected
                                 let menuHelpFr = menuToolbar 
-                                    ? createToolbarPreviewFr(this.ntb, menuToolbar, undefined, true)
+                                    ? this.ntb.settingsUtils.createToolbarPreviewFr(menuToolbar, undefined, true)
                                     : learnMoreFr(t('setting.item.option-item-menu-help'), 'Creating-toolbar-items');
                                 // add disclaimers
                                 const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
@@ -1223,7 +1223,7 @@ export default class ToolbarItemUi {
                 const menuGroupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
                 const fieldHelp = document.createDocumentFragment();
                 menuGroupToolbar
-                    ? fieldHelp.append(createToolbarPreviewFr(this.ntb, menuGroupToolbar, undefined, true))
+                    ? fieldHelp.append(this.ntb.settingsUtils.createToolbarPreviewFr(menuGroupToolbar, undefined, true))
                     : fieldHelp.append(
                         learnMoreFr(
                             type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
