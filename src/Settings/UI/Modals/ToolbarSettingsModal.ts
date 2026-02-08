@@ -86,7 +86,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	public display(focusItemId?: string) {
 
-		this.ntb.debug("🟡 REDRAWING MODAL 🟡");
+		// this.ntb.debug("🟡 REDRAWING MODAL 🟡");
 
 		this.contentEl.empty();
 		this.modalEl.addClass('note-toolbar-setting-ui');
