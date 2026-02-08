@@ -9,7 +9,7 @@ import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsMod
 import CommandSuggester from "../Suggesters/CommandSuggester";
 import FileSuggester from "../Suggesters/FileSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { copyToolbarItem, fixToggleTab, getDisclaimersFr, getPlatformVisState, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
+import { fixToggleTab, getDisclaimersFr, getPlatformVisState, learnMoreFr, setFieldHelp, updateItemComponentStatus, updateItemIcon } from "../Utils/SettingsUIUtils";
 
 export default class ToolbarItemUi {
 
@@ -416,7 +416,7 @@ export default class ToolbarItemUi {
                 .setTitle(t('setting.item.menu-copy-item'))
                 .setIcon('square-arrow-right')
                 .onClick(async (menuEvent) => {
-                    await copyToolbarItem(this.ntb, this.toolbar, toolbarItem);
+                    await this.ntb.settingsUtils.copyToolbarItem(this.toolbar, toolbarItem);
                 });
         });
 

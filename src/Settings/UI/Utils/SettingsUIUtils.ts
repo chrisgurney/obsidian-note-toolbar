@@ -417,6 +417,39 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Copies an item to a toolbar of the user's choice.
+	 * @param fromToolbar toolbar to copy the item from
+	 * @param item item to copy
+	 */
+	async copyToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
+			if (toToolbar) {
+				await this.ntb.settingsManager.duplicateToolbarItem(toToolbar, item);
+				await this.ntb.settingsManager.save();
+				new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
+			}
+		});
+		modal.open();
+	}
+
+	/**
+	 * Moves an item to a toolbar of the user's choice.
+	 * @param fromToolbar toolbar to move the item from
+	 * @param item item to move
+	 */
+	async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
+			if (toToolbar) {
+				fromToolbar.items.remove(item);
+				toToolbar.items.push(item);
+				await this.ntb.settingsManager.save();
+				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
+			}
+		});
+		modal.open();
+	}
+
+	/**
 	 * Renders the item suggestion into the given element, for use in item suggesters and Quick Tools.
 	 * @param item ToolbarItemSettings to render
 	 * @param el HEMLElement to render suggestion into
@@ -938,39 +971,6 @@ export function getPluginNames(ntb: NoteToolbarPlugin, item: ToolbarItemSettings
 		if (itemPluginType) return t(`plugin.${itemPluginType}`)
 			else return undefined;
 	}
-}
-
-/**
- * Copies an item to a toolbar of the user's choice.
- * @param fromToolbar toolbar to copy the item from
- * @param item item to copy
- */
-export async function copyToolbarItem(ntb: NoteToolbarPlugin, fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
-	const modal = new ToolbarSuggestModal(ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
-		if (toToolbar) {
-			await ntb.settingsManager.duplicateToolbarItem(toToolbar, item);
-			await ntb.settingsManager.save();
-			new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
-		}
-	});
-	modal.open();
-}
-
-/**
- * Moves an item to a toolbar of the user's choice.
- * @param fromToolbar toolbar to move the item from
- * @param item item to move
- */
-export async function moveToolbarItem(ntb: NoteToolbarPlugin, fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
-	const modal = new ToolbarSuggestModal(ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
-		if (toToolbar) {
-			fromToolbar.items.remove(item);
-			toToolbar.items.push(item);
-			await ntb.settingsManager.save();
-			new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
-		}
-	});
-	modal.open();
 }
 
 /**
