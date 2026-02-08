@@ -1,6 +1,6 @@
 import { EditorView, Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { App, Command, FileView, ItemView, MarkdownView, PaneType, Platform } from "obsidian";
+import { App, Command, FileView, ItemView, MarkdownView, MarkdownViewModeType, PaneType, Platform } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
 
 export default class PluginUtils {
@@ -227,6 +227,22 @@ export default class PluginUtils {
 				item.linkAttr.type === ItemType.Command && !(item.linkAttr.commandId in this.ntb.app.commands.commands)
 			)
 			.map(item => item.linkAttr.commandId.split(':')[0].trim());
+	}
+
+
+	/**
+	 * Gets the view mode of the latest markdown view.
+	 * @param ntb NoteToolbarPlugin
+	 * @returns MarkdownViewModeType or undefined, if not available.
+	 */
+	getLatestViewMode(): MarkdownViewModeType | undefined {
+		let latestMode: MarkdownViewModeType | undefined = undefined;
+		const leaves = this.ntb.app.workspace.getLeavesOfType('markdown');
+		const activeView = leaves.length > 0 ? leaves[0].view as MarkdownView : null;
+		if (activeView && activeView instanceof MarkdownView) {
+			latestMode = activeView.getMode();
+		}
+		return latestMode;
 	}
 
 	/**

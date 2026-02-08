@@ -416,20 +416,16 @@ export function getItemVisState(ntb: NoteToolbarPlugin, item: ToolbarItemSetting
 	if (!state) {
 		const visibility = item.visibility ? (Platform.isDesktop ? item.visibility.desktop : item.visibility.mobile) : undefined;
 		
-		if (visibility && item.visibility.viewMode) {
-			const leaves = ntb.app.workspace.getLeavesOfType('markdown');
-			const activeView = leaves.length > 0 ? leaves[0].view as MarkdownView : null;
-			if (activeView && activeView instanceof MarkdownView) {
-				const currentMode = activeView.getMode();
-				if (item.visibility.viewMode !== ViewModeType.All && item.visibility.viewMode !== currentMode) {
-					if (item.visibility.viewMode === 'source') {
-						state = 'preview';
-						tooltip = t('setting.item.visibility.tooltip-editing-visible');
-					} 
-					else {
-						state = 'reading';
-						tooltip = t('setting.item.visibility.tooltip-reading-visible');
-					}
+		if (visibility && item.visibility.viewMode && item.visibility.viewMode !== ViewModeType.All) {
+			const latestMode = ntb.utils.getLatestViewMode();
+			if (latestMode && item.visibility.viewMode !== latestMode) {
+				if (item.visibility.viewMode === 'source') {
+					state = 'preview';
+					tooltip = t('setting.item.visibility.tooltip-editing-visible');
+				} 
+				else {
+					state = 'reading';
+					tooltip = t('setting.item.visibility.tooltip-reading-visible');
 				}
 			}
 		}
