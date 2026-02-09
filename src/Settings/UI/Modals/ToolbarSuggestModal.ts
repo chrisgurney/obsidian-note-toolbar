@@ -1,7 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { SuggestModal, TFile } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { createOnboardingMessageEl, createToolbarPreviewFr } from "../Utils/SettingsUIUtils";
 
 export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
@@ -40,7 +39,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             if (!this.ntb.settings.onboarding[onboardingId]) {
                 let resultsEl = this.modalEl.querySelector('.prompt-results');
                 if (resultsEl) {
-                    let messageEl = createOnboardingMessageEl(this.ntb, 
+                    let messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
                         onboardingId, 
                         t('onboarding.swap-toolbar-title'), 
                         t('onboarding.swap-toolbar-content', { property: this.ntb.settings.toolbarProp }));
@@ -128,7 +127,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             previewContainerEl.addClass('setting-item-description');
             let previewEl = previewContainerEl.createDiv();
             previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
-            let previewFr = createToolbarPreviewFr(this.ntb, toolbar, undefined);
+            let previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
             previewEl.append(previewFr);
             el.append(previewContainerEl);
         }

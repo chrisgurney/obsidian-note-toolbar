@@ -4,7 +4,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Setting } from "obsidian";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { emptyMessageFr, handleKeyClick, iconTextFr } from "../Utils/SettingsUIUtils";
+import { iconTextFr } from "../Utils/SettingsUIUtils";
 
 export default class RuleUi {
 
@@ -45,7 +45,7 @@ export default class RuleUi {
                         }
                     });
                     cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-                    handleKeyClick(this.ntb, cb.extraSettingsEl);
+                    this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
                 });
         }
         else {
@@ -57,7 +57,7 @@ export default class RuleUi {
 
         if (this.ntb.settings.rules.length == 0) {
             rulesContainer
-                .createEl("div", { text: emptyMessageFr(this.ntb, t('setting.rules.label-empty')) })
+                .createEl("div", { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
                 .className = "note-toolbar-setting-empty-message";
         }
         else {

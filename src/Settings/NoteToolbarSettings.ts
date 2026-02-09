@@ -2,7 +2,7 @@ import { getUUID } from "Utils/Utils";
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
-export const WHATSNEW_VERSION = '1.28';
+export const WHATSNEW_VERSION = '1.29';
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20260122.1;
@@ -97,6 +97,7 @@ export const enum ViewModeType {
 	Editing = 'source',
 	Reading = 'preview'
 }
+export type ItemComponentVisibility = 'visible' | 'hidden' | 'icon' | 'label';
 export const enum PlatformType {
 	All = 'all',
 	Desktop = 'desktop',

@@ -128,6 +128,12 @@
             }
         }
     }
+    & .setting-item-control {
+        .is-phone & {
+            justify-content: flex-end !important;
+            width: unset !important;
+        }
+    }
 } 
 
 .mod-cta .note-toolbar-setting-text-with-icon {
@@ -217,7 +223,7 @@
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     font-size: var(--font-ui-medium);
     column-gap: 0.5em;
     padding: 8px;
@@ -336,10 +342,8 @@
     width: 100%;
 }
 
-.note-toolbar-setting-icon-button-cta {
-    & svg {
-        color: var(--interactive-accent);
-    }
+.note-toolbar-setting-state-active svg {
+    color: var(--interactive-accent);
 }
 
 .note-toolbar-setting-item-preview-icon:empty {
@@ -668,9 +672,6 @@ input[type="text"].note-toolbar-setting-error,
             gap: var(--size-4-4);
             margin-top: 0 !important;
         }
-    }
-    & svg {
-        color: var(--interactive-accent);
     }
 }
 
@@ -1022,6 +1023,12 @@ input[type="text"].note-toolbar-setting-error,
         }
         & .setting-item-info {
             display: none;
+        }
+    }
+    &.note-toolbar-item-visibility-indicator {
+        padding-inline: var(--size-4-2);
+        & svg {
+           color: var(--interactive-accent);
         }
     }
 }

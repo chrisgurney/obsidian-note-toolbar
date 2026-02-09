@@ -6,7 +6,7 @@ import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import { importFromModal } from "../Modals/ImportModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
-import { createToolbarPreviewFr, emptyMessageFr, handleKeyClick, iconTextFr, learnMoreFr, openItemSuggestModal, updateItemComponentStatus } from "../Utils/SettingsUIUtils";
+import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
 
 
 const enum ItemFormComponent {
@@ -65,7 +65,7 @@ export default class ItemListUi {
                         }
                     });
                 });
-                handleKeyClick(this.ntb, cb.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
             });
 
         if (this.toolbar.items.length > 8) {
@@ -84,7 +84,7 @@ export default class ItemListUi {
                         this.handleItemListToggle(settingsDiv);
                     });
                     cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
-                    handleKeyClick(this.ntb, cb.extraSettingsEl);
+                    this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
                 });
         }
 
@@ -101,13 +101,13 @@ export default class ItemListUi {
 
             // display empty state
             const emptyMsgEl = this.parent.containerEl.createEl('div', 
-                { text: emptyMessageFr(this.ntb, t('setting.items.label-empty-no-items') + '\u00A0') });
+                { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.items.label-empty-no-items') + '\u00A0') });
             emptyMsgEl.addClass('note-toolbar-setting-empty-message');
 
             const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-            this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => openItemSuggestModal(this.ntb, this.toolbar, 'New', this.parent));
-            handleKeyClick(this.ntb, galleryLinkEl);
+            this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
+            this.ntb.settingsUtils.handleKeyClick(galleryLinkEl);
 
             itemsSortableContainer.append(emptyMsgEl);
 
@@ -135,8 +135,7 @@ export default class ItemListUi {
                 // check if item previews are valid (non-empty + valid), and highlight if not
                 const itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
                 if (itemPreviewEl) {
-                    updateItemComponentStatus(
-                        this.ntb,
+                    this.ntb.settingsUtils.updateItemComponentStatus(
                         this.parent,
                         (toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
                         SettingFieldItemMap[toolbarItem.linkAttr.type], 
@@ -213,19 +212,19 @@ export default class ItemListUi {
                 icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
                 btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Separator, itemsSortableContainer));
-                handleKeyClick(this.ntb, btn.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
             })
             .addExtraButton((btn) => {
                 btn.setIcon('move-horizontal')
                     .setTooltip(t('setting.items.button-add-spreader-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Spreader, itemsSortableContainer));
-                handleKeyClick(this.ntb, btn.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
             })
             .addExtraButton((btn) => {
                 btn.setIcon('lucide-corner-down-left')
                     .setTooltip(t('setting.items.button-add-break-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Break, itemsSortableContainer));
-                handleKeyClick(this.ntb, btn.extraSettingsEl);
+                this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
             });
         itemsListButtonContainer.appendChild(formattingButtons);
 
@@ -233,7 +232,7 @@ export default class ItemListUi {
             .setClass('note-toolbar-setting-no-border')
             .addButton((btn) => {
                 btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-                    .onClick(async () => openItemSuggestModal(this.ntb, this.toolbar, 'New', this.parent));
+                    .onClick(async () => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
                 btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
             })
             .addButton((btn) => {
@@ -294,6 +293,16 @@ export default class ItemListUi {
         itemPreviewContainer.appendChild(itemPreview);
 
         this.renderPreview(toolbarItem, itemPreviewContainer);
+
+        //
+        // add the initial icon for the item's visibility state
+        //
+
+        let visibilityStatusEl = createDiv();
+        visibilityStatusEl.id = 'ntb-item-visibility-indicator';
+        visibilityStatusEl.addClass("note-toolbar-setting-item-controls");
+        this.updateItemVisStatus(toolbarItem, visibilityStatusEl);
+        itemPreviewContainer.append(visibilityStatusEl);
 
         //
         // add the preview drag-and-drop handle
@@ -367,6 +376,35 @@ export default class ItemListUi {
 
         return itemPreviewContainer;
 
+    }
+
+    /**
+     * Updates the visibility status indicator for a toolbar item in the settings list.
+     * Shows an icon indicating if the item is hidden or restricted by platform/view mode.
+     * @param toolbarItem The toolbar item to update the visibility status for.
+     * @param visibilityStatusEl Optional element to update. If not provided, searches for it in the item row.
+     */
+    updateItemVisStatus(toolbarItem: ToolbarItemSettings, visibilityStatusEl?: HTMLElement) {
+
+        // if it's not provided for initial update, find the item in the list
+        const itemRowEl = this.getItemRowEl(toolbarItem.uuid);
+        if (!visibilityStatusEl) visibilityStatusEl = itemRowEl.querySelector('#ntb-item-visibility-indicator') as HTMLElement;
+
+        if (visibilityStatusEl) {
+            visibilityStatusEl.empty();
+            const [itemVisState, itemVisTooltip] = this.ntb.settingsUtils.getItemVisState(toolbarItem);
+            visibilityStatusEl.toggleClass("note-toolbar-item-visibility-indicator", !!itemVisState);
+            if (itemVisState) {
+                setIcon(
+                    visibilityStatusEl,
+                    itemVisState === 'hidden' ? 'eye-off' :
+                        itemVisState === 'mobile' ? 'monitor-off' :
+                            itemVisState === 'desktop' ? 'note-toolbar-tablet-smartphone-off' :
+                                itemVisState === 'reading' ? 'book-open' : 'pencil'
+                );
+                setTooltip(visibilityStatusEl, itemVisTooltip);
+            }
+        }
     }
 
 	/**
@@ -655,7 +693,7 @@ export default class ItemListUi {
 				const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 				setTooltip(itemPreview, 
 					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				itemPreviewContent.appendChild(groupToolbar ? createToolbarPreviewFr(this.ntb, groupToolbar) : emptyMessageFr(this.ntb, t('setting.item.option-item-group-error-invalid')));
+				itemPreviewContent.appendChild(groupToolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : this.ntb.settingsUtils.emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
 				break;
 			}
 			default: {

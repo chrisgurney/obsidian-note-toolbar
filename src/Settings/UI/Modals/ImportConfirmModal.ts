@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
-import { createToolbarPreviewFr, learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
+import { learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 
 export async function confirmImportWithModal(ntb: NoteToolbarPlugin, callout: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ export default class ImportConfirmModal extends Modal {
 
             this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
 
-            let previewFr = toolbar ? createToolbarPreviewFr(this.ntb, toolbar, undefined) : '';
+            let previewFr = toolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined) : '';
 
             let previewContainerEl = this.modalEl.createDiv();
             previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');

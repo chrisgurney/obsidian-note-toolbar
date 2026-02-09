@@ -4,7 +4,7 @@ import NoteToolbarPlugin from "main";
 import { debounce, ItemView, MarkdownView, Setting, SettingGroup } from "obsidian";
 import StyleModal from "../Modals/StyleModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
-import { emptyMessageFr, getDisclaimersFr, getValueForKey, learnMoreFr } from "../Utils/SettingsUIUtils";
+import { getDisclaimersFr, getValueForKey, learnMoreFr } from "../Utils/SettingsUIUtils";
 
 export default class ToolbarStyleUi {
 
@@ -38,7 +38,7 @@ export default class ToolbarStyleUi {
 
         if (this.toolbar.defaultStyles.length == 0) {
             let emptyMsg = this.parent.containerEl.createEl("div", 
-                { text: emptyMessageFr(this.ntb, t('setting.styles.option-default-empty')) });
+                { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.styles.option-default-empty')) });
             emptyMsg.className = "note-toolbar-setting-empty-message";
             defaultStyleDiv.append(emptyMsg);
         }
@@ -116,7 +116,7 @@ export default class ToolbarStyleUi {
 
         if (this.toolbar.mobileStyles.length == 0) {
             let emptyMsg = this.parent.containerEl.createEl("div", 
-                { text: emptyMessageFr(this.ntb, t('setting.styles.option-mobile-empty')) });
+                { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.styles.option-mobile-empty')) });
             emptyMsg.className = "note-toolbar-setting-empty-message";
             mobileStyleDiv.append(emptyMsg);
         }

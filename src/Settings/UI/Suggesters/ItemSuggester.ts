@@ -1,7 +1,6 @@
 import { AbstractInputSuggest, App } from "obsidian";
 import { ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
-import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 
 export default class ItemSuggester extends AbstractInputSuggest<ToolbarItemSettings> {
 
@@ -61,7 +60,7 @@ export default class ItemSuggester extends AbstractInputSuggest<ToolbarItemSetti
      * @param el HTMLElement to render it in
      */
     renderSuggestion(item: ToolbarItemSettings, el: HTMLElement): void {
-        renderItemSuggestion(this.ntb, item, el, this.inputEl.value);
+        this.ntb.settingsUtils.renderItemSuggestion(item, el, this.inputEl.value);
     }
 
     selectSuggestion(item: ToolbarItemSettings): void {

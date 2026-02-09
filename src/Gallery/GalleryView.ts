@@ -3,7 +3,7 @@ import NoteToolbarPlugin from 'main';
 import { ButtonComponent, Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import ItemSuggester from 'Settings/UI/Suggesters/ItemSuggester';
-import { getPluginNames, iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
+import { iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 
 interface Category {
 	name: { [key: string]: string };
@@ -199,7 +199,7 @@ export function renderGalleryItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivE
 				itemEl.createDiv('note-toolbar-card-item-description').setText(galleryItem.description);
 			}
 
-			let pluginNames = getPluginNames(ntb, galleryItem);
+			let pluginNames = ntb.settingsUtils.getPluginNames(galleryItem);
 			if (pluginNames) {
 				const pluginEl = itemEl.createDiv('note-toolbar-card-item-plugins');
 				setIcon(pluginEl.createSpan(), 'puzzle');

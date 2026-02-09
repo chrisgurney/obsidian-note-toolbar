@@ -1,7 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Platform, SuggestModal, TFile } from "obsidian";
 import { DEFAULT_ITEM_SETTINGS, ErrorBehavior, GALLERY_DIVIDER_ID, ITEM_GALLERY_DIVIDER, ItemType, LocalVar, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { renderItemSuggestion } from "../Utils/SettingsUIUtils";
 import ItemModal from "./ItemModal";
 import ToolbarSuggestModal from "./ToolbarSuggestModal";
 
@@ -339,7 +338,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
                 emptyEl.setText(t('setting.item-suggest-modal.label-empty-no-items'));
                 emptyEl.insertAdjacentElement('afterend', el);
             }
-            renderItemSuggestion(this.ntb, item, el, this.inputEl.value, true, (this.mode === 'QuickTools'));
+            this.ntb.settingsUtils.renderItemSuggestion(item, el, this.inputEl.value, true, (this.mode === 'QuickTools'));
         }
     }
 
