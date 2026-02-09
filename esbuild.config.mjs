@@ -105,7 +105,7 @@ const galleryDocsPlugin = {
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', 'docs/wiki/gallery.md');
+			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', 'docs/gallery.md');
 		} 
 		catch (error) {
 			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
