@@ -16,23 +16,19 @@ npm run lint
 
 ## Documentation
 
-### API
+Documentation should automatically be updated based on the source files for those docs.
 
-API documentation should automatically be generated, when any changes are made to the API's interfaces in `src/Api`.
-
-Once complete, update the [API wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API).
-
-### Gallery
-
-Gallery documentation should automatically be generated, when any changes are made to the Gallery JSON files in `src/Gallery`.
-
-Once generated, update the [Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery).
+|Type    |Source        |Then update...|
+|--------|--------------|--------------|
+|API     |`src/Api`     |[API wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API)|
+|Gallery |`src/Gallery` |[Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)|
 
 # Releasing
 
 ## For major releases
 
 - [ ] Create and update the latest _What's New_ documentation in `docs/releases/en`.
+  - For beta branches, amke sure this done is in the `master` branch.
 - [ ] Update `WHATSNEW_VERSION` in `NoteToolbarSettings.ts` in order to show the latest _What's New_ doc in the plugin.
 
 ## Release process
@@ -42,18 +38,27 @@ Once generated, update the [Gallery wiki page](https://github.com/chrisgurney/ob
 
 ## Betas
 
-See for more details: https://github.com/TfTHacker/obsidian42-brat/blob/main/BRAT-DEVELOPER-GUIDE.md
+Test with the [BRAT plugin ↗](https://github.com/TfTHacker/obsidian42-brat). See also the [BRAT Guide for Plugin Developers](https://github.com/TfTHacker/obsidian42-brat/blob/main/BRAT-DEVELOPER-GUIDE.md).
 
-### Method 1: Using the `main` branch
+### Method 1: Using feature branches
 
+1. Create a new branch.
+1. Make changes.
+1. Update `WHATSNEW_VERSION` in `NoteToolbarSettings.ts`.
+1. Make sure the What's New doc in `docs/releases/en` is in the `master` branch. 
+1. Run `npm run release 1.xx-beta-01`
+1. Edit and **Set as a pre-release** [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
+1. Use the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat/) to get the latest version.
+
+### Method 2: Using the `master` branch
+
+1. Make changes.
+1. Update `WHATSNEW_VERSION` in `NoteToolbarSettings.ts`.
 1. Create `manifest-beta.json` a copy of `manifest.json`.
     1. Set the `version` as `X.Y-beta-01`.
-1. Update the `package.json` with the beta version. _Do not_ run `npm run version`.
+1. Update the `package.json` with the beta version. _Do not_ run `npm run release`.
 1. Commit and push.
-1. Tag the release by running `./release.sh {NEWVERSION}`. Example:
-    ```sh
-    ./release.sh X.Y-beta-01
-    ```
+1. Tag the release.
 1. Edit and **Set as a pre-release** [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
 1. Use the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat/) to get the latest version.
 
