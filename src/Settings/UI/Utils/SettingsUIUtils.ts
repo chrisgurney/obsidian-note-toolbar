@@ -197,6 +197,7 @@ export default class SettingsUIUtils {
 
 			new Setting(settingsDiv)
 				.setName(t('plugin.note-toolbar') + ' • v' + PLUGIN_VERSION)
+				.setClass('note-toolbar-setting-help-section')
 				.setDesc(t('setting.help.description'))
 				.addButton((button: ButtonComponent) => {
 					button
