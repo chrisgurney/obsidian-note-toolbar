@@ -3181,16 +3181,6 @@ input[type="text"].note-toolbar-setting-error,
         margin-bottom: 0.75em;
     }
 }
-/* fix for mappings heading not being full width */
-.note-toolbar-setting-mappings-container {
-    .is-phone & {
-        & .note-toolbar-setting-no-border {
-            & .setting-item-control {
-                width: unset !important;
-            }
-        }
-    }
-}
 .note-toolbar-setting-item-heading-top-spacing {
     padding-top: 1.5em;
 }
@@ -3201,6 +3191,14 @@ input[type="text"].note-toolbar-setting-error,
             display: none;
         }
     }  
+}
+.note-toolbar-setting-item-full-control-phone {
+    .is-phone & {
+        width: 100%;
+        & .setting-item-control {
+            width: 100%;
+        }
+    }
 }
 .note-toolbar-setting-items-button-container {
     align-items: center !important;

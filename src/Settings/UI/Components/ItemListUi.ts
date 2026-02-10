@@ -230,6 +230,7 @@ export default class ItemListUi {
 
         new Setting(itemsListButtonContainer)
             .setClass('note-toolbar-setting-no-border')
+            .setClass('note-toolbar-setting-item-full-control-phone')
             .addButton((btn) => {
                 btn.setTooltip(t('setting.items.button-find-item-tooltip'))
                     .onClick(async () => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
