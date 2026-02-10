@@ -33,7 +33,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 
 - [[ntb.app|Note-Toolbar-API#app]]
 - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
-- [[ntb.exoirt|Note-Toolbar-API#export]]
+- [[ntb.export|Note-Toolbar-API#export]]
 - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
 - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
 - [[ntb.getItem|Note-Toolbar-API#getitem]]
