@@ -33,6 +33,7 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 
 - [[ntb.app|Note-Toolbar-API#app]]
 - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
+- [[ntb.exoirt|Note-Toolbar-API#export]]
 - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
 - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
 - [[ntb.getItem|Note-Toolbar-API#getitem]]
@@ -98,6 +99,40 @@ const value = await ntb.clipboard();
 
 new Notice(value);
 ```
+
+***
+
+### export()
+
+> **export**: (`toolbar`) => `Promise`\<`string` \| `null`\>
+
+Exports the given toolbar as a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `toolbar` | [`IToolbar`](IToolbar.Interface.IToolbar.md) |
+
+#### Returns
+
+`Promise`\<`string` \| `null`\>
+
+Toolbar as a callout or `null` if the toolbar is undefined.
+
+#### Example
+
+```ts
+const toolbars = ntb.getToolbars();
+for (let toolbar of toolbars) {
+    console.log(`\n## ${toolbar.getName()}\n\n`);
+    console.log(await ntb.export(toolbar));
+}
+```
+
+#### See
+
+`NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
 
 ***
 

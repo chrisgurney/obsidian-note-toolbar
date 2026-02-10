@@ -37,6 +37,7 @@ import { IToolbar } from "./IToolbar";
  * 
  * - [[ntb.app|Note-Toolbar-API#app]]
  * - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
+ * - [[ntb.export|Note-Toolbar-API#export]]
  * - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
  * - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
  * - [[ntb.getItem|Note-Toolbar-API#getitem]]
@@ -85,6 +86,22 @@ export default interface INoteToolbarApi<T> {
      * new Notice(value);
      */
     clipboard: () => Promise<string | null>;
+
+    /**
+     * Exports the given toolbar as a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
+     * 
+     * @returns Toolbar as a callout or `null` if the toolbar is undefined.
+     * 
+     * @example
+     * const toolbars = ntb.getToolbars();
+     * for (let toolbar of toolbars) {
+     *     console.log(`\n## ${toolbar.getName()}\n\n`);
+     *     console.log(await ntb.export(toolbar));
+     * }
+     * 
+     * @see `NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     */
+    export: (toolbar: IToolbar) => Promise<string | null>;
 
     /**
      * Shows a file suggester modal and waits for the user's selection.
