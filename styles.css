@@ -4097,6 +4097,9 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+.note-toolbar-setting-help-section {
+    flex-wrap: wrap;
+}
 .note-toolbar-setting-help-section-phone {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
