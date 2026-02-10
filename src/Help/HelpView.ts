@@ -47,18 +47,6 @@ export default class HelpView extends ItemView {
 
         const guideEl = contentDiv.createDiv();
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
-        new Setting(guideEl)
-            .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-read'))
-                    .setTooltip(t('setting.help.button-open-github'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open(URL_USER_GUIDE, '_blank');
-                    });
-            })
-            .setClass('note-toolbar-setting-no-border');
 
         new Setting(guideEl)
             .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
@@ -70,6 +58,19 @@ export default class HelpView extends ItemView {
                     .setCta()
                     .onClick(() => {
                         window.open('obsidian://note-toolbar?gallery', '_blank');
+                    });
+            })
+            .setClass('note-toolbar-setting-no-border');
+
+        new Setting(guideEl)
+            .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.help.button-read'))
+                    .setTooltip(t('setting.help.button-open-github'))
+                    .setCta()
+                    .onClick(() => {
+                        window.open(URL_USER_GUIDE, '_blank');
                     });
             });
             // .setClass('note-toolbar-setting-no-border');
