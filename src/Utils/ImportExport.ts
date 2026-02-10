@@ -10,7 +10,22 @@ const toIconizeFormat = (s: string) =>
         .join('')}:`;
 
 /**
- * Exports the given toolbar as a Note Toolbar Callout
+ * Exports the given toolbar (using its ID) as a Note Toolbar Callout.
+ * @param ntb NoteToolbarPlugin
+ * @param toolbarId ID for the toolbar to export
+ * @param options ExportSettings
+ * @returns Note Toolbar Callout as a string
+ */
+export async function exportToCalloutById(ntb: NoteToolbarPlugin, toolbarId: string, options: ExportSettings): Promise<string> {
+    const toolbar = ntb.settingsManager.getToolbarById(toolbarId);
+    if (toolbar) {
+        return await exportToCallout(ntb, toolbar, options);
+    }
+    return `Unable to find toolbar with provided ID: ${toolbarId}`;
+}
+
+/**
+ * Exports the given toolbar as a Note Toolbar Callout.
  * @param ntb NoteToolbarPlugin
  * @param toolbar ToolbarSettings for the toolbar to export
  * @param options ExportSettings

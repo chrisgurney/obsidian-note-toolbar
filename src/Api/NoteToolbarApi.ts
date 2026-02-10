@@ -1,8 +1,9 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
 import * as Obsidian from "obsidian";
-import { App, ItemView, MarkdownView, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { App, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
+import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
@@ -37,6 +38,27 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     async clipboard(): Promise<string | null> {
         return await navigator.clipboard.readText();
+    }
+
+    /**
+     * Exports the given toolbar as a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
+     * 
+     * @returns Toolbar as a callout or `null` if the toolbar is undefined.
+     * 
+     * @example
+     * const toolbars = ntb.getToolbars();
+     * for (let toolbar of toolbars) {
+     *     console.log(`\n## ${toolbar.getName()}\n\n`);
+     *     console.log(await ntb.export(toolbar));
+     * }
+     * 
+     * @see `NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     */
+    async export(toolbar: Toolbar): Promise<string | null> {
+        if (toolbar.id) {
+            return await exportToCalloutById(this.ntb, toolbar.id, this.ntb.settings.export);
+        }
+        return null;
     }
 
     /**
@@ -149,7 +171,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.getToolbars
      */
     getToolbars(): Toolbar[] {
-        return this.ntb.settings.toolbars.map(toolbar => new Toolbar(this.ntb, toolbar));
+        return this.ntb.settings.toolbars.map(toolbar => new Toolbar(toolbar));
     }
 
     /**
