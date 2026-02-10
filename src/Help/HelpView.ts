@@ -41,25 +41,9 @@ export default class HelpView extends ItemView {
         // tipsEl.addClass('note-toolbar-tips-card-items');
         // renderTipItems(this.plugin, tipsEl, ['gallery', 'getting-started', 'daily-notes', 'mobile-tips']);
 
-        const galleryEl = contentDiv.createDiv();
-        galleryEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
-        new Setting(galleryEl)
-            .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
-            .setDesc(t('setting.help.label-gallery-description'))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open'))
-                    .setTooltip(t('setting.help.label-gallery'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('obsidian://note-toolbar?gallery', '_blank');
-                    });
-            })
-            .setClass('note-toolbar-setting-no-border');
-
         // User guide
 
-        contentDiv.createEl('h2').setText(t('setting.help.heading-user-guide'));
+        contentDiv.createEl('h2').setText(t('setting.help.heading-get-started'));
 
         const guideEl = contentDiv.createDiv();
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
@@ -75,6 +59,20 @@ export default class HelpView extends ItemView {
                     });
             })
             .setClass('note-toolbar-setting-no-border');
+
+        new Setting(guideEl)
+            .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
+            .setDesc(t('setting.help.label-gallery-description'))
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.help.button-open'))
+                    .setTooltip(t('setting.help.label-gallery'))
+                    .setCta()
+                    .onClick(() => {
+                        window.open('obsidian://note-toolbar?gallery', '_blank');
+                    });
+            });
+            // .setClass('note-toolbar-setting-no-border');
 
         // Support
 
