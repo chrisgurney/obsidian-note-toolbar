@@ -100,6 +100,8 @@ export default interface INoteToolbarApi<T> {
      * }
      * 
      * @see `NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * 
+     * @since 1.29
      */
     export: (toolbar: IToolbar) => Promise<string | null>;
 

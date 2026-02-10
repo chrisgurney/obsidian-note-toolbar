@@ -134,6 +134,10 @@ for (let toolbar of toolbars) {
 
 `NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
 
+#### Since
+
+1.29
+
 ***
 
 ### fileSuggester()
