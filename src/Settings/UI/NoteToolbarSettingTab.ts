@@ -307,11 +307,20 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											.setTitle(t('setting.delete-toolbar.button-delete'))
 											.setIcon('minus-circle')
 											.onClick(async () => {
+												const questionFr = document.createDocumentFragment();
+												questionFr.createEl('p', { text: t('setting.delete-toolbar.label-delete-confirm') });
+												// warning if this toolbar is the default
+												if (this.ntb.settings.defaultToolbar === toolbar.uuid) {
+													questionFr
+														.createEl('p', { text: t('setting.delete-toolbar.warning-default') })
+														.addClass('note-toolbar-setting-error-message');
+												}
+												// confirm and delete
 												confirmWithModal(
 													this.ntb.app, 
 													{ 
 														title: t('setting.delete-toolbar.title', { toolbar: toolbar.name, interpolation: { escapeValue: false } }),
-														questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
+														questionLabel: questionFr,
 														approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
 														denyLabel: t('setting.button-cancel'),
 														warning: true
