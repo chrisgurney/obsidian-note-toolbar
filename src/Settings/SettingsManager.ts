@@ -321,7 +321,7 @@ export default class SettingsManager {
 	 * @param name name of the toolbar
 	 * @returns ToolbarSettings for the new toolbar
 	 */
-	public async newToolbar(name: string = ""): Promise<ToolbarSettings> {
+	public async newToolbar(name: string = t('setting.toolbars.new-tbar-name')): Promise<ToolbarSettings> {
 		const newToolbar = {
 			uuid: getUUID(),
 			commandPosition: PositionType.Floating,

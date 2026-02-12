@@ -26,7 +26,7 @@ export default class GalleryManager {
 		const toolbarModal = new ToolbarSuggestModal(this.ntb, true, false, true, async (selectedToolbar: ToolbarSettings) => {
 			if (selectedToolbar && galleryItem) {
 				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
-					selectedToolbar = await this.ntb.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
+					selectedToolbar = await this.ntb.settingsManager.newToolbar();
 				}
 				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
                 const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);

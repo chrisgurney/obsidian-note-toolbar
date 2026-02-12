@@ -722,7 +722,7 @@
             "menu-copy-id-notice": "Toolbar ID copied to clipboard.",
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
-            "new-tbar-name": "New toolbar"
+            "new-tbar-name": "Toolbar"
         },
         "usage": {
             "description": "This toolbar is used in: ",
