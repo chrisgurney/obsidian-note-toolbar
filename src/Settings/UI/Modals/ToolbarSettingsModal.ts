@@ -460,12 +460,11 @@ export default class ToolbarSettingsModal extends Modal {
 								denyLabel: t('setting.button-cancel'),
 								warning: true
 							}
-						).then((isConfirmed: boolean) => {
+						).then(async (isConfirmed: boolean) => {
 							if (isConfirmed) {
 								this.ntb.settingsManager.deleteToolbar(this.toolbar.uuid);
-								this.ntb.settingsManager.save().then(() => {
-									this.close()
-								});
+								await this.ntb.settingsManager.save();
+								this.close();
 							}
 						});
 					});
