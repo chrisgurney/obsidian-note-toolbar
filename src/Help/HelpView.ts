@@ -44,7 +44,7 @@ export default class HelpView extends ItemView {
 
         // User guide
 
-        contentDiv.createEl('h2').setText(t('setting.help.heading-get-started'));
+        contentDiv.createEl('h2').setText(t('setting.help.heading-user-guide'));
 
         const guideEl = contentDiv.createDiv();
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
