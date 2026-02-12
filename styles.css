@@ -3950,6 +3950,8 @@ input[type="text"].note-toolbar-setting-error,
     padding-top: 1em;
 }
 .note-toolbar-tips-card-items {
+    display: flex;
+    justify-content: center;
     padding-bottom: 2em;
     & .note-toolbar-card-item {
         background-blend-mode: overlay;

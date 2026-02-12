@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, ItemView, setIcon, Setting, WorkspaceLeaf } from "obsidian";
 import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
+import { renderTipItems } from "./TipView";
 
 export default class HelpView extends ItemView {
 
@@ -37,9 +38,9 @@ export default class HelpView extends ItemView {
 
         // Tips
 
-        // const tipsEl = contentDiv.createDiv();
-        // tipsEl.addClass('note-toolbar-tips-card-items');
-        // renderTipItems(this.plugin, tipsEl, ['gallery', 'getting-started', 'daily-notes', 'mobile-tips']);
+        const tipsEl = contentDiv.createDiv();
+        tipsEl.addClass('note-toolbar-tips-card-items');
+        renderTipItems(this.ntb, tipsEl, ['getting-started', 'gallery']);
 
         // User guide
 
@@ -47,21 +48,6 @@ export default class HelpView extends ItemView {
 
         const guideEl = contentDiv.createDiv();
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
-
-        new Setting(guideEl)
-            .setName(iconTextFr('layout-grid', t('setting.help.label-gallery')))
-            .setDesc(t('setting.help.label-gallery-description'))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open'))
-                    .setTooltip(t('setting.help.label-gallery'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('obsidian://note-toolbar?gallery', '_blank');
-                    });
-            })
-            .setClass('note-toolbar-setting-no-border');
-
         new Setting(guideEl)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
             .addButton((button: ButtonComponent) => {
@@ -72,8 +58,8 @@ export default class HelpView extends ItemView {
                     .onClick(() => {
                         window.open(URL_USER_GUIDE, '_blank');
                     });
-            });
-            // .setClass('note-toolbar-setting-no-border');
+            })
+            .setClass('note-toolbar-setting-no-border');
 
         // Support
 
