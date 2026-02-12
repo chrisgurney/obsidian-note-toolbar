@@ -325,10 +325,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 														denyLabel: t('setting.button-cancel'),
 														warning: true
 													}
-												).then((isConfirmed: boolean) => {
+												).then(async (isConfirmed: boolean) => {
 													if (isConfirmed) {
 														this.ntb.settingsManager.deleteToolbar(toolbar.uuid);
-														this.ntb.settingsManager.save();
+														await this.ntb.settingsManager.save();
 														this.display();
 													}
 												});
