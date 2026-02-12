@@ -613,21 +613,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const mappingsGroup = new SettingGroup(containerEl);
 
-		mappingsGroup.addSetting((propertySetting) => {
-			propertySetting
-				.setName(t('setting.display-rules.option-property'))
-				.setDesc(t('setting.display-rules.option-property-description'))
-				.addText(text => text
-					.setPlaceholder(t('setting.display-rules.option-property-placeholder'))
-					.setValue(this.ntb.settings.toolbarProp)
-					.onChange(debounce(async (value) => {
-						this.ntb.settings.toolbarProp = value;
-						// FIXME? set all toolbars to updated?
-						// this.plugin.settings.toolbars.updated = new Date().toISOString();
-						await this.ntb.settingsManager.save();	
-					}, 750)));
-		});
-
 		mappingsGroup.addSetting((defaultToolbarSetting) => {
 			const existingDefaultToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.defaultToolbar);
 			defaultToolbarSetting
@@ -652,6 +637,21 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 			const defaultToolbarFr = existingDefaultToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingDefaultToolbar, undefined, false);
 			setFieldHelp(defaultToolbarSetting.controlEl, defaultToolbarFr);						
+		});
+
+		mappingsGroup.addSetting((propertySetting) => {
+			propertySetting
+				.setName(t('setting.display-rules.option-property'))
+				.setDesc(t('setting.display-rules.option-property-description'))
+				.addText(text => text
+					.setPlaceholder(t('setting.display-rules.option-property-placeholder'))
+					.setValue(this.ntb.settings.toolbarProp)
+					.onChange(debounce(async (value) => {
+						this.ntb.settings.toolbarProp = value;
+						// FIXME? set all toolbars to updated?
+						// this.plugin.settings.toolbars.updated = new Date().toISOString();
+						await this.ntb.settingsManager.save();	
+					}, 750)));
 		});
 
 		mappingsGroup.addSetting((folderMappingSetting) => {
