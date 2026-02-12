@@ -44,10 +44,23 @@ export default class HelpView extends ItemView {
 
         // User guide
 
-        contentDiv.createEl('h2').setText(t('setting.help.heading-user-guide'));
-
+        contentDiv.createEl('h2').setText(t('setting.help.heading-learn'));
         const guideEl = contentDiv.createDiv();
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
+
+        new Setting(guideEl)
+            .setName(iconTextFr('party-popper', t('setting.help.label-whats-new')))
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.help.button-read'))
+                    .setTooltip(t('setting.button-whats-new-tooltip'))
+                    .setCta()
+                    .onClick(() => {
+                        window.open('obsidian://note-toolbar?whatsnew', '_blank');
+                    });
+            })
+            .setClass('note-toolbar-setting-no-border');
+
         new Setting(guideEl)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
             .addButton((button: ButtonComponent) => {
@@ -58,15 +71,14 @@ export default class HelpView extends ItemView {
                     .onClick(() => {
                         window.open(URL_USER_GUIDE, '_blank');
                     });
-            })
-            .setClass('note-toolbar-setting-no-border');
+            });
 
         // Support
 
         contentDiv.createEl('h2').setText(t('setting.help.heading-support'));
-
         const supportEl = contentDiv.createDiv();
         supportEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
+
         new Setting(supportEl)
             .setName(iconTextFr('messages-square', t('setting.help.label-support')))
             .addButton((button: ButtonComponent) => {
@@ -104,7 +116,13 @@ export default class HelpView extends ItemView {
                     });
             });
 
-        new Setting(supportEl)
+        // Donate
+
+        contentDiv.createEl('h2').setText(t('setting.help.heading-donate'));
+        const donateEl = contentDiv.createDiv();
+        donateEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
+
+        new Setting(donateEl)
             .setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
             .addButton((button: ButtonComponent) => {
                 button
@@ -114,14 +132,9 @@ export default class HelpView extends ItemView {
                     .onClick(() => {
                         window.open(URL_FEEDBACK_FORM, '_blank');
                     });
-            });
+            })
+            .setClass('note-toolbar-setting-no-border');
 
-        // Donate
-
-        contentDiv.createEl('h2').setText(t('setting.help.heading-donate'));
-
-        const donateEl = contentDiv.createDiv();
-        donateEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
         new Setting(donateEl)
             .setName(iconTextFr('heart', t('setting.help.label-donate')))
             .setDesc(t('setting.help.label-donate-description'))
@@ -133,8 +146,7 @@ export default class HelpView extends ItemView {
                     .onClick(() => {
                         window.open('https://buymeacoffee.com/cheznine', '_blank');
                     });
-            })
-            .setClass('note-toolbar-setting-no-border');
+            });
 
     }
 
