@@ -54,10 +54,29 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Removes modal window and refreshes the parent settings window.
 	 */
-	onClose() {
+	async onClose(): Promise<void> {
 		const { contentEl } = this;
 		contentEl.empty();
-		this.parent ? this.parent.display() : undefined;
+		// if this is the only toolbar, prompt to make this the Default
+		// note that this won't actually be async, as onClose() isn't async in Modal, but seems to work?
+		if (!this.ntb.settings.defaultToolbar && this.ntb.settings.toolbars.length === 1) {
+			const setAsDefault = await confirmWithModal(this.ntb.app, { 
+				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name }),
+				questionLabel: t('setting.toolbars.label-set-default-confirm'),
+				approveLabel: t('setting.button-confirm'),
+				denyLabel: t('setting.button-cancel')
+			});
+			if (setAsDefault) {
+				this.ntb.settings.defaultToolbar = this.toolbar.uuid;
+				await this.ntb.settingsManager.save();
+				// refresh the parent window
+				this.parent ? this.parent.display() : undefined;
+			}
+		}
+		else {
+			// refresh the parent window
+			this.parent ? this.parent.display() : undefined;
+		}
 	}
 
 	/**

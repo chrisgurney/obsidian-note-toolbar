@@ -255,6 +255,7 @@
             "title-confirm": "Add item: {{itemName}}"
         },
         "button-cancel": "Cancel",
+        "button-confirm": "Confirm",
         "button-enable": "Enable",
         "button-proceed": "Proceed",
         "button-collapse-tooltip": "Collapse section",
@@ -713,6 +714,8 @@
             "button-new-tbar-tooltip": "Add a new toolbar",
             "duplicated-tbar-suffix": "copy",
             "label-empty-create-tbar": "No toolbars.",
+            "label-set-default": "Set as default: {{toolbar}}",
+            "label-set-default-confirm": "Make this the default toolbar for all notes? This can be changed later.",
             "label-tbar-name-not-set": "Toolbar name not set",
             "link-create": "Create a toolbar",
             "menu-copy-id": "Copy developer ID",
