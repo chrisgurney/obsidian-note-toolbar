@@ -34,6 +34,7 @@ export default class SettingsManager {
 		});
 		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
+		if (this.ntb.settings.defaultToolbar === id) this.ntb.settings.defaultToolbar = null;
 	}
 
 	/** 
@@ -320,7 +321,7 @@ export default class SettingsManager {
 	 * @returns ToolbarSettings for the new toolbar
 	 */
 	public async newToolbar(name: string = ""): Promise<ToolbarSettings> {
-		let newToolbar = {
+		const newToolbar = {
 			uuid: getUUID(),
 			commandPosition: PositionType.Floating,
 			customClasses: "",
