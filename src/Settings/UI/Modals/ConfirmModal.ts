@@ -2,7 +2,7 @@ import { App, ButtonComponent, Component, MarkdownRenderer, Modal } from "obsidi
 
 interface UiSettings {
     title: string,
-    questionLabel?: string,
+    questionLabel?: DocumentFragment | string,
     notes?: string,
     approveLabel: string,
     denyLabel: string,
@@ -44,7 +44,12 @@ export default class ConfirmModal extends Modal {
                 const component = new Component();
                 component.load();
                 try {
-                    MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, this.contentEl, '/', component);
+                    if (this.uiSettings.questionLabel instanceof DocumentFragment) {
+                        this.contentEl.append(this.uiSettings.questionLabel);
+                    }
+                    else {
+                        MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, this.contentEl, '/', component);
+                    }
                 }
                 finally {
                     component.unload();
