@@ -179,6 +179,13 @@ export default class SettingsManager {
 
 		}
 
+		// use the configured default
+		if (!matchingToolbar && !ignoreToolbar) {
+			if (this.ntb.settings.defaultToolbar) {
+				matchingToolbar = this.getToolbarById(this.ntb.settings.defaultToolbar);
+			}
+		}
+
 		return matchingToolbar;
 
 	}
