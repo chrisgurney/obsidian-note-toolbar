@@ -1103,7 +1103,7 @@ input[type="text"].note-toolbar-setting-error,
                 overflow: hidden;
                 position: relative;
                 max-height: calc(var(--line-height-tight) * 1em);
-                max-width: 250px;
+                max-width: 175px;
                 .is-mobile & {
                     max-width: inherit;
                 }
