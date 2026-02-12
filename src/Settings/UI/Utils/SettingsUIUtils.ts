@@ -654,6 +654,22 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Shows the Help view (for onboarding) if the user hasn't seen it yet.
+	 */
+	showHelpViewIfNeeded() {
+		const onboardingId = 'startup-help-view';
+		if (!this.ntb.settings.onboarding[onboardingId]) {
+			this.ntb.settings.onboarding[onboardingId] = true;
+			this.ntb.settingsManager.save().then(() => {
+				this.ntb.app.workspace.getLeaf(true).setViewState({
+					type: VIEW_TYPE_HELP,
+					active: true
+				});
+			});
+		}
+	}
+
+	/**
 	 * Shows the What's New dialog if the user hasn't seen it yet.
 	 */
 	showWhatsNewIfNeeded() {
