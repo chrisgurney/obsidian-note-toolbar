@@ -3711,6 +3711,10 @@ input[type="text"].note-toolbar-setting-error,
             .is-phone & {
                 width: inherit !important;
             }
+            & .extra-setting-button:active,
+            & .extra-setting-button:hover {
+                border-radius: var(--pill-radius);
+            }
             & select.dropdown, 
             & select.dropdown:active,
             & select.dropdown:focus {
