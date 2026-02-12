@@ -367,7 +367,6 @@
             "button-open-github": "Open github.com",
             "button-open-google": "Open google.com",
             "button-read": "Read ↗",
-            "description": "Context-aware toolbars for your notes.",
             "error-failed-to-load": "Failed to load:\n{{baseUrl}}/{{lang}}/{{name}}.md",
             "heading": "Help using Note Toolbar",
             "heading-donate": "Contribute",

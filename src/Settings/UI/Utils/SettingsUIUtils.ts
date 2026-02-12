@@ -191,27 +191,17 @@ export default class SettingsUIUtils {
 		else {
 
 			const helpDesc = document.createDocumentFragment();
-			helpDesc.append(
-				helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + PLUGIN_VERSION })
-			);
+			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
+			this.ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
+				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+				closeCallback();
+			});
 
 			new Setting(settingsDiv)
 				.setName(t('plugin.note-toolbar') + ' • v' + PLUGIN_VERSION)
 				.setClass('note-toolbar-setting-help-section')
-				.setDesc(t('setting.help.description'))
-				.addButton((button: ButtonComponent) => {
-					button
-						.setTooltip(t('setting.button-whats-new-tooltip'))
-						.onClick(() => {
-							this.ntb.app.workspace.getLeaf(true).setViewState({
-								type: VIEW_TYPE_WHATS_NEW,
-								active: true
-							});
-							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
-							closeCallback();
-						})
-						.buttonEl.setText(t('setting.button-whats-new'));
-				})
+				.setDesc(helpDesc)
 				.addButton((button: ButtonComponent) => {
 					button
 						.setTooltip(t('setting.button-gallery-tooltip'))
