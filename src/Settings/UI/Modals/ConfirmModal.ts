@@ -3,9 +3,11 @@ import { App, ButtonComponent, Component, MarkdownRenderer, Modal } from "obsidi
 interface UiSettings {
     title: string,
     questionLabel?: DocumentFragment | string,
+    /** Shown in small type under the confirmation question. */
     notes?: string,
     approveLabel: string,
     denyLabel: string,
+    /** If true, uses the warning button. */
     warning?: boolean
 };
 
