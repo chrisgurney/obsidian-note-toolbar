@@ -327,8 +327,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 													}
 												).then(async (isConfirmed: boolean) => {
 													if (isConfirmed) {
-														this.ntb.settingsManager.deleteToolbar(toolbar.uuid);
-														await this.ntb.settingsManager.save();
+														await this.ntb.settingsManager.deleteToolbar(toolbar.uuid);
 														this.display();
 													}
 												});

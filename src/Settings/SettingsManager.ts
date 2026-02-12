@@ -27,7 +27,7 @@ export default class SettingsManager {
 	 * Removes the provided toolbar from settings; does nothing if it does not exist.
 	 * @param id UUID of the toolbar to remove.
 	 */
-	public deleteToolbar(id: string) {
+	public async deleteToolbar(id: string): Promise<void> {
 		let toolbarToDelete = this.ntb.settingsManager.getToolbarById(id);
 		toolbarToDelete?.items.forEach((item) => {
 			if (item.hasCommand) this.ntb.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
@@ -35,6 +35,7 @@ export default class SettingsManager {
 		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
 		if (this.ntb.settings.defaultToolbar === id) this.ntb.settings.defaultToolbar = null;
+		await this.ntb.settingsManager.save();
 	}
 
 	/** 

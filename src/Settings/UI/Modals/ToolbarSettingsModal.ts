@@ -462,8 +462,7 @@ export default class ToolbarSettingsModal extends Modal {
 							}
 						).then(async (isConfirmed: boolean) => {
 							if (isConfirmed) {
-								this.ntb.settingsManager.deleteToolbar(this.toolbar.uuid);
-								await this.ntb.settingsManager.save();
+								await this.ntb.settingsManager.deleteToolbar(this.toolbar.uuid);
 								this.close();
 							}
 						});
