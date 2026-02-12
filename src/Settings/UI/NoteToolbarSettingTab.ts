@@ -628,6 +628,32 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					}, 750)));
 		});
 
+		mappingsGroup.addSetting((defaultToolbarSetting) => {
+			const existingDefaultToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.defaultToolbar);
+			defaultToolbarSetting
+				.setName(t('setting.display-rules.option-default'))
+				.setDesc(t('setting.display-rules.option-default-description'))
+				.setClass('note-toolbar-setting-item-control-std-with-help')
+				.addSearch(async (cb) => {
+					new ToolbarSuggester(this.ntb, cb.inputEl);
+					cb.setPlaceholder(t('setting.display-rules.option-default-placeholder'))
+						.setValue(existingDefaultToolbar ? existingDefaultToolbar.name : '')
+						.onChange(debounce(async (name) => {
+							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, defaultToolbarSetting.controlEl, undefined, 'beforeend');
+							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+							this.ntb.settings.defaultToolbar = newToolbar?.uuid ?? null;
+							// update toolbar preview
+							const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
+							removeFieldHelp(defaultToolbarSetting.controlEl);
+							setFieldHelp(defaultToolbarSetting.controlEl, toolbarPreviewFr);
+							await this.ntb.settingsManager.save();
+						}, 250));
+					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+				});
+			const defaultToolbarFr = existingDefaultToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingDefaultToolbar, undefined, false);
+			setFieldHelp(defaultToolbarSetting.controlEl, defaultToolbarFr);						
+		});
+
 		mappingsGroup.addSetting((folderMappingSetting) => {
 			folderMappingSetting
 				.setName(t('setting.mappings.name'))
