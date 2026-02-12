@@ -91,15 +91,16 @@ Tips are help articles that are built-in to the plugin, and are loaded in from G
 
 ## Create new Tips
 
-1. Create a new markdown file in `docs/tips/en` .
+1. Create a new markdown file in `docs/tips/en`.
 1. Write your tip.
-1. Add the Tip to `src/Help/HelpView.ts`
+1. Add the Tip to `src/Help/tips.json` with the ID being the filename.
+1. Add it to the Help view `src/Help/HelpView.ts`
 
 See below for instructions on adding various components to Tips.
 
 ## Linking to Tips
 
-Use this URI format to link between Tips. The value of the `tip` parameter corresponds with the name of the markdown file.
+Use this URI format to link between Tips. The value of the `tip` parameter corresponds with the ID (and filename) in `tips.json`.
 
 ```markdown
 Learn about how to add toolbars to your [daily notes](obsidian://note-toolbar?tip=daily-notes).
