@@ -413,6 +413,11 @@
     }
 }
 
+.note-toolbar-setting-help-content {
+    max-width: 500px;
+    margin-inline: auto;
+}
+
 .note-toolbar-setting-whatsnew-content {
     code:not(.language-ts) {
         background-color: var(--code-background);
