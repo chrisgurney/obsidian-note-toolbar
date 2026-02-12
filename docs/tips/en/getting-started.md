@@ -1,14 +1,18 @@
 Thank you for installing Note Toolbar!
 
-This plugin provides a flexible way to create context-aware toolbars for your notes, which can include commands, file and folder links, websites/URIs, menus, and scripts (Dataview, Templater, and JavaScript).
-
-With this plugin, you also get Note Toolbar Callouts which you can add anywhere in your notes.
-
 ## Add your first toolbar
 
 1. Open Settings and click the *Gallery* button/link.
-2. Select an item to create your first toolbar.
-  - If you use Daily Notes, add a navigation toolbar between those notes.
+2. Select an item. A new toolbar will be created (otherwise you would be prompted to select one).
+
+Try: For example, if you use the Daily Notes core plugin, create a toolbar that navigates between them:
+
+> [!note-toolbar-gallery]
+> - daily-notes-prev
+> - daily-notes-today
+> - daily-notes-next
+
+Or create your own items. Other item types let you use commands, file and folder links, websites/URIs, menus, and scripts (Dataview, Templater, and JavaScript).
 
 ## To get a toolbar to show up in your notes
 
@@ -22,12 +26,6 @@ You only have to do this once for each new toolbar:
 > [!note-toolbar-video]
 > https://chrisgurney.github.io/obsidian-note-toolbar/tips/en/getting-started-gallery.mp4
 
-## Try these toolbar items
+## More to explore
 
-Here are some common items you may want to add to a toolbar:
-
-> [!note-toolbar-gallery]
-> - copy
-> - paste
-> - undo
-> - redo
+- To put toolbars in the middle of your notes, try [Note Toolbar Callouts ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
