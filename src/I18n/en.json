@@ -255,7 +255,6 @@
             "title-confirm": "Add item: {{itemName}}"
         },
         "button-cancel": "Cancel",
-        "button-confirm": "Confirm",
         "button-enable": "Enable",
         "button-proceed": "Proceed",
         "button-collapse-tooltip": "Collapse section",
@@ -712,6 +711,7 @@
             "button-more-tooltip": "More options",
             "button-new-tbar": "New toolbar",
             "button-new-tbar-tooltip": "Add a new toolbar",
+            "button-set-default": "Set as default",
             "duplicated-tbar-suffix": "copy",
             "label-empty-create-tbar": "No toolbars.",
             "label-set-default": "Set as default: {{toolbar}}",
