@@ -268,29 +268,31 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 												});
 											});
 									});
-									menu.addSeparator();
-									menu.addItem((menuItem: MenuItem) => {
-										menuItem
-											.setTitle(t('export.label-share'))
-											.setIcon('share')
-											.onClick(async () => {
-												const shareUri = await this.ntb.protocolManager.getShareUri(toolbar);
-												let shareModal = new ShareModal(this.ntb, shareUri, toolbar);
-												shareModal.open();
-											});
-									});
-									menu.addItem((menuItem: MenuItem) => {
-										menuItem
-											.setTitle(t('export.label-callout'))
-											.setIcon('copy')
-											.onClick(async () => {
-												let calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
-												navigator.clipboard.writeText(calloutExport);
-												new Notice(
-													learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
-												).containerEl.addClass('mod-success');
-											});
-									});
+									if (toolbar.items.length > 0) {
+										menu.addSeparator();
+										menu.addItem((menuItem: MenuItem) => {
+											menuItem
+												.setTitle(t('export.label-share'))
+												.setIcon('share')
+												.onClick(async () => {
+													const shareUri = await this.ntb.protocolManager.getShareUri(toolbar);
+													let shareModal = new ShareModal(this.ntb, shareUri, toolbar);
+													shareModal.open();
+												});
+										});
+										menu.addItem((menuItem: MenuItem) => {
+											menuItem
+												.setTitle(t('export.label-callout'))
+												.setIcon('copy')
+												.onClick(async () => {
+													let calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
+													navigator.clipboard.writeText(calloutExport);
+													new Notice(
+														learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
+													).containerEl.addClass('mod-success');
+												});
+										});
+									}
 									menu.addSeparator();
 									menu.addItem((menuItem: MenuItem) => {
 										menuItem
