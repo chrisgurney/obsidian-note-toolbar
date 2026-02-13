@@ -72,7 +72,7 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 		}
 		// refresh the parent window
-		this.parent ? this.parent.display() : undefined;
+		this.parent?.display();
 	}
 
 	/**
