@@ -61,7 +61,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// note that this won't actually be async, as onClose() isn't async in Modal, but seems to work?
 		if (!this.ntb.settings.defaultToolbar && this.ntb.settings.toolbars.length === 1) {
 			const setAsDefault = await confirmWithModal(this.ntb.app, { 
-				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name }),
+				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 				questionLabel: t('setting.toolbars.label-set-default-confirm'),
 				approveLabel: t('setting.button-confirm'),
 				denyLabel: t('setting.button-cancel')
