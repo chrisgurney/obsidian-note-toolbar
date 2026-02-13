@@ -57,6 +57,9 @@ export default class ToolbarSettingsModal extends Modal {
 	async onClose(): Promise<void> {
 		const { contentEl } = this;
 		contentEl.empty();
+		// refresh the parent window, so we see the new toolbar
+		this.parent?.display();
+		
 		// if this is the only toolbar, prompt once to make this the Default
 		// note that this won't actually be async, as onClose() isn't async in Modal, but seems to work?
 		const onboardingId = `default-${this.toolbar.uuid}`;
@@ -74,10 +77,10 @@ export default class ToolbarSettingsModal extends Modal {
 			if (setAsDefault) {
 				this.ntb.settings.defaultToolbar = this.toolbar.uuid;
 				await this.ntb.settingsManager.save();
+				// refresh the parent window again, so we can see the updated Default setting
+				this.parent?.display();
 			}
 		}
-		// refresh the parent window
-		this.parent?.display();
 	}
 
 	/**
