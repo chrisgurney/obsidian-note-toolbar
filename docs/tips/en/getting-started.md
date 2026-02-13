@@ -2,13 +2,13 @@
 
 In Obsidian's settings go to **Note Toolbar → + New toolbar**, or [open the Gallery](obsidian://note-toolbar?gallery) and choose an item to get your toolbar started.
 
-Then:
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/settings_edit_toolbar_empty.png" title="Edit Toolbar dialog, showing name, items, styles, and a delete button" width="800"/>
 
 1. _Optional:_ Give your toolbar a unique **Name**. This will help you keep your toolbars organized. (You can do this later.)
 2. **Search** (to browse items included with Note Toolbar), or use **+ New** to create toolbar items from scratch.
 3. _Optional:_ Set a **Position** (toolbars appear under the Properties section by default), or choose to **Style** your toolbar. For now, let's leave it as-is, and explore this later.
 
-Close the window, and you will be asked if you want to make this the toolbar the default for all of your notes. You can choose not to, and learn about the other approaches below.
+Close the window, and you will be asked if you want to make this the toolbar the default for all of your notes. You can choose not to, and learn continue reading below.
 
 **Try:** Click/Tap to add a formatting command to your toolbar:
 
