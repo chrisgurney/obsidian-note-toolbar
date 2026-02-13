@@ -70,13 +70,9 @@ export default class ToolbarSettingsModal extends Modal {
 				this.ntb.settings.defaultToolbar = this.toolbar.uuid;
 				await this.ntb.settingsManager.save();
 			}
-			// refresh the parent window
-			this.parent ? this.parent.display() : undefined;
 		}
-		else {
-			// refresh the parent window
-			this.parent ? this.parent.display() : undefined;
-		}
+		// refresh the parent window
+		this.parent ? this.parent.display() : undefined;
 	}
 
 	/**
