@@ -3945,6 +3945,7 @@ input[type="text"].note-toolbar-setting-error,
     gap: 16px;
     overflow-x: auto;
     overscroll-behavior-x: none;
+    padding-inline-end: 0.5em;
     position: relative;
     scroll-behavior: smooth;
 }
@@ -3952,6 +3953,18 @@ input[type="text"].note-toolbar-setting-error,
     border-block-end: solid 1px var(--background-modifier-border);
     padding-bottom: 2em;
     padding-top: 1em;
+    position: relative;
+    /* fade stays fixed on non-scrolling parent */
+    &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 1%;
+        background: linear-gradient(to right, transparent, var(--background-primary));
+        pointer-events: none;
+    }
 }
 .note-toolbar-tips-card-items {
     display: flex;
