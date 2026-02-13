@@ -46,6 +46,10 @@
     border-block-end: solid 1px var(--background-modifier-border);
     padding-bottom: 2em;
     padding-top: 1em;
+}
+
+.note-toolbar-gallery-card-items,
+.note-toolbar-gallery-card-items-no-border {
     position: relative;
     /* fade stays fixed on non-scrolling parent */
     &::after {
@@ -429,6 +433,17 @@
 .note-toolbar-setting-help-content {
     max-width: 500px;
     margin-inline: auto;
+}
+
+.note-toolbar-setting-tip-content {
+    h2 {
+        border-bottom: 1px solid var(--background-modifier-border);
+        padding-top: 1em;
+        padding-bottom: .3em;
+        &::after {
+            display: none; /* fix for ITS theme */
+        }
+    }
 }
 
 .note-toolbar-setting-whatsnew-content {
