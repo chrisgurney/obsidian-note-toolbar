@@ -57,9 +57,14 @@ export default class ToolbarSettingsModal extends Modal {
 	async onClose(): Promise<void> {
 		const { contentEl } = this;
 		contentEl.empty();
-		// if this is the only toolbar, prompt to make this the Default
+		// if this is the only toolbar, prompt once to make this the Default
 		// note that this won't actually be async, as onClose() isn't async in Modal, but seems to work?
-		if (!this.ntb.settings.defaultToolbar && this.ntb.settings.toolbars.length === 1) {
+		const onboardingId = `default-${this.toolbar.uuid}`;
+		const promptForDefault = this.ntb.settings.toolbars.length === 1 
+			&& !this.ntb.settings.defaultToolbar 
+			&& !this.ntb.settings.onboarding[onboardingId];
+		if (promptForDefault) {
+			this.ntb.settings.onboarding[onboardingId] = true;
 			const setAsDefault = await confirmWithModal(this.ntb.app, { 
 				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 				questionLabel: t('setting.toolbars.label-set-default-confirm'),
