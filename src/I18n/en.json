@@ -711,6 +711,7 @@
             "button-more-tooltip": "More options",
             "button-new-tbar": "New toolbar",
             "button-new-tbar-tooltip": "Add a new toolbar",
+            "button-no-default": "No thanks",
             "button-set-default": "Set as default",
             "duplicated-tbar-suffix": "copy",
             "label-empty-create-tbar": "No toolbars.",

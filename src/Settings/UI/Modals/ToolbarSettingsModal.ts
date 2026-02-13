@@ -64,7 +64,7 @@ export default class ToolbarSettingsModal extends Modal {
 				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 				questionLabel: t('setting.toolbars.label-set-default-confirm'),
 				approveLabel: t('setting.toolbars.button-set-default'),
-				denyLabel: t('setting.button-cancel')
+				denyLabel: t('setting.toolbars.button-no-default')
 			});
 			if (setAsDefault) {
 				this.ntb.settings.defaultToolbar = this.toolbar.uuid;
