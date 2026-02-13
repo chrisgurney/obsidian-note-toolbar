@@ -71,6 +71,7 @@ export default class ToolbarSettingsModal extends Modal {
 			const setAsDefault = await confirmWithModal(this.ntb.app, { 
 				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 				questionLabel: t('setting.toolbars.label-set-default-confirm'),
+				notes: t('setting.toolbars.label-set-default-notes'),
 				approveLabel: t('setting.toolbars.button-set-default'),
 				denyLabel: t('setting.toolbars.button-no-default')
 			});
