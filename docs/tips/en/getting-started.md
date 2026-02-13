@@ -22,6 +22,8 @@ Close the window, and you will be asked if you want to make this the toolbar the
 
 Under **Settings... → Note Toolbar → Display rules**, you can decide which toolbars appear in which notes:
 
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/settings_rules.png" title="Rules section of the settings, defining where to show the toolbar" width="800"/>
+
 * The **Default toolbar** appears in all notes, unless one of the rules below is satisfied.
 * Use the `notetoolbar` property in any note if you want a specific toolbar to appear. (Change the name of this property with the **Property** setting.)
 * Use **Folder mappings** to specify which toolbar appears based on what folder your note is in. Use **+ New mapping** to create a new one.
@@ -33,23 +35,23 @@ Learn more about [Defining where to show toolbars ↗](https://github.com/chrisg
 There are several ways to organize and style toolbars, depending on what look you're trying to achieve:
 
 - Add separators, gaps, and line breaks.
-- Use the **Styles** settings: This allows you to individually style toolbars, and define their behavior.
-- Use the **Style Settings Plugin** to customize even more details. Note however that this applies styles to all toolbars, overriding the defaults (which are designed to adapt to the theme). You can use this plugin to fix certain issues you encounter with themes.
+- Use the **Styles** in a toolbar's settings to individually style toolbars.
+- Use the **Style Settings Plugin** to customize even more details. Note that this applies styles to _all_ toolbars, overriding the defaults (which are designed to adapt to your themes). Consider using this plugin to fix certain issues you encounter with themes.
 - Apply **Custom styles**, defined in CSS snippets, if you wish to make even more specific changes.
 
-Learn more about [Styling toolbars ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars) in the User Guide.
+Learn about the available styles [in the User Guide ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars).
 
 ## Positioning your toolbar
 
-Choose the position of your toolbar, separately for desktop and mobile (i.e., phone and tablet), using the toolbar's **Position** setting.
+Use the toolbar's **Position** setting to choose the position of your toolbar, separately for desktop and mobile (i.e., phone and tablet).
 
-Learn more about [Positioning toolbars ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) in the User Guide.
+Learn more about the available positions [in the User Guide ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars).
 
 ## Example: Daily Notes toolbar
 
 The Daily Notes plugin can be powerful for keeping a daily journal, and Note Toolbar can help you navigate between your daily entries easier.
 
-Select one of these to get started:
+**Try:** Select one of these to get started:
 
 > [!note-toolbar-gallery]
 > - daily-notes-prev
@@ -67,8 +69,8 @@ Once you've added all of your items, under **Folder mappings**, add the folder c
 
 Read about [Creating toolbar items ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items) to learn about the various item types such as commands, file and folder links, websites/URIs, menus, groups, and scripts (Dataview, Templater, and JavaScript).
 
-Use toolbars in other areas of Obsidian, as well:
+Use toolbars in other parts of Obsidian, as well:
 
-- You can also access toolbars throughout the app, including: in the New tab view, the Navigation bar (on phones), and more. See Note Toolbar's **Toolbars within the app** settings.
+- Use the **Toolbars within the app** setting to [access toolbars throughout the app ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app), including: in the New tab view, the Navigation bar (on phones), and more.
 - Toolbars can also be shown in non-markdown files such as canvases, PDFs, and video.
 - To put toolbars in the middle of your notes, try [Note Toolbar Callouts ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
