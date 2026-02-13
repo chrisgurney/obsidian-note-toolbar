@@ -87,7 +87,9 @@ export default class TipView extends ItemView {
     getDisplayText(): string {
         const tip = TipItems.find(tip => tip.id.includes(this.state?.id));
         const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
-        return `${t('plugin.note-toolbar')} • ${(tip as TipType)?.title[language] ?? t('setting.help.title')}`;
+        const title = (tip as TipType)?.title?.[language];
+        // on the initial call Tip is undefined, so we use a generic fallback
+        return title ? t('plugin.note-toolbar') + ' • ' + title : t('setting.help.title');
     }
 
     getIcon(): string {
