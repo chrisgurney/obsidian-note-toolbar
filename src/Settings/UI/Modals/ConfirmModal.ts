@@ -4,7 +4,7 @@ interface UiSettings {
     title: string,
     questionLabel?: DocumentFragment | string,
     /** Shown in small type under the confirmation question. */
-    notes?: string,
+    notes?: DocumentFragment | string,
     approveLabel: string,
     denyLabel: string,
     /** If true, uses the warning button. */
@@ -43,14 +43,15 @@ export default class ConfirmModal extends Modal {
             this.setTitle(this.uiSettings.title);
 
             if (this.uiSettings.questionLabel) {
+                const questionEl = this.contentEl.createDiv();
                 const component = new Component();
                 component.load();
                 try {
                     if (this.uiSettings.questionLabel instanceof DocumentFragment) {
-                        this.contentEl.append(this.uiSettings.questionLabel);
+                        questionEl.append(this.uiSettings.questionLabel);
                     }
                     else {
-                        MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, this.contentEl, '/', component);
+                        MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, questionEl, '/', component);
                     }
                 }
                 finally {
@@ -64,7 +65,12 @@ export default class ConfirmModal extends Modal {
                 const component = new Component();
                 component.load();
                 try {
-                    MarkdownRenderer.render(this.app, this.uiSettings.notes, notesEl, '/', component);
+                    if (this.uiSettings.notes instanceof DocumentFragment) {
+                        notesEl.append(this.uiSettings.notes);
+                    }
+                    else {
+                        MarkdownRenderer.render(this.app, this.uiSettings.notes, notesEl, '/', component);
+                    }
                 }
                 finally {
                     component.unload();
