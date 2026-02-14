@@ -44,7 +44,7 @@ export default class SettingsUIUtils {
 			if (this.ntb.settings[key] === toolbar.uuid) {
 				warningsFr
 					.createEl('li', { text: warning })
-					.addClass('note-toolbar-setting-error-message');
+					.addClass('mod-warning');
 			}
 		});
 
