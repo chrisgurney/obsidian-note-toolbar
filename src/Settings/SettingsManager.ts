@@ -34,7 +34,9 @@ export default class SettingsManager {
 		});
 		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
-		if (this.ntb.settings.defaultToolbar === id) this.ntb.settings.defaultToolbar = null;
+		(['defaultToolbar', 'editorMenuToolbar', 'emptyViewToolbar', 'ribbonToolbar', 'textToolbar'] as const).forEach(key => {
+			if (this.ntb.settings[key] === id) this.ntb.settings[key] = null;
+		});
 		await this.ntb.settingsManager.save();
 	}
 
