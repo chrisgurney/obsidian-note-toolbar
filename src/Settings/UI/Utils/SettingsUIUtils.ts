@@ -39,6 +39,15 @@ export default class SettingsUIUtils {
 		const notesFr = activeDocument.createDocumentFragment();
 		const warningsFr = notesFr.createEl('ul');
 
+		// warnings if this toolbar is assigned to any app locations
+		APP_TOOLBAR_WARNINGS.forEach(({ key, warning }) => {
+			if (this.ntb.settings[key] === toolbar.uuid) {
+				warningsFr
+					.createEl('li', { text: warning })
+					.addClass('note-toolbar-setting-error-message');
+			}
+		});
+
 		// check usage stats
 		let usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
 		if (usageStats) {
@@ -51,15 +60,6 @@ export default class SettingsUIUtils {
 				propertyName: this.ntb.settings.toolbarProp, 
 				toolbarName: toolbar.name 
 			}) 
-		});
-
-		// warnings if this toolbar is assigned to any app locations
-		APP_TOOLBAR_WARNINGS.forEach(({ key, warning }) => {
-			if (this.ntb.settings[key] === toolbar.uuid) {
-				warningsFr
-					.createEl('li', { text: warning })
-					.addClass('note-toolbar-setting-error-message');
-			}
 		});
 
 		// confirm and delete
@@ -390,7 +390,7 @@ export default class SettingsUIUtils {
 	}
 
 	/**
-	 * Returns a usage statistics for the given toolbar; empty string otherwise.
+	 * Returns mapping and item usage statistics for the given toolbar; empty string otherwise.
 	 * @param toolbar ToolbarSettings
 	 * @returns comma-separated list of usage statistics
 	 */
