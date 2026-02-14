@@ -1283,6 +1283,7 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-confirm-dialog {
     & ul {
+        padding-bottom: 1em;
         padding-inline-start: 1em;
     }
 }
