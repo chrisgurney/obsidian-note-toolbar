@@ -293,11 +293,16 @@
             "button-delete-confirm": "Delete",
             "button-delete-tooltip": "Delete this toolbar",
             "description": "This action cannot be undone.",
-            "label-delete-confirm": "Are you sure you want to delete this toolbar? This action cannot be undone.",
+            "label-delete-confirm": "Are you sure you want to delete this toolbar?",
             "label-usage-note": "This toolbar may be used in a `{{propertyName}}` property. If you want to make sure, close this window and search for `[{{propertyName}}:\u00A0{{toolbarName}}]`",
             "name": "Delete this toolbar",
             "title": "Delete toolbar: {{toolbar}}",
-            "warning-default": "⚠️ Warning: This is your default toolbar."
+            "warning-default": "⚠️ Warning: This is your Default toolbar.",
+            "warning-editor-menu": "⚠️ Warning: This is your Editor menu toolbar.",
+            "warning-empty-view": "⚠️ Warning: This is your New tab view toolbar.",
+            "warning-permanent": "This action cannot be undone.",
+            "warning-ribbon": "⚠️ Warning: This is your Ribbon button toolbar.",
+            "warning-text": "⚠️ Warning: This is your Selected text toolbar."
         },
         "display-contexts": {
             "description": "Enable toolbars in canvases, PDFs, video, and other file types.",

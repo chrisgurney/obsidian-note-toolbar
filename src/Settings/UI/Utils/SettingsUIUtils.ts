@@ -11,11 +11,71 @@ import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
 
+// warnings if this toolbar is assigned to any app locations
+const APP_TOOLBAR_WARNINGS = [
+	{ key: 'defaultToolbar', warning: t('setting.delete-toolbar.warning-default') },
+	{ key: 'editorMenuToolbar', warning: t('setting.delete-toolbar.warning-editor-menu') },
+	{ key: 'emptyViewToolbar', warning: t('setting.delete-toolbar.warning-empty-view') },
+	{ key: 'ribbonToolbar', warning: t('setting.delete-toolbar.warning-ribbon') },
+	{ key: 'textToolbar', warning: t('setting.delete-toolbar.warning-text') }
+] as const;
+
 export default class SettingsUIUtils {
 
 	constructor(
 		private ntb: NoteToolbarPlugin
 	) {}
+
+	/**
+	 * Shows a confirmation modal to delete a toolbar, with warnings if it's in use.
+	 * @param toolbar ToolbarSettings to delete
+	 * @param onConfirm callback to execute after successful deletion
+	 */
+	async confirmDeleteToolbar(toolbar: ToolbarSettings, onConfirm: () => void): Promise<void> {
+		const questionFr = activeDocument.createDocumentFragment();
+		questionFr.createEl('p', { text: t('setting.delete-toolbar.label-delete-confirm') });
+		questionFr.createEl('p', { text: t('setting.delete-toolbar.warning-permanent') });
+
+		const notesFr = activeDocument.createDocumentFragment();
+		const warningsFr = notesFr.createEl('ul');
+
+		// check usage stats
+		let usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
+		if (usageStats) {
+			warningsFr.createEl('li', { text: t('setting.usage.description') + usageStats });
+		}
+
+		// add usage note
+		warningsFr.createEl('li', { 
+			text: t('setting.delete-toolbar.label-usage-note', { 
+				propertyName: this.ntb.settings.toolbarProp, 
+				toolbarName: toolbar.name 
+			}) 
+		});
+
+		// warnings if this toolbar is assigned to any app locations
+		APP_TOOLBAR_WARNINGS.forEach(({ key, warning }) => {
+			if (this.ntb.settings[key] === toolbar.uuid) {
+				warningsFr
+					.createEl('li', { text: warning })
+					.addClass('note-toolbar-setting-error-message');
+			}
+		});
+
+		// confirm and delete
+		const isConfirmed = await confirmWithModal(this.ntb.app, {
+			title: t('setting.delete-toolbar.title', { toolbar: toolbar.name }),
+			questionLabel: questionFr,
+			notes: notesFr,
+			approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
+			denyLabel: t('setting.button-cancel'),
+			warning: true
+		});
+		if (isConfirmed) {
+			await this.ntb.settingsManager.deleteToolbar(toolbar.uuid);
+			onConfirm();
+		}
+	}
 
 	/**
 	 * Returns an element contianing a dismissable onboarding message.
@@ -329,6 +389,11 @@ export default class SettingsUIUtils {
 		return usageFr;
 	}
 
+	/**
+	 * Returns a usage statistics for the given toolbar; empty string otherwise.
+	 * @param toolbar ToolbarSettings
+	 * @returns comma-separated list of usage statistics
+	 */
 	getToolbarUsageText(toolbar: ToolbarSettings): string {
 		const [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(toolbar.uuid);
 		let usage: String[] = [];

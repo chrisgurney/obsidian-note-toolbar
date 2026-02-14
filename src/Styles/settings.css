@@ -1281,6 +1281,12 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
+.note-toolbar-setting-confirm-dialog {
+    & ul {
+        padding-inline-start: 1em;
+    }
+}
+
 .note-toolbar-setting-confirm-dialog-buttons {
     column-gap: 0.5em;
     display: flex;
