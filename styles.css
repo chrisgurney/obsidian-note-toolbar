@@ -3629,7 +3629,7 @@ input[type="text"].note-toolbar-setting-error,
                 overflow: hidden;
                 position: relative;
                 max-height: calc(var(--line-height-tight) * 1em);
-                max-width: 250px;
+                max-width: 175px;
                 .is-mobile & {
                     max-width: inherit;
                 }
@@ -3711,6 +3711,10 @@ input[type="text"].note-toolbar-setting-error,
             .is-phone & {
                 width: inherit !important;
             }
+            & .extra-setting-button:active,
+            & .extra-setting-button:hover {
+                border-radius: var(--pill-radius);
+            }
             & select.dropdown, 
             & select.dropdown:active,
             & select.dropdown:focus {
@@ -3789,6 +3793,12 @@ input[type="text"].note-toolbar-setting-error,
     textarea {
         flex: 1 1 auto;
         min-height: 16em !important;
+    }
+}
+.note-toolbar-setting-confirm-dialog {
+    & ul {
+        padding-bottom: 1em;
+        padding-inline-start: 1em;
     }
 }
 .note-toolbar-setting-confirm-dialog-buttons {
@@ -3941,6 +3951,7 @@ input[type="text"].note-toolbar-setting-error,
     gap: 16px;
     overflow-x: auto;
     overscroll-behavior-x: none;
+    padding-inline-end: 0.5em;
     position: relative;
     scroll-behavior: smooth;
 }
@@ -3949,7 +3960,24 @@ input[type="text"].note-toolbar-setting-error,
     padding-bottom: 2em;
     padding-top: 1em;
 }
+.note-toolbar-gallery-card-items,
+.note-toolbar-gallery-card-items-no-border {
+    position: relative;
+    /* fade stays fixed on non-scrolling parent */
+    &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 1%;
+        background: linear-gradient(to right, transparent, var(--background-primary));
+        pointer-events: none;
+    }
+}
 .note-toolbar-tips-card-items {
+    display: flex;
+    justify-content: center;
     padding-bottom: 2em;
     & .note-toolbar-card-item {
         background-blend-mode: overlay;
@@ -4291,6 +4319,20 @@ input[type="text"].note-toolbar-setting-error,
             border-width: 1px;
             padding: var(--size-2-2) var(--size-4-2);
             text-align: start;
+        }
+    }
+}
+.note-toolbar-setting-help-content {
+    max-width: 500px;
+    margin-inline: auto;
+}
+.note-toolbar-setting-tip-content {
+    h2 {
+        border-bottom: 1px solid var(--background-modifier-border);
+        padding-top: 1em;
+        padding-bottom: .3em;
+        &::after {
+            display: none; /* fix for ITS theme */
         }
     }
 }

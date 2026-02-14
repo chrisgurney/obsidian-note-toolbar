@@ -508,6 +508,7 @@ export default class ToolbarItemUi {
         }
         else {
             this.ntb.settingsManager.deleteToolbarItemById(toolbarItem.uuid);
+            // TODO: move next two lines into deleteToolbarItemById()
             this.toolbar.updated = new Date().toISOString();
             await this.ntb.settingsManager.save();
             this.parent.close();

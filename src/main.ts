@@ -175,6 +175,9 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.registerEditorExtension(this.textToolbar);
 			}
 
+			// show the Help view on first launch
+			this.settingsUtils.showHelpViewIfNeeded();
+
 		});
 
 	}

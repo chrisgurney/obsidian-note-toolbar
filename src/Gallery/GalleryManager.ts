@@ -1,6 +1,6 @@
 import galleryItems from "Gallery/gallery-items.json";
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import { Notice, Platform } from "obsidian";
@@ -23,22 +23,29 @@ export default class GalleryManager {
 	 * @param galleryItem Gallery item to add
 	 */
 	async addItem(galleryItem: ToolbarItemSettings): Promise<void> {
-		const toolbarModal = new ToolbarSuggestModal(this.ntb, true, false, true, async (selectedToolbar: ToolbarSettings) => {
-			if (selectedToolbar && galleryItem) {
-				if (selectedToolbar.uuid === EMPTY_TOOLBAR_ID) {
-					selectedToolbar = await this.ntb.settingsManager.newToolbar(t('setting.toolbars.new-tbar-name'));
+
+        const addItemToToolbar = async (toolbar: ToolbarSettings) => {
+			if (toolbar && galleryItem) {
+				if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
+					toolbar = await this.ntb.settingsManager.newToolbar();
 				}
-				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(selectedToolbar, galleryItem);
+				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, galleryItem);
                 const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
                 if (!isResolved) return;
-				selectedToolbar.updated = new Date().toISOString();
+				toolbar.updated = new Date().toISOString();
 				await this.ntb.settingsManager.save();
-				this.ntb.commands.openToolbarSettingsForId(selectedToolbar.uuid, newItem.uuid);
+				this.ntb.commands.openToolbarSettingsForId(toolbar.uuid, newItem.uuid);
                 new Notice(
-                    t('setting.add-item.notice-item-added', { toolbarName: selectedToolbar.name, interpolation: { escapeValue: false } })
+                    t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })
                 ).containerEl.addClass('mod-success');
 			}
-		});
+        }
+        
+        const toolbarSuggester = new ToolbarSuggestModal(this.ntb, true, false, true, async (toolbar: ToolbarSettings) => addItemToToolbar(toolbar));
+
+        const doNextStep = () => {
+            (this.ntb.settings.toolbars.length > 0) ? toolbarSuggester.open() : addItemToToolbar(EMPTY_TOOLBAR);
+        }
 
         // confirm with user if they would like to enable scripting
         const isScriptingEnabled = await this.ntb.settingsUtils.openScriptPrompt(galleryItem);
@@ -53,23 +60,17 @@ export default class GalleryManager {
                     // prompt the user if they'd still like to add it
                     // get plugin name if known, otherwise show command ID
                     const pluginName = t(`plugin.${commandPluginId}`, { defaultValue: '' });
-                    confirmWithModal(
-                        this.ntb.app, 
-                        {
-                            title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
-                            questionLabel: pluginName 
-                                ? t('setting.add-item.label-confirm-plugin', { plugin: pluginName })
-                                : t('setting.add-item.label-confirm-command', { commandId: galleryItem.linkAttr.commandId }),
-                            approveLabel: t('setting.button-proceed'),
-                            denyLabel: t('setting.button-cancel')
-                        }
-                    ).then((isConfirmed: boolean) => {
-                        if (isConfirmed) toolbarModal.open();
+                    const proceedWithoutCommand = await confirmWithModal(this.ntb.app, {
+                        title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
+                        questionLabel: pluginName 
+                            ? t('setting.add-item.label-confirm-plugin', { plugin: pluginName })
+                            : t('setting.add-item.label-confirm-command', { commandId: galleryItem.linkAttr.commandId }),
+                        approveLabel: t('setting.button-proceed'),
+                        denyLabel: t('setting.button-cancel')
                     });
+                    if (proceedWithoutCommand) doNextStep();
                 }
-                else {
-                    toolbarModal.open();
-                }
+                else doNextStep();
                 break;
             }
             case ItemType.JavaScript:
@@ -79,28 +80,20 @@ export default class GalleryManager {
                     const hasFileUri = galleryItem.link.startsWith('file://') || galleryItem.scriptConfig?.expression?.includes('file://');
                     if (hasFileUri) {
                         // prompt the user if they'd still like to add it
-                        confirmWithModal(
-                            this.ntb.app, 
-                            {
-                                title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
-                                questionLabel: t('setting.add-item.label-confirm-mobile-uri', { uri: galleryItem.link }),
-                                approveLabel: t('setting.button-proceed'),
-                                denyLabel: t('setting.button-cancel')
-                            }
-                        ).then((isConfirmed: boolean) => {
-                            if (isConfirmed) toolbarModal.open();
+                        const proceedWithFileUri = await confirmWithModal(this.ntb.app, {
+                            title: t('setting.add-item.title-confirm', { itemName: galleryItem.tooltip }),
+                            questionLabel: t('setting.add-item.label-confirm-mobile-uri', { uri: galleryItem.link }),
+                            approveLabel: t('setting.button-proceed'),
+                            denyLabel: t('setting.button-cancel')
                         });
+                        if (proceedWithFileUri) doNextStep();
                     }
-                    else {
-                        toolbarModal.open();
-                    }
+                    else doNextStep();
                 }
-                else {
-                    toolbarModal.open();
-                }
+                else doNextStep();
                 break;
             default:
-                toolbarModal.open();
+                doNextStep();
                 break;
         }
 

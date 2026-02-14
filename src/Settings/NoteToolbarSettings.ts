@@ -236,6 +236,7 @@ export const enum ErrorBehavior {
 
 export interface NoteToolbarSettings {
 	debugEnabled: boolean;
+	defaultToolbar: string | null;
 	editorMenuAsToolbar: boolean;
 	editorMenuToolbar: string | null;
 	emptyViewToolbar: string | null;
@@ -265,6 +266,7 @@ export interface NoteToolbarSettings {
 
 export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	debugEnabled: false,
+	defaultToolbar: null,
 	editorMenuAsToolbar: false,
 	editorMenuToolbar: null,
 	emptyViewToolbar: null,
@@ -329,24 +331,6 @@ export interface ToolbarSettings {
 	position: Position;
 	updated: string;
 }
-
-export const DEFAULT_TOOLBAR_SETTINGS: ToolbarSettings = {
-	uuid: getUUID(),
-	name: '',
-	commandPosition: PositionType.Floating,
-	customClasses: '',
-	defaultItem: null,
-	defaultStyles: [DefaultStyleType.Border, DefaultStyleType.Even, DefaultStyleType.Sticky],
-	hasCommand: false,
-	items: [],
-	mobileStyles: [],
-	position: {
-		desktop: { allViews: { position: PositionType.Props } },
-		tablet: { allViews: { position: PositionType.Props } },
-		mobile: { allViews: { position: PositionType.Props } },
-	},
-	updated: new Date().toISOString(),
-};
 
 export const EMPTY_TOOLBAR: ToolbarSettings = {
 	uuid: EMPTY_TOOLBAR_ID,

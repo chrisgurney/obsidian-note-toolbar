@@ -330,6 +330,8 @@ export default class CommandManager {
         // figure out what toolbar is on the screen
         let toolbarEl = this.ntb.el.getToolbarEl();
         toolbarEl?.id ? await this.openToolbarSettingsForId(toolbarEl.id) : undefined;
+        // TODO: show Notice if no toolbar to show settings for
+        // TODO: duplicate? there's another verison of this function in SettingsManager 
     }
 
     /**

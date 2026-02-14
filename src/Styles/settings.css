@@ -1103,7 +1103,7 @@ input[type="text"].note-toolbar-setting-error,
                 overflow: hidden;
                 position: relative;
                 max-height: calc(var(--line-height-tight) * 1em);
-                max-width: 250px;
+                max-width: 175px;
                 .is-mobile & {
                     max-width: inherit;
                 }
@@ -1187,6 +1187,10 @@ input[type="text"].note-toolbar-setting-error,
             }
             .is-phone & {
                 width: inherit !important;
+            }
+            & .extra-setting-button:active,
+            & .extra-setting-button:hover {
+                border-radius: var(--pill-radius);
             }
             & select.dropdown, 
             & select.dropdown:active,
@@ -1274,6 +1278,13 @@ input[type="text"].note-toolbar-setting-error,
     textarea {
         flex: 1 1 auto;
         min-height: 16em !important;
+    }
+}
+
+.note-toolbar-setting-confirm-dialog {
+    & ul {
+        padding-bottom: 1em;
+        padding-inline-start: 1em;
     }
 }
 

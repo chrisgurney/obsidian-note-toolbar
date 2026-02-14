@@ -33,7 +33,7 @@ export default class ItemModal extends Modal {
 	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
-        if (this.parent) this.parent.display();
+        this.parent?.display();
 	}
 
 	/**

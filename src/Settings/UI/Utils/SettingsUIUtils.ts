@@ -11,11 +11,71 @@ import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
 
+// warnings if this toolbar is assigned to any app locations
+const APP_TOOLBAR_WARNINGS = [
+	{ key: 'defaultToolbar', warning: t('setting.delete-toolbar.warning-default') },
+	{ key: 'editorMenuToolbar', warning: t('setting.delete-toolbar.warning-editor-menu') },
+	{ key: 'emptyViewToolbar', warning: t('setting.delete-toolbar.warning-empty-view') },
+	{ key: 'ribbonToolbar', warning: t('setting.delete-toolbar.warning-ribbon') },
+	{ key: 'textToolbar', warning: t('setting.delete-toolbar.warning-text') }
+] as const;
+
 export default class SettingsUIUtils {
 
 	constructor(
 		private ntb: NoteToolbarPlugin
 	) {}
+
+	/**
+	 * Shows a confirmation modal to delete a toolbar, with warnings if it's in use.
+	 * @param toolbar ToolbarSettings to delete
+	 * @param onConfirm callback to execute after successful deletion
+	 */
+	async confirmDeleteToolbar(toolbar: ToolbarSettings, onConfirm: () => void): Promise<void> {
+		const questionFr = activeDocument.createDocumentFragment();
+		questionFr.createEl('p', { text: t('setting.delete-toolbar.label-delete-confirm') });
+		questionFr.createEl('p', { text: t('setting.delete-toolbar.warning-permanent') });
+
+		const notesFr = activeDocument.createDocumentFragment();
+		const warningsFr = notesFr.createEl('ul');
+
+		// warnings if this toolbar is assigned to any app locations
+		APP_TOOLBAR_WARNINGS.forEach(({ key, warning }) => {
+			if (this.ntb.settings[key] === toolbar.uuid) {
+				warningsFr
+					.createEl('li', { text: warning })
+					.addClass('mod-warning');
+			}
+		});
+
+		// check usage stats
+		let usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
+		if (usageStats) {
+			warningsFr.createEl('li', { text: t('setting.usage.description') + usageStats });
+		}
+
+		// add usage note
+		warningsFr.createEl('li', { 
+			text: t('setting.delete-toolbar.label-usage-note', { 
+				propertyName: this.ntb.settings.toolbarProp, 
+				toolbarName: toolbar.name 
+			}) 
+		});
+
+		// confirm and delete
+		const isConfirmed = await confirmWithModal(this.ntb.app, {
+			title: t('setting.delete-toolbar.title', { toolbar: toolbar.name }),
+			questionLabel: questionFr,
+			notes: notesFr,
+			approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
+			denyLabel: t('setting.button-cancel'),
+			warning: true
+		});
+		if (isConfirmed) {
+			await this.ntb.settingsManager.deleteToolbar(toolbar.uuid);
+			onConfirm();
+		}
+	}
 
 	/**
 	 * Returns an element contianing a dismissable onboarding message.
@@ -191,27 +251,17 @@ export default class SettingsUIUtils {
 		else {
 
 			const helpDesc = document.createDocumentFragment();
-			helpDesc.append(
-				helpDesc.createEl("a", { href: URL_RELEASES, text: 'v' + PLUGIN_VERSION })
-			);
+			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
+			this.ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
+				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+				closeCallback();
+			});
 
 			new Setting(settingsDiv)
 				.setName(t('plugin.note-toolbar') + ' • v' + PLUGIN_VERSION)
 				.setClass('note-toolbar-setting-help-section')
-				.setDesc(t('setting.help.description'))
-				.addButton((button: ButtonComponent) => {
-					button
-						.setTooltip(t('setting.button-whats-new-tooltip'))
-						.onClick(() => {
-							this.ntb.app.workspace.getLeaf(true).setViewState({
-								type: VIEW_TYPE_WHATS_NEW,
-								active: true
-							});
-							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
-							closeCallback();
-						})
-						.buttonEl.setText(t('setting.button-whats-new'));
-				})
+				.setDesc(helpDesc)
 				.addButton((button: ButtonComponent) => {
 					button
 						.setTooltip(t('setting.button-gallery-tooltip'))
@@ -339,6 +389,11 @@ export default class SettingsUIUtils {
 		return usageFr;
 	}
 
+	/**
+	 * Returns mapping and item usage statistics for the given toolbar; empty string otherwise.
+	 * @param toolbar ToolbarSettings
+	 * @returns comma-separated list of usage statistics
+	 */
 	getToolbarUsageText(toolbar: ToolbarSettings): string {
 		const [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(toolbar.uuid);
 		let usage: String[] = [];
@@ -407,7 +462,7 @@ export default class SettingsUIUtils {
 				if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
 				else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
 
-				if (parent) parent.display(newItem.uuid);
+				parent?.display(newItem.uuid);
 
 			}, 
 			mode
@@ -650,6 +705,22 @@ export default class SettingsUIUtils {
 				}
 				fieldEl.addClass('note-toolbar-setting-error');
 			}
+		}
+	}
+
+	/**
+	 * Shows the Help view (for onboarding) if the user hasn't seen it yet.
+	 */
+	showHelpViewIfNeeded() {
+		const onboardingId = 'startup-help-view';
+		if (!this.ntb.settings.onboarding[onboardingId]) {
+			this.ntb.settings.onboarding[onboardingId] = true;
+			this.ntb.settingsManager.save().then(() => {
+				this.ntb.app.workspace.getLeaf(true).setViewState({
+					type: VIEW_TYPE_HELP,
+					active: true
+				});
+			});
 		}
 	}
 

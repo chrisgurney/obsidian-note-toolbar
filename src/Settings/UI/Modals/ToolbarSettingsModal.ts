@@ -54,10 +54,34 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Removes modal window and refreshes the parent settings window.
 	 */
-	onClose() {
+	async onClose(): Promise<void> {
 		const { contentEl } = this;
 		contentEl.empty();
-		this.parent ? this.parent.display() : undefined;
+		// refresh the parent window, so we see the new toolbar
+		this.parent?.display();
+		
+		// if this is the only toolbar, prompt once to make this the Default
+		// note that this won't actually be async, as onClose() isn't async in Modal, but seems to work?
+		const onboardingId = `default-${this.toolbar.uuid}`;
+		const promptForDefault = this.ntb.settings.toolbars.length === 1 
+			&& !this.ntb.settings.defaultToolbar 
+			&& !this.ntb.settings.onboarding[onboardingId];
+		if (promptForDefault) {
+			this.ntb.settings.onboarding[onboardingId] = true;
+			const setAsDefault = await confirmWithModal(this.ntb.app, { 
+				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
+				questionLabel: t('setting.toolbars.label-set-default-confirm'),
+				notes: t('setting.toolbars.label-set-default-notes'),
+				approveLabel: t('setting.toolbars.button-set-default'),
+				denyLabel: t('setting.toolbars.button-no-default')
+			});
+			if (setAsDefault) {
+				this.ntb.settings.defaultToolbar = this.toolbar.uuid;
+				await this.ntb.settingsManager.save();
+				// refresh the parent window again, so we can see the updated Default setting
+				this.parent?.display();
+			}
+		}
 	}
 
 	/**
@@ -446,28 +470,7 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
 					.onClick(() => {
-						let usageStats = this.ntb.settingsUtils.getToolbarUsageText(this.toolbar);
-						let usageText = usageStats 
-							? t('setting.usage.description') + '\n' + usageStats 
-							: t('setting.usage.description_none');
-						confirmWithModal(
-							this.ntb.app,
-							{ 
-								title: t('setting.delete-toolbar.title', { toolbar: this.toolbar.name }),
-								questionLabel: t('setting.delete-toolbar.label-delete-confirm'),
-								notes: usageText + '\n\n' + t('setting.delete-toolbar.label-usage-note', { propertyName: this.ntb.settings.toolbarProp, toolbarName: this.toolbar.name }),
-								approveLabel: t('setting.delete-toolbar.button-delete-confirm'),
-								denyLabel: t('setting.button-cancel'),
-								warning: true
-							}
-						).then((isConfirmed: boolean) => {
-							if (isConfirmed) {
-								this.ntb.settingsManager.deleteToolbar(this.toolbar.uuid);
-								this.ntb.settingsManager.save().then(() => {
-									this.close()
-								});
-							}
-						});
+						this.ntb.settingsUtils.confirmDeleteToolbar(this.toolbar, () => this.close());
 					});
 			});
 

@@ -27,13 +27,17 @@ export default class SettingsManager {
 	 * Removes the provided toolbar from settings; does nothing if it does not exist.
 	 * @param id UUID of the toolbar to remove.
 	 */
-	public deleteToolbar(id: string) {
+	public async deleteToolbar(id: string): Promise<void> {
 		let toolbarToDelete = this.ntb.settingsManager.getToolbarById(id);
 		toolbarToDelete?.items.forEach((item) => {
 			if (item.hasCommand) this.ntb.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
 		});
 		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
+		(['defaultToolbar', 'editorMenuToolbar', 'emptyViewToolbar', 'ribbonToolbar', 'textToolbar'] as const).forEach(key => {
+			if (this.ntb.settings[key] === id) this.ntb.settings[key] = null;
+		});
+		await this.ntb.settingsManager.save();
 	}
 
 	/** 
@@ -179,6 +183,13 @@ export default class SettingsManager {
 
 		}
 
+		// use the configured default
+		if (!matchingToolbar && !ignoreToolbar) {
+			if (this.ntb.settings.defaultToolbar) {
+				matchingToolbar = this.getToolbarById(this.ntb.settings.defaultToolbar);
+			}
+		}
+
 		return matchingToolbar;
 
 	}
@@ -312,8 +323,8 @@ export default class SettingsManager {
 	 * @param name name of the toolbar
 	 * @returns ToolbarSettings for the new toolbar
 	 */
-	public async newToolbar(name: string = ""): Promise<ToolbarSettings> {
-		let newToolbar = {
+	public async newToolbar(name: string = t('setting.toolbars.new-tbar-name')): Promise<ToolbarSettings> {
+		const newToolbar = {
 			uuid: getUUID(),
 			commandPosition: PositionType.Floating,
 			customClasses: "",
