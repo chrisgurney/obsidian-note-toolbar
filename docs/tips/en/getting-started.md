@@ -60,11 +60,6 @@ The Daily Notes plugin can be powerful for keeping a daily journal, and Note Too
 
 Once you've added all of your items, under **Folder mappings**, add the folder containing your daily notes, and select your new toolbar. (Alternately, in your daily notes template, add a `notetoolbar` property with the name of the toolbar.)
 
-## Using the Gallery
-
-> [!note-toolbar-video]
-> https://chrisgurney.github.io/obsidian-note-toolbar/tips/en/getting-started-gallery.mp4
-
 ## More to explore
 
 Read about [Creating toolbar items ↗](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items) to learn about the various item types such as commands, file and folder links, websites/URIs, menus, groups, and scripts (Dataview, Templater, and JavaScript).
