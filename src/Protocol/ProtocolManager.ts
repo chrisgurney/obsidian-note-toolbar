@@ -75,6 +75,10 @@ export default class ProtocolManager {
 				}
 			}
 		}
+		else if (data.new) {
+			const toolbar = await this.ntb.settingsManager.newToolbar();
+			this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+		}
 		else if (data.settings) {
 			await this.ntb.commands.openSettings();
 		}
