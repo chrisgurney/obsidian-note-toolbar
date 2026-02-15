@@ -28,6 +28,8 @@ export default class WhatsNewView extends ItemView {
 
     async onOpen() {
 
+		this.ntb.settingsUtils.addCloseToPhoneNav(this);
+
         const contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-whatsnew-view');
 
