@@ -1,5 +1,5 @@
 import { EditorView } from "@codemirror/view";
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, ToggleUiStateType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, ToggleUiStateType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -24,6 +24,7 @@ export default class CommandManager {
         this.ntb.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.focus() });
         this.ntb.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.focus(true) });
         this.ntb.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
+        this.ntb.addCommand({ id: 'open-help', name: t('command.name-open-help'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true }) });
 
         this.ntb.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.openQuickTools() });
         this.ntb.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.ntb.settings.icon, checkCallback: this.checkHasToolbarAndRun(async () => { 

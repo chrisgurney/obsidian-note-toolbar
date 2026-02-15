@@ -997,14 +997,14 @@ export default class ToolbarRenderer {
 	 * @param toolbarPosition position of current toolbar.
 	 * @param toolbarHeight height of the current toolbar.
 	 */ 
-	updatePhoneNavigation(toolbarPosition: PositionType | undefined, toolbarHeight: number): void {
+	updatePhoneNavigation(toolbarPosition: PositionType | undefined, toolbarHeight?: number): void {
 
 		if (!Platform.isPhone || !toolbarPosition) return;
 
 		// position Obsidian Navbar above toolbar
 		const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 		if (mobileNavbarEl) {
-			if (toolbarPosition === PositionType.Bottom) {
+			if (toolbarPosition === PositionType.Bottom && toolbarHeight) {
 				if (!this.mobileNavbarMargin) {
 					// only calculate this once, so we don't keep adding it
 					this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(mobileNavbarEl).marginBottom);
@@ -1019,7 +1019,7 @@ export default class ToolbarRenderer {
 		// position header bar below toolbar
 		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
 		if (viewHeaderEl) {
-			if (toolbarPosition === PositionType.Top) {
+			if (toolbarPosition === PositionType.Top && toolbarHeight) {
 				if (!this.viewActionsHeight) {
 					// only calculate this once, so we don't keep adding it
 					this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
