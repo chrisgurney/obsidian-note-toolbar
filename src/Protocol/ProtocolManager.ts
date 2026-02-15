@@ -75,6 +75,9 @@ export default class ProtocolManager {
 				}
 			}
 		}
+		else if (data.settings) {
+			await this.ntb.commands.openSettings();
+		}
 		else if (data.tip) {
 			if (data.tip.length > 0) {
 				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
