@@ -3954,6 +3954,7 @@ input[type="text"].note-toolbar-setting-error,
     padding-inline-end: 0.5em;
     position: relative;
     scroll-behavior: smooth;
+    scrollbar-width: none;
 }
 .note-toolbar-gallery-card-items {
     border-block-end: solid 1px var(--background-modifier-border);
@@ -3961,7 +3962,8 @@ input[type="text"].note-toolbar-setting-error,
     padding-top: 1em;
 }
 .note-toolbar-gallery-card-items,
-.note-toolbar-gallery-card-items-no-border {
+.note-toolbar-gallery-card-items-no-border,
+.note-toolbar-tips-card-items {
     position: relative;
     /* fade stays fixed on non-scrolling parent */
     &::after {

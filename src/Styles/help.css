@@ -40,6 +40,7 @@
     padding-inline-end: 0.5em;
     position: relative;
     scroll-behavior: smooth;
+    scrollbar-width: none;
 }
 
 .note-toolbar-gallery-card-items {
@@ -49,7 +50,8 @@
 }
 
 .note-toolbar-gallery-card-items,
-.note-toolbar-gallery-card-items-no-border {
+.note-toolbar-gallery-card-items-no-border,
+.note-toolbar-tips-card-items {
     position: relative;
     /* fade stays fixed on non-scrolling parent */
     &::after {
