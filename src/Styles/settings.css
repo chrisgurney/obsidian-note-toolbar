@@ -1238,6 +1238,9 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-mini-dialog {
     width: calc(var(--dialog-width) / 1.5);
+    .is-phone & {
+        width: inherit;
+    }
 }
 
 .note-toolbar-setting-position-group {
