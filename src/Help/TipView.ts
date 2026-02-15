@@ -1,7 +1,7 @@
 import { renderGalleryItems } from "Gallery/GalleryView";
 import TipItems from "Help/tips.json";
 import NoteToolbarPlugin from "main";
-import { Component, ItemView, MarkdownRenderer, Platform, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, URL_TIPS, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 
 interface TipViewState {
@@ -31,7 +31,7 @@ export default class TipView extends ItemView {
         const tip = TipItems.find(tip => tip.id.includes(this.state.id));
         if (!tip) return; // no matching tip
         
-        if (Platform.isPhone) this.ntb.settingsUtils.addCloseToNav(this);
+        this.ntb.settingsUtils.addCloseToPhoneNav(this);
 
         const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
         

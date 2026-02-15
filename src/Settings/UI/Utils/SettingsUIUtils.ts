@@ -26,7 +26,8 @@ export default class SettingsUIUtils {
 		private ntb: NoteToolbarPlugin
 	) {}
 
-	addCloseToNav(view: ItemView) {
+	addCloseToPhoneNav(view: ItemView) {
+		if (!Platform.isPhone) return;
 		const closeButton = activeDocument.createElement('button');
 		setIcon(closeButton, 'x');
 		setTooltip(closeButton, t('setting.help.button-close'));

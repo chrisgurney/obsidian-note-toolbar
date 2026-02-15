@@ -1,6 +1,6 @@
 import gallery from 'Gallery/gallery.json';
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, Component, ItemView, MarkdownRenderer, Platform, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { ButtonComponent, Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
 import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import ItemSuggester from 'Settings/UI/Suggesters/ItemSuggester';
 import { iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
@@ -52,7 +52,7 @@ export default class GalleryView extends ItemView {
 
     async onOpen() {
 
-		if (Platform.isPhone) this.ntb.settingsUtils.addCloseToNav(this);
+		this.ntb.settingsUtils.addCloseToPhoneNav(this);
 
         let contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-gallery-view');
