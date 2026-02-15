@@ -367,6 +367,7 @@
         "error-invalid-floating-toolbar": "Note Toolbar: Floating toolbar does not exist. Check your settings.",
         "error-invalid-text-toolbar": "Note Toolbar: Selected text toolbar does not exist. Check your settings.",
         "help": {
+            "button-close": "Close",
             "button-donate": "Donate ↗",
             "button-donate-tooltip": "Open buymeacoffee.com",
             "button-open": "Open",

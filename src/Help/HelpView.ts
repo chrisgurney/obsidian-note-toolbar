@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, ItemView, Setting, WorkspaceLeaf } from "obsidian";
+import { ButtonComponent, ExtraButtonComponent, ItemView, Platform, Setting, WorkspaceLeaf } from "obsidian";
 import { PositionType, t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import { PLUGIN_VERSION } from "version";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
@@ -34,9 +34,29 @@ export default class HelpView extends ItemView {
         const contentDiv = containerDiv.createDiv();
         contentDiv.addClass('is-readable-line-width');
         
+        // Heading
+
 		const bannerEl = contentDiv.createDiv();
-		bannerEl.addClass('note-toolbar-setting-view-banner', 'note-toolbar-setting-help-view-title');
-		bannerEl.createEl('h1').setText(t('plugin.note-toolbar') + ' v' + PLUGIN_VERSION);
+		bannerEl.addClass('note-toolbar-setting-help-view-title');
+        if (Platform.isPhone) {
+            new Setting(bannerEl)
+                .setName(t('plugin.note-toolbar') + ' v' + PLUGIN_VERSION)
+                .setHeading()
+                .addExtraButton((btn: ExtraButtonComponent) => {
+                    btn.extraSettingsEl.addClass('mod-raised');
+                    btn
+                        .setIcon('x')
+                        .setTooltip(t('setting.help.button-close'))
+                        .onClick(() => {
+                            this.leaf?.detach();
+                        });
+                    this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
+                });
+        }
+        else {
+            bannerEl.addClass('note-toolbar-setting-view-banner');
+            bannerEl.createEl('h1').setText(t('plugin.note-toolbar') + ' v' + PLUGIN_VERSION);
+        }
 
         // Tips
 
