@@ -142,6 +142,7 @@
         "name-item-suggester": "Quick tools",
         "name-item-suggester-current": "Quick tools (for current toolbar)",
         "name-open-gallery": "Open Gallery",
+        "name-open-help": "Open Help",
         "name-open-toolbar": "Open: {{toolbar}}",
         "name-settings": "Plugin settings",
         "name-show-properties": "Show Properties",
