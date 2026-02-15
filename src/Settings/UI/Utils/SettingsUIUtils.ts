@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, getIcon, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
+import { ButtonComponent, getIcon, ItemView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
@@ -25,6 +25,17 @@ export default class SettingsUIUtils {
 	constructor(
 		private ntb: NoteToolbarPlugin
 	) {}
+
+	addCloseToNav(view: ItemView) {
+		const closeButton = activeDocument.createElement('button');
+		setIcon(closeButton, 'x');
+		setTooltip(closeButton, t('setting.help.button-close'));
+		closeButton.addClasses(['clickable-icon', 'view-action']);
+		this.ntb.registerDomEvent(closeButton, 'click', (e) => view.leaf?.detach());
+		const viewEl = view.leaf?.containerEl as HTMLElement | null;
+		const viewActionsEl = viewEl?.querySelector('.view-actions') as HTMLElement;
+		viewActionsEl?.insertAdjacentElement('afterbegin', closeButton);
+	}
 
 	/**
 	 * Shows a confirmation modal to delete a toolbar, with warnings if it's in use.

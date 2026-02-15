@@ -265,28 +265,8 @@
 }
 
 .note-toolbar-setting-help-view-title {
-    padding: 2em;
-    .is-phone & {
-        padding: 2em 0;
-    }
     & h1, p, svg {
         color: var(--text-normal) !important;
-    }
-    & .setting-item {
-        margin-bottom: 0;
-        padding-inline: 0;
-        & .setting-item-name {
-            color: var(--text-normal);
-            font-size: var(--h1-size);
-        }
-        & .extra-setting-button {
-            height: var(--touch-size-m);
-            width: var(--touch-size-m);
-            & svg {
-                height: var(--icon-size);
-                width: var(--icon-size);
-            }
-        }
     }
 }
 
