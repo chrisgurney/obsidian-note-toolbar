@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, ItemView, Setting, WorkspaceLeaf } from "obsidian";
-import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { PositionType, t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import { PLUGIN_VERSION } from "version";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import { renderTipItems } from "./TipView";
