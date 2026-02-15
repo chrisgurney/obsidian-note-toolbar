@@ -129,17 +129,20 @@ export default class TipView extends ItemView {
      * @returns Body of the Tip, or null.
      */
     async getTip(filename: string, language: string = 'en'): Promise<string | null> {
-        let url = `${URL_TIPS}/${language}/${filename}.md`;
-        let res = await requestUrl(url);
-    
-        if ((!res || res.status !== 200) && language !== 'en') {
-            url = `${URL_TIPS}/en/${filename}.md`;
-            res = await requestUrl(url);
+        try {
+            const res = await requestUrl(`${URL_TIPS}/${language}/${filename}.md`);
+            if (res.status !== 200) return null;
+            return res.text ?? '';
+        } catch (e) {
+            this.ntb.debug(`Error fetching tip for language (${language}). Falling back to English.\n${e}`);
+            try {
+                const res = await requestUrl(`${URL_TIPS}/en/${filename}.md`);
+                if (res.status !== 200) return null;
+                return res.text ?? '';
+            } catch {
+                return null;
+            }
         }
-    
-        if (!res || res.status !== 200) return null;
-    
-        return res.text;
     }
 
     /**
