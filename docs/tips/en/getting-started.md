@@ -8,7 +8,7 @@ In Obsidian's settings go to [**Note Toolbar → + New toolbar**](obsidian://not
 2. **Search** (to browse items included with Note Toolbar), or use **+ New** to create toolbar items from scratch.
 3. _Optional:_ Set a **Position** (toolbars appear under the Properties section by default), or choose to **Style** your toolbar. For now, let's leave it as-is, and explore this later.
 
-Close the window, and you will be asked if you want to make this the toolbar the default for all of your notes. You can choose not to, and learn continue reading below.
+Close the window, and you will be asked if you want to make this the toolbar the default for all of your notes. You can choose not to, and continue reading to learn about your other options.
 
 **Try:** Click/Tap to add a formatting command to your toolbar:
 
