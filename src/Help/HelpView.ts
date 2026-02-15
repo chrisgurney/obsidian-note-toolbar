@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, ItemView, setIcon, Setting, WorkspaceLeaf } from "obsidian";
+import { ButtonComponent, ItemView, Setting, WorkspaceLeaf } from "obsidian";
 import { t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { PLUGIN_VERSION } from "version";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import { renderTipItems } from "./TipView";
 
@@ -32,9 +33,7 @@ export default class HelpView extends ItemView {
         
 		const bannerEl = contentDiv.createDiv();
 		bannerEl.addClass('note-toolbar-setting-view-banner', 'note-toolbar-setting-help-view-title');
-		const bannerIconEl = bannerEl.createDiv();
-		setIcon(bannerIconEl, 'circle-help');
-		bannerEl.createEl('h1').setText(t('setting.help.heading'));
+		bannerEl.createEl('h1').setText(t('plugin.note-toolbar') + ' v' + PLUGIN_VERSION);
 
         // Tips
 
