@@ -1,6 +1,6 @@
 ## Create your first toolbar
 
-In Obsidian's settings go to **Note Toolbar → + New toolbar**, or [open the Gallery](obsidian://note-toolbar?gallery) and choose an item to get your toolbar started.
+In Obsidian's settings go to [**Note Toolbar → + New toolbar**](obsidian://note-toolbar?new), or [open the Gallery](obsidian://note-toolbar?gallery) and choose an item to get your toolbar started.
 
 <img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/settings_edit_toolbar_empty.png" title="Edit Toolbar dialog, showing name, items, styles, and a delete button" width="800"/>
 
