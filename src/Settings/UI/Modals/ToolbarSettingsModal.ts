@@ -68,6 +68,7 @@ export default class ToolbarSettingsModal extends Modal {
 			&& !this.ntb.settings.onboarding[onboardingId];
 		if (promptForDefault) {
 			this.ntb.settings.onboarding[onboardingId] = true;
+			await this.ntb.settingsManager.save();
 			const setAsDefault = await confirmWithModal(this.ntb.app, { 
 				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 				questionLabel: t('setting.toolbars.label-set-default-confirm'),
