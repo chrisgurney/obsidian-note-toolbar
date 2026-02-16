@@ -34,12 +34,17 @@ export default class HelpView extends ItemView {
         const contentDiv = containerDiv.createDiv();
         contentDiv.addClass('is-readable-line-width');
         
-        // Heading
+        this.ntb.settingsUtils.addCloseToPhoneNav(this);
+
+        // Heading + Onboarding message
 
 		const bannerEl = contentDiv.createDiv();
 		bannerEl.addClass('note-toolbar-setting-help-view-title', 'note-toolbar-setting-view-banner');
         bannerEl.createEl('h1').setText(t('plugin.note-toolbar') + ' v' + PLUGIN_VERSION);
-        this.ntb.settingsUtils.addCloseToPhoneNav(this);
+        this.ntb.settingsUtils.runOnboarding('help-welcome-shown', () => {
+            const welcomeEl = bannerEl.createDiv();
+            welcomeEl.createEl('p', { text: t('setting.help.label-welcome') });
+        });
 
         // Tips
 
