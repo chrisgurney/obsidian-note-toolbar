@@ -394,10 +394,12 @@
             "label-gallery": "Open Gallery",
             "label-gallery-description": "Add ready-to-use items to your toolbars.",
             "label-issues": "View open issues",
+            "label-settings": "Open settings",
             "label-support": "Search the discussion forums",
             "label-user-guide": "Read the User Guide",
             "label-whats-new": "See what's new",
             "title": "Note Toolbar Help",
+            "tooltip-settings": "Open Note Toolbar settings",
             "tooltip-view-tip": "View this tip"
         },
         "icon-suggester": {
