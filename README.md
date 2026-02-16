@@ -49,7 +49,7 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
   - Set optional tooltips for each item.
   - Show items specifically on mobile, desktop, or both.
   - Choose whether the icon, label, or both are displayed.
-- Use [variables](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables) or script experssions to sub in the note's title or properties and more into toolbar item labels, tooltips, and URIs.
+- Use [variables](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables) or script expressions to sub in the note's title or properties and more into toolbar item labels, tooltips, and URIs.
 - [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) let you create and place toolbars anywhere within your notes.
 - [Share toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars) with other users with a link, or [as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars).
 - [Style toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars) by adding borders, sticking to the top of your note on scroll, auto-hiding, choosing whether or not the toolbar should wrap (on mobile), making items look like buttons or act like tabs, and aligning items (left, right, centered, evenly spaced).
