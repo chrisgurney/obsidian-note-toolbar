@@ -63,6 +63,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.setHeading();
 		}
 
+		// update status of installed plugins, for any settings that depend on them
+		this.ntb.adapters.checkPlugins();
+
 		// help
 		this.ntb.settingsUtils.displayHelpSection(containerEl, undefined, () => {
 			// @ts-ignore
@@ -1126,6 +1129,39 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			textToolbarOnKeyboardSetting.settingEl.setAttribute('data-active', hasTextToolbar.toString());
 		});
 		
+		//
+		// Web viewer
+		//
+
+
+		if (this.ntb.adapters.isInternalPluginEnabled('webviewer')) {
+			appToolbarGroup.addSetting((webToolbarSetting) => {
+				const existingWebToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.webviewerToolbar);
+				webToolbarSetting
+					.setName(t('setting.display-locations.option-webviewer'))
+					.setDesc(t('setting.display-locations.option-webviewer-description'))
+					.setClass('note-toolbar-setting-item-control-std-with-help')
+					.addSearch(async (cb) => {
+						new ToolbarSuggester(this.ntb, cb.inputEl);
+						cb.setPlaceholder(t('setting.display-locations.option-webviewer-placeholder'))
+							.setValue(existingWebToolbar ? existingWebToolbar.name : '')
+							.onChange(debounce(async (name) => {
+								const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
+								const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+								this.ntb.settings.webviewerToolbar = newToolbar?.uuid ?? null;
+								// update toolbar preview
+								const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
+								removeFieldHelp(webToolbarSetting.controlEl);
+								setFieldHelp(webToolbarSetting.controlEl, toolbarPreviewFr);
+								await this.ntb.settingsManager.save();
+							}, 250));
+						await this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+					});
+				const webToolbarFr = existingWebToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingWebToolbar, undefined, false);
+				setFieldHelp(webToolbarSetting.controlEl, webToolbarFr);					
+			});
+		}
+
 		settingsContainerEl.appendChild(collapsibleContainerEl);
 		containerEl.append(settingsContainerEl);
 

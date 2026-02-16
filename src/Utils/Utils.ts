@@ -84,6 +84,7 @@ export default class PluginUtils {
 			'markdown': true,
 			'pdf': this.ntb.settings.showToolbarIn.pdf,
 			'video': this.ntb.settings.showToolbarIn.video,
+			'webviewer': (this.ntb.settings.webviewerToolbar !== undefined)
 		};
 	
 		if (viewSettings[currentViewType] === false) return false;

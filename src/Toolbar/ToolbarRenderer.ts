@@ -760,10 +760,13 @@ export default class ToolbarRenderer {
 			let frontmatter = activeFile ? this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
 			await this.checkAndRender(activeFile, frontmatter, toolbarView);
 		}
-		// for New tab view
+		// for New tab + Web viewer views
 		else {
-			if (this.ntb.settings.emptyViewToolbar) {
-				const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.emptyViewToolbar);
+			const nonFiletoolbar = toolbarView?.getViewType() === 'webviewer' 
+				? this.ntb.settings.webviewerToolbar 
+				: this.ntb.settings.emptyViewToolbar;
+			if (nonFiletoolbar) {
+				const toolbar = this.ntb.settingsManager.getToolbarById(nonFiletoolbar);
 				const toolbarRemoved = this.removeIfNeeded(toolbar, toolbarView);
 				if (toolbar) {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep

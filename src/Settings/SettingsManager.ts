@@ -34,7 +34,7 @@ export default class SettingsManager {
 		});
 		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
 		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
-		(['defaultToolbar', 'editorMenuToolbar', 'emptyViewToolbar', 'ribbonToolbar', 'textToolbar'] as const).forEach(key => {
+		(['defaultToolbar', 'editorMenuToolbar', 'emptyViewToolbar', 'ribbonToolbar', 'textToolbar', 'webviewerToolbar'] as const).forEach(key => {
 			if (this.ntb.settings[key] === id) this.ntb.settings[key] = null;
 		});
 		await this.ntb.settingsManager.save();
@@ -130,6 +130,11 @@ export default class SettingsManager {
 				case 'home-tab-view':
 					if (this.ntb.settings.emptyViewToolbar) {
 						return this.getToolbarById(this.ntb.settings.emptyViewToolbar);
+					}
+					break;
+				case 'webviewer':
+					if (this.ntb.settings.webviewerToolbar) {
+						return this.getToolbarById(this.ntb.settings.webviewerToolbar);
 					}
 					break;
 			}

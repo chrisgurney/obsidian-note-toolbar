@@ -302,7 +302,8 @@
             "warning-empty-view": "⚠️ Warning: This is your New tab view toolbar.",
             "warning-permanent": "This action cannot be undone.",
             "warning-ribbon": "⚠️ Warning: This is your Ribbon button toolbar.",
-            "warning-text": "⚠️ Warning: This is your Selected text toolbar."
+            "warning-text": "⚠️ Warning: This is your Selected text toolbar.",
+            "warning-webviewer": "⚠️ Warning: This is your Web viewer toolbar."
         },
         "display-contexts": {
             "description": "Enable toolbars in canvases, PDFs, video, and other file types.",
@@ -339,6 +340,9 @@
             "option-text-on-keyboard": "Display for keyboard selections",
             "option-text-on-keyboard-description": "Show this toolbar when text is selected with the keyboard.",
             "option-text-placeholder": "Select toolbar...",
+            "option-webviewer": "Web viewer",
+            "option-webviewer-placeholder": "Select toolbar...",
+            "option-webviewer-description": "Display a toolbar in the web viewer.",
             "ribbon-action": {
                 "description": "Set the action to take when the ribbon button in the navigation bar (on phones) is used.",
                 "name": "Navigation bar 📱",

@@ -75,6 +75,10 @@ export default class AdapterManager {
         return this.plugins[pluginId] ?? false;
     }
 
+    isInternalPluginEnabled(pluginId: string): boolean {
+        return this.internalPluginsEnabled[pluginId] ?? false;        
+    }
+
 	/**
 	 * Creates the adapters if scripting, and the plugins, are enabled; otherwise disables all adapters.
 	 */

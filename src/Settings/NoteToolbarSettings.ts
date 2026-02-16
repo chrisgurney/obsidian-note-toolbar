@@ -261,6 +261,7 @@ export interface NoteToolbarSettings {
 	toolbarProp: string;
 	toolbars: Array<ToolbarSettings>;
 	version: number;
+	webviewerToolbar: string | null;
 	whatsnew_version: string;
 }
 
@@ -304,6 +305,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	toolbarProp: "notetoolbar",
 	toolbars: [],
 	version: SETTINGS_VERSION,
+	webviewerToolbar: null,
 	whatsnew_version: '0'
 }
 

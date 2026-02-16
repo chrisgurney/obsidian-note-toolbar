@@ -17,7 +17,8 @@ const APP_TOOLBAR_WARNINGS = [
 	{ key: 'editorMenuToolbar', warning: t('setting.delete-toolbar.warning-editor-menu') },
 	{ key: 'emptyViewToolbar', warning: t('setting.delete-toolbar.warning-empty-view') },
 	{ key: 'ribbonToolbar', warning: t('setting.delete-toolbar.warning-ribbon') },
-	{ key: 'textToolbar', warning: t('setting.delete-toolbar.warning-text') }
+	{ key: 'textToolbar', warning: t('setting.delete-toolbar.warning-text') },
+	{ key: 'webviewerToolbar', warning: t('setting.delete-toolbar.warning-webviewer') }
 ] as const;
 
 export default class SettingsUIUtils {
