@@ -293,10 +293,11 @@ export function renderTipItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivEleme
             itemEl.setAttribute('data-ignore-swipe', 'true');
             setTooltip(itemEl, tip.id === 'gallery' ? t('setting.button-gallery-tooltip') : t('setting.help.tooltip-view-tip'));
             
-            const itemTitleEl = itemEl.createDiv('note-toolbar-card-item-title').setText(tip.title[language]);
-            if (tip.description) {
-                itemEl.createDiv('note-toolbar-card-item-description').setText(tip.description[language]);
-            }
+            const tipTitle = tip.title?.[language] || tip.title['en'];
+            const tipDesc = tip.description?.[language] || tip.description['en'] || '';
+
+            const itemTitleEl = itemEl.createDiv('note-toolbar-card-item-title').setText(tipTitle);
+            if (tipDesc) itemEl.createDiv('note-toolbar-card-item-description').setText(tipDesc);
 
             const iconEl = itemEl.createDiv();
             iconEl.addClass('note-toolbar-card-item-icon');
