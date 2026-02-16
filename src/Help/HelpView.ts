@@ -41,7 +41,7 @@ export default class HelpView extends ItemView {
 		const bannerEl = contentDiv.createDiv();
 		bannerEl.addClass('note-toolbar-setting-help-view-title', 'note-toolbar-setting-view-banner');
         bannerEl.createEl('h1').setText(t('plugin.note-toolbar') + ' v' + PLUGIN_VERSION);
-        this.ntb.settingsUtils.runOnboarding('help-welcome-shown', () => {
+        this.ntb.settingsUtils.runOnboarding('startup-help-welcome', () => {
             const welcomeEl = bannerEl.createDiv();
             welcomeEl.createEl('p', { text: t('setting.help.label-welcome') });
         });
