@@ -670,6 +670,19 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Runs onboarding logic once per onboardingId.
+	 * @param onboardingId unique identifier for this onboarding step
+	 * @param callback function to execute on first run
+	 */
+	async runOnboarding(onboardingId: string, callback: () => void | Promise<void>): Promise<void> {
+		if (!this.ntb.settings.onboarding[onboardingId]) {
+			this.ntb.settings.onboarding[onboardingId] = true;
+			await this.ntb.settingsManager.save();
+			await callback();
+		}
+	}
+
+	/**
 	 * Updates the given element with an error border and text.
 	 * @param parent ToolbarSettingsModal
 	 * @param fieldEl HTMLElement to update
