@@ -620,6 +620,8 @@
             "description": "Where to position this toolbar.",
             "name": "Position",
             "notice-defaultitem-invalid": "Invalid default item for floating button. Check toolbar configuration.",
+            "option-addressbar": "Address bar",
+            "option-below-addressbar": "Below address bar",
             "option-bottom": "Bottom",
             "option-centered": "Centered",
             "option-defaultitem": "Floating button default item",
