@@ -311,7 +311,7 @@
                 "uk": "Перехід до щотижневих, щомісячних та річних нотаток. Потрібен додаток [Periodic Notes](obsidian://show-plugin?id=periodic-notes)."
             },
             "itemIds": [
-                "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
+                "periodic-notes-daily-prev", "periodic-notes-daily-open", "periodic-notes-daily-next", "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
             ]
         },
         {

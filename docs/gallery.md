@@ -236,6 +236,9 @@ Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidi
 
 | Item | Description |
 | --- | --- |
+| Previous daily note | Go to previous daily note. (Must be in a daily note.) |
+| Today's daily note | Go to today's daily note. |
+| Next daily note | Go to next daily note. (Must be in a daily note.) |
 | Previous weekly note | Opens previous weekly note. (Must be in a weekly note.) |
 | Open weekly note | Open weekly note. |
 | Next weekly note | Next weekly note. (Must be in a weekly note.) |

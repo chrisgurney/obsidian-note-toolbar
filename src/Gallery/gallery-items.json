@@ -1155,6 +1155,42 @@
         "type": "javascript"
     },
     {
+        "id": "periodic-notes-daily-next",
+        "commandId": "periodic-notes:next-daily-note",
+        "description": {
+            "en": "Go to next daily note. (Must be in a daily note.)"
+        },
+        "icon": "arrow-right",
+        "tooltip": {
+            "en": "Next daily note"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-daily-prev",
+        "commandId": "periodic-notes:prev-daily-note",
+        "description": {
+            "en": "Go to previous daily note. (Must be in a daily note.)"
+        },
+        "icon": "arrow-left",
+        "tooltip": {
+            "en": "Previous daily note"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-daily-open",
+        "commandId": "periodic-notes:open-daily-note",
+        "description": {
+            "en": "Go to today's daily note."
+        },
+        "icon": "calendar",
+        "tooltip": {
+            "en": "Today's daily note"
+        },
+        "type": "command"
+    },
+    {
         "id": "periodic-notes-monthly-next",
         "commandId": "periodic-notes:next-monthly-note",
         "description": {
