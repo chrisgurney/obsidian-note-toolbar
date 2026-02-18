@@ -388,10 +388,11 @@ export default class ToolbarItemHandler {
 					isCommandAvailable = command.editorCheckCallback(true, toolbarView.editor, toolbarView) ?? false;
 				}
 				if (isCommandAvailable && typeof command?.checkCallback === 'function') {
-					isCommandAvailable = command.checkCallback(true) ?? false;
+                    const inMetadataContainer = activeDocument.activeElement?.closest('.metadata-container');
+                    if (!inMetadataContainer) isCommandAvailable = command.checkCallback(true) ?? false;
 				}
 			}
-			// this.debug('command available:', item.linkAttr.commandId, '→', isCommandAvailable);
+			// this.ntb.debug('command available:', item.linkAttr.commandId, '→', isCommandAvailable, toolbarView);
 		}
 		return isCommandAvailable;
 	}
