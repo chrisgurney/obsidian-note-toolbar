@@ -4451,6 +4451,19 @@ input[type="text"].note-toolbar-setting-error,
                 margin: unset;
             }
         }
+        & .ntb-suggester-input-icon {
+            border-bottom: var(--border-width) solid var(--background-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: var(--prompt-input-height);
+            margin: auto;
+            padding: var(--size-4-6);
+            padding-inline-end: 0;
+            & svg {
+                width: var(--search-clear-button-size);
+            }
+        }
     }
 }
 .note-toolbar-ui-button-div {

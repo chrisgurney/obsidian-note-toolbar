@@ -497,6 +497,10 @@ export interface NtbSuggesterOptions {
      */
     default?: string;
     /**
+     * Optional icon to place before the input field.
+     */
+    icon?: string;
+    /**
      * Optional text shown above the input field, with markdown formatting supported. Default is no label.
      */
     label?: string;

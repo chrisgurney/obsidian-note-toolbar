@@ -1,7 +1,7 @@
-import { Component, FuzzyMatch, FuzzySuggestModal, MarkdownRenderer } from "obsidian";
+import NoteToolbarPlugin from "main";
+import { Component, FuzzyMatch, FuzzySuggestModal, getIcon, MarkdownRenderer, setIcon } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSuggesterOptions } from "./INoteToolbarApi";
-import NoteToolbarPlugin from "main";
 
 /**
  * Provides a Suggester modal that can be accessed from the Note Toolbar API.
@@ -19,6 +19,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private allowCustomInput: boolean = false;
     private class = '';
     private default: string;
+    private icon: string;
     private label: string;
     private rendermd;
 
@@ -37,6 +38,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.allowCustomInput = options?.allowCustomInput ?? false;
         this.class = options?.class ?? '';
         this.default = options?.default ?? '';
+        this.icon = options?.icon ?? '';
         this.label = options?.label ?? '';
         if (options?.limit) this.limit = options.limit;
         this.rendermd = options?.rendermd ?? false;
@@ -63,6 +65,16 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     onOpen(): void {
 
         super.onOpen();
+
+        if (this.icon && getIcon(this.icon)) {
+            const inputContainerEl = this.modalEl.querySelector('.prompt-input-container');
+            if (inputContainerEl) {
+                const iconEl = inputContainerEl.createDiv();
+                iconEl.addClass('ntb-suggester-input-icon'),
+                inputContainerEl.insertAdjacentElement('afterbegin', iconEl);
+                setIcon(iconEl, this.icon);
+            }
+        }
 
         if (this.label) {
             const headerEl = this.containerEl.createDiv('ntb-suggester-header');
