@@ -34,22 +34,14 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         super(ntb.app);
 
-        const { 
-            allowCustomInput = false,
-            class: css_classes = '',
-            default: default_value = '',
-            label: label_text = '',
-            limit,
-            placeholder,
-            rendermd = true, 
-        } = options || {};
+        this.allowCustomInput = options?.allowCustomInput ?? false;
+        this.class = options?.class ?? '';
+        this.default = options?.default ?? '';
+        this.label = options?.label ?? '';
+        if (options?.limit) this.limit = options.limit;
+        this.rendermd = options?.rendermd ?? false;
 
-        this.allowCustomInput = allowCustomInput;
-        this.class = css_classes;
-        this.default = default_value;
-        this.label = label_text;
-        this.rendermd = rendermd;
-        this.setPlaceholder(placeholder ? placeholder : t('api.ui.suggester-placeholder'));
+        this.setPlaceholder(options?.placeholder ? options.placeholder : t('api.ui.suggester-placeholder'));
         this.setInstructions([
             {command: '↑↓', purpose: t('api.ui.instruction-navigate')},
             {command: '↵', purpose: t('api.ui.instruction-select')},
@@ -62,9 +54,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 this.keys = values as unknown as T[];
             }
         }
-        
-        limit && (this.limit = limit);
-        
+                
         this.modalEl.addClass("note-toolbar-ui");
         this.class && this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'suggester');
