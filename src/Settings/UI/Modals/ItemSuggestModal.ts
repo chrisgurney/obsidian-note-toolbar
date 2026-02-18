@@ -117,6 +117,8 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             }
         }
     
+        this.patchChooserToSkipDivider();
+
     }
 
     /**
@@ -251,6 +253,31 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
 
         return false;
 
+    }
+
+    /**
+     * Patch chooser to skip the Gallery divider item during keyboard navigation.
+     */
+    private patchChooserToSkipDivider() {
+        const originalSetSelectedItem = this.chooser.setSelectedItem.bind(this.chooser);
+        this.chooser.setSelectedItem = (index: number, event: KeyboardEvent | boolean) => {
+            const items = this.chooser.values;
+            if (items?.length) {
+                // capture direction before wrapping
+                let direction = index >= this.chooser.selectedItem ? 1 : -1;
+                // wrap the index first, before divider checks
+                index = (index + items.length) % items.length;
+                if (items[index]?.uuid === GALLERY_DIVIDER_ID) {
+                    // if we've wrapped to a divider at the boundary, flip direction
+                    if (index === 0) direction = 1;
+                    else if (index === items.length - 1) direction = -1;
+                    while (items[index]?.uuid === GALLERY_DIVIDER_ID) {
+                        index = (index + direction + items.length) % items.length;
+                    }
+                }
+            }
+            originalSetSelectedItem(index, event);
+        };
     }
 
     /**

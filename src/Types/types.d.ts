@@ -33,6 +33,18 @@ declare module "obsidian" {
         getBasePath(): string;
     }
 
+    /** internal chooser API used by SuggestModal */
+    interface ChooserType<T> {
+        values: T[];
+        selectedItem: number;
+        setSelectedItem(index: number, event: KeyboardEvent | boolean): void;
+    }
+
+    /** allows access to SuggestModal chooser, so keyboard navigation can skip Gallery divider */
+    interface SuggestModal<T> {
+        chooser: ChooserType<T>;
+    }
+
     // allows access to Menu DOM, to add a class for styling
 	interface Menu {
 		dom: HTMLDivElement
