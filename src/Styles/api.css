@@ -70,6 +70,14 @@
         }
     }
     &[data-ntb-ui-type="suggester"] {
+        &.ntb-suggester-collapsed {
+            & .prompt-results {
+                display: none;
+            }
+            & .prompt-instructions {
+                display: none;
+            }
+        }
         & .ntb-suggester-header {
             border-bottom: 1px solid var(--background-secondary);
             padding: var(--size-4-4) var(--size-4-4) 0.75em var(--size-4-4);

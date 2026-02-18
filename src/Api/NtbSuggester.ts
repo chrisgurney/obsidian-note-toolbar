@@ -18,6 +18,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     private allowCustomInput: boolean = false;
     private class = '';
+    private collapsed: boolean = false;
     private default: string;
     private icon: string;
     private label: string;
@@ -37,6 +38,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         this.allowCustomInput = options?.allowCustomInput ?? false;
         this.class = options?.class ?? '';
+        this.collapsed = options?.collapsed ?? false;
         this.default = options?.default ?? '';
         this.icon = options?.icon ?? '';
         this.label = options?.label ?? '';
@@ -101,6 +103,13 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             }
             return false;
         });
+
+        if (this.collapsed) {
+            this.modalEl.toggleClass('ntb-suggester-collapsed', !this.inputEl.value);
+            this.ntb.registerDomEvent(this.inputEl, 'input', () => {
+                this.modalEl.toggleClass('ntb-suggester-collapsed', !this.inputEl.value);
+            });
+        }
 
     }
 
