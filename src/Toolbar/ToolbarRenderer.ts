@@ -881,7 +881,7 @@ export default class ToolbarRenderer {
 		const currentPosition = this.ntb.settingsManager.getToolbarPosition(toolbar);
 
 		// no need to run update for certain positions
-		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, undefined].includes(currentPosition)) {
+		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, PositionType.Text, undefined].includes(currentPosition)) {
 			this.ntb.debugGroupEnd();
 			return;
 		}
