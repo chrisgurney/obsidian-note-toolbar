@@ -101,9 +101,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayFocusScroll(focusSelector: string | undefined, scrollToFocus: boolean) {
 
-		// if search is enabled (>4 toolbars), focus on search field by default
+		// on desktop, if search is enabled (>4 toolbars), focus on search field by default
 		// this.ntb.debug('focusSelector', focusSelector, 'lastScrollPosition', this.lastScrollPosition);
-		if (!Platform.isPhone && (this.lastScrollPosition === undefined) && !focusSelector && (this.ntb.settings.toolbars.length > 4)) {
+		if (Platform.isDesktop && (this.lastScrollPosition === undefined) && !focusSelector && (this.ntb.settings.toolbars.length > 4)) {
 			focusSelector = '#tbar-search input';
 		}
 
