@@ -4451,6 +4451,15 @@ input[type="text"].note-toolbar-setting-error,
             & .prompt-instructions {
                 display: none;
             }
+            .is-phone & {
+                &.prompt {
+                    background-color: unset;
+                    padding-bottom: 0;
+                }
+                & .prompt-input-container {
+                    margin-bottom: 0;
+                }
+            }
         }
         & .ntb-suggester-header {
             border-bottom: 1px solid var(--background-secondary);
