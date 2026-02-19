@@ -493,7 +493,9 @@ export interface NtbSuggesterOptions {
      */
     class?: string;
     /**
-     * If set to `true`, the results and dialog instructions are hidden until input is provided. Default is `false`.
+     * If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`.
+     * 
+     * @since 1.29.14
      */
     collapsed?: boolean;
     /**
@@ -502,6 +504,8 @@ export interface NtbSuggesterOptions {
     default?: string;
     /**
      * Optional icon to place before the input field.
+     * 
+     * @since 1.29.14
      */
     icon?: string;
     /**
