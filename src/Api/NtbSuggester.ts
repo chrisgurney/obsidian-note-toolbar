@@ -33,6 +33,11 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         private keys?: T[],
         options?: NtbSuggesterOptions 
     ) {
+        
+        // check if `options` was accidentally passed as `keys`
+        if (keys !== undefined && keys !== null && !Array.isArray(keys)) {
+            throw new Error('ntb.suggester(): The `options` object may have been passed as the `keys` parameter. Set the second parameter to `null` and try again.');
+        }
 
         super(ntb.app);
 
