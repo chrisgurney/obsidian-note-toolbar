@@ -87,11 +87,17 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 : f.path
         );
 
+        const placeholderText = options?.placeholder 
+            ? options.placeholder 
+            : options?.filesonly 
+                ? t('api.ui.file-suggester-placeholder_file')
+                : options?.foldersonly 
+                    ? t('api.ui.file-suggester-placeholder_folder') 
+                    : t('api.ui.file-suggester-placeholder');
+    
         options = {
             limit: 9,
-            placeholder: 
-                options?.filesonly ? t('api.ui.file-suggester-placeholder_file') :
-                    options?.foldersonly ? t('api.ui.file-suggester-placeholder_folder') : t('api.ui.file-suggester-placeholder'), 
+            placeholder: placeholderText,
             ...options,
             rendermd: false
         }
