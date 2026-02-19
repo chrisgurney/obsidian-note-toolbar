@@ -96,6 +96,9 @@
         }
         & .ntb-suggester-input-icon {
             border-bottom: var(--border-width) solid var(--background-secondary);
+            .is-phone & {
+                border-bottom: none;
+            }
             display: flex;
             justify-content: center;
             align-items: center;
