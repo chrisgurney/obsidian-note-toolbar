@@ -884,7 +884,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
     & textarea {
-        height: 6rem;
+        height: 8rem;
         width: 100%;
     }
 }
