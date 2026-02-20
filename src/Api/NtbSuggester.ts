@@ -22,7 +22,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private default: string;
     private icon: string;
     private label: string;
-    private rendermd;
+    private rendermd: boolean;
 
     /**
      * @see INoteToolbarApi.suggester
@@ -48,7 +48,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.icon = options?.icon ?? '';
         this.label = options?.label ?? '';
         if (options?.limit) this.limit = options.limit;
-        this.rendermd = options?.rendermd ?? false;
+        this.rendermd = options?.rendermd ?? true;
 
         this.setPlaceholder(options?.placeholder ? options.placeholder : t('api.ui.suggester-placeholder'));
         this.setInstructions([
