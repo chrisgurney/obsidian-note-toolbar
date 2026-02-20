@@ -70,7 +70,7 @@
         }
     }
     &[data-ntb-ui-type="suggester"] {
-        &.ntb-suggester-collapsed {
+        &.ntb-suggester-collapse {
             & .prompt-results {
                 display: none;
             }

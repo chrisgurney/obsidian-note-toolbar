@@ -497,7 +497,7 @@ export interface NtbSuggesterOptions {
      * 
      * @since 1.29.14
      */
-    collapsed?: boolean;
+    collapse?: boolean;
     /**
      * Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set.
      */
