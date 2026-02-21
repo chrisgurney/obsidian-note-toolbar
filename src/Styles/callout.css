@@ -708,6 +708,9 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
             & a:hover, span.external-link:hover {
                 box-shadow: none;
                 opacity: unset;
+                body.is-translucent:not(.is-mobile) & {
+                    background-color: var(--interactive-normal) !important;
+                }
             }
         }
     }
