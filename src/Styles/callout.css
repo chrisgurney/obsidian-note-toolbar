@@ -695,11 +695,14 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
         & a, span.external-link {
             background-color: var(--ntb-liquid-glass-background) !important;
             backdrop-filter: var(--raised-blur) !important;
+            /* fix: have to disable blur as workaround for Electron issue: if Obsidian translucent windows are enabled, there are ghosting images */
+            body.is-translucent:not(.is-mobile) & {
+                backdrop-filter: unset !important;
+            }
             border: var(--border-width) solid var(--background-modifier-border);
             border-radius: 32px;
             box-shadow: var(--ntb-shadow-xs);
-            /* fix: ghosting effect with overlays when glass style is being used */
-            /* transition: var(--ntb-anim-duration-moderate); */
+            transition: var(--ntb-anim-duration-moderate);
         }
         @media (hover: hover) {
             & a:hover, span.external-link:hover {
@@ -719,3 +722,13 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         }
     }
 }
+
+/* 
+body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([data-callout-metadata*="card"]) {
+    & ul {
+        & a, span.external-link {
+            backdrop-filter: unset !important;
+            border: solid 1px red;
+        }
+    }
+} */
