@@ -41,18 +41,6 @@ export default class WhatsNewView extends ItemView {
 		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
 
 		new Setting(ctaEl)
-			.setName(iconTextFr('party-popper', t('setting.whats-new.label-show-whatsnew')))
-			.setDesc(t('setting.whats-new.label-show-whatsnew-description'))
-			.addToggle((toggle: ToggleComponent) => {
-				toggle
-					.setValue(this.ntb.settings.showWhatsNew)
-					.onChange((value: boolean) => {
-						this.ntb.settings.showWhatsNew = value;
-						this.ntb.settingsManager.save();
-					});
-			});
-
-		new Setting(ctaEl)
 			.setName(iconTextFr('book-text', t('setting.whats-new.label-release-notes')))
 			.setDesc(t('setting.whats-new.label-release-notes-description'))
 			.addButton((button: ButtonComponent) => {
@@ -75,6 +63,18 @@ export default class WhatsNewView extends ItemView {
 					.setCta()
 					.onClick(() => {
 						window.open(URL_USER_GUIDE + 'Roadmap', '_blank');
+					});
+			});
+
+		new Setting(ctaEl)
+			.setName(iconTextFr('party-popper', t('setting.whats-new.label-show-whatsnew')))
+			.setDesc(t('setting.whats-new.label-show-whatsnew-description'))
+			.addToggle((toggle: ToggleComponent) => {
+				toggle
+					.setValue(this.ntb.settings.showWhatsNew)
+					.onChange((value: boolean) => {
+						this.ntb.settings.showWhatsNew = value;
+						this.ntb.settingsManager.save();
 					});
 			});
 
