@@ -264,6 +264,15 @@
     padding-bottom: var(--navbar-height);
 }
 
+.note-toolbar-setting-whatsnew-view {
+    & .note-toolbar-setting-view-cta {
+        & .setting-item {
+            margin-bottom: 0;
+            padding: var(--size-4-4);
+        }
+    }
+}
+
 .note-toolbar-setting-help-view-title {
     & h1, p, svg {
         color: var(--text-normal) !important;
