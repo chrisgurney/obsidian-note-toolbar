@@ -768,6 +768,8 @@
             "placehoder-loading": "Loading...",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
+            "label-show-whatsnew": "Show What's new",
+            "label-show-whatsnew-description": "Show this tab when each new major release is installed.",
             "label-roadmap": "What's ahead for Note Toolbar?",
             "label-roadmap-description": "Check out the Roadmap to preview the features under consideration.",
             "title": "What's new in Note Toolbar?"

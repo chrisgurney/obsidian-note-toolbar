@@ -748,7 +748,7 @@ export default class SettingsUIUtils {
 	 */
 	showWhatsNewIfNeeded() {
 		// show the What's New dialog once if the user hasn't seen it yet
-		if (this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
+		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
 			this.ntb.settings.whatsnew_version = WHATSNEW_VERSION;
 			this.ntb.settingsManager.save().then(() => {
 				this.ntb.app.workspace.getLeaf(true).setViewState({
