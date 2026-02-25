@@ -132,7 +132,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 return this.getItemText(item) === query;
             });
             // allows for styling the input differently when the custom option is not already in the list of suggestions #518
-            this.inputEl.toggleClass('ntb-suggester-custom-option', !alreadyExists);
+            this.inputEl.toggleClass('ntb-is-custom-input', !alreadyExists);
             if (!alreadyExists) {
                 // prepend the custom input option
                 return [{ item: queryAsOption, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
