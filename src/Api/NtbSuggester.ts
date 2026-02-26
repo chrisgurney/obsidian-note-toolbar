@@ -123,7 +123,8 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     }
 
     getSuggestions(query: string): FuzzyMatch<T>[] {
-        if (this.allowCustomInput && query.trim().length > 0) {
+        const isEmptyQuery = query.trim().length === 0;
+        if (this.allowCustomInput && !isEmptyQuery) {
             const matches = super.getSuggestions(query);
             // add the raw query as a custom option if it's not already in the matches
             const queryAsOption = query as unknown as T;
@@ -132,7 +133,6 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 return this.getItemText(item) === query;
             });
             // allows for styling the input differently when the custom option is not already in the list of suggestions #518
-            this.inputEl.toggleClass('ntb-is-custom-input', !alreadyExists);
             if (!alreadyExists) {
                 // prepend the custom input option
                 return [{ item: queryAsOption, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
@@ -157,6 +157,8 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         const component = new Component();
         if (this.rendermd) MarkdownRenderer.render(this.ntb.app, this.getItemText(item.item), el, '', component);
         else el.setText(this.getItemText(item.item));
+        const isCustomInput = this.getItemText(item.item) === this.inputEl.value;
+        if (isCustomInput) el.toggleClass('ntb-is-custom-input', true);
     }
 
     getItemText(item: T): string {
