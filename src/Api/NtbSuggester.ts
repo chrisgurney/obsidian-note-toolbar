@@ -132,7 +132,6 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 const item = 'item' in match ? match.item : match;
                 return this.getItemText(item) === query;
             });
-            // allows for styling the input differently when the custom option is not already in the list of suggestions #518
             if (!alreadyExists) {
                 // prepend the custom input option
                 return [{ item: queryAsOption, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
@@ -156,8 +155,10 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         // renders text markdown, if provided
         const component = new Component();
         if (this.rendermd) MarkdownRenderer.render(this.ntb.app, this.getItemText(item.item), el, '', component);
-        else el.setText(this.getItemText(item.item));
-        const isCustomInput = this.getItemText(item.item) === this.inputEl.value;
+        else el.setText(this.getItemText(item.item)); 
+        // if the item is a custom input (not already in the list of suggestions), add a special class for styling #518
+        const suggestionKey = this.keys && this.keys.indexOf(item.item);
+        const isCustomInput = suggestionKey === -1 && this.getItemText(item.item) === this.inputEl.value;
         if (isCustomInput) el.toggleClass('ntb-is-custom-input', true);
     }
 
