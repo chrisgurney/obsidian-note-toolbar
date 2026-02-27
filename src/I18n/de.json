@@ -318,7 +318,7 @@
         "display-navbar": {
             "ribbon-action": {
                 "description": "Aktion, die ausgeführt wird, wenn das Ribbon-Icon (auf Mobilgeräten) verwendet wird.",
-                "name": "Aktion des Ribbon-Icons 📱",
+                "name": "Aktion des Ribbon-Icons",
                 "option-item-suggester": "Alle Werkzeuge anzeigen",
                 "option-toolbar": "Aktuelle Toolbar anzeigen",
                 "option-toolbar-suggester": "Alle Toolbars anzeigen"

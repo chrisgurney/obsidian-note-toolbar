@@ -342,7 +342,7 @@
     "display-navbar": {
       "ribbon-action": {
         "description": "设置在手机上使用功能区图标时要执行的操作。",
-        "name": "功能区 📱",
+        "name": "功能区",
         "option-item-suggester": "显示所有工具",
         "option-toolbar": "显示当前工具栏",
         "option-toolbar-suggester": "显示所有工具栏"
