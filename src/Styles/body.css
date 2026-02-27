@@ -141,10 +141,16 @@ body {
     display: none !important;
 }
 
-.is-phone.ntb-remove-nav .mobile-navbar {
-    display: none !important;
+body.is-phone.ntb-remove-nav {
+    --navbar-height: 0px;
+    & .mobile-navbar {
+        display: none !important;
+    }
 }
 
-body.is-phone.ntb-remove-nav {
-    --navbar-height: 0;
+body.is-phone.ntb-remove-view-header {
+    --view-header-height: 0px;
+    & .view-header {
+        display: none !important;
+    }
 }

@@ -57,6 +57,11 @@
     padding-top: 0;
 }
 
+/* removes safe area inset from fade, as it's taken into account above the toolbar */
+.is-phone:has(.view-header + [data-tbar-position="top"]) .view-content {
+    --view-top-fade-mask: linear-gradient(to bottom, rgba(0, 0, 0, var(--view-top-fade-opacity)) 0%, #000000 calc(var(--view-header-height) + 12px));
+}
+
 .callout[data-callout="note-toolbar-output"] {
     background-color: var(--background-primary) !important;
     background-image: unset !important;

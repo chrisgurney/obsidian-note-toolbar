@@ -1432,12 +1432,18 @@ body {
     display: none !important;
 }
 
-.is-phone.ntb-remove-nav .mobile-navbar {
-    display: none !important;
+body.is-phone.ntb-remove-nav {
+    --navbar-height: 0px;
+    & .mobile-navbar {
+        display: none !important;
+    }
 }
 
-body.is-phone.ntb-remove-nav {
-    --navbar-height: 0;
+body.is-phone.ntb-remove-view-header {
+    --view-header-height: 0px;
+    & .view-header {
+        display: none !important;
+    }
 }
 /*
  * Default adjustments for various themes (CSS variables)
@@ -1540,6 +1546,12 @@ body {
 
 .is-phone .view-header:has(+ [data-tbar-position="top"]) {
     padding-top: 0;
+}
+
+/* removes safe area inset from fade, as it's taken into account above the toolbar */
+
+.is-phone:has(.view-header + [data-tbar-position="top"]) .view-content {
+    --view-top-fade-mask: linear-gradient(to bottom, rgba(0, 0, 0, var(--view-top-fade-opacity)) 0%, #000000 calc(var(--view-header-height) + 12px));
 }
 
 .callout[data-callout="note-toolbar-output"] {
@@ -3115,6 +3127,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-items-container,
 .note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container,
 .note-toolbar-setting-rules-container {
     padding-top: 0.75em;
     & .setting-item-heading {
@@ -3192,7 +3205,8 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
-.note-toolbar-setting-mappings-container {
+.note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container {
     &[data-active="true"] {
         margin-bottom: 0.75em;
     }

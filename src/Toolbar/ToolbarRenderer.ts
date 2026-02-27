@@ -996,7 +996,7 @@ export default class ToolbarRenderer {
 	}
 
 	/** 
-	 * Repositions Obsidian's navbar if necessary, and hides actions if configured.
+	 * Repositions Obsidian's navbar if necessary, and hides navbars/actions if configured.
 	 * @param toolbarPosition position of current toolbar.
 	 * @param toolbarHeight height of the current toolbar.
 	 */ 
@@ -1004,49 +1004,56 @@ export default class ToolbarRenderer {
 
 		if (!Platform.isPhone || !toolbarPosition) return;
 
-		// position Obsidian Navbar above toolbar
-		const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
-		if (mobileNavbarEl) {
-			if (toolbarPosition === PositionType.Bottom && toolbarHeight) {
-				if (!this.mobileNavbarMargin) {
-					// only calculate this once, so we don't keep adding it
-					this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(mobileNavbarEl).marginBottom);
-				}
-				mobileNavbarEl.style.marginBottom = (this.mobileNavbarMargin + toolbarHeight) + 'px';	
-			}
-			else {
-				mobileNavbarEl.style.marginBottom = ''; // reset style
-			}
-		}
+		//
+		// top navigation bar (view header)
+		//
 
-		// position header bar below toolbar
 		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
-		if (viewHeaderEl) {
-			if (toolbarPosition === PositionType.Top && toolbarHeight) {
-				if (!this.viewActionsHeight) {
-					// only calculate this once, so we don't keep adding it
-					this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
-				}
-				viewHeaderEl.style.marginTop = toolbarHeight + 'px';
+		
+		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
+		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
+
+		// position top navbar (view header) below toolbar
+		if (toolbarPosition === PositionType.Top && toolbarHeight) {
+			if (!this.viewActionsHeight) {
+				// only calculate this once, so we don't keep adding it
+				this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
 			}
-			else {
-				viewHeaderEl.style.marginTop = ''; // reset style
-			}
+			viewHeaderEl.style.marginTop = toolbarHeight + 'px';
+		}
+		else {
+			viewHeaderEl.style.marginTop = ''; // reset style
 		}
 
 		// reduce top spacing
 		const viewActionsEl = viewHeaderEl.querySelector('.view-actions') as HTMLElement;
 		if (viewActionsEl) {
 			if (toolbarPosition === PositionType.Top) {
-				activeDocument.body.style.setProperty('--view-top-spacing-markdown', viewActionsEl.offsetHeight + 'px');
+				activeDocument.body.style.setProperty('--view-top-spacing-markdown', `calc(${viewActionsEl.offsetHeight}px + 16px)`);
 			}
 			else {
 				activeDocument.body.style.removeProperty('--view-top-spacing-markdown');
 			}
 		}
 
+		//
+		// bottom navigation bar
+		//
+		
 		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 		if (!navbarEl) return;
+		
+		// position Obsidian Navbar above bottom toolbar
+		if (toolbarPosition === PositionType.Bottom && toolbarHeight) {
+			if (!this.mobileNavbarMargin) {
+				// only calculate this once, so we don't keep adding it
+				this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(navbarEl).marginBottom);
+			}
+			navbarEl.style.marginBottom = (this.mobileNavbarMargin + toolbarHeight) + 'px';	
+		}
+		else {
+			navbarEl.style.marginBottom = ''; // reset style
+		}
 
 		navbarEl.style.marginBottom = ''; // reset spacing
 

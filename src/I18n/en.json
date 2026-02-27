@@ -342,10 +342,23 @@
             "option-text-placeholder": "Select toolbar...",
             "option-webviewer": "Web viewer 🖥️",
             "option-webviewer-placeholder": "Select toolbar...",
-            "option-webviewer-description": "Display a toolbar in the web viewer.",
+            "option-webviewer-description": "Display a toolbar in the web viewer."
+        },
+        "display-navbar": {
+            "bottom": {
+                "description": "Hides actions in Obsidian's bottom phone navigation bar.",
+                "label-hidden": "Navbar is hidden",
+                "label-partial": "Some navbar actions are hidden",
+                "label-visible": "Navbar is visible",
+                "name": "Bottom navigation bar item visibility",
+                "option-hide-all": "Hide all actions",
+                "option-unhide-all": "Unhide all actions"
+            },
+            "description": "Override Obsidian's phone navigation bars.",
+            "name": "Navigation bar settings",
             "ribbon-action": {
-                "description": "Set the action to take when the ribbon button in the navigation bar (on phones) is used.",
-                "name": "Navigation bar 📱",
+                "description": "Set the action to take when the ribbon button in the bottom navigation bar is used.",
+                "name": "Ribbon button",
                 "option-item-suggester": "Show all tools",
                 "option-toolbar": "Show current toolbar",
                 "option-toolbar-selected": "Show selected toolbar",
@@ -353,6 +366,10 @@
                 "option-toolbar-selected-description": "Show this toolbar when using the ribbon button.",
                 "option-toolbar-selected-placeholder":  "Select toolbar...",
                 "option-toolbar-suggester": "Show all toolbars"
+            },
+            "top": {
+                "description": "Hides Obsidian's top phone navigation bar.",
+                "name": "Top navigation bar visibility"
             }
         },
         "display-rules": {
@@ -598,15 +615,6 @@
                 "name": "Lock Note Toolbar Callouts"
             },
             "name": "Other",
-            "navbar-visibility": {
-                "description": "Hides actions in Obsidian's phone navigation bar.",
-                "label-hidden": "Navbar is hidden",
-                "label-partial": "Some navbar actions are hidden",
-                "label-visible": "Navbar is visible",
-                "name": "Navbar item visibility 📱",
-                "option-hide-all": "Hide all actions",
-                "option-unhide-all": "Unhide all actions"
-            },
             "scripting": {
                 "description": "Adds support for Dataview, JavaScript, JS Engine, and Templater. Plugins must be installed and enabled.",
                 "name": "Scripting"

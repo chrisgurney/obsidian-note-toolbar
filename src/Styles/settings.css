@@ -543,6 +543,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-items-container,
 .note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container,
 .note-toolbar-setting-rules-container {
     padding-top: 0.75em;
     & .setting-item-heading {
@@ -623,7 +624,8 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
-.note-toolbar-setting-mappings-container {
+.note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container {
     &[data-active="true"] {
         margin-bottom: 0.75em;
     }
