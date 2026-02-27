@@ -355,7 +355,7 @@
                 "option-unhide-all": "Unhide all actions"
             },
             "description": "Override Obsidian's phone navigation bars.",
-            "name": "Navigation bar settings",
+            "name": "Navigation bar",
             "ribbon-action": {
                 "description": "Set the action to take when the ribbon button in the bottom navigation bar is used.",
                 "name": "Ribbon button",
