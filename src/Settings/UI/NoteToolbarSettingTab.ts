@@ -885,7 +885,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const navbarSetting = new Setting(collapsibleEl)
 			.setHeading()
 			.setName(t('setting.display-navbar.name'))
-			.setDesc(learnMoreFr(t('setting.display-navbar.description'), 'File-types'));
+			.setDesc(learnMoreFr(t('setting.display-navbar.description'), 'Toolbars-within-the-app'));
 
 		this.renderSettingToggle(navbarSetting, '.note-toolbar-setting-navbar-container', 'navbar');
 
