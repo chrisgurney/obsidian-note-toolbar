@@ -350,7 +350,7 @@
                 "label-hidden": "Navbar is hidden",
                 "label-partial": "Some navbar actions are hidden",
                 "label-visible": "Navbar is visible",
-                "name": "Bottom navigation bar item visibility",
+                "name": "Bottom navigation bar visibility",
                 "option-hide-all": "Hide all actions",
                 "option-unhide-all": "Unhide all actions"
             },
