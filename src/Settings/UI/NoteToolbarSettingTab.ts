@@ -877,6 +877,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	displayNavbarSettings(containerEl: HTMLElement): void {
 
+		if (!Platform.isPhone) return;
+
 		const collapsibleEl = createDiv('note-toolbar-setting-navbar-container');
 		collapsibleEl.setAttribute('data-active', this.isSectionOpen['navbar'].toString());
 
@@ -1009,54 +1011,56 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		// Editor menu
 		//
 
-		appToolbarGroup.addSetting((editorMenuSetting) => {
-			const existingEditorMenuToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
-			editorMenuSetting
-				.setName(t('setting.display-locations.option-editor-menu'))
-				.setDesc(learnMoreFr(t('setting.display-locations.option-editor-menu-description'), 'Toolbars-within-the-app#Editor-menu'))
-				.setClass('note-toolbar-setting-item-control-std-with-help')
-				.addSearch(async (cb) => {
-					new ToolbarSuggester(this.ntb, cb.inputEl);
-					cb.setPlaceholder(t('setting.display-locations.option-editor-menu-placeholder'))
-						.setValue(existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '')
-						.onChange(debounce(async (name) => {
-							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
-							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
-							this.ntb.settings.editorMenuToolbar = newToolbar?.uuid ?? null;
-							// toggle editor menu as toolbar setting
-							const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
-							const editorMenuAsTbarSettingEl = this.containerEl.querySelector('#note-toolbar-editor-menu-as-tbar-setting');
-							editorMenuAsTbarSettingEl?.setAttribute('data-active', hasEditorMenuToolbar.toString());
-							// update toolbar preview
-							const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-							removeFieldHelp(editorMenuSetting.controlEl);
-							setFieldHelp(editorMenuSetting.controlEl, toolbarPreviewFr);
-							await this.ntb.settingsManager.save();
-						}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
-				});
-			const editorMenuToolbarFr = existingEditorMenuToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingEditorMenuToolbar, undefined, false);
-			setFieldHelp(editorMenuSetting.controlEl, editorMenuToolbarFr);			
-		});
+		if (Platform.isDesktop) {
+			appToolbarGroup.addSetting((editorMenuSetting) => {
+				const existingEditorMenuToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
+				editorMenuSetting
+					.setName(t('setting.display-locations.option-editor-menu'))
+					.setDesc(learnMoreFr(t('setting.display-locations.option-editor-menu-description'), 'Toolbars-within-the-app#Editor-menu'))
+					.setClass('note-toolbar-setting-item-control-std-with-help')
+					.addSearch(async (cb) => {
+						new ToolbarSuggester(this.ntb, cb.inputEl);
+						cb.setPlaceholder(t('setting.display-locations.option-editor-menu-placeholder'))
+							.setValue(existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '')
+							.onChange(debounce(async (name) => {
+								const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
+								const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+								this.ntb.settings.editorMenuToolbar = newToolbar?.uuid ?? null;
+								// toggle editor menu as toolbar setting
+								const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
+								const editorMenuAsTbarSettingEl = this.containerEl.querySelector('#note-toolbar-editor-menu-as-tbar-setting');
+								editorMenuAsTbarSettingEl?.setAttribute('data-active', hasEditorMenuToolbar.toString());
+								// update toolbar preview
+								const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
+								removeFieldHelp(editorMenuSetting.controlEl);
+								setFieldHelp(editorMenuSetting.controlEl, toolbarPreviewFr);
+								await this.ntb.settingsManager.save();
+							}, 250));
+						await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+					});
+				const editorMenuToolbarFr = existingEditorMenuToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingEditorMenuToolbar, undefined, false);
+				setFieldHelp(editorMenuSetting.controlEl, editorMenuToolbarFr);			
+			});
 
-		appToolbarGroup.addSetting((editorMenuAsTbarSetting) => {
-			editorMenuAsTbarSetting
-				.setName(t('setting.display-locations.option-editor-menu-as-tbar'))
-				.setDesc(t('setting.display-locations.option-editor-menu-as-tbar-description'))
-				.setClass('note-toolbar-sub-setting-item')
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.editorMenuAsToolbar)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.editorMenuAsToolbar = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-			editorMenuAsTbarSetting.settingEl.id = 'note-toolbar-editor-menu-as-tbar-setting';
-			const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
-			editorMenuAsTbarSetting.settingEl.setAttribute('data-active', hasEditorMenuToolbar.toString());
-		});
+			appToolbarGroup.addSetting((editorMenuAsTbarSetting) => {
+				editorMenuAsTbarSetting
+					.setName(t('setting.display-locations.option-editor-menu-as-tbar'))
+					.setDesc(t('setting.display-locations.option-editor-menu-as-tbar-description'))
+					.setClass('note-toolbar-sub-setting-item')
+					.addToggle((toggle: ToggleComponent) => {
+						toggle
+							.setValue(this.ntb.settings.editorMenuAsToolbar)
+							.onChange(async (value: boolean) => {
+								this.ntb.settings.editorMenuAsToolbar = value;
+								await this.ntb.settingsManager.save();
+							});
+						fixToggleTab(toggle);
+					});
+				editorMenuAsTbarSetting.settingEl.id = 'note-toolbar-editor-menu-as-tbar-setting';
+				const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
+				editorMenuAsTbarSetting.settingEl.setAttribute('data-active', hasEditorMenuToolbar.toString());
+			});
+		}
 
 		//
 		// File menu
@@ -1191,33 +1195,34 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		// Web viewer
 		//
 
-
-		if (this.ntb.adapters.isInternalPluginEnabled('webviewer')) {
-			appToolbarGroup.addSetting((webToolbarSetting) => {
-				const existingWebToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.webviewerToolbar);
-				webToolbarSetting
-					.setName(t('setting.display-locations.option-webviewer'))
-					.setDesc(t('setting.display-locations.option-webviewer-description'))
-					.setClass('note-toolbar-setting-item-control-std-with-help')
-					.addSearch(async (cb) => {
-						new ToolbarSuggester(this.ntb, cb.inputEl);
-						cb.setPlaceholder(t('setting.display-locations.option-webviewer-placeholder'))
-							.setValue(existingWebToolbar ? existingWebToolbar.name : '')
-							.onChange(debounce(async (name) => {
-								const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
-								const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
-								this.ntb.settings.webviewerToolbar = newToolbar?.uuid ?? null;
-								// update toolbar preview
-								const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-								removeFieldHelp(webToolbarSetting.controlEl);
-								setFieldHelp(webToolbarSetting.controlEl, toolbarPreviewFr);
-								await this.ntb.settingsManager.save();
-							}, 250));
-						await this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
-					});
-				const webToolbarFr = existingWebToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingWebToolbar, undefined, false);
-				setFieldHelp(webToolbarSetting.controlEl, webToolbarFr);					
-			});
+		if (Platform.isDesktop) {
+			if (this.ntb.adapters.isInternalPluginEnabled('webviewer')) {
+				appToolbarGroup.addSetting((webToolbarSetting) => {
+					const existingWebToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.webviewerToolbar);
+					webToolbarSetting
+						.setName(t('setting.display-locations.option-webviewer'))
+						.setDesc(t('setting.display-locations.option-webviewer-description'))
+						.setClass('note-toolbar-setting-item-control-std-with-help')
+						.addSearch(async (cb) => {
+							new ToolbarSuggester(this.ntb, cb.inputEl);
+							cb.setPlaceholder(t('setting.display-locations.option-webviewer-placeholder'))
+								.setValue(existingWebToolbar ? existingWebToolbar.name : '')
+								.onChange(debounce(async (name) => {
+									const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
+									const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+									this.ntb.settings.webviewerToolbar = newToolbar?.uuid ?? null;
+									// update toolbar preview
+									const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
+									removeFieldHelp(webToolbarSetting.controlEl);
+									setFieldHelp(webToolbarSetting.controlEl, toolbarPreviewFr);
+									await this.ntb.settingsManager.save();
+								}, 250));
+							await this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+						});
+					const webToolbarFr = existingWebToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingWebToolbar, undefined, false);
+					setFieldHelp(webToolbarSetting.controlEl, webToolbarFr);					
+				});
+			}
 		}
 
 		settingsContainerEl.appendChild(collapsibleContainerEl);

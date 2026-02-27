@@ -324,7 +324,7 @@
         "display-locations": {
             "description": "Define where toolbars are shown across the app.",
             "name": "Toolbars within the app",
-            "option-editor-menu": "Editor menu 🖥️",
+            "option-editor-menu": "Editor menu",
             "option-editor-menu-description": "Replace the Editor menu (on desktop) with the chosen toolbar.",
             "option-editor-menu-error": "Error: Editor menu toolbar not found. Check your settings.",
             "option-editor-menu-placeholder": "Select toolbar...",
@@ -340,7 +340,7 @@
             "option-text-on-keyboard": "Display for keyboard selections",
             "option-text-on-keyboard-description": "Show this toolbar when text is selected with the keyboard.",
             "option-text-placeholder": "Select toolbar...",
-            "option-webviewer": "Web viewer 🖥️",
+            "option-webviewer": "Web viewer",
             "option-webviewer-placeholder": "Select toolbar...",
             "option-webviewer-description": "Display a toolbar in the web viewer."
         },
