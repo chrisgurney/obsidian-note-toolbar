@@ -598,7 +598,7 @@
                 "name": "Debugging"
             },
             "icon": {
-                "description": "Sets the icon for Note Toolbar when used in the tab bar, floating button, and navigation bar (on phone). Requires restart.",
+                "description": "Sets the icon for Note Toolbar when used in floating buttons and navigation bars. Requires restart.",
                 "name": "Icon",
                 "tooltip": "Select icon"
             },
@@ -646,7 +646,7 @@
             "option-mobile-help": "Tip: Access toolbars from the navigation bar.",
             "option-props": "Below Properties",
             "option-quicktools": "Quick Tools window",
-            "option-tabbar": "Tab bar",
+            "option-tabbar": "Top navigation bar",
             "option-top": "Top (fixed)"
         },
         "rules": {
