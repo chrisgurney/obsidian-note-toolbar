@@ -53,6 +53,7 @@ export default class GalleryView extends ItemView {
     async onOpen() {
 
 		this.ntb.settingsUtils.addCloseToPhoneNav(this);
+		activeDocument.body.toggleClass('ntb-remove-view-header', false);
 
         let contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-gallery-view');
