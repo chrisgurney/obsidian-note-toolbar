@@ -27,7 +27,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		'appToolbars': true,
 		'callouts': false,
 		'contexts': false,
-		'navbar': false,
+		'navbar': Platform.isPhone ? true : false,
 		'displayRules': true,
 		'itemList': true,
 	}
