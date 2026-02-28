@@ -534,14 +534,16 @@ export default class SettingsUIUtils {
 	 * Moves an item to a toolbar of the user's choice.
 	 * @param fromToolbar toolbar to move the item from
 	 * @param item item to move
+	 * @param callback function to execute after move is complete, to update the UI as needed
 	 */
-	async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
+	async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings, callback: () => void | Promise<void>): Promise<void> {
 		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				fromToolbar.items.remove(item);
 				toToolbar.items.push(item);
 				await this.ntb.settingsManager.save();
 				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
+				await callback();
 			}
 		});
 		modal.open();
