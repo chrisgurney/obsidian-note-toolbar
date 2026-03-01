@@ -3657,9 +3657,9 @@ input[type="text"].note-toolbar-setting-error,
             & .note-toolbar-setting-tbar-preview {
                 flex-wrap: nowrap;
                 overflow: hidden;
-                position: relative;
                 max-height: calc(var(--line-height-tight) * 1em);
                 max-width: 175px;
+                position: relative;
                 .is-mobile & {
                     max-width: inherit;
                 }
@@ -3669,18 +3669,20 @@ input[type="text"].note-toolbar-setting-error,
                     }
                 }
             }
-            /* fade overflow */
-            & .note-toolbar-setting-tbar-preview::after {
-                content: '';
-                position: absolute;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                width: 33%;
-                background: linear-gradient(to right, transparent, var(--setting-items-background));
-                pointer-events: none;
-            }
         }
+    }
+}
+/* fade overflow */
+.note-toolbar-setting-tbar-preview-fade {
+    &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 33%;
+        background: linear-gradient(to right, transparent, var(--setting-items-background));
+        pointer-events: none;
     }
 }
 .note-toolbar-setting-item-fields {

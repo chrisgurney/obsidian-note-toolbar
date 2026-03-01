@@ -743,6 +743,11 @@ export default class SettingsUIUtils {
 		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
 		removeFieldHelp(setting.controlEl);
 		setFieldHelp(setting.controlEl, toolbarPreviewFr);
+		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview') as HTMLElement | null;
+		// only apply fade if the preview is overflowing
+		if (tbarEl) setTimeout(() => {
+			tbarEl.classList.toggle('note-toolbar-setting-tbar-preview-fade', tbarEl.scrollWidth > tbarEl.clientWidth);
+		}, 0);
 	}
 
 	/**
