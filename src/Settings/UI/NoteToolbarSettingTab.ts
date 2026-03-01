@@ -619,16 +619,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, defaultToolbarSetting.controlEl, undefined, 'beforeend');
 							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 							this.ntb.settings.defaultToolbar = newToolbar?.uuid ?? null;
-							// update toolbar preview
-							const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-							removeFieldHelp(defaultToolbarSetting.controlEl);
-							setFieldHelp(defaultToolbarSetting.controlEl, toolbarPreviewFr);
+							this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, newToolbar);
 							await this.ntb.settingsManager.save();
 						}, 250));
 					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 				});
-			const defaultToolbarFr = existingDefaultToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingDefaultToolbar, undefined, false);
-			setFieldHelp(defaultToolbarSetting.controlEl, defaultToolbarFr);						
+			this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);						
 		});
 
 		mappingsGroup.addSetting((propertySetting) => {
@@ -962,10 +958,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, ribbonToolbarSetting.controlEl, undefined, 'beforeend');
 						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 						this.ntb.settings.ribbonToolbar = newToolbar?.uuid ?? null;
-						// update toolbar preview
-						const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-						removeFieldHelp(ribbonToolbarSetting.controlEl);
-						setFieldHelp(ribbonToolbarSetting.controlEl, toolbarPreviewFr);
+						this.ntb.settingsUtils.setFieldPreview(ribbonToolbarSetting, newToolbar);
 						await this.ntb.settingsManager.save();
 					}, 250));
 					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingRibbonToolbar ? existingRibbonToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
@@ -974,9 +967,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			ribbonToolbarSetting.settingEl.id = 'note-toolbar-ribbon-toolbar-setting';
 			const hasRibbonToolbar = (this.ntb.settings.ribbonAction === RibbonAction.ToolbarSelected);
 			ribbonToolbarSetting.settingEl.setAttribute('data-active', hasRibbonToolbar.toString());
-			// show the toolbar preview
-			const ribbonToolbarFr = existingRibbonToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingRibbonToolbar, undefined, false);
-			setFieldHelp(ribbonToolbarSetting.controlEl, ribbonToolbarFr);
+			// show toolbar preview
+			this.ntb.settingsUtils.setFieldPreview(ribbonToolbarSetting, existingRibbonToolbar);
 		});
 
 		collapsibleEl.appendChild(collapsibleContainerEl);
@@ -1030,16 +1022,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 								const hasEditorMenuToolbar = !!this.ntb.settings.editorMenuToolbar;
 								const editorMenuAsTbarSettingEl = this.containerEl.querySelector('#note-toolbar-editor-menu-as-tbar-setting');
 								editorMenuAsTbarSettingEl?.setAttribute('data-active', hasEditorMenuToolbar.toString());
-								// update toolbar preview
-								const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-								removeFieldHelp(editorMenuSetting.controlEl);
-								setFieldHelp(editorMenuSetting.controlEl, toolbarPreviewFr);
+								this.ntb.settingsUtils.setFieldPreview(editorMenuSetting, newToolbar);
 								await this.ntb.settingsManager.save();
 							}, 250));
 						await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 					});
-				const editorMenuToolbarFr = existingEditorMenuToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingEditorMenuToolbar, undefined, false);
-				setFieldHelp(editorMenuSetting.controlEl, editorMenuToolbarFr);			
+				this.ntb.settingsUtils.setFieldPreview(editorMenuSetting, existingEditorMenuToolbar);
 			});
 
 			appToolbarGroup.addSetting((editorMenuAsTbarSetting) => {
@@ -1104,15 +1092,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							const launchpadSettingEl = this.containerEl.querySelector('#note-toolbar-launchpad-setting');
 							launchpadSettingEl?.setAttribute('data-active', hasEmptyViewToolbar.toString());
 							// update toolbar preview
-							const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-							removeFieldHelp(emptyViewSetting.controlEl);
-							setFieldHelp(emptyViewSetting.controlEl, toolbarPreviewFr);
+							this.ntb.settingsUtils.setFieldPreview(emptyViewSetting, newToolbar);
 							await this.ntb.settingsManager.save();
 						}, 250));
 					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 				});
-			const emptyViewToolbarFr = existingEmptyViewToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingEmptyViewToolbar, undefined, false);
-			setFieldHelp(emptyViewSetting.controlEl, emptyViewToolbarFr);
+			this.ntb.settingsUtils.setFieldPreview(emptyViewSetting, existingEmptyViewToolbar);
 		});
 
 		appToolbarGroup.addSetting((launchpadSetting) => {
@@ -1161,15 +1146,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							const textToolbarOnKeyboardSettingEl = this.containerEl.querySelector('#ntb-text-tbar-keyboard-setting');
 							textToolbarOnKeyboardSettingEl?.setAttribute('data-active', hasTextToolbar.toString());
 							// update toolbar preview
-							const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-							removeFieldHelp(textToolbarSetting.controlEl);
-							setFieldHelp(textToolbarSetting.controlEl, toolbarPreviewFr);
+							this.ntb.settingsUtils.setFieldPreview(textToolbarSetting, newToolbar);
 							await this.ntb.settingsManager.save();
 						}, 250));
 					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingTextToolbar ? existingTextToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 				});
-			const textToolbarPreviewFr = existingTextToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingTextToolbar, undefined, false);
-			setFieldHelp(textToolbarSetting.controlEl, textToolbarPreviewFr);
+			this.ntb.settingsUtils.setFieldPreview(textToolbarSetting, existingTextToolbar);
 		});
 
 		appToolbarGroup.addSetting((textToolbarOnKeyboardSetting) => {
@@ -1211,16 +1193,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 									const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
 									const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 									this.ntb.settings.webviewerToolbar = newToolbar?.uuid ?? null;
-									// update toolbar preview
-									const toolbarPreviewFr = newToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(newToolbar, undefined, false);
-									removeFieldHelp(webToolbarSetting.controlEl);
-									setFieldHelp(webToolbarSetting.controlEl, toolbarPreviewFr);
+									this.ntb.settingsUtils.setFieldPreview(webToolbarSetting, newToolbar);
 									await this.ntb.settingsManager.save();
 								}, 250));
 							await this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 						});
-					const webToolbarFr = existingWebToolbar && this.ntb.settingsUtils.createToolbarPreviewFr(existingWebToolbar, undefined, false);
-					setFieldHelp(webToolbarSetting.controlEl, webToolbarFr);					
+					this.ntb.settingsUtils.setFieldPreview(webToolbarSetting, existingWebToolbar);
 				});
 			}
 		}

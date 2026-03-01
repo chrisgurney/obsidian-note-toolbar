@@ -737,6 +737,15 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Updates the toolbar preview for the given setting.
+	 */
+	setFieldPreview(setting: Setting, toolbar: ToolbarSettings | undefined) {
+		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
+		removeFieldHelp(setting.controlEl);
+		setFieldHelp(setting.controlEl, toolbarPreviewFr);
+	}
+
+	/**
 	 * Shows the Help view (for onboarding) if the user hasn't seen it yet.
 	 */
 	showHelpViewIfNeeded() {
