@@ -155,9 +155,9 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 const strippedQuery = searchSegment.slice(prefix.length);
                 const matches = super.getSuggestions(strippedQuery);
                 if (this.allowCustomInput && strippedQuery.length > 0) {
-                    const alreadyExists = matches.some(match => this.getItemText(match.item) === query);
+                    const alreadyExists = matches.some(match => this.getItemText(match.item) === strippedQuery);
                     if (!alreadyExists) {
-                        return [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
+                        return [{ item: `${prefix}${strippedQuery}` as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
                     }
                 }
                 return matches;
