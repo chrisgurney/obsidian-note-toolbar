@@ -186,7 +186,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         if (this.values instanceof Function) {
             return this.values(item);
         }
-        if (Object.keys(this.prefixes).length > 0 && typeof item === 'string') {
+        if (this.activePrefix !== undefined && typeof item === 'string') {
             return item;
         }
         if (this.keys) {
