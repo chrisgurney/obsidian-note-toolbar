@@ -14,6 +14,8 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private resolve: (value: T) => void;
     private reject: (reason?: Error) => void;
 
+    private activePrefix?: string;
+    private activePrefixStart?: number;
     private originalKeys?: T[];
     private submitted = false;
 
@@ -109,7 +111,14 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             if (selectedEl) {
                 const itemText = selectedEl.textContent?.trim();
                 if (itemText) {
-                    this.inputEl.value = itemText;
+                    if (this.activePrefix !== undefined && this.activePrefixStart !== undefined) {
+                        // keep any text before the prefix and append the selected item
+                        const before = this.inputEl.value.slice(0, this.activePrefixStart);
+                        this.inputEl.value = `${before}${itemText}`;
+                    }
+                    else {
+                        this.inputEl.value = itemText;
+                    }
                     this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
                 }
             }
@@ -132,12 +141,18 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     getSuggestions(query: string): FuzzyMatch<T>[] {
         this.keys = this.originalKeys;
         const isEmptyQuery = query.trim().length === 0;
-        
+
         if (this.prefixes && !isEmptyQuery) {
-            const prefix = Object.keys(this.prefixes).find(p => query.trim().startsWith(p));
+            // check for prefix at start of query, or after the last space
+            const lastSpaceIndex = query.lastIndexOf(' ');
+            const searchSegment = lastSpaceIndex === -1 ? query.trim() : query.slice(lastSpaceIndex + 1);
+            const prefix = Object.keys(this.prefixes).find(p => searchSegment.startsWith(p));
+
             if (prefix) {
+                this.activePrefix = prefix;
+                this.activePrefixStart = lastSpaceIndex === -1 ? 0 : lastSpaceIndex + 1;
                 this.keys = (this.prefixes[prefix] as () => T[])();
-                const strippedQuery = query.trim().slice(prefix.length);
+                const strippedQuery = searchSegment.slice(prefix.length);
                 const matches = super.getSuggestions(strippedQuery);
                 if (this.allowCustomInput && strippedQuery.length > 0) {
                     const alreadyExists = matches.some(match => this.getItemText(match.item) === query);
@@ -146,6 +161,10 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                     }
                 }
                 return matches;
+            }
+            else {
+                this.activePrefix = undefined;
+                this.activePrefixStart = undefined;
             }
         }
 
@@ -158,6 +177,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             }
             return matches;
         }
+
         return super.getSuggestions(query);
     }
 
@@ -166,6 +186,12 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     }
 
     selectSuggestion(value: FuzzyMatch<T>, evt: MouseEvent | KeyboardEvent): void {
+        if (this.activePrefix !== undefined && this.activePrefixStart !== undefined) {
+            // replace just the prefix segment with the selected item
+            const before = this.inputEl.value.slice(0, this.activePrefixStart);
+            const selected = this.getItemText(value.item);
+            value = { ...value, item: `${before}${selected}` as unknown as T };
+        }
         this.submitted = true;
         this.close();
         this.onChooseSuggestion(value, evt);
