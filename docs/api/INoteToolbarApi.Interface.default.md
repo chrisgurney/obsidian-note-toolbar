@@ -161,7 +161,7 @@ Shows a file suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
-| `options.prefixes?` | `Record`\<`string`, () => `unknown`[]\> | Provide results if certain prefixes are entered. |
+| `options.prefixes?` | `Record`\<`string`, () => `unknown`[]\> | Maps input prefixes to functions that return suggestions. When the user types a matching prefix, the corresponding function is called and its results are shown as suggestions. **Example** `{ '#': () => getTags(), '[[': () => getFiles() }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
@@ -547,7 +547,7 @@ Shows a suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
-| `options.prefixes?` | `Record`\<`string`, () => `unknown`[]\> | Provide results if certain prefixes are entered. |
+| `options.prefixes?` | `Record`\<`string`, () => `unknown`[]\> | Maps input prefixes to functions that return suggestions. When the user types a matching prefix, the corresponding function is called and its results are shown as suggestions. **Example** `{ '#': () => getTags(), '[[': () => getFiles() }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns

@@ -531,8 +531,11 @@ export interface NtbSuggesterOptions {
      */
     placeholder?: string;
     /**
-     * Provide results if certain prefixes are entered.
-     */    
+     * Maps input prefixes to functions that return suggestions. When the user types a matching prefix, the corresponding function is called and its results are shown as suggestions.
+     * 
+     * @example { '#': () => getTags(), '[[': () => getFiles() }
+     * @since 1.30.0
+     */
     prefixes?: Record<string, () => unknown[]>;
     /**
      * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
