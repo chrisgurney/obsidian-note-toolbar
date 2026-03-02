@@ -110,6 +110,7 @@
             "file-not-exist": "File does not exist",
             "toolbar-not-found": "Toolbar not found: {{toolbar}}"
         },
+        "name": "Note Toolbar API",
         "ui": {
             "button-submit": "Submit",
             "error-cancelled": "Cancelled prompt",
