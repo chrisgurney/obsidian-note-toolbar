@@ -331,6 +331,16 @@ export default interface INoteToolbarApi<T> {
      * 
      * new Notice(selectedKey);
      * 
+     * @example
+     * // no values required; allows for tag and file suggestions
+     * const selected = await ntb.suggester(null, null, {
+     *   prefixes: {
+     *     '#': () => Object.keys(this.ntb.app.metadataCache.getTags()),
+     *     '[[': () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
+     *   }
+     * });
+     * new Notice(selected);
+     * 
      * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
     suggester: (values?: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;

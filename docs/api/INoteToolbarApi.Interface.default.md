@@ -579,6 +579,17 @@ const selectedKey = await ntb.suggester(values, keys, {
 new Notice(selectedKey);
 ```
 
+```ts
+// no values required; allows for tag and file suggestions
+const selected = await ntb.suggester(null, null, {
+  prefixes: {
+    '#': () => Object.keys(this.ntb.app.metadataCache.getTags()),
+    '[[': () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
+  }
+});
+new Notice(selected);
+```
+
 #### See
 
 `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
