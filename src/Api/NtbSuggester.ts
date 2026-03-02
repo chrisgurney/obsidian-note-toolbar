@@ -16,6 +16,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     private activePrefix?: string;
     private activePrefixStart?: number;
+    private currentMatches: FuzzyMatch<T>[];
     private originalKeys?: T[];
     private submitted = false;
 
@@ -120,6 +121,12 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     }
 
     getSuggestions(query: string): FuzzyMatch<T>[] {
+
+        const saveMatches = (matches: FuzzyMatch<T>[]): FuzzyMatch<T>[] => {
+            this.currentMatches = matches;
+            return matches;
+        }
+
         this.keys = this.originalKeys;
         const isEmptyQuery = query.trim().length === 0;
 
@@ -140,10 +147,12 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                     const customItem = `${prefix}${strippedQuery}` as unknown as T;
                     const alreadyExists = matches.some(match => match.item === customItem);
                     if (!alreadyExists) {
-                        return [{ item: customItem, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
+                        return saveMatches(
+                            [{ item: customItem, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
+                        );
                     }
                 }
-                return matches;
+                return saveMatches(matches);
             } 
             else {
                 this.activePrefix = undefined;
@@ -156,12 +165,14 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             const alreadyExists = matches.some(match => this.getItemText(match.item) === searchSegment);
             if (!alreadyExists) {
                 // prepend the custom input option
-                return [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
+                return saveMatches(
+                    [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
+                );
             }
-            return matches;
+            return saveMatches(matches);
         }
 
-        return super.getSuggestions(searchSegment);
+        return saveMatches(super.getSuggestions(searchSegment));
     }
 
     onClose(): void {
@@ -234,22 +245,16 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         e.preventDefault();
         const selectedEl = this.modalEl.querySelector('.suggestion-item.is-selected');
         if (selectedEl) {
-            const itemText = selectedEl.textContent?.trim();
-            if (itemText) {
-                let fillText = itemText;
-                if (this.allowCustomInput) {
-                    // find the key for the displayed value
-                    const match = this.getSuggestions(this.inputEl.value)
-                        .find(m => this.getItemText(m.item) === itemText);
-                    fillText = match ? String(match.item) : itemText;
-                }
+            const allItems = this.modalEl.querySelectorAll('.suggestion-item');
+            const index = Array.from(allItems).indexOf(selectedEl as HTMLElement);
+            const suggestion = index !== -1 ? this.currentMatches[index] : undefined;
+            if (suggestion) {
+                const fillText = String(suggestion.item);
                 if (this.activePrefix !== undefined && this.activePrefixStart !== undefined) {
-                    // keep any text before the prefix and append the selected item
                     const before = this.inputEl.value.slice(0, this.activePrefixStart);
                     this.inputEl.value = `${before}${fillText}`;
                 } 
                 else {
-                    // replace only the last segment after the last space
                     const lastSpaceIndex = this.inputEl.value.lastIndexOf(' ');
                     const before = lastSpaceIndex === -1 ? '' : this.inputEl.value.slice(0, lastSpaceIndex + 1);
                     this.inputEl.value = `${before}${fillText}`;
