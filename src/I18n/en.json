@@ -126,7 +126,8 @@
             "instruction-select": "to select item",
             "prompt-placeholder": "Type text and press enter",
             "prompt-placeholder-large": "Type text",
-            "suggester-placeholder": "Select an option..."
+            "suggester-placeholder": "Select an option...",
+            "suggester-placeholder-no-values": "Type something..."
         }
     },
     "command": {

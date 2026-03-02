@@ -345,7 +345,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see Adapted from [Templater](https://github.com/SilentVoid13/Templater/blob/master/src/core/functions/internal_functions/system/InternalModuleSystem.ts)
      */
     async suggester<T>(
-        values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions
+        values?: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions
     ): Promise<T> {
 
         const suggester = new NtbSuggester(this.ntb, values, keys, options);

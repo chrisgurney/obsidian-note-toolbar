@@ -14,6 +14,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private resolve: (value: T) => void;
     private reject: (reason?: Error) => void;
 
+    private originalKeys?: T[];
     private submitted = false;
 
     private allowCustomInput: boolean;
@@ -22,6 +23,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private default: string;
     private icon: string;
     private label: string;
+    private prefixes: Record<string, () => unknown[]>;
     private rendermd: boolean;
 
     /**
@@ -29,7 +31,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
      */
     constructor(
         private ntb: NoteToolbarPlugin,
-        private values: string[] | ((item: T) => string),
+        private values?: string[] | ((item: T) => string),
         private keys?: T[],
         options?: NtbSuggesterOptions 
     ) {
@@ -41,29 +43,34 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         super(ntb.app);
 
-        this.allowCustomInput = options?.allowCustomInput ?? false;
+        const hasValues = this.values !== undefined && this.values !== null;
+
+        this.allowCustomInput = options?.allowCustomInput ?? (hasValues ? false : true);
         this.class = options?.class ?? '';
-        this.collapse = options?.collapse ?? false;
+        this.collapse = options?.collapse ?? (hasValues ? false : true);
         this.default = options?.default ?? '';
         this.icon = options?.icon ?? '';
         this.label = options?.label ?? '';
         if (options?.limit) this.limit = options.limit;
-        this.rendermd = options?.rendermd ?? true;
+        this.prefixes = options?.prefixes ?? {};
+        this.rendermd = options?.rendermd ?? (hasValues ? true : false);
 
-        this.setPlaceholder(options?.placeholder ? options.placeholder : t('api.ui.suggester-placeholder'));
+        this.setPlaceholder(options?.placeholder ?? (hasValues ? t('api.ui.suggester-placeholder') : t('api.ui.suggester-placeholder-no-values')));
         this.setInstructions([
             {command: '↑↓', purpose: t('api.ui.instruction-navigate')},
             {command: '↵', purpose: t('api.ui.instruction-select')},
             {command: 'tab', purpose: t('api.ui.instruction-autofill')},
             {command: 'esc', purpose: t('api.ui.instruction-dismiss')},
         ]);
+
         if (!keys) {
             if (Array.isArray(values)) {
                 // if it's a string array, convert it to T[] (if possible)
                 this.keys = values as unknown as T[];
             }
         }
-                
+        this.originalKeys = this.keys;
+
         this.modalEl.addClass("note-toolbar-ui");
         this.class && this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'suggester');
@@ -123,18 +130,31 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     }
 
     getSuggestions(query: string): FuzzyMatch<T>[] {
+        this.keys = this.originalKeys;
         const isEmptyQuery = query.trim().length === 0;
+        
+        if (this.prefixes && !isEmptyQuery) {
+            const prefix = Object.keys(this.prefixes).find(p => query.trim().startsWith(p));
+            if (prefix) {
+                this.keys = (this.prefixes[prefix] as () => T[])();
+                const strippedQuery = query.trim().slice(prefix.length);
+                const matches = super.getSuggestions(strippedQuery);
+                if (this.allowCustomInput && strippedQuery.length > 0) {
+                    const alreadyExists = matches.some(match => this.getItemText(match.item) === query);
+                    if (!alreadyExists) {
+                        return [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
+                    }
+                }
+                return matches;
+            }
+        }
+
         if (this.allowCustomInput && !isEmptyQuery) {
             const matches = super.getSuggestions(query);
-            // add the raw query as a custom option if it's not already in the matches
-            const queryAsOption = query as unknown as T;
-            const alreadyExists = matches.some(match => {
-                const item = 'item' in match ? match.item : match;
-                return this.getItemText(item) === query;
-            });
+            const alreadyExists = matches.some(match => this.getItemText(match.item) === query);
             if (!alreadyExists) {
                 // prepend the custom input option
-                return [{ item: queryAsOption, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
+                return [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
             }
             return matches;
         }
@@ -166,9 +186,12 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         if (this.values instanceof Function) {
             return this.values(item);
         }
+        if (Object.keys(this.prefixes).length > 0 && typeof item === 'string') {
+            return item;
+        }
         if (this.keys) {
             const keyIndex = this.keys.indexOf(item);
-            if (keyIndex !== -1) {
+            if (this.values && this.values instanceof Array && keyIndex !== -1) {
                 return this.values[keyIndex] || t('api.ui.error-undefined');
             }
             if (this.allowCustomInput && typeof item === 'string') {

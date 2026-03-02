@@ -333,7 +333,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
-    suggester: (values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
+    suggester: (values?: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
 
    /**
      * This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
@@ -520,6 +520,10 @@ export interface NtbSuggesterOptions {
      * Optional placeholder text for input field; defaults to preset message.
      */
     placeholder?: string;
+    /**
+     * Provide results if certain prefixes are entered.
+     */    
+    prefixes?: Record<string, () => unknown[]>;
     /**
      * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
      */
