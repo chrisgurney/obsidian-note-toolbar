@@ -104,26 +104,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
-        // when tab is pressed, fill the input with the currently selected option
-        this.scope.register(null, 'Tab', (e: KeyboardEvent) => {
-            e.preventDefault();
-            const selectedEl = this.modalEl.querySelector('.suggestion-item.is-selected');
-            if (selectedEl) {
-                const itemText = selectedEl.textContent?.trim();
-                if (itemText) {
-                    if (this.activePrefix !== undefined && this.activePrefixStart !== undefined) {
-                        // keep any text before the prefix and append the selected item
-                        const before = this.inputEl.value.slice(0, this.activePrefixStart);
-                        this.inputEl.value = `${before}${itemText}`;
-                    }
-                    else {
-                        this.inputEl.value = itemText;
-                    }
-                    this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            }
-            return false;
-        });
+        this.scope.register(null, 'Tab', (e: KeyboardEvent) => this.handleTabCompletion(e));
 
         if (this.collapse) {
             this.modalEl.toggleClass('ntb-suggester-collapse', !this.inputEl.value);
@@ -142,10 +123,11 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.keys = this.originalKeys;
         const isEmptyQuery = query.trim().length === 0;
 
+        // check for prefix at start of query, or after the last space
+        const lastSpaceIndex = query.lastIndexOf(' ');
+        const searchSegment = lastSpaceIndex === -1 ? query.trim() : query.slice(lastSpaceIndex + 1);
+
         if (this.prefixes && !isEmptyQuery) {
-            // check for prefix at start of query, or after the last space
-            const lastSpaceIndex = query.lastIndexOf(' ');
-            const searchSegment = lastSpaceIndex === -1 ? query.trim() : query.slice(lastSpaceIndex + 1);
             const prefix = Object.keys(this.prefixes).find(p => searchSegment.startsWith(p));
 
             if (prefix) {
@@ -155,13 +137,14 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 const strippedQuery = searchSegment.slice(prefix.length);
                 const matches = super.getSuggestions(strippedQuery);
                 if (this.allowCustomInput && strippedQuery.length > 0) {
-                    const alreadyExists = matches.some(match => this.getItemText(match.item) === strippedQuery);
+                    const customItem = `${prefix}${strippedQuery}` as unknown as T;
+                    const alreadyExists = matches.some(match => match.item === customItem);
                     if (!alreadyExists) {
-                        return [{ item: `${prefix}${strippedQuery}` as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
+                        return [{ item: customItem, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
                     }
                 }
                 return matches;
-            }
+            } 
             else {
                 this.activePrefix = undefined;
                 this.activePrefixStart = undefined;
@@ -169,8 +152,8 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         }
 
         if (this.allowCustomInput && !isEmptyQuery) {
-            const matches = super.getSuggestions(query);
-            const alreadyExists = matches.some(match => this.getItemText(match.item) === query);
+            const matches = super.getSuggestions(searchSegment);
+            const alreadyExists = matches.some(match => this.getItemText(match.item) === searchSegment);
             if (!alreadyExists) {
                 // prepend the custom input option
                 return [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches];
@@ -178,7 +161,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             return matches;
         }
 
-        return super.getSuggestions(query);
+        return super.getSuggestions(searchSegment);
     }
 
     onClose(): void {
@@ -242,4 +225,39 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.reject = reject;
         this.open();
     }
+
+    /**
+     * When tab is pressed, fills the input with the currently selected option.
+     * @param e KeyboardEvent
+     */
+    private handleTabCompletion = (e: KeyboardEvent) => {
+        e.preventDefault();
+        const selectedEl = this.modalEl.querySelector('.suggestion-item.is-selected');
+        if (selectedEl) {
+            const itemText = selectedEl.textContent?.trim();
+            if (itemText) {
+                let fillText = itemText;
+                if (this.allowCustomInput) {
+                    // find the key for the displayed value
+                    const match = this.getSuggestions(this.inputEl.value)
+                        .find(m => this.getItemText(m.item) === itemText);
+                    fillText = match ? String(match.item) : itemText;
+                }
+                if (this.activePrefix !== undefined && this.activePrefixStart !== undefined) {
+                    // keep any text before the prefix and append the selected item
+                    const before = this.inputEl.value.slice(0, this.activePrefixStart);
+                    this.inputEl.value = `${before}${fillText}`;
+                } 
+                else {
+                    // replace only the last segment after the last space
+                    const lastSpaceIndex = this.inputEl.value.lastIndexOf(' ');
+                    const before = lastSpaceIndex === -1 ? '' : this.inputEl.value.slice(0, lastSpaceIndex + 1);
+                    this.inputEl.value = `${before}${fillText}`;
+                }
+                this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+        return false;
+    }
+
 }
