@@ -640,6 +640,7 @@
             "option-defaultitem-error-invalid": "Invalid toolbar item",
             "option-defaultitem-placeholder": "Item...",
             "option-fab-desktop-native-menus-disclaimer": "Disable Obsidian's Appearance → Native menus option, if you want icons to appear floating button menus.",
+            "option-below-properties-source-disclaimer": "In Source mode, Below Properties position shows toolbar below note title",
             "option-fabl": "Floating button: left",
             "option-fabr": "Floating button: right",
             "option-floating": "Floating toolbar",

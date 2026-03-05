@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { App, ButtonComponent, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce } from 'obsidian';
+import { App, ButtonComponent, ItemView, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce } from 'obsidian';
 import { COMMAND_PREFIX_TBAR, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, TOOLBAR_COMMAND_POSITION_OPTIONS, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
@@ -267,21 +267,11 @@ export default class ToolbarSettingsModal extends Modal {
 							if (!this.hasMobileFabPosition) {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
 							}
-							// update disclaimers
-							desktopPosSetting.descEl.empty();
-							const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
-							if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
-								desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
-							}
 							await this.ntb.settingsManager.save();
-							this.display();
+							this.updatePositionDisclaimers(desktopPosSetting, val, 'desktop');
 						})
 					);
-
-			const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
-			if (this.hasDesktopFabPosition && isNativeMenusEnabled) {
-				desktopPosSetting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
-			}
+			this.updatePositionDisclaimers(desktopPosSetting, initialDesktopPosition, 'desktop');
 
 		});
 
@@ -310,9 +300,10 @@ export default class ToolbarSettingsModal extends Modal {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
 							}
 							await this.ntb.settingsManager.save();
-							this.display();
+							this.updatePositionDisclaimers(mobilePosSetting, val, 'mobile');
 						})
 					);
+			this.updatePositionDisclaimers(mobilePosSetting, initialMobilePosition, 'mobile');
 		});
 
 		positionGroup.addSetting((defaultItemSetting) => {
@@ -516,6 +507,28 @@ export default class ToolbarSettingsModal extends Modal {
 			let scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
 			scrollToEl?.scrollIntoView({ behavior: 'instant', block: 'center' });
 		}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
+	}
+
+	/**
+	 * Updates disclaimers shown for position settings, based on the position selected and the platform.
+	 * @param setting Setting
+	 * @param position PositionType
+	 * @param platform 'desktop' or 'mobile'
+	 */
+	private updatePositionDisclaimers(setting: Setting, position: PositionType, platform: 'desktop' | 'mobile') {
+		setting.descEl.empty();
+
+		const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
+		if (this.hasDesktopFabPosition && isNativeMenusEnabled && platform === 'desktop') {
+			setting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
+		}
+		
+		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		// @ts-ignore
+		const isSourceView = currentView?.editMode?.sourceMode;
+		if (isSourceView && position === PositionType.Props) {
+			setting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['sourceProperties']));
+		}
 	}
 
 }

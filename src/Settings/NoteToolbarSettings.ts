@@ -650,7 +650,8 @@ export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 ];
 
 export const SETTINGS_DISCLAIMERS: { [key: string]: string }[] = [
-	{ 'nativeMenus': t('setting.position.option-fab-desktop-native-menus-disclaimer') }
+	{ 'nativeMenus': t('setting.position.option-fab-desktop-native-menus-disclaimer') },
+	{ 'sourceProperties': t('setting.position.option-below-properties-source-disclaimer') }
 ];
 
 export interface ObsidianUIElement {
