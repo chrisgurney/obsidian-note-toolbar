@@ -98,6 +98,11 @@ body {
     --cg-nt-quick-tools-item-text-color: var(--text-normal);
     --cg-nt-ui-modal-width: var(--prompt-width);
 
+    /* fix: don't need safe-area-inset when fixed nav is visible on phone #522 */
+    &.is-phone:not(.is-floating-nav):not(.is-hidden-nav) {
+        --cg-nt-tbar-bottom-margin-bottom-phone: 0px;
+    }
+
     &.is-android {
         --cg-nt-fab-border-radius: var(--radius-xl);
     }
