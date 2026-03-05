@@ -7,12 +7,13 @@ _I would appreciate your feedback, which you can leave in [the discussions](http
 > [!warning]
 > While you could also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
 
-## Copy developer ID for toolbars and items
-
+<details>
+<summary>Copy developer ID for toolbars and items</summary>
+<br/>
 To get a unique identifier (UUID):
 
-- for toolbars, go to Note Toolbar's main settings (in `1.27` or later), and use **More options → Copy developer ID**; and
-- for toolbar items, go to each item's settings, and use **More actions... → Copy developer ID**. 
+- for **toolbars**, go to Note Toolbar's main settings (in `1.27` or later), and use **More options → Copy developer ID**; and
+- for **toolbar items**, go to each item's settings, and use **More actions... → Copy developer ID**. 
 
 Use this as another method to uniquely style toolbars or items, or reference them in the API, without worrying if their names might change.
 
@@ -26,6 +27,7 @@ item.setIcon('alert');
 // or fetch the HTML element (for non-floating-button toolbars)
 const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e23513');
 ```
+</details>
 
 ## `ntb` API
 
