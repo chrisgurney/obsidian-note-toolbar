@@ -40,6 +40,8 @@ export default class ContextMenu {
 		let contextMenu = new Menu();
 
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		// @ts-ignore
+		const isSourceView = currentView?.editMode?.sourceMode;
 		const currentPosition = toolbarSettings ? this.ntb.settingsManager.getToolbarPosition(toolbarSettings) : undefined;
 
 		if (toolbarSettings !== undefined) {
@@ -109,7 +111,7 @@ export default class ContextMenu {
 					const DEFAULT_POSITIONS = [
 						{ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' },
 						{ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' },
-						{ type: PositionType.Props, titleKey: 'setting.position.option-props', icon: 'arrow-down-narrow-wide' },
+						{ type: PositionType.Props, titleKey: isSourceView ? 'setting.position.option-below-title' : 'setting.position.option-props', icon: 'arrow-down-narrow-wide' },
 						{ type: PositionType.Bottom, titleKey: 'setting.position.option-bottom', icon: 'arrow-down-to-line' }
 					];
 
@@ -172,7 +174,7 @@ export default class ContextMenu {
 			// show/hide properties + bases toolbars
 			//
 
-			if (this.ntb.utils.hasView('markdown')) {
+			if (this.ntb.utils.hasView('markdown') && !isSourceView) {
 				const propsEl = this.ntb.el.getPropsEl();
 				if (propsEl) {
 					const propsDisplayStyle = getComputedStyle(propsEl).getPropertyValue('display');
