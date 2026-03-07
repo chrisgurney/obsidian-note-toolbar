@@ -103,7 +103,7 @@ const copyToWikiPlugin = {
 						readFile(destPath).catch(() => null), // null if dest doesn't exist yet
 					]);
 					if (destContent && srcContent.equals(destContent)) {
-						console.log(`[copy-to-wiki] no change: ${src}`);
+						// console.log(`[copy-to-wiki] no change: ${src}`);
 						continue;
 					}
 					await mkdir(dirname(destPath), { recursive: true });
