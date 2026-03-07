@@ -1,10 +1,12 @@
-import esbuild from "esbuild";
+import builtins from "builtin-modules";
+import { spawn } from 'child_process';
 import chokidar from "chokidar";
+import esbuild from "esbuild";
+import { copyFile, mkdir, readFile } from 'fs/promises';
+import { dirname, join } from 'path';
+import process from "process";
 import { fileInliner } from "./build/file-inliner.mjs";
 import { galleryDocs } from "./build/gallery-docs.mjs";
-import process from "process";
-import { spawn } from 'child_process';
-import builtins from "builtin-modules";
 
 const banner =
 `/*
@@ -14,6 +16,16 @@ if you want to view the source, please visit the github repository of this plugi
 `;
 
 const prod = (process.argv[2] === "production");
+
+// directory of the external repo to copy files into
+const WIKI_REPO = "../obsidian-note-toolbar-wiki";
+
+// files to copy into the external repo after build
+// each entry: { src: <source path>, dest: <path relative to WIKI_REPO> }
+const WIKI_FILES = [
+	{ src: "docs/api/INoteToolbarApi.Interface.default.md", dest: "Note-Toolbar-API.md" },
+	{ src: "docs/gallery.md", dest: "Gallery.md" },
+];
 
 // use esbuild to check CSS for errors
 // DISABLED for now until I have time to fix the noted issues
@@ -86,6 +98,33 @@ const eslintPlugin = {
 	},
 };
 
+// copy configured files into the external wiki repo, only if contents changed
+const copyToWikiPlugin = {
+	name: 'copy-to-wiki',
+	setup(build) {
+		build.onEnd(async () => {
+			for (const { src, dest } of WIKI_FILES) {
+				const destPath = join(WIKI_REPO, dest);
+				try {
+					const [srcContent, destContent] = await Promise.all([
+						readFile(src),
+						readFile(destPath).catch(() => null), // null if dest doesn't exist yet
+					]);
+					if (destContent && srcContent.equals(destContent)) {
+						console.log(`[copy-to-wiki] no change: ${src}`);
+						continue;
+					}
+					await mkdir(dirname(destPath), { recursive: true });
+					await copyFile(src, destPath);
+					console.log(`\x1b[32m[copy-to-wiki] ✓ ${src} → ${destPath}\x1b[0m`);
+				} catch (error) {
+					console.error(`\x1b[31m[copy-to-wiki] ✗ failed to copy ${src}: ${error.message}\x1b[0m`);
+				}
+			}
+		});
+	},
+};
+
 // inline files into CSS
 const fileInlinerPlugin = {
 	name: 'file-inliner-plugin',
@@ -142,7 +181,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [fileInlinerPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin, eslintPlugin],
+	plugins: [fileInlinerPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin, eslintPlugin, copyToWikiPlugin],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,
