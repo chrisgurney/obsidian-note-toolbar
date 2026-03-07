@@ -128,8 +128,7 @@ const stylesPlugin = {
 			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
 			process.exit(1);
 		}
-		// use esbuild to check CSS for errors
-		// DISABLED for now until I have time to fix the noted issues
+		// use esbuild to report CSS syntax errors
 		await esbuild.build({
 			entryPoints: ['styles.css'],
 			bundle: false,
