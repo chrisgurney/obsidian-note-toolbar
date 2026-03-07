@@ -210,7 +210,7 @@ if (prod) {
 		try {
 			await context.rebuild();
 		} 
-		catch {
+		catch (error) {
 			console.error('[watch] rebuild failed:', error);
 		}
 	});
