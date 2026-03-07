@@ -132,7 +132,8 @@ const fileInlinerPlugin = {
 	  build.onEnd(async () => {
 		try {
 			await fileInliner('src/Styles/styles.css', 'styles.css');
-		} catch {
+		} catch (error) {
+			console.error("\x1b[31m[file-inliner-plugin] Error:\x1b[0m", error);
 			process.exit(1);
 		}
 	  });
