@@ -27,14 +27,6 @@ const WIKI_FILES = [
 	{ src: "docs/gallery.md", dest: "Gallery.md" },
 ];
 
-// use esbuild to check CSS for errors
-// DISABLED for now until I have time to fix the noted issues
-// await esbuild.build({
-// 	entryPoints: ['src/styles.css'],
-// 	bundle: false,
-// 	write: false
-// }).catch(() => process.exit(1));
-
 const typecheckPlugin = {
 	name: 'typecheck',
 	setup(build) {
@@ -125,17 +117,24 @@ const copyToWikiPlugin = {
 	},
 };
 
-// inline files into CSS
-const fileInlinerPlugin = {
-	name: 'file-inliner-plugin',
+// inline files into CSS, and validates it
+const stylesPlugin = {
+	name: 'styles',
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
 			await fileInliner('src/Styles/styles.css', 'styles.css');
 		} catch (error) {
-			console.error("\x1b[31m[file-inliner-plugin] Error:\x1b[0m", error);
+			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
 			process.exit(1);
 		}
+		// use esbuild to check CSS for errors
+		// DISABLED for now until I have time to fix the noted issues
+		await esbuild.build({
+			entryPoints: ['styles.css'],
+			bundle: false,
+			write: false,
+		}).catch(() => process.exit(1));
 	  });
 	},
   };
@@ -188,7 +187,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [fileInlinerPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin, eslintPlugin, copyToWikiPlugin],
+	plugins: [stylesPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin, eslintPlugin, copyToWikiPlugin],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,
