@@ -6,7 +6,7 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
     const items = JSON.parse(fs.readFileSync(itemsFile, 'utf-8'));
     const gallery = JSON.parse(fs.readFileSync(galleryFile, 'utf-8'));
 
-    let markdown = `# ${gallery.title.en}\n\n`;
+    let markdown = '';
 
     const getExclusionNote = (item) => {
         const x = item.excludeOn
