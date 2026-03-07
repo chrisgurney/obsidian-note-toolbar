@@ -133,7 +133,10 @@ const stylesPlugin = {
 			entryPoints: ['styles.css'],
 			bundle: false,
 			write: false,
-		}).catch(() => process.exit(1));
+		}).catch((error) => {
+			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
+			process.exit(1)
+		});
 	  });
 	},
   };
@@ -151,8 +154,9 @@ const galleryDocsPlugin = {
 		}
 		try {
 			await fileInliner('docs/gallery-header.md', 'docs/gallery.md');
-		} catch (error) {
-			console.error("\x1b[31m[file-inliner-plugin] Error:\x1b[0m", error);
+		}
+		catch (error) {
+			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
 			process.exit(1);
 		}
 	  });
