@@ -73,7 +73,12 @@ const typedocPlugin = {
 					console.error(`${data}`);
 				});
 				typedoc.on('close', (code) => {
-					code === 0 ? resolve() : reject(new Error(`typedoc exited with code ${code}`));
+					if (code === 0) {
+						console.log(`[api-docs] API docs generated in: ${DOC_OUTPUT}/api`);
+						resolve();
+					} else {
+						reject(new Error(`typedoc exited with code ${code}`));
+					}
 				});
 			});
 			// generate wiki output
