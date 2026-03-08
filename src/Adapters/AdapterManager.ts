@@ -34,11 +34,7 @@ export default class AdapterManager {
      * Updates status of other installed plugins we're interested in.
      */
     checkPlugins() {
-        // @ts-ignore
-        const appPlugins = this.ntb.app.plugins.plugins;
-        // @ts-ignore
-        const internalPlugins = this.ntb.app.internalPlugins.plugins;
-
+        const { appPlugins, internalPlugins } = this.ntb.obsidian.getPlugins();
         Object.keys(this.plugins).forEach(key => {
             this.plugins[key] = key in appPlugins;
         });
