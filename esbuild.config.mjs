@@ -17,8 +17,8 @@ if you want to view the source, please visit the github repository of this plugi
 
 const prod = (process.argv[2] === "production");
 
-const DOC_IMPORTS = "docs/_imports";
 const DOC_OUTPUT = "docs/dist";
+const DOC_WIKI_INPUT = "docs/wiki";
 
 // directory of the external repo to copy files into
 const WIKI_REPO = "../obsidian-note-toolbar-wiki";
@@ -75,11 +75,11 @@ const typedocPlugin = {
 					code === 0 ? resolve() : reject(new Error(`typedoc exited with code ${code}`));
 				});
 			});
+			// generate wiki output
 			try {
-				await fileInliner(`${DOC_IMPORTS}/api-header.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`);
+				await fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-API.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`);
 			}
 			catch (error) {
-				console.error("\x1b[31m[api-docs] Error:\x1b[0m", error);
 				process.exit(1);
 			}
 		});
@@ -171,11 +171,11 @@ const galleryDocsPlugin = {
 			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
 			process.exit(1);
 		}
+		// generate wiki output
 		try {
-			await fileInliner(`${DOC_IMPORTS}/gallery-header.md`, `${DOC_OUTPUT}/wiki/Gallery.md`);
+			await fileInliner(`${DOC_WIKI_INPUT}/Gallery.md`, `${DOC_OUTPUT}/wiki/Gallery.md`);
 		}
 		catch (error) {
-			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
 			process.exit(1);
 		}
 	  });
