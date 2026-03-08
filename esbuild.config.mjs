@@ -26,8 +26,8 @@ const WIKI_REPO = "../obsidian-note-toolbar-wiki";
 // files to copy into the external repo after build
 // each entry: { src: <source path>, dest: <path relative to WIKI_REPO> }
 const WIKI_FILES = [
-	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.default.md`, dest: "Note-Toolbar-API.md" },
-	{ src: `${DOC_OUTPUT}/gallery/gallery.md`, dest: "Gallery.md" },
+	{ src: `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`, dest: "Note-Toolbar-API.md" },
+	{ src: `${DOC_OUTPUT}/wiki/Gallery.md`, dest: "Gallery.md" },
 ];
 
 /* ****************************************************************************
@@ -59,19 +59,31 @@ const typecheckPlugin = {
 const typedocPlugin = {
 	name: 'api-docs',
 	setup(build) {
-		build.onEnd(() => {
-			const typedoc = spawn('typedoc', [
-				'src/Api/INoteToolbarApi.ts',
-				'src/Api/IToolbar.ts',
-				'src/Api/IItem.ts',
-				'--readme',
-				'none'
-			]);
-			typedoc.stderr.on('data', (data) => {
-				console.error(`${data}`);
+		build.onEnd(async () => {
+			await new Promise((resolve, reject) => {
+				const typedoc = spawn('typedoc', [
+					'src/Api/INoteToolbarApi.ts',
+					'src/Api/IToolbar.ts',
+					'src/Api/IItem.ts',
+					'--readme',
+					'none'
+				]);
+				typedoc.stderr.on('data', (data) => {
+					console.error(`${data}`);
+				});
+				typedoc.on('close', (code) => {
+					code === 0 ? resolve() : reject(new Error(`typedoc exited with code ${code}`));
+				});
 			});
+			try {
+				await fileInliner(`${DOC_IMPORTS}/api-header.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`);
+			}
+			catch (error) {
+				console.error("\x1b[31m[api-docs] Error:\x1b[0m", error);
+				process.exit(1);
+			}
 		});
-  	},
+	},
 };
 
 const eslintPlugin = {
@@ -160,7 +172,7 @@ const galleryDocsPlugin = {
 			process.exit(1);
 		}
 		try {
-			await fileInliner(`${DOC_IMPORTS}/gallery-header.md`, `${DOC_OUTPUT}/gallery/gallery.md`);
+			await fileInliner(`${DOC_IMPORTS}/gallery-header.md`, `${DOC_OUTPUT}/wiki/Gallery.md`);
 		}
 		catch (error) {
 			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
