@@ -144,10 +144,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.ntb.settingsUtils.displayHelpSection(settingsDiv, true, () => {
 			this.close();
-			if (this.parent) {
-				// @ts-ignore
-				this.ntb.app.setting.close();
-			}
+			if (this.parent) this.ntb.app.setting.close();
 		});
 
 		this.contentEl.appendChild(settingsDiv);
@@ -524,7 +521,6 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 		
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-		// @ts-ignore
 		const isSourceView = currentView?.editMode?.sourceMode;
 		if (isSourceView && position === PositionType.Props) {
 			setting.descEl.append(getDisclaimersFr(SETTINGS_DISCLAIMERS, ['sourceProperties']));

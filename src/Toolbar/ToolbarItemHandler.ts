@@ -121,8 +121,7 @@ export default class ToolbarItemHandler {
                 this.ntb.debug("- openLinkText: ", linkHref, " from: ", activeFilePath);
                 let fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
                 if (fileOrFolder instanceof TFolder) {
-                    // @ts-ignore
-                    this.ntb.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(fileOrFolder);
+                    this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer').revealInFolder(fileOrFolder);
                 }
                 else if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
                     // this.ntb.api.modal(fileOrFolder, { editable: true });
@@ -241,10 +240,8 @@ export default class ToolbarItemHandler {
         if (isValidUri(linkHref)) {
             let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
 
-            // @ts-ignore
             const isWebViewerEnabled = this.ntb.app.internalPlugins.plugins['webviewer']?.enabled ?? false;
-            // @ts-ignore
-            const isWebViewerOpeningUrls = this.ntb.app.internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;					
+            const isWebViewerOpeningUrls = this.ntb.app.internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;
             let usingWebViewer = false;
 
             // use Web Viewer for certain targets even if the 'Open external links' setting is disabled
@@ -336,8 +333,7 @@ export default class ToolbarItemHandler {
         // this.debug('handleLinkFolder:', folder);
         let tFileOrFolder = folder ? this.ntb.app.vault.getAbstractFileByPath(folder) : undefined;
         if (tFileOrFolder instanceof TFolder) {
-            // @ts-ignore
-            this.ntb.app.internalPlugins.getEnabledPluginById("file-explorer").revealInFolder(tFileOrFolder);
+            this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer').revealInFolder(tFileOrFolder);
         }
         else {
             new Notice(

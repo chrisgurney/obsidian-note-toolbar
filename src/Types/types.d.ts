@@ -26,11 +26,19 @@ declare module "obsidian" {
         hotkeyManager: {
             getHotkeys(command: string): KeymapInfo[];
         };
-    }
-
-    // allows access to the path of the vault, for the {{vault_path}} var
-    interface FileSystemAdapter extends DataAdapter {
-        getBasePath(): string;
+        internalPlugins: {
+            getEnabledPluginById(id: string): any;
+            getPluginById(id: string): any;
+            plugins: Record<string, any>;
+        };
+        plugins: {
+            plugins: Record<string, any>;
+        };
+        setting: {
+            close(): void;
+            open(): void;
+            openTabById(id: string): void;
+        }
     }
 
     /** internal chooser API used by SuggestModal */
@@ -40,14 +48,23 @@ declare module "obsidian" {
         setSelectedItem(index: number, event: KeyboardEvent | boolean): void;
     }
 
-    /** allows access to SuggestModal chooser, so keyboard navigation can skip Gallery divider */
-    interface SuggestModal<T> {
-        chooser: ChooserType<T>;
+    // allows access to the path of the vault, for the {{vault_path}} var
+    interface FileSystemAdapter extends DataAdapter {
+        getBasePath(): string;
     }
 
-    // allows access to Menu DOM, to add a class for styling
+    // allows us to check if current view is in source mode
+    interface ItemView {
+        editMode: {
+            sourceMode: boolean;
+        }
+    }
+
 	interface Menu {
+        // allows access to Menu DOM, to add a class for styling
 		dom: HTMLDivElement
+        // alows us to clear the Editor menu to replace it with a toolbar
+        items: MenuItem[];
 	}
 
     interface MenuItem {
@@ -55,6 +72,11 @@ declare module "obsidian" {
 		dom: HTMLDivElement;
         // allows access to sub-menus, and setting warning style
         setSubmenu: () => Menu;
+    }
+
+    /** allows access to SuggestModal chooser, so keyboard navigation can skip Gallery divider */
+    interface SuggestModal<T> {
+        chooser: ChooserType<T>;
     }
 
     interface Vault {

@@ -40,7 +40,6 @@ export default class ContextMenu {
 		let contextMenu = new Menu();
 
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-		// @ts-ignore
 		const isSourceView = currentView?.editMode?.sourceMode;
 		const currentPosition = toolbarSettings ? this.ntb.settingsManager.getToolbarPosition(toolbarSettings) : undefined;
 

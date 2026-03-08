@@ -30,7 +30,6 @@ import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
 import HotkeyHelper from 'Utils/Hotkeys';
-import ObsidianInternals from 'Obsidian/ObsidianInternals';
 import PluginUtils from 'Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
@@ -40,7 +39,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	commands: CommandManager;
 	hotkeys: HotkeyHelper;
 	gallery: GalleryManager;
-	obsidian: ObsidianInternals;
 	protocolManager: ProtocolManager;
 	settings: NoteToolbarSettings;	
 	settingsManager: SettingsManager;
@@ -82,7 +80,6 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.callouts = new CalloutHandler(this);
 		this.el = new ToolbarElementHelper(this);
 		this.items = new ToolbarItemHandler(this);
-		this.obsidian = new ObsidianInternals(this);
 		this.render = new ToolbarRenderer(this);
 		this.settingsUtils = new SettingsUIUtils(this);
 		this.toolbars = new ToolbarHandler(this);
@@ -126,7 +123,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.adapters.updateAdapters();
 		
 			// has to be done on plugin load
-			// @ts-expect-error - internalPlugins is not in the public App type
 			const internalPlugins = this.app.internalPlugins;
 			this.listeners.workspace.workspacesPlugin = internalPlugins.getPluginById('workspaces');
 

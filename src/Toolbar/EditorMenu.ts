@@ -18,7 +18,6 @@ export default class EditorMenu {
 			const activeFile = this.ntb.app.workspace.getActiveFile();
 			const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.editorMenuToolbar);
 			if (toolbar) {
-				// @ts-ignore
 				menu.items = [];
 				if (this.ntb.settings.editorMenuAsToolbar) {
 					const pointerPos = this.ntb.utils.getPosition('pointer');

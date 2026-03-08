@@ -318,7 +318,6 @@ export default class CommandManager {
      * Convenience command to open settings (Note Toolbar's by default).
      */
     async openSettings(tabId: string = 'note-toolbar'): Promise<void> {
-        // @ts-ignore
         const settings = this.ntb.app.setting;
         await settings.open();
         settings.openTabById(tabId);
@@ -401,7 +400,6 @@ export default class CommandManager {
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
         const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-        // @ts-ignore make sure we're not in source (code) view
         const isSourceView = currentView?.editMode?.sourceMode;
         if (!activeFile || !currentView || isSourceView) return;
 

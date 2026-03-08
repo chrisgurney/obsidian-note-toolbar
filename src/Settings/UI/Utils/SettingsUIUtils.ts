@@ -394,8 +394,7 @@ export default class SettingsUIUtils {
 		usageFr.append(descLinkFr);
 		this.ntb.registerDomEvent(descLinkFr, 'click', () => {
 			parent?.close();
-			// @ts-ignore
-			ntb.app.setting.close();
+			this.ntb.app.setting.close();
 			window.open(this.getToolbarPropSearchUri(toolbar.name));
 		});
 

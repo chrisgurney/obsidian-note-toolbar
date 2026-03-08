@@ -68,10 +68,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.ntb.adapters.checkPlugins();
 
 		// help
-		this.ntb.settingsUtils.displayHelpSection(containerEl, undefined, () => {
-			// @ts-ignore
-			this.ntb.app.setting.close();
-		});
+		this.ntb.settingsUtils.displayHelpSection(containerEl, undefined, () => this.ntb.app.setting.close());
 
 		// toolbar list
 		this.displayToolbarList(containerEl);
