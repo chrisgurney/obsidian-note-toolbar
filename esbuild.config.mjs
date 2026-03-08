@@ -2,6 +2,7 @@ import builtins from "builtin-modules";
 import { spawn } from 'child_process';
 import chokidar from "chokidar";
 import esbuild from "esbuild";
+import { existsSync } from 'fs';
 import { copyFile, mkdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import process from "process";
@@ -110,10 +111,18 @@ const eslintPlugin = {
 };
 
 // copy configured files into the external wiki repo, only if contents changed
+let isWikiRepoWarningShown = false;
 const copyToWikiPlugin = {
 	name: 'copy-to-wiki',
 	setup(build) {
 		build.onEnd(async () => {
+			if (!existsSync(WIKI_REPO)) {
+				if (!isWikiRepoWarningShown) {
+					console.warn(`\x1b[33m[copy-to-wiki] ⚠ wiki repo folder not found, skipping copies to: ${WIKI_REPO}\x1b[0m`);
+					isWikiRepoWarningShown = true;
+				}
+				return;
+			}
 			for (const { src, dest } of WIKI_FILES) {
 				const destPath = join(WIKI_REPO, dest);
 				try {
