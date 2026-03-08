@@ -1,6 +1,7 @@
 // Generates a markdown summary of Gallery items for publishing in the User Guide.
 
 import fs from 'fs';
+import path from 'path';
 
 export async function galleryDocs(itemsFile, galleryFile, outputFile) {
     const items = JSON.parse(fs.readFileSync(itemsFile, 'utf-8'));
@@ -41,6 +42,10 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
         markdown += '\n';
     }
 
+    const dir = path.dirname(outputFile);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
     fs.writeFileSync(outputFile, markdown);
     console.log('[gallery-docs] Markdown exported to:', outputFile);
 }

@@ -15,8 +15,9 @@ export async function fileInliner(inputPath, outputPath) {
 
     await fs.writeFile(outputPath, content);
     console.log(`[file-inliner] written: ${outputPath}`);
-  } catch (error) {
-    console.error('[file-inliner] processing failed:', error);
+  }
+  catch (error) {
+    console.error(`\x1b[31m[file-inliner] ✗ failed: ${inputPath}\x1b[0m`, error);
     throw error;
   }
 }

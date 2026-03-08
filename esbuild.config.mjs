@@ -17,15 +17,21 @@ if you want to view the source, please visit the github repository of this plugi
 
 const prod = (process.argv[2] === "production");
 
+const DOCS_OUTPUT = "docs/dist";
+
 // directory of the external repo to copy files into
 const WIKI_REPO = "../obsidian-note-toolbar-wiki";
 
 // files to copy into the external repo after build
 // each entry: { src: <source path>, dest: <path relative to WIKI_REPO> }
 const WIKI_FILES = [
-	{ src: "docs/api/INoteToolbarApi.Interface.default.md", dest: "Note-Toolbar-API.md" },
-	{ src: "docs/gallery.md", dest: "Gallery.md" },
+	{ src: `${DOCS_OUTPUT}/api/INoteToolbarApi.Interface.default.md`, dest: "Note-Toolbar-API.md" },
+	{ src: `${DOCS_OUTPUT}/gallery/gallery.md`, dest: "Gallery.md" },
 ];
+
+/* ****************************************************************************
+ * PLUGINS
+ * ************************************************************************** */
 
 const typecheckPlugin = {
 	name: 'typecheck',
@@ -146,14 +152,14 @@ const galleryDocsPlugin = {
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', 'docs/gallery-items.md');
+			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', `${DOCS_OUTPUT}/gallery/items.md`);
 		} 
 		catch (error) {
 			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
 			process.exit(1);
 		}
 		try {
-			await fileInliner('docs/gallery-header.md', 'docs/gallery.md');
+			await fileInliner('docs/gallery-header.md', `${DOCS_OUTPUT}/gallery/gallery.md`);
 		}
 		catch (error) {
 			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
@@ -162,6 +168,10 @@ const galleryDocsPlugin = {
 	  });
 	},
   };
+
+/* ****************************************************************************
+ * EXECUTE BUILD
+ * ************************************************************************** */
 
 const context = await esbuild.context({
 	banner: {
