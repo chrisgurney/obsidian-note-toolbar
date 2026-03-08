@@ -71,15 +71,17 @@ const typedocPlugin = {
 					'--readme',
 					'none'
 				]);
+				let errorOutput = '';
 				typedoc.stderr.on('data', (data) => {
-					console.error(`${data}`);
+					errorOutput += data;
 				});
 				typedoc.on('close', (code) => {
 					if (code === 0) {
 						// console.log(`[api-docs] API docs generated in: ${DOC_OUTPUT}/api`);
 						resolve();
-					} else {
-						reject(new Error(`typedoc exited with code ${code}`));
+					} 
+					else {
+						reject(new Error(`typedoc exited with code ${code}${errorOutput ? `:\n${errorOutput.trim()}` : ''}`));
 					}
 				});
 			});
