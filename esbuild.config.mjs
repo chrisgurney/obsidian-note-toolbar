@@ -16,6 +16,8 @@ if you want to view the source, please visit the github repository of this plugi
 */
 `;
 
+let isDocsChange = false;
+let isWikiRepoWarningShown = false;
 const prod = (process.argv[2] === "production");
 
 const DOC_OUTPUT = "docs/dist";
@@ -74,7 +76,7 @@ const typedocPlugin = {
 				});
 				typedoc.on('close', (code) => {
 					if (code === 0) {
-						console.log(`[api-docs] API docs generated in: ${DOC_OUTPUT}/api`);
+						// console.log(`[api-docs] API docs generated in: ${DOC_OUTPUT}/api`);
 						resolve();
 					} else {
 						reject(new Error(`typedoc exited with code ${code}`));
@@ -83,7 +85,7 @@ const typedocPlugin = {
 			});
 			// generate wiki output
 			try {
-				await fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-API.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`);
+				if (fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-API.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`)) isDocsChange = true;
 			}
 			catch (error) {
 				process.exit(1);
@@ -116,7 +118,6 @@ const eslintPlugin = {
 };
 
 // copy configured files into the external wiki repo, only if contents changed
-let isWikiRepoWarningShown = false;
 const copyToWikiPlugin = {
 	name: 'copy-to-wiki',
 	setup(build) {
@@ -156,7 +157,7 @@ const stylesPlugin = {
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await fileInliner('src/Styles/styles.css', 'styles.css');
+			if (fileInliner('src/Styles/styles.css', 'styles.css')) isDocsChange = true;
 		} catch (error) {
 			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
 			process.exit(1);
@@ -179,7 +180,7 @@ const galleryDocsPlugin = {
 	setup(build) {
 	  build.onEnd(async () => {
 		try {
-			await galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', `${DOC_OUTPUT}/gallery/items.md`);
+			if (galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', `${DOC_OUTPUT}/gallery/items.md`)) isDocsChange = true;
 		} 
 		catch (error) {
 			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
@@ -187,7 +188,7 @@ const galleryDocsPlugin = {
 		}
 		// generate wiki output
 		try {
-			await fileInliner(`${DOC_WIKI_INPUT}/Gallery.md`, `${DOC_OUTPUT}/wiki/Gallery.md`);
+			if (fileInliner(`${DOC_WIKI_INPUT}/Gallery.md`, `${DOC_OUTPUT}/wiki/Gallery.md`)) isDocsChange = true;
 		}
 		catch (error) {
 			process.exit(1);
@@ -195,6 +196,26 @@ const galleryDocsPlugin = {
 	  });
 	},
   };
+
+const buildStart = {
+    name: 'build-start',
+    setup(build) {
+        build.onStart(() => {
+			isDocsChange = false; 
+		});
+    },
+}
+
+const buildEnd = {
+	name: 'build end',
+	setup(build) {
+		build.onEnd(() => {
+			if (!isDocsChange) {
+				console.log('[docs] up to date');
+			}
+		});
+	},
+};
 
 /* ****************************************************************************
  * EXECUTE BUILD
@@ -227,7 +248,16 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	plugins: [stylesPlugin, typedocPlugin, galleryDocsPlugin, typecheckPlugin, eslintPlugin, copyToWikiPlugin],
+	plugins: [
+		buildStart,
+		stylesPlugin, 
+		typedocPlugin, 
+		galleryDocsPlugin, 
+		typecheckPlugin, 
+		eslintPlugin, 
+		copyToWikiPlugin, 
+		buildEnd
+	],
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
 	minify: prod ? true : false,

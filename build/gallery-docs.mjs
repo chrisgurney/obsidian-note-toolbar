@@ -1,9 +1,10 @@
-// Generates a markdown summary of Gallery items for publishing in the User Guide.
+// generates a markdown summary of Gallery items for publishing in the User Guide.
+// returns true if the output file was written, false if unchanged
 
 import fs from 'fs';
 import path from 'path';
 
-export async function galleryDocs(itemsFile, galleryFile, outputFile) {
+export function galleryDocs(itemsFile, galleryFile, outputFile) {
     const items = JSON.parse(fs.readFileSync(itemsFile, 'utf-8'));
     const gallery = JSON.parse(fs.readFileSync(galleryFile, 'utf-8'));
 
@@ -30,7 +31,7 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
 
             // FIXME: reuse function to check command ID here?
             // if (item.type === 'plugin' && item.pluginName) {
-            //     description += ` • Uses plugin: ${item.pluginName})`;
+            //     description += ` • Uses plugin: ${item.pluginName})`;
             // }
 
             const exclusionNote = getExclusionNote(item);
@@ -46,15 +47,10 @@ export async function galleryDocs(itemsFile, galleryFile, outputFile) {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
     }
-    fs.writeFileSync(outputFile, markdown);
-    console.log('[gallery-docs] Markdown exported to:', outputFile);
-}
 
-// // Uncomment the following lines to run this script directly from the command line
-// if (process.argv.length === 5) {
-//     const [,, itemsFile, galleryFile, outputFile] = process.argv;
-//     await galleryDocs(itemsFile, galleryFile, outputFile);
-// } else {
-//     console.error('Usage: node gallery-docs.mjs <gallery-items.json> <gallery.json> <output.md>');
-//     process.exit(1);
-// }
+    const existing = fs.existsSync(outputFile) ? fs.readFileSync(outputFile, 'utf-8') : null;
+    if (existing === markdown) return false;
+
+    fs.writeFileSync(outputFile, markdown);
+    return true;
+}

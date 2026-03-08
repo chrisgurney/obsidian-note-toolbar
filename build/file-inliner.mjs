@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 // inlines @import directives in the input file and writes the result to the output file
+// returns true if the output file was written, false if unchanged
 export function fileInliner(inputPath, outputPath) {
   try {
     let content = fs.readFileSync(inputPath, 'utf8');
@@ -17,8 +18,12 @@ export function fileInliner(inputPath, outputPath) {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
+
+    const existing = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : null;
+    if (existing === content) return false;
+
     fs.writeFileSync(outputPath, content);
-    console.log(`[file-inliner] written: ${outputPath}`);
+    return true;
   }
   catch (error) {
     console.error(`\x1b[31m[file-inliner] ✗ failed: ${inputPath}\x1b[0m`, error);
