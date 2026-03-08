@@ -25,4 +25,4 @@ Here's what's currently available, grouped by category. If you're missing any of
 
 ---
 
-@import 'dist/gallery/items.md';
+@import '../dist/gallery/items.md';
