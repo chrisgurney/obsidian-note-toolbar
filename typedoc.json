@@ -8,5 +8,6 @@
     "parametersFormat": "table",
     "outputFileStrategy": "members",
     "plugin": ["typedoc-plugin-markdown"],
-    "out": "./docs/dist/api"
+    "out": "./docs/dist/api",
+    "skipErrorChecking": true
 }
