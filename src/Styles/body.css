@@ -102,22 +102,16 @@ body {
      * Bottom toolbar positioning
      */
     --cg-nt-tbar-bottom-pos-phone: var(--cg-nt-tbar-bottom-margin-bottom-phone);
-    &.is-hidden-nav {
-        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
-    }
     &.auto-full-screen {
         --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height));
-        &.is-hidden-nav {
-            --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
-        }
     }
     &.is-floating-nav {
         --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
-        &.is-hidden-nav {
-            --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
-        }
     }
-
+    &.is-hidden-nav {
+        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+    }
+    
     /*
      * Android styles
      */
