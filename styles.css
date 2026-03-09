@@ -1401,6 +1401,9 @@ body {
     &.is-hidden-nav {
         --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
     }
+    &.ntb-remove-nav {
+        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+    }
     
     /*
      * Android styles
@@ -2562,13 +2565,6 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     /* reduce padding to better align with formatting toolbar */
     .ntb-is-keyboard-open & {
         padding-inline: 0;
-    }
-}
-
-/* if Navbar is completely hidden by Note Toolbar, don't shift bottom toolbars */
-.is-phone.ntb-remove-nav .cg-note-toolbar-container[data-tbar-position*="bottom"] {
-    & .cg-note-toolbar-callout {
-        margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
     }
 }
 

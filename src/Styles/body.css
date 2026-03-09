@@ -111,6 +111,9 @@ body {
     &.is-hidden-nav {
         --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
     }
+    &.ntb-remove-nav {
+        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+    }
     
     /*
      * Android styles
