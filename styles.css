@@ -1391,15 +1391,15 @@ body {
     /*
      * Bottom toolbar positioning
      */
-    --cg-nt-tbar-bottom-pos-phone: var(--cg-nt-tbar-bottom-margin-bottom-phone);
+    --ntb-tbar-bottom-margin-phone: var(--cg-nt-tbar-bottom-margin-bottom-phone);
     &.auto-full-screen {
-        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height));
+        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height));
     }
     &.is-floating-nav {
-        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
+        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
     }
     &.is-hidden-nav {
-        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
     }
     
     /*
@@ -2474,7 +2474,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         }
         & .cg-note-toolbar-callout {
             .is-phone & {
-                margin-bottom: var(--cg-nt-tbar-bottom-pos-phone);
+                margin-bottom: var(--ntb-tbar-bottom-margin-phone);
                 /* use animation consistent with Navbar */
                 transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
             }

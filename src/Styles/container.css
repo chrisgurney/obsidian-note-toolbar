@@ -53,7 +53,7 @@
         }
         & .cg-note-toolbar-callout {
             .is-phone & {
-                margin-bottom: var(--cg-nt-tbar-bottom-pos-phone);
+                margin-bottom: var(--ntb-tbar-bottom-margin-phone);
                 /* use animation consistent with Navbar */
                 transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
             }
