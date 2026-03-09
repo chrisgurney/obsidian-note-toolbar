@@ -37,7 +37,7 @@ declare module "obsidian" {
         setting: {
             close(): void;
             open(): void;
-            openTabById(id: string): void;
+            openTabById(id: string): SettingTab;
         }
     }
 
