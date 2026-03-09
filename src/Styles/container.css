@@ -53,12 +53,9 @@
         }
         & .cg-note-toolbar-callout {
             .is-phone & {
-                margin-bottom: calc(var(--navbar-height) + var(--cg-nt-tbar-bottom-margin-bottom-phone));
+                margin-bottom: var(--cg-nt-tbar-bottom-pos-phone);
                 /* use animation consistent with Navbar */
                 transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
-                .is-hidden-nav & {
-                    margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
-                }
             }
             /* fix: bottom margin needs to be removed when keyboard is open on phone */
             .is-phone.ntb-is-keyboard-open & {

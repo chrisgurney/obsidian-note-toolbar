@@ -12,7 +12,7 @@ body {
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
-    --cg-nt-tbar-bottom-margin-bottom-phone: var(--safe-area-inset-bottom);
+    --cg-nt-tbar-bottom-margin-bottom-phone: 0px;
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-3);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
@@ -98,11 +98,29 @@ body {
     --cg-nt-quick-tools-item-text-color: var(--text-normal);
     --cg-nt-ui-modal-width: var(--prompt-width);
 
-    /* fix: don't need safe-area-inset when fixed nav is visible on phone #522 */
-    &.is-phone:not(.is-floating-nav):not(.is-hidden-nav) {
-        --cg-nt-tbar-bottom-margin-bottom-phone: 0px;
+    /*
+     * Bottom toolbar positioning
+     */
+    --cg-nt-tbar-bottom-pos-phone: var(--cg-nt-tbar-bottom-margin-bottom-phone);
+    &.is-hidden-nav {
+        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+    }
+    &.auto-full-screen {
+        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height));
+        &.is-hidden-nav {
+            --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+        }
+    }
+    &.is-floating-nav {
+        --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
+        &.is-hidden-nav {
+            --cg-nt-tbar-bottom-pos-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+        }
     }
 
+    /*
+     * Android styles
+     */
     &.is-android {
         --cg-nt-fab-border-radius: var(--radius-xl);
     }
