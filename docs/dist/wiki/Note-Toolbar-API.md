@@ -50,16 +50,6 @@ const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e235
 
 ---
 
-[obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / default
-
-## Type Parameters
-
-| Type Parameter |
-| ------ |
-| `T` |
-
-## Properties
-
 ### app
 
 > **app**: `App`

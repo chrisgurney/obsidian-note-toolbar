@@ -2,7 +2,7 @@ import builtins from "builtin-modules";
 import { spawn } from 'child_process';
 import chokidar from "chokidar";
 import esbuild from "esbuild";
-import { existsSync } from 'fs';
+import fs, { existsSync } from 'fs';
 import { copyFile, mkdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import process from "process";
@@ -87,7 +87,13 @@ const typedocPlugin = {
 			});
 			// generate wiki output
 			try {
+				// inline linked files
 				if (fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-API.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`)) isDocsChange = true;
+				// replace auto-generated heading
+				const apiDocPath = `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`;
+				const apiDocContent = fs.readFileSync(apiDocPath, 'utf8');
+				const apiDocCleaned = apiDocContent.replace(/^.*obsidian-note-toolbar.*\n\n## Type Parameters[\s\S]*?## Properties\n\n/m, '');
+				fs.writeFileSync(apiDocPath, apiDocCleaned);
 			}
 			catch (error) {
 				process.exit(1);
