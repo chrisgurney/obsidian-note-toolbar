@@ -30,8 +30,6 @@ export default class ToolbarRenderer {
 
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
-	mobileNavbarMargin: number;
-	viewActionsHeight: number;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -1015,10 +1013,6 @@ export default class ToolbarRenderer {
 
 		// position top navbar (view header) below toolbar
 		if (toolbarPosition === PositionType.Top && toolbarHeight) {
-			if (!this.viewActionsHeight) {
-				// only calculate this once, so we don't keep adding it
-				this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
-			}
 			viewHeaderEl.style.marginTop = toolbarHeight + 'px';
 		}
 		else {
@@ -1043,18 +1037,6 @@ export default class ToolbarRenderer {
 		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 		if (!navbarEl) return;
 		
-		// position Obsidian Navbar above bottom toolbar
-		if (toolbarPosition === PositionType.Bottom && toolbarHeight) {
-			if (!this.mobileNavbarMargin) {
-				// only calculate this once, so we don't keep adding it
-				this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(navbarEl).marginBottom);
-			}
-			navbarEl.style.marginBottom = (this.mobileNavbarMargin + toolbarHeight) + 'px';	
-		}
-		else {
-			navbarEl.style.marginBottom = ''; // reset style
-		}
-
 		navbarEl.style.marginBottom = ''; // reset spacing
 
 		// move Navbar left/right to make room for the FAB
