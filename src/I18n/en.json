@@ -102,6 +102,7 @@
         "item": {
             "error-invalid-icon": "Invalid icon ID: {{iconId}}"
         },
+        "link-name": "Note\u00A0Toolbar\u00A0API",
         "msg": {
             "block-no-id": "No block ID found",
             "clipboard-copied": "Copied to clipboard",
@@ -110,7 +111,6 @@
             "file-not-exist": "File does not exist",
             "toolbar-not-found": "Toolbar not found: {{toolbar}}"
         },
-        "name": "Note Toolbar API",
         "ui": {
             "button-submit": "Submit",
             "error-cancelled": "Cancelled prompt",
