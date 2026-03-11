@@ -238,7 +238,7 @@ export default class ToolbarRenderer {
             return;
         }
 
-		this.updatePhoneNavigation(position, noteToolbarElement?.offsetHeight ?? 0);
+		this.updatePhoneNavigation(position);
 		
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
@@ -295,6 +295,8 @@ export default class ToolbarRenderer {
                 }
                 break;
         }
+
+		activeDocument.body.style.setProperty('--ntb-toolbar-height', `${embedBlock.offsetHeight ?? 0}px`);
 
         this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
         this.ntb.debugGroupEnd();
@@ -966,7 +968,8 @@ export default class ToolbarRenderer {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
 
-		this.updatePhoneNavigation(currentPosition, toolbarEl.offsetHeight);
+		this.updatePhoneNavigation(currentPosition);
+		activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarEl.offsetHeight ?? 0}px`);
 
 		this.ntb.debugGroupEnd();
 
@@ -996,9 +999,8 @@ export default class ToolbarRenderer {
 	/** 
 	 * Repositions Obsidian's navbar if necessary, and hides navbars/actions if configured.
 	 * @param toolbarPosition position of current toolbar.
-	 * @param toolbarHeight height of the current toolbar.
 	 */ 
-	updatePhoneNavigation(toolbarPosition: PositionType | undefined, toolbarHeight?: number): void {
+	updatePhoneNavigation(toolbarPosition: PositionType | undefined): void {
 
 		if (!Platform.isPhone || !toolbarPosition) return;
 
@@ -1008,11 +1010,6 @@ export default class ToolbarRenderer {
 
 		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
 		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarHeight ?? 0}px`);
-			});
-		});
 
 		//
 		// bottom navigation bar
