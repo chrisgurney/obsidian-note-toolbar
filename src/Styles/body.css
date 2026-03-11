@@ -110,7 +110,7 @@ body {
     --ntb-tbar-top-pt-phone: 0px;
     &.auto-full-screen {
         --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height));
-        --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height));
+        --ntb-tbar-top-header-mt-phone: var(--ntb-toolbar-height);
         --ntb-tbar-top-header-pt-phone: var(--view-header-top-offset);
         --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + 16px);
         --ntb-tbar-top-spacing: calc(var(--view-header-height) + 16px);
@@ -120,7 +120,7 @@ body {
         --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + 16px);
         --ntb-tbar-top-spacing: calc(var(--view-header-height) + 16px);
         &:not(.auto-full-screen) {
-            --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height));
+            --ntb-tbar-top-header-mt-phone: var(--ntb-toolbar-height);
             --ntb-tbar-top-header-pt-phone: var(--view-header-top-offset);
             --ntb-tbar-top-spacing-md: var(--size-4-2);
         }
