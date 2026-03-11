@@ -273,7 +273,7 @@ export default class ToolbarRenderer {
                 // FIXME: add to modal header, but this is causing duplicate toolbars
                 // if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
                 viewHeader 
-                    ? viewHeader.insertAdjacentElement("afterend", embedBlock)
+                    ? viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock)
                     : this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
                 break;
             }
@@ -1006,29 +1006,9 @@ export default class ToolbarRenderer {
 		// top navigation bar (view header)
 		//
 
-		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
-		
 		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
 		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
-
-		// position top navbar (view header) below toolbar
-		if (toolbarPosition === PositionType.Top && toolbarHeight) {
-			viewHeaderEl.style.marginTop = toolbarHeight + 'px';
-		}
-		else {
-			viewHeaderEl.style.marginTop = ''; // reset style
-		}
-
-		// reduce top spacing
-		const viewActionsEl = viewHeaderEl.querySelector('.view-actions') as HTMLElement;
-		if (viewActionsEl) {
-			if (toolbarPosition === PositionType.Top) {
-				activeDocument.body.style.setProperty('--view-top-spacing-markdown', `calc(${viewActionsEl.offsetHeight}px + 16px)`);
-			}
-			else {
-				activeDocument.body.style.removeProperty('--view-top-spacing-markdown');
-			}
-		}
+		activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarHeight ?? 0}px`);
 
 		//
 		// bottom navigation bar

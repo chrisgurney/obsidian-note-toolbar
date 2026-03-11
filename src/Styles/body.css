@@ -12,7 +12,7 @@ body {
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
-    --cg-nt-tbar-bottom-margin-bottom-phone: 0px;
+    --cg-nt-tbar-bottom-mb-phone: 0px;
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-3);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
@@ -35,7 +35,7 @@ body {
     --cg-nt-tbar-text-shadow: var(--shadow-s);
     --cg-nt-tbar-text-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
     --cg-nt-tbar-top-padding-x-mobile: var(--size-4-3);
-    --cg-nt-tbar-top-padding-top-phone: var(--safe-area-inset-top);
+    --cg-nt-tbar-top-pt-phone: var(--safe-area-inset-top);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -0.5rem;
     --cg-nt-tbar-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
@@ -101,18 +101,31 @@ body {
     /*
      * Bottom toolbar positioning
      */
-    --ntb-tbar-bottom-margin-phone: var(--cg-nt-tbar-bottom-margin-bottom-phone);
+    --ntb-tbar-bottom-mb-phone: var(--cg-nt-tbar-bottom-mb-phone);
+    --ntb-tbar-top-fade-mask: linear-gradient(to bottom, rgba(0, 0, 0, var(--view-top-fade-opacity)) 0%, #000000 calc(var(--view-header-height) + 12px));;
+    --ntb-tbar-top-header-mt-phone: 0px;
+    --ntb-tbar-top-md-spacing: var(--size-4-2);
+    --ntb-tbar-top-mt-phone: var(--safe-area-inset-top);
+    --ntb-tbar-top-pt-phone: 0px;
     &.auto-full-screen {
-        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height));
+        --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height));
+        --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height));
+        --ntb-tbar-top-header-pt-phone: var(--view-header-top-offset);
+        --ntb-tbar-top-md-spacing: calc(var(--view-header-height) + 16px);
     }
     &.is-floating-nav {
-        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
+        --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
+        --ntb-tbar-top-md-spacing: calc(var(--view-header-height) + 16px);
+        &:not(.auto-full-screen) {
+            --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height));
+            --ntb-tbar-top-header-pt-phone: var(--view-header-top-offset);
+        }
     }
     &.is-hidden-nav {
-        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+        --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
     }
     &.ntb-remove-nav {
-        --ntb-tbar-bottom-margin-phone: calc(var(--cg-nt-tbar-bottom-margin-bottom-phone) + var(--safe-area-inset-bottom));
+        --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
     }
     
     /*
