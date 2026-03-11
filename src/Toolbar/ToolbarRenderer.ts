@@ -1008,7 +1008,11 @@ export default class ToolbarRenderer {
 
 		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
 		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
-		activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarHeight ?? 0}px`);
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarHeight ?? 0}px`);
+			});
+		});
 
 		//
 		// bottom navigation bar
