@@ -122,6 +122,7 @@ body {
         &:not(.auto-full-screen) {
             --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height));
             --ntb-tbar-top-header-pt-phone: var(--view-header-top-offset);
+            --ntb-tbar-top-spacing-md: var(--size-4-2);
         }
     }
     &.is-hidden-nav {
