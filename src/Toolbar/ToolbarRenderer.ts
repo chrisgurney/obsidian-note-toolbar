@@ -238,7 +238,7 @@ export default class ToolbarRenderer {
             return;
         }
 
-		this.updatePhoneNavigation(position);
+		this.updatePhoneNavigation(position, embedBlock);
 		
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
@@ -295,8 +295,6 @@ export default class ToolbarRenderer {
                 }
                 break;
         }
-
-		activeDocument.body.style.setProperty('--ntb-toolbar-height', `${embedBlock.offsetHeight ?? 0}px`);
 
         this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
         this.ntb.debugGroupEnd();
@@ -968,8 +966,7 @@ export default class ToolbarRenderer {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
 
-		this.updatePhoneNavigation(currentPosition);
-		activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarEl.offsetHeight ?? 0}px`);
+		this.updatePhoneNavigation(currentPosition, toolbarEl);
 
 		this.ntb.debugGroupEnd();
 
@@ -999,8 +996,9 @@ export default class ToolbarRenderer {
 	/** 
 	 * Repositions Obsidian's navbar if necessary, and hides navbars/actions if configured.
 	 * @param toolbarPosition position of current toolbar.
+	 * @param toolbarEl toolbar element, used to get height for header repositioning for _Top (fixed)_ position.
 	 */ 
-	updatePhoneNavigation(toolbarPosition: PositionType | undefined): void {
+	updatePhoneNavigation(toolbarPosition: PositionType | undefined, toolbarEl?: HTMLElement): void {
 
 		if (!Platform.isPhone || !toolbarPosition) return;
 
@@ -1010,6 +1008,13 @@ export default class ToolbarRenderer {
 
 		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
 		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
+		if (toolbarPosition === PositionType.Top && toolbarEl) {
+			// set immediately for initial value
+			activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarEl.offsetHeight}px`);
+			toolbarEl.addEventListener('transitionend', () => {
+				activeDocument.body.style.setProperty('--ntb-toolbar-height', `${toolbarEl.offsetHeight}px`);
+			});
+		}
 
 		//
 		// bottom navigation bar
