@@ -107,12 +107,7 @@ export default class ContextMenu {
 					}
 				}
 				else {
-					const DEFAULT_POSITIONS = [
-						{ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' },
-						{ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' },
-						{ type: PositionType.Props, titleKey: isSourceView ? 'setting.position.option-below-title' : 'setting.position.option-props', icon: 'arrow-down-narrow-wide' },
-						{ type: PositionType.Bottom, titleKey: 'setting.position.option-bottom', icon: 'arrow-down-to-line' }
-					];
+					const DEFAULT_POSITIONS = this.getDefaultPositions();
 
 					DEFAULT_POSITIONS.forEach(({ type, titleKey, icon }) => {
 						if (currentPosition !== type) {
@@ -340,5 +335,29 @@ export default class ContextMenu {
 		contextMenu.showAtPosition(event);
 
     }
+
+	/**
+	 * Gets the default possible positions for the toolbar.
+	 * @returns array of default positions.
+	 */
+	getDefaultPositions(): { type: PositionType, titleKey: string, icon: string }[] {
+		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		const isSourceView = currentView?.editMode?.sourceMode;
+
+		var defaultPositions = [];
+		if (Platform.isPhone) {
+			defaultPositions.push({ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' });
+			defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
+		}
+		else {
+			defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
+			defaultPositions.push({ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' });
+		}
+		if (this.ntb.utils.hasView('markdown')) {
+			defaultPositions.push({ type: PositionType.Props, titleKey: isSourceView ? 'setting.position.option-below-title' : 'setting.position.option-props', icon: 'arrow-down-narrow-wide' });
+		}
+		defaultPositions.push({ type: PositionType.Bottom, titleKey: 'setting.position.option-bottom', icon: 'arrow-down-to-line' });
+		return defaultPositions;
+	}	
 
 }
