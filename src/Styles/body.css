@@ -133,6 +133,9 @@ body {
         --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
         --ntb-tbar-top-spacing: var(--size-4-2);
     }
+    &.ntb-remove-view-header {
+        --ntb-tbar-top-spacing: 0px;
+    }
     &.ntb-remove-nav {
         --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
     }
