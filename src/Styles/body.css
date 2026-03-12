@@ -198,4 +198,7 @@ body.is-phone.ntb-remove-view-header {
     & .view-header {
         display: none !important;
     }
+    & .view-content {
+        mask-image: var(--view-top-fade-mask);
+    }
 }
