@@ -1172,7 +1172,7 @@ export default class ToolbarRenderer {
 	async renderFloatingToolbar(
 		toolbar: ToolbarSettings | undefined, 
 		position: Rect | undefined,
-		positionType: PositionType.Floating | PositionType.Text
+		positionType: PositionType.Floating | PositionType.Text | PositionType.Hidden
 	): Promise<void> {
 
 		if (!position || !toolbar) return;
@@ -1196,6 +1196,11 @@ export default class ToolbarRenderer {
 		/*
 		 * render new toolbar
 		 */
+
+		if (!this.ntb.utils.hasVisibleItems(toolbar)) {
+			this.ntb.debug("renderFloatingToolbar: toolbar has no visible items → rendering as hidden");
+			positionType = PositionType.Hidden;
+		}
 
 		let toolbarContainerEl = activeDocument.createElement('div');
 		toolbarContainerEl.id = toolbar.uuid;
