@@ -700,7 +700,7 @@
             "option-mobile-description": "Override default styles.",
             "option-mobile-empty": "No mobile styles set. Using default styles.",
             "option-mobile-name": "Mobile",
-            "option-noautohide": "no autohide",
+            "option-noautohide": "no auto-hide",
             "option-noborder": "no border",
             "option-notab": "no tab file items",
             "option-notsticky": "not sticky",
