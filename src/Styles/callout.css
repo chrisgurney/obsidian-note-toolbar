@@ -271,19 +271,8 @@
     }
 
     /*************************************************************************
-     * Toolbar Styles (sticky's further up in this file)
+     * Toolbar Styles
      *************************************************************************/
-
-    &[data-callout-metadata*="autohide"] {
-        &:not(.is-mobile &) {
-            opacity: var(--cg-nt-tbar-autohide-opacity);
-            transition: all 0.2s ease-in-out;
-            -webkit-transition: all 0.2s ease-in-out;
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
 
     &[data-callout-metadata*="between"] ul {
         justify-content: space-between;
@@ -684,6 +673,42 @@
         }
     }
     
+}
+
+/*
+ * Autohide Style
+ */
+body:not(.is-mobile) {
+    & .callout[data-callout="note-toolbar"][data-callout-metadata*="autohide"] {        
+        opacity: var(--cg-nt-tbar-autohide-opacity);
+        transition: all 0.2s ease-in-out;
+        -webkit-transition: all 0.2s ease-in-out;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+body.is-phone .cg-note-toolbar-container {
+    &[data-tbar-position*="bottom"] {
+        & .callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"]) {   
+            transition: margin-bottom 0.3s ease-in-out, transform 0.3s ease-out;
+            body.is-hidden-nav & {
+                opacity: 0;
+                transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+                visibility: hidden;
+            }
+        }
+    }
+    &[data-tbar-position*="top"] {
+        & .callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"]) {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+            body.is-hidden-nav & {
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                visibility: hidden;
+            }
+        }
+    }
 }
 
 /* on phones, hide the top border when properties is open */
