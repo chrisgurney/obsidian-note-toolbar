@@ -1409,6 +1409,7 @@ body {
         }
     }
     &:not(.is-floating-nav) {
+        --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height) - 1px);
         --ntb-tbar-top-spacing-md: 16px;
         &.auto-full-screen {
             --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height));
