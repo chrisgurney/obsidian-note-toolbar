@@ -277,10 +277,11 @@ export default class ToolbarRenderer {
                     : this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				// update height for header repositioning on phones
 				if (Platform.isPhone) {
-					// set immediately for initial value
-					activeDocument.body.style.setProperty('--ntb-toolbar-height', `${embedBlock.offsetHeight}px`);
-					embedBlock.addEventListener('transitionend', () => {
-						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${embedBlock.offsetHeight}px`);
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
+							activeDocument.body.style.setProperty('--ntb-toolbar-height', `${embedBlock.offsetHeight}px`);
+							// this.ntb.debug(embedBlock.offsetHeight);
+						});
 					});
 				}
                 break;
