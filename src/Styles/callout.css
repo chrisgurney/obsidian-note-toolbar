@@ -701,6 +701,9 @@ body.is-phone .cg-note-toolbar-container {
         }
     }
     &[data-tbar-position*="top"] {
+        body.is-floating-nav & {
+            --cg-nt-tbar-bg-color: transparent;
+        }
         &:has(.callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"])) {
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
             body.is-hidden-nav & {

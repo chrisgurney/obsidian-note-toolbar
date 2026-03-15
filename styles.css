@@ -1401,7 +1401,6 @@ body {
     --ntb-tbar-top-mt-phone: 0px;
     --ntb-tbar-top-pt-phone: var(--safe-area-inset-top);
     &.is-floating-nav {
-        --cg-nt-tbar-bg-color: transparent;
         --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
         --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + 16px + var(--ntb-toolbar-height));
         &.auto-full-screen {
@@ -2234,6 +2233,9 @@ body.is-phone .cg-note-toolbar-container {
         }
     }
     &[data-tbar-position*="top"] {
+        body.is-floating-nav & {
+            --cg-nt-tbar-bg-color: transparent;
+        }
         &:has(.callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"])) {
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
             body.is-hidden-nav & {
