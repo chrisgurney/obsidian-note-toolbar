@@ -17,7 +17,7 @@
     "@types/node": "^25.0.3",
     "@types/sortablejs": "^1.15.8",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
-    "@typescript-eslint/parser": "^8.53.1",
+    "@typescript-eslint/parser": "^8.55.0",
     "@typescript-eslint/utils": "^8.53.1",
     "builtin-modules": "3.3.0",
     "chokidar": "^5.0.0",
