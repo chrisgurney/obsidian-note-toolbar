@@ -1398,13 +1398,17 @@ body {
     --ntb-tbar-top-header-pt-phone: 0px;
     --ntb-tbar-top-spacing-md: var(--ntb-toolbar-height);
     --ntb-tbar-top-spacing: 0px;
+    --ntb-tbar-top-spacing-pad: 16px;
+    &:not(.workspace-leaf-content[data-type*="markdown"]) {
+        --ntb-tbar-top-spacing-pad: var(--ntb-toolbar-height);
+    }
     --ntb-tbar-top-mt-phone: 0px;
     --ntb-tbar-top-pt-phone: var(--safe-area-inset-top);
     &.is-floating-nav {
         --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height) + var(--safe-area-inset-bottom));
-        --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + 16px + var(--ntb-toolbar-height));
+        --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad) + var(--ntb-toolbar-height));
         &.auto-full-screen {
-            --ntb-tbar-top-spacing: calc(var(--view-header-height) + 16px);
+            --ntb-tbar-top-spacing: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
             --ntb-tbar-top-spacing-md: var(--ntb-toolbar-height);
         }
     }
@@ -1413,7 +1417,7 @@ body {
         --ntb-tbar-top-spacing-md: 16px;
         &.auto-full-screen {
             --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height));
-            --ntb-tbar-top-spacing: calc(var(--view-header-height) + 16px);
+            --ntb-tbar-top-spacing: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
             --ntb-tbar-top-spacing-md: var(--ntb-toolbar-height);
         }
     }
