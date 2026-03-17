@@ -1399,8 +1399,8 @@ body {
     --ntb-tbar-top-spacing-md: var(--ntb-toolbar-height);
     --ntb-tbar-top-spacing: 0px;
     --ntb-tbar-top-spacing-pad: 16px;
-    &:not(.workspace-leaf-content[data-type*="markdown"]) {
-        --ntb-tbar-top-spacing-pad: var(--ntb-toolbar-height);
+    &:not(:has(.workspace-leaf-content[data-type*="markdown"])) {
+        --ntb-tbar-top-spacing-pad: calc(var(--ntb-toolbar-height) + 16px);
     }
     --ntb-tbar-top-mt-phone: 0px;
     --ntb-tbar-top-pt-phone: var(--safe-area-inset-top);
