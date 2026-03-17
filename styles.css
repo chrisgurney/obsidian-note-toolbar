@@ -2275,6 +2275,10 @@ body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([
 body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]:not([data-callout-metadata*="card"]) {
     background: unset !important;
     mix-blend-mode: normal !important;
+    overflow: visible;
+    & .callout-content {
+        overflow: visible;
+    }
     & ul {
         gap: var(--size-4-2);
         & a, span.external-link {
