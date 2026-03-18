@@ -214,17 +214,11 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             if (this.values && this.values instanceof Array && keyIndex !== -1) {
                 return this.values[keyIndex] || t('api.ui.error-undefined');
             }
-            if (this.allowCustomInput && typeof item === 'string') {
-                return item;
-            }
-            return t('api.ui.error-undefined');
         }
-        else {
-            if (this.allowCustomInput && typeof item === 'string') {
-                return item;
-            }
-            return t('api.ui.error-undefined');
+        if (this.allowCustomInput && typeof item === 'string') {
+            return item;
         }
+        return t('api.ui.error-undefined');
     }
 
     onChooseItem(item: T): void {
