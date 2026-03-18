@@ -601,6 +601,22 @@
         }
     }
 
+    /* style buttons on phones similar to floating nav, if enabled */
+    &[data-callout-metadata*="button"], &[data-callout-metadata*="mbtn"] {
+        .is-phone.is-floating-nav & {
+            overflow: visible;
+            & .callout-content {
+                overflow: visible;
+                & ul a, ul span.external-link {
+                    backdrop-filter: var(--raised-blur);
+                    background: var(--raised-background);
+                    box-shadow: var(--raised-shadow);
+                    border: var(--raised-mask-border-width) solid transparent;
+                }
+            }
+        }
+    }
+
     &[data-callout-metadata*="tab"] ul {
         & li[data-active-file] {
             & span.external-link {
