@@ -100,7 +100,7 @@ export default class JavaScriptAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement) {
+    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement): Promise<string | undefined> {
 
         if (!filename) {
             return;
