@@ -117,7 +117,7 @@ export default class JavaScriptAdapter extends Adapter {
         let contents = await this.ntb?.app.vault.read(viewFile);
 
         if (contents) {
-            await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
+            return await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
         }
 
     }
@@ -153,10 +153,7 @@ export default class JavaScriptAdapter extends Adapter {
         const activeFilePath = activeFile?.path || '';
 
         if (expression) {
-            if (expression.includes("await")) expression = "(async () => { " + expression + " })()";
-            // TODO: not sure if this is needed for some reason when evaluating files? (from DataviewAdapter)
-            // expression += `\n//# sourceURL=${viewFile.path}`;
-            let func = new Function("input", expression);
+            let func = new JavaScriptAdapter.AsyncFunction("input", expression);
             const component = new Component();
             component.load();
             try {

@@ -11,6 +11,9 @@ export abstract class Adapter {
     adapterApi: any | null;
     adapterPlugin: any | null;
 
+    /** used to create async functions from strings at runtime */
+    protected static readonly AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+
     /**
      * Creates a new Adapter for the given plugin.
      * @param notetoolbar reference to the NoteToolbar plugin.
