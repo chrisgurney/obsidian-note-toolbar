@@ -122,11 +122,6 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     getSuggestions(query: string): FuzzyMatch<T>[] {
 
-        const saveMatches = (matches: FuzzyMatch<T>[]): FuzzyMatch<T>[] => {
-            this.currentMatches = matches;
-            return matches;
-        }
-
         this.keys = this.originalKeys;
         const isEmptyQuery = query.trim().length === 0;
 
@@ -147,12 +142,12 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                     const customItem = `${prefix}${strippedQuery}` as unknown as T;
                     const alreadyExists = matches.some(match => match.item === customItem);
                     if (!alreadyExists) {
-                        return saveMatches(
+                        return this.saveMatches(
                             [{ item: customItem, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
                         );
                     }
                 }
-                return saveMatches(matches);
+                return this.saveMatches(matches);
             } 
             else {
                 this.activePrefix = undefined;
@@ -165,14 +160,14 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             const alreadyExists = matches.some(match => this.getItemText(match.item) === searchSegment);
             if (!alreadyExists) {
                 // prepend the custom input option
-                return saveMatches(
+                return this.saveMatches(
                     [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
                 );
             }
-            return saveMatches(matches);
+            return this.saveMatches(matches);
         }
 
-        return saveMatches(super.getSuggestions(searchSegment));
+        return this.saveMatches(super.getSuggestions(searchSegment));
     }
 
     onClose(): void {
@@ -257,6 +252,14 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             }
         }
         return false;
+    }
+
+    /**
+     * Saves provided matches to a variable for later reference (by tab completion), and returns them.
+     */
+    private saveMatches(matches: FuzzyMatch<T>[]): FuzzyMatch<T>[] {
+        this.currentMatches = matches;
+        return matches;
     }
 
 }
