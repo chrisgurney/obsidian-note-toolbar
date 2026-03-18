@@ -131,7 +131,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         if (this.prefixes && !isEmptyQuery) {
             const prefix = Object.keys(this.prefixes).find(p => searchSegment.startsWith(p));
             if (prefix) {
-                return this.getSuggestionsWithPrefix(prefix, searchSegment, lastSpaceIndex);
+                return this.getSuggestionsWithPrefix(prefix, searchSegment, lastSpaceIndex, query);
             }
             else {
                 this.activePrefix = undefined;
@@ -251,18 +251,18 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
      * @param prefix the matched prefix string
      * @param searchSegment the portion of the query being searched (from last space or start)
      * @param lastSpaceIndex index of the last space in the original query, or -1 if none
+     * @param query the current query
      */
-    private getSuggestionsWithPrefix(prefix: string, searchSegment: string, lastSpaceIndex: number): FuzzyMatch<T>[] {
+    private getSuggestionsWithPrefix(prefix: string, searchSegment: string, lastSpaceIndex: number, query: string): FuzzyMatch<T>[] {
         this.activePrefix = prefix;
         this.activePrefixStart = lastSpaceIndex === -1 ? 0 : lastSpaceIndex + 1;
         this.keys = (this.prefixes![prefix] as () => T[])();
         const strippedQuery = searchSegment.slice(prefix.length);
         const matches = super.getSuggestions(strippedQuery);
         if (this.allowCustomInput && strippedQuery.length > 0) {
-            const customItem = `${prefix}${strippedQuery}` as unknown as T;
-            if (!matches.some(match => match.item === customItem)) {
+            if (!matches.some(match => this.getItemText(match.item) === query)) {
                 return this.saveMatches(
-                    [{ item: customItem, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
+                    [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
                 );
             }
         }
