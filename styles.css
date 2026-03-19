@@ -1403,6 +1403,7 @@ body {
     --ntb-tbar-top-pt-phone: var(--safe-area-inset-top);
     &.is-floating-nav {
         --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height) + var(--safe-area-inset-bottom) + 8px);
+        --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height) + 8px);
     }
     &:not(.is-floating-nav) {
         --ntb-tbar-top-header-mt-phone: 0px;
