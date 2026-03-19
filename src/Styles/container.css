@@ -15,8 +15,10 @@
         margin-inline-end: 0;
     }
     &:hover {
-        /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
-        overflow: inherit !important;
+        &:not(:has(.note-toolbar-launchpad)) {
+            /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
+            overflow: inherit !important;
+        }
     }
     /* width: var(--var-max-width);
     max-width: var(--var-max-width); */

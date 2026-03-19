@@ -2,7 +2,7 @@
  * Callouts
  */
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]:not(.note-toolbar-launchpad)) {
     &:hover {
         box-shadow: none !important; /* hide the border on hover of the toolbar callout */
         & .edit-block-button {
