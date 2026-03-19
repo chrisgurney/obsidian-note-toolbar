@@ -618,6 +618,15 @@
             & .callout-content {
                 & ul a:after, ul span.external-link:after {
                     backdrop-filter: brightness(var(--blur-brightness));
+                    display: var(--raised-mask-display);
+                    position: absolute;
+                    content: "";
+                    background: var(--raised-mask-background);
+                    mask: var(--raised-mask);
+                    mask-composite: var(--raised-mask-composite);
+                    inset: 0;
+                    border: var(--raised-mask-border-width) solid transparent;
+                    z-index: 1;
                 }
             }
         }
