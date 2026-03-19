@@ -2142,9 +2142,9 @@ body {
         }
     }
 
-    /* style buttons on phones similar to floating nav, if enabled */
+    /* style buttons on phones similar to floating nav */
     &[data-callout-metadata*="button"], &[data-callout-metadata*="mbtn"] {
-        .is-phone.is-floating-nav & {
+        .is-phone & {
             overflow: visible;
             & .callout-content {
                 overflow: visible;
@@ -2156,7 +2156,7 @@ body {
                 }
             }
         }
-        .is-phone.is-floating-nav.is-ios & {
+        .is-phone.is-ios & {
             & .callout-content {
                 & ul a:after, ul span.external-link:after {
                     backdrop-filter: brightness(var(--blur-brightness));
