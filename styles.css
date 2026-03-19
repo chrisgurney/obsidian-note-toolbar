@@ -1893,6 +1893,7 @@ body {
             gap: 16px;
             overflow-x: auto;
             overscroll-behavior-x: none;
+            padding: var(--border-width);
             padding-bottom: 4px;
             position: relative;
             scroll-behavior: smooth;
@@ -1913,7 +1914,7 @@ body {
                 min-width: var(--ntb-callout-card-width);
                 width: auto;
                 .is-mobile & {
-                    border: var(--border-width) solid var(--background-modifier-border);
+                    outline: var(--border-width) solid var(--background-modifier-border);
                     flex: var(--ntb-callout-card-flex-mobile);
                     min-width: var(--ntb-callout-card-width-mobile);
                 }
