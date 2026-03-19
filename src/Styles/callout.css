@@ -46,7 +46,6 @@
 .is-phone .cm-embed-block[data-tbar-position="top"] {
     margin-top: var(--ntb-tbar-top-mt-phone);
     padding-top: var(--ntb-tbar-top-pt-phone);
-    position: fixed;
 }
 
 .is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-header {
