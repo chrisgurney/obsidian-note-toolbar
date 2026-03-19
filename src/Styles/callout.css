@@ -614,6 +614,13 @@
                 }
             }
         }
+        .is-phone.is-floating-nav.is-ios & {
+            & .callout-content {
+                & ul a:after, ul span.external-link:after {
+                    backdrop-filter: brightness(var(--blur-brightness));
+                }
+            }
+        }
     }
 
     &[data-callout-metadata*="tab"] ul {
