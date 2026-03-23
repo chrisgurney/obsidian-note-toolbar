@@ -246,39 +246,39 @@
             height: 1em;
             text-transform: lowercase;
             width: 100%;
-            &:before, &:after {
+            &::before, &::after {
                 content: "";
                 flex: 1 1;
                 margin: auto;    
             }
-            &:before {
+            &::before {
                 margin-right: 6px;
             }
-            &:after {
+            &::after {
                 margin-left: 6px;
             }
         }
     }
     &[data-item-type="spreader"] > span {
-        &:before, &:after {
+        &::before, &::after {
             margin-top: 0;
             margin-bottom: 0;
         }
-        &:before {
+        &::before {
             content: "|←";
         }
-        &:after {
+        &::after {
             content: "→|";
             text-align: right;
         }
     }
     &[data-item-type="separator"] > span {
-        &:before, &:after {
+        &::before, &::after {
             border: dashed 1px var(--color-base-40);
         }
     }
     &[data-item-type="break"] > span {
-        &:before, &:after {
+        &::before, &::after {
             border: solid 1px var(--color-base-50);
         }
     }
