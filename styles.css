@@ -1499,6 +1499,12 @@ body.is-phone.ntb-remove-view-header {
         mask-image: var(--view-top-fade-mask);
     }
 }
+
+/* fix: tooltips appearing on elements below tapped elements */
+body.is-phone [aria-label]::before,
+body.is-phone [aria-label]::after {
+    display: none !important;
+}
 /*
  * Default adjustments for various themes (CSS variables)
  */
