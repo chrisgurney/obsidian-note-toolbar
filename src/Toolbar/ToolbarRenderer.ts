@@ -24,6 +24,7 @@ export default class ToolbarRenderer {
     floatingToolbarEl: HTMLDivElement | null = null;
 
 	phoneTbarPosition: PositionType | null = null;
+	private phoneTbarHeightCache: Map<string, { height: number, timestamp: string }> = new Map();
 
 	// for tracking the last clicked element position (which can include callouts)
 	lastClickedPos: Rect;
@@ -125,6 +126,15 @@ export default class ToolbarRenderer {
     async render(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView): Promise<void> {
 
         this.ntb.debugGroup(`render: ${toolbar.name}`);
+
+		// try setting the toolbar's height early, to reduce flickering
+		if (Platform.isPhone) {
+			const cachedTbarHeight = this.phoneTbarHeightCache.get(toolbar.uuid);
+			if (cachedTbarHeight && cachedTbarHeight.timestamp === toolbar.updated) {
+				activeDocument.body.style.setProperty('--ntb-toolbar-height', `${cachedTbarHeight.height}px`);
+				this.ntb.debug('--ntb-toolbar-height (cached)', `${cachedTbarHeight.height}px`);
+			}
+		}
 
         // get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
         let position: PositionType;
@@ -282,8 +292,8 @@ export default class ToolbarRenderer {
 						if (height === 0) return;
 						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${height}px`);
 						this.ntb.debug('--ntb-toolbar-height', `${height}px`);
+						this.phoneTbarHeightCache.set(toolbar.uuid, { height, timestamp: toolbar.updated });
 					};
-					setToolbarHeight();
 					embedBlock.addEventListener('transitionend', setToolbarHeight);
 					// fallback: if no transition fires (e.g. on restart), read height after layout settles
 					setTimeout(setToolbarHeight, 200);
