@@ -279,6 +279,7 @@ export default class ToolbarRenderer {
 				if (Platform.isPhone) {
 					const setToolbarHeight = () => {
 						const height = embedBlock.offsetHeight;
+						if (height === 0) return;
 						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${height}px`);
 						this.ntb.debug('--ntb-toolbar-height', `${height}px`);
 					};
