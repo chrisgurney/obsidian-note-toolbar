@@ -277,12 +277,15 @@ export default class ToolbarRenderer {
                     : this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				// update height for header repositioning on phones
 				if (Platform.isPhone) {
-					activeDocument.body.style.setProperty('--ntb-toolbar-height', `${embedBlock.offsetHeight}px`);
-					this.ntb.debug('--ntb-toolbar-height', `${embedBlock.offsetHeight}px`);
-					embedBlock.addEventListener('transitionend', () => {
-						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${embedBlock.offsetHeight}px`);
-						this.ntb.debug('--ntb-toolbar-height', `${embedBlock.offsetHeight}px`);
-					});
+					const setToolbarHeight = () => {
+						const height = embedBlock.offsetHeight;
+						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${height}px`);
+						this.ntb.debug('--ntb-toolbar-height', `${height}px`);
+					};
+					setToolbarHeight();
+					embedBlock.addEventListener('transitionend', setToolbarHeight);
+					// fallback: if no transition fires (e.g. on restart), read height after layout settles
+					setTimeout(setToolbarHeight, 200);
 				}
                 break;
             }
