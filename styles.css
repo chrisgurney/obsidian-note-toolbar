@@ -1501,8 +1501,7 @@ body.is-phone.ntb-remove-view-header {
 }
 
 /* fix: tooltips appearing on elements below tapped elements */
-body.is-phone [aria-label]::before,
-body.is-phone [aria-label]::after {
+body.is-phone .tooltip {
     display: none !important;
 }
 /*
