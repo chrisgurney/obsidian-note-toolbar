@@ -2,7 +2,7 @@ import { getUUID } from "Utils/Utils";
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
-export const WHATSNEW_VERSION = '1.29';
+export const WHATSNEW_VERSION = '1.30';
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20260122.1;
@@ -150,6 +150,8 @@ export const enum DefaultStyleType {
 	Tab = 'tab'
 }
 export const enum MobileStyleType {
+	Autohide = 'mhd',
+	NoAutohide = 'mnhd',
 	Border = 'mbrder',
 	NoBorder = 'mnbrder',
 	Button = 'mbtn',
@@ -578,10 +580,10 @@ export const POSITION_OPTIONS = {
 }
 
 export const RIBBON_ACTION_OPTIONS = {
-	[RibbonAction.Toolbar]: (t('setting.display-locations.ribbon-action.option-toolbar')),
-	[RibbonAction.ToolbarSelected]: t('setting.display-locations.ribbon-action.option-toolbar-selected'),
-	[RibbonAction.ItemSuggester]: t('setting.display-locations.ribbon-action.option-item-suggester'),
-	[RibbonAction.ToolbarSuggester]: t('setting.display-locations.ribbon-action.option-toolbar-suggester'),
+	[RibbonAction.Toolbar]: (t('setting.display-navbar.ribbon-action.option-toolbar')),
+	[RibbonAction.ToolbarSelected]: t('setting.display-navbar.ribbon-action.option-toolbar-selected'),
+	[RibbonAction.ItemSuggester]: t('setting.display-navbar.ribbon-action.option-item-suggester'),
+	[RibbonAction.ToolbarSuggester]: t('setting.display-navbar.ribbon-action.option-toolbar-suggester'),
 }
 
 export const TARGET_OPTIONS = {
@@ -626,6 +628,7 @@ export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
  * Each of these correlates to (style) metatdata that's matched in styles.css.
  */
 export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
+	{ [MobileStyleType.Autohide]: t('setting.styles.option-autohide') },
     { [MobileStyleType.Border]: t('setting.styles.option-border') },
 	{ [MobileStyleType.Button]: t('setting.styles.option-button') },
     { [MobileStyleType.Center]: t('setting.styles.option-center') },
@@ -634,6 +637,7 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ [MobileStyleType.Wide]: t('setting.styles.option-wide') },
 	{ [MobileStyleType.Glass]: t('setting.styles.option-glass') },
     { [MobileStyleType.Left]: t('setting.styles.option-left') },
+    { [MobileStyleType.NoAutohide]: t('setting.styles.option-noautohide') },
     { [MobileStyleType.NoBorder]: t('setting.styles.option-noborder') },
 	{ [MobileStyleType.NoTab ]: t('setting.styles.option-notab') },
     { [MobileStyleType.NoSticky]: t('setting.styles.option-notsticky') },
@@ -645,12 +649,14 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
+	{ [MobileStyleType.Autohide]: t('setting.styles.option-autohide-disclaimer') },
 	{ [MobileStyleType.NoWrap]: t('setting.styles.option-nowrap-disclaimer') },
 	{ [MobileStyleType.Sticky]: t('setting.styles.option-sticky-disclaimer') },
 ];
 
 export const SETTINGS_DISCLAIMERS: { [key: string]: string }[] = [
-	{ 'nativeMenus': t('setting.position.option-fab-desktop-native-menus-disclaimer') }
+	{ 'nativeMenus': t('setting.position.option-fab-desktop-native-menus-disclaimer') },
+	{ 'sourceProperties': t('setting.position.option-below-properties-source-disclaimer') }
 ];
 
 export interface ObsidianUIElement {

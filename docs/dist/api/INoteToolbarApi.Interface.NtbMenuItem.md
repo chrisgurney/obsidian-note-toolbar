@@ -34,7 +34,7 @@ Label for the menu item.
 
 ### type
 
-> **type**: `"file"` \| `"command"` \| `"uri"`
+> **type**: `"command"` \| `"file"` \| `"uri"`
 
 Type of the menu item. Can be `command`, `file`, or `uri`.
 

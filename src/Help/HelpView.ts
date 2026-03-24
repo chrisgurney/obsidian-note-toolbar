@@ -27,6 +27,7 @@ export default class HelpView extends ItemView {
 
         // reset navbar position if needed
         this.ntb.render.updatePhoneNavigation(PositionType.Hidden);
+        activeDocument.body.toggleClass('ntb-remove-view-header', false);
 
         const containerDiv = this.contentEl.createDiv();
         containerDiv.addClass('note-toolbar-setting-help-view', 'note-toolbar-setting-help-content');

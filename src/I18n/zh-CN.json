@@ -337,10 +337,12 @@
       "option-launchpad-description": "使用该工具栏替换新标签页，作为启动台呈现。",
       "option-text": "选中文本",
       "option-text-description": "选中文本时显示工具栏。",
-      "option-text-placeholder": "选择工具栏...",
+      "option-text-placeholder": "选择工具栏..."
+    },
+    "display-navbar": {
       "ribbon-action": {
         "description": "设置在手机上使用功能区图标时要执行的操作。",
-        "name": "功能区 📱",
+        "name": "功能区",
         "option-item-suggester": "显示所有工具",
         "option-toolbar": "显示当前工具栏",
         "option-toolbar-suggester": "显示所有工具栏"
@@ -564,13 +566,6 @@
         "name": "锁定笔记工具栏标注"
       },
       "name": "其他",
-      "ribbon-action": {
-        "description": "使用移动端的 ribbon 图标时进行的操作",
-        "name": "Ribbon 图标的行为 📱",
-        "option-item-suggester": "打开快速工具",
-        "option-toolbar": "显示当前工具栏",
-        "option-toolbar-suggester": "打开快速工具栏"
-      },
       "scripting": {
         "description": "（需要先安装并启用 Dataview，JS Engine 或 Templater 插件）添加对应的项目类型。",
         "name": "脚本"

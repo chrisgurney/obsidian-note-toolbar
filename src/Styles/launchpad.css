@@ -47,9 +47,6 @@
                     & .cg-note-toolbar-item-label {
                         white-space: wrap;
                     }
-                    .is-phone & {
-                        color: var(--interactive-accent);
-                    }
                     & svg {
                         height: var(--cg-nt-launchpad-item-icon-size);
                         width: var(--cg-nt-launchpad-item-icon-size);

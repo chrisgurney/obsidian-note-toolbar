@@ -36,3 +36,13 @@ const selected4 = await ntb.suggester(values, keys, {
     limit: 1
 });
 new Notice(selected4);
+
+// allows custom input, and also adds prefixes for tag and file suggestions
+const selected5 = await ntb.suggester(values, null, {
+    allowCustomInput: true,
+    prefixes: {
+        '#': () => Object.keys(this.ntb.app.metadataCache.getTags()),
+        '[[': () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
+    }
+});
+new Notice(selected5);

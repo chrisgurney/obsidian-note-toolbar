@@ -1,57 +1,5 @@
 [obsidian-note-toolbar](index.md) / [INoteToolbarApi](INoteToolbarApi.md) / default
 
-The Note Toolbar API provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
-
-Using the `ntb` object, the below functions can be called in scripts that are [executed from Note Toolbar items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts).
-
-I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions).
-
-> [!warning]
-> While you could also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
-
-## Copy developer ID for toolbars and items
-
-To get a unique identifier (UUID):
-
-- for toolbars, go to Note Toolbar's main settings (in `1.27` or later), and use **More options → Copy developer ID**; and
-- for toolbar items, go to each item's settings, and use **More actions... → Copy developer ID**. 
-
-Use this as another method to uniquely style toolbars or items, or reference them in the API, without worrying if their names might change.
-
-Here's some examples with items:
-
-```js
-// update this item's icon
-const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
-item.setIcon('alert');
-
-// or fetch the HTML element (for non-floating-button toolbars)
-const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e23513');
-```
-
-## `ntb` API
-
-- [[ntb.app|Note-Toolbar-API#app]]
-- [[ntb.clipboard|Note-Toolbar-API#clipboard]]
-- [[ntb.export|Note-Toolbar-API#export]]
-- [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
-- [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
-- [[ntb.getItem|Note-Toolbar-API#getitem]]
-- [[ntb.getProperty|Note-Toolbar-API#getproperty]]
-- [[ntb.getSelection|Note-Toolbar-API#getselection]]
-- [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
-- [[ntb.menu|Note-Toolbar-API#menu]]
-- [[ntb.modal|Note-Toolbar-API#modal]]
-- [[ntb.o|Note-Toolbar-API#o]]
-- [[ntb.prompt|Note-Toolbar-API#prompt]]
-- [[ntb.setProperty|Note-Toolbar-API#setproperty]]
-- [[ntb.setSelection|Note-Toolbar-API#setselection]]
-- [[ntb.suggester|Note-Toolbar-API#suggester]]
-- [[ntb.t|Note-Toolbar-API#t]]
-- [[ntb.toolbar|Note-Toolbar-API#toolbar]]
-
----
-
 ## Type Parameters
 
 | Type Parameter |
@@ -150,7 +98,7 @@ Shows a file suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `filesonly?`: `boolean`; `foldersonly?`: `boolean`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `filesonly?`: `boolean`; `foldersonly?`: `boolean`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, () => `unknown`[]\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
@@ -161,6 +109,7 @@ Shows a file suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
+| `options.prefixes?` | `Record`\<`string`, () => `unknown`[]\> | Maps input prefixes to functions that return suggestions. When the user types a matching prefix, the corresponding function is called and its results are shown as suggestions. **Example** `{ '#': () => getTags(), '[[': () => getFiles() }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
@@ -297,11 +246,11 @@ Shows a menu with the provided items.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or UUID; or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
-| `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `id?`: `string`; `position`: `"cursor"` \| `"toolbar"` \| `"pointer"`; \} | Optional display options. |
+| `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `id?`: `string`; `position`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
 | `options.id?` | `string` | Optional ID to add to the menu when it's rendered. **Since** 1.27 |
-| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) **Since** 1.27 |
+| `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) **Since** 1.27 |
 
 #### Returns
 
@@ -527,7 +476,7 @@ ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</s
 
 ### suggester()
 
-> **suggester**: (`values`, `keys?`, `options?`) => `Promise`\<`T` \| `null`\>
+> **suggester**: (`values?`, `keys?`, `options?`) => `Promise`\<`T` \| `null`\>
 
 Shows a suggester modal and waits for the user's selection.
 
@@ -535,9 +484,9 @@ Shows a suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `values` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
+| `values?` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys?` | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, () => `unknown`[]\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
@@ -546,6 +495,7 @@ Shows a suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
+| `options.prefixes?` | `Record`\<`string`, () => `unknown`[]\> | Maps input prefixes to functions that return suggestions. When the user types a matching prefix, the corresponding function is called and its results are shown as suggestions. **Example** `{ '#': () => getTags(), '[[': () => getFiles() }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
@@ -575,6 +525,17 @@ const selectedKey = await ntb.suggester(values, keys, {
 });
 
 new Notice(selectedKey);
+```
+
+```ts
+// shows a suggester with no existing values that can be typed in; displays tag and file suggestions when those prefixes are entered
+const selected = await ntb.suggester(null, null, {
+  prefixes: {
+    "#": () => Object.keys(this.ntb.app.metadataCache.getTags()),
+    "[[": () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
+  }
+});
+new Notice(selected);
 ```
 
 #### See
@@ -618,9 +579,9 @@ Shows a (floating) toolbar. Defaults to the 'toolbar' position.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `toolbarNameOrId` | `string` | Toolbar name or UUID. |
-| `options?` | \{ `class?`: `string`; `position`: `"cursor"` \| `"toolbar"` \| `"pointer"`; \} | Optional display options. |
+| `options?` | \{ `class?`: `string`; `position`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
-| `options.position?` | `"cursor"` \| `"toolbar"` \| `"pointer"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |
+| `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |
 
 #### Returns
 

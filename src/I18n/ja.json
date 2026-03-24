@@ -329,10 +329,16 @@
             "option-launchpad-description": "新規タブビューをこのツールバーの大きいバージョンで置き換えます。有効にしない場合、ツールバーは設定で選択した位置に表示されます。",
             "option-text": "選択したテキスト",
             "option-text-description": "テキストが選択されているときにツールバーを表示します。",
-            "option-text-placeholder": "ツールバーを選択...",
+            "option-text-placeholder": "ツールバーを選択..."
+        },
+        "display-navbar": {
+            "bottom": {
+                "description": "Hides actions in Obsidian's mobile navigation bar.",
+                "name": "Navbar item visibility"
+            },
             "ribbon-action": {
                 "description": "リボンアイコン（スマートフォン）を使用したときのアクションを設定します。",
-                "name": "リボン 📱",
+                "name": "リボン",
                 "option-item-suggester": "すべてのツールを表示",
                 "option-toolbar": "現在のツールバーを表示",
                 "option-toolbar-suggester": "すべてのツールバーを表示"
@@ -561,10 +567,6 @@
                 "name": "Note Toolbarのコールアウトをロック"
             },
             "name": "その他",
-            "navbar-visibility": {
-                "description": "Hides actions in Obsidian's mobile navigation bar.",
-                "name": "Navbar item visibility 📱"
-            },
             "scripting": {
                 "description": "Dataview、JS Engine、Templaterのサポートを追加します。これらはインストールして有効にする必要があります。",
                 "name": "スクリプティング"

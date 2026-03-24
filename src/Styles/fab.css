@@ -69,11 +69,11 @@
     }
     /* use animations consistent with Navbar */
     & .cg-note-toolbar-container[data-tbar-position*="fab"] {
-        transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+        transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-out;
     }
     &.is-hidden-nav {
         & .cg-note-toolbar-container[data-tbar-position*="fab"] {
-            transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+            transition: margin-bottom 0.3s ease-in-out, opacity 0.2s ease-in-out, transform 0.3s ease-out;
             transform: translateY(calc(var(--navbar-height) + var(--safe-area-inset-bottom)));
             opacity: 0;
         }

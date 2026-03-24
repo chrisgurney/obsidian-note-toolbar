@@ -246,39 +246,39 @@
             height: 1em;
             text-transform: lowercase;
             width: 100%;
-            &:before, &:after {
+            &::before, &::after {
                 content: "";
                 flex: 1 1;
                 margin: auto;    
             }
-            &:before {
+            &::before {
                 margin-right: 6px;
             }
-            &:after {
+            &::after {
                 margin-left: 6px;
             }
         }
     }
     &[data-item-type="spreader"] > span {
-        &:before, &:after {
+        &::before, &::after {
             margin-top: 0;
             margin-bottom: 0;
         }
-        &:before {
+        &::before {
             content: "|←";
         }
-        &:after {
+        &::after {
             content: "→|";
             text-align: right;
         }
     }
     &[data-item-type="separator"] > span {
-        &:before, &:after {
+        &::before, &::after {
             border: dashed 1px var(--color-base-40);
         }
     }
     &[data-item-type="break"] > span {
-        &:before, &:after {
+        &::before, &::after {
             border: solid 1px var(--color-base-50);
         }
     }
@@ -543,6 +543,7 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-items-container,
 .note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container,
 .note-toolbar-setting-rules-container {
     padding-top: 0.75em;
     & .setting-item-heading {
@@ -623,7 +624,8 @@ input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
-.note-toolbar-setting-mappings-container {
+.note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container {
     &[data-active="true"] {
         margin-bottom: 0.75em;
     }
@@ -1101,9 +1103,9 @@ input[type="text"].note-toolbar-setting-error,
             & .note-toolbar-setting-tbar-preview {
                 flex-wrap: nowrap;
                 overflow: hidden;
-                position: relative;
                 max-height: calc(var(--line-height-tight) * 1em);
                 max-width: 175px;
+                position: relative;
                 .is-mobile & {
                     max-width: inherit;
                 }
@@ -1113,18 +1115,21 @@ input[type="text"].note-toolbar-setting-error,
                     }
                 }
             }
-            /* fade overflow */
-            & .note-toolbar-setting-tbar-preview::after {
-                content: '';
-                position: absolute;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                width: 33%;
-                background: linear-gradient(to right, transparent, var(--setting-items-background));
-                pointer-events: none;
-            }
         }
+    }
+}
+
+/* fade overflow */
+.note-toolbar-setting-tbar-preview-fade {
+    &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 33%;
+        background: linear-gradient(to right, transparent, var(--setting-items-background));
+        pointer-events: none;
     }
 }
 

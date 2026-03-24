@@ -420,6 +420,17 @@ export default class ToolbarItemUi {
                 });
         });
 
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.menu-move-item'))
+                .setIcon('arrow-right')
+                .onClick(async (menuEvent) => {
+                    await this.ntb.settingsUtils.moveToolbarItem(this.toolbar, toolbarItem, () => {
+                        this.parent.display();
+                    });
+                });
+        });
+
         menu.addSeparator();
 
         if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {

@@ -4,60 +4,9 @@ import { IItem } from "./IItem";
 import { IToolbar } from "./IToolbar";
 
 /**
- * The Note Toolbar API provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
- * 
- * Using the `ntb` object, the below functions can be called in scripts that are [executed from Note Toolbar items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts).
- * 
- * I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions).
- * 
- * > [!warning]
- * > While you could also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
- * 
- * ## Copy developer ID for toolbars and items
- * 
- * To get a unique identifier (UUID):
- * 
- * - for toolbars, go to Note Toolbar's main settings (in `1.27` or later), and use **More options → Copy developer ID**; and
- * - for toolbar items, go to each item's settings, and use **More actions... → Copy developer ID**. 
- * 
- * Use this as another method to uniquely style toolbars or items, or reference them in the API, without worrying if their names might change.
- * 
- * Here's some examples with items:
- * 
- * ```js
- * // update this item's icon
- * const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
- * item.setIcon('alert');
- * 
- * // or fetch the HTML element (for non-floating-button toolbars)
- * const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e23513');
- * ```
- * 
- * ## `ntb` API
- * 
- * - [[ntb.app|Note-Toolbar-API#app]]
- * - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
- * - [[ntb.export|Note-Toolbar-API#export]]
- * - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
- * - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
- * - [[ntb.getItem|Note-Toolbar-API#getitem]]
- * - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
- * - [[ntb.getSelection|Note-Toolbar-API#getselection]]
- * - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
- * - [[ntb.menu|Note-Toolbar-API#menu]]
- * - [[ntb.modal|Note-Toolbar-API#modal]]
- * - [[ntb.o|Note-Toolbar-API#o]]
- * - [[ntb.prompt|Note-Toolbar-API#prompt]]
- * - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
- * - [[ntb.setSelection|Note-Toolbar-API#setselection]]
- * - [[ntb.suggester|Note-Toolbar-API#suggester]]
- * - [[ntb.t|Note-Toolbar-API#t]]
- * - [[ntb.toolbar|Note-Toolbar-API#toolbar]]
- * 
- * ---
- * 
  * @privateRemarks
  * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
+ * The page header is in `src/docs/_imports/api-header.md` and is inlined during the build process.
  */
 export default interface INoteToolbarApi<T> {
 
@@ -331,9 +280,19 @@ export default interface INoteToolbarApi<T> {
      * 
      * new Notice(selectedKey);
      * 
+     * @example
+     * // shows a suggester with no existing values that can be typed in; displays tag and file suggestions when those prefixes are entered
+     * const selected = await ntb.suggester(null, null, {
+     *   prefixes: {
+     *     "#": () => Object.keys(this.ntb.app.metadataCache.getTags()),
+     *     "[[": () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
+     *   }
+     * });
+     * new Notice(selected);
+     * 
      * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      */
-    suggester: (values: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
+    suggester: (values?: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
 
    /**
      * This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
@@ -520,6 +479,13 @@ export interface NtbSuggesterOptions {
      * Optional placeholder text for input field; defaults to preset message.
      */
     placeholder?: string;
+    /**
+     * Maps input prefixes to functions that return suggestions. When the user types a matching prefix, the corresponding function is called and its results are shown as suggestions.
+     * 
+     * @example { '#': () => getTags(), '[[': () => getFiles() }
+     * @since 1.30.0
+     */
+    prefixes?: Record<string, () => unknown[]>;
     /**
      * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
      */

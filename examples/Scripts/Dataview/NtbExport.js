@@ -6,15 +6,14 @@
  * - Add the path to this JavaScript file.
  */
 
-(async () => {
-    const toolbars = ntb.getToolbars();
-    let callouts = '';
-    for (let toolbar of toolbars) {
-        callouts += `## ${toolbar.getName()}\n\n`;
-        callouts += await ntb.export(toolbar);
-        callouts += '\n';
-    }
-    const datestamp = new Date().toISOString().replace(/[:.]/g, '').replace('T', '-').split('Z')[0];
-    const filename = `TOOLBARS ${datestamp}.md`;
-    await app.vault.create(filename, callouts);
-})();
+const toolbars = ntb.getToolbars();
+let callouts = '';
+for (let toolbar of toolbars) {
+    callouts += `## ${toolbar.getName()}\n\n`;
+    callouts += await ntb.export(toolbar);
+    callouts += '\n';
+}
+const datestamp = new Date().toISOString().replace(/[:.]/g, '').replace('T', '-').split('Z')[0];
+const filename = `TOOLBARS ${datestamp}.md`;
+await app.vault.create(filename, callouts);
+new Notice(`Toolbars exported to:\n${filename}`);

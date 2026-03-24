@@ -24,14 +24,13 @@ export default class ToolbarRenderer {
     floatingToolbarEl: HTMLDivElement | null = null;
 
 	phoneTbarPosition: PositionType | null = null;
+	private phoneTbarHeightCache: Map<string, { height: number, timestamp: string }> = new Map();
 
 	// for tracking the last clicked element position (which can include callouts)
 	lastClickedPos: Rect;
 
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
-	mobileNavbarMargin: number;
-	viewActionsHeight: number;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -127,6 +126,15 @@ export default class ToolbarRenderer {
     async render(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView): Promise<void> {
 
         this.ntb.debugGroup(`render: ${toolbar.name}`);
+
+		// try setting the toolbar's height early, to reduce flickering
+		if (Platform.isPhone) {
+			const cachedTbarHeight = this.phoneTbarHeightCache.get(toolbar.uuid);
+			if (cachedTbarHeight && cachedTbarHeight.timestamp === toolbar.updated) {
+				activeDocument.body.style.setProperty('--ntb-toolbar-height', `${cachedTbarHeight.height}px`);
+				this.ntb.debug('--ntb-toolbar-height (cached)', `${cachedTbarHeight.height}px`);
+			}
+		}
 
         // get position for this platform; default to 'props' if it's not set for some reason (should not be the case)
         let position: PositionType;
@@ -240,7 +248,7 @@ export default class ToolbarRenderer {
             return;
         }
 
-		this.updatePhoneNavigation(position, noteToolbarElement?.offsetHeight ?? 0);
+		this.updatePhoneNavigation(position);
 		
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
@@ -275,8 +283,21 @@ export default class ToolbarRenderer {
                 // FIXME: add to modal header, but this is causing duplicate toolbars
                 // if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
                 viewHeader 
-                    ? viewHeader.insertAdjacentElement("afterend", embedBlock)
+                    ? viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock)
                     : this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
+				// update height for header repositioning on phones
+				if (Platform.isPhone) {
+					const setToolbarHeight = () => {
+						const height = embedBlock.offsetHeight;
+						if (height === 0) return;
+						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${height}px`);
+						this.ntb.debug('--ntb-toolbar-height', `${height}px`);
+						this.phoneTbarHeightCache.set(toolbar.uuid, { height, timestamp: toolbar.updated });
+					};
+					embedBlock.addEventListener('transitionend', setToolbarHeight);
+					// fallback: if no transition fires (e.g. on restart), read height after layout settles
+					setTimeout(setToolbarHeight, 200);
+				}
                 break;
             }
             default:
@@ -968,7 +989,7 @@ export default class ToolbarRenderer {
 			this.renderBottomToolbarStyles(toolbar, toolbarEl);
 		}
 
-		this.updatePhoneNavigation(currentPosition, toolbarEl.offsetHeight);
+		this.updatePhoneNavigation(currentPosition);
 
 		this.ntb.debugGroupEnd();
 
@@ -996,58 +1017,27 @@ export default class ToolbarRenderer {
 	}
 
 	/** 
-	 * Repositions Obsidian's navbar if necessary, and hides actions if configured.
+	 * Repositions Obsidian's navbar if necessary, and hides navbars/actions if configured.
 	 * @param toolbarPosition position of current toolbar.
-	 * @param toolbarHeight height of the current toolbar.
 	 */ 
-	updatePhoneNavigation(toolbarPosition: PositionType | undefined, toolbarHeight?: number): void {
+	updatePhoneNavigation(toolbarPosition: PositionType | undefined): void {
 
 		if (!Platform.isPhone || !toolbarPosition) return;
 
-		// position Obsidian Navbar above toolbar
-		const mobileNavbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
-		if (mobileNavbarEl) {
-			if (toolbarPosition === PositionType.Bottom && toolbarHeight) {
-				if (!this.mobileNavbarMargin) {
-					// only calculate this once, so we don't keep adding it
-					this.mobileNavbarMargin = parseInt(activeWindow.getComputedStyle(mobileNavbarEl).marginBottom);
-				}
-				mobileNavbarEl.style.marginBottom = (this.mobileNavbarMargin + toolbarHeight) + 'px';	
-			}
-			else {
-				mobileNavbarEl.style.marginBottom = ''; // reset style
-			}
-		}
+		//
+		// top navigation bar (view header)
+		//
 
-		// position header bar below toolbar
-		const viewHeaderEl = activeDocument.querySelector('.view-header') as HTMLElement;
-		if (viewHeaderEl) {
-			if (toolbarPosition === PositionType.Top && toolbarHeight) {
-				if (!this.viewActionsHeight) {
-					// only calculate this once, so we don't keep adding it
-					this.viewActionsHeight = parseInt(activeWindow.getComputedStyle(viewHeaderEl).marginTop);
-				}
-				viewHeaderEl.style.marginTop = toolbarHeight + 'px';
-			}
-			else {
-				viewHeaderEl.style.marginTop = ''; // reset style
-			}
-		}
+		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
+		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
 
-		// reduce top spacing
-		const viewActionsEl = viewHeaderEl.querySelector('.view-actions') as HTMLElement;
-		if (viewActionsEl) {
-			if (toolbarPosition === PositionType.Top) {
-				activeDocument.body.style.setProperty('--view-top-spacing-markdown', viewActionsEl.offsetHeight + 'px');
-			}
-			else {
-				activeDocument.body.style.removeProperty('--view-top-spacing-markdown');
-			}
-		}
-
+		//
+		// bottom navigation bar
+		//
+		
 		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 		if (!navbarEl) return;
-
+		
 		navbarEl.style.marginBottom = ''; // reset spacing
 
 		// move Navbar left/right to make room for the FAB
@@ -1197,7 +1187,7 @@ export default class ToolbarRenderer {
 	async renderFloatingToolbar(
 		toolbar: ToolbarSettings | undefined, 
 		position: Rect | undefined,
-		positionType: PositionType.Floating | PositionType.Text
+		positionType: PositionType.Floating | PositionType.Text | PositionType.Hidden
 	): Promise<void> {
 
 		if (!position || !toolbar) return;
@@ -1221,6 +1211,11 @@ export default class ToolbarRenderer {
 		/*
 		 * render new toolbar
 		 */
+
+		if (!this.ntb.utils.hasVisibleItems(toolbar)) {
+			this.ntb.debug("renderFloatingToolbar: toolbar has no visible items → rendering as hidden");
+			positionType = PositionType.Hidden;
+		}
 
 		let toolbarContainerEl = activeDocument.createElement('div');
 		toolbarContainerEl.id = toolbar.uuid;

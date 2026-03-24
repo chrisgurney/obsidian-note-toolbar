@@ -1,7 +1,6 @@
 /* NOTE: make any modifications to this file in src/Styles/styles.css */
 
 /* @settings
-
 name: Note Toolbar
 id: note-toolbar
 settings:
@@ -1287,7 +1286,7 @@ settings:
         type: variable-number
         default: 700
         format: px
- */
+*/
 
 /*
  * Body (CSS Variables)
@@ -1303,7 +1302,7 @@ body {
     --cg-nt-tbar-margin-y: 0.5em;
     --cg-nt-tbar-padding-inline: 0em;
     --cg-nt-tbar-bottom-border-radius: 5px;
-    --cg-nt-tbar-bottom-margin-bottom-phone: var(--safe-area-inset-bottom);
+    --cg-nt-tbar-bottom-mb-phone: 0px;
     --cg-nt-tbar-bottom-padding-x-desktop: var(--size-4-8);
     --cg-nt-tbar-bottom-padding-x-mobile: var(--size-4-3);
     --cg-nt-tbar-bottom-pos-y-desktop: 4.25em;
@@ -1316,7 +1315,7 @@ body {
     --cg-nt-tbar-text-border-radius: 5px;
     --cg-nt-tbar-text-item-button-bg-color: var(--interactive-normal);
     --cg-nt-tbar-text-item-bg-color-hover: var(--background-modifier-hover);
-    --cg-nt-tbar-text-item-text-color: var(--metadata-label-text-color);
+    --cg-nt-tbar-text-item-text-color: var(--icon-color);
     --cg-nt-tbar-text-item-text-color-hover: var(--text-normal);
     --cg-nt-tbar-text-margin-x: 0.5em;
     --cg-nt-tbar-text-margin-y: 0.5em;
@@ -1326,7 +1325,7 @@ body {
     --cg-nt-tbar-text-shadow: var(--shadow-s);
     --cg-nt-tbar-text-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
     --cg-nt-tbar-top-padding-x-mobile: var(--size-4-3);
-    --cg-nt-tbar-top-padding-top-phone: var(--safe-area-inset-top);
+    --cg-nt-tbar-top-pt-phone: var(--safe-area-inset-top);
     --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1);
     --cg-nt-tbar-top-sticky-pos-mobile: -0.5rem;
     --cg-nt-tbar-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
@@ -1363,7 +1362,7 @@ body {
     --cg-nt-item-sep-width: 1px;
     --cg-nt-item-sep-margin-x: 0.25em;
     --cg-nt-item-sep-margin-y: 0.25em;
-    --cg-nt-item-text-color: var(--metadata-label-text-color);
+    --cg-nt-item-text-color: var(--icon-color);
     --cg-nt-item-text-color-hover: var(--text-normal);
     --cg-nt-launchpad-cols-desktop: 2;
     --cg-nt-launchpad-cols-mobile: 2;
@@ -1389,6 +1388,58 @@ body {
     --cg-nt-quick-tools-item-text-color: var(--text-normal);
     --cg-nt-ui-modal-width: var(--prompt-width);
 
+    /*
+     * Top + Bottom toolbar positioning
+     */
+    --ntb-toolbar-height: 50px; /* default, prior to first calculation on render */
+    --ntb-tbar-bottom-mb-phone: var(--cg-nt-tbar-bottom-mb-phone);
+    --ntb-tbar-top-fade-mask: linear-gradient(to bottom, rgba(0, 0, 0, var(--view-top-fade-opacity)) 0%, #000000 calc(var(--view-header-height) + 12px));
+    --ntb-tbar-top-header-mt-phone: var(--ntb-toolbar-height);
+    --ntb-tbar-top-header-pt-phone: 0px;
+    --ntb-tbar-top-spacing-pad: 16px;
+    --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
+    --ntb-tbar-top-spacing: 0px;
+    --ntb-tbar-top-mt-phone: 0px;
+    --ntb-tbar-top-pt-phone: var(--safe-area-inset-top);
+    &.is-floating-nav {
+        --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height) + var(--safe-area-inset-bottom) + 8px);
+        --ntb-tbar-top-header-mt-phone: calc(var(--ntb-toolbar-height) + 8px);
+    }
+    &:not(.is-floating-nav) {
+        --ntb-tbar-top-header-mt-phone: 0px;
+        --ntb-tbar-top-spacing-md: var(--ntb-tbar-top-spacing-pad);
+        &.auto-full-screen {
+            --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--navbar-height) + 8px);
+            --ntb-tbar-top-header-mt-phone: var(--ntb-toolbar-height);
+            --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
+        }
+    }
+    &:not(:has(.workspace-leaf-content[data-type*="markdown"])) {
+        --ntb-tbar-top-spacing-md: 0px;
+        &.is-floating-nav {
+            --ntb-tbar-top-spacing: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
+        }
+        &:not(.is-floating-nav) {
+            --ntb-tbar-top-spacing: 0px;
+            &.auto-full-screen {
+                --ntb-tbar-top-spacing: var(--view-header-height);
+            }
+        }
+    }
+    &.is-hidden-nav {
+        --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+    }
+    &.ntb-remove-view-header {
+        --ntb-tbar-top-spacing: 0px;
+        --ntb-tbar-top-spacing-md: var(--size-4-2);
+    }
+    &.ntb-remove-nav {
+        --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+    }
+    
+    /*
+     * Android styles
+     */
     &.is-android {
         --cg-nt-fab-border-radius: var(--radius-xl);
     }
@@ -1432,16 +1483,31 @@ body {
     display: none !important;
 }
 
-.is-phone.ntb-remove-nav .mobile-navbar {
-    display: none !important;
+body.is-phone.ntb-remove-nav {
+    --navbar-height: 0px;
+    & .mobile-navbar {
+        display: none !important;
+    }
 }
 
-body.is-phone.ntb-remove-nav {
-    --navbar-height: 0;
+body.is-phone.ntb-remove-view-header {
+    --view-header-height: 0px;
+    & .view-header {
+        display: none !important;
+    }
+    & .view-content {
+        mask-image: var(--view-top-fade-mask);
+    }
+}
+
+/* fix: tooltips appearing on elements below tapped elements */
+body.is-phone .tooltip {
+    display: none !important;
 }
 /*
  * Default adjustments for various themes (CSS variables)
  */
+
 body {
 
     &[data-ntb-csstheme="Baseline"] {
@@ -1479,12 +1545,11 @@ body {
     }
 
 }
-
 /*
  * Callouts
  */
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]:not(.note-toolbar-launchpad)) {
     &:hover {
         box-shadow: none !important; /* hide the border on hover of the toolbar callout */
         & .edit-block-button {
@@ -1506,7 +1571,6 @@ body {
 }
 
 /* default, if not specified */
-
 .cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
     top: inherit;
     position: relative;
@@ -1527,19 +1591,30 @@ body {
 }
 
 .is-phone .cm-embed-block[data-tbar-position="top"] {
-    padding-top: var(--cg-nt-tbar-top-padding-top-phone);
+    margin-top: var(--ntb-tbar-top-mt-phone);
+    padding-top: var(--ntb-tbar-top-pt-phone);
+}
+
+.is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-header {
+    margin-top: var(--ntb-tbar-top-header-mt-phone);
+    padding-top: var(--ntb-tbar-top-header-pt-phone);
 }
 
 /* fixes header div getting squished when the toolbar's at the top position */
-
-.view-header:has(+ [data-tbar-position="top"]) {
+/* .view-header:has(+ [data-tbar-position="top"]) {
     min-height: var(--header-height);
-}
+} */
 
 /* removes padding above the top navigation, when Obsidian's Floating navigation setting is disabled */
-
-.is-phone .view-header:has(+ [data-tbar-position="top"]) {
+/* .is-phone .view-header:has(+ [data-tbar-position="top"]) {
     padding-top: 0;
+} */
+
+/* removes safe area inset from these variables, as it's taken into account above the toolbar */
+.is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-content {
+    --view-top-fade-mask: var(--ntb-tbar-top-fade-mask);
+    --view-top-spacing: var(--ntb-tbar-top-spacing);
+    --view-top-spacing-markdown: var(--ntb-tbar-top-spacing-md);
 }
 
 .callout[data-callout="note-toolbar-output"] {
@@ -1743,19 +1818,8 @@ body {
     }
 
     /*************************************************************************
-     * Toolbar Styles (sticky's further up in this file)
+     * Toolbar Styles
      *************************************************************************/
-
-    &[data-callout-metadata*="autohide"] {
-        &:not(.is-mobile &) {
-            opacity: var(--cg-nt-tbar-autohide-opacity);
-            transition: all 0.2s ease-in-out;
-            -webkit-transition: all 0.2s ease-in-out;
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
 
     &[data-callout-metadata*="between"] ul {
         justify-content: space-between;
@@ -1855,7 +1919,7 @@ body {
                 min-width: var(--ntb-callout-card-width);
                 width: auto;
                 .is-mobile & {
-                    border: var(--border-width) solid var(--background-modifier-border);
+                    box-shadow: inset 0 0 0 var(--border-width) var(--background-modifier-border);
                     flex: var(--ntb-callout-card-flex-mobile);
                     min-width: var(--ntb-callout-card-width-mobile);
                 }
@@ -2083,6 +2147,38 @@ body {
         }
     }
 
+    /* style buttons on phones similar to floating nav */
+    &[data-callout-metadata*="button"], &[data-callout-metadata*="mbtn"] {
+        .is-phone & {
+            overflow: visible;
+            & .callout-content {
+                overflow: visible;
+                & ul a, ul span.external-link {
+                    backdrop-filter: var(--raised-blur);
+                    background: var(--raised-background);
+                    box-shadow: var(--raised-shadow);
+                    border: var(--raised-mask-border-width) solid transparent;
+                }
+            }
+        }
+        .is-phone.is-ios & {
+            & .callout-content {
+                & ul a::after, ul span.external-link::after {
+                    backdrop-filter: brightness(var(--blur-brightness));
+                    display: var(--raised-mask-display);
+                    position: absolute;
+                    content: "";
+                    background: var(--raised-mask-background);
+                    mask: var(--raised-mask);
+                    mask-composite: var(--raised-mask-composite);
+                    inset: 0;
+                    border: var(--raised-mask-border-width) solid transparent;
+                    z-index: 1;
+                }
+            }
+        }
+    }
+
     &[data-callout-metadata*="tab"] ul {
         & li[data-active-file] {
             & span.external-link {
@@ -2158,8 +2254,52 @@ body {
     
 }
 
-/* on phones, hide the top border when properties is open */
+/*
+ * Autohide Style
+ */
+body:not(.is-mobile) {
+    & .callout[data-callout="note-toolbar"][data-callout-metadata*="autohide"] {        
+        opacity: var(--cg-nt-tbar-autohide-opacity);
+        transition: all 0.2s ease-in-out;
+        -webkit-transition: all 0.2s ease-in-out;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+body.is-phone .cg-note-toolbar-container {
+    &[data-tbar-position*="bottom"] {
+        & .callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"]) {   
+            transition: margin-bottom 0.3s ease-in-out, transform 0.3s ease-out;
+            body.is-hidden-nav & {
+                opacity: 0;
+                transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+                visibility: hidden;
+            }
+        }
+    }
+    &[data-tbar-position*="top"] {
+        &:has(.callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"])) {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+            body.is-hidden-nav & {
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                transform: translateY(calc(var(--ntb-toolbar-height) * -1));
+                visibility: hidden;
+            }
+        }
+    }
+}
 
+/* on phones, make sure top toolbar is full width, and transparent for Appearance → Floating navigation */
+body.is-phone .cg-note-toolbar-container[data-tbar-position*="top"] {
+    width: 100%;
+    body.is-floating-nav & {
+        --cg-nt-tbar-bg-color: transparent;
+    }
+}
+
+/* on phones, hide the top border when properties is open */
 .is-phone .metadata-container:not([data-property-count="0"])[style*="--metadata-display-reading: block"] ~ .cg-note-toolbar-container {
   & .callout[data-callout="note-toolbar"]:not([data-callout-metadata*="mnbrder"])[data-callout-metadata*="border"],
   & .callout[data-callout="note-toolbar"][data-callout-metadata*="mbrder"] {
@@ -2171,13 +2311,15 @@ body {
 }
 
 /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
-
 /* Licensed under the MIT License; see the LICENSE file */
-
 body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([data-callout-metadata*="card"]),
 body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]:not([data-callout-metadata*="card"]) {
     background: unset !important;
     mix-blend-mode: normal !important;
+    overflow: visible;
+    & .callout-content {
+        overflow: visible;
+    }
     & ul {
         gap: var(--size-4-2);
         & a, span.external-link {
@@ -2205,7 +2347,6 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
 }
 
 /* user feedback that toolbar interaction is not available; workaround for #69 */
-
 body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .cg-note-toolbar-callout[data-callout="note-toolbar"] {
         opacity: var(--cg-nt-tbar-inactive-opacity-desktop);
@@ -2227,6 +2368,7 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
 /*
  * FAB (Floating Action Button)
  */
+
 /* toolbar styles */
 .cg-note-toolbar-fab-container {
     & button[data-fab-metadata*="autohide"] {
@@ -2254,6 +2396,7 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
         }
     }
 }
+
 /* positioning */
 .cg-note-toolbar-fab-container {
     bottom: var(--cg-nt-fab-pos-y-desktop);
@@ -2282,6 +2425,7 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
         top: calc(100vh - var(--keyboard-height) - var(--mobile-toolbar-height) - var(--cg-nt-fab-icon-size) - var(--cg-nt-fab-padding) * 2 - 8px);
     }
 }
+
 .is-phone {
     /* Navbar overrides to create space for the floating button. */
     & .note-toolbar-navbar-left {
@@ -2292,27 +2436,30 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
     }
     /* use animations consistent with Navbar */
     & .cg-note-toolbar-container[data-tbar-position*="fab"] {
-        transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+        transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-out;
     }
     &.is-hidden-nav {
         & .cg-note-toolbar-container[data-tbar-position*="fab"] {
-            transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
+            transition: margin-bottom 0.3s ease-in-out, opacity 0.2s ease-in-out, transform 0.3s ease-out;
             transform: translateY(calc(var(--navbar-height) + var(--safe-area-inset-bottom)));
             opacity: 0;
         }
     }
 }
+
 /* user feedback that toolbar interaction is not available; workaround for #69 */
 body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     & .cg-note-toolbar-fab-container {
         opacity: var(--cg-nt-fab-inactive-opacity);
     }
 }
+
 @keyframes cg-note-toolbar-fab-anim {
     0% { transform: scale(1); }
     50% { transform: scale(1.75); }
     100% { transform: scale(1.5); }
 }
+
 .cg-note-toolbar-fab {
     aspect-ratio: 1;
     background-color: var(--cg-nt-fab-bg-color-desktop) !important;
@@ -2364,6 +2511,7 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         cursor: pointer;
     }
 }
+
 /* Liquid Glass effect for the Cupertino (thanks to @aaaaalexis) */
 /* Licensed under the MIT License; see the LICENSE file */
 body button.cg-note-toolbar-fab[data-fab-metadata*="glass"],
@@ -2395,6 +2543,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
 /*
  * Toolbar Container
  */
+
 .cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
     /* fix: (#90) box-shadow appearing over top of text */
@@ -2408,8 +2557,10 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         margin-inline-end: 0;
     }
     &:hover {
-        /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
-        overflow: inherit !important;
+        &:not(:has(.note-toolbar-launchpad)) {
+            /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
+            overflow: inherit !important;
+        }
     }
     /* width: var(--var-max-width);
     max-width: var(--var-max-width); */
@@ -2446,12 +2597,9 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         }
         & .cg-note-toolbar-callout {
             .is-phone & {
-                margin-bottom: calc(var(--navbar-height) + var(--cg-nt-tbar-bottom-margin-bottom-phone));
+                margin-bottom: var(--ntb-tbar-bottom-mb-phone);
                 /* use animation consistent with Navbar */
                 transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
-                .is-hidden-nav & {
-                    margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
-                }
             }
             /* fix: bottom margin needs to be removed when keyboard is open on phone */
             .is-phone.ntb-is-keyboard-open & {
@@ -2528,6 +2676,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         }
     }
 }
+
 .is-phone .cg-note-toolbar-container[data-tbar-position*="bottom"] {
     /* if toolbar doesn't wrap, container needs a constrained width so it's scrollable */
     &:has(.cg-note-toolbar-callout[data-callout-metadata*="mnwrp"]) {
@@ -2538,17 +2687,13 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         padding-inline: 0;
     }
 }
-/* if Navbar is completely hidden by Note Toolbar, don't shift bottom toolbars */
-.is-phone.ntb-remove-nav .cg-note-toolbar-container[data-tbar-position*="bottom"] {
-    & .cg-note-toolbar-callout {
-        margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
-    }
-}
+
 /* hides the FAB when a sidebar is open on phones */
 .is-phone .app-container:has(.workspace.is-left-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"],
 .is-phone .app-container:has(.workspace.is-right-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"] {
     display: none;
 }
+
 /* remove spacing after props section, only if toolbar is in props position */
 .metadata-container:has(+ .cg-note-toolbar-bar-container[data-tbar-position="props"]) {
     margin-block-end: 0;
@@ -2556,6 +2701,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
 /*
  * Menu
  */
+
 .note-toolbar-menu {
     background-color: var(--cg-nt-menu-bg-color);
     border-color: var(--cg-nt-menu-border-color);
@@ -2597,6 +2743,7 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
         background-color: var(--cg-nt-menu-item-bg-color-hover);
     }
 }
+
 body[data-ntb-csstheme="Cupertino"],
 body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]) {
     & .note-toolbar-menu {
@@ -2649,6 +2796,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         box-shadow: 0 0 0 var(--input-border-width-focus) var(--background-modifier-border-focus);
     }
 }
+
 .note-toolbar-setting-modal-container {
     .is-mobile & {
         & .setting-group {
@@ -2660,17 +2808,20 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         }
     }
 }
+
 .note-toolbar-setting-plugin-error,
 .note-toolbar-setting-plugin-onboarding {
     padding: 1em !important;
     border-radius: 8px;
 }
+
 .note-toolbar-setting-plugin-error {
     & .setting-item-name {
         color: var(--text-error);
     }
     border: solid 1px var(--text-error) !important;
 }
+
 .note-toolbar-setting-plugin-onboarding {
     border: solid 1px var(--color-accent-1) !important;
     position: relative;
@@ -2683,14 +2834,17 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         }
     }
 }
+
 .note-toolbar-setting-plugin-onboarding-close {
     position: absolute;
     top: 8px;
     right: 8px;
 }
+
 .note-toolbar-setting-item-link-container > .note-toolbar-setting-plugin-error {
     font-size: var(--font-ui-small);
 }
+
 .note-toolbar-setting-toolbar-list {
     background-color: var(--setting-items-background);
     border-radius: var(--setting-items-radius);
@@ -2742,12 +2896,14 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
             width: unset !important;
         }
     }
-}
+} 
+
 .mod-cta .note-toolbar-setting-text-with-icon {
     & svg {
         color: var(--text-on-accent);
     }
 }
+
 .note-toolbar-setting-text-with-icon {
     display: inline-flex;
     column-gap: 0.5em;
@@ -2757,6 +2913,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         vertical-align: middle;
     }
 }
+
 .note-toolbar-setting-item {
     border-radius: var(--radius-m);
     border: 1px solid var(--background-modifier-border);
@@ -2774,12 +2931,14 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         display: none !important;
     }
 }
+
 .note-toolbar-sub-setting-item {
     & .setting-item-info {
         border-left: var(--border-width) solid var(--background-modifier-border);
         padding-inline-start: var(--size-4-4);
     }
 }
+
 .note-toolbar-setting-item-preview-container {
     align-items: center;
     display: flex;
@@ -2801,6 +2960,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         display: none !important;
     }
 }
+
 .note-toolbar-setting-ui {
     .setting-item {
         &[data-active="true"] {
@@ -2811,14 +2971,17 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         }
     }
 }
+
 .note-toolbar-setting-item-preview-code {
     font-family: var(--font-monospace);
     white-space: normal !important;
     overflow-wrap: anywhere;
 }
+
 .note-toolbar-setting-item-preview .note-toolbar-setting-item-preview-code {
     font-size: var(--font-ui-small); 
 }
+
 .note-toolbar-setting-item-preview {
     display: flex;
     flex-grow: 1;
@@ -2845,39 +3008,39 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
             height: 1em;
             text-transform: lowercase;
             width: 100%;
-            &:before, &:after {
+            &::before, &::after {
                 content: "";
                 flex: 1 1;
                 margin: auto;    
             }
-            &:before {
+            &::before {
                 margin-right: 6px;
             }
-            &:after {
+            &::after {
                 margin-left: 6px;
             }
         }
     }
     &[data-item-type="spreader"] > span {
-        &:before, &:after {
+        &::before, &::after {
             margin-top: 0;
             margin-bottom: 0;
         }
-        &:before {
+        &::before {
             content: "|←";
         }
-        &:after {
+        &::after {
             content: "→|";
             text-align: right;
         }
     }
     &[data-item-type="separator"] > span {
-        &:before, &:after {
+        &::before, &::after {
             border: dashed 1px var(--color-base-40);
         }
     }
     &[data-item-type="break"] > span {
-        &:before, &:after {
+        &::before, &::after {
             border: solid 1px var(--color-base-50);
         }
     }
@@ -2911,6 +3074,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         }
     }
 }
+
 .note-toolbar-setting-hotkey,
 .note-toolbar-setting-command-indicator {
     font-size: var(--font-ui-small);
@@ -2924,6 +3088,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
     display: flex;
     align-items: center;
 }
+
 .note-toolbar-setting-command-indicator {
     padding: 2px;
     & svg {
@@ -2931,23 +3096,28 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         vertical-align: middle;
     }
 }
+
 .note-toolbar-setting-item-preview-edit-mobile {
     display: flex;
     column-gap: 0.5em;
     justify-content: space-between;
     width: 100%;
 }
+
 .note-toolbar-setting-state-active svg {
     color: var(--interactive-accent);
 }
+
 .note-toolbar-setting-item-preview-icon:empty {
     display: none;
 }
+
 .note-toolbar-setting-item-preview-empty,
 .note-toolbar-setting-item-preview-tooltip {
     color: var(--color-base-60);
     font-style: italic;
 }
+
 .note-toolbar-setting-toolbar-list-preview-item {
     align-items: center;
     display: flex;
@@ -2965,6 +3135,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         }
     }
 }
+
 .note-toolbar-setting-empty-message {
     align-items: center;
     color: var(--text-muted);
@@ -2983,19 +3154,23 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
         justify-content: left;
     }
 }
+
 .note-toolbar-setting-error-message {
     color: var(--text-error);
     padding-bottom: 1em;
 }
+
 .setting-item-control:has(input[type="search"].note-toolbar-setting-error),
 .setting-item-control:has(input[type="text"].note-toolbar-setting-error) {
     flex-wrap: wrap;
 }
+
 input[type="search"].note-toolbar-setting-error,
 input[type="text"].note-toolbar-setting-error,
 .note-toolbar-setting-error textarea {
     box-shadow: 0 0 0 1px var(--text-error);
 }
+
 .note-toolbar-setting-error {
     &.note-toolbar-setting-item-preview {
         border-radius: var(--radius-m);
@@ -3013,6 +3188,7 @@ input[type="text"].note-toolbar-setting-error,
         box-shadow: 0 0 0 1px var(--text-error);
     }
 }
+
 @keyframes note-toolbar-setting-error-grows {
     0% {
       box-shadow: 0 0 0 1px var(--text-error);
@@ -3021,6 +3197,7 @@ input[type="text"].note-toolbar-setting-error,
         box-shadow: 0 0 0 3px var(--text-error);
     }
 }
+  
 @keyframes note-toolbar-setting-error-shrinks {
     0% {
         box-shadow: 0 0 0 3px var(--text-error);
@@ -3029,34 +3206,43 @@ input[type="text"].note-toolbar-setting-error,
         box-shadow: 0 0 0 1px var(--text-error);
     }
 }
+
 .note-toolbar-setting-button {
     border-top: none;
     padding-top: 0 !important;
     padding-bottom: 1em !important;
 }
+
 .is-phone .note-toolbar-setting-header-phone {
     padding-top: 2.25em !important
 }
+
 .note-toolbar-setting-no-background {
     background-color: transparent !important;
 }
+
 .note-toolbar-setting-no-border {
     border-top: none !important;
 }
+
 .note-toolbar-setting-top-border {
     border-top: solid 1px var(--background-modifier-border) !important;
 }
+
 .note-toolbar-setting-top-spacing {
     margin-top: 2em !important;
 }
+
 .note-toolbar-setting-bottom-spacing {
     margin-bottom: 2em !important;
 }
+
 .note-toolbar-setting-group-container {
     &[data-active="false"] {
         display: none !important;
     }
 }
+
 .note-toolbar-setting-item-full-width {
     align-items: flex-start;
     flex-direction: column;
@@ -3069,6 +3255,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-full-width-phone {
     & .setting-item-control > div {
         .is-mobile & {
@@ -3076,6 +3263,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-folder-list-item-container {
     display: flex;
     border-top: var(--border-width) solid var(--background-modifier-border);
@@ -3103,6 +3291,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-items-header {
     border-bottom: 1px solid var(--background-modifier-border) !important;
     border-width: 0 0 var(--border-width) 0 !important;
@@ -3110,11 +3299,13 @@ input[type="text"].note-toolbar-setting-error,
     padding-bottom: 1em;
     margin-bottom: 1em;
 }
+
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-items-container,
 .note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container,
 .note-toolbar-setting-rules-container {
     padding-top: 0.75em;
     & .setting-item-heading {
@@ -3169,6 +3360,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
 .note-toolbar-setting-mappings-container,
@@ -3181,6 +3373,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-items-container {
     & .setting-item {
         .is-phone & {
@@ -3188,18 +3381,22 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 /* collapsible sections - bottom border */
 .note-toolbar-setting-app-toolbars-container,
 .note-toolbar-setting-callout-container,
 .note-toolbar-setting-contexts-container,
-.note-toolbar-setting-mappings-container {
+.note-toolbar-setting-mappings-container,
+.note-toolbar-setting-navbar-container {
     &[data-active="true"] {
         margin-bottom: 0.75em;
     }
 }
+
 .note-toolbar-setting-item-heading-top-spacing {
     padding-top: 1.5em;
 }
+
 .is-phone .note-toolbar-setting-items-container,
 .is-phone .note-toolbar-setting-items-list-container {
     & .note-toolbar-setting-button {
@@ -3208,6 +3405,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }  
 }
+
 .note-toolbar-setting-item-full-control-phone {
     .is-phone & {
         width: 100%;
@@ -3216,6 +3414,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-items-button-container {
     align-items: center !important;
     display: flex;
@@ -3237,6 +3436,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-top-container {
     display: flex;
     flex-flow: wrap;
@@ -3245,6 +3445,7 @@ input[type="text"].note-toolbar-setting-error,
         border-bottom: none !important;
     }
 }
+
 .note-toolbar-setting-item-visibility-container {
     display: flex;
     flex-wrap: wrap;
@@ -3253,6 +3454,7 @@ input[type="text"].note-toolbar-setting-error,
         border-bottom: none !important;
     }
 }
+
 .note-toolbar-setting-item-icon {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
@@ -3280,6 +3482,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-mapping-field {
     border-top: none !important;
     padding: 0 !important;
@@ -3293,6 +3496,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-field {
     border-top: none !important;
     flex-grow: 1;
@@ -3314,6 +3518,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-link-container {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -3335,6 +3540,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-link-field,
 .note-toolbar-setting-item-link-subfield {
     display: flex;
@@ -3354,9 +3560,11 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-subfield-advanced-container {
     width: 100%;
 }
+
 .note-toolbar-setting-subfield-advanced {
     align-items: center !important;
     display: flex;
@@ -3377,6 +3585,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-link-advanced {
     display: none;
     &[data-active] {
@@ -3408,9 +3617,11 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-link {
     width: 100%;
 }
+
 .note-toolbar-setting-item-field-link {
     align-items: flex-start;
     border-top: none !important;
@@ -3441,11 +3652,13 @@ input[type="text"].note-toolbar-setting-error,
         width: 100%;
     }
 }
+
 .note-toolbar-setting-focussable-link {
     &:focus-within {
         box-shadow: var(--cg-nt-settings-link-focus-box-shadow);
     }
 }
+
 .note-toolbar-setting-field-help,
 .note-toolbar-setting-field-error {
     color: var(--text-muted);
@@ -3470,6 +3683,7 @@ input[type="text"].note-toolbar-setting-error,
         display: none !important;
     }
 }
+
 .note-toolbar-setting-tbar-preview {
     display: flex;
     gap: 2px 8px;
@@ -3483,12 +3697,15 @@ input[type="text"].note-toolbar-setting-error,
         margin-inline-end: 6px;
     }
 }
+
 .note-toolbar-setting-tbar-preview-edit {
     margin-top: 6px;
 }
+
 .note-toolbar-setting-field-error {
     color: var(--text-error);
 }
+
 .note-toolbar-sortablejs-list {
     display: flex;
     flex-direction: column;
@@ -3516,6 +3733,7 @@ input[type="text"].note-toolbar-setting-error,
         cursor: grabbing;
     }
 }
+
 .note-toolbar-setting-item-delete {
     padding: 0 8px 0 0;
     & .setting-item-info {
@@ -3546,12 +3764,14 @@ input[type="text"].note-toolbar-setting-error,
         color: var(--text-error);
     }
 }
+
 .note-toolbar-setting-item-visibility {
     display: flex;
     & button {
         font-size: var(--font-ui-smaller);
     }
 }
+
 .note-toolbar-setting-item-controls {
     display: flex;
     gap: var(--size-4-2);
@@ -3574,6 +3794,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-visibility-and-controls {
     border-top: none !important;
     display: flex;
@@ -3623,6 +3844,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-control-std-with-help {
     & .setting-item-control {
         flex-direction: column;
@@ -3643,9 +3865,9 @@ input[type="text"].note-toolbar-setting-error,
             & .note-toolbar-setting-tbar-preview {
                 flex-wrap: nowrap;
                 overflow: hidden;
-                position: relative;
                 max-height: calc(var(--line-height-tight) * 1em);
                 max-width: 175px;
+                position: relative;
                 .is-mobile & {
                     max-width: inherit;
                 }
@@ -3655,20 +3877,24 @@ input[type="text"].note-toolbar-setting-error,
                     }
                 }
             }
-            /* fade overflow */
-            & .note-toolbar-setting-tbar-preview::after {
-                content: '';
-                position: absolute;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                width: 33%;
-                background: linear-gradient(to right, transparent, var(--setting-items-background));
-                pointer-events: none;
-            }
         }
     }
 }
+
+/* fade overflow */
+.note-toolbar-setting-tbar-preview-fade {
+    &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 33%;
+        background: linear-gradient(to right, transparent, var(--setting-items-background));
+        pointer-events: none;
+    }
+}
+
 .note-toolbar-setting-item-fields {
     display: flex;
     flex-grow: 1;
@@ -3676,11 +3902,13 @@ input[type="text"].note-toolbar-setting-error,
     gap: 0.5em 1em;
     padding-bottom: 0.25em;
 }
+
 .note-toolbar-setting-item-styles {
     & > .setting-item-info {
         align-self: flex-start;
     }
 }
+
 .note-toolbar-setting-item-style {
     display: flex;
     flex-wrap: wrap;
@@ -3740,6 +3968,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-item-suggester-dialog {
     width: calc(var(--dialog-width) / 1.5);
     & .suggestion-empty {
@@ -3769,20 +3998,24 @@ input[type="text"].note-toolbar-setting-error,
         margin-bottom: 0;
     }
 }
+
 .is-phone .note-toolbar-setting-dialog-phonefix {
     padding: 1em;
 }
+
 .note-toolbar-setting-mini-dialog {
     width: calc(var(--dialog-width) / 1.5);
     .is-phone & {
         width: inherit;
     }
 }
+
 .note-toolbar-setting-position-group {
     & .setting-item:has(+ .setting-item[data-active="false"]) {
         padding-bottom: 0;
     }
 }
+
 .note-toolbar-setting-small-heading {
     color: var(--color-base-50);
     font-size: var(--font-ui-smaller);
@@ -3790,9 +4023,11 @@ input[type="text"].note-toolbar-setting-error,
     line-height: 1em;
     margin-block-end: 0.5em;
 }
+
 .note-toolbar-setting-spacer {
     margin-block-start: 2em;    
 }
+
 .note-toolbar-setting-import-confirm-preview {
     border: 1px solid var(--background-modifier-border);
     border-radius: 8px;
@@ -3804,6 +4039,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-import-text-area {
     border-top: none;
     .setting-item-info {
@@ -3814,20 +4050,24 @@ input[type="text"].note-toolbar-setting-error,
         min-height: 16em !important;
     }
 }
+
 .note-toolbar-setting-confirm-dialog {
     & ul {
         padding-bottom: 1em;
         padding-inline-start: 1em;
     }
 }
+
 .note-toolbar-setting-confirm-dialog-buttons {
     column-gap: 0.5em;
     display: flex;
     justify-content: flex-end;
 }
+
 .note-toolbar-setting-confirm-dialog-note {
     font-size: var(--font-ui-small);
 }
+
 .note-toolbar-share-dialog {
     .setting-item:first-of-type {
         border-top: none;
@@ -3842,6 +4082,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .is-phone {
     & .note-toolbar-setting-modal-phone-top-inset-fix {
         /* fix/workaround for Obsidian v1.5.11 bug: tall modals opened from settings have an inaccessible close button */
@@ -3851,6 +4092,7 @@ input[type="text"].note-toolbar-setting-error,
         padding-bottom: var(--safe-area-inset-bottom);
     }
 }
+
 .note-toolbar-setting-modal-container {
     & .setting-item-heading {
         padding-left: 0;
@@ -3860,6 +4102,7 @@ input[type="text"].note-toolbar-setting-error,
         z-index: 2; /* fix for modal title overlapping close button */
     }
 }
+
 .vertical-tab-content.note-toolbar-setting-modal {
     background-color: transparent !important;
     padding-bottom: var(--size-4-5);
@@ -3876,6 +4119,7 @@ input[type="text"].note-toolbar-setting-error,
 /*
  * Suggesters
  */
+
 .note-toolbar-item-suggester-name {
     align-items: center;
     justify-content: space-between;
@@ -3883,6 +4127,7 @@ input[type="text"].note-toolbar-setting-error,
     column-gap: 1em;
     width: 100%;
 }
+
 .note-toolbar-item-suggester-note {
     color: var(--text-muted);
     display: flex;
@@ -3897,14 +4142,17 @@ input[type="text"].note-toolbar-setting-error,
         width: var(--font-ui-smaller) !important;
     }
 }
+
 .note-toolbar-item-suggester-type {
     opacity: 0.4;
 }
+
 .note-toolbar-item-suggestion-container {
     column-gap: 0.5em;
     display: flex;
     width: 100%;
 }
+
 .note-toolbar-item-suggestion {
     align-items: center;
     display: flex;
@@ -3915,6 +4163,7 @@ input[type="text"].note-toolbar-setting-error,
         margin: 0 auto;
     }
 }
+
 .note-toolbar-icon-suggestion {
     align-items: center;
     display: flex;
@@ -3924,11 +4173,13 @@ input[type="text"].note-toolbar-setting-error,
         margin: 0 auto;
     }
 }
+
 .note-toolbar-icon-action-button-container {
     display: flex;
     justify-content: space-between;
     gap: 0 1em;
 }
+
 .note-toolbar-setting-folder-suggestion-item-muted {
     display: flex;
     gap: 1em;
@@ -3938,6 +4189,7 @@ input[type="text"].note-toolbar-setting-error,
 /*
  * Help
  */
+
 .note-toolbar-gallery-item-divider {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -3945,10 +4197,12 @@ input[type="text"].note-toolbar-setting-error,
     font-size: var(--font-ui-small);
     font-weight: var(--font-semibold);
 }
+
 .note-toolbar-gallery-item-suggestion {
     box-shadow: inset 0 0 0 2px var(--background-modifier-border);
     margin-bottom: 0.5em;
 }
+
 .note-toolbar-gallery-view-search {
     & .setting-item-info {
         display: none;
@@ -3964,6 +4218,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-card-items {
     align-items: stretch;
     display: flex;
@@ -3975,11 +4230,13 @@ input[type="text"].note-toolbar-setting-error,
     scroll-behavior: smooth;
     scrollbar-width: none;
 }
+
 .note-toolbar-gallery-card-items {
     border-block-end: solid 1px var(--background-modifier-border);
     padding-bottom: 2em;
     padding-top: 1em;
 }
+
 .note-toolbar-gallery-card-items,
 .note-toolbar-gallery-card-items-no-border,
 .note-toolbar-tips-card-items {
@@ -3996,6 +4253,7 @@ input[type="text"].note-toolbar-setting-error,
         pointer-events: none;
     }
 }
+
 .note-toolbar-tips-card-items {
     display: flex;
     justify-content: center;
@@ -4012,6 +4270,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-view-heading {
     display: flex;
     flex-basis: fit-content;
@@ -4030,15 +4289,18 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-gallery-view-plugin-overview p {
     margin-block-end: 0.25em;
 }
+
 .note-toolbar-gallery-view-cat-title h2 {
     margin-block-end: 0.25em;
     &::after {
         display: none; /* fix for Border theme */
     }
 }
+
 .note-toolbar-gallery-view-note,
 .note-toolbar-gallery-view-cat-description {
     display: flex;
@@ -4053,6 +4315,7 @@ input[type="text"].note-toolbar-setting-error,
         width: 1em;
     }
 }
+
 .note-toolbar-card-item {
     align-items: start;
     box-shadow: var(--input-shadow);
@@ -4144,9 +4407,11 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-help-section {
     flex-wrap: wrap;
 }
+
 .note-toolbar-setting-help-section-phone {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
@@ -4167,6 +4432,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-gallery-view .is-readable-line-width,
 .note-toolbar-setting-help-view .is-readable-line-width,
 .note-toolbar-setting-whatsnew-view .is-readable-line-width {
@@ -4174,15 +4440,18 @@ input[type="text"].note-toolbar-setting-error,
     margin-left: auto;
     margin-right: auto;
 }
+
 .is-phone .note-toolbar-setting-help-view {
     & .note-toolbar-setting-view-banner {
         padding: 1em 1em 2em 1em;
     }
 }
+
 .is-phone .note-toolbar-setting-help-view,
 .is-phone .note-toolbar-setting-whatsnew-view {
     padding-bottom: var(--navbar-height);
 }
+
 .note-toolbar-setting-whatsnew-view {
     & .note-toolbar-setting-view-cta {
         & .setting-item {
@@ -4191,11 +4460,13 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-help-view-title {
     & h1, p, svg {
         color: var(--text-normal) !important;
     }
 }
+
 .note-toolbar-setting-help-view-section {
     border-radius: 8px;
     border: 1px solid var(--background-modifier-border);
@@ -4210,6 +4481,7 @@ input[type="text"].note-toolbar-setting-error,
         margin-top: 0 !important;
     }
 }
+
 .note-toolbar-setting-help-video {
     aspect-ratio: 8 / 5;
     position: relative;
@@ -4253,11 +4525,13 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-gallery-view {
     & .note-toolbar-setting-view-banner {
         background-image: linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%), linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%);
     }
 }
+
 .note-toolbar-setting-view-banner {
     background-blend-mode: overlay;
     font-size: var(--font-ui-medium);
@@ -4280,10 +4554,12 @@ input[type="text"].note-toolbar-setting-error,
         transform-origin: center;
     }
 }
+
 @keyframes note-toolbar-tip-icon-animation {
   0% { opacity: 0.5; transform: scale(0.95); }
   100% { opacity: 1; transform: scale(1); }
 }
+
 .note-toolbar-setting-view-cta {
     & .setting-item {
         background: transparent !important;
@@ -4301,6 +4577,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-gallery-content,
 .note-toolbar-setting-help-content,
 .note-toolbar-setting-tip-content,
@@ -4351,10 +4628,12 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-help-content {
     max-width: 500px;
     margin-inline: auto;
 }
+
 .note-toolbar-setting-tip-content {
     h2 {
         border-bottom: 1px solid var(--background-modifier-border);
@@ -4365,6 +4644,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-setting-whatsnew-content {
     code:not(.language-ts) {
         background-color: var(--code-background);
@@ -4382,6 +4662,7 @@ input[type="text"].note-toolbar-setting-error,
         width: unset;
     }
 }
+
 .note-toolbar-setting-remote-skeleton {
     background: linear-gradient(90deg, var(--text-normal) 25%, var(--text-muted) 50%, var(--text-normal) 75%);
     opacity: 0.25;
@@ -4389,17 +4670,20 @@ input[type="text"].note-toolbar-setting-error,
     animation: note-toolbar-setting-remote-shimmer 1.5s infinite;
     border-radius: 4px;
 }
+
 @keyframes note-toolbar-setting-remote-shimmer {
     100% {
         background-position: -200% 0;
     }
 }
+
 .note-toolbar-notice-pointer {
     cursor: pointer;
 }
 /* 
  * Note Toolbar API UI Components
  */
+
 .note-toolbar-ui {
     min-height: unset;
     & .modal-close-button {
@@ -4510,25 +4794,30 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
+
 .note-toolbar-ui-button-div {
     display: flex;
     flex-direction: column;
     align-items: end;
     margin-top: 1rem;
 }
+
 .note-toolbar-ui-div {
     display: flex;
 }
+
 .note-toolbar-ui-form {
     display: flex;
     flex-grow: 1;
 }
+
 .note-toolbar-ui-input {
     flex-grow: 1;
 }
 /*
  * New tab toolbar (Launchpad) 
  */
+
 .note-toolbar-launchpad-container {
     display: flex;
     flex-direction: column;
@@ -4540,6 +4829,7 @@ input[type="text"].note-toolbar-setting-error,
         display: none;
     }
 }
+
 .note-toolbar-launchpad {
     & .callout-content {
         margin-left: auto;
@@ -4573,9 +4863,6 @@ input[type="text"].note-toolbar-setting-error,
                     & .cg-note-toolbar-item-label {
                         white-space: wrap;
                     }
-                    .is-phone & {
-                        color: var(--interactive-accent);
-                    }
                     & svg {
                         height: var(--cg-nt-launchpad-item-icon-size);
                         width: var(--cg-nt-launchpad-item-icon-size);
@@ -4596,12 +4883,12 @@ input[type="text"].note-toolbar-setting-error,
     }
 
 }
-
 /* theme overrides: needs to be imported last */
 /*
  * Any necessary overrides for specific themes (otherwise not possible by just changing variables).
  * Needs to be imported last.
  */
+
 body[data-ntb-csstheme="Border"] {
     & .cg-note-toolbar-container[data-tbar-position="bottom"],
     & .cg-note-toolbar-container[data-tbar-position="top"] {
@@ -4609,6 +4896,7 @@ body[data-ntb-csstheme="Border"] {
         z-index: calc(var(--layer-popover) - 1);
     }
 }
+
 body[data-ntb-csstheme="Cupertino"] {
     &.is-mobile.theme-dark {
         & .callout[data-callout="note-toolbar-output"] {
@@ -4667,6 +4955,7 @@ body[data-ntb-csstheme="Cupertino"] {
         }
     }
 }
+
 /* Minimal: width fix for props position #204 #216 */
 body[data-ntb-csstheme="Minimal"] {
     & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
@@ -4677,6 +4966,7 @@ body[data-ntb-csstheme="Minimal"] {
         }
     }
 }
+
 /* Velocity: fix: margins and padding incorrect */
 body[data-ntb-csstheme="Velocity"] {
     & .callout[data-callout="note-toolbar"] .callout-content {

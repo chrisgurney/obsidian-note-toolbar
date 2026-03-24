@@ -1,6 +1,8 @@
 /* NOTE: make any modifications to this file in src/Styles/styles.css */
 
+/* @settings
 @import "./style-settings.yaml";
+*/
 
 @import "./body.css";
 @import "./body-themes.css";

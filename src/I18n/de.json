@@ -315,6 +315,15 @@
             "option-launchpad": "Ansicht surch Toolbar ersetzen.",
             "option-launchpad-description": "Ersetzen Sie die neue Registerkartenansicht durch diese Symbolleiste."
         },
+        "display-navbar": {
+            "ribbon-action": {
+                "description": "Aktion, die ausgeführt wird, wenn das Ribbon-Icon (auf Mobilgeräten) verwendet wird.",
+                "name": "Aktion des Ribbon-Icons",
+                "option-item-suggester": "Alle Werkzeuge anzeigen",
+                "option-toolbar": "Aktuelle Toolbar anzeigen",
+                "option-toolbar-suggester": "Alle Toolbars anzeigen"
+            }
+        },
         "display-rules": {
             "description": "Bestimmen Sie mithilfe einer Eigenschaft, Zuordnungen oder beidem, für welche Notizen Toolbars angezeigt werden sollen.",
             "name": "Anzeigeregeln",
@@ -529,13 +538,6 @@
                 "name": "Notiz Toolbar-Callouts sperren"
             },
             "name": "Sonstiges",
-            "ribbon-action": {
-                "description": "Aktion, die ausgeführt wird, wenn das Ribbon-Icon (auf Mobilgeräten) verwendet wird.",
-                "name": "Aktion des Ribbon-Icons 📱",
-                "option-item-suggester": "Alle Werkzeuge anzeigen",
-                "option-toolbar": "Aktuelle Toolbar anzeigen",
-                "option-toolbar-suggester": "Alle Toolbars anzeigen"
-            },
             "scripting": {
                 "description": "Fügt Unterstützung für Dataview, JS Engine und Templater hinzu, die installiert und aktiviert werden müssen.",
                 "name": "Scripting"

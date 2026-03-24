@@ -394,8 +394,7 @@ export default class SettingsUIUtils {
 		usageFr.append(descLinkFr);
 		this.ntb.registerDomEvent(descLinkFr, 'click', () => {
 			parent?.close();
-			// @ts-ignore
-			ntb.app.setting.close();
+			this.ntb.app.setting.close();
 			window.open(this.getToolbarPropSearchUri(toolbar.name));
 		});
 
@@ -534,14 +533,16 @@ export default class SettingsUIUtils {
 	 * Moves an item to a toolbar of the user's choice.
 	 * @param fromToolbar toolbar to move the item from
 	 * @param item item to move
+	 * @param callback function to execute after move is complete, to update the UI as needed
 	 */
-	async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
+	async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings, callback: () => void | Promise<void>): Promise<void> {
 		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				fromToolbar.items.remove(item);
 				toToolbar.items.push(item);
 				await this.ntb.settingsManager.save();
 				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
+				await callback();
 			}
 		});
 		modal.open();
@@ -732,6 +733,20 @@ export default class SettingsUIUtils {
 				fieldEl.addClass('note-toolbar-setting-error');
 			}
 		}
+	}
+
+	/**
+	 * Updates the toolbar preview for the given setting.
+	 */
+	setFieldPreview(setting: Setting, toolbar: ToolbarSettings | undefined) {
+		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
+		removeFieldHelp(setting.controlEl);
+		setFieldHelp(setting.controlEl, toolbarPreviewFr);
+		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview') as HTMLElement | null;
+		// only apply fade if the preview is overflowing
+		if (tbarEl) setTimeout(() => {
+			tbarEl.classList.toggle('note-toolbar-setting-tbar-preview-fade', tbarEl.scrollWidth > tbarEl.clientWidth);
+		}, 0);
 	}
 
 	/**

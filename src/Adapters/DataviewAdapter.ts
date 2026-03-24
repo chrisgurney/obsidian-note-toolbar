@@ -192,7 +192,9 @@ export default class DataviewAdapter extends Adapter {
      * Arguments = { "fileFolder": "Demos" }
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
-    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement) {
+    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement): Promise<string | undefined> {
+
+        let result;
 
         if (!filename) {
             return;
@@ -234,17 +236,14 @@ export default class DataviewAdapter extends Adapter {
              containerEl.empty();
              let dataviewLocalApi = this.adapterPlugin.localApi(activeFilePath, this.ntb, containerEl);    
              // from dv.view: may directly render, in which case it will likely return undefined or null
-             let result = await Promise.resolve(func(dataviewLocalApi, args));
+             result = await Promise.resolve(func(dataviewLocalApi, args));
              if (result && this.ntb) {
-                 await this.adapterApi.renderValue(
-                     this.ntb.app,
-                     result as any,
-                     containerEl,
-                     activeFilePath,
-                     component,
-                     this.adapterApi.settings,
-                     true
-                 );
+                    await this.adapterApi.renderValue(
+                        result as any,
+                        containerEl,
+                        component,
+                        activeFilePath
+                    );
              }
          }
          catch (error) {
@@ -255,6 +254,8 @@ export default class DataviewAdapter extends Adapter {
          }
 
         }
+
+        return result;
 
     }
 

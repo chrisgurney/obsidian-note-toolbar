@@ -15,8 +15,10 @@
         margin-inline-end: 0;
     }
     &:hover {
-        /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
-        overflow: inherit !important;
+        &:not(:has(.note-toolbar-launchpad)) {
+            /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
+            overflow: inherit !important;
+        }
     }
     /* width: var(--var-max-width);
     max-width: var(--var-max-width); */
@@ -53,12 +55,9 @@
         }
         & .cg-note-toolbar-callout {
             .is-phone & {
-                margin-bottom: calc(var(--navbar-height) + var(--cg-nt-tbar-bottom-margin-bottom-phone));
+                margin-bottom: var(--ntb-tbar-bottom-mb-phone);
                 /* use animation consistent with Navbar */
                 transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-out;
-                .is-hidden-nav & {
-                    margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
-                }
             }
             /* fix: bottom margin needs to be removed when keyboard is open on phone */
             .is-phone.ntb-is-keyboard-open & {
@@ -144,13 +143,6 @@
     /* reduce padding to better align with formatting toolbar */
     .ntb-is-keyboard-open & {
         padding-inline: 0;
-    }
-}
-
-/* if Navbar is completely hidden by Note Toolbar, don't shift bottom toolbars */
-.is-phone.ntb-remove-nav .cg-note-toolbar-container[data-tbar-position*="bottom"] {
-    & .cg-note-toolbar-callout {
-        margin-bottom: var(--cg-nt-tbar-bottom-margin-bottom-phone);
     }
 }
 

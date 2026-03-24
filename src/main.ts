@@ -123,7 +123,6 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.adapters.updateAdapters();
 		
 			// has to be done on plugin load
-			// @ts-expect-error - internalPlugins is not in the public App type
 			const internalPlugins = this.app.internalPlugins;
 			this.listeners.workspace.workspacesPlugin = internalPlugins.getPluginById('workspaces');
 

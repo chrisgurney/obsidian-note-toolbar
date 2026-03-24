@@ -16,6 +16,10 @@ function Definition() {
     if (selectedText) {
         fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + selectedText)
         .then(response => {
+            if (response.status === 404) {
+                new Notice('Definition: No definition found for "' + selectedText + '".');
+                return null;
+            }
             return response.json();
         })
         .then(word => {

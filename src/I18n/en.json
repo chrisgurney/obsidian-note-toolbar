@@ -102,6 +102,7 @@
         "item": {
             "error-invalid-icon": "Invalid icon ID: {{iconId}}"
         },
+        "link-name": "Note\u00A0Toolbar\u00A0API",
         "msg": {
             "block-no-id": "No block ID found",
             "clipboard-copied": "Copied to clipboard",
@@ -126,7 +127,8 @@
             "instruction-select": "to select item",
             "prompt-placeholder": "Type text and press enter",
             "prompt-placeholder-large": "Type text",
-            "suggester-placeholder": "Select an option..."
+            "suggester-placeholder": "Select an option...",
+            "suggester-placeholder-no-values": "Type something..."
         }
     },
     "command": {
@@ -324,7 +326,7 @@
         "display-locations": {
             "description": "Define where toolbars are shown across the app.",
             "name": "Toolbars within the app",
-            "option-editor-menu": "Editor menu 🖥️",
+            "option-editor-menu": "Editor menu",
             "option-editor-menu-description": "Replace the Editor menu (on desktop) with the chosen toolbar.",
             "option-editor-menu-error": "Error: Editor menu toolbar not found. Check your settings.",
             "option-editor-menu-placeholder": "Select toolbar...",
@@ -340,12 +342,25 @@
             "option-text-on-keyboard": "Display for keyboard selections",
             "option-text-on-keyboard-description": "Show this toolbar when text is selected with the keyboard.",
             "option-text-placeholder": "Select toolbar...",
-            "option-webviewer": "Web viewer 🖥️",
+            "option-webviewer": "Web viewer",
             "option-webviewer-placeholder": "Select toolbar...",
-            "option-webviewer-description": "Display a toolbar in the web viewer.",
+            "option-webviewer-description": "Display a toolbar in the web viewer."
+        },
+        "display-navbar": {
+            "bottom": {
+                "description": "Hides actions in Obsidian's bottom phone navigation bar.",
+                "label-hidden": "Navbar is hidden",
+                "label-partial": "Some navbar actions are hidden",
+                "label-visible": "Navbar is visible",
+                "name": "Bottom navigation bar visibility",
+                "option-hide-all": "Hide all actions",
+                "option-unhide-all": "Unhide all actions"
+            },
+            "description": "Override Obsidian's phone navigation bars.",
+            "name": "Navigation bars",
             "ribbon-action": {
-                "description": "Set the action to take when the ribbon button in the navigation bar (on phones) is used.",
-                "name": "Navigation bar 📱",
+                "description": "Set the action to take when the ribbon button in the bottom navigation bar is used.",
+                "name": "Ribbon button",
                 "option-item-suggester": "Show all tools",
                 "option-toolbar": "Show current toolbar",
                 "option-toolbar-selected": "Show selected toolbar",
@@ -353,6 +368,10 @@
                 "option-toolbar-selected-description": "Show this toolbar when using the ribbon button.",
                 "option-toolbar-selected-placeholder":  "Select toolbar...",
                 "option-toolbar-suggester": "Show all toolbars"
+            },
+            "top": {
+                "description": "Hides Obsidian's top phone navigation bar.",
+                "name": "Top navigation bar visibility"
             }
         },
         "display-rules": {
@@ -581,7 +600,7 @@
                 "name": "Debugging"
             },
             "icon": {
-                "description": "Sets the icon for Note Toolbar when used in the tab bar, floating button, and navigation bar (on phone). Requires restart.",
+                "description": "Sets the icon for Note Toolbar when used in floating buttons and navigation bars. Requires restart.",
                 "name": "Icon",
                 "tooltip": "Select icon"
             },
@@ -598,15 +617,6 @@
                 "name": "Lock Note Toolbar Callouts"
             },
             "name": "Other",
-            "navbar-visibility": {
-                "description": "Hides actions in Obsidian's phone navigation bar.",
-                "label-hidden": "Navbar is hidden",
-                "label-partial": "Some navbar actions are hidden",
-                "label-visible": "Navbar is visible",
-                "name": "Navbar item visibility 📱",
-                "option-hide-all": "Hide all actions",
-                "option-unhide-all": "Unhide all actions"
-            },
             "scripting": {
                 "description": "Adds support for Dataview, JavaScript, JS Engine, and Templater. Plugins must be installed and enabled.",
                 "name": "Scripting"
@@ -622,6 +632,7 @@
             "notice-defaultitem-invalid": "Invalid default item for floating button. Check toolbar configuration.",
             "option-addressbar": "Address bar",
             "option-below-addressbar": "Below address bar",
+            "option-below-title": "Below title",
             "option-bottom": "Bottom",
             "option-centered": "Centered",
             "option-defaultitem": "Floating button default item",
@@ -629,6 +640,7 @@
             "option-defaultitem-error-invalid": "Invalid toolbar item",
             "option-defaultitem-placeholder": "Item...",
             "option-fab-desktop-native-menus-disclaimer": "Disable Obsidian's Appearance → Native menus option, if you want icons to appear floating button menus.",
+            "option-below-properties-source-disclaimer": "In Source mode, Below Properties position shows toolbar below note title",
             "option-fabl": "Floating button: left",
             "option-fabr": "Floating button: right",
             "option-floating": "Floating toolbar",
@@ -638,7 +650,7 @@
             "option-mobile-help": "Tip: Access toolbars from the navigation bar.",
             "option-props": "Below Properties",
             "option-quicktools": "Quick Tools window",
-            "option-tabbar": "Tab bar",
+            "option-tabbar": "Top navigation bar",
             "option-top": "Top (fixed)"
         },
         "rules": {
@@ -670,7 +682,7 @@
             "help": "Customize even more with the Style Settings plugin.",
             "name": "Styles",
             "option-autohide": "auto-hide*",
-            "option-autohide-disclaimer": "Auto-hide does not apply on mobile.",
+            "option-autohide-disclaimer": "Auto-hide requires Obsidian's Appearance → Full sceen setting to be enabled on phones. Does not work on tablets.",
             "option-between": "space between items",
             "option-border": "border",
             "option-button": "buttons",
@@ -688,12 +700,13 @@
             "option-mobile-description": "Override default styles.",
             "option-mobile-empty": "No mobile styles set. Using default styles.",
             "option-mobile-name": "Mobile",
+            "option-noautohide": "no auto-hide",
             "option-noborder": "no border",
             "option-notab": "no tab file items",
             "option-notsticky": "not sticky",
             "option-nowide": "content width",
             "option-nowrap": "don't wrap items*",
-            "option-nowrap-disclaimer": "Works best if items are not evenly spaced or centered.",
+            "option-nowrap-disclaimer": "No wrap works best if items are not evenly spaced or centered.",
             "option-placeholder": "Add style...",
             "option-right": "right align items",
             "option-sticky": "sticky*",

@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
@@ -16,7 +17,7 @@ export default class JavaScriptAdapter extends Adapter {
             label: t('adapter.javascript.eval-function'),
             description: "",
             parameters: [
-                { parameter: 'expression', label: t('adapter.javascript.eval-expr'),  description: t('adapter.javascript.eval-expr-description'), type: SettingType.TextArea, required: true },
+                { parameter: 'expression', label: t('adapter.javascript.eval-expr'),  description: learnMoreFr(t('adapter.javascript.eval-expr-description'), 'Note-Toolbar-API', t('api.link-name')), type: SettingType.TextArea, required: true },
                 { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
             ]
         },
@@ -99,7 +100,7 @@ export default class JavaScriptAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement) {
+    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement): Promise<string | undefined> {
 
         if (!filename) {
             return;
@@ -116,7 +117,7 @@ export default class JavaScriptAdapter extends Adapter {
         let contents = await this.ntb?.app.vault.read(viewFile);
 
         if (contents) {
-            await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
+            return await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
         }
 
     }
@@ -152,10 +153,7 @@ export default class JavaScriptAdapter extends Adapter {
         const activeFilePath = activeFile?.path || '';
 
         if (expression) {
-            if (expression.includes("await")) expression = "(async () => { " + expression + " })()";
-            // TODO: not sure if this is needed for some reason when evaluating files? (from DataviewAdapter)
-            // expression += `\n//# sourceURL=${viewFile.path}`;
-            let func = new Function("input", expression);
+            let func = new JavaScriptAdapter.AsyncFunction("input", expression);
             const component = new Component();
             component.load();
             try {

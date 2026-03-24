@@ -2,7 +2,7 @@
  * Callouts
  */
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]) {
+.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]:not(.note-toolbar-launchpad)) {
     &:hover {
         box-shadow: none !important; /* hide the border on hover of the toolbar callout */
         & .edit-block-button {
@@ -44,17 +44,30 @@
 }
 
 .is-phone .cm-embed-block[data-tbar-position="top"] {
-    padding-top: var(--cg-nt-tbar-top-padding-top-phone);
+    margin-top: var(--ntb-tbar-top-mt-phone);
+    padding-top: var(--ntb-tbar-top-pt-phone);
+}
+
+.is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-header {
+    margin-top: var(--ntb-tbar-top-header-mt-phone);
+    padding-top: var(--ntb-tbar-top-header-pt-phone);
 }
 
 /* fixes header div getting squished when the toolbar's at the top position */
-.view-header:has(+ [data-tbar-position="top"]) {
+/* .view-header:has(+ [data-tbar-position="top"]) {
     min-height: var(--header-height);
-}
+} */
 
 /* removes padding above the top navigation, when Obsidian's Floating navigation setting is disabled */
-.is-phone .view-header:has(+ [data-tbar-position="top"]) {
+/* .is-phone .view-header:has(+ [data-tbar-position="top"]) {
     padding-top: 0;
+} */
+
+/* removes safe area inset from these variables, as it's taken into account above the toolbar */
+.is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-content {
+    --view-top-fade-mask: var(--ntb-tbar-top-fade-mask);
+    --view-top-spacing: var(--ntb-tbar-top-spacing);
+    --view-top-spacing-markdown: var(--ntb-tbar-top-spacing-md);
 }
 
 .callout[data-callout="note-toolbar-output"] {
@@ -258,19 +271,8 @@
     }
 
     /*************************************************************************
-     * Toolbar Styles (sticky's further up in this file)
+     * Toolbar Styles
      *************************************************************************/
-
-    &[data-callout-metadata*="autohide"] {
-        &:not(.is-mobile &) {
-            opacity: var(--cg-nt-tbar-autohide-opacity);
-            transition: all 0.2s ease-in-out;
-            -webkit-transition: all 0.2s ease-in-out;
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
 
     &[data-callout-metadata*="between"] ul {
         justify-content: space-between;
@@ -370,7 +372,7 @@
                 min-width: var(--ntb-callout-card-width);
                 width: auto;
                 .is-mobile & {
-                    border: var(--border-width) solid var(--background-modifier-border);
+                    box-shadow: inset 0 0 0 var(--border-width) var(--background-modifier-border);
                     flex: var(--ntb-callout-card-flex-mobile);
                     min-width: var(--ntb-callout-card-width-mobile);
                 }
@@ -598,6 +600,38 @@
         }
     }
 
+    /* style buttons on phones similar to floating nav */
+    &[data-callout-metadata*="button"], &[data-callout-metadata*="mbtn"] {
+        .is-phone & {
+            overflow: visible;
+            & .callout-content {
+                overflow: visible;
+                & ul a, ul span.external-link {
+                    backdrop-filter: var(--raised-blur);
+                    background: var(--raised-background);
+                    box-shadow: var(--raised-shadow);
+                    border: var(--raised-mask-border-width) solid transparent;
+                }
+            }
+        }
+        .is-phone.is-ios & {
+            & .callout-content {
+                & ul a::after, ul span.external-link::after {
+                    backdrop-filter: brightness(var(--blur-brightness));
+                    display: var(--raised-mask-display);
+                    position: absolute;
+                    content: "";
+                    background: var(--raised-mask-background);
+                    mask: var(--raised-mask);
+                    mask-composite: var(--raised-mask-composite);
+                    inset: 0;
+                    border: var(--raised-mask-border-width) solid transparent;
+                    z-index: 1;
+                }
+            }
+        }
+    }
+
     &[data-callout-metadata*="tab"] ul {
         & li[data-active-file] {
             & span.external-link {
@@ -673,6 +707,51 @@
     
 }
 
+/*
+ * Autohide Style
+ */
+body:not(.is-mobile) {
+    & .callout[data-callout="note-toolbar"][data-callout-metadata*="autohide"] {        
+        opacity: var(--cg-nt-tbar-autohide-opacity);
+        transition: all 0.2s ease-in-out;
+        -webkit-transition: all 0.2s ease-in-out;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+body.is-phone .cg-note-toolbar-container {
+    &[data-tbar-position*="bottom"] {
+        & .callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"]) {   
+            transition: margin-bottom 0.3s ease-in-out, transform 0.3s ease-out;
+            body.is-hidden-nav & {
+                opacity: 0;
+                transition: margin-bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+                visibility: hidden;
+            }
+        }
+    }
+    &[data-tbar-position*="top"] {
+        &:has(.callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"])) {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+            body.is-hidden-nav & {
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                transform: translateY(calc(var(--ntb-toolbar-height) * -1));
+                visibility: hidden;
+            }
+        }
+    }
+}
+
+/* on phones, make sure top toolbar is full width, and transparent for Appearance → Floating navigation */
+body.is-phone .cg-note-toolbar-container[data-tbar-position*="top"] {
+    width: 100%;
+    body.is-floating-nav & {
+        --cg-nt-tbar-bg-color: transparent;
+    }
+}
+
 /* on phones, hide the top border when properties is open */
 .is-phone .metadata-container:not([data-property-count="0"])[style*="--metadata-display-reading: block"] ~ .cg-note-toolbar-container {
   & .callout[data-callout="note-toolbar"]:not([data-callout-metadata*="mnbrder"])[data-callout-metadata*="border"],
@@ -690,6 +769,10 @@ body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([
 body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]:not([data-callout-metadata*="card"]) {
     background: unset !important;
     mix-blend-mode: normal !important;
+    overflow: visible;
+    & .callout-content {
+        overflow: visible;
+    }
     & ul {
         gap: var(--size-4-2);
         & a, span.external-link {

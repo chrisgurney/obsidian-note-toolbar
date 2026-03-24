@@ -303,6 +303,15 @@
             "option-other-placeholder": "наприклад: excalidraw",
             "option-video": "Відео"
         },
+        "display-navbar": {
+            "ribbon-action": {
+                "description": "Дія натискання у стрічковому меню (мобільний).",
+                "name": "Іконка Стрічкового меню",
+                "option-item-suggester": "Показати всі елементи",
+                "option-toolbar": "Показати поточну панель",
+                "option-toolbar-suggester": "Показати всі панелі"
+            }
+        },
         "display-rules": {
             "description": "Параметри відображення панелей у нотатках, використовуючи: Властивість, Зіставлені теки, або обидва засоби.",
             "name": "Правила відображення",
@@ -416,7 +425,7 @@
             "option-visibility-hidden": "приховано",
             "option-visibility-hidden-platform": "приховано на {{platform}}",
             "option-visibility-platform-desktop": "комп'ютері",
-            "option-visibility-platform-mobile": "мобільном 📱",
+            "option-visibility-platform-mobile": "мобільном",
             "option-visibility-visible-platform": "показувати на {{platform}}",
             "title": "Редагування елемента"
         },
@@ -482,7 +491,7 @@
             "notice-command-removed": "Команда видалена:\n{{command}}"
         },
         "option-platform-desktop": "Комп'ютер",
-        "option-platform-mobile": "Мобільний📱",
+        "option-platform-mobile": "Мобільний",
         "other": {
             "debugging": {
                 "description": "Якщо увімкнено, повідомлення налагодження відображатимуться у консолі. Це може бути корисно для розробників та усунення неполадок.",
@@ -502,13 +511,6 @@
                 "name": "Завантажувати зміни налаштувань"
             },
             "name": "Інше",
-            "ribbon-action": {
-                "description": "Дія натискання у стрічковому меню (мобільний).",
-                "name": "Іконка Стрічкового меню 📱",
-                "option-item-suggester": "Показати всі елементи",
-                "option-toolbar": "Показати поточну панель",
-                "option-toolbar-suggester": "Показати всі панелі"
-            },
             "scripting": {
                 "description": "Додає елементи Dataview, JsEngine та Templater. Потребує наявності цих додатків.",
                 "name": "Скриптування"
@@ -546,7 +548,7 @@
             "help": "Налаштуйте ще більше з додатком Style Settings.",
             "name": "Стилі",
             "option-autohide": "автоматично ховати*",
-            "option-autohide-disclaimer": "Автоматичне приховування не поширюється на мобільном 📱.",
+            "option-autohide-disclaimer": "Автоматичне приховування не поширюється на мобільном.",
             "option-between": "інтервал між елементами",
             "option-border": "рамка",
             "option-button": "елементи як кнопки",
@@ -561,7 +563,7 @@
             "option-left": "елементи ліворуч",
             "option-mobile-description": "Перевизначити типовий стиль.",
             "option-mobile-empty": "Стилі Мобільного не вказані, діють типові.",
-            "option-mobile-name": "Мобільний 📱",
+            "option-mobile-name": "Мобільний",
             "option-noborder": "без рамки",
             "option-notab": "немає елементів файлу вкладки",
             "option-notsticky": "не прикріпляти",
