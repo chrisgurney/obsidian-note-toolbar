@@ -142,7 +142,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         if (this.allowCustomInput && !isEmptyQuery) {
             const matches = super.getSuggestions(searchSegment);
-            const alreadyExists = matches.some(match => this.getItemText(match.item) === searchSegment);
+            const alreadyExists = matches.some(match => this.getItemText(match.item) === query);
             if (!alreadyExists) {
                 // prepend the custom input option
                 return this.saveMatches(
