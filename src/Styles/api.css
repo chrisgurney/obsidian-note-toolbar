@@ -110,6 +110,9 @@
                 width: var(--search-clear-button-size);
             }
         }
+        & .ntb-is-custom-input {
+            color: hsla(var(--accent-h), var(--accent-s), var(--accent-l));
+        }
     }
 }
 
