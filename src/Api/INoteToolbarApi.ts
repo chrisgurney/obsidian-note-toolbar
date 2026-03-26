@@ -480,12 +480,13 @@ export interface NtbSuggesterOptions {
      */
     placeholder?: string;
     /**
-     * Maps input prefixes to functions that return suggestions. When the user types a matching prefix, the corresponding function is called and its results are shown as suggestions.
+     * Maps input prefixes to functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input.
      * 
      * @example { '#': () => getTags(), '[[': () => getFiles() }
+     * @example { '#': async () => await ntb.suggester(lorem, ipsum) }
      * @since 1.30.0
      */
-    prefixes?: Record<string, () => unknown[]>;
+    prefixes?: Record<string, () => unknown[] | Promise<unknown>>;
     /**
      * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
      */

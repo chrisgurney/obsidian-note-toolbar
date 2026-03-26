@@ -18,6 +18,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private activePrefixStart?: number;
     private currentMatches: FuzzyMatch<T>[];
     private originalKeys?: T[];
+    private prefixHandlerActive: boolean;
     private submitted = false;
 
     private allowCustomInput: boolean;
@@ -26,7 +27,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private default: string;
     private icon: string;
     private label: string;
-    private prefixes: Record<string, () => unknown[]>;
+    private prefixes: Record<string, () => unknown[] | Promise<unknown>>;
     private rendermd: boolean;
 
     /**
@@ -254,6 +255,26 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
      * @param query the current query
      */
     private getSuggestionsWithPrefix(prefix: string, searchSegment: string, lastSpaceIndex: number, query: string): FuzzyMatch<T>[] {
+
+        // handle async prefix functions: fire it, inject the result into the input when resolved, and block re-firing while pending
+        if (this.prefixHandlerActive) return this.saveMatches([]);
+        const prefixFn = this.prefixes![prefix];
+        const result = prefixFn();
+        if (result instanceof Promise) {
+            if (this.prefixHandlerActive) return this.saveMatches([]);
+            this.prefixHandlerActive = true;
+            result.then(item => {
+                const before = lastSpaceIndex === -1 ? '' : query.slice(0, lastSpaceIndex + 1);
+                this.inputEl.value = `${before}${item}`;
+                this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+                this.prefixHandlerActive = false;
+            }).catch(() => {
+                this.prefixHandlerActive = false;
+            });
+            return this.saveMatches([]);
+        }
+
+        // handle non-async prefix code
         this.activePrefix = prefix;
         this.activePrefixStart = lastSpaceIndex === -1 ? 0 : lastSpaceIndex + 1;
         this.keys = (this.prefixes![prefix] as () => T[])();
