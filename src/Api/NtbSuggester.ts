@@ -271,6 +271,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             }).catch(() => {
                 this.prefixHandlerActive = false;
             });
+            // getSuggestions can't be async, so we return an empty result set immediately here (and resolve later)
             return this.saveMatches([]);
         }
 
