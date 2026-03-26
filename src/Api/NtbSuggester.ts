@@ -259,11 +259,16 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         // handle async prefix functions: fire it, inject the result into the input when resolved, and block re-firing while pending
         if (this.prefixHandlerActive) return this.saveMatches([]);
         const prefixFn = this.prefixes![prefix];
-        const result = prefixFn();
-        if (result instanceof Promise) {
+        const prefixFnResult = prefixFn();
+        if (prefixFnResult instanceof Promise) {
             if (this.prefixHandlerActive) return this.saveMatches([]);
             this.prefixHandlerActive = true;
-            result.then(item => {
+            prefixFnResult.then(item => {
+                // return nothing when nothing's selected (e.g., Escape is pressed)
+                if (item === null) {
+                    this.prefixHandlerActive = false;
+                    return;
+                }
                 const before = lastSpaceIndex === -1 ? '' : query.slice(0, lastSpaceIndex + 1);
                 this.inputEl.value = `${before}${item}`;
                 this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
