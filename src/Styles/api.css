@@ -111,7 +111,7 @@
             }
         }
         & .ntb-is-custom-input {
-            color: hsla(var(--accent-h), var(--accent-s), var(--accent-l));
+            font-family: var(--font-monospace);
         }
     }
 }
