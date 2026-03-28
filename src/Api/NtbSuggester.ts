@@ -27,7 +27,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private default: string;
     private icon: string;
     private label: string;
-    private prefixes: Record<string, () => unknown[] | Promise<unknown>>;
+    private prefixes: Record<string, unknown[] | (() => unknown[] | Promise<unknown>)>
     private rendermd: boolean;
 
     /**
@@ -262,7 +262,9 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         // handle async prefix functions: fire it, inject the result into the input when resolved, and block re-firing while pending
         if (this.prefixHandlerActive) return this.saveMatches([]);
-        const prefixFn = this.prefixes![prefix];
+        const prefixFn = typeof this.prefixes![prefix] === 'function'
+            ? this.prefixes![prefix] as () => unknown[] | Promise<unknown>
+            : () => this.prefixes![prefix] as unknown[];
         const prefixFnResult = prefixFn();
         if (prefixFnResult instanceof Promise) {
             if (this.prefixHandlerActive) return this.saveMatches([]);
@@ -287,7 +289,10 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         // handle non-async prefix code
         this.activePrefix = prefix;
         this.activePrefixStart = lastSpaceIndex === -1 ? 0 : lastSpaceIndex + 1;
-        this.keys = (this.prefixes![prefix] as () => T[])();
+        this.keys = (typeof this.prefixes![prefix] === 'function'
+            ? (this.prefixes![prefix] as () => T[])()
+            : this.prefixes![prefix] as T[]);
+
         const strippedQuery = searchSegment.slice(prefix.length);
         const matches = super.getSuggestions(strippedQuery);
         if (this.allowCustomInput && strippedQuery.length > 0) {

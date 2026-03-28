@@ -98,7 +98,7 @@ Shows a file suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `filesonly?`: `boolean`; `foldersonly?`: `boolean`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, () => `unknown`[] \| `Promise`\<`unknown`\>\>; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `filesonly?`: `boolean`; `foldersonly?`: `boolean`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
@@ -109,7 +109,7 @@ Shows a file suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
-| `options.prefixes?` | `Record`\<`string`, () => `unknown`[] \| `Promise`\<`unknown`\>\> | Maps input prefixes to functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': () => getTags(), '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
+| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
@@ -486,7 +486,7 @@ Shows a suggester modal and waits for the user's selection.
 | ------ | ------ | ------ |
 | `values?` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys?` | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, () => `unknown`[] \| `Promise`\<`unknown`\>\>; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `icon?`: `string`; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
@@ -495,7 +495,7 @@ Shows a suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
-| `options.prefixes?` | `Record`\<`string`, () => `unknown`[] \| `Promise`\<`unknown`\>\> | Maps input prefixes to functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': () => getTags(), '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
+| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
