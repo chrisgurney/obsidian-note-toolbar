@@ -124,6 +124,10 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     getSuggestions(query: string): FuzzyMatch<T>[] {
         this.keys = this.originalKeys;
         const isEmptyQuery = query.trim().length === 0;
+        if (isEmptyQuery) {
+            this.activePrefix = undefined;
+            this.activePrefixStart = undefined;
+        }
 
         // check for prefix at start of query, or after the last space
         const lastSpaceIndex = query.lastIndexOf(' ');
