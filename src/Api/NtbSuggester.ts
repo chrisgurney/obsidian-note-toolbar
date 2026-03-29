@@ -170,6 +170,10 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             const selected = this.getItemText(value.item);
             value = { ...value, item: `${before}${selected}` as unknown as T };
         }
+        // trim trailing spaces
+        if (typeof value.item === 'string') {
+            value = { ...value, item: (value.item as string).trimEnd() as unknown as T };
+        }
         this.submitted = true;
         this.close();
         this.onChooseSuggestion(value, evt);
@@ -239,7 +243,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                 else {
                     const lastSpaceIndex = this.inputEl.value.lastIndexOf(' ');
                     const before = lastSpaceIndex === -1 ? '' : this.inputEl.value.slice(0, lastSpaceIndex + 1);
-                    this.inputEl.value = `${before}${fillText}`;
+                    this.inputEl.value = `${before}${fillText} `;
                 }
                 this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
             }
@@ -276,7 +280,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
                     return;
                 }
                 const before = lastSpaceIndex === -1 ? '' : query.slice(0, lastSpaceIndex + 1);
-                this.inputEl.value = `${before}${item}`;
+                this.inputEl.value = `${before}${item} `;
                 this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
                 this.prefixHandlerActive = false;
             }).catch(() => {
