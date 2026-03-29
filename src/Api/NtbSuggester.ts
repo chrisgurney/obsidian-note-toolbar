@@ -296,9 +296,9 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         // if there's only one suggestion, just return it
         if (this.keys.length === 1) {
             const before = lastSpaceIndex === -1 ? '' : query.slice(0, lastSpaceIndex + 1);
-            this.inputEl.value = `${before}${this.getItemText(this.keys[0])}`;
+            this.inputEl.value = `${before}${this.getItemText(this.keys[0])} `;
             this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
-            return this.saveMatches([]);
+            return this.currentMatches;
         }
 
         const strippedQuery = searchSegment.slice(prefix.length);
