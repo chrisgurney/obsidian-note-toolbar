@@ -77,7 +77,7 @@ export default class VariableResolver {
 		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
 		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (match, encode, p1) => {
 			const key = p1.trim();
-			if (frontmatter && frontmatter[key] !== undefined) {
+			if (frontmatter && frontmatter[key] !== undefined && frontmatter[key] !== null) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
 				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
 				// handle the case where the prop might be a list, and convert numbers to strings
