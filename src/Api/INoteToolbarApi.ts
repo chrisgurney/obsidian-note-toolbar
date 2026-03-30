@@ -317,11 +317,11 @@ export default interface INoteToolbarApi<T> {
      * 
      * @example
      * // show the "Daily Notes" toolbar at the toolbar button (default)
-     * await ntb.toolbar('Daily Notes');
+     * ntb.toolbar('Daily Notes');
      * 
      * @example
      * // show the "Daily Notes" toolbar at the cursor position (or above the text selection)
-     * await ntb.toolbar('Daily Notes', { position: 'cursor' });
+     * ntb.toolbar('Daily Notes', { position: 'cursor' });
      * 
      * @since 1.27
      */

@@ -637,12 +637,12 @@ Nothing. Displays the toolbar.
 
 ```ts
 // show the "Daily Notes" toolbar at the toolbar button (default)
-await ntb.toolbar('Daily Notes');
+ntb.toolbar('Daily Notes');
 ```
 
 ```ts
 // show the "Daily Notes" toolbar at the cursor position (or above the text selection)
-await ntb.toolbar('Daily Notes', { position: 'cursor' });
+ntb.toolbar('Daily Notes', { position: 'cursor' });
 ```
 
 #### Since
