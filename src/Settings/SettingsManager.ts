@@ -217,7 +217,17 @@ export default class SettingsManager {
 	 */
 	public getToolbarNameFromProps(frontmatter: FrontMatterCache | undefined): string | undefined {
 		const propValue = frontmatter?.[this.ntb.settings.toolbarProp];
-		return Array.isArray(propValue) ? propValue[0] : typeof propValue === 'string' ? propValue : undefined;
+		if (Array.isArray(propValue)) {
+			// if we're checking tags, make sure what's returned is a toolbar
+			if (this.ntb.settings.toolbarProp === 'tags') {
+				return propValue.find(tag =>
+					this.ntb.settings.toolbars.some(tbar => tbar.name === tag)
+				);
+			}
+			// otherwise, return the first value
+			return propValue[0];
+		}
+		return typeof propValue === 'string' ? propValue : undefined;
 	}
 
 	private isUuid(value: string): boolean {
