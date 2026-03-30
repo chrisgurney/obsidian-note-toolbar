@@ -553,9 +553,7 @@ The selected value, or corresponding key if keys are provided.
 ```ts
 // shows a suggester that returns the selected value 
 const values = ["value `1`", "value `2`"];
-
 const selectedValue = await ntb.suggester(values);
-
 new Notice(selectedValue);
 ```
 
@@ -563,7 +561,6 @@ new Notice(selectedValue);
 // shows a suggester that returns a key corresponding to the selected value, and overrides placeholder text
 const values = ["value `1`", "value `2`"];
 const keys = ["key1", "key2"];
-
 const selectedKey = await ntb.suggester(values, keys, {
   placeholder: "Pick something"
 });
@@ -578,6 +575,19 @@ const selected = await ntb.suggester(null, null, {
     "#": () => Object.keys(this.ntb.app.metadataCache.getTags()),
     "[[": () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
   }
+});
+new Notice(selected);
+```
+
+```ts
+// displays a suggester with the key mappings overridden
+const values = ['cat', 'dog'];
+const selected = await ntb.suggester(values, null, {
+    keymap: [
+        { key: 'Tab', action: 'navigateNext' },
+        { modifiers: ['Ctrl'], key: 'Tab', action: 'select' },
+        { key: 'ArrowRight', action: 'autofill' },
+    ],
 });
 new Notice(selected);
 ```
