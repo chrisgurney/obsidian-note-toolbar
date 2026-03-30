@@ -1,5 +1,5 @@
 import * as Obsidian from "obsidian";
-import { App, Modal, TAbstractFile, TFile } from "obsidian";
+import { App, Modal, Modifier, TAbstractFile, TFile } from "obsidian";
 import { IItem } from "./IItem";
 import { IToolbar } from "./IToolbar";
 
@@ -468,6 +468,13 @@ export interface NtbSuggesterOptions {
      */
     icon?: string;
     /**
+     * Optionally replace key bindings.
+     * 
+     * @see {@link NtbKeyBinding} for available actions and modifier options.
+     * @since 1.30.06
+     */
+    keymap?: NtbKeyBinding[];
+    /**
      * Optional text shown above the input field, with markdown formatting supported. Default is no label.
      */
     label?: string;
@@ -525,3 +532,28 @@ export interface NtbFileSuggesterOptions extends NtbSuggesterOptions {
      */
     foldersonly?: boolean;
 }
+
+/**
+ * @inline
+ */
+export interface NtbKeyBinding {
+    /**
+     * Modifier keys that must be held for this binding to trigger. Use `null` if no modifier is required.
+     * @see {@link Modifier}
+     */
+    modifiers?: Modifier[] | null,
+    /**
+     * The key that triggers this binding, as a {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values | KeyboardEvent.key} value
+     * (e.g. `"Tab"`, `"Enter"`, `"ArrowDown"`).
+     */
+    key: string,
+    /**
+     * The action to perform when this binding is triggered.
+     * - `navigateNext`: move to the next suggestion
+     * - `navigatePrev`: move to the previous suggestion
+     * - `select`: confirm the current suggestion
+     * - `dismiss`: close the suggester
+     * - `autofill`: fill the input with the current suggestion without selecting
+     */
+    action: 'navigateNext' | 'navigatePrev' | 'select' | 'dismiss' | 'autofill' | (() => boolean)
+};

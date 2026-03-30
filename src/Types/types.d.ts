@@ -46,6 +46,7 @@ declare module "obsidian" {
         values: T[];
         selectedItem: number;
         setSelectedItem(index: number, event: KeyboardEvent | boolean): void;
+        useSelectedItem(evt: MouseEvent | KeyboardEvent): void;
     }
 
     // allows access to the path of the vault, for the {{vault_path}} var

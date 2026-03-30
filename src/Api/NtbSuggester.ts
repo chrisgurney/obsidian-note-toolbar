@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { Component, FuzzyMatch, FuzzySuggestModal, getIcon, MarkdownRenderer, setIcon } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
-import { NtbSuggesterOptions } from "./INoteToolbarApi";
+import { NtbKeyBinding, NtbSuggesterOptions } from "./INoteToolbarApi";
 
 /**
  * Provides a Suggester modal that can be accessed from the Note Toolbar API.
@@ -26,6 +26,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private collapse: boolean;
     private default: string;
     private icon: string;
+    private keymap: NtbKeyBinding[];
     private label: string;
     private prefixes: Record<string, unknown[] | (() => unknown[] | Promise<unknown>)>
     private rendermd: boolean;
@@ -54,18 +55,23 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.collapse = options?.collapse ?? (hasValues ? false : true);
         this.default = options?.default ?? '';
         this.icon = options?.icon ?? '';
+        this.keymap = options?.keymap ?? [];
         this.label = options?.label ?? '';
         if (options?.limit) this.limit = options.limit;
         this.prefixes = options?.prefixes ?? {};
         this.rendermd = options?.rendermd ?? (hasValues ? true : false);
 
         this.setPlaceholder(options?.placeholder ?? (hasValues ? t('api.ui.suggester-placeholder') : t('api.ui.suggester-placeholder-no-values')));
-        this.setInstructions([
-            {command: '↑↓', purpose: t('api.ui.instruction-navigate')},
-            {command: '↵', purpose: t('api.ui.instruction-select')},
-            {command: 'tab', purpose: t('api.ui.instruction-autofill')},
-            {command: 'esc', purpose: t('api.ui.instruction-dismiss')},
-        ]);
+
+        // show default keyboard instructions, if key mappings are not provided
+        if (this.keymap.length === 0) {
+            this.setInstructions([
+                {command: '↑↓', purpose: t('api.ui.instruction-navigate')},
+                {command: '↵', purpose: t('api.ui.instruction-select')},
+                {command: 'tab', purpose: t('api.ui.instruction-autofill')},
+                {command: 'esc', purpose: t('api.ui.instruction-dismiss')},
+            ]);
+        }
 
         if (!keys) {
             if (Array.isArray(values)) {
@@ -106,14 +112,30 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
-        this.scope.register(null, 'Tab', (e: KeyboardEvent) => this.handleTabCompletion(e));
-
         if (this.collapse) {
             this.modalEl.toggleClass('ntb-suggester-collapse', !this.inputEl.value);
             this.ntb.registerDomEvent(this.inputEl, 'input', () => {
                 this.modalEl.toggleClass('ntb-suggester-collapse', !this.inputEl.value);
             });
         }
+
+        // key mappings: custom bindings with modifiers should be first, to prevent them being swallowed by bare key registrations
+        const keymapBindingsFirst = [...this.keymap ?? []].sort((a, b) => (b.modifiers?.length ?? 0) - (a.modifiers?.length ?? 0));
+        keymapBindingsFirst.forEach(({ modifiers, key, action }) => {
+            this.scope.register(modifiers ?? null, key, (e) => {
+                if (action === 'navigateNext') this.chooser.setSelectedItem(this.chooser.selectedItem + 1, e);
+                else if (action === 'navigatePrev') this.chooser.setSelectedItem(this.chooser.selectedItem - 1, e);
+                else if (action === 'select') this.chooser.useSelectedItem(e);
+                else if (action === 'dismiss') this.close();
+                else if (action === 'autofill') this.handleTabCompletion(e);
+                else return action();
+                return false;
+            });
+        });
+
+        // key mappings: default case where `Tab` hasn't been remapped
+        const hasTabOverride = this.keymap?.some(k => k.key === 'Tab' && (!k.modifiers || k.modifiers.length === 0) && k.action !== 'autofill');
+        if (!hasTabOverride) this.scope.register(null, 'Tab', (e) => this.handleTabCompletion(e));
 
     }
 
