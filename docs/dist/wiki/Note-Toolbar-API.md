@@ -564,7 +564,6 @@ const keys = ["key1", "key2"];
 const selectedKey = await ntb.suggester(values, keys, {
   placeholder: "Pick something"
 });
-
 new Notice(selectedKey);
 ```
 
