@@ -38,7 +38,7 @@ export class TextToolbarClass implements PluginValue {
         if (!this.ntb.settings.textToolbar ||
             (!this.ntb.settings.textToolbarOnKeyboard && this.ntb.listeners.document.isKeyboardSelection)
         ) {
-            if (this.ntb.render.hasFloatingToolbar()) this.ntb.render.removeFloatingToolbar();
+            if (this.ntb.render.hasFloatingTextToolbar()) this.ntb.render.removeFloatingToolbar();
             return;
         };
         
