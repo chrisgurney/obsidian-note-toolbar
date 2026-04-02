@@ -413,7 +413,12 @@ export function getItemText(ntb: NoteToolbarPlugin, toolbarItem: ToolbarItemSett
  * @returns string UUID
  */
 export function getUUID(): string {
-	return window.crypto.randomUUID();
+	// ensure the first character is a letter to avoid issues with CSS selectors
+	let uuid: string;
+	do {
+		uuid = window.crypto.randomUUID();
+	} while (!/^[a-f]/.test(uuid));
+	return uuid;
 }
 
 /**
