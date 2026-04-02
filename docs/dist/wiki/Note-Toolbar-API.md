@@ -69,7 +69,7 @@ new Notice(currentFile.name);
 
 ***
 
-### clipboard()
+### clipboard
 
 > **clipboard**: () => `Promise`\<`string` \| `null`\>
 
@@ -92,7 +92,7 @@ new Notice(value);
 
 ***
 
-### export()
+### export
 
 > **export**: (`toolbar`) => `Promise`\<`string` \| `null`\>
 
@@ -130,7 +130,7 @@ for (let toolbar of toolbars) {
 
 ***
 
-### fileSuggester()
+### fileSuggester
 
 > **fileSuggester**: (`options?`) => `Promise`\<`TAbstractFile` \| `null`\>
 
@@ -140,7 +140,7 @@ Shows a file suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `filesonly?`: `boolean`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\>; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `filesonly?`: `boolean`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
@@ -152,7 +152,7 @@ Shows a file suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
-| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
+| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
@@ -175,7 +175,7 @@ new Notice(folder.name);
 
 ***
 
-### getActiveItem()
+### getActiveItem
 
 > **getActiveItem**: () => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
 
@@ -193,7 +193,7 @@ This does not work with Note Toolbar Callouts.
 
 ***
 
-### getItem()
+### getItem
 
 > **getItem**: (`id`) => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
 
@@ -220,7 +220,7 @@ const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
 
 ***
 
-### getProperty()
+### getProperty
 
 > **getProperty**: (`property`) => `string` \| `undefined`
 
@@ -246,7 +246,7 @@ const createdDate = ntb.getProperty('created');
 
 ***
 
-### getSelection()
+### getSelection
 
 > **getSelection**: () => `string`
 
@@ -264,7 +264,7 @@ The selected text, or the word at the current cursor position. Otherwise returns
 
 ***
 
-### getToolbars()
+### getToolbars
 
 > **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
 
@@ -278,7 +278,7 @@ All toolbars.
 
 ***
 
-### menu()
+### menu
 
 > **menu**: (`toolbarOrItems`, `options?`) => `Promise`\<`void`\>
 
@@ -336,7 +336,7 @@ ntb.menu(mi);
 
 ***
 
-### modal()
+### modal
 
 > **modal**: (`content`, `options?`) => `Promise`\<`Modal`\>
 
@@ -405,7 +405,7 @@ const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
 
 ***
 
-### prompt()
+### prompt
 
 > **prompt**: (`options?`) => `Promise`\<`string` \| `null`\>
 
@@ -455,7 +455,7 @@ new Notice(result);
 
 ***
 
-### setProperty()
+### setProperty
 
 > **setProperty**: (`property`, `value`) => `Promise`\<`void`\>
 
@@ -484,7 +484,7 @@ await ntb.setProperty('A List', ['asdf', 'asdf2']);
 
 ***
 
-### setSelection()
+### setSelection
 
 > **setSelection**: (`replacement`) => `void`
 
@@ -517,7 +517,7 @@ ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</s
 
 ***
 
-### suggester()
+### suggester
 
 > **suggester**: (`values?`, `keys?`, `options?`) => `Promise`\<`T` \| `null`\>
 
@@ -527,9 +527,9 @@ Shows a suggester modal and waits for the user's selection.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `values?` | `string`[] \| (`value`) => `string` | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
+| `values?` | `string`[] \| ((`value`) => `string`) | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys?` | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\>; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
@@ -539,7 +539,7 @@ Shows a suggester modal and waits for the user's selection.
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
-| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| () => `unknown`[] \| `Promise`\<`unknown`\>\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
+| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 
 #### Returns
@@ -621,7 +621,7 @@ new Notice(ntb.t('api.msg.clipboard-copied'));
 
 ***
 
-### toolbar()
+### toolbar
 
 > **toolbar**: (`toolbarNameOrId`, `options?`) => `Promise`\<`void`\>
 
