@@ -31,6 +31,10 @@ const WIKI_REPO = "../obsidian-note-toolbar-wiki";
 const WIKI_FILES = [
 	{ src: `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`, dest: "Note-Toolbar-API.md" },
 	{ src: `${DOC_OUTPUT}/wiki/Gallery.md`, dest: "Gallery.md" },
+	{ src: `${DOC_OUTPUT}/api/IItem.Interface.IItem.md`, dest: "IItem.Interface.IItem.md.md" },
+	{ src: `${DOC_OUTPUT}/api/IToolbar.Interface.IToolbar.md`, dest: "IToolbar.Interface.IToolbar.md.md" },
+	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbKeyBinding.md`, dest: "INoteToolbarApi.Interface.NtbKeyBinding.md.md" },
+	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbMenuItem.md`, dest: "INoteToolbarApi.Interface.NtbMenuItem.md.md" },
 ];
 
 /* ****************************************************************************
