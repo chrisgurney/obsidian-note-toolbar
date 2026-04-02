@@ -132,7 +132,6 @@ export default class ToolbarRenderer {
 			const cachedTbarHeight = this.phoneTbarHeightCache.get(toolbar.uuid);
 			if (cachedTbarHeight && cachedTbarHeight.timestamp === toolbar.updated) {
 				activeDocument.body.style.setProperty('--ntb-toolbar-height', `${cachedTbarHeight.height}px`);
-				this.ntb.debug('--ntb-toolbar-height (cached)', `${cachedTbarHeight.height}px`);
 			}
 		}
 
@@ -291,7 +290,6 @@ export default class ToolbarRenderer {
 						const height = embedBlock.offsetHeight;
 						if (height === 0) return;
 						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${height}px`);
-						this.ntb.debug('--ntb-toolbar-height', `${height}px`);
 						this.phoneTbarHeightCache.set(toolbar.uuid, { height, timestamp: toolbar.updated });
 					};
 					embedBlock.addEventListener('transitionend', setToolbarHeight);
