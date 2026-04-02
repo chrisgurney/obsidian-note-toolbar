@@ -6,7 +6,7 @@ Defines a menu item that can be dynamically created and displayed via [`ntb.menu
 
 ### icon?
 
-> `optional` **icon**: `string`
+> `optional` **icon?**: `string`
 
 Optional icon to display in the menu item.
 
@@ -14,7 +14,7 @@ Optional icon to display in the menu item.
 
 ### id?
 
-> `optional` **id**: `string`
+> `optional` **id?**: `string`
 
 Optional ID to add to the menu item when it's rendered.
 

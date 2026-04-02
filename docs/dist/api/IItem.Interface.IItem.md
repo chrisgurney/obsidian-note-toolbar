@@ -6,7 +6,7 @@ The `IItem` interface provides basic API access to toolbar items, with more func
 
 ### id?
 
-> `optional` **id**: `string`
+> `optional` **id?**: `string`
 
 Unique identifier for the item.
 

@@ -6,7 +6,7 @@ The `IToolbar` interface provides basic API access to toolbars, with more functi
 
 ### id?
 
-> `optional` **id**: `string`
+> `optional` **id?**: `string`
 
 Unique identifier for the toolbar.
 

@@ -4,7 +4,7 @@
 
 ### action
 
-> **action**: `"navigateNext"` \| `"navigatePrev"` \| `"select"` \| `"dismiss"` \| `"autofill"` \| () => `boolean`
+> **action**: `"navigateNext"` \| `"navigatePrev"` \| `"select"` \| `"dismiss"` \| `"autofill"` \| (() => `boolean`)
 
 The action to perform when this binding is triggered.
 - `navigateNext`: move to the next suggestion
@@ -26,7 +26,7 @@ The key that triggers this binding, as a [KeyboardEvent.key](https://developer.m
 
 ### modifiers?
 
-> `optional` **modifiers**: `Modifier`[] \| `null`
+> `optional` **modifiers?**: `Modifier`[] \| `null`
 
 Modifier keys that must be held for this binding to trigger. Use `null` if no modifier is required.
 
