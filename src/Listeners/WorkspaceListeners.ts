@@ -164,7 +164,7 @@ export default class WorkspaceListeners {
 	onLeafChange = async (leaf: any) => {
 		let renderToolbar = false;
 		// FIXME? what if there's more than one toolbar?
-		let toolbarEl = this.ntb.el.getToolbarEl();
+		let toolbarEl = await this.ntb.el.getToolbarElAsync();
 		let currentView = this.ntb.utils.getActiveView();
 
 		const viewId = getViewId(currentView);

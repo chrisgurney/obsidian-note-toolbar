@@ -72,7 +72,7 @@ export default class ToolbarElementHelper {
     }
 
     /**
-     * Get the toolbar element, in the current view.
+     * Get the toolbar element, in the provided view.
      * @param view optional ItemView to find the toolbar container for; otherwise uses the active view.
      * @param isFloatingToolbar true if we should look for a floating toolbar.
      * @returns HTMLElement or null, if it doesn't exist.
@@ -96,6 +96,38 @@ export default class ToolbarElementHelper {
             }
             return toolbarEl;
         }
+    }
+
+    /**
+     * Get the toolbar element asynchronously, in the current view.
+     * @returns HTMLElement or null, if it doesn't exist.
+     */
+    async getToolbarElAsync(): Promise<HTMLElement | null> {
+        const existingToolbarEl = this.getToolbarEl();
+        // return immediately if already rendered
+        if (existingToolbarEl) return existingToolbarEl;
+
+        const toolbarView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        const containerEl = toolbarView?.containerEl;
+        if (!containerEl) return null;
+
+        return new Promise((resolve) => {
+            const observer = new MutationObserver(() => {
+                const el = this.getToolbarEl();
+                if (el) {
+                    observer.disconnect();
+                    resolve(el);
+                }
+            });
+
+            observer.observe(containerEl, { childList: true, subtree: true });
+
+            // safety timeout: resolve null if toolbar never appears
+            window.setTimeout(() => {
+                observer.disconnect();
+                resolve(null);
+            }, 500);
+        });
     }
 
     /**
