@@ -310,7 +310,7 @@ export default class ToolbarRenderer {
 							propsEl = this.ntb.el.getPropsEl(view);
 							if (propsEl) break;
 						}
-                        this.ntb.debug("🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
+						if (!propsEl) this.ntb.debug("🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
                     }
                     propsEl?.insertAdjacentElement("afterend", embedBlock);
                 }
