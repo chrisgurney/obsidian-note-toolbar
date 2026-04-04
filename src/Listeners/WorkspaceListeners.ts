@@ -193,7 +193,7 @@ export default class WorkspaceListeners {
 			// if (currentView instanceof MarkdownView) {
 			// 	renderToolbar = ['source', 'preview'].includes((currentView as MarkdownView).getMode());
 			// }
-			if (!renderToolbar) renderToolbar = this.ntb.utils.checkToolbarForItemView(currentView);
+			if (!renderToolbar) renderToolbar = this.ntb.utils.hasToolbarForItemView(currentView);
 		}
 
 		if (renderToolbar) {

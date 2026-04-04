@@ -68,7 +68,7 @@ export default class PluginUtils {
 	 * @param currentViewType Type of the current view.
 	 * @returns `true` if the toolbar should be visible, otherwise `false`.
 	 */
-	checkToolbarForItemView(itemView: ItemView): boolean {
+	hasToolbarForItemView(itemView: ItemView): boolean {
 		const currentViewType = itemView.getViewType();
 		if (this.ntb.settings.showToolbarInOther.includes(currentViewType)) return true;
 		

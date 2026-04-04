@@ -152,7 +152,7 @@ export default class ToolbarRenderer {
         }
 
         if (!(view instanceof MarkdownView)) {
-            const isToolbarVisible = this.ntb.utils.checkToolbarForItemView(view);
+            const isToolbarVisible = this.ntb.utils.hasToolbarForItemView(view);
             if (!isToolbarVisible) {
                 this.ntb.debug("🛑 renderToolbar: nothing to render in this view → exiting");
                 this.ntb.debugGroupEnd();

@@ -14,7 +14,7 @@ export default class ViewListeners {
     public register() {
         // setup scroll listener for the active view
         const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-        if (activeView && this.ntb.utils.checkToolbarForItemView(activeView)) {
+        if (activeView && this.ntb.utils.hasToolbarForItemView(activeView)) {
             this.setupScrollListener(activeView);
         }
     }

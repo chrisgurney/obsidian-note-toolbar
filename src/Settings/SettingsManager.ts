@@ -122,7 +122,7 @@ export default class SettingsManager {
 	public getEmptyViewToolbar(): ToolbarSettings | undefined {
 		const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		if (itemView) {
-			let renderToolbar = this.ntb.utils.checkToolbarForItemView(itemView);
+			let renderToolbar = this.ntb.utils.hasToolbarForItemView(itemView);
 			if (!renderToolbar) return;
 			switch (itemView.getViewType()) {
 				case 'empty':
