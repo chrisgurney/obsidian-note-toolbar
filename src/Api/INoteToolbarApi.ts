@@ -470,6 +470,10 @@ export interface NtbSuggesterOptions {
      */
     default?: string;
     /**
+     * Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`.
+     */
+    exact?: boolean;
+    /**
      * Optional icon to place before the input field.
      * 
      * @since 1.29.14

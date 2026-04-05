@@ -25,6 +25,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     private class = '';
     private collapse: boolean;
     private default: string;
+    private exact: boolean;
     private icon: string;
     private keymap: NtbKeyBinding[];
     private label: string;
@@ -54,6 +55,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.class = options?.class ?? '';
         this.collapse = options?.collapse ?? (hasValues ? false : true);
         this.default = options?.default ?? '';
+        this.exact = options?.exact ?? false;
         this.icon = options?.icon ?? '';
         this.keymap = options?.keymap ?? [];
         this.label = options?.label ?? '';
@@ -158,7 +160,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         if (this.prefixes && !isEmptyQuery) {
             const prefix = Object.keys(this.prefixes).find(p => searchSegment.startsWith(p));
             if (prefix) {
-                return this.getSuggestionsWithPrefix(prefix, searchSegment, lastSpaceIndex, query);
+                return this.getPrefixSuggestions(prefix, searchSegment, lastSpaceIndex, query);
             }
             else {
                 this.activePrefix = undefined;
@@ -167,7 +169,9 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         }
 
         if (this.allowCustomInput && !isEmptyQuery) {
-            const matches = super.getSuggestions(searchSegment);
+            const matches = this.exact
+                ? this.getExactSuggestions(searchSegment)
+                : super.getSuggestions(searchSegment);
             const alreadyExists = matches.some(match => this.getItemText(match.item) === query);
             if (!alreadyExists) {
                 // prepend the custom input option
@@ -178,7 +182,10 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             return this.saveMatches(matches);
         }
 
-        return this.saveMatches(super.getSuggestions(searchSegment));
+        const matches = super.getSuggestions(searchSegment);
+        return this.saveMatches(
+            this.exact ? this.getExactSuggestions(searchSegment) : matches
+        );
     }
 
     onClose(): void {
@@ -274,8 +281,36 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
     }
 
 	/*************************************************************************
-	 * PREFIX SUGGESTION FUNCTIONS
+	 * HELPERS
 	 *************************************************************************/
+
+    /**
+     * Returns substring-matched suggestions sorted by relevance, for use when fuzzy matching is disabled.
+     * Filters to only items whose text contains the query as a literal substring (case-insensitive),
+     * excluding fuzzy character-scatter matches. Results are sorted by starts-with first, then includes,
+     * then alphabetically.
+     *
+     * @param query - the search string to match against item text
+     * @returns array of matched items as {@link FuzzyMatch} objects with zeroed scores
+     */
+    private getExactSuggestions(query: string): FuzzyMatch<T>[] {
+        if (!query) return this.getItems().map(item => ({ item, match: { score: 0, matches: [] } } as FuzzyMatch<T>));
+        const q = query.toLowerCase();
+        return this.getItems()
+            .filter(item => this.getItemText(item).toLowerCase().includes(q))
+            .map(item => ({ item, match: { score: 0, matches: [] } } as FuzzyMatch<T>))
+            .sort((a, b) => {
+                const aText = this.getItemText(a.item).toLowerCase();
+                const bText = this.getItemText(b.item).toLowerCase();
+                const aStarts = aText.startsWith(q);
+                const bStarts = bText.startsWith(q);
+                if (aStarts !== bStarts) return aStarts ? -1 : 1;
+                const aIncludes = aText.includes(q);
+                const bIncludes = bText.includes(q);
+                if (aIncludes !== bIncludes) return aIncludes ? -1 : 1;
+                return aText.localeCompare(bText);
+            });
+    }
 
     /**
      * Returns suggestions for a query that begins with a recognized prefix.
@@ -284,7 +319,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
      * @param lastSpaceIndex index of the last space in the original query, or -1 if none
      * @param query the current query
      */
-    private getSuggestionsWithPrefix(prefix: string, searchSegment: string, lastSpaceIndex: number, query: string): FuzzyMatch<T>[] {
+    private getPrefixSuggestions(prefix: string, searchSegment: string, lastSpaceIndex: number, query: string): FuzzyMatch<T>[] {
 
         // handle async prefix functions: fire it, inject the result into the input when resolved, and block re-firing while pending
         if (this.prefixHandlerActive) return this.saveMatches([]);
@@ -328,7 +363,9 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         }
 
         const strippedQuery = searchSegment.slice(prefix.length);
-        const matches = super.getSuggestions(strippedQuery);
+        const matches = this.exact
+            ? this.getExactSuggestions(strippedQuery)
+            : super.getSuggestions(strippedQuery);
         if (this.allowCustomInput && strippedQuery.length > 0) {
             if (!matches.some(match => this.getItemText(match.item) === query)) {
                 return this.saveMatches(
