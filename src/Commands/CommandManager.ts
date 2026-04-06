@@ -306,6 +306,16 @@ export default class CommandManager {
     }
 
     /**
+     * Convenience command to open hotkey settings, with the given query set.
+     */
+    async openHotkeySettings(query: string): Promise<void> {
+        const settings = this.ntb.app.setting;
+        await settings.open();
+        const tab = settings.openTabById('hotkeys');
+        if (tab?.setQuery) tab.setQuery(query);
+    }
+
+    /**
      * Opens the item suggester modal for Quick Tools/Toolbars.
      * @param toolbarId optional ID of a toolbar to limit the ItemSuggestModal to show
      */

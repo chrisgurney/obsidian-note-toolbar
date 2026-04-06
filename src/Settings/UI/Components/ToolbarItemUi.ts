@@ -472,7 +472,7 @@ export default class ToolbarItemUi {
                                 this.ntb.registerDomEvent(noticeEl, 'click', async () => {
                                     notice.hide();
                                     this.parent.close();
-                                    await this.ntb.commands.openSettings('hotkeys');
+                                    await this.ntb.commands.openHotkeySettings(commandName);
                                 });
                                 this.parent.display();
                             });

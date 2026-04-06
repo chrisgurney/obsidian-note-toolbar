@@ -75,6 +75,11 @@ declare module "obsidian" {
         setSubmenu: () => Menu;
     }
 
+    interface SettingTab {
+        /** allows setting the search query for the settings tab (e.g., hotkeys) */
+        setQuery?: (query: string) => void;
+    }
+
     /** allows access to SuggestModal chooser, so keyboard navigation can skip Gallery divider */
     interface SuggestModal<T> {
         chooser: ChooserType<T>;

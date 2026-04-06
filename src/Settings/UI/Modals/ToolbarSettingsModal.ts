@@ -367,18 +367,27 @@ export default class ToolbarSettingsModal extends Modal {
 						commandGroupEl?.setAttribute('data-active', value.toString());
 						// add or remove the command
 						if (value) {
+							const commandName = t('command.name-open-toolbar', {toolbar: this.toolbar.name});
 							this.ntb.addCommand({ 
 								id: COMMAND_PREFIX_TBAR + this.toolbar.uuid, 
-								name: t('command.name-open-toolbar', {toolbar: this.toolbar.name}), 
+								name: commandName, 
 								icon: this.ntb.settings.icon, 
 								callback: async () => {
 									this.ntb.commands.openQuickTools(this.toolbar.uuid);
 								}
 							});
-							new Notice(t(
-								'setting.open-command.notice-command-added', 
-								{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
-							)).containerEl.addClass('mod-success');
+							const message = 
+								t('setting.open-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } }) +
+								(Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
+							const notice = new Notice(message, 10000);
+							notice.containerEl.addClass('mod-success');
+							const noticeEl = notice.messageEl;
+							noticeEl.addClass('note-toolbar-notice-pointer');
+							this.ntb.registerDomEvent(noticeEl, 'click', async () => {
+								notice.hide();
+								this.close();
+								await this.ntb.commands.openHotkeySettings(commandName);
+							});
 						}
 						else {
 							this.ntb.removeCommand(COMMAND_PREFIX_TBAR + this.toolbar.uuid);
@@ -414,7 +423,7 @@ export default class ToolbarSettingsModal extends Modal {
 							.setButtonText(hotkey ?? "Set hotkey")
 							.onClick(async () => {
 								this.close();
-								await this.ntb.commands.openSettings('hotkeys');
+								await this.ntb.commands.openHotkeySettings(toolbarCommand.name);
 							});
 						});
 			});

@@ -587,6 +587,7 @@
             "description": "Add a command that opens this toolbar.",
             "name": "Add toolbar command",
             "notice-command-added": "Command now available:\n{{command}}",
+            "notice-command-added-hotkeys": "Open hotkey settings {{cta}} →",
             "notice-command-removed": "Command removed:\n{{command}}",
             "option-hotkey-description": "Open Obsidian's hotkey settings.",
             "option-position": "Where to open toolbar",
