@@ -145,7 +145,7 @@ Shows a file suggester modal and waits for the user's selection.
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
 | `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
-| `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. |
+| `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
 | `options.filesonly?` | `boolean` | If set to true, only files are shown. If not provided, defaults to `false`. |
 | `options.foldersonly?` | `boolean` | If set to true, only folders are shown. If not provided, defaults to `false`. |
 | `options.icon?` | `string` | Optional icon to place before the input field. **Since** 1.29.14 |
@@ -535,7 +535,7 @@ Shows a suggester modal and waits for the user's selection.
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
 | `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
-| `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. |
+| `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
 | `options.icon?` | `string` | Optional icon to place before the input field. **Since** 1.29.14 |
 | `options.keymap?` | `object`[] | Optionally replace key bindings. **See** [NtbKeyBinding](INoteToolbarApi.Interface.NtbKeyBinding.md) for available actions and modifier options. **Since** 1.30.06 |
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
