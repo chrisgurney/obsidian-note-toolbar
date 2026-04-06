@@ -421,6 +421,11 @@
             "tooltip-settings": "Open Note Toolbar settings",
             "tooltip-view-tip": "View this tip"
         },
+        "hotkeys": {
+            "label-open-settings": "Open hotkey settings",
+            "label-set": "Set hotkey",
+            "notice-open-settings": "Open hotkey settings {{cta}} →"
+        },
         "icon-suggester": {
             "instruction-dismiss": "to dismiss",
             "instruction-navigate": "to navigate",
@@ -587,7 +592,6 @@
             "description": "Add a command that opens this toolbar.",
             "name": "Add toolbar command",
             "notice-command-added": "Command now available:\n{{command}}",
-            "notice-command-added-hotkeys": "Open hotkey settings {{cta}} →",
             "notice-command-removed": "Command removed:\n{{command}}",
             "option-hotkey-description": "Open Obsidian's hotkey settings.",
             "option-position": "Where to open toolbar",
@@ -767,7 +771,6 @@
             "name-copy": "Copy command URI for item",
             "name-remove": "Remove command for item",
             "notice-command-added": "Command now available:\n{{command}}",
-            "notice-command-added-hotkeys": "Open hotkey settings {{cta}} →",
             "notice-command-error-noname": "Unable to add command. Ensure item has a name or label set, and at least one does not include variables or an expression.",
             "notice-command-error-startup-noname": "Note Toolbar: Some item commands in these toolbars were not added due to empty labels or tooltips: {{toolbars}}",
             "notice-command-removed": "Command removed:\n{{command}}",

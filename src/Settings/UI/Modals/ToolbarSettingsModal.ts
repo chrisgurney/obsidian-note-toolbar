@@ -378,7 +378,7 @@ export default class ToolbarSettingsModal extends Modal {
 							});
 							const message = 
 								t('setting.open-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } }) +
-								(Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
+								(Platform.isPhone ? '' : '\n' + t('setting.hotkeys.notice-open-settings', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
 							const notice = new Notice(message, 10000);
 							notice.containerEl.addClass('mod-success');
 							const noticeEl = notice.messageEl;
@@ -417,10 +417,10 @@ export default class ToolbarSettingsModal extends Modal {
 				commandNameFr.createEl('code', { text: toolbarCommand.name });
 				commandHotkeySetting
 					.setName(commandNameFr)
-					.setDesc(t('setting.open-command.option-hotkey-description'))
+					.setDesc(t('setting.hotkeys.label-open-settings'))
 					.addButton((button) => {
 						button
-							.setButtonText(hotkey ?? "Set hotkey")
+							.setButtonText(hotkey ?? t('setting.hotkeys.label-set'))
 							.onClick(async () => {
 								this.close();
 								await this.ntb.commands.openHotkeySettings(toolbarCommand.name);

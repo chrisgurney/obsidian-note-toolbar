@@ -257,6 +257,24 @@ export default class ToolbarItemUi {
                         .onClick(async () => this.handleItemDuplicate(toolbarItem));
             });
 
+            const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
+            if (itemCommand) {
+                const hotkey = this.ntb.hotkeys.getHotkeyText(itemCommand);
+                const commandNameFr = document.createDocumentFragment();
+                commandNameFr.createEl('code', { text: itemCommand.name });
+                new Setting(itemControlsContainer)
+                    .setClass('note-toolbar-setting-item-visibility-and-controls')
+                    .addButton((btn) => {
+                        if (!hotkey) btn.setIcon('circle-plus');
+                        if (hotkey) btn.setButtonText(hotkey);
+                        btn.setTooltip(hotkey ? t('setting.hotkeys.label-open-settings') : t('setting.hotkeys.label-set'));
+                        btn.onClick(async () => {
+                            this.parent.close();
+                            await this.ntb.commands.openHotkeySettings(itemCommand.name);
+                        });
+                    });
+            }
+
         }
 
         //
@@ -464,7 +482,7 @@ export default class ToolbarItemUi {
                                 // open notice with a CTA to change hotkeys
                                 const message = 
                                     t('setting.use-item-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } }) +
-                                    (Platform.isPhone ? '' : '\n' + t('setting.use-item-command.notice-command-added-hotkeys', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
+                                    (Platform.isPhone ? '' : '\n' + t('setting.hotkeys.notice-open-settings', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
                                 const notice = new Notice(message, 10000);
                                 notice.containerEl.addClass('mod-success');
                                 const noticeEl = notice.messageEl;
