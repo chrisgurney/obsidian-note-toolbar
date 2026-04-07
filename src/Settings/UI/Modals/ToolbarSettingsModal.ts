@@ -417,7 +417,6 @@ export default class ToolbarSettingsModal extends Modal {
 				commandNameFr.createEl('code', { text: toolbarCommand.name });
 				commandHotkeySetting
 					.setName(commandNameFr)
-					.setDesc(t('setting.hotkeys.label-settings'))
 					.addButton((btn) => {
 						btn
 							.setButtonText(hotkey ?? t('setting.hotkeys.label-set'))

@@ -589,7 +589,7 @@
             "option-menu": "Menu"
         },
         "open-command": {
-            "description": "Add a command that opens this toolbar.",
+            "description": "Add a command and set a hotkey to open this toolbar.",
             "name": "Add toolbar command",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}",
