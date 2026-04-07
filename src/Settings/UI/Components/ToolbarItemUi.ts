@@ -264,7 +264,7 @@ export default class ToolbarItemUi {
                 .addButton((btn) => {
                     if (!hotkey) btn.setIcon('keyboard');
                     if (hotkey) btn.setButtonText(hotkey);
-                    btn.setTooltip(hotkey ? t('setting.hotkeys.label-open-settings') : t('setting.hotkeys.label-set'));
+                    btn.setTooltip(hotkey ? t('setting.hotkeys.label-settings') : t('setting.hotkeys.label-set'));
                     btn.onClick(async () => {
                         // if a command doesn't already exist, create it and open hotkey settings
                         if (!itemCommand) {

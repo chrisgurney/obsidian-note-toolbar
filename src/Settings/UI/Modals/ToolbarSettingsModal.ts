@@ -7,7 +7,7 @@ import ItemListUi from '../Components/ItemListUi';
 import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
-import { fixToggleTab, getDisclaimersFr, learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
+import { fixToggleTab, getDisclaimersFr, iconTextFr, learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -417,15 +417,17 @@ export default class ToolbarSettingsModal extends Modal {
 				commandNameFr.createEl('code', { text: toolbarCommand.name });
 				commandHotkeySetting
 					.setName(commandNameFr)
-					.setDesc(t('setting.hotkeys.label-open-settings'))
-					.addButton((button) => {
-						button
+					.setDesc(t('setting.hotkeys.label-settings'))
+					.addButton((btn) => {
+						btn
 							.setButtonText(hotkey ?? t('setting.hotkeys.label-set'))
+							.setTooltip(t('setting.hotkeys.label-settings'))
 							.onClick(async () => {
 								this.close();
 								await this.ntb.commands.openHotkeySettings(toolbarCommand.name);
 							});
-						});
+						if (!hotkey) btn.buttonEl.setText(iconTextFr('keyboard', t('setting.hotkeys.label-set')));
+					});
 			});
 		}
 		

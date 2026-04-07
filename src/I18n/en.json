@@ -422,8 +422,8 @@
             "tooltip-view-tip": "View this tip"
         },
         "hotkeys": {
-            "label-open-settings": "Open hotkey settings",
             "label-set": "Set hotkey",
+            "label-settings": "Open hotkey settings",
             "notice-open-settings": "Open hotkey settings {{cta}} →"
         },
         "icon-suggester": {
