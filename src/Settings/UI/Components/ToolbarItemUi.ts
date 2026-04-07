@@ -265,7 +265,7 @@ export default class ToolbarItemUi {
                 new Setting(itemControlsContainer)
                     .setClass('note-toolbar-setting-item-visibility-and-controls')
                     .addButton((btn) => {
-                        if (!hotkey) btn.setIcon('circle-plus');
+                        if (!hotkey) btn.setIcon('keyboard');
                         if (hotkey) btn.setButtonText(hotkey);
                         btn.setTooltip(hotkey ? t('setting.hotkeys.label-open-settings') : t('setting.hotkeys.label-set'));
                         btn.onClick(async () => {
