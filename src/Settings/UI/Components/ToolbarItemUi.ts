@@ -258,22 +258,30 @@ export default class ToolbarItemUi {
             });
 
             const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
-            if (itemCommand) {
-                const hotkey = this.ntb.hotkeys.getHotkeyText(itemCommand);
-                const commandNameFr = document.createDocumentFragment();
-                commandNameFr.createEl('code', { text: itemCommand.name });
-                new Setting(itemControlsContainer)
-                    .setClass('note-toolbar-setting-item-visibility-and-controls')
-                    .addButton((btn) => {
-                        if (!hotkey) btn.setIcon('keyboard');
-                        if (hotkey) btn.setButtonText(hotkey);
-                        btn.setTooltip(hotkey ? t('setting.hotkeys.label-open-settings') : t('setting.hotkeys.label-set'));
-                        btn.onClick(async () => {
+            const hotkey = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
+            new Setting(itemControlsContainer)
+                .setClass('note-toolbar-setting-item-visibility-and-controls')
+                .addButton((btn) => {
+                    if (!hotkey) btn.setIcon('keyboard');
+                    if (hotkey) btn.setButtonText(hotkey);
+                    btn.setTooltip(hotkey ? t('setting.hotkeys.label-open-settings') : t('setting.hotkeys.label-set'));
+                    btn.onClick(async () => {
+                        // if a command doesn't already exist, create it and open hotkey settings
+                        if (!itemCommand) {
+                            await this.ntb.commands.addItemCommand(toolbarItem, async (commandName) => {
+                                new Notice(
+                                    t('setting.use-item-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } })
+                                ).containerEl.addClass('mod-success');
+                                this.parent.close();
+                                await this.ntb.commands.openHotkeySettings(commandName);
+                            });
+                        }
+                        else {
                             this.parent.close();
                             await this.ntb.commands.openHotkeySettings(itemCommand.name);
-                        });
+                        }
                     });
-            }
+                });
 
         }
 
@@ -501,6 +509,9 @@ export default class ToolbarItemUi {
                         }
                     });
             });
+
+            menu.addSeparator();
+
         }
 
         menu.addItem((menuItem: MenuItem) => {
