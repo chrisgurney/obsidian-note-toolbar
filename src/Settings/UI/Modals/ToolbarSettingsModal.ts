@@ -23,6 +23,7 @@ export default class ToolbarSettingsModal extends Modal {
 	public itemListUi: ItemListUi;
 
 	private parent: NoteToolbarSettingTab | null;
+	private scrollListener: ((event: Event) => void) | null = null;
 
 	private hasDesktopFabPosition: boolean = false;
 	private hasMobileFabPosition: boolean = false;
@@ -168,7 +169,7 @@ export default class ToolbarSettingsModal extends Modal {
 		}
 
 		// scroll to the position when the modal was last open
-		this.rememberLastPosition(this.contentEl.children[0] as HTMLElement);
+		this.rememberLastPosition(this.modalEl);
 
 		// show the What's New view once, if the user hasn't seen it yet
 		this.ntb.settingsUtils.showWhatsNewIfNeeded();
@@ -496,9 +497,12 @@ export default class ToolbarSettingsModal extends Modal {
 		});
 
         // listen to changes
-        this.ntb.registerDomEvent(containerEl, 'scroll', (event) => {
-            this.lastScrollPosition = containerEl.scrollTop;
-		});
+		if (!this.scrollListener) {
+			this.scrollListener = (event: Event) => {
+				this.lastScrollPosition = containerEl.scrollTop;
+			};
+			this.ntb.registerDomEvent(containerEl, 'scroll', this.scrollListener);
+		}
 
     }
 
