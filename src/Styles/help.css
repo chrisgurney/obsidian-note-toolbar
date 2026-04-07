@@ -182,6 +182,9 @@
         opacity: 0.8;
     }
     & .note-toolbar-card-item-title {
+        .note-toolbar-tips-card-items & {
+            color: var(--text-on-accent);
+        }
         font-size: 1.25em;
         font-weight: var(--h3-weight);
         .is-mobile & {
@@ -201,7 +204,7 @@
         align-self: start;
         color: var(--text-muted);
         .note-toolbar-tips-card-items & {
-            color: var(--text-normal);
+            color: var(--text-on-accent);
         }
         display: flex;
         font-size: var(--font-ui-small);
