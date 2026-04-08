@@ -6,9 +6,9 @@ _I would appreciate your feedback, which you can leave in [the discussions](http
 
 Even if you're not a developer, getting started with the API is easy:
 
-1. Create a toolbar item with a **JavaScript type**.
-2. Select **Evaluate JavaScript**.
-3. Copy/Paste one of the examples provided.
+1. Create a new toolbar item with a **JavaScript type**.
+2. **Select function... → Evaluate JavaScript**.
+3. Copy/Paste one of the examples provided into the **JavaScript expression** field.
 
 ## `ntb` API
 
