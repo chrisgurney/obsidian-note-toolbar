@@ -135,10 +135,8 @@ export default class CommandManager {
      * Update the command for the given toolbar item, to update its name and icon.
      */
     async updateItemCommand(item: ToolbarItemSettings, showNotice: boolean = true): Promise<void> {
-        // get command for item
         const command = this.getCommandFor(item);
         if (command) {
-            // get item text
             const itemText = getItemText(this.ntb, item, true);
             if (itemText) {
                 const oldCommandName = command.name;
@@ -156,11 +154,26 @@ export default class CommandManager {
     }
 
     /**
+     * Update the command for the given toolbar, to update its name and icon.
+     */
+    async updateToolbarCommand(toolbar: ToolbarSettings, showNotice: boolean = true): Promise<void> {
+        const command = this.getCommandFor(toolbar);
+        if (command && toolbar.name) {
+            const oldCommandName = command.name;
+            command.name = t('command.name-open-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } });
+            command.icon = this.ntb.settings.icon;
+            if (showNotice && (oldCommandName !== command.name)) {
+                new Notice(t('command.notice-command-updated', { command: command.name }));
+            }
+        }
+    }
+
+    /**
      * Adds commands to open each toolbar in a Quick Tools window.
      */
     setupToolbarCommands() {
         this.ntb.settings.toolbars.forEach(toolbar => {
-            if (toolbar.hasCommand) {
+            if (toolbar.hasCommand && toolbar.name) {
                 this.ntb.addCommand({ 
                     id: COMMAND_PREFIX_TBAR + toolbar.uuid,
                     name: t('command.name-open-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }),

@@ -199,6 +199,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.ntb.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
+						if (this.toolbar.hasCommand) await this.ntb.commands.updateToolbarCommand(this.toolbar, false);
 						await this.ntb.settingsManager.save();
 						this.setTitle(this.toolbar.name
 							? t('setting.title-edit-toolbar', { toolbar: this.toolbar.name }) 
@@ -413,20 +414,18 @@ export default class ToolbarSettingsModal extends Modal {
 		const toolbarCommand = this.ntb.commands.getCommandFor(this.toolbar);
 		if (toolbarCommand) {
 			const hotkey = this.ntb.hotkeys.getHotkeyText(toolbarCommand);
-			commandOptionsGroup.addSetting((commandHotkeySetting) => {
-				const commandNameFr = document.createDocumentFragment();
-				commandNameFr.createEl('code', { text: toolbarCommand.name });
-				commandHotkeySetting
-					.setName(commandNameFr)
+			commandOptionsGroup.addSetting((hotkeySetting) => {
+				hotkeySetting
+					.setName(t('setting.open-command.option-hotkey'))
+					.setDesc(t('setting.open-command.option-hotkey-description'))
 					.addButton((btn) => {
 						btn
-							.setButtonText(hotkey ?? t('setting.hotkeys.label-set'))
 							.setTooltip(t('setting.hotkeys.label-settings'))
 							.onClick(async () => {
 								this.close();
 								await this.ntb.commands.openHotkeySettings(toolbarCommand.name);
 							});
-						if (!hotkey) btn.buttonEl.setText(iconTextFr('keyboard', t('setting.hotkeys.label-set')));
+						btn.buttonEl.setText(hotkey ?? iconTextFr('keyboard', t('setting.open-command.label-hotkey')));
 					});
 			});
 		}

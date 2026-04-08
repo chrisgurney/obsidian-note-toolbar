@@ -153,7 +153,8 @@
         "name-toggle-properties": "Toggle Properties",
         "name-toolbar-settings": "Toolbar settings",
         "name-toolbar-suggester": "Quick toolbars",
-        "name-use-item": "Use: {{item}}"
+        "name-use-item": "Use: {{item}}",
+        "notice-command-updated": "Command updated:\n{{command}}"
     },
     "export": {
         "button-copy-link": "Copy link",
@@ -590,12 +591,14 @@
         },
         "open-command": {
             "description": "Add a command and set a hotkey to open this toolbar.",
+            "label-hotkey": "Hotkey",
             "name": "Add toolbar command",
             "notice-command-added": "Command now available:\n{{command}}",
             "notice-command-removed": "Command removed:\n{{command}}",
-            "option-hotkey-description": "Open Obsidian's hotkey settings.",
-            "option-position": "Where to open toolbar",
-            "option-position-description": "By default the toolbar opens as a floating toolbar at the cursor position."
+            "option-hotkey": "Hotkey",
+            "option-hotkey-description": "Display toolbar when this key combination is pressed.",
+            "option-position": "How to display toolbar",
+            "option-position-description": "By default the toolbar displays as a floating toolbar at the cursor position."
         },
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
