@@ -2,8 +2,37 @@ The Note Toolbar API can be [executed from Note Toolbar items](https://github.co
 
 _I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)._
 
+## Getting started
+
+Even if you're not a developer, getting started with the API is easy:
+
+1. Create a toolbar item with a **JavaScript type**.
+2. Select **Evaluate JavaScript**.
+3. Copy/Paste one of the examples provided.
+
+## `ntb` API
+
+- [[ntb.app|Note-Toolbar-API#app]]
+- [[ntb.clipboard|Note-Toolbar-API#clipboard]]
+- [[ntb.export|Note-Toolbar-API#export]]
+- [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
+- [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
+- [[ntb.getItem|Note-Toolbar-API#getitem]]
+- [[ntb.getProperty|Note-Toolbar-API#getproperty]]
+- [[ntb.getSelection|Note-Toolbar-API#getselection]]
+- [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
+- [[ntb.menu|Note-Toolbar-API#menu]]
+- [[ntb.modal|Note-Toolbar-API#modal]]
+- [[ntb.o|Note-Toolbar-API#o]]
+- [[ntb.prompt|Note-Toolbar-API#prompt]]
+- [[ntb.setProperty|Note-Toolbar-API#setproperty]]
+- [[ntb.setSelection|Note-Toolbar-API#setselection]]
+- [[ntb.suggester|Note-Toolbar-API#suggester]]
+- [[ntb.t|Note-Toolbar-API#t]]
+- [[ntb.toolbar|Note-Toolbar-API#toolbar]]
+
 > [!warning]
-> While you could also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
+> You can also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, but be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
 
 <details>
 <summary>Copy developer ID for toolbars and items</summary>
@@ -26,27 +55,6 @@ item.setIcon('alert');
 const itemEl = activeDocument.getElementById('112c7ed3-d5c2-4750-b95d-75bc84e23513');
 ```
 </details>
-
-## `ntb` API
-
-- [[ntb.app|Note-Toolbar-API#app]]
-- [[ntb.clipboard|Note-Toolbar-API#clipboard]]
-- [[ntb.export|Note-Toolbar-API#export]]
-- [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
-- [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
-- [[ntb.getItem|Note-Toolbar-API#getitem]]
-- [[ntb.getProperty|Note-Toolbar-API#getproperty]]
-- [[ntb.getSelection|Note-Toolbar-API#getselection]]
-- [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
-- [[ntb.menu|Note-Toolbar-API#menu]]
-- [[ntb.modal|Note-Toolbar-API#modal]]
-- [[ntb.o|Note-Toolbar-API#o]]
-- [[ntb.prompt|Note-Toolbar-API#prompt]]
-- [[ntb.setProperty|Note-Toolbar-API#setproperty]]
-- [[ntb.setSelection|Note-Toolbar-API#setselection]]
-- [[ntb.suggester|Note-Toolbar-API#suggester]]
-- [[ntb.t|Note-Toolbar-API#t]]
-- [[ntb.toolbar|Note-Toolbar-API#toolbar]]
 
 ---
 
