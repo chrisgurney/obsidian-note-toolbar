@@ -142,9 +142,9 @@ In the Gallery, **[explore 100+ items](https://github.com/chrisgurney/obsidian-n
 
 Screenshots of Note Toolbar's configuration:
 
-![Example of settings configuration](./docs/images/settings.png)
+<img width="700" title="Example of settings configuration" src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/settings.png" />
 
-![Example of settings for a toolbar](./docs/images/settings_edit_toolbar_example.png)
+<img width="700" title="Example of settings for a toolbar" src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/settings_edit_toolbar_example.png" />
 
 # License
 
