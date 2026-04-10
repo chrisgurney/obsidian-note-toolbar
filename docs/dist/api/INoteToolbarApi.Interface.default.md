@@ -6,20 +6,47 @@
 | ------ |
 | `T` |
 
-## Properties
+## Note Manipulation
 
-### app
+Functions for reading and manipulating notes in the vault.
 
-> **app**: `App`
+### getProperty
 
-The [Obsidian app instance](https://docs.obsidian.md/Reference/TypeScript+API/App). Use this instead of the global `app` when writing JavaScript.
+> **getProperty**: (`property`) => `string` \| `undefined`
+
+Gets the value of the given property in the active note.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `property` | `string` | The property to get the frontmatter for. |
+
+#### Returns
+
+`string` \| `undefined`
+
+The frontmatter value for the given property, or `undefined` if it does not exist.
 
 #### Example
 
 ```ts
-const currentFile = ntb.app.workspace.getActiveFile();
-new Notice(currentFile.name);
+const createdDate = ntb.getProperty('created');
 ```
+
+***
+
+### getSelection
+
+> **getSelection**: () => `string`
+
+Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
+
+#### Returns
+
+`string`
+
+The selected text, or the word at the current cursor position. Otherwise returns an empty string.
 
 #### Since
 
@@ -27,28 +54,69 @@ new Notice(currentFile.name);
 
 ***
 
-### clipboard
+### setProperty
 
-> **clipboard**: () => `Promise`\<`string` \| `null`\>
+> **setProperty**: (`property`, `value`) => `Promise`\<`void`\>
 
-Gets the clipboard value.
+Sets the given property's value in the active note.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `property` | `string` | Propety to set in the frontmatter. |
+| `value` | `any` | Value to set for the property. |
 
 #### Returns
 
-`Promise`\<`string` \| `null`\>
-
-The clipboard value or `null`.
+`Promise`\<`void`\>
 
 #### Example
 
 ```ts
-// gets the clipboard value
-const value = await ntb.clipboard();
-
-new Notice(value);
+await ntb.setProperty('Created', moment().format('YYYY-MM-DD'));
+await ntb.setProperty('cssclasses', 'myclass');
+await ntb.setProperty('A Link', '[[Some Note]]');
+await ntb.setProperty('A Number', 1234);
+await ntb.setProperty('A List', ['asdf', 'asdf2']);
 ```
 
 ***
+
+### setSelection
+
+> **setSelection**: (`replacement`) => `void`
+
+Replaces the selected text, or the word at the cursor position, with the provided string.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `replacement` | `string` | The text to replace the selection with. |
+
+#### Returns
+
+`void`
+
+#### Remarks
+
+This does not do anything in Reading mode.
+
+#### Example
+
+```ts
+// makes the selected text or the current word red
+ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</span>`);
+```
+
+#### Since
+
+1.26
+
+## Toolbars
+
+Methods for creating and updating toolbars.
 
 ### export
 
@@ -87,6 +155,67 @@ for (let toolbar of toolbars) {
 1.29
 
 ***
+
+### getActiveItem
+
+> **getActiveItem**: () => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+Gets the active (last activated) toolbar item.
+
+#### Returns
+
+[`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+The active (last activated) item.
+
+#### Remarks
+
+This does not work with Note Toolbar Callouts.
+
+***
+
+### getItem
+
+> **getItem**: (`id`) => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+Gets an item by its [ID](Developer-IDs), if it exists.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `id` | `string` | The [ID](Developer-IDs) of the item. |
+
+#### Returns
+
+[`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+The item, or undefined.
+
+#### Example
+
+```js
+// to get the ID, edit an item's settings and use _Copy developer ID_
+const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+```
+
+***
+
+### getToolbars
+
+> **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+Gets all toolbars.
+
+#### Returns
+
+[`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+All toolbars.
+
+## UI Components
+
+Functions for showing various UI components, such as menus, modals, toolbars, and suggesters.
 
 ### fileSuggester
 
@@ -134,109 +263,6 @@ new Notice(folder.name);
 
 ***
 
-### getActiveItem
-
-> **getActiveItem**: () => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
-
-Gets the active (last activated) toolbar item.
-
-#### Returns
-
-[`IItem`](IItem.Interface.IItem.md) \| `undefined`
-
-The active (last activated) item.
-
-#### Remarks
-
-This does not work with Note Toolbar Callouts.
-
-***
-
-### getItem
-
-> **getItem**: (`id`) => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
-
-Gets an item by its ID, if it exists.
-
-#### Parameters
-
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `id` | `string` | The ID of the item. |
-
-#### Returns
-
-[`IItem`](IItem.Interface.IItem.md) \| `undefined`
-
-The item, or undefined.
-
-#### Example
-
-```js
-// to get the ID, edit an item's settings and use _Copy developer ID_
-const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
-```
-
-***
-
-### getProperty
-
-> **getProperty**: (`property`) => `string` \| `undefined`
-
-Gets the value of the given property in the active note.
-
-#### Parameters
-
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `property` | `string` | The property to get the frontmatter for. |
-
-#### Returns
-
-`string` \| `undefined`
-
-The frontmatter value for the given property, or `undefined` if it does not exist.
-
-#### Example
-
-```ts
-const createdDate = ntb.getProperty('created');
-```
-
-***
-
-### getSelection
-
-> **getSelection**: () => `string`
-
-Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
-
-#### Returns
-
-`string`
-
-The selected text, or the word at the current cursor position. Otherwise returns an empty string.
-
-#### Since
-
-1.26
-
-***
-
-### getToolbars
-
-> **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
-
-Gets all toolbars.
-
-#### Returns
-
-[`IToolbar`](IToolbar.Interface.IToolbar.md)[]
-
-All toolbars.
-
-***
-
 ### menu
 
 > **menu**: (`toolbarOrItems`, `options?`) => `Promise`\<`void`\>
@@ -247,7 +273,7 @@ Shows a menu with the provided items.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or UUID; or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
+| `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or [ID](Developer-IDs); or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
 | `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `id?`: `string`; `position`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
@@ -345,25 +371,6 @@ else {
 
 ***
 
-### o
-
-> **o**: `__module`
-
-Reference to the [Obsidian API module](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts) for accessing Obsidian classes and utilities from scripts.
-
-#### Example
-
-```ts
-// get the current markdown view
-const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
-```
-
-#### Since
-
-1.26
-
-***
-
 ### prompt
 
 > **prompt**: (`options?`) => `Promise`\<`string` \| `null`\>
@@ -411,68 +418,6 @@ new Notice(result);
 #### See
 
 `NtbPrompt.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
-
-***
-
-### setProperty
-
-> **setProperty**: (`property`, `value`) => `Promise`\<`void`\>
-
-Sets the given property's value in the active note.
-
-#### Parameters
-
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `property` | `string` | Propety to set in the frontmatter. |
-| `value` | `any` | Value to set for the property. |
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Example
-
-```ts
-await ntb.setProperty('Created', moment().format('YYYY-MM-DD'));
-await ntb.setProperty('cssclasses', 'myclass');
-await ntb.setProperty('A Link', '[[Some Note]]');
-await ntb.setProperty('A Number', 1234);
-await ntb.setProperty('A List', ['asdf', 'asdf2']);
-```
-
-***
-
-### setSelection
-
-> **setSelection**: (`replacement`) => `void`
-
-Replaces the selected text, or the word at the cursor position, with the provided string.
-
-#### Parameters
-
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `replacement` | `string` | The text to replace the selection with. |
-
-#### Returns
-
-`void`
-
-#### Remarks
-
-This does not do anything in Reading mode.
-
-#### Example
-
-```ts
-// makes the selected text or the current word red
-ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</span>`);
-```
-
-#### Since
-
-1.26
 
 ***
 
@@ -557,30 +502,6 @@ new Notice(selected);
 
 ***
 
-### t
-
-> **t**: `string`
-
-This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
-
-#### Returns
-
-The string translation corresponding with the provided key, if it exists, with a fallback to English. If the key does not exist, the key is returned.
-
-#### Example
-
-```ts
-// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
-new Notice(ntb.t('api.msg.clipboard-copied'));
-```
-
-#### See
-
- - For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
- - `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
-
-***
-
 ### toolbar
 
 > **toolbar**: (`toolbarNameOrId`, `options?`) => `Promise`\<`void`\>
@@ -591,7 +512,7 @@ Shows a (floating) toolbar. Defaults to the 'toolbar' position.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `toolbarNameOrId` | `string` | Toolbar name or UUID. |
+| `toolbarNameOrId` | `string` | Toolbar name or [ID](Developer-IDs). |
 | `options?` | \{ `class?`: `string`; `position`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
 | `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |
@@ -617,3 +538,88 @@ ntb.toolbar('Daily Notes', { position: 'cursor' });
 #### Since
 
 1.27
+
+## Utilities
+
+### app
+
+> **app**: `App`
+
+The [Obsidian app instance](https://docs.obsidian.md/Reference/TypeScript+API/App). Use this instead of the global `app` when writing JavaScript.
+
+#### Example
+
+```ts
+const currentFile = ntb.app.workspace.getActiveFile();
+new Notice(currentFile.name);
+```
+
+#### Since
+
+1.26
+
+***
+
+### clipboard
+
+> **clipboard**: () => `Promise`\<`string` \| `null`\>
+
+Gets the clipboard value.
+
+#### Returns
+
+`Promise`\<`string` \| `null`\>
+
+The clipboard value or `null`.
+
+#### Example
+
+```ts
+// gets the clipboard value
+const value = await ntb.clipboard();
+
+new Notice(value);
+```
+
+***
+
+### o
+
+> **o**: `__module`
+
+Reference to the [Obsidian API module](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts) for accessing Obsidian classes and utilities from scripts.
+
+#### Example
+
+```ts
+// get the current markdown view
+const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+```
+
+#### Since
+
+1.26
+
+***
+
+### t
+
+> **t**: `string`
+
+This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
+
+#### Returns
+
+The string translation corresponding with the provided key, if it exists, with a fallback to English. If the key does not exist, the key is returned.
+
+#### Example
+
+```ts
+// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+new Notice(ntb.t('api.msg.clipboard-copied'));
+```
+
+#### See
+
+ - For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
+ - `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).

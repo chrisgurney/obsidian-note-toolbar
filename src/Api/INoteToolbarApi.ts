@@ -7,6 +7,15 @@ import { IToolbar } from "./IToolbar";
  * @privateRemarks
  * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
  * The page header is in `src/docs/_imports/api-header.md` and is inlined during the build process.
+ * 
+ * @groupDescription Note Manipulation
+ * Functions for reading and manipulating notes in the vault.
+ *
+ * @groupDescription Toolbars
+ * Methods for creating and updating toolbars.
+ * 
+ * @groupDescription UI Components
+ * Functions for showing various UI components, such as menus, modals, toolbars, and suggesters.
  */
 export default interface INoteToolbarApi<T> {
 
@@ -19,6 +28,7 @@ export default interface INoteToolbarApi<T> {
      * const currentFile = ntb.app.workspace.getActiveFile();
      * new Notice(currentFile.name);
      * 
+     * @group Utilities
      * @since 1.26
      */
     app: App;
@@ -33,6 +43,8 @@ export default interface INoteToolbarApi<T> {
      * const value = await ntb.clipboard();
      * 
      * new Notice(value);
+     * 
+     * @group Utilities
      */
     clipboard: () => Promise<string | null>;
 
@@ -48,8 +60,8 @@ export default interface INoteToolbarApi<T> {
      *     console.log(await ntb.export(toolbar));
      * }
      * 
+     * @group Toolbars
      * @see `NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
-     * 
      * @since 1.29
      */
     export: (toolbar: IToolbar) => Promise<string | null>;
@@ -68,6 +80,8 @@ export default interface INoteToolbarApi<T> {
      *  foldersonly: true
      * });
      * new Notice(folder.name);
+     * 
+     * @group UI Components
      */
     fileSuggester: (options?: NtbFileSuggesterOptions) => Promise<TAbstractFile | null>;
 
@@ -76,13 +90,15 @@ export default interface INoteToolbarApi<T> {
      * 
      * @returns The active (last activated) item.
      * @remarks This does not work with Note Toolbar Callouts.
+     * 
+     * @group Toolbars
      */
     getActiveItem: () => IItem | undefined;
 
     /**
-     * Gets an item by its ID, if it exists.
+     * Gets an item by its [ID](Developer-IDs), if it exists.
      * 
-     * @param id The ID of the item.
+     * @param id The [ID](Developer-IDs) of the item.
      * @returns The item, or undefined.
      * 
      * @example
@@ -90,6 +106,8 @@ export default interface INoteToolbarApi<T> {
      * // to get the ID, edit an item's settings and use _Copy developer ID_
      * const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
      * ```
+     * 
+     * @group Toolbars
      */
     getItem: (id: string) => IItem | undefined;
 
@@ -101,6 +119,8 @@ export default interface INoteToolbarApi<T> {
      * 
      * @example
      * const createdDate = ntb.getProperty('created');
+     * 
+     * @group Note Manipulation
      */
     getProperty: (property: string) => string | undefined;
 
@@ -108,8 +128,8 @@ export default interface INoteToolbarApi<T> {
      * Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
      * 
      * @returns The selected text, or the word at the current cursor position. Otherwise returns an empty string.
-     * 
      * @since 1.26
+     * @group Note Manipulation
      */
     getSelection: () => string;
 
@@ -117,13 +137,14 @@ export default interface INoteToolbarApi<T> {
      * Gets all toolbars.
      * 
      * @returns All toolbars.
+     * @group Toolbars
      */
     getToolbars: () => IToolbar[];
 
     /**
      * Shows a menu with the provided items.
      * 
-     * @param {string | NtbMenuItem[]} toolbarOrItems Toolbar name or UUID; or an array of items to display. See {@link NtbMenuItem}.
+     * @param {string | NtbMenuItem[]} toolbarOrItems Toolbar name or [ID](Developer-IDs); or an array of items to display. See {@link NtbMenuItem}.
      * @param options Optional display options.
      * @returns Nothing. Displays the menu.
      * 
@@ -154,6 +175,8 @@ export default interface INoteToolbarApi<T> {
      *       icon: b.type === 'folder' ? 'folder' : 'file'
      *   }));
      * ntb.menu(mi);
+     * 
+     * @group UI Components
      */
     menu: (toolbarOrItems: string | NtbMenuItem[], options?: NtbMenuOptions) => Promise<void>;
 
@@ -183,6 +206,7 @@ export default interface INoteToolbarApi<T> {
      * }
      * 
      * @see `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * @group UI Components
      */
     modal: (content: string | TFile, options?: NtbModalOptions) => Promise<Modal>;
 
@@ -194,6 +218,7 @@ export default interface INoteToolbarApi<T> {
      * const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
      * 
      * @since 1.26
+     * @group Utilities
      */
     o: typeof Obsidian;
 
@@ -221,6 +246,7 @@ export default interface INoteToolbarApi<T> {
      * new Notice(result);
      * 
      * @see `NtbPrompt.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * @group UI Components
      */
     prompt: (options?: NtbPromptOptions) => Promise<string | null>;
 
@@ -236,6 +262,8 @@ export default interface INoteToolbarApi<T> {
      * await ntb.setProperty('A Link', '[[Some Note]]');
      * await ntb.setProperty('A Number', 1234);
      * await ntb.setProperty('A List', ['asdf', 'asdf2']);
+     * 
+     * @group Note Manipulation
      */
     setProperty: (property: string, value: any) => Promise<void>;
 
@@ -250,6 +278,8 @@ export default interface INoteToolbarApi<T> {
      * ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</span>`);
      * 
      * @since 1.26
+     * 
+     * @group Note Manipulation
      */
     setSelection: (replacement: string) => void;
 
@@ -299,6 +329,7 @@ export default interface INoteToolbarApi<T> {
      * new Notice(selected);
      * 
      * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * @group UI Components
      */
     suggester: (values?: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;
 
@@ -313,13 +344,14 @@ export default interface INoteToolbarApi<T> {
      * 
      * @see For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
      * @see `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+     * @group Utilities
      */
     t: string;
 
     /**
      * Shows a (floating) toolbar. Defaults to the 'toolbar' position. 
      * 
-     * @param {string} toolbarNameOrId Toolbar name or UUID.
+     * @param {string} toolbarNameOrId Toolbar name or [ID](Developer-IDs).
      * @param options Optional display options.
      * @returns Nothing. Displays the toolbar.
      * 
@@ -332,6 +364,7 @@ export default interface INoteToolbarApi<T> {
      * ntb.toolbar('Daily Notes', { position: 'cursor' });
      * 
      * @since 1.27
+     * @group UI Components
      */
     toolbar: (toolbarNameOrId: string, options?: NtbToolbarOptions) => Promise<void>;
 
