@@ -62,7 +62,7 @@ Test with the [BRAT plugin ↗](https://github.com/TfTHacker/obsidian42-brat). S
 1. Edit and **Set as a pre-release** [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
 1. Use the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat/) to get the latest version.
 
-# Icons
+# Custom icons
 
 If there's a Lucide icon that doesn't quite fit the plugin's use case, here's how to create one:
 
@@ -106,7 +106,7 @@ Use this URI format to link between Tips. The value of the `tip` parameter corre
 Learn about how to add toolbars to your [daily notes](obsidian://note-toolbar?tip=daily-notes).
 ```
 
-## Toolbar items
+## Toolbar items in Tips
 
 Create a strip of item cards by using the `note-toolbar-gallery` callout. Use Gallery item IDs in a list, as defined in `src/Gallery/gallery-items.json`.
 
@@ -118,7 +118,7 @@ Create a strip of item cards by using the `note-toolbar-gallery` callout. Use Ga
 > - redo
 ```
 
-## Video
+## Video in Tips
 
 1. Record with https://cursorful.com/
 1. Switch to the `gh-pages` branch.
