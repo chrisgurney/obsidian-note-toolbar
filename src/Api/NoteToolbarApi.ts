@@ -7,6 +7,7 @@ import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
+import { IToolbar } from "./IToolbar";
 import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
 import NtbSuggester from "./NtbSuggester";
@@ -45,7 +46,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.export
      */
-    async export(toolbar: Toolbar): Promise<string | null> {
+    async export(toolbar: IToolbar): Promise<string | null> {
         if (toolbar.id) {
             return await exportToCalloutById(this.ntb, toolbar.id, this.ntb.settings.export);
         }
