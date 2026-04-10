@@ -96,10 +96,11 @@ const typedocPlugin = {
 				// replace auto-generated heading
 				const apiDocPath = `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`;
 				const apiDocContent = fs.readFileSync(apiDocPath, 'utf8');
-				const apiDocCleaned = apiDocContent.replace(/^.*obsidian-note-toolbar.*\n\n## Type Parameters[\s\S]*?## Properties\n\n/m, '');
+				const apiDocCleaned = apiDocContent.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Note Manipulation\n\n)/, '');
 				fs.writeFileSync(apiDocPath, apiDocCleaned);
 			}
 			catch (error) {
+				// console.error(`\x1b[31m[typedocPlugin] ✗ error generating API docs: ${error.message}\x1b[0m`);
 				process.exit(1);
 			}
 		});
