@@ -55,6 +55,7 @@ export default defineConfig([
 			// for support of older versions of iOS (15 and earlier)
 			"es-x/no-regexp-lookbehind-assertions": "error",
 
+			// "@typescript-eslint/no-non-null-assertion": "error",
 			// "@typescript-eslint/no-unused-vars": "error",
 			
 			// COMMENT BACK IN BELOW SUGGESTED LIST TO TACKLE ONE-BY-ONE
