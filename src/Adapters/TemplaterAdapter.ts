@@ -110,7 +110,7 @@ export default class TemplaterAdapter extends Adapter {
             try {
                 await this.ntb?.app.commands.executeCommandById(config.postCommand);
             } 
-            catch (error) {
+            catch (error: Error | any) {
                 throw new Error(error);
             }
         }
@@ -134,7 +134,7 @@ export default class TemplaterAdapter extends Adapter {
                     throw new Error(t('adapter.error.file-not-found', { filename: filename }));
                 }
             }
-            catch (error) {
+            catch (error: Error | any) {
                 this.displayScriptError(error);
             }
         }
@@ -167,7 +167,7 @@ export default class TemplaterAdapter extends Adapter {
                     throw new Error(t('adapter.error.file-not-found', { filename: filename }));
                 }
             }
-            catch (error) {
+            catch (error: Error | any) {
                 this.displayScriptError(error);
             }
         }
@@ -217,7 +217,7 @@ export default class TemplaterAdapter extends Adapter {
                 result = (result === 'undefined') ? '' : result;
             }
         }
-        catch (error) {
+        catch (error: Error | any) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
                     this.displayScriptError(error);

@@ -140,7 +140,7 @@ export default class JsEngineAdapter extends Adapter {
             if (execution.functionRunError) throw execution.functionRunError;
             result = execution.result;
         }
-        catch (error) {
+        catch (error: Error | any) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
                     this.displayScriptError(error);
