@@ -12,24 +12,24 @@ Even if you're not a developer, getting started with the API is easy:
 
 ## `ntb` API
 
-- [Note Manipulation](#Note-manipulation)
+- **[Note Manipulation](#Note-manipulation)**
     - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
     - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
     - [[ntb.getSelection|Note-Toolbar-API#getselection]]
     - [[ntb.setSelection|Note-Toolbar-API#setselection]]
-- [Toolbars](#Toolbars)
+- **[Toolbars](#Toolbars)**
     - [[ntb.export|Note-Toolbar-API#export]]
     - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
     - [[ntb.getItem|Note-Toolbar-API#getitem]]
     - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
-- [UI Components](#UI-Components)
+- **[UI Components](#UI-Components)**
     - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
     - [[ntb.menu|Note-Toolbar-API#menu]]
     - [[ntb.modal|Note-Toolbar-API#modal]]
     - [[ntb.prompt|Note-Toolbar-API#prompt]]
     - [[ntb.suggester|Note-Toolbar-API#suggester]]
     - [[ntb.toolbar|Note-Toolbar-API#toolbar]]
-- [Utilities](#Utilities)
+- **[Utilities](#Utilities)**
     - [[ntb.app|Note-Toolbar-API#app]]
     - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
     - [[ntb.o|Note-Toolbar-API#o]]
