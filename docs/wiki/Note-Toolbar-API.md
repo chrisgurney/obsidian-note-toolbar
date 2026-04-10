@@ -25,7 +25,7 @@ Even if you're not a developer, getting started with the API is easy:
 - [[ntb.setSelection|Note-Toolbar-API#setselection]]
 - [[ntb.t|Note-Toolbar-API#t]]
 
-## `ntb` UI API
+### UI API
 
 Show UI elements with these APIs:
 
