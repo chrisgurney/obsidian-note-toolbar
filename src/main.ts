@@ -34,25 +34,25 @@ import PluginUtils from 'Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
-	adapters: AdapterManager;
-	api: INoteToolbarApi<any>;
-	commands: CommandManager;
-	hotkeys: HotkeyHelper;
-	gallery: GalleryManager;
-	protocolManager: ProtocolManager;
-	settings: NoteToolbarSettings;	
-	settingsManager: SettingsManager;
-	settingsUtils: SettingsUIUtils;
-	utils: PluginUtils;
+	adapters!: AdapterManager;
+	api!: INoteToolbarApi<any>;
+	commands!: CommandManager;
+	hotkeys!: HotkeyHelper;
+	gallery!: GalleryManager;
+	protocolManager!: ProtocolManager;
+	settings!: NoteToolbarSettings;	
+	settingsManager!: SettingsManager;
+	settingsUtils!: SettingsUIUtils;
+	utils!: PluginUtils;
 	
-	callouts: CalloutHandler;
-	el: ToolbarElementHelper;
-	items: ToolbarItemHandler;
-	render: ToolbarRenderer;
-	toolbars: ToolbarHandler;
-	vars: VariableResolver;
+	callouts!: CalloutHandler;
+	el!: ToolbarElementHelper;
+	items!: ToolbarItemHandler;
+	render!: ToolbarRenderer;
+	toolbars!: ToolbarHandler;
+	vars!: VariableResolver;
 
-	listeners: {
+	listeners!: {
 		callout: CalloutListeners;
 		document: DocumentListeners;
 		metadata: MetadataListeners;
