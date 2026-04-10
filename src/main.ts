@@ -207,7 +207,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		/* eslint-disable no-console */
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
-			this.debug = console.debug.bind(console);
+			this.debug = console.log.bind(console);
 			this.debugGroup = console.group.bind(console);
 			this.debugGroupEnd = console.groupEnd.bind(console);
 		}
