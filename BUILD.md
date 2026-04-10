@@ -28,7 +28,7 @@ Documentation should automatically be updated based on the source files for thos
 ## For major releases
 
 - [ ] Create and update the latest _What's New_ documentation in `docs/releases/en`.
-  - For beta branches, make sure this done is in the `master` branch (or cherry picked from the branch).
+  - If you're working in a beta branch, make sure this done is in the `master` branch (or cherry picked from the branch).
 - [ ] Update `WHATSNEW_VERSION` in `NoteToolbarSettings.ts` in order to show the latest _What's New_ doc in the plugin.
 
 ## Release process
@@ -92,6 +92,7 @@ Tips are help articles that are built-in to the plugin, and are loaded in from G
 ## Create new Tips
 
 1. Create a new markdown file in `docs/tips/en`.
+    - If you're working in a beta branch, make sure this done is in the `master` branch (or cherry picked from the branch).
 1. Write your tip.
 1. Add the Tip to `src/Help/tips.json` with the ID being the filename.
 1. Add it to the Help view `src/Help/HelpView.ts`
