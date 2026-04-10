@@ -283,7 +283,7 @@ if (prod) {
 	await context.watch();
 
 	// watch for changes to files outside the build process
-	const watcher = chokidar.watch(['src/Api', 'src/Styles']);
+	const watcher = chokidar.watch(['docs/wiki', 'src/Api', 'src/Styles']);
 	watcher.on('ready', () => {
 		console.log('[watch] watching for changes...');
 	});
