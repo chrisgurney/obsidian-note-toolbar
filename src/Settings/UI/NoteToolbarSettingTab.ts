@@ -929,8 +929,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					dropdown
 						.addOptions(RIBBON_ACTION_OPTIONS)
 						.setValue(this.ntb.settings.ribbonAction)
-						.onChange(async (value: RibbonAction) => {
-							this.ntb.settings.ribbonAction = value;
+						.onChange(async (value: string) => {
+							this.ntb.settings.ribbonAction = value as RibbonAction;
 							// toggle toolbar setting, if necessary
 							const hasRibbonToolbar = (value === RibbonAction.ToolbarSelected);
 							const ribbonToolbarEl = this.containerEl.querySelector('#note-toolbar-ribbon-toolbar-setting');

@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { getUUID } from "Utils/Utils";
-import { ItemType, ItemViewContext, PlatformType, Position, PositionType, SETTINGS_VERSION, ViewType, Visibility } from "./NoteToolbarSettings";
+import { ItemType, PlatformType, Position, PositionType, SETTINGS_VERSION, ViewContext, ViewType, Visibility } from "./NoteToolbarSettings";
 
 
 export default class SettingsMigrator {
@@ -117,7 +117,7 @@ export default class SettingsMigrator {
                     this.ntb.settings.toolbars[index].positions?.forEach((pos, posIndex) => {
                         this.ntb.settings.toolbars[index].position = {} as Position;
                         if (pos.contexts) {
-                            pos.contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+                            pos.contexts?.forEach((ctx: ViewContext, ctxIndex) => {
                                 if (pos.position) {
                                     switch (ctx.platform) {
                                         case PlatformType.Desktop:
@@ -154,7 +154,7 @@ export default class SettingsMigrator {
                 // item contexts -> item / component visibility
                 tb.items.forEach((item: any, item_index: number) => {
                     if (this.ntb.settings.toolbars[index].items[item_index].contexts) {							
-                        this.ntb.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ItemViewContext, ctxIndex) => {
+                        this.ntb.settings.toolbars[index].items[item_index].contexts?.forEach((ctx: ViewContext, ctxIndex) => {
                             if (!this.ntb.settings.toolbars[index].items[item_index].visibility) {
                                 this.ntb.settings.toolbars[index].items[item_index].visibility = {} as Visibility;
                                 // OLD MIGRATION CODE REMOVED AS TYPES CHANGED FOR 202601XX

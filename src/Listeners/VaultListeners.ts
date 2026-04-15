@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { TFile } from "obsidian";
+import { TAbstractFile } from "obsidian";
 import { ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 
@@ -18,7 +18,7 @@ export default class VaultListeners {
      * @param file TFile of the new file.
      * @param oldPath old path.
      */
-    onFileRename = async (file: TFile, oldPath: string) => {
+    onFileRename = async (file: TAbstractFile, oldPath: string) => {
         this.ntb.debugGroup('onFileRename');
         let settingsChanged = false;
         this.ntb.settings.toolbars.forEach((toolbar: ToolbarSettings) => {

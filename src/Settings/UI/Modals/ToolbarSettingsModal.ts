@@ -257,17 +257,18 @@ export default class ToolbarSettingsModal extends Modal {
 								return { ...acc, ...option };
 							}, {}))
 						.setValue(initialDesktopPosition)
-						.onChange(async (val: PositionType) => {
-							this.toolbar.position.desktop = { allViews: { position: val } };
+						.onChange(async (val: string) => {
+							const posVal = val as PositionType;
+							this.toolbar.position.desktop = { allViews: { position: posVal } };
 							this.toolbar.updated = new Date().toISOString();
-							this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+							this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(posVal);
 							// toggle display of the default item setting
 							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasMobileFabPosition) {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
 							}
 							await this.ntb.settingsManager.save();
-							this.updatePositionDisclaimers(desktopPosSetting, val, 'desktop');
+							this.updatePositionDisclaimers(desktopPosSetting, posVal, 'desktop');
 						})
 					);
 			this.updatePositionDisclaimers(desktopPosSetting, initialDesktopPosition, 'desktop');
@@ -288,18 +289,19 @@ export default class ToolbarSettingsModal extends Modal {
 								return { ...acc, ...option };
 							}, {}))
 						.setValue(initialMobilePosition)
-						.onChange(async (val: PositionType) => {
-							this.toolbar.position.mobile = { allViews: { position: val } };
-							this.toolbar.position.tablet = { allViews: { position: val } };
+						.onChange(async (val: string) => {
+							const posVal = val as PositionType;
+							this.toolbar.position.mobile = { allViews: { position: posVal } };
+							this.toolbar.position.tablet = { allViews: { position: posVal } };
 							this.toolbar.updated = new Date().toISOString();
-							this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(val);
+							this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(posVal);
 							// toggle display of the default item setting
 							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasDesktopFabPosition) {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
 							}
 							await this.ntb.settingsManager.save();
-							this.updatePositionDisclaimers(mobilePosSetting, val, 'mobile');
+							this.updatePositionDisclaimers(mobilePosSetting, posVal, 'mobile');
 						})
 					);
 			this.updatePositionDisclaimers(mobilePosSetting, initialMobilePosition, 'mobile');
@@ -439,8 +441,8 @@ export default class ToolbarSettingsModal extends Modal {
 					dropdown
 						.addOptions(TOOLBAR_COMMAND_POSITION_OPTIONS)
 						.setValue(initialCommandPosition)
-						.onChange(async (value: PositionType) => {
-							this.toolbar.commandPosition = value;
+						.onChange(async (val: string) => {
+							this.toolbar.commandPosition = val as PositionType;
 							await this.ntb.settingsManager.save();
 						});
 					});
