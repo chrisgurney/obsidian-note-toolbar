@@ -6,7 +6,7 @@ import { t } from "Settings/NoteToolbarSettings";
 export default class WorkspaceListeners {
 
 	// track the last used file and property, to prompt if Note Toolbar property references unknown toolbar
-	lastFileOpenedOnCacheChange: TFile | null;
+	lastFileOpenedOnCacheChange!: TFile | null;
 	lastNtbPropValue: string | undefined;
 
     constructor(

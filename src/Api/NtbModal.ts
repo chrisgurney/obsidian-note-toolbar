@@ -13,7 +13,7 @@ export default class NtbModal extends Modal {
     private isWebviewer: boolean;
     private class: string;
 
-    private leaf: WorkspaceLeaf;
+    private leaf!: WorkspaceLeaf;
 
     /**
      * @see INoteToolbarApi.modal

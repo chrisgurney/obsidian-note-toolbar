@@ -11,14 +11,14 @@ import { NtbKeyBinding, NtbSuggesterOptions } from "./INoteToolbarApi";
  */
 export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
-    private resolve: (value: T) => void;
-    private reject: (reason?: Error) => void;
+    private resolve!: (value: T) => void;
+    private reject!: (reason?: Error) => void;
 
     private activePrefix?: string;
     private activePrefixStart?: number;
-    private currentMatches: FuzzyMatch<T>[];
+    private currentMatches!: FuzzyMatch<T>[];
     private originalKeys?: T[];
-    private prefixHandlerActive: boolean;
+    private prefixHandlerActive!: boolean;
     private submitted = false;
 
     private allowCustomInput: boolean;

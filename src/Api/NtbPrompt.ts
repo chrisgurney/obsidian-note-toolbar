@@ -11,11 +11,11 @@ import NoteToolbarPlugin from "main";
  */
 export default class NtbPrompt extends Modal {
 
-    private resolve: (value: string) => void;
-    private reject: (reason?: Error) => void;
+    private resolve!: (value: string) => void;
+    private reject!: (reason?: Error) => void;
 
     private submitted = false;
-    private value: string;
+    private value!: string;
 
     private label: string;
     private large: boolean;

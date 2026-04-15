@@ -18,7 +18,7 @@ type TipType = {
 
 export default class TipView extends ItemView {
 
-    state: TipViewState;
+    state!: TipViewState;
 
     constructor(readonly ntb: NoteToolbarPlugin, readonly leaf: WorkspaceLeaf) {
         super(leaf);

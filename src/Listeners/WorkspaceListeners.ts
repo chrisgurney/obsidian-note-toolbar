@@ -19,7 +19,7 @@ export default class WorkspaceListeners {
     workspacesPlugin: { instance: any; enabled: boolean } | null = null;
     
 	// track to reduce unneccessary re-renders 
-	activeWorkspace: string;
+	activeWorkspace!: string;
 	lastFileOpenedOnLayoutChange: TFile | null | undefined;
 	lastViewModeOnLayoutChange: MarkdownViewModeType | undefined;
 
