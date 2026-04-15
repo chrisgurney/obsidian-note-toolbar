@@ -1,7 +1,7 @@
 import { AbstractInputSuggest, App, TAbstractFile, TFolder } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
-module FolderSuggester {
+namespace FolderSuggester {
     export type Pattern = {
         pattern: string,
         label: string,
