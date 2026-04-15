@@ -51,8 +51,6 @@ export default defineConfig([
 			"no-debugger": "warn",
 			
 			"@typescript-eslint/no-invalid-this": "error",
-			// "@typescript-eslint/no-non-null-assertion": "error",
-			// "@typescript-eslint/no-unused-vars": "error",
 
 			// for support of older versions of iOS (15 and earlier)
 			"es-x/no-regexp-lookbehind-assertions": "error",
