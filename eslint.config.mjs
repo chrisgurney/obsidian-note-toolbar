@@ -69,7 +69,7 @@ export default defineConfig([
 			// Prevents unnecessary async/await overhead
 			// "@typescript-eslint/require-await": "warn",
 			// Avoids expensive string concatenation in loops
-			// "@typescript-eslint/prefer-string-starts-ends-with": "error",
+			"@typescript-eslint/prefer-string-starts-ends-with": "error",
 			// Use optional chaining (more optimized by engines)
 			// "@typescript-eslint/prefer-optional-chain": "warn",
 			// Prevents unnecessary type assertions that can hide performance issues
