@@ -150,7 +150,7 @@ export default class TipView extends ItemView {
      * @param contentEl HTMLDivElement to render Gallery items in.
      */
     renderGalleryCallouts(contentEl: HTMLDivElement, color: ColorType) {
-        const callouts = contentEl.querySelectorAll('.callout[data-callout="note-toolbar-gallery"]');
+        const callouts = contentEl.querySelectorAll<HTMLDivElement>('.callout[data-callout="note-toolbar-gallery"]');
         callouts.forEach(async (calloutEl: HTMLDivElement) => {
             const items: string[] = [];
             calloutEl.querySelectorAll('li').forEach(li => {
@@ -198,7 +198,7 @@ export default class TipView extends ItemView {
      * @param contentEl HTMLDivElement to render videos in.
      */
     renderTipVideos(contentEl: HTMLDivElement) {
-        const callouts = contentEl.querySelectorAll('.callout[data-callout="note-toolbar-video"]');
+        const callouts = contentEl.querySelectorAll<HTMLDivElement>('.callout[data-callout="note-toolbar-video"]');
         callouts.forEach(async (calloutEl: HTMLDivElement) => {
             const url = calloutEl.querySelector('.callout-content')?.textContent?.trim();
             if (!url) return;
