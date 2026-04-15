@@ -68,15 +68,15 @@ export default class WorkspaceListeners {
 	 * @param menu the file Menu
 	 * @param file TFile for link that was clicked on
 	 */
-	onFileMenu = (menu: Menu, file: TFile) => {
-		this.fileMenu.render(menu, file);
+	onFileMenu = (menu: Menu, file: TAbstractFile | null, source: any) => {
+		if (file && file instanceof TFile) this.fileMenu.render(menu, file);
 	}
 
 	/**
 	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
 	 * @param file TFile that was opened.
 	 */
-	onFileOpen = async (file: TFile) => {
+	onFileOpen = async (file: TFile | null) => {
 		// this.ntb.debug('FILE-OPEN: updating recent file list:', file?.name);
 		// update list of the most recently opened files
 		if (file) await this.ntb.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
