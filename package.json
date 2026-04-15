@@ -4,11 +4,12 @@
   "description": "Obsidian plugin that adds customizable toolbars to your notes.",
   "main": "main.js",
   "scripts": {
-    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "eslint .",
     "prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
-    "release": "node release.mjs"
+    "release": "node release.mjs",
+    "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "keywords": [],
   "author": "Chris Gurney",

@@ -47,7 +47,7 @@ const typecheckPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[typecheck] running...');
-				const tsc = spawn('tsc', ['-noEmit', '-skipLibCheck'], {
+				const tsc = spawn('tsc', ['--noEmit', '--skipLibCheck'], {
 					stdio: 'inherit' // pipes stdout/stderr directly, preserving colors
 				});
 				tsc.on('close', (code) => {
