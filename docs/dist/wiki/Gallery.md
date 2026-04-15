@@ -157,6 +157,8 @@ Navigate between notes and files.
 
 | Item | Description |
 | --- | --- |
+| Navigate back | Go backwards. |
+| Navigate forward | Go forwards. |
 | Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
 | Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
 | Open file in new tab | Opens the selected file in a new tab. |

@@ -507,6 +507,18 @@
         "type": "command"
     },
     {
+        "id": "go-back",
+        "commandId": "app:go-back",
+        "description": {
+            "en": "Go backwards."
+        },
+        "icon": "arrow-left",
+        "tooltip": {
+            "en": "Navigate back"
+        },
+        "type": "command"
+    },
+    {
         "id": "go-bottom",
         "description": {
             "en": "Moves the cursor to the bottom of the current note.",
@@ -523,6 +535,18 @@
             "uk": "Перейти до кінця"
         },
         "type": "javascript"
+    },
+    {
+        "id": "go-forward",
+        "commandId": "app:go-forward",
+        "description": {
+            "en": "Go forwards."
+        },
+        "icon": "arrow-right",
+        "tooltip": {
+            "en": "Navigate forward"
+        },
+        "type": "command"
     },
     {
         "id": "go-home",
