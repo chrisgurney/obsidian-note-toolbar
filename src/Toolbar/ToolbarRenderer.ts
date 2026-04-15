@@ -27,7 +27,7 @@ export default class ToolbarRenderer {
 	private phoneTbarHeightCache: Map<string, { height: number, timestamp: string }> = new Map();
 
 	// for tracking the last clicked element position (which can include callouts)
-	lastClickedPos: Rect;
+	lastClickedPos!: Rect;
 
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders

@@ -16,7 +16,7 @@ export async function importFromModal(ntb: NoteToolbarPlugin, toolbar?: ToolbarS
 
 export default class ImportModal extends Modal {
 
-    public importedToolbar: ToolbarSettings;
+    public importedToolbar!: ToolbarSettings;
 
     callout: string = '';
 

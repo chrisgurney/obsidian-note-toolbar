@@ -21,7 +21,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	private itemListIdCounter: number = 0;
 
 	// track UI state
-	private lastScrollPosition: number;
+	private lastScrollPosition!: number;
 	private lastScrollListenerRegistered = false;
 	private isSectionOpen: Record<SettingsSectionType, boolean> = {
 		'appToolbars': true,
