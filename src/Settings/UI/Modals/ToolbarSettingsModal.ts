@@ -479,7 +479,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 * SETTINGS DISPLAY HANDLERS
 	 *************************************************************************/
 
-	private lastScrollPosition: number;
+	private lastScrollPosition!: number;
 	/**
 	 * Remembers the scrolling position of the user and jumps to it on display.
 	 * @author Taitava (Shell Commands plugin)
