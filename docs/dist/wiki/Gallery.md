@@ -6,8 +6,8 @@ The **Note Toolbar Gallery** is a curated list of 100+ items that can be added t
 
 **To open the Gallery**:
 
-- In Note Toolbar's settings look for the _Gallery_ button/link at the top; or 
-- when searching existing items to add to the toolbar, Gallery items will also appear in search results; or
+- In Note Toolbar's settings look for the _Gallery_ button/link at the top; OR 
+- when searching existing items to add to the toolbar, Gallery items will also appear in search results; OR
 - run the `Note Toolbar: Open Gallery` command.
 
 Then:
