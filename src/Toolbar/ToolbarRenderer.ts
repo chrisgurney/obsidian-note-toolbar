@@ -413,7 +413,7 @@ export default class ToolbarRenderer {
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
 			const isLinkEmpty = this.ntb.vars.hasVars(item.link) && (await this.ntb.vars.replaceVars(item.link, file) === '');
-			if ((item.label === "" && item.icon === "") || isLinkEmpty 
+			if (((item.label === "" && item.icon === "") || isLinkEmpty) 
 				&& ![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) {
 				continue;
 			}
