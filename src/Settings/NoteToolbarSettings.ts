@@ -502,6 +502,7 @@ export interface ToolbarItemLinkAttr {
 	commandCheck: boolean;
 	commandId: string;
 	focus?: ItemFocusType;
+	/**	@deprecated use the hasVars() method instead */
 	hasVars: boolean;
 	target?: PaneType | 'modal';
 	type: ItemType;
