@@ -2,6 +2,7 @@ import { ViewPlugin } from '@codemirror/view';
 import AdapterManager from 'Adapters/AdapterManager';
 import INoteToolbarApi from "Api/INoteToolbarApi";
 import NoteToolbarApi from 'Api/NoteToolbarApi';
+import CliManager from 'Cli/CliManager';
 import CommandManager from 'Commands/CommandManager';
 import GalleryManager from 'Gallery/GalleryManager';
 import GalleryView from 'Gallery/GalleryView';
@@ -36,6 +37,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	adapters!: AdapterManager;
 	api!: INoteToolbarApi<any>;
+	cli!: CliManager;
 	commands!: CommandManager;
 	hotkeys!: HotkeyHelper;
 	gallery!: GalleryManager;
@@ -108,6 +110,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// initialize managers + helpers that require settings to be loaded
 		this.api = new NoteToolbarApi(this);
+		this.cli = new CliManager(this);
 		this.commands = new CommandManager(this);
 		this.hotkeys = new HotkeyHelper(this);
 		this.gallery = new GalleryManager(this);
@@ -150,6 +153,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.window.register();
 
 			// add commands
+			this.cli.register();
 			this.commands.addCommands();
 
 			// prototcol handler
