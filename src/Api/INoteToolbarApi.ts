@@ -75,6 +75,8 @@ export default interface INoteToolbarApi<T> {
      * @example
      * const fileOrFolder = await ntb.fileSuggester();
      * new Notice(fileOrFolder.name);
+     * 
+     * @example
      * // show only folders
      * const folder = await ntb.fileSuggester({
      *  foldersonly: true
@@ -574,6 +576,12 @@ export interface NtbFileSuggesterOptions extends NtbSuggesterOptions {
      * If set to true, only files are shown. If not provided, defaults to `false`.
      */
     filesonly?: boolean;
+    /**
+     * Limit results to this folder.
+     * 
+     * @since 1.30.14
+     */
+    folder?: string;
     /**
      * If set to true, only folders are shown. If not provided, defaults to `false`.
      */

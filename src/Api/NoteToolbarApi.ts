@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
 import * as Obsidian from "obsidian";
-import { App, Menu, MenuItem, Modal, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
@@ -67,6 +67,10 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         let files: TAbstractFile[] = [];
         files = abstractFiles.filter((file: TAbstractFile) => {
+            if (options?.folder) {
+                const normalizedFolder = normalizePath(options.folder);
+                if (!file.path.startsWith(normalizedFolder + '/')) return false;
+            }
             if (options?.filesonly && !(file instanceof TFile)) return false;
             if (options?.foldersonly && !(file instanceof TFolder)) return false;
             return true;
