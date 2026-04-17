@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { SuggestModal, TFile } from "obsidian";
+import { Platform, SuggestModal } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
 export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
@@ -139,8 +140,19 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      */
     async onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
         await this.ntb.settingsManager.updateRecentList(LocalVar.RecentToolbars, toolbar.name);
-        this.callback(toolbar);
-        this.close();
+        // open the toolbar editor if the proper key modifiers are pressed
+        const isModifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
+        if (isModifierPressed && event?.shiftKey && !event?.altKey) {
+            this.close();
+            const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbar);
+            modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
+            modal.open();
+            return;
+        }
+        else {
+            this.callback(toolbar);
+            this.close();
+        }
     }
 
 }
