@@ -1,0 +1,44 @@
+{
+    "id": "note-toolbar",
+    "description": {
+        "en": "Commands for managing Note Toolbars."
+    },
+    "commands": [
+        {
+            "id": "note-toolbar:add-command",
+            "description": {
+                "en": "Adds a command item to the specified toolbar."
+            },
+            "flags": {
+                "toolbar": {
+                    "description": {
+                        "en": "Name or ID of the toolbar to add the item to"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<nameOrId>"
+                    },
+                    "required": true
+                }
+            }
+        },
+        {
+            "id": "note-toolbar:add-javascript",
+            "description": {
+                "en": "Adds a JavaScript item to the specified toolbar."
+            },
+            "flags": {
+                "toolbar": {
+                    "description": {
+                        "en": "Name or ID of the toolbar to add the item to"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<nameOrId>"
+                    },
+                    "required": true
+                }
+            }
+        }
+    ]
+}

@@ -629,3 +629,10 @@ export function toolbarHasMenu(toolbar: ToolbarSettings): boolean {
 		(item.linkAttr.type === ItemType.Menu) && (item.link)
 	);
 }
+
+/**
+ * Returns the translated string for the given record, with fallbacks to English and then 'undefined'.
+ */
+export function tr(field: Record<string, string>, locale: string = 'en'): string | undefined {
+	return field[locale] ?? field['en'] ?? undefined;
+}

@@ -1,6 +1,7 @@
+import cliDef from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
-import { t, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
-
+import { CliFlag, CliFlags, CliHandler } from "obsidian";
+import { tr } from "Utils/Utils";
 
 export default class CliManager {
 
@@ -9,20 +10,79 @@ export default class CliManager {
     ) {}
 
     /**
+     * Defines the CLI command handlers, used in register().
+     */
+    cliHandlers: Record<string, CliHandler> = {
+        'note-toolbar:add-command': async (args) => {
+            const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
+            if (!toolbar) return `Toolbar not found: ${args.toolbar}`;
+            return 'add-command is not yet implemented';
+        },
+        'note-toolbar:add-javascript': async (args) => {
+            const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
+            if (!toolbar) return `Toolbar not found: ${args.toolbar}`;
+            return 'add-script is not yet implemented';
+        }
+    };
+
+    /**
      * Register the plugin's CLI commands. Called from plugin's `onLayoutReady()`.
      */
     register(): void {
 
-        this.ntb.registerCliHandler(
-            'note-toolbar:help',
-            t('command.name-open-help'),
-            null,
-            async (): Promise<string> => {
-                this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
-                return '';
-            }
-        );
+        let commands = [];
+        const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
+        // default command: displays list of available sub-commands
+        commands.push({
+            id: cliDef.id,
+            description: tr(cliDef.description, language) ?? '',
+            flags: null,
+            handler: async () => {
+                return cliDef.commands
+                    .map((cmd: any) => `${cmd.id}: ${tr(cmd.description, language) ?? ''}`)
+                    .join('\n');
+            }
+        });
+
+        // sub-commands
+        commands.push(...cliDef.commands
+            .map((cmd: any) => {
+                const handler = this.cliHandlers[cmd.id];
+                if (!handler) {
+                    console.error(`CliHandler: no handler registered for command "${cmd.id}"`);
+                    return null;
+                }
+                return {
+                    id: cmd.id,
+                    description: tr(cmd.description, language) ?? '',
+                    flags: cmd.flags ? this.toCliFlags(cmd.flags, language) : null,
+                    handler: this.cliHandlers[cmd.id]
+                }
+            })
+            .filter((cmd): cmd is NonNullable<typeof cmd> => cmd !== null));
+
+        // register the commands with Obsidian
+        for (const cmd of commands) {
+            this.ntb.registerCliHandler(cmd.id, cmd.description, cmd.flags, cmd.handler);
+        }
+
+    }
+
+    /**
+     * Gets the localized description for the CLI command flags.
+     */
+    toCliFlags(flags: Record<string, any>, language: string): CliFlags {
+        return Object.fromEntries(
+            Object.entries(flags).map(([key, flag]) => [
+                key,
+                {
+                    ...flag,
+                    description: tr(flag.description, language) ?? null,
+                    value: tr(flag.value, language) ?? null,
+                }
+            ])
+        );
     }
 
 }
