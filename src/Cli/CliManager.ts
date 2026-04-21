@@ -1,6 +1,6 @@
 import cliDef from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
-import { CliFlag, CliFlags, CliHandler } from "obsidian";
+import { CliFlags, CliHandler } from "obsidian";
 import { tr } from "Utils/Utils";
 
 export default class CliManager {
@@ -33,24 +33,24 @@ export default class CliManager {
         let commands = [];
         const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
-        // default command: displays list of available sub-commands
+        // default command: displays list of available actions
         commands.push({
             id: cliDef.id,
             description: tr(cliDef.description, language) ?? '',
             flags: null,
             handler: async () => {
-                return cliDef.commands
+                return cliDef.actions
                     .map((cmd: any) => `${cmd.id}: ${tr(cmd.description, language) ?? ''}`)
                     .join('\n');
             }
         });
 
-        // sub-commands
-        commands.push(...cliDef.commands
+        // actions
+        commands.push(...cliDef.actions
             .map((cmd: any) => {
                 const handler = this.cliHandlers[cmd.id];
                 if (!handler) {
-                    console.error(`CliHandler: no handler registered for command "${cmd.id}"`);
+                    this.ntb.debug(`⚠️ CliManager: no handler registered for command "${cmd.id}"`);
                     return null;
                 }
                 return {

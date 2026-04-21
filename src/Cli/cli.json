@@ -3,7 +3,7 @@
     "description": {
         "en": "Commands for managing Note Toolbars."
     },
-    "commands": [
+    "actions": [
         {
             "id": "note-toolbar:add-command",
             "description": {
