@@ -19,6 +19,37 @@
                         "en": "<nameOrId>"
                     },
                     "required": true
+                },
+                "command": {
+                    "description": {
+                        "en": "Obsidian command ID (e.g. editor:toggle-bold)"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<commandId>"
+                    },
+                    "required": true
+                },
+                "label": {
+                    "description": {
+                        "en": "Display label for the item."
+                    },
+                    "type": "string",
+                    "required": false
+                },
+                "icon": {
+                    "description": {
+                        "en": "Lucide icon name."
+                    },
+                    "type": "string",
+                    "required": false
+                },
+                "tooltip": {
+                    "description": {
+                        "en": "Tooltip text. Defaults to label if omitted."
+                    },
+                    "type": "string",
+                    "required": false
                 }
             }
         },

@@ -1,7 +1,8 @@
 import cliDef from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
 import { CliFlags, CliHandler } from "obsidian";
-import { tr } from "Utils/Utils";
+import { DEFAULT_ITEM_SETTINGS, ItemType, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { getUUID, tr } from "Utils/Utils";
 
 export default class CliManager {
 
@@ -13,10 +14,30 @@ export default class CliManager {
      * Defines the CLI command handlers, used in register().
      */
     cliHandlers: Record<string, CliHandler> = {
+        // TODO: support adding items from Gallery
         'note-toolbar:add-command': async (args) => {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
-            if (!toolbar) return `Toolbar not found: ${args.toolbar}`;
-            return 'add-command is not yet implemented';
+            if (!toolbar) return `Error: Toolbar not found: ${args.toolbar}`;
+            const item: ToolbarItemSettings = JSON.parse(JSON.stringify(DEFAULT_ITEM_SETTINGS));
+            const command = this.ntb.app.commands.commands[args.command];
+            if (!command) return t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
+            item.linkAttr.type = ItemType.Command;
+            item.linkAttr.commandId = args.command;
+            if (args.label || args.icon) {
+                if (args.label) item.label = args.label;
+                // TODO: check if icon is valid before setting it - see: setIcon()
+                if (args.icon) item.icon = args.icon;
+            }
+            else {
+                return "Error: A label or icon must be provided.";
+            }
+            if (args.tooltip) item.tooltip = args.tooltip;
+            // TODO: support set focus flag
+            item.uuid = getUUID();
+            toolbar.items.push(item);
+            toolbar.updated = new Date().toISOString();
+            await this.ntb.settingsManager.save();
+            return 'Command item added successfully';
         },
         'note-toolbar:add-javascript': async (args) => {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
