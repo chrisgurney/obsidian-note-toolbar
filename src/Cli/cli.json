@@ -1,7 +1,10 @@
 {
     "id": "note-toolbar",
     "description": {
-        "en": "Commands for managing Note Toolbars."
+        "en": "Displays Note Toolbar CLI help."
+    },
+    "heading": {
+        "en": "Note Toolbar CLI actions:"
     },
     "actions": [
         {

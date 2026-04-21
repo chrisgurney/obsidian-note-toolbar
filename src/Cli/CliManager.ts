@@ -1,6 +1,6 @@
 import cliDef from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
-import { CliFlags, CliHandler } from "obsidian";
+import { CliFlags, CliHandler, getIcon } from "obsidian";
 import { DEFAULT_ITEM_SETTINGS, ItemType, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { getUUID, tr } from "Utils/Utils";
 
@@ -25,8 +25,11 @@ export default class CliManager {
             item.linkAttr.commandId = args.command;
             if (args.label || args.icon) {
                 if (args.label) item.label = args.label;
-                // TODO: check if icon is valid before setting it - see: setIcon()
-                if (args.icon) item.icon = args.icon;
+                if (args.icon) {
+                    const icon = getIcon(args.icon);
+                    if (!icon) return t('api.item.error-invalid-icon', { iconId: args.icon })
+                    item.icon = args.icon;
+                }
             }
             else {
                 return "Error: A label or icon must be provided.";
@@ -60,9 +63,11 @@ export default class CliManager {
             description: tr(cliDef.description, language) ?? '',
             flags: null,
             handler: async () => {
-                return cliDef.actions
-                    .map((cmd: any) => `${cmd.id}: ${tr(cmd.description, language) ?? ''}`)
+                const heading = tr(cliDef.heading, language) ?? '';
+                const actions = cliDef.actions
+                    .map((cmd: any) => `\x1b[90m${cmd.id}\x1b[0m\t\x1b[32m${tr(cmd.description, language) ?? ''}\x1b[0m`)
                     .join('\n');
+                return `${heading}\n\n${actions}`;
             }
         });
 
