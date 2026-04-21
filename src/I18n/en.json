@@ -729,8 +729,11 @@
         "title-edit-toolbar_none": "Edit Toolbar",
         "toolbar-suggest-modal": {
             "instruction-dismiss": "to dismiss",
+            "instruction-edit": "to edit toolbar",
             "instruction-navigate": "to navigate",
             "instruction-use": "to open toolbar",
+            "key-edit-macos": "hold ⌘ + shift",
+            "key-edit-windows": "hold ctrl + shift",
             "option-default": "Default (use toolbar mapping)",
             "option-new": "Create a new toolbar...",
             "placeholder": "Search for a toolbar...",

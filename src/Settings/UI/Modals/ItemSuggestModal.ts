@@ -382,7 +382,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
                     let activeFile = this.ntb.app.workspace.getActiveFile();
                     const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toolbar: ToolbarSettings) => {
                         await this.ntb.commands.openQuickTools(toolbar.uuid);
-                    });
+                    }, 'QuickTools');
                     modal.open();
                 }
                 break;

@@ -3,6 +3,12 @@ import { Platform, SuggestModal } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
+/**
+ * `Default` = Just uses modal to select a toolbar.
+ * `QuickTools` = Opens the toolbar versus just selecting it.
+ */
+export type ToolbarSuggestMode = 'Default' | 'QuickTools';
+
 export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     /**
@@ -12,13 +18,15 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param showSwapUi true if UI for swap toolbars should be shown (e.g., default toolbar option)
      * @param showNewOption true if UI should show a "New toolbar" option (for adding items from the Gallery)
      * @param callback function to call when a toolbar is selected
+     * @param mode ToolbarSuggestMode to use
      */
 	constructor(
         private ntb: NoteToolbarPlugin,
         private showPreviews: boolean, 
         private showSwapUi: boolean,
         private showNewOption: boolean,
-        private callback: (toolbar: ToolbarSettings) => void
+        private callback: (toolbar: ToolbarSettings) => void,
+        private mode: ToolbarSuggestMode = 'Default'
     ) {
 
         super(ntb.app);
@@ -28,11 +36,21 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             showNewOption 
                 ? t('setting.toolbar-suggest-modal.placeholder-add') 
                 : t('setting.toolbar-suggest-modal.placeholder'));
-        this.setInstructions([
+
+        let instructions = [];
+        instructions.push(
             {command: '↑↓', purpose: t('setting.toolbar-suggest-modal.instruction-navigate')},
             {command: '↵', purpose: t('setting.toolbar-suggest-modal.instruction-use')},
+        );
+        if (mode === 'QuickTools') {
+            instructions.push(
+                {command: (Platform.isWin || Platform.isLinux) ? t('setting.toolbar-suggest-modal.key-edit-windows') : t('setting.toolbar-suggest-modal.key-edit-macos'), purpose: t('setting.toolbar-suggest-modal.instruction-edit')},
+            );
+        }
+        instructions.push(
             {command: 'esc', purpose: t('setting.toolbar-suggest-modal.instruction-dismiss')},
-        ]);
+        );
+        this.setInstructions(instructions);
 
         if (this.showSwapUi) {
             // show warning message about properties being changed
