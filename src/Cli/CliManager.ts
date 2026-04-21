@@ -78,7 +78,7 @@ export default class CliManager {
                 key,
                 {
                     ...flag,
-                    description: tr(flag.description, language) ?? null,
+                    description: tr(flag.description, language) ?? '',
                     value: tr(flag.value, language) ?? null,
                 }
             ])

@@ -634,5 +634,6 @@ export function toolbarHasMenu(toolbar: ToolbarSettings): boolean {
  * Returns the translated string for the given record, with fallbacks to English and then 'undefined'.
  */
 export function tr(field: Record<string, string>, locale: string = 'en'): string | undefined {
+	if (!field) return undefined;
 	return field[locale] ?? field['en'] ?? undefined;
 }
