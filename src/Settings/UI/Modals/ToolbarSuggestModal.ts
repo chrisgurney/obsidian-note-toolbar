@@ -18,11 +18,11 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         private showPreviews: boolean, 
         private showSwapUi: boolean,
         private showNewOption: boolean,
-        private callback: (toolbar: ToolbarSettings) => void) {
+        private callback: (toolbar: ToolbarSettings) => void
+    ) {
 
         super(ntb.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
-        this.ntb = ntb;
 
         this.setPlaceholder(
             showNewOption 
@@ -48,6 +48,9 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
                 }    
             }
         }
+
+        // handle meta key selections
+        this.scope.register(null, 'Enter', (event) => this.handleKeyboardSelection(event));
 
     }
 
@@ -118,6 +121,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
+        el.setAttribute('id', toolbar.uuid);
         let toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
         if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
@@ -153,6 +157,16 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             this.callback(toolbar);
             this.close();
         }
+    }
+
+    /**
+     * Handle case where keyboard with meta key is used to make selection. 
+     * @param event KeyboardEvent
+     */
+    async handleKeyboardSelection(event: KeyboardEvent) {
+        const selectedItem = this.modalEl.querySelector('.suggestion-item.is-selected');
+        const selected = selectedItem?.id ? this.ntb.settingsManager.getToolbarById(selectedItem?.id) : undefined;
+        selected ? this.onChooseSuggestion(selected, event) : undefined;
     }
 
 }
