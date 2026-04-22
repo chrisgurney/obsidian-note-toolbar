@@ -27,7 +27,7 @@ export default class SettingsManager {
 	 * Adds the given item to the given toolbar.
 	 * @param toolbar toolbar to add the item to
 	 * @param item ToolbarItemSettings to add
-	 * @param insertIndex optional index to insert the item at; if not provided, the item is added to the end of the toolbar
+	 * @param insertIndex optional index to insert the item at; if too large, the item is added to the end of the toolbar; if not provided, the item is added to the end of the toolbar
 	 */
 	public async addToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<void> {
 		if (insertIndex !== undefined && insertIndex >= 0) {
