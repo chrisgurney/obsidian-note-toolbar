@@ -55,11 +55,11 @@ export default class CliManager {
         // TODO: support adding items from Gallery
         'note-toolbar:add-command': async (args) => {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
-            if (!toolbar) return `Error: Toolbar not found: ${args.toolbar}`;
+            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
             const item: ToolbarItemSettings = JSON.parse(JSON.stringify(DEFAULT_ITEM_SETTINGS));
 
             const command = this.ntb.app.commands.commands[args.command];
-            if (!command) return t('setting.add-item.error-invalid-command', { commandId: args.command });
+            if (!command) return t('cli.error-invalid-command', { commandId: args.command });
             item.linkAttr.type = ItemType.Command;
             item.linkAttr.commandId = args.command;
             // TODO: support set focus flag
@@ -68,7 +68,7 @@ export default class CliManager {
                 if (args.label) item.label = args.label;
                 if (args.icon) {
                     const icon = getIcon(args.icon);
-                    if (!icon) return t('api.item.error-invalid-icon', { iconId: args.icon })
+                    if (!icon) return t('cli.error-invalid-icon', { iconId: args.icon })
                     item.icon = args.icon;
                 }
             }
@@ -86,7 +86,7 @@ export default class CliManager {
         },
         'note-toolbar:add-javascript': async (args) => {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
-            if (!toolbar) return `Toolbar not found: ${args.toolbar}`;
+            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
             return 'add-script is not yet implemented';
         }
     };

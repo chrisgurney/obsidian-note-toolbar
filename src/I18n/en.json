@@ -131,6 +131,11 @@
             "suggester-placeholder-no-values": "Type something..."
         }
     },
+    "cli": {
+        "error-invalid-command": "Error: Command does not exist: {{commandId}}",
+        "error-invalid-icon": "Error: Invalid icon ID: {{iconId}}",
+        "error-invalid-toolbar": "Error: Toolbar not found: {{toolbar}}"
+    },
     "command": {
         "copy-command-notice": "Command copied to clipboard",
         "callouts-locked-notice": "Locked Note Toolbar Callouts",
