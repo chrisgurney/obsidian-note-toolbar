@@ -9,7 +9,7 @@
     "commonFlags": {
         "toolbar": {
             "description": {
-                "en": "Name or ID of toolbar to add the item to"
+                "en": "Name or ID of toolbar to add item to"
             },
             "type": "string",
             "value": {
@@ -19,7 +19,7 @@
         },
         "label": {
             "description": {
-                "en": "Display label for the item (required if icon is not provided)"
+                "en": "Display label for item (required if icon is not provided)"
             },
             "type": "string",
             "value": {
@@ -29,7 +29,7 @@
         },
         "icon": {
             "description": {
-                "en": "Icon for the item, from Lucide's icon set (required if label is not provided)"
+                "en": "Icon for item, from Lucide's icon set (required if label is not provided)"
             },
             "type": "string",
             "value": {
@@ -49,7 +49,7 @@
         },
         "pos": {
             "description": {
-                "en": "Position in the toolbar to put the item; default = end"
+                "en": "Position in toolbar to insert the item; default = end"
             },
             "type": "string",
             "value": {
@@ -62,7 +62,7 @@
         {
             "id": "note-toolbar:add-command",
             "description": {
-                "en": "Adds a command item to the specified toolbar"
+                "en": "Add command item to a toolbar"
             },
             "flags": {
                 "$before": ["toolbar"],
@@ -82,7 +82,7 @@
         {
             "id": "note-toolbar:add-js",
             "description": {
-                "en": "Adds a JavaScript item to the specified toolbar"
+                "en": "Add JavaScript item to a toolbar"
             },
             "flags": {
                 "$before": ["toolbar"],
@@ -92,7 +92,7 @@
         {
             "id": "note-toolbar:add-separator",
             "description": {
-                "en": "Adds a separator item to the specified toolbar"
+                "en": "Add separator item to a toolbar"
             },
             "flags": {
                 "$before": ["toolbar"],
