@@ -19,10 +19,13 @@ export default class CliManager {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
             if (!toolbar) return `Error: Toolbar not found: ${args.toolbar}`;
             const item: ToolbarItemSettings = JSON.parse(JSON.stringify(DEFAULT_ITEM_SETTINGS));
+
             const command = this.ntb.app.commands.commands[args.command];
             if (!command) return t('setting.add-item.error-invalid-command', { commandId: item.linkAttr.commandId });
             item.linkAttr.type = ItemType.Command;
             item.linkAttr.commandId = args.command;
+            // TODO: support set focus flag
+
             if (args.label || args.icon) {
                 if (args.label) item.label = args.label;
                 if (args.icon) {
@@ -32,14 +35,15 @@ export default class CliManager {
                 }
             }
             else {
-                return "Error: A label or icon must be provided.";
+                return "Error: label or icon must be provided";
             }
             if (args.tooltip) item.tooltip = args.tooltip;
-            // TODO: support set focus flag
             item.uuid = getUUID();
+
             toolbar.items.push(item);
             toolbar.updated = new Date().toISOString();
             await this.ntb.settingsManager.save();
+
             return 'Command item added successfully';
         },
         'note-toolbar:add-javascript': async (args) => {
