@@ -47,38 +47,9 @@ export default class CliManager {
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
-
+    
     /**
-     * Defines the CLI command handlers, used in register().
-     */
-    cliHandlers: Record<string, CliHandler> = {
-        // TODO: support adding items from Gallery
-        'note-toolbar:add-command': async (args: CliData) => {
-            const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
-            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
-            const item = this.ntb.settingsManager.getDefaultItem(ItemType.Command);
-
-            const command = this.ntb.app.commands.commands[args.command];
-            if (!command) return t('cli.error-invalid-command', { commandId: args.command });
-            item.linkAttr.commandId = args.command;
-            // TODO: support set focus flag
-
-            const labelIconTooltipError = this.applyLabelIconTooltip(item, args);
-            if (labelIconTooltipError) return labelIconTooltipError;
-
-            const position = args.pos ? parseInt(args.pos) : undefined;
-            await this.ntb.settingsManager.addToolbarItem(toolbar, item, position);
-            return 'Command item added successfully';
-        },
-        'note-toolbar:add-javascript': async (args: CliData) => {
-            const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
-            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
-            return 'add-script is not yet implemented';
-        }
-    };
-
-    /**
-     * Register the plugin's CLI commands. Called from plugin's `onLayoutReady()`.
+     * Register the plugin's CLI commands, as defined in `cli.json`. Called from plugin's `onLayoutReady()`.
      */
     register(): void {
 
@@ -121,6 +92,59 @@ export default class CliManager {
             this.ntb.registerCliHandler(cmd.id, cmd.description, cmd.flags, cmd.handler);
         }
 
+    }
+
+	/*************************************************************************
+	 * HANDLERS
+	 *************************************************************************/
+
+    /**
+     * Defines the CLI command handlers, used in register().
+     */
+    cliHandlers: Record<string, CliHandler> = {
+        // TODO: support adding items from Gallery
+        'note-toolbar:add-command': async (args: CliData) => {
+            return this.addItemHandler(args, ItemType.Command, (item) => {
+                const command = this.ntb.app.commands.commands[args.command];
+                if (!command) return t('cli.error-invalid-command', { commandId: args.command });
+                item.linkAttr.commandId = args.command;
+            });
+        },
+        'note-toolbar:add-javascript': async (args: CliData) => {
+            return this.addItemHandler(args, ItemType.JavaScript, (item) => {
+                // TODO: add JavaScript item logic
+            });
+        }
+    };
+
+    /**
+     * Sets up a new item for `add-*` commands based on the CLI args, and adds it to the specified toolbar.
+     * @param args CLI arguments
+     * @param itemType ItemType of item to add
+     * @param populateItem callback specific to the type of item being added, responsible for populating the item with the necessary params based on the CLI args; should return an error string if validation fails, or void if successful.
+     * @returns success or error message
+     */
+    private async addItemHandler(
+        args: CliData, 
+        itemType: ItemType, 
+        populateItem: (item: ToolbarItemSettings) => string | void
+    ): Promise<string> {
+        // get the toolbar and create a default item
+        const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
+        if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
+        const item = this.ntb.settingsManager.getDefaultItem(itemType);
+        // execute the type-specific population logic
+        const itemError = populateItem(item);
+        if (itemError) return itemError;
+        // apply the label, icon, and tooltip
+        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(itemType)) {
+            const labelIconTooltipError = this.applyLabelIconTooltip(item, args);
+            if (labelIconTooltipError) return labelIconTooltipError;
+        }
+        // add the item to the toolbar
+        const position = args.pos ? parseInt(args.pos) : undefined;
+        await this.ntb.settingsManager.addToolbarItem(toolbar, item, position);
+        return t('cli.success-item-added', { toolbar: toolbar.name });
     }
 
 	/*************************************************************************

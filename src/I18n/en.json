@@ -135,7 +135,8 @@
         "error-invalid-command": "Error: Command does not exist: {{commandId}}",
         "error-invalid-icon": "Error: Invalid icon name: {{iconId}}",
         "error-invalid-toolbar": "Error: Toolbar not found: {{toolbar}}",
-        "error-label-or-icon-required": "Error: A value for label or icon is required"
+        "error-label-or-icon-required": "Error: A value for label or icon is required",
+        "success-item-added": "Success: Item added to {{toolbar}}"
     },
     "command": {
         "copy-command-notice": "Command copied to clipboard",
