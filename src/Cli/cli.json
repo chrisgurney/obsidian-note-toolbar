@@ -6,6 +6,48 @@
     "heading": {
         "en": "Note Toolbar CLI actions:"
     },
+    "commonFlags": {
+        "toolbar": {
+            "description": {
+                "en": "Name or ID of the toolbar to add the item to."
+            },
+            "type": "string",
+            "value": {
+                "en": "<nameOrId>"
+            },
+            "required": true
+        },
+        "label": {
+            "description": {
+                "en": "Display label for the item. Required if icon is not provided."
+            },
+            "type": "string",
+            "value": {
+                "en": "<label>"
+            },
+            "required": false
+        },
+        "icon": {
+            "description": {
+                "en": "Icon for the item, from Lucide's icon set. Required if label is not provided."
+            },
+            "type": "string",
+            "value": {
+                "en": "<iconName>"
+            },
+            "required": false
+        },
+        "tooltip": {
+            "description": {
+                "en": "Tooltip text."
+            },
+            "type": "string",
+            "value": {
+                "en": "<tooltip>"
+            },
+            "required": false
+        }
+    },
     "actions": [
         {
             "id": "note-toolbar:add-command",
@@ -13,16 +55,8 @@
                 "en": "Adds a command item to the specified toolbar."
             },
             "flags": {
-                "toolbar": {
-                    "description": {
-                        "en": "Name or ID of the toolbar to add the item to"
-                    },
-                    "type": "string",
-                    "value": {
-                        "en": "<nameOrId>"
-                    },
-                    "required": true
-                },
+                "$before": ["toolbar"],
+                "$after": ["label", "icon", "tooltip"],
                 "command": {
                     "description": {
                         "en": "Obsidian command ID (e.g. editor:toggle-bold)"
@@ -32,27 +66,6 @@
                         "en": "<commandId>"
                     },
                     "required": true
-                },
-                "label": {
-                    "description": {
-                        "en": "Display label for the item."
-                    },
-                    "type": "string",
-                    "required": false
-                },
-                "icon": {
-                    "description": {
-                        "en": "Lucide icon name."
-                    },
-                    "type": "string",
-                    "required": false
-                },
-                "tooltip": {
-                    "description": {
-                        "en": "Tooltip text. Defaults to label if omitted."
-                    },
-                    "type": "string",
-                    "required": false
                 }
             }
         },
