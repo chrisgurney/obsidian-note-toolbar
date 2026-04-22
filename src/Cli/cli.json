@@ -9,7 +9,7 @@
     "commonFlags": {
         "toolbar": {
             "description": {
-                "en": "Name or ID of toolbar to add item to"
+                "en": "Toolbar name or ID to add item to"
             },
             "type": "string",
             "value": {
@@ -19,7 +19,7 @@
         },
         "label": {
             "description": {
-                "en": "Display label for item (required if icon is not provided)"
+                "en": "Item label (required if icon is not provided)"
             },
             "type": "string",
             "value": {
@@ -29,7 +29,7 @@
         },
         "icon": {
             "description": {
-                "en": "Icon for item, from Lucide's icon set (required if label is not provided)"
+                "en": "Item icon, from Lucide's icon set (required if label is not provided)"
             },
             "type": "string",
             "value": {
@@ -39,7 +39,7 @@
         },
         "tooltip": {
             "description": {
-                "en": "Tooltip text."
+                "en": "Item tooltip"
             },
             "type": "string",
             "value": {
@@ -49,7 +49,7 @@
         },
         "pos": {
             "description": {
-                "en": "Position in toolbar to insert the item; default = end"
+                "en": "Item position in toolbar; default = end"
             },
             "type": "string",
             "value": {
@@ -86,7 +86,37 @@
             },
             "flags": {
                 "$before": ["toolbar"],
-                "$after": ["label", "icon", "tooltip", "pos"]
+                "$after": ["label", "icon", "tooltip", "pos"],
+                "code": {
+                    "description": {
+                        "en": "JavaScript code to execute (required if file is not provided)"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<code>"
+                    },
+                    "required": false
+                },
+                "file": {
+                    "description": {
+                        "en": "Path to JavaScript file to execute (required if code is not provided)"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<filePath>"
+                    },
+                    "required": false
+                },
+                "args": {
+                    "description": {
+                        "en": "Comma-separated 'name: value' format, with string values in quotes"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<args>"
+                    },
+                    "required": false
+                }
             }
         },
         {
