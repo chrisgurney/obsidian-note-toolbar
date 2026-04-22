@@ -539,8 +539,8 @@ export default class SettingsUIUtils {
 		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				fromToolbar.items.remove(item);
-				toToolbar.items.push(item);
-				await this.ntb.settingsManager.save();
+				fromToolbar.updated = new Date().toISOString();
+				this.ntb.settingsManager.addToolbarItem(toToolbar, item);
 				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
 				await callback();
 			}

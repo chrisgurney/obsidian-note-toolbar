@@ -529,14 +529,8 @@ export default class ItemListUi {
         }
 
         // create the new item, with the given type
-        let newToolbarItem: ToolbarItemSettings = {
-            ...DEFAULT_ITEM_SETTINGS,
-            uuid: getUUID(),
-            linkAttr: { ...DEFAULT_ITEM_SETTINGS.linkAttr, type: itemType },
-        }
-        this.toolbar.items.push(newToolbarItem);
-        this.toolbar.updated = new Date().toISOString();
-        await this.ntb.settingsManager.save();
+        let newToolbarItem = this.ntb.settingsManager.getDefaultItem(itemType);
+        await this.ntb.settingsManager.addToolbarItem(this.toolbar, newToolbarItem);
 
         // show the modal on phones and return
         if (Platform.isPhone) {

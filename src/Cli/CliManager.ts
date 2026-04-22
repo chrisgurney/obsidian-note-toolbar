@@ -56,13 +56,13 @@ export default class CliManager {
         'note-toolbar:add-command': async (args) => {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
             if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
-            const item: ToolbarItemSettings = JSON.parse(JSON.stringify(DEFAULT_ITEM_SETTINGS));
+            const item = this.ntb.settingsManager.getDefaultItem(ItemType.Command);
 
             const command = this.ntb.app.commands.commands[args.command];
             if (!command) return t('cli.error-invalid-command', { commandId: args.command });
-            item.linkAttr.type = ItemType.Command;
-            item.linkAttr.commandId = args.command;
+            item.linkAttr.commandId = args.command;            
             // TODO: support set focus flag
+
             if (this.hasValue(args.label) || this.hasValue(args.icon)) {
                 if (args.label) item.label = args.label;
                 if (args.icon) {
@@ -75,12 +75,8 @@ export default class CliManager {
                 return t('cli.error-label-or-icon-required');
             }
             if (args.tooltip) item.tooltip = args.tooltip;
-            item.uuid = getUUID();
 
-            toolbar.items.push(item);
-            toolbar.updated = new Date().toISOString();
-            await this.ntb.settingsManager.save();
-
+            this.ntb.settingsManager.addToolbarItem(toolbar, item);
             return 'Command item added successfully';
         },
         'note-toolbar:add-javascript': async (args) => {
