@@ -60,13 +60,14 @@ export default class CliManager {
 
             const command = this.ntb.app.commands.commands[args.command];
             if (!command) return t('cli.error-invalid-command', { commandId: args.command });
-            item.linkAttr.commandId = args.command;            
+            item.linkAttr.commandId = args.command;
             // TODO: support set focus flag
 
             const labelIconTooltipError = this.applyLabelIconTooltip(item, args);
             if (labelIconTooltipError) return labelIconTooltipError;
 
-            await this.ntb.settingsManager.addToolbarItem(toolbar, item);
+            const position = args.pos ? parseInt(args.pos) : undefined;
+            await this.ntb.settingsManager.addToolbarItem(toolbar, item, position);
             return 'Command item added successfully';
         },
         'note-toolbar:add-javascript': async (args: CliData) => {
