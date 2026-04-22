@@ -88,6 +88,16 @@
                 "$before": ["toolbar"],
                 "$after": ["label", "icon", "tooltip", "pos"]
             }
+        },
+        {
+            "id": "note-toolbar:add-separator",
+            "description": {
+                "en": "Adds a separator item to the specified toolbar"
+            },
+            "flags": {
+                "$before": ["toolbar"],
+                "$after": ["pos"]
+            }
         }
     ]
 }

@@ -114,6 +114,9 @@ export default class CliManager {
             return this.addItemHandler(args, ItemType.JavaScript, (item) => {
                 // TODO: add JavaScript item logic - set the scriptConfig on the item based on CLI args, and validate the config
             });
+        },
+        'note-toolbar:add-separator': async (args: CliData) => {
+            return this.addItemHandler(args, ItemType.Separator, (item) => {});
         }
     };
 
