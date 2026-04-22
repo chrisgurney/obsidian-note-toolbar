@@ -1,7 +1,7 @@
 {
     "id": "note-toolbar",
     "description": {
-        "en": "Displays Note Toolbar CLI help."
+        "en": "Displays Note Toolbar CLI help"
     },
     "heading": {
         "en": "Note Toolbar CLI actions:"
@@ -9,7 +9,7 @@
     "commonFlags": {
         "toolbar": {
             "description": {
-                "en": "Name or ID of the toolbar to add the item to."
+                "en": "Name or ID of toolbar to add the item to"
             },
             "type": "string",
             "value": {
@@ -19,7 +19,7 @@
         },
         "label": {
             "description": {
-                "en": "Display label for the item. Required if icon is not provided."
+                "en": "Display label for the item (required if icon is not provided)"
             },
             "type": "string",
             "value": {
@@ -29,7 +29,7 @@
         },
         "icon": {
             "description": {
-                "en": "Icon for the item, from Lucide's icon set. Required if label is not provided."
+                "en": "Icon for the item, from Lucide's icon set (required if label is not provided)"
             },
             "type": "string",
             "value": {
@@ -49,7 +49,7 @@
         },
         "pos": {
             "description": {
-                "en": "Position of the item in the toolbar. Defaults to the end."
+                "en": "Position in the toolbar to put the item; default = end"
             },
             "type": "string",
             "value": {
@@ -62,14 +62,14 @@
         {
             "id": "note-toolbar:add-command",
             "description": {
-                "en": "Adds a command item to the specified toolbar."
+                "en": "Adds a command item to the specified toolbar"
             },
             "flags": {
                 "$before": ["toolbar"],
                 "$after": ["label", "icon", "tooltip", "pos"],
                 "command": {
                     "description": {
-                        "en": "Obsidian command ID (e.g. editor:toggle-bold)"
+                        "en": "Obsidian command ID (eg: editor:toggle-bold)"
                     },
                     "type": "string",
                     "value": {
@@ -80,12 +80,13 @@
             }
         },
         {
-            "id": "note-toolbar:add-javascript",
+            "id": "note-toolbar:add-js",
             "description": {
-                "en": "Adds a JavaScript item to the specified toolbar."
+                "en": "Adds a JavaScript item to the specified toolbar"
             },
             "flags": {
-                "$before": ["toolbar"]
+                "$before": ["toolbar"],
+                "$after": ["label", "icon", "tooltip", "pos"]
             }
         }
     ]

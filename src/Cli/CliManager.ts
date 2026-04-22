@@ -64,7 +64,7 @@ export default class CliManager {
             handler: async () => {
                 const heading = tr(this.cliDef.heading, language) ?? '';
                 const actions = this.cliDef.actions
-                    .map((cmd: any) => `\x1b[90m${cmd.id}\x1b[0m\t\x1b[32m${tr(cmd.description, language) ?? ''}\x1b[0m`)
+                    .map((cmd: any) => `\x1b[90m${cmd.id.padEnd(36)}\x1b[0m\x1b[32m${tr(cmd.description, language) ?? ''}\x1b[0m`)
                     .join('\n');
                 return `${heading}\n\n${actions}`;
             }
@@ -110,9 +110,9 @@ export default class CliManager {
                 item.linkAttr.commandId = args.command;
             });
         },
-        'note-toolbar:add-javascript': async (args: CliData) => {
+        'note-toolbar:add-js': async (args: CliData) => {
             return this.addItemHandler(args, ItemType.JavaScript, (item) => {
-                // TODO: add JavaScript item logic
+                // TODO: add JavaScript item logic - set the scriptConfig on the item based on CLI args, and validate the config
             });
         }
     };
