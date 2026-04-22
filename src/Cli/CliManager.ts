@@ -141,7 +141,7 @@ export default class CliManager {
         if (itemError) return itemError;
         // apply the label, icon, and tooltip
         if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(itemType)) {
-            const labelIconTooltipError = this.applyLabelIconTooltip(item, args);
+            const labelIconTooltipError = this.addItemArgs(item, args);
             if (labelIconTooltipError) return labelIconTooltipError;
         }
         // add the item to the toolbar
@@ -158,7 +158,7 @@ export default class CliManager {
      * Sets the label, icon, and tooltip on an item from CLI args.
      * @returns an error string if validation fails, otherwise undefined
      */
-    private applyLabelIconTooltip(item: ToolbarItemSettings, args: CliData): string | undefined {
+    private addItemArgs(item: ToolbarItemSettings, args: CliData): string | undefined {
         if (this.hasValue(args.label) || this.hasValue(args.icon)) {
             if (args.label) item.label = args.label;
             if (args.icon) {
