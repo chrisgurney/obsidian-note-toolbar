@@ -104,7 +104,7 @@ export default class CliManager {
             .map((action: CliAction) => {
                 const handler = this.cliHandlers[action.id];
                 if (!handler) {
-                    this.ntb.debug(`⚠️ CliManager: No handler registered for command "${action.id}"`);
+                    this.ntb.error(`CliManager: No handler registered for command "${action.id}"`);
                     return null;
                 }
                 return {
@@ -163,7 +163,7 @@ export default class CliManager {
         const resolveShared = (keys: string[]) =>
             keys.reduce((acc, key) => {
                 const flag = this.cliDef.commonFlags[key];
-                if (!flag) this.ntb.debug(`⚠️ CliManager: Unknown shared flag: "${key}"`);
+                if (!flag) this.ntb.error(`CliManager: Unknown shared flag: "${key}" when reading cli.json for command "${this.cliDef.id}"`);
                 else acc[key] = flag;
                 return acc;
             }, {} as Record<string, CliLocalizedFlag>);
