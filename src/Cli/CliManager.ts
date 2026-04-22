@@ -63,8 +63,7 @@ export default class CliManager {
             item.linkAttr.type = ItemType.Command;
             item.linkAttr.commandId = args.command;
             // TODO: support set focus flag
-
-            if (args.label || args.icon) {
+            if (this.hasValue(args.label) || this.hasValue(args.icon)) {
                 if (args.label) item.label = args.label;
                 if (args.icon) {
                     const icon = getIcon(args.icon);
@@ -73,7 +72,7 @@ export default class CliManager {
                 }
             }
             else {
-                return "Error: label or icon must be provided";
+                return t('cli.error-label-or-icon-required');
             }
             if (args.tooltip) item.tooltip = args.tooltip;
             item.uuid = getUUID();
@@ -140,7 +139,7 @@ export default class CliManager {
     /**
      * Gets the localized description for the CLI command flags.
      */
-    toCliFlags(flags: CliActionFlags, language: string): CliFlags {
+    private toCliFlags(flags: CliActionFlags, language: string): CliFlags {
 
         const resolveShared = (keys: string[]) =>
             keys.reduce((acc, key) => {
@@ -168,6 +167,15 @@ export default class CliManager {
                 }
             ])
         );
+    }
+
+    /**
+     * Checks if a CLI flag value is provided and not just the string "true".
+     * @param arg argument to check
+     * @returns true if the argument has a meaningful value, false if it's undefined or the string "true"
+     */
+    private hasValue(arg: string | undefined): arg is string {
+        return !!arg && arg !== 'true';
     }
 
 }
