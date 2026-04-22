@@ -163,7 +163,7 @@ export default class CliManager {
         const resolveShared = (keys: string[]) =>
             keys.reduce((acc, key) => {
                 const flag = this.cliDef.commonFlags[key];
-                if (!flag) this.ntb.error(`CliManager: Unknown shared flag: "${key}" when reading cli.json for command "${this.cliDef.id}"`);
+                if (!flag) this.ntb.error(`CliManager: Unknown shared flag: "${key}" when reading cli.json`);
                 else acc[key] = flag;
                 return acc;
             }, {} as Record<string, CliLocalizedFlag>);
