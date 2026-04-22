@@ -151,14 +151,7 @@ export default class CliManager {
             }, {} as Record<string, CliLocalizedFlag>);
 
         const { $before = [], $after = [], ...ownFlags } = flags;
-
-        const resolvedOwn = Object.fromEntries(
-            Object.entries(ownFlags)
-                .filter((entry): entry is [string, CliLocalizedFlag] =>
-                    entry[1] !== null && typeof entry[1] === 'object' && !Array.isArray(entry[1]) && 'description' in entry[1]
-                )
-        );
-
+        const resolvedOwn = ownFlags as Record<string, CliLocalizedFlag>;
         const orderedFlags: Record<string, CliLocalizedFlag> = {
             ...resolveShared($before as string[]),
             ...resolvedOwn,
