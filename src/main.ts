@@ -69,6 +69,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	debug!: (...args: any[]) => void;
 	debugGroup!: (...args: any[]) => void;
 	debugGroupEnd!: (...args: any[]) => void;
+	error!: (...args: any[]) => void;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -214,12 +215,14 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.debug = console.log.bind(console);
 			this.debugGroup = console.group.bind(console);
 			this.debugGroupEnd = console.groupEnd.bind(console);
+			this.error = console.error.bind(console);
 		}
 		// otherwise do nothing when debug functions are called
 		else {
 			this.debug = (...args: any[]) => {};
 			this.debugGroup = (...args: any[]) => {};
 			this.debugGroupEnd = (...args: any[]) => {};
+			this.error = (...args: any[]) => {};
 		}
 		/* eslint-enable no-console */
 	}
