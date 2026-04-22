@@ -1,6 +1,6 @@
 import cliDefJson from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
-import { CliFlags, CliHandler, getIcon } from "obsidian";
+import { CliData, CliFlags, CliHandler, getIcon } from "obsidian";
 import { DEFAULT_ITEM_SETTINGS, ItemType, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { getUUID, tr } from "Utils/Utils";
 
@@ -53,7 +53,7 @@ export default class CliManager {
      */
     cliHandlers: Record<string, CliHandler> = {
         // TODO: support adding items from Gallery
-        'note-toolbar:add-command': async (args) => {
+        'note-toolbar:add-command': async (args: CliData) => {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
             if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
             const item = this.ntb.settingsManager.getDefaultItem(ItemType.Command);
@@ -63,23 +63,13 @@ export default class CliManager {
             item.linkAttr.commandId = args.command;            
             // TODO: support set focus flag
 
-            if (this.hasValue(args.label) || this.hasValue(args.icon)) {
-                if (args.label) item.label = args.label;
-                if (args.icon) {
-                    const icon = getIcon(args.icon);
-                    if (!icon) return t('cli.error-invalid-icon', { iconId: args.icon })
-                    item.icon = args.icon;
-                }
-            }
-            else {
-                return t('cli.error-label-or-icon-required');
-            }
-            if (args.tooltip) item.tooltip = args.tooltip;
+            const labelIconTooltipError = this.applyLabelIconTooltip(item, args);
+            if (labelIconTooltipError) return labelIconTooltipError;
 
-            this.ntb.settingsManager.addToolbarItem(toolbar, item);
+            await this.ntb.settingsManager.addToolbarItem(toolbar, item);
             return 'Command item added successfully';
         },
-        'note-toolbar:add-javascript': async (args) => {
+        'note-toolbar:add-javascript': async (args: CliData) => {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
             if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
             return 'add-script is not yet implemented';
@@ -132,6 +122,38 @@ export default class CliManager {
 
     }
 
+	/*************************************************************************
+	 * HELPERS
+	 *************************************************************************/
+
+    /**
+     * Sets the label, icon, and tooltip on an item from CLI args.
+     * @returns an error string if validation fails, otherwise undefined
+     */
+    private applyLabelIconTooltip(item: ToolbarItemSettings, args: CliData): string | undefined {
+        if (this.hasValue(args.label) || this.hasValue(args.icon)) {
+            if (args.label) item.label = args.label;
+            if (args.icon) {
+                const icon = getIcon(args.icon);
+                if (!icon) return t('cli.error-invalid-icon', { iconId: args.icon });
+                item.icon = args.icon;
+            }
+        }
+        else {
+            return t('cli.error-label-or-icon-required');
+        }
+        if (args.tooltip) item.tooltip = args.tooltip;
+    }
+
+    /**
+     * Checks if a CLI flag value is provided and not just the string "true".
+     * @param arg argument to check
+     * @returns true if the argument has a meaningful value, false if it's undefined or the string "true"
+     */
+    private hasValue(arg: string | undefined): arg is string {
+        return !!arg && arg !== 'true';
+    }
+
     /**
      * Gets the localized description for the CLI command flags.
      */
@@ -163,15 +185,6 @@ export default class CliManager {
                 }
             ])
         );
-    }
-
-    /**
-     * Checks if a CLI flag value is provided and not just the string "true".
-     * @param arg argument to check
-     * @returns true if the argument has a meaningful value, false if it's undefined or the string "true"
-     */
-    private hasValue(arg: string | undefined): arg is string {
-        return !!arg && arg !== 'true';
     }
 
 }
