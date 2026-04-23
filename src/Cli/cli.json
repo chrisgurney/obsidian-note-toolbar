@@ -74,11 +74,11 @@
                 "en": "Add command item to a toolbar"
             },
             "flags": {
-                "$before": ["toolbar"],
-                "$after": ["label", "icon", "tooltip", "pos"],
+                "$before": ["toolbar", "label", "icon"],
+                "$after": ["tooltip", "pos"],
                 "command": {
                     "description": {
-                        "en": "Obsidian command ID (eg: editor:toggle-bold)"
+                        "en": "Obsidian command ID (e.g. editor:toggle-bold)"
                     },
                     "type": "string",
                     "value": {
@@ -94,8 +94,8 @@
                 "en": "Add JavaScript item to a toolbar"
             },
             "flags": {
-                "$before": ["toolbar"],
-                "$after": ["label", "icon", "tooltip", "pos"],
+                "$before": ["toolbar", "label", "icon"],
+                "$after": ["tooltip", "pos"],
                 "code": {
                     "description": {
                         "en": "JavaScript code to execute (required if file is not provided)"
