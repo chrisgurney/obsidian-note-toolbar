@@ -65,6 +65,7 @@
             "description": {
                 "en": "Add a line break to a toolbar"
             },
+            "docs": "Adds a [break](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
             "flags": {
                 "$before": ["toolbar", "pos"]
             }
@@ -146,6 +147,7 @@
             "description": {
                 "en": "Add a separator to a toolbar"
             },
+            "docs": "Adds a [separator](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
             "flags": {
                 "$before": ["toolbar", "pos"]
             }
@@ -155,6 +157,7 @@
             "description": {
                 "en": "Add a spreader to a toolbar"
             },
+            "docs": "Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
             "flags": {
                 "$before": ["toolbar", "pos"]
             }

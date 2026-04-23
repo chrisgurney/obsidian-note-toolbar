@@ -4,6 +4,8 @@ Lists all Note Toolbar CLI actions.
 
 ## `note-toolbar:add-break`
 
+Adds a [break](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
+
 ```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
@@ -36,12 +38,16 @@ pos=<n>             # Item position in toolbar; default = end
 
 ## `note-toolbar:add-sep`
 
+Adds a [separator](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
+
 ```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
 
 ## `note-toolbar:add-spread`
+
+Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
 
 ```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
