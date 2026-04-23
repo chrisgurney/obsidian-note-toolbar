@@ -4,14 +4,14 @@ Lists all Note Toolbar CLI actions.
 
 ## `note-toolbar:add-break`
 
-```
+```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
 
 ## `note-toolbar:add-command`
 
-```
+```sh
 toolbar=<nameOrId>   # Toolbar name or ID to add item to
 label=<label>        # Item label (required if icon is not provided)
 icon=<iconName>      # Item icon, from Lucide's icon set (required if label is not provided)
@@ -22,7 +22,7 @@ pos=<n>              # Item position in toolbar; default = end
 
 ## `note-toolbar:add-js`
 
-```
+```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
 label=<label>       # Item label (required if icon is not provided)
 icon=<iconName>     # Item icon, from Lucide's icon set (required if label is not provided)
@@ -36,14 +36,14 @@ pos=<n>             # Item position in toolbar; default = end
 
 ## `note-toolbar:add-sep`
 
-```
+```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
 
 ## `note-toolbar:add-spread`
 
-```
+```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```

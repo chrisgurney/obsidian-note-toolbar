@@ -23,7 +23,7 @@ function flagsBlock(flags, commonFlags) {
     if (!rows.length) return '';
 
     const colWidth = Math.max(...rows.map(([col]) => col.length));
-    let block = '```\n';
+    let block = '```sh\n';
     for (const [col, desc] of rows) {
         block += `${col.padEnd(colWidth)}  # ${desc}\n`;
     }
