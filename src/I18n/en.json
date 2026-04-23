@@ -132,12 +132,14 @@
         }
     },
     "cli": {
+        "error-file-not-found": "Error: File not found: {{file}}",
+        "error-path-not-found": "Error: Path not found: {{path}}",
         "error-invalid-command": "Error: Command does not exist: {{commandId}}",
         "error-invalid-icon": "Error: Invalid icon name: {{iconId}}",
         "error-invalid-toolbar": "Error: Toolbar not found: {{toolbar}}",
-        "error-js-code-or-file-required": "Error: A value for code or file is required",
+        "error-js-code-or-file-required": "Error: A value for code or file/path is required",
         "error-label-or-icon-required": "Error: A value for label or icon is required",
-        "success-item-added": "Success: Item added to {{toolbar}}"
+        "success-item-added": "Success: Item added to toolbar: {{toolbar}}"
     },
     "command": {
         "copy-command-notice": "Command copied to clipboard",

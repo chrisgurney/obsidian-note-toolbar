@@ -108,11 +108,23 @@
                 },
                 "file": {
                     "description": {
-                        "en": "Path to JavaScript file to execute (required if code is not provided)"
+                        "en": "Filename to execute (file or path required if code is not provided)"
                     },
+                    "notes": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
                     "type": "string",
                     "value": {
-                        "en": "<filePath>"
+                        "en": "<file>"
+                    },
+                    "required": false
+                },
+                "path": {
+                    "description": {
+                        "en": "Filename with path to execute (file or path required if code is not provided)."
+                    },
+                    "notes": "Requires the exact path from the vault root, e.g. folder/script.js",
+                    "type": "string",
+                    "value": {
+                        "en": "<path>"
                     },
                     "required": false
                 },

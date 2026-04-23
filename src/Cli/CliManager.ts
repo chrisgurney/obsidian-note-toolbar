@@ -1,6 +1,6 @@
 import cliDefJson from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
-import { CliData, CliFlags, CliHandler, getIcon } from "obsidian";
+import { CliData, CliFlags, CliHandler, getIcon, normalizePath, TFile } from "obsidian";
 import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { tr } from "Utils/Utils";
 
@@ -25,9 +25,9 @@ interface CliAction {
     description: CliLocalizedString;
     flags: CliActionFlags;
     since?: string;
-    notes?: CliLocalizedString;
+    notes?: string;
     examples?: {
-        description: CliLocalizedString;
+        description: string;
         command: string;
     }[];
 }
@@ -115,7 +115,21 @@ export default class CliManager {
         },
         'note-toolbar:add-js': async (args: CliData) => {
             return this.addItemHandler(args, ItemType.JavaScript, (item) => {
-                // TODO: add JavaScript item logic - set the scriptConfig on the item based on CLI args, and validate the config
+                if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
+                    const fileResult = this.resolveFileArgs(args.file, args.path);
+                    if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+                    const file = fileResult;
+                    let scriptConfig: ScriptConfig = {
+                        pluginFunction: this.hasValue(args.code) ? 'evaluate' : 'exec',
+                        expression: args.code,
+                        sourceFile: file?.path
+                    } as ScriptConfig;
+                    if (args.args) scriptConfig.sourceArgs = args.args;
+                    item.scriptConfig = scriptConfig;
+                }
+                else {
+                    return t('cli.error-js-code-or-file-required');
+                }
             });
         },
         'note-toolbar:add-sep': async (args: CliData) => {
@@ -186,6 +200,25 @@ export default class CliManager {
      */
     private hasValue(arg: string | undefined): arg is string {
         return !!arg && arg !== 'true';
+    }
+
+    /**
+     * Checks if the given file, or path to a file, exists and returns the corresponding TFile, null, or an error string.
+     * @returns TFile, null, or an error string
+     */
+    private resolveFileArgs(fileArg?: string, pathArg?: string): TFile | null | string {
+        if (this.hasValue(fileArg)) {
+            const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
+            const file = this.ntb.app.metadataCache.getFirstLinkpathDest(fileArg!, activeFilePath);
+            if (!file) return t('cli.error-file-not-found', { file: fileArg });
+            return file;
+        }
+        if (this.hasValue(pathArg)) {
+            const file = this.ntb.app.vault.getFileByPath(normalizePath(pathArg!));
+            if (!file) return t('cli.error-path-not-found', { path: pathArg });
+            return file;
+        }
+        return null;
     }
 
     /**
