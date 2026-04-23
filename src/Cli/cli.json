@@ -85,6 +85,7 @@
                 "en": "Add command item to a toolbar"
             },
             "docs": "Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.",
+            "examples": "# Add a bold toggle to an existing toolbar\nnote-toolbar:add-command toolbar=\"Formatting Tools\" icon=bold command=\"editor:toggle-bold\"",
             "flags": {
                 "$before": ["toolbar", "label", "icon"],
                 "$after": ["tooltip", "pos"],

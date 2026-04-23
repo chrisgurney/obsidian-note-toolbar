@@ -54,6 +54,13 @@ tooltip=<tooltip>    # Item tooltip
 pos=<n>              # Item position in toolbar; default = end
 ```
 
+#### Examples
+
+```sh
+# Add a bold toggle to an existing toolbar
+note-toolbar:add-command toolbar="Formatting Tools" icon=bold command="editor:toggle-bold"
+```
+
 ### `note-toolbar:add-js`
 
 Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.

@@ -45,6 +45,11 @@ export function cliDocs(cliJsonPath, outputFile) {
             markdown += `### \`${action.id}\`\n\n`;
             if (action.docs) markdown += `${action.docs}\n\n`;
             markdown += flagsBlock(action.flags ?? {}, cli.commonFlags ?? {});
+            if (action.examples) {
+                markdown += '#### Examples\n\n```sh\n';
+                markdown += `${action.examples}\n`;
+                markdown += '```\n\n';
+            }
         }
     }
 

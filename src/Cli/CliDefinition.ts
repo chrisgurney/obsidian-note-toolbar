@@ -26,10 +26,7 @@ interface CliAction {
     flags: CliActionFlags;
     since?: string;
     docs?: string;
-    examples?: {
-        docs?: string;
-        command: string;
-    }[];
+    examples?: string;
 }
 
 interface CliDef {
