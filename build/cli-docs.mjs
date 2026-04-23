@@ -35,11 +35,23 @@ export function cliDocs(cliJsonPath, outputFile) {
     const cli = JSON.parse(fs.readFileSync(cliJsonPath, 'utf-8'));
 
     let markdown = '';
-    markdown += `## \`${cli.id}\`\n\n`;
-    if (cli.docs) markdown += `${cli.docs}\n\n`;
 
-    for (const action of cli.actions) {
-        markdown += `## \`${action.id}\`\n\n`;
+    // display actions by category
+    for (const category of cli.categories ?? []) {
+        markdown += `## ${category.heading}\n\n`;
+         if (category.docs) markdown += `${category.docs}\n\n`;
+        const actions = cli.actions.filter(a => a.category === category.id);
+        for (const action of actions) {
+            markdown += `### \`${action.id}\`\n\n`;
+            if (action.docs) markdown += `${action.docs}\n\n`;
+            markdown += flagsBlock(action.flags ?? {}, cli.commonFlags ?? {});
+        }
+    }
+
+    // actions with no category (should not be any, but just in case)
+    const uncategorized = cli.actions.filter(a => !a.category);
+    for (const action of uncategorized) {
+        markdown += `### \`${action.id}\`\n\n`;
         if (action.docs) markdown += `${action.docs}\n\n`;
         markdown += flagsBlock(action.flags ?? {}, cli.commonFlags ?? {});
     }

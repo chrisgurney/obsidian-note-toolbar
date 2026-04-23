@@ -1,8 +1,8 @@
-## `note-toolbar`
+## Add items to a toolbar
 
-Lists all Note Toolbar CLI actions.
+Commands for adding items to a toolbar.
 
-## `note-toolbar:add-break`
+### `note-toolbar:add-break`
 
 Adds a [break](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
 
@@ -11,7 +11,7 @@ toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
 
-## `note-toolbar:add-command`
+### `note-toolbar:add-command`
 
 Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.
 
@@ -24,7 +24,7 @@ tooltip=<tooltip>    # Item tooltip
 pos=<n>              # Item position in toolbar; default = end
 ```
 
-## `note-toolbar:add-js`
+### `note-toolbar:add-js`
 
 Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.
 
@@ -40,7 +40,7 @@ tooltip=<tooltip>   # Item tooltip
 pos=<n>             # Item position in toolbar; default = end
 ```
 
-## `note-toolbar:add-sep`
+### `note-toolbar:add-sep`
 
 Adds a [separator](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
 
@@ -49,7 +49,7 @@ toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
 
-## `note-toolbar:add-spread`
+### `note-toolbar:add-spread`
 
 Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
 
