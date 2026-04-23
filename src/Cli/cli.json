@@ -1,59 +1,71 @@
 {
     "id": "note-toolbar",
     "description": {
-        "en": "Displays Note Toolbar CLI help"
+        "en": "Displays Note Toolbar CLI help",
+        "zh-CN": "显示 Note Toolbar CLI 帮助"
     },
     "heading": {
-        "en": "Note Toolbar CLI actions:"
+        "en": "Note Toolbar CLI actions:",
+        "zh-CN": "Note Toolbar CLI 操作："
     },
     "commonFlags": {
         "toolbar": {
             "description": {
-                "en": "Toolbar name or ID to add item to"
+                "en": "Toolbar name or ID to add item to",
+                "zh-CN": "将要添加新项目的工具栏名称或 ID"
             },
             "type": "string",
             "value": {
-                "en": "<nameOrId>"
+                "en": "<nameOrId>",
+                "zh-CN": "<名称或ID>"
             },
             "required": true
         },
         "label": {
             "description": {
-                "en": "Item label (required if icon is not provided)"
+                "en": "Item label (required if icon is not provided)",
+                "zh-CN": "项目文本（必填，除非已设置图标）"
             },
             "type": "string",
             "value": {
-                "en": "<label>"
+                "en": "<label>",
+                "zh-CN": "<标签>"
             },
             "required": false
         },
         "icon": {
             "description": {
-                "en": "Item icon, from Lucide's icon set (required if label is not provided)"
+                "en": "Item icon, from Lucide's icon set (required if label is not provided)",
+                "zh-CN": "项目图标，来自 Lucide 图标集（必填，除非已设置文本）"
             },
             "type": "string",
             "value": {
-                "en": "<iconName>"
+                "en": "<iconName>",
+                "zh-CN": "<图标名称>"
             },
             "required": false
         },
         "tooltip": {
             "description": {
-                "en": "Item tooltip"
+                "en": "Item tooltip",
+                "zh-CN": "项目提示文本"
             },
             "type": "string",
             "value": {
-                "en": "<tooltip>"
+                "en": "<tooltip>",
+                "zh-CN": "<提示文本>"
             },
             "required": false
         },
         "pos": {
             "description": {
-                "en": "Item position in toolbar; default = end"
+                "en": "Item position in toolbar; default = end",
+                "zh-CN": "项目在工具栏中的位置；默认在末尾"
             },
             "type": "string",
             "value": {
-                "en": "<n>"
+                "en": "<n>",
+                "zh-CN": "<位置序号>"
             },
             "required": false
         }
@@ -62,18 +74,21 @@
         {
             "id": "note-toolbar:add-command",
             "description": {
-                "en": "Add command item to a toolbar"
+                "en": "Add command item to a toolbar",
+                "zh-CN": "向工具栏添加命令项目"
             },
             "flags": {
                 "$before": ["toolbar"],
                 "$after": ["label", "icon", "tooltip", "pos"],
                 "command": {
                     "description": {
-                        "en": "Obsidian command ID (eg: editor:toggle-bold)"
+                        "en": "Obsidian command ID (eg: editor:toggle-bold)",
+                        "zh-CN": "Obsidian 命令 ID（例如：editor:toggle-bold）"
                     },
                     "type": "string",
                     "value": {
-                        "en": "<commandId>"
+                        "en": "<commandId>",
+                        "zh-CN": "<命令ID>"
                     },
                     "required": true
                 }
@@ -82,38 +97,45 @@
         {
             "id": "note-toolbar:add-js",
             "description": {
-                "en": "Add JavaScript item to a toolbar"
+                "en": "Add JavaScript item to a toolbar",
+                "zh-CN": "向工具栏添加 JavaScript 脚本项目"
             },
             "flags": {
                 "$before": ["toolbar"],
                 "$after": ["label", "icon", "tooltip", "pos"],
                 "code": {
                     "description": {
-                        "en": "JavaScript code to execute (required if file is not provided)"
+                        "en": "JavaScript code to execute (required if file is not provided)",
+                        "zh-CN": "要执行的 JavaScript 代码（必填，除非已提供脚本文件）"
                     },
                     "type": "string",
                     "value": {
-                        "en": "<code>"
+                        "en": "<code>",
+                        "zh-CN": "<代码>"
                     },
                     "required": false
                 },
                 "file": {
                     "description": {
-                        "en": "Path to JavaScript file to execute (required if code is not provided)"
+                        "en": "Path to JavaScript file to execute (required if code is not provided)",
+                        "zh-CN": "要执行的 JavaScript 文件路径（必填，除非已提供 JS 代码）"
                     },
                     "type": "string",
                     "value": {
-                        "en": "<filePath>"
+                        "en": "<filePath>",
+                        "zh-CN": "<文件路径>"
                     },
                     "required": false
                 },
                 "args": {
                     "description": {
-                        "en": "Comma-separated 'name: value' format, with string values in quotes"
+                        "en": "Comma-separated 'name: value' format, with string values in quotes",
+                        "zh-CN": "以英文逗号分隔的 'name: value' 格式，字符串值需放在引号中"
                     },
                     "type": "string",
                     "value": {
-                        "en": "<args>"
+                        "en": "<args>",
+                        "zh-CN": "<参数>"
                     },
                     "required": false
                 }
@@ -122,7 +144,8 @@
         {
             "id": "note-toolbar:add-separator",
             "description": {
-                "en": "Add separator item to a toolbar"
+                "en": "Add separator item to a toolbar",
+                "zh-CN": "向工具栏添加分隔符"
             },
             "flags": {
                 "$before": ["toolbar"],
