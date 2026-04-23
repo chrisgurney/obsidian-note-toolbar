@@ -137,6 +137,7 @@
         "error-invalid-command": "Error: Command does not exist: {{commandId}}",
         "error-invalid-icon": "Error: Invalid icon name: {{iconId}}",
         "error-invalid-toolbar": "Error: Toolbar not found: {{toolbar}}",
+        "error-js-code-and-file-exclusive": "Error: Provide either code or file/path",
         "error-js-code-or-file-required": "Error: A value for code or file/path is required",
         "error-label-or-icon-required": "Error: A value for label or icon is required",
         "error-script-invalid-args": "Error: Invalid script argument format: {{args}}",

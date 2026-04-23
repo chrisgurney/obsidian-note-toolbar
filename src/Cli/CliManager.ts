@@ -116,9 +116,12 @@ export default class CliManager {
         'note-toolbar:add-js': async (args: CliData) => {
             return this.addItemHandler(args, ItemType.JavaScript, (item) => {
                 if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
+                    if (this.hasValue(args.code) && (this.hasValue(args.file) || this.hasValue(args.path))) {
+                        return t('cli.error-js-code-and-file-exclusive');
+                    }
                     const fileResult = this.resolveFileArgs(args.file, args.path);
                     if (typeof fileResult === 'string') return fileResult; // error resolving file or path
-                    const file = fileResult;
+                    const file: TFile | null = fileResult;
                     let scriptConfig: ScriptConfig = {
                         pluginFunction: this.hasValue(args.code) ? 'evaluate' : 'exec',
                         expression: args.code,
@@ -207,8 +210,8 @@ export default class CliManager {
     }
 
     /**
-     * Checks if the given file, or path to a file, exists and returns the corresponding TFile, null, or an error string.
-     * @returns TFile, null, or an error string
+     * Checks if the given file, or path to a file, exists.
+     * @returns corresponding TFile, null if there's nothing to check, or an error string
      */
     private resolveFileArgs(fileArg?: string, pathArg?: string): TFile | null | string {
         if (this.hasValue(fileArg)) {
