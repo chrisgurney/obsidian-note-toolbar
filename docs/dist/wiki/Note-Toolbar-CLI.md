@@ -17,6 +17,8 @@ pos=<n>             # Item position in toolbar; default = end
 
 ## `note-toolbar:add-command`
 
+Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.
+
 ```sh
 toolbar=<nameOrId>   # Toolbar name or ID to add item to
 label=<label>        # Item label (required if icon is not provided)
@@ -27,6 +29,8 @@ pos=<n>              # Item position in toolbar; default = end
 ```
 
 ## `note-toolbar:add-js`
+
+Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.
 
 ```sh
 toolbar=<nameOrId>  # Toolbar name or ID to add item to

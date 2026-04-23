@@ -75,6 +75,7 @@
             "description": {
                 "en": "Add command item to a toolbar"
             },
+            "docs": "Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.",
             "flags": {
                 "$before": ["toolbar", "label", "icon"],
                 "$after": ["tooltip", "pos"],
@@ -95,6 +96,7 @@
             "description": {
                 "en": "Add JavaScript item to a toolbar"
             },
+            "docs": "Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.",
             "flags": {
                 "$before": ["toolbar", "label", "icon"],
                 "$after": ["tooltip", "pos"],
