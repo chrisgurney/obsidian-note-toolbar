@@ -818,6 +818,7 @@ export default class SettingsUIUtils {
 			switch(fieldType) {
 				case SettingType.Args: {
 					const parsedArgs = importArgs(itemValue);
+					this.ntb.debug('validating args:', itemValue, parsedArgs);
 					if (!parsedArgs) {
 						status = Status.Invalid;
 						statusMessage = t('adapter.error.args-format');
