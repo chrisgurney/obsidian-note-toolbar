@@ -42,28 +42,28 @@
       "scripting-disabled": "在 Note Toolbar 设置中启用脚本功能以使用此项目。"
     },
     "javascript": {
-      "eval-expr": "JavaScript表达式",
-      "eval-expr-description": "需要执行的JavaScript表达式",
-      "eval-expr-error-required": "错误：需要提供JavaScript表达式",
-      "eval-function": "执行JavaScript",
-      "exec-error-required": "错误：需要提供一个脚本文件",
-      "exec-function": "执行脚本文件",
+      "eval-expr": "JavaScript 代码",
+      "eval-expr-description": "运行的 JavaScript 代码",
+      "eval-expr-error-required": "错误：需要提供 JavaScript 代码",
+      "eval-function": "运行 JavaScript 代码",
+      "exec-error-required": "错误：需要提供一个 JavaScript 脚本文件",
+      "exec-function": "执行 JavaScript 脚本文件",
       "exec-sourcefile": "JavaScript 文件",
       "exec-sourcefile-description": "执行的 JavaScript 文件",
       "exec-sourcefile-error-required": "错误：需要提供 JavaScript 文件"
     },
     "js-engine": {
-      "eval-expr": "JavaScript 表达式",
-      "eval-expr-description": "需要执行的 JavaScript 表达式",
-      "eval-expr-error-required": "错误：需要提供 JavaScript 表达式",
-      "eval-function": "执行 JavaScript",
-      "exec-function": "执行 JavaScript",
+      "eval-expr": "JavaScript 代码",
+      "eval-expr-description": "需要运行的 JavaScript 代码",
+      "eval-expr-error-required": "错误：需要提供 JavaScript 代码",
+      "eval-function": "运行 JavaScript 代码",
+      "exec-function": "执行 JavaScript 脚本文件",
       "exec-sourcefile": "JavaScript 文件",
       "exec-sourcefile-description": "要执行的 JavaScript 文件。",
       "exec-sourcefile-error-required": "错误：需要一个 JavaScript 文件",
       "importexec-args": "参数（可选）",
       "importexec-args-description": "你的脚本函数接受的参数，以逗号分隔的 'name: value' 格式，字符串值在引号中。",
-      "importexec-function": "导入并执行 JavaScript",
+      "importexec-function": "导入并执行 JavaScript 函数",
       "importexec-sourcefile": "JavaScript 文件",
       "importexec-sourcefile-description": "要导入的 JavaScript 文件。注意该文件只会被导入一次。你可能需要重启 Obsidian 才能使更改生效。",
       "importexec-sourcefile-error-required": "错误：需要一个 JavaScript 文件",
@@ -102,12 +102,14 @@
     "item": {
       "error-invalid-icon": "无效的图标ID：{{iconId}}"
     },
+    "link-name": "Note Toolbar API",
     "msg": {
       "block-no-id": "未找到块ID",
       "clipboard-copied": "已复制到剪贴板",
       "error-console": "错误：请检查控制台以获取详细信息",
       "file-created": "已创建：{{filename}}",
-      "file-not-exist": "文件不存在"
+      "file-not-exist": "文件不存在",
+      "toolbar-not-found": "未找到工具栏：{{toolbar}}"
     },
     "ui": {
       "button-submit": "提交",
@@ -125,8 +127,17 @@
       "instruction-select": "确认",
       "prompt-placeholder": "在此输入文本",
       "prompt-placeholder-large": "输入文本",
-      "suggester-placeholder": "选择一个选项…"
+      "suggester-placeholder": "选择一个选项…",
+      "suggester-placeholder-no-values": "请输入内容…"
     }
+  },
+  "cli": {
+    "error-invalid-command": "错误：命令不存在：{{commandId}}",
+    "error-invalid-icon": "错误：无效的图标名称：{{iconId}}",
+    "error-invalid-toolbar": "错误：未找到工具栏：{{toolbar}}",
+    "error-js-code-or-file-required": "错误：必须提供代码或文件",
+    "error-label-or-icon-required": "错误：必须提供标签或图标",
+    "success-item-added": "成功：已将项目添加到 {{toolbar}}"
   },
   "command": {
     "callouts-locked-notice": "锁定笔记工具栏标注",
@@ -141,6 +152,7 @@
     "name-item-suggester": "打开快速工具",
     "name-item-suggester-current": "打开当前工具栏的快速工具",
     "name-open-gallery": "打开示例库",
+    "name-open-help": "打开帮助",
     "name-open-toolbar": "打开工具栏：{{toolbar}}",
     "name-settings": "打开插件设置",
     "name-show-properties": "显示笔记属性",
@@ -149,7 +161,8 @@
     "name-toggle-properties": "切换笔记属性的显示",
     "name-toolbar-settings": "打开工具栏设置",
     "name-toolbar-suggester": "打开快速工具栏",
-    "name-use-item": "调用 {{item}}"
+    "name-use-item": "调用 {{item}}",
+    "notice-command-updated": "命令已更新：\n{{command}}"
   },
   "export": {
     "button-copy-link": "复制链接",
@@ -224,7 +237,7 @@
     "error-item-menu-not-found": "请检查笔记工具栏设置中的菜单项设置。\n未找到工具栏：{{toolbar}}",
     "error-scripting-not-enabled": "请在 Note Toolbar 设置中启用脚本功能以使用此项目。",
     "error-scripting-plugin-not-enabled": "请在安装并启用插件后切换脚本设置：{{plugin}}",
-    "error-toolbar-not-found": "请检查笔记工具栏设置中的工具栏设置。\n未找到工具栏：{{folder}}",
+    "error-toolbar-not-found": "请检查笔记工具栏设置中的工具栏设置。\n未找到工具栏：{{toolbar}}",
     "error-uri-params-not-supported": "不支持 {{params}} 中的某个（或某些）的 URI 参数",
     "warning-no-matching-toolbar": "Note Toolbar: 没有匹配的 {{toolbar}} 工具栏\n点击此处创建"
   },
@@ -252,7 +265,7 @@
   },
   "setting": {
     "add-item": {
-      "error-invalid-command": "命令不存在：{{CommandId}}",
+      "error-invalid-command": "命令不存在：{{commandId}}",
       "label-confirm-command": "命令不支持或未找到：\n\n\n`{{commandId}}`\n\n\n您还想将此项目添加到工具栏中吗？\n您可以安装/启用以后提供此命令的插件。",
       "label-confirm-mobile-uri": "该项目使用文件URI（在移动设备上可能不支持）\n\n\n您还想将此项目添加到工具栏中吗？",
       "label-confirm-plugin": "插件未安装（或未启用）：\n\n\n** {{plugin}} **\n\n您还想将此项目添加到工具栏中吗？\n您可以稍后安装/启用此插件。",
@@ -303,7 +316,14 @@
       "label-delete-confirm": "您确定要删除此工具栏吗？",
       "label-usage-note": "该工具栏可能在 `{{propertyName}}` 属性中被使用。\n如果你想确认，请关闭此窗口后搜索 `[{{propertyName}}: {{toolbarName}}]`",
       "name": "删除此工具栏",
-      "title": "删除工具栏：{{toolbar}}"
+      "title": "删除工具栏：{{toolbar}}",
+      "warning-default": "⚠️ 警告：这是你的默认工具栏。",
+      "warning-editor-menu": "⚠️ 警告：这是你的编辑器菜单工具栏。",
+      "warning-empty-view": "⚠️ 警告：这是你的新标签页视图工具栏。",
+      "warning-permanent": "此操作无法撤销。",
+      "warning-ribbon": "⚠️ 警告：这是你的功能区按钮工具栏。",
+      "warning-text": "⚠️ 警告：这是你的选中文本工具栏。",
+      "warning-webviewer": "⚠️ 警告：这是你的网页查看器工具栏。"
     },
     "display-contexts": {
       "description": "允许在 Canvas（画布）、新标签页和其他文件类型中显示工具栏。",
@@ -327,6 +347,8 @@
       "description": "定义工具栏在应用中的显示位置。",
       "name": "应用内的工具栏",
       "option-editor-menu": "编辑器菜单",
+      "option-editor-menu-as-tbar": "将编辑器菜单显示为工具栏",
+      "option-editor-menu-as-tbar-description": "默认会将此工具栏显示为菜单。启用后将改为显示为工具栏。",
       "option-editor-menu-description": "用所选工具栏替换编辑器菜单。",
       "option-editor-menu-error": "错误：找不到编辑器菜单工具栏。检查您的设置。",
       "option-editor-menu-placeholder": "选择工具栏...",
@@ -337,28 +359,57 @@
       "option-launchpad-description": "使用该工具栏替换新标签页，作为启动台呈现。",
       "option-text": "选中文本",
       "option-text-description": "选中文本时显示工具栏。",
-      "option-text-placeholder": "选择工具栏..."
+      "option-text-on-keyboard": "为键盘选区显示",
+      "option-text-on-keyboard-description": "当通过键盘选中文本时显示此工具栏。",
+      "option-text-placeholder": "选择工具栏...",
+      "option-webviewer": "网页查看器",
+      "option-webviewer-placeholder": "选择工具栏...",
+      "option-webviewer-description": "在网页查看器中显示工具栏。"
     },
     "display-navbar": {
+      "bottom": {
+        "description": "隐藏 Obsidian 手机底部导航栏中的操作。",
+        "label-hidden": "导航栏已隐藏",
+        "label-partial": "部分导航栏操作已隐藏",
+        "label-visible": "导航栏可见",
+        "name": "底部导航栏可见性",
+        "option-hide-all": "隐藏全部操作",
+        "option-unhide-all": "取消隐藏全部操作"
+      },
+      "description": "覆盖 Obsidian 手机上的导航栏设置。",
+      "name": "导航栏",
       "ribbon-action": {
         "description": "设置在手机上使用功能区图标时要执行的操作。",
         "name": "功能区",
         "option-item-suggester": "显示所有工具",
+        "option-toolbar-selected": "显示所选工具栏",
+        "option-toolbar-selected-description": "使用功能区按钮时显示此工具栏。",
+        "option-toolbar-selected-name": "功能区按钮工具栏",
+        "option-toolbar-selected-placeholder": "选择工具栏...",
         "option-toolbar": "显示当前工具栏",
         "option-toolbar-suggester": "显示所有工具栏"
+      },
+      "top": {
+        "description": "隐藏 Obsidian 手机顶部导航栏。",
+        "name": "顶部导航栏可见性"
       }
     },
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
       "name": "特定笔记显示规则",
+      "option-default": "默认工具栏",
+      "option-default-description": "除非满足下方任一规则，否则在所有笔记上显示此工具栏。",
+      "option-default-placeholder": "选择工具栏...",
       "option-property": "属性",
       "option-property-description": "如果在此属性中找到工具栏名称，则会在笔记上显示对应的工具栏。优先于任何文件夹映射的规则。设置为'none'则会隐藏工具栏。",
       "option-property-placeholder": "属性"
     },
+    "error-invalid-floating-toolbar": "Note Toolbar：浮动工具栏不存在。请检查你的设置。",
     "error-invalid-text-toolbar": "错误：所选文本工具栏不存在。请检查您的设置。",
     "error-old-settings-description": "加载了旧的设置文件（{{oldVersion}}），当前最新版本为 {{currentVersion}}",
     "error-old-settings-name": "⚠️ 错误：请重新启用笔记工具栏插件（或重启 Obsidian）",
     "help": {
+      "button-close": "关闭",
       "button-donate": "捐赠 ↗",
       "button-donate-tooltip": "打开 buymeacoffee.com",
       "button-open": "打开↗",
@@ -370,6 +421,8 @@
       "error-failed-to-load": "无法加载：\n{{baseUrl}}/{{lang}}/{{name}}.md",
       "heading": "使用笔记工具栏的帮助",
       "heading-donate": "捐赠",
+      "heading-get-started": "快速开始",
+      "heading-learn": "了解更多",
       "heading-support": "支持",
       "heading-user-guide": "用户指南",
       "label-article-1": "创建工具栏项目",
@@ -386,10 +439,14 @@
       "label-gallery": "打开示例库",
       "label-gallery-description": "查看示例库（Gallery）以获取开箱即用的工具项目。",
       "label-issues": "查看开放问题",
+      "label-settings": "打开设置",
       "label-support": "获取支持",
       "label-user-guide": "阅读用户指南",
+      "label-welcome": "欢迎使用 Note Toolbar！你可以先了解下方的入门内容、阅读用户指南，或直接进入设置。",
+      "label-whats-new": "查看更新内容",
       "title": "笔记工具栏的帮助🛟",
-      "tooltip-view-tip": "查看该 Tip"
+      "tooltip-settings": "打开 Note Toolbar 设置",
+      "tooltip-view-tip": "查看该提示"
     },
     "icon-suggester": {
       "instruction-dismiss": "关闭",
@@ -453,6 +510,7 @@
       "option-script-focus": "聚焦到编辑器",
       "option-script-focus-description": "在命令执行后聚焦回编辑器",
       "option-separator": "分隔符",
+      "option-spreader": "伸缩间隔",
       "option-target-default": "当前页（默认）",
       "option-target-modal": "模态窗口（Modal）",
       "option-target-split": "左右分屏",
@@ -468,6 +526,23 @@
       "option-uri-target-disclaimer-device": "该选项在本设备上无效。",
       "option-uri-target-disclaimer-modal": "仅有文件的URIS以模态（Modal）打开。",
       "option-uri-target-disclaimer-non-default": "外部链接的 URIS 只有在启用核心插件 WebViewer 的情况下，才能使用非默认选项。",
+      "visibility": {
+        "component-icon": "图标",
+        "component-label": "文本",
+        "option-component-show": "仅在{{platform}}显示{{component}}",
+        "option-editing-show": "仅在编辑模式显示",
+        "option-editing-reading-show": "在编辑和阅读模式显示",
+        "option-item-hide": "在{{platform}}隐藏项目",
+        "option-item-show": "在{{platform}}显示项目",
+        "option-reading-show": "仅在阅读模式显示",
+        "platform-desktop": "桌面端",
+        "platform-mobile": "移动端",
+        "tooltip-desktop-visible": "仅在桌面端可见",
+        "tooltip-editing-visible": "仅在编辑模式可见",
+        "tooltip-hidden": "项目已隐藏",
+        "tooltip-mobile-visible": "仅在移动端可见",
+        "tooltip-reading-visible": "仅在阅读模式可见"
+      },
       "option-visibility-component-hidden-platform": "在{{platform}}隐藏{{component}}",
       "option-visibility-component-visible-platform": "在{{platform}}显示{{component}}",
       "option-visibility-hidden": "隐藏",
@@ -501,6 +576,7 @@
     "items": {
       "button-add-break-tooltip": "向工具栏添加换行",
       "button-add-separator-tooltip": "向工具栏添加分隔符",
+      "button-add-spreader-tooltip": "向工具栏添加可伸缩间隔，将项目分散排列",
       "button-find-item": "搜索",
       "button-find-item-tooltip": "查找要添加到工具栏的项目",
       "button-new-item": "添加工具栏项目",
@@ -523,6 +599,7 @@
       "description": "下列文件夹中的笔记将显示映射到该文件夹的工具栏，优先级从上到下。",
       "error-folder-already-mapped": "此文件夹已经关联了一个工具栏",
       "label-empty": "使用该按钮创建映射",
+      "link-create": "创建映射",
       "name": "文件夹映射",
       "name-with-count": "文件夹映射（{{count}}）",
       "option-folder-all": "所有文件夹",
@@ -535,11 +612,29 @@
       "error-toolbar-already-exists": "已存在同名的工具栏！",
       "name": "名称"
     },
+    "hotkeys": {
+      "label-set": "设置热键",
+      "label-settings": "打开热键设置",
+      "notice-open-settings": "打开热键设置 {{cta}} →"
+    },
+    "navbar": {
+      "option-back": "返回",
+      "option-forward": "前进",
+      "option-quick-switcher": "快速切换器",
+      "option-new-tab": "新标签页",
+      "option-tabs": "标签页",
+      "option-menu": "菜单"
+    },
     "open-command": {
       "description": "添加命令以便在「快速工具」窗口中打开工具栏",
+      "label-hotkey": "热键",
       "name": "增加工具栏命令",
       "notice-command-added": "命令现在可用：\n{{command}}",
-      "notice-command-removed": "命令被移除：\n{{command}}"
+      "notice-command-removed": "命令被移除：\n{{command}}",
+      "option-hotkey": "热键",
+      "option-hotkey-description": "按下这个组合键时显示工具栏。",
+      "option-position": "工具栏显示方式",
+      "option-position-description": "默认会在光标位置显示为浮动工具栏。"
     },
     "option-platform-desktop": "桌面端",
     "option-platform-mobile": "移动端",
@@ -579,6 +674,9 @@
       "description": "配置当前工具栏的显示位置",
       "name": "位置",
       "notice-defaultitem-invalid": "浮动按钮的默认项目无效。\n请检查工具栏的配置。",
+      "option-addressbar": "地址栏",
+      "option-below-addressbar": "地址栏下方",
+      "option-below-title": "标题下方",
       "option-bottom": "底部",
       "option-centered": "居中",
       "option-defaultitem": "浮动按钮的默认项目",
@@ -586,12 +684,16 @@
       "option-defaultitem-error-invalid": "无效的工具栏项目",
       "option-defaultitem-placeholder": "项目…",
       "option-fab-desktop-native-menus-disclaimer": "如果您希望浮动按钮菜单中显示图标，请禁用 Obsidian 的“外观”→“原生菜单”选项。",
+      "option-below-properties-source-disclaimer": "在源码模式下，“属性下方”位置会显示在笔记标题下方",
       "option-fabl": "浮动按钮：左侧",
       "option-fabr": "浮动按钮：右侧",
+      "option-floating": "浮动工具栏",
       "option-hidden": "隐藏（不显示）",
       "option-hidden-mobile": "隐藏 / 导航栏",
+      "option-menu": "菜单",
       "option-mobile-help": "提示：你可以从导航栏访问工具栏。",
       "option-props": "笔记属性下方",
+      "option-quicktools": "快速工具窗口",
       "option-tabbar": "标题栏按钮",
       "option-top": "置顶（固定位置）"
     },
@@ -630,7 +732,7 @@
       "option-button": "显示为按钮",
       "option-center": "居中项目",
       "option-custom-description": "CSS 片段中定义的类（classes），会应用于该工具栏。使用空格分隔。",
-      "option-custom-empty": "CSS classes",
+      "option-custom-empty": "CSS 类",
       "option-custom-name": "自定义",
       "option-default-description": "适用于所有平台（除非被覆盖）。",
       "option-default-empty": "未设置默认样式。",
@@ -642,6 +744,7 @@
       "option-mobile-description": "覆盖默认样式。",
       "option-mobile-empty": "未设置移动端样式。使用默认样式。",
       "option-mobile-name": "移动端",
+      "option-noautohide": "不自动隐藏",
       "option-noborder": "无边框",
       "option-notab": "非标签文件项目",
       "option-notsticky": "非粘性",
@@ -676,12 +779,20 @@
       "button-more-tooltip": "更多选项",
       "button-new-tbar": "新建工具栏",
       "button-new-tbar-tooltip": "添加一个新的工具栏",
+      "button-no-default": "暂不设置",
+      "button-set-default": "设为默认",
       "duplicated-tbar-suffix": "复制",
       "label-empty-create-tbar": "点击按钮创建工具栏。",
+      "label-set-default": "设为默认：{{toolbar}}",
+      "label-set-default-confirm": "要将此工具栏设为所有笔记的默认工具栏吗？",
+      "label-set-default-notes": "稍后仍可更改。",
       "label-tbar-name-not-set": "未设置工具栏名称",
+      "link-create": "创建工具栏",
+      "menu-copy-id": "复制开发者 ID",
+      "menu-copy-id-notice": "工具栏 ID 已复制到剪贴板。",
       "name": "工具栏",
       "name-with-count": "工具栏（{{count}}）",
-      "new-tbar-name": "New toolbar"
+      "new-tbar-name": "新工具栏"
     },
     "usage": {
       "description": "此工具栏在 {{mappingCount}} 个文件夹映射和 {{itemCount}} 个工具栏项目中使用。",
@@ -711,6 +822,8 @@
       "button-read": "阅读 ↗",
       "button-read-tooltip": "打开 github.com",
       "error-failed-to-load": "无法加载更新日志：\n{{baseUrl}}/{{lang}}/{{version}}.md",
+      "label-show-whatsnew": "显示“更新内容”",
+      "label-show-whatsnew-description": "每次安装新的主要版本时显示此标签页。",
       "label-release-notes": "发布说明",
       "label-release-notes-description": "最新版本的详细说明位于 Github",
       "label-roadmap": "Note Toolbar 的未来？",
