@@ -25,9 +25,9 @@ interface CliAction {
     description: CliLocalizedString;
     flags: CliActionFlags;
     since?: string;
-    notes?: string;
+    docs?: string;
     examples?: {
-        description: string;
+        docs?: string;
         command: string;
     }[];
 }
@@ -36,6 +36,7 @@ interface CliDef {
     id: string;
     description: CliLocalizedString;
     heading: CliLocalizedString;
+    docs?: string;
     commonFlags: Record<string, CliLocalizedFlag>;
     actions: CliAction[];
 }
