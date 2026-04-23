@@ -1,8 +1,8 @@
 import cliDefJson from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
 import { CliData, CliFlags, CliHandler, getIcon } from "obsidian";
-import { DEFAULT_ITEM_SETTINGS, ItemType, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
-import { getUUID, tr } from "Utils/Utils";
+import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { tr } from "Utils/Utils";
 
 interface CliLocalizedString {
     [locale: string]: string;
@@ -103,6 +103,9 @@ export default class CliManager {
      */
     cliHandlers: Record<string, CliHandler> = {
         // TODO: support adding items from Gallery
+        'note-toolbar:add-break': async (args: CliData) => {
+            return this.addItemHandler(args, ItemType.Break, (item) => {});
+        },
         'note-toolbar:add-command': async (args: CliData) => {
             return this.addItemHandler(args, ItemType.Command, (item) => {
                 const command = this.ntb.app.commands.commands[args.command];
@@ -115,8 +118,11 @@ export default class CliManager {
                 // TODO: add JavaScript item logic - set the scriptConfig on the item based on CLI args, and validate the config
             });
         },
-        'note-toolbar:add-separator': async (args: CliData) => {
+        'note-toolbar:add-sep': async (args: CliData) => {
             return this.addItemHandler(args, ItemType.Separator, (item) => {});
+        },
+        'note-toolbar:add-spread': async (args: CliData) => {
+            return this.addItemHandler(args, ItemType.Spreader, (item) => {});
         }
     };
 

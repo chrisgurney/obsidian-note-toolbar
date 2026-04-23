@@ -1,7 +1,7 @@
 {
     "id": "note-toolbar",
     "description": {
-        "en": "Displays Note Toolbar CLI help"
+        "en": "Display Note Toolbar CLI help"
     },
     "heading": {
         "en": "Note Toolbar CLI actions:"
@@ -59,6 +59,15 @@
         }
     },
     "actions": [
+        {
+            "id": "note-toolbar:add-break",
+            "description": {
+                "en": "Add a line break to a toolbar"
+            },
+            "flags": {
+                "$before": ["toolbar", "pos"]
+            }
+        },
         {
             "id": "note-toolbar:add-command",
             "description": {
@@ -120,13 +129,21 @@
             }
         },
         {
-            "id": "note-toolbar:add-separator",
+            "id": "note-toolbar:add-sep",
             "description": {
-                "en": "Add separator item to a toolbar"
+                "en": "Add a separator to a toolbar"
             },
             "flags": {
-                "$before": ["toolbar"],
-                "$after": ["pos"]
+                "$before": ["toolbar", "pos"]
+            }
+        },
+        {
+            "id": "note-toolbar:add-spread",
+            "description": {
+                "en": "Add a spreader to a toolbar"
+            },
+            "flags": {
+                "$before": ["toolbar", "pos"]
             }
         }
     ]
