@@ -139,6 +139,7 @@
         "error-invalid-toolbar": "Error: Toolbar not found: {{toolbar}}",
         "error-js-code-or-file-required": "Error: A value for code or file/path is required",
         "error-label-or-icon-required": "Error: A value for label or icon is required",
+        "error-script-invalid-args": "Error: Invalid script argument format: {{args}}",
         "success-item-added": "Success: Item added to toolbar: {{toolbar}}"
     },
     "command": {

@@ -2,7 +2,7 @@ import cliDefJson from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
 import { CliData, CliFlags, CliHandler, getIcon, normalizePath, TFile } from "obsidian";
 import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
-import { tr } from "Utils/Utils";
+import { importArgs, tr } from "Utils/Utils";
 
 interface CliLocalizedString {
     [locale: string]: string;
@@ -124,7 +124,11 @@ export default class CliManager {
                         expression: args.code,
                         sourceFile: file?.path
                     } as ScriptConfig;
-                    if (args.args) scriptConfig.sourceArgs = args.args;
+                    if (this.hasValue(args.args)) {
+                        const parsedArgs = importArgs(args.args);
+                        if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
+                        scriptConfig.sourceArgs = args.args;
+                    }
                     item.scriptConfig = scriptConfig;
                 }
                 else {
