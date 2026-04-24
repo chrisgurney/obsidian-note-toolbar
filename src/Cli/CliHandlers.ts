@@ -35,59 +35,70 @@ export default class CliHandlers {
      * Defines the CLI command handlers, used in register().
      */
     public cliHandlers: Record<string, CliHandler> = {
-        // TODO: support adding items from Gallery
-        'note-toolbar': async (args: CliData) => {
-            return this.cliDefinition.formatCommandList();
-        },
-        'note-toolbar:add-break': async (args: CliData) => {
-            return this.addItemHelper(args, ItemType.Break, (item) => {});
-        },
-        'note-toolbar:add-command': async (args: CliData) => {
-            return this.addItemHelper(args, ItemType.Command, (item) => {
-                const command = this.ntb.app.commands.commands[args.command];
-                if (!command) return t('cli.error-invalid-command', { commandId: args.command });
-                item.linkAttr.commandId = args.command;
-            });
-        },
-        'note-toolbar:add-js': async (args: CliData) => {
-            return this.addItemHelper(args, ItemType.JavaScript, (item) => {
-                if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
-                    if (this.hasValue(args.code) && (this.hasValue(args.file) || this.hasValue(args.path))) {
-                        return t('cli.error-js-code-and-file-exclusive');
-                    }
-                    const fileResult = this.resolveFileArgs(args.file, args.path);
-                    if (typeof fileResult === 'string') return fileResult; // error resolving file or path
-                    const file: TFile | null = fileResult;
-                    let scriptConfig: ScriptConfig = {
-                        pluginFunction: this.hasValue(args.code) ? 'evaluate' : 'exec',
-                        expression: args.code,
-                        sourceFile: file?.path
-                    } as ScriptConfig;
-                    if (this.hasValue(args.args)) {
-                        const parsedArgs = importArgs(args.args);
-                        if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
-                        scriptConfig.sourceArgs = args.args;
-                    }
-                    item.scriptConfig = scriptConfig;
-                }
-                else {
-                    return t('cli.error-js-code-or-file-required');
-                }
-            });
-        },
-        'note-toolbar:add-sep': async (args: CliData) => {
-            return this.addItemHelper(args, ItemType.Separator, (item) => {});
-        },
-        'note-toolbar:add-spread': async (args: CliData) => {
-            return this.addItemHelper(args, ItemType.Spreader, (item) => {});
-        },
-        'note-toolbar:help': async () => {
-            activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
-            return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } });
-        }
+        'note-toolbar': this.handleDefault.bind(this),
+        'note-toolbar:add-break': this.handleAddBreak.bind(this),
+        'note-toolbar:add-command': this.handleAddCommand.bind(this),
+        'note-toolbar:add-js': this.handleAddJs.bind(this),
+        'note-toolbar:add-sep': this.handleAddSep.bind(this),
+        'note-toolbar:add-spread': this.handleAddSpread.bind(this),
+        'note-toolbar:help': this.handleHelp.bind(this)
     };
 
+    handleAddBreak(args: CliData): Promise<string> {
+        return this.addItemHelper(args, ItemType.Break, (item) => {});
+    }
 
+    handleAddCommand(args: CliData): Promise<string> {
+        return this.addItemHelper(args, ItemType.Command, (item) => {
+            const command = this.ntb.app.commands.commands[args.command];
+            if (!command) return t('cli.error-invalid-command', { commandId: args.command });
+            item.linkAttr.commandId = args.command;
+        });
+    }
+
+    handleAddJs(args: CliData): Promise<string> {
+        return this.addItemHelper(args, ItemType.JavaScript, (item) => {
+            if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
+                if (this.hasValue(args.code) && (this.hasValue(args.file) || this.hasValue(args.path))) {
+                    return t('cli.error-js-code-and-file-exclusive');
+                }
+                const fileResult = this.resolveFileArgs(args.file, args.path);
+                if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+                const file: TFile | null = fileResult;
+                let scriptConfig: ScriptConfig = {
+                    pluginFunction: this.hasValue(args.code) ? 'evaluate' : 'exec',
+                    expression: args.code,
+                    sourceFile: file?.path
+                } as ScriptConfig;
+                if (this.hasValue(args.args)) {
+                    const parsedArgs = importArgs(args.args);
+                    if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
+                    scriptConfig.sourceArgs = args.args;
+                }
+                item.scriptConfig = scriptConfig;
+            }
+            else {
+                return t('cli.error-js-code-or-file-required');
+            }
+        });
+    }
+
+    handleAddSep(args: CliData): Promise<string> {
+        return this.addItemHelper(args, ItemType.Separator, (item) => {});
+    }
+
+    handleAddSpread(args: CliData): Promise<string> {
+        return this.addItemHelper(args, ItemType.Spreader, (item) => {});
+    }
+    
+    handleDefault(args: CliData): string {
+        return this.cliDefinition.formatCommandList();
+    }
+
+    handleHelp(args: CliData): Promise<string> {
+        activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
+        return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } });
+    }
 
 	/*************************************************************************
 	 * HELPERS
