@@ -7,25 +7,21 @@
         "en": "Note Toolbar CLI actions:"
     },
     "docs": "Lists all Note Toolbar CLI actions.",
-    "categories": [
-        {
-            "id": "help",
-            "heading": "Help"
+    "categories": {
+        "help": { 
+            "heading": "Help" 
         },
-        {
-            "id": "items",
-            "heading": "Items"
+        "items": { 
+            "heading": "Items" 
         },
-        {
-            "id": "items-add",
-            "heading": "Items (Adding)",
-            "docs": "Add items to toolbars."
+        "items-add": { 
+            "heading": "Items (Adding)", 
+            "docs": "Add items to toolbars." 
         },
-        {
-            "id": "toolbars",
-            "heading": "Toolbars"
+        "toolbars": { 
+            "heading": "Toolbars" 
         }
-    ],
+    },
     "commonFlags": {
         "format": {
             "description": {

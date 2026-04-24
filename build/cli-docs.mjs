@@ -37,10 +37,10 @@ export function cliDocs(cliJsonPath, outputFile) {
     let markdown = '';
 
     // display actions by category
-    for (const category of cli.categories ?? []) {
+    for (const [categoryId, category] of Object.entries(cli.categories ?? {})) {
         markdown += `## ${category.heading}\n\n`;
         if (category.docs) markdown += `${category.docs}\n\n`;
-        const actions = Object.entries(cli.actions).filter(([, a]) => a.category === category.id);
+        const actions = Object.entries(cli.actions).filter(([, a]) => a.category === categoryId);
         for (const [id, action] of actions) {
             markdown += `### \`${id}\`\n\n`;
             if (action.docs) markdown += `${action.docs}\n\n`;
