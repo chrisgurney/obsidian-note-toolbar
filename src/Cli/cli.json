@@ -9,14 +9,17 @@
     "docs": "Lists all Note Toolbar CLI actions.",
     "categories": [
         {
-            "id": "add",
+            "id": "add-items",
             "heading": "Add items",
             "docs": "Add items to toolbars."
         },
         {
+            "id": "add-toolbars",
+            "heading": "Add toolbars"
+        },
+        {
             "id": "help",
-            "heading": "Help",
-            "docs": "Get help with the Note Toolbar CLI."
+            "heading": "Help"
         }
     ],
     "commonFlags": {
@@ -74,7 +77,7 @@
     "actions": [
         {
             "id": "note-toolbar:add-break",
-            "category": "add",
+            "category": "add-items",
             "description": {
                 "en": "Add a line break to a toolbar"
             },
@@ -85,7 +88,7 @@
         },
         {
             "id": "note-toolbar:add-command",
-            "category": "add",
+            "category": "add-items",
             "description": {
                 "en": "Add command item to a toolbar"
             },
@@ -115,7 +118,7 @@
         },
         {
             "id": "note-toolbar:add-js",
-            "category": "add",
+            "category": "add-items",
             "description": {
                 "en": "Add JavaScript item to a toolbar"
             },
@@ -169,7 +172,7 @@
         },
         {
             "id": "note-toolbar:add-sep",
-            "category": "add",
+            "category": "add-items",
             "description": {
                 "en": "Add a separator to a toolbar"
             },
@@ -180,13 +183,33 @@
         },
         {
             "id": "note-toolbar:add-spread",
-            "category": "add",
+            "category": "add-items",
             "description": {
                 "en": "Add a spreader to a toolbar"
             },
             "docs": "Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
             "flags": {
                 "$before": ["toolbar", "pos"]
+            }
+        },
+        {
+            "id": "note-toolbar:add-toolbar",
+            "category": "add-toolbars",
+            "description": {
+                "en": "Create a new toolbar"
+            },
+            "docs": "Creates a new toolbar",
+            "flags": {
+                "name": {
+                    "description": {
+                        "en": "Toolbar name"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<name>"
+                    },
+                    "required": false
+                }
             }
         },
         {

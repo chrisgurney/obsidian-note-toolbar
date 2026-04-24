@@ -22,7 +22,7 @@ export default class CliHandlers {
         const handler = this.cliHandlers[commandId];
         if (!handler) {
             this.ntb.error(`CliManager: No handler registered for command "${commandId}"`);
-            return async () => t('cli.error-command-not-found', { commandId });
+            return async () => t('cli.error-handler-not-found', { command: commandId });
         }
         return handler;
     }
@@ -41,15 +41,16 @@ export default class CliHandlers {
         'note-toolbar:add-js': this.handleAddJs.bind(this),
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
+        'note-toolbar:add-toolbar': this.handleAddToolbar.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this)
     };
 
-    handleAddBreak(args: CliData): Promise<string> {
-        return this.addItemHelper(args, ItemType.Break, (item) => {});
+    async handleAddBreak(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Break, (item) => {});
     }
 
-    handleAddCommand(args: CliData): Promise<string> {
-        return this.addItemHelper(args, ItemType.Command, (item) => {
+    async handleAddCommand(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Command, (item) => {
             const command = this.ntb.app.commands.commands[args.command];
             if (!command) return t('cli.error-invalid-command', { commandId: args.command });
             item.linkAttr.commandId = args.command;
@@ -57,8 +58,15 @@ export default class CliHandlers {
         });
     }
 
-    handleAddJs(args: CliData): Promise<string> {
-        return this.addItemHelper(args, ItemType.JavaScript, (item) => {
+    async handleAddToolbar(args: CliData): Promise<string> {
+        const toolbar = this.ntb.settingsManager.getToolbar(args.name);
+        if (toolbar) return t('cli.error-toolbar-already-exists', { toolbar: args.name });
+        const newToolbar = await this.ntb.settingsManager.newToolbar(args.name);
+        return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
+    }
+
+    async handleAddJs(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.JavaScript, (item) => {
             if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
                 if (this.hasValue(args.code) && (this.hasValue(args.file) || this.hasValue(args.path))) {
                     return t('cli.error-js-code-and-file-exclusive');
@@ -84,12 +92,12 @@ export default class CliHandlers {
         });
     }
 
-    handleAddSep(args: CliData): Promise<string> {
-        return this.addItemHelper(args, ItemType.Separator, (item) => {});
+    async handleAddSep(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Separator, (item) => {});
     }
 
-    handleAddSpread(args: CliData): Promise<string> {
-        return this.addItemHelper(args, ItemType.Spreader, (item) => {});
+    async handleAddSpread(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Spreader, (item) => {});
     }
     
     handleDefault(args: CliData): string {

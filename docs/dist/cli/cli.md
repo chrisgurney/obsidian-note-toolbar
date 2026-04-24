@@ -66,9 +66,17 @@ toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
 
-## Help
+## Add toolbars
 
-Get help with the Note Toolbar CLI.
+### `note-toolbar:add-toolbar`
+
+Creates a new toolbar
+
+```sh
+name=<name>  # Toolbar name
+```
+
+## Help
 
 ### `note-toolbar:help`
 

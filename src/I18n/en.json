@@ -133,6 +133,7 @@
     },
     "cli": {
         "error-file-not-found": "Error: File not found: {{file}}",
+        "error-handler-not-found": "Error: Handler for command not found: {{command}}",
         "error-path-not-found": "Error: Path not found: {{path}}",
         "error-invalid-command": "Error: Command does not exist: {{commandId}}",
         "error-invalid-icon": "Error: Invalid icon name: {{iconId}}",
@@ -141,7 +142,9 @@
         "error-js-code-or-file-required": "Error: A value for code or file/path is required",
         "error-label-or-icon-required": "Error: A value for label or icon is required",
         "error-script-invalid-args": "Error: Invalid script argument format: {{args}}",
+        "error-toolbar-already-exists": "Error: A toolbar with this name already exists: {{toolbar}}",
         "success-item-added": "Success: Item added to toolbar: {{toolbar}}",
+        "success-toolbar-created": "Success: Toolbar created: {{toolbar}}",
         "success-uri-opened": "Opened: {{uri}}"
     },
     "command": {
