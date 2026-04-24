@@ -20,6 +20,7 @@ toolbar=<nameOrId>   # Toolbar name or ID to add item to
 label=<label>        # Item label (required if icon is not provided)
 icon=<iconName>      # Item icon, from Lucide's icon set (required if label is not provided)
 command=<commandId>  # Obsidian command ID (e.g. editor:toggle-bold)
+focus                # Focus the editor after executing the command; default = false
 tooltip=<tooltip>    # Item tooltip
 pos=<n>              # Item position in toolbar; default = end
 ```

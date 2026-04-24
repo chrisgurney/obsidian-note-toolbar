@@ -103,6 +103,13 @@
                         "en": "<commandId>"
                     },
                     "required": true
+                },
+                "focus": {
+                    "description": {
+                        "en": "Focus the editor after executing the command; default = false"
+                    },
+                    "type": "boolean",
+                    "required": false
                 }
             }
         },

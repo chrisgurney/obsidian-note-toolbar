@@ -53,6 +53,7 @@ export default class CliHandlers {
             const command = this.ntb.app.commands.commands[args.command];
             if (!command) return t('cli.error-invalid-command', { commandId: args.command });
             item.linkAttr.commandId = args.command;
+            if (args.focus === 'true') item.linkAttr.focus = 'editor';
         });
     }
 
