@@ -65,8 +65,8 @@ Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/
 
 ```sh
 toolbar=<nameOrId>   # (required) Toolbar name or ID to add item to
-label=<label>        # Item label (required if icon is not provided)
-icon=<iconName>      # Item icon, from Lucide's icon set (required if label is not provided)
+label=<label>        # (required if icon not provided) Item label
+icon=<iconName>      # (required if label not provided) Item icon, from Lucide's icon set
 command=<commandId>  # (required) Obsidian command ID (e.g. editor:toggle-bold)
 focus                # Focus the editor after executing the command (default: false)
 tooltip=<tooltip>    # Item tooltip
@@ -86,11 +86,11 @@ Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wi
 
 ```sh
 toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
-label=<label>       # Item label (required if icon is not provided)
-icon=<iconName>     # Item icon, from Lucide's icon set (required if label is not provided)
-code=<code>         # JavaScript code to execute (required if file or path is not provided)
-file=<name>         # Filename to execute (file or path required if code is not provided)
-path=<path>         # Filename with path to execute (file or path required if code is not provided).
+label=<label>       # (required if icon not provided) Item label
+icon=<iconName>     # (required if label not provided) Item icon, from Lucide's icon set
+code=<code>         # (required if file|path not provided) JavaScript code to execute
+file=<name>         # (required if code|path not provided) Filename to execute
+path=<path>         # (required if file|code not provided) Filename with path to execute
 args=<args>         # Comma-separated 'name: value' format, with string values in quotes
 tooltip=<tooltip>   # Item tooltip
 pos=<n>             # Item position in toolbar (default: end)
