@@ -39,10 +39,10 @@ export function cliDocs(cliJsonPath, outputFile) {
     // display actions by category
     for (const category of cli.categories ?? []) {
         markdown += `## ${category.heading}\n\n`;
-         if (category.docs) markdown += `${category.docs}\n\n`;
-        const actions = cli.actions.filter(a => a.category === category.id);
-        for (const action of actions) {
-            markdown += `### \`${action.id}\`\n\n`;
+        if (category.docs) markdown += `${category.docs}\n\n`;
+        const actions = Object.entries(cli.actions).filter(([, a]) => a.category === category.id);
+        for (const [id, action] of actions) {
+            markdown += `### \`${id}\`\n\n`;
             if (action.docs) markdown += `${action.docs}\n\n`;
             markdown += flagsBlock(action.flags ?? {}, cli.commonFlags ?? {});
             if (action.examples) {
@@ -54,9 +54,9 @@ export function cliDocs(cliJsonPath, outputFile) {
     }
 
     // actions with no category (should not be any, but just in case)
-    const uncategorized = cli.actions.filter(a => !a.category);
-    for (const action of uncategorized) {
-        markdown += `### \`${action.id}\`\n\n`;
+    const uncategorized = Object.entries(cli.actions).filter(([, a]) => !a.category);
+    for (const [id, action] of uncategorized) {
+        markdown += `### \`${id}\`\n\n`;
         if (action.docs) markdown += `${action.docs}\n\n`;
         markdown += flagsBlock(action.flags ?? {}, cli.commonFlags ?? {});
     }

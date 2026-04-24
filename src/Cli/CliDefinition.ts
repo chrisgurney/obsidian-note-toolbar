@@ -22,7 +22,6 @@ interface CliActionFlags {
 }
 
 interface CliAction {
-    id: string;
     description: CliLocalizedString;
     flags?: CliActionFlags;
     since?: string;
@@ -36,7 +35,7 @@ interface CliDef {
     heading: CliLocalizedString;
     docs?: string;
     commonFlags: Record<string, CliLocalizedFlag>;
-    actions: CliAction[];
+    actions: Record<string, CliAction>;
 }
 
 interface CliCommandDef {
@@ -72,9 +71,9 @@ export default class CliDefinition {
         });
 
         // action definitions (check for handlers in CliManager)
-        this.commands.push(...this.cliDef.actions
-            .map((action: CliAction) => ({
-                id: action.id,
+        this.commands.push(...Object.entries(this.cliDef.actions)
+            .map(([id, action]: [string, CliAction]) => ({
+                id,
                 description: tr(action.description, this.language) ?? '',
                 flags: action.flags ? this.toCliFlags(action.flags, this.language) : null,
             }))
@@ -88,7 +87,7 @@ export default class CliDefinition {
 
     public formatCommandList(): string {
         const heading = tr(this.cliDef.heading, this.language) ?? '';
-        const actions = this.cliDef.actions
+        const actions = Object.values(this.cliDef.actions)
             .map((cmd: any) => `\x1b[90m${cmd.id.padEnd(36)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`)
             .join('\n');
         return `${heading}\n\n${actions}`;

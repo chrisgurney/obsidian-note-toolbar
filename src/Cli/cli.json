@@ -95,9 +95,8 @@
             "required": false
         }
     },
-    "actions": [
-        {
-            "id": "note-toolbar:add-break",
+    "actions": {
+        "note-toolbar:add-break": {
             "category": "items-add",
             "description": {
                 "en": "Add a line break to a toolbar"
@@ -107,8 +106,7 @@
                 "$before": ["toolbar", "pos"]
             }
         },
-        {
-            "id": "note-toolbar:add-command",
+        "note-toolbar:add-command": {
             "category": "items-add",
             "description": {
                 "en": "Add command item to a toolbar"
@@ -137,8 +135,7 @@
                 }
             }
         },
-        {
-            "id": "note-toolbar:add-js",
+        "note-toolbar:add-js": {
             "category": "items-add",
             "description": {
                 "en": "Add JavaScript item to a toolbar"
@@ -191,8 +188,7 @@
                 }
             }
         },
-        {
-            "id": "note-toolbar:add-sep",
+        "note-toolbar:add-sep": {
             "category": "items-add",
             "description": {
                 "en": "Add a separator to a toolbar"
@@ -202,8 +198,7 @@
                 "$before": ["toolbar", "pos"]
             }
         },
-        {
-            "id": "note-toolbar:add-spread",
+        "note-toolbar:add-spread": {
             "category": "items-add",
             "description": {
                 "en": "Add a spreader to a toolbar"
@@ -213,8 +208,7 @@
                 "$before": ["toolbar", "pos"]
             }
         },
-        {
-            "id": "note-toolbar:add-toolbar",
+        "note-toolbar:add-toolbar": {
             "category": "toolbars",
             "description": {
                 "en": "Create a new toolbar"
@@ -233,16 +227,14 @@
                 }
             }
         },
-        {
-            "id": "note-toolbar:help",
+        "note-toolbar:help": {
             "category": "help",
             "description": {
                 "en": "Opens Note Toolbar's CLI user guide in a browser"
             },
             "docs": "Opens Note Toolbar's CLI user guide (this page) in a browser."
         },
-        {
-            "id": "note-toolbar:items",
+        "note-toolbar:items": {
             "category": "items",
             "description": {
                 "en": "Lists toolbar items"
@@ -259,8 +251,7 @@
                 }
             }
         },
-        {
-            "id": "note-toolbar:toolbars",
+        "note-toolbar:toolbars": {
             "category": "toolbars",
             "description": {
                 "en": "Lists toolbars"
@@ -270,5 +261,5 @@
                 "$after": ["verbose", "format"]
             }
         }
-    ]
+    }
 }
