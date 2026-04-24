@@ -3,10 +3,10 @@
     "description": {
         "en": "Display Note Toolbar CLI help"
     },
+    "docs": "Lists all Note Toolbar CLI actions.",
     "heading": {
         "en": "Note Toolbar CLI actions:"
     },
-    "docs": "Lists all Note Toolbar CLI actions.",
     "categories": {
         "help": { 
             "heading": "Help" 
