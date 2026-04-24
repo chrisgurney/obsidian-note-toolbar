@@ -82,7 +82,7 @@ export default class CliHandlers {
             return this.addItemHelper(args, ItemType.Spreader, (item) => {});
         },
         'note-toolbar:help': async () => {
-            window.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
+            activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
             return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } });
         }
     };
