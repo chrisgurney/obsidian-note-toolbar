@@ -42,6 +42,8 @@ export default class CliHandlers {
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
         'note-toolbar:add-toolbar': this.handleAddToolbar.bind(this),
+        'note-toolbar:items': this.handleItems.bind(this),
+        'note-toolbar:toolbars': this.handleToolbars.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this)
     };
 
@@ -107,6 +109,92 @@ export default class CliHandlers {
     handleHelp(args: CliData): Promise<string> {
         activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
         return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } });
+    }
+
+    handleItems(args: CliData): string {
+        const format = this.hasValue(args.format) ? args.format : 'tsv';
+        const verbose = args.verbose !== undefined;
+        // include empty items if verbose or --empty flag is present
+        const includeEmpty = verbose || args.empty !== undefined;
+
+        const separator = format === 'csv' ? ',' : '\t';
+
+        type ItemRow = { key: string; cols: string[] };
+        const rows: ItemRow[] = [];
+        let emptyCount = 0;
+
+        this.ntb.settings.toolbars.forEach((toolbar) => {
+            toolbar.items.forEach((item) => {
+                const label = item.label ?? '';
+                const tooltip = item.tooltip ?? '';
+
+                if (!label && !tooltip) {
+                    if (includeEmpty) {
+                        // empty items sort to the top via empty key
+                    } else {
+                        emptyCount++;
+                        return;
+                    }
+                }
+
+                const cols = verbose
+                    ? [item.uuid, item.linkAttr.type ?? '', item.icon ?? '', label, tooltip, toolbar.uuid]
+                    : [item.linkAttr.type ?? '', item.icon ?? '', label, tooltip];
+
+                // sort key is label, falling back to tooltip; empty string sorts to top
+                rows.push({ key: label || tooltip, cols });
+            });
+        });
+
+        if (!rows.length && !emptyCount) return t('cli.no-items');
+
+        rows.sort((a, b) => {
+            if (!a.key && b.key) return -1;
+            if (a.key && !b.key) return 1;
+            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
+        });
+
+        // tabs in values are replaced with a space to avoid breaking TSV structure
+        const escape = (val: string) =>
+            format === 'csv' ? `"${val.replace(/"/g, '""')}"` : val.replace(/\t/g, ' ');
+
+        const header = verbose
+            ? ['uuid', 'type', 'icon', 'label', 'tooltip', 'toolbar'].join(separator)
+            : ['type', 'icon', 'label', 'tooltip'].join(separator);
+
+        const lines = [header, ...rows.map(r => r.cols.map(escape).join(separator))];
+
+        if (emptyCount > 0) lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
+
+        return lines.join('\n');
+    }
+
+    handleToolbars(args: CliData): string {
+        const format = this.hasValue(args.format) ? args.format : 'text';
+        const verbose = args.verbose !== undefined;
+
+        const toolbars = [...this.ntb.settings.toolbars].sort(
+            (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+        );
+
+        if (!toolbars.length) return t('cli.no-toolbars');
+
+        switch (format) {
+            case 'csv': {
+                const header = verbose ? 'uuid,name' : 'name';
+                const rows = toolbars.map(tb =>
+                    verbose
+                        ? `"${tb.uuid}","${tb.name.replace(/"/g, '""')}"`
+                        : `"${tb.name.replace(/"/g, '""')}"`
+                );
+                return [header, ...rows].join('\n');
+            }
+            default: {
+                return toolbars.map(tb =>
+                    verbose ? `${tb.uuid}\t${tb.name}` : tb.name
+                ).join('\n');
+            }
+        }
     }
 
 	/*************************************************************************

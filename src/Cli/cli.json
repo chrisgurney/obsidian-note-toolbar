@@ -9,29 +9,33 @@
     "docs": "Lists all Note Toolbar CLI actions.",
     "categories": [
         {
-            "id": "add-items",
-            "heading": "Add items",
+            "id": "help",
+            "heading": "Help"
+        },
+        {
+            "id": "items",
+            "heading": "Items"
+        },
+        {
+            "id": "items-add",
+            "heading": "Items (Adding)",
             "docs": "Add items to toolbars."
         },
         {
-            "id": "add-toolbars",
-            "heading": "Add toolbars"
-        },
-        {
-            "id": "help",
-            "heading": "Help"
+            "id": "toolbars",
+            "heading": "Toolbars"
         }
     ],
     "commonFlags": {
-        "toolbar": {
+        "format": {
             "description": {
-                "en": "Toolbar name or ID to add item to"
+                "en": "Output format (default: tsv)"
             },
             "type": "string",
             "value": {
-                "en": "<nameOrId>"
+                "en": "tsv|csv"
             },
-            "required": true
+            "required": false
         },
         "label": {
             "description": {
@@ -53,6 +57,26 @@
             },
             "required": false
         },
+        "pos": {
+            "description": {
+                "en": "Item position in toolbar (default: end)"
+            },
+            "type": "string",
+            "value": {
+                "en": "<n>"
+            },
+            "required": false
+        },
+        "toolbar": {
+            "description": {
+                "en": "Toolbar name or ID to add item to"
+            },
+            "type": "string",
+            "value": {
+                "en": "<nameOrId>"
+            },
+            "required": true
+        },
         "tooltip": {
             "description": {
                 "en": "Item tooltip"
@@ -63,21 +87,18 @@
             },
             "required": false
         },
-        "pos": {
+        "verbose": {
             "description": {
-                "en": "Item position in toolbar; default = end"
+                "en": "Include additional details in output"
             },
-            "type": "string",
-            "value": {
-                "en": "<n>"
-            },
+            "type": "boolean",
             "required": false
         }
     },
     "actions": [
         {
             "id": "note-toolbar:add-break",
-            "category": "add-items",
+            "category": "items-add",
             "description": {
                 "en": "Add a line break to a toolbar"
             },
@@ -88,7 +109,7 @@
         },
         {
             "id": "note-toolbar:add-command",
-            "category": "add-items",
+            "category": "items-add",
             "description": {
                 "en": "Add command item to a toolbar"
             },
@@ -109,7 +130,7 @@
                 },
                 "focus": {
                     "description": {
-                        "en": "Focus the editor after executing the command; default = false"
+                        "en": "Focus the editor after executing the command (default: false)"
                     },
                     "type": "boolean",
                     "required": false
@@ -118,7 +139,7 @@
         },
         {
             "id": "note-toolbar:add-js",
-            "category": "add-items",
+            "category": "items-add",
             "description": {
                 "en": "Add JavaScript item to a toolbar"
             },
@@ -143,7 +164,7 @@
                     "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
                     "type": "string",
                     "value": {
-                        "en": "<file>"
+                        "en": "<name>"
                     },
                     "required": false
                 },
@@ -172,7 +193,7 @@
         },
         {
             "id": "note-toolbar:add-sep",
-            "category": "add-items",
+            "category": "items-add",
             "description": {
                 "en": "Add a separator to a toolbar"
             },
@@ -183,7 +204,7 @@
         },
         {
             "id": "note-toolbar:add-spread",
-            "category": "add-items",
+            "category": "items-add",
             "description": {
                 "en": "Add a spreader to a toolbar"
             },
@@ -194,11 +215,11 @@
         },
         {
             "id": "note-toolbar:add-toolbar",
-            "category": "add-toolbars",
+            "category": "toolbars",
             "description": {
                 "en": "Create a new toolbar"
             },
-            "docs": "Creates a new toolbar",
+            "docs": "Creates a new toolbar.",
             "flags": {
                 "name": {
                     "description": {
@@ -219,6 +240,35 @@
                 "en": "Opens Note Toolbar's CLI user guide in a browser"
             },
             "docs": "Opens Note Toolbar's CLI user guide (this page) in a browser."
+        },
+        {
+            "id": "note-toolbar:items",
+            "category": "items",
+            "description": {
+                "en": "Lists toolbar items"
+            },
+            "docs": "Lists toolbar items.",
+            "flags": {
+                "$after": ["verbose", "format"],
+                "empty": {
+                    "description": {
+                        "en": "Include empty items in output"
+                    },
+                    "type": "boolean",
+                    "required": false
+                }
+            }
+        },
+        {
+            "id": "note-toolbar:toolbars",
+            "category": "toolbars",
+            "description": {
+                "en": "Lists toolbars"
+            },
+            "docs": "Lists toolbars.",
+            "flags": {
+                "$after": ["verbose", "format"]
+            }
         }
     ]
 }

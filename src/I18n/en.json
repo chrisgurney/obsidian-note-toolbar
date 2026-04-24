@@ -143,6 +143,9 @@
         "error-label-or-icon-required": "Error: A value for label or icon is required",
         "error-script-invalid-args": "Error: Invalid script argument format: {{args}}",
         "error-toolbar-already-exists": "Error: A toolbar with this name already exists: {{toolbar}}",
+        "items-empty-not-shown": "{{count}} items were not listed (empty labels and tooltips)",
+        "no-items": "No items found.",
+        "no-toolbars": "No toolbars found.",
         "success-item-added": "Success: Item added to toolbar: {{toolbar}}",
         "success-toolbar-created": "Success: Toolbar created: {{toolbar}}",
         "success-uri-opened": "Opened: {{uri}}"
