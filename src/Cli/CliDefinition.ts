@@ -1,6 +1,7 @@
 import cliDefJson from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
 import { CliFlags } from "obsidian";
+import { t } from "Settings/NoteToolbarSettings";
 import { tr } from "Utils/Utils";
 
 
@@ -123,7 +124,7 @@ export default class CliDefinition {
                 key,
                 {
                     ...flag,
-                    description: tr(flag.description, language) ?? '',
+                    description: (flag.required ? t('cli.required') + ' ' : '') + (tr(flag.description, language) ?? ''),
                     value: flag.value ? tr(flag.value, language) ?? undefined : undefined,
                 }
             ])
