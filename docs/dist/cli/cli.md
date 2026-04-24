@@ -65,3 +65,7 @@ toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
 
+### `note-toolbar:help`
+
+Opens Note Toolbar's CLI user guide (this page) in a browser.
+

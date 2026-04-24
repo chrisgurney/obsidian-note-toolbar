@@ -176,6 +176,14 @@
             "flags": {
                 "$before": ["toolbar", "pos"]
             }
+        },
+        {
+            "id": "note-toolbar:help",
+            "category": "add",
+            "description": {
+                "en": "Opens Note Toolbar's CLI user guide in a browser"
+            },
+            "docs": "Opens Note Toolbar's CLI user guide (this page) in a browser."
         }
     ]
 }

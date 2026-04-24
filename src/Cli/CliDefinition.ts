@@ -23,7 +23,7 @@ interface CliActionFlags {
 interface CliAction {
     id: string;
     description: CliLocalizedString;
-    flags: CliActionFlags;
+    flags?: CliActionFlags;
     since?: string;
     docs?: string;
     examples?: string;

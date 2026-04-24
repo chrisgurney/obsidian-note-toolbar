@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { CliData, CliHandler, getIcon, normalizePath, TFile } from "obsidian";
-import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, t, ToolbarItemSettings, URL_USER_GUIDE } from "Settings/NoteToolbarSettings";
 import { importArgs, tr } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 
@@ -40,17 +40,17 @@ export default class CliHandlers {
             return this.cliDefinition.formatCommandList();
         },
         'note-toolbar:add-break': async (args: CliData) => {
-            return this.addItemHandler(args, ItemType.Break, (item) => {});
+            return this.addItemHelper(args, ItemType.Break, (item) => {});
         },
         'note-toolbar:add-command': async (args: CliData) => {
-            return this.addItemHandler(args, ItemType.Command, (item) => {
+            return this.addItemHelper(args, ItemType.Command, (item) => {
                 const command = this.ntb.app.commands.commands[args.command];
                 if (!command) return t('cli.error-invalid-command', { commandId: args.command });
                 item.linkAttr.commandId = args.command;
             });
         },
         'note-toolbar:add-js': async (args: CliData) => {
-            return this.addItemHandler(args, ItemType.JavaScript, (item) => {
+            return this.addItemHelper(args, ItemType.JavaScript, (item) => {
                 if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
                     if (this.hasValue(args.code) && (this.hasValue(args.file) || this.hasValue(args.path))) {
                         return t('cli.error-js-code-and-file-exclusive');
@@ -76,42 +76,18 @@ export default class CliHandlers {
             });
         },
         'note-toolbar:add-sep': async (args: CliData) => {
-            return this.addItemHandler(args, ItemType.Separator, (item) => {});
+            return this.addItemHelper(args, ItemType.Separator, (item) => {});
         },
         'note-toolbar:add-spread': async (args: CliData) => {
-            return this.addItemHandler(args, ItemType.Spreader, (item) => {});
+            return this.addItemHelper(args, ItemType.Spreader, (item) => {});
+        },
+        'note-toolbar:help': async () => {
+            window.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
+            return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } });
         }
     };
 
-    /**
-     * Sets up a new item for `add-*` commands based on the CLI args, and adds it to the specified toolbar.
-     * @param args CLI arguments
-     * @param itemType ItemType of item to add
-     * @param populateItem callback specific to the type of item being added, responsible for populating the item with the necessary params based on the CLI args; should return an error string if validation fails, or void if successful.
-     * @returns success or error message
-     */
-    private async addItemHandler(
-        args: CliData, 
-        itemType: ItemType, 
-        populateItem: (item: ToolbarItemSettings) => string | void
-    ): Promise<string> {
-        // get the toolbar and create a default item
-        const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
-        if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
-        const item = this.ntb.settingsManager.getDefaultItem(itemType);
-        // execute the type-specific population logic
-        const itemError = populateItem(item);
-        if (itemError) return itemError;
-        // apply the label, icon, and tooltip
-        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(itemType)) {
-            const labelIconTooltipError = this.addItemArgs(item, args);
-            if (labelIconTooltipError) return labelIconTooltipError;
-        }
-        // add the item to the toolbar
-        const position = args.pos ? parseInt(args.pos) : undefined;
-        await this.ntb.settingsManager.addToolbarItem(toolbar, item, position);
-        return t('cli.success-item-added', { toolbar: toolbar.name });
-    }
+
 
 	/*************************************************************************
 	 * HELPERS
@@ -134,6 +110,36 @@ export default class CliHandlers {
             return t('cli.error-label-or-icon-required');
         }
         if (args.tooltip) item.tooltip = args.tooltip;
+    }
+
+    /**
+     * Sets up a new item for `add-*` commands based on the CLI args, and adds it to the specified toolbar.
+     * @param args CLI arguments
+     * @param itemType ItemType of item to add
+     * @param populateItem callback specific to the type of item being added, responsible for populating the item with the necessary params based on the CLI args; should return an error string if validation fails, or void if successful.
+     * @returns success or error message
+     */
+    private async addItemHelper(
+        args: CliData, 
+        itemType: ItemType, 
+        populateItem: (item: ToolbarItemSettings) => string | void
+    ): Promise<string> {
+        // get the toolbar and create a default item
+        const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
+        if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
+        const item = this.ntb.settingsManager.getDefaultItem(itemType);
+        // execute the type-specific population logic
+        const itemError = populateItem(item);
+        if (itemError) return itemError;
+        // apply the label, icon, and tooltip
+        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(itemType)) {
+            const labelIconTooltipError = this.addItemArgs(item, args);
+            if (labelIconTooltipError) return labelIconTooltipError;
+        }
+        // add the item to the toolbar
+        const position = args.pos ? parseInt(args.pos) : undefined;
+        await this.ntb.settingsManager.addToolbarItem(toolbar, item, position);
+        return t('cli.success-item-added', { toolbar: toolbar.name });
     }
 
     /**
