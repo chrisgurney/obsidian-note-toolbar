@@ -38,7 +38,7 @@ Opens Note Toolbar's CLI user guide (this page) in a browser.
 
 ### `note-toolbar:items`
 
-Lists toolbar items.
+Lists all toolbar items, except empty items (no label or tooltip) by default.
 
 ```sh
 empty           # Include empty items in output
@@ -126,7 +126,7 @@ name=<name>  # Toolbar name
 
 ### `note-toolbar:toolbars`
 
-Lists toolbars.
+Lists all toolbars.
 
 ```sh
 verbose         # Include additional details in output

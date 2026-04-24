@@ -247,7 +247,7 @@
             "description": {
                 "en": "Lists toolbar items"
             },
-            "docs": "Lists toolbar items.",
+            "docs": "Lists all toolbar items, except empty items (no label or tooltip) by default.",
             "flags": {
                 "$after": ["verbose", "format"],
                 "empty": {
@@ -265,7 +265,7 @@
             "description": {
                 "en": "Lists toolbars"
             },
-            "docs": "Lists toolbars.",
+            "docs": "Lists all toolbars.",
             "flags": {
                 "$after": ["verbose", "format"]
             }
