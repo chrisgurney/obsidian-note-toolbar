@@ -288,7 +288,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 												.setIcon('copy')
 												.onClick(async () => {
 													let calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
-													navigator.clipboard.writeText(calloutExport);
+													activeWindow.navigator.clipboard.writeText(calloutExport);
 													new Notice(
 														learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
 													).containerEl.addClass('mod-success');
@@ -301,7 +301,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											.setTitle(t('setting.toolbars.menu-copy-id'))
 											.setIcon('code')
 											.onClick(async (menuEvent) => {
-												navigator.clipboard.writeText(toolbar.uuid);
+												activeWindow.navigator.clipboard.writeText(toolbar.uuid);
 												new Notice(t('setting.toolbars.menu-copy-id-notice')).containerEl.addClass('mod-success');
 											});
 									});

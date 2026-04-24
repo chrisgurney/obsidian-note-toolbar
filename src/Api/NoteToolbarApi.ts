@@ -38,7 +38,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.clipboard
      */
     async clipboard(): Promise<string | null> {
-        return await navigator.clipboard.readText();
+        return await activeWindow.navigator.clipboard.readText();
     }
 
     /**

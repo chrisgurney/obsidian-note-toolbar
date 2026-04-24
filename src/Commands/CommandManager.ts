@@ -312,7 +312,7 @@ export default class CommandManager {
             const commandText = returnDataElement
                 ? `[]()<data data-ntb-command="${command.id}"/> <!-- ${command.name} -->`
                 : `obsidian://note-toolbar?command=${command.id}`;
-            navigator.clipboard.writeText(commandText);
+            activeWindow.navigator.clipboard.writeText(commandText);
             new Notice(t('command.copy-command-notice')).containerEl.addClass('mod-success');
         });
         modal.open();
