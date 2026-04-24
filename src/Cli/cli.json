@@ -10,8 +10,13 @@
     "categories": [
         {
             "id": "add",
-            "heading": "Add items to a toolbar",
-            "docs": "Commands for adding items to a toolbar."
+            "heading": "Add items",
+            "docs": "Add items to toolbars."
+        },
+        {
+            "id": "help",
+            "heading": "Help",
+            "docs": "Get help with the Note Toolbar CLI."
         }
     ],
     "commonFlags": {
@@ -179,7 +184,7 @@
         },
         {
             "id": "note-toolbar:help",
-            "category": "add",
+            "category": "help",
             "description": {
                 "en": "Opens Note Toolbar's CLI user guide in a browser"
             },

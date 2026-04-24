@@ -1,6 +1,6 @@
-## Add items to a toolbar
+## Add items
 
-Commands for adding items to a toolbar.
+Add items to toolbars.
 
 ### `note-toolbar:add-break`
 
@@ -64,6 +64,10 @@ Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Crea
 toolbar=<nameOrId>  # Toolbar name or ID to add item to
 pos=<n>             # Item position in toolbar; default = end
 ```
+
+## Help
+
+Get help with the Note Toolbar CLI.
 
 ### `note-toolbar:help`
 
