@@ -85,7 +85,7 @@
             "uk": "Копіює вибраний текст у буфер обміну."
         },
         "icon": "clipboard-copy",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await activeWindow.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Copy",
             "ja": "コピー",
@@ -103,7 +103,7 @@
             "uk": "Копіює посилання на поточний блок до буфера обміну."
         },
         "icon": "link-2",
-        "script": "const { metadataCache: m } = app, e = ntb.app.workspace.activeEditor?.editor, f = ntb.app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
+        "script": "const { metadataCache: m } = app, e = ntb.app.workspace.activeEditor?.editor, f = ntb.app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (window.navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
         "tooltip": {
             "en": "Copy link to block",
             "ja": "ブロックへのリンクをコピー",
@@ -121,7 +121,7 @@
             "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
         },
         "icon": "clipboard-check",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait activeWindow.navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
         "tooltip": {
             "en": "Copy note content",
             "ja": "ノートの内容をコピー",
@@ -157,7 +157,7 @@
             "uk": "Вирізає вибраний текст у буфер обміну."
         },
         "icon": "scissors",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await activeWindow.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Cut",
             "ja": "切り取り",
@@ -1169,7 +1169,7 @@
             "uk": "Вставте текст з буфера обміну."
         },
         "icon": "clipboard-paste",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await activeWindow.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Paste",
             "ja": "貼り付け",
