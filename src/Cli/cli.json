@@ -113,7 +113,7 @@
                 "$after": ["tooltip", "pos"],
                 "code": {
                     "description": {
-                        "en": "JavaScript code to execute (required if file is not provided)"
+                        "en": "JavaScript code to execute (required if file or path is not provided)"
                     },
                     "type": "string",
                     "value": {
