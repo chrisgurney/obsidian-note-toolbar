@@ -39,7 +39,7 @@
         },
         "label": {
             "description": {
-                "en": "(required if icon not provided) Item label"
+                "en": "(required: label or icon) Item label"
             },
             "type": "string",
             "value": {
@@ -49,7 +49,7 @@
         },
         "icon": {
             "description": {
-                "en": "(required if label not provided) Item icon, from Lucide's icon set"
+                "en": "(required: label or icon) Item icon, from Lucide's icon set"
             },
             "type": "string",
             "value": {
@@ -59,7 +59,7 @@
         },
         "pos": {
             "description": {
-                "en": "Item position in toolbar (default: end)"
+                "en": "Item position in toolbar (default: end of toolbar)"
             },
             "type": "string",
             "value": {
@@ -149,7 +149,7 @@
                 "$after": ["tooltip", "pos"],
                 "code": {
                     "description": {
-                        "en": "(required if file|path not provided) JavaScript code to execute"
+                        "en": "(required: code, file, or path) JavaScript code to execute"
                     },
                     "type": "string",
                     "value": {
@@ -159,7 +159,7 @@
                 },
                 "file": {
                     "description": {
-                        "en": "(required if code|path not provided) Filename to execute"
+                        "en": "(required: code, file, or path) Filename to execute"
                     },
                     "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
                     "type": "string",
@@ -170,7 +170,7 @@
                 },
                 "path": {
                     "description": {
-                        "en": "(required if file|code not provided) Filename with path to execute"
+                        "en": "(required: code, file, or path) Filename with path to execute"
                     },
                     "docs": "Requires the exact path from the vault root, e.g. folder/script.js",
                     "type": "string",

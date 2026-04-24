@@ -26,7 +26,7 @@ Adds a [break](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creatin
 
 ```sh
 toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
-pos=<n>             # Item position in toolbar (default: end)
+pos=<n>             # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-command`
@@ -35,12 +35,12 @@ Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/
 
 ```sh
 toolbar=<nameOrId>   # (required) Toolbar name or ID to add item to
-label=<label>        # (required if icon not provided) Item label
-icon=<iconName>      # (required if label not provided) Item icon, from Lucide's icon set
+label=<label>        # (required: label or icon) Item label
+icon=<iconName>      # (required: label or icon) Item icon, from Lucide's icon set
 command=<commandId>  # (required) Obsidian command ID (e.g. editor:toggle-bold)
 focus                # Focus the editor after executing the command (default: false)
 tooltip=<tooltip>    # Item tooltip
-pos=<n>              # Item position in toolbar (default: end)
+pos=<n>              # Item position in toolbar (default: end of toolbar)
 ```
 
 #### Examples
@@ -56,14 +56,14 @@ Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wi
 
 ```sh
 toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
-label=<label>       # (required if icon not provided) Item label
-icon=<iconName>     # (required if label not provided) Item icon, from Lucide's icon set
-code=<code>         # (required if file|path not provided) JavaScript code to execute
-file=<name>         # (required if code|path not provided) Filename to execute
-path=<path>         # (required if file|code not provided) Filename with path to execute
+label=<label>       # (required: label or icon) Item label
+icon=<iconName>     # (required: label or icon) Item icon, from Lucide's icon set
+code=<code>         # (required: code, file, or path) JavaScript code to execute
+file=<name>         # (required: code, file, or path) Filename to execute
+path=<path>         # (required: code, file, or path) Filename with path to execute
 args=<args>         # Comma-separated 'name: value' format, with string values in quotes
 tooltip=<tooltip>   # Item tooltip
-pos=<n>             # Item position in toolbar (default: end)
+pos=<n>             # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-sep`
@@ -72,7 +72,7 @@ Adds a [separator](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Cre
 
 ```sh
 toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
-pos=<n>             # Item position in toolbar (default: end)
+pos=<n>             # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-spread`
@@ -81,7 +81,7 @@ Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Crea
 
 ```sh
 toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
-pos=<n>             # Item position in toolbar (default: end)
+pos=<n>             # Item position in toolbar (default: end of toolbar)
 ```
 
 ## Toolbars
