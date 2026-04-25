@@ -29,7 +29,7 @@ When adding an icon for a toolbar item, Obsidian uses the [Lucide ↗](https://l
 ### Copy output 
 
 Add `--copy` to any command to copy the output to the clipboard.
-```sh
+```console
 note-toolbar:items empty format=csv --copy
 ```
 
