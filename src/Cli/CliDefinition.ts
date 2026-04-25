@@ -87,8 +87,8 @@ export default class CliDefinition {
 
     public formatCommandList(): string {
         const heading = tr(this.cliDef.heading, this.language) ?? '';
-        const actions = Object.values(this.cliDef.actions)
-            .map((cmd: any) => `\x1b[90m${cmd.id.padEnd(36)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`)
+        const actions = Object.entries(this.cliDef.actions)
+            .map(([id, cmd]: [string, CliAction]) => `\x1b[90m${id.padEnd(36)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`)
             .join('\n');
         return `${heading}\n\n${actions}`;
     }
