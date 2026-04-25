@@ -26,6 +26,13 @@ Some commands accept file and path parameters to target a specific file (for exa
 
 When adding an icon for a toolbar item, Obsidian uses the [Lucide ↗](https://lucide.dev/) icon library, which lists available icon (and their names) on their website. If your icon name isn't working, note that Obsidian may be a version or two behind what's listed there; if in doubt, use Note Toolbar's interface to add an item for a list of all icon names.
 
+### Copy output 
+
+Add `--copy` to any command to copy the output to the clipboard.
+```sh
+note-toolbar:items empty format=csv --copy
+```
+
 ---
 
 ## Help
