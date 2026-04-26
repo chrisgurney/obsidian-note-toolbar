@@ -95,6 +95,7 @@ Add various types of content like links or media.
 | Add internal link | Add an internal link. |
 | Insert table | Insert a table. |
 | Add embed | Add an embedded file or note. |
+| Add external embed | Add an embedded external link. |
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 

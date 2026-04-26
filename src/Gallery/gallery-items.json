@@ -735,6 +735,19 @@
         "type": "command"
     },
     {
+        "id": "insert-external-embed",
+        "description": {
+            "en": "Add an embedded external link."
+        },
+        "focus": "editor",
+        "icon": "image-play",
+        "script": "const c = await ntb.clipboard().then(t => t.trim());\nconst u = URL.canParse(c) ? c : await ntb.prompt({\n  placeholder: ntb.t('api.ui.prompt-placeholder-url')\n});\nif (!u) return;\nntb.setSelection(`![](${u})`);",
+        "tooltip": {
+            "en": "Add external embed"
+        },
+        "type": "javascript"
+    },
+    {
         "id": "insert-horizontal-rule",
         "commandCheck": true,
         "commandId": "editor:insert-horizontal-rule",
