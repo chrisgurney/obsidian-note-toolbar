@@ -623,22 +623,9 @@ export function insertTextAtCursor(app: App, textToInsert: any) {
 
 /**
  * Check if a string is a valid URI.
- * @link https://stackoverflow.com/a/49909903
  */
-// I think this is defined outside the function to reuse the object, for efficiency
-let validUrlEl: HTMLInputElement | undefined;
 export function isValidUri(u: string): boolean {
-	if (u !== "") {  
-		if (!validUrlEl) {
-			validUrlEl = document.createElement('input');
-			validUrlEl.setAttribute('type', 'url');
-		}
-		validUrlEl.value = u;
-		return validUrlEl.validity.valid;
-	}
-	else {
-		return false
-	}
+    return u !== "" && URL.canParse(u.trim());
 }
 
 /**
