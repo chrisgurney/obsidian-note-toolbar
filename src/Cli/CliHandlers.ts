@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { CliData, CliHandler, getIcon, normalizePath, TFile } from "obsidian";
-import { ItemType, ScriptConfig, t, ToolbarItemSettings, URL_USER_GUIDE } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE } from "Settings/NoteToolbarSettings";
 import { importArgs, tr } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 
@@ -41,10 +41,10 @@ export default class CliHandlers {
         'note-toolbar:add-js': this.handleAddJs.bind(this),
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
-        'note-toolbar:add-toolbar': this.handleAddToolbar.bind(this),
+        'note-toolbar:help': this.handleHelp.bind(this),
         'note-toolbar:items': this.handleItems.bind(this),
-        'note-toolbar:toolbars': this.handleToolbars.bind(this),
-        'note-toolbar:help': this.handleHelp.bind(this)
+        'note-toolbar:new': this.handleNew.bind(this),
+        'note-toolbar:toolbars': this.handleToolbars.bind(this)
     };
 
     async handleAddBreak(args: CliData): Promise<string> {
@@ -58,13 +58,6 @@ export default class CliHandlers {
             item.linkAttr.commandId = args.command;
             if (args.focus === 'true') item.linkAttr.focus = 'editor';
         });
-    }
-
-    async handleAddToolbar(args: CliData): Promise<string> {
-        const toolbar = this.ntb.settingsManager.getToolbar(args.name);
-        if (toolbar) return t('cli.error-toolbar-already-exists', { toolbar: args.name });
-        const newToolbar = await this.ntb.settingsManager.newToolbar(args.name);
-        return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
     }
 
     async handleAddJs(args: CliData): Promise<string> {
@@ -112,61 +105,14 @@ export default class CliHandlers {
     }
 
     handleItems(args: CliData): string {
-        const format = this.hasValue(args.format) ? args.format : 'tsv';
-        const verbose = args.verbose !== undefined;
-        // include empty items if verbose or --empty flag is present
-        const includeEmpty = verbose || args.empty !== undefined;
+        return this.getItemList(args);
+    }
 
-        const separator = format === 'csv' ? ',' : '\t';
-
-        type ItemRow = { key: string; cols: string[] };
-        const rows: ItemRow[] = [];
-        let emptyCount = 0;
-
-        this.ntb.settings.toolbars.forEach((toolbar) => {
-            toolbar.items.forEach((item) => {
-                const label = item.label ?? '';
-                const tooltip = item.tooltip ?? '';
-
-                if (!label && !tooltip) {
-                    if (includeEmpty) {
-                        // empty items sort to the top via empty key
-                    } else {
-                        emptyCount++;
-                        return;
-                    }
-                }
-
-                const cols = verbose
-                    ? [item.uuid, item.linkAttr.type ?? '', item.icon ?? '', label, tooltip, toolbar.uuid]
-                    : [item.linkAttr.type ?? '', item.icon ?? '', label, tooltip];
-
-                // sort key is label, falling back to tooltip; empty string sorts to top
-                rows.push({ key: label || tooltip, cols });
-            });
-        });
-
-        if (!rows.length && !emptyCount) return t('cli.no-items');
-
-        rows.sort((a, b) => {
-            if (!a.key && b.key) return -1;
-            if (a.key && !b.key) return 1;
-            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
-        });
-
-        // tabs in values are replaced with a space to avoid breaking TSV structure
-        const escape = (val: string) =>
-            format === 'csv' ? `"${val.replace(/"/g, '""')}"` : val.replace(/\t/g, ' ');
-
-        const header = verbose
-            ? ['uuid', 'type', 'icon', 'label', 'tooltip', 'toolbar'].join(separator)
-            : ['type', 'icon', 'label', 'tooltip'].join(separator);
-
-        const lines = [header, ...rows.map(r => r.cols.map(escape).join(separator))];
-
-        if (emptyCount > 0) lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
-
-        return lines.join('\n');
+    async handleNew(args: CliData): Promise<string> {
+        const toolbar = this.ntb.settingsManager.getToolbar(args.name);
+        if (toolbar) return t('cli.error-toolbar-already-exists', { toolbar: args.name });
+        const newToolbar = await this.ntb.settingsManager.newToolbar(args.name);
+        return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
     }
 
     handleToolbars(args: CliData): string {
@@ -195,6 +141,98 @@ export default class CliHandlers {
                 ).join('\n');
             }
         }
+    }
+
+	/*************************************************************************
+	 * HANDLER HELPERS
+	 *************************************************************************/
+
+    private static readonly VARS_TRUNCATE_LENGTH = 32;
+
+    private truncateVars(value: string): string {
+        if (!this.ntb.vars.hasVars(value)) return value;
+        return value.slice(0, CliHandlers.VARS_TRUNCATE_LENGTH).trimEnd() + '…';
+    }
+
+    private buildItemRows(
+        toolbars: ToolbarSettings[],
+        verbose: boolean,
+        includeEmpty: boolean,
+        truncate: boolean
+    ): { rows: { key: string; cols: string[] }[]; emptyCount: number } {
+        type ItemRow = { key: string; cols: string[] };
+        const rows: ItemRow[] = [];
+        let emptyCount = 0;
+
+        toolbars.forEach((toolbar) => {
+            toolbar.items.forEach((item) => {
+                const label = truncate ? this.truncateVars(item.label ?? '') : (item.label ?? '');
+                const tooltip = truncate ? this.truncateVars(item.tooltip ?? '') : (item.tooltip ?? '');
+
+                if (!label && !tooltip) {
+                    if (includeEmpty) {
+                        // empty items sort to the top via empty key
+                    } else {
+                        emptyCount++;
+                        return;
+                    }
+                }
+
+                const cols = verbose
+                    ? [item.uuid, item.linkAttr.type ?? '', item.icon ?? '', label, tooltip, toolbar.uuid]
+                    : [item.linkAttr.type ?? '', item.icon ?? '', label, tooltip];
+
+                rows.push({ key: item.label || item.tooltip || '', cols });
+            });
+        });
+
+        rows.sort((a, b) => {
+            if (!a.key && b.key) return -1;
+            if (a.key && !b.key) return 1;
+            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
+        });
+
+        return { rows, emptyCount };
+    }
+
+    private getItemList(
+        args: CliData,
+        toolbar?: ToolbarSettings
+    ): string {
+        const format = this.hasValue(args.format) ? args.format : 'table';
+        const verbose = args.verbose !== undefined;
+        const includeEmpty = verbose || args.empty !== undefined;
+        const isCsv = format === 'csv';
+
+        const toolbars = toolbar ? [toolbar] : this.ntb.settings.toolbars;
+        const { rows, emptyCount } = this.buildItemRows(toolbars, verbose, includeEmpty, !isCsv);
+
+        if (!rows.length && !emptyCount) return t('cli.no-items');
+
+        let lines: string[];
+
+        if (isCsv) {
+            const header = verbose
+                ? ['uuid', 'type', 'icon', 'label', 'tooltip', 'toolbar'].join(',')
+                : ['type', 'icon', 'label', 'tooltip'].join(',');
+            const escape = (val: string) => `"${val.replace(/"/g, '""')}"`;
+            lines = [header, ...rows.map(r => r.cols.map(escape).join(','))];
+        } else {
+            const colWidths = rows.reduce((widths, row) => {
+                row.cols.forEach((col, i) => {
+                    widths[i] = Math.max(widths[i] ?? 0, col.length);
+                });
+                return widths;
+            }, [] as number[]);
+
+            lines = rows.map(r =>
+                r.cols.map((col, i) => col.padEnd(colWidths[i])).join('  ').trimEnd()
+            );
+        }
+
+        if (emptyCount > 0) lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
+
+        return lines.join('\n');
     }
 
 	/*************************************************************************

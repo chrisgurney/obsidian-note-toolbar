@@ -204,25 +204,6 @@
                 "$before": ["toolbar", "pos"]
             }
         },
-        "note-toolbar:add-toolbar": {
-            "category": "toolbars",
-            "description": {
-                "en": "Create a new toolbar"
-            },
-            "docs": "Creates a new toolbar.",
-            "flags": {
-                "name": {
-                    "description": {
-                        "en": "Toolbar name"
-                    },
-                    "type": "string",
-                    "value": {
-                        "en": "<name>"
-                    },
-                    "required": false
-                }
-            }
-        },
         "note-toolbar:help": {
             "category": "help",
             "description": {
@@ -243,6 +224,25 @@
                         "en": "Include empty items in output"
                     },
                     "type": "boolean",
+                    "required": false
+                }
+            }
+        },
+        "note-toolbar:new": {
+            "category": "toolbars",
+            "description": {
+                "en": "Create a new toolbar"
+            },
+            "docs": "Creates a new toolbar.",
+            "flags": {
+                "name": {
+                    "description": {
+                        "en": "Toolbar name"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<name>"
+                    },
                     "required": false
                 }
             }

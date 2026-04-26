@@ -86,7 +86,7 @@ pos=<n>             # Item position in toolbar (default: end of toolbar)
 
 ## Toolbars
 
-### `note-toolbar:add-toolbar`
+### `note-toolbar:new`
 
 Creates a new toolbar.
 
