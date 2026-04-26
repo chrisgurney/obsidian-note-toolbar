@@ -325,7 +325,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
-     * Replaces the selected text with the provided string, or the word at the cursor position.
+     * Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
      * 
      * @see INoteToolbarApi.setSelection
      */
@@ -339,7 +339,11 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             editor.replaceSelection(replacement);
         } else {
             const wordRange = editor.wordAt(editor.getCursor());
-            if (wordRange) editor.replaceRange(replacement, wordRange.from, wordRange.to);
+            if (wordRange) {
+                editor.replaceRange(replacement, wordRange.from, wordRange.to);
+            } else {
+                editor.replaceRange(replacement, editor.getCursor());
+            }
         }
     }
 

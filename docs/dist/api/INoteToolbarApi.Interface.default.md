@@ -87,7 +87,7 @@ await ntb.setProperty('A List', ['asdf', 'asdf2']);
 
 > **setSelection**: (`replacement`) => `void`
 
-Replaces the selected text, or the word at the cursor position, with the provided string.
+Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
 
 #### Parameters
 
