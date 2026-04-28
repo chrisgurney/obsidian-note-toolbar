@@ -153,8 +153,8 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             this.activePrefixStart = undefined;
         }
 
-        // check for prefix at start of query, or after the last space
-        const lastSpaceIndex = query.lastIndexOf(' ');
+        // check for prefix at start of query, or after the last space (use whole query otherwise)
+        const lastSpaceIndex = Object.keys(this.prefixes).length > 0 ? query.lastIndexOf(' ') : -1;
         const searchSegment = lastSpaceIndex === -1 ? query.trim() : query.slice(lastSpaceIndex + 1);
 
         if (this.prefixes && !isEmptyQuery) {
