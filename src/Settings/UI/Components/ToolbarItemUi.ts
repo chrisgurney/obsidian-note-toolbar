@@ -338,6 +338,7 @@ export default class ToolbarItemUi {
                                 isComponentVisible.label = true;						
                             }
                             this.updateItemVisButton(toolbarItem, btn, 'desktop');
+                            if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.updateItemVisStatus(toolbarItem);
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
@@ -375,6 +376,7 @@ export default class ToolbarItemUi {
                                 isComponentVisible.label = true;						
                             }
                             this.updateItemVisButton(toolbarItem, btn, 'mobile');
+                            if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.updateItemVisStatus(toolbarItem);
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
