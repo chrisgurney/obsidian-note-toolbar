@@ -279,6 +279,16 @@ export default class SettingsMigrator {
             old_version = new_version;
         }
 
+        // MIGRATION: removed deprecated recent* settings (no longer needed) #542
+        if (old_version === 20260122.1) {
+            new_version = 20260428.1;
+            this.ntb.debug("starting migration: " + old_version + " -> " + new_version);
+            //@ts-ignore
+            delete this.ntb.settings.recentFiles, delete this.ntb.settings.recentItems, delete this.ntb.settings.recentToolbars;
+            // for the next migration to run
+            old_version = new_version;
+        }
+
         // COMMENT THIS OUT while testing new migration code
         this.ntb.settings.version = SETTINGS_VERSION;
 

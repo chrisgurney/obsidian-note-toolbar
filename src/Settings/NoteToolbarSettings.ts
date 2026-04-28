@@ -5,7 +5,7 @@ import { getLanguage, PaneType } from "obsidian";
 export const WHATSNEW_VERSION = '1.30';
 
 /* only update when settings structure changes to trigger migrations */
-export const SETTINGS_VERSION = 20260122.1;
+export const SETTINGS_VERSION = 20260428.1;
 
 // *****************************************************************************
 // #region TRANSLATIONS
