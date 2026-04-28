@@ -449,7 +449,7 @@ export default class SettingsUIUtils {
 				}
 
 				const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
-				if (isEmptyItem) selectedItem.label = '';
+				if (isEmptyItem) selectedItem.label = selectedItem.tooltip = '';
 				if (isEmptyItem && parent) {
 					const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
 					if (itemContainer) {
