@@ -1,7 +1,9 @@
+> Available in `1.31+`
+
 The **Note Toolbar CLI** provides command-line access to create Note Toolbar toolbars and items, using [Obsidian's CLI ↗](https://obsidian.md/help/cli). This lets you control Note Toolbar from your terminal for scripting, automation, and integration with external tools.
 
 > [!IMPORTANT]
-> Access to the CLI requires Obsidian 1.12.2 or later.
+> Access to the CLI requires Obsidian 1.12.2 or later, and Note Toolbar 1.31 or later.
 
 ## Get started
 
