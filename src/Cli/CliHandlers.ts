@@ -39,6 +39,7 @@ export default class CliHandlers {
         'note-toolbar:add-break': this.handleAddBreak.bind(this),
         'note-toolbar:add-command': this.handleAddCommand.bind(this),
         'note-toolbar:add-js': this.handleAddJs.bind(this),
+        'note-toolbar:add-menu': this.handleAddMenu.bind(this),
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this),
@@ -95,13 +96,22 @@ export default class CliHandlers {
         return await this.addItemHelper(args, ItemType.Spreader, (item) => {});
     }
     
+    async handleAddMenu(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Menu, (item) => {
+            const menuToolbar = this.ntb.settingsManager.getToolbar(args.menu);
+            if (!menuToolbar) return t('cli.error-invalid-toolbar', { toolbar: args.menu });
+            item.link = menuToolbar.uuid;
+        });
+    }
+
     handleDefault(args: CliData): string {
         return this.cliDefinition.formatCommandList();
     }
 
-    handleHelp(args: CliData): Promise<string> {
-        activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
-        return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } });
+    handleHelp(args: CliData): string {
+        const win = activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
+        if (win) return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } })
+        else return '';
     }
 
     handleItems(args: CliData): string {

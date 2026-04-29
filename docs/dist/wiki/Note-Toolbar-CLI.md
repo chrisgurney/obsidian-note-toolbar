@@ -93,6 +93,19 @@ pos=<n>              # Item position in toolbar (default: end of toolbar)
 note-toolbar:add-command toolbar="Formatting Tools" icon=bold command="editor:toggle-bold"
 ```
 
+### `note-toolbar:add-menu`
+
+Adds a [menu item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.
+
+```sh
+toolbar=<nameOrId>      # Toolbar name or ID to add item to (required)
+label=<label>           # Item label (required: label or icon)
+icon=<iconName>         # Item icon, from Lucide's icon set (required: label or icon)
+menu=<toolbarNameOrId>  # Toolbar to add as menu (required)
+tooltip=<tooltip>       # Item tooltip
+pos=<n>                 # Item position in toolbar (default: end of toolbar)
+```
+
 ### `note-toolbar:add-js`
 
 Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.

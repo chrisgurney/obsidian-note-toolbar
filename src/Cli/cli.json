@@ -131,6 +131,27 @@
                 }
             }
         },
+        "note-toolbar:add-menu": {
+            "category": "items-add",
+            "description": {
+                "en": "Add menu item to a toolbar"
+            },
+            "docs": "Adds a [menu item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.",
+            "flags": {
+                "$before": ["toolbar", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "menu": {
+                    "description": {
+                        "en": "Toolbar to add as menu"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<toolbarNameOrId>"
+                    },
+                    "required": true
+                }
+            }
+        },
         "note-toolbar:add-js": {
             "category": "items-add",
             "description": {
