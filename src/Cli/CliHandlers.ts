@@ -61,6 +61,14 @@ export default class CliHandlers {
         });
     }
 
+    async handleAddMenu(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Menu, (item) => {
+            const menuToolbar = this.ntb.settingsManager.getToolbar(args.menu);
+            if (!menuToolbar) return t('cli.error-invalid-toolbar', { toolbar: args.menu });
+            item.link = menuToolbar.uuid;
+        });
+    }
+
     async handleAddJs(args: CliData): Promise<string> {
         return await this.addItemHelper(args, ItemType.JavaScript, (item) => {
             if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
@@ -96,14 +104,6 @@ export default class CliHandlers {
         return await this.addItemHelper(args, ItemType.Spreader, (item) => {});
     }
     
-    async handleAddMenu(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Menu, (item) => {
-            const menuToolbar = this.ntb.settingsManager.getToolbar(args.menu);
-            if (!menuToolbar) return t('cli.error-invalid-toolbar', { toolbar: args.menu });
-            item.link = menuToolbar.uuid;
-        });
-    }
-
     handleDefault(args: CliData): string {
         return this.cliDefinition.formatCommandList();
     }
