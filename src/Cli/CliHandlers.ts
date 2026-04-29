@@ -44,6 +44,7 @@ export default class CliHandlers {
         'note-toolbar:add-menu': this.handleAddMenu.bind(this),
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
+        'note-toolbar:add-uri': this.handleAddUri.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this),
         'note-toolbar:items': this.handleItems.bind(this),
         'note-toolbar:new': this.handleNew.bind(this),
@@ -123,7 +124,13 @@ export default class CliHandlers {
     async handleAddSpread(args: CliData): Promise<string> {
         return await this.addItemHelper(args, ItemType.Spreader, (item) => {});
     }
-    
+
+    async handleAddUri(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Uri, (item) => {
+            item.link = args.uri;
+        });
+    }
+
     handleDefault(args: CliData): string {
         return this.cliDefinition.formatCommandList();
     }

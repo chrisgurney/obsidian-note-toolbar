@@ -279,6 +279,27 @@
                 "$before": ["toolbar", "pos"]
             }
         },
+        "note-toolbar:add-uri": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a URI item to a toolbar"
+            },
+            "docs": "Adds a [URI item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/URI-items) to a toolbar.",
+            "flags": {
+                "$before": ["toolbar", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "uri": {
+                    "description": {
+                        "en": "Website, URI, or note title"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<link>"
+                    },
+                    "required": true
+                }
+            }
+        },
         "note-toolbar:help": {
             "category": "help",
             "description": {
