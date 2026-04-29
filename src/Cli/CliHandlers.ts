@@ -38,6 +38,7 @@ export default class CliHandlers {
         'note-toolbar': this.handleDefault.bind(this),
         'note-toolbar:add-break': this.handleAddBreak.bind(this),
         'note-toolbar:add-command': this.handleAddCommand.bind(this),
+        'note-toolbar:add-group': this.handleAddGroup.bind(this),
         'note-toolbar:add-js': this.handleAddJs.bind(this),
         'note-toolbar:add-menu': this.handleAddMenu.bind(this),
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
@@ -61,11 +62,11 @@ export default class CliHandlers {
         });
     }
 
-    async handleAddMenu(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Menu, (item) => {
-            const menuToolbar = this.ntb.settingsManager.getToolbar(args.menu);
-            if (!menuToolbar) return t('cli.error-invalid-toolbar', { toolbar: args.menu });
-            item.link = menuToolbar.uuid;
+    async handleAddGroup(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Group, (item) => {
+            const groupToolbar = this.ntb.settingsManager.getToolbar(args.group);
+            if (!groupToolbar) return t('cli.error-invalid-toolbar', { toolbar: args.group });
+            item.link = groupToolbar.uuid;
         });
     }
 
@@ -93,6 +94,14 @@ export default class CliHandlers {
             else {
                 return t('cli.error-js-code-or-file-required');
             }
+        });
+    }
+
+    async handleAddMenu(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Menu, (item) => {
+            const menuToolbar = this.ntb.settingsManager.getToolbar(args.menu);
+            if (!menuToolbar) return t('cli.error-invalid-toolbar', { toolbar: args.menu });
+            item.link = menuToolbar.uuid;
         });
     }
 

@@ -105,7 +105,7 @@
         "note-toolbar:add-command": {
             "category": "items-add",
             "description": {
-                "en": "Add command item to a toolbar"
+                "en": "Add a command item to a toolbar"
             },
             "docs": "Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.",
             "examples": "# Add a bold toggle to an existing toolbar\nnote-toolbar:add-command toolbar=\"Formatting Tools\" icon=bold command=\"editor:toggle-bold\"",
@@ -131,18 +131,18 @@
                 }
             }
         },
-        "note-toolbar:add-menu": {
+        "note-toolbar:add-group": {
             "category": "items-add",
             "description": {
-                "en": "Add menu item to a toolbar"
+                "en": "Add an item group to a toolbar"
             },
-            "docs": "Adds a [menu item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.",
+            "docs": "Adds an [item group](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-groups) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "label", "icon"],
-                "$after": ["tooltip", "pos"],
-                "menu": {
+                "$before": ["toolbar"],
+                "$after": ["pos"],
+                "group": {
                     "description": {
-                        "en": "Toolbar to add as menu"
+                        "en": "Toolbar to add as a group"
                     },
                     "type": "string",
                     "value": {
@@ -155,7 +155,7 @@
         "note-toolbar:add-js": {
             "category": "items-add",
             "description": {
-                "en": "Add JavaScript item to a toolbar"
+                "en": "Add a JavaScript item to a toolbar"
             },
             "docs": "Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.",
             "flags": {
@@ -202,6 +202,27 @@
                         "en": "<args>"
                     },
                     "required": false
+                }
+            }
+        },
+        "note-toolbar:add-menu": {
+            "category": "items-add",
+            "description": {
+                "en": "Add an item menu to a toolbar"
+            },
+            "docs": "Adds an [item menu](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.",
+            "flags": {
+                "$before": ["toolbar", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "menu": {
+                    "description": {
+                        "en": "Toolbar to add as a menu"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<toolbarNameOrId>"
+                    },
+                    "required": true
                 }
             }
         },

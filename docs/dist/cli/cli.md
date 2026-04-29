@@ -50,17 +50,14 @@ pos=<n>              # Item position in toolbar (default: end of toolbar)
 note-toolbar:add-command toolbar="Formatting Tools" icon=bold command="editor:toggle-bold"
 ```
 
-### `note-toolbar:add-menu`
+### `note-toolbar:add-group`
 
-Adds a [menu item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.
+Adds an [item group](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-groups) to a toolbar.
 
 ```sh
-toolbar=<nameOrId>      # Toolbar name or ID to add item to (required)
-label=<label>           # Item label (required: label or icon)
-icon=<iconName>         # Item icon, from Lucide's icon set (required: label or icon)
-menu=<toolbarNameOrId>  # Toolbar to add as menu (required)
-tooltip=<tooltip>       # Item tooltip
-pos=<n>                 # Item position in toolbar (default: end of toolbar)
+toolbar=<nameOrId>       # Toolbar name or ID to add item to (required)
+group=<toolbarNameOrId>  # Toolbar to add as a group (required)
+pos=<n>                  # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-js`
@@ -77,6 +74,19 @@ path=<path>         # Filename with path to execute (required: code, file, or pa
 args=<args>         # Comma-separated 'name: value' format, with string values in quotes
 tooltip=<tooltip>   # Item tooltip
 pos=<n>             # Item position in toolbar (default: end of toolbar)
+```
+
+### `note-toolbar:add-menu`
+
+Adds an [item menu](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.
+
+```sh
+toolbar=<nameOrId>      # Toolbar name or ID to add item to (required)
+label=<label>           # Item label (required: label or icon)
+icon=<iconName>         # Item icon, from Lucide's icon set (required: label or icon)
+menu=<toolbarNameOrId>  # Toolbar to add as a menu (required)
+tooltip=<tooltip>       # Item tooltip
+pos=<n>                 # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-sep`
