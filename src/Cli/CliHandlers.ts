@@ -38,6 +38,7 @@ export default class CliHandlers {
         'note-toolbar': this.handleDefault.bind(this),
         'note-toolbar:add-break': this.handleAddBreak.bind(this),
         'note-toolbar:add-command': this.handleAddCommand.bind(this),
+        'note-toolbar:add-file': this.handleAddFile.bind(this),
         'note-toolbar:add-group': this.handleAddGroup.bind(this),
         'note-toolbar:add-js': this.handleAddJs.bind(this),
         'note-toolbar:add-menu': this.handleAddMenu.bind(this),
@@ -59,6 +60,16 @@ export default class CliHandlers {
             if (!command) return t('cli.error-invalid-command', { commandId: args.command });
             item.linkAttr.commandId = args.command;
             if (args.focus === 'true') item.linkAttr.focus = 'editor';
+        });
+    }
+
+    async handleAddFile(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.File, (item) => {
+            const fileResult = this.resolveFileArgs(args.file, args.path);
+            if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+            const file: TFile | null = fileResult;
+            if (!file) return t('cli.error-file-or-path-required');
+            item.link = file.path;
         });
     }
 
@@ -324,12 +335,12 @@ export default class CliHandlers {
         if (this.hasValue(fileArg)) {
             const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
             const file = this.ntb.app.metadataCache.getFirstLinkpathDest(fileArg!, activeFilePath);
-            if (!file) return t('cli.error-file-not-found', { file: fileArg });
+            if (!file) return t('cli.error-file-not-found', { file: fileArg, interpolation: { escapeValue: false } });
             return file;
         }
         if (this.hasValue(pathArg)) {
             const file = this.ntb.app.vault.getFileByPath(normalizePath(pathArg!));
-            if (!file) return t('cli.error-path-not-found', { path: pathArg });
+            if (!file) return t('cli.error-path-not-found', { path: pathArg, interpolation: { escapeValue: false } });
             return file;
         }
         return null;

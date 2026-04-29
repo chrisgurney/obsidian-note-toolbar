@@ -134,6 +134,7 @@
     },
     "cli": {
         "error-file-not-found": "Error: File not found: {{file}}",
+        "error-file-or-path-required": "Error: A value for file or path is required",
         "error-handler-not-found": "Error: Handler for command not found: {{command}}",
         "error-path-not-found": "Error: Path not found: {{path}}",
         "error-invalid-command": "Error: Command does not exist: {{commandId}}",

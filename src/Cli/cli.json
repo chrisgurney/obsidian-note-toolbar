@@ -131,6 +131,39 @@
                 }
             }
         },
+        "note-toolbar:add-file": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a file item to a toolbar"
+            },
+            "docs": "Adds a [file item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/File-items) to a toolbar.",
+            "flags": {
+                "$before": ["toolbar", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "File to link to (required: file or path)"
+                    },
+                    "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
+                    "type": "string",
+                    "value": {
+                        "en": "<name>"
+                    },
+                    "required": false
+                },
+                "path": {
+                    "description": {
+                        "en": "Path of file to link to (required: file or path)"
+                    },
+                    "docs": "Requires the exact path from the vault root, e.g. folder/file.md",
+                    "type": "string",
+                    "value": {
+                        "en": "<path>"
+                    },
+                    "required": false
+                }
+            }
+        },
         "note-toolbar:add-group": {
             "category": "items-add",
             "description": {

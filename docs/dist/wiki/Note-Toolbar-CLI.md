@@ -93,6 +93,20 @@ pos=<n>              # Item position in toolbar (default: end of toolbar)
 note-toolbar:add-command toolbar="Formatting Tools" icon=bold command="editor:toggle-bold"
 ```
 
+### `note-toolbar:add-file`
+
+Adds a [file item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/File-items) to a toolbar.
+
+```sh
+toolbar=<nameOrId>  # Toolbar name or ID to add item to (required)
+label=<label>       # Item label (required: label or icon)
+icon=<iconName>     # Item icon, from Lucide's icon set (required: label or icon)
+file=<name>         # File to link to (required: file or path)
+path=<path>         # Path of file to link to (required: file or path)
+tooltip=<tooltip>   # Item tooltip
+pos=<n>             # Item position in toolbar (default: end of toolbar)
+```
+
 ### `note-toolbar:add-group`
 
 Adds an [item group](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-groups) to a toolbar.
