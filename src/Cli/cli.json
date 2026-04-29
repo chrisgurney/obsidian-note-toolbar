@@ -35,7 +35,7 @@
         },
         "label": {
             "description": {
-                "en": "(required: label or icon) Item label"
+                "en": "Item label (required: label or icon)"
             },
             "type": "string",
             "value": {
@@ -45,7 +45,7 @@
         },
         "icon": {
             "description": {
-                "en": "(required: label or icon) Item icon, from Lucide's icon set"
+                "en": "Item icon, from Lucide's icon set (required: label or icon)"
             },
             "type": "string",
             "value": {
@@ -142,7 +142,7 @@
                 "$after": ["tooltip", "pos"],
                 "code": {
                     "description": {
-                        "en": "(required: code, file, or path) JavaScript code to execute"
+                        "en": "JavaScript code to execute (required: code, file, or path)"
                     },
                     "type": "string",
                     "value": {
@@ -152,7 +152,7 @@
                 },
                 "file": {
                     "description": {
-                        "en": "(required: code, file, or path) Filename to execute"
+                        "en": "Filename to execute (required: code, file, or path)"
                     },
                     "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
                     "type": "string",
@@ -163,7 +163,7 @@
                 },
                 "path": {
                     "description": {
-                        "en": "(required: code, file, or path) Filename with path to execute"
+                        "en": "Filename with path to execute (required: code, file, or path)"
                     },
                     "docs": "Requires the exact path from the vault root, e.g. folder/script.js",
                     "type": "string",

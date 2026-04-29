@@ -25,7 +25,7 @@ Add items to toolbars.
 Adds a [break](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
 
 ```sh
-toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
+toolbar=<nameOrId>  # Toolbar name or ID to add item to (required)
 pos=<n>             # Item position in toolbar (default: end of toolbar)
 ```
 
@@ -34,10 +34,10 @@ pos=<n>             # Item position in toolbar (default: end of toolbar)
 Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.
 
 ```sh
-toolbar=<nameOrId>   # (required) Toolbar name or ID to add item to
-label=<label>        # (required: label or icon) Item label
-icon=<iconName>      # (required: label or icon) Item icon, from Lucide's icon set
-command=<commandId>  # (required) Obsidian command ID (e.g. editor:toggle-bold)
+toolbar=<nameOrId>   # Toolbar name or ID to add item to (required)
+label=<label>        # Item label (required: label or icon)
+icon=<iconName>      # Item icon, from Lucide's icon set (required: label or icon)
+command=<commandId>  # Obsidian command ID (e.g. editor:toggle-bold) (required)
 focus                # Focus the editor after executing the command (default: false)
 tooltip=<tooltip>    # Item tooltip
 pos=<n>              # Item position in toolbar (default: end of toolbar)
@@ -55,12 +55,12 @@ note-toolbar:add-command toolbar="Formatting Tools" icon=bold command="editor:to
 Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.
 
 ```sh
-toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
-label=<label>       # (required: label or icon) Item label
-icon=<iconName>     # (required: label or icon) Item icon, from Lucide's icon set
-code=<code>         # (required: code, file, or path) JavaScript code to execute
-file=<name>         # (required: code, file, or path) Filename to execute
-path=<path>         # (required: code, file, or path) Filename with path to execute
+toolbar=<nameOrId>  # Toolbar name or ID to add item to (required)
+label=<label>       # Item label (required: label or icon)
+icon=<iconName>     # Item icon, from Lucide's icon set (required: label or icon)
+code=<code>         # JavaScript code to execute (required: code, file, or path)
+file=<name>         # Filename to execute (required: code, file, or path)
+path=<path>         # Filename with path to execute (required: code, file, or path)
 args=<args>         # Comma-separated 'name: value' format, with string values in quotes
 tooltip=<tooltip>   # Item tooltip
 pos=<n>             # Item position in toolbar (default: end of toolbar)
@@ -71,7 +71,7 @@ pos=<n>             # Item position in toolbar (default: end of toolbar)
 Adds a [separator](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
 
 ```sh
-toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
+toolbar=<nameOrId>  # Toolbar name or ID to add item to (required)
 pos=<n>             # Item position in toolbar (default: end of toolbar)
 ```
 
@@ -80,7 +80,7 @@ pos=<n>             # Item position in toolbar (default: end of toolbar)
 Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.
 
 ```sh
-toolbar=<nameOrId>  # (required) Toolbar name or ID to add item to
+toolbar=<nameOrId>  # Toolbar name or ID to add item to (required)
 pos=<n>             # Item position in toolbar (default: end of toolbar)
 ```
 

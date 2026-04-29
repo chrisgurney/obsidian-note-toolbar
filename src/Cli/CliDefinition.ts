@@ -123,7 +123,7 @@ export default class CliDefinition {
                 key,
                 {
                     ...flag,
-                    description: (flag.required ? t('cli.required') + ' ' : '') + (tr(flag.description, language) ?? ''),
+                    description: tr(flag.description, language) ?? '',
                     value: flag.value ? tr(flag.value, language) ?? undefined : undefined,
                 }
             ])
