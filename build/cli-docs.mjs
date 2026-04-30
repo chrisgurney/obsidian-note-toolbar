@@ -36,29 +36,29 @@ export function cliDocs(cliJsonPath, outputFile) {
 
     let markdown = '';
 
-    // display actions by category
+    // display commands by category
     for (const [categoryId, category] of Object.entries(cli.categories ?? {})) {
         markdown += `## ${category.heading}\n\n`;
         if (category.docs) markdown += `${category.docs}\n\n`;
-        const actions = Object.entries(cli.actions).filter(([, a]) => a.category === categoryId);
-        for (const [id, action] of actions) {
+        const commands = Object.entries(cli.commands).filter(([, c]) => c.category === categoryId);
+        for (const [id, command] of commands) {
             markdown += `### \`${id}\`\n\n`;
-            if (action.docs) markdown += `${action.docs}\n\n`;
-            markdown += flagsBlock(action.flags ?? {}, cli.commonFlags ?? {});
-            if (action.examples) {
+            if (command.docs) markdown += `${command.docs}\n\n`;
+            markdown += flagsBlock(command.flags ?? {}, cli.commonFlags ?? {});
+            if (command.examples) {
                 markdown += '#### Examples\n\n```sh\n';
-                markdown += `${action.examples}\n`;
+                markdown += `${command.examples}\n`;
                 markdown += '```\n\n';
             }
         }
     }
 
-    // actions with no category (should not be any, but just in case)
-    const uncategorized = Object.entries(cli.actions).filter(([, a]) => !a.category);
-    for (const [id, action] of uncategorized) {
+    // commands with no category (should not be any, but just in case)
+    const uncategorized = Object.entries(cli.commands).filter(([, c]) => !c.category);
+    for (const [id, command] of uncategorized) {
         markdown += `### \`${id}\`\n\n`;
-        if (action.docs) markdown += `${action.docs}\n\n`;
-        markdown += flagsBlock(action.flags ?? {}, cli.commonFlags ?? {});
+        if (command.docs) markdown += `${command.docs}\n\n`;
+        markdown += flagsBlock(command.flags ?? {}, cli.commonFlags ?? {});
     }
 
     //

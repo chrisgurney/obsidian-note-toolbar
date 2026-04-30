@@ -1,8 +1,12 @@
 ## Help
 
-### `note-toolbar:help`
+### `note-toolbar`
 
 Opens Note Toolbar's CLI user guide (this page) in a browser.
+
+### `note-toolbar:help`
+
+Lists all Note Toolbar CLI actions.
 
 ## Items
 

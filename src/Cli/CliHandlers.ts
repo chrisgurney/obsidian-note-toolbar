@@ -132,13 +132,13 @@ export default class CliHandlers {
     }
 
     handleDefault(args: CliData): string {
-        return this.cliDefinition.formatCommandList();
-    }
-
-    handleHelp(args: CliData): string {
         const win = activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
         if (win) return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } })
         else return '';
+    }
+
+    handleHelp(args: CliData): string {
+        return this.cliDefinition.formatCommandList();
     }
 
     handleItems(args: CliData): string {

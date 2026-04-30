@@ -1,12 +1,4 @@
 {
-    "id": "note-toolbar",
-    "description": {
-        "en": "Display Note Toolbar CLI help"
-    },
-    "docs": "Lists all Note Toolbar CLI actions.",
-    "heading": {
-        "en": "Note Toolbar CLI actions:"
-    },
     "categories": {
         "help": { 
             "heading": "Help" 
@@ -91,7 +83,14 @@
             "required": false
         }
     },
-    "actions": {
+    "commands": {
+        "note-toolbar": {
+            "category": "help",
+            "description": {
+                "en": "Opens Note Toolbar's CLI user guide in a browser"
+            },
+            "docs": "Opens Note Toolbar's CLI user guide (this page) in a browser."
+        },
         "note-toolbar:add-break": {
             "category": "items-add",
             "description": {
@@ -303,9 +302,9 @@
         "note-toolbar:help": {
             "category": "help",
             "description": {
-                "en": "Opens Note Toolbar's CLI user guide in a browser"
+                "en": "Display Note Toolbar CLI help"
             },
-            "docs": "Opens Note Toolbar's CLI user guide (this page) in a browser."
+            "docs": "Lists all Note Toolbar CLI actions."
         },
         "note-toolbar:items": {
             "category": "items",

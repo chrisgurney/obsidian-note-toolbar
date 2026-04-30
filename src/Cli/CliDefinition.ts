@@ -30,12 +30,8 @@ interface CliAction {
 }
 
 interface CliDef {
-    id: string;
-    description: CliLocalizedString;
-    heading: CliLocalizedString;
-    docs?: string;
     commonFlags: Record<string, CliLocalizedFlag>;
-    actions: Record<string, CliAction>;
+    commands: Record<string, CliAction>;
 }
 
 interface CliCommandDef {
@@ -63,19 +59,12 @@ export default class CliDefinition {
 
     public load(): void {
 
-        // default command: displays list of available actions
-        this.commands.push({
-            id: this.cliDef.id,
-            description: tr(this.cliDef.description, this.language) ?? '',
-            flags: null
-        });
-
-        // action definitions (check for handlers in CliManager)
-        this.commands.push(...Object.entries(this.cliDef.actions)
-            .map(([id, action]: [string, CliAction]) => ({
+        // command definitions (check for handlers in CliManager)
+        this.commands.push(...Object.entries(this.cliDef.commands)
+            .map(([id, command]: [string, CliAction]) => ({
                 id,
-                description: tr(action.description, this.language) ?? '',
-                flags: action.flags ? this.toCliFlags(action.flags, this.language) : null,
+                description: tr(command.description, this.language) ?? '',
+                flags: command.flags ? this.toCliFlags(command.flags, this.language) : null,
             }))
         );
 
@@ -86,11 +75,32 @@ export default class CliDefinition {
     }
 
     public formatCommandList(): string {
-        const heading = tr(this.cliDef.heading, this.language) ?? '';
-        const actions = Object.entries(this.cliDef.actions)
-            .map(([id, cmd]: [string, CliAction]) => `\x1b[90m${id.padEnd(36)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`)
+        const COL_WIDTH = 28;
+        const commonFlags = this.cliDef.commonFlags ?? {};
+        const commands = Object.entries(this.cliDef.commands)
+            .map(([id, cmd]: [string, CliAction]) => {
+                const cmdLine = `\x1b[90m${id.padEnd(COL_WIDTH)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`;
+                if (!cmd.flags) return `  ${cmdLine}\n`;
+                const flags = cmd.flags;
+                const ordered = [
+                    ...((flags['$before'] as string[] | undefined) ?? []),
+                    ...Object.keys(flags).filter(k => !k.startsWith('$')),
+                    ...((flags['$after'] as string[] | undefined) ?? []),
+                ];
+                const flagList = ordered
+                    .map(flag => {
+                        const flagDef = (flags[flag] ?? commonFlags[flag]) as CliLocalizedFlag | undefined;
+                        if (!flagDef || Array.isArray(flagDef)) return null;
+                        const value = flagDef.value ? tr(flagDef.value, this.language) : '';
+                        const flagStr = value ? `  ${flag}=${value}` : flag;
+                        return `  \x1b[90m${flagStr}\x1b[0m${' '.repeat(Math.max(0, COL_WIDTH - flagStr.length))}\x1b[32m- ${tr(flagDef.description, this.language) ?? ''}\x1b[0m`;
+                    })
+                    .filter(line => line !== null)
+                    .join('\n');
+                return flagList ? `  ${cmdLine}\n${flagList}\n` : `  ${cmdLine}\n`;
+            })
             .join('\n');
-        return `${heading}\n\n${actions}`;
+        return commands;
     }
 
 	/*************************************************************************
