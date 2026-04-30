@@ -146,6 +146,8 @@
         "error-script-invalid-args": "Error: Invalid script argument format: {{args}}",
         "error-toolbar-already-exists": "Error: A toolbar with this name already exists: {{toolbar}}",
         "items-empty-not-shown": "{{count}} items were not listed (empty labels and tooltips)",
+        "label-title": "Note Toolbar CLI",
+        "label-command-heading": "Commands:",
         "no-items": "No items found.",
         "no-toolbars": "No toolbars found.",
         "required": "(required)",

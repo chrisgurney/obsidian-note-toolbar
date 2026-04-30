@@ -55,7 +55,7 @@
             },
             "required": false
         },
-        "toolbar": {
+        "to": {
             "description": {
                 "en": "Toolbar name or ID to add item to"
             },
