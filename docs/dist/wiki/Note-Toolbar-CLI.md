@@ -84,6 +84,7 @@ label=<label>         # Item label (required: label or icon)
 icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
 command=<commandId>   # Obsidian command ID (e.g. editor:toggle-bold) (required)
 focus                 # Focus the editor after executing the command (default: false)
+target=split|tab      # Where to run command
 tooltip=<tooltip>     # Item tooltip
 pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
@@ -100,13 +101,14 @@ note-toolbar:add-command to="Formatting Tools" icon=bold command="editor:toggle-
 Adds a [file item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/File-items) to a toolbar.
 
 ```sh
-to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
-label=<label>         # Item label (required: label or icon)
-icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
-file=<name>           # File to link to (required: file or path)
-path=<path>           # Path of file to link to (required: file or path)
-tooltip=<tooltip>     # Item tooltip
-pos=<n>               # Item position in toolbar (default: end of toolbar)
+to=<toolbarNameOrId>           # Toolbar name or ID to add item to (required)
+label=<label>                  # Item label (required: label or icon)
+icon=<iconName>                # Item icon, from Lucide's icon set (required: label or icon)
+file=<name>                    # File to link to (required: file or path)
+path=<path>                    # Path of file to link to (required: file or path)
+target=modal|split|tab|window  # Where to open the file
+tooltip=<tooltip>              # Item tooltip
+pos=<n>                        # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-group`
@@ -171,12 +173,13 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 Adds a [URI item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/URI-items) to a toolbar.
 
 ```sh
-to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
-label=<label>         # Item label (required: label or icon)
-icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
-uri=<link>            # Website, URI, or note title (required)
-tooltip=<tooltip>     # Item tooltip
-pos=<n>               # Item position in toolbar (default: end of toolbar)
+to=<toolbarNameOrId>           # Toolbar name or ID to add item to (required)
+label=<label>                  # Item label (required: label or icon)
+icon=<iconName>                # Item icon, from Lucide's icon set (required: label or icon)
+uri=<link>                     # Website, URI, or note title (required)
+target=modal|split|tab|window  # Where to open the URI
+tooltip=<tooltip>              # Item tooltip
+pos=<n>                        # Item position in toolbar (default: end of toolbar)
 ```
 
 ## Toolbars

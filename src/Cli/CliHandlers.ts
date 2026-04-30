@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { CliData, CliHandler, getIcon, normalizePath, TFile } from "obsidian";
+import { CliData, CliHandler, getIcon, normalizePath, PaneType, TFile } from "obsidian";
 import { ItemType, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE } from "Settings/NoteToolbarSettings";
 import { importArgs, tr } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
@@ -61,6 +61,10 @@ export default class CliHandlers {
             if (!command) return t('cli.error-invalid-command', { commandId: args.command });
             item.linkAttr.commandId = args.command;
             if (args.focus === 'true') item.linkAttr.focus = 'editor';
+            if (args.target) {
+                if (!['split', 'tab'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                item.linkAttr.target = args.target as 'split' | 'tab';
+            }
         });
     }
 
@@ -71,6 +75,10 @@ export default class CliHandlers {
             const file: TFile | null = fileResult;
             if (!file) return t('cli.error-file-or-path-required');
             item.link = file.path;
+            if (args.target) {
+                if (!['modal', 'split', 'tab', 'window'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                item.linkAttr.target = args.target as PaneType | 'modal';
+            }
         });
     }
 
@@ -128,6 +136,10 @@ export default class CliHandlers {
     async handleAddUri(args: CliData): Promise<string> {
         return await this.addItemHelper(args, ItemType.Uri, (item) => {
             item.link = args.uri;
+            if (args.target) {
+                if (!['modal', 'split', 'tab', 'window'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                item.linkAttr.target = args.target as PaneType | 'modal';
+            }
         });
     }
 

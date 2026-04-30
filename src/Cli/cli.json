@@ -125,6 +125,14 @@
                     },
                     "type": "boolean",
                     "required": false
+                },
+                "target": {
+                    "description": {
+                        "en": "Where to run command"
+                    },
+                    "type": "string",
+                    "value": "split|tab",
+                    "required": false
                 }
             }
         },
@@ -157,6 +165,14 @@
                     "value": {
                         "en": "<path>"
                     },
+                    "required": false
+                },
+                "target": {
+                    "description": {
+                        "en": "Where to open the file"
+                    },
+                    "type": "string",
+                    "value": "modal|split|tab|window",
                     "required": false
                 }
             }
@@ -294,6 +310,14 @@
                         "en": "<link>"
                     },
                     "required": true
+                },
+                "target": {
+                    "description": {
+                        "en": "Where to open the URI"
+                    },
+                    "type": "string",
+                    "value": "modal|split|tab|window",
+                    "required": false
                 }
             }
         },
