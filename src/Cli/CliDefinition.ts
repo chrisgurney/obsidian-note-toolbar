@@ -76,11 +76,12 @@ export default class CliDefinition {
 
     public formatCommandList(): string {
         const COL_WIDTH = 28;
+        const INDENT = '  ';
         const commonFlags = this.cliDef.commonFlags ?? {};
         const commands = Object.entries(this.cliDef.commands)
             .map(([id, cmd]: [string, CliAction]) => {
                 const cmdLine = `\x1b[90m${id.padEnd(COL_WIDTH)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`;
-                if (!cmd.flags) return `  ${cmdLine}\n`;
+                if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
                 const flags = cmd.flags;
                 const ordered = [
                     ...((flags['$before'] as string[] | undefined) ?? []),
@@ -92,12 +93,12 @@ export default class CliDefinition {
                         const flagDef = (flags[flag] ?? commonFlags[flag]) as CliLocalizedFlag | undefined;
                         if (!flagDef || Array.isArray(flagDef)) return null;
                         const value = flagDef.value ? tr(flagDef.value, this.language) : '';
-                        const flagStr = value ? `  ${flag}=${value}` : flag;
-                        return `  \x1b[90m${flagStr}\x1b[0m${' '.repeat(Math.max(0, COL_WIDTH - flagStr.length))}\x1b[32m- ${tr(flagDef.description, this.language) ?? ''}\x1b[0m`;
+                        const flagStr = value ? `${flag}=${value}` : flag;
+                        return `${INDENT}\x1b[90m${INDENT}${flagStr}\x1b[0m${' '.repeat(Math.max(0, COL_WIDTH - 2 - flagStr.length))}\x1b[32m- ${tr(flagDef.description, this.language) ?? ''}\x1b[0m`;
                     })
                     .filter(line => line !== null)
                     .join('\n');
-                return flagList ? `  ${cmdLine}\n${flagList}\n` : `  ${cmdLine}\n`;
+                return flagList ? `${INDENT}${cmdLine}\n${flagList}\n` : `${INDENT}${cmdLine}\n`;
             })
             .join('\n');
         return commands;
