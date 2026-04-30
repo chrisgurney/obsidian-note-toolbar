@@ -45,10 +45,6 @@ note-toolbar:items empty format=csv --copy
 
 ## Help
 
-### `note-toolbar`
-
-Lists all Note Toolbar CLI actions.
-
 ### `note-toolbar:help`
 
 Lists all Note Toolbar CLI actions.

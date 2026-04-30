@@ -79,6 +79,7 @@ export default class CliDefinition {
         const INDENT = '  ';
         const commonFlags = this.cliDef.commonFlags ?? {};
         const commands = Object.entries(this.cliDef.commands)
+            .filter(([id]) => id !== 'note-toolbar')
             .map(([id, cmd]: [string, CliAction]) => {
                 const cmdLine = `\x1b[32m${id.padEnd(COL_WIDTH)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`;
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
