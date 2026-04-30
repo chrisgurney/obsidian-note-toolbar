@@ -309,8 +309,8 @@ export default class CliHandlers {
         populateItem: (item: ToolbarItemSettings) => string | void
     ): Promise<string> {
         // get the toolbar and create a default item
-        const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
-        if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
+        const toolbar = this.ntb.settingsManager.getToolbar(args.to);
+        if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.to });
         const item = this.ntb.settingsManager.getDefaultItem(itemType);
         // execute the type-specific population logic
         const itemError = populateItem(item);
