@@ -80,7 +80,7 @@ export default class CliDefinition {
         const commonFlags = this.cliDef.commonFlags ?? {};
         const commands = Object.entries(this.cliDef.commands)
             .map(([id, cmd]: [string, CliAction]) => {
-                const cmdLine = `\x1b[90m${id.padEnd(COL_WIDTH)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`;
+                const cmdLine = `\x1b[32m${id.padEnd(COL_WIDTH)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`;
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
                 const flags = cmd.flags;
                 const ordered = [
