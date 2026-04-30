@@ -15,7 +15,7 @@ function flagsBlock(flags, commonFlags) {
     for (const flagKey of ordered) {
         const flagVal = flags[flagKey] ?? commonFlags[flagKey];
         if (!flagVal || Array.isArray(flagVal)) continue;
-        const value = flagVal.value?.en ?? '';
+        const value = (typeof flagVal.value === 'string' ? flagVal.value : flagVal.value?.en) ?? '';
         const desc  = (flagVal.description?.en ?? '') + (flagVal.required ? ' (required)' : '');
         rows.push([`${flagKey}${value ? `=${value}` : ''}`, desc]);
     }

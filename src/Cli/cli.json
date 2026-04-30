@@ -20,9 +20,7 @@
                 "en": "Output format (default: tsv)"
             },
             "type": "string",
-            "value": {
-                "en": "tsv|csv"
-            },
+            "value": "tsv|csv",
             "required": false
         },
         "label": {

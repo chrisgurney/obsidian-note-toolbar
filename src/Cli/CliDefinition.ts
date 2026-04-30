@@ -11,7 +11,7 @@ interface CliLocalizedString {
 
 interface CliLocalizedFlag {
     description: CliLocalizedString;
-    value?: CliLocalizedString | null;
+    value?: string | CliLocalizedString | null;
     required?: boolean;
 }
 
@@ -92,8 +92,8 @@ export default class CliDefinition {
                 const flagList = ordered
                     .map(flag => {
                         const flagDef = (flags[flag] ?? commonFlags[flag]) as CliLocalizedFlag | undefined;
-                        if (!flagDef || Array.isArray(flagDef)) return null;
-                        const value = flagDef.value ? tr(flagDef.value, this.language) : '';
+                        if (!flagDef || Array.isArray(flagDef)) return null; 
+                        const value = flagDef.value ? (typeof flagDef.value === 'string' ? flagDef.value : tr(flagDef.value, this.language)) : '';
                         const flagStr = value ? `${flag}=${value}` : flag;
                         return `${INDENT}\x1b[90m${INDENT}${flagStr}\x1b[0m${' '.repeat(Math.max(0, COL_WIDTH - 2 - flagStr.length))}\x1b[32m- ${tr(flagDef.description, this.language) ?? ''}\x1b[0m`;
                     })
@@ -136,7 +136,7 @@ export default class CliDefinition {
                 {
                     ...flag,
                     description: tr(flag.description, language) ?? '',
-                    value: flag.value ? tr(flag.value, language) ?? undefined : undefined,
+                    value: flag.value ? (typeof flag.value === 'string' ? flag.value : tr(flag.value, this.language)) ?? undefined : undefined,
                 }
             ])
         );
