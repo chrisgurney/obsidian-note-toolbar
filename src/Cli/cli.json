@@ -98,7 +98,7 @@
             },
             "docs": "Adds a [break](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "pos"]
+                "$before": ["to", "pos"]
             }
         },
         "note-toolbar:add-command": {
@@ -109,7 +109,7 @@
             "docs": "Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.",
             "examples": "# Add a bold toggle to an existing toolbar\nnote-toolbar:add-command to=\"Formatting Tools\" icon=bold command=\"editor:toggle-bold\"",
             "flags": {
-                "$before": ["toolbar", "label", "icon"],
+                "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
                 "command": {
                     "description": {
@@ -137,7 +137,7 @@
             },
             "docs": "Adds a [file item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/File-items) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "label", "icon"],
+                "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
                 "file": {
                     "description": {
@@ -170,7 +170,7 @@
             },
             "docs": "Adds an [item group](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-groups) to a toolbar.",
             "flags": {
-                "$before": ["toolbar"],
+                "$before": ["to"],
                 "$after": ["pos"],
                 "group": {
                     "description": {
@@ -191,7 +191,7 @@
             },
             "docs": "Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "label", "icon"],
+                "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
                 "code": {
                     "description": {
@@ -244,7 +244,7 @@
             },
             "docs": "Adds an [item menu](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "label", "icon"],
+                "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
                 "menu": {
                     "description": {
@@ -265,7 +265,7 @@
             },
             "docs": "Adds a [separator](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "pos"]
+                "$before": ["to", "pos"]
             }
         },
         "note-toolbar:add-spread": {
@@ -275,7 +275,7 @@
             },
             "docs": "Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "pos"]
+                "$before": ["to", "pos"]
             }
         },
         "note-toolbar:add-uri": {
@@ -285,7 +285,7 @@
             },
             "docs": "Adds a [URI item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/URI-items) to a toolbar.",
             "flags": {
-                "$before": ["toolbar", "label", "icon"],
+                "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
                 "uri": {
                     "description": {
