@@ -336,6 +336,16 @@
             "docs": "Lists all toolbar items, except empty items (no label or tooltip) by default.",
             "flags": {
                 "$after": ["verbose", "format"],
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar to list items for"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<nameOrId>"
+                    },
+                    "required": false
+                },
                 "empty": {
                     "description": {
                         "en": "Include empty items in output"

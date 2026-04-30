@@ -155,7 +155,9 @@ export default class CliHandlers {
     }
 
     handleItems(args: CliData): string {
-        return this.getItemList(args);
+        const toolbar = this.hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
+        if (this.hasValue(args.toolbar) && !toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
+        return this.getItemList(args, toolbar);
     }
 
     async handleNew(args: CliData): Promise<string> {
