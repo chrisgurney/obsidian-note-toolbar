@@ -132,9 +132,10 @@ export default class CliHandlers {
     }
 
     handleDefault(args: CliData): string {
-        const win = activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
-        if (win) return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } })
-        else return '';
+        // const win = activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
+        // if (win) return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } })
+        // else return '';
+        return this.handleHelp(args);
     }
 
     handleHelp(args: CliData): string {

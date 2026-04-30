@@ -87,9 +87,9 @@
         "note-toolbar": {
             "category": "help",
             "description": {
-                "en": "Opens Note Toolbar's CLI user guide in a browser"
+                "en": "Display Note Toolbar CLI help"
             },
-            "docs": "Opens Note Toolbar's CLI user guide (this page) in a browser."
+            "docs": "Lists all Note Toolbar CLI actions."
         },
         "note-toolbar:add-break": {
             "category": "items-add",
