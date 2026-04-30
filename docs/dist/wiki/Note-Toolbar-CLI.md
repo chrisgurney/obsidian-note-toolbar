@@ -114,9 +114,9 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 Adds an [item group](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-groups) to a toolbar.
 
 ```sh
-to=<toolbarNameOrId>     # Toolbar name or ID to add item to (required)
-group=<toolbarNameOrId>  # Toolbar to add as a group (required)
-pos=<n>                  # Item position in toolbar (default: end of toolbar)
+to=<toolbarNameOrId>       # Toolbar name or ID to add item to (required)
+toolbar=<toolbarNameOrId>  # Toolbar to add as a group (required)
+pos=<n>                    # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-js`
@@ -140,12 +140,12 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 Adds an [item menu](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.
 
 ```sh
-to=<toolbarNameOrId>    # Toolbar name or ID to add item to (required)
-label=<label>           # Item label (required: label or icon)
-icon=<iconName>         # Item icon, from Lucide's icon set (required: label or icon)
-menu=<toolbarNameOrId>  # Toolbar to add as a menu (required)
-tooltip=<tooltip>       # Item tooltip
-pos=<n>                 # Item position in toolbar (default: end of toolbar)
+to=<toolbarNameOrId>       # Toolbar name or ID to add item to (required)
+label=<label>              # Item label (required: label or icon)
+icon=<iconName>            # Item icon, from Lucide's icon set (required: label or icon)
+toolbar=<toolbarNameOrId>  # Toolbar to add as a menu (required)
+tooltip=<tooltip>          # Item tooltip
+pos=<n>                    # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:add-sep`

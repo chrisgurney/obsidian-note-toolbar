@@ -172,7 +172,7 @@
             "flags": {
                 "$before": ["to"],
                 "$after": ["pos"],
-                "group": {
+                "toolbar": {
                     "description": {
                         "en": "Toolbar to add as a group"
                     },
@@ -246,7 +246,7 @@
             "flags": {
                 "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
-                "menu": {
+                "toolbar": {
                     "description": {
                         "en": "Toolbar to add as a menu"
                     },
