@@ -61,7 +61,7 @@
             },
             "type": "string",
             "value": {
-                "en": "<nameOrId>"
+                "en": "<toolbarNameOrId>"
             },
             "required": true
         },
