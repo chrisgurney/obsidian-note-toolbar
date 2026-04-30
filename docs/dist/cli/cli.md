@@ -49,7 +49,7 @@ pos=<n>              # Item position in toolbar (default: end of toolbar)
 
 ```sh
 # Add a bold toggle to an existing toolbar
-note-toolbar:add-command toolbar="Formatting Tools" icon=bold command="editor:toggle-bold"
+note-toolbar:add-command to="Formatting Tools" icon=bold command="editor:toggle-bold"
 ```
 
 ### `note-toolbar:add-file`
