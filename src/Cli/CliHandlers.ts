@@ -4,6 +4,8 @@ import { ItemType, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings, URL_US
 import { importArgs, tr } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 
+type ItemRow = { key: string; cols: string[] };
+
 /**
  * Defines the CLI command handlers, registered to Obsidian's CLI in `CliManager`.
  */
@@ -214,59 +216,105 @@ export default class CliHandlers {
         verbose: boolean,
         includeEmpty: boolean,
         truncate: boolean
-    ): { rows: { key: string; cols: string[] }[]; emptyCount: number } {
-        type ItemRow = { key: string; cols: string[] };
-        const rows: ItemRow[] = [];
-        const singleToolbar = toolbars.length === 1;
-        if (singleToolbar) includeEmpty = true;
+    ): { rows: ItemRow[]; emptyCount: number } {
+        const single = toolbars.length === 1;
+        const allowEmpty = single || includeEmpty;
+
         let emptyCount = 0;
 
-        toolbars.forEach((toolbar) => {
-            toolbar.items.forEach((item, index) => {
-                const label = (truncate && !verbose) ? this.truncate(item.label ?? '') : (item.label ?? '');
-                const tooltip = (truncate && !verbose) ? this.truncate(item.tooltip ?? '') : (item.tooltip ?? '');
+        const rows = toolbars.flatMap((toolbar) =>
+            toolbar.items
+                .map((item, index) => {
+                    const label = this.formatText(item.label, truncate, verbose);
+                    const tooltip = this.formatText(item.tooltip, truncate, verbose);
 
-                if (!label && !tooltip) {
-                    if (includeEmpty) {
-                        // empty items sort to the top via empty key
-                    } else {
-                        emptyCount++;
-                        return;
+                    if (!label && !tooltip) {
+                        if (!allowEmpty) {
+                            emptyCount++;
+                            return null;
+                        }
                     }
-                }
 
-                const itemText = verbose ? [label, tooltip] : [label || tooltip || ''];
-                if ([ItemType.Group, ItemType.Menu].contains(item.linkAttr.type) && item.link) {
-                    const linkedToolbar = this.ntb.settingsManager.getToolbarById(item.link);
-                    const linkedName = linkedToolbar ? linkedToolbar.name : t('cli.label-unknown-toolbar');
-                    itemText.push(`toolbar:${linkedName}`);
-                }
-                
-                const itemToolbar = singleToolbar ? '' : toolbar.uuid;
-                let cols = verbose
-                    ? [item.uuid, item.linkAttr.type ?? '', ...itemText, item.icon ?? '', itemToolbar]
-                    : [item.linkAttr.type ?? '', ...itemText];
-                if (singleToolbar) cols = [index.toString(), ...cols];
+                    const cols = this.buildCols({
+                        item,
+                        index,
+                        toolbar,
+                        label,
+                        tooltip,
+                        verbose,
+                        single
+                    });
 
-                rows.push({ key: item.label || item.tooltip || '', cols });
-            });
-        });
+                    return {
+                        key: item.label || item.tooltip || '',
+                        cols
+                    };
+                })
+                .filter((r): r is ItemRow => r !== null)
+        );
 
-        if (!singleToolbar) {
-            rows.sort((a, b) => {
-                if (!a.key && b.key) return -1;
-                if (a.key && !b.key) return 1;
-                return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
-            });
-        }
+        if (!single) this.sortItemRows(rows);
 
         return { rows, emptyCount };
     }
 
-    private getItemList(
-        args: CliData,
-        toolbar?: ToolbarSettings
-    ): string {
+    private formatText(value: string | undefined, truncate: boolean, verbose: boolean): string {
+        const v = value ?? '';
+        return truncate && !verbose ? this.truncate(v) : v;
+    }
+
+    private buildCols(args: {
+        item: ToolbarItemSettings;
+        index: number;
+        toolbar: ToolbarSettings;
+        label: string;
+        tooltip: string;
+        verbose: boolean;
+        single: boolean;
+    }): string[] {
+        const { item, index, toolbar, label, tooltip, verbose, single } = args;
+
+        const text = this.buildItemText(item, label, tooltip, verbose);
+
+        let cols = verbose
+            ? [
+                item.uuid,
+                item.linkAttr.type ?? '',
+                ...text,
+                item.icon ?? '',
+                single ? '' : toolbar.uuid
+            ]
+            : [item.linkAttr.type ?? '', ...text];
+
+        return single ? [index.toString(), ...cols] : cols;
+    }
+
+    private buildItemText(item: ToolbarItemSettings, label: string, tooltip: string, verbose: boolean): string[] {
+        const base = verbose ? [label, tooltip] : [label || tooltip || ''];
+
+        if ([ItemType.Group, ItemType.Menu].includes(item.linkAttr.type)) {
+            base.push(this.getToolbarRef(item.link));
+        }
+        else if ([ItemType.File, ItemType.Uri].includes(item.linkAttr.type)) {
+            base.push(item.link);
+        }
+        else if ([ItemType.Command].includes(item.linkAttr.type)) {
+            base.push(item.linkAttr.commandId ?? '');
+        }
+
+        return base;
+    }
+
+    private getToolbarRef(id?: string): string {
+        if (!id) return '';
+
+        const tb = this.ntb.settingsManager.getToolbarById(id);
+        const name = tb?.name ?? t('cli.label-unknown-toolbar');
+
+        return `toolbar:${name}`;
+    }
+
+    private getItemList(args: CliData,  toolbar?: ToolbarSettings): string {
         const format = this.hasValue(args.format) ? args.format : 'table';
         const verbose = args.verbose !== undefined;
         const includeEmpty = verbose || args.empty !== undefined;
@@ -301,6 +349,14 @@ export default class CliHandlers {
         if (emptyCount > 0) lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
 
         return lines.join('\n');
+    }
+
+    private sortItemRows(rows: ItemRow[]): void {
+        rows.sort((a, b) => {
+            if (!a.key && b.key) return -1;
+            if (a.key && !b.key) return 1;
+            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
+        });
     }
 
 	/*************************************************************************
