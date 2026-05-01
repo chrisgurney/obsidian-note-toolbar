@@ -151,7 +151,7 @@ export default class CliHandlers {
     }
 
     handleHelp(args: CliData): string {
-        return t('cli.label-title') + '\n\n' + t('cli.label-command-heading') + '\n' + this.cliDefinition.formatCommandList();
+        return t('cli.label-title') + '\n\n' + t('cli.label-heading-commands') + '\n' + this.cliDefinition.formatCommandList();
     }
 
     handleItems(args: CliData): string {
