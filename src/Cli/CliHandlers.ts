@@ -199,13 +199,16 @@ export default class CliHandlers {
 	 * HANDLER HELPERS
 	 *************************************************************************/
 
-    private static readonly VARS_TRUNCATE_LENGTH = 32;
+    private static readonly TRUNCATE_LENGTH = 32;
 
-    private truncateVars(value: string): string {
-        if (!this.ntb.vars.hasVars(value)) return value;
-        return value.slice(0, CliHandlers.VARS_TRUNCATE_LENGTH).trimEnd() + '…';
+    private truncate(value: string): string {
+        if (value.length <= CliHandlers.TRUNCATE_LENGTH) return value;
+        return value.slice(0, CliHandlers.TRUNCATE_LENGTH).trimEnd() + '…';
     }
 
+    /**
+     * Builds a list of items from the specified toolbars, formatted for display in the CLI.
+     */
     private buildItemRows(
         toolbars: ToolbarSettings[],
         verbose: boolean,
@@ -214,12 +217,14 @@ export default class CliHandlers {
     ): { rows: { key: string; cols: string[] }[]; emptyCount: number } {
         type ItemRow = { key: string; cols: string[] };
         const rows: ItemRow[] = [];
+        const singleToolbar = toolbars.length === 1;
+        if (singleToolbar) includeEmpty = true;
         let emptyCount = 0;
 
         toolbars.forEach((toolbar) => {
-            toolbar.items.forEach((item) => {
-                const label = truncate ? this.truncateVars(item.label ?? '') : (item.label ?? '');
-                const tooltip = truncate ? this.truncateVars(item.tooltip ?? '') : (item.tooltip ?? '');
+            toolbar.items.forEach((item, index) => {
+                const label = (truncate && !verbose) ? this.truncate(item.label ?? '') : (item.label ?? '');
+                const tooltip = (truncate && !verbose) ? this.truncate(item.tooltip ?? '') : (item.tooltip ?? '');
 
                 if (!label && !tooltip) {
                     if (includeEmpty) {
@@ -230,19 +235,30 @@ export default class CliHandlers {
                     }
                 }
 
-                const cols = verbose
-                    ? [item.uuid, item.linkAttr.type ?? '', item.icon ?? '', label, tooltip, toolbar.uuid]
-                    : [item.linkAttr.type ?? '', item.icon ?? '', label, tooltip];
+                const itemText = verbose ? [label, tooltip] : [label || tooltip || ''];
+                if ([ItemType.Group, ItemType.Menu].contains(item.linkAttr.type) && item.link) {
+                    const linkedToolbar = this.ntb.settingsManager.getToolbarById(item.link);
+                    const linkedName = linkedToolbar ? linkedToolbar.name : t('cli.label-unknown-toolbar');
+                    itemText.push(`toolbar:${linkedName}`);
+                }
+                
+                const itemToolbar = singleToolbar ? '' : toolbar.uuid;
+                let cols = verbose
+                    ? [item.uuid, item.linkAttr.type ?? '', ...itemText, item.icon ?? '', itemToolbar]
+                    : [item.linkAttr.type ?? '', ...itemText];
+                if (singleToolbar) cols = [index.toString(), ...cols];
 
                 rows.push({ key: item.label || item.tooltip || '', cols });
             });
         });
 
-        rows.sort((a, b) => {
-            if (!a.key && b.key) return -1;
-            if (a.key && !b.key) return 1;
-            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
-        });
+        if (!singleToolbar) {
+            rows.sort((a, b) => {
+                if (!a.key && b.key) return -1;
+                if (a.key && !b.key) return 1;
+                return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
+            });
+        }
 
         return { rows, emptyCount };
     }
