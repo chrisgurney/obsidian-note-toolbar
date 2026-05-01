@@ -260,7 +260,7 @@ export default class CliHandlers {
 
     private formatText(value: string | undefined, truncate: boolean, verbose: boolean): string {
         const v = value ?? '';
-        return truncate && !verbose ? this.truncate(v) : v;
+        return truncate ? this.truncate(v) : v;
     }
 
     private buildCols(args: {
@@ -328,12 +328,11 @@ export default class CliHandlers {
         let lines: string[];
 
         if (isCsv) {
-            const header = verbose
-                ? ['uuid', 'type', 'icon', 'label', 'tooltip', 'toolbar'].join(',')
-                : ['type', 'icon', 'label', 'tooltip'].join(',');
+            const header = this.getColumnSchema(verbose, toolbars.length === 1).join(',');
             const escape = (val: string) => `"${val.replace(/"/g, '""')}"`;
             lines = [header, ...rows.map(r => r.cols.map(escape).join(','))];
-        } else {
+        } 
+        else {
             const colWidths = rows.reduce((widths, row) => {
                 row.cols.forEach((col, i) => {
                     widths[i] = Math.max(widths[i] ?? 0, col.length);
@@ -349,6 +348,18 @@ export default class CliHandlers {
         if (emptyCount > 0) lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
 
         return lines.join('\n');
+    }
+
+    private getColumnSchema(verbose: boolean, single: boolean): string[] {
+        if (verbose) {
+            return single
+                ? ['position', 'uuid', 'type', 'label', 'tooltip', 'icon']
+                : ['uuid', 'type', 'label', 'tooltip', 'icon', 'toolbar'];
+        }
+
+        return single
+            ? ['position', 'type', 'labelTooltip', 'value']
+            : ['type', 'label'];
     }
 
     private sortItemRows(rows: ItemRow[]): void {
