@@ -162,7 +162,8 @@ Shout out to other projects and people who helped me with questions I had while 
 
 # Contribute 🧑‍💻
 
-Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
+Check out the [discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) to [ask a question](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/new?category=q-a) or [request a feature](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/new?category=ideas).
+  - Use this [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8) if you don't have a GitHub account.
 
 [Help add or review translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
