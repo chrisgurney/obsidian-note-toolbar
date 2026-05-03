@@ -6,6 +6,21 @@ import CliDefinition from "./CliDefinition";
 
 type ItemRow = { key: string; cols: string[] };
 
+type ColumnSpec =
+    | 'position'
+    | 'uuid'
+    | 'type'
+    | 'label'
+    | 'tooltip'
+    | 'icon'
+    | 'toolbar'
+    | 'value'
+    | 'link'
+    | 'command'
+    | 'toolbarRef';
+
+type ColumnSchema = readonly ColumnSpec[];
+
 /**
  * Defines the CLI command handlers, registered to Obsidian's CLI in `CliManager`.
  */
@@ -208,6 +223,11 @@ export default class CliHandlers {
         return value.slice(0, CliHandlers.TRUNCATE_LENGTH).trimEnd() + '…';
     }
 
+    private formatText(value: string | undefined, truncate: boolean): string {
+        const v = value ?? '';
+        return truncate ? this.truncate(v) : v;
+    }
+
     /**
      * Builds a list of items from the specified toolbars, formatted for display in the CLI.
      */
@@ -218,91 +238,83 @@ export default class CliHandlers {
         truncate: boolean
     ): { rows: ItemRow[]; emptyCount: number } {
         const single = toolbars.length === 1;
-        const allowEmpty = single || includeEmpty;
+        const schema = this.getColumnSchema(verbose, single);
 
-        let emptyCount = 0;
+        return toolbars.reduce(
+            (acc, toolbar) => {
+                const result = toolbar.items.reduce(
+                    (inner, item, index) => {
+                        const cols = this.projectItem(
+                            item,
+                            toolbar,
+                            index,
+                            schema,
+                            verbose,
+                            truncate
+                        );
 
-        const rows = toolbars.flatMap((toolbar) =>
-            toolbar.items
-                .map((item, index) => {
-                    const label = this.formatText(item.label, truncate, verbose);
-                    const tooltip = this.formatText(item.tooltip, truncate, verbose);
+                        const isEmpty = cols.every(c => !c);
 
-                    if (!label && !tooltip) {
-                        if (!allowEmpty) {
-                            emptyCount++;
-                            return null;
+                        if (isEmpty && !includeEmpty) {
+                            inner.emptyCount++;
+                            return inner;
                         }
-                    }
 
-                    const cols = this.buildCols({
-                        item,
-                        index,
-                        toolbar,
-                        label,
-                        tooltip,
-                        verbose,
-                        single
-                    });
+                        inner.rows.push({
+                            key: item.label || item.tooltip || '',
+                            cols
+                        });
 
-                    return {
-                        key: item.label || item.tooltip || '',
-                        cols
-                    };
-                })
-                .filter((r): r is ItemRow => r !== null)
+                        return inner;
+                    },
+                    { rows: [] as ItemRow[], emptyCount: 0 }
+                );
+
+                acc.rows.push(...result.rows);
+                acc.emptyCount += result.emptyCount;
+
+                return acc;
+            },
+            { rows: [] as ItemRow[], emptyCount: 0 }
         );
-
-        if (!single) this.sortItemRows(rows);
-
-        return { rows, emptyCount };
     }
 
-    private formatText(value: string | undefined, truncate: boolean, verbose: boolean): string {
-        const v = value ?? '';
-        return truncate ? this.truncate(v) : v;
-    }
+    private projectItem(
+        item: ToolbarItemSettings,
+        toolbar: ToolbarSettings,
+        index: number,
+        schema: ColumnSchema,
+        verbose: boolean,
+        truncate: boolean
+    ): string[] {
+        const label = this.formatText(item.label, truncate);
+        const tooltip = this.formatText(item.tooltip, truncate);
 
-    private buildCols(args: {
-        item: ToolbarItemSettings;
-        index: number;
-        toolbar: ToolbarSettings;
-        label: string;
-        tooltip: string;
-        verbose: boolean;
-        single: boolean;
-    }): string[] {
-        const { item, index, toolbar, label, tooltip, verbose, single } = args;
+        const value =
+            label || tooltip || '';
 
-        const text = this.buildItemText(item, label, tooltip, verbose);
+        const map: Record<ColumnSpec, string> = {
+            position: String(index),
 
-        let cols = verbose
-            ? [
-                item.uuid,
-                item.linkAttr.type ?? '',
-                ...text,
-                item.icon ?? '',
-                single ? '' : toolbar.uuid
-            ]
-            : [item.linkAttr.type ?? '', ...text];
+            uuid: item.uuid,
+            type: item.linkAttr.type ?? '',
 
-        return single ? [index.toString(), ...cols] : cols;
-    }
+            label,
+            tooltip,
+            icon: item.icon ?? '',
 
-    private buildItemText(item: ToolbarItemSettings, label: string, tooltip: string, verbose: boolean): string[] {
-        const base = verbose ? [label, tooltip] : [label || tooltip || ''];
+            toolbar: toolbar.uuid,
 
-        if ([ItemType.Group, ItemType.Menu].includes(item.linkAttr.type)) {
-            base.push(this.getToolbarRef(item.link));
-        }
-        else if ([ItemType.File, ItemType.Uri].includes(item.linkAttr.type)) {
-            base.push(item.link);
-        }
-        else if ([ItemType.Command].includes(item.linkAttr.type)) {
-            base.push(item.linkAttr.commandId ?? '');
-        }
+            value,
 
-        return base;
+            link: item.link ?? '',
+
+            command: item.linkAttr.commandId ?? '',
+
+            toolbarRef: this.getToolbarRef(item.link)
+        };
+
+        return schema.map((col) => map[col] ?? '');
     }
 
     private getToolbarRef(id?: string): string {
@@ -314,52 +326,79 @@ export default class CliHandlers {
         return `toolbar:${name}`;
     }
 
-    private getItemList(args: CliData,  toolbar?: ToolbarSettings): string {
+    private getItemList(args: CliData, toolbar?: ToolbarSettings): string {
         const format = this.hasValue(args.format) ? args.format : 'table';
         const verbose = args.verbose !== undefined;
         const includeEmpty = verbose || args.empty !== undefined;
         const isCsv = format === 'csv';
 
         const toolbars = toolbar ? [toolbar] : this.ntb.settings.toolbars;
-        const { rows, emptyCount } = this.buildItemRows(toolbars, verbose, includeEmpty, !isCsv);
+
+        const { rows, emptyCount } = this.buildItemRows(
+            toolbars,
+            verbose,
+            includeEmpty,
+            !isCsv
+        );
 
         if (!rows.length && !emptyCount) return t('cli.no-items');
+
+        const schema = this.getColumnSchema(verbose, toolbars.length === 1);
 
         let lines: string[];
 
         if (isCsv) {
-            const header = this.getColumnSchema(verbose, toolbars.length === 1).join(',');
+            const header = schema.join(',');
             const escape = (val: string) => `"${val.replace(/"/g, '""')}"`;
-            lines = [header, ...rows.map(r => r.cols.map(escape).join(','))];
-        } 
-        else {
-            const colWidths = rows.reduce((widths, row) => {
-                row.cols.forEach((col, i) => {
-                    widths[i] = Math.max(widths[i] ?? 0, col.length);
+
+            lines = [
+                header,
+                ...rows.map(r => r.cols.map(escape).join(','))
+            ];
+        } else {
+            const widths = rows.reduce((acc, r) => {
+                r.cols.forEach((c, i) => {
+                    acc[i] = Math.max(acc[i] ?? 0, c.length);
                 });
-                return widths;
+                return acc;
             }, [] as number[]);
 
             lines = rows.map(r =>
-                r.cols.map((col, i) => col.padEnd(colWidths[i])).join('  ').trimEnd()
+                r.cols.map((c, i) => c.padEnd(widths[i])).join('  ').trimEnd()
             );
         }
 
-        if (emptyCount > 0) lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
+        if (emptyCount > 0) {
+            lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
+        }
 
         return lines.join('\n');
     }
 
-    private getColumnSchema(verbose: boolean, single: boolean): string[] {
+    private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
         if (verbose) {
             return single
-                ? ['position', 'uuid', 'type', 'label', 'tooltip', 'icon']
-                : ['uuid', 'type', 'label', 'tooltip', 'icon', 'toolbar'];
+                ? [
+                    'position',
+                    'uuid',
+                    'type',
+                    'label',
+                    'tooltip',
+                    'icon'
+                ]
+                : [
+                    'uuid',
+                    'type',
+                    'label',
+                    'tooltip',
+                    'icon',
+                    'toolbar'
+                ];
         }
 
         return single
-            ? ['position', 'type', 'labelTooltip', 'value']
-            : ['type', 'label'];
+            ? ['position', 'type', 'value']
+            : ['type', 'value'];
     }
 
     private sortItemRows(rows: ItemRow[]): void {
