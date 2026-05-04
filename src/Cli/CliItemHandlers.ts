@@ -148,24 +148,9 @@ export default class CliItemHandlers {
     private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
         if (verbose) {
             return single
-                ? [
-                    'position',
-                    'uuid',
-                    'type',
-                    'label',
-                    'tooltip',
-                    'icon'
-                ]
-                : [
-                    'uuid',
-                    'type',
-                    'label',
-                    'tooltip',
-                    'icon',
-                    'toolbar'
-                ];
+                ? ['position', 'uuid', 'type', 'labelTooltip', 'icon', 'value']
+                : ['uuid', 'type', 'labelTooltip', 'value', 'toolbar'];
         }
-
         return single
             ? ['position', 'type', 'labelTooltip', 'value']
             : ['type', 'labelTooltip', 'value'];
@@ -224,7 +209,7 @@ export default class CliItemHandlers {
 
             labelTooltip: this.formatText(this.getItemText(item), truncate),
 
-            toolbar: toolbar.uuid,
+            toolbar: this.getToolbarRef(toolbar.uuid),
 
             value: this.formatText(this.getItemValue(item), truncate),
 
