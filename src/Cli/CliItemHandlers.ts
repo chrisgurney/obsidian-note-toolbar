@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { CliData } from "obsidian";
-import { ToolbarSettings, ToolbarItemSettings, t } from "Settings/NoteToolbarSettings";
+import { ToolbarSettings, ToolbarItemSettings, t, ItemType } from "Settings/NoteToolbarSettings";
 import { hasValue } from "./CliUtils";
 
 type ItemRow = { key: string; cols: string[] };
@@ -11,6 +11,7 @@ type ColumnSpec =
     | 'type'
     | 'label'
     | 'tooltip'
+    | 'labelTooltip'
     | 'icon'
     | 'toolbar'
     | 'value'
@@ -107,6 +108,12 @@ export default class CliItemHandlers {
                             truncate
                         );
 
+                        // skip separators in non-verbose single-toolbar mode
+                        const isSep = [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
+                        if (isSep && !single && !verbose) {
+                            return inner;
+                        }
+
                         const isEmpty = cols.every(c => !c);
 
                         if (isEmpty && !includeEmpty) {
@@ -160,8 +167,32 @@ export default class CliItemHandlers {
         }
 
         return single
-            ? ['position', 'type', 'value']
-            : ['type', 'value'];
+            ? ['position', 'type', 'labelTooltip', 'value']
+            : ['type', 'labelTooltip', 'value'];
+    }
+
+    private getItemText(item: ToolbarItemSettings): string {
+        switch (item.linkAttr.type) {
+            case ItemType.Group:
+                return '-->';
+            default:
+                return item.label || item.tooltip || item.icon || '';
+        }
+    }
+
+    private getItemValue(item: ToolbarItemSettings): string {
+        switch (item.linkAttr.type) {
+            case ItemType.Command:
+                return item.linkAttr.commandId ?? '';
+            case ItemType.File:
+            case ItemType.Uri:
+                return item.link ?? '';
+            case ItemType.Group:
+            case ItemType.Menu:
+                return this.getToolbarRef(item.link);
+            default:
+                return '';
+        }
     }
 
     private getToolbarRef(id?: string): string {
@@ -181,25 +212,21 @@ export default class CliItemHandlers {
         verbose: boolean,
         truncate: boolean
     ): string[] {
-        const label = this.formatText(item.label, truncate);
-        const tooltip = this.formatText(item.tooltip, truncate);
-
-        const value =
-            label || tooltip || '';
-
         const map: Record<ColumnSpec, string> = {
             position: String(index),
 
             uuid: item.uuid,
             type: item.linkAttr.type ?? '',
 
-            label,
-            tooltip,
+            label: this.formatText(item.label, truncate),
+            tooltip: this.formatText(item.tooltip, truncate),
             icon: item.icon ?? '',
+
+            labelTooltip: this.formatText(this.getItemText(item), truncate),
 
             toolbar: toolbar.uuid,
 
-            value,
+            value: this.formatText(this.getItemValue(item), truncate),
 
             link: item.link ?? '',
 
@@ -211,13 +238,13 @@ export default class CliItemHandlers {
         return schema.map((col) => map[col] ?? '');
     }
 
-    private sortItemRows(rows: ItemRow[]): void {
-        rows.sort((a, b) => {
-            if (!a.key && b.key) return -1;
-            if (a.key && !b.key) return 1;
-            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
-        });
-    }
+    // private sortItemRows(rows: ItemRow[]): void {
+    //     rows.sort((a, b) => {
+    //         if (!a.key && b.key) return -1;
+    //         if (a.key && !b.key) return 1;
+    //         return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
+    //     });
+    // }
 
     private truncate(value: string): string {
         if (value.length <= CliItemHandlers.TRUNCATE_LENGTH) return value;
