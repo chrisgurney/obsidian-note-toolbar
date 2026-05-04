@@ -1,31 +1,17 @@
 import NoteToolbarPlugin from "main";
 import { CliData, CliHandler, getIcon, normalizePath, PaneType, TFile } from "obsidian";
-import { ItemType, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings, URL_USER_GUIDE } from "Settings/NoteToolbarSettings";
-import { importArgs, tr } from "Utils/Utils";
+import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { importArgs } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
-
-type ItemRow = { key: string; cols: string[] };
-
-type ColumnSpec =
-    | 'position'
-    | 'uuid'
-    | 'type'
-    | 'label'
-    | 'tooltip'
-    | 'icon'
-    | 'toolbar'
-    | 'value'
-    | 'link'
-    | 'command'
-    | 'toolbarRef';
-
-type ColumnSchema = readonly ColumnSpec[];
+import CliItemHandlers from "./CliItemHandlers";
+import { hasValue } from "./CliUtils";
 
 /**
  * Defines the CLI command handlers, registered to Obsidian's CLI in `CliManager`.
  */
 export default class CliHandlers {
 
+    private cliItemHandlers: CliItemHandlers;
     private language;
 
     constructor(
@@ -33,6 +19,7 @@ export default class CliHandlers {
         private cliDefinition: CliDefinition
     ) {
         this.language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
+        this.cliItemHandlers = new CliItemHandlers(ntb);
     }
 
     public get(commandId: string): CliHandler {
@@ -109,19 +96,19 @@ export default class CliHandlers {
 
     async handleAddJs(args: CliData): Promise<string> {
         return await this.addItemHelper(args, ItemType.JavaScript, (item) => {
-            if (this.hasValue(args.code) || (this.hasValue(args.file) || this.hasValue(args.path))) {
-                if (this.hasValue(args.code) && (this.hasValue(args.file) || this.hasValue(args.path))) {
+            if (hasValue(args.code) || (hasValue(args.file) || hasValue(args.path))) {
+                if (hasValue(args.code) && (hasValue(args.file) || hasValue(args.path))) {
                     return t('cli.error-js-code-and-file-exclusive');
                 }
                 const fileResult = this.resolveFileArgs(args.file, args.path);
                 if (typeof fileResult === 'string') return fileResult; // error resolving file or path
                 const file: TFile | null = fileResult;
                 let scriptConfig: ScriptConfig = {
-                    pluginFunction: this.hasValue(args.code) ? 'evaluate' : 'exec',
+                    pluginFunction: hasValue(args.code) ? 'evaluate' : 'exec',
                     expression: args.code,
                     sourceFile: file?.path
                 } as ScriptConfig;
-                if (this.hasValue(args.args)) {
+                if (hasValue(args.args)) {
                     const parsedArgs = importArgs(args.args);
                     if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
                     scriptConfig.sourceArgs = args.args;
@@ -172,9 +159,9 @@ export default class CliHandlers {
     }
 
     handleItems(args: CliData): string {
-        const toolbar = this.hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
-        if (this.hasValue(args.toolbar) && !toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
-        return this.getItemList(args, toolbar);
+        const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
+        if (hasValue(args.toolbar) && !toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
+        return this.cliItemHandlers.getItemList(args, toolbar);
     }
 
     async handleNew(args: CliData): Promise<string> {
@@ -185,7 +172,7 @@ export default class CliHandlers {
     }
 
     handleToolbars(args: CliData): string {
-        const format = this.hasValue(args.format) ? args.format : 'text';
+        const format = hasValue(args.format) ? args.format : 'text';
         const verbose = args.verbose !== undefined;
 
         const toolbars = [...this.ntb.settings.toolbars].sort(
@@ -213,203 +200,6 @@ export default class CliHandlers {
     }
 
 	/*************************************************************************
-	 * HANDLER HELPERS
-	 *************************************************************************/
-
-    private static readonly TRUNCATE_LENGTH = 32;
-
-    private truncate(value: string): string {
-        if (value.length <= CliHandlers.TRUNCATE_LENGTH) return value;
-        return value.slice(0, CliHandlers.TRUNCATE_LENGTH).trimEnd() + '…';
-    }
-
-    private formatText(value: string | undefined, truncate: boolean): string {
-        const v = value ?? '';
-        return truncate ? this.truncate(v) : v;
-    }
-
-    /**
-     * Builds a list of items from the specified toolbars, formatted for display in the CLI.
-     */
-    private buildItemRows(
-        toolbars: ToolbarSettings[],
-        verbose: boolean,
-        includeEmpty: boolean,
-        truncate: boolean
-    ): { rows: ItemRow[]; emptyCount: number } {
-        const single = toolbars.length === 1;
-        const schema = this.getColumnSchema(verbose, single);
-
-        return toolbars.reduce(
-            (acc, toolbar) => {
-                const result = toolbar.items.reduce(
-                    (inner, item, index) => {
-                        const cols = this.projectItem(
-                            item,
-                            toolbar,
-                            index,
-                            schema,
-                            verbose,
-                            truncate
-                        );
-
-                        const isEmpty = cols.every(c => !c);
-
-                        if (isEmpty && !includeEmpty) {
-                            inner.emptyCount++;
-                            return inner;
-                        }
-
-                        inner.rows.push({
-                            key: item.label || item.tooltip || '',
-                            cols
-                        });
-
-                        return inner;
-                    },
-                    { rows: [] as ItemRow[], emptyCount: 0 }
-                );
-
-                acc.rows.push(...result.rows);
-                acc.emptyCount += result.emptyCount;
-
-                return acc;
-            },
-            { rows: [] as ItemRow[], emptyCount: 0 }
-        );
-    }
-
-    private projectItem(
-        item: ToolbarItemSettings,
-        toolbar: ToolbarSettings,
-        index: number,
-        schema: ColumnSchema,
-        verbose: boolean,
-        truncate: boolean
-    ): string[] {
-        const label = this.formatText(item.label, truncate);
-        const tooltip = this.formatText(item.tooltip, truncate);
-
-        const value =
-            label || tooltip || '';
-
-        const map: Record<ColumnSpec, string> = {
-            position: String(index),
-
-            uuid: item.uuid,
-            type: item.linkAttr.type ?? '',
-
-            label,
-            tooltip,
-            icon: item.icon ?? '',
-
-            toolbar: toolbar.uuid,
-
-            value,
-
-            link: item.link ?? '',
-
-            command: item.linkAttr.commandId ?? '',
-
-            toolbarRef: this.getToolbarRef(item.link)
-        };
-
-        return schema.map((col) => map[col] ?? '');
-    }
-
-    private getToolbarRef(id?: string): string {
-        if (!id) return '';
-
-        const tb = this.ntb.settingsManager.getToolbarById(id);
-        const name = tb?.name ?? t('cli.label-unknown-toolbar');
-
-        return `toolbar:${name}`;
-    }
-
-    private getItemList(args: CliData, toolbar?: ToolbarSettings): string {
-        const format = this.hasValue(args.format) ? args.format : 'table';
-        const verbose = args.verbose !== undefined;
-        const includeEmpty = verbose || args.empty !== undefined;
-        const isCsv = format === 'csv';
-
-        const toolbars = toolbar ? [toolbar] : this.ntb.settings.toolbars;
-
-        const { rows, emptyCount } = this.buildItemRows(
-            toolbars,
-            verbose,
-            includeEmpty,
-            !isCsv
-        );
-
-        if (!rows.length && !emptyCount) return t('cli.no-items');
-
-        const schema = this.getColumnSchema(verbose, toolbars.length === 1);
-
-        let lines: string[];
-
-        if (isCsv) {
-            const header = schema.join(',');
-            const escape = (val: string) => `"${val.replace(/"/g, '""')}"`;
-
-            lines = [
-                header,
-                ...rows.map(r => r.cols.map(escape).join(','))
-            ];
-        } else {
-            const widths = rows.reduce((acc, r) => {
-                r.cols.forEach((c, i) => {
-                    acc[i] = Math.max(acc[i] ?? 0, c.length);
-                });
-                return acc;
-            }, [] as number[]);
-
-            lines = rows.map(r =>
-                r.cols.map((c, i) => c.padEnd(widths[i])).join('  ').trimEnd()
-            );
-        }
-
-        if (emptyCount > 0) {
-            lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
-        }
-
-        return lines.join('\n');
-    }
-
-    private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
-        if (verbose) {
-            return single
-                ? [
-                    'position',
-                    'uuid',
-                    'type',
-                    'label',
-                    'tooltip',
-                    'icon'
-                ]
-                : [
-                    'uuid',
-                    'type',
-                    'label',
-                    'tooltip',
-                    'icon',
-                    'toolbar'
-                ];
-        }
-
-        return single
-            ? ['position', 'type', 'value']
-            : ['type', 'value'];
-    }
-
-    private sortItemRows(rows: ItemRow[]): void {
-        rows.sort((a, b) => {
-            if (!a.key && b.key) return -1;
-            if (a.key && !b.key) return 1;
-            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
-        });
-    }
-
-	/*************************************************************************
 	 * HELPERS
 	 *************************************************************************/
 
@@ -418,7 +208,7 @@ export default class CliHandlers {
      * @returns an error string if validation fails, otherwise undefined
      */
     private addItemArgs(item: ToolbarItemSettings, args: CliData): string | undefined {
-        if (this.hasValue(args.label) || this.hasValue(args.icon)) {
+        if (hasValue(args.label) || hasValue(args.icon)) {
             if (args.label) item.label = args.label;
             if (args.icon) {
                 const icon = getIcon(args.icon);
@@ -463,26 +253,17 @@ export default class CliHandlers {
     }
 
     /**
-     * Checks if a CLI flag value is provided and not just the string "true".
-     * @param arg argument to check
-     * @returns true if the argument has a meaningful value, false if it's undefined or the string "true"
-     */
-    private hasValue(arg: string | undefined): arg is string {
-        return !!arg && arg !== 'true';
-    }
-
-    /**
      * Checks if the given file, or path to a file, exists.
      * @returns corresponding TFile, null if there's nothing to check, or an error string
      */
     private resolveFileArgs(fileArg?: string, pathArg?: string): TFile | null | string {
-        if (this.hasValue(fileArg)) {
+        if (hasValue(fileArg)) {
             const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
             const file = this.ntb.app.metadataCache.getFirstLinkpathDest(fileArg!, activeFilePath);
             if (!file) return t('cli.error-file-not-found', { file: fileArg, interpolation: { escapeValue: false } });
             return file;
         }
-        if (this.hasValue(pathArg)) {
+        if (hasValue(pathArg)) {
             const file = this.ntb.app.vault.getFileByPath(normalizePath(pathArg!));
             if (!file) return t('cli.error-path-not-found', { path: pathArg, interpolation: { escapeValue: false } });
             return file;
