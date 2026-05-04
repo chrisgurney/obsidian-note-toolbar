@@ -11,7 +11,7 @@ type ColumnSpec =
     | 'type'
     | 'label'
     | 'tooltip'
-    | 'labelTooltip'
+    | 'labelTooltipIcon'
     | 'icon'
     | 'toolbar'
     | 'value'
@@ -148,12 +148,12 @@ export default class CliItemHandlers {
     private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
         if (verbose) {
             return single
-                ? ['position', 'uuid', 'type', 'labelTooltip', 'icon', 'value']
-                : ['uuid', 'type', 'labelTooltip', 'icon', 'value', 'toolbar'];
+                ? ['position', 'uuid', 'type', 'labelTooltipIcon', 'icon', 'value']
+                : ['uuid', 'type', 'labelTooltipIcon', 'icon', 'value', 'toolbar'];
         }
         return single
-            ? ['position', 'type', 'labelTooltip', 'value']
-            : ['type', 'labelTooltip', 'value', 'toolbar'];
+            ? ['position', 'type', 'labelTooltipIcon', 'value']
+            : ['type', 'labelTooltipIcon', 'value', 'toolbar'];
     }
 
     private getItemText(item: ToolbarItemSettings): string {
@@ -207,7 +207,7 @@ export default class CliItemHandlers {
             tooltip: this.formatText(item.tooltip, truncate),
             icon: item.icon ?? '',
 
-            labelTooltip: this.formatText(this.getItemText(item), truncate),
+            labelTooltipIcon: this.formatText(this.getItemText(item), truncate),
 
             toolbar: this.getToolbarRef(toolbar.uuid),
 
