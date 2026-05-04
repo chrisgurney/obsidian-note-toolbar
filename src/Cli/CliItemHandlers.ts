@@ -3,7 +3,6 @@ import { CliData } from "obsidian";
 import { ToolbarSettings, ToolbarItemSettings, t } from "Settings/NoteToolbarSettings";
 import { hasValue } from "./CliUtils";
 
-
 type ItemRow = { key: string; cols: string[] };
 
 type ColumnSpec =
@@ -20,6 +19,7 @@ type ColumnSpec =
     | 'toolbarRef';
 
 type ColumnSchema = readonly ColumnSpec[];
+
 
 export default class CliItemHandlers {
 
@@ -80,6 +80,8 @@ export default class CliItemHandlers {
 	 * HELPERS
 	 *************************************************************************/
     
+    private static readonly TRUNCATE_LENGTH = 32;
+
     /**
      * Builds a list of items from the specified toolbars, formatted for display in the CLI.
      */
@@ -131,6 +133,46 @@ export default class CliItemHandlers {
         );
     }
 
+    private formatText(value: string | undefined, truncate: boolean): string {
+        const v = value ?? '';
+        return truncate ? this.truncate(v) : v;
+    }
+
+    private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
+        if (verbose) {
+            return single
+                ? [
+                    'position',
+                    'uuid',
+                    'type',
+                    'label',
+                    'tooltip',
+                    'icon'
+                ]
+                : [
+                    'uuid',
+                    'type',
+                    'label',
+                    'tooltip',
+                    'icon',
+                    'toolbar'
+                ];
+        }
+
+        return single
+            ? ['position', 'type', 'value']
+            : ['type', 'value'];
+    }
+
+    private getToolbarRef(id?: string): string {
+        if (!id) return '';
+
+        const tb = this.ntb.settingsManager.getToolbarById(id);
+        const name = tb?.name ?? t('cli.label-unknown-toolbar');
+
+        return `toolbar:${name}`;
+    }
+
     private projectItem(
         item: ToolbarItemSettings,
         toolbar: ToolbarSettings,
@@ -169,55 +211,6 @@ export default class CliItemHandlers {
         return schema.map((col) => map[col] ?? '');
     }
 
-    private getToolbarRef(id?: string): string {
-        if (!id) return '';
-
-        const tb = this.ntb.settingsManager.getToolbarById(id);
-        const name = tb?.name ?? t('cli.label-unknown-toolbar');
-
-        return `toolbar:${name}`;
-    }
-
-
-
-    private static readonly TRUNCATE_LENGTH = 32;
-
-    private truncate(value: string): string {
-        if (value.length <= CliItemHandlers.TRUNCATE_LENGTH) return value;
-        return value.slice(0, CliItemHandlers.TRUNCATE_LENGTH).trimEnd() + '…';
-    }
-
-    private formatText(value: string | undefined, truncate: boolean): string {
-        const v = value ?? '';
-        return truncate ? this.truncate(v) : v;
-    }
-
-    private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
-        if (verbose) {
-            return single
-                ? [
-                    'position',
-                    'uuid',
-                    'type',
-                    'label',
-                    'tooltip',
-                    'icon'
-                ]
-                : [
-                    'uuid',
-                    'type',
-                    'label',
-                    'tooltip',
-                    'icon',
-                    'toolbar'
-                ];
-        }
-
-        return single
-            ? ['position', 'type', 'value']
-            : ['type', 'value'];
-    }
-
     private sortItemRows(rows: ItemRow[]): void {
         rows.sort((a, b) => {
             if (!a.key && b.key) return -1;
@@ -226,5 +219,9 @@ export default class CliItemHandlers {
         });
     }
 
+    private truncate(value: string): string {
+        if (value.length <= CliItemHandlers.TRUNCATE_LENGTH) return value;
+        return value.slice(0, CliItemHandlers.TRUNCATE_LENGTH).trimEnd() + '…';
+    }
 
 }
