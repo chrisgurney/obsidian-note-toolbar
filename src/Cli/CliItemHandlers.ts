@@ -149,11 +149,11 @@ export default class CliItemHandlers {
         if (verbose) {
             return single
                 ? ['position', 'uuid', 'type', 'labelTooltip', 'icon', 'value']
-                : ['uuid', 'type', 'labelTooltip', 'value', 'toolbar'];
+                : ['uuid', 'type', 'labelTooltip', 'icon', 'value', 'toolbar'];
         }
         return single
             ? ['position', 'type', 'labelTooltip', 'value']
-            : ['type', 'labelTooltip', 'value'];
+            : ['type', 'labelTooltip', 'value', 'toolbar'];
     }
 
     private getItemText(item: ToolbarItemSettings): string {
