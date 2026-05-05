@@ -59,7 +59,7 @@ Lists all toolbar items, except empty items (no label or tooltip) by default.
 toolbar=<nameOrId>  # Toolbar to list items for
 empty               # Include empty items in output
 verbose             # Include additional details in output
-format=tsv|csv      # Output format (default: tsv)
+format=csv          # Output format
 ```
 
 ## Items (Adding)
@@ -198,7 +198,7 @@ name=<name>  # Toolbar name
 Lists all toolbars.
 
 ```sh
-verbose         # Include additional details in output
-format=tsv|csv  # Output format (default: tsv)
+verbose     # Include additional details in output
+format=csv  # Output format
 ```
 

@@ -17,10 +17,10 @@
     "commonFlags": {
         "format": {
             "description": {
-                "en": "Output format (default: tsv)"
+                "en": "Output format"
             },
             "type": "string",
-            "value": "tsv|csv",
+            "value": "csv",
             "required": false
         },
         "label": {
