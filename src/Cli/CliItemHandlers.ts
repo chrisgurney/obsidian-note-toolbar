@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { CliData } from "obsidian";
-import { ToolbarSettings, ToolbarItemSettings, t, ItemType } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, ToolbarItemSettings, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
 import { hasValue } from "./CliUtils";
 
 type ItemRow = { key: string; cols: string[] };
@@ -33,6 +33,7 @@ export default class CliItemHandlers {
         const verbose = args.verbose !== undefined;
         const includeEmpty = verbose || args.empty !== undefined;
         const isCsv = format === 'csv';
+        const isJson = format === 'json';
         const isTotal = args.total !== undefined;
 
         const toolbars = toolbar ? [toolbar] : this.ntb.settings.toolbars;
@@ -41,7 +42,7 @@ export default class CliItemHandlers {
             toolbars,
             verbose,
             includeEmpty,
-            !isCsv
+            !verbose && !isCsv
         );
 
         if (isTotal) return String(rows.length);
@@ -49,6 +50,15 @@ export default class CliItemHandlers {
         if (!rows.length && !emptyCount) return t('cli.no-items');
 
         const schema = this.getColumnSchema(verbose, toolbars.length === 1);
+
+        if (isJson) {
+            const data = rows.map(r =>
+                Object.fromEntries(
+                    schema.map((col, i) => [col, r.cols[i]])
+                )
+            );
+            return JSON.stringify(data, null, 2);
+        }
 
         let lines: string[];
 
@@ -172,6 +182,11 @@ export default class CliItemHandlers {
         switch (item.linkAttr.type) {
             case ItemType.Command:
                 return item.linkAttr.commandId ?? '';
+            case ItemType.Dataview:
+            case ItemType.JsEngine:
+            case ItemType.JavaScript:
+            case ItemType.Templater:
+                return this.getScriptSummary(item.scriptConfig);
             case ItemType.File:
             case ItemType.Uri:
                 return item.link ?? '';
@@ -181,6 +196,16 @@ export default class CliItemHandlers {
             default:
                 return '';
         }
+    }
+
+    private getScriptSummary(config: ScriptConfig | undefined): string {
+        if (!config) return '';
+        let parts: string[] = [];
+        let pluginFunction = `${config.pluginFunction}:`;
+        if (config.sourceFile) parts.push(`${config.sourceFile}`);
+        if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
+        if (config.expression) parts.push(`${config.expression}`);
+        return pluginFunction + parts.join(' | ');
     }
 
     private getToolbarRef(id?: string): string {
