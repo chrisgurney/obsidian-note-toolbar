@@ -33,6 +33,7 @@ export default class CliItemHandlers {
         const verbose = args.verbose !== undefined;
         const includeEmpty = verbose || args.empty !== undefined;
         const isCsv = format === 'csv';
+        const isTotal = args.total !== undefined;
 
         const toolbars = toolbar ? [toolbar] : this.ntb.settings.toolbars;
 
@@ -42,6 +43,8 @@ export default class CliItemHandlers {
             includeEmpty,
             !isCsv
         );
+
+        if (isTotal) return String(rows.length);
 
         if (!rows.length && !emptyCount) return t('cli.no-items');
 

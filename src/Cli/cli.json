@@ -352,6 +352,13 @@
                     },
                     "type": "boolean",
                     "required": false
+                },
+                "total": {
+                    "description": {
+                        "en": "Returns item count"
+                    },
+                    "type": "boolean",
+                    "required": false
                 }
             }
         },
