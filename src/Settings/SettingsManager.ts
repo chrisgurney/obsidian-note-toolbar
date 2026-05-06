@@ -418,7 +418,7 @@ export default class SettingsManager {
 	async resolveGalleryItem(item: ToolbarItemSettings): Promise<boolean> {
 
 		if (!item.linkAttr?.type) {
-			console.error(t('gallery.error-missing-item-type'));
+			this.ntb.error(t('gallery.error-missing-item-type'));
 			return false;
 		}
 
@@ -495,12 +495,12 @@ export default class SettingsManager {
 				}
 			}
 			else {
-				console.error(t('gallery.error-invalid-plugin'));
+				this.ntb.error(t('gallery.error-invalid-plugin'));
 				return undefined;
 			}
 		}
 		else {
-			console.error(t('gallery.error-missing-property'));
+			this.ntb.error(t('gallery.error-missing-property'));
 			return undefined;
 		}
 

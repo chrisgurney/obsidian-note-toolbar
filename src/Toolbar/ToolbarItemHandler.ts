@@ -193,7 +193,7 @@ export default class ToolbarItemHandler {
                 if (focus === 'editor') this.ntb.app.workspace.activeEditor?.editor?.focus();
             } 
             catch (error: Error | any) {
-                console.error(error);
+                this.ntb.error(error);
                 new Notice(error).containerEl.addClass('mod-warning');
             }
         }
@@ -305,7 +305,7 @@ export default class ToolbarItemHandler {
                         await this.ntb.app.commands.executeCommandById(commandId);
                     } 
                     catch (error: Error | any) {
-                        console.error(error);
+                        this.ntb.error(error);
                         new Notice(error).containerEl.addClass('mod-warning');
                     }
                     break;
