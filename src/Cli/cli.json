@@ -10,6 +10,10 @@
             "heading": "Items (Adding)", 
             "docs": "Add items to toolbars." 
         },
+        "items-copy": { 
+            "heading": "Items (Copying + Moving)", 
+            "docs": "Copy and move items to toolbars." 
+        },
         "toolbars": { 
             "heading": "Toolbars" 
         }
@@ -332,7 +336,7 @@
             }
         },
         "note-toolbar:copy": {
-            "category": "copy",
+            "category": "items-copy",
             "description": {
                 "en": "Copy an item to a toolbar"
             },
@@ -384,7 +388,7 @@
             }
         },
         "note-toolbar:move": {
-            "category": "Move",
+            "category": "items-copy",
             "description": {
                 "en": "Move an item to a toolbar"
             },

@@ -139,6 +139,30 @@ tooltip=<tooltip>              # Item tooltip
 pos=<n>                        # Item position in toolbar (default: end of toolbar)
 ```
 
+## Items (Copying + Moving)
+
+Copy and move items to toolbars.
+
+### `note-toolbar:copy`
+
+Copies an item to a toolbar.
+
+```sh
+to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
+item=<itemId>         # Item ID (required)
+pos=<n>               # Item position in toolbar (default: end of toolbar)
+```
+
+### `note-toolbar:move`
+
+Moves an item to a toolbar.
+
+```sh
+to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
+item=<itemId>         # Item ID (required)
+pos=<n>               # Item position in toolbar (default: end of toolbar)
+```
+
 ## Toolbars
 
 ### `note-toolbar:new`
