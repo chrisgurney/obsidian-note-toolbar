@@ -112,15 +112,7 @@ export default class CliItemHandlers {
 
         if (!verbose) {
             // normal single-line row
-            const line = row.cols
-                .map((c, i) => {
-                    const padded = c.padEnd(widths[i]);
-                    if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
-                    return padded;
-                })
-                .join('\t')
-                .trimEnd();
-
+            const line = this.layoutRowAndColor(row.cols, widths, schema);
             lines.push(line);
             return lines;
         }
@@ -142,15 +134,7 @@ export default class CliItemHandlers {
             }
         });
 
-        const line = headCols
-            .map((c, i) => {
-                const padded = c.padEnd(headWidths[i]);
-                if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
-                return padded;
-            })
-            .join('\t')
-            .trimEnd();
-
+        const line = this.layoutRowAndColor(headCols, headWidths, schema);
         lines.push(line);
 
         if (valueCol) {
@@ -222,6 +206,17 @@ export default class CliItemHandlers {
             },
             { rows: [] as ItemRow[], emptyCount: 0 }
         );
+    }
+
+    private layoutRowAndColor(cols: string[], widths: number[], schema: ColumnSchema): string {
+        return cols
+            .map((c, i) => {
+                const padded = c.padEnd(widths[i]);
+                if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
+                return padded;
+            })
+            .join('\t')
+            .trimEnd();
     }
 
     private formatText(value: string | undefined, truncate: boolean): string {
