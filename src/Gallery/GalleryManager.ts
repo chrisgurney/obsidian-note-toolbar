@@ -29,11 +29,8 @@ export default class GalleryManager {
 				if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
 					toolbar = await this.ntb.settingsManager.newToolbar();
 				}
-				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, galleryItem);
-                const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
-                if (!isResolved) return;
-				toolbar.updated = new Date().toISOString();
-				await this.ntb.settingsManager.save();
+				const newItem = await this.addItemToToolbar(toolbar, galleryItem);
+                if (!newItem) return;
 				this.ntb.commands.openToolbarSettingsForId(toolbar.uuid, newItem.uuid);
                 new Notice(
                     t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })
@@ -47,10 +44,11 @@ export default class GalleryManager {
             (this.ntb.settings.toolbars.length > 0) ? toolbarSuggester.open() : addItemToToolbar(EMPTY_TOOLBAR);
         }
 
-        // confirm with user if they would like to enable scripting
+        // prompt: confirm with user if they would like to enable scripting
         const isScriptingEnabled = await this.ntb.settingsUtils.openScriptPrompt(galleryItem);
         if (!isScriptingEnabled) return;
 
+        // prompts for certain item types
         switch (galleryItem.linkAttr.type) {
             case ItemType.Command: {
                 // check if the item's command exists, before displaying toolbar modal
@@ -98,6 +96,19 @@ export default class GalleryManager {
         }
 
 	}
+
+    async addItemToToolbar(toolbar: ToolbarSettings, galleryItem: ToolbarItemSettings): Promise<ToolbarItemSettings | undefined> {
+        let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, galleryItem);
+        const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
+        if (!isResolved) return;
+        toolbar.updated = new Date().toISOString();
+        await this.ntb.settingsManager.save();
+        return newItem;
+    }
+
+    getItemById(id: string): ToolbarItemSettings | undefined {
+        return this.getItems().find((item: any) => item.uuid.includes(id));
+    }
 
     private loadItems() {
         const startTime = performance.now();

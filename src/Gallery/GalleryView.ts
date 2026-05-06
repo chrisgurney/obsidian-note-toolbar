@@ -156,7 +156,7 @@ export default class GalleryView extends ItemView {
 		this.ntb.registerDomEvent(markdownEl, 'click', async (evt) => {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-card-item');
 			if (galleryItemEl && galleryItemEl.id) {
-				const galleryItem = this.ntb.gallery.getItems().find((item: any) => item.uuid.includes(galleryItemEl.id));
+				const galleryItem = this.ntb.gallery.getItemById(galleryItemEl.id);
 				if (galleryItem) await this.ntb.gallery.addItem(galleryItem);
 			}
 		});
