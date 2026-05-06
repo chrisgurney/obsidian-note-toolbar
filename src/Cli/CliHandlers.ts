@@ -242,6 +242,9 @@ export default class CliHandlers {
             (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
         );
 
+        const widths = toolbars.map(toolbar => toolbar.name.length);
+        const maxNameWidth = Math.max(...widths);
+
         if (!toolbars.length) return t('cli.no-toolbars');
 
         switch (format) {
@@ -249,14 +252,16 @@ export default class CliHandlers {
                 const header = verbose ? 'uuid,name' : 'name';
                 const rows = toolbars.map(tb =>
                     verbose
-                        ? `"${tb.uuid}","${tb.name.replace(/"/g, '""')}"`
+                        ? `"${tb.name.replace(/"/g, '""')}","${tb.uuid}"`
                         : `"${tb.name.replace(/"/g, '""')}"`
                 );
                 return [header, ...rows].join('\n');
             }
             default: {
                 return toolbars.map(tb =>
-                    verbose ? `${tb.uuid}\t${tb.name}` : tb.name
+                    verbose
+                        ? `${tb.name.padEnd(maxNameWidth)}\t${color(tb.uuid, 'green')}`
+                        : tb.name
                 ).join('\n');
             }
         }
