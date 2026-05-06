@@ -430,9 +430,9 @@
         "note-toolbar:settings": {
             "category": "settings",
             "description": {
-                "en": "Open Note Toolbar settings"
+                "en": "Open Note Toolbar settings in Obsidian"
             },
-            "docs": "Opens settings for the provided item or toolbar. Opens main settings by default.",
+            "docs": "Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.",
             "flags": {
                 "item": {
                     "description": {

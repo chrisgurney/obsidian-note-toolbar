@@ -212,7 +212,7 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 
 ### `note-toolbar:settings`
 
-Opens settings for the provided item or toolbar. Opens main settings by default.
+Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.
 
 ```sh
 item=<itemId>       # ID of item to open settings for
