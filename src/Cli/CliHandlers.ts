@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { CliData, CliHandler, getIcon, normalizePath, PaneType, TFile } from "obsidian";
 import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import ItemModal from "Settings/UI/Modals/ItemModal";
 import { importArgs } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 import CliItemHandlers from "./CliItemHandlers";
@@ -55,6 +56,7 @@ export default class CliHandlers {
         'note-toolbar:items': this.handleItems.bind(this),
         'note-toolbar:move': this.handleMove.bind(this),
         'note-toolbar:new': this.handleNew.bind(this),
+        'note-toolbar:settings': this.handleSettings.bind(this),
         'note-toolbar:toolbars': this.handleToolbars.bind(this)
     };
 
@@ -208,6 +210,28 @@ export default class CliHandlers {
         if (toolbar) return t('cli.error-toolbar-already-exists', { toolbar: args.name });
         const newToolbar = await this.ntb.settingsManager.newToolbar(args.name);
         return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
+    }
+
+    async handleSettings(args: CliData): Promise<string> {
+        const itemId = hasValue(args.item) ? args.item : undefined;
+        const toolbarId = hasValue(args.toolbar) ? args.toolbar : undefined;
+        if (toolbarId) {
+            const toolbar = this.ntb.settingsManager.getToolbar(toolbarId);
+            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: toolbarId });
+            this.ntb.settingsManager.openToolbarSettings(toolbar);
+            return '';
+        }
+        if (itemId) {
+            const item = this.ntb.settingsManager.getToolbarItemById(itemId);
+            if (!item) return t('cli.error-invalid-item', { item: itemId });
+            const itemToolbar = this.ntb.settingsManager.getToolbarByItemId(itemId);
+            if (!itemToolbar) return t('cli.error-toolbar-not-found-for-item', { item: itemId });
+            const itemModal = new ItemModal(this.ntb, itemToolbar, item);
+            itemModal.open();
+            return '';
+        }
+        await this.ntb.commands.openSettings();
+        return 'Opened settings window';
     }
 
     handleToolbars(args: CliData): string {

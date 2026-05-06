@@ -14,6 +14,9 @@
             "heading": "Items (Copying + Moving)", 
             "docs": "Copy and move items to toolbars." 
         },
+        "settings": {
+            "heading": "Settings"
+        },
         "toolbars": { 
             "heading": "Toolbars" 
         }
@@ -424,6 +427,35 @@
                 }
             }
         },
+        "note-toolbar:settings": {
+            "category": "settings",
+            "description": {
+                "en": "Open Note Toolbar settings"
+            },
+            "docs": "Opens settings for the provided item or toolbar. If no item or toolbar is provided, opens main settings page.",
+            "flags": {
+                "item": {
+                    "description": {
+                        "en": "ID of item to open settings for"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<itemId>"
+                    },
+                    "required": false
+                },
+                "toolbar": {
+                    "description": {
+                        "en": "ID of toolbar to open settings for"
+                    },
+                    "type": "string",
+                    "value": {
+                        "en": "<nameOrId>"
+                    },
+                    "required": false
+                }
+            }
+        },        
         "note-toolbar:toolbars": {
             "category": "toolbars",
             "description": {

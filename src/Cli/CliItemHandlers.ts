@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { CliData } from "obsidian";
 import { ItemType, ScriptConfig, ToolbarItemSettings, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
-import { hasValue } from "./CliUtils";
+import { color, hasValue } from "./CliUtils";
 
 type ItemRow = { key: string; cols: string[] };
 
@@ -35,14 +35,18 @@ export default class CliItemHandlers {
         const isCsv = format === 'csv';
         const isJson = format === 'json';
         const isTotal = args.total !== undefined;
-
+        
         const toolbars = toolbar ? [toolbar] : this.ntb.settings.toolbars;
+
+        const truncateDisplay = (toolbars.length > 1) &&!isCsv;
+        const truncateValue = !verbose && !isCsv;
 
         const { rows, emptyCount } = this.buildItemRows(
             toolbars,
             verbose,
             includeEmpty,
-            !verbose && !isCsv
+            truncateDisplay,
+            truncateValue
         );
 
         if (isTotal) return String(rows.length);
@@ -72,7 +76,8 @@ export default class CliItemHandlers {
                 header,
                 ...rows.map(r => r.cols.map(escape).join(','))
             ];
-        } else {
+        }
+        else {
             const widths = rows.reduce((acc, r) => {
                 r.cols.forEach((c, i) => {
                     acc[i] = Math.max(acc[i] ?? 0, c.length);
@@ -80,13 +85,51 @@ export default class CliItemHandlers {
                 return acc;
             }, [] as number[]);
 
-            lines = rows.map(r =>
-                r.cols.map((c, i) => c.padEnd(widths[i])).join('  ').trimEnd()
-            );
+            lines = [];
+
+            rows.forEach(r => {
+                if (!verbose) {
+                    // normal single-line row
+                    const line = r.cols
+                        .map((c, i) => c.padEnd(widths[i]))
+                        .join('  ')
+                        .trimEnd();
+
+                    lines.push(line);
+                    return;
+                }
+
+                const headCols: string[] = [];
+                const headWidths: number[] = [];
+                let valueCol = '';
+
+                r.cols.forEach((c, i) => {
+                    if (schema[i] === 'value') {
+                        valueCol = c;
+                    } else {
+                        headCols.push(c);
+                        headWidths.push(widths[i]);
+                    }
+                });
+
+                const line = headCols
+                    .map((c, i) => c.padEnd(headWidths[i]))
+                    .join('  ')
+                    .trimEnd();
+
+                lines.push(line);
+
+                if (valueCol) {
+                    valueCol.split('\n').forEach(l => {
+                        lines.push(color('\t' + l, isCsv ? undefined : 'black'));
+                    });
+                }
+
+            });
         }
 
         if (emptyCount > 0) {
-            lines.push(`\n${t('cli.items-empty-not-shown', { count: emptyCount })}`);
+            lines.push(`\n${color(t('cli.items-empty-not-shown', { count: emptyCount }), 'green')}`);
         }
 
         return lines.join('\n');
@@ -105,7 +148,8 @@ export default class CliItemHandlers {
         toolbars: ToolbarSettings[],
         verbose: boolean,
         includeEmpty: boolean,
-        truncate: boolean
+        truncateDisplay: boolean,
+        truncateValue: boolean
     ): { rows: ItemRow[]; emptyCount: number } {
         const single = toolbars.length === 1;
         const schema = this.getColumnSchema(verbose, single);
@@ -120,7 +164,8 @@ export default class CliItemHandlers {
                             index,
                             schema,
                             verbose,
-                            truncate
+                            truncateDisplay,
+                            truncateValue
                         );
 
                         // skip separators in all items, non-verbose mode
@@ -129,8 +174,7 @@ export default class CliItemHandlers {
                             return inner;
                         }
 
-                        const isEmpty = (item.label || item.tooltip) === '';
-                        if (isEmpty && !includeEmpty) {
+                        if (this.isEmpty(item) && !includeEmpty) {
                             inner.emptyCount++;
                             return inner;
                         }
@@ -163,7 +207,7 @@ export default class CliItemHandlers {
         if (verbose) {
             return single
                 ? ['position', 'uuid', 'type', 'labelTooltipIcon', 'icon', 'value']
-                : ['uuid', 'type', 'labelTooltipIcon', 'icon', 'value', 'toolbar'];
+                : ['uuid', 'type', 'labelTooltipIcon', 'icon', 'toolbar', 'value'];
         }
         return single
             ? ['position', 'labelTooltipIcon', 'type', 'value']
@@ -183,7 +227,7 @@ export default class CliItemHandlers {
         }
     }
 
-    private getItemValue(item: ToolbarItemSettings): string {
+    private getItemValue(item: ToolbarItemSettings, verbose: boolean): string {
         switch (item.linkAttr.type) {
             case ItemType.Command:
                 return item.linkAttr.commandId ?? '';
@@ -191,7 +235,7 @@ export default class CliItemHandlers {
             case ItemType.JsEngine:
             case ItemType.JavaScript:
             case ItemType.Templater:
-                return this.getScriptSummary(item.scriptConfig);
+                return this.getScriptSummary(item.scriptConfig, verbose);
             case ItemType.File:
             case ItemType.Uri:
                 return item.link ?? '';
@@ -202,10 +246,10 @@ export default class CliItemHandlers {
         }
     }
 
-    private getScriptSummary(config: ScriptConfig | undefined): string {
+    private getScriptSummary(config: ScriptConfig | undefined, verbose: boolean): string {
         if (!config) return '';
         let parts: string[] = [];
-        let pluginFunction = `${config.pluginFunction}:`;
+        let pluginFunction = verbose ? '' : `${config.pluginFunction}:`;
         if (config.sourceFile) parts.push(`${config.sourceFile}`);
         if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
         if (config.expression) parts.push(`${config.expression}`);
@@ -221,13 +265,18 @@ export default class CliItemHandlers {
         return `toolbar:${name}`;
     }
 
+    private isEmpty(item: ToolbarItemSettings): boolean {
+        return (item.label || item.tooltip) === '';
+    }
+
     private projectItem(
         item: ToolbarItemSettings,
         toolbar: ToolbarSettings,
         index: number,
         schema: ColumnSchema,
         verbose: boolean,
-        truncate: boolean
+        truncateDisplay: boolean,
+        truncateValue: boolean
     ): string[] {
         const map: Record<ColumnSpec, string> = {
             position: String(index + 1),
@@ -235,15 +284,15 @@ export default class CliItemHandlers {
             uuid: item.uuid,
             type: item.linkAttr.type ?? '',
 
-            label: this.formatText(item.label, truncate),
-            tooltip: this.formatText(item.tooltip, truncate),
+            label: this.formatText(item.label, truncateDisplay),
+            tooltip: this.formatText(item.tooltip, truncateDisplay),
             icon: item.icon ?? '',
 
-            labelTooltipIcon: this.formatText(this.getItemText(item), truncate),
+            labelTooltipIcon: this.formatText(this.getItemText(item), truncateDisplay),
 
             toolbar: this.getToolbarRef(toolbar.uuid),
 
-            value: this.formatText(this.getItemValue(item), truncate),
+            value: this.formatText(this.getItemValue(item, verbose), truncateValue),
 
             link: item.link ?? '',
 

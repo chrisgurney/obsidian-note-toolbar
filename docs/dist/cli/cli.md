@@ -167,6 +167,17 @@ item=<itemId>         # Item ID (required)
 pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
 
+## Settings
+
+### `note-toolbar:settings`
+
+Opens settings for the provided item or toolbar. If no item or toolbar is provided, opens main settings page.
+
+```sh
+item=<itemId>       # ID of item to open settings for
+toolbar=<nameOrId>  # ID of toolbar to open settings for
+```
+
 ## Toolbars
 
 ### `note-toolbar:new`
