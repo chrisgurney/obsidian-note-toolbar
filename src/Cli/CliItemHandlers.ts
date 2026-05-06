@@ -187,8 +187,7 @@ export default class CliItemHandlers {
                         );
 
                         // skip separators when showing all items
-                        const isSep = [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
-                        if (isSep && !single) {
+                        if (this.isSeparator(item) && !single) {
                             return inner;
                         }
 
@@ -224,7 +223,7 @@ export default class CliItemHandlers {
     private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
         if (verbose) {
             return single
-                ? ['position', 'uuid', 'type', 'labelTooltipIcon', 'icon', 'value']
+                ? ['position', 'labelTooltipIcon', 'type', 'icon', 'uuid', 'value']
                 : ['labelTooltipIcon', 'type', 'icon', 'toolbar', 'uuid', 'value'];
         }
         return single
@@ -284,8 +283,12 @@ export default class CliItemHandlers {
     }
 
     private isEmpty(item: ToolbarItemSettings): boolean {
-        if ([ItemType.Break, ItemType.Separator, ItemType.Spreader].contains(item.linkAttr.type)) return false;
+        if (this.isSeparator(item)) return false;
         return (item.label || item.tooltip) === '';
+    }
+
+    private isSeparator(item: ToolbarItemSettings): boolean {
+        return [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
     }
 
     private projectItem(
