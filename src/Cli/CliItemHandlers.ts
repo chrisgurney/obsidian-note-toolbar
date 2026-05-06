@@ -88,43 +88,9 @@ export default class CliItemHandlers {
             lines = [];
 
             rows.forEach(r => {
-                if (!verbose) {
-                    // normal single-line row
-                    const line = r.cols
-                        .map((c, i) => c.padEnd(widths[i]))
-                        .join('  ')
-                        .trimEnd();
-
-                    lines.push(line);
-                    return;
-                }
-
-                const headCols: string[] = [];
-                const headWidths: number[] = [];
-                let valueCol = '';
-
-                r.cols.forEach((c, i) => {
-                    if (schema[i] === 'value') {
-                        valueCol = c;
-                    } else {
-                        headCols.push(c);
-                        headWidths.push(widths[i]);
-                    }
-                });
-
-                const line = headCols
-                    .map((c, i) => c.padEnd(headWidths[i]))
-                    .join('  ')
-                    .trimEnd();
-
-                lines.push(line);
-
-                if (valueCol) {
-                    valueCol.split('\n').forEach(l => {
-                        lines.push(color('\t' + l, isCsv ? undefined : 'black'));
-                    });
-                }
-
+                lines.push(
+                    ...this.getItemRow(r, widths, schema, verbose, isCsv)
+                );
             });
         }
 
@@ -133,6 +99,55 @@ export default class CliItemHandlers {
         }
 
         return lines.join('\n');
+    }
+
+    getItemRow(
+        row: ItemRow, 
+        widths: number[], 
+        schema: ColumnSchema, 
+        verbose: boolean,
+        isCsv: boolean
+    ): string[] {
+        let lines: string[] = [];
+
+        if (!verbose) {
+            // normal single-line row
+            const line = row.cols
+                .map((c, i) => c.padEnd(widths[i]))
+                .join('  ')
+                .trimEnd();
+
+            lines.push(line);
+            return lines;
+        }
+
+        const headCols: string[] = [];
+        const headWidths: number[] = [];
+        let valueCol = '';
+
+        row.cols.forEach((c, i) => {
+            if (schema[i] === 'value') {
+                valueCol = c;
+            } else {
+                headCols.push(c);
+                headWidths.push(widths[i]);
+            }
+        });
+
+        const line = headCols
+            .map((c, i) => c.padEnd(headWidths[i]))
+            .join('  ')
+            .trimEnd();
+
+        lines.push(line);
+
+        if (valueCol) {
+            valueCol.split('\n').forEach(l => {
+                lines.push(color('\t' + l, isCsv ? undefined : 'black'));
+            });
+        }
+
+        return lines;
     }
 
 	/*************************************************************************
