@@ -89,7 +89,7 @@ export default class CliItemHandlers {
 
             rows.forEach(row => {
                 lines.push(
-                    ...this.getItemRow(row, widths, schema, verbose, isCsv)
+                    ...this.getItemRow(row, widths, schema, verbose)
                 );
             });
         }
@@ -105,8 +105,7 @@ export default class CliItemHandlers {
         row: ItemRow, 
         widths: number[], 
         schema: ColumnSchema, 
-        verbose: boolean,
-        isCsv: boolean
+        verbose: boolean
     ): string[] {
         let lines: string[] = [];
 
@@ -139,7 +138,7 @@ export default class CliItemHandlers {
 
         if (valueCol) {
             valueCol.split('\n').forEach(l => {
-                lines.push(color('\t' + l, isCsv ? undefined : 'black'));
+                lines.push(color('\t' + l, 'black'));
             });
         }
 
