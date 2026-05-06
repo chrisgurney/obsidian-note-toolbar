@@ -107,7 +107,7 @@ export default class GalleryManager {
     }
 
     getItemById(id: string): ToolbarItemSettings | undefined {
-        return this.getItems().find((item: any) => item.uuid.includes(id));
+        return this.getItems().find((item: any) => item.uuid === id);
     }
 
     private loadItems() {
