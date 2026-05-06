@@ -113,13 +113,21 @@ export default class CliItemHandlers {
         if (!verbose) {
             // normal single-line row
             const line = row.cols
-                .map((c, i) => c.padEnd(widths[i]))
+                .map((c, i) => {
+                    const padded = c.padEnd(widths[i]);
+                    if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
+                    return padded;
+                })
                 .join('\t')
                 .trimEnd();
 
             lines.push(line);
             return lines;
         }
+
+        //
+        // in verbose mode, show a row and value detail under the row
+        //
 
         const headCols: string[] = [];
         const headWidths: number[] = [];
@@ -137,7 +145,8 @@ export default class CliItemHandlers {
         const line = headCols
             .map((c, i) => {
                 const padded = c.padEnd(headWidths[i]);
-                return schema[i] === 'uuid' ? color(padded, 'green') : padded;
+                if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
+                return padded;
             })
             .join('\t')
             .trimEnd();
