@@ -432,7 +432,7 @@
             "description": {
                 "en": "Open Note Toolbar settings"
             },
-            "docs": "Opens settings for the provided item or toolbar. If no item or toolbar is provided, opens main settings page.",
+            "docs": "Opens settings for the provided item or toolbar. Opens main settings by default.",
             "flags": {
                 "item": {
                     "description": {
