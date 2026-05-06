@@ -31,7 +31,7 @@ export default class CliItemHandlers {
     getItemList(args: CliData, toolbar?: ToolbarSettings): string {
         const format = hasValue(args.format) ? args.format : 'table';
         const verbose = args.verbose !== undefined;
-        const includeEmpty = verbose || args.empty !== undefined;
+        const includeEmpty = args.empty !== undefined;
         const isCsv = format === 'csv';
         const isJson = format === 'json';
         const isTotal = args.total !== undefined;
@@ -135,8 +135,11 @@ export default class CliItemHandlers {
         });
 
         const line = headCols
-            .map((c, i) => c.padEnd(headWidths[i]))
-            .join('  ')
+            .map((c, i) => {
+                const padded = c.padEnd(headWidths[i]);
+                return schema[i] === 'uuid' ? color(padded, 'green') : padded;
+            })
+            .join('\t')
             .trimEnd();
 
         lines.push(line);
@@ -189,7 +192,7 @@ export default class CliItemHandlers {
                             return inner;
                         }
 
-                        if (this.isEmpty(item) && !includeEmpty) {
+                        if (this.isEmpty(item) && !includeEmpty && !single) {
                             inner.emptyCount++;
                             return inner;
                         }
@@ -222,7 +225,7 @@ export default class CliItemHandlers {
         if (verbose) {
             return single
                 ? ['position', 'uuid', 'type', 'labelTooltipIcon', 'icon', 'value']
-                : ['uuid', 'type', 'labelTooltipIcon', 'icon', 'toolbar', 'value'];
+                : ['labelTooltipIcon', 'type', 'icon', 'toolbar', 'uuid', 'value'];
         }
         return single
             ? ['position', 'labelTooltipIcon', 'type', 'value']
@@ -281,7 +284,7 @@ export default class CliItemHandlers {
     }
 
     private isEmpty(item: ToolbarItemSettings): boolean {
-        if ([ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(item.linkAttr.type)) return false;
+        if ([ItemType.Break, ItemType.Separator, ItemType.Spreader].contains(item.linkAttr.type)) return false;
         return (item.label || item.tooltip) === '';
     }
 
