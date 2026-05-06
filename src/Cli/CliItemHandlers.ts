@@ -114,7 +114,7 @@ export default class CliItemHandlers {
             // normal single-line row
             const line = row.cols
                 .map((c, i) => c.padEnd(widths[i]))
-                .join('  ')
+                .join('\t')
                 .trimEnd();
 
             lines.push(line);
@@ -267,7 +267,7 @@ export default class CliItemHandlers {
         let pluginFunction = verbose ? '' : `${config.pluginFunction}:`;
         if (config.sourceFile) parts.push(`${config.sourceFile}`);
         if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
-        if (config.expression) parts.push(`${config.expression}`);
+        if (config.expression) parts.push(verbose ? config.expression : config.expression.replace(/\n/g, ' '));
         return pluginFunction + parts.join(' | ');
     }
 
