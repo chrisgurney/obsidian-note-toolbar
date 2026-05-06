@@ -284,7 +284,7 @@ export default class CliItemHandlers {
 
     private isEmpty(item: ToolbarItemSettings): boolean {
         if (this.isSeparator(item)) return false;
-        return (item.label || item.tooltip) === '';
+        return (item.label || item.tooltip || item.icon) === '';
     }
 
     private isSeparator(item: ToolbarItemSettings): boolean {
