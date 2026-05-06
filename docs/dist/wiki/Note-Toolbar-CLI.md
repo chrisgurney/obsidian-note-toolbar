@@ -49,7 +49,7 @@ Lists all Note Toolbar CLI actions.
 
 ### `note-toolbar:gallery`
 
-Lists items in the Gallery.
+Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command.
 
 ### `note-toolbar:items`
 

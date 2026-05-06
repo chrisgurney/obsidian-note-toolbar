@@ -351,7 +351,7 @@
             "description": {
                 "en": "List items in the Gallery"
             },
-            "docs": "Lists items in the Gallery."
+            "docs": "Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command."
         },
         "note-toolbar:help": {
             "category": "help",
