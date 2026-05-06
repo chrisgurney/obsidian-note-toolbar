@@ -49,6 +49,8 @@ export default class CliItemHandlers {
 
         if (!rows.length && !emptyCount) return t('cli.no-items');
 
+        if (toolbars.length > 1) this.sortItemRows(rows);
+
         const schema = this.getColumnSchema(verbose, toolbars.length === 1);
 
         if (isJson) {
@@ -127,8 +129,7 @@ export default class CliItemHandlers {
                             return inner;
                         }
 
-                        const isEmpty = cols.every(c => !c);
-
+                        const isEmpty = (item.label || item.tooltip) === '';
                         if (isEmpty && !includeEmpty) {
                             inner.emptyCount++;
                             return inner;
@@ -254,13 +255,13 @@ export default class CliItemHandlers {
         return schema.map((col) => map[col] ?? '');
     }
 
-    // private sortItemRows(rows: ItemRow[]): void {
-    //     rows.sort((a, b) => {
-    //         if (!a.key && b.key) return -1;
-    //         if (a.key && !b.key) return 1;
-    //         return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
-    //     });
-    // }
+    private sortItemRows(rows: ItemRow[]): void {
+        rows.sort((a, b) => {
+            if (!a.key && b.key) return -1;
+            if (a.key && !b.key) return 1;
+            return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
+        });
+    }
 
     private truncate(value: string): string {
         if (value.length <= CliItemHandlers.TRUNCATE_LENGTH) return value;
