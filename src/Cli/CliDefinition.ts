@@ -75,7 +75,7 @@ export default class CliDefinition {
     }
 
     public formatCommandList(): string {
-        const COL_WIDTH = 28;
+        const COL_WIDTH = 33;
         const INDENT = '  ';
         const commonFlags = this.cliDef.commonFlags ?? {};
         const commands = Object.entries(this.cliDef.commands)
