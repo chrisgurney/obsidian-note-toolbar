@@ -165,14 +165,18 @@ export default class CliItemHandlers {
                 : ['uuid', 'type', 'labelTooltipIcon', 'icon', 'value', 'toolbar'];
         }
         return single
-            ? ['position', 'type', 'labelTooltipIcon', 'value']
-            : ['type', 'labelTooltipIcon', 'value', 'toolbar'];
+            ? ['position', 'labelTooltipIcon', 'type', 'value']
+            : ['labelTooltipIcon', 'type', 'value', 'toolbar'];
     }
 
     private getItemText(item: ToolbarItemSettings): string {
         switch (item.linkAttr.type) {
+            case ItemType.Break:
+            case ItemType.Separator:
+            case ItemType.Spreader:
+                return '---';
             case ItemType.Group:
-                return '-->';
+                return this.getToolbarRef(item.link);
             default:
                 return item.label || item.tooltip || item.icon || '';
         }
@@ -190,7 +194,6 @@ export default class CliItemHandlers {
             case ItemType.File:
             case ItemType.Uri:
                 return item.link ?? '';
-            case ItemType.Group:
             case ItemType.Menu:
                 return this.getToolbarRef(item.link);
             default:
