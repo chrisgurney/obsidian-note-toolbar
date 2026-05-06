@@ -219,7 +219,7 @@ export default class CliHandlers {
             const toolbar = this.ntb.settingsManager.getToolbar(toolbarId);
             if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: toolbarId });
             this.ntb.settingsManager.openToolbarSettings(toolbar);
-            return '';
+            return t('cli.success-settings-opened');
         }
         if (itemId) {
             const item = this.ntb.settingsManager.getToolbarItemById(itemId);
@@ -228,10 +228,10 @@ export default class CliHandlers {
             if (!itemToolbar) return t('cli.error-toolbar-not-found-for-item', { item: itemId });
             const itemModal = new ItemModal(this.ntb, itemToolbar, item);
             itemModal.open();
-            return '';
+            return t('cli.success-settings-opened');
         }
         await this.ntb.commands.openSettings();
-        return 'Opened settings window';
+        return t('cli.success-settings-opened');
     }
 
     handleToolbars(args: CliData): string {

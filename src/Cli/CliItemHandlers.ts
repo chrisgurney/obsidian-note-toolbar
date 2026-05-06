@@ -168,9 +168,9 @@ export default class CliItemHandlers {
                             truncateValue
                         );
 
-                        // skip separators in all items, non-verbose mode
+                        // skip separators when showing all items
                         const isSep = [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
-                        if (isSep && !single && !verbose) {
+                        if (isSep && !single) {
                             return inner;
                         }
 
@@ -266,6 +266,7 @@ export default class CliItemHandlers {
     }
 
     private isEmpty(item: ToolbarItemSettings): boolean {
+        if ([ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(item.linkAttr.type)) return false;
         return (item.label || item.tooltip) === '';
     }
 
