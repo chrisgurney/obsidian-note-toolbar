@@ -121,7 +121,7 @@ export default class CliItemHandlers {
                             truncate
                         );
 
-                        // skip separators in non-verbose single-toolbar mode
+                        // skip separators in all items, non-verbose mode
                         const isSep = [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
                         if (isSep && !single && !verbose) {
                             return inner;
