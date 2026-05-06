@@ -210,19 +210,19 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	toggleDebugging() {
 		/* eslint-disable no-console */
+		// all errors should be logged
+		this.error = console.error.bind(console);
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
 			this.debug = console.log.bind(console);
 			this.debugGroup = console.group.bind(console);
 			this.debugGroupEnd = console.groupEnd.bind(console);
-			this.error = console.error.bind(console);
 		}
 		// otherwise do nothing when debug functions are called
 		else {
 			this.debug = (...args: any[]) => {};
 			this.debugGroup = (...args: any[]) => {};
 			this.debugGroupEnd = (...args: any[]) => {};
-			this.error = (...args: any[]) => {};
 		}
 		/* eslint-enable no-console */
 	}
