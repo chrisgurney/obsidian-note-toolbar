@@ -240,7 +240,7 @@ export default class CliItemHandlers {
             case ItemType.Group:
                 return this.getToolbarRef(item.link);
             default:
-                return item.label || item.tooltip || item.icon || '';
+                return item.label || item.tooltip || (item.icon ? `icon:${item.icon}` : '') || '';
         }
     }
 
