@@ -87,9 +87,9 @@ export default class CliItemHandlers {
 
             lines = [];
 
-            rows.forEach(r => {
+            rows.forEach(row => {
                 lines.push(
-                    ...this.getItemRow(r, widths, schema, verbose, isCsv)
+                    ...this.getItemRow(row, widths, schema, verbose, isCsv)
                 );
             });
         }
