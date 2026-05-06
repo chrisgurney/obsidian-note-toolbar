@@ -346,6 +346,13 @@
                 "$after": ["pos"]
             }
         },
+        "note-toolbar:gallery": {
+            "category": "items",
+            "description": {
+                "en": "List items in the Gallery"
+            },
+            "docs": "Lists items in the Gallery."
+        },
         "note-toolbar:help": {
             "category": "help",
             "description": {

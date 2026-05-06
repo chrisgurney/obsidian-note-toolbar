@@ -1,8 +1,8 @@
 import cliDefJson from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
 import { CliFlags } from "obsidian";
-import { t } from "Settings/NoteToolbarSettings";
 import { tr } from "Utils/Utils";
+import { color } from "./CliUtils";
 
 
 interface CliLocalizedString {
@@ -81,7 +81,7 @@ export default class CliDefinition {
         const commands = Object.entries(this.cliDef.commands)
             .filter(([id]) => id !== 'note-toolbar')
             .map(([id, cmd]: [string, CliAction]) => {
-                const cmdLine = `\x1b[32m${id.padEnd(COL_WIDTH)}\x1b[0m\x1b[32m${tr(cmd.description, this.language) ?? ''}\x1b[0m`;
+                const cmdLine = color(id.padEnd(COL_WIDTH) + (tr(cmd.description, this.language) ?? ''), 'green');
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
                 const flags = cmd.flags;
                 const ordered = [
@@ -95,7 +95,9 @@ export default class CliDefinition {
                         if (!flagDef || Array.isArray(flagDef)) return null; 
                         const value = flagDef.value ? (typeof flagDef.value === 'string' ? flagDef.value : tr(flagDef.value, this.language)) : '';
                         const flagStr = value ? `${flag}=${value}` : flag;
-                        return `${INDENT}\x1b[90m${INDENT}${flagStr}\x1b[0m${' '.repeat(Math.max(0, COL_WIDTH - 2 - flagStr.length))}\x1b[32m- ${tr(flagDef.description, this.language) ?? ''}\x1b[0m`;
+                        return `${INDENT}${INDENT}${color(flagStr, 'black')}` 
+                            + ' '.repeat(Math.max(0, COL_WIDTH - 2 - flagStr.length)) 
+                            + color(`- ${tr(flagDef.description, this.language) ?? ''}`, 'green');
                     })
                     .filter(line => line !== null)
                     .join('\n');

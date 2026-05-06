@@ -4,7 +4,7 @@ import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToo
 import { importArgs } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 import CliItemHandlers from "./CliItemHandlers";
-import { hasValue } from "./CliUtils";
+import { color, hasValue } from "./CliUtils";
 
 /**
  * Defines the CLI command handlers, registered to Obsidian's CLI in `CliManager`.
@@ -50,6 +50,7 @@ export default class CliHandlers {
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
         'note-toolbar:add-uri': this.handleAddUri.bind(this),
         'note-toolbar:copy': this.handleCopy.bind(this),
+        'note-toolbar:gallery': this.handleGallery.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this),
         'note-toolbar:items': this.handleItems.bind(this),
         'note-toolbar:move': this.handleMove.bind(this),
@@ -164,6 +165,13 @@ export default class CliHandlers {
         // if (win) return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } })
         // else return '';
         return this.handleHelp(args);
+    }
+
+    handleGallery(args: CliData): string {
+        const galleryItems = this.ntb.gallery.getItems();
+        const widths = galleryItems.map(item => item.tooltip.length);
+        const maxWidth = Math.max(...widths);
+        return galleryItems.map(item => item.tooltip.padEnd(maxWidth) + '\t' + color(`gallery:${item.uuid}`, 'black')).join('\n');
     }
 
     handleHelp(args: CliData): string {

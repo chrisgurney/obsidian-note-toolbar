@@ -6,6 +6,10 @@ Lists all Note Toolbar CLI actions.
 
 ## Items
 
+### `note-toolbar:gallery`
+
+Lists items in the Gallery.
+
 ### `note-toolbar:items`
 
 Lists all toolbar items, except empty items (no label or tooltip) by default.
