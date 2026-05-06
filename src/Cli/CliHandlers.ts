@@ -49,8 +49,10 @@ export default class CliHandlers {
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
         'note-toolbar:add-uri': this.handleAddUri.bind(this),
+        'note-toolbar:copy': this.handleCopy.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this),
         'note-toolbar:items': this.handleItems.bind(this),
+        'note-toolbar:move': this.handleMove.bind(this),
         'note-toolbar:new': this.handleNew.bind(this),
         'note-toolbar:toolbars': this.handleToolbars.bind(this)
     };
@@ -147,6 +149,16 @@ export default class CliHandlers {
         });
     }
 
+    async handleCopy(args: CliData): Promise<string> {
+        const toolbar = this.ntb.settingsManager.getToolbar(args.to);
+        if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.to });
+        const item = this.ntb.settingsManager.getToolbarItemById(args.item);
+        if (!item) return t('cli.error-invalid-item', { item: args.item });
+        const position = args.pos ? parseInt(args.pos) - 1 : undefined;
+        await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, position);
+        return t('cli.success-item-copied', { toolbar: toolbar.name });
+    }
+
     handleDefault(args: CliData): string {
         // const win = activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
         // if (win) return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } })
@@ -162,6 +174,16 @@ export default class CliHandlers {
         const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
         if (hasValue(args.toolbar) && !toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
         return this.cliItemHandlers.getItemList(args, toolbar);
+    }
+
+    async handleMove(args: CliData): Promise<string> {
+        const toolbar = this.ntb.settingsManager.getToolbar(args.to);
+        if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.to });
+        const item = this.ntb.settingsManager.getToolbarItemById(args.item);
+        if (!item) return t('cli.error-invalid-item', { item: args.item });
+        const position = args.pos ? parseInt(args.pos) - 1 : undefined;
+        await this.ntb.settingsManager.moveToolbarItem(item, toolbar, position);
+        return t('cli.success-item-moved', { toolbar: toolbar.name });
     }
 
     async handleNew(args: CliData): Promise<string> {
@@ -247,7 +269,7 @@ export default class CliHandlers {
             if (labelIconTooltipError) return labelIconTooltipError;
         }
         // add the item to the toolbar
-        const position = args.pos ? parseInt(args.pos) : undefined;
+        const position = args.pos ? parseInt(args.pos) - 1 : undefined;
         await this.ntb.settingsManager.addToolbarItem(toolbar, item, position);
         return t('cli.success-item-added', { toolbar: toolbar.name });
     }

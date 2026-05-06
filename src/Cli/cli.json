@@ -43,6 +43,16 @@
             },
             "required": false
         },
+        "item": {
+            "description": {
+                "en": "Item ID"
+            },
+            "type": "string",
+            "value": {
+                "en": "<itemId>"
+            },
+            "required": true
+        },
         "pos": {
             "description": {
                 "en": "Item position in toolbar (default: end of toolbar)"
@@ -321,6 +331,17 @@
                 }
             }
         },
+        "note-toolbar:copy": {
+            "category": "copy",
+            "description": {
+                "en": "Copy an item to a toolbar"
+            },
+            "docs": "Copies an item to a toolbar.",
+            "flags": {
+                "$before": ["to", "item"],
+                "$after": ["pos"]
+            }
+        },
         "note-toolbar:help": {
             "category": "help",
             "description": {
@@ -331,7 +352,7 @@
         "note-toolbar:items": {
             "category": "items",
             "description": {
-                "en": "Lists toolbar items"
+                "en": "List toolbar items"
             },
             "docs": "Lists all toolbar items, except empty items (no label or tooltip) by default.",
             "flags": {
@@ -360,6 +381,17 @@
                     "type": "boolean",
                     "required": false
                 }
+            }
+        },
+        "note-toolbar:move": {
+            "category": "Move",
+            "description": {
+                "en": "Move an item to a toolbar"
+            },
+            "docs": "Moves an item to a toolbar.",
+            "flags": {
+                "$before": ["to", "item"],
+                "$after": ["pos"]
             }
         },
         "note-toolbar:new": {

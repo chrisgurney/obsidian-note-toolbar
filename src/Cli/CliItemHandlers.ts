@@ -226,7 +226,7 @@ export default class CliItemHandlers {
         truncate: boolean
     ): string[] {
         const map: Record<ColumnSpec, string> = {
-            position: String(index),
+            position: String(index + 1),
 
             uuid: item.uuid,
             type: item.linkAttr.type ?? '',

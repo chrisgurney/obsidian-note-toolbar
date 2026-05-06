@@ -30,10 +30,6 @@ When adding an icon for a toolbar item, Obsidian uses the [Lucide ↗](https://l
 
 If your icon name isn't working, note that Obsidian may be a version or two behind what's listed there; if in doubt, check [Fevol's Icon Search tool ↗](https://fevol.github.io/obsidian-notes/utils/icons/), or use Note Toolbar's interface to add an item for a list of all icon names.
 
-### Provide the position
-
-Positions (`pos`) start at zero. For example, add an item to the start of a toolbar using `pos=0`. (Remember that there may be items in the toolbar that are not visible.)
-
 ### Copy output
 
 Add `--copy` to any command to copy the output to the clipboard.

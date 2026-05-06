@@ -358,6 +358,20 @@ export default class SettingsManager {
 	}
 
 	/**
+	 * Moves the given toolbar item to the given toolbar.
+	 * @param item ToolbarItemSettings to move.
+	 * @param toToolbar ToolbarSettings to move the item to.
+	 * @param insertIndex optional index to insert the moved item at; if not provided, the item is added to the end of the toolbar.
+	 */
+	public async moveToolbarItem(item: ToolbarItemSettings, toToolbar: ToolbarSettings, insertIndex?: number): Promise<void> {
+		const fromToolbar = this.getToolbarByItemId(item.uuid);
+		if (!fromToolbar) return;
+		fromToolbar.items.remove(item);
+		fromToolbar.updated = new Date().toISOString();
+		await this.addToolbarItem(toToolbar, item, insertIndex);
+	}
+
+	/**
 	 * Creates a new toolbar with default settings, with an optional name.
 	 * @param name name of the toolbar
 	 * @returns ToolbarSettings for the new toolbar

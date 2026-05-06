@@ -139,6 +139,7 @@
         "error-path-not-found": "Error: Path not found: {{path}}",
         "error-invalid-command": "Error: Command does not exist: {{commandId}}",
         "error-invalid-icon": "Error: Invalid icon name: {{iconId}}",
+        "error-invalid-item": "Error: Item not found: {{item}}",
         "error-invalid-target": "Error: Invalid target: {{target}}",
         "error-invalid-toolbar": "Error: Toolbar not found: {{toolbar}}",
         "error-js-code-and-file-exclusive": "Error: Provide either code or file/path",
@@ -154,6 +155,8 @@
         "no-toolbars": "No toolbars found.",
         "required": "(required)",
         "success-item-added": "Success: Item added to toolbar: {{toolbar}}",
+        "success-item-copied": "Success: Item copied to toolbar: {{toolbar}}",
+        "success-item-moved": "Success: Item moved to toolbar: {{toolbar}}",
         "success-toolbar-created": "Success: Toolbar created: {{toolbar}}",
         "success-uri-opened": "Opened: {{uri}}"
     },
