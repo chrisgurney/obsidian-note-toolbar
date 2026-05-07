@@ -153,6 +153,7 @@
         "label-title": "Note Toolbar CLI",
         "label-unknown-toolbar": "Unknown toolbar",
         "no-items": "No items found.",
+        "no-mappings": "No mappings found.",
         "no-toolbars": "No toolbars found.",
         "required": "(required)",
         "success-item-added": "Success: Item added to toolbar: {{toolbar}}",

@@ -164,7 +164,7 @@ export default class CliHandlers {
             if (!resolvedItem) return '';
         }
         else {
-            let item = this.ntb.settingsManager.getToolbarItemById(args.item);
+            const item = this.ntb.settingsManager.getToolbarItemById(args.item);
             if (!item) return t('cli.error-invalid-item', { item: args.item });
             const position = args.pos ? parseInt(args.pos) - 1 : undefined;
             await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, position);
@@ -214,7 +214,7 @@ export default class CliHandlers {
         const format = hasValue(args.format) ? args.format : 'tsv';
 
         const mappings = this.ntb.settings.folderMappings;
-        if (!mappings.length) return 'No folder mappings';
+        if (!mappings.length) return t('cli.no-mappings');
         
         type MappingSchema = 'position' | 'folder' | 'toolbar';
         const schema: MappingSchema[] = ['position', 'folder', 'toolbar'];
