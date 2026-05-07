@@ -58,7 +58,7 @@ toolbar=<nameOrId>  # Toolbar to list items for
 empty               # Include empty items in output
 total               # Returns item count
 verbose             # Include additional details in output
-format=csv          # Output format
+format=csv|tsv      # Output format (default: tsv)
 ```
 
 ## Items (Adding)
@@ -214,6 +214,10 @@ Display folder mappings
 
 Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).
 
+```sh
+format=csv|tsv  # Output format (default: tsv)
+```
+
 ## Settings
 
 ### `note-toolbar:settings`
@@ -240,7 +244,7 @@ name=<name>  # Toolbar name
 Lists all toolbars.
 
 ```sh
-verbose     # Include additional details in output
-format=csv  # Output format
+verbose         # Include additional details in output
+format=csv|tsv  # Output format (default: tsv)
 ```
 

@@ -28,9 +28,9 @@
     "commonFlags": {
         "format": {
             "description": {
-                "en": "Output format"
+                "en": "Output format (default: tsv)"
             },
-            "value": "csv",
+            "value": "csv|tsv",
             "required": false
         },
         "label": {
@@ -410,7 +410,10 @@
             "description": {
                 "en": "List mapping rules"
             },
-            "docs": "Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars)."
+            "docs": "Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).",
+            "flags": {
+                "$after": ["format"]
+            }
         },
         "note-toolbar:settings": {
             "category": "settings",
