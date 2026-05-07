@@ -26,7 +26,6 @@
             "description": {
                 "en": "Output format"
             },
-            "type": "string",
             "value": "csv",
             "required": false
         },
@@ -34,7 +33,6 @@
             "description": {
                 "en": "Item label (required: label or icon)"
             },
-            "type": "string",
             "value": {
                 "en": "<label>"
             },
@@ -44,7 +42,6 @@
             "description": {
                 "en": "Item icon, from Lucide's icon set (required: label or icon)"
             },
-            "type": "string",
             "value": {
                 "en": "<iconName>"
             },
@@ -54,7 +51,6 @@
             "description": {
                 "en": "Item ID"
             },
-            "type": "string",
             "value": {
                 "en": "<itemId>"
             },
@@ -64,7 +60,6 @@
             "description": {
                 "en": "Item position in toolbar (default: end of toolbar)"
             },
-            "type": "string",
             "value": {
                 "en": "<n>"
             },
@@ -74,7 +69,6 @@
             "description": {
                 "en": "Toolbar name or ID to add item to"
             },
-            "type": "string",
             "value": {
                 "en": "<toolbarNameOrId>"
             },
@@ -84,7 +78,6 @@
             "description": {
                 "en": "Item tooltip"
             },
-            "type": "string",
             "value": {
                 "en": "<tooltip>"
             },
@@ -94,7 +87,6 @@
             "description": {
                 "en": "Include additional details in output"
             },
-            "type": "boolean",
             "required": false
         }
     },
@@ -130,7 +122,6 @@
                     "description": {
                         "en": "Obsidian command ID (e.g. editor:toggle-bold)"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<commandId>"
                     },
@@ -140,14 +131,12 @@
                     "description": {
                         "en": "Focus the editor after executing the command (default: false)"
                     },
-                    "type": "boolean",
                     "required": false
                 },
                 "target": {
                     "description": {
                         "en": "Where to run command"
                     },
-                    "type": "string",
                     "value": "split|tab",
                     "required": false
                 }
@@ -167,7 +156,6 @@
                         "en": "File to link to (required: file or path)"
                     },
                     "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
-                    "type": "string",
                     "value": {
                         "en": "<name>"
                     },
@@ -178,7 +166,6 @@
                         "en": "Path of file to link to (required: file or path)"
                     },
                     "docs": "Requires the exact path from the vault root, e.g. folder/file.md",
-                    "type": "string",
                     "value": {
                         "en": "<path>"
                     },
@@ -188,7 +175,6 @@
                     "description": {
                         "en": "Where to open the file"
                     },
-                    "type": "string",
                     "value": "modal|split|tab|window",
                     "required": false
                 }
@@ -207,7 +193,6 @@
                     "description": {
                         "en": "Toolbar to add as a group"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<toolbarNameOrId>"
                     },
@@ -228,7 +213,6 @@
                     "description": {
                         "en": "JavaScript code to execute (required: code, file, or path)"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<code>"
                     },
@@ -239,7 +223,6 @@
                         "en": "Filename to execute (required: code, file, or path)"
                     },
                     "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
-                    "type": "string",
                     "value": {
                         "en": "<name>"
                     },
@@ -250,7 +233,6 @@
                         "en": "Filename with path to execute (required: code, file, or path)"
                     },
                     "docs": "Requires the exact path from the vault root, e.g. folder/script.js",
-                    "type": "string",
                     "value": {
                         "en": "<path>"
                     },
@@ -260,7 +242,6 @@
                     "description": {
                         "en": "Comma-separated 'name: value' format, with string values in quotes"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<args>"
                     },
@@ -281,7 +262,6 @@
                     "description": {
                         "en": "Toolbar to add as a menu"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<toolbarNameOrId>"
                     },
@@ -322,7 +302,6 @@
                     "description": {
                         "en": "Website, URI, or note title"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<link>"
                     },
@@ -332,7 +311,6 @@
                     "description": {
                         "en": "Where to open the URI"
                     },
-                    "type": "string",
                     "value": "modal|split|tab|window",
                     "required": false
                 }
@@ -375,7 +353,6 @@
                     "description": {
                         "en": "Toolbar to list items for"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<nameOrId>"
                     },
@@ -385,14 +362,12 @@
                     "description": {
                         "en": "Include empty items in output"
                     },
-                    "type": "boolean",
                     "required": false
                 },
                 "total": {
                     "description": {
                         "en": "Returns item count"
                     },
-                    "type": "boolean",
                     "required": false
                 }
             }
@@ -419,7 +394,6 @@
                     "description": {
                         "en": "Toolbar name"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<name>"
                     },
@@ -438,7 +412,6 @@
                     "description": {
                         "en": "ID of item to open settings for"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<itemId>"
                     },
@@ -448,7 +421,6 @@
                     "description": {
                         "en": "ID of toolbar to open settings for"
                     },
-                    "type": "string",
                     "value": {
                         "en": "<nameOrId>"
                     },
