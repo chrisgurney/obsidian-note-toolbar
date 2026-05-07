@@ -4,7 +4,7 @@ import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToo
 import ItemModal from "Settings/UI/Modals/ItemModal";
 import { importArgs } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
-import CliItemHandlers from "./CliItemHandlers";
+import CliItemsHandler from "./CliItemsHandler";
 import { color, hasValue } from "./CliUtils";
 
 /**
@@ -12,7 +12,7 @@ import { color, hasValue } from "./CliUtils";
  */
 export default class CliHandlers {
 
-    private cliItemHandlers: CliItemHandlers;
+    private cliItemsHandler: CliItemsHandler;
     private language;
 
     constructor(
@@ -20,7 +20,7 @@ export default class CliHandlers {
         private cliDefinition: CliDefinition
     ) {
         this.language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
-        this.cliItemHandlers = new CliItemHandlers(ntb);
+        this.cliItemsHandler = new CliItemsHandler(ntb);
     }
 
     public get(commandId: string): CliHandler {
@@ -192,7 +192,7 @@ export default class CliHandlers {
     handleItems(args: CliData): string {
         const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
         if (hasValue(args.toolbar) && !toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
-        return this.cliItemHandlers.getItemList(args, toolbar);
+        return this.cliItemsHandler.getItemList(args, toolbar);
     }
 
     async handleMove(args: CliData): Promise<string> {

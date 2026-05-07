@@ -22,7 +22,7 @@ type ColumnSpec =
 type ColumnSchema = readonly ColumnSpec[];
 
 
-export default class CliItemHandlers {
+export default class CliItemsHandler {
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -338,8 +338,8 @@ export default class CliItemHandlers {
     }
 
     private truncate(value: string): string {
-        if (value.length <= CliItemHandlers.TRUNCATE_LENGTH) return value;
-        return value.slice(0, CliItemHandlers.TRUNCATE_LENGTH).trimEnd() + '…';
+        if (value.length <= CliItemsHandler.TRUNCATE_LENGTH) return value;
+        return value.slice(0, CliItemsHandler.TRUNCATE_LENGTH).trimEnd() + '…';
     }
 
 }
