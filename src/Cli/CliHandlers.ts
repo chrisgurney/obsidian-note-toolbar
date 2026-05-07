@@ -216,11 +216,12 @@ export default class CliHandlers {
         const mappings = this.ntb.settings.folderMappings;
         if (!mappings.length) return 'No folder mappings';
         
-        type MappingSchema = 'folder' | 'toolbar';
-        const schema: MappingSchema[] = ['folder', 'toolbar'];
+        type MappingSchema = 'position' | 'folder' | 'toolbar';
+        const schema: MappingSchema[] = ['position', 'folder', 'toolbar'];
 
-        const rows = mappings.map(mapping => {
+        const rows = mappings.map((mapping, i) => {
             const values: Record<MappingSchema, string> = { 
+                position: String(i + 1),
                 folder: mapping.folder, 
                 toolbar: formatToolbarRef(this.ntb, mapping.toolbar) 
             };
