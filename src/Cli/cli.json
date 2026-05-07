@@ -451,6 +451,24 @@
             "flags": {
                 "$after": ["verbose", "format"]
             }
+        },
+        "note-toolbar:use": {
+            "category": "items",
+            "description": {
+                "en": "Uses the item"
+            },
+            "docs": "Uses an item.",
+            "flags": {
+                "item": {
+                    "description": {
+                        "en": "ID of item to use"
+                    },
+                    "value": {
+                        "en": "<itemId>"
+                    },
+                    "required": true
+                }
+            }
         }
     }
 }

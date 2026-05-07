@@ -22,6 +22,14 @@ verbose             # Include additional details in output
 format=csv|tsv      # Output format (default: tsv)
 ```
 
+### `note-toolbar:use`
+
+Uses an item.
+
+```sh
+item=<itemId>  # ID of item to use (required)
+```
+
 ## Items (Adding)
 
 Add items to toolbars.

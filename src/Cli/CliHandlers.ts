@@ -58,7 +58,8 @@ export default class CliHandlers {
         'note-toolbar:new': this.handleNew.bind(this),
         'note-toolbar:rules': this.handleRules.bind(this),
         'note-toolbar:settings': this.handleSettings.bind(this),
-        'note-toolbar:toolbars': this.handleToolbars.bind(this)
+        'note-toolbar:toolbars': this.handleToolbars.bind(this),
+        'note-toolbar:use': this.handleUse.bind(this)
     };
 
     async handleAddBreak(args: CliData): Promise<string> {
@@ -315,6 +316,14 @@ export default class CliHandlers {
                 ).join('\n');
             }
         }
+    }
+
+    async handleUse(args: CliData): Promise<string> {
+        const item = this.ntb.settingsManager.getToolbarItemById(args.item);
+        if (!item) return t('cli.error-invalid-item', { item: args.item });
+        let activeFile = this.ntb.app.workspace.getActiveFile();
+        await this.ntb.items.handleItemLink(item, undefined, activeFile);
+        return 'Used item: ' + (item.label || item.tooltip || item.uuid);
     }
 
 	/*************************************************************************
