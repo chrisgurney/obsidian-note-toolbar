@@ -149,8 +149,6 @@ export default class CliItemsHandler {
 	 * HELPERS
 	 *************************************************************************/
     
-    private static readonly TRUNCATE_LENGTH = 32;
-
     /**
      * Builds a list of items from the specified toolbars, formatted for display in the CLI.
      */
@@ -285,15 +283,6 @@ export default class CliItemsHandler {
         return `toolbar:${name}`;
     }
 
-    private isEmpty(item: ToolbarItemSettings): boolean {
-        if (this.isSeparator(item)) return false;
-        return (item.label || item.tooltip || item.icon) === '';
-    }
-
-    private isSeparator(item: ToolbarItemSettings): boolean {
-        return [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
-    }
-
     private projectItem(
         item: ToolbarItemSettings,
         toolbar: ToolbarSettings,
@@ -335,6 +324,21 @@ export default class CliItemsHandler {
             if (a.key && !b.key) return 1;
             return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
         });
+    }
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+    private static readonly TRUNCATE_LENGTH = 32;
+
+    private isEmpty(item: ToolbarItemSettings): boolean {
+        if (this.isSeparator(item)) return false;
+        return (item.label || item.tooltip || item.icon) === '';
+    }
+
+    private isSeparator(item: ToolbarItemSettings): boolean {
+        return [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
     }
 
     private truncate(value: string): string {
