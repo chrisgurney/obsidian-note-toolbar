@@ -172,9 +172,6 @@ export default class CliHandlers {
     }
 
     handleDefault(args: CliData): string {
-        // const win = activeWindow.open(URL_USER_GUIDE + 'Note-Toolbar-CLI', '_blank');
-        // if (win) return t('cli.success-uri-opened', { uri: URL_USER_GUIDE + 'Note-Toolbar-CLI', interpolation: { escapeValue: false } })
-        // else return '';
         return this.handleHelp(args);
     }
 
@@ -192,7 +189,7 @@ export default class CliHandlers {
     handleItems(args: CliData): string {
         const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
         if (hasValue(args.toolbar) && !toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
-        return this.cliItemsHandler.getItemList(args, toolbar);
+        return this.cliItemsHandler.formatItemList(args, toolbar);
     }
 
     async handleMove(args: CliData): Promise<string> {

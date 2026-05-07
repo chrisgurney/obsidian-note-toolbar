@@ -21,14 +21,22 @@ type ColumnSpec =
 
 type ColumnSchema = readonly ColumnSpec[];
 
-
+/**
+ * Handles formatting the output of the `note-toolbar:items` command.
+ */
 export default class CliItemsHandler {
 
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
 
-    getItemList(args: CliData, toolbar?: ToolbarSettings): string {
+    /**
+     * Outputs the list of items, formatted per the given arguments.
+     * @param args CLI arguments
+     * @param toolbar if provided, output is scoped to the toolbar
+     * @returns the list of items
+     */
+    formatItemList(args: CliData, toolbar?: ToolbarSettings): string {
         const format = hasValue(args.format) ? args.format : 'table';
         const verbose = args.verbose !== undefined;
         const includeEmpty = args.empty !== undefined;
@@ -89,7 +97,7 @@ export default class CliItemsHandler {
 
             rows.forEach(row => {
                 lines.push(
-                    ...this.getItemRow(row, widths, schema, verbose)
+                    ...this.formatItemRow(row, widths, schema, verbose)
                 );
             });
         }
@@ -101,52 +109,8 @@ export default class CliItemsHandler {
         return lines.join('\n');
     }
 
-    getItemRow(
-        row: ItemRow, 
-        widths: number[], 
-        schema: ColumnSchema, 
-        verbose: boolean
-    ): string[] {
-        let lines: string[] = [];
-
-        if (!verbose) {
-            // normal single-line row
-            const line = this.layoutRowAndColor(row.cols, widths, schema);
-            lines.push(line);
-            return lines;
-        }
-
-        //
-        // in verbose mode, show a row and value detail under the row
-        //
-
-        const headCols: string[] = [];
-        const headWidths: number[] = [];
-        let valueCol = '';
-
-        row.cols.forEach((c, i) => {
-            if (schema[i] === 'value') {
-                valueCol = c;
-            } else {
-                headCols.push(c);
-                headWidths.push(widths[i]);
-            }
-        });
-
-        const line = this.layoutRowAndColor(headCols, headWidths, schema);
-        lines.push(line);
-
-        if (valueCol) {
-            valueCol.split('\n').forEach(l => {
-                lines.push(color('\t' + l, 'black'));
-            });
-        }
-
-        return lines;
-    }
-
 	/*************************************************************************
-	 * HELPERS
+	 * OUTPUT BUILDERS
 	 *************************************************************************/
     
     /**
@@ -166,7 +130,7 @@ export default class CliItemsHandler {
             (acc, toolbar) => {
                 const result = toolbar.items.reduce(
                     (inner, item, index) => {
-                        const cols = this.projectItem(
+                        const cols = this.projectItemToRow(
                             item,
                             toolbar,
                             index,
@@ -205,22 +169,6 @@ export default class CliItemsHandler {
         );
     }
 
-    private layoutRowAndColor(cols: string[], widths: number[], schema: ColumnSchema): string {
-        return cols
-            .map((c, i) => {
-                const padded = c.padEnd(widths[i]);
-                if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
-                return padded;
-            })
-            .join('\t')
-            .trimEnd();
-    }
-
-    private formatText(value: string | undefined, truncate: boolean): string {
-        const v = value ?? '';
-        return truncate ? this.truncate(v) : v;
-    }
-
     private getColumnSchema(verbose: boolean, single: boolean): ColumnSchema {
         if (verbose) {
             return single
@@ -232,58 +180,7 @@ export default class CliItemsHandler {
             : ['labelTooltipIcon', 'type', 'value', 'toolbar'];
     }
 
-    private getItemText(item: ToolbarItemSettings): string {
-        switch (item.linkAttr.type) {
-            case ItemType.Break:
-            case ItemType.Separator:
-            case ItemType.Spreader:
-                return '---';
-            case ItemType.Group:
-                return this.getToolbarRef(item.link);
-            default:
-                return item.label || item.tooltip || (item.icon ? `icon:${item.icon}` : '') || '';
-        }
-    }
-
-    private getItemValue(item: ToolbarItemSettings, verbose: boolean): string {
-        switch (item.linkAttr.type) {
-            case ItemType.Command:
-                return item.linkAttr.commandId ?? '';
-            case ItemType.Dataview:
-            case ItemType.JsEngine:
-            case ItemType.JavaScript:
-            case ItemType.Templater:
-                return this.getScriptSummary(item.scriptConfig, verbose);
-            case ItemType.File:
-            case ItemType.Uri:
-                return item.link ?? '';
-            case ItemType.Menu:
-                return this.getToolbarRef(item.link);
-            default:
-                return '';
-        }
-    }
-
-    private getScriptSummary(config: ScriptConfig | undefined, verbose: boolean): string {
-        if (!config) return '';
-        let parts: string[] = [];
-        let pluginFunction = verbose ? '' : `${config.pluginFunction}:`;
-        if (config.sourceFile) parts.push(`${config.sourceFile}`);
-        if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
-        if (config.expression) parts.push(verbose ? config.expression : config.expression.replace(/\n/g, ' '));
-        return pluginFunction + parts.join(' | ');
-    }
-
-    private getToolbarRef(id?: string): string {
-        if (!id) return '';
-
-        const tb = this.ntb.settingsManager.getToolbarById(id);
-        const name = tb?.name ?? t('cli.label-unknown-toolbar');
-
-        return `toolbar:${name}`;
-    }
-
-    private projectItem(
+    private projectItemToRow(
         item: ToolbarItemSettings,
         toolbar: ToolbarSettings,
         index: number,
@@ -298,21 +195,21 @@ export default class CliItemsHandler {
             uuid: item.uuid,
             type: item.linkAttr.type ?? '',
 
-            label: this.formatText(item.label, truncateDisplay),
-            tooltip: this.formatText(item.tooltip, truncateDisplay),
+            label: this.formatWithTruncation(item.label, truncateDisplay),
+            tooltip: this.formatWithTruncation(item.tooltip, truncateDisplay),
             icon: item.icon ?? '',
 
-            labelTooltipIcon: this.formatText(this.getItemText(item), truncateDisplay),
+            labelTooltipIcon: this.formatWithTruncation(this.formatItemText(item), truncateDisplay),
 
-            toolbar: this.getToolbarRef(toolbar.uuid),
+            toolbar: this.formatToolbarRef(toolbar.uuid),
 
-            value: this.formatText(this.getItemValue(item, verbose), truncateValue),
+            value: this.formatWithTruncation(this.formatItemValue(item, verbose), truncateValue),
 
             link: item.link ?? '',
 
             command: item.linkAttr.commandId ?? '',
 
-            toolbarRef: this.getToolbarRef(item.link)
+            toolbarRef: this.formatToolbarRef(item.link)
         };
 
         return schema.map((col) => map[col] ?? '');
@@ -324,6 +221,141 @@ export default class CliItemsHandler {
             if (a.key && !b.key) return 1;
             return a.key.localeCompare(b.key, undefined, { sensitivity: 'base' });
         });
+    }
+
+	/*************************************************************************
+	 * OUTPUT FORMATTERS
+	 *************************************************************************/
+
+    private formatItemRow(
+        row: ItemRow, 
+        widths: number[], 
+        schema: ColumnSchema, 
+        verbose: boolean
+    ): string[] {
+        let lines: string[] = [];
+
+        // normal single-line row
+        
+        if (!verbose) {
+            const line = this.formatRow(row.cols, widths, schema);
+            lines.push(line);
+            return lines;
+        }
+
+        // in verbose mode, show a row and value detail under the row
+
+        const headCols: string[] = [];
+        const headWidths: number[] = [];
+        let valueCol = '';
+
+        row.cols.forEach((c, i) => {
+            if (schema[i] === 'value') {
+                valueCol = c;
+            } else {
+                headCols.push(c);
+                headWidths.push(widths[i]);
+            }
+        });
+
+        const line = this.formatRow(headCols, headWidths, schema);
+        lines.push(line);
+
+        if (valueCol) {
+            valueCol.split('\n').forEach(l => {
+                lines.push(color('\t' + l, 'black'));
+            });
+        }
+
+        return lines;
+    }
+
+    /**
+     * Creates a string representation of the visible parts of an item.
+     * @param item item to display
+     * @returns item's visible string representation
+     */
+    private formatItemText(item: ToolbarItemSettings): string {
+        switch (item.linkAttr.type) {
+            case ItemType.Break:
+            case ItemType.Separator:
+            case ItemType.Spreader:
+                return '---';
+            case ItemType.Group:
+                return this.formatToolbarRef(item.link);
+            default:
+                return item.label || item.tooltip || (item.icon ? `icon:${item.icon}` : '') || '';
+        }
+    }
+
+    /**
+     * Creates a string representation of the value of the item, based on its type.
+     * @param item item to get the value of
+     * @param verbose true if the value should display more detail
+     * @returns item's value string representation
+     */
+    private formatItemValue(item: ToolbarItemSettings, verbose: boolean): string {
+        switch (item.linkAttr.type) {
+            case ItemType.Command:
+                return item.linkAttr.commandId ?? '';
+            case ItemType.Dataview:
+            case ItemType.JsEngine:
+            case ItemType.JavaScript:
+            case ItemType.Templater:
+                return this.formatScriptSummary(item.scriptConfig, verbose);
+            case ItemType.File:
+            case ItemType.Uri:
+                return item.link ?? '';
+            case ItemType.Menu:
+                return this.formatToolbarRef(item.link);
+            default:
+                return '';
+        }
+    }
+
+    /**
+     * Takes the columns of a row and returns them as a colored, tab-separated string.
+     */
+    private formatRow(cols: string[], widths: number[], schema: ColumnSchema): string {
+        return cols
+            .map((c, i) => {
+                const padded = c.padEnd(widths[i]);
+                if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
+                return padded;
+            })
+            .join('\t')
+            .trimEnd();
+    }
+
+    /**
+     * Creates a string representation of the script settings of an item.
+     */
+    private formatScriptSummary(config: ScriptConfig | undefined, verbose: boolean): string {
+        if (!config) return '';
+        let parts: string[] = [];
+        let pluginFunction = verbose ? '' : `${config.pluginFunction}:`;
+        if (config.sourceFile) parts.push(`${config.sourceFile}`);
+        if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
+        if (config.expression) parts.push(verbose ? config.expression : config.expression.replace(/\n/g, ' '));
+        return pluginFunction + parts.join(' | ');
+    }
+
+    /**
+     * Creates a string representation of a reference to another toolbar.
+     */    
+    private formatToolbarRef(id?: string): string {
+        if (!id) return '';
+        const tb = this.ntb.settingsManager.getToolbarById(id);
+        const name = tb?.name ?? t('cli.label-unknown-toolbar');
+        return `toolbar:${name}`;
+    }
+
+    /**
+     * Truncates the provided string, if requested.
+     */
+    private formatWithTruncation(value: string | undefined, truncate: boolean): string {
+        const v = value ?? '';
+        return truncate ? this.truncate(v) : v;
     }
 
 	/*************************************************************************
