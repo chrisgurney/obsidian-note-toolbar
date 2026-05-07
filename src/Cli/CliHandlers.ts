@@ -239,26 +239,35 @@ export default class CliHandlers {
             (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
         );
 
-        const widths = toolbars.map(toolbar => toolbar.name.length);
-        const maxNameWidth = Math.max(...widths);
-
         if (!toolbars.length) return t('cli.no-toolbars');
+
+        type ToolbarSchema = 'name' | 'uuid';
+        const schema: ToolbarSchema[] = verbose ? ['name', 'uuid'] : ['name'];
+
+        const rows = toolbars.map(tb => {
+            const values: Record<ToolbarSchema, string> = { name: tb.name, uuid: tb.uuid };
+            return schema.map(col => values[col]);
+        });
 
         switch (format) {
             case 'csv': {
-                const header = verbose ? 'name,uuid' : 'name';
-                const rows = toolbars.map(tb =>
-                    verbose
-                        ? `"${tb.name.replace(/"/g, '""')}","${tb.uuid}"`
-                        : `"${tb.name.replace(/"/g, '""')}"`
+                const header = schema.join(',');
+                const lines = rows.map(r =>
+                    r.map(v => `"${v.replace(/"/g, '""')}"`).join(',')
                 );
-                return [header, ...rows].join('\n');
+                return [header, ...lines].join('\n');
             }
             default: {
-                return toolbars.map(tb =>
-                    verbose
-                        ? `${tb.name.padEnd(maxNameWidth)}\t${color(tb.uuid, 'green')}`
-                        : tb.name
+                const widths = rows.reduce((acc, r) => {
+                    r.forEach((v, i) => { acc[i] = Math.max(acc[i] ?? 0, v.length); });
+                    return acc;
+                }, [] as number[]);
+
+                return rows.map(r =>
+                    r.map((v, i) => {
+                        const padded = v.padEnd(widths[i]);
+                        return schema[i] === 'uuid' ? color(padded, 'green') : padded;
+                    }).join('\t').trimEnd()
                 ).join('\n');
             }
         }
