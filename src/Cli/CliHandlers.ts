@@ -5,7 +5,7 @@ import ItemModal from "Settings/UI/Modals/ItemModal";
 import { importArgs } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 import CliItemsHandler from "./CliItemsHandler";
-import { color, hasValue } from "./CliUtils";
+import { color, formatToolbarRef, hasValue } from "./CliUtils";
 
 /**
  * Defines the CLI command handlers, registered to Obsidian's CLI in `CliManager`.
@@ -56,6 +56,7 @@ export default class CliHandlers {
         'note-toolbar:items': this.handleItems.bind(this),
         'note-toolbar:move': this.handleMove.bind(this),
         'note-toolbar:new': this.handleNew.bind(this),
+        'note-toolbar:rules': this.handleRules.bind(this),
         'note-toolbar:settings': this.handleSettings.bind(this),
         'note-toolbar:toolbars': this.handleToolbars.bind(this)
     };
@@ -207,6 +208,48 @@ export default class CliHandlers {
         if (toolbar) return t('cli.error-toolbar-already-exists', { toolbar: args.name });
         const newToolbar = await this.ntb.settingsManager.newToolbar(args.name);
         return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
+    }
+
+    async handleRules(args: CliData): Promise<string> {
+        const format = hasValue(args.format) ? args.format : 'tsv';
+
+        const mappings = this.ntb.settings.folderMappings;
+        if (!mappings.length) return 'No folder mappings';
+        
+        type MappingSchema = 'folder' | 'toolbar';
+        const schema: MappingSchema[] = ['folder', 'toolbar'];
+
+        const rows = mappings.map(mapping => {
+            const values: Record<MappingSchema, string> = { 
+                folder: mapping.folder, 
+                toolbar: formatToolbarRef(this.ntb, mapping.toolbar) 
+            };
+            return schema.map(col => values[col]);
+        });
+
+        switch (format) {
+            case 'csv': {
+                const header = schema.join(',');
+                const lines = rows.map(r =>
+                    r.map(v => `"${v.replace(/"/g, '""')}"`).join(',')
+                );
+                return [header, ...lines].join('\n');
+            }
+            default: {
+                const widths = rows.reduce((acc, r) => {
+                    r.forEach((v, i) => { acc[i] = Math.max(acc[i] ?? 0, v.length); });
+                    return acc;
+                }, [] as number[]);
+
+                return rows.map(r =>
+                    r.map((v, i) => {
+                        const padded = v.padEnd(widths[i]);
+                        return padded;
+                    }).join('\t').trimEnd()
+                ).join('\n');
+            }
+        }
+
     }
 
     async handleSettings(args: CliData): Promise<string> {

@@ -206,6 +206,14 @@ item=<itemId>         # Item ID (required)
 pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
 
+## Rules
+
+Display folder mappings
+
+### `note-toolbar:rules`
+
+Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).
+
 ## Settings
 
 ### `note-toolbar:settings`

@@ -14,6 +14,10 @@
             "heading": "Items (Copying + Moving)", 
             "docs": "Copy and move items to toolbars." 
         },
+        "rules": {
+            "heading": "Rules",
+            "docs": "Display folder mappings"
+        },
         "settings": {
             "heading": "Settings"
         },
@@ -400,6 +404,13 @@
                     "required": false
                 }
             }
+        },
+        "note-toolbar:rules": {
+            "category": "rules",
+            "description": {
+                "en": "List mapping rules"
+            },
+            "docs": "Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars)."
         },
         "note-toolbar:settings": {
             "category": "settings",
