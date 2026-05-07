@@ -232,7 +232,7 @@ export default class CliHandlers {
     }
 
     handleToolbars(args: CliData): string {
-        const format = hasValue(args.format) ? args.format : 'text';
+        const format = hasValue(args.format) ? args.format : 'tsv';
         const verbose = args.verbose !== undefined;
 
         const toolbars = [...this.ntb.settings.toolbars].sort(
@@ -246,7 +246,7 @@ export default class CliHandlers {
 
         switch (format) {
             case 'csv': {
-                const header = verbose ? 'uuid,name' : 'name';
+                const header = verbose ? 'name,uuid' : 'name';
                 const rows = toolbars.map(tb =>
                     verbose
                         ? `"${tb.name.replace(/"/g, '""')}","${tb.uuid}"`

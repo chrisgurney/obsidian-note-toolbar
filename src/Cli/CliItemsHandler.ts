@@ -37,7 +37,7 @@ export default class CliItemsHandler {
      * @returns the list of items
      */
     formatItemList(args: CliData, toolbar?: ToolbarSettings): string {
-        const format = hasValue(args.format) ? args.format : 'table';
+        const format = hasValue(args.format) ? args.format : 'tsv';
         const verbose = args.verbose !== undefined;
         const includeEmpty = args.empty !== undefined;
         const isCsv = format === 'csv';
