@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { CliData } from "obsidian";
 import { ItemType, ScriptConfig, ToolbarItemSettings, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
-import { color, hasValue } from "./CliUtils";
+import { color, formatToolbarRef, hasValue } from "./CliUtils";
 
 type ItemRow = { key: string; cols: string[] };
 
@@ -201,7 +201,7 @@ export default class CliItemsHandler {
 
             labelTooltipIcon: this.formatWithTruncation(this.formatItemText(item), truncateDisplay),
 
-            toolbar: this.formatToolbarRef(toolbar.uuid),
+            toolbar: formatToolbarRef(this.ntb, toolbar.uuid),
 
             value: this.formatWithTruncation(this.formatItemValue(item, verbose), truncateValue),
 
@@ -209,7 +209,7 @@ export default class CliItemsHandler {
 
             command: item.linkAttr.commandId ?? '',
 
-            toolbarRef: this.formatToolbarRef(item.link)
+            toolbarRef: formatToolbarRef(this.ntb, item.link)
         };
 
         return schema.map((col) => map[col] ?? '');
@@ -282,7 +282,7 @@ export default class CliItemsHandler {
             case ItemType.Spreader:
                 return '---';
             case ItemType.Group:
-                return this.formatToolbarRef(item.link);
+                return formatToolbarRef(this.ntb, item.link);
             default:
                 return item.label || item.tooltip || (item.icon ? `icon:${item.icon}` : '') || '';
         }
@@ -307,7 +307,7 @@ export default class CliItemsHandler {
             case ItemType.Uri:
                 return item.link ?? '';
             case ItemType.Menu:
-                return this.formatToolbarRef(item.link);
+                return formatToolbarRef(this.ntb, item.link);
             default:
                 return '';
         }
@@ -338,16 +338,6 @@ export default class CliItemsHandler {
         if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
         if (config.expression) parts.push(verbose ? config.expression : config.expression.replace(/\n/g, ' '));
         return pluginFunction + parts.join(' | ');
-    }
-
-    /**
-     * Creates a string representation of a reference to another toolbar.
-     */    
-    private formatToolbarRef(id?: string): string {
-        if (!id) return '';
-        const tb = this.ntb.settingsManager.getToolbarById(id);
-        const name = tb?.name ?? t('cli.label-unknown-toolbar');
-        return `toolbar:${name}`;
     }
 
     /**

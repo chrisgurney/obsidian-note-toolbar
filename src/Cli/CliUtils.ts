@@ -1,3 +1,6 @@
+import NoteToolbarPlugin from "main";
+import { t } from "Settings/NoteToolbarSettings";
+
 /**
  * Outputs the ANSI color codes for the given text and color.
  * @param text text to color
@@ -14,6 +17,16 @@ export function color(text: string, color?: 'black' | 'green'): string {
         default:
             return text;
     }
+}
+
+/**
+ * Creates a string representation of a reference to another toolbar.
+ */    
+export function formatToolbarRef(ntb: NoteToolbarPlugin, id?: string): string {
+    if (!id) return '';
+    const tb = ntb.settingsManager.getToolbarById(id);
+    const name = tb?.name ?? t('cli.label-unknown-toolbar');
+    return `toolbar:${name}`;
 }
 
 /**
