@@ -457,7 +457,7 @@
             "description": {
                 "en": "Uses the item"
             },
-            "docs": "Uses an item.",
+            "docs": "Uses an item. Defaults to using the item within the active file.",
             "flags": {
                 "item": {
                     "description": {
@@ -467,6 +467,26 @@
                         "en": "<itemId>"
                     },
                     "required": true
+                },
+                "file": {
+                    "description": {
+                        "en": "File to use the item in"
+                    },
+                    "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
+                    "value": {
+                        "en": "<name>"
+                    },
+                    "required": false
+                },
+                "path": {
+                    "description": {
+                        "en": "Path of file to use the item in"
+                    },
+                    "docs": "Requires the exact path from the vault root, e.g. folder/file.md",
+                    "value": {
+                        "en": "<path>"
+                    },
+                    "required": false
                 }
             }
         }

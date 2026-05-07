@@ -321,7 +321,9 @@ export default class CliHandlers {
     async handleUse(args: CliData): Promise<string> {
         const item = this.ntb.settingsManager.getToolbarItemById(args.item);
         if (!item) return t('cli.error-invalid-item', { item: args.item });
-        let activeFile = this.ntb.app.workspace.getActiveFile();
+        const fileResult = this.resolveFileArgs(args.file, args.path);
+        if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+        let activeFile = fileResult || this.ntb.app.workspace.getActiveFile();
         await this.ntb.items.handleItemLink(item, undefined, activeFile);
         return 'Used item: ' + (item.label || item.tooltip || item.uuid);
     }

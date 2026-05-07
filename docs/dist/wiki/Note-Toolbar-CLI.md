@@ -63,10 +63,12 @@ format=csv|tsv      # Output format (default: tsv)
 
 ### `note-toolbar:use`
 
-Uses an item.
+Uses an item. Defaults to using the item within the active file.
 
 ```sh
 item=<itemId>  # ID of item to use (required)
+file=<name>    # File to use the item in
+path=<path>    # Path of file to use the item in
 ```
 
 ## Items (Adding)
