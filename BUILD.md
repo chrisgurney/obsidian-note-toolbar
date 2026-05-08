@@ -18,10 +18,12 @@ npm run lint
 
 Documentation should automatically be updated based on the source files for those docs.
 
-|Type    |Source        |Then update...|
+|Type    |Source        |Then push to...|
 |--------|--------------|--------------|
-|API     |`src/Api`     |[API wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API)|
-|Gallery |`src/Gallery` |[Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)|
+|API     |`src/Api`<br/>`docs/wiki/Note-Toolbar-API.md` |[API wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) + other API pages|
+|CLI     |`src/Cli/*.json`<br/>`docs/wiki/Note-Toolbar-CLI.md` |[CLI wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-CLI)|
+|Gallery |`src/Gallery/*.json`<br/>`docs/wiki/Gallery.md` |[Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)|
+|Tips.   |[See: Tips](#Tips) |[See: Tips](#Tips) |
 
 # Releasing
 
@@ -61,29 +63,6 @@ Test with the [BRAT plugin ↗](https://github.com/TfTHacker/obsidian42-brat). S
 1. Tag the release.
 1. Edit and **Set as a pre-release** [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
 1. Use the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat/) to get the latest version.
-
-# Custom icons
-
-If there's a Lucide icon that doesn't quite fit the plugin's use case, here's how to create one:
-
-1. Copy any [Lucide icon](https://lucide.dev/) you want to modify by using the site’s **Copy SVG** button.
-    - Paste it into a design tool like [Figma](https://www.figma.com/) (free to use, with limited projects).
-2. In the design tool:
-    - **resize to 100 x 100**
-    - set the **stroke size to 7**
-    - make your changes
-    - **save as SVG**
-3. Use [ImageOptim](https://imageoptim.com/) to **optimize the SVG file**.
-4. **Edit the SVG file by hand** (e.g., in TextEdit/Notepad):
-    - Change stroke colors to `stroke=“currentColor”`
-    - Add `fill=“none”` on `<g>` or individual `<path>` elements (your shapes may get filled in by Obsidian otherwise).
-5. **Copy the *contents*** of the `<svg>` element.
-    - Why? `setIcon()` seems to add its own `<svg>` element wrapper.
-6. **In your plugin code**:
-    - Use `addIcon()` to add the icon for use.
-    - Prefix icon names with your plugin’s ID (which I believe this is necessary to avoid possible conflicts).
-    - Example: `addIcon('note-toolbar-pen-book', '<g fill="none" stroke="currentColor" …’);`
-7. **Use the icon** as you normally would via `setIcon()`.
 
 # Tips
 
@@ -130,3 +109,26 @@ Create a strip of item cards by using the `note-toolbar-gallery` callout. Use Ga
 > [!note-toolbar-video]
 > https://chrisgurney.github.io/obsidian-note-toolbar/tips/en/getting-started-gallery.mp4
 ```
+
+# Custom icons
+
+If there's a Lucide icon that doesn't quite fit the plugin's use case, here's how to create one:
+
+1. Copy any [Lucide icon](https://lucide.dev/) you want to modify by using the site’s **Copy SVG** button.
+    - Paste it into a design tool like [Figma](https://www.figma.com/) (free to use, with limited projects).
+2. In the design tool:
+    - **resize to 100 x 100**
+    - set the **stroke size to 7**
+    - make your changes
+    - **save as SVG**
+3. Use [ImageOptim](https://imageoptim.com/) to **optimize the SVG file**.
+4. **Edit the SVG file by hand** (e.g., in TextEdit/Notepad):
+    - Change stroke colors to `stroke=“currentColor”`
+    - Add `fill=“none”` on `<g>` or individual `<path>` elements (your shapes may get filled in by Obsidian otherwise).
+5. **Copy the *contents*** of the `<svg>` element.
+    - Why? `setIcon()` seems to add its own `<svg>` element wrapper.
+6. **In your plugin code**:
+    - Use `addIcon()` to add the icon for use.
+    - Prefix icon names with your plugin’s ID (which I believe this is necessary to avoid possible conflicts).
+    - Example: `addIcon('note-toolbar-pen-book', '<g fill="none" stroke="currentColor" …’);`
+7. **Use the icon** as you normally would via `setIcon()`.
