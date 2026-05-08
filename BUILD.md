@@ -23,7 +23,7 @@ Documentation should automatically be updated based on the source files for thos
 |API     |`src/Api`<br/>`docs/wiki/Note-Toolbar-API.md` |[API wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) + other API pages|
 |CLI     |`src/Cli/*.json`<br/>`docs/wiki/Note-Toolbar-CLI.md` |[CLI wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-CLI)|
 |Gallery |`src/Gallery/*.json`<br/>`docs/wiki/Gallery.md` |[Gallery wiki page](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)|
-|Tips.   |[See: Tips](#Tips) |[See: Tips](#Tips) |
+|Tips    |[See: Tips](#Tips) |[See: Tips](#Tips) |
 
 # Releasing
 
