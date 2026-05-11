@@ -23,10 +23,11 @@
         },
         "rules": {
             "heading": "Rules",
-            "docs": "Display folder mappings"
+            "docs": "Display folder mappings."
         },
         "toolbars": { 
-            "heading": "Toolbars" 
+            "heading": "Toolbars",
+            "docs": "Create and list toolbars."
         }
     },
     "commonFlags": {

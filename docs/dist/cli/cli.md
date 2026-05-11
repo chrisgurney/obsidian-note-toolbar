@@ -254,7 +254,7 @@ path=<path>    # Path of file to use the item in
 
 ## Rules
 
-Display folder mappings
+Display folder mappings.
 
 ### `note-toolbar:rules`
 
@@ -265,6 +265,8 @@ format=csv|tsv  # Output format (default: tsv)
 ```
 
 ## Toolbars
+
+Create and list toolbars.
 
 ### `note-toolbar:new`
 
