@@ -1,7 +1,7 @@
 {
     "categories": {
-        "help": { 
-            "heading": "Help" 
+        "general": { 
+            "heading": "General commands" 
         },
         "items-add": { 
             "heading": "Adding items", 
@@ -24,9 +24,6 @@
         "rules": {
             "heading": "Rules",
             "docs": "Display folder mappings"
-        },
-        "settings": {
-            "heading": "Settings"
         },
         "toolbars": { 
             "heading": "Toolbars" 
@@ -97,7 +94,7 @@
     },
     "commands": {
         "note-toolbar": {
-            "category": "help",
+            "category": "general",
             "description": {
                 "en": "Display Note Toolbar CLI help"
             },
@@ -515,7 +512,7 @@
             }
         },
         "note-toolbar:settings": {
-            "category": "settings",
+            "category": "general",
             "description": {
                 "en": "Open Note Toolbar settings in Obsidian"
             },

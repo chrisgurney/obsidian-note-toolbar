@@ -1,8 +1,13 @@
-## Help
+## General commands
 
-### `note-toolbar:help`
+### `note-toolbar:settings`
 
-Lists all Note Toolbar CLI actions.
+Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.
+
+```sh
+item=<itemId>       # ID of item to open settings for
+toolbar=<nameOrId>  # ID of toolbar to open settings for
+```
 
 ## Adding items
 
@@ -253,17 +258,6 @@ Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-too
 
 ```sh
 format=csv|tsv  # Output format (default: tsv)
-```
-
-## Settings
-
-### `note-toolbar:settings`
-
-Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.
-
-```sh
-item=<itemId>       # ID of item to open settings for
-toolbar=<nameOrId>  # ID of toolbar to open settings for
 ```
 
 ## Toolbars
