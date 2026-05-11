@@ -186,10 +186,6 @@ to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
 pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
 
-### `note-toolbar:add-tp`
-
-Lists commands that add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to a toolbar. See: _[Items (Adding Templater items)](#items-adding-templater-items)_
-
 ### `note-toolbar:add-uri`
 
 Adds a [URI item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/URI-items) to a toolbar.
