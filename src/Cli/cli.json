@@ -528,7 +528,7 @@
                 },
                 "toolbar": {
                     "description": {
-                        "en": "ID of toolbar to open settings for"
+                        "en": "Name or ID of toolbar to open settings for"
                     },
                     "value": {
                         "en": "<nameOrId>"

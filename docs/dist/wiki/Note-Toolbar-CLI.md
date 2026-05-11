@@ -49,7 +49,7 @@ Opens settings in Obsidian for the provided item or toolbar. Opens main settings
 
 ```sh
 item=<itemId>       # ID of item to open settings for
-toolbar=<nameOrId>  # ID of toolbar to open settings for
+toolbar=<nameOrId>  # Name or ID of toolbar to open settings for
 ```
 
 ## Adding items
