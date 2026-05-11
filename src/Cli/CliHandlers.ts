@@ -49,6 +49,11 @@ export default class CliHandlers {
         'note-toolbar:add-menu': this.handleAddMenu.bind(this),
         'note-toolbar:add-sep': this.handleAddSep.bind(this),
         'note-toolbar:add-spread': this.handleAddSpread.bind(this),
+        'note-toolbar:add-tp': this.handleAddTp.bind(this),
+        'note-toolbar:add-tp:command': (args: CliData) => this.handleAddTp(args, 'parseTemplate'),
+        'note-toolbar:add-tp:create': (args: CliData) => this.handleAddTp(args, 'createFrom'),
+        'note-toolbar:add-tp:exec': (args: CliData) => this.handleAddTp(args, 'parseTemplateFile'),
+        'note-toolbar:add-tp:insert': (args: CliData) => this.handleAddTp(args, 'appendTemplate'),
         'note-toolbar:add-uri': this.handleAddUri.bind(this),
         'note-toolbar:copy': this.handleCopy.bind(this),
         'note-toolbar:gallery': this.handleGallery.bind(this),
@@ -142,6 +147,32 @@ export default class CliHandlers {
 
     async handleAddSpread(args: CliData): Promise<string> {
         return await this.addItemHelper(args, ItemType.Spreader, (item) => {});
+    }
+
+    async handleAddTp(
+        args: CliData, 
+        pluginFunction?: 'appendTemplate' | 'createFrom' | 'parseTemplate' | 'parseTemplateFile'
+    ): Promise<string> {
+        if (!pluginFunction) return this.cliDefinition.formatCommandList('note-toolbar:add-tp:');
+        // check for file/path argument when required
+        let file: TFile | null;
+        if (['appendTemplate', 'createFrom', 'parseTemplateFile'].contains(pluginFunction)) {
+            if (!hasValue(args.file) && !hasValue(args.path)) {
+                return t('cli.error-file-or-path-required');
+            }
+            const fileResult = this.resolveFileArgs(args.file, args.path);
+            if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+            file = fileResult;
+        }
+        return await this.addItemHelper(args, ItemType.Templater, (item) => {
+            let scriptConfig: ScriptConfig = {
+                pluginFunction: pluginFunction,
+                expression: args.command ?? '',
+                outputFile: args.output ?? '',
+                sourceFile: file?.path
+            } as ScriptConfig;
+            item.scriptConfig = scriptConfig;
+        });  
     }
 
     async handleAddUri(args: CliData): Promise<string> {

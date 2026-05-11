@@ -74,12 +74,12 @@ export default class CliDefinition {
         return this.commands.find((cmd) => cmd.id === id);
     }
 
-    public formatCommandList(): string {
+    public formatCommandList(prefix?: string): string {
         const COL_WIDTH = 33;
         const INDENT = '  ';
         const commonFlags = this.cliDef.commonFlags ?? {};
         const commands = Object.entries(this.cliDef.commands)
-            .filter(([id]) => id !== 'note-toolbar')
+            .filter(([id]) => id !== 'note-toolbar' && (!prefix || id.startsWith(prefix)))
             .map(([id, cmd]: [string, CliAction]) => {
                 const cmdLine = color(id.padEnd(COL_WIDTH) + (tr(cmd.description, this.language) ?? ''), 'green');
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;

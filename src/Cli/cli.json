@@ -10,6 +10,10 @@
             "heading": "Items (Adding)", 
             "docs": "Add items to toolbars." 
         },
+        "items-add-tp": { 
+            "heading": "Items (Adding Templater items)", 
+            "docs": "Add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to toolbars." 
+        },
         "items-copy": { 
             "heading": "Items (Copying + Moving)", 
             "docs": "Copy and move items to toolbars." 
@@ -30,8 +34,7 @@
             "description": {
                 "en": "Output format (default: tsv)"
             },
-            "value": "csv|tsv",
-            "required": false
+            "value": "csv|tsv"
         },
         "label": {
             "description": {
@@ -39,8 +42,7 @@
             },
             "value": {
                 "en": "<label>"
-            },
-            "required": false
+            }
         },
         "icon": {
             "description": {
@@ -48,8 +50,7 @@
             },
             "value": {
                 "en": "<iconName>"
-            },
-            "required": false
+            }
         },
         "item": {
             "description": {
@@ -66,8 +67,7 @@
             },
             "value": {
                 "en": "<n>"
-            },
-            "required": false
+            }
         },
         "to": {
             "description": {
@@ -84,14 +84,12 @@
             },
             "value": {
                 "en": "<tooltip>"
-            },
-            "required": false
+            }
         },
         "verbose": {
             "description": {
                 "en": "Include additional details in output"
-            },
-            "required": false
+            }
         }
     },
     "commands": {
@@ -134,15 +132,13 @@
                 "focus": {
                     "description": {
                         "en": "Focus the editor after executing the command (default: false)"
-                    },
-                    "required": false
+                    }
                 },
                 "target": {
                     "description": {
                         "en": "Where to run command"
                     },
-                    "value": "split|tab",
-                    "required": false
+                    "value": "split|tab"
                 }
             }
         },
@@ -159,28 +155,23 @@
                     "description": {
                         "en": "File to link to (required: file or path)"
                     },
-                    "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
                     "value": {
                         "en": "<name>"
-                    },
-                    "required": false
+                    }
                 },
                 "path": {
                     "description": {
                         "en": "Path of file to link to (required: file or path)"
                     },
-                    "docs": "Requires the exact path from the vault root, e.g. folder/file.md",
                     "value": {
                         "en": "<path>"
-                    },
-                    "required": false
+                    }
                 },
                 "target": {
                     "description": {
                         "en": "Where to open the file"
                     },
-                    "value": "modal|split|tab|window",
-                    "required": false
+                    "value": "modal|split|tab|window"
                 }
             }
         },
@@ -219,28 +210,23 @@
                     },
                     "value": {
                         "en": "<code>"
-                    },
-                    "required": false
+                    }
                 },
                 "file": {
                     "description": {
                         "en": "Filename to execute (required: code, file, or path)"
                     },
-                    "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
                     "value": {
                         "en": "<name>"
-                    },
-                    "required": false
+                    }
                 },
                 "path": {
                     "description": {
                         "en": "Filename with path to execute (required: code, file, or path)"
                     },
-                    "docs": "Requires the exact path from the vault root, e.g. folder/script.js",
                     "value": {
                         "en": "<path>"
-                    },
-                    "required": false
+                    }
                 },
                 "args": {
                     "description": {
@@ -248,8 +234,7 @@
                     },
                     "value": {
                         "en": "<args>"
-                    },
-                    "required": false
+                    }
                 }
             }
         },
@@ -293,6 +278,122 @@
                 "$before": ["to", "pos"]
             }
         },
+        "note-toolbar:add-tp": {
+            "category": "items-add",
+            "description": {
+                "en": "List commands that add a Templater item to a toolbar"
+            },
+            "docs": "Lists commands that add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to a toolbar. See: _[Items (Adding Templater items)](#items-adding-templater-items)_"
+        },
+        "note-toolbar:add-tp:command": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Execute Templater command."
+            },
+            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater command.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "command": {
+                    "description": {
+                        "en": "Templater command to execute"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    },
+                    "required": true
+                }
+            }
+        },
+        "note-toolbar:add-tp:create": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Creates new note from template."
+            },
+            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that creates a note from a template.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "Template filename to create note from (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Template filename with path to create note from (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                },
+                "output": {
+                    "description": {
+                        "en": "Folder and filename (without file extension) to output to"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-tp:exec": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Execute Templater file."
+            },
+            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater file.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "Template filename to execute (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Template filename with path to execute (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-tp:insert": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Insert template."
+            },
+            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that inserts a template.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "Template filename to insert (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Template filename with path to insert (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        },
         "note-toolbar:add-uri": {
             "category": "items-add",
             "description": {
@@ -315,8 +416,7 @@
                     "description": {
                         "en": "Where to open the URI"
                     },
-                    "value": "modal|split|tab|window",
-                    "required": false
+                    "value": "modal|split|tab|window"
                 }
             }
         },
@@ -359,20 +459,17 @@
                     },
                     "value": {
                         "en": "<nameOrId>"
-                    },
-                    "required": false
+                    }
                 },
                 "empty": {
                     "description": {
                         "en": "Include empty items in output"
-                    },
-                    "required": false
+                    }
                 },
                 "total": {
                     "description": {
                         "en": "Returns item count"
-                    },
-                    "required": false
+                    }
                 }
             }
         },
@@ -400,8 +497,7 @@
                     },
                     "value": {
                         "en": "<name>"
-                    },
-                    "required": false
+                    }
                 }
             }
         },
@@ -428,8 +524,7 @@
                     },
                     "value": {
                         "en": "<itemId>"
-                    },
-                    "required": false
+                    }
                 },
                 "toolbar": {
                     "description": {
@@ -437,8 +532,7 @@
                     },
                     "value": {
                         "en": "<nameOrId>"
-                    },
-                    "required": false
+                    }
                 }
             }
         },        
@@ -472,21 +566,17 @@
                     "description": {
                         "en": "File to use the item in"
                     },
-                    "docs": "Resolves the file using the same link resolution as wikilinks, matching by file name without requiring the full path or extension.",
                     "value": {
                         "en": "<name>"
-                    },
-                    "required": false
+                    }
                 },
                 "path": {
                     "description": {
                         "en": "Path of file to use the item in"
                     },
-                    "docs": "Requires the exact path from the vault root, e.g. folder/file.md",
                     "value": {
                         "en": "<path>"
-                    },
-                    "required": false
+                    }
                 }
             }
         }

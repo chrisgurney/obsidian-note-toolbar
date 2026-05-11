@@ -178,6 +178,10 @@ to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
 pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
 
+### `note-toolbar:add-tp`
+
+Lists commands that add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to a toolbar. See: _[Items (Adding Templater items)](#items-adding-templater-items)_
+
 ### `note-toolbar:add-uri`
 
 Adds a [URI item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/URI-items) to a toolbar.
@@ -190,6 +194,66 @@ uri=<link>                     # Website, URI, or note title (required)
 target=modal|split|tab|window  # Where to open the URI
 tooltip=<tooltip>              # Item tooltip
 pos=<n>                        # Item position in toolbar (default: end of toolbar)
+```
+
+## Items (Adding Templater items)
+
+Add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to toolbars.
+
+### `note-toolbar:add-tp:command`
+
+Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater command.
+
+```sh
+to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
+label=<label>         # Item label (required: label or icon)
+icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
+command=<name>        # Templater command to execute (required)
+tooltip=<tooltip>     # Item tooltip
+pos=<n>               # Item position in toolbar (default: end of toolbar)
+```
+
+### `note-toolbar:add-tp:create`
+
+Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that creates a note from a template.
+
+```sh
+to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
+label=<label>         # Item label (required: label or icon)
+icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
+file=<name>           # Template filename to create note from (required: file, or path)
+path=<path>           # Template filename with path to create note from (required: file, or path)
+output=<path>         # Folder and filename (without file extension) to output to
+tooltip=<tooltip>     # Item tooltip
+pos=<n>               # Item position in toolbar (default: end of toolbar)
+```
+
+### `note-toolbar:add-tp:exec`
+
+Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater file.
+
+```sh
+to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
+label=<label>         # Item label (required: label or icon)
+icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
+file=<name>           # Template filename to execute (required: file, or path)
+path=<path>           # Template filename with path to execute (required: file, or path)
+tooltip=<tooltip>     # Item tooltip
+pos=<n>               # Item position in toolbar (default: end of toolbar)
+```
+
+### `note-toolbar:add-tp:insert`
+
+Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that inserts a template.
+
+```sh
+to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
+label=<label>         # Item label (required: label or icon)
+icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
+file=<name>           # Template filename to insert (required: file, or path)
+path=<path>           # Template filename with path to insert (required: file, or path)
+tooltip=<tooltip>     # Item tooltip
+pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
 
 ## Items (Copying + Moving)
