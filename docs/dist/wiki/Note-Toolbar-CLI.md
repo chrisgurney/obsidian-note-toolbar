@@ -270,6 +270,8 @@ verbose             # Include additional details in output
 format=csv|tsv      # Output format (default: tsv)
 ```
 
+## Using items
+
 ### `note-toolbar:use`
 
 Uses an item. Defaults to using the item within the active file.
@@ -279,8 +281,6 @@ item=<itemId>  # ID of item to use (required)
 file=<name>    # File to use the item in
 path=<path>    # Path of file to use the item in
 ```
-
-## Using items
 
 ## Rules
 

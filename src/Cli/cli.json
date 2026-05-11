@@ -550,7 +550,7 @@
             }
         },
         "note-toolbar:use": {
-            "category": "items",
+            "category": "items-use",
             "description": {
                 "en": "Uses the item"
             },
