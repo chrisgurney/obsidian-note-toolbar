@@ -290,7 +290,7 @@
             "description": {
                 "en": "Add a Templater item to a toolbar: Execute Templater command."
             },
-            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater command.",
+            "docs": "Adds an item to a toolbar that executes a Templater command.",
             "flags": {
                 "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
@@ -310,7 +310,7 @@
             "description": {
                 "en": "Add a Templater item to a toolbar: Creates new note from template."
             },
-            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that creates a note from a template.",
+            "docs": "Adds an item to a toolbar that creates a note from a Templater template.",
             "flags": {
                 "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
@@ -345,7 +345,7 @@
             "description": {
                 "en": "Add a Templater item to a toolbar: Execute Templater file."
             },
-            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater file.",
+            "docs": "Adds an item to a toolbar that executes a Templater file.",
             "flags": {
                 "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],
@@ -372,7 +372,7 @@
             "description": {
                 "en": "Add a Templater item to a toolbar: Insert template."
             },
-            "docs": "Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that inserts a template.",
+            "docs": "Adds an item to a toolbar that inserts a template.",
             "flags": {
                 "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],

@@ -183,7 +183,7 @@ Add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/
 
 ### `note-toolbar:add-tp:command`
 
-Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater command.
+Adds an item to a toolbar that executes a Templater command.
 
 ```sh
 to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
@@ -196,7 +196,7 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 
 ### `note-toolbar:add-tp:create`
 
-Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that creates a note from a template.
+Adds an item to a toolbar that creates a note from a Templater template.
 
 ```sh
 to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
@@ -211,7 +211,7 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 
 ### `note-toolbar:add-tp:exec`
 
-Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that executes a Templater file.
+Adds an item to a toolbar that executes a Templater file.
 
 ```sh
 to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
@@ -225,7 +225,7 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 
 ### `note-toolbar:add-tp:insert`
 
-Adds a [Templater item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) that inserts a template.
+Adds an item to a toolbar that inserts a template.
 
 ```sh
 to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
