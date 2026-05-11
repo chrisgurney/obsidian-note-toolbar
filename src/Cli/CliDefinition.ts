@@ -79,17 +79,18 @@ export default class CliDefinition {
         const INDENT = '  ';
         const commonFlags = this.cliDef.commonFlags ?? {};
         const commands = Object.entries(this.cliDef.commands)
-            .filter(([id]) => id !== 'note-toolbar' && (!prefix || id.startsWith(prefix)))
+            // filter out commands that just list commands, and by prefix if provided
+            .filter(([id]) => id !== 'note-toolbar' && id !== 'note-toolbar:add-tp' && (!prefix || id.startsWith(prefix)))
             .map(([id, cmd]: [string, CliAction]) => {
                 const cmdLine = color(id.padEnd(COL_WIDTH) + (tr(cmd.description, this.language) ?? ''), 'green');
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
                 const flags = cmd.flags;
-                const ordered = [
+                const flagsOrdered = [
                     ...((flags['$before'] as string[] | undefined) ?? []),
                     ...Object.keys(flags).filter(k => !k.startsWith('$')),
                     ...((flags['$after'] as string[] | undefined) ?? []),
                 ];
-                const flagList = ordered
+                const flagList = flagsOrdered
                     .map(flag => {
                         const flagDef = (flags[flag] ?? commonFlags[flag]) as CliLocalizedFlag | undefined;
                         if (!flagDef || Array.isArray(flagDef)) return null; 
