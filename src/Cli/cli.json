@@ -3,20 +3,23 @@
         "help": { 
             "heading": "Help" 
         },
-        "items": { 
-            "heading": "Items" 
-        },
         "items-add": { 
-            "heading": "Items (Adding)", 
+            "heading": "Adding items", 
             "docs": "Add items to toolbars." 
         },
         "items-add-tp": { 
-            "heading": "Items (Adding Templater items)", 
+            "heading": "Adding Templater items", 
             "docs": "Add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to toolbars." 
         },
         "items-copy": { 
-            "heading": "Items (Copying + Moving)", 
+            "heading": "Copying + Moving items", 
             "docs": "Copy and move items to toolbars." 
+        },
+        "items": { 
+            "heading": "Listing items" 
+        },
+        "items-use": { 
+            "heading": "Using items" 
         },
         "rules": {
             "heading": "Rules",

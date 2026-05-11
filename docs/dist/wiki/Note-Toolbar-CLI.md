@@ -43,35 +43,7 @@ note-toolbar:items empty format=csv --copy
 
 Lists all Note Toolbar CLI actions.
 
-## Items
-
-### `note-toolbar:gallery`
-
-Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command.
-
-### `note-toolbar:items`
-
-Lists all toolbar items, except empty items (no label or tooltip) by default.
-
-```sh
-toolbar=<nameOrId>  # Toolbar to list items for
-empty               # Include empty items in output
-total               # Returns item count
-verbose             # Include additional details in output
-format=csv|tsv      # Output format (default: tsv)
-```
-
-### `note-toolbar:use`
-
-Uses an item. Defaults to using the item within the active file.
-
-```sh
-item=<itemId>  # ID of item to use (required)
-file=<name>    # File to use the item in
-path=<path>    # Path of file to use the item in
-```
-
-## Items (Adding)
+## Adding items
 
 Add items to toolbars.
 
@@ -196,7 +168,7 @@ tooltip=<tooltip>              # Item tooltip
 pos=<n>                        # Item position in toolbar (default: end of toolbar)
 ```
 
-## Items (Adding Templater items)
+## Adding Templater items
 
 Add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to toolbars.
 
@@ -256,7 +228,7 @@ tooltip=<tooltip>     # Item tooltip
 pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
 
-## Items (Copying + Moving)
+## Copying + Moving items
 
 Copy and move items to toolbars.
 
@@ -279,6 +251,36 @@ to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
 item=<itemId>         # Item ID (required)
 pos=<n>               # Item position in toolbar (default: end of toolbar)
 ```
+
+## Listing items
+
+### `note-toolbar:gallery`
+
+Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command.
+
+### `note-toolbar:items`
+
+Lists all toolbar items, except empty items (no label or tooltip) by default.
+
+```sh
+toolbar=<nameOrId>  # Toolbar to list items for
+empty               # Include empty items in output
+total               # Returns item count
+verbose             # Include additional details in output
+format=csv|tsv      # Output format (default: tsv)
+```
+
+### `note-toolbar:use`
+
+Uses an item. Defaults to using the item within the active file.
+
+```sh
+item=<itemId>  # ID of item to use (required)
+file=<name>    # File to use the item in
+path=<path>    # Path of file to use the item in
+```
+
+## Using items
 
 ## Rules
 
