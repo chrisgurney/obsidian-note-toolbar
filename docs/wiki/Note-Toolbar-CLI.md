@@ -31,7 +31,7 @@ If your icon name isn't working, note that Obsidian may be a version or two behi
 ### Copy output
 
 Add `--copy` to any command to copy the output to the clipboard.
-```console
+```sh
 note-toolbar:items empty format=csv --copy
 ```
 
