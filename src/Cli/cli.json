@@ -149,7 +149,7 @@
                 "en": "Add a Dataview item to a toolbar"
             },
             "docs": "Adds a [Dataview item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview) to a toolbar.",
-            "examples": "note-toolbar:add-dv to=Basic label=QueryExample query=\"LIST FROM \\\"Templates\\\" SORT file.name\"\n\nnote-toolbar:add-dv to=Basic label=EvalExample eval=\"this.file.mtime\"",
+            "examples": "# List files in a folder\nnote-toolbar:add-dv to=Basic label=QueryExample query=\"LIST FROM \\\"Templates\\\" SORT file.name\"\n\n# Get the file modified time\nnote-toolbar:add-dv to=Basic label=EvalExample eval=\"this.file.mtime\"",
             "flags": {
                 "$before": ["to", "label", "icon"],
                 "$after": ["tooltip", "pos"],

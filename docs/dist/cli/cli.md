@@ -68,8 +68,10 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 #### Examples
 
 ```sh
+# List files in a folder
 note-toolbar:add-dv to=Basic label=QueryExample query="LIST FROM \"Templates\" SORT file.name"
 
+# Get the file modified time
 note-toolbar:add-dv to=Basic label=EvalExample eval="this.file.mtime"
 ```
 
