@@ -439,7 +439,7 @@
             "docs": "Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command."
         },
         "note-toolbar:help": {
-            "category": "help",
+            "category": "general",
             "description": {
                 "en": "Display Note Toolbar CLI help"
             },

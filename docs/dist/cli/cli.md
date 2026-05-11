@@ -1,5 +1,9 @@
 ## General commands
 
+### `note-toolbar:help`
+
+Lists all Note Toolbar CLI actions.
+
 ### `note-toolbar:settings`
 
 Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.
