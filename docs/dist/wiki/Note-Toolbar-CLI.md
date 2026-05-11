@@ -87,6 +87,31 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 note-toolbar:add-command to="Formatting Tools" icon=bold command="editor:toggle-bold"
 ```
 
+### `note-toolbar:add-dv`
+
+Adds a [Dataview item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview) to a toolbar.
+
+```sh
+to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
+label=<label>         # Item label (required: label or icon)
+icon=<iconName>       # Item icon, from Lucide's icon set (required: label or icon)
+eval=<query>          # Dataview expression to evaluate (required: eval, query, or file/path)
+query=<query>         # Dataview query to execute (required: eval, query, or file/path)
+file=<name>           # Filename to execute (required: eval, query, or file/path)
+path=<path>           # Filename with path to execute (required: eval, query, or file/path)
+args=<args>           # Comma-separated 'name: value' format, with string values in quotes
+tooltip=<tooltip>     # Item tooltip
+pos=<n>               # Item position in toolbar (default: end of toolbar)
+```
+
+#### Examples
+
+```sh
+note-toolbar:add-dv to=Basic label=QueryExample query="LIST FROM \"Templates\" SORT file.name"
+
+note-toolbar:add-dv to=Basic label=EvalExample eval="this.file.mtime"
+```
+
 ### `note-toolbar:add-file`
 
 Adds a [file item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/File-items) to a toolbar.

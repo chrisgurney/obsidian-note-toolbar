@@ -143,6 +143,58 @@
                 }
             }
         },
+        "note-toolbar:add-dv": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a Dataview item to a toolbar"
+            },
+            "docs": "Adds a [Dataview item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview) to a toolbar.",
+            "examples": "note-toolbar:add-dv to=Basic label=QueryExample query=\"LIST FROM \\\"Templates\\\" SORT file.name\"\n\nnote-toolbar:add-dv to=Basic label=EvalExample eval=\"this.file.mtime\"",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "eval": {
+                    "description": {
+                        "en": "Dataview expression to evaluate (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<query>"
+                    }
+                },
+                "query": {
+                    "description": {
+                        "en": "Dataview query to execute (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<query>"
+                    }
+                },
+                "file": {
+                    "description": {
+                        "en": "Filename to execute (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Filename with path to execute (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                },
+                "args": {
+                    "description": {
+                        "en": "Comma-separated 'name: value' format, with string values in quotes"
+                    },
+                    "value": {
+                        "en": "<args>"
+                    }
+                }
+            }
+        },
         "note-toolbar:add-file": {
             "category": "items-add",
             "description": {

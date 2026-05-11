@@ -133,6 +133,8 @@
         }
     },
     "cli": {
+        "error-dv-code-and-file-exclusive": "Error: Provide eval, query, or file/path",
+        "error-dv-code-or-file-required": "Error: eval/query or file/path is required",
         "error-file-not-found": "Error: File not found: {{file}}",
         "error-file-or-path-required": "Error: A value for file or path is required",
         "error-handler-not-found": "Error: Handler for command not found: {{command}}",

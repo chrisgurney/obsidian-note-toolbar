@@ -43,6 +43,7 @@ export default class CliHandlers {
         'note-toolbar': this.handleDefault.bind(this),
         'note-toolbar:add-break': this.handleAddBreak.bind(this),
         'note-toolbar:add-command': this.handleAddCommand.bind(this),
+        'note-toolbar:add-dv': this.handleAddDv.bind(this),
         'note-toolbar:add-file': this.handleAddFile.bind(this),
         'note-toolbar:add-group': this.handleAddGroup.bind(this),
         'note-toolbar:add-js': this.handleAddJs.bind(this),
@@ -81,6 +82,33 @@ export default class CliHandlers {
                 if (!['split', 'tab'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
                 item.linkAttr.target = args.target as 'split' | 'tab';
             }
+        });
+    }
+
+    async handleAddDv(args: CliData): Promise<string> {
+        return await this.addItemHelper(args, ItemType.Dataview, (item) => {
+            if (!(hasValue(args.eval) || hasValue(args.query)) && !(hasValue(args.file) || hasValue(args.path))) {
+                return t('cli.error-dv-code-or-file-required');
+            }
+            // if (hasValue(args.eval) && (hasValue(args.file) || hasValue(args.path))) {
+            //     return t('cli.error-dv-code-and-file-exclusive');
+            // }
+            const fileResult = this.resolveFileArgs(args.file, args.path);
+            if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+            const file: TFile | null = fileResult;
+            let scriptConfig: ScriptConfig = {
+                pluginFunction: hasValue(args.eval) 
+                    ? 'evaluate' 
+                    : (hasValue(args.query) ? 'query' : 'exec'),
+                expression: args.eval || args.query || '',
+                sourceFile: file?.path
+            } as ScriptConfig;
+            if (hasValue(args.args)) {
+                const parsedArgs = importArgs(args.args);
+                if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
+                scriptConfig.sourceArgs = args.args;
+            }
+            item.scriptConfig = scriptConfig;
         });
     }
 
