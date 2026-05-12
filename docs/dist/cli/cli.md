@@ -263,7 +263,7 @@ Lists items available in the [Note Toolbar Gallery](https://github.com/chrisgurn
 
 ### `note-toolbar:items`
 
-Lists all toolbar items, except empty items (no label or tooltip) by default.
+Lists items in all toolbars, except empty items (no label or tooltip) by default.
 
 ```sh
 toolbar=<nameOrId>  # Toolbar to list items for
