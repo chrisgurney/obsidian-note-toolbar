@@ -20,7 +20,7 @@ TBD
 Some commands accept file and path parameters to target a specific file (for example for executing script files).
 
 - `file=<name>` resolves the file using the same link resolution as [wikilinks ↗](https://obsidian.md/help/links), matching by file name without requiring the full path or extension.
-- `path=<path>` requires the exact path from the vault root, `e.g. folder/note.md`.
+- `path=<path>` requires the exact path from the vault root, `e.g. folder/script.js`.
 
 ### Provide icons to commands
 

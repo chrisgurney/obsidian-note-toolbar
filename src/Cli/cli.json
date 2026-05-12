@@ -487,9 +487,9 @@
         "note-toolbar:gallery": {
             "category": "items",
             "description": {
-                "en": "List items in the Gallery"
+                "en": "List items available in the Gallery"
             },
-            "docs": "Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command."
+            "docs": "Lists items available in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command."
         },
         "note-toolbar:help": {
             "category": "general",
@@ -569,7 +569,7 @@
             "description": {
                 "en": "Open Note Toolbar settings in Obsidian"
             },
-            "docs": "Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.",
+            "docs": "Opens settings UI in Obsidian for the provided item or toolbar. Opens main settings UI by default.",
             "flags": {
                 "item": {
                     "description": {

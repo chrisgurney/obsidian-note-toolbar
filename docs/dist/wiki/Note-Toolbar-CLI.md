@@ -20,7 +20,7 @@ TBD
 Some commands accept file and path parameters to target a specific file (for example for executing script files).
 
 - `file=<name>` resolves the file using the same link resolution as [wikilinks ↗](https://obsidian.md/help/links), matching by file name without requiring the full path or extension.
-- `path=<path>` requires the exact path from the vault root, `e.g. folder/note.md`.
+- `path=<path>` requires the exact path from the vault root, `e.g. folder/script.js`.
 
 ### Provide icons to commands
 
@@ -45,7 +45,7 @@ Lists all Note Toolbar CLI actions.
 
 ### `note-toolbar:settings`
 
-Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.
+Opens settings UI in Obsidian for the provided item or toolbar. Opens main settings UI by default.
 
 ```sh
 item=<itemId>       # ID of item to open settings for
@@ -288,7 +288,7 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 
 ### `note-toolbar:gallery`
 
-Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command.
+Lists items available in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command.
 
 ### `note-toolbar:items`
 

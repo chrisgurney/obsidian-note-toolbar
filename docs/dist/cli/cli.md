@@ -6,7 +6,7 @@ Lists all Note Toolbar CLI actions.
 
 ### `note-toolbar:settings`
 
-Opens settings in Obsidian for the provided item or toolbar. Opens main settings by default.
+Opens settings UI in Obsidian for the provided item or toolbar. Opens main settings UI by default.
 
 ```sh
 item=<itemId>       # ID of item to open settings for
@@ -249,7 +249,7 @@ pos=<n>               # Item position in toolbar (default: end of toolbar)
 
 ### `note-toolbar:gallery`
 
-Lists items in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command.
+Lists items available in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command.
 
 ### `note-toolbar:items`
 
