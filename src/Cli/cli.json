@@ -26,8 +26,7 @@
             "docs": "Display folder mappings."
         },
         "toolbars": { 
-            "heading": "Toolbars",
-            "docs": "Create and list toolbars."
+            "heading": "Create toolbars"
         }
     },
     "commonFlags": {

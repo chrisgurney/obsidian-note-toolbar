@@ -336,9 +336,7 @@ Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-too
 format=csv|tsv  # Output format (default: tsv)
 ```
 
-## Toolbars
-
-Create and list toolbars.
+## Create toolbars
 
 ### `note-toolbar:new`
 
