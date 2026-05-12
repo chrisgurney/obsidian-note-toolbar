@@ -338,6 +338,7 @@ export default class CliHandlers {
     handleToolbars(args: CliData): string {
         const format = hasValue(args.format) ? args.format : 'tsv';
         const verbose = args.verbose !== undefined;
+        const isTotal = args.total !== undefined;
 
         if (hasValue(args.toolbar)) {
             const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
@@ -349,6 +350,8 @@ export default class CliHandlers {
             (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
         );
 
+        if (isTotal) return String(toolbars.length);
+        
         if (!toolbars.length) return t('cli.no-toolbars');
 
         type ToolbarSchema = 'name' | 'uuid';

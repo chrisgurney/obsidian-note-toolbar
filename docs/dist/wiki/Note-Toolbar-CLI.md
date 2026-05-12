@@ -60,8 +60,9 @@ Lists all toolbars or a toolbar's items.
 
 ```sh
 toolbar=<nameOrId>  # Toolbar to list items for (name or ID)
-verbose             # Include additional details in output
 format=csv|tsv      # Output format (default: tsv)
+total               # Returns count
+verbose             # Include additional details in output
 ```
 
 ### `note-toolbar:help`
@@ -323,9 +324,9 @@ Lists items in all toolbars, except empty items (no label or tooltip) by default
 toolbar=<nameOrId>  # Toolbar to list items for
 filter=<string>     # Filter by string in label/tooltip
 empty               # Include empty items in output
-total               # Returns item count
-verbose             # Include additional details in output
 format=csv|tsv      # Output format (default: tsv)
+total               # Returns count
+verbose             # Include additional details in output
 ```
 
 ## Using items
