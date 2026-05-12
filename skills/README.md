@@ -4,7 +4,7 @@ Skills provide context for AI coding agents to let them interact with [Note Tool
 
 ## Installation
 
-Clone or download the skills from this repository, then copy them to the appropriate directory for your agent (e.g., `.claude/skills/` or `.codex/skills/`).
+Clone or download the skills from this repository, then copy them to the appropriate directory for your agent (e.g., `.claude/skills/` or `~/.codex/skills/`).
 
 ## Usage
 
