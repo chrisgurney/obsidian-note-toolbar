@@ -39,6 +39,16 @@ note-toolbar:items empty format=csv --copy
 
 ## General commands
 
+### `note-toolbar`
+
+Lists all toolbars or a toolbar's items.
+
+```sh
+toolbar=<nameOrId>  # Toolbar to list items for (name or ID)
+verbose             # Include additional details in output
+format=csv|tsv      # Output format (default: tsv)
+```
+
 ### `note-toolbar:help`
 
 Lists all Note Toolbar CLI actions.
@@ -336,14 +346,5 @@ Creates a new toolbar.
 
 ```sh
 name=<name>  # Toolbar name
-```
-
-### `note-toolbar:toolbars`
-
-Lists all toolbars.
-
-```sh
-verbose         # Include additional details in output
-format=csv|tsv  # Output format (default: tsv)
 ```
 

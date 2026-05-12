@@ -97,9 +97,20 @@
         "note-toolbar": {
             "category": "general",
             "description": {
-                "en": "Display Note Toolbar CLI help"
+                "en": "Lists toolbars or a toolbar's items"
             },
-            "docs": "Lists all Note Toolbar CLI actions."
+            "docs": "Lists all toolbars or a toolbar's items.",
+            "flags": {
+                "$after": ["verbose", "format"],
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar to list items for (name or ID)"
+                    },
+                    "value": {
+                        "en": "<nameOrId>"
+                    }
+                }
+            }
         },
         "note-toolbar:add-break": {
             "category": "items-add",
@@ -589,16 +600,6 @@
                 }
             }
         },        
-        "note-toolbar:toolbars": {
-            "category": "toolbars",
-            "description": {
-                "en": "Lists toolbars"
-            },
-            "docs": "Lists all toolbars.",
-            "flags": {
-                "$after": ["verbose", "format"]
-            }
-        },
         "note-toolbar:use": {
             "category": "items-use",
             "description": {

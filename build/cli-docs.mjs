@@ -42,7 +42,7 @@ export function cliDocs(cliJsonPath, outputFile) {
         if (category.docs) markdown += `${category.docs}\n\n`;
         const commands = Object.entries(cli.commands).filter(([, c]) => c.category === categoryId);
         for (const [id, command] of commands) {
-            if (id === 'note-toolbar' || id === 'note-toolbar:add-tp') continue;
+            if (id === 'note-toolbar:add-tp') continue;
             markdown += `### \`${id}\`\n\n`;
             if (command.docs) markdown += `${command.docs}\n\n`;
             markdown += flagsBlock(command.flags ?? {}, cli.commonFlags ?? {});

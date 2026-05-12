@@ -233,7 +233,7 @@ export default class CliHandlers {
     }
 
     handleDefault(args: CliData): string {
-        return this.handleHelp(args);
+        return this.handleToolbars(args);
     }
 
     handleGallery(args: CliData): string {
@@ -338,6 +338,12 @@ export default class CliHandlers {
     handleToolbars(args: CliData): string {
         const format = hasValue(args.format) ? args.format : 'tsv';
         const verbose = args.verbose !== undefined;
+
+        if (hasValue(args.toolbar)) {
+            const toolbar = this.ntb.settingsManager.getToolbar(args.toolbar);
+            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.toolbar });
+            return this.cliItemsHandler.formatItemList(args, toolbar);
+        }
 
         const toolbars = [...this.ntb.settings.toolbars].sort(
             (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })

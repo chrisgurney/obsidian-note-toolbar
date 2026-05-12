@@ -80,7 +80,7 @@ export default class CliDefinition {
         const commonFlags = this.cliDef.commonFlags ?? {};
         const commands = Object.entries(this.cliDef.commands)
             // filter out commands that just list commands, and by prefix if provided
-            .filter(([id]) => id !== 'note-toolbar' && id !== 'note-toolbar:add-tp' && (!prefix || id.startsWith(prefix)))
+            .filter(([id]) => id !== 'note-toolbar:add-tp' && (!prefix || id.startsWith(prefix)))
             .map(([id, cmd]: [string, CliAction]) => {
                 const cmdLine = color(id.padEnd(COL_WIDTH) + (tr(cmd.description, this.language) ?? ''), 'green');
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
