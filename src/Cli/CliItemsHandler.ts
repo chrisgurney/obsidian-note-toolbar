@@ -37,6 +37,7 @@ export default class CliItemsHandler {
      * @returns the list of items
      */
     formatItemList(args: CliData, toolbar?: ToolbarSettings): string {
+        const filter = args.filter ?? '';
         const format = hasValue(args.format) ? args.format : 'tsv';
         const verbose = args.verbose !== undefined;
         const includeEmpty = args.empty !== undefined;
@@ -53,6 +54,7 @@ export default class CliItemsHandler {
             toolbars,
             verbose,
             includeEmpty,
+            filter,
             truncateDisplay,
             truncateValue
         );
@@ -120,6 +122,7 @@ export default class CliItemsHandler {
         toolbars: ToolbarSettings[],
         verbose: boolean,
         includeEmpty: boolean,
+        filter: string,
         truncateDisplay: boolean,
         truncateValue: boolean
     ): { rows: ItemRow[]; emptyCount: number } {
@@ -144,6 +147,10 @@ export default class CliItemsHandler {
                         if (this.isSeparator(item) && !single) {
                             return inner;
                         }
+                        
+                        if (filter && !(this.formatItemText(item).includes(filter))) {
+                            return inner;
+                        };
 
                         if (this.isEmpty(item) && !includeEmpty && !single) {
                             inner.emptyCount++;
