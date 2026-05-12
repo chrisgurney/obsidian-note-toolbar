@@ -16,6 +16,6 @@ Once installed, the agent will automatically select the appropriate skill when y
 
 | Skill | Description |
 |-------|-------------|
-| [`note-toolbar-api`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-api/SKILLS.md) | Write, edit, or debug JavaScript using the Note Toolbar `ntb` API inside Obsidian |
-| [`note-toolbar-callouts`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-callouts/SKILLS.md) | Create and edit Note Toolbar Callouts (toolbars within `.md` files) |
-| [`note-toolbar-cli`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-cli/SKILLS.md) | Create and manage toolbars, add and use items via the Note Toolbar CLI |
+| [`note-toolbar-api`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-api/SKILL.md) | Write, edit, or debug JavaScript using the Note Toolbar `ntb` API inside Obsidian |
+| [`note-toolbar-callouts`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-callouts/SKILL.md) | Create and edit Note Toolbar Callouts (toolbars within `.md` files) |
+| [`note-toolbar-cli`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-cli/SKILL.md) | Create and manage toolbars, add and use items via the Note Toolbar CLI |
