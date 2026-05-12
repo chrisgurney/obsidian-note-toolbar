@@ -154,7 +154,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.window.register();
 
 			// add commands
-			if (requireApiVersion('1.12.2')) this.cli.register();
+			if (Platform.isDesktop && requireApiVersion('1.12.2')) this.cli.register();
 			this.commands.addCommands();
 
 			// prototcol handler
