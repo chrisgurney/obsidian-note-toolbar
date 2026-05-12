@@ -193,7 +193,7 @@ export default class CliItemsHandler {
             position: String(index + 1),
 
             uuid: item.uuid,
-            type: item.linkAttr.type ?? '',
+            type: this.formatItemType(item),
 
             label: this.formatWithTruncation(item.label, truncateDisplay),
             tooltip: this.formatWithTruncation(item.tooltip, truncateDisplay),
@@ -263,7 +263,7 @@ export default class CliItemsHandler {
 
         if (valueCol) {
             valueCol.split('\n').forEach(l => {
-                lines.push(color('\t' + l, 'black'));
+                lines.push(color('  ' + l, 'black'));
             });
         }
 
@@ -285,6 +285,24 @@ export default class CliItemsHandler {
                 return formatToolbarRef(this.ntb, item.link);
             default:
                 return item.label || item.tooltip || (item.icon ? `icon:${item.icon}` : '') || '';
+        }
+    }
+
+    /**
+     * Creates a string representation of the type of the item.
+     * @param item item to get the type of
+     * @returns item's type string representation
+     */
+    private formatItemType(item: ToolbarItemSettings): string {
+        if (!item.linkAttr.type) return '';
+        switch (item.linkAttr.type) {
+            case ItemType.Dataview:
+            case ItemType.JavaScript:
+            case ItemType.JsEngine:
+            case ItemType.Templater:
+                return item.scriptConfig?.pluginFunction ? `${item.linkAttr.type} (${item.scriptConfig?.pluginFunction})` : item.linkAttr.type;
+            default:
+                return item.linkAttr.type;
         }
     }
 
@@ -333,11 +351,10 @@ export default class CliItemsHandler {
     private formatScriptSummary(config: ScriptConfig | undefined, verbose: boolean): string {
         if (!config) return '';
         let parts: string[] = [];
-        let pluginFunction = verbose ? '' : `${config.pluginFunction}:`;
         if (config.sourceFile) parts.push(`${config.sourceFile}`);
         if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
         if (config.expression) parts.push(verbose ? config.expression : config.expression.replace(/\n/g, ' '));
-        return pluginFunction + parts.join(' | ');
+        return parts.join(' | ');
     }
 
     /**
