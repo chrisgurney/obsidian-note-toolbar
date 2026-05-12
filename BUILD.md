@@ -48,8 +48,8 @@ Test with the [BRAT plugin ↗](https://github.com/TfTHacker/obsidian42-brat). S
 1. Make changes.
 1. Update `WHATSNEW_VERSION` in `NoteToolbarSettings.ts`.
 1. Make sure the What's New doc in `docs/releases/en` is in the `master` branch. 
-1. Run `npm run release 1.xx-beta-01`
-1. Edit and **Set as a pre-release** [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
+1. In the feature branch, run `npm run release 1.xx-beta-01`
+1. [Edit the release on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases) and **Set as a pre-release**.
 1. Use the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat/) to get the latest version.
 
 ### Method 2: Using the `master` branch
