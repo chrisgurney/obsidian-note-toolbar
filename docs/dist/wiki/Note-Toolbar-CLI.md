@@ -11,7 +11,22 @@ Read the [Obsidian CLI ↗](https://obsidian.md/help/cli) documentation to insta
 
 ## Examples
 
-TBD
+```sh
+# List toolbars
+obsidian note-toolbar
+
+# List items in a toolbar
+obsidian note-toolbar toolbar="Daily Notes"
+
+# Create a toolbar
+obsidian note-toolbar:new name=Formatting
+
+# Add an item to a toolbar
+obsidian note-toolbar:add-command to=Formatting label=Bold command=editor:toggle-bold
+
+# Use an item
+obsidian note-toolbar:use item=c0a21325-b8b1-4617-81a0-5114350310fc
+```
 
 ## How to
 
@@ -32,7 +47,7 @@ If your icon name isn't working, note that Obsidian may be a version or two behi
 
 Add `--copy` to any command to copy the output to the clipboard.
 ```sh
-note-toolbar:items empty format=csv --copy
+obsidian note-toolbar:items empty format=csv --copy
 ```
 
 ---

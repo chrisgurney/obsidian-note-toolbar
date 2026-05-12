@@ -602,7 +602,7 @@
         "note-toolbar:use": {
             "category": "items-use",
             "description": {
-                "en": "Uses the item"
+                "en": "Uses an item"
             },
             "docs": "Uses an item. Defaults to using the item within the active file.",
             "flags": {
