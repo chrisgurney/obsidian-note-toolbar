@@ -318,9 +318,9 @@ export default class CliHandlers {
         const toolbarId = hasValue(args.toolbar) ? args.toolbar : undefined;
         if (toolbarId) {
             const toolbar = this.ntb.settingsManager.getToolbar(toolbarId);
-            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: toolbarId });
+            if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: toolbarId, interpolation: { escapeValue: false } });
             this.ntb.settingsManager.openToolbarSettings(toolbar);
-            return t('cli.success-settings-opened');
+            return t('cli.success-settings-toolbar-opened', { toolbar: toolbar.name, interpolation: { escapeValue: false } });
         }
         if (itemId) {
             const item = this.ntb.settingsManager.getToolbarItemById(itemId);

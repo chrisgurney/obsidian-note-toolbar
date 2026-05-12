@@ -161,7 +161,8 @@
         "success-item-added": "Success: Item added to toolbar: {{toolbar}}",
         "success-item-copied": "Success: Item copied to toolbar: {{toolbar}}",
         "success-item-moved": "Success: Item moved to toolbar: {{toolbar}}",
-        "success-settings-opened": "Opened settings window in Obsidian",
+        "success-settings-opened": "Opened: Note Toolbar Settings window",
+        "success-settings-toolbar-opened": "Opened: Settings window: {{toolbar}}",
         "success-toolbar-created": "Success: Toolbar created: {{toolbar}}",
         "success-uri-opened": "Opened: {{uri}}"
     },
