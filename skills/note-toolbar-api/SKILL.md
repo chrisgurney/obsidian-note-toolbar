@@ -1,6 +1,6 @@
 ---
 name: note-toolbar-api
-description: Write, edit, or debug JavaScript that uses the Note Toolbar `ntb` API inside Obsidian. Use this skill whenever the user wants to script a toolbar item, use ntb.prompt / ntb.suggester / ntb.fileSuggester / ntb.menu / ntb.modal, read or write note properties via ntb.getProperty / ntb.setProperty, work with toolbar items via ntb.getItem / ntb.getToolbars, or combine the ntb API with Dataview JS, JS Engine, or Templater. Also trigger for any script that references `ntb`, `NtbSuggester`, or "Note Toolbar API".
+description: "Write, edit, or debug JavaScript that uses the Note Toolbar `ntb` API inside Obsidian. Use this skill whenever the user wants to script a toolbar item, use ntb.prompt / ntb.suggester / ntb.fileSuggester / ntb.menu / ntb.modal, read or write note properties via ntb.getProperty / ntb.setProperty, work with toolbar items via ntb.getItem / ntb.getToolbars, or combine the ntb API with Dataview JS, JS Engine, or Templater. Also trigger for any script that references `ntb`, `NtbSuggester`, or 'Note Toolbar API'."
 ---
 
 # Note Toolbar API
