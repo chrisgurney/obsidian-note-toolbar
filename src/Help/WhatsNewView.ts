@@ -41,31 +41,19 @@ export default class WhatsNewView extends ItemView {
 		const ctaEl = contentDiv.createDiv();
 		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
 
-		new Setting(ctaEl)
-			.setName(iconTextFr('book-text', t('setting.whats-new.label-release-notes')))
-			.setDesc(t('setting.whats-new.label-release-notes-description'))
-			.addButton((button: ButtonComponent) => {
-				button
-					.setButtonText(t('setting.whats-new.button-read'))
-					.setTooltip(t('setting.whats-new.button-read-tooltip'))
-					.setCta()
-					.onClick(() => {
-						window.open(URL_RELEASES, '_blank');
-					});
-			});
+		ctaEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+			createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
+				el.append( iconTextFr('book-text', t('setting.whats-new.label-release-notes')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.whats-new.label-release-notes-description') }) )
+			),
+			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: URL_RELEASES, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
+		);
 
-		new Setting(ctaEl)
-			.setName(iconTextFr('signpost', t('setting.whats-new.label-roadmap')))
-			.setDesc(t('setting.whats-new.label-roadmap-description'))
-			.addButton((button: ButtonComponent) => {
-				button
-					.setButtonText(t('setting.whats-new.button-read'))
-					.setTooltip(t('setting.whats-new.button-read-tooltip'))
-					.setCta()
-					.onClick(() => {
-						window.open(URL_USER_GUIDE + 'Roadmap', '_blank');
-					});
-			});
+		ctaEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+			createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
+				el.append( iconTextFr('signpost', t('setting.whats-new.label-roadmap')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.whats-new.label-roadmap-description') }) )
+			),
+			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: URL_USER_GUIDE + 'Roadmap', attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
+		);
 
 		new Setting(ctaEl)
 			.setName(iconTextFr('party-popper', t('setting.whats-new.label-show-whatsnew')))

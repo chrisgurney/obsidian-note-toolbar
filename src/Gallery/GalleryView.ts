@@ -138,19 +138,12 @@ export default class GalleryView extends ItemView {
 		});
 
 		const ctaEl = markdownEl.createDiv();
-		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
-		new Setting(ctaEl)
-			.setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
-			.setDesc(t('setting.help.label-feedback-description'))
-			.addButton((button: ButtonComponent) => {
-				button
-					.setButtonText(t('setting.help.label-feedback'))
-					.setTooltip(t('setting.help.button-open-google'))
-					.setCta()
-					.onClick(() => {
-						window.open(URL_FEEDBACK_FORM, '_blank');
-					});
-			});
+        ctaEl.createDiv({ cls: ['note-toolbar-setting-link', 'is-readable-line-width'] }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
+                el.append( iconTextFr('pen-box', t('setting.help.label-feedback')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-feedback-description') }) )
+            ),
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.label-feedback'), href: URL_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+        );
 
 		// on clicking an item, prompt for toolbar and add it
 		this.ntb.registerDomEvent(markdownEl, 'click', async (evt) => {

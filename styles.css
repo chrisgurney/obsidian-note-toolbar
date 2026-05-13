@@ -4534,7 +4534,7 @@ input[type="text"].note-toolbar-setting-error,
     align-items: center;
     justify-content: space-between;
     border-top: 1px solid var(--background-modifier-border);
-    padding: 1em 0em !important;
+    padding: var(--size-4-4) 0;
 }
 
 .note-toolbar-setting-link:first-child {
@@ -4608,7 +4608,7 @@ input[type="text"].note-toolbar-setting-error,
     & .note-toolbar-setting-view-cta {
         & .setting-item {
             margin-bottom: 0;
-            padding: var(--size-4-4);
+            padding: var(--size-4-4) 0;
         }
     }
 }
