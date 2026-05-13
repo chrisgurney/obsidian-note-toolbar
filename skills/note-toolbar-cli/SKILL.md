@@ -5,6 +5,8 @@ description: Interact with the Obsidian Note Toolbar plugin using the Obsidian C
 
 # Note Toolbar CLI
 
+> **Important:** Do NOT make changes to the plugin's data file (`data.json`) directly.
+
 Use the `obsidian` CLI to interact with a running Obsidian instance. Requires Obsidian to be open, with the Note Toolbar plugin installed and enabled.
 
 Run `obsidian note-toolbar:help` to see all available commands. This is always up to date.
