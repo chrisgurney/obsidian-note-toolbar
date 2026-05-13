@@ -1,6 +1,6 @@
 ---
 name: note-toolbar-callouts
-description: Create and edit Note Toolbar Callouts. Use to create toolbars within .md files in Obsidian.
+description: "Create and edit Note Toolbar Callouts. Use to create toolbars within .md files in Obsidian."
 ---
 
 # Note Toolbar Callouts
