@@ -69,7 +69,8 @@ export default class HelpView extends ItemView {
                     .onClick(() => {
                         window.open('obsidian://note-toolbar?whatsnew', '_blank');
                     });
-            });
+            })
+            .setClass('note-toolbar-setting-no-border');
 
         new Setting(guideEl)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
@@ -81,8 +82,7 @@ export default class HelpView extends ItemView {
                     .onClick(() => {
                         window.open(URL_USER_GUIDE, '_blank');
                     });
-            })
-            .setClass('note-toolbar-setting-no-border');
+            });
 
         new Setting(guideEl)
             .setName(iconTextFr('settings', t('setting.help.label-settings')))
