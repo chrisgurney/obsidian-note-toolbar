@@ -60,6 +60,18 @@ export default class HelpView extends ItemView {
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
 
         new Setting(guideEl)
+            .setName(iconTextFr('party-popper', t('setting.help.label-whats-new')))
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.help.button-open'))
+                    .setTooltip(t('setting.button-whats-new-tooltip'))
+                    .setCta()
+                    .onClick(() => {
+                        window.open('obsidian://note-toolbar?whatsnew', '_blank');
+                    });
+            });
+
+        new Setting(guideEl)
             .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
             .addButton((button: ButtonComponent) => {
                 button
@@ -71,18 +83,6 @@ export default class HelpView extends ItemView {
                     });
             })
             .setClass('note-toolbar-setting-no-border');
-
-        new Setting(guideEl)
-            .setName(iconTextFr('party-popper', t('setting.help.label-whats-new')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open'))
-                    .setTooltip(t('setting.button-whats-new-tooltip'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('obsidian://note-toolbar?whatsnew', '_blank');
-                    });
-            });
 
         new Setting(guideEl)
             .setName(iconTextFr('settings', t('setting.help.label-settings')))
