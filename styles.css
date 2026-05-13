@@ -4545,6 +4545,7 @@ input[type="text"].note-toolbar-setting-error,
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    margin-inline-end: var(--size-4-4);
 }
 
 .note-toolbar-setting-link-button {
