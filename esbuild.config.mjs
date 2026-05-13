@@ -1,4 +1,4 @@
-import builtins from "builtin-modules";
+import { builtinModules } from 'node:module'
 import { spawn } from 'child_process';
 import chokidar from "chokidar";
 import esbuild from "esbuild";
@@ -278,7 +278,7 @@ const context = await esbuild.context({
 		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/lr",
-		...builtins],
+		...builtinModules],
 	format: "cjs",
 	target: "es2018",
 	loader: {
