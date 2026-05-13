@@ -224,9 +224,9 @@ export default class DataviewAdapter extends Adapter {
 
         let contents = await this.ntb?.app.vault.read(viewFile);
         if (contents) {
-            if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
+            // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
-            let func = new Function("dv", "input", contents);
+            let func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
          // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
          // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
          // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
