@@ -148,7 +148,7 @@ export default class CliItemsHandler {
                             return inner;
                         }
                         
-                        if (filter && !(this.formatItemText(item).includes(filter))) {
+                        if (filter && !(this.formatItemText(item, verbose).includes(filter))) {
                             return inner;
                         };
 
@@ -206,7 +206,7 @@ export default class CliItemsHandler {
             tooltip: this.formatWithTruncation(item.tooltip, truncateDisplay),
             icon: item.icon ?? '',
 
-            labelTooltipIcon: this.formatWithTruncation(this.formatItemText(item), truncateDisplay),
+            labelTooltipIcon: this.formatWithTruncation(this.formatItemText(item, verbose), truncateDisplay),
 
             toolbar: formatToolbarRef(this.ntb, toolbar.uuid),
 
@@ -280,9 +280,10 @@ export default class CliItemsHandler {
     /**
      * Creates a string representation of the visible parts of an item.
      * @param item item to display
+     * @param verbose true if the value should display more detail
      * @returns item's visible string representation
      */
-    private formatItemText(item: ToolbarItemSettings): string {
+    private formatItemText(item: ToolbarItemSettings, verbose: boolean): string {
         switch (item.linkAttr.type) {
             case ItemType.Break:
             case ItemType.Separator:
@@ -291,7 +292,8 @@ export default class CliItemsHandler {
             case ItemType.Group:
                 return formatToolbarRef(this.ntb, item.link);
             default:
-                return item.label || item.tooltip || (item.icon ? `icon:${item.icon}` : '') || '';
+                return (item.label ? item.label + (verbose && item.tooltip ? ` | ${item.tooltip}` : '') : item.tooltip) 
+                    || (item.icon ? `icon:${item.icon}` : '') || '';
         }
     }
 
