@@ -216,22 +216,38 @@ export default class CliHandlers {
 
     async handleCopy(args: CliData): Promise<string> {
         const position = args.pos ? parseInt(args.pos) - 1 : undefined;
-        
+
         const toolbar = this.ntb.settingsManager.getToolbar(args.to);
         if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.to });
-        if (args.item.startsWith('gallery:')) {
-            const galleryItemId = args.item.replace('gallery:', '');
-            const galleryItem = this.ntb.gallery.getItemById(galleryItemId);
-            if (!galleryItem) return t('cli.error-invalid-item', { item: args.item });
-            const resolvedItem = await this.ntb.gallery.addItemToToolbar(toolbar, galleryItem, position);
-            if (!resolvedItem) return '';
+
+        const ids = args.item.split(',').map(s => s.trim());
+
+        let cliResult = '';
+        let itemPosition = position;
+        let itemsAdded = 0;
+        for (const id of ids) {
+            let item;
+            if (id.startsWith('gallery:')) {
+                const galleryItemId = id.replace('gallery:', '');
+                item = this.ntb.gallery.getItemById(galleryItemId);
+                if (!item) { cliResult += color(t('cli.error-invalid-item', { item: id }), 'red') + '\n'; continue; }
+                const [newItem] = await this.ntb.gallery.addItemToToolbar(toolbar, item, itemPosition);
+                if (newItem && itemPosition !== undefined) itemPosition++;
+            }
+            else {
+                item = this.ntb.settingsManager.getToolbarItemById(id);
+                if (!item) { cliResult += color(t('cli.error-invalid-item', { item: id }), 'red') + '\n'; continue; }
+                await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, itemPosition);
+                if (itemPosition !== undefined) itemPosition++;
+            }
+            if (item) {
+                itemsAdded++;
+                cliResult += t('cli.success-item-copied', { item: (item.label || item.tooltip || item.icon || item.uuid), interpolation: { escapeValue: false } }) + '\n';
+            }
         }
-        else {
-            const item = this.ntb.settingsManager.getToolbarItemById(args.item);
-            if (!item) return t('cli.error-invalid-item', { item: args.item });
-            await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, position);
-        }
-        return t('cli.success-item-copied', { toolbar: toolbar.name });
+
+        if (itemsAdded) cliResult += t('cli.success-item-copied-toolbar', { count: itemsAdded, toolbar: toolbar.name, interpolation: { escapeValue: false } });
+        return cliResult;
     }
 
     handleDefault(args: CliData): string {

@@ -491,11 +491,20 @@
         "note-toolbar:copy": {
             "category": "items-copy",
             "description": {
-                "en": "Copy an item to a toolbar"
+                "en": "Copy one or more items to a toolbar"
             },
-            "docs": "Copies an item to a toolbar.",
+            "docs": "Copies one or more items to a toolbar.",
             "flags": {
                 "$before": ["to", "item"],
+                "item": {
+                    "description": {
+                        "en": "Item ID, or comma-separated list of item IDs"
+                    },
+                    "value": {
+                        "en": "<itemId>[,<itemId>...]"
+                    },
+                    "required": true
+                },                
                 "$after": ["pos"]
             }
         },

@@ -238,12 +238,13 @@ Copy and move items to toolbars.
 
 ### `note-toolbar:copy`
 
-Copies an item to a toolbar.
+Copies one or more items to a toolbar.
 
 ```sh
-to=<toolbarNameOrId>  # Toolbar name or ID to add item to (required)
-item=<itemId>         # Item ID (required)
-pos=<n>               # Item position in toolbar (default: end of toolbar)
+to=<toolbarNameOrId>         # Toolbar name or ID to add item to (required)
+item=<itemId>[,<itemId>...]  # Item ID, or comma-separated list of item IDs (required)
+item=<itemId>[,<itemId>...]  # Item ID, or comma-separated list of item IDs (required)
+pos=<n>                      # Item position in toolbar (default: end of toolbar)
 ```
 
 ### `note-toolbar:move`
