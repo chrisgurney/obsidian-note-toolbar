@@ -118,7 +118,7 @@ export default class NtbModal extends Modal {
 
         // set focus in modal
         this.contentEl.tabIndex = 1;
-        setTimeout(() => {
+        activeWindow.setTimeout(() => {
             this.contentEl.focus();
         }, 50);
 

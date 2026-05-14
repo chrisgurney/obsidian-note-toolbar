@@ -642,7 +642,7 @@ export function moveElement<T>(array: T[], fromIndex: number, toIndex: number): 
  * Issues a down-arrow event in order to put focus in menus (works in non-native menus only).
  */
 export function putFocusInMenu() {
-	setTimeout(() => {
+	activeWindow.setTimeout(() => {
 		const downArrowEvent = new KeyboardEvent('keydown', {
 			key: 'ArrowDown',
 			code: 'ArrowDown',
