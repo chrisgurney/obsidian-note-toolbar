@@ -412,8 +412,7 @@ export default class ToolbarRenderer {
 
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
-			const isLinkEmpty = this.ntb.vars.hasVars(item.link) && (await this.ntb.vars.replaceVars(item.link, file) === '');
-			if (((item.label === "" && item.icon === "") || isLinkEmpty) 
+			if ((item.label === "" && item.icon === "") 
 				&& ![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) {
 				continue;
 			}
@@ -504,6 +503,8 @@ export default class ToolbarRenderer {
 				!showInMode ? noteToolbarLi.addClass('hide-in-mode') : false;
 				!showOnMobile ? noteToolbarLi.addClass('hide-on-mobile') : false;
 				!showOnDesktop ? noteToolbarLi.addClass('hide-on-desktop') : false;
+				const isLinkEmpty = this.ntb.vars.hasVars(item.link) && (await this.ntb.vars.replaceVars(item.link, file) === '');
+				isLinkEmpty ? noteToolbarLi.addClass('hide') : false;
 				// disable if it's a command that's not available
 				if (item.linkAttr.type === ItemType.Command) {
 					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(item, view);

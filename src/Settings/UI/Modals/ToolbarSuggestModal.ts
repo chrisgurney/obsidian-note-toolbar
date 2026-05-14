@@ -3,6 +3,12 @@ import { Platform, SuggestModal } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
+/**
+ * `Default` = Just uses modal to select a toolbar.
+ * `QuickTools` = Opens the toolbar versus just selecting it.
+ */
+export type ToolbarSuggestMode = 'Default' | 'QuickTools';
+
 export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
 
     /**
@@ -12,27 +18,39 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param showSwapUi true if UI for swap toolbars should be shown (e.g., default toolbar option)
      * @param showNewOption true if UI should show a "New toolbar" option (for adding items from the Gallery)
      * @param callback function to call when a toolbar is selected
+     * @param mode ToolbarSuggestMode to use
      */
 	constructor(
         private ntb: NoteToolbarPlugin,
         private showPreviews: boolean, 
         private showSwapUi: boolean,
         private showNewOption: boolean,
-        private callback: (toolbar: ToolbarSettings) => void) {
+        private callback: (toolbar: ToolbarSettings) => void,
+        private mode: ToolbarSuggestMode = 'Default'
+    ) {
 
         super(ntb.app);
         this.modalEl.addClass("note-toolbar-setting-item-suggester-dialog");
-        this.ntb = ntb;
 
         this.setPlaceholder(
             showNewOption 
                 ? t('setting.toolbar-suggest-modal.placeholder-add') 
                 : t('setting.toolbar-suggest-modal.placeholder'));
-        this.setInstructions([
+
+        let instructions = [];
+        instructions.push(
             {command: '↑↓', purpose: t('setting.toolbar-suggest-modal.instruction-navigate')},
             {command: '↵', purpose: t('setting.toolbar-suggest-modal.instruction-use')},
+        );
+        if (mode === 'QuickTools') {
+            instructions.push(
+                {command: (Platform.isWin || Platform.isLinux) ? t('setting.toolbar-suggest-modal.key-edit-windows') : t('setting.toolbar-suggest-modal.key-edit-macos'), purpose: t('setting.toolbar-suggest-modal.instruction-edit')},
+            );
+        }
+        instructions.push(
             {command: 'esc', purpose: t('setting.toolbar-suggest-modal.instruction-dismiss')},
-        ]);
+        );
+        this.setInstructions(instructions);
 
         if (this.showSwapUi) {
             // show warning message about properties being changed
@@ -48,6 +66,9 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
                 }    
             }
         }
+
+        // handle meta key selections
+        this.scope.register(null, 'Enter', (event) => this.handleKeyboardSelection(event));
 
     }
 
@@ -118,6 +139,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
+        el.setAttribute('id', toolbar.uuid);
         let toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
         if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
@@ -153,6 +175,16 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             this.callback(toolbar);
             this.close();
         }
+    }
+
+    /**
+     * Handle case where keyboard with meta key is used to make selection. 
+     * @param event KeyboardEvent
+     */
+    async handleKeyboardSelection(event: KeyboardEvent) {
+        const selectedItem = this.modalEl.querySelector('.suggestion-item.is-selected');
+        const selected = selectedItem?.id ? this.ntb.settingsManager.getToolbarById(selectedItem?.id) : undefined;
+        selected ? this.onChooseSuggestion(selected, event) : undefined;
     }
 
 }

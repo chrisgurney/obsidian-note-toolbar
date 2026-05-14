@@ -60,11 +60,9 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
     /**
      * Creates a new modal.
      * @param ntb NoteToolbarPlugin
-     * @param activeFile TFile for the active file (so vars can be replaced)
      * @param toolbarId string ID of the toolbar to optionally scope this ItemSuggestModal to
      * @oaram callback function to call when an item is selected
      * @param mode ItemSuggestMode to use
-     * @param quickToolsMode true if we're showing items that can be used; otherwise false to search for items
      */
 	constructor(
         private ntb: NoteToolbarPlugin,
@@ -382,7 +380,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
                     let activeFile = this.ntb.app.workspace.getActiveFile();
                     const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toolbar: ToolbarSettings) => {
                         await this.ntb.commands.openQuickTools(toolbar.uuid);
-                    });
+                    }, 'QuickTools');
                     modal.open();
                 }
                 break;
