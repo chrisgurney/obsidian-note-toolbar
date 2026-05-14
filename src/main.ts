@@ -66,10 +66,10 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	textToolbar: ViewPlugin<TextToolbarClass> | null = null;
 
-	debug!: (...args: any[]) => void;
-	debugGroup!: (...args: any[]) => void;
-	debugGroupEnd!: (...args: any[]) => void;
-	error!: (...args: any[]) => void;
+	debug!: (...args: unknown[]) => void;
+	debugGroup!: (...args: unknown[]) => void;
+	debugGroupEnd!: (...args: unknown[]) => void;
+	error!: (...args: unknown[]) => void;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -220,9 +220,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		// otherwise do nothing when debug functions are called
 		else {
-			this.debug = (...args: any[]) => {};
-			this.debugGroup = (...args: any[]) => {};
-			this.debugGroupEnd = (...args: any[]) => {};
+			this.debug = (...args: unknown[]) => {};
+			this.debugGroup = (...args: unknown[]) => {};
+			this.debugGroupEnd = (...args: unknown[]) => {};
 		}
 		/* eslint-enable no-console */
 	}

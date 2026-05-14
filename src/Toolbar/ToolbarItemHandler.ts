@@ -229,7 +229,7 @@ export default class ToolbarItemHandler {
                 result = await this.ntb.adapters.tp?.use(scriptConfig);
                 break;
         }
-        result ? insertTextAtCursor(this.ntb.app, result) : undefined;
+        if (result) insertTextAtCursor(this.ntb.app, result);
 
         if (!focus || focus === 'editor') {
             this.ntb.app.workspace.activeEditor?.editor?.focus();

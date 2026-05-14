@@ -610,7 +610,7 @@ export function importArgs(args: string): Record<string, any> | null {
  * @param app App
  * @param textToInsert thing to insert
  */
-export function insertTextAtCursor(app: App, textToInsert: any) {
+export function insertTextAtCursor(app: App, textToInsert: string) {
 	const activeLeaf = app.workspace.getActiveViewOfType(MarkdownView);
 	const editor = activeLeaf ? activeLeaf.editor : null;
 	if (editor) {
