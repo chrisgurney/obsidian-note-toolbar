@@ -2999,7 +2999,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
 
 .note-toolbar-setting-text-with-icon {
     display: inline-flex;
-    column-gap: 0.5em;
+    gap: 0 0.5em;
     align-items: center;
     & svg {
         color: var(--text-color) !important;
@@ -3080,7 +3080,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
     flex-grow: 1;
     /* flex-wrap: wrap; */
     font-size: var(--font-ui-medium);
-    column-gap: 0.5em;
+    gap: 0 0.5em;
     padding: 8px;
     .is-mobile & {
         padding-inline-start: 0;
@@ -3192,7 +3192,7 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
 
 .note-toolbar-setting-item-preview-edit-mobile {
     display: flex;
-    column-gap: 0.5em;
+    gap: 0 0.5em;
     justify-content: space-between;
     width: 100%;
 }
@@ -3639,8 +3639,7 @@ input[type="text"].note-toolbar-setting-error,
     display: flex;
     flex-grow: 1;
     flex-wrap: wrap;
-    column-gap: 1em;
-    /* row-gap: 1em; */
+    gap: 0 1em;
     & .setting-item {
         padding: 0;
     }
@@ -4217,7 +4216,7 @@ input[type="text"].note-toolbar-setting-error,
     align-items: center;
     justify-content: space-between;
     display: flex;
-    column-gap: 1em;
+    gap: 0 1em;
     width: 100%;
 }
 
@@ -4241,7 +4240,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-item-suggestion-container {
-    column-gap: 0.5em;
+    gap: 0 0.5em;
     display: flex;
     width: 100%;
 }
@@ -4250,7 +4249,7 @@ input[type="text"].note-toolbar-setting-error,
     align-items: center;
     display: flex;
     flex-direction: column;
-    column-gap: 0.5rem;
+    gap: 0 0.5rem;
     & svg {
         display: block;
         margin: 0 auto;
@@ -4521,7 +4520,7 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
     .note-toolbar-setting-text-with-icon {
-        column-gap: 0.25em;
+        gap: 0 0.25em;
         & svg {
             height: var(--font-ui-smaller);
             width: var(--font-ui-smaller);

@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: space-between;
     display: flex;
-    column-gap: 1em;
+    gap: 0 1em;
     width: 100%;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .note-toolbar-item-suggestion-container {
-    column-gap: 0.5em;
+    gap: 0 0.5em;
     display: flex;
     width: 100%;
 }
@@ -39,7 +39,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    column-gap: 0.5rem;
+    gap: 0 0.5rem;
     & svg {
         display: block;
         margin: 0 auto;

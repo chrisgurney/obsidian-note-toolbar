@@ -240,7 +240,7 @@
         }
     }
     .note-toolbar-setting-text-with-icon {
-        column-gap: 0.25em;
+        gap: 0 0.25em;
         & svg {
             height: var(--font-ui-smaller);
             width: var(--font-ui-smaller);
