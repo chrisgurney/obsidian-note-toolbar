@@ -169,7 +169,7 @@ export default class TipView extends ItemView {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-card-item');
 			if (galleryItemEl && galleryItemEl.id) {
                 const galleryItem = this.ntb.gallery.getItemById(galleryItemEl.id);
-				if (galleryItem) await this.ntb.gallery.addItem(galleryItem);
+				if (galleryItem) await this.ntb.gallery.addItemWithPrompt(galleryItem);
 			}
 		});
     }
