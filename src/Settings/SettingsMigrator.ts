@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { getUUID } from "Utils/Utils";
-import { ItemType, PlatformType, Position, PositionType, SETTINGS_VERSION, ViewContext, ViewType, Visibility } from "./NoteToolbarSettings";
+import { ItemType, NoteToolbarSettings, PlatformType, Position, PositionType, SETTINGS_VERSION, ViewContext, ViewType, Visibility } from "./NoteToolbarSettings";
 
 
 export default class SettingsMigrator {
@@ -9,7 +9,7 @@ export default class SettingsMigrator {
         private ntb: NoteToolbarPlugin
     ) {}
 
-    run(loaded_settings: any, old_version: number) {
+    run(loaded_settings: NoteToolbarSettings, old_version: number) {
 
         let new_version: number;
 

@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, FolderMapping, ItemType, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, FolderMapping, ItemType, NoteToolbarSettings, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, Platform, TFile } from "obsidian";
@@ -548,7 +548,7 @@ export default class SettingsManager {
 	 */
 	async load(): Promise<void> {
 
-		const loaded_settings = await this.ntb.loadData();
+		const loaded_settings: NoteToolbarSettings = await this.ntb.loadData();
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 		
 		// initialize debugging based on user preference
