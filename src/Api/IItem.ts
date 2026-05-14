@@ -42,7 +42,7 @@ export interface IItem {
      * const item = ntb.getActiveItem();
      * item.setIcon('circle-alert'); 
      */
-    setIcon(iconId: string): void;
+    setIcon(iconId: string): Promise<void>;
 
     /**
      * Replaces the item's label with the provided text.
@@ -54,7 +54,7 @@ export interface IItem {
      * const item = ntb.getActiveItem();
      * item.setLabel('My Label'); 
      */
-    setLabel(text: string): void;
+    setLabel(text: string): Promise<void>;
 
     /**
      * Replaces the item's tooltip with the provided text.
@@ -66,6 +66,6 @@ export interface IItem {
      * const item = ntb.getActiveItem();
      * item.setTooltip('My Tooltip'); 
      */
-    setTooltip(text: string): void;
+    setTooltip(text: string): Promise<void>;
 
 }

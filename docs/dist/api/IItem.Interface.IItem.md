@@ -56,7 +56,7 @@ The item's tooltip, or an empty string if there isn't one set.
 
 ### setIcon()
 
-> **setIcon**(`iconId`): `void`
+> **setIcon**(`iconId`): `Promise`\<`void`\>
 
 Replaces the item's icon to the provided one, if it exists.
 
@@ -68,7 +68,7 @@ Replaces the item's icon to the provided one, if it exists.
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 nothing
 
@@ -83,7 +83,7 @@ item.setIcon('circle-alert');
 
 ### setLabel()
 
-> **setLabel**(`text`): `void`
+> **setLabel**(`text`): `Promise`\<`void`\>
 
 Replaces the item's label with the provided text.
 
@@ -95,7 +95,7 @@ Replaces the item's label with the provided text.
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 nothing
 
@@ -110,7 +110,7 @@ item.setLabel('My Label');
 
 ### setTooltip()
 
-> **setTooltip**(`text`): `void`
+> **setTooltip**(`text`): `Promise`\<`void`\>
 
 Replaces the item's tooltip with the provided text.
 
@@ -122,7 +122,7 @@ Replaces the item's tooltip with the provided text.
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 nothing
 

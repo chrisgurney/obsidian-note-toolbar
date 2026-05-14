@@ -43,13 +43,15 @@ export default class Item implements IItem {
      * 
      * @see IItem.setIcon
      */
-    setIcon(iconId: string): void {
+    async setIcon(iconId: string): Promise<void> {
         const newIcon = getIcon(iconId);
         if (newIcon || iconId === '') {
             this.item.icon = iconId;
             const toolbar = this.ntb.settingsManager.getToolbarByItemId(this.item.uuid);
-            if (toolbar) toolbar.updated = new Date().toISOString();
-            this.ntb.settingsManager.save();
+            if (toolbar) {
+                toolbar.updated = new Date().toISOString();
+                await this.ntb.settingsManager.save();
+            }
         }
         else {
             throw new Error(t('api.item.error-invalid-icon', { iconId: iconId }));
@@ -61,11 +63,13 @@ export default class Item implements IItem {
      * 
      * @see IItem.setLabel
      */
-    setLabel(text: string): void {
+    async setLabel(text: string): Promise<void> {
         this.item.label = text;
         const toolbar = this.ntb.settingsManager.getToolbarByItemId(this.item.uuid);
-        if (toolbar) toolbar.updated = new Date().toISOString();
-        this.ntb.settingsManager.save();
+        if (toolbar) {
+            toolbar.updated = new Date().toISOString();
+            await this.ntb.settingsManager.save();
+        }
     }
 
     /**
@@ -73,11 +77,13 @@ export default class Item implements IItem {
      * 
      * @see IItem.setTooltip
      */
-    setTooltip(text: string): void {
+    async setTooltip(text: string): Promise<void> {
         this.item.tooltip = text;
         const toolbar = this.ntb.settingsManager.getToolbarByItemId(this.item.uuid);
-        if (toolbar) toolbar.updated = new Date().toISOString();
-        this.ntb.settingsManager.save();
+        if (toolbar) {
+            toolbar.updated = new Date().toISOString();
+            await this.ntb.settingsManager.save();
+        }
     }
 
 }
