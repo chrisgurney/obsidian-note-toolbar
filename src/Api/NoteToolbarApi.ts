@@ -212,7 +212,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                                 case 'file': {
                                     const activeFile = this.ntb.app.workspace.getActiveFile();
                                     const activeFilePath = activeFile ? activeFile.path : '';
-                                    this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
+                                    await this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
                                     break;
                                 }
                                 case 'uri':

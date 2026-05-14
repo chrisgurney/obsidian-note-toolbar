@@ -88,9 +88,9 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.modalEl.setAttr('data-ntb-ui-type', 'suggester');
     }
 
-    onOpen(): void {
+    async onOpen(): Promise<void> {
 
-        super.onOpen();
+        await super.onOpen();
 
         if (this.icon && getIcon(this.icon)) {
             const inputContainerEl = this.modalEl.querySelector('.prompt-input-container');
@@ -105,7 +105,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         if (this.label) {
             const headerEl = this.containerEl.createDiv('ntb-suggester-header');
             const component = new Component();
-            MarkdownRenderer.render(this.ntb.app, this.label, headerEl, "", component);
+            await MarkdownRenderer.render(this.ntb.app, this.label, headerEl, "", component);
             this.modalEl.insertAdjacentElement('afterbegin', headerEl);
         }
 
@@ -210,8 +210,12 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
     renderSuggestion(item: FuzzyMatch<T>, el: HTMLElement): void {
         // renders text markdown, if provided
-        const component = new Component();
-        if (this.rendermd) MarkdownRenderer.render(this.ntb.app, this.getItemText(item.item), el, '', component);
+        if (this.rendermd) {
+            const component = new Component();
+            component.load();
+            MarkdownRenderer.render(this.ntb.app, this.getItemText(item.item), el, '', component)
+                .then(() => component.unload());
+        }
         else el.setText(this.getItemText(item.item)); 
         // if the item is a custom input (not already in the list of suggestions), add a special class for styling #518
         const suggestionKey = this.keys && this.keys.indexOf(item.item);

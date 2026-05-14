@@ -47,7 +47,7 @@ export default class NtbModal extends Modal {
         if (this.title) {
             let containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
             const component = new Component();
-            MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", component);
+            await MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", component);
         }
         if (this.isEditable && this.content instanceof TFile) {
             // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
@@ -91,10 +91,10 @@ export default class NtbModal extends Modal {
                     this.modalEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
                         (link as HTMLElement).tabIndex = 1;
                         if (link.hasClass('internal-link')) {
-                            this.ntb.registerDomEvent(link as HTMLElement, 'click', (event) => {
+                            this.ntb.registerDomEvent(link as HTMLElement, 'click', async (event) => {
                                 event.preventDefault();
                                 const target = link.getAttribute('href');
-                                if (target) this.ntb.app.workspace.openLinkText(target, '', true);
+                                if (target) await this.ntb.app.workspace.openLinkText(target, '', true);
                             });
                         }
                     });

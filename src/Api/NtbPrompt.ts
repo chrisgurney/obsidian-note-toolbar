@@ -53,10 +53,10 @@ export default class NtbPrompt extends Modal {
         if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'noclose-noheader');
     }
 
-    onOpen(): void {
+    async onOpen(): Promise<void> {
         if (this.label) {
             const component = new Component();
-            MarkdownRenderer.render(this.ntb.app, this.label, this.titleEl, "", component);
+            await MarkdownRenderer.render(this.ntb.app, this.label, this.titleEl, "", component);
         }
         this.createForm();
     }

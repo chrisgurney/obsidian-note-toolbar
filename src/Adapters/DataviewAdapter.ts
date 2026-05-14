@@ -339,7 +339,7 @@ export default class DataviewAdapter extends Adapter {
                 if (containerEl) {
                     containerEl.empty();
                     if (this.ntb) {
-                        MarkdownRenderer.render(
+                        await MarkdownRenderer.render(
                             this.ntb.app,
                             dvResult.successful ? dvResult.value : dvResult.error,
                             containerEl,

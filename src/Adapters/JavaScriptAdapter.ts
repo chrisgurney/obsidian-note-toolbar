@@ -162,7 +162,7 @@ export default class JavaScriptAdapter extends Adapter {
                 // may directly render, in which case it will likely return undefined or null
                 result = await Promise.resolve(func(args));
                 if (containerEl && result && this.ntb) {
-                    MarkdownRenderer.render(
+                    await MarkdownRenderer.render(
                         this.ntb.app,
                         result,
                         resultEl,
