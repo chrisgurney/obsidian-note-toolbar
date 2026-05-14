@@ -7,13 +7,15 @@ import { t } from "Settings/NoteToolbarSettings";
  * @param color color to apply
  * @returns colored text
  */
-export function color(text: string, color?: 'black' | 'green'): string {
+export function color(text: string, color?: 'black' | 'green' | 'red'): string {
     if (!color) return text;
     switch (color) {
         case 'black':
             return `\x1b[90m${text}\x1b[0m`;
         case 'green':
             return `\x1b[32m${text}\x1b[0m`;
+        case 'red':
+            return `\x1b[31m${text}\x1b[0m`;
         default:
             return text;
     }

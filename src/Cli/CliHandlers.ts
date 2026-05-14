@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { CliData, CliHandler, getIcon, normalizePath, PaneType, TFile } from "obsidian";
+import { CliData, CliHandler, getIcon, ItemView, normalizePath, PaneType, TFile } from "obsidian";
 import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import ItemModal from "Settings/UI/Modals/ItemModal";
 import { importArgs } from "Utils/Utils";
@@ -64,6 +64,7 @@ export default class CliHandlers {
         'note-toolbar:new': this.handleNew.bind(this),
         'note-toolbar:rules': this.handleRules.bind(this),
         'note-toolbar:settings': this.handleSettings.bind(this),
+        'note-toolbar:status': this.handleStatus.bind(this),
         'note-toolbar:toolbars': this.handleToolbars.bind(this),
         'note-toolbar:use': this.handleUse.bind(this)
     };
@@ -333,6 +334,48 @@ export default class CliHandlers {
         }
         await this.ntb.commands.openSettings();
         return t('cli.success-settings-opened');
+    }
+
+    handleStatus(args: CliData): string {
+        const toolbar = this.ntb.settingsManager.getCurrentToolbar();
+        const view = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        const format = args.format as 'csv' | 'tsv' | undefined;
+
+        type StatusSchema = 'view' | 'toolbar' | 'visible';
+        const schema: StatusSchema[] = ['view', 'toolbar', 'visible'];
+
+        const values: Record<StatusSchema, string> = {
+            view:    view?.getDisplayText() ?? 'n/a',
+            toolbar: toolbar?.name ?? 'n/a',
+            visible: toolbar ? 'true' : 'false',
+        };
+
+        const rows = [schema.map(col => values[col])];
+
+        switch (format) {
+            case 'csv': {
+                const header = schema.join(',');
+                const lines = rows.map(r =>
+                    r.map(v => `"${v.replace(/"/g, '""')}"`).join(',')
+                );
+                return [header, ...lines].join('\n');
+            }
+            default: {
+                const widths = rows.reduce((acc, r) => {
+                    r.forEach((v, i) => { acc[i] = Math.max(acc[i] ?? 0, v.length); });
+                    return acc;
+                }, [] as number[]);
+
+                const header = schema.map((col, i) => col.padEnd(widths[i])).join('\t').trimEnd();
+                const line = rows[0].map((v, i) => {
+                    const padded = v.padEnd(widths[i]);
+                    if (schema[i] === 'toolbar') return color(padded, 'green');
+                    if (schema[i] === 'visible' && v === 'false') return color(padded, 'red');
+                    return padded;
+                }).join('\t').trimEnd();
+                return [header, line].join('\n');
+            }
+        }
     }
 
     handleToolbars(args: CliData): string {

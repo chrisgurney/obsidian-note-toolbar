@@ -353,6 +353,14 @@ Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-too
 format=csv|tsv  # Output format (default: tsv)
 ```
 
+### `note-toolbar:status`
+
+Lists toolbars that are visible (positioned) in the current view.
+
+```sh
+format=csv|tsv  # Output format (default: tsv)
+```
+
 ## Create toolbars
 
 ### `note-toolbar:new`

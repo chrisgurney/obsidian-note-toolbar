@@ -101,7 +101,7 @@
         "note-toolbar": {
             "category": "general",
             "description": {
-                "en": "Lists toolbars or a toolbar's items"
+                "en": "List toolbars or a toolbar's items"
             },
             "docs": "Lists all toolbars or a toolbar's items.",
             "flags": {
@@ -606,11 +606,21 @@
                     }
                 }
             }
-        },        
+        },
+        "note-toolbar:status": {
+            "category": "rules",
+            "description": {
+                "en": "List toolbars that are visible (positioned) in the current view."
+            },
+            "docs": "Lists toolbars that are visible (positioned) in the current view.",
+            "flags": {
+                "$after": ["format"]
+            }
+        },
         "note-toolbar:use": {
             "category": "items-use",
             "description": {
-                "en": "Uses an item"
+                "en": "Use an item"
             },
             "docs": "Uses an item. Defaults to using the item within the active file.",
             "flags": {
