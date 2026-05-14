@@ -30,6 +30,7 @@ export default defineConfig([
 			parser: tsParser,
 			parserOptions: {
 				project: "./tsconfig.json",
+				tsconfigRootDir: import.meta.dirname,
 				sourceType: "module"
 			},
 		},
@@ -43,15 +44,13 @@ export default defineConfig([
 			...(obsidianmd.configs.recommended.rules || {}),
 
 			// IGNORE TS-ESLINT BASIC RULES FOR NOW
-			...Object.fromEntries(
-				Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
-			),
+			// ...Object.fromEntries(
+			// 	Object.keys(tsPlugin.rules).map(r => [`@typescript-eslint/${r}`, "off"])
+			// ),
 
 			"no-console": ["warn", { "allow": ["warn", "error"] }],
 			"no-debugger": "warn",
 			
-			"@typescript-eslint/no-invalid-this": "error",
-
 			// for support of older versions of iOS (15 and earlier)
 			"es-x/no-regexp-lookbehind-assertions": "error",
 
