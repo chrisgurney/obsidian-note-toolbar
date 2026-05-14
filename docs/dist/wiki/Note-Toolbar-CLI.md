@@ -2,6 +2,9 @@
 
 The **Note Toolbar CLI** provides command-line access to create [Note Toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/) toolbars and items, using [Obsidian's CLI ↗](https://obsidian.md/help/cli). This lets you control Note Toolbar from your terminal for scripting, automation, and integration with external tools.
 
+> [!NOTE]
+> Out of an abundance of caution, deletion of items and toolbars is currently not supported in the CLI. Perhaps such commands will be added if there is a clean way to undo these actions (for which currently there is not).
+
 ## Get started
 
 Read the [Obsidian CLI ↗](https://obsidian.md/help/cli) documentation to install, enable, and get familiar with how Obsidian's command-line interface works.
