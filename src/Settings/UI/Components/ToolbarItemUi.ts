@@ -577,14 +577,18 @@ export default class ToolbarItemUi {
 	 * @param visibility visibility to check for component visibility
 	 * @returns Menu
 	 */
-	getItemVisibilityMenu(item: ToolbarItemSettings, visibility: any, platform: 'desktop' | 'mobile', button: ButtonComponent): Menu {
+	getItemVisibilityMenu(
+        item: ToolbarItemSettings, 
+        visibility: { components: ComponentType[]; }, 
+        platform: 'desktop' | 'mobile', button: ButtonComponent
+    ): Menu {
 
         const platformLabel = platform === 'desktop' ? t('setting.item.visibility.platform-desktop') : t('setting.item.visibility.platform-mobile');
 
-		const isComponentVisible = {
-			icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
-			label: visibility ? visibility.components.includes(ComponentType.Label) : false,
-		};
+		// const isComponentVisible = {
+		// 	icon: visibility ? visibility.components.includes(ComponentType.Icon) : false,
+		// 	label: visibility ? visibility.components.includes(ComponentType.Label) : false,
+		// };
 
 		let menu = new Menu();
 

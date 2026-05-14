@@ -95,8 +95,8 @@ export default class DocumentListeners {
     /**
      * Track any document selections, but only for Preview mode.
      */
-    onSelectionChange = (event: any) => {
-        // this.ntb.debug('onSelection');
+    onSelectionChange = (event: Event) => {
+        // this.ntb.debug('onSelection', event);
         this.updatePreviewSelection();
     }
 
