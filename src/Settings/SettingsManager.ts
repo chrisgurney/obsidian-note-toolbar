@@ -467,7 +467,7 @@ export default class SettingsManager {
 					return isEnabled 
 						? t('gallery.select-plugin-suggestion', { plugin: name }) 
 						: t('gallery.select-plugin-suggestion-not-enabled', { plugin: name });
-				});
+				}).filter((n): n is string => n !== undefined);
 				pluginType = await this.ntb.api.suggester(pluginNames, plugins, {
 					class: 'note-toolbar-setting-mini-dialog',
 					placeholder: t('gallery.select-plugin-placeholder')

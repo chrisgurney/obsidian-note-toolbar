@@ -35,7 +35,7 @@ const Locales = i18next.createInstance({
 
 Locales.init();
 
-export const t = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
+export const t: (key: string, ...args: unknown[]) => string = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
 //#endregion
 

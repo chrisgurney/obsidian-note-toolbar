@@ -348,7 +348,7 @@ export default interface INoteToolbarApi<T> {
      * @see `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
      * @group Utilities
      */
-    t: string;
+    t: (key: string, ...args: unknown[]) => string;
 
     /**
      * Shows a (floating) toolbar. Defaults to the 'toolbar' position. 

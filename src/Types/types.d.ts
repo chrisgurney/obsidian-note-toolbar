@@ -8,7 +8,13 @@ declare global {
     }
 
     // provides access to Obsidian's translation framework
-    let i18next: any;
+    let i18next: {
+        createInstance(options?: {}): typeof i18next;
+        init(options?: {}): Promise<void>;
+        getFixedT(lng: string | null, ns: string | null, keyPrefix?: string | null): (key: string, ...args: unknown[]) => string;
+        language: string;
+        t: (key: string, ...args: unknown[]) => string;
+    };
 
 }
 

@@ -377,7 +377,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.t
      */
-    t: string = t;
+    t: typeof t = t;
 
     /**
      * Shows a toolbar by its name or ID.
