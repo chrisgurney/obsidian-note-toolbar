@@ -215,19 +215,20 @@ export default class CliHandlers {
     }
 
     async handleCopy(args: CliData): Promise<string> {
+        const position = args.pos ? parseInt(args.pos) - 1 : undefined;
+        
         const toolbar = this.ntb.settingsManager.getToolbar(args.to);
         if (!toolbar) return t('cli.error-invalid-toolbar', { toolbar: args.to });
         if (args.item.startsWith('gallery:')) {
             const galleryItemId = args.item.replace('gallery:', '');
             const galleryItem = this.ntb.gallery.getItemById(galleryItemId);
             if (!galleryItem) return t('cli.error-invalid-item', { item: args.item });
-            const resolvedItem = await this.ntb.gallery.addItemToToolbar(toolbar, galleryItem);
+            const resolvedItem = await this.ntb.gallery.addItemToToolbar(toolbar, galleryItem, position);
             if (!resolvedItem) return '';
         }
         else {
             const item = this.ntb.settingsManager.getToolbarItemById(args.item);
             if (!item) return t('cli.error-invalid-item', { item: args.item });
-            const position = args.pos ? parseInt(args.pos) - 1 : undefined;
             await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, position);
         }
         return t('cli.success-item-copied', { toolbar: toolbar.name });

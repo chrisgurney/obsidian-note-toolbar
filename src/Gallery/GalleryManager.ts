@@ -97,8 +97,12 @@ export default class GalleryManager {
 
 	}
 
-    async addItemToToolbar(toolbar: ToolbarSettings, galleryItem: ToolbarItemSettings): Promise<ToolbarItemSettings | undefined> {
-        let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, galleryItem);
+    async addItemToToolbar(
+        toolbar: ToolbarSettings, 
+        galleryItem: ToolbarItemSettings, 
+        position?: number
+    ): Promise<ToolbarItemSettings | undefined> {
+        let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, galleryItem, position);
         const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
         if (!isResolved) return;
         toolbar.updated = new Date().toISOString();
