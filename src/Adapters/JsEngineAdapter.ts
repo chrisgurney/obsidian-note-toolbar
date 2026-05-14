@@ -140,7 +140,7 @@ export default class JsEngineAdapter extends Adapter {
             if (execution.functionRunError) throw execution.functionRunError;
             result = execution.result;
         }
-        catch (error: Error | any) {
+        catch (error) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
                     this.displayScriptError(error);
@@ -187,7 +187,7 @@ export default class JsEngineAdapter extends Adapter {
             args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
-            this.displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error);
+            this.displayScriptError(error, t('adapter.error.args-parsing', { filename: filename }));
             return t('adapter.error.args-parsing-error', { filename: filename, error: error });
         }
         
@@ -205,7 +205,7 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb?.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        this.displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error);
+                        this.displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }));
                     }
                 }
                 else {
@@ -252,7 +252,7 @@ export default class JsEngineAdapter extends Adapter {
             }
         }
         catch (error) {
-            this.displayScriptError(t('adapter.error.exec-failed', { filename: filename }), error, containerEl);
+            this.displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }), containerEl);
         }
         finally {
             component.unload();

@@ -174,7 +174,7 @@ export default class JavaScriptAdapter extends Adapter {
             catch (error) {
                 switch (errorBehavior) {
                     case ErrorBehavior.Display:
-                        this.displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+                        this.displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
                         result = t('adapter.error.general', { error: error }) + '\n';
                         break;
                     case ErrorBehavior.Report:

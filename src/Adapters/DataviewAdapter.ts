@@ -165,7 +165,7 @@ export default class DataviewAdapter extends Adapter {
         catch (error) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
-                    this.displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+                    this.displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
                     result = t('adapter.error.general', { error: error }) + '\n';
                     break;
                 case ErrorBehavior.Report:
@@ -205,7 +205,7 @@ export default class DataviewAdapter extends Adapter {
             args = argsJson ? importArgs(argsJson) : {};
         }
         catch (error) {
-            this.displayScriptError(t('adapter.error.args-parsing', { filename: filename }), error, containerEl);
+            this.displayScriptError(error, t('adapter.error.args-parsing', { filename: filename }), containerEl);
             return;
         }
         
@@ -247,7 +247,7 @@ export default class DataviewAdapter extends Adapter {
              }
          }
          catch (error) {
-             this.displayScriptError(t('adapter.error.exec-failed', { filename: viewFile.path }), error, containerEl);
+             this.displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
          }
          finally {
              component.unload();
@@ -299,7 +299,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            this.displayScriptError(t('adapter.error.expr-failed', { expression: expression }), error, containerEl);
+            this.displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
         }
         finally {
             component.unload();
@@ -355,7 +355,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            this.displayScriptError(t('adapter.error.query-failed', { expression: expression }), error, containerEl);
+            this.displayScriptError(error, t('adapter.error.query-failed', { expression: expression }), containerEl);
             result = t('adapter.error.general', { error: error }) + '\n';
         }
         finally {

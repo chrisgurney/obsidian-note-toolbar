@@ -111,8 +111,8 @@ export default class NtbModal extends Modal {
                     await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, "", embedMdComponent);
                 };
             }
-            catch (error: Error | any) {
-                new Notice(error).containerEl.addClass('mod-warning');
+            catch (error) {
+                new Notice(error instanceof Error ? error.message : String(error)).containerEl.addClass('mod-warning');
             }
         }
 

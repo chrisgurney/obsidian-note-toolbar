@@ -41,18 +41,19 @@ export abstract class Adapter {
      * @param error 
      * @param containerEl 
      */
-    displayScriptError(message: string, error?: any, containerEl?: HTMLElement) {
-        console.error(message);
+    displayScriptError(error: unknown, context?: string, containerEl?: HTMLElement) {
+        const message = error instanceof Error ? error.message : String(error);
+        const fullMessage = context ? `${context}\n${message}` : message;
+        console.error(fullMessage);
         console.error(error);
         // output the error to the Note Toolbar Output container, if provided
         if (containerEl) {
             let errorEl = containerEl.createEl('pre');
-            errorEl.setText(message + '\n' + error);
+            errorEl.setText(fullMessage);
         }
         // show notice
         let errorFr = createFragment();
-        errorFr.append(message);
-        error ? errorFr.append('\n', error) : undefined;
+        errorFr.append(fullMessage);
         new Notice(errorFr, 5000).containerEl.addClass('mod-warning');
     }
     
