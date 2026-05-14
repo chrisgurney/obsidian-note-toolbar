@@ -1,9 +1,10 @@
 import gallery from 'Gallery/gallery.json';
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
-import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { t, ToolbarItemSettings, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import ItemSuggester from 'Settings/UI/Suggesters/ItemSuggester';
 import { iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
+import { URL_GOOG_FEEDBACK_FORM } from "Utils/Urls";
 
 interface Category {
 	name: { [key: string]: string };
@@ -142,7 +143,7 @@ export default class GalleryView extends ItemView {
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
                 el.append( iconTextFr('pen-box', t('setting.help.label-feedback')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-feedback-description') }) )
             ),
-            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.label-feedback'), href: URL_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.label-feedback'), href: URL_GOOG_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
         );
 
 		// on clicking an item, prompt for toolbar and add it

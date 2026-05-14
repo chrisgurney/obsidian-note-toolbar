@@ -1,7 +1,8 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, getIcon, ItemView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
+import { URL_GH_USER_GUIDE } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
 import { PLUGIN_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
@@ -1064,7 +1065,7 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
 /**
  * Creates a text fragment with help text and a Learn More link.
  * @param message Message to return as a fragment.
- * @param page Documentation page (i.e., URL after `.../wiki/`).
+ * @param page Documentation page (i.e., URL after `.../wiki`).
  * @returns DocumentFragment containing the message and styling.
  */
 export function learnMoreFr(message: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
@@ -1072,7 +1073,7 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
 	messageFr.append(
 		message, ' ',
 	);
-	let learnMoreLink = messageFr.createEl('a', { href: URL_USER_GUIDE + page, text: linkText });
+	let learnMoreLink = messageFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
 }
@@ -1081,7 +1082,7 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
  * Creates a text fragment for use in settings headings, with description text and a Learn More link.
  * @param title Heading text.
  * @param desc Description text.
- * @param page Documentation page (i.e., URL after `.../wiki/`).
+ * @param page Documentation page (i.e., URL after `.../wiki`).
  * @returns DocumentFragment containing the message and styling.
  */
 export function headingLearnMoreFr(title: string, desc: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
@@ -1091,7 +1092,7 @@ export function headingLearnMoreFr(title: string, desc: string, page: string, li
 	// description + learn more link
 	let descFr = messageFr.createEl('div', 'setting-item-description');
 	descFr.append(desc, ' ');
-	let learnMoreLink = descFr.createEl('a', { href: URL_USER_GUIDE + page, text: linkText });
+	let learnMoreLink = descFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 
 	return messageFr;

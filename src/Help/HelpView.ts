@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, ItemView, Setting, WorkspaceLeaf } from "obsidian";
-import { PositionType, t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { ItemView, WorkspaceLeaf } from "obsidian";
+import { PositionType, t, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { URL_DONATE, URL_GH_DISCUSSIONS, URL_GH_ISSUES, URL_GH_USER_GUIDE, URL_GOOG_FEEDBACK_FORM, URL_GOOG_ISSUE_FORM } from "Utils/Urls";
 import { PLUGIN_VERSION } from "version";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import { renderTipItems } from "./TipView";
@@ -66,7 +67,7 @@ export default class HelpView extends ItemView {
 
         guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('book-open', t('setting.help.label-user-guide')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-read'), href: URL_USER_GUIDE, attr: { 'aria-label': t('setting.help.button-open-github'), 'target': '_blank', 'rel': 'noopener noreferrer' } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-read'), href: URL_GH_USER_GUIDE, attr: { 'aria-label': t('setting.help.button-open-github'), 'target': '_blank', 'rel': 'noopener noreferrer' } })
         );
 
         guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
@@ -82,17 +83,17 @@ export default class HelpView extends ItemView {
 
         supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('messages-square', t('setting.help.label-support')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: 'https://github.com/chrisgurney/obsidian-note-toolbar/discussions', attr: { 'aria-label': t('setting.help.button-open-github') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GH_DISCUSSIONS, attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
         supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('circle-dot', t('setting.help.label-issues')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: 'https://github.com/chrisgurney/obsidian-note-toolbar/issues', attr: { 'aria-label': t('setting.help.button-open-github') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GH_ISSUES, attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
         supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('bug', t('setting.help.label-bug')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_ISSUE_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GOOG_ISSUE_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
         );
 
         // Donate
@@ -103,14 +104,14 @@ export default class HelpView extends ItemView {
 
         contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('pen-box', t('setting.help.label-feedback')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GOOG_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
         );
 
         contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
                 el.append( iconTextFr('heart', t('setting.help.label-donate')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-donate-description') }) )
             ),
-            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-donate'), href: 'https://buymeacoffee.com/cheznine', attr: { 'aria-label': t('setting.help.button-donate-tooltip') } })
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-donate'), href: URL_DONATE, attr: { 'aria-label': t('setting.help.button-donate-tooltip') } })
         );
 
     }

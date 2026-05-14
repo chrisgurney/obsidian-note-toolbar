@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, Component, ItemView, MarkdownRenderer, requestUrl, Setting, ToggleComponent, WorkspaceLeaf } from 'obsidian';
-import { t, URL_RELEASE_NOTES, URL_RELEASES, URL_USER_GUIDE, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
+import { Component, ItemView, MarkdownRenderer, requestUrl, Setting, ToggleComponent, WorkspaceLeaf } from 'obsidian';
+import { t, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
+import { URL_GH_RELEASES, URL_GH_USER_GUIDE, URL_GHUC_RELEASE_NOTES } from "Utils/Urls";
 import { iconTextFr } from '../Settings/UI/Utils/SettingsUIUtils';
 
 type Release = { 
@@ -45,14 +46,14 @@ export default class WhatsNewView extends ItemView {
 			createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
 				el.append( iconTextFr('book-text', t('setting.whats-new.label-release-notes')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.whats-new.label-release-notes-description') }) )
 			),
-			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: URL_RELEASES, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
+			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: URL_GH_RELEASES, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
 		);
 
 		ctaEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
 			createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
 				el.append( iconTextFr('signpost', t('setting.whats-new.label-roadmap')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.whats-new.label-roadmap-description') }) )
 			),
-			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: URL_USER_GUIDE + 'Roadmap', attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
+			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: `${URL_GH_USER_GUIDE}/Roadmap`, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
 		);
 
 		new Setting(ctaEl)
@@ -76,11 +77,11 @@ export default class WhatsNewView extends ItemView {
 				releaseText = release.body;
 			}
 			else {
-				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
+				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_GHUC_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
 			}
 		}
 		catch (error) {
-			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
+			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_GHUC_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
 			releaseText += `\n>[!error]-\n> \`${error as string}\`\n`;
 		}
 		finally {
@@ -104,13 +105,13 @@ export default class WhatsNewView extends ItemView {
 	 */
 	async getReleaseNote(version: string, language: string = 'en'): Promise<Release | null> {
 		try {
-			const res = await requestUrl(`${URL_RELEASE_NOTES}/${language}/${version}.md`);
+			const res = await requestUrl(`${URL_GHUC_RELEASE_NOTES}/${language}/${version}.md`);
 			if (res.status !== 200) return null;
 			return { tag_name: version, body: res.text ?? '' };
 		} catch (e) {
 			this.ntb.debug(`Error fetching release notes for language (${language}). Falling back to English.\n${e}`);
 			try {
-				const res = await requestUrl(`${URL_RELEASE_NOTES}/en/${version}.md`);
+				const res = await requestUrl(`${URL_GHUC_RELEASE_NOTES}/en/${version}.md`);
 				if (res.status !== 200) return null;
 				return { tag_name: version, body: res.text ?? '' };
 			} catch {

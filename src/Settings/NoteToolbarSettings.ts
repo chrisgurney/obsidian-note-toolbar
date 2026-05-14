@@ -523,19 +523,6 @@ export interface ScriptConfig {
 	postCommand?: string;
 };
 
-// #endregion
-
-// ****************************************************************************
-// #region UI STRINGS
-// ****************************************************************************
-
-export const URL_FEEDBACK_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeVWHVnookJr8HVQywk5TwupU-p7vkRkSt83Q5jscR6VwpZEQ/viewform';
-export const URL_ISSUE_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform';
-export const URL_RELEASE_NOTES = 'https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/releases';
-export const URL_RELEASES = 'https://github.com/chrisgurney/obsidian-note-toolbar/releases';
-export const URL_TIPS = 'https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/tips';
-export const URL_USER_GUIDE = 'https://github.com/chrisgurney/obsidian-note-toolbar/wiki/';
-
 export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
 
 export const SCRIPT_ATTRIBUTE_MAP: Record<string, string> = {
