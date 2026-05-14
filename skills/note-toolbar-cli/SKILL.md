@@ -18,7 +18,8 @@ Full docs: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-tool
 - **Parameters** take a value with `=`. Quote values with spaces. **Flags** are boolean switches with no value.
 - **File targeting**: use `file=<name>` (wikilink-style) or `path=<path>` (vault-root relative); defaults to active file.
 - **Vault targeting**: `vault=<name>` must come before the command name (e.g. `obsidian vault="My Vault" note-toolbar:new ...`); defaults to most recently focused vault.
-- `obsidian note-toolbar` with no subcommand lists toolbars for the active file.
+- `obsidian note-toolbar` with no subcommand lists all configured toolbars.
+- `obsidian note-toolbar:status` shows the toolbar that is currently visible in the active view.
 
 ## Common patterns
 
