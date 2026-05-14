@@ -1012,23 +1012,6 @@
         "type": "uri"
     },
     {
-        "id": "obsidian-discord",
-        "description": {
-            "en": "Opens Obsidian's Discord community.",
-            "ja": "ObsidianのDiscordコミュニティを開きます。",
-            "zh": "打开 Obsidian 的 Discord 社区。",
-            "uk": "Відвідайте Discord спільноту Obsidian."
-        },
-        "icon": "discord",
-        "tooltip": {
-            "en": "Obsidian Discord",
-            "ja": "Obsidian Discord",
-            "zh": "Obsidian Discord"
-        },
-        "uri": "https://discord.gg/obsidianmd",
-        "type": "uri"
-    },
-    {
         "id": "obsidian-excalidraw-create",
         "commandId": "obsidian-excalidraw-plugin:excalidraw-autocreate-newtab",
         "description": {
@@ -1117,24 +1100,6 @@
             "uk": "Довідка Markdown"
         },
         "uri": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
-        "type": "uri"
-    },
-    {
-        "id": "obsidian-subreddit",
-        "description": {
-            "en": "Opens the Obsidian community on Reddit.",
-            "ja": "Reddit上のObsidianコミュニティを開きます。",
-            "zh": "打开 Reddit 上的 Obsidian 社区。",
-            "uk": "Відвідайте спільноту Obsidian на Reddit."
-        },
-        "icon": "messages-square",
-        "tooltip": {
-            "en": "Obsidian subreddit",
-            "ja": "Obsidian subreddit",
-            "zh": "Obsidian 子版块",
-            "uk": "Obsidian Reddit"
-        },
-        "uri": "https://www.reddit.com/r/ObsidianMD/",
         "type": "uri"
     },
     {

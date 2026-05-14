@@ -192,9 +192,7 @@ Get help from Obsidian community resources.
 | --- | --- |
 | Obsidian Help | Opens the official Obsidian Help site. |
 | Markdown reference | Opens Obsidian's Markdown formatting guide. |
-| Obsidian Discord | Opens Obsidian's Discord community. |
 | Obsidian forum | Opens Obsidian's forum for discussions and support. |
-| Obsidian subreddit | Opens the Obsidian community on Reddit. |
 
 ## Search
 
