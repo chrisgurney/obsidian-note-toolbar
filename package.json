@@ -20,7 +20,6 @@
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
     "@typescript-eslint/utils": "^8.53.1",
-    "builtin-modules": "3.3.0",
     "chokidar": "^5.0.0",
     "esbuild": "^0.27.0",
     "eslint": "^9.38.0",
