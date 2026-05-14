@@ -270,7 +270,7 @@ export default interface INoteToolbarApi<T> {
     setProperty: (property: string, value: any) => Promise<void>;
 
     /**
-     * Replaces the selected text, or the word at the cursor position, with the provided string.
+     * Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
      * 
      * @param replacement The text to replace the selection with.
      * @remarks This does not do anything in Reading mode.

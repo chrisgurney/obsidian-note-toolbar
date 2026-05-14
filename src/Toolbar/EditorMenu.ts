@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Editor, MarkdownFileInfo, MarkdownView, Menu, MenuItem, Notice } from "obsidian";
 import { PositionType, t } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
+import { URL_GH_USER_GUIDE } from "Utils/Urls";
 
 
 export default class EditorMenu {
@@ -43,7 +44,7 @@ export default class EditorMenu {
 						.setIcon('info')
 						.setTitle(t('import.option-help'))
 						.onClick(async () => {
-							window.open('https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts', '_blank');
+							window.open(`${URL_GH_USER_GUIDE}/Note-Toolbar-Callouts`, '_blank');
 						});
 				});
 			}

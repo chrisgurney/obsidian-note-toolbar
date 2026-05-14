@@ -95,6 +95,7 @@ Add various types of content like links or media.
 | Add internal link | Add an internal link. |
 | Insert table | Insert a table. |
 | Add embed | Add an embedded file or note. |
+| Add external embed | Add an embedded external link. |
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 
@@ -191,9 +192,7 @@ Get help from Obsidian community resources.
 | --- | --- |
 | Obsidian Help | Opens the official Obsidian Help site. |
 | Markdown reference | Opens Obsidian's Markdown formatting guide. |
-| Obsidian Discord | Opens Obsidian's Discord community. |
 | Obsidian forum | Opens Obsidian's forum for discussions and support. |
-| Obsidian subreddit | Opens the Obsidian community on Reddit. |
 
 ## Search
 

@@ -524,23 +524,85 @@ export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleTyp
 
 /**
  * Imports the given arguments string as if it were JSON, but allows for missing parens and quotes.
- * @param args JSON-formatted string
+ * @param args JSON-like formatted string
  * @returns parsed arguments, or null if parsing fails
  */
 export function importArgs(args: string): Record<string, any> | null {
-	try {
-		// remove spaces between keys and colons
-		args = args.replace(/(\w+)\s*:/g, '"$1":');
-		
-		// add missing curly brackets
-		if (!args.trim().startsWith('{')) args = `{${args}`;
-		if (!args.trim().endsWith('}')) args = `${args}}`;
+    try {
+        const result: Record<string, any> = {};
+        let i = 0;
+        const s = args.trim();
 
-		return JSON.parse(args);
-	} 
-	catch {
-		return null; 
-	}
+        const readToken = (start_i: number, terminators: string[]): { token: string | null, i: number } => {
+            let i = start_i;
+            if (s[i] === '"') {
+                i++; // skip opening quote
+                let str = '';
+                while (i < s.length && s[i] !== '"') {
+                    if (s[i] === '\\' && s[i + 1] === '"') {
+                        str += '"';
+                        i += 2;
+                    } else {
+                        str += s[i++];
+                    }
+                }
+                if (i >= s.length) return { token: null, i };
+                i++; // skip closing quote
+                return { token: str, i };
+            } else {
+                const start = i;
+                while (i < s.length && !terminators.includes(s[i])) i++;
+                return { token: s.slice(start, i).trim(), i };
+            }
+        };
+
+        // skip optional leading brace
+        if (s[i] === '{') i++;
+
+        while (i < s.length) {
+            // skip whitespace and commas
+            while (i < s.length && (s[i] === ' ' || s[i] === ',' || s[i] === '\n')) i++;
+            if (s[i] === '}' || i >= s.length) break;
+
+            const keyResult = readToken(i, [':']);
+            i = keyResult.i;
+            const key = keyResult.token;
+            if (key === null || key === '') return null;
+
+            // skip colon
+            while (i < s.length && s[i] === ' ') i++;
+            if (s[i] !== ':') return null;
+            i++;
+            while (i < s.length && s[i] === ' ') i++;
+
+            const wasQuoted = s[i] === '"';
+            const valueResult = readToken(i, [',', '}']);
+            i = valueResult.i;
+            const raw = valueResult.token;
+            if (raw === null) return null;
+
+            if (wasQuoted) {
+                result[key] = raw;
+            } else if (raw === '') {
+                result[key] = null;
+            } else if (raw === 'true') {
+                result[key] = true;
+            } else if (raw === 'false') {
+                result[key] = false;
+            } else if (raw === 'null') {
+                result[key] = null;
+            } else if (!isNaN(Number(raw))) {
+                result[key] = Number(raw);
+            } else {
+                result[key] = raw;
+            }
+        }
+
+        return result;
+    }
+    catch {
+        return null;
+    }
 }
 
 /**
@@ -561,22 +623,9 @@ export function insertTextAtCursor(app: App, textToInsert: any) {
 
 /**
  * Check if a string is a valid URI.
- * @link https://stackoverflow.com/a/49909903
  */
-// I think this is defined outside the function to reuse the object, for efficiency
-let validUrlEl: HTMLInputElement | undefined;
 export function isValidUri(u: string): boolean {
-	if (u !== "") {  
-		if (!validUrlEl) {
-			validUrlEl = document.createElement('input');
-			validUrlEl.setAttribute('type', 'url');
-		}
-		validUrlEl.value = u;
-		return validUrlEl.validity.valid;
-	}
-	else {
-		return false
-	}
+    return u !== "" && URL.canParse(u.trim());
 }
 
 /**
@@ -628,4 +677,12 @@ export function toolbarHasMenu(toolbar: ToolbarSettings): boolean {
 	return toolbar.items.some(item => 
 		(item.linkAttr.type === ItemType.Menu) && (item.link)
 	);
+}
+
+/**
+ * Returns the translated string for the given record, with fallbacks to English and then 'undefined'.
+ */
+export function tr(field: Record<string, string>, locale: string = 'en'): string | undefined {
+	if (!field) return undefined;
+	return field[locale] ?? field['en'] ?? undefined;
 }

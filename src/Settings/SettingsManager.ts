@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_SETTINGS, FolderMapping, ItemType, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, FolderMapping, ItemType, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, Platform, TFile } from "obsidian";
@@ -20,6 +20,23 @@ export default class SettingsManager {
 	public async addToolbar(toolbar: ToolbarSettings): Promise<void> {
 		this.ntb.settings.toolbars.push(toolbar);
 		this.ntb.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
+		await this.save();
+	}
+
+	/**
+	 * Adds the given item to the given toolbar.
+	 * @param toolbar toolbar to add the item to
+	 * @param item ToolbarItemSettings to add
+	 * @param insertIndex optional index to insert the item at; if too large, the item is added to the end of the toolbar; if not provided, the item is added to the end of the toolbar
+	 */
+	public async addToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<void> {
+		if (insertIndex !== undefined && insertIndex >= 0) {
+			toolbar.items.splice(insertIndex, 0, item);
+		}
+		else {
+			toolbar.items.push(item);
+		}
+		toolbar.updated = new Date().toISOString();
 		await this.save();
 	}
 
@@ -95,12 +112,7 @@ export default class SettingsManager {
 		newItem.hasCommand = false;
 		newItem.inGallery = false;
 		newItem.uuid = getUUID();
-		if (insertIndex !== undefined && insertIndex >= 0) {
-			toolbar.items.splice(insertIndex, 0, newItem);
-		}
-		else {
-			toolbar.items.push(newItem);
-		}
+		await this.addToolbarItem(toolbar, newItem, insertIndex);
 		return newItem;
 	}
 
@@ -113,6 +125,18 @@ export default class SettingsManager {
 		// TODO: return replaced toolbar if set?
 		const noteToolbarSettings = noteToolbarEl ? this.getToolbarById(noteToolbarEl?.id) : undefined;
 		return noteToolbarSettings;
+	}
+
+	/**
+	 * Returns an item with default settings, for the provided item type.
+	 * @param itemType ItemType to get default settings for; defaults to Command.
+	 * @returns ToolbarItemSettings
+	 */
+	getDefaultItem(itemType: ItemType = ItemType.Command): ToolbarItemSettings {
+		const item: ToolbarItemSettings = JSON.parse(JSON.stringify(DEFAULT_ITEM_SETTINGS));
+		item.linkAttr.type = itemType;
+		item.uuid = getUUID();
+		return item;
 	}
 
 	/**
@@ -334,6 +358,20 @@ export default class SettingsManager {
 	}
 
 	/**
+	 * Moves the given toolbar item to the given toolbar.
+	 * @param item ToolbarItemSettings to move.
+	 * @param toToolbar ToolbarSettings to move the item to.
+	 * @param insertIndex optional index to insert the moved item at; if not provided, the item is added to the end of the toolbar.
+	 */
+	public async moveToolbarItem(item: ToolbarItemSettings, toToolbar: ToolbarSettings, insertIndex?: number): Promise<void> {
+		const fromToolbar = this.getToolbarByItemId(item.uuid);
+		if (!fromToolbar) return;
+		fromToolbar.items.remove(item);
+		fromToolbar.updated = new Date().toISOString();
+		await this.addToolbarItem(toToolbar, item, insertIndex);
+	}
+
+	/**
 	 * Creates a new toolbar with default settings, with an optional name.
 	 * @param name name of the toolbar
 	 * @returns ToolbarSettings for the new toolbar
@@ -380,7 +418,7 @@ export default class SettingsManager {
 	async resolveGalleryItem(item: ToolbarItemSettings): Promise<boolean> {
 
 		if (!item.linkAttr?.type) {
-			console.error(t('gallery.error-missing-item-type'));
+			this.ntb.error(t('gallery.error-missing-item-type'));
 			return false;
 		}
 
@@ -457,12 +495,12 @@ export default class SettingsManager {
 				}
 			}
 			else {
-				console.error(t('gallery.error-invalid-plugin'));
+				this.ntb.error(t('gallery.error-invalid-plugin'));
 				return undefined;
 			}
 		}
 		else {
-			console.error(t('gallery.error-missing-property'));
+			this.ntb.error(t('gallery.error-missing-property'));
 			return undefined;
 		}
 

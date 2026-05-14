@@ -18,22 +18,41 @@ export default class GalleryManager {
         return this.items;
     }
 
+    async addItemToToolbar(
+        toolbar: ToolbarSettings,
+        galleryItem: ToolbarItemSettings | ToolbarItemSettings[],
+        position?: number
+    ): Promise<ToolbarItemSettings[]> {
+        const items = Array.isArray(galleryItem) ? galleryItem : [galleryItem];
+        const added: ToolbarItemSettings[] = [];
+        let currentPosition = position;
+        for (const item of items) {
+            let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, currentPosition);
+            const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
+            if (!isResolved) continue;
+            if (currentPosition !== undefined) currentPosition++;
+            added.push(newItem);
+        }
+        if (added.length) {
+            toolbar.updated = new Date().toISOString();
+            await this.ntb.settingsManager.save();
+        }
+        return added;
+    }
+
 	/**
 	 * Adds the provided Gallery item, after prompting for the toolbar to add it to.
 	 * @param galleryItem Gallery item to add
 	 */
-	async addItem(galleryItem: ToolbarItemSettings): Promise<void> {
+	async addItemWithPrompt(galleryItem: ToolbarItemSettings): Promise<void> {
 
         const addItemToToolbar = async (toolbar: ToolbarSettings) => {
 			if (toolbar && galleryItem) {
 				if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
 					toolbar = await this.ntb.settingsManager.newToolbar();
 				}
-				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, galleryItem);
-                const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
-                if (!isResolved) return;
-				toolbar.updated = new Date().toISOString();
-				await this.ntb.settingsManager.save();
+				const [newItem] = await this.addItemToToolbar(toolbar, galleryItem);
+                if (!newItem) return;
 				this.ntb.commands.openToolbarSettingsForId(toolbar.uuid, newItem.uuid);
                 new Notice(
                     t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })
@@ -47,10 +66,11 @@ export default class GalleryManager {
             (this.ntb.settings.toolbars.length > 0) ? toolbarSuggester.open() : addItemToToolbar(EMPTY_TOOLBAR);
         }
 
-        // confirm with user if they would like to enable scripting
+        // prompt: confirm with user if they would like to enable scripting
         const isScriptingEnabled = await this.ntb.settingsUtils.openScriptPrompt(galleryItem);
         if (!isScriptingEnabled) return;
 
+        // prompts for certain item types
         switch (galleryItem.linkAttr.type) {
             case ItemType.Command: {
                 // check if the item's command exists, before displaying toolbar modal
@@ -98,6 +118,10 @@ export default class GalleryManager {
         }
 
 	}
+
+    getItemById(id: string): ToolbarItemSettings | undefined {
+        return this.getItems().find((item: any) => item.uuid === id);
+    }
 
     private loadItems() {
         const startTime = performance.now();

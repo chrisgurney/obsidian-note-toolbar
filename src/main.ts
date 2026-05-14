@@ -2,6 +2,7 @@ import { ViewPlugin } from '@codemirror/view';
 import AdapterManager from 'Adapters/AdapterManager';
 import INoteToolbarApi from "Api/INoteToolbarApi";
 import NoteToolbarApi from 'Api/NoteToolbarApi';
+import CliManager from 'Cli/CliManager';
 import CommandManager from 'Commands/CommandManager';
 import GalleryManager from 'Gallery/GalleryManager';
 import GalleryView from 'Gallery/GalleryView';
@@ -15,7 +16,7 @@ import VaultListeners from 'Listeners/VaultListeners';
 import ViewListeners from 'Listeners/ViewListeners';
 import WindowListeners from 'Listeners/WindowListeners';
 import WorkspaceListeners from 'Listeners/WorkspaceListeners';
-import { Platform, Plugin, WorkspaceLeaf } from 'obsidian';
+import { Platform, Plugin, requireApiVersion, WorkspaceLeaf } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsIcons from 'Settings/SettingsIcons';
@@ -36,6 +37,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	adapters!: AdapterManager;
 	api!: INoteToolbarApi<any>;
+	cli!: CliManager;
 	commands!: CommandManager;
 	hotkeys!: HotkeyHelper;
 	gallery!: GalleryManager;
@@ -67,6 +69,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	debug!: (...args: any[]) => void;
 	debugGroup!: (...args: any[]) => void;
 	debugGroupEnd!: (...args: any[]) => void;
+	error!: (...args: any[]) => void;
 
 	/**
 	 * When this plugin is loaded (e.g., on Obsidian startup, or plugin is enabled in settings):
@@ -108,6 +111,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 		// initialize managers + helpers that require settings to be loaded
 		this.api = new NoteToolbarApi(this);
+		this.cli = new CliManager(this);
 		this.commands = new CommandManager(this);
 		this.hotkeys = new HotkeyHelper(this);
 		this.gallery = new GalleryManager(this);
@@ -150,6 +154,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.window.register();
 
 			// add commands
+			if (Platform.isDesktop && requireApiVersion('1.12.2')) this.cli.register();
 			this.commands.addCommands();
 
 			// prototcol handler
@@ -205,6 +210,8 @@ export default class NoteToolbarPlugin extends Plugin {
 	 */
 	toggleDebugging() {
 		/* eslint-disable no-console */
+		// all errors should be logged
+		this.error = console.error.bind(console);
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
 			this.debug = console.log.bind(console);

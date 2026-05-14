@@ -85,7 +85,7 @@
             "uk": "Копіює вибраний текст у буфер обміну."
         },
         "icon": "clipboard-copy",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await activeWindow.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Copy",
             "ja": "コピー",
@@ -103,7 +103,7 @@
             "uk": "Копіює посилання на поточний блок до буфера обміну."
         },
         "icon": "link-2",
-        "script": "const { metadataCache: m } = app, e = ntb.app.workspace.activeEditor?.editor, f = ntb.app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
+        "script": "const { metadataCache: m } = app, e = ntb.app.workspace.activeEditor?.editor, f = ntb.app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (window.navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
         "tooltip": {
             "en": "Copy link to block",
             "ja": "ブロックへのリンクをコピー",
@@ -121,7 +121,7 @@
             "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
         },
         "icon": "clipboard-check",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait activeWindow.navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
         "tooltip": {
             "en": "Copy note content",
             "ja": "ノートの内容をコピー",
@@ -157,7 +157,7 @@
             "uk": "Вирізає вибраний текст у буфер обміну."
         },
         "icon": "scissors",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await activeWindow.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Cut",
             "ja": "切り取り",
@@ -735,6 +735,19 @@
         "type": "command"
     },
     {
+        "id": "insert-external-embed",
+        "description": {
+            "en": "Add an embedded external link."
+        },
+        "focus": "editor",
+        "icon": "image-play",
+        "script": "const c = await ntb.clipboard().then(t => t.trim());\nconst u = URL.canParse(c) ? c : await ntb.prompt({\n  placeholder: ntb.t('api.ui.prompt-placeholder-url')\n});\nif (!u) return;\nntb.setSelection(`![](${u})`);",
+        "tooltip": {
+            "en": "Add external embed"
+        },
+        "type": "javascript"
+    },
+    {
         "id": "insert-horizontal-rule",
         "commandCheck": true,
         "commandId": "editor:insert-horizontal-rule",
@@ -999,23 +1012,6 @@
         "type": "uri"
     },
     {
-        "id": "obsidian-discord",
-        "description": {
-            "en": "Opens Obsidian's Discord community.",
-            "ja": "ObsidianのDiscordコミュニティを開きます。",
-            "zh": "打开 Obsidian 的 Discord 社区。",
-            "uk": "Відвідайте Discord спільноту Obsidian."
-        },
-        "icon": "discord",
-        "tooltip": {
-            "en": "Obsidian Discord",
-            "ja": "Obsidian Discord",
-            "zh": "Obsidian Discord"
-        },
-        "uri": "https://discord.gg/obsidianmd",
-        "type": "uri"
-    },
-    {
         "id": "obsidian-excalidraw-create",
         "commandId": "obsidian-excalidraw-plugin:excalidraw-autocreate-newtab",
         "description": {
@@ -1107,24 +1103,6 @@
         "type": "uri"
     },
     {
-        "id": "obsidian-subreddit",
-        "description": {
-            "en": "Opens the Obsidian community on Reddit.",
-            "ja": "Reddit上のObsidianコミュニティを開きます。",
-            "zh": "打开 Reddit 上的 Obsidian 社区。",
-            "uk": "Відвідайте спільноту Obsidian на Reddit."
-        },
-        "icon": "messages-square",
-        "tooltip": {
-            "en": "Obsidian subreddit",
-            "ja": "Obsidian subreddit",
-            "zh": "Obsidian 子版块",
-            "uk": "Obsidian Reddit"
-        },
-        "uri": "https://www.reddit.com/r/ObsidianMD/",
-        "type": "uri"
-    },
-    {
         "id": "obsidian-sync-version-history",
         "commandId": "sync:view-version-history",
         "description": {
@@ -1169,7 +1147,7 @@
             "uk": "Вставте текст з буфера обміну."
         },
         "icon": "clipboard-paste",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
+        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await activeWindow.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Paste",
             "ja": "貼り付け",

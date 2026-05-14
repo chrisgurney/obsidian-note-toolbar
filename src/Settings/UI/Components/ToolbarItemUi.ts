@@ -473,7 +473,7 @@ export default class ToolbarItemUi {
                             .setIcon('copy')
                             .onClick(async (menuEvent) => {
                                 const commandText = `obsidian://note-toolbar?command=${itemCommand.id}`;
-                                navigator.clipboard.writeText(commandText);
+                                activeWindow.navigator.clipboard.writeText(commandText);
                                 new Notice(t('command.copy-command-notice')).containerEl.addClass('mod-success');
                             });
                     });
@@ -521,7 +521,7 @@ export default class ToolbarItemUi {
                 .setTitle(t('setting.item.menu-copy-id'))
                 .setIcon('code')
                 .onClick(async (menuEvent) => {
-                    navigator.clipboard.writeText(toolbarItem.uuid);
+                    activeWindow.navigator.clipboard.writeText(toolbarItem.uuid);
                     new Notice(t('setting.item.menu-copy-id-notice')).containerEl.addClass('mod-success');
                 });
         });

@@ -310,7 +310,7 @@ export default class ContextMenu {
 					.onClick(async (menuEvent) => {
 						if (toolbarSettings) {
 							let calloutExport = await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export);
-							navigator.clipboard.writeText(calloutExport);
+							window.navigator.clipboard.writeText(calloutExport);
 							new Notice(
 								learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
 							).containerEl.addClass('mod-success');

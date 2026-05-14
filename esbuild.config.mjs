@@ -7,6 +7,7 @@ import { copyFile, mkdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import process from "process";
 import { fileInliner } from "./build/file-inliner.mjs";
+import { cliDocs } from "./build/cli-docs.mjs";
 import { galleryDocs } from "./build/gallery-docs.mjs";
 
 const banner =
@@ -29,8 +30,9 @@ const WIKI_REPO = "../obsidian-note-toolbar-wiki";
 // files to copy into the external repo after build
 // each entry: { src: <source path>, dest: <path relative to WIKI_REPO> }
 const WIKI_FILES = [
-	{ src: `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`, dest: "Note-Toolbar-API.md" },
 	{ src: `${DOC_OUTPUT}/wiki/Gallery.md`, dest: "Gallery.md" },
+	{ src: `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`, dest: "Note-Toolbar-API.md" },
+	{ src: `${DOC_OUTPUT}/wiki/Note-Toolbar-CLI.md`, dest: "Note-Toolbar-CLI.md" },
 	{ src: `${DOC_OUTPUT}/api/IItem.Interface.IItem.md`, dest: "IItem.Interface.IItem.md.md" },
 	{ src: `${DOC_OUTPUT}/api/IToolbar.Interface.IToolbar.md`, dest: "IToolbar.Interface.IToolbar.md.md" },
 	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbKeyBinding.md`, dest: "INoteToolbarApi.Interface.NtbKeyBinding.md.md" },
@@ -63,7 +65,7 @@ const typecheckPlugin = {
 	},
 };
 
-const typedocPlugin = {
+const apiDocsPlugin = {
 	name: 'api-docs',
 	setup(build) {
 		build.onEnd(async () => {
@@ -188,6 +190,28 @@ const stylesPlugin = {
 	},
   };
 
+const cliDocsPlugin = {
+	name: 'cli-docs',
+	setup(build) {
+	  build.onEnd(async () => {
+		try {
+			if (cliDocs('src/Cli/cli.json', `${DOC_OUTPUT}/cli/cli.md`)) isDocsChange = true;
+		}
+		catch (error) {
+			console.error("\x1b[31m[cli-docs] Error:\x1b[0m", error);
+			process.exit(1);
+		}
+		// generate wiki output
+		try {
+			if (fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-CLI.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-CLI.md`)) isDocsChange = true;
+		}
+		catch (error) {
+			process.exit(1);
+		}
+	  });
+	},
+  };
+
 const galleryDocsPlugin = {
 	name: 'gallery-docs',
 	setup(build) {
@@ -264,7 +288,8 @@ const context = await esbuild.context({
 	plugins: [
 		buildStart,
 		stylesPlugin, 
-		typedocPlugin, 
+		apiDocsPlugin, 
+		cliDocsPlugin,
 		galleryDocsPlugin, 
 		typecheckPlugin, 
 		eslintPlugin, 
@@ -284,7 +309,7 @@ if (prod) {
 	await context.watch();
 
 	// watch for changes to files outside the build process
-	const watcher = chokidar.watch(['docs/wiki', 'src/Api', 'src/Styles']);
+	const watcher = chokidar.watch(['docs/wiki', 'src/Api', 'src/Cli/cli.json', 'src/Styles']);
 	watcher.on('ready', () => {
 		console.log('[watch] watching for changes...');
 	});

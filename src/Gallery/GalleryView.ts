@@ -1,9 +1,10 @@
 import gallery from 'Gallery/gallery.json';
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
-import { t, ToolbarItemSettings, URL_FEEDBACK_FORM, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
+import { t, ToolbarItemSettings, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import ItemSuggester from 'Settings/UI/Suggesters/ItemSuggester';
 import { iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
+import { URL_GOOG_FEEDBACK_FORM } from "Utils/Urls";
 
 interface Category {
 	name: { [key: string]: string };
@@ -91,7 +92,7 @@ export default class GalleryView extends ItemView {
 			.setClass('note-toolbar-gallery-view-search')
 			.addSearch((cb) => {
 				new ItemSuggester(this.ntb, undefined, cb.inputEl, async (galleryItem) => {
-					this.ntb.gallery.addItem(galleryItem);
+					this.ntb.gallery.addItemWithPrompt(galleryItem);
 					cb.inputEl.value = '';
 				});
 				cb.setPlaceholder(t('setting.item-suggest-modal.placeholder'))
@@ -138,26 +139,19 @@ export default class GalleryView extends ItemView {
 		});
 
 		const ctaEl = markdownEl.createDiv();
-		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
-		new Setting(ctaEl)
-			.setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
-			.setDesc(t('setting.help.label-feedback-description'))
-			.addButton((button: ButtonComponent) => {
-				button
-					.setButtonText(t('setting.help.label-feedback'))
-					.setTooltip(t('setting.help.button-open-google'))
-					.setCta()
-					.onClick(() => {
-						window.open(URL_FEEDBACK_FORM, '_blank');
-					});
-			});
+        ctaEl.createDiv({ cls: ['note-toolbar-setting-link', 'is-readable-line-width'] }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
+                el.append( iconTextFr('pen-box', t('setting.help.label-feedback')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-feedback-description') }) )
+            ),
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.label-feedback'), href: URL_GOOG_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+        );
 
 		// on clicking an item, prompt for toolbar and add it
 		this.ntb.registerDomEvent(markdownEl, 'click', async (evt) => {
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-card-item');
 			if (galleryItemEl && galleryItemEl.id) {
-				const galleryItem = this.ntb.gallery.getItems().find((item: any) => item.uuid.includes(galleryItemEl.id));
-				if (galleryItem) await this.ntb.gallery.addItem(galleryItem);
+				const galleryItem = this.ntb.gallery.getItemById(galleryItemEl.id);
+				if (galleryItem) await this.ntb.gallery.addItemWithPrompt(galleryItem);
 			}
 		});
 

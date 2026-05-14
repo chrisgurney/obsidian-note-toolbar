@@ -43,6 +43,10 @@ export function galleryDocs(itemsFile, galleryFile, outputFile) {
         markdown += '\n';
     }
 
+    //
+    // write output
+    //
+
     const dir = path.dirname(outputFile);
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });

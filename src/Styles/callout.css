@@ -440,30 +440,6 @@
                 }
             }
         }
-        &[data-callout-metadata*="red"] svg {
-            color: var(--color-red) !important;
-        }
-        &[data-callout-metadata*="orange"] svg {
-            color: var(--color-orange) !important;
-        }
-        &[data-callout-metadata*="yellow"] svg {
-            color: var(--color-yellow) !important;
-        }
-        &[data-callout-metadata*="green"] svg {
-            color: var(--color-green) !important;
-        }
-        &[data-callout-metadata*="cyan"] svg {
-            color: var(--color-cyan) !important;
-        }
-        &[data-callout-metadata*="blue"] svg {
-            color: var(--color-blue) !important;
-        }
-        &[data-callout-metadata*="purple"] svg {
-            color: var(--color-purple) !important;
-        }
-        &[data-callout-metadata*="pink"] svg {
-            color: var(--color-pink) !important;
-        }
     }
 
     &[data-callout-metadata*="center"] ul {

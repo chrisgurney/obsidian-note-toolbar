@@ -45,6 +45,7 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
   - [Show a toolbar when text is selected.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#Selected-text)
   - Add a toolbar to the _New tab_ view, or [completely replace the New tab view](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#New-tab-view) as a launchpad for your vault.
   - Access the toolbar from the navigation bar (on mobile).
+  - Right-click (or long press) toolbars to swap with others, quickly change their position, style, or to access configuration.
 - Use Obsidian's built-in icons, labels (which can include emojis), or a mix of both.
   - Set optional tooltips for each item.
   - Show items specifically on mobile, desktop, or both.
@@ -59,7 +60,7 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
 - Add [commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to open any toolbar, or to execute any item. Built-in commands _completely_ hide note properties, quickly access toolbars with [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools), get command URIs, and more.
 - [Note Toolbar URIs](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) let you execute commands, focus on folders, open menus (within Note Toolbar Callouts), and open toolbar settings, from mostly anywhere within your notes.
 - [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
-- Right-click toolbars to swap with other toolbars, quickly change the position, style, or to access configuration.
+- The [Note Toolbar CLI](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-CLI) provides command-line access to create Note Toolbar toolbars and items, using Obsidian's CLI.
 - The [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
 
 # Translations 🌐
@@ -162,7 +163,8 @@ Shout out to other projects and people who helped me with questions I had while 
 
 # Contribute 🧑‍💻
 
-Happy to [discuss your ideas](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)! Pull requests are welcome!
+Check out the [discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) to [ask a question](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/new?category=q-a) or [request a feature](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/new?category=ideas).
+  - Use this [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8) if you don't have a GitHub account.
 
 [Help add or review translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 

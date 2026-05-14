@@ -1,0 +1,115 @@
+.cm-embed-block > div > .callout[data-callout="note-toolbar"] {
+
+    &[data-callout-metadata*="red"] {
+        a.internal-link, a.external-link {
+            color: var(--color-red) !important;
+        }
+    }
+    &[data-callout-metadata*="red-icon"], &[data-callout-metadata*="icon-red"] {
+        a.internal-link,  a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-red) !important;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="orange"] {
+        a.internal-link, a.external-link {
+            color: var(--color-orange) !important;
+        }
+    }
+    &[data-callout-metadata*="orange-icon"], &[data-callout-metadata*="icon-orange"] {
+        a.internal-link, a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-orange) !important;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="yellow"] {
+        a.internal-link, a.external-link {
+            color: var(--color-yellow) !important;
+        }
+    }
+    &[data-callout-metadata*="yellow-icon"], &[data-callout-metadata*="icon-yellow"] {
+        a.internal-link, a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-yellow) !important;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="green"] {
+        a.internal-link, a.external-link {
+            color: var(--color-green) !important;
+        }
+    }
+    &[data-callout-metadata*="green-icon"], &[data-callout-metadata*="icon-green"] {
+        a.internal-link, a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-green) !important;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="cyan"] {
+        a.internal-link, a.external-link {
+            color: var(--color-cyan) !important;
+        }
+    }
+    &[data-callout-metadata*="cyan-icon"], &[data-callout-metadata*="icon-cyan"] {
+        a.internal-link, a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-cyan) !important;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="blue"] {
+        a.internal-link, a.external-link {
+            color: var(--color-blue) !important;
+        }
+    }
+    &[data-callout-metadata*="blue-icon"], &[data-callout-metadata*="icon-blue"] {
+        a.internal-link, a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-blue) !important;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="purple"] {
+        a.internal-link, a.external-link {
+            color: var(--color-purple) !important;
+        }
+    }
+    &[data-callout-metadata*="purple-icon"], &[data-callout-metadata*="icon-purple"] {
+        a.internal-link, a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-purple) !important;
+            }
+        }
+    }
+
+    &[data-callout-metadata*="pink"] {
+        a.internal-link, a.external-link {
+            color: var(--color-pink) !important;
+        }
+    }
+    &[data-callout-metadata*="pink-icon"], &[data-callout-metadata*="icon-pink"] {
+        a.internal-link, a.external-link {
+            color: inherit !important;
+            & > .cm-iconize-icon svg {
+                color: var(--color-pink) !important;
+            }
+        }
+    }
+
+}

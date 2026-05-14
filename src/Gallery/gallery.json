@@ -134,7 +134,7 @@
                 "uk": "Додайте різні типи вмісту, такі як посилання, або медіа."
             },
             "itemIds": [
-                "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
+                "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "insert-external-embed", "attach-file", "insert-mathblock"
             ]
         },
         {
@@ -244,7 +244,7 @@
                 "uk": "Отримайте допомогу від спільноти Obsidian."
             },
             "itemIds": [
-                "obsidian-help-site", "obsidian-markdown-reference", "obsidian-discord", "obsidian-forum", "obsidian-subreddit"
+                "obsidian-help-site", "obsidian-markdown-reference", "obsidian-forum"
             ]
         },
         {

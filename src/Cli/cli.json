@@ -1,0 +1,664 @@
+{
+    "categories": {
+        "general": { 
+            "heading": "General commands" 
+        },
+        "items-add": { 
+            "heading": "Adding items", 
+            "docs": "Add items to toolbars." 
+        },
+        "items-add-tp": { 
+            "heading": "Adding Templater items", 
+            "docs": "Add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to toolbars." 
+        },
+        "items-copy": { 
+            "heading": "Copying + Moving items", 
+            "docs": "Copy and move items to toolbars." 
+        },
+        "items": { 
+            "heading": "Listing items" 
+        },
+        "items-use": { 
+            "heading": "Using items" 
+        },
+        "rules": {
+            "heading": "Rules",
+            "docs": "Display folder mappings."
+        },
+        "toolbars": { 
+            "heading": "Create toolbars"
+        }
+    },
+    "commonFlags": {
+        "format": {
+            "description": {
+                "en": "Output format (default: tsv)"
+            },
+            "value": "csv|tsv"
+        },
+        "label": {
+            "description": {
+                "en": "Item label (required: label or icon)"
+            },
+            "value": {
+                "en": "<label>"
+            }
+        },
+        "icon": {
+            "description": {
+                "en": "Item icon, from Lucide's icon set (required: label or icon)"
+            },
+            "value": {
+                "en": "<iconName>"
+            }
+        },
+        "item": {
+            "description": {
+                "en": "Item ID"
+            },
+            "value": {
+                "en": "<itemId>"
+            },
+            "required": true
+        },
+        "pos": {
+            "description": {
+                "en": "Item position in toolbar (default: end of toolbar)"
+            },
+            "value": {
+                "en": "<n>"
+            }
+        },
+        "to": {
+            "description": {
+                "en": "Toolbar name or ID to add item to"
+            },
+            "value": {
+                "en": "<toolbarNameOrId>"
+            },
+            "required": true
+        },
+        "tooltip": {
+            "description": {
+                "en": "Item tooltip"
+            },
+            "value": {
+                "en": "<tooltip>"
+            }
+        },
+        "total": {
+            "description": {
+                "en": "Returns count"
+            }
+        },
+        "verbose": {
+            "description": {
+                "en": "Include additional details in output"
+            }
+        }
+    },
+    "commands": {
+        "note-toolbar": {
+            "category": "general",
+            "description": {
+                "en": "List toolbars or a toolbar's items"
+            },
+            "docs": "Lists all toolbars or a toolbar's items.",
+            "flags": {
+                "$after": ["format", "total", "verbose"],
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar to list items for (name or ID)"
+                    },
+                    "value": {
+                        "en": "<nameOrId>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-break": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a line break to a toolbar"
+            },
+            "docs": "Adds a [break](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
+            "flags": {
+                "$before": ["to", "pos"]
+            }
+        },
+        "note-toolbar:add-command": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a command item to a toolbar"
+            },
+            "docs": "Adds a [command item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Command-items) to a toolbar.",
+            "examples": "# Add a bold toggle to an existing toolbar\nnote-toolbar:add-command to=\"Formatting Tools\" icon=bold command=\"editor:toggle-bold\"",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "command": {
+                    "description": {
+                        "en": "Obsidian command ID (e.g. editor:toggle-bold)"
+                    },
+                    "value": {
+                        "en": "<commandId>"
+                    },
+                    "required": true
+                },
+                "focus": {
+                    "description": {
+                        "en": "Focus the editor after executing the command (default: false)"
+                    }
+                },
+                "target": {
+                    "description": {
+                        "en": "Where to run command"
+                    },
+                    "value": "split|tab"
+                }
+            }
+        },
+        "note-toolbar:add-dv": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a Dataview item to a toolbar"
+            },
+            "docs": "Adds a [Dataview item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Dataview) to a toolbar.",
+            "examples": "# List files in a folder\nnote-toolbar:add-dv to=Basic label=QueryExample query=\"LIST FROM \\\"Templates\\\" SORT file.name\"\n\n# Get the file modified time\nnote-toolbar:add-dv to=Basic label=EvalExample eval=\"this.file.mtime\"",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "eval": {
+                    "description": {
+                        "en": "Dataview expression to evaluate (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<query>"
+                    }
+                },
+                "query": {
+                    "description": {
+                        "en": "Dataview query to execute (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<query>"
+                    }
+                },
+                "file": {
+                    "description": {
+                        "en": "Filename to execute (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Filename with path to execute (required: eval, query, or file/path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                },
+                "args": {
+                    "description": {
+                        "en": "Comma-separated 'name: value' format, with string values in quotes"
+                    },
+                    "value": {
+                        "en": "<args>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-file": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a file item to a toolbar"
+            },
+            "docs": "Adds a [file item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/File-items) to a toolbar.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "File to link to (required: file or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Path of file to link to (required: file or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                },
+                "target": {
+                    "description": {
+                        "en": "Where to open the file"
+                    },
+                    "value": "modal|split|tab|window"
+                }
+            }
+        },
+        "note-toolbar:add-group": {
+            "category": "items-add",
+            "description": {
+                "en": "Add an item group to a toolbar"
+            },
+            "docs": "Adds an [item group](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-groups) to a toolbar.",
+            "flags": {
+                "$before": ["to"],
+                "$after": ["pos"],
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar to add as a group"
+                    },
+                    "value": {
+                        "en": "<toolbarNameOrId>"
+                    },
+                    "required": true
+                }
+            }
+        },
+        "note-toolbar:add-js": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a JavaScript item to a toolbar"
+            },
+            "docs": "Adds a [JavaScript item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/JavaScript) to a toolbar.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "code": {
+                    "description": {
+                        "en": "JavaScript code to execute (required: code, file, or path)"
+                    },
+                    "value": {
+                        "en": "<code>"
+                    }
+                },
+                "file": {
+                    "description": {
+                        "en": "Filename to execute (required: code, file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Filename with path to execute (required: code, file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                },
+                "args": {
+                    "description": {
+                        "en": "Comma-separated 'name: value' format, with string values in quotes"
+                    },
+                    "value": {
+                        "en": "<args>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-menu": {
+            "category": "items-add",
+            "description": {
+                "en": "Add an item menu to a toolbar"
+            },
+            "docs": "Adds an [item menu](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Item-Menus) to a toolbar.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar to add as a menu"
+                    },
+                    "value": {
+                        "en": "<toolbarNameOrId>"
+                    },
+                    "required": true
+                }
+            }
+        },
+        "note-toolbar:add-sep": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a separator to a toolbar"
+            },
+            "docs": "Adds a [separator](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
+            "flags": {
+                "$before": ["to", "pos"]
+            }
+        },
+        "note-toolbar:add-spread": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a spreader to a toolbar"
+            },
+            "docs": "Adds a [spreader](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items#toolbar-layout) to a toolbar.",
+            "flags": {
+                "$before": ["to", "pos"]
+            }
+        },
+        "note-toolbar:add-tp": {
+            "category": "items-add",
+            "description": {
+                "en": "List commands that add a Templater item to a toolbar"
+            },
+            "docs": "Lists commands that add [Templater items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater) to a toolbar. See: _[Items (Adding Templater items)](#items-adding-templater-items)_"
+        },
+        "note-toolbar:add-tp:command": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Execute Templater command."
+            },
+            "docs": "Adds an item to a toolbar that executes a Templater command.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "command": {
+                    "description": {
+                        "en": "Templater command to execute"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    },
+                    "required": true
+                }
+            }
+        },
+        "note-toolbar:add-tp:create": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Creates new note from template."
+            },
+            "docs": "Adds an item to a toolbar that creates a note from a Templater template.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "Template filename to create note from (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Template filename with path to create note from (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                },
+                "output": {
+                    "description": {
+                        "en": "Folder and filename (without file extension) to output to"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-tp:exec": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Execute Templater file."
+            },
+            "docs": "Adds an item to a toolbar that executes a Templater file.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "Template filename to execute (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Template filename with path to execute (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-tp:insert": {
+            "category": "items-add-tp",
+            "description": {
+                "en": "Add a Templater item to a toolbar: Insert template."
+            },
+            "docs": "Adds an item to a toolbar that inserts a template.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "file": {
+                    "description": {
+                        "en": "Template filename to insert (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Template filename with path to insert (required: file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:add-uri": {
+            "category": "items-add",
+            "description": {
+                "en": "Add a URI item to a toolbar"
+            },
+            "docs": "Adds a [URI item](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/URI-items) to a toolbar.",
+            "flags": {
+                "$before": ["to", "label", "icon"],
+                "$after": ["tooltip", "pos"],
+                "uri": {
+                    "description": {
+                        "en": "Website, URI, or note title"
+                    },
+                    "value": {
+                        "en": "<link>"
+                    },
+                    "required": true
+                },
+                "target": {
+                    "description": {
+                        "en": "Where to open the URI"
+                    },
+                    "value": "modal|split|tab|window"
+                }
+            }
+        },
+        "note-toolbar:copy": {
+            "category": "items-copy",
+            "description": {
+                "en": "Copy one or more items to a toolbar"
+            },
+            "docs": "Copies one or more items to a toolbar.",
+            "flags": {
+                "$before": ["to", "item"],
+                "item": {
+                    "description": {
+                        "en": "Item ID, or comma-separated list of item IDs"
+                    },
+                    "value": {
+                        "en": "<itemId>[,<itemId>...]"
+                    },
+                    "required": true
+                },                
+                "$after": ["pos"]
+            }
+        },
+        "note-toolbar:gallery": {
+            "category": "items",
+            "description": {
+                "en": "List items available in the Gallery"
+            },
+            "docs": "Lists items available in the [Note Toolbar Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery). Copy them to toolbars using the `note-toolbar:copy` command."
+        },
+        "note-toolbar:help": {
+            "category": "general",
+            "description": {
+                "en": "Display Note Toolbar CLI help"
+            },
+            "docs": "Lists all Note Toolbar CLI actions."
+        },
+        "note-toolbar:items": {
+            "category": "items",
+            "description": {
+                "en": "List toolbar items"
+            },
+            "docs": "Lists items in all toolbars, except empty items (no label or tooltip) by default.",
+            "flags": {
+                "$after": ["format", "total", "verbose"],
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar to list items for"
+                    },
+                    "value": {
+                        "en": "<nameOrId>"
+                    }
+                },
+                "filter": {
+                    "description": {
+                        "en": "Filter by string in label/tooltip"
+                    },
+                    "value": {
+                        "en": "<string>"
+                    }
+                },
+                "empty": {
+                    "description": {
+                        "en": "Include empty items in output"
+                    }
+                }
+            }
+        },
+        "note-toolbar:move": {
+            "category": "items-copy",
+            "description": {
+                "en": "Move an item to a toolbar"
+            },
+            "docs": "Moves an item to a toolbar.",
+            "flags": {
+                "$before": ["to", "item"],
+                "$after": ["pos"]
+            }
+        },
+        "note-toolbar:new": {
+            "category": "toolbars",
+            "description": {
+                "en": "Create a new toolbar"
+            },
+            "docs": "Creates a new toolbar.",
+            "flags": {
+                "name": {
+                    "description": {
+                        "en": "Toolbar name"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:rules": {
+            "category": "rules",
+            "description": {
+                "en": "List mapping rules"
+            },
+            "docs": "Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).",
+            "flags": {
+                "$after": ["format"]
+            }
+        },
+        "note-toolbar:settings": {
+            "category": "general",
+            "description": {
+                "en": "Open Note Toolbar settings in Obsidian"
+            },
+            "docs": "Opens settings UI in Obsidian for the provided item or toolbar. Opens main settings UI by default.",
+            "flags": {
+                "item": {
+                    "description": {
+                        "en": "ID of item to open settings for"
+                    },
+                    "value": {
+                        "en": "<itemId>"
+                    }
+                },
+                "toolbar": {
+                    "description": {
+                        "en": "Name or ID of toolbar to open settings for"
+                    },
+                    "value": {
+                        "en": "<nameOrId>"
+                    }
+                }
+            }
+        },
+        "note-toolbar:status": {
+            "category": "rules",
+            "description": {
+                "en": "List toolbars that are visible (positioned) in the current view."
+            },
+            "docs": "Lists toolbars that are visible (positioned) in the current view.",
+            "flags": {
+                "$after": ["format"]
+            }
+        },
+        "note-toolbar:use": {
+            "category": "items-use",
+            "description": {
+                "en": "Use an item"
+            },
+            "docs": "Uses an item. Defaults to using the item within the active file.",
+            "flags": {
+                "item": {
+                    "description": {
+                        "en": "ID of item to use"
+                    },
+                    "value": {
+                        "en": "<itemId>"
+                    },
+                    "required": true
+                },
+                "file": {
+                    "description": {
+                        "en": "File to use the item in"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Path of file to use the item in"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, ItemView, Setting, WorkspaceLeaf } from "obsidian";
-import { PositionType, t, URL_FEEDBACK_FORM, URL_ISSUE_FORM, URL_USER_GUIDE, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { ItemView, WorkspaceLeaf } from "obsidian";
+import { PositionType, t, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { URL_DONATE, URL_GH_DISCUSSIONS, URL_GH_ISSUES, URL_GH_USER_GUIDE, URL_GOOG_FEEDBACK_FORM, URL_GOOG_ISSUE_FORM } from "Utils/Urls";
 import { PLUGIN_VERSION } from "version";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import { renderTipItems } from "./TipView";
@@ -59,42 +60,20 @@ export default class HelpView extends ItemView {
         const guideEl = contentDiv.createDiv();
         guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
 
-        new Setting(guideEl)
-            .setName(iconTextFr('book-open', t('setting.help.label-user-guide')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-read'))
-                    .setTooltip(t('setting.help.button-open-github'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open(URL_USER_GUIDE, '_blank');
-                    });
-            })
-            .setClass('note-toolbar-setting-no-border');
+        guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('party-popper', t('setting.help.label-whats-new')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open'), href: 'obsidian://note-toolbar?whatsnew', attr: { 'aria-label': t('setting.button-whats-new-tooltip') } })
+        );
 
-        new Setting(guideEl)
-            .setName(iconTextFr('party-popper', t('setting.help.label-whats-new')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open'))
-                    .setTooltip(t('setting.button-whats-new-tooltip'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('obsidian://note-toolbar?whatsnew', '_blank');
-                    });
-            });
+        guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('book-open', t('setting.help.label-user-guide')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-read'), href: URL_GH_USER_GUIDE, attr: { 'aria-label': t('setting.help.button-open-github'), 'target': '_blank', 'rel': 'noopener noreferrer' } })
+        );
 
-        new Setting(guideEl)
-            .setName(iconTextFr('settings', t('setting.help.label-settings')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open'))
-                    .setTooltip(t('setting.help.tooltip-settings'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('obsidian://note-toolbar?settings', '_blank');
-                    });
-            });
+        guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('settings', t('setting.help.label-settings')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open'), href: 'obsidian://note-toolbar?settings', attr: { 'aria-label': t('setting.help.tooltip-settings') } })
+        );
 
         // Support
 
@@ -102,74 +81,38 @@ export default class HelpView extends ItemView {
         const supportEl = contentDiv.createDiv();
         supportEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
 
-        new Setting(supportEl)
-            .setName(iconTextFr('messages-square', t('setting.help.label-support')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open-external'))
-                    .setTooltip(t('setting.help.button-open-github'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('https://github.com/chrisgurney/obsidian-note-toolbar/discussions', '_blank');
-                    });
-            })
-            .setClass('note-toolbar-setting-no-border');
+        supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('messages-square', t('setting.help.label-support')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GH_DISCUSSIONS, attr: { 'aria-label': t('setting.help.button-open-github') } })
+        );
 
-        new Setting(supportEl)
-            .setName(iconTextFr('circle-dot', t('setting.help.label-issues')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open-external'))
-                    .setTooltip(t('setting.help.button-open-github'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('https://github.com/chrisgurney/obsidian-note-toolbar/issues', '_blank');
-                    });
-            });
+        supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('circle-dot', t('setting.help.label-issues')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GH_ISSUES, attr: { 'aria-label': t('setting.help.button-open-github') } })
+        );
 
-        new Setting(supportEl)
-            .setName(iconTextFr('bug', t('setting.help.label-bug')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open-external'))
-                    .setTooltip(t('setting.help.button-open-google'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open(URL_ISSUE_FORM, '_blank');
-                    });
-            });
+        supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('bug', t('setting.help.label-bug')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GOOG_ISSUE_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+        );
 
         // Donate
 
         contentDiv.createEl('h2').setText(t('setting.help.heading-donate'));
-        const donateEl = contentDiv.createDiv();
-        donateEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
+        const contribEl = contentDiv.createDiv();
+        contribEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
 
-        new Setting(donateEl)
-            .setName(iconTextFr('pen-box', t('setting.help.label-feedback')))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-open-external'))
-                    .setTooltip(t('setting.help.button-open-google'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open(URL_FEEDBACK_FORM, '_blank');
-                    });
-            })
-            .setClass('note-toolbar-setting-no-border');
+        contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('pen-box', t('setting.help.label-feedback')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GOOG_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+        );
 
-        new Setting(donateEl)
-            .setName(iconTextFr('heart', t('setting.help.label-donate')))
-            .setDesc(t('setting.help.label-donate-description'))
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.help.button-donate'))
-                    .setTooltip(t('setting.help.button-donate-tooltip'))
-                    .setCta()
-                    .onClick(() => {
-                        window.open('https://buymeacoffee.com/cheznine', '_blank');
-                    });
-            });
+        contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
+                el.append( iconTextFr('heart', t('setting.help.label-donate')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-donate-description') }) )
+            ),
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-donate'), href: URL_DONATE, attr: { 'aria-label': t('setting.help.button-donate-tooltip') } })
+        );
 
     }
 
