@@ -84,7 +84,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.originalKeys = this.keys;
 
         this.modalEl.addClass("note-toolbar-ui");
-        this.class && this.modalEl.addClasses([...this.class.split(' ')]);
+        if (this.class) this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'suggester');
     }
 
@@ -96,7 +96,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             const inputContainerEl = this.modalEl.querySelector('.prompt-input-container');
             if (inputContainerEl) {
                 const iconEl = inputContainerEl.createDiv();
-                iconEl.addClass('ntb-suggester-input-icon'),
+                iconEl.addClass('ntb-suggester-input-icon');
                 inputContainerEl.insertAdjacentElement('afterbegin', iconEl);
                 setIcon(iconEl, this.icon);
             }
@@ -176,7 +176,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             if (!alreadyExists) {
                 // prepend the custom input option
                 return this.saveMatches(
-                    [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
+                    [{ item: query as unknown as T, match: { score: 0, matches: [] } }, ...matches]
                 );
             }
             return this.saveMatches(matches);
@@ -214,7 +214,8 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
             const component = new Component();
             component.load();
             MarkdownRenderer.render(this.ntb.app, this.getItemText(item.item), el, '', component)
-                .then(() => component.unload());
+                .then(() => component.unload())
+                .catch((error) => { this.ntb.error(error) });
         }
         else el.setText(this.getItemText(item.item)); 
         // if the item is a custom input (not already in the list of suggestions), add a special class for styling #518
@@ -265,7 +266,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         const selectedEl = this.modalEl.querySelector('.suggestion-item.is-selected');
         if (selectedEl) {
             const allItems = this.modalEl.querySelectorAll('.suggestion-item');
-            const index = Array.from(allItems).indexOf(selectedEl as HTMLElement);
+            const index = Array.from(allItems).indexOf(selectedEl);
             const suggestion = index !== -1 ? this.currentMatches[index] : undefined;
             if (suggestion) {
                 const fillText = String(suggestion.item);
@@ -298,11 +299,11 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
      * @returns array of matched items as {@link FuzzyMatch} objects with zeroed scores
      */
     private getExactSuggestions(query: string): FuzzyMatch<T>[] {
-        if (!query) return this.getItems().map(item => ({ item, match: { score: 0, matches: [] } } as FuzzyMatch<T>));
+        if (!query) return this.getItems().map(item => ({ item, match: { score: 0, matches: [] } }));
         const q = query.toLowerCase();
         return this.getItems()
             .filter(item => this.getItemText(item).toLowerCase().includes(q))
-            .map(item => ({ item, match: { score: 0, matches: [] } } as FuzzyMatch<T>))
+            .map(item => ({ item, match: { score: 0, matches: [] } }))
             .sort((a, b) => {
                 const aText = this.getItemText(a.item).toLowerCase();
                 const bText = this.getItemText(b.item).toLowerCase();
@@ -327,21 +328,21 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
 
         // handle async prefix functions: fire it, inject the result into the input when resolved, and block re-firing while pending
         if (this.prefixHandlerActive) return this.saveMatches([]);
-        const prefixFn = typeof this.prefixes![prefix] === 'function'
-            ? this.prefixes![prefix] as () => unknown[] | Promise<unknown>
-            : () => this.prefixes![prefix] as unknown[];
+        const prefixFn = typeof this.prefixes[prefix] === 'function'
+            ? this.prefixes[prefix]
+            : () => this.prefixes[prefix] as unknown[];
         const prefixFnResult = prefixFn();
         if (prefixFnResult instanceof Promise) {
             if (this.prefixHandlerActive) return this.saveMatches([]);
             this.prefixHandlerActive = true;
             prefixFnResult.then(item => {
                 // return nothing when nothing's selected (e.g., Escape is pressed)
-                if (item === null) {
+                if (item === null || item == undefined) {
                     this.prefixHandlerActive = false;
                     return;
                 }
                 const before = lastSpaceIndex === -1 ? '' : query.slice(0, lastSpaceIndex + 1);
-                this.inputEl.value = `${before}${item} `;
+                this.inputEl.value = `${before}${item as string} `;
                 this.inputEl.dispatchEvent(new Event('input', { bubbles: true }));
                 this.prefixHandlerActive = false;
             }).catch(() => {
@@ -354,9 +355,9 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         // handle non-async prefix code
         this.activePrefix = prefix;
         this.activePrefixStart = lastSpaceIndex === -1 ? 0 : lastSpaceIndex + 1;
-        this.keys = (typeof this.prefixes![prefix] === 'function'
-            ? (this.prefixes![prefix] as () => T[])()
-            : this.prefixes![prefix] as T[]);
+        this.keys = (typeof this.prefixes[prefix] === 'function'
+            ? (this.prefixes[prefix] as () => T[])()
+            : this.prefixes[prefix] as T[]);
 
         // if there's only one suggestion, just return it
         if (this.keys.length === 1) {
@@ -373,7 +374,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         if (this.allowCustomInput && strippedQuery.length > 0) {
             if (!matches.some(match => this.getItemText(match.item) === query)) {
                 return this.saveMatches(
-                    [{ item: query as unknown as T, match: { score: 0, matches: [] } } as FuzzyMatch<T>, ...matches]
+                    [{ item: query as unknown as T, match: { score: 0, matches: [] } }, ...matches]
                 );
             }
         }

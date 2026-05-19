@@ -8,8 +8,8 @@ export abstract class Adapter {
     abstract readonly FUNCTIONS: AdapterFunction[];
 
     ntb: NoteToolbarPlugin | null;
-    adapterApi: any | null;
-    adapterPlugin: any | null;
+    adapterApi: unknown | null;
+    adapterPlugin: unknown | null;
 
     /** used to create async functions from strings at runtime */
     protected static readonly AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
@@ -48,11 +48,11 @@ export abstract class Adapter {
         console.error(error);
         // output the error to the Note Toolbar Output container, if provided
         if (containerEl) {
-            let errorEl = containerEl.createEl('pre');
+            const errorEl = containerEl.createEl('pre');
             errorEl.setText(fullMessage);
         }
         // show notice
-        let errorFr = createFragment();
+        const errorFr = createFragment();
         errorFr.append(fullMessage);
         new Notice(errorFr, 5000).containerEl.addClass('mod-warning');
     }
