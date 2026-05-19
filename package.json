@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
     "dev": "npm run prebuild && node esbuild.config.mjs",
-    "lint": "eslint .",
+    "lint": "npx eslint .",
     "prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "release": "node release.mjs",
     "typecheck": "tsc --noEmit --skipLibCheck"
