@@ -961,7 +961,6 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .sortable-handle {
         cursor: move;
-        cursor: -webkit-grabbing;
     }
     & .sortable-handle:hover {
         cursor: grab;
