@@ -267,31 +267,32 @@ export default class DataviewAdapter extends Adapter {
             // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
             const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
-         // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
-         // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
-         // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
-         const component = new Component();
-         component.load();
-         try {
-             containerEl.empty();
-             const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
-             // from dv.view: may directly render, in which case it will likely return undefined or null
-             result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
-             if (result && this.ntb) {
-                    await this.adapterApi?.renderValue(
-                        result,
-                        containerEl,
-                        component,
-                        activeFilePath
-                    );
-             }
-         }
-         catch (error) {
-             this.displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
-         }
-         finally {
-             component.unload();
-         }
+            // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
+            // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
+            // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
+            const component = new Component();
+            component.load();
+            try {
+                containerEl.empty();
+                const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
+                // from dv.view: may directly render, in which case it will likely return undefined or null
+                result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
+                // console.debug(result, containerEl);
+                if (result && component) {
+                        await this.adapterApi?.renderValue(
+                            result,
+                            containerEl,
+                            component,
+                            activeFilePath
+                        );
+                }
+            }
+            catch (error) {
+                this.displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
+            }
+            finally {
+                containerEl.addEventListener('remove', () => component.unload(), { once: true });
+            }
 
         }
 
@@ -320,9 +321,9 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                // this.noteToolbar?.debug("executeJs() ", expression);
+                // console.debug("executeJs() ", expression);
                 await this.adapterApi?.executeJs(expression, resultEl, component, activeFilePath);
-                // this.noteToolbar?.debug("executeJs() result:", resultEl);
+                // console.debug("executeJs() result:", resultEl);
                 if (!containerEl) {
                     const errorEl = resultEl.querySelector('.dataview-error');
                     if (errorEl) {
