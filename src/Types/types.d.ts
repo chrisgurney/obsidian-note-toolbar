@@ -4,13 +4,13 @@ import INoteToolbarApi from "Api/INoteToolbarApi";
 declare global {
     
     interface Window {
-        ntb?: INoteToolbarApi<any>;
+        ntb?: INoteToolbarApi<unknown>;
     }
 
     // provides access to Obsidian's translation framework
     let i18next: {
-        createInstance(options?: {}): typeof i18next;
-        init(options?: {}): Promise<void>;
+        createInstance(options?: object): typeof i18next;
+        init(options?: object): Promise<void>;
         getFixedT(lng: string | null, ns: string | null, keyPrefix?: string | null): (key: string, ...args: unknown[]) => string;
         language: string;
         t: (key: string, ...args: unknown[]) => string;
@@ -33,12 +33,12 @@ declare module "obsidian" {
             getHotkeys(command: string): KeymapInfo[];
         };
         internalPlugins: {
-            getEnabledPluginById(id: string): any;
-            getPluginById(id: string): any;
-            plugins: Record<string, any>;
+            getEnabledPluginById(id: string): Plugin;
+            getPluginById(id: string): Plugin;
+            plugins: Record<string, { enabled?: boolean }>;
         };
         plugins: {
-            plugins: Record<string, any>;
+            plugins: Record<string, Plugin>;
         };
         setting: {
             close(): void;
