@@ -38,27 +38,27 @@ export default class NtbModal extends Modal {
         this.class = css_classes;
 
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
-        this.class && this.modalEl.addClasses([...this.class.split(' ')]);
+        if (this.class) this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'modal');
         if (!this.title) this.modalEl.setAttr('data-ntb-ui-mode', 'noheader');
     }
 
     async onOpen(): Promise<void> {
         if (this.title) {
-            let containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
+            const containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
             const component = new Component();
             await MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", component);
         }
         if (this.isEditable && this.content instanceof TFile) {
             // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
             this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
-            if (this.leaf) (this.leaf as any).containerEl.hide();
+            if (this.leaf) (this.leaf.containerEl as HTMLElement).hide();
             await this.leaf.openFile(this.content);
             this.contentEl.appendChild(this.leaf.view.containerEl);
         }
         else if (this.isWebviewer && typeof this.content === 'string') {
             this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
-            if (this.leaf) (this.leaf as any).containerEl.hide();
+            if (this.leaf) (this.leaf.containerEl as HTMLElement).hide();
             await this.leaf.setViewState({type: 'webviewer', state: { url: this.content, navigate: true }, active: true});
             this.contentEl.appendChild(this.leaf.view.containerEl);
         }
@@ -71,7 +71,7 @@ export default class NtbModal extends Modal {
 
     async displayMarkdown(): Promise<void> {
 
-        let containerEl = this.contentEl.createEl('div', {cls: 'markdown-preview-view'});
+        const containerEl = this.contentEl.createEl('div', {cls: 'markdown-preview-view'});
 
         // render content as markdown
         if (typeof this.content === 'string') {
@@ -126,11 +126,11 @@ export default class NtbModal extends Modal {
 
     }
 
-    async displayEditor(): Promise<void> {
+    displayEditor() {
         this.open();
     }
 
-    async displayWebpage(): Promise<void> {
+    displayWebpage() {
         this.open();
     }
 

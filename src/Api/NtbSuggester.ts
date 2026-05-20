@@ -247,7 +247,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.resolve(item);
     }
 
-    async openAndGetValue(resolve: (value: T) => void, reject: (reason?: Error) => void): Promise<void> {
+    openAndGetValue(resolve: (value: T) => void, reject: (reason?: Error) => void) {
         this.resolve = resolve;
         this.reject = reject;
         this.open();

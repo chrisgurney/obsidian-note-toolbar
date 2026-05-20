@@ -101,7 +101,7 @@ Sets the given property's value in the active note.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `property` | `string` | Propety to set in the frontmatter. |
-| `value` | `any` | Value to set for the property. |
+| `value` | `unknown` | Value to set for the property. |
 
 #### Returns
 
