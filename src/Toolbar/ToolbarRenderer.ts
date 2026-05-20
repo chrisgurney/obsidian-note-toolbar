@@ -879,7 +879,7 @@ export default class ToolbarRenderer {
 			// restore properties to the state they were before
 			const propsState = this.ntb.app.loadLocalStorage(LocalVar.TogglePropsState) as ToggleUiStateType;
 			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
-				await this.ntb.commands.toggleUi('props', propsState, true);
+				this.ntb.commands.toggleUi('props', propsState, true);
 			}
 		}
 
