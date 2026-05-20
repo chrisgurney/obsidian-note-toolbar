@@ -8,32 +8,22 @@ export abstract class Adapter {
     abstract readonly FUNCTIONS: AdapterFunction[];
 
     ntb: NoteToolbarPlugin | null;
-    adapterApi: unknown | null;
-    adapterPlugin: unknown | null;
 
     /** used to create async functions from strings at runtime */
-    protected static readonly AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+    protected static readonly AsyncFunction = (Object.getPrototypeOf(async function(){}) as { constructor: typeof Function }).constructor;
 
     /**
      * Creates a new Adapter for the given plugin.
      * @param notetoolbar reference to the NoteToolbar plugin.
-     * @param adapterPlugin plugin we're adapting.
-     * @param adapterApi API for the provided plugin.
      */
-    constructor(notetoolbar: NoteToolbarPlugin, adapterPlugin: any, adapterApi: any) {
+    constructor(notetoolbar: NoteToolbarPlugin) {
         this.ntb = notetoolbar;
-        this.adapterApi = adapterApi;
-        this.adapterPlugin = adapterPlugin;
     }
 
     /**
      * Cleans up the adapter when it's no longer needed.
      */ 
-    disable() {
-        this.adapterApi = null;
-        this.adapterPlugin = null;
-        this.ntb = null;
-    }
+    abstract disable(): void;
 
     /**
      * Displays the provided scripting error as a console message, and is output to a container, if provided. 
@@ -61,15 +51,13 @@ export abstract class Adapter {
      * Returns all functions for this adapter.
      */
     getFunctions(): Map<string, AdapterFunction> {
-        return new Map(this.FUNCTIONS.map(func => [func.function.name, func]));
+        return new Map(this.FUNCTIONS.map(func => [func.name, func]));
     }
 
     /**
      * Gets the requested setting from the plugin.
      */
-    getSetting(settingName: string): string {
-        return this.adapterPlugin.settings[settingName] ?? '';
-    }
+    abstract getSetting(settingName: string): string;
 
     /**
      * Executes the function with provided config.

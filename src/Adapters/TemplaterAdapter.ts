@@ -2,52 +2,89 @@ import NoteToolbarPlugin from "main";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
+import { Plugin, TFile } from "obsidian";
+
+type TemplaterRunningConfig = {
+    template_file: TFile | undefined;
+    target_file: TFile;
+    run_mode: 'DynamicProcessor';
+    active_file?: TFile | null;
+};
 
 /**
  * @link https://github.com/SilentVoid13/Templater/blob/master/src/core/Templater.ts
  */
 export default class TemplaterAdapter extends Adapter {
 
-    readonly FUNCTIONS: AdapterFunction[] = [
-        {
-            function: this.appendTemplate,
-            label: t('adapter.templater.append-function'),
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: t('adapter.templater.append-sourcefile'), description: t('adapter.templater.append-sourcefile-description'), type: SettingType.File, required: true },
-            ]
-        },
-        {
-            function: this.createFrom,
-            label: t('adapter.templater.create-function'),
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: t('adapter.templater.create-sourcefile'), description: t('adapter.templater.create-sourcefile-description'), type: SettingType.File, required: true },
-                { parameter: 'outputFile', label: t('adapter.templater.create-outputfile'), description: t('adapter.templater.create-outputfile-description'), type: SettingType.Text, required: false },
-                { parameter: 'postCommand', label: t('adapter.postCommand'), description: t('adapter.postCommand-description'), type: SettingType.Command, required: false }
-            ]
-        },
-        {
-            function: this.parseTemplate,
-            label: t('adapter.templater.eval-function'),
-            description: "",
-            parameters: [
-                { parameter: 'expression', label: t('adapter.templater.eval-expr'), description: t('adapter.templater.eval-expr-description'), type: SettingType.TextArea, required: true },
-            ]
-        },
-        {
-            function: this.parseTemplateFile,
-            label: t('adapter.templater.exec-function'),
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: t('adapter.templater.exec-sourcefile'), description: t('adapter.templater.exec-sourcefile-description'), type: SettingType.File, required: true },
-            ]
-        },        
-    ];
+    get FUNCTIONS(): AdapterFunction[] {
+        return [
+            {
+                name: 'appendTemplate',
+                function: this.appendTemplate as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.templater.append-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'sourceFile', label: t('adapter.templater.append-sourcefile'), description: t('adapter.templater.append-sourcefile-description'), type: SettingType.File, required: true },
+                ]
+            },
+            {
+                name: 'createFrom',
+                function: this.createFrom as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.templater.create-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'sourceFile', label: t('adapter.templater.create-sourcefile'), description: t('adapter.templater.create-sourcefile-description'), type: SettingType.File, required: true },
+                    { parameter: 'outputFile', label: t('adapter.templater.create-outputfile'), description: t('adapter.templater.create-outputfile-description'), type: SettingType.Text, required: false },
+                    { parameter: 'postCommand', label: t('adapter.postCommand'), description: t('adapter.postCommand-description'), type: SettingType.Command, required: false }
+                ]
+            },
+            {
+                name: 'parseTemplate',
+                function: this.parseTemplate as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.templater.eval-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'expression', label: t('adapter.templater.eval-expr'), description: t('adapter.templater.eval-expr-description'), type: SettingType.TextArea, required: true },
+                ]
+            },
+            {
+                name: 'parseTemplateFile',
+                function: this.parseTemplateFile as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.templater.exec-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'sourceFile', label: t('adapter.templater.exec-sourcefile'), description: t('adapter.templater.exec-sourcefile-description'), type: SettingType.File, required: true },
+                ]
+            },        
+        ];
+    }
+
+    private adapterApi: {
+        append_template_to_active_file: (f: TFile) => Promise<void>;
+        create_new_note_from_template: (template: TFile, folder: string, filename: string) => Promise<void>;
+        read_and_parse_template: (config: TemplaterRunningConfig) => Promise<string>;
+        parse_template: (config: TemplaterRunningConfig, template: string) => Promise<string>;
+    } | null;
+    private adapterPlugin: { 
+        templater: unknown; 
+        settings: Record<string, string>;
+    } & Plugin | null;
 
     constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = (noteToolbar.app as any).plugins.plugins[ItemType.Templater];
-        super(noteToolbar, plugin, plugin.templater);
+        const plugin = noteToolbar.app.plugins.plugins[ItemType.Templater] as { templater: unknown, settings: unknown } & Plugin;
+        super(noteToolbar);
+        this.adapterPlugin = plugin as typeof this.adapterPlugin;
+        this.adapterApi = this.adapterPlugin?.templater as typeof this.adapterApi;
+    }
+
+    disable() {
+        this.ntb = null;
+        this.adapterApi = null;
+        this.adapterPlugin = null;;
+    }
+    
+    getSetting(settingName: string): string {
+        return this.adapterPlugin ? this.adapterPlugin.settings[settingName] : '';
     }
 
     /**
@@ -117,10 +154,10 @@ export default class TemplaterAdapter extends Adapter {
      * Calls append_template_to_active_file.
      * @param filename 
      */
-    async appendTemplate(filename: string): Promise<void> {
+    appendTemplate = async (filename: string): Promise<string> => {
 
         if (this.adapterApi) {
-            let templateFile = this.ntb?.app.vault.getFileByPath(filename);
+            const templateFile = this.ntb?.app.vault.getFileByPath(filename);
             try {
                 if (templateFile) {
                     await this.adapterApi.append_template_to_active_file(templateFile);
@@ -134,6 +171,8 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
 
+        return ''; // required to satisfy function signature
+
     }
 
     /**
@@ -141,7 +180,7 @@ export default class TemplaterAdapter extends Adapter {
      * @param filename 
      * @param outputFile 
      */
-    async createFrom(filename: string, outputFile?: string): Promise<void> {
+    createFrom = async (filename: string, outputFile?: string): Promise<string> => {
 
 		if (outputFile && this.ntb?.vars.hasVars(outputFile)) {
             const activeFile = this.ntb?.app.workspace.getActiveFile();
@@ -149,11 +188,11 @@ export default class TemplaterAdapter extends Adapter {
         }
 
         const { parsedFolder, parsedFilename } = this.parseOutputFile(outputFile);
-        let outputFolder = outputFile ? parsedFolder : '';
-        let outputFilename = outputFile ? parsedFilename : '';
+        const outputFolder = outputFile ? parsedFolder : '';
+        const outputFilename = outputFile ? parsedFilename : '';
 
         if (this.adapterApi) {
-            let templateFile = this.ntb?.app.vault.getFileByPath(filename);
+            const templateFile = this.ntb?.app.vault.getFileByPath(filename);
             try {
                 if (templateFile) {
                     await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
@@ -166,6 +205,8 @@ export default class TemplaterAdapter extends Adapter {
                 this.displayScriptError(error);
             }
         }
+
+        return ''; // required to satisfy function signature
 
     }
 
@@ -186,13 +227,13 @@ export default class TemplaterAdapter extends Adapter {
      * @param errorBehavior
      * @returns 
      */
-    async parseTemplate(expression: string, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> {
+    parseTemplate = async (expression: string, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> => {
 
         let result = '';
 
         const activeFile = this.ntb?.app.workspace.getActiveFile();
-        if (!activeFile && errorBehavior === ErrorBehavior.Display) {
-            this.displayScriptError(t('adapter.error.expr-note-not-open'));
+        if (!activeFile) {
+            if (errorBehavior === ErrorBehavior.Display) this.displayScriptError(t('adapter.error.expr-note-not-open'));
             return t('adapter.error.expr-note-not-open');
         }
 
@@ -202,8 +243,9 @@ export default class TemplaterAdapter extends Adapter {
         if (!expressionToEval.endsWith('%>')) expressionToEval += '%>';
 
         try {
-            const config = {
+            const config: TemplaterRunningConfig = {
                 target_file: activeFile,
+                template_file: undefined,
                 run_mode: 'DynamicProcessor',
                 active_file: activeFile
             };
@@ -240,7 +282,7 @@ export default class TemplaterAdapter extends Adapter {
      * @param filename 
      * @returns 
      */
-    async parseTemplateFile(filename: string): Promise<string> {
+    parseTemplateFile = async (filename: string) => {
 
         let result = '';
 
@@ -250,10 +292,10 @@ export default class TemplaterAdapter extends Adapter {
             return t('adapter.error.function-note-not-open');
         }
 
-        let templateFile = this.ntb?.app.vault.getFileByPath(filename);
+        const templateFile = this.ntb?.app.vault.getFileByPath(filename);
         try {
             if (templateFile) {
-                const config = { 
+                const config: TemplaterRunningConfig = { 
                     template_file: templateFile,
                     target_file: activeFile,
                     run_mode: 'DynamicProcessor',
