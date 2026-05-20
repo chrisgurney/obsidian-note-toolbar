@@ -5054,7 +5054,7 @@ body[data-ntb-csstheme="Border"] {
 body[data-ntb-csstheme="Cupertino"] {
     &.is-mobile.theme-dark {
         & .callout[data-callout="note-toolbar-output"] {
-            background-color: #000 !important;
+            background-color: #000000 !important;
         }
     }
     /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
