@@ -4424,7 +4424,7 @@ input[type="text"].note-toolbar-setting-error,
     width: 200px;
     &:focus-visible {
         border-radius: var(--radius-m);
-        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        /* box-shadow: inset 0 0 0 1px var(--background-modifier-border); */
         box-shadow: inset 0 0 0 3px var(--background-modifier-border-focus);
     }
     &:hover {
@@ -4514,7 +4514,7 @@ input[type="text"].note-toolbar-setting-error,
         color: var(--text-muted);
         display: inline-flex;
         &:focus-visible {
-            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            /* box-shadow: 0 0 0 1px var(--background-modifier-border); */
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
         }
     }
@@ -4860,7 +4860,7 @@ input[type="text"].note-toolbar-setting-error,
       .callout[data-callout="note-toolbar"] a.external-link, .callout[data-callout="note-toolbar"] a.internal-link {
         &:is(:focus-visible) {
             border-radius: var(--input-radius);
-            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            /* box-shadow: 0 0 0 1px var(--background-modifier-border); */
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
         }
     }
