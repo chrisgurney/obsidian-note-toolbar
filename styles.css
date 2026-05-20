@@ -2462,8 +2462,10 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
  * FAB (Floating Action Button)
  */
 
-/* toolbar styles */
-.cg-note-toolbar-fab-container {
+ .cg-note-toolbar-fab-container {
+    
+    /* toolbar styles */
+
     & button[data-fab-metadata*="autohide"] {
         box-shadow: none;
         &:not(.is-mobile &) {
@@ -2488,10 +2490,9 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
             display: none;
         }
     }
-}
 
-/* positioning */
-.cg-note-toolbar-fab-container {
+    /* positioning */
+
     bottom: var(--cg-nt-fab-pos-y-desktop);
     position: absolute;
     padding: 0;
@@ -2887,18 +2888,6 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
     /* fix: Settings: Keyboard focus is not visible after tabbing away from toggle control (#501) */
     & .checkbox-container:has(input:focus) {
         box-shadow: 0 0 0 var(--input-border-width-focus) var(--background-modifier-border-focus);
-    }
-}
-
-.note-toolbar-setting-modal-container {
-    .is-mobile & {
-        & .setting-group {
-            border-radius: var(--radius-m);
-            border: var(--border-width) solid var(--background-modifier-border);
-            & .setting-items {
-                border-radius: var(--radius-m);
-            }
-        }
     }
 }
 
@@ -4191,6 +4180,15 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .modal-close-button {
         z-index: 2; /* fix for modal title overlapping close button */
+    }
+    .is-mobile & {
+        & .setting-group {
+            border-radius: var(--radius-m);
+            border: var(--border-width) solid var(--background-modifier-border);
+            & .setting-items {
+                border-radius: var(--radius-m);
+            }
+        }
     }
 }
 
