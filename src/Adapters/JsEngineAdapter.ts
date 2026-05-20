@@ -9,7 +9,11 @@ import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 type JsEngineResult = {
     functionBuildError?: Error;
     functionRunError?: Error;
-    result: unknown;
+    result: {
+        apiInstance: unknown;
+        content?: string;
+        markdownElements?: [];
+    };
 }
 
 type JsExecution = {
@@ -303,15 +307,13 @@ export default class JsEngineAdapter extends Adapter {
                 component: component,
             });
             this.ntb?.debug('exec() result:', execution?.result);
-            if (this.ntb) {
-                if (containerEl) {
-                    const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
-                    await renderer?.render(execution?.result);
-                    // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
-                }
-                else {
-                    result = (execution?.result || '') as string;
-                }
+            if (containerEl) {
+                const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
+                await renderer?.render(execution?.result);
+                // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
+            }
+            else {
+                result = execution?.result?.content || (execution?.result || '') as string;
             }
         }
         catch (error) {
