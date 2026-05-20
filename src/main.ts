@@ -36,7 +36,7 @@ import PluginUtils from 'Utils/Utils';
 export default class NoteToolbarPlugin extends Plugin {
 
 	adapters!: AdapterManager;
-	api!: INoteToolbarApi<any>;
+	api!: INoteToolbarApi<unknown>;
 	cli!: CliManager;
 	commands!: CommandManager;
 	hotkeys!: HotkeyHelper;
@@ -120,7 +120,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.app.workspace.onLayoutReady(async () => {
 
 			// make API available
-			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
+			window["ntb"] = this.api;
+			this.register(() => delete window["ntb"]);
 
 			// check what other plugins are enabled that we need to know about
 			this.adapters.checkPlugins();
