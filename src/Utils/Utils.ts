@@ -1,6 +1,6 @@
 import { EditorView, Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { App, Command, FileView, ItemView, MarkdownView, MarkdownViewModeType, PaneType, Platform } from "obsidian";
+import { App, Command, Editor, FileView, ItemView, MarkdownView, MarkdownViewModeType, PaneType, Platform } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
 
 export default class PluginUtils {
@@ -24,7 +24,7 @@ export default class PluginUtils {
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
 		if (currentView) {
 			const currentMode = currentView.getMode();
-			if (visibility.viewMode && visibility.viewMode != ViewModeType.All && visibility.viewMode !== currentMode) {
+			if (visibility.viewMode && visibility.viewMode != ViewModeType.All && visibility.viewMode !== currentMode as ViewModeType) {
 				isVisibleInMode = false;
 			}
 		}
@@ -173,12 +173,12 @@ export default class PluginUtils {
 				}
 			}
 			else {
-				const editor = this.ntb.app.workspace.activeEditor?.editor;
+				const editor: Editor | undefined = this.ntb.app.workspace.activeEditor?.editor;
 				
 				// TODO: support other file types here?
 				if (!editor) return;
 				
-				const editorView = (editor as any).cm as EditorView;
+				const editorView = editor.cm as EditorView;
 				const cursorOffset = editor.posToOffset(editor.getCursor());
 				const cursorCoords = editorView.coordsAtPos(cursorOffset);
 		
@@ -347,7 +347,7 @@ export default class PluginUtils {
 		return toolbar.items.some(item => {
 			const platformComponents = item.visibility[platform]?.components || [];
 			const hasVisibleComponents = platformComponents.length > 0;
-			const modeVisible = !currentMode || !item.visibility.viewMode || (item.visibility.viewMode === ViewModeType.All || item.visibility.viewMode === currentMode);
+			const modeVisible = !currentMode || !item.visibility.viewMode || (item.visibility.viewMode === ViewModeType.All || item.visibility.viewMode === currentMode as ViewModeType);
 			return hasVisibleComponents && modeVisible;
 		});
 	}
@@ -527,9 +527,9 @@ export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleTyp
  * @param args JSON-like formatted string
  * @returns parsed arguments, or null if parsing fails
  */
-export function importArgs(args: string): Record<string, any> | null {
+export function importArgs(args: string): Record<string, unknown> | null {
     try {
-        const result: Record<string, any> = {};
+        const result: Record<string, unknown> = {};
         let i = 0;
         const s = args.trim();
 
