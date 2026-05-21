@@ -55,6 +55,10 @@ declare module "obsidian" {
         useSelectedItem(evt: MouseEvent | KeyboardEvent): void;
     }
 
+    interface Editor {
+        cm: unknown;
+    }
+
     // allows access to the path of the vault, for the {{vault_path}} var
     interface FileSystemAdapter extends DataAdapter {
         getBasePath(): string;
