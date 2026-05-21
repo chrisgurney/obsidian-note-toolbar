@@ -156,7 +156,8 @@
         },
         {
             "name": { 
-                "en": "Navigating on Mobile"
+                "en": "Navigating on Mobile",
+                "uk": "Навігація на мобільном"
             },
             "description": { 
                 "en": "Use these after hiding Obsidian's Navigation actions (on phones)."
@@ -186,7 +187,8 @@
             "name": { 
                 "en": "New Tab View",
                 "ja": "新しいタブビュー",
-                "zh": "新标签页视图"
+                "zh": "新标签页视图",
+                "uk": "Вигляд Нової вкладки"
             },
             "description": {
                 "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
@@ -335,7 +337,7 @@
                 "en": "Plugins",
                 "ja": "プラグイン",
                 "zh": "探索更多",
-                "uk": "Знайти більше"
+                "uk": "Додатки"
             },
             "description": { 
                 "en": "Do even more with other Obsidian plugins.",

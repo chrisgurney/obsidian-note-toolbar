@@ -1160,11 +1160,13 @@
         "id": "periodic-notes-daily-next",
         "commandId": "periodic-notes:next-daily-note",
         "description": {
-            "en": "Go to next daily note. (Must be in a daily note.)"
+            "en": "Go to next daily note. (Must be in a daily note.)",
+            "uk": "Наступна щоденна нотатка."
         },
         "icon": "arrow-right",
         "tooltip": {
-            "en": "Next daily note"
+            "en": "Next daily note",
+            "uk": "Наступна щоденна нотатка"
         },
         "type": "command"
     },
@@ -1408,12 +1410,14 @@
         "commandCheck": true,
         "commandId": "editor:set-heading-1",
         "description": {
-            "en": "Set as heading 1"
+            "en": "Set as heading 1",
+            "uk": "Перетворити на Заголовок 1"
         },
         "focus": "editor",
         "icon": "heading-1",
         "tooltip": {
-            "en": "Heading 1"
+            "en": "Heading 1",
+            "uk": "Заголовок 1"
         },
         "type": "command"
     },
@@ -1422,12 +1426,14 @@
         "commandCheck": true,
         "commandId": "editor:set-heading-2",
         "description": {
-            "en": "Set as heading 2"
+            "en": "Set as heading 2",
+            "uk": "Перетворити на Заголовок 2"
         },
         "focus": "editor",
         "icon": "heading-2",
         "tooltip": {
-            "en": "Heading 2"
+            "en": "Heading 2",
+            "uk": "Заголовок 2"
         },
         "type": "command"
     },
@@ -1436,12 +1442,14 @@
         "commandCheck": true,
         "commandId": "editor:set-heading-3",
         "description": {
-            "en": "Set as heading 3"
+            "en": "Set as heading 3",
+            "uk": "Перетворити на Заголовок 3"
         },
         "focus": "editor",
         "icon": "heading-3",
         "tooltip": {
-            "en": "Heading 3"
+            "en": "Heading 3",
+            "uk": "Заголовок 3"
         },
         "type": "command"
     },
@@ -1450,12 +1458,14 @@
         "commandCheck": true,
         "commandId": "editor:set-heading-4",
         "description": {
-            "en": "Set as heading 4"
+            "en": "Set as heading 4",
+            "uk": "Перетворити на Заголовок 4"
         },
         "focus": "editor",
         "icon": "heading-4",
         "tooltip": {
-            "en": "Heading 4"
+            "en": "Heading 4",
+            "uk": "Заголовок 4"
         },
         "type": "command"
     },
@@ -1464,12 +1474,14 @@
         "commandCheck": true,
         "commandId": "editor:set-heading-5",
         "description": {
-            "en": "Set as heading 5"
+            "en": "Set as heading 5",
+            "uk": "Перетворити на Заголовок 5"
         },
         "focus": "editor",
         "icon": "heading-5",
         "tooltip": {
-            "en": "Heading 5"
+            "en": "Heading 5",
+            "uk": "Заголовок 5"
         },
         "type": "command"
     },
@@ -1478,12 +1490,14 @@
         "commandCheck": true,
         "commandId": "editor:set-heading-6",
         "description": {
-            "en": "Set as heading 6"
+            "en": "Set as heading 6",
+            "uk": "Перетворити на Заголовок 6"
         },
         "focus": "editor",
         "icon": "heading-6",
         "tooltip": {
-            "en": "Heading 6"
+            "en": "Heading 6",
+            "uk": "Заголовок 6"
         },
         "type": "command"
     },
