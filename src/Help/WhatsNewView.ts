@@ -62,9 +62,9 @@ export default class WhatsNewView extends ItemView {
 			.addToggle((toggle: ToggleComponent) => {
 				toggle
 					.setValue(this.ntb.settings.showWhatsNew)
-					.onChange((value: boolean) => {
+					.onChange(async (value: boolean) => {
 						this.ntb.settings.showWhatsNew = value;
-						this.ntb.settingsManager.save();
+						await this.ntb.settingsManager.save();
 					});
 			});
 
@@ -90,7 +90,7 @@ export default class WhatsNewView extends ItemView {
 
 		const rootPath = this.ntb.app.vault.getRoot().path;
 		const component = new Component();
-		MarkdownRenderer.render(this.ntb.app, releaseText, markdownEl, rootPath, component);
+		await MarkdownRenderer.render(this.ntb.app, releaseText, markdownEl, rootPath, component);
 
     }
 
@@ -109,7 +109,7 @@ export default class WhatsNewView extends ItemView {
 			if (res.status !== 200) return null;
 			return { tag_name: version, body: res.text ?? '' };
 		} catch (e) {
-			this.ntb.debug(`Error fetching release notes for language (${language}). Falling back to English.\n${e}`);
+			this.ntb.debug(`Error fetching release notes for language (${language}). Falling back to English.\n${e as string}`);
 			try {
 				const res = await requestUrl(`${URL_GHUC_RELEASE_NOTES}/en/${version}.md`);
 				if (res.status !== 200) return null;
