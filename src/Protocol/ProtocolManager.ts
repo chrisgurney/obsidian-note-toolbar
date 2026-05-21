@@ -21,37 +21,35 @@ export default class ProtocolManager {
 		this.ntb.debug('protocolHandler', data);
 		// supports both commandid= and command= for backwards-compatability with Advanced URI
 		if (data.commandid || data.commandId || data.command) {
-			this.ntb.items.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
+			await this.ntb.items.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
 		}
 		else if (data.folder) {
-			this.ntb.items.handleLinkFolder(data.folder);
+			await this.ntb.items.handleLinkFolder(data.folder);
 		}
 		else if (data.gallery) {
-			this.ntb.app.workspace.getLeaf(true).setViewState({
+			await this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_GALLERY,
 				active: true
 			});
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
 		else if (data.help) {
-			this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+			await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
         else if (data.import) {
             const content = decodeURIComponent(data.import);
 			// double-check provided text is a Note Toolbar Callout
 			if (data.import.includes('[!note-toolbar')) {
-				confirmImportWithModal(
+				await confirmImportWithModal(
 					this.ntb, 
 					content
-				).then((isConfirmed: boolean) => {
+				).then(async (isConfirmed: boolean) => {
 					if (isConfirmed) {
-						importFromCallout(this.ntb, content, undefined, true)
-							.then(toolbar => {
-								this.ntb.settingsManager.addToolbar(toolbar)
-									.then(res => {
-										this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
-									});
+						const importedToolbar = importFromCallout(this.ntb, content, undefined, true);
+						await this.ntb.settingsManager.addToolbar(importedToolbar)
+							.then(res => {
+								this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
 							});
 					}
 				});
@@ -65,10 +63,13 @@ export default class ProtocolManager {
 			const toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getToolbar(data.menu);
 			if (activeFile) {
 				if (toolbar) {
-					this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => { 
-						this.ntb.render.showMenuAtPosition(menu,
-							{ x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
-						)
+					await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => { 
+						this.ntb.render.updateLastClickedPos();
+						if (this.ntb.render.lastClickedPos) {
+							this.ntb.render.showMenuAtPosition(menu,
+								{ x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
+							)
+						}
 					});
 				}
 				else {
@@ -81,23 +82,21 @@ export default class ProtocolManager {
 			this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
 		}
 		else if (data.settings) {
-			await this.ntb.commands.openSettings();
+			this.ntb.commands.openSettings();
 		}
 		else if (data.tip) {
 			if (data.tip.length > 0) {
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
 			}
 		}
 		else if (data.toolbarsettings) {
 			let toolbarSettings;
 			if (data.toolbarsettings.length > 0) {
 				toolbarSettings = this.ntb.settingsManager.getToolbarByName(data.toolbarsettings);
-				!toolbarSettings 
-					? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })).containerEl.addClass('mod-warning') 
-					: undefined;
+				if (!toolbarSettings) new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })).containerEl.addClass('mod-warning');
 			}
 			else {
-				let toolbarEl = this.ntb.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
+				const toolbarEl = this.ntb.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
 				toolbarSettings = toolbarEl ? this.ntb.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
 			}
 			if (toolbarSettings) {
@@ -107,7 +106,7 @@ export default class ProtocolManager {
 			}
 		}
 		else if (data.whatsnew) {
-			this.ntb.app.workspace.getLeaf(true).setViewState({
+			await this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_WHATS_NEW,
 				active: true
 			});
@@ -133,7 +132,7 @@ export default class ProtocolManager {
 			useDataEls: true,
 			useIds: false
 		} as ExportSettings;
-        let callout = await exportToCallout(this.ntb, toolbar, options);
+        const callout = await exportToCallout(this.ntb, toolbar, options);
 		const shareUri = useObsidianUri 
 			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
 			: `${URL_GHIO}/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
