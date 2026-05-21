@@ -1,8 +1,8 @@
 import NoteToolbarPlugin from "main";
 import { getIcon, Platform, setIcon, Setting, setTooltip } from "obsidian";
-import { DEFAULT_ITEM_SETTINGS, ItemType, SettingFieldItemMap, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, SettingFieldItemMap, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import Sortable from "sortablejs";
-import { arraymove, getUUID, moveElement } from "Utils/Utils";
+import { arraymove, moveElement } from "Utils/Utils";
 import { importFromModal } from "../Modals/ImportModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
@@ -36,7 +36,7 @@ export default class ItemListUi {
      */
     displayItemList(settingsDiv: HTMLElement) {
 
-        let itemsContainer = createDiv();
+        const itemsContainer = createDiv();
         itemsContainer.addClass('note-toolbar-setting-items-container');
         itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
 
@@ -55,7 +55,7 @@ export default class ItemListUi {
                 cb.setIcon('import')
                 .setTooltip(t('import.button-import-into-tooltip'))
                 .onClick(async () => {
-                    importFromModal(
+                    await importFromModal(
                         this.ntb, 
                         this.toolbar
                     ).then(async (importedToolbar: ToolbarSettings) => {
@@ -80,7 +80,7 @@ export default class ItemListUi {
                 .addExtraButton((cb) => {
                     cb.setIcon('right-triangle')
                     .setTooltip(t('setting.button-expand-collapse-tooltip'))
-                    .onClick(async () => {
+                    .onClick(() => {
                         this.handleItemListToggle(settingsDiv);
                     });
                     cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
@@ -92,9 +92,9 @@ export default class ItemListUi {
         // Item list
         //
 
-        let itemsListContainer = createDiv();
+        const itemsListContainer = createDiv();
         itemsListContainer.addClass('note-toolbar-setting-items-list-container');
-        let itemsSortableContainer = createDiv();
+        const itemsSortableContainer = createDiv();
         itemsSortableContainer.addClass('note-toolbar-sortablejs-list');
 
         if (this.toolbar.items.length === 0) {
@@ -117,14 +117,14 @@ export default class ItemListUi {
             // generate the preview + form for each item
             this.toolbar.items.forEach((toolbarItem, index) => {
 
-                let itemContainer = createDiv();
+                const itemContainer = createDiv();
                 itemContainer.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
                 itemContainer.addClass("note-toolbar-setting-items-container-row");
 
-                let itemPreviewContainer = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
+                const itemPreviewContainer = this.generateItemPreview(toolbarItem, this.itemListIdCounter.toString());
                 itemContainer.appendChild(itemPreviewContainer);
 
-                let itemForm = this.parent.itemUi.generateItemForm(toolbarItem);
+                const itemForm = this.parent.itemUi.generateItemForm(toolbarItem);
                 itemForm.setAttribute(SettingsAttr.Active, 'false');
                 itemContainer.appendChild(itemForm);
 
@@ -180,7 +180,7 @@ export default class ItemListUi {
         // make the list drag-and-droppable
         //
 
-        let sortable = Sortable.create(itemsSortableContainer, {
+        Sortable.create(itemsSortableContainer, {
             chosenClass: 'sortable-chosen',
             ghostClass: 'sortable-ghost',
             handle: '.sortable-handle',
@@ -201,13 +201,13 @@ export default class ItemListUi {
         // Add item buttons
         //
 
-        let itemsListButtonContainer = createDiv();
+        const itemsListButtonContainer = createDiv();
         itemsListButtonContainer.addClasses(['setting-item', 'note-toolbar-setting-items-button-container']);
 
-        let formattingButtons = createSpan();
+        const formattingButtons = createSpan();
         new Setting(formattingButtons)
             .addExtraButton((btn) => {
-                let icon = getIcon('note-toolbar-separator');
+                const icon = getIcon('note-toolbar-separator');
                 btn.extraSettingsEl.empty(); // remove existing gear icon
                 icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
                 btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
@@ -285,9 +285,9 @@ export default class ItemListUi {
         // create the preview
         //
 
-        let itemPreviewContainer = createDiv();
+        const itemPreviewContainer = createDiv();
         itemPreviewContainer.className = "note-toolbar-setting-item-preview-container";
-        let itemPreview = createDiv();
+        const itemPreview = createDiv();
         itemPreview.className = "note-toolbar-setting-item-preview";
         itemPreview.setAttribute('role', 'button');
         itemPreview.tabIndex = 0;
@@ -299,7 +299,7 @@ export default class ItemListUi {
         // add the initial icon for the item's visibility state
         //
 
-        let visibilityStatusEl = createDiv();
+        const visibilityStatusEl = createDiv();
         visibilityStatusEl.id = 'ntb-item-visibility-indicator';
         visibilityStatusEl.addClass("note-toolbar-setting-item-controls");
         this.updateItemVisStatus(toolbarItem, visibilityStatusEl);
@@ -309,7 +309,7 @@ export default class ItemListUi {
         // add the preview drag-and-drop handle
         //
 
-        let itemHandleDiv = createDiv();
+        const itemHandleDiv = createDiv();
         itemHandleDiv.addClass("note-toolbar-setting-item-controls");
         new Setting(itemHandleDiv)
             .addExtraButton((cb) => {
@@ -319,8 +319,8 @@ export default class ItemListUi {
                 cb.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
                 cb.extraSettingsEl.tabIndex = 0;
                 this.ntb.registerDomEvent(
-                    cb.extraSettingsEl,	'keydown', (e) => {
-                        this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
+                    cb.extraSettingsEl,	'keydown', async (e) => {
+                        await this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
                     } );
             });
         itemPreviewContainer.append(itemHandleDiv);
@@ -338,7 +338,7 @@ export default class ItemListUi {
                             const index = this.toolbar.items.indexOf(toolbarItem);
                             const itemIndex = index >= 0 ? index + 1 : undefined;
                             const newItem = await this.ntb.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
-                            this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save();
                             this.parent.display(newItem.uuid);
                         }
                         break;
@@ -413,12 +413,13 @@ export default class ItemListUi {
 	 * @param settingsDiv settings HTMLElement
 	 */
 	handleItemListToggle(settingsDiv: HTMLElement) {
-		let itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
+		const itemsContainer = settingsDiv.querySelector('.note-toolbar-setting-items-container');
 		if (itemsContainer) {
 			this.itemListOpen = !this.itemListOpen;
 			itemsContainer.setAttribute(SettingsAttr.Active, this.itemListOpen.toString());
-			let heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
-			this.itemListOpen ? heading?.setText(t('setting.items.name')) : heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
+			const heading = itemsContainer.querySelector('.setting-item-heading .setting-item-name');
+			if (this.itemListOpen) heading?.setText(t('setting.items.name'))
+                else heading?.setText(t('setting.items.name-with-count', { count: this.toolbar.items.length }));
 		}
 	}
 
@@ -500,7 +501,7 @@ export default class ItemListUi {
                     focusSelector = "#note-toolbar-item-field-tooltip input";
                     break;
             }
-            let focusField = itemForm?.querySelector(focusSelector) as HTMLElement;
+            const focusField = itemForm?.querySelector(focusSelector) as HTMLElement;
 
             // set focus in the form
             if (focusField) {
@@ -529,7 +530,7 @@ export default class ItemListUi {
         }
 
         // create the new item, with the given type
-        let newToolbarItem = this.ntb.settingsManager.getDefaultItem(itemType);
+        const newToolbarItem = this.ntb.settingsManager.getDefaultItem(itemType);
         await this.ntb.settingsManager.addToolbarItem(this.toolbar, newToolbarItem);
 
         // show the modal on phones and return
@@ -542,15 +543,15 @@ export default class ItemListUi {
         // add preview and form to the list
         if (itemContainer) {
 
-            let newItemContainer = createDiv();
+            const newItemContainer = createDiv();
             newItemContainer.setAttribute(SettingsAttr.ItemUuid, newToolbarItem.uuid);
             newItemContainer.addClass("note-toolbar-setting-items-container-row");
     
-            let newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
+            const newItemPreview = this.generateItemPreview(newToolbarItem, this.itemListIdCounter.toString());
             newItemPreview.setAttribute(SettingsAttr.Active, 'false');
             newItemContainer.appendChild(newItemPreview);
     
-            let newItemForm = this.parent.itemUi.generateItemForm(newToolbarItem);
+            const newItemForm = this.parent.itemUi.generateItemForm(newToolbarItem);
             newItemForm.setAttribute(SettingsAttr.Active, 'true');
             newItemContainer.appendChild(newItemForm);
     
@@ -559,7 +560,7 @@ export default class ItemListUi {
             itemContainer.appendChild(newItemContainer);
     
             // set focus in the form
-            let focusField = newItemForm?.querySelector('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon') as HTMLElement;
+            const focusField = newItemForm?.querySelector('.note-toolbar-setting-item-icon .setting-item-control .clickable-icon') as HTMLElement;
             if (focusField) {
                 focusField.focus();
                 // scroll to the form
@@ -642,7 +643,7 @@ export default class ItemListUi {
         itemUuid: string,
         action?: 'up' | 'down' | 'delete'
     ): Promise<void> {	
-        let itemIndex = this.getIndexByUuid(itemUuid);
+        const itemIndex = this.getIndexByUuid(itemUuid);
         this.ntb.debug("listMoveHandlerById: moving index:", itemIndex);
         await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
     }
@@ -672,9 +673,9 @@ export default class ItemListUi {
 	renderPreview(toolbarItem: ToolbarItemSettings, itemPreviewContainer?: HTMLElement) {
 
 		itemPreviewContainer = itemPreviewContainer ? itemPreviewContainer : this.getItemRowEl(toolbarItem.uuid);
-		let itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
+		const itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
 		itemPreview?.empty();
-		let itemPreviewContent = createSpan();
+		const itemPreviewContent = createSpan();
 		itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
 		switch(toolbarItem.linkAttr.type) {
 			case ItemType.Break:
@@ -693,9 +694,9 @@ export default class ItemListUi {
 			}
 			default: {
 				setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
-				let itemPreviewIcon = createSpan();
+				const itemPreviewIcon = createSpan();
 				itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
-				toolbarItem.icon ? setIcon(itemPreviewIcon, toolbarItem.icon) : undefined;
+				if (toolbarItem.icon) setIcon(itemPreviewIcon, toolbarItem.icon);
 				itemPreview.appendChild(itemPreviewIcon);
 				itemPreviewContent.addClass('note-toolbar-setting-item-preview-label');
 				if (toolbarItem.label) {
@@ -743,7 +744,7 @@ export default class ItemListUi {
 					itemPreviewContent.appendChild(itemHotkeyEl);
 				}
 				else {
-					let commandIconEl = itemPreviewContent.createSpan();
+					const commandIconEl = itemPreviewContent.createSpan();
 					commandIconEl.addClass('note-toolbar-setting-command-indicator');
 					setIcon(commandIconEl, 'terminal');
 					setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: itemCommand.name, interpolation: { escapeValue: false } }));
