@@ -139,7 +139,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				await this.render.renderForView();
 			}
 			else {
-				await this.render.renderForAllLeaves();
+				this.render.renderForAllLeaves();
 			}
 
 			// add the settings UI

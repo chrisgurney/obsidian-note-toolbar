@@ -70,6 +70,9 @@ export default class ProtocolManager {
 								{ x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
 							)
 						}
+						else {
+                            this.ntb.error('No last clicked position available.');
+						}
 					});
 				}
 				else {

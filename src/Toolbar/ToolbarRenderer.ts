@@ -1002,8 +1002,11 @@ export default class ToolbarRenderer {
 		this.ntb.app.saveLocalStorage(LocalVar.ActiveItem, activeItemId ?? '');
 	}
 
+	/**
+	 * Only updates the last clicked position if there isn't already one stored.
+	 */
 	updateLastClickedPos(): void {
-		this.lastClickedPos = this.ntb.utils.getPosition();
+		if (!this.lastClickedPos) this.lastClickedPos = this.ntb.utils.getPosition();
 	}
 
 	/** 

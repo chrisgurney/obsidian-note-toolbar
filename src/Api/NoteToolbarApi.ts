@@ -253,8 +253,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 );
             }
             else {
-                // TODO: display an error
-                this.ntb.debug('⚠️ ntb.menu: Not opening window - No toolbar position available.');
+                this.ntb.error('Not opening window - No toolbar position available.');
             }
         }
 

@@ -1,4 +1,3 @@
-import { getUUID } from "Utils/Utils";
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
