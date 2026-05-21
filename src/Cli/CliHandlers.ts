@@ -331,7 +331,7 @@ export default class CliHandlers {
 
     }
 
-    async handleSettings(args: CliData): Promise<string> {
+    handleSettings(args: CliData): string {
         const itemId = hasValue(args.item) ? args.item : undefined;
         const toolbarId = hasValue(args.toolbar) ? args.toolbar : undefined;
         if (toolbarId) {
@@ -349,7 +349,7 @@ export default class CliHandlers {
             itemModal.open();
             return t('cli.success-settings-opened');
         }
-        await this.ntb.commands.openSettings();
+        this.ntb.commands.openSettings();
         return t('cli.success-settings-opened');
     }
 

@@ -56,10 +56,10 @@ export default class GalleryView extends ItemView {
 		this.ntb.settingsUtils.addCloseToPhoneNav(this);
 		activeDocument.body.toggleClass('ntb-remove-view-header', false);
 
-        let contentDiv = this.contentEl.createDiv();
+        const contentDiv = this.contentEl.createDiv();
         contentDiv.addClass('note-toolbar-setting-gallery-view');
 
-		let markdownEl = contentDiv.createDiv();
+		const markdownEl = contentDiv.createDiv();
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-gallery-content', 'is-readable-line-width');
 
 		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
@@ -71,32 +71,33 @@ export default class GalleryView extends ItemView {
 		const title = (gallery as Gallery).title[language] || gallery.title['en'];
 		const bannerTitleEl = bannerEl.createDiv();
 		const bannerTitleComponent = new Component();
-		MarkdownRenderer.render(this.ntb.app, `# ${title}`, bannerTitleEl, '/', bannerTitleComponent);
+		await MarkdownRenderer.render(this.ntb.app, `# ${title}`, bannerTitleEl, '/', bannerTitleComponent);
 
 		const overviewEl = markdownEl.createDiv();
 		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
 		const overview = (gallery as Gallery).overview[language] || gallery.overview['en'];
 		const overviewComponent = new Component();
-		MarkdownRenderer.render(this.ntb.app, overview, overviewEl, '/', overviewComponent);
+		await MarkdownRenderer.render(this.ntb.app, overview, overviewEl, '/', overviewComponent);
 
 		const pluginNoteEl = markdownEl.createDiv();
 		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
 		setIcon(pluginNoteEl.createSpan(), 'puzzle');
 		const pluginNoteText = (gallery as Gallery).pluginNote[language] || (gallery as Gallery).pluginNote['en'];
 		const pluginNoteComponent = new Component();
-		MarkdownRenderer.render(this.ntb.app, pluginNoteText, pluginNoteEl, '/', pluginNoteComponent);
+		await MarkdownRenderer.render(this.ntb.app, pluginNoteText, pluginNoteEl, '/', pluginNoteComponent);
 
 		const searchSetting = new Setting(markdownEl)
 			.setClass('note-toolbar-setting-item-full-width-phone')
 			.setClass('note-toolbar-setting-no-border')
 			.setClass('note-toolbar-gallery-view-search')
 			.addSearch((cb) => {
-				new ItemSuggester(this.ntb, undefined, cb.inputEl, async (galleryItem) => {
-					this.ntb.gallery.addItemWithPrompt(galleryItem);
-					cb.inputEl.value = '';
+				new ItemSuggester(this.ntb, undefined, cb.inputEl, (galleryItem) => {
+					void this.ntb.gallery.addItemWithPrompt(galleryItem).then(() => {
+						cb.inputEl.value = '';
+					});
 				});
 				cb.setPlaceholder(t('setting.item-suggest-modal.placeholder'))
-					.onChange(async (itemText) => {
+					.onChange((itemText) => {
 						cb.inputEl.value = itemText;
 					});
 			});
@@ -116,7 +117,7 @@ export default class GalleryView extends ItemView {
 			return nameA.localeCompare(nameB);
 		});
 		
-		sortedCategories.forEach((category, i) => {
+		for (const [i, category] of sortedCategories.entries()) {
 
 			const cssColor = cssColors[i % cssColors.length];
 			
@@ -124,19 +125,19 @@ export default class GalleryView extends ItemView {
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
 			const catName = category.name[language] || category.name['en'];
 			const catComponent = new Component();
-			MarkdownRenderer.render(this.ntb.app, `## ${catName}`, catNameEl, '/', catComponent);
+			await MarkdownRenderer.render(this.ntb.app, `## ${catName}`, catNameEl, '/', catComponent);
 
 			const catDescEl = markdownEl.createEl('div');
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
 			const catDescText = category.description[language] || category.description['en'];
 			const catDescComponent = new Component();
-			MarkdownRenderer.render(this.ntb.app, catDescText, catDescEl, '/', catDescComponent);
+			await MarkdownRenderer.render(this.ntb.app, catDescText, catDescEl, '/', catDescComponent);
 
 			const galleryItemContainerEl = markdownEl.createDiv();
 			galleryItemContainerEl.addClass('note-toolbar-gallery-card-items');
 			renderGalleryItems(this.ntb, galleryItemContainerEl, category.itemIds, cssColor);
 
-		});
+		};
 
 		const ctaEl = markdownEl.createDiv();
         ctaEl.createDiv({ cls: ['note-toolbar-setting-link', 'is-readable-line-width'] }).append(
@@ -196,7 +197,7 @@ export function renderGalleryItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivE
 				itemEl.createDiv('note-toolbar-card-item-description').setText(galleryItem.description);
 			}
 
-			let pluginNames = ntb.settingsUtils.getPluginNames(galleryItem);
+			const pluginNames = ntb.settingsUtils.getPluginNames(galleryItem);
 			if (pluginNames) {
 				const pluginEl = itemEl.createDiv('note-toolbar-card-item-plugins');
 				setIcon(pluginEl.createSpan(), 'puzzle');
