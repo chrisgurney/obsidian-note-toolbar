@@ -26,7 +26,7 @@ export default class EditorMenu {
 				}
 				else {
 					// not replacing variables here, because we need to call it synchronously
-					this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
+					await this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
 				}
 				return;
 			}
@@ -43,7 +43,7 @@ export default class EditorMenu {
 					item
 						.setIcon('info')
 						.setTitle(t('import.option-help'))
-						.onClick(async () => {
+						.onClick(() => {
 							window.open(`${URL_GH_USER_GUIDE}/Note-Toolbar-Callouts`, '_blank');
 						});
 				});
@@ -54,9 +54,9 @@ export default class EditorMenu {
 						.setIcon('import')
 						.setTitle(t('import.option-create'))
 						.onClick(async () => {
-							let toolbar = await importFromCallout(this.ntb, selection);
+							const toolbar = importFromCallout(this.ntb, selection);
 							await this.ntb.settingsManager.addToolbar(toolbar);
-							await this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+							this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
 						});
 				});
 			}
