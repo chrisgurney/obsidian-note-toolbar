@@ -261,7 +261,7 @@ export default class SettingsMigrator {
             this.ntb.debug("starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
                 tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
-                    const visibility = this.ntb.settings.toolbars[index].items[item_index].visibility as unknown as Record<string, Record<string, unknown>>;
+                    const visibility = this.ntb.settings.toolbars[index].items[item_index].visibility as unknown as Record<string, { allViews?: unknown }>;
                     const desktop = visibility.desktop?.allViews;
                     const mobile = visibility.mobile?.allViews;
                     const tablet = visibility.tablet?.allViews;

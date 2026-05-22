@@ -26,80 +26,76 @@ export default class ImportConfirmModal extends Modal {
         this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
     }
 
-    public onOpen() {
+    onOpen() {
         this.display();
     }
 
-    async display() {
+    display() {
 
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
         // parse the callout to show a preview
-        const toolbar: ToolbarSettings = await importFromCallout(this.ntb, this.callout, undefined, true);
+        const toolbar: ToolbarSettings = importFromCallout(this.ntb, this.callout, undefined, true);
 
-        new Promise((resolve) => {
+        this.setTitle(t('import.title-import-confirmation', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
 
-            this.setTitle(t('import.title-import-confirmation', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
+        this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
 
-            this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
+        const previewFr = toolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined) : '';
 
-            const previewFr = toolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined) : '';
+        const previewContainerEl = this.modalEl.createDiv();
+        previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');
+        previewContainerEl.createEl('p', { text: t('export.label-share-preview'), cls: 'note-toolbar-setting-small-heading' });
+        previewContainerEl.createDiv().append(previewFr);
 
-            const previewContainerEl = this.modalEl.createDiv();
-            previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');
-            previewContainerEl.createEl('p', { text: t('export.label-share-preview'), cls: 'note-toolbar-setting-small-heading' });
-            previewContainerEl.createDiv().append(previewFr);
+        //
+        // disclaimers, if any
+        //
 
-            //
-            // disclaimers, if any
-            //
+        const importInvalidCommands = this.ntb.utils.getInvalidCommandsForToolbar(toolbar);
+        const importHasVars = this.ntb.vars.toolbarHasVars(toolbar);
 
-            const importInvalidCommands = this.ntb.utils.getInvalidCommandsForToolbar(toolbar);
-            const importHasVars = this.ntb.vars.toolbarHasVars(toolbar);
+        if (importInvalidCommands.length > 0 || importHasVars) {
 
-            if (importInvalidCommands.length > 0 || importHasVars) {
+            const disclaimers = this.modalEl.createDiv();
+            disclaimers.addClass('note-toolbar-setting-field-help');
+            const disclaimersList = disclaimers.createEl('ul');
 
-                const disclaimers = this.modalEl.createDiv();
-                disclaimers.addClass('note-toolbar-setting-field-help');
-                const disclaimersList = disclaimers.createEl('ul');
-
-                if (importInvalidCommands.length > 0) {
-                    const commandDisclaimer = disclaimersList.createEl('li', { text: t('import.warning-invalid-plugins') });
-                    const commandsList = commandDisclaimer.createEl('ul');
-                    importInvalidCommands.map((id, index) => {
-                        const commandsListItem = commandsList.createEl('li');
-                        const pluginLink = pluginLinkFr(id, id);
-                        pluginLink ? commandsListItem.appendChild(pluginLink) : undefined;
-                    });
-                }
-    
-                if (importHasVars) {
-                    disclaimersList.createEl('li', { text: learnMoreFr(t('import.warning-vars'), 'Variables') });
-                }
-    
+            if (importInvalidCommands.length > 0) {
+                const commandDisclaimer = disclaimersList.createEl('li', { text: t('import.warning-invalid-plugins') });
+                const commandsList = commandDisclaimer.createEl('ul');
+                importInvalidCommands.map((id, index) => {
+                    const commandsListItem = commandsList.createEl('li');
+                    const pluginLink = pluginLinkFr(id, id);
+                    if (pluginLink) commandsListItem.appendChild(pluginLink);
+                });
             }
 
-            //
-            // buttons
-            //
+            if (importHasVars) {
+                disclaimersList.createEl('li', { text: learnMoreFr(t('import.warning-vars'), 'Variables') });
+            }
 
-            this.modalEl.createDiv().addClass('note-toolbar-setting-spacer');
-            const btnContainerEl = this.modalEl.createDiv();
-            btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
-            new ButtonComponent(btnContainerEl)
-                .setButtonText(t('import.button-confirm'))
-                .setCta()
-                .onClick(() => {
-                    this.isConfirmed = true;
-                    this.close();
-                });
-            new ButtonComponent(btnContainerEl)
-                .setButtonText(t('import.button-cancel'))
-                .onClick(() => {
-                    this.close();
-                });
+        }
 
-        });
+        //
+        // buttons
+        //
+
+        this.modalEl.createDiv().addClass('note-toolbar-setting-spacer');
+        const btnContainerEl = this.modalEl.createDiv();
+        btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
+        new ButtonComponent(btnContainerEl)
+            .setButtonText(t('import.button-confirm'))
+            .setCta()
+            .onClick(() => {
+                this.isConfirmed = true;
+                this.close();
+            });
+        new ButtonComponent(btnContainerEl)
+            .setButtonText(t('import.button-cancel'))
+            .onClick(() => {
+                this.close();
+            });
 
     }
 

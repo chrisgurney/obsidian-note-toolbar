@@ -33,14 +33,14 @@ export default class IconSuggestModal extends SuggestModal<IconName> {
         return iconSuggestions;
     }
 
-    onOpen(): void {
+    async onOpen(): Promise<void> {
         if (this.selectedIcon && this.selectedIcon !== '') {
             const iconName = this.selectedIcon.replace(/^lucide-/, '')
             this.inputEl.value = iconName;
             this.inputEl.trigger('input');
         }
         else {
-            super.onOpen();
+            await super.onOpen();
         }
     }
 
