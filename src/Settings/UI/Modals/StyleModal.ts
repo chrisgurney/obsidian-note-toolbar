@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { App, ButtonComponent, Modal, Platform, Setting } from "obsidian";
+import { ButtonComponent, Modal, Platform, Setting } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarStyleUi from "../Components/ToolbarStyleUi";
 
@@ -47,7 +47,7 @@ export default class StyleModal extends Modal {
 				btn.setButtonText(t('setting.styles.button-close'))
 					.setCta()
 					.setTooltip(t('setting.styles.button-close-description'))
-					.onClick(async (event) => {
+					.onClick((event) => {
 						this.close();
 					});
 			});
@@ -63,7 +63,7 @@ export default class StyleModal extends Modal {
 
         // let user close modal with Cmd/Ctrl + Enter
         this.ntb.registerDomEvent(
-            this.modalEl, 'keydown', async (e: KeyboardEvent) => {
+            this.modalEl, 'keydown', (e: KeyboardEvent) => {
                 switch (e.key) {
                     case "Enter": {
                         const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
