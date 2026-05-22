@@ -82,7 +82,7 @@ export default class CalloutHandler {
                         }
                         case CalloutAttr.Folder:
                         case CalloutAttr.FolderNtb:
-                            await this.ntb.items.handleLinkFolder(value);
+                            this.ntb.items.handleLinkFolder(value);
                             break;
                         case CalloutAttr.Menu:
                         case CalloutAttr.MenuNtb: {
