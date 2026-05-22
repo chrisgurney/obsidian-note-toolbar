@@ -1,6 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { getUUID } from "Utils/Utils";
-import { FolderMapping, ItemType, NoteToolbarSettings, PlatformType, Position, PositionType, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings, ViewContext, ViewType, Visibility } from "./NoteToolbarSettings";
+import { NoteToolbarSettings, PlatformType, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from "./NoteToolbarSettings";
 
 
 export default class SettingsMigrator {
