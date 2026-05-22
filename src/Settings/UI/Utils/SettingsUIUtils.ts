@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, getIcon, ItemView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URL_GH_USER_GUIDE } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
@@ -103,8 +103,8 @@ export default class SettingsUIUtils {
 		title: string,
 		content: string,
 	): HTMLElement {
-		let containerEl = createDiv();
-		let setting = new Setting(containerEl)
+		const containerEl = createDiv();
+		const setting = new Setting(containerEl)
 			.setName(title)
 			.setDesc(content)
 			.setClass('note-toolbar-setting-plugin-onboarding')
@@ -112,10 +112,10 @@ export default class SettingsUIUtils {
 				button
 					.setIcon('cross')
 					.setTooltip("Dismiss") // FIXME: localize string
-					.onClick(() => {
+					.onClick(async () => {
 						setting.settingEl.remove();
 						this.ntb.settings.onboarding[messageId] = true;
-						this.ntb.settingsManager.save();
+						await this.ntb.settingsManager.save();
 					});
 				button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
 				this.handleKeyClick(button.extraSettingsEl);
@@ -211,9 +211,9 @@ export default class SettingsUIUtils {
 		previewContainer.appendChild(itemsFr);
 
 		if (showEditLink) {
-			let toolbarLinkContainer = createDiv();
+			const toolbarLinkContainer = createDiv();
 			toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
-			let toolbarLink = createEl('a');
+			const toolbarLink = createEl('a');
 			toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
 			toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
 			toolbarLinkContainer.appendChild(toolbarLink);
@@ -234,28 +234,28 @@ export default class SettingsUIUtils {
 		
 		if (Platform.isPhone || useTextVersion) {
 
-			let helpContainerEl = settingsDiv.createDiv();
+			const helpContainerEl = settingsDiv.createDiv();
 			helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
 
 			const helpDesc = document.createDocumentFragment();
 			helpDesc.append("v" + PLUGIN_VERSION, " • ");
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
-			this.ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
-			this.ntb.registerDomEvent(galleryLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+			this.ntb.registerDomEvent(galleryLink, 'click', async (event) => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
-			this.ntb.registerDomEvent(helpLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+			this.ntb.registerDomEvent(helpLink, 'click', async (event) => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
@@ -266,8 +266,8 @@ export default class SettingsUIUtils {
 
 			const helpDesc = document.createDocumentFragment();
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
-			this.ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
@@ -279,8 +279,8 @@ export default class SettingsUIUtils {
 				.addButton((button: ButtonComponent) => {
 					button
 						.setTooltip(t('setting.button-gallery-tooltip'))
-						.onClick(() => {
-							this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+						.onClick(async () => {
+							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 							closeCallback();
 						})
@@ -289,8 +289,8 @@ export default class SettingsUIUtils {
 				.addButton((button: ButtonComponent) => {
 					button
 						.setTooltip(t('setting.button-help-tooltip'))
-						.onClick(() => {
-							this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+						.onClick(async () => {
+							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 							closeCallback();
 						})
@@ -308,8 +308,8 @@ export default class SettingsUIUtils {
 	 */
 	emptyMessageFr(message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
 
-		let messageFr = document.createDocumentFragment();
-		let messageFrText = document.createElement("i");
+		const messageFr = document.createDocumentFragment();
+		const messageFrText = document.createElement("i");
 		messageFrText.textContent = message;
 		messageFr.append(messageFrText);
 
@@ -359,7 +359,7 @@ export default class SettingsUIUtils {
 	 * @returns string 'obsidian://' URI.
 	 */
 	private getToolbarPropSearchUri(toolbarName: string): string {
-		let searchUri = 'obsidian://search?vault=' + this.ntb.app.vault.getName() + '&query=[' + this.ntb.settings.toolbarProp + ': ' + toolbarName + ']';
+		const searchUri = 'obsidian://search?vault=' + this.ntb.app.vault.getName() + '&query=[' + this.ntb.settings.toolbarProp + ': ' + toolbarName + ']';
 		return encodeURI(searchUri);
 	}
 
@@ -369,8 +369,8 @@ export default class SettingsUIUtils {
 	 * @returns mappingCount and itemCount
 	 */
 	private getToolbarSettingsUsage(id: string): [number, number] {
-		let mappingCount = this.ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
-		let itemCount = this.ntb.settings.toolbars.reduce((count, toolbar) => {
+		const mappingCount = this.ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
+		const itemCount = this.ntb.settings.toolbars.reduce((count, toolbar) => {
 			return count + toolbar.items.filter(item => 
 				item.link === id && (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu)
 			).length;
@@ -379,8 +379,8 @@ export default class SettingsUIUtils {
 	}
 
 	getToolbarUsageFr(toolbar: ToolbarSettings, parent: ToolbarSettingsModal): DocumentFragment {
-		let usageFr = document.createDocumentFragment();
-		let usageStats = this.getToolbarUsageText(toolbar);
+		const usageFr = document.createDocumentFragment();
+		const usageStats = this.getToolbarUsageText(toolbar);
 		if (usageStats) {
 			usageFr.append(t('setting.usage.description'));
 			usageFr.append(usageFr.createEl("br"));
@@ -409,7 +409,7 @@ export default class SettingsUIUtils {
 	 */
 	getToolbarUsageText(toolbar: ToolbarSettings): string {
 		const [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(toolbar.uuid);
-		let usage: String[] = [];
+		const usage: string[] = [];
 		if (mappingCount > 0) usage.push(t('setting.usage.description-mappings', { count: mappingCount }));
 		if (itemCount > 0) usage.push(t('setting.usage.description-toolbar-items', { count: itemCount }));
 		return (usage.length > 0) ? usage.join(', ') : '';
@@ -519,11 +519,10 @@ export default class SettingsUIUtils {
 	 * @param fromToolbar toolbar to copy the item from
 	 * @param item item to copy
 	 */
-	async copyToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
-		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
+	copyToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings) {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
-				await this.ntb.settingsManager.duplicateToolbarItem(toToolbar, item);
-				await this.ntb.settingsManager.save();
+				void this.ntb.settingsManager.duplicateToolbarItem(toToolbar, item).then(() => this.ntb.settingsManager.save());
 				new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
 			}
 		});
@@ -536,14 +535,15 @@ export default class SettingsUIUtils {
 	 * @param item item to move
 	 * @param callback function to execute after move is complete, to update the UI as needed
 	 */
-	async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings, callback: () => void | Promise<void>): Promise<void> {
-		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
+	moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings, callback: () => void | Promise<void>) {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				fromToolbar.items.remove(item);
 				fromToolbar.updated = new Date().toISOString();
-				this.ntb.settingsManager.addToolbarItem(toToolbar, item);
-				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
-				await callback();
+				void this.ntb.settingsManager.addToolbarItem(toToolbar, item).then(() => {
+					new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
+					void callback();
+				});
 			}
 		});
 		modal.open();
@@ -572,35 +572,26 @@ export default class SettingsUIUtils {
 		itemMainEl.addClass('note-toolbar-item-suggestion-container');
 
 		if (item.icon) {
-			let svgExists = getIcon(item.icon);
+			const svgExists = getIcon(item.icon);
 			if (svgExists) {
-				let iconGlyphEl = itemMainEl.createSpan();
+				const iconGlyphEl = itemMainEl.createSpan();
 				setIcon(iconGlyphEl, item.icon);
 			}
 		}
-		let itemNameEl = itemMainEl.createSpan();
+		const itemNameEl = itemMainEl.createSpan();
 		let itemName = item.label || item.tooltip;
 
 		// fallback if no label or tooltip
-		let isItemNameLink = false;
-		if (!itemName) {
-			if (item.icon) {
-				isItemNameLink = true;
-				itemName = item.link;
-			}
-			else {
-				itemName = '';
-			}
-		}
+		if (!itemName) itemName = item.icon ? item.link : '';
 
 		itemNameEl.addClass("note-toolbar-item-suggester-name");
 		const itemLabelEl = itemNameEl.createSpan();
 
-		let title = itemName;
+		const title = itemName;
 		// replace variables in labels (or tooltip, if no label set)
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		if (replaceVars) {
-			this.ntb.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+			void this.ntb.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
 				itemLabelEl.setText(resolvedName);
 			});
 		}
@@ -609,7 +600,7 @@ export default class SettingsUIUtils {
 		}
 		
 		if (showMeta) {
-			let itemMeta = itemNameEl.createSpan();
+			const itemMeta = itemNameEl.createSpan();
 			itemMeta.addClass("note-toolbar-item-suggester-type");
 			switch (item.linkAttr.type) {
 				case ItemType.Command:
@@ -643,7 +634,7 @@ export default class SettingsUIUtils {
 		const inputStrLower = inputStr.toLowerCase();
 		// if what's shown doesn't already contain the searched string, show it below
 		if (!title.toLowerCase().includes(inputStrLower)) {
-			let inputMatch = 
+			const inputMatch = 
 				item.label.toLowerCase().includes(inputStrLower)
 					? item.label
 					: item.tooltip.toLowerCase().includes(inputStrLower) 
@@ -661,7 +652,7 @@ export default class SettingsUIUtils {
 
 			// show the plugin(s) supported, or the command ID used
 			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
-				let itemPluginText = this.getPluginNames(item);
+				const itemPluginText = this.getPluginNames(item);
 				if (itemPluginText) {
 					const pluginDescEl = el.createDiv();
 					pluginDescEl.addClass('note-toolbar-item-suggester-note');	
