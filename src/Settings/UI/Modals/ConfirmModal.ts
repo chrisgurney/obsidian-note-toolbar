@@ -77,10 +77,10 @@ export default class ConfirmModal extends Modal {
                 }
             }
 
-            let btnContainerEl = this.contentEl.createDiv();
+            const btnContainerEl = this.contentEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
     
-            let btn1 = new ButtonComponent(btnContainerEl)
+            const btn1 = new ButtonComponent(btnContainerEl)
                 .setButtonText(this.uiSettings.approveLabel)
                 .onClick(() => {
                     this.isConfirmed = true;
@@ -89,7 +89,7 @@ export default class ConfirmModal extends Modal {
     
             this.uiSettings.warning ? btn1.setWarning() : btn1.setCta();
     
-            let btn2 = new ButtonComponent(btnContainerEl)
+            const btn2 = new ButtonComponent(btnContainerEl)
                 .setButtonText(this.uiSettings.denyLabel)
                 .onClick(() => {
                     this.close();

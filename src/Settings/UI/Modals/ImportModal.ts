@@ -64,7 +64,7 @@ export default class ImportModal extends Modal {
             //
 
             if (this.toolbar) {
-                let help = this.modalEl.createDiv();
+                const help = this.modalEl.createDiv();
                 help.addClass('note-toolbar-setting-field-help');
                 help.setText(t('import.label-import-into-help'));
             }
@@ -74,7 +74,7 @@ export default class ImportModal extends Modal {
             //
 
             this.modalEl.createDiv().addClass('note-toolbar-setting-spacer');            
-            let btnContainerEl = this.modalEl.createDiv();
+            const btnContainerEl = this.modalEl.createDiv();
             btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
             new ButtonComponent(btnContainerEl)
                 .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))

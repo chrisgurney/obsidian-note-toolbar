@@ -90,12 +90,12 @@ export default class ToolbarSettingsModal extends Modal {
 	 * Closes an expanded form if it's open, otherwise closes the modal. 
 	 */
 	onEscapeKey() {
-		let focussedElement = activeDocument.activeElement;
+		const focussedElement = activeDocument.activeElement;
 		if (focussedElement instanceof HTMLElement) {
-			let settingForm = focussedElement.closest('.note-toolbar-setting-item');
+			const settingForm = focussedElement.closest('.note-toolbar-setting-item');
 			if (settingForm) {
-				let rowEscaped = focussedElement.closest('.note-toolbar-setting-items-container-row');
-				let settingsDiv = this.modalEl.querySelector('.note-toolbar-setting-modal') as HTMLDivElement;
+				const rowEscaped = focussedElement.closest('.note-toolbar-setting-items-container-row');
+				const settingsDiv = this.modalEl.querySelector('.note-toolbar-setting-modal') as HTMLDivElement;
 				settingsDiv ? this.itemListUi.collapseItemForms(settingsDiv, rowEscaped, true) : undefined;
 				return;
 			}
@@ -122,13 +122,13 @@ export default class ToolbarSettingsModal extends Modal {
 		// update status of installed plugins so we can display errors if needed
 		this.ntb.adapters.checkPlugins();
 
-		let settingsDiv = createDiv();
+		const settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
 
 		// show warning message about properties being changed
 		const onboardingId = 'new-toolbar-mapping';
 		if (!this.ntb.settings.onboarding[onboardingId]) {
-			let messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
+			const messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
 				onboardingId, 
 				t('onboarding.new-toolbar-mapping-title'),
 				t('onboarding.new-toolbar-mapping-content', { property: this.ntb.settings.toolbarProp }));
@@ -138,7 +138,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayNameSetting(settingsDiv);
 		this.itemListUi.displayItemList(settingsDiv);
 		this.displayPositionSetting(settingsDiv);
-		let toolbarStyle = new ToolbarStyleUi(this.ntb, this, this.toolbar);
+		const toolbarStyle = new ToolbarStyleUi(this.ntb, this, this.toolbar);
 		toolbarStyle.displayStyleSetting(settingsDiv);
 		this.displayCommandButton(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
@@ -152,19 +152,19 @@ export default class ToolbarSettingsModal extends Modal {
 
 		// listen for clicks outside the list area, to collapse form that might be open
 		this.ntb.registerDomEvent(this.modalEl, 'click', (e) => {
-			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
+			const rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
 			this.itemListUi.collapseItemForms(settingsDiv, rowClicked);
 		});
 
 		// listen for focus changes, to collapse form that might be open
 		this.ntb.registerDomEvent(settingsDiv, 'focusin', (e) => {
-			let rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
+			const rowClicked = (e.target as HTMLElement).closest('.note-toolbar-setting-items-container-row');
 			this.itemListUi.collapseItemForms(settingsDiv, rowClicked);
 		});
 
 		if (focusItemId) {
 			const selector = `.note-toolbar-sortablejs-list > div[${SettingsAttr.ItemUuid}="${focusItemId}"] > .note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview`;
-			let focusEl = this.containerEl.querySelector(selector) as HTMLElement;
+			const focusEl = this.containerEl.querySelector(selector) as HTMLElement;
 			focusEl?.focus();
 		}
 
@@ -190,7 +190,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setValue(this.toolbar.name)
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
-					let existingToolbar = this.ntb.settingsManager.getToolbarByName(value);
+					const existingToolbar = this.ntb.settingsManager.getToolbarByName(value);
 					if (existingToolbar && existingToolbar !== this.toolbar) {
 						this.ntb.settingsUtils.setFieldError(this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
 					}
@@ -263,7 +263,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.updated = new Date().toISOString();
 							this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(posVal);
 							// toggle display of the default item setting
-							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
+							const defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasMobileFabPosition) {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasDesktopFabPosition.toString());
 							}
@@ -296,7 +296,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.updated = new Date().toISOString();
 							this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(posVal);
 							// toggle display of the default item setting
-							let defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
+							const defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasDesktopFabPosition) {
 								defaultItemSettingEl?.setAttribute('data-active', this.hasMobileFabPosition.toString());
 							}
@@ -456,7 +456,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayDeleteButton(settingsDiv: HTMLElement) {
 
-		let usageDescFr = this.ntb.settingsUtils.getToolbarUsageFr(this.toolbar, this);
+		const usageDescFr = this.ntb.settingsUtils.getToolbarUsageFr(this.toolbar, this);
 
 		new Setting(settingsDiv)
 			.setName(t('setting.delete-toolbar.name'))
@@ -513,10 +513,10 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param scrollToClass Looks for this containing class and scrolls to it if provided.
 	 */
 	public scrollToPosition(selectors: string, scrollToClass?: string) {
-		let focusEl = this.contentEl.querySelector(selectors) as HTMLElement;
+		const focusEl = this.contentEl.querySelector(selectors) as HTMLElement;
 		focusEl?.focus();
 		activeWindow.setTimeout(() => { 
-			let scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
+			const scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
 			scrollToEl?.scrollIntoView({ behavior: 'instant', block: 'center' });
 		}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard
 	}

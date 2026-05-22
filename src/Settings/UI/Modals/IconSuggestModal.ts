@@ -24,7 +24,7 @@ export default class IconSuggestModal extends SuggestModal<IconName> {
         const iconIds = getIconIds();
         const iconSuggestions: IconName[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
-        this.showNoIconOption ? iconSuggestions.push(t('setting.icon-suggester.option-no-icon')) : null;
+        if (this.showNoIconOption) iconSuggestions.push(t('setting.icon-suggester.option-no-icon'));
         iconIds.forEach((icon: IconName) => {
             if (icon.toLowerCase().includes(lowerCaseInputStr)) {
                 iconSuggestions.push(icon);
@@ -46,13 +46,13 @@ export default class IconSuggestModal extends SuggestModal<IconName> {
 
     renderSuggestion(icon: IconName, el: HTMLElement): void {
         el.addClass("note-toolbar-icon-suggestion");
-        let iconName = el.createSpan();
+        const iconName = el.createSpan();
         if (icon === t('setting.icon-suggester.option-no-icon')) {
             iconName.setText(icon);
         }
         else {
             iconName.setText(icon.startsWith("lucide-") ? icon.substring(7) : icon);
-            let iconGlyph = el.createSpan();
+            const iconGlyph = el.createSpan();
             setIcon(iconGlyph, icon);
         }
     }
