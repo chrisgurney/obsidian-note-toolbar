@@ -301,7 +301,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											.setTitle(t('setting.toolbars.menu-copy-id'))
 											.setIcon('code')
 											.onClick(async (menuEvent) => {
-												activeWindow.navigator.clipboard.writeText(toolbar.uuid);
+												await activeWindow.navigator.clipboard.writeText(toolbar.uuid);
 												new Notice(t('setting.toolbars.menu-copy-id-notice')).containerEl.addClass('mod-success');
 											});
 									});
@@ -311,7 +311,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											.setTitle(t('setting.delete-toolbar.button-delete'))
 											.setIcon('minus-circle')
 											.onClick(async () => {
-												this.ntb.settingsUtils.confirmDeleteToolbar(toolbar, () => this.display());
+												await this.ntb.settingsUtils.confirmDeleteToolbar(toolbar, () => this.display());
 											})
 											.setWarning(true);
 									});									
@@ -337,7 +337,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					});
 
 					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
-					toolbar.name ? undefined : toolbarListItemSetting.nameEl.addClass('mod-warning');
+					if (!toolbar.name) toolbarListItemSetting.nameEl.addClass('mod-warning');
 			
 					this.ntb.registerDomEvent(
 						toolbarListItemSetting.settingEl, 'keydown', (e: KeyboardEvent) => {
@@ -345,7 +345,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 								case "d": {
 									const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
 									if (modifierPressed) {
-										this.ntb.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
+										void this.ntb.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
 											this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
 										});
 									}
@@ -448,7 +448,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							// const itemTooltipMatches = allItemTooltips.includes(query);
 
 							// hide non-matching results
-							(toolbarNameMatches || itemTextMatches) ? toolbarEl.show() : toolbarEl.hide();
+							if (toolbarNameMatches || itemTextMatches) toolbarEl.show()
+								else toolbarEl.hide();
 
 							hasMatch = hasMatch || ((toolbarNameMatches || itemTextMatches) && query.length > 0);
 							// hasNonVisibleMatch = hasNonVisibleMatch || (itemTooltipMatches && query.length > 0);
@@ -562,7 +563,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			this.isSectionOpen['itemList'] = !this.isSectionOpen['itemList'];
 			itemsContainer.setAttribute('data-active', this.isSectionOpen['itemList'].toString());
 			const headingEl = itemsContainer.querySelector('.setting-item-info .setting-item-name');
-			this.isSectionOpen['itemList'] ? headingEl?.setText(t('setting.toolbars.name')) : headingEl?.setText(t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }));
+			headingEl?.setText(this.isSectionOpen['itemList'] ? t('setting.toolbars.name') : t('setting.toolbars.name-with-count', { count: this.ntb.settings.toolbars.length }) );
 		}
 	}
 
@@ -655,11 +656,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 				const emptyMsgEl = createDiv({ text: 
 					this.ntb.settingsUtils.emptyMessageFr(
-						t('setting.mappings.label-empty'), t('setting.mappings.link-create'), async () => {
+						t('setting.mappings.label-empty'), t('setting.mappings.link-create'), () => {
 						const newMapping = { folder: "", toolbar: "" };
 						this.ntb.settings.folderMappings.push(newMapping);
-						await this.ntb.settingsManager.save();
-						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
+						void this.ntb.settingsManager.save().then(() => {
+							this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
+						});
 					}) });
 				emptyMsgEl.addClass('note-toolbar-setting-empty-message');
 				
@@ -683,11 +685,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					handle: '.sortable-handle',
 					onChange: (item) => navigator.vibrate(50),
 					onChoose: (item) => navigator.vibrate(50),
-					onSort: async (item) => {
+					onSort: (item) => {
 						this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 						if (item.oldIndex !== undefined && item.newIndex !== undefined) {
 							moveElement(this.ntb.settings.folderMappings, item.oldIndex, item.newIndex);
-							await this.ntb.settingsManager.save();
+							void this.ntb.settingsManager.save();
 						}
 					}
 				});
@@ -747,7 +749,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					.setTooltip(t('setting.button-delete-tooltip'))
 					.onClick(async () => {
 						const rowId = cb.buttonEl.getAttribute('data-row-id');
-						rowId ? this.listMoveHandlerById(null, rowId, 'delete') : undefined;
+						if (rowId) await this.listMoveHandlerById(null, rowId, 'delete');
 					});
 				cb.buttonEl.setAttribute('data-row-id', rowId);
 			});
@@ -809,11 +811,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.extraSettingsEl.setAttribute('data-row-id', this.itemListIdCounter.toString());
 				cb.extraSettingsEl.tabIndex = 0;
 				this.ntb.registerDomEvent(
-					cb.extraSettingsEl,	'keydown', (e) => {
+					cb.extraSettingsEl,	'keydown', async (e) => {
 						const currentEl = e.target as HTMLElement;
 						const rowId = currentEl.getAttribute('data-row-id');
 						// this.plugin.debug("rowId", rowId);
-						rowId ? this.listMoveHandlerById(e, rowId) : undefined;
+						if (rowId) await this.listMoveHandlerById(e, rowId);
 					});
 			});
 
@@ -847,7 +849,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		setting.addExtraButton((cb) => {
 			cb.setIcon('right-triangle')
 				.setTooltip(t('setting.button-expand-collapse-tooltip'))
-				.onClick(async () => {
+				.onClick(() => {
 					this.handleSettingToggle(containerSelector, section, callback);
 				});
 			cb.extraSettingsEl.addClass('note-toolbar-setting-item-expand');
@@ -894,10 +896,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.addButton((button: ButtonComponent) => {
 					button
 						.setIcon(this.ntb.settings.obsidianUiVisibility?.['view-header'] === false ? 'eye-off' : 'eye')
-						.onClick((cb) => {
+						.onClick(async (cb) => {
 							const currentValue = this.ntb.settings.obsidianUiVisibility['view-header'] ?? true;
 							this.ntb.settings.obsidianUiVisibility['view-header'] = !currentValue;
-							this.ntb.settingsManager.save();
+							await this.ntb.settingsManager.save();
 							button.setIcon(!currentValue ? 'eye' : 'eye-off');
 						});
 				});
@@ -932,7 +934,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.onChange(async (value: string) => {
 							this.ntb.settings.ribbonAction = value as RibbonAction;
 							// toggle toolbar setting, if necessary
-							const hasRibbonToolbar = (value === RibbonAction.ToolbarSelected);
+							const hasRibbonToolbar = (this.ntb.settings.ribbonAction === RibbonAction.ToolbarSelected);
 							const ribbonToolbarEl = this.containerEl.querySelector('#note-toolbar-ribbon-toolbar-setting');
 							ribbonToolbarEl?.setAttribute('data-active', hasRibbonToolbar.toString());
 							await this.ntb.settingsManager.save();
@@ -1571,9 +1573,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 */
 	updateNoteToolbarIcon(settingEl: HTMLElement, selectedIcon: string) {
 		this.ntb.settings.icon = (selectedIcon === t('setting.icon-suggester.option-no-icon') ? "" : selectedIcon);
-		this.ntb.settingsManager.save();
-		setIcon(settingEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
-		settingEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
+		void this.ntb.settingsManager.save().then(() => {
+			setIcon(settingEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
+			settingEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
+		});
 	}
 
 	/*************************************************************************
