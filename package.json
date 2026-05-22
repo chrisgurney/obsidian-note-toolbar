@@ -26,6 +26,8 @@
     "eslint-plugin-obsidianmd": "^0.1.9",
     "obsidian": "latest",
     "postcss": "^8.4.45",
+    "stylelint": "^17.12.0",
+    "stylelint-config-standard": "^40.0.0",
     "tslib": "2.4.0",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.9.0",
