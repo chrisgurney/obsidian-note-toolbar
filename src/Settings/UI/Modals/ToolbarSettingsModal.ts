@@ -55,34 +55,36 @@ export default class ToolbarSettingsModal extends Modal {
 	/**
 	 * Removes modal window and refreshes the parent settings window.
 	 */
-	async onClose(): Promise<void> {
+	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
 		// refresh the parent window, so we see the new toolbar
 		this.parent?.display();
 		
 		// if this is the only toolbar, prompt once to make this the Default
-		// note that this won't actually be async, as onClose() isn't async in Modal, but seems to work?
 		const onboardingId = `default-${this.toolbar.uuid}`;
 		const promptForDefault = this.ntb.settings.toolbars.length === 1 
 			&& !this.ntb.settings.defaultToolbar 
 			&& !this.ntb.settings.onboarding[onboardingId];
 		if (promptForDefault) {
 			this.ntb.settings.onboarding[onboardingId] = true;
-			await this.ntb.settingsManager.save();
-			const setAsDefault = await confirmWithModal(this.ntb.app, { 
-				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
-				questionLabel: t('setting.toolbars.label-set-default-confirm'),
-				notes: t('setting.toolbars.label-set-default-notes'),
-				approveLabel: t('setting.toolbars.button-set-default'),
-				denyLabel: t('setting.toolbars.button-no-default')
+			void this.ntb.settingsManager.save().then(() => {
+				void confirmWithModal(this.ntb.app, { 
+					title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
+					questionLabel: t('setting.toolbars.label-set-default-confirm'),
+					notes: t('setting.toolbars.label-set-default-notes'),
+					approveLabel: t('setting.toolbars.button-set-default'),
+					denyLabel: t('setting.toolbars.button-no-default')
+				}).then((setAsDefault) => {
+					if (setAsDefault) {
+						this.ntb.settings.defaultToolbar = this.toolbar.uuid;
+						void this.ntb.settingsManager.save().then(() => {
+							// refresh the parent window again, so we can see the updated Default setting
+							this.parent?.display();
+						});
+					}
+				});
 			});
-			if (setAsDefault) {
-				this.ntb.settings.defaultToolbar = this.toolbar.uuid;
-				await this.ntb.settingsManager.save();
-				// refresh the parent window again, so we can see the updated Default setting
-				this.parent?.display();
-			}
 		}
 	}
 
@@ -199,7 +201,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.ntb.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
-						if (this.toolbar.hasCommand) await this.ntb.commands.updateToolbarCommand(this.toolbar, false);
+						if (this.toolbar.hasCommand) this.ntb.commands.updateToolbarCommand(this.toolbar, false);
 						await this.ntb.settingsManager.save();
 						this.setTitle(this.toolbar.name
 							? t('setting.title-edit-toolbar', { toolbar: this.toolbar.name }) 
@@ -316,11 +318,11 @@ export default class ToolbarSettingsModal extends Modal {
 				.setDesc(t('setting.position.option-defaultitem-description'))
 				.setClass('note-toolbar-setting-item-full-width-phone')
 				.addSearch((cb) => {
-					new ItemSuggester(this.ntb, this.toolbar, cb.inputEl, async (item) => {
+					new ItemSuggester(this.ntb, this.toolbar, cb.inputEl, (item) => {
 						removeFieldError(cb.inputEl, 'beforeend');
 						cb.inputEl.value = item.label || item.tooltip;
 						this.toolbar.defaultItem = item.uuid;
-						await this.ntb.settingsManager.save();
+						void this.ntb.settingsManager.save();
 					});
 					cb.setPlaceholder(t('setting.position.option-defaultitem-placeholder'))
 						.setValue(initialDefaultItem ? (initialDefaultItem.label || initialDefaultItem.tooltip) : '')
