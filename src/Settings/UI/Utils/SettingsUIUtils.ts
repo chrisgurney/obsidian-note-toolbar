@@ -441,7 +441,7 @@ export default class SettingsUIUtils {
 			this.ntb, 
 			undefined, 
 			(selectedItem: ToolbarItemSettings) => {
-				void (async () => {
+				const handleSelectedItem = async () => {
 					const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
 					if (isBrowseGalleryItem) {
 						void this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
@@ -476,7 +476,8 @@ export default class SettingsUIUtils {
 					else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
 
 					parent?.display(newItem.uuid);
-				});
+				};
+				void handleSelectedItem();
 			},
 			mode
 		);
