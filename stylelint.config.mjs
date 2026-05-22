@@ -1,4 +1,12 @@
 /** @type {import('stylelint').Config} */
 export default {
-  extends: ["stylelint-config-standard"]
+  // extends: ["stylelint-config-standard"],
+  rules: {
+    // "comment-empty-line-before": null,
+    // "declaration-empty-line-before": null,
+    // "import-notation": null,
+    // "rule-empty-line-before": null,
+    // "declaration-block-no-redundant-longhand-properties": null
+    "declaration-no-important": true
+  }
 };
