@@ -96,7 +96,7 @@ export default class ToolbarSettingsModal extends Modal {
 			if (settingForm) {
 				const rowEscaped = focussedElement.closest('.note-toolbar-setting-items-container-row');
 				const settingsDiv = this.modalEl.querySelector('.note-toolbar-setting-modal') as HTMLDivElement;
-				settingsDiv ? this.itemListUi.collapseItemForms(settingsDiv, rowEscaped, true) : undefined;
+				if (settingsDiv) this.itemListUi.collapseItemForms(settingsDiv, rowEscaped, true);
 				return;
 			}
 		}
@@ -278,7 +278,7 @@ export default class ToolbarSettingsModal extends Modal {
 		positionGroup.addSetting((mobilePosSetting) => {
 			mobilePosSetting
 				.setName(t('setting.option-platform-mobile'))
-				.setDesc(this.toolbar.position.mobile?.allViews?.position === 'hidden'
+				.setDesc(this.toolbar.position.mobile?.allViews?.position === PositionType.Hidden
 					? learnMoreFr(t('setting.position.option-mobile-help'), 'Navigation-bar')
 					: ''
 				)
@@ -376,7 +376,7 @@ export default class ToolbarSettingsModal extends Modal {
 								id: COMMAND_PREFIX_TBAR + this.toolbar.uuid, 
 								name: commandName, 
 								icon: this.ntb.settings.icon, 
-								callback: async () => {
+								callback: () => {
 									this.ntb.commands.openQuickTools(this.toolbar.uuid);
 								}
 							});
@@ -387,10 +387,10 @@ export default class ToolbarSettingsModal extends Modal {
 							notice.containerEl.addClass('mod-success');
 							const noticeEl = notice.messageEl;
 							noticeEl.addClass('note-toolbar-notice-pointer');
-							this.ntb.registerDomEvent(noticeEl, 'click', async () => {
+							this.ntb.registerDomEvent(noticeEl, 'click', () => {
 								notice.hide();
 								this.close();
-								await this.ntb.commands.openHotkeySettings(commandName);
+								this.ntb.commands.openHotkeySettings(commandName);
 							});
 						}
 						else {
@@ -423,9 +423,9 @@ export default class ToolbarSettingsModal extends Modal {
 					.addButton((btn) => {
 						btn
 							.setTooltip(t('setting.hotkeys.label-settings'))
-							.onClick(async () => {
+							.onClick(() => {
 								this.close();
-								await this.ntb.commands.openHotkeySettings(toolbarCommand.name);
+								this.ntb.commands.openHotkeySettings(toolbarCommand.name);
 							});
 						btn.buttonEl.setText(hotkey ?? iconTextFr('keyboard', t('setting.open-command.label-hotkey')));
 					});
@@ -470,8 +470,8 @@ export default class ToolbarSettingsModal extends Modal {
 					.setTooltip(t('setting.delete-toolbar.button-delete-tooltip'))
 					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
-					.onClick(() => {
-						this.ntb.settingsUtils.confirmDeleteToolbar(this.toolbar, () => this.close());
+					.onClick(async () => {
+						await this.ntb.settingsUtils.confirmDeleteToolbar(this.toolbar, () => this.close());
 					});
 			});
 
