@@ -7,6 +7,7 @@ export default {
     // "import-notation": null,
     // "rule-empty-line-before": null,
     // "declaration-block-no-redundant-longhand-properties": null
+    "selector-pseudo-class-disallowed-list": ["has"],
     "declaration-no-important": true
   }
 };
