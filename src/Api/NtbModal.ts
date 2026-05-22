@@ -88,10 +88,10 @@ export default class NtbModal extends Modal {
                     await MarkdownRenderer.render(this.ntb.app, fileContent, containerEl, normalizePath(this.content.path), component);
 
                     // make links tabbable
-                    this.modalEl.querySelectorAll('a.internal-link, a.external-link').forEach((link) => {
-                        (link as HTMLElement).tabIndex = 1;
+                    this.modalEl.querySelectorAll<HTMLElement>('a.internal-link, a.external-link').forEach((link) => {
+                        link.tabIndex = 1;
                         if (link.hasClass('internal-link')) {
-                            this.ntb.registerDomEvent(link as HTMLElement, 'click', async (event) => {
+                            this.ntb.registerDomEvent(link, 'click', async (event) => {
                                 event.preventDefault();
                                 const target = link.getAttribute('href');
                                 if (target) await this.ntb.app.workspace.openLinkText(target, '', true);

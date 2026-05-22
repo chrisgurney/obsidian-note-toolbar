@@ -135,7 +135,7 @@ export default class ItemListUi {
                 // check if item previews are valid (non-empty + valid), and highlight if not
                 const itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
                 if (itemPreviewEl) {
-                    this.ntb.settingsUtils.updateItemComponentStatus(
+                    void this.ntb.settingsUtils.updateItemComponentStatus(
                         this.parent,
                         (toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
                         SettingFieldItemMap[toolbarItem.linkAttr.type], 
@@ -186,11 +186,11 @@ export default class ItemListUi {
             handle: '.sortable-handle',
             onChange: (item) => navigator.vibrate(50),
             onChoose: (item) => navigator.vibrate(50),
-            onSort: async (item) => {
+            onSort: (item) => {
                 this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
                 if (item.oldIndex !== undefined && item.newIndex !== undefined) {
                     moveElement(this.toolbar.items, item.oldIndex, item.newIndex);
-                    await this.ntb.settingsManager.save();
+                    void this.ntb.settingsManager.save();
                 }
             }
         });
@@ -209,7 +209,7 @@ export default class ItemListUi {
             .addExtraButton((btn) => {
                 const icon = getIcon('note-toolbar-separator');
                 btn.extraSettingsEl.empty(); // remove existing gear icon
-                icon ? btn.extraSettingsEl.appendChild(icon) : undefined;
+                if (icon) btn.extraSettingsEl.appendChild(icon);
                 btn.setTooltip(t('setting.items.button-add-separator-tooltip'))
                     .onClick(async () => this.addItemHandler(ItemType.Separator, itemsSortableContainer));
                 this.ntb.settingsUtils.handleKeyClick(btn.extraSettingsEl);
@@ -233,7 +233,7 @@ export default class ItemListUi {
             .setClass('note-toolbar-setting-item-full-control-phone')
             .addButton((btn) => {
                 btn.setTooltip(t('setting.items.button-find-item-tooltip'))
-                    .onClick(async () => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
+                    .onClick(() => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
                 btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
             })
             .addButton((btn) => {
@@ -260,8 +260,8 @@ export default class ItemListUi {
         // collapse all items except row
         const listItems = settingsDiv.querySelectorAll('.note-toolbar-sortablejs-list > div');
         listItems.forEach((row) => {
-            const itemPreviewContainer = row.querySelector('.note-toolbar-setting-item-preview-container') as HTMLElement;
-            const itemPreviewError = row.querySelector('.note-toolbar-setting-field-error') as HTMLDivElement;
+            const itemPreviewContainer = row.querySelector<HTMLElement>('.note-toolbar-setting-item-preview-container');
+            const itemPreviewError = row.querySelector<HTMLDivElement>('.note-toolbar-setting-field-error');
             if (closeAll || row !== activeRow) {
                 const itemForm = row.querySelector('.note-toolbar-setting-item');
                 itemPreviewContainer?.setAttribute(SettingsAttr.Active, 'true');
@@ -269,8 +269,8 @@ export default class ItemListUi {
                 itemForm?.setAttribute(SettingsAttr.Active, 'false');
             }
             if (closeAll && row === activeRow) {
-                const itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
-                itemPreview.focus();
+                const itemPreview = itemPreviewContainer?.querySelector<HTMLElement>('.note-toolbar-setting-item-preview');
+                itemPreview?.focus();
             }
         });
 
@@ -435,7 +435,7 @@ export default class ItemListUi {
 
         const itemForm = itemRow.querySelector('.note-toolbar-setting-item') as HTMLDivElement;
         const itemPreviewError = itemRow.querySelector('.note-toolbar-setting-field-error') as HTMLDivElement;
-        const itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type');
+        const itemType = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview')?.getAttribute('data-item-type') as ItemType | null;
         // this.plugin.debug("toggleItemView", itemPreviewContainer, itemForm, itemType, focusOn);
         
         let previewState: string;

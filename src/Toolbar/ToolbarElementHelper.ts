@@ -16,7 +16,7 @@ export default class ToolbarElementHelper {
 	 * @returns last activated toolbar item ID, or null if it can't be found.
 	 */
 	getActiveItemId(): string | null {
-		return this.ntb.app.loadLocalStorage(LocalVar.ActiveItem);
+		return this.ntb.app.loadLocalStorage(LocalVar.ActiveItem) as string;
 	}
 
     /**
@@ -27,14 +27,14 @@ export default class ToolbarElementHelper {
         // there's only one active view on phones, so ignore it and return everything
         if (Platform.isPhone) {
             const allToolbarEls: HTMLElement[] = [];
-            const viewToolbarEls = activeDocument.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+            const viewToolbarEls = activeDocument.querySelectorAll<HTMLElement>('.cg-note-toolbar-container');
             viewToolbarEls?.forEach(el => allToolbarEls.push(el));
             return allToolbarEls as unknown as NodeListOf<HTMLElement>;
         }
         // otherwise, scope to the view if provided
         let toolbarViewEl = view ? view.containerEl : this.ntb.app.workspace.getActiveViewOfType(ItemView)?.containerEl as HTMLElement;
         toolbarViewEl = toolbarViewEl?.closest('.modal-container .note-toolbar-ui') ?? toolbarViewEl;
-        const viewToolbarEls = toolbarViewEl?.querySelectorAll('.cg-note-toolbar-container') as NodeListOf<HTMLElement>;
+        const viewToolbarEls = toolbarViewEl?.querySelectorAll<HTMLElement>('.cg-note-toolbar-container');
         return viewToolbarEls || ([] as unknown as NodeListOf<HTMLElement>);
     }
 
@@ -47,7 +47,7 @@ export default class ToolbarElementHelper {
         const currentView = view ?? this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
         if (!currentView) return null;
         const currentMode = currentView.getMode();
-        const currentViewEl = currentView.containerEl as HTMLElement;
+        const currentViewEl = currentView.containerEl;
         // get the props container based on view mode; fix for toolbar not showing below props in reading mode, in notes with an embed (#392)
         const propertiesContainer = currentViewEl?.querySelector(`.markdown-${currentMode === 'preview' ? 'reading' : 'source'}-view .metadata-container`) as HTMLElement;
         // fix for toolbar rendering in Make.md frames, causing unpredictable behavior (#151)
@@ -81,10 +81,10 @@ export default class ToolbarElementHelper {
         if (isFloatingToolbar) {
             return activeDocument.querySelector(
                 '.cg-note-toolbar-container[data-tbar-position="float"], .cg-note-toolbar-container[data-tbar-position="text"]'
-            ) as HTMLElement;
+            );
         }
         else {
-            var toolbarEl: HTMLElement | null = null;
+            let toolbarEl: HTMLElement | null = null;
             const toolbarView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
             const toolbarViewEl = toolbarView?.containerEl as HTMLElement;
             if (toolbarViewEl) {
@@ -145,7 +145,7 @@ export default class ToolbarElementHelper {
      * @returns HTMLElement or null, if it doesn't exist.
      */
     getToolbarFabEl(): HTMLElement | null {
-        let existingToolbarFabEl = activeDocument.querySelector('.cg-note-toolbar-fab-container') as HTMLElement;
+        const existingToolbarFabEl = activeDocument.querySelector('.cg-note-toolbar-fab-container') as HTMLElement;
         return existingToolbarFabEl;
     }
 

@@ -262,15 +262,13 @@ export default class SettingsMigrator {
             this.ntb.debug("starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
                 tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
-                    // @ts-ignore
-                    let desktop = this.ntb.settings.toolbars[index].items[item_index].visibility.desktop?.allViews;
-                    // @ts-ignore
-                    let mobile = this.ntb.settings.toolbars[index].items[item_index].visibility.mobile?.allViews;
-                    // @ts-ignore
-                    let tablet = this.ntb.settings.toolbars[index].items[item_index].visibility.tablet?.allViews;
-                    if (desktop) this.ntb.settings.toolbars[index].items[item_index].visibility.desktop = desktop;
-                    if (mobile) this.ntb.settings.toolbars[index].items[item_index].visibility.mobile = mobile;
-                    if (tablet) this.ntb.settings.toolbars[index].items[item_index].visibility.tablet = tablet;
+                    const visibility = this.ntb.settings.toolbars[index].items[item_index].visibility as unknown as Record<string, Record<string, unknown>>;
+                    const desktop = visibility.desktop?.allViews;
+                    const mobile = visibility.mobile?.allViews;
+                    const tablet = visibility.tablet?.allViews;
+                    if (desktop) visibility.desktop = desktop;
+                    if (mobile) visibility.mobile = mobile;
+                    if (tablet) visibility.tablet = tablet;
                 });
             });
             // for the next migration to run
