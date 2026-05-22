@@ -1155,8 +1155,9 @@ export function setFieldHelp(fieldEl: HTMLElement, helpText: DocumentFragment | 
 	removeFieldHelp(fieldEl);
 	const fieldHelp = createDiv();
 	fieldHelp.addClass('note-toolbar-setting-field-help');
-	(helpText instanceof DocumentFragment) ? fieldHelp.append(helpText) : fieldHelp.setText(helpText);
-	fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+	if (helpText instanceof DocumentFragment) fieldHelp.append(helpText)
+		else fieldHelp.setText(helpText);
+	if (fieldHelp) fieldEl.insertAdjacentElement('beforeend', fieldHelp);
 }
 
 /**
@@ -1166,12 +1167,12 @@ export function setFieldHelp(fieldEl: HTMLElement, helpText: DocumentFragment | 
  */
 export function updateItemIcon(parent: ToolbarSettingsModal | ItemModal, settingEl: HTMLElement, selectedIcon: string) {
 	// update item form
-	let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
-	formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
+	const formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
+	if (formEl) setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
 	formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
 	if (parent instanceof ToolbarSettingsModal) {
 		// update item preview
-		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
-		(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
+		const previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
+		if (previewIconEl && selectedIcon) setIcon(previewIconEl, selectedIcon);
 	}
 }
