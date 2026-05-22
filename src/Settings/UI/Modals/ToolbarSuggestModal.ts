@@ -37,7 +37,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
                 ? t('setting.toolbar-suggest-modal.placeholder-add') 
                 : t('setting.toolbar-suggest-modal.placeholder'));
 
-        let instructions = [];
+        const instructions = [];
         instructions.push(
             {command: '↑↓', purpose: t('setting.toolbar-suggest-modal.instruction-navigate')},
             {command: '↵', purpose: t('setting.toolbar-suggest-modal.instruction-use')},
@@ -56,9 +56,9 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             // show warning message about properties being changed
             const onboardingId = 'swap-toolbars-prop';
             if (!this.ntb.settings.onboarding[onboardingId]) {
-                let resultsEl = this.modalEl.querySelector('.prompt-results');
+                const resultsEl = this.modalEl.querySelector('.prompt-results');
                 if (resultsEl) {
-                    let messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
+                    const messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
                         onboardingId, 
                         t('onboarding.swap-toolbar-title'), 
                         t('onboarding.swap-toolbar-content', { property: this.ntb.settings.toolbarProp }));
@@ -84,12 +84,12 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         if (this.showSwapUi) {
-            let emptyToolbar = { ...EMPTY_TOOLBAR };
+            const emptyToolbar = { ...EMPTY_TOOLBAR };
             emptyToolbar.name = t('setting.toolbar-suggest-modal.option-default');
             tbarSuggestions.push(emptyToolbar);
         }
         else if (this.showNewOption) {
-            let newToolbar = { ...EMPTY_TOOLBAR };
+            const newToolbar = { ...EMPTY_TOOLBAR };
             newToolbar.name = t('setting.toolbar-suggest-modal.option-new');
             tbarSuggestions.push(newToolbar);
         }
@@ -101,7 +101,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         });
 
         // sort the search results
-        const recentToolbars = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentToolbars) || '[]');
+        const recentToolbars = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentToolbars) as string || '[]') as string[];
         sortedSuggestions.sort((a, b) => {
             const query = lowerCaseInputStr;
             const aName = a.name.toLowerCase();
@@ -140,17 +140,17 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      */
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
         el.setAttribute('id', toolbar.uuid);
-        let toolbarNameEl = el.createSpan();
+        const toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
         if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
             el.addClass('cm-em');
         }
         if (this.showPreviews && toolbar.uuid !== EMPTY_TOOLBAR_ID) {
-            let previewContainerEl = el.createDiv();
+            const previewContainerEl = el.createDiv();
             previewContainerEl.addClass('setting-item-description');
-            let previewEl = previewContainerEl.createDiv();
+            const previewEl = previewContainerEl.createDiv();
             previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
-            let previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
+            const previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
             previewEl.append(previewFr);
             el.append(previewContainerEl);
         }
