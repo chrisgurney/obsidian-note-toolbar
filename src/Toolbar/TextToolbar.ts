@@ -50,7 +50,7 @@ export class TextToolbarClass implements PluginValue {
             if (!isSourceMode) return;
         };
         
-        const { state, view } = update;
+        const { state, } = update;
 
         const selection = state.selection.main;
         this.selection = {
@@ -107,7 +107,7 @@ export class TextToolbarClass implements PluginValue {
             return;
         }
 
-        requestAnimationFrame(async () => {
+        requestAnimationFrame(() => {
 
             if (!this.selection) return;
 
@@ -118,16 +118,16 @@ export class TextToolbarClass implements PluginValue {
                 return;
             };
 
-            // place the toolbar above the cursor, which takes the selection into account
-            this.ntb.debug('🎨 TextToolbar: Rendering toolbar', toolbar.name);
-            const cursorPos = this.ntb.utils.getPosition('cursor');
-            await this.ntb.render.renderFloatingToolbar(toolbar, cursorPos, PositionType.Text);
-
             this.lastSelection = {
                 from: this.selection.from,
                 to: this.selection.to,
                 text: this.selection.text
             };
+
+            // place the toolbar above the cursor, which takes the selection into account
+            this.ntb.debug('🎨 TextToolbar: Rendering toolbar', toolbar.name);
+            const cursorPos = this.ntb.utils.getPosition('cursor');
+            void this.ntb.render.renderFloatingToolbar(toolbar, cursorPos, PositionType.Text);
 
         });
 
