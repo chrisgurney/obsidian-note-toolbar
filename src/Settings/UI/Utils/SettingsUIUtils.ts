@@ -440,44 +440,44 @@ export default class SettingsUIUtils {
 		const modal = new ItemSuggestModal(
 			this.ntb, 
 			undefined, 
-			async (selectedItem: ToolbarItemSettings) => {
-				
-				const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
-				if (isBrowseGalleryItem) {
-					this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
-					if (parent) parent.close();
-					return;
-				}
-
-				const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
-				if (isEmptyItem) selectedItem.label = selectedItem.tooltip = '';
-				if (isEmptyItem && parent) {
-					const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
-					if (itemContainer) {
-						await parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+			(selectedItem: ToolbarItemSettings) => {
+				void (async () => {
+					const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
+					if (isBrowseGalleryItem) {
+						void this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+						if (parent) parent.close();
 						return;
 					}
-				}
 
-				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
-				// reset the visibility setting, as there's no prior indication to the user as to its visibility
-				newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS));
+					const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
+					if (isEmptyItem) selectedItem.label = selectedItem.tooltip = '';
+					if (isEmptyItem && parent) {
+						const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
+						if (itemContainer) {
+							void parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+							return;
+						}
+					}
 
-				// confirm with user if they would like to enable scripting
-				const isScriptingEnabled = await this.openScriptPrompt(newItem);
-				if (!isScriptingEnabled) return;
+					const newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
+					// reset the visibility setting, as there's no prior indication to the user as to its visibility
+					newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)) as Visibility;
 
-				if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
-				
-				toolbar.updated = new Date().toISOString();
-				await this.ntb.settingsManager.save();
+					// confirm with user if they would like to enable scripting
+					const isScriptingEnabled = await this.openScriptPrompt(newItem);
+					if (!isScriptingEnabled) return;
 
-				if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
-				else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
+					if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
+					
+					toolbar.updated = new Date().toISOString();
+					await this.ntb.settingsManager.save();
 
-				parent?.display(newItem.uuid);
+					if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
+					else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
 
-			}, 
+					parent?.display(newItem.uuid);
+				});
+			},
 			mode
 		);
 		modal.open();
@@ -951,9 +951,9 @@ export default class SettingsUIUtils {
 			const visibility = item.visibility ? (Platform.isDesktop ? item.visibility.desktop : item.visibility.mobile) : undefined;
 			
 			if (visibility && item.visibility.viewMode && item.visibility.viewMode !== ViewModeType.All) {
-				const latestMode = this.ntb.utils.getRecentViewMode();
-				if (latestMode && item.visibility.viewMode !== latestMode) {
-					if (item.visibility.viewMode === 'source') {
+				const latestMode = this.ntb.utils.getRecentViewMode() as string;
+				if (latestMode && item.visibility.viewMode as string !== latestMode) {
+					if (item.visibility.viewMode === ViewModeType.Editing) {
 						state = 'preview';
 						tooltip = t('setting.item.visibility.tooltip-editing-visible');
 					} 

@@ -160,8 +160,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * Closes the modal and executes the given item.
      * @param toolbar ToolbarSettings to use.
      */
-    async onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
-        await this.ntb.settingsManager.updateRecentList(LocalVar.RecentToolbars, toolbar.name);
+    onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
         // open the toolbar editor if the proper key modifiers are pressed
         const isModifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
         if (isModifierPressed && event?.shiftKey && !event?.altKey) {
@@ -175,16 +174,17 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             this.callback(toolbar);
             this.close();
         }
+        void this.ntb.settingsManager.updateRecentList(LocalVar.RecentToolbars, toolbar.name);
     }
 
     /**
      * Handle case where keyboard with meta key is used to make selection. 
      * @param event KeyboardEvent
      */
-    async handleKeyboardSelection(event: KeyboardEvent) {
+    handleKeyboardSelection(event: KeyboardEvent) {
         const selectedItem = this.modalEl.querySelector('.suggestion-item.is-selected');
         const selected = selectedItem?.id ? this.ntb.settingsManager.getToolbarById(selectedItem?.id) : undefined;
-        selected ? this.onChooseSuggestion(selected, event) : undefined;
+        if (selected) this.onChooseSuggestion(selected, event);
     }
 
 }
