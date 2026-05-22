@@ -24,7 +24,7 @@ export default class ProtocolManager {
 			await this.ntb.items.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
 		}
 		else if (data.folder) {
-			await this.ntb.items.handleLinkFolder(data.folder);
+			this.ntb.items.handleLinkFolder(data.folder);
 		}
 		else if (data.gallery) {
 			await this.ntb.app.workspace.getLeaf(true).setViewState({

@@ -197,53 +197,51 @@ export default class SettingsMigrator {
         //     old_version = new_version;
         // }
 
-        // MIGRATION: add and use IDs for toolbars and items
-        if (old_version === 20240426.1) {
-            new_version = 20240727.1;
-            this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
-            loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
-                // add UUIDs to toolbars first
-                this.ntb.settings.toolbars[index].uuid = this.ntb.settings.toolbars[index].uuid 
-                    ? this.ntb.settings.toolbars[index].uuid
-                    : getUUID();
-            });
-            loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
-                tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
-                    // add UUIDs to items
-                    this.ntb.settings.toolbars[index].items[item_index].uuid = this.ntb.settings.toolbars[index].items[item_index].uuid
-                        ? this.ntb.settings.toolbars[index].items[item_index].uuid
-                        : getUUID();
-                    // update item menu type references to use toolbar UUIDs
-                    if (item.linkAttr.type === ItemType.Menu) {
-                        let menuToIdToolbar = this.ntb.settingsManager.getToolbarByName(item.link);
-                        // just skip if we can't find it
-                        menuToIdToolbar 
-                            ? this.ntb.settings.toolbars[index].items[item_index].link = menuToIdToolbar?.uuid
-                            : undefined;
-                    }
-                });
-            });
-            // update folder mappings to use toolbar UUIDs
-            loaded_settings.folderMappings?.forEach((mapping: FolderMapping, index: number) => {
-                let mapToIdToolbar = this.ntb.settingsManager.getToolbarByName(mapping.toolbar);
-                // just skip if we can't find it
-                mapToIdToolbar ? this.ntb.settings.folderMappings[index].toolbar = mapToIdToolbar.uuid : undefined;
-            });
-            // for the next migration to run
-            old_version = new_version;
-        }
+        // // MIGRATION: add and use IDs for toolbars and items
+        // if (old_version === 20240426.1) {
+        //     new_version = 20240727.1;
+        //     this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
+        //     loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
+        //         // add UUIDs to toolbars first
+        //         this.ntb.settings.toolbars[index].uuid = this.ntb.settings.toolbars[index].uuid 
+        //             ? this.ntb.settings.toolbars[index].uuid
+        //             : getUUID();
+        //     });
+        //     loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
+        //         tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
+        //             // add UUIDs to items
+        //             this.ntb.settings.toolbars[index].items[item_index].uuid = this.ntb.settings.toolbars[index].items[item_index].uuid
+        //                 ? this.ntb.settings.toolbars[index].items[item_index].uuid
+        //                 : getUUID();
+        //             // update item menu type references to use toolbar UUIDs
+        //             if (item.linkAttr.type === ItemType.Menu) {
+        //                 const menuToIdToolbar = this.ntb.settingsManager.getToolbarByName(item.link);
+        //                 // just skip if we can't find it
+        //                 if (menuToIdToolbar) this.ntb.settings.toolbars[index].items[item_index].link = menuToIdToolbar?.uuid;
+        //             }
+        //         });
+        //     });
+        //     // update folder mappings to use toolbar UUIDs
+        //     loaded_settings.folderMappings?.forEach((mapping: FolderMapping, index: number) => {
+        //         const mapToIdToolbar = this.ntb.settingsManager.getToolbarByName(mapping.toolbar);
+        //         // just skip if we can't find it
+        //         if (mapToIdToolbar) this.ntb.settings.folderMappings[index].toolbar = mapToIdToolbar.uuid;
+        //     });
+        //     // for the next migration to run
+        //     old_version = new_version;
+        // }
 
-        // MIGRATION: add and use IDs for toolbars and items
-        if (old_version === 20240727.1) {
-            new_version = 20250302.1;
-            this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
-            // don't show onboarding for new toolbars if user's already mapped stuff 
-            if (loaded_settings.folderMappings.length > 0) {
-                this.ntb.settings.onboarding['new-toolbar-mapping'] = true;
-            }
-            // for the next migration to run
-            old_version = new_version;
-        }
+        // // MIGRATION: add and use IDs for toolbars and items
+        // if (old_version === 20240727.1) {
+        //     new_version = 20250302.1;
+        //     this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
+        //     // don't show onboarding for new toolbars if user's already mapped stuff 
+        //     if (loaded_settings.folderMappings.length > 0) {
+        //         this.ntb.settings.onboarding['new-toolbar-mapping'] = true;
+        //     }
+        //     // for the next migration to run
+        //     old_version = new_version;
+        // }
 
         // MIGRATION: set gallery flag on existing items
         if (old_version === 20250302.1) {
@@ -283,8 +281,12 @@ export default class SettingsMigrator {
         if (old_version === 20260122.1) {
             new_version = 20260428.1;
             this.ntb.debug("starting migration: " + old_version + " -> " + new_version);
-            //@ts-ignore
-            delete this.ntb.settings.recentFiles, delete this.ntb.settings.recentItems, delete this.ntb.settings.recentToolbars;
+            //@ts-expect-error: property may not exist
+            delete this.ntb.settings.recentFiles;
+            //@ts-expect-error: property may not exist
+            delete this.ntb.settings.recentItems;
+            //@ts-expect-error: property may not exist
+            delete this.ntb.settings.recentToolbars;
             // for the next migration to run
             old_version = new_version;
         }
