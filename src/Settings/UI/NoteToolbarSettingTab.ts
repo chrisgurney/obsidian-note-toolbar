@@ -8,10 +8,9 @@ import Sortable from 'sortablejs';
 import TextToolbar from 'Toolbar/TextToolbar';
 import { exportToCallout } from 'Utils/ImportExport';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
-import { confirmWithModal } from './Modals/ConfirmModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
-import { fixToggleTab, iconTextFr, learnMoreFr, removeFieldHelp, setFieldHelp } from "./Utils/SettingsUIUtils";
+import { fixToggleTab, iconTextFr, learnMoreFr } from "./Utils/SettingsUIUtils";
 // import RuleUi from './RuleUi';
 
 type SettingsSectionType = 'appToolbars' | 'callouts' | 'contexts' | 'displayRules' | 'itemList' | 'navbar';
@@ -164,11 +163,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				this.renderSearchField(toolbarListSetting.controlEl);
 			}
 			else {
-				const searchButton = toolbarListSetting
+				toolbarListSetting
 					.addExtraButton((cb) => {
 						cb.setIcon('search')
 						.setTooltip(t('setting.search.button-tooltip'))
-						.onClick(async () => {
+						.onClick(() => {
 							this.toggleSearch();
 							// un-collapse list container if it's collapsed
 							if (!this.isSectionOpen['itemList']) {
@@ -188,13 +187,13 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setIcon('import')
 				.setTooltip(t('import.button-import-tooltip'))
 				.onClick(async () => {
-					importFromModal(
+					await importFromModal(
 						this.ntb
 					).then(async (importedToolbar: ToolbarSettings) => {
 						if (importedToolbar) {
 							await this.ntb.settingsManager.addToolbar(importedToolbar);
 							await this.ntb.settingsManager.save();
-							await this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
+							this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
 							this.display();
 						}
 					});
@@ -220,9 +219,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		if (this.ntb.settings.toolbars.length == 0) {
 
 			const emptyMsgEl = createDiv({ text: 
-				this.ntb.settingsUtils.emptyMessageFr(t('setting.toolbars.label-empty-create-tbar'), t('setting.toolbars.link-create'), async () => {
-					const newToolbar = await this.ntb.settingsManager.newToolbar();
-					this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
+				this.ntb.settingsUtils.emptyMessageFr(t('setting.toolbars.label-empty-create-tbar'), t('setting.toolbars.link-create'), () => {
+					void this.ntb.settingsManager.newToolbar().then((newToolbar) => {
+						this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
+					});
 				}) });
 			emptyMsgEl.addClass('note-toolbar-setting-empty-message');
 			toolbarListDiv.append(emptyMsgEl);
@@ -264,8 +264,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 										menuItem
 											.setTitle(t('setting.toolbars.button-duplicate-tbar-tooltip'))
 											.setIcon('copy-plus')
-											.onClick(async () => {
-												this.ntb.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
+											.onClick(() => {
+												void this.ntb.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
 													this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
 												});
 											});
@@ -288,7 +288,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 												.setIcon('copy')
 												.onClick(async () => {
 													const calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
-													activeWindow.navigator.clipboard.writeText(calloutExport);
+													await activeWindow.navigator.clipboard.writeText(calloutExport);
 													new Notice(
 														learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
 													).containerEl.addClass('mod-success');
@@ -1449,7 +1449,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.addButton((cb) => {
 					cb.setIcon(this.ntb.settings.icon)
 						.setTooltip(t('setting.other.icon.tooltip'))
-						.onClick(async (e) => {
+						.onClick((e) => {
 							e.preventDefault();
 							const modal = new IconSuggestModal(
 								this.ntb, this.ntb.settings.icon, false, (icon) => this.updateNoteToolbarIcon(cb.buttonEl, icon));
@@ -1723,7 +1723,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	}
 
 	updateNavbarVisibilityButton(button: ButtonComponent) {
-		const { obsidianUiEls, obsidianUiSetting, allNavbarKeys, allHidden } = this.getNavbarState();
+		const { obsidianUiSetting, allNavbarKeys, allHidden } = this.getNavbarState();
 		if (allHidden) {
 			button.setIcon('eye-off');
 			button.setTooltip(t('setting.display-navbar.bottom.label-hidden'));
