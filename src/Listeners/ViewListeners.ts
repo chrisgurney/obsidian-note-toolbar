@@ -64,8 +64,8 @@ export default class ViewListeners {
         switch (viewType) {
             case 'markdown': {
                 scrollEl = (view as MarkdownView).getMode() === 'preview' 
-                    ? containerEl.querySelector('.markdown-reading-view .markdown-preview-view') as HTMLElement
-                    : containerEl.querySelector('.cm-scroller') as HTMLElement;
+                    ? containerEl.querySelector('.markdown-reading-view .markdown-preview-view')
+                    : containerEl.querySelector('.cm-scroller');
                 break;
             }
             default:
