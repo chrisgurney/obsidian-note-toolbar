@@ -63,7 +63,7 @@ export default class SettingsUIUtils {
 		});
 
 		// check usage stats
-		let usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
+		const usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
 		if (usageStats) {
 			warningsFr.createEl('li', { text: t('setting.usage.description') + usageStats });
 		}
