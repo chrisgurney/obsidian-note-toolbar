@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, Platform, Plugin, TAbstractFile, TFile, WorkspaceLeaf } from "obsidian";
+import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, Platform, TAbstractFile, TFile, WorkspaceLeaf, WorkspacesPlugin } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
 import EditorMenu from "../Toolbar/EditorMenu";
@@ -16,7 +16,7 @@ export default class WorkspaceListeners {
 	private fileMenu: FileMenu;
 	private ribbonMenu: RibbonMenu;
 
-	workspacesPlugin!: { instance: Plugin & { activeWorkspace: string } };
+	workspacesPlugin!: WorkspacesPlugin;
     
 	// track to reduce unneccessary re-renders 
 	activeWorkspace!: string | undefined;

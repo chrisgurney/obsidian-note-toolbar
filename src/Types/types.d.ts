@@ -59,6 +59,10 @@ declare module "obsidian" {
         cm: unknown;
     }
 
+    interface FileExplorerPlugin extends Plugin {
+        revealInFolder(fileFolder: TFile | TFolder): void;
+    }
+
     // allows access to the path of the vault, for the {{vault_path}} var
     interface FileSystemAdapter extends DataAdapter {
         getBasePath(): string;
@@ -103,11 +107,19 @@ declare module "obsidian" {
     //     on(name: "note-toolbar:item-activated", callback: () => void, ctx?: any): EventRef;
     // }
 
+    interface WebViewerPlugin extends Plugin {
+        instance: Plugin & { options: { openExternalURLs: boolean } };
+    }
+
     interface WorkspaceItem {
         // allows access to leaf's container element, for DOM queries (in current view mode)
         containerEl: HTMLDivElement;
         // allows access to leaf's ID, to help uniquely identify note views
         id: string;
+    }
+
+    interface WorkspacesPlugin extends Plugin {
+        instance: Plugin & { activeWorkspace: string };
     }
 
 }

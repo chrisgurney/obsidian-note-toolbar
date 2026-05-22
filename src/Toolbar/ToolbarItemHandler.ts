@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Command, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder } from "obsidian";
+import { Command, FileExplorerPlugin, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder, WebViewerPlugin } from "obsidian";
 import { ItemFocusType, ItemType, LINK_OPTIONS, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from "Utils/Utils";
 
@@ -124,7 +124,7 @@ export default class ToolbarItemHandler {
                 this.ntb.debug("- openLinkText: ", linkHref, " from: ", activeFilePath);
                 const fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
                 if (fileOrFolder instanceof TFolder) {
-                    this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer').revealInFolder(fileOrFolder);
+                    (this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer') as FileExplorerPlugin).revealInFolder(fileOrFolder);
                 }
                 else if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
                     // this.ntb.api.modal(fileOrFolder, { editable: true });
@@ -253,7 +253,8 @@ export default class ToolbarItemHandler {
             const target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
 
             const isWebViewerEnabled = this.ntb.app.internalPlugins.plugins['webviewer']?.enabled ?? false;
-            const isWebViewerOpeningUrls = this.ntb.app.internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;
+            const isWebViewerOpeningUrls = 
+                (this.ntb.app.internalPlugins.plugins['webviewer'] as WebViewerPlugin)?.instance?.options?.openExternalURLs ?? false;
             let usingWebViewer = false;
 
             // use Web Viewer for certain targets even if the 'Open external links' setting is disabled
@@ -341,11 +342,11 @@ export default class ToolbarItemHandler {
      * Highlights the provided folder in the file explorer.
      * @param folder folder to highlight, or null if nothing to do.
      */
-    async handleLinkFolder(folder: string | null) {
+    handleLinkFolder(folder: string | null) {
         // this.debug('handleLinkFolder:', folder);
         const tFileOrFolder = folder ? this.ntb.app.vault.getAbstractFileByPath(folder) : undefined;
         if (tFileOrFolder instanceof TFolder) {
-            this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer').revealInFolder(tFileOrFolder);
+            (this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer') as FileExplorerPlugin).revealInFolder(tFileOrFolder);
         }
         else {
             new Notice(
