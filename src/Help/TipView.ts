@@ -46,10 +46,10 @@ export default class TipView extends ItemView {
         setIcon(bannerIconEl, tip.icon);
         const bannerTitleEl = bannerEl.createDiv();
         const bannerTitleComponent = new Component();
-        MarkdownRenderer.render(this.ntb.app, `# ${(tip as TipType).title[language]}`, bannerTitleEl, '/', bannerTitleComponent);
+        await MarkdownRenderer.render(this.ntb.app, `# ${(tip as TipType).title[language]}`, bannerTitleEl, '/', bannerTitleComponent);
         const bannerDescEl = bannerEl.createDiv();
         const bannerDescComponent = new Component();
-        MarkdownRenderer.render(this.ntb.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', bannerDescComponent);
+        await MarkdownRenderer.render(this.ntb.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', bannerDescComponent);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-tip-content', 'is-readable-line-width');
@@ -76,7 +76,7 @@ export default class TipView extends ItemView {
 
         const rootPath = this.ntb.app.vault.getRoot().path;
         const component = new Component();
-        MarkdownRenderer.render(this.ntb.app, tipText, contentEl, rootPath, component);
+        await MarkdownRenderer.render(this.ntb.app, tipText, contentEl, rootPath, component);
 
         this.renderTipVideos(contentEl);
         this.renderGalleryCallouts(contentEl, tip.color as ColorType);
@@ -135,7 +135,7 @@ export default class TipView extends ItemView {
             if (res.status !== 200) return null;
             return res.text ?? '';
         } catch (e) {
-            this.ntb.debug(`Error fetching tip for language (${language}). Falling back to English.\n${e}`);
+            this.ntb.debug(`Error fetching tip for language (${language}). Falling back to English.\n${e instanceof Error ? e.message : String(e)}`);
             try {
                 const res = await requestUrl(`${URL_GHUC_TIPS}/en/${filename}.md`);
                 if (res.status !== 200) return null;
@@ -152,7 +152,7 @@ export default class TipView extends ItemView {
      */
     renderGalleryCallouts(contentEl: HTMLDivElement, color: ColorType) {
         const callouts = contentEl.querySelectorAll<HTMLDivElement>('.callout[data-callout="note-toolbar-gallery"]');
-        callouts.forEach(async (calloutEl: HTMLDivElement) => {
+        callouts.forEach((calloutEl: HTMLDivElement) => {
             const items: string[] = [];
             calloutEl.querySelectorAll('li').forEach(li => {
                 const id = li.textContent?.trim();
@@ -200,7 +200,7 @@ export default class TipView extends ItemView {
      */
     renderTipVideos(contentEl: HTMLDivElement) {
         const callouts = contentEl.querySelectorAll<HTMLDivElement>('.callout[data-callout="note-toolbar-video"]');
-        callouts.forEach(async (calloutEl: HTMLDivElement) => {
+        callouts.forEach((calloutEl: HTMLDivElement) => {
             const url = calloutEl.querySelector('.callout-content')?.textContent?.trim();
             if (!url) return;
 
@@ -222,9 +222,10 @@ export default class TipView extends ItemView {
 
             overlayEl.onclick = () => {
                 if (videoEl.paused) {
-                    videoEl.play();
-                    playButtonEl.remove();
-                    videoEl.setAttribute('controls', '');
+                    void videoEl.play().then(() => {
+                        playButtonEl.remove();
+                        videoEl.setAttribute('controls', '');
+                    });
                 } else {
                     videoEl.pause();
                 }
@@ -297,7 +298,7 @@ export function renderTipItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivEleme
             const tipTitle = tip.title?.[language] || tip.title['en'];
             const tipDesc = tip.description?.[language] || tip.description['en'] || '';
 
-            const itemTitleEl = itemEl.createDiv('note-toolbar-card-item-title').setText(tipTitle);
+            itemEl.createDiv('note-toolbar-card-item-title').setText(tipTitle);
             if (tipDesc) itemEl.createDiv('note-toolbar-card-item-description').setText(tipDesc);
 
             const iconEl = itemEl.createDiv();

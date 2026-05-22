@@ -109,7 +109,7 @@ export default class WhatsNewView extends ItemView {
 			if (res.status !== 200) return null;
 			return { tag_name: version, body: res.text ?? '' };
 		} catch (e) {
-			this.ntb.debug(`Error fetching release notes for language (${language}). Falling back to English.\n${e as string}`);
+			this.ntb.debug(`Error fetching release notes for language (${language}). Falling back to English.\n${e instanceof Error ? e.message : String(e)}`);
 			try {
 				const res = await requestUrl(`${URL_GHUC_RELEASE_NOTES}/en/${version}.md`);
 				if (res.status !== 200) return null;

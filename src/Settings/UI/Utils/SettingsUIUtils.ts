@@ -702,17 +702,17 @@ export default class SettingsUIUtils {
 					: fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') !== null;
 			if (fieldContainerEl && !hasError) {
 				if (errorText) {
-					let errorDiv = createEl('div', { 
+					const errorDiv = createEl('div', { 
 						text: errorText, 
 						cls: 'note-toolbar-setting-field-error' });
 					if (errorLink) {
 						// as it's not easy to listen for plugins being enabled,
 						// user will have to click a refresh link to dismiss the error
 						this.ntb.registerDomEvent(errorLink, 'click', (event) => {
-							let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
-							let refreshIcon = refreshLink.createSpan();
+							const refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
+							const refreshIcon = refreshLink.createSpan();
 							setIcon(refreshIcon, 'refresh-cw');
-							let oldLink = event.currentTarget as HTMLElement;
+							const oldLink = event.currentTarget as HTMLElement;
 							oldLink?.replaceWith(refreshLink);
 							this.ntb.registerDomEvent(refreshLink, 'click', event => {
 								parent.display();
@@ -734,7 +734,7 @@ export default class SettingsUIUtils {
 		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
 		removeFieldHelp(setting.controlEl);
 		setFieldHelp(setting.controlEl, toolbarPreviewFr);
-		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview') as HTMLElement | null;
+		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview');
 		// only apply fade if the preview is overflowing
 		if (tbarEl) activeWindow.setTimeout(() => {
 			tbarEl.classList.toggle('note-toolbar-setting-tbar-preview-fade', tbarEl.scrollWidth > tbarEl.clientWidth);
@@ -745,8 +745,8 @@ export default class SettingsUIUtils {
 	 * Shows the Help view (for onboarding) if the user hasn't seen it yet.
 	 */
 	showHelpViewIfNeeded() {
-		this.runOnboarding('startup-help-view', () => {
-			this.ntb.app.workspace.getLeaf(true).setViewState({	type: VIEW_TYPE_HELP, active: true });
+		void this.runOnboarding('startup-help-view', async () => {
+			await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 		});
 	}
 
@@ -757,8 +757,8 @@ export default class SettingsUIUtils {
 		// show the What's New dialog once if the user hasn't seen it yet
 		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
 			this.ntb.settings.whatsnew_version = WHATSNEW_VERSION;
-			this.ntb.settingsManager.save().then(() => {
-				this.ntb.app.workspace.getLeaf(true).setViewState({
+			void this.ntb.settingsManager.save().then(async () => {
+				await this.ntb.app.workspace.getLeaf(true).setViewState({
 					type: VIEW_TYPE_WHATS_NEW,
 					active: true
 				});
@@ -825,8 +825,8 @@ export default class SettingsUIUtils {
 						}
 						else {
 							statusMessage = t('setting.item.option-command-error-not-available-search');
-							let pluginLinkFragment = pluginLinkFr(itemValue);
-							let pluginLink = pluginLinkFragment?.querySelector('a');
+							const pluginLinkFragment = pluginLinkFr(itemValue);
+							const pluginLink = pluginLinkFragment?.querySelector('a');
 							if (pluginLink) {
 								statusMessage = t('setting.item.option-command-error-not-available-install');
 								pluginLink.addClass('note-toolbar-setting-focussable-link');
@@ -871,14 +871,14 @@ export default class SettingsUIUtils {
 				case SettingType.Script:
 					if (toolbarItem && toolbarItem.scriptConfig) {
 						// validate what the selected function for the adapter for this item requires
-						let adapter = this.ntb.adapters.getAdapterForItemType(toolbarItem.linkAttr.type);
+						const adapter = this.ntb.adapters.getAdapterForItemType(toolbarItem.linkAttr.type);
 						if (adapter) {
-							let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
+							const selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
 							const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
 							if (params) {
-								for (const [index, param] of params.entries()) {
+								for (const [ , param] of params.entries()) {
 									// TODO? error if required parameter is empty?
-									const value = toolbarItem.scriptConfig?.[param.parameter as keyof ScriptConfig] ?? null;
+									const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
 									if (value) {
 										const subfieldValid = await this.updateItemComponentStatus(parent, value, param.type, componentEl);
 										status = subfieldValid ? Status.Valid : Status.Invalid;
@@ -987,7 +987,7 @@ export function fixToggleTab(toggle: ToggleComponent) {
  * @returns DocumentFragment with disclaimers to show in settings UI
  */
 export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToCheck: string[]): DocumentFragment {
-	let disclaimersFr = document.createDocumentFragment();
+	const disclaimersFr = document.createDocumentFragment();
 	let first = true;
 	keysToCheck.forEach(keyToCheck => {
 		const disclaimer = disclaimers.find(d => keyToCheck in d);
@@ -1010,7 +1010,7 @@ export function getPlatformVisState(item: ToolbarItemSettings, platform: 'deskto
 	const visibility = item.visibility ? (platform === 'desktop' ? item.visibility.desktop : item.visibility.mobile) : undefined;
 
 	if (visibility) {
-		let components = visibility?.components;
+		const components = visibility?.components;
 		if (components) {
 			if (components.length === 2) {
 				return ['visible', '', t('setting.item.visibility.option-item-show', { platform: labelPlatform })];
@@ -1042,12 +1042,12 @@ export function getValueForKey(dict: {[key: string]: string}[], key: string): st
 }
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {
-	let headingFr = document.createDocumentFragment();
-	let headingEl = headingFr.createEl('span');
+	const headingFr = document.createDocumentFragment();
+	const headingEl = headingFr.createEl('span');
 	headingEl.addClass('note-toolbar-setting-text-with-icon');
-	let headingIcon = headingEl.createEl('span');
+	const headingIcon = headingEl.createEl('span');
 	setIcon(headingIcon, 'lucide-' + icon);
-	let headingText = headingEl.createEl('span');
+	const headingText = headingEl.createEl('span');
 	headingText.setText(text);
 	headingFr.append(headingEl);
 	return headingFr;
@@ -1060,11 +1060,11 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
  * @returns DocumentFragment containing the message and styling.
  */
 export function learnMoreFr(message: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	let messageFr = document.createDocumentFragment();
+	const messageFr = document.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
 	);
-	let learnMoreLink = messageFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
+	const learnMoreLink = messageFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
 }
@@ -1077,13 +1077,13 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
  * @returns DocumentFragment containing the message and styling.
  */
 export function headingLearnMoreFr(title: string, desc: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	let messageFr = document.createDocumentFragment();
+	const messageFr = document.createDocumentFragment();
 	messageFr.append(title);
 
 	// description + learn more link
-	let descFr = messageFr.createEl('div', 'setting-item-description');
+	const descFr = messageFr.createEl('div', 'setting-item-description');
 	descFr.append(desc, ' ');
-	let learnMoreLink = descFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
+	const learnMoreLink = descFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 
 	return messageFr;
@@ -1097,12 +1097,12 @@ export function headingLearnMoreFr(title: string, desc: string, page: string, li
  */
 export function pluginLinkFr(commandId: string, linkText?: string): DocumentFragment | undefined {
 	let pluginLinkFr = undefined;
-	let pluginId = commandId.includes(':') ? commandId.split(':')[0].trim() : undefined;
+	const pluginId = commandId.includes(':') ? commandId.split(':')[0].trim() : undefined;
 	// don't show Community Plugins link for Obsidian's built-in commands
 	if (pluginId && pluginId !== 'workspace') {
 		pluginLinkFr = document.createDocumentFragment();
 		// TODO: return link to core plugin settings if ID is in CORE_PLUGIN_IDS
-		let pluginLink = pluginLinkFr.createEl('a', { 
+		const pluginLink = pluginLinkFr.createEl('a', { 
 			href: `obsidian://show-plugin?id=${pluginId}`, 
 			text: linkText ? linkText : t('setting.item.label-review-plugin') 
 		});
@@ -1121,9 +1121,9 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 		const itemControlClass = 'setting-item-control';
 		const itemPreviewClass = 'note-toolbar-setting-item-preview';
 		let containerEl = null;
-		el.hasClass(itemControlClass) ? containerEl = el : containerEl = el.closest(`.${itemControlClass}`);
+		containerEl = el.hasClass(itemControlClass) ? el : el.closest(`.${itemControlClass}`);
 		if (!containerEl) {
-			el.hasClass(itemPreviewClass) ? containerEl = el : containerEl = el.closest(`.${itemPreviewClass}`);
+			containerEl = el.hasClass(itemPreviewClass) ? el : el.closest(`.${itemPreviewClass}`);
 		}
 		const errorEl = position === 'beforeend'
 			? containerEl?.querySelector('.note-toolbar-setting-field-error')
