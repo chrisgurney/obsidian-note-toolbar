@@ -76,10 +76,10 @@ export default class WorkspaceListeners {
 	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
 	 * @param file TFile that was opened.
 	 */
-	onFileOpen = async (file: TFile | null) => {
+	onFileOpen = (file: TFile | null) => {
 		// this.ntb.debug('FILE-OPEN: updating recent file list:', file?.name);
 		// update list of the most recently opened files
-		if (file) await this.ntb.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
+		if (file) this.ntb.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
 	};
 
 	/**
