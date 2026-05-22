@@ -1,7 +1,7 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
-import { ComponentType, ItemType, LINK_OPTIONS, ScriptConfig, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
+import { ComponentType, ItemType, LINK_OPTIONS, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import IconSuggestModal from "../Modals/IconSuggestModal";
 import ItemModal from "../Modals/ItemModal";
@@ -93,8 +93,8 @@ export default class ToolbarItemUi {
                 .addExtraButton((btn: ExtraButtonComponent) => {
                     btn.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
                         .setTooltip(t('setting.item.button-icon-tooltip'))
-                        .onClick(async () => {
-                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, async (icon) => handleIconSelected(icon));
+                        .onClick(() => {
+                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void handleIconSelected(icon));
                             modal.open();
                         });
                     btn.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -107,7 +107,7 @@ export default class ToolbarItemUi {
                                     const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
                                     if (!modifierPressed) {
                                         e.preventDefault();
-                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => handleIconSelected(icon));
+                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void handleIconSelected(icon));
                                         modal.open();
                                     }
                                 }
@@ -130,7 +130,7 @@ export default class ToolbarItemUi {
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
-                    this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
+                    void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
                 });	
             labelField.settingEl.id = 'note-toolbar-item-field-label';
 
@@ -148,7 +148,7 @@ export default class ToolbarItemUi {
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
-                    this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
+                    void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
                 });
             tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
             
@@ -266,17 +266,17 @@ export default class ToolbarItemUi {
                     btn.onClick(async () => {
                         // if a command doesn't already exist, create it and open hotkey settings
                         if (!itemCommand) {
-                            await this.ntb.commands.addItemCommand(toolbarItem, async (commandName) => {
+                            await this.ntb.commands.addItemCommand(toolbarItem, (commandName) => {
                                 new Notice(
                                     t('setting.use-item-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } })
                                 ).containerEl.addClass('mod-success');
                                 this.parent.close();
-                                await this.ntb.commands.openHotkeySettings(commandName);
+                                this.ntb.commands.openHotkeySettings(commandName);
                             });
                         }
                         else {
                             this.parent.close();
-                            await this.ntb.commands.openHotkeySettings(itemCommand.name);
+                            this.ntb.commands.openHotkeySettings(itemCommand.name);
                         }
                     });
                 });
@@ -293,7 +293,7 @@ export default class ToolbarItemUi {
             .addButton((cb) => {
                 cb.setIcon("ellipsis")
                     .setTooltip(t('setting.item.menu-more-actions'))
-                    .onClick(async (event) => {
+                    .onClick((event) => {
                         const menu = this.generateItemActionMenu(toolbarItem);
                         menu.showAtPosition(getElementPosition(cb.buttonEl));
                     });
@@ -387,7 +387,7 @@ export default class ToolbarItemUi {
             })
             .addButton((btn: ButtonComponent) => {
                 this.updateViewModeButton(btn, toolbarItem.visibility.viewMode ?? ViewModeType.All);
-                btn.onClick(async () => {
+                btn.onClick(() => {
                     const menu = this.getModeVisibilityMenu(toolbarItem, btn);
                     menu.showAtPosition(getElementPosition(btn.buttonEl));               
                 });
@@ -401,8 +401,8 @@ export default class ToolbarItemUi {
                 btn.extraSettingsEl.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
                 btn.extraSettingsEl.tabIndex = 0;
                 this.ntb.registerDomEvent(
-                    btn.extraSettingsEl, 'keydown', (e) => {
-                        if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
+                    btn.extraSettingsEl, 'keydown', async (e) => {
+                        if (this.parent instanceof ToolbarSettingsModal) await this.parent.itemListUi.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
                     } );
             });
         }
@@ -441,8 +441,8 @@ export default class ToolbarItemUi {
             menuItem
                 .setTitle(t('setting.item.menu-copy-item'))
                 .setIcon('square-arrow-right')
-                .onClick(async (menuEvent) => {
-                    await this.ntb.settingsUtils.copyToolbarItem(this.toolbar, toolbarItem);
+                .onClick((menuEvent) => {
+                    this.ntb.settingsUtils.copyToolbarItem(this.toolbar, toolbarItem);
                 });
         });
 
@@ -450,8 +450,8 @@ export default class ToolbarItemUi {
             menuItem
                 .setTitle(t('setting.item.menu-move-item'))
                 .setIcon('arrow-right')
-                .onClick(async (menuEvent) => {
-                    await this.ntb.settingsUtils.moveToolbarItem(this.toolbar, toolbarItem, () => {
+                .onClick((menuEvent) => {
+                    this.ntb.settingsUtils.moveToolbarItem(this.toolbar, toolbarItem, () => {
                         this.parent.display();
                     });
                 });
@@ -495,10 +495,10 @@ export default class ToolbarItemUi {
                                 notice.containerEl.addClass('mod-success');
                                 const noticeEl = notice.messageEl;
                                 noticeEl.addClass('note-toolbar-notice-pointer');
-                                this.ntb.registerDomEvent(noticeEl, 'click', async () => {
+                                this.ntb.registerDomEvent(noticeEl, 'click', () => {
                                     notice.hide();
                                     this.parent.close();
-                                    await this.ntb.commands.openHotkeySettings(commandName);
+                                    this.ntb.commands.openHotkeySettings(commandName);
                                 });
                                 this.parent.display();
                             });
@@ -519,7 +519,7 @@ export default class ToolbarItemUi {
                 .setTitle(t('setting.item.menu-copy-id'))
                 .setIcon('code')
                 .onClick(async (menuEvent) => {
-                    activeWindow.navigator.clipboard.writeText(toolbarItem.uuid);
+                    await activeWindow.navigator.clipboard.writeText(toolbarItem.uuid);
                     new Notice(t('setting.item.menu-copy-id-notice')).containerEl.addClass('mod-success');
                 });
         });
@@ -705,16 +705,18 @@ export default class ToolbarItemUi {
                 const commandSetting = new Setting(fieldDiv)
                     .setClass("note-toolbar-setting-item-field-link")
                     .addSearch((cb) => {
-                        new CommandSuggester(this.ntb.app, cb.inputEl, async (command) => {
+                        new CommandSuggester(this.ntb.app, cb.inputEl, (command) => {
                             // below code is executed when user selects from list
-                            const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this.parent, command.id, SettingType.Command, cb.inputEl.parentElement);
-                            if (isValid) cb.setPlaceholder(t('setting.item.option-command-placeholder'));
-                            cb.inputEl.value = command.name;
-                            toolbarItem.link = command.name;
-                            toolbarItem.linkAttr.commandId = command.id;
-                            toolbarItem.linkAttr.type = type;
-                            await this.ntb.settingsManager.save();
-                            this.renderPreview(toolbarItem);
+                            void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, command.id, SettingType.Command, cb.inputEl.parentElement).then((isValid) => {
+                                if (isValid) cb.setPlaceholder(t('setting.item.option-command-placeholder'));
+                                cb.inputEl.value = command.name;
+                                toolbarItem.link = command.name;
+                                toolbarItem.linkAttr.commandId = command.id;
+                                toolbarItem.linkAttr.type = type;
+                                void this.ntb.settingsManager.save().then(() => {
+                                    this.renderPreview(toolbarItem);
+                                });
+                            });
                         });
                         cb.setPlaceholder(isInitialCommandValid ? t('setting.item.option-command-placeholder') : initialCommandId)
                             .setValue(this.ntb.utils.getCommandNameById(toolbarItem.linkAttr.commandId) || '')
@@ -729,7 +731,7 @@ export default class ToolbarItemUi {
                                 await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                             }, 500));
-                        this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
+                        void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
                     });	
 
                 const commandAdvancedEl = fieldDiv.createDiv();
@@ -836,7 +838,7 @@ export default class ToolbarItemUi {
                                 await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                             }, 500));
-                        this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
+                        void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
                     });
                 const fileAdvancedEl = fieldDiv.createDiv();
                 fileAdvancedEl.addClass('note-toolbar-setting-item-link-advanced');
@@ -879,7 +881,7 @@ export default class ToolbarItemUi {
                                     : learnMoreFr(t('setting.item.option-item-group-help'), 'Creating-toolbar-items');
                                 setFieldHelp(groupSetting.controlEl, groupPreviewFr);
                             }, 500));
-                        this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
+                        void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
                     });
                 setFieldHelp(groupSetting.controlEl, helpTextFr);
                 break;
@@ -914,7 +916,7 @@ export default class ToolbarItemUi {
                                 }
                                 setFieldHelp(menuSetting.controlEl, menuHelpFr);
                             }, 500));
-                        this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
+                        void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.Toolbar, cb.inputEl.parentElement);
                     });
                 setFieldHelp(menuSetting.controlEl, helpTextFr);
                 break;
@@ -927,7 +929,7 @@ export default class ToolbarItemUi {
                             .setValue(toolbarItem.link)
                             .onChange(
                                 debounce(async (value) => {
-                                    this.ntb.settingsUtils.updateItemComponentStatus(this.parent, value, SettingType.Text, cb.inputEl.parentElement);
+                                    await this.ntb.settingsUtils.updateItemComponentStatus(this.parent, value, SettingType.Text, cb.inputEl.parentElement);
                                     toolbarItem.link = value;
                                     toolbarItem.linkAttr.commandId = '';
                                     toolbarItem.linkAttr.type = type;
@@ -935,7 +937,7 @@ export default class ToolbarItemUi {
                                     await this.ntb.settingsManager.save();
                                     this.renderPreview(toolbarItem);
                                 }, 500));
-                        this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
+                        void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
                     });
                 // unable to put help about vars below the field without restructuring; leaving out for now
                 // setFieldHelp(uriSetting.controlEl, helpTextFr);
@@ -1060,11 +1062,12 @@ export default class ToolbarItemUi {
                         setting = new Setting(fieldDiv)
                             .setClass("note-toolbar-setting-item-field-link")
                             .addSearch((cb) => {
-                                new CommandSuggester(this.ntb.app, cb.inputEl, async (command) => {
-                                    this.ntb.settingsUtils.updateItemComponentStatus(this.parent, command.id, param.type, cb.inputEl.parentElement);
-                                    config[param.parameter] = command.id;
-                                    cb.inputEl.value = command.name;
-                                    await this.ntb.settingsManager.save();
+                                new CommandSuggester(this.ntb.app, cb.inputEl, (command) => {
+                                    void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, command.id, param.type, cb.inputEl.parentElement).then(() => {
+                                        config[param.parameter] = command.id;
+                                        cb.inputEl.value = command.name;
+                                        void this.ntb.settingsManager.save();
+                                    });
                                 });
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? (this.ntb.utils.getCommandNameById(initialValue) || '') : '')
@@ -1075,7 +1078,7 @@ export default class ToolbarItemUi {
                                         await this.ntb.settingsManager.save();
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
-                                this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
+                                void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         break;
                     case SettingType.File:
@@ -1098,7 +1101,7 @@ export default class ToolbarItemUi {
                                         await this.ntb.settingsManager.save();
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
-                                this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
+                                void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         break;
                     case SettingType.Text: {
@@ -1115,7 +1118,7 @@ export default class ToolbarItemUi {
                                             await this.ntb.settingsManager.save();
                                             this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
-                                this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
+                                void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
                             });
                         // outputContainer setting is shown in Advanced settings section below
                         if (param.parameter === 'outputContainer') {
@@ -1139,7 +1142,7 @@ export default class ToolbarItemUi {
                                             await this.ntb.settingsManager.save();
                                             this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
-                                this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);					
+                                void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);					
                             });
                         break;
                 }
@@ -1199,7 +1202,7 @@ export default class ToolbarItemUi {
                     toggle
                         .setValue(!toolbarItem.linkAttr.focus || toolbarItem.linkAttr.focus === 'editor')
                         .onChange(async (value: boolean) => {
-                            value ? toolbarItem.linkAttr.focus = 'editor' : toolbarItem.linkAttr.focus = 'none';
+                            toolbarItem.linkAttr.focus = value ? 'editor' : 'none';
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         });
@@ -1267,9 +1270,8 @@ export default class ToolbarItemUi {
             case ItemType.Menu: {
                 const menuGroupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
                 const fieldHelp = document.createDocumentFragment();
-                menuGroupToolbar
-                    ? fieldHelp.append(this.ntb.settingsUtils.createToolbarPreviewFr(menuGroupToolbar, undefined, true))
-                    : fieldHelp.append(
+                if (menuGroupToolbar) fieldHelp.append(this.ntb.settingsUtils.createToolbarPreviewFr(menuGroupToolbar, undefined, true))
+                    else fieldHelp.append(
                         learnMoreFr(
                             type === ItemType.Group ? t('setting.item.option-item-group-help') : t('setting.item.option-item-menu-help'),
                             type === ItemType.Group ? 'Item-Groups': 'Item-Menus')
@@ -1316,7 +1318,7 @@ export default class ToolbarItemUi {
 
         // highlight the button if we're currently in the other mode
         const recentViewMode: MarkdownViewModeType | undefined = this.ntb.utils.getRecentViewMode();
-        const isCurrentlyHidden = (mode !== ViewModeType.All) && !!recentViewMode && recentViewMode !== mode;
+        const isCurrentlyHidden = (mode !== ViewModeType.All) && !!recentViewMode && recentViewMode !== mode as string;
         button.buttonEl.toggleClass('note-toolbar-setting-state-active', isCurrentlyHidden);
 
         setIcon(button.buttonEl, config.icon);
