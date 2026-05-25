@@ -150,8 +150,9 @@ export default class ItemListUi {
                     if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
                     const currentFocussed = activeDocument.activeElement as HTMLElement;
                     if (currentFocussed) {
-                        const itemSelector = 
-                            currentFocussed.hasClass('sortable-handle') ? '.note-toolbar-setting-item-preview-container .sortable-handle' : '.note-toolbar-setting-item-preview';
+                        const itemSelector = currentFocussed.hasClass('sortable-handle') 
+                                ? '.note-toolbar-setting-item-preview-container .sortable-handle' 
+                                : '.note-toolbar-setting-item-preview-container > .note-toolbar-setting-item-preview';
                         const itemEls = Array.from(itemsSortableContainer.querySelectorAll<HTMLElement>(itemSelector));
                         const currentIndex = itemEls.indexOf(currentFocussed);
                         if (currentIndex === -1) return; // if focus is not on the item preview
