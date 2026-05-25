@@ -44,6 +44,7 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
 
 <details>
 <summary>Learn more...</summary>
+<br/>
 <ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
   <ul>
