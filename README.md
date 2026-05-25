@@ -43,7 +43,7 @@ In order for Note Toolbar to provide a built-in library of helpful tools, and sc
 Expand below to what these are used for, and let me know (via [GitHub ↗](https://github.com/chrisgurney/obsidian-note-toolbar/issues/546) or [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8)) if you have any questions or concerns.
 
 <details>
-<summary>Details...</summary>
+<summary>Learn more...</summary>
 <ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
   <ul>
