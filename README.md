@@ -63,8 +63,8 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
   </ul>
   <li><b>Clipboard Access: Reads or writes the system clipboard. May expose content copied from outside Obsidian.</b></li>
   <ul>
-    <li>The clipboard is <em>read</em>: if using the Gallery's <em>Paste</em> item; or using Note Toolbar's `clipboard` API function (provided as a convenience for user scripts).</li>
-    <li>The clipboard is <em>written</em>: when getting the callout version of a toolbar, getting the developer ID, a command URI, sharing a toolbar, and in various Gallery items that you can choose to add.</li>
+    <li>The clipboard is <em>read</em>... if using the Gallery's <em>Paste</em> item; or using Note Toolbar's `clipboard` API function (provided as a convenience for user scripts).</li>
+    <li>The clipboard is <em>written</em>... when getting the callout version of a toolbar, getting the developer ID, a command URI, sharing a toolbar, and in various Gallery items that you can choose to add.</li>
   </ul>
 </ul>
 
