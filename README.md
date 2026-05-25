@@ -36,6 +36,38 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 
 <img width="800" src="./docs/images/mobile_options.png" title="Mobile options for accessing the toolbar"/>
 
+## Disclosures
+
+In order for Note Toolbar to provide a built-in library of helpful tools, and scripting extensibility, the plugin needs access to read, write, and list files within a vault, as well as selective clipboard access. _The majority of these features are completely optional._
+
+Expand below to what these are used for, and let me know (via [GitHub ↗](https://github.com/chrisgurney/obsidian-note-toolbar/issues/546) or [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8)) if you have any questions or concerns.
+
+<details>
+<summary>Details...</summary>
+<ul>
+  <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
+  <ul>
+    <li>Used in Gallery items such as <em>Append text</em>, or to read in a script to execute it.</li>
+    <li>Used in Note Toolbar's <code>modal</code> API to display a file.</li>
+  </ul>
+  <li><b>Vault Write: Creates or modifies vault files via the Obsidian API</b></li>
+  <ul>
+    <li>Used by Gallery items such as <em>Append text</em>.</li>
+  </ul>
+  <li><b>Vault Enumeration: Enumerates all files in the vault. Gives the plugin access to every file path in the vault.</b></li>
+  <ul>
+    <li>Used by the Settings UI to show a list of files in the vault (e.g., to select a script file).</li>
+    <li>Used in Note Toolbar's <code>fileSuggester</code> API to allow for file search and selection.</li>
+  </ul>
+  <li><b>Clipboard Access: Reads or writes the system clipboard. May expose content copied from outside Obsidian.</b></li>
+  <ul>
+    <li>The clipboard is <em>read</em>: if using the Gallery's <em>Paste</em> item; or using Note Toolbar's `clipboard` API function (provided as a convenience for user scripts).</li>
+    <li>The clipboard is <em>written</em>: when getting the callout version of a toolbar, getting the developer ID, a command URI, sharing a toolbar, and in various Gallery items that you can choose to add.</li>
+    <li>Gallery item scripts that use the clipboard can be inspected (and modified) after adding them to any toolbar.</li>
+  </ul>
+</ul>
+</details>
+
 ## Features
 
 _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
