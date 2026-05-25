@@ -22,7 +22,7 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 - [Gallery](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 - [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)
 
-# Screenshots
+## Screenshots
 
 *Toolbars can stick to the top on scroll:*
 
@@ -36,7 +36,7 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 
 <img width="800" src="./docs/images/mobile_options.png" title="Mobile options for accessing the toolbar"/>
 
-# Features
+## Features
 
 _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
 
@@ -65,7 +65,7 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
 - The [Note Toolbar CLI](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-CLI) provides command-line access to create Note Toolbar toolbars and items, using Obsidian's CLI.
 - The [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
 
-# Translations 🌐
+## Translations 🌐
 
 Note Toolbar's UI, and Style Settings options, are also available in:
 
@@ -78,7 +78,7 @@ Note Toolbar's UI, and Style Settings options, are also available in:
 
 [Help add more translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
-# Installation
+## Installation
 
 [Click here](https://obsidian.md/plugins?id=note-toolbar) or:
 
@@ -115,7 +115,7 @@ As beta versions become available, I welcome <a href="https://github.com/chrisgu
 </blockquote>
 </details>
 
-# Getting Started 🚀
+## Getting Started 🚀
 
 Once enabled, open Note Toolbar's settings:
 
@@ -127,19 +127,19 @@ Once enabled, open Note Toolbar's settings:
 
 If you want your toolbar to show _without_ using a property, try mapping a folder (like wherever your Daily Notes are stored) to your new toolbar.
 
-# Example
+## Example
 
 ![Example Daily Notes toolbar including Daily Notes navigation, and multiple command shortcuts](./docs/images/example_toolbar_daily_notes.png)
 
 📖 [See the User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) for detailed instructions, and tips, and [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell) for examples.
 
-# Gallery
+## Gallery
 
 In the Gallery, **[explore 100+ items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)** that can be added to toolbars in just a couple clicks/taps.
 
 <img width="700" title="Screenshot of the Gallery" src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/gallery.png" />
 
-# User Guide
+## User Guide
 
 📖 **See the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki)** for detailed instructions, tips, and lots more.
 
@@ -149,11 +149,11 @@ Screenshots of Note Toolbar's configuration:
 
 <img width="700" title="Example of settings for a toolbar" src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/settings_edit_toolbar_example.png" />
 
-# License
+## License
 
 Note Toolbar is licensed under GPL 3.0. See the [LICENSE](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/LICENSE).
 
-# Inspiration and Thanks 🙏
+## Inspiration and Thanks 🙏
 
 Shout out to other projects and people who helped me with questions I had while developing this plugin:
 
@@ -163,14 +163,16 @@ Shout out to other projects and people who helped me with questions I had while 
 - [BRAT](https://github.com/TfTHacker/obsidian42-brat) - for the means to beta test this plugin.
 - Everybody on the [Obsidian Discord](https://discord.gg/obsidianmd) #plugin-dev channel for their time and documentation, including but not limited to: claremacrae, dovos, lemons_dev, liam.cain, joethei, sailKite, SkepticMystic
 
-# Contribute 🧑‍💻
+## Contribute 🧑‍💻
 
 Check out the [discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions) to [ask a question](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/new?category=q-a) or [request a feature](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/new?category=ideas).
   - Use this [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8) if you don't have a GitHub account.
 
 [Help add or review translations.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Help-translate-Note-Toolbar-%F0%9F%8C%90)
 
-# Support 🛟
+Or [contribute to development](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/CONTRIBUTING.md).
+
+## Support 🛟
 
 📖 **See [Troubleshooting](https://github.com/chrisgurney/obsidian-note-toolbar/Troubleshooting) in the [User Guide](https://github.com/chrisgurney/obsidian-note-toolbar/wiki).**
 
