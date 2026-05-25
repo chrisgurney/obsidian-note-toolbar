@@ -39,7 +39,7 @@ export default class CommandSuggestModal extends SuggestModal<Command> {
         el.setText(command.name);
     }
 
-    async onChooseSuggestion(command: Command, event: MouseEvent | KeyboardEvent) {
+    onChooseSuggestion(command: Command, event: MouseEvent | KeyboardEvent) {
         this.callback(command);
         this.close();
     }

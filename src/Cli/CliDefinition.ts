@@ -86,9 +86,9 @@ export default class CliDefinition {
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
                 const flags = cmd.flags;
                 const flagsOrdered = [
-                    ...((flags['$before'] as string[] | undefined) ?? []),
+                    ...((flags['$before']) ?? []),
                     ...Object.keys(flags).filter(k => !k.startsWith('$')),
-                    ...((flags['$after'] as string[] | undefined) ?? []),
+                    ...((flags['$after']) ?? []),
                 ];
                 const flagList = flagsOrdered
                     .map(flag => {
@@ -128,9 +128,9 @@ export default class CliDefinition {
         const { $before = [], $after = [], ...ownFlags } = flags;
         const resolvedOwn = ownFlags as Record<string, CliLocalizedFlag>;
         const orderedFlags: Record<string, CliLocalizedFlag> = {
-            ...resolveShared($before as string[]),
+            ...resolveShared($before),
             ...resolvedOwn,
-            ...resolveShared($after as string[]),
+            ...resolveShared($after),
         };
 
         return Object.fromEntries(

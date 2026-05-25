@@ -1,6 +1,5 @@
-import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { Command, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder } from "obsidian";
+import { Command, FileExplorerPlugin, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder, WebViewerPlugin } from "obsidian";
 import { ItemFocusType, ItemType, LINK_OPTIONS, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from "Utils/Utils";
 
@@ -25,24 +24,26 @@ export default class ToolbarItemHandler {
 		// allow standard and middle clicks through
 		if (event.type === 'click' || (event.type === 'auxclick' && event.button === 1)) {
 
-			let clickedEl = event.currentTarget as HTMLLinkElement;
-			let linkHref = clickedEl.getAttribute("href");
+			const clickedEl = event.currentTarget as HTMLLinkElement;
+			const linkHref = clickedEl.getAttribute("href");
 	
 			if (linkHref != null) {
 				
 				const itemUuid = clickedEl.id;
 
-				let linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
-				linkType ? (Object.values(ItemType).includes(linkType) ? event.preventDefault() : undefined) : undefined;
+				const linkType = clickedEl.getAttribute("data-toolbar-link-attr-type") as ItemType;
+				if (linkType && Object.values(ItemType).includes(linkType)) {
+                    event.preventDefault();
+                }
 	
 				// this.ntb.debug('clickHandler: ', 'clickedEl: ', clickedEl);
 	
-				let linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
+				const linkCommandId = clickedEl.getAttribute("data-toolbar-link-attr-commandid");
 				
 				// remove the focus effect if clicked with a mouse
 				if ((event as PointerEvent)?.pointerType === "mouse") {
 					clickedEl.blur();
-					await this.ntb.render.removeFocusStyle();
+					this.ntb.render.removeFocusStyle();
 				}
 
 				await this.ntb.items.handleLink(itemUuid, linkHref, linkType, linkCommandId, event);
@@ -85,7 +86,8 @@ export default class ToolbarItemHandler {
 
         this.ntb.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
-        let activeFile = this.ntb.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
+        const hasFloatingToolbar = this.ntb.render.hasFloatingToolbar();
         const item = this.ntb.settingsManager.getToolbarItemById(uuid);
 
         // determine where event originated from so we know where to position menus
@@ -111,35 +113,42 @@ export default class ToolbarItemHandler {
 
         switch (type) {
             case ItemType.Command:
-                (file && (file !== activeFile)) 
-                    ? this.handleLinkInSidebar(item, file) 
-                    : this.handleLinkCommand(commandId, item?.linkAttr.focus, item?.linkAttr.target as PaneType);
+                if (file && file !== activeFile) {
+                    await this.handleLinkInSidebar(item, file);
+                } else {
+                    await this.handleLinkCommand(commandId, item?.linkAttr.focus, item?.linkAttr.target as PaneType);
+                }
                 break;
             case ItemType.File: {
                 // it's an internal link (note); try to open it
-                let activeFilePath = activeFile ? activeFile.path : '';
+                const activeFilePath = activeFile ? activeFile.path : '';
                 this.ntb.debug("- openLinkText: ", linkHref, " from: ", activeFilePath);
-                let fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
+                const fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
                 if (fileOrFolder instanceof TFolder) {
-                    this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer').revealInFolder(fileOrFolder);
+                    (this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer') as FileExplorerPlugin).revealInFolder(fileOrFolder);
                 }
                 else if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
                     // this.ntb.api.modal(fileOrFolder, { editable: true });
-                    this.ntb.api.modal(fileOrFolder);
+                    await this.ntb.api.modal(fileOrFolder);
                 }
                 else {
-                    this.ntb.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
+                    await this.ntb.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
                 }
                 break;
             }
             case ItemType.Menu: {
                 const toolbar = this.ntb.settingsManager.getToolbar(linkHref);
                 if (toolbar) {
-                    this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
-                        this.ntb.render.showMenuAtPosition(menu,
-                            { x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
-                        );
-                        event instanceof KeyboardEvent ? putFocusInMenu() : undefined;
+                    await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
+                        if (this.ntb.render.lastClickedPos) {
+                            this.ntb.render.showMenuAtPosition(menu,
+                                { x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
+                            );
+                            if (event instanceof KeyboardEvent) putFocusInMenu();
+                        }
+                        else {
+                            this.ntb.error('No last clicked position available.');
+                        }
                     });
                 }
                 else if (!toolbar) {
@@ -155,7 +164,11 @@ export default class ToolbarItemHandler {
             case ItemType.Templater:
                 this.ntb.adapters.updateAdapters();
                 if (this.ntb.settings.scriptingEnabled) {
-                    (file && (file !== activeFile)) ? await this.handleLinkInSidebar(item, file) : await this.handleItemScript(item);
+                    if (file && file !== activeFile) {
+                        await this.handleLinkInSidebar(item, file);
+                    } else {
+                        await this.handleItemScript(item);
+                    }
                 }
                 else {
                     new Notice(t('notice.error-scripting-not-enabled')).containerEl.addClass('mod-warning');
@@ -167,10 +180,8 @@ export default class ToolbarItemHandler {
         }
         
         // dismiss any floating toolbars
-        if (event && this.ntb.render.hasFloatingToolbar()) {
-            if (type !== ItemType.Menu) {
-                this.ntb.render.removeFloatingToolbar();
-            }
+        if (event && hasFloatingToolbar && type !== ItemType.Menu) {
+            this.ntb.render.removeFloatingToolbar();
         }
 
     }
@@ -180,7 +191,7 @@ export default class ToolbarItemHandler {
      * @param commandId encoded command string, or null if nothing to do.
      * @param target where to execute the command.
      */
-    async handleLinkCommand(commandId: string | null, focus?: ItemFocusType, target?: PaneType | undefined) {
+    async handleLinkCommand(commandId: string | null, focus?: ItemFocusType, target?: PaneType  ) {
         // this.debug('handleLinkCommand:', commandId);
         if (commandId) {
             if (!(commandId in this.ntb.app.commands.commands)) {
@@ -238,10 +249,11 @@ export default class ToolbarItemHandler {
 
     async handleLinkUri(linkHref: string, event?: MouseEvent | KeyboardEvent, item?: ToolbarItemSettings) {
         if (isValidUri(linkHref)) {
-            let target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
+            const target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
 
             const isWebViewerEnabled = this.ntb.app.internalPlugins.plugins['webviewer']?.enabled ?? false;
-            const isWebViewerOpeningUrls = this.ntb.app.internalPlugins.plugins['webviewer']?.instance?.options?.openExternalURLs ?? false;
+            const isWebViewerOpeningUrls = 
+                (this.ntb.app.internalPlugins.plugins['webviewer'] as WebViewerPlugin)?.instance?.options?.openExternalURLs ?? false;
             let usingWebViewer = false;
 
             // use Web Viewer for certain targets even if the 'Open external links' setting is disabled
@@ -254,7 +266,7 @@ export default class ToolbarItemHandler {
 
             if (usingWebViewer) {
                 if (target === 'modal') {
-                    this.ntb.api.modal(linkHref, { webpage: true });
+                    await this.ntb.api.modal(linkHref, { webpage: true });
                 }
                 else {
                     const leaf = this.ntb.app.workspace.getLeaf(target);
@@ -267,14 +279,14 @@ export default class ToolbarItemHandler {
         }
         else {
             // as fallback, treat it as internal note
-            let activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? "";
-            let fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
+            const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? "";
+            const fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
             if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
                 // this.ntb.api.modal(fileOrFolder, { editable: true });
-                this.ntb.api.modal(fileOrFolder);
+                await this.ntb.api.modal(fileOrFolder);
             }
             else {
-                this.ntb.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
+                await this.ntb.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
             }
         }
     }
@@ -329,11 +341,11 @@ export default class ToolbarItemHandler {
      * Highlights the provided folder in the file explorer.
      * @param folder folder to highlight, or null if nothing to do.
      */
-    async handleLinkFolder(folder: string | null) {
+    handleLinkFolder(folder: string | null) {
         // this.debug('handleLinkFolder:', folder);
-        let tFileOrFolder = folder ? this.ntb.app.vault.getAbstractFileByPath(folder) : undefined;
+        const tFileOrFolder = folder ? this.ntb.app.vault.getAbstractFileByPath(folder) : undefined;
         if (tFileOrFolder instanceof TFolder) {
-            this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer').revealInFolder(tFileOrFolder);
+            (this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer') as FileExplorerPlugin).revealInFolder(tFileOrFolder);
         }
         else {
             new Notice(

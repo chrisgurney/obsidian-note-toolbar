@@ -141,11 +141,24 @@ body {
              --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
          }
          &.ntb-remove-view-header {
-             --ntb-tbar-top-spacing: 0px;
-             --ntb-tbar-top-spacing-md: var(--size-4-2);
+            --ntb-tbar-top-spacing: 0px;
+            --ntb-tbar-top-spacing-md: var(--size-4-2);
+
+            --view-header-height: 0px;
+            & .view-header {
+                display: none !important;
+            }
+            & .view-content {
+                mask-image: var(--view-top-fade-mask);
+            }
          }
          &.ntb-remove-nav {
-             --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+            --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+
+            --navbar-height: 0px;
+            & .mobile-navbar {
+                display: none !important;
+            }
          }
     }
     
@@ -193,23 +206,6 @@ body {
 
 .ntb-hidden {
     display: none !important;
-}
-
-body.is-phone.ntb-remove-nav {
-    --navbar-height: 0px;
-    & .mobile-navbar {
-        display: none !important;
-    }
-}
-
-body.is-phone.ntb-remove-view-header {
-    --view-header-height: 0px;
-    & .view-header {
-        display: none !important;
-    }
-    & .view-content {
-        mask-image: var(--view-top-fade-mask);
-    }
 }
 
 /* fix: tooltips appearing on elements below tapped elements */

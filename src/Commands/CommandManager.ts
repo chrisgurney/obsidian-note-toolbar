@@ -1,12 +1,11 @@
-import { EditorView } from "@codemirror/view";
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, ToggleUiStateType, t, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import { getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { Command, ItemView, MarkdownView, Notice } from "obsidian";
+import { Command, ItemView, Notice } from "obsidian";
 
 export default class CommandManager {
 
@@ -19,28 +18,28 @@ export default class CommandManager {
      */
     addCommands(): void {
 
-        this.ntb.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: async () => this.copy(false) });
-        this.ntb.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: async () => this.copy(true) });
+        this.ntb.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: () => this.copy(false) });
+        this.ntb.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: () => this.copy(true) });
         this.ntb.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.focus() });
         this.ntb.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.focus(true) });
         this.ntb.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
         this.ntb.addCommand({ id: 'open-help', name: t('command.name-open-help'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true }) });
 
-        this.ntb.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: async () => this.openQuickTools() });
-        this.ntb.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.ntb.settings.icon, checkCallback: this.checkHasToolbarAndRun(async () => { 
+        this.ntb.addCommand({ id: 'open-item-suggester', name: t('command.name-item-suggester'), callback: () => this.openQuickTools() });
+        this.ntb.addCommand({ id: 'open-item-suggester-current', name: t('command.name-item-suggester-current'), icon: this.ntb.settings.icon, checkCallback: this.checkHasToolbarAndRun(() => { 
             const currentToolbar = this.ntb.settingsManager.getCurrentToolbar();
-            if (currentToolbar) this.openQuickTools(currentToolbar.uuid);
+            if (currentToolbar) void this.openQuickTools(currentToolbar.uuid);
         }) });
-        this.ntb.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: async () => this.openToolbarSuggester() });
-        this.ntb.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: async () => this.openSettings() });
-        this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), checkCallback: this.checkHasToolbarAndRun(async () => { this.openToolbarSettings(); }) });
+        this.ntb.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: () => this.openToolbarSuggester() });
+        this.ntb.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: () => this.openSettings() });
+        this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), checkCallback: this.checkHasToolbarAndRun(() => { void this.openToolbarSettings(); }) });
 
         this.ntb.addCommand({ id: 'toggle-base-toolbar', name: t('command.name-toggle-base-toolbar'), callback: () => this.toggleUi('baseToolbar', 'toggle') });
 
-        this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'toggle'); }) });
-        this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'),  checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'show'); }) });
-        this.ntb.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'hide'); }) });
-        this.ntb.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), checkCallback: this.checkViewAndRun('markdown', async () => { this.toggleUi('props', 'fold'); }) });
+        this.ntb.addCommand({ id: 'toggle-properties', name: t('command.name-toggle-properties'), checkCallback: this.checkViewAndRun('markdown', () => { this.toggleUi('props', 'toggle'); }) });
+        this.ntb.addCommand({ id: 'show-properties', name: t('command.name-show-properties'),  checkCallback: this.checkViewAndRun('markdown', () => { this.toggleUi('props', 'show'); }) });
+        this.ntb.addCommand({ id: 'hide-properties', name: t('command.name-hide-properties'), checkCallback: this.checkViewAndRun('markdown', () => { this.toggleUi('props', 'hide'); }) });
+        this.ntb.addCommand({ id: 'fold-properties', name: t('command.name-fold-properties'), checkCallback: this.checkViewAndRun('markdown', () => { this.toggleUi('props', 'fold'); }) });
 
         this.ntb.addCommand({ id: 'toggle-lock-callouts', name: t('command.name-toggle-lock-callouts'), callback: async () => this.toggleLockCallouts() });
 
@@ -58,7 +57,7 @@ export default class CommandManager {
                 name: commandName, 
                 icon: item.icon ? item.icon : this.ntb.settings.icon, 
                 callback: async () => {
-                    let activeFile = this.ntb.app.workspace.getActiveFile();
+                    const activeFile = this.ntb.app.workspace.getActiveFile();
                     await this.ntb.items.handleItemLink(item, undefined, activeFile);
                 }
             });
@@ -91,9 +90,8 @@ export default class CommandManager {
         this.ntb.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
         item.hasCommand = false;
         await this.ntb.settingsManager.save();
-        itemText 
-            ? new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName, interpolation: { escapeValue: false } }))
-            : new Notice(t('setting.use-item-command.notice-command-removed_empty'));
+        if (itemText) new Notice(t('setting.use-item-command.notice-command-removed', { command: commandName, interpolation: { escapeValue: false } }))
+            else new Notice(t('setting.use-item-command.notice-command-removed_empty'));
     }
 
     /**
@@ -107,12 +105,12 @@ export default class CommandManager {
                 if (item.hasCommand) {
                     const itemText = getItemText(this.ntb, item, true);
                     if (itemText) {
-                        const command = this.ntb.addCommand({
+                        this.ntb.addCommand({
                             id: COMMAND_PREFIX_ITEM + item.uuid,
                             name: t('command.name-use-item', { item: itemText, interpolation: { escapeValue: false } }),
                             icon: item.icon ? item.icon : this.ntb.settings.icon,
                             callback: async () => {
-                                let activeFile = this.ntb.app.workspace.getActiveFile();
+                                const activeFile = this.ntb.app.workspace.getActiveFile();
                                 await this.ntb.items.handleItemLink(item, undefined, activeFile);
                             }
                         });
@@ -156,7 +154,7 @@ export default class CommandManager {
     /**
      * Update the command for the given toolbar, to update its name and icon.
      */
-    async updateToolbarCommand(toolbar: ToolbarSettings, showNotice: boolean = true): Promise<void> {
+    updateToolbarCommand(toolbar: ToolbarSettings, showNotice: boolean = true) {
         const command = this.getCommandFor(toolbar);
         if (command && toolbar.name) {
             const oldCommandName = command.name;
@@ -186,7 +184,7 @@ export default class CommandManager {
                             case PositionType.Menu: {
                                 if (!showAtPosition) break;
                                 const activeFile = this.ntb.app.workspace.getActiveFile();
-                                this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
+                                await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
                                     menu.showAtPosition({x: showAtPosition.left, y: showAtPosition.top});
                                 });
                                 // TODO? is there a need to put the focus in the menu? test on tablet
@@ -237,25 +235,25 @@ export default class CommandManager {
         }
 
         // need to get the type of toolbar first
-        let toolbarEl = this.ntb.el.getToolbarEl(undefined, isFloatingToolbar);
-        let toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
+        const toolbarEl = this.ntb.el.getToolbarEl(undefined, isFloatingToolbar);
+        const toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
         switch (toolbarPosition) {
             case PositionType.FabRight:
             case PositionType.FabLeft: {
                 // trigger the menu
-                let toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
+                const toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
                 this.ntb.debug("button: ", toolbarFabEl);
                 if (toolbarEl) {
                     const toolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
                     // show the toolbar's menu if it has a default item set
                     if (toolbar?.defaultItem) {
                         // TODO: this is a copy of toolbarFabHandler() -- put in a function?
-                        let activeFile = this.ntb.app.workspace.getActiveFile();
-                        this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
-                            let fabPos = toolbarFabEl.getAttribute('data-tbar-position');
+                        const activeFile = this.ntb.app.workspace.getActiveFile();
+                        await this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+                            const fabPos = toolbarFabEl.getAttribute('data-tbar-position');
                             // determine menu orientation based on button position
-                            let elemRect = toolbarFabEl.getBoundingClientRect();
-                            let menuPos = { 
+                            const elemRect = toolbarFabEl.getBoundingClientRect();
+                            const menuPos = { 
                                 x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
                                 y: (elemRect.top - 4),
                                 overlap: true,
@@ -281,7 +279,7 @@ export default class CommandManager {
                 const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
                 if (itemsUl) {
                     // this.ntb.debug("toolbar: ", itemsUl);
-                    let items = Array.from(itemsUl.children);
+                    const items = Array.from(itemsUl.children);
                     const visibleItems = items.filter(item => {
                         const hasSpan = item.querySelector('span') !== null; // to filter out separators
                         const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
@@ -307,12 +305,12 @@ export default class CommandManager {
     /**
      * Copies the selected command to the clipboard as a NTB URI or callout data element.
      */
-    async copy(returnDataElement: boolean = false): Promise<void> {
+    copy(returnDataElement: boolean = false) {
         const modal = new CommandSuggestModal(this.ntb, (command) => {
             const commandText = returnDataElement
                 ? `[]()<data data-ntb-command="${command.id}"/> <!-- ${command.name} -->`
                 : `obsidian://note-toolbar?command=${command.id}`;
-            activeWindow.navigator.clipboard.writeText(commandText);
+            void activeWindow.navigator.clipboard.writeText(commandText);
             new Notice(t('command.copy-command-notice')).containerEl.addClass('mod-success');
         });
         modal.open();
@@ -321,9 +319,9 @@ export default class CommandManager {
     /**
      * Convenience command to open hotkey settings, with the given query set.
      */
-    async openHotkeySettings(query: string): Promise<void> {
+    openHotkeySettings(query: string) {
         const settings = this.ntb.app.setting;
-        await settings.open();
+        settings.open();
         const tab = settings.openTabById('hotkeys');
         if (tab?.setQuery) tab.setQuery(query);
     }
@@ -332,7 +330,7 @@ export default class CommandManager {
      * Opens the item suggester modal for Quick Tools/Toolbars.
      * @param toolbarId optional ID of a toolbar to limit the ItemSuggestModal to show
      */
-    async openQuickTools(toolbarId?: string): Promise<void> {
+    openQuickTools(toolbarId?: string) {
         const modal = new ItemSuggestModal(this.ntb, toolbarId, undefined, 'QuickTools');
         modal.open();
     }
@@ -340,19 +338,19 @@ export default class CommandManager {
     /**
      * Convenience command to open settings (Note Toolbar's by default).
      */
-    async openSettings(tabId: string = 'note-toolbar'): Promise<void> {
+    openSettings(tabId: string = 'note-toolbar') {
         const settings = this.ntb.app.setting;
-        await settings.open();
+        settings.open();
         settings.openTabById(tabId);
     }
 
     /**
      * Convenience command to open the active toolbar's settings.
      */
-    async openToolbarSettings(): Promise<void> {
+    openToolbarSettings() {
         // figure out what toolbar is on the screen
-        let toolbarEl = this.ntb.el.getToolbarEl();
-        toolbarEl?.id ? await this.openToolbarSettingsForId(toolbarEl.id) : undefined;
+        const toolbarEl = this.ntb.el.getToolbarEl();
+        if (toolbarEl?.id) this.openToolbarSettingsForId(toolbarEl.id);
         // TODO: show Notice if no toolbar to show settings for
         // TODO: duplicate? there's another verison of this function in SettingsManager 
     }
@@ -360,8 +358,8 @@ export default class CommandManager {
     /**
      * Opens settings for a particular toolbar by ID.
      */
-    async openToolbarSettingsForId(uuid: string, focusItemId?: string): Promise<void> {
-        let toolbarSettings = this.ntb.settingsManager.getToolbarById(uuid);
+    openToolbarSettingsForId(uuid: string, focusItemId?: string) {
+        const toolbarSettings = this.ntb.settingsManager.getToolbarById(uuid);
         if (toolbarSettings) {
             const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbarSettings);
             modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name, interpolation: { escapeValue: false } }));
@@ -373,10 +371,9 @@ export default class CommandManager {
     /**
      * Opens the toolbar suggester modal.
      */
-    async openToolbarSuggester(): Promise<void> {
-        let activeFile = this.ntb.app.workspace.getActiveFile();
-        const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toolbar: ToolbarSettings) => {
-            await this.ntb.commands.openQuickTools(toolbar.uuid);
+    openToolbarSuggester() {
+        const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toolbar: ToolbarSettings) => {
+            this.ntb.commands.openQuickTools(toolbar.uuid);
         }, 'QuickTools');
         modal.open();
     }
@@ -384,16 +381,16 @@ export default class CommandManager {
     /**
      * Opens the toolbar suggester and replaces the current toolbar using the property.
      */
-    async swapToolbar(): Promise<void> {
-        const modal = new ToolbarSuggestModal(this.ntb, true, true, false, async (toolbar: ToolbarSettings) => {
+    swapToolbar() {
+        const modal = new ToolbarSuggestModal(this.ntb, true, true, false, (toolbar: ToolbarSettings) => {
             const activeFile = this.ntb.app.workspace.getActiveFile();
             if (activeFile) {
-                await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
+                void this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
                     if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
-                        delete frontmatter[this.ntb.settings.toolbarProp];
+                        delete (frontmatter as Record<string, unknown>)[this.ntb.settings.toolbarProp];
                         return;
                     }
-                    frontmatter[this.ntb.settings.toolbarProp] = toolbar.name;
+                    (frontmatter as Record<string, unknown>)[this.ntb.settings.toolbarProp] = toolbar.name;
                 });
             }
         });
@@ -419,7 +416,7 @@ export default class CommandManager {
      * @param visibility set to 'show', 'hide', 'fold', or 'toggle'
      * @param isAutoFold set to `true` if triggering automatically
      */
-    async toggleUi(component: 'baseToolbar' | 'props', visibility: ToggleUiStateType, isAutoFold: boolean = false): Promise<void> {
+    toggleUi(component: 'baseToolbar' | 'props', visibility: ToggleUiStateType, isAutoFold: boolean = false) {
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
         const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
@@ -437,7 +434,9 @@ export default class CommandManager {
             if (!propsEl) return;
 
             const computedDisplay = getComputedStyle(propsEl).getPropertyValue('display');
-            visibility === 'toggle' ? (computedDisplay === 'none' ? visibility = 'show' : visibility = 'hide') : undefined;
+            if (visibility === 'toggle') {
+                visibility = computedDisplay === 'none' ? 'show' : 'hide';
+            }
             ['--metadata-display-reading', '--metadata-display-editing'].forEach((prop) => {
                 propsEl.style.setProperty(
                     prop, ['show', 'fold'].contains(visibility) ? 'block' : 'none');
@@ -458,7 +457,7 @@ export default class CommandManager {
      * @param visibility 
      * @param isAutoFold 
      */
-    async toggleUiFoldProps(elToToggle: HTMLElement, visibility: ToggleUiStateType, isAutoFold: boolean) {
+    toggleUiFoldProps(elToToggle: HTMLElement, visibility: ToggleUiStateType, isAutoFold: boolean) {
 
         // click the element to trigger the code to fold the section, if needed
         switch (visibility) {
@@ -479,7 +478,7 @@ export default class CommandManager {
                     if (!activeFile) break;
                     const metadata = this.ntb.app.metadataCache.getFileCache(activeFile);
                     const hasProperties = !!metadata?.frontmatter && Object.keys(metadata.frontmatter).length > 0;
-                    if (!hasProperties) await this.ntb.app.commands.executeCommandById('markdown:add-metadata-property');
+                    if (!hasProperties) this.ntb.app.commands.executeCommandById('markdown:add-metadata-property');
                 }
                 break;
             }

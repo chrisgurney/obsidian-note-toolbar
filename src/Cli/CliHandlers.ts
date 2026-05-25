@@ -27,7 +27,7 @@ export default class CliHandlers {
         const handler = this.cliHandlers[commandId];
         if (!handler) {
             this.ntb.error(`CliManager: No handler registered for command "${commandId}"`);
-            return async () => t('cli.error-handler-not-found', { command: commandId });
+            return () => t('cli.error-handler-not-found', { command: commandId });
         }
         return handler;
     }
@@ -97,13 +97,13 @@ export default class CliHandlers {
             const fileResult = this.resolveFileArgs(args.file, args.path);
             if (typeof fileResult === 'string') return fileResult; // error resolving file or path
             const file: TFile | null = fileResult;
-            let scriptConfig: ScriptConfig = {
+            const scriptConfig: ScriptConfig = {
                 pluginFunction: hasValue(args.eval) 
                     ? 'evaluate' 
                     : (hasValue(args.query) ? 'query' : 'exec'),
                 expression: args.eval || args.query || '',
                 sourceFile: file?.path
-            } as ScriptConfig;
+            };
             if (hasValue(args.args)) {
                 const parsedArgs = importArgs(args.args);
                 if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
@@ -144,11 +144,11 @@ export default class CliHandlers {
                 const fileResult = this.resolveFileArgs(args.file, args.path);
                 if (typeof fileResult === 'string') return fileResult; // error resolving file or path
                 const file: TFile | null = fileResult;
-                let scriptConfig: ScriptConfig = {
+                const scriptConfig: ScriptConfig = {
                     pluginFunction: hasValue(args.code) ? 'evaluate' : 'exec',
                     expression: args.code,
                     sourceFile: file?.path
-                } as ScriptConfig;
+                };
                 if (hasValue(args.args)) {
                     const parsedArgs = importArgs(args.args);
                     if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
@@ -194,12 +194,12 @@ export default class CliHandlers {
             file = fileResult;
         }
         return await this.addItemHelper(args, ItemType.Templater, (item) => {
-            let scriptConfig: ScriptConfig = {
+            const scriptConfig: ScriptConfig = {
                 pluginFunction: pluginFunction,
                 expression: args.command ?? '',
                 outputFile: args.output ?? '',
                 sourceFile: file?.path
-            } as ScriptConfig;
+            };
             item.scriptConfig = scriptConfig;
         });  
     }
@@ -288,7 +288,7 @@ export default class CliHandlers {
         return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
     }
 
-    async handleRules(args: CliData): Promise<string> {
+    handleRules(args: CliData): string {
         const format = hasValue(args.format) ? args.format : 'tsv';
 
         const mappings = this.ntb.settings.folderMappings;
@@ -331,7 +331,7 @@ export default class CliHandlers {
 
     }
 
-    async handleSettings(args: CliData): Promise<string> {
+    handleSettings(args: CliData): string {
         const itemId = hasValue(args.item) ? args.item : undefined;
         const toolbarId = hasValue(args.toolbar) ? args.toolbar : undefined;
         if (toolbarId) {
@@ -349,7 +349,7 @@ export default class CliHandlers {
             itemModal.open();
             return t('cli.success-settings-opened');
         }
-        await this.ntb.commands.openSettings();
+        this.ntb.commands.openSettings();
         return t('cli.success-settings-opened');
     }
 
@@ -451,7 +451,7 @@ export default class CliHandlers {
         if (!item) return t('cli.error-invalid-item', { item: args.item });
         const fileResult = this.resolveFileArgs(args.file, args.path);
         if (typeof fileResult === 'string') return fileResult; // error resolving file or path
-        let activeFile = fileResult || this.ntb.app.workspace.getActiveFile();
+        const activeFile = fileResult || this.ntb.app.workspace.getActiveFile();
         await this.ntb.items.handleItemLink(item, undefined, activeFile);
         return 'Used item: ' + (item.label || item.tooltip || item.uuid);
     }
@@ -516,12 +516,12 @@ export default class CliHandlers {
     private resolveFileArgs(fileArg?: string, pathArg?: string): TFile | null | string {
         if (hasValue(fileArg)) {
             const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
-            const file = this.ntb.app.metadataCache.getFirstLinkpathDest(fileArg!, activeFilePath);
+            const file = this.ntb.app.metadataCache.getFirstLinkpathDest(fileArg, activeFilePath);
             if (!file) return t('cli.error-file-not-found', { file: fileArg, interpolation: { escapeValue: false } });
             return file;
         }
         if (hasValue(pathArg)) {
-            const file = this.ntb.app.vault.getFileByPath(normalizePath(pathArg!));
+            const file = this.ntb.app.vault.getFileByPath(normalizePath(pathArg));
             if (!file) return t('cli.error-path-not-found', { path: pathArg, interpolation: { escapeValue: false } });
             return file;
         }

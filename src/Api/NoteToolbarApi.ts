@@ -58,12 +58,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.fileSuggester
      */
-    async fileSuggester<T>(
+    async fileSuggester(
         options?: NtbFileSuggesterOptions
     ): Promise<TAbstractFile> {
 
         const abstractFiles = this.ntb.app.vault.getAllLoadedFiles();
-        const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) || '[]');
+        const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]') as string[];
 
         let files: TAbstractFile[] = [];
         files = abstractFiles.filter((file: TAbstractFile) => {
@@ -109,14 +109,15 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         const suggester = new NtbSuggester(this.ntb, filePaths, files, options);
 
-        const promise = new Promise((resolve: (value: TAbstractFile) => void, reject: (reason?: Error) => void) => 
-            suggester.openAndGetValue(resolve, reject)
-        );
+        const promise = new Promise((resolve: (value: TAbstractFile) => void, reject: (reason?: Error) => void) => {
+            void suggester.openAndGetValue(resolve, reject);
+        });
 
         try {
             return await promise;
         } 
         catch (error) {
+            this.ntb.error(error);
             return null as unknown as TAbstractFile;
         }
 
@@ -153,7 +154,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         const activeFile = this.ntb.app.workspace.getActiveFile();
         if (activeFile) {
             const frontmatter = activeFile ? this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-            return frontmatter ? frontmatter[property] : undefined;
+            return frontmatter ? frontmatter[property] as string | undefined : undefined;
         }
         return undefined;
     }
@@ -252,8 +253,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 );
             }
             else {
-                // TODO: display an error
-                this.ntb.debug('⚠️ ntb.menu: Not opening window - No toolbar position available.');
+                this.ntb.error('Not opening window - No toolbar position available.');
             }
         }
 
@@ -268,10 +268,10 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     async modal(content: string | TFile, options?: NtbModalOptions): Promise<Modal> {
         const modal = new NtbModal(this.ntb, content, options);
-        if (options?.editable && content instanceof TFile) await modal.displayEditor();
-        else if (options?.webpage && typeof content === 'string') await modal.displayWebpage();
+        if (options?.editable && content instanceof TFile) modal.displayEditor();
+        else if (options?.webpage && typeof content === 'string') modal.displayWebpage();
         else await modal.displayMarkdown();
-        return modal as Modal;
+        return modal;
     }
 
     /**
@@ -291,34 +291,35 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         const prompt = new NtbPrompt(this.ntb, options);
 
-        const promise = new Promise((resolve: (value: string) => void, reject: (reason?: Error) => void) => 
-            prompt.openAndGetValue(resolve, reject)
-        );
+        const promise = new Promise((resolve: (value: string) => void, reject: (reason?: Error) => void) => {
+            void prompt.openAndGetValue(resolve, reject);
+        });
 
         try {
             return await promise;
         }
         catch (error) {
+            this.ntb.error(error);
             return null;
         }
 
     };
 
-    async replaceToolbar(toolbarId: string): Promise<void> {
-        // TODO: flag to replace the text toolbar (vs the note's toolbar)
-        // TODO: if ID not set, revert to original toolbar
-        const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
-    }
+    // async replaceToolbar(toolbarId: string): Promise<void> {
+    //     // TODO: flag to replace the text toolbar (vs the note's toolbar)
+    //     // TODO: if ID not set, revert to original toolbar
+    //     const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
+    // }
 
     /**
      * Sets the given property's value in the active note. 
      * 
      * @see INoteToolbarApi.setProperty
      */
-    async setProperty(property: string, value: any) {
+    async setProperty(property: string, value: unknown) {
         const activeFile = this.ntb.app.workspace.getActiveFile();
         if (activeFile) {
-            await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
+            await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
                 frontmatter[property] = value;
             });
         }
@@ -359,14 +360,15 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         const suggester = new NtbSuggester(this.ntb, values, keys, options);
 
-        const promise = new Promise((resolve: (value: T) => void, reject: (reason?: Error) => void) => 
-            suggester.openAndGetValue(resolve, reject)
-        );
+        const promise = new Promise((resolve: (value: T) => void, reject: (reason?: Error) => void) => {
+            void suggester.openAndGetValue(resolve, reject);
+        });
 
         try {
             return await promise;
         } 
         catch (error) {
+            this.ntb.error(error);
             return null as unknown as T;
         }
 

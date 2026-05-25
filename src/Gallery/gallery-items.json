@@ -905,7 +905,7 @@
     },
     {
         "id": "note-toolbar-backup-data",
-        "script": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\nntb.app.vault.adapter.read(src).then(data => { ntb.app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
+        "script": "const src = `${ntb.app.vault.configDir}/plugins/note-toolbar/data.json`;\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\nntb.app.vault.adapter.read(src).then(data => { ntb.app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
         "description": {
             "en": "Copy Note Toolbar's settings (data.json) file into the vault.",
             "ja": "Note Toolbarの設定(data.json)ファイルを保管庫にコピーします。",

@@ -4,13 +4,13 @@ import INoteToolbarApi from "Api/INoteToolbarApi";
 declare global {
     
     interface Window {
-        ntb?: INoteToolbarApi<any>;
+        ntb?: INoteToolbarApi<unknown>;
     }
 
     // provides access to Obsidian's translation framework
     let i18next: {
-        createInstance(options?: {}): typeof i18next;
-        init(options?: {}): Promise<void>;
+        createInstance(options?: object): typeof i18next;
+        init(options?: object): Promise<void>;
         getFixedT(lng: string | null, ns: string | null, keyPrefix?: string | null): (key: string, ...args: unknown[]) => string;
         language: string;
         t: (key: string, ...args: unknown[]) => string;
@@ -33,12 +33,12 @@ declare module "obsidian" {
             getHotkeys(command: string): KeymapInfo[];
         };
         internalPlugins: {
-            getEnabledPluginById(id: string): any;
-            getPluginById(id: string): any;
-            plugins: Record<string, any>;
+            getEnabledPluginById(id: string): Plugin;
+            getPluginById(id: string): Plugin;
+            plugins: Record<string, { enabled?: boolean }>;
         };
         plugins: {
-            plugins: Record<string, any>;
+            plugins: Record<string, Plugin>;
         };
         setting: {
             close(): void;
@@ -53,6 +53,14 @@ declare module "obsidian" {
         selectedItem: number;
         setSelectedItem(index: number, event: KeyboardEvent | boolean): void;
         useSelectedItem(evt: MouseEvent | KeyboardEvent): void;
+    }
+
+    interface Editor {
+        cm: unknown;
+    }
+
+    interface FileExplorerPlugin extends Plugin {
+        revealInFolder(fileFolder: TFile | TFolder): void;
     }
 
     // allows access to the path of the vault, for the {{vault_path}} var
@@ -99,11 +107,19 @@ declare module "obsidian" {
     //     on(name: "note-toolbar:item-activated", callback: () => void, ctx?: any): EventRef;
     // }
 
+    interface WebViewerPlugin extends Plugin {
+        instance: Plugin & { options: { openExternalURLs: boolean } };
+    }
+
     interface WorkspaceItem {
         // allows access to leaf's container element, for DOM queries (in current view mode)
         containerEl: HTMLDivElement;
         // allows access to leaf's ID, to help uniquely identify note views
         id: string;
+    }
+
+    interface WorkspacesPlugin extends Plugin {
+        instance: Plugin & { activeWorkspace: string };
     }
 
 }

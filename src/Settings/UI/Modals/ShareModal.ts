@@ -36,15 +36,15 @@ export default class ShareModal extends Modal {
         // share link
         //
 
-		let shareSetting = new Setting(this.contentEl)
+		new Setting(this.contentEl)
 			.setName(this.shareUri)
 			.addButton((button: ButtonComponent) => {
 				button
 					.setButtonText(t('export.button-copy-link'))
 					.setTooltip(t('export.button-copy-link-description'))
 					.setCta()
-					.onClick(() => {
-                        activeWindow.navigator.clipboard.writeText(this.shareUri);
+					.onClick(async () => {
+                        await activeWindow.navigator.clipboard.writeText(this.shareUri);
                         new Notice(t('export.notice-shared')).containerEl.addClass('mod-success');
                         this.close();
 					});
@@ -72,11 +72,11 @@ export default class ShareModal extends Modal {
         const hasMenu = toolbarHasMenu(this.toolbar);
 
         if (isLongUri || hasMenu) {
-            let disclaimers = this.contentEl.createDiv();
+            const disclaimers = this.contentEl.createDiv();
             disclaimers.addClass('note-toolbar-setting-field-help');
-            let disclaimersList = disclaimers.createEl('ul');
-            isLongUri ? disclaimersList.createEl('li', { text: t('export.warning-share-length') }) : undefined;
-            hasMenu ? disclaimersList.createEl('li', { text: t('export.warning-share-menu') }) : undefined;
+            const disclaimersList = disclaimers.createEl('ul');
+            if (isLongUri) disclaimersList.createEl('li', { text: t('export.warning-share-length') });
+            if (hasMenu) disclaimersList.createEl('li', { text: t('export.warning-share-menu') });
         }
 
     }

@@ -19,7 +19,7 @@ export default class VariableResolver {
         let hasVars = /{{.*?}}/g.test(s);
         if (this.ntb.settings.scriptingEnabled) {
             if (!hasVars && this.ntb.adapters.hasPlugin(ItemType.Dataview)) {
-                let prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
+                const prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
                 hasVars = !!prefix && s.trim().startsWith(prefix);
                 if (!hasVars) hasVars = s.trim().startsWith('{{dv:');
                 // TODO? support dvjs? check for $= JS inline queries
@@ -73,13 +73,13 @@ export default class VariableResolver {
 
 		// PROP_ VARIABLES
 		// have to get this at run/click-time, as file or metadata may not have changed
-		let frontmatter = file ? this.ntb.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
+		const frontmatter = file ? this.ntb.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
 		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (match, encode, p1) => {
+		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (match, encode: string, p1: string) => {
 			const key = p1.trim();
 			if (frontmatter && frontmatter[key] !== undefined && frontmatter[key] !== null) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
-				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
+				const linkWrap = /\[\[([^|\]]+)(?:\|[^\]]*)?\]\]/g;
 				// handle the case where the prop might be a list, and convert numbers to strings
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : String(frontmatter[key]);
 				fm = fm ? fm.replace(linkWrap, '$1') : '';
@@ -96,7 +96,7 @@ export default class VariableResolver {
 			// JAVASCRIPT
 			if (s.trim().startsWith('{{js:')) {
 				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
-				let result = await this.ntb.adapters.js?.use({ 
+				const result = await this.ntb.adapters.js?.use({ 
 					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 					expression: s
 				});
@@ -105,13 +105,13 @@ export default class VariableResolver {
 
 			// PLUGIN EXPRESSIONS
 			if (this.ntb.adapters.hasPlugin(ItemType.Dataview)) {
-				let prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
+				const prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
 				if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
 					// strip prefix before evaluation
 					if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
 					if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
 					s = s.trim();
-					let result = await this.ntb.adapters.dv?.use({
+					const result = await this.ntb.adapters.dv?.use({
 						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 						expression: s
 					});
@@ -129,7 +129,7 @@ export default class VariableResolver {
 			if (this.ntb.adapters.hasPlugin(ItemType.JsEngine)) {
 				if (s.trim().startsWith('{{jse:')) {
 					s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
-					let result = await this.ntb.adapters.jsEngine?.use({ 
+					const result = await this.ntb.adapters.jsEngine?.use({ 
 						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 						expression: s
 					});
@@ -145,7 +145,7 @@ export default class VariableResolver {
 					// add Templater's prefix back in for evaluation
 					if (!s.startsWith('<%')) s = '<%' + s;
 					if (!s.endsWith('%>')) s += '%>';
-					let result = await this.ntb.adapters.tp?.use({ 
+					const result = await this.ntb.adapters.tp?.use({ 
 						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
 						expression: s
 					});
@@ -166,8 +166,8 @@ export default class VariableResolver {
 	 * @returns string arrays of labels and tooltips with resolved values 
 	 */
 	async resolveText(toolbar: ToolbarSettings, file: TFile | null): Promise<{ resolvedLabels: string[], resolvedTooltips: string[] }> {
-		let labels: string[] = [];
-		let tooltips: string[] = [];
+		const labels: string[] = [];
+		const tooltips: string[] = [];
 		for (const item of toolbar.items) {
 			const resolvedLabel = await this.replaceVars(item.label, file);
 			const resolvedTooltip = await this.replaceVars(item.tooltip, file);

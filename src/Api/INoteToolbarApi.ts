@@ -267,7 +267,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * @group Note Manipulation
      */
-    setProperty: (property: string, value: any) => Promise<void>;
+    setProperty: (property: string, value: unknown) => Promise<void>;
 
     /**
      * Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.

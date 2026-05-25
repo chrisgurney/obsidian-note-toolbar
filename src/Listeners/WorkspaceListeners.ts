@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, Platform, TAbstractFile, TFile, WorkspaceLeaf } from "obsidian";
+import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, Platform, TAbstractFile, TFile, WorkspaceLeaf, WorkspacesPlugin } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
 import EditorMenu from "../Toolbar/EditorMenu";
@@ -16,7 +16,7 @@ export default class WorkspaceListeners {
 	private fileMenu: FileMenu;
 	private ribbonMenu: RibbonMenu;
 
-	workspacesPlugin: { instance: { activeWorkspace: string }; enabled: boolean } | null = null;
+	workspacesPlugin!: WorkspacesPlugin;
     
 	// track to reduce unneccessary re-renders 
 	activeWorkspace!: string | undefined;
@@ -50,7 +50,7 @@ export default class WorkspaceListeners {
 	/**
 	 * Track changes to the theme (for better CSS overrides when rendering toolbars).
 	 */
-	onCssChange = async () => {
+	onCssChange = () => {
 		// this.ntb.debug('===== CSS-CHANGE =====');
 		// update the global theme attribute (for styling)
 		activeDocument.body.setAttr('data-ntb-csstheme', this.ntb.app.vault.getConfig('cssTheme'));
@@ -76,10 +76,10 @@ export default class WorkspaceListeners {
 	 * On opening of a file, track recent files that have been opened (for more helpful file select UI).
 	 * @param file TFile that was opened.
 	 */
-	onFileOpen = async (file: TFile | null) => {
+	onFileOpen = (file: TFile | null) => {
 		// this.ntb.debug('FILE-OPEN: updating recent file list:', file?.name);
 		// update list of the most recently opened files
-		if (file) await this.ntb.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
+		if (file) this.ntb.settingsManager.updateRecentList(LocalVar.RecentFiles, file.path);
 	};
 
 	/**
@@ -95,7 +95,7 @@ export default class WorkspaceListeners {
 		// on phones we can just render for the active view
 		const workspace = this.workspacesPlugin?.instance.activeWorkspace;
 		if (!Platform.isPhone && workspace !== this.activeWorkspace) {
-			await this.ntb.render.renderForAllLeaves();
+			this.ntb.render.renderForAllLeaves();
 			this.activeWorkspace = workspace;
 		}
 		else {
@@ -164,8 +164,8 @@ export default class WorkspaceListeners {
 	onLeafChange = async (leaf: WorkspaceLeaf | null) => {
 		let renderToolbar = false;
 		// FIXME? what if there's more than one toolbar?
-		let toolbarEl = await this.ntb.el.getToolbarElAsync();
-		let currentView = this.ntb.utils.getActiveView();
+		const toolbarEl = await this.ntb.el.getToolbarElAsync();
+		const currentView = this.ntb.utils.getActiveView();
 
 		const viewId = getViewId(currentView);
 		this.ntb.debug('===== LEAF-CHANGE ===== ', viewId);
@@ -175,7 +175,7 @@ export default class WorkspaceListeners {
 
 		// update the active toolbar if its configuration changed
 		if (toolbarEl) {
-			let activeToolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
+			const activeToolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
 			if (activeToolbar && (activeToolbar.updated !== toolbarEl.getAttribute(TbarData.Updated))) {
 				renderToolbar = true;
 			}
@@ -184,7 +184,7 @@ export default class WorkspaceListeners {
 		// exit if the view has already been handled, after updating the toolbar
 		if (!renderToolbar && !Platform.isPhone && viewId && this.ntb.render.activeViewIds.contains(viewId)) {
 			this.ntb.debug('LEAF-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
-			this.ntb.render.updateActive();
+			await this.ntb.render.updateActive();
 			return;
 		};
 

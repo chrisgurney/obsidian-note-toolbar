@@ -1,58 +1,98 @@
 import NoteToolbarPlugin from "main";
-import { Component, MarkdownRenderer } from "obsidian";
+import { Component, MarkdownRenderer, Plugin } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
+
+type DataviewResult = {
+    error: Error;
+    successful: boolean;
+    value: string;
+};
+
+type DataviewQuerySettings = {
+    forceId?: boolean;
+};
 
 /**
  * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/plugin-api.ts
  */
 export default class DataviewAdapter extends Adapter {
 
-    readonly FUNCTIONS: AdapterFunction[] = [
-        {
-            function: this.query,
-            label: t('adapter.dataview.query-function'),
-            description: "",
-            parameters: [
-                { parameter: 'expression', label: t('adapter.dataview.query-expr'), description: t('adapter.dataview.query-expr-description'), type: SettingType.TextArea, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
-            ]
-        },
-        {
-            function: this.exec,
-            label: t('adapter.dataview.exec-function'),
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: t('adapter.dataview.exec-sourcefile'), description: t('adapter.dataview.exec-sourcefile-description'), type: SettingType.File, required: true },
-                { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
-            ]
-        },
-        {
-            function: this.evaluate,
-            label: t('adapter.dataview.eval-function'),
-            description: "",
-            parameters: [
-                { parameter: 'expression', label: t('adapter.dataview.eval-expr'), description: t('adapter.dataview.eval-expr-description'), type: SettingType.TextArea, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
-            ]
-        },
-        {
-            function: this.executeJs,
-            label: t('adapter.dataview.dvjs-function'),
-            description: "",
-            parameters: [
-                { parameter: 'expression', label: t('adapter.dataview.dvjs-expr'),  description: t('adapter.dataview.dvjs-expr-description'), type: SettingType.TextArea, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
-            ]
-        },
-    ];
+    get FUNCTIONS(): AdapterFunction[] {
+        return [
+            {
+                name: 'query',
+                function: this.query as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.dataview.query-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'expression', label: t('adapter.dataview.query-expr'), description: t('adapter.dataview.query-expr-description'), type: SettingType.TextArea, required: true },
+                    { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                ]
+            },
+            {
+                name: 'exec',
+                function: this.exec as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.dataview.exec-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'sourceFile', label: t('adapter.dataview.exec-sourcefile'), description: t('adapter.dataview.exec-sourcefile-description'), type: SettingType.File, required: true },
+                    { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
+                    { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                ]
+            },
+            {
+                name: 'evaluate',
+                function: this.evaluate as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.dataview.eval-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'expression', label: t('adapter.dataview.eval-expr'), description: t('adapter.dataview.eval-expr-description'), type: SettingType.TextArea, required: true },
+                    { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                ]
+            },
+            {
+                name: 'executeJs',
+                function: this.executeJs as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.dataview.dvjs-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'expression', label: t('adapter.dataview.dvjs-expr'),  description: t('adapter.dataview.dvjs-expr-description'), type: SettingType.TextArea, required: true },
+                    { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                ]
+            },
+        ];
+    }
+
+    private adapterApi: {
+        evaluateInline: (expression: string, origin: string) => Promise<DataviewResult>;
+        executeJs: (expression: string, resultEl: HTMLElement, component: Component, filePath: string) => Promise<string>;
+        renderValue: (value: unknown, container: HTMLElement, component: Component, filePath: string) => Promise<string>;
+        queryMarkdown: (expression: string, originFile?: string, settings?: DataviewQuerySettings) => Promise<DataviewResult>;
+    } | null;
+    private adapterPlugin: { 
+        api: unknown;
+        localApi: (path: string, component: Component, el: HTMLElement) => unknown;
+        settings: Record<string, string>;
+    } & Plugin | null;
 
     constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = (noteToolbar.app as any).plugins.plugins[ItemType.Dataview];
-        super(noteToolbar, plugin, plugin.api);
+        const plugin = noteToolbar.app.plugins.plugins[ItemType.Dataview] as { api: unknown, settings: unknown } & Plugin;
+        super(noteToolbar);
+        this.adapterPlugin = plugin as typeof this.adapterPlugin;
+        this.adapterApi = this.adapterPlugin?.api as typeof this.adapterApi;
+    }
+
+    disable() {
+        this.ntb = null;
+        this.adapterApi = null;
+        this.adapterPlugin = null;;
+    }
+    
+    getSetting(settingName: string): string {
+        return this.adapterPlugin ? this.adapterPlugin.settings[settingName] : '';
     }
 
     /**
@@ -129,11 +169,11 @@ export default class DataviewAdapter extends Adapter {
      * @param errorBehavior
      * @returns 
      */
-    private async evaluate(
+    private evaluate = async (
         expression: string, 
         containerEl?: HTMLElement, 
         errorBehavior: ErrorBehavior = ErrorBehavior.Display
-    ): Promise<string> {
+    ): Promise<string> => {
 
         let result = '';
         
@@ -143,9 +183,9 @@ export default class DataviewAdapter extends Adapter {
         const component = new Component();
 		component.load();
         try {
-            if (this.adapterApi) {
+            if (this.adapterApi && activeFilePath) {
                 // this.noteToolbar?.debug("evaluate() " + expression);
-                let dvResult = await (this.adapterApi as any).evaluateInline(expression, activeFile?.path);
+                const dvResult: DataviewResult = await this.adapterApi.evaluateInline(expression, activeFilePath);
                 // this.noteToolbar?.debug("evaluate() result:", dvResult);
                 if (containerEl) {
                     containerEl.empty();
@@ -192,7 +232,7 @@ export default class DataviewAdapter extends Adapter {
      * Arguments = { "fileFolder": "Demos" }
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
-    private async exec(filename: string, argsJson?: string, containerEl?: HTMLElement): Promise<string | undefined> {
+    private exec = async (filename: string, argsJson?: string, containerEl?: HTMLElement): Promise<string | undefined> => {
 
         let result;
 
@@ -215,7 +255,7 @@ export default class DataviewAdapter extends Adapter {
         const activeFile = this.ntb?.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path || '';
 
-        let viewFile = this.ntb?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
+        const viewFile = this.ntb?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
             this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
@@ -226,36 +266,37 @@ export default class DataviewAdapter extends Adapter {
         if (contents) {
             // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
-            let func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
-         // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
-         // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
-         // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
-         const component = new Component();
-         component.load();
-         try {
-             containerEl.empty();
-             let dataviewLocalApi = this.adapterPlugin.localApi(activeFilePath, this.ntb, containerEl);    
-             // from dv.view: may directly render, in which case it will likely return undefined or null
-             result = await Promise.resolve(func(dataviewLocalApi, args));
-             if (result && this.ntb) {
-                    await this.adapterApi.renderValue(
-                        result as any,
-                        containerEl,
-                        component,
-                        activeFilePath
-                    );
-             }
-         }
-         catch (error) {
-             this.displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
-         }
-         finally {
-             component.unload();
-         }
+            const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
+            // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
+            // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
+            // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
+            const component = new Component();
+            component.load();
+            try {
+                containerEl.empty();
+                const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
+                // from dv.view: may directly render, in which case it will likely return undefined or null
+                result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
+                // console.debug(result, containerEl);
+                if (result && component) {
+                        await this.adapterApi?.renderValue(
+                            result,
+                            containerEl,
+                            component,
+                            activeFilePath
+                        );
+                }
+            }
+            catch (error) {
+                this.displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
+            }
+            finally {
+                containerEl.addEventListener('remove', () => component.unload(), { once: true });
+            }
 
         }
 
-        return result;
+        return result as string;
 
     }
 
@@ -268,20 +309,21 @@ export default class DataviewAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    private async executeJs(expression: string, containerEl?: HTMLElement): Promise<string> {
+    executeJs = async (expression: string, containerEl?: HTMLElement): Promise<string> => {
 
         let result = '';
-        let resultEl = containerEl || createSpan();
+        const resultEl = containerEl || createSpan();
 
         const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFilePath = activeFile?.path || '';
 
         const component = new Component();
         component.load();
         try {
             if (this.adapterApi) {
-                // this.noteToolbar?.debug("executeJs() ", expression);
-                await (this.adapterApi as any).executeJs(expression, resultEl, component, activeFile?.path);
-                // this.noteToolbar?.debug("executeJs() result:", resultEl);
+                // console.debug("executeJs() ", expression);
+                await this.adapterApi?.executeJs(expression, resultEl, component, activeFilePath);
+                // console.debug("executeJs() result:", resultEl);
                 if (!containerEl) {
                     const errorEl = resultEl.querySelector('.dataview-error');
                     if (errorEl) {
@@ -318,7 +360,7 @@ export default class DataviewAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    private async query(expression: string, containerEl?: HTMLElement): Promise<string> {
+    private query = async (expression: string, containerEl?: HTMLElement): Promise<string> => {
 
         let result = '';
         const activeFile = this.ntb?.app.workspace.getActiveFile();
@@ -328,20 +370,22 @@ export default class DataviewAdapter extends Adapter {
             return t('adapter.error.query-note-not-open');
         }
 
+        const activeFilePath = activeFile.path;
+
         const component = new Component();
         component.load();
         try {
             if (this.adapterApi) {
                 this.ntb?.debug("query() " + expression);
                 // returns a Promise<Result<QueryResult, string>>
-                let dvResult = await (this.adapterApi as any).queryMarkdown(expression, activeFile, this.adapterApi.settings);
+                const dvResult = await this.adapterApi.queryMarkdown(expression, activeFilePath);
                 this.ntb?.debug("query() result: ", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     if (this.ntb) {
                         await MarkdownRenderer.render(
                             this.ntb.app,
-                            dvResult.successful ? dvResult.value : dvResult.error,
+                            dvResult.successful ? dvResult.value : String(dvResult.error),
                             containerEl,
                             activeFile.path,
                             component

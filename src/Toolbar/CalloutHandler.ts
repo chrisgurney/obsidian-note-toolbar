@@ -1,4 +1,3 @@
-import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { Notice } from "obsidian";
 import { CalloutAttr, ItemType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
@@ -40,17 +39,17 @@ export default class CalloutHandler {
                 const targetPos = clickedItemEl.getBoundingClientRect();
                 this.ntb.render.lastClickedPos = { left: targetPos.x, right: targetPos.x, top: targetPos.bottom, bottom: targetPos.bottom };
 
-                let dataEl = clickedItemEl?.nextElementSibling;
+                const dataEl = clickedItemEl?.nextElementSibling;
                 if (dataEl) {
                     // make sure it's a valid attribute, and get its value
                     const attribute = Object.values(CalloutAttr).find(attr => dataEl?.hasAttribute(attr));
-                    attribute ? e.preventDefault() : undefined; // prevent callout code block from opening
+                    if (attribute) e.preventDefault(); // prevent callout code block from opening
                     const value = attribute ? dataEl?.getAttribute(attribute) : null;
                     
                     switch (attribute) {
                         case CalloutAttr.Command:
                         case CalloutAttr.CommandNtb:
-                            this.ntb.items.handleLinkCommand(value);
+                            await this.ntb.items.handleLinkCommand(value);
                             break;
                         case CalloutAttr.Dataview:
                         case CalloutAttr.JavaScript:
@@ -67,16 +66,16 @@ export default class CalloutHandler {
                             } as ScriptConfig;
                             switch (attribute) {
                                 case CalloutAttr.Dataview:
-                                    this.ntb.items.handleLinkScript(ItemType.Dataview, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.Dataview, scriptConfig);
                                     break;
                                 case CalloutAttr.JavaScript:
-                                    this.ntb.items.handleLinkScript(ItemType.JavaScript, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.JavaScript, scriptConfig);
                                     break;
                                 case CalloutAttr.JsEngine:
-                                    this.ntb.items.handleLinkScript(ItemType.JsEngine, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.JsEngine, scriptConfig);
                                     break;
                                 case CalloutAttr.Templater:
-                                    this.ntb.items.handleLinkScript(ItemType.Templater, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.Templater, scriptConfig);
                                     break;	
                             }
                             break;
@@ -91,10 +90,16 @@ export default class CalloutHandler {
                             const toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getToolbar(value);
                             if (activeFile) {
                                 if (toolbar) {
-                                    this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
-                                        this.ntb.render.showMenuAtPosition(menu,
-                                            { x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
-                                        );
+                                    await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
+                                        this.ntb.render.updateLastClickedPos();
+                                        if (this.ntb.render.lastClickedPos) {
+                                            this.ntb.render.showMenuAtPosition(menu,
+                                                { x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
+                                            );
+                                        }
+                                        else {
+                                            this.ntb.error('No last clicked position available.');
+                                        }
                                     });
                                 }
                                 else {

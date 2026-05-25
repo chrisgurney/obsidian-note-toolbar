@@ -32,70 +32,69 @@ export default class ConfirmModal extends Modal {
         this.uiSettings = uiSettings;
     }
 
-    public onOpen() {
-        this.display();
+    async onOpen() {
+        await this.display();
     }
 
     async display() {
-        new Promise((resolve) => {
             
-            this.modalEl.addClass('note-toolbar-setting-modal-container');
-            this.setTitle(this.uiSettings.title);
+        this.modalEl.addClass('note-toolbar-setting-modal-container');
+        this.setTitle(this.uiSettings.title);
 
-            if (this.uiSettings.questionLabel) {
-                const questionEl = this.contentEl.createDiv();
-                const component = new Component();
-                component.load();
-                try {
-                    if (this.uiSettings.questionLabel instanceof DocumentFragment) {
-                        questionEl.append(this.uiSettings.questionLabel);
-                    }
-                    else {
-                        MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, questionEl, '/', component);
-                    }
+        if (this.uiSettings.questionLabel) {
+            const questionEl = this.contentEl.createDiv();
+            const component = new Component();
+            component.load();
+            try {
+                if (this.uiSettings.questionLabel instanceof DocumentFragment) {
+                    questionEl.append(this.uiSettings.questionLabel);
                 }
-                finally {
-                    component.unload();
+                else {
+                    await MarkdownRenderer.render(this.app, this.uiSettings.questionLabel, questionEl, '/', component);
                 }
             }
-    
-            if (this.uiSettings.notes) {
-                const notesEl = this.contentEl.createDiv();
-                notesEl.addClass('note-toolbar-setting-confirm-dialog-note');
-                const component = new Component();
-                component.load();
-                try {
-                    if (this.uiSettings.notes instanceof DocumentFragment) {
-                        notesEl.append(this.uiSettings.notes);
-                    }
-                    else {
-                        MarkdownRenderer.render(this.app, this.uiSettings.notes, notesEl, '/', component);
-                    }
+            finally {
+                component.unload();
+            }
+        }
+
+        if (this.uiSettings.notes) {
+            const notesEl = this.contentEl.createDiv();
+            notesEl.addClass('note-toolbar-setting-confirm-dialog-note');
+            const component = new Component();
+            component.load();
+            try {
+                if (this.uiSettings.notes instanceof DocumentFragment) {
+                    notesEl.append(this.uiSettings.notes);
                 }
-                finally {
-                    component.unload();
+                else {
+                    await MarkdownRenderer.render(this.app, this.uiSettings.notes, notesEl, '/', component);
                 }
             }
+            finally {
+                component.unload();
+            }
+        }
 
-            let btnContainerEl = this.contentEl.createDiv();
-            btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
-    
-            let btn1 = new ButtonComponent(btnContainerEl)
-                .setButtonText(this.uiSettings.approveLabel)
-                .onClick(() => {
-                    this.isConfirmed = true;
-                    this.close();
-                });
-    
-            this.uiSettings.warning ? btn1.setWarning() : btn1.setCta();
-    
-            let btn2 = new ButtonComponent(btnContainerEl)
-                .setButtonText(this.uiSettings.denyLabel)
-                .onClick(() => {
-                    this.close();
-                });
+        const btnContainerEl = this.contentEl.createDiv();
+        btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
 
-        });
+        const btn1 = new ButtonComponent(btnContainerEl)
+            .setButtonText(this.uiSettings.approveLabel)
+            .onClick(() => {
+                this.isConfirmed = true;
+                this.close();
+            });
+
+        if (this.uiSettings.warning) btn1.setWarning()
+            else btn1.setCta();
+
+        new ButtonComponent(btnContainerEl)
+            .setButtonText(this.uiSettings.denyLabel)
+            .onClick(() => {
+                this.close();
+            });
+
     }
 
 }

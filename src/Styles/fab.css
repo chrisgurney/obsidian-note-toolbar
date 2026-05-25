@@ -2,8 +2,10 @@
  * FAB (Floating Action Button)
  */
 
-/* toolbar styles */
-.cg-note-toolbar-fab-container {
+ .cg-note-toolbar-fab-container {
+    
+    /* toolbar styles */
+
     & button[data-fab-metadata*="autohide"] {
         box-shadow: none;
         &:not(.is-mobile &) {
@@ -28,10 +30,9 @@
             display: none;
         }
     }
-}
 
-/* positioning */
-.cg-note-toolbar-fab-container {
+    /* positioning */
+
     bottom: var(--cg-nt-fab-pos-y-desktop);
     position: absolute;
     padding: 0;

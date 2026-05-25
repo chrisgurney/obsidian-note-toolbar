@@ -1431,11 +1431,24 @@ body {
              --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
          }
          &.ntb-remove-view-header {
-             --ntb-tbar-top-spacing: 0px;
-             --ntb-tbar-top-spacing-md: var(--size-4-2);
+            --ntb-tbar-top-spacing: 0px;
+            --ntb-tbar-top-spacing-md: var(--size-4-2);
+
+            --view-header-height: 0px;
+            & .view-header {
+                display: none !important;
+            }
+            & .view-content {
+                mask-image: var(--view-top-fade-mask);
+            }
          }
          &.ntb-remove-nav {
-             --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+            --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+
+            --navbar-height: 0px;
+            & .mobile-navbar {
+                display: none !important;
+            }
          }
     }
     
@@ -1485,67 +1498,9 @@ body {
     display: none !important;
 }
 
-body.is-phone.ntb-remove-nav {
-    --navbar-height: 0px;
-    & .mobile-navbar {
-        display: none !important;
-    }
-}
-
-body.is-phone.ntb-remove-view-header {
-    --view-header-height: 0px;
-    & .view-header {
-        display: none !important;
-    }
-    & .view-content {
-        mask-image: var(--view-top-fade-mask);
-    }
-}
-
 /* fix: tooltips appearing on elements below tapped elements */
 body.is-phone .tooltip {
     display: none !important;
-}
-/*
- * Default adjustments for various themes (CSS variables)
- */
-
-body {
-
-    &[data-ntb-csstheme="Baseline"] {
-        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
-        --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
-    }
-    &[data-ntb-csstheme="Cupertino"] {
-        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
-        --ntb-anim-duration-moderate: var(--anim-duration-moderate);
-        --cg-nt-item-button-bg-color: var(--ntb-liquid-glass-background);
-        --cg-nt-item-border-radius: 32px;
-        --ntb-shadow-base: var(--shadow-base);
-        --ntb-shadow-xs: var(--shadow-xs);
-    }
-    &[data-ntb-csstheme="Baseline"], &[data-ntb-csstheme="Cupertino"] {     
-        --cg-nt-fab-inactive-opacity: 0.5;
-        --cg-nt-tbar-inactive-opacity-desktop: 0.5;
-        --cg-nt-tbar-inactive-opacity-mobile: 0.5;
-        --cg-nt-tbar-bg-color: rgba(0,0,0,0.0);
-        /* theme overrides this? so reset it */
-        --raised-blur: blur(2px) saturate(1.5) brightness(1.025);
-        &.is-phone {
-            --cg-nt-fab-pos-x-mobile: var(--navbar-side-offset);
-            --cg-nt-fab-pos-y-mobile: var(--navbar-bottom-offset);
-        }
-        &.is-mobile.theme-dark {
-            --cg-nt-tbar-bg-color: unset !important;
-        }
-    }
-    &[data-ntb-csstheme="Minimal"] {
-        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
-    }
-    &[data-ntb-csstheme="Velocity"] {
-        --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 22px);      
-    }
-
 }
 /*
  * Callouts
@@ -2462,8 +2417,10 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
  * FAB (Floating Action Button)
  */
 
-/* toolbar styles */
-.cg-note-toolbar-fab-container {
+ .cg-note-toolbar-fab-container {
+    
+    /* toolbar styles */
+
     & button[data-fab-metadata*="autohide"] {
         box-shadow: none;
         &:not(.is-mobile &) {
@@ -2488,10 +2445,9 @@ body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data
             display: none;
         }
     }
-}
 
-/* positioning */
-.cg-note-toolbar-fab-container {
+    /* positioning */
+
     bottom: var(--cg-nt-fab-pos-y-desktop);
     position: absolute;
     padding: 0;
@@ -2887,18 +2843,6 @@ body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*=
     /* fix: Settings: Keyboard focus is not visible after tabbing away from toggle control (#501) */
     & .checkbox-container:has(input:focus) {
         box-shadow: 0 0 0 var(--input-border-width-focus) var(--background-modifier-border-focus);
-    }
-}
-
-.note-toolbar-setting-modal-container {
-    .is-mobile & {
-        & .setting-group {
-            border-radius: var(--radius-m);
-            border: var(--border-width) solid var(--background-modifier-border);
-            & .setting-items {
-                border-radius: var(--radius-m);
-            }
-        }
     }
 }
 
@@ -3816,7 +3760,6 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .sortable-handle {
         cursor: move;
-        cursor: -webkit-grabbing;
     }
     & .sortable-handle:hover {
         cursor: grab;
@@ -4193,6 +4136,15 @@ input[type="text"].note-toolbar-setting-error,
     & .modal-close-button {
         z-index: 2; /* fix for modal title overlapping close button */
     }
+    .is-mobile & {
+        & .setting-group {
+            border-radius: var(--radius-m);
+            border: var(--border-width) solid var(--background-modifier-border);
+            & .setting-items {
+                border-radius: var(--radius-m);
+            }
+        }
+    }
 }
 
 .vertical-tab-content.note-toolbar-setting-modal {
@@ -4425,7 +4377,7 @@ input[type="text"].note-toolbar-setting-error,
     width: 200px;
     &:focus-visible {
         border-radius: var(--radius-m);
-        box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+        /* box-shadow: inset 0 0 0 1px var(--background-modifier-border); */
         box-shadow: inset 0 0 0 3px var(--background-modifier-border-focus);
     }
     &:hover {
@@ -4515,7 +4467,7 @@ input[type="text"].note-toolbar-setting-error,
         color: var(--text-muted);
         display: inline-flex;
         &:focus-visible {
-            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            /* box-shadow: 0 0 0 1px var(--background-modifier-border); */
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
         }
     }
@@ -4861,7 +4813,7 @@ input[type="text"].note-toolbar-setting-error,
       .callout[data-callout="note-toolbar"] a.external-link, .callout[data-callout="note-toolbar"] a.internal-link {
         &:is(:focus-visible) {
             border-radius: var(--input-radius);
-            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            /* box-shadow: 0 0 0 1px var(--background-modifier-border); */
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
         }
     }
@@ -5043,6 +4995,11 @@ input[type="text"].note-toolbar-setting-error,
  * Needs to be imported last.
  */
 
+body[data-ntb-csstheme="Baseline"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+    --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
+}
+
 body[data-ntb-csstheme="Border"] {
     & .cg-note-toolbar-container[data-tbar-position="bottom"],
     & .cg-note-toolbar-container[data-tbar-position="top"] {
@@ -5051,10 +5008,32 @@ body[data-ntb-csstheme="Border"] {
     }
 }
 
+body[data-ntb-csstheme="Baseline"], body[data-ntb-csstheme="Cupertino"] {     
+    --cg-nt-fab-inactive-opacity: 0.5;
+    --cg-nt-tbar-inactive-opacity-desktop: 0.5;
+    --cg-nt-tbar-inactive-opacity-mobile: 0.5;
+    --cg-nt-tbar-bg-color: rgba(0,0,0,0.0);
+    /* theme overrides this? so reset it */
+    --raised-blur: blur(2px) saturate(1.5) brightness(1.025);
+    &.is-phone {
+        --cg-nt-fab-pos-x-mobile: var(--navbar-side-offset);
+        --cg-nt-fab-pos-y-mobile: var(--navbar-bottom-offset);
+    }
+    &.is-mobile.theme-dark {
+        --cg-nt-tbar-bg-color: unset !important;
+    }
+}
+
 body[data-ntb-csstheme="Cupertino"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
+    --ntb-anim-duration-moderate: var(--anim-duration-moderate);
+    --cg-nt-item-button-bg-color: var(--ntb-liquid-glass-background);
+    --cg-nt-item-border-radius: 32px;
+    --ntb-shadow-base: var(--shadow-base);
+    --ntb-shadow-xs: var(--shadow-xs);
     &.is-mobile.theme-dark {
         & .callout[data-callout="note-toolbar-output"] {
-            background-color: #000 !important;
+            background-color: #000000 !important;
         }
     }
     /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
@@ -5112,6 +5091,7 @@ body[data-ntb-csstheme="Cupertino"] {
 
 /* Minimal: width fix for props position #204 #216 */
 body[data-ntb-csstheme="Minimal"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
     & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
         .is-readable-line-width & {
             max-width: var(--max-width);
@@ -5123,6 +5103,7 @@ body[data-ntb-csstheme="Minimal"] {
 
 /* Velocity: fix: margins and padding incorrect */
 body[data-ntb-csstheme="Velocity"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 22px);      
     & .callout[data-callout="note-toolbar"] .callout-content {
         margin-block-end: var(--cg-nt-tbar-margin-y);
         padding-inline: unset;

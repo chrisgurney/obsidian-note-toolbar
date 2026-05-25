@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, PositionType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, PositionType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
 import { getUUID } from "./Utils";
 import { getIcon, Notice, TFile, TFolder } from "obsidian";
 
@@ -42,7 +42,7 @@ export async function exportToCallout(ntb: NoteToolbarPlugin, toolbar: ToolbarSe
     let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}] ${toolbar.name}`;
 
     // get the active file to provide context, and to replace vars if requested
-    let activeFile = ntb.app.workspace.getActiveFile();
+    const activeFile = ntb.app.workspace.getActiveFile();
 
     calloutExport += await exportToCalloutList(ntb, toolbar, activeFile, options) + '\n';
 
@@ -134,10 +134,10 @@ async function exportToCalloutList(
             case ItemType.File: {
                 // check if the provided file links to a folder, and if so replace with a folder
                 let resolvedItemLink = itemLink;
-                ntb.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
+                await ntb.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
                     resolvedItemLink = resolvedLink;
                 });
-                let fileOrFolder = ntb.app.vault.getAbstractFileByPath(resolvedItemLink);
+                const fileOrFolder = ntb.app.vault.getAbstractFileByPath(resolvedItemLink);
                 if (fileOrFolder instanceof TFolder) {
                     itemsExport += options.useDataEls
                         ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`
@@ -149,7 +149,7 @@ async function exportToCalloutList(
                 break;
             }
             case ItemType.Group: {
-                let groupToolbar = ntb.settingsManager.getToolbar(item.link);
+                const groupToolbar = ntb.settingsManager.getToolbar(item.link);
                 itemsExport += groupToolbar ? await exportToCalloutList(ntb, groupToolbar, activeFile, options, recursions + 1) : '';
                 // TODO: skipped/ignored message if toolbar not found
                 break;
@@ -157,7 +157,7 @@ async function exportToCalloutList(
             case ItemType.Menu: {
                 let menuLink = itemLink;
                 if (!options.useIds) {
-                    let menuToolbar = ntb.settingsManager.getToolbar(item.link);
+                    const menuToolbar = ntb.settingsManager.getToolbar(item.link);
                     menuLink = menuToolbar ? menuToolbar.name : menuLink;
                     // TODO: skipped/ignored message if toolbar not found?
                 }
@@ -190,9 +190,9 @@ async function exportToCalloutList(
  */
 function escapeAttribute(str: string): string {
     return str
-        .replace(/\"/g, '&quot;')
-        .replace(/\>/g, '&gt;')
-        .replace(/\</g, '&lt;')
+        .replace(/"/g, '&quot;')
+        .replace(/>/g, '&gt;')
+        .replace(/</g, '&lt;')
         .replace(/\s+/g, ' '); // replace newlines with spaces
 }
 
@@ -217,7 +217,7 @@ function unescapeLinkForCallout(str: string): string {
         .replace(/\\\(/g, '(')
         .replace(/^<(?!%)/g, '')  // replace < but not <%
         // replace > but not %> (without using regex lookbehinds)
-        .replace(/>$/g, (match, offset, fullString) => {
+        .replace(/>$/g, (match: string, offset: number, fullString: string) => {
             // check if the character before the match is '%'
             const charBefore = fullString[offset - 1];
             return charBefore === '%' ? match : '';
@@ -264,12 +264,12 @@ function unescapeTextForCallout(str: string): string {
  * @param toolbar optional ToolbarSettings for existing toolbar to import into
  * @returns ToolbarSettings
  */
-export async function importFromCallout(
+export function importFromCallout(
     ntb: NoteToolbarPlugin, 
     callout: string, 
     toolbar?: ToolbarSettings, 
     fromShareUri: boolean = false
-): Promise<ToolbarSettings> {
+): ToolbarSettings {
 
     ntb.debugGroup('importFromCallout');
 
@@ -278,7 +278,7 @@ export async function importFromCallout(
     let errorLog = '';
 
     // get the active file to provide context
-    let activeFile = ntb.app.workspace.getActiveFile();
+    const activeFile = ntb.app.workspace.getActiveFile();
 
     // create a new toolbar to return, if one wasn't provided
     if (!toolbar) {
@@ -306,8 +306,8 @@ export async function importFromCallout(
         if (!isToolbarProvided) {
             const metadataMatch = lines[0].match(/\[!note-toolbar\|?\s*([^\]]*)\](.*)/);
             if (metadataMatch) {
-                let styles = metadataMatch[1].split(/[^a-zA-Z0-9]+/);
-                let name = metadataMatch[2].trim();
+                const styles = metadataMatch[1].split(/[^a-zA-Z0-9]+/);
+                const name = metadataMatch[2].trim();
     
                 const DEFAULT_STYLE_KEYS = DEFAULT_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
                 const MOBILE_STYLE_KEYS = MOBILE_STYLE_OPTIONS.map(style => Object.keys(style)[0]);
@@ -360,7 +360,7 @@ export async function importFromCallout(
             const tooltipMatch = line.match(/<!--\s*(.*?)\s*-->/);
 
             // remove the data element and tooltip to ensure the whole link is included in the match
-            let linkText = line.replace(/<data[\s\S]*$|<!--[\s\S]*?-->$/g, '');
+            const linkText = line.replace(/<data[\s\S]*$|<!--[\s\S]*?-->$/g, '');
             // get the components of the external or internal link
             const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
@@ -395,7 +395,7 @@ export async function importFromCallout(
                     // translate Iconize strings to Lucide icon strings
                     const iconName = label?.match(/:Li(\w+):/);
                     if (iconName) {
-                        let iconImported = iconName[1]
+                        const iconImported = iconName[1]
                             .replace(/([a-z])([A-Z0-9])/g, '$1-$2')
                             .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
                             .toLowerCase();
@@ -414,7 +414,7 @@ export async function importFromCallout(
                     const dataUriValue = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[2] : '');
                     ntb.debug('• data?', dataUriType, link);
         
-                    switch (dataUriType) {
+                    switch (dataUriType as ItemType) {
                         case ItemType.Command: {
                             itemType = ItemType.Command;
                             commandId = dataUriValue;
@@ -429,7 +429,7 @@ export async function importFromCallout(
                         case ItemType.JavaScript:
                         case ItemType.JsEngine:
                         case ItemType.Templater: {
-                            itemType = dataUriType;
+                            itemType = dataUriType as ItemType;
                             const dataEl = line.match(/<data\s[^>]*\/?>/);
                             ntb.debug(dataUriType, dataEl);
                             
@@ -455,7 +455,7 @@ export async function importFromCallout(
                             break;
                         case ItemType.Menu: {
                             itemType = ItemType.Menu;
-                            let menuToolbar = ntb.settingsManager.getToolbar(dataUriValue);
+                            const menuToolbar = ntb.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : dataUriValue;
                             errorLog += menuToolbar ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
@@ -484,7 +484,7 @@ export async function importFromCallout(
         // create the toolbar item and add it to the toolbar
         if (itemType) {
 
-            let toolbarItem: ToolbarItemSettings =
+            const toolbarItem: ToolbarItemSettings =
 			{
 				uuid: getUUID(),
 				icon: icon.trim(),
@@ -500,7 +500,7 @@ export async function importFromCallout(
 					type: itemType
 				},
                 scriptConfig: scriptConfig,
-				visibility: JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)),
+				visibility: JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)) as Visibility,
 			};
 
             toolbar?.items.push(toolbarItem);

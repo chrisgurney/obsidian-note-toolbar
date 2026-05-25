@@ -16,7 +16,7 @@ import VaultListeners from 'Listeners/VaultListeners';
 import ViewListeners from 'Listeners/ViewListeners';
 import WindowListeners from 'Listeners/WindowListeners';
 import WorkspaceListeners from 'Listeners/WorkspaceListeners';
-import { Platform, Plugin, requireApiVersion, WorkspaceLeaf } from 'obsidian';
+import { Platform, Plugin, requireApiVersion, WorkspaceLeaf, WorkspacesPlugin } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsIcons from 'Settings/SettingsIcons';
@@ -36,7 +36,7 @@ import PluginUtils from 'Utils/Utils';
 export default class NoteToolbarPlugin extends Plugin {
 
 	adapters!: AdapterManager;
-	api!: INoteToolbarApi<any>;
+	api!: INoteToolbarApi<unknown>;
 	cli!: CliManager;
 	commands!: CommandManager;
 	hotkeys!: HotkeyHelper;
@@ -120,7 +120,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.app.workspace.onLayoutReady(async () => {
 
 			// make API available
-			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
+			window["ntb"] = this.api;
+			this.register(() => delete window["ntb"]);
 
 			// check what other plugins are enabled that we need to know about
 			this.adapters.checkPlugins();
@@ -128,7 +129,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 			// has to be done on plugin load
 			const internalPlugins = this.app.internalPlugins;
-			this.listeners.workspace.workspacesPlugin = internalPlugins.getPluginById('workspaces');
+			this.listeners.workspace.workspacesPlugin = internalPlugins.getPluginById('workspaces') as WorkspacesPlugin;
 
 			// add icons specific to the plugin
 			SettingsIcons.register();
@@ -138,7 +139,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				await this.render.renderForView();
 			}
 			else {
-				await this.render.renderForAllLeaves();
+				this.render.renderForAllLeaves();
 			}
 
 			// add the settings UI

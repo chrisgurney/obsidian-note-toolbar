@@ -1,10 +1,42 @@
 import NoteToolbarPlugin from "main";
-import { Component } from "obsidian";
+import { Component, Plugin, TFile } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
+
+type JsEngineResult = {
+    functionBuildError?: Error;
+    functionRunError?: Error;
+    result: {
+        apiInstance: unknown;
+        content?: string;
+        markdownElements?: [];
+    };
+}
+
+type JsExecution = {
+    functionBuildError?: Error;
+    functionRunError?: Error;
+    result: unknown;
+}
+
+type ResultRenderer = {
+    render(value: unknown): Promise<void>;
+}
+
+type EngineExecutionParams = {
+	code: string;
+	component: Component;
+	container?: HTMLElement | undefined;
+	context: ExecutionContext;
+}
+
+type ExecutionContext = {
+    executionSource: 'markdown-other';
+    file?: TFile;
+}
 
 /**
  * @link https://github.com/mProjectsCode/obsidian-js-engine-plugin/blob/master/jsEngine/api/API.ts
@@ -13,40 +45,70 @@ import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
  */
 export default class JsEngineAdapter extends Adapter {
 
-    readonly FUNCTIONS: AdapterFunction[] = [
-        {
-            function: this.evaluate,
-            label: t('adapter.js-engine.eval-function'),
-            description: "",
-            parameters: [
-                { parameter: 'expression', label: t('adapter.js-engine.eval-expr'), description: t('adapter.js-engine.eval-expr-description'), type: SettingType.TextArea, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
-            ]
-        },
-        {
-            function: this.exec,
-            label: t('adapter.js-engine.exec-function'),
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: t('adapter.js-engine.exec-sourcefile'), description: t('adapter.js-engine.exec-sourcefile-description'), type: SettingType.File, required: true },
-                { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: learnMoreFr(t('adapter.outputcontainer-description'), '/Executing-scripts#output-callout'), type: SettingType.Text, required: false }
-            ]
-        },
-        {
-            function: this.importExec,
-            label: t('adapter.js-engine.importexec-function'),
-            description: "",
-            parameters: [
-                { parameter: 'sourceFile', label: t('adapter.js-engine.importexec-sourcefile'), description: t('adapter.js-engine.importexec-sourcefile-description'), type: SettingType.File, required: true },
-                { parameter: 'sourceFunction', label: t('adapter.js-engine.importexec-sourcefunction'), description: t('adapter.js-engine.importexec-sourcefunction-description'), type: SettingType.Text, required: false },
-                { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
-            ]
-        },
-    ];
+    get FUNCTIONS(): AdapterFunction[] {
+        return [
+            {
+                name: 'evaluate',
+                function: this.evaluate as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.js-engine.eval-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'expression', label: t('adapter.js-engine.eval-expr'), description: t('adapter.js-engine.eval-expr-description'), type: SettingType.TextArea, required: true },
+                    { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: t('adapter.outputcontainer-description'), type: SettingType.Text, required: false }
+                ]
+            },
+            {
+                name: 'exec',
+                function: this.exec as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.js-engine.exec-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'sourceFile', label: t('adapter.js-engine.exec-sourcefile'), description: t('adapter.js-engine.exec-sourcefile-description'), type: SettingType.File, required: true },
+                    { parameter: 'outputContainer', label: t('adapter.outputcontainer'), description: learnMoreFr(t('adapter.outputcontainer-description'), '/Executing-scripts#output-callout'), type: SettingType.Text, required: false }
+                ]
+            },
+            {
+                name: 'importExec',
+                function: this.importExec as (...args: unknown[]) => Promise<string>,
+                label: t('adapter.js-engine.importexec-function'),
+                description: "",
+                parameters: [
+                    { parameter: 'sourceFile', label: t('adapter.js-engine.importexec-sourcefile'), description: t('adapter.js-engine.importexec-sourcefile-description'), type: SettingType.File, required: true },
+                    { parameter: 'sourceFunction', label: t('adapter.js-engine.importexec-sourcefunction'), description: t('adapter.js-engine.importexec-sourcefunction-description'), type: SettingType.Text, required: false },
+                    { parameter: 'sourceArgs', label: t('adapter.args'), description: t('adapter.args-description'), type: SettingType.Args, required: false },
+                ]
+            },
+        ]
+    }
+
+    private adapterApi: {
+        importJs: (path: string) => Promise<unknown>;
+        internal: {
+            createRenderer: ( container: HTMLElement, sourcePath: string, component: Component ) => ResultRenderer;
+            execute: ( params: EngineExecutionParams) => Promise<JsExecution>;
+            executeFile: ( filename: string, config: { container: HTMLElement | undefined, component: Component }) => Promise<JsEngineResult>;
+        };
+    } | null;
+    private adapterPlugin: { 
+        api: unknown;
+        settings: Record<string, string>;
+    } & Plugin | null;
 
     constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = (noteToolbar.app as any).plugins.plugins[ItemType.JsEngine];
-        super(noteToolbar, plugin, plugin.api);
+        const plugin = noteToolbar.app.plugins.plugins[ItemType.JsEngine] as { api: unknown, settings: unknown } & Plugin;
+        super(noteToolbar);
+        this.adapterPlugin = plugin as typeof this.adapterPlugin;
+        this.adapterApi = this.adapterPlugin?.api as typeof this.adapterApi;
+    }
+
+    disable() {
+        this.ntb = null;
+        this.adapterApi = null;
+        this.adapterPlugin = null;;
+    }
+    
+    getSetting(settingName: string): string {
+        return this.adapterPlugin ? this.adapterPlugin.settings[settingName] : '';
     }
 
     /**
@@ -112,10 +174,12 @@ export default class JsEngineAdapter extends Adapter {
      * @param displayErrors
      * @returns
      */
-    async evaluate(expression: string, containerEl?: HTMLElement, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> {
+    evaluate = async (expression: string, containerEl?: HTMLElement, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> => {
+
+        if (!this.adapterApi) return '';
 
         let result = '';
-        let resultEl = containerEl || createSpan();
+        const resultEl = containerEl || createSpan();
 
         const activeFile = this.ntb?.app.workspace.getActiveFile();
 
@@ -123,22 +187,24 @@ export default class JsEngineAdapter extends Adapter {
 		component.load();
         try {
             containerEl?.empty();
-            let context = {};
-            if (activeFile) {
-                context = {
-                    executionSource: 'markdown-other',
-                    file: activeFile
-                }
+            if (!activeFile) {
+                this.displayScriptError(t('adapter.error.query-note-not-open'));
+                return t('adapter.error.query-note-not-open');
+            }            
+            const context: ExecutionContext = {
+                executionSource: 'markdown-other',
+                file: activeFile
             }
-            const execution = await this.adapterApi.internal.execute({
+            const params: EngineExecutionParams = {
                 code: expression,
                 container: resultEl,
                 component: component,
                 context: context
-            });
+            };
+            const execution = await this.adapterApi?.internal.execute(params);
             if (execution.functionBuildError) throw execution.functionBuildError;
             if (execution.functionRunError) throw execution.functionRunError;
-            result = execution.result;
+            result = execution.result as string;
         }
         catch (error) {
             switch (errorBehavior) {
@@ -178,9 +244,9 @@ export default class JsEngineAdapter extends Adapter {
      * @param argsJson 
      * @returns 
      */
-    async importExec(filename: string, functionName?: string, argsJson?: string): Promise<string> {
+    importExec = async (filename: string, functionName?: string, argsJson?: string): Promise<string> => {
 
-        let result = '';
+        let result;
 
         let args;
         try {
@@ -192,15 +258,16 @@ export default class JsEngineAdapter extends Adapter {
         }
         
         if (this.adapterApi) {
-            let module = await this.adapterApi.importJs(filename);
-            if (functionName) {
+            // const module = await this.adapterApi.importJs(filename);
+            const module = await this.adapterApi.importJs(filename) as Record<string, unknown>;
+            if (module && functionName) {
                 if (module[functionName] && (typeof module[functionName] === 'function')) {
                     try {
                         if (args) {
-                            result = module[functionName](this.adapterApi, args);
+                            result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi, args);
                         }
                         else {
-                            result = module[functionName](this.adapterApi);
+                            result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi);
                         }
                         this.ntb?.debug('importExec() result:', result);
                     }
@@ -213,7 +280,7 @@ export default class JsEngineAdapter extends Adapter {
                 }
             }
         }
-        return result;
+        return result as string;
 
     }
 
@@ -223,10 +290,10 @@ export default class JsEngineAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    async exec(filename: string, containerEl?: HTMLElement): Promise<string> {
+    exec = async (filename: string, containerEl?: HTMLElement): Promise<string> => {
 
         let result = '';
-        let resultEl = containerEl || createSpan();
+        const resultEl = containerEl || createSpan();
 
         const activeFile = this.ntb?.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path ?? '';
@@ -235,20 +302,18 @@ export default class JsEngineAdapter extends Adapter {
         component.load();
         try {
             containerEl?.empty();
-            const execution = await this.adapterApi.internal.executeFile(filename, {
+            const execution = await this.adapterApi?.internal.executeFile(filename, {
                 container: resultEl,
-                component: this.ntb,
+                component: component,
             });
-            this.ntb?.debug('exec() result:', execution.result);
-            if (this.ntb) {
-                if (containerEl) {
-                    const renderer = this.adapterApi.internal.createRenderer(resultEl, activeFilePath, this.ntb);
-                    renderer.render(execution.result);
-                    // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
-                }
-                else {
-                    result = execution.result || '';
-                }
+            this.ntb?.debug('exec() result:', execution?.result);
+            if (containerEl) {
+                const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
+                await renderer?.render(execution?.result);
+                // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
+            }
+            else {
+                result = execution?.result?.content || (execution?.result || '') as string;
             }
         }
         catch (error) {

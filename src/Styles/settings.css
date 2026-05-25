@@ -35,18 +35,6 @@
     }
 }
 
-.note-toolbar-setting-modal-container {
-    .is-mobile & {
-        & .setting-group {
-            border-radius: var(--radius-m);
-            border: var(--border-width) solid var(--background-modifier-border);
-            & .setting-items {
-                border-radius: var(--radius-m);
-            }
-        }
-    }
-}
-
 .note-toolbar-setting-plugin-error,
 .note-toolbar-setting-plugin-onboarding {
     padding: 1em !important;
@@ -961,7 +949,6 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .sortable-handle {
         cursor: move;
-        cursor: -webkit-grabbing;
     }
     & .sortable-handle:hover {
         cursor: grab;
@@ -1337,6 +1324,15 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .modal-close-button {
         z-index: 2; /* fix for modal title overlapping close button */
+    }
+    .is-mobile & {
+        & .setting-group {
+            border-radius: var(--radius-m);
+            border: var(--border-width) solid var(--background-modifier-border);
+            & .setting-items {
+                border-radius: var(--radius-m);
+            }
+        }
     }
 }
 

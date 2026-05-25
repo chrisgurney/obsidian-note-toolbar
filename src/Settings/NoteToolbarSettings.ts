@@ -1,4 +1,3 @@
-import { getUUID } from "Utils/Utils";
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
@@ -33,7 +32,7 @@ const Locales = i18next.createInstance({
 	}
 });
 
-Locales.init();
+void Locales.init();
 
 export const t: (key: string, ...args: unknown[]) => string = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 

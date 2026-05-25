@@ -3,6 +3,11 @@
  * Needs to be imported last.
  */
 
+body[data-ntb-csstheme="Baseline"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+    --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
+}
+
 body[data-ntb-csstheme="Border"] {
     & .cg-note-toolbar-container[data-tbar-position="bottom"],
     & .cg-note-toolbar-container[data-tbar-position="top"] {
@@ -11,10 +16,32 @@ body[data-ntb-csstheme="Border"] {
     }
 }
 
+body[data-ntb-csstheme="Baseline"], body[data-ntb-csstheme="Cupertino"] {     
+    --cg-nt-fab-inactive-opacity: 0.5;
+    --cg-nt-tbar-inactive-opacity-desktop: 0.5;
+    --cg-nt-tbar-inactive-opacity-mobile: 0.5;
+    --cg-nt-tbar-bg-color: rgba(0,0,0,0.0);
+    /* theme overrides this? so reset it */
+    --raised-blur: blur(2px) saturate(1.5) brightness(1.025);
+    &.is-phone {
+        --cg-nt-fab-pos-x-mobile: var(--navbar-side-offset);
+        --cg-nt-fab-pos-y-mobile: var(--navbar-bottom-offset);
+    }
+    &.is-mobile.theme-dark {
+        --cg-nt-tbar-bg-color: unset !important;
+    }
+}
+
 body[data-ntb-csstheme="Cupertino"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
+    --ntb-anim-duration-moderate: var(--anim-duration-moderate);
+    --cg-nt-item-button-bg-color: var(--ntb-liquid-glass-background);
+    --cg-nt-item-border-radius: 32px;
+    --ntb-shadow-base: var(--shadow-base);
+    --ntb-shadow-xs: var(--shadow-xs);
     &.is-mobile.theme-dark {
         & .callout[data-callout="note-toolbar-output"] {
-            background-color: #000 !important;
+            background-color: #000000 !important;
         }
     }
     /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
@@ -72,6 +99,7 @@ body[data-ntb-csstheme="Cupertino"] {
 
 /* Minimal: width fix for props position #204 #216 */
 body[data-ntb-csstheme="Minimal"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
     & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
         .is-readable-line-width & {
             max-width: var(--max-width);
@@ -83,6 +111,7 @@ body[data-ntb-csstheme="Minimal"] {
 
 /* Velocity: fix: margins and padding incorrect */
 body[data-ntb-csstheme="Velocity"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 22px);      
     & .callout[data-callout="note-toolbar"] .callout-content {
         margin-block-end: var(--cg-nt-tbar-margin-y);
         padding-inline: unset;
