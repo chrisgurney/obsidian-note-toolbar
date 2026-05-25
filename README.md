@@ -47,7 +47,7 @@ Expand below to what these are used for, and let me know (via [GitHub ↗](https
 <ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
   <ul>
-    <li>Used in Gallery items such as <em>Append text</em></li>.
+    <li>Used in Gallery items such as <em>Append text</em>.</li>
     <li>Used by script items to read in a user script to execute it (if configured to do so).</li>
     <li>Used in Note Toolbar's <code>modal</code> API to display a file.</li>
   </ul>
