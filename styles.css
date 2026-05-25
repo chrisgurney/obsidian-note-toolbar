@@ -569,6 +569,7 @@ settings:
         id: launchpad
         title: 'New tab view (Launchpad)'
         title.zh: '新标签页视图（Launchpad 启动台）'
+        title.uk: 'Вигляд Нової вкладки (Launchpad)'
         description: 'Style the toolbar replacing the New tab view'
         description.zh: '为替换新标签页视图的工具栏设置样式'
         type: heading
@@ -587,6 +588,7 @@ settings:
         id: cg-nt-launchpad-item-bg-color
         title: 'Item: Background color'
         title.zh: '项目：背景颜色'
+        title.uk: 'Елемент: Колір фону'
         type: variable-themed-color
         opacity: true
         format: hex
@@ -605,18 +607,21 @@ settings:
         id: cg-nt-launchpad-cols-desktop
         title: 'Number of columns on desktop'
         title.zh: '桌面端列数'
+        title.uk: "Кількість колонок на комп'ютері"
         type: variable-number
         default: 2
     -
         id: cg-nt-launchpad-cols-mobile
         title: 'Number of columns on mobile 📱'
         title.zh: '移动端列数 📱'
+        title.uk: 'Кількість колонок на мобільному пристрої 📱'
         type: variable-number
         default: 2
     -
         id: cg-nt-launchpad-max-width
         title: 'Max width (in px units)'
         title.zh: '最大宽度（单位：px）'
+        title.uk: 'Максимальна ширина（пікселі)'
         type: variable-number
         default: 0
         format: px
@@ -624,6 +629,7 @@ settings:
         id: cg-nt-launchpad-item-font-size
         title: 'Item: Font size (in em units)'
         title.zh: '项目：字体大小（单位：em）'
+        title.uk: 'Елемент: Розмір шрифту (em)'
         type: variable-number
         default: 0
         format: em
@@ -631,6 +637,7 @@ settings:
         id: cg-nt-launchpad-item-icon-size
         title: 'Item: Icon size (in px units)'
         title.zh: '项目：图标大小（单位：px）'
+        title.uk: 'Елемент: Разміер іконки (пікселі)'
         type: variable-number
         default: 0
         format: px
@@ -647,6 +654,7 @@ settings:
         id: cg-nt-launchpad-item-border-radius
         title: 'Item: Border radius (in px units)'
         title.zh: '项目：边框圆角（单位：px）'
+        title.uk: 'Параметр: Радіус кутів (пікселі)'
         type: variable-number
         default: 0
         format: px
@@ -861,6 +869,7 @@ settings:
         id: cg-nt-tbar-z-index
         title: 'Z-index'
         description: "Controls stacking order relative to other elements. Increase if bottom or top-positioned toolbars appear behind other components, or decrease if it covers them."
+        description.uk: "Визначає порядок накладання відносно інших елементів. Збільшуйте значення, якщо панелі, розміщені внизу або вгорі, з’являються за іншими компонентами, або зменшуйте, якщо вони їх перекривають."
         type: variable-number
         default: 44
     -
@@ -1059,8 +1068,10 @@ settings:
         id: toolbar-text-tbar
         title: 'Toolbars (floating)'
         title.zh: '工具栏（文本）'
+        title.uk: 'Панелі інструментів (плаваючі)'
         description: 'Styles for floating toolbars (including text toolbars)'
         description.zh: '文本工具栏的样式'
+        description.uk: 'Стилі для плаваючих панелей інструментів (включно з текстовими панелями)'
         type: heading
         level: 1
         collapsed: true
@@ -1145,6 +1156,7 @@ settings:
         id: cg-nt-tbar-text-z-index
         title: 'Z-index'
         description: "Controls stacking order relative to other elements. Increase if floating toolbars appear behind other components, or decrease if it covers them."
+        description.uk: "Визначає порядок накладання відносно інших елементів. Збільшуйте значення, якщо плаваючі панелі з’являються за іншими компонентами, або зменшуйте, якщо вони їх перекривають."
         type: variable-number
         default: 44
     -
@@ -1160,6 +1172,7 @@ settings:
         id: cg-nt-tbar-text-max-width-desktop
         title: 'Max width on desktop (in px units)'
         title.zh: '桌面端最大宽度（单位：px）'
+        title.uk: "Максимальна ширина на комп'юторі (пікселі)"
         description: 'How wide the toolbar is allowed to be.'
         description.zh: '工具栏允许的最大宽度。'
         type: variable-number
@@ -1169,8 +1182,10 @@ settings:
         id: cg-nt-tbar-text-max-width-tablet
         title: 'Max width on tablets (in px units)'
         title.zh: '平板端最大宽度（单位：px）'
+        title.uk: 'Максимальна ширина на планшете (пікселі)'
         description: 'How wide the toolbar is allowed to be.'
         description.zh: '工具栏允许的最大宽度。'
+        description.uk: 'Яку максимальну ширину будуть мати ваши панелі'
         type: variable-number
         default: 650
         format: px
@@ -1178,6 +1193,7 @@ settings:
         id: cg-nt-tbar-text-margin-x
         title: 'Left + Right margin (in em units)'
         title.zh: '左右边距（单位：em）'
+        title.uk: 'Лівий + правий відступ (em)'
         type: variable-number
         default: 0.5
         format: em
@@ -1250,22 +1266,27 @@ settings:
         id: cg-nt-tbar-text-shadow
         title: 'Shadow'
         title.zh: '阴影'
+        title.uk: 'Тінь'
         description: 'Shadow behind the text toolbar'
         description.zh: '文本工具栏背后的阴影'
+        description.uk: 'Тінь за панелю для тексту'
         type: variable-select
         default: 'var(--shadow-s)'
         options:
             - 
                 label: 'None'
                 label.zh: '无'
+                label.uk: 'Вимкнута'
                 value: 'none'
             - 
                 label: 'Input style'
                 label.zh: '输入框样式'
+                label.uk: 'Стиль введення'
                 value: 'var(--input-shadow)'
             - 
                 label: 'Small style'
                 label.zh: '小型样式'
+                label.uk: 'Невеликий розмір'
                 value: 'var(--shadow-s)'
     -
         id: ui
