@@ -511,6 +511,10 @@ export default class ToolbarRenderer {
 							item.tooltip ? `${item.tooltip} (${t('toolbar.item-unavailable-tooltip')})` : t('toolbar.item-unavailable-tooltip')
 						);
 					}
+					else {
+						noteToolbarLi.ariaDisabled = 'false';
+						setTooltip(toolbarItem, item.tooltip ?? '');
+					}
 				}
 
 				// add it to the list container
@@ -938,6 +942,10 @@ export default class ToolbarRenderer {
 					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, currentView);
 					if (isCommandAvailable) {
 						itemEl.ariaDisabled = 'false';
+						setTooltip(
+							itemSpanEl, 
+							itemTooltip ?? ''
+						);
 					}
 					else {
 						itemEl.ariaDisabled = 'true';
