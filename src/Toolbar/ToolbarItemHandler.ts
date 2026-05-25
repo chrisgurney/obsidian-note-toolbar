@@ -87,6 +87,7 @@ export default class ToolbarItemHandler {
         this.ntb.app.workspace.trigger("note-toolbar:item-activated", 'test');
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
+        const hasFloatingToolbar = this.ntb.render.hasFloatingToolbar();
         const item = this.ntb.settingsManager.getToolbarItemById(uuid);
 
         // determine where event originated from so we know where to position menus
@@ -179,10 +180,8 @@ export default class ToolbarItemHandler {
         }
         
         // dismiss any floating toolbars
-        if (event && this.ntb.render.hasFloatingToolbar()) {
-            if (type !== ItemType.Menu) {
-                this.ntb.render.removeFloatingToolbar();
-            }
+        if (event && hasFloatingToolbar && type !== ItemType.Menu) {
+            this.ntb.render.removeFloatingToolbar();
         }
 
     }
