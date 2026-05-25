@@ -64,9 +64,10 @@ Expand below to what these are used for, and let me know (via [GitHub ↗](https
   <ul>
     <li>The clipboard is <em>read</em>: if using the Gallery's <em>Paste</em> item; or using Note Toolbar's `clipboard` API function (provided as a convenience for user scripts).</li>
     <li>The clipboard is <em>written</em>: when getting the callout version of a toolbar, getting the developer ID, a command URI, sharing a toolbar, and in various Gallery items that you can choose to add.</li>
-    <li>Gallery item scripts that use the clipboard can be inspected (and modified) after adding them to any toolbar.</li>
   </ul>
 </ul>
+
+Note that all Gallery item scripts can be inspected (and modified) after adding them to any toolbar.
 </details>
 
 ## Features
