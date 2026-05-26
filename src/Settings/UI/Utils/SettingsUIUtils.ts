@@ -241,21 +241,21 @@ export default class SettingsUIUtils {
 			helpDesc.append("v" + PLUGIN_VERSION, " • ");
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
-				await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
 			this.ntb.registerDomEvent(galleryLink, 'click', async (event) => { 
-				await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
 			this.ntb.registerDomEvent(helpLink, 'click', async (event) => { 
-				await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_HELP, active: true });
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
@@ -267,7 +267,7 @@ export default class SettingsUIUtils {
 			const helpDesc = document.createDocumentFragment();
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
-				await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
@@ -280,7 +280,7 @@ export default class SettingsUIUtils {
 					button
 						.setTooltip(t('setting.button-gallery-tooltip'))
 						.onClick(async () => {
-							await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 							closeCallback();
 						})
@@ -290,7 +290,7 @@ export default class SettingsUIUtils {
 					button
 						.setTooltip(t('setting.button-help-tooltip'))
 						.onClick(async () => {
-							await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_HELP, active: true });
+							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 							closeCallback();
 						})
@@ -444,7 +444,7 @@ export default class SettingsUIUtils {
 				const handleSelectedItem = async () => {
 					const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
 					if (isBrowseGalleryItem) {
-						void this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+						void this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 						if (parent) parent.close();
 						return;
 					}
@@ -747,8 +747,9 @@ export default class SettingsUIUtils {
 	 */
 	showHelpViewIfNeeded() {
 		void this.runOnboarding('startup-help-view', async () => {
-			await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_HELP, active: true });
-			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+			const leaf = this.ntb.app.workspace.getLeaf(true);
+			await leaf.setViewState({ type: VIEW_TYPE_HELP, active: true });
+			await this.ntb.app.workspace.revealLeaf(leaf);
 		});
 	}
 
@@ -760,11 +761,9 @@ export default class SettingsUIUtils {
 		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
 			this.ntb.settings.whatsnew_version = WHATSNEW_VERSION;
 			void this.ntb.settingsManager.save(false).then(async () => {
-				await this.ntb.app.workspace.getLeaf('tab').setViewState({
-					type: VIEW_TYPE_WHATS_NEW,
-					active: true
-				});
-				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+				const leaf = this.ntb.app.workspace.getLeaf(true);
+				await leaf.setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				await this.ntb.app.workspace.revealLeaf(leaf);
 			});
 		}
 	}

@@ -27,14 +27,14 @@ export default class ProtocolManager {
 			this.ntb.items.handleLinkFolder(data.folder);
 		}
 		else if (data.gallery) {
-			await this.ntb.app.workspace.getLeaf('tab').setViewState({
+			await this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_GALLERY,
 				active: true
 			});
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
 		else if (data.help) {
-			await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_HELP, active: true });
+			await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
         else if (data.import) {
@@ -89,7 +89,7 @@ export default class ProtocolManager {
 		}
 		else if (data.tip) {
 			if (data.tip.length > 0) {
-				await this.ntb.app.workspace.getLeaf('tab').setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
 			}
 		}
 		else if (data.toolbarsettings) {
@@ -109,7 +109,7 @@ export default class ProtocolManager {
 			}
 		}
 		else if (data.whatsnew) {
-			await this.ntb.app.workspace.getLeaf('tab').setViewState({
+			await this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_WHATS_NEW,
 				active: true
 			});
