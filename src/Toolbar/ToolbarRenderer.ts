@@ -329,6 +329,7 @@ export default class ToolbarRenderer {
 		if (view.getViewType() === 'canvas') {
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
+					this.ntb.debug('Triggering canvas resize...');
 					view.onResize();
 				});
 			});
