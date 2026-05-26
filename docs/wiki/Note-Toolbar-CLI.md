@@ -55,4 +55,4 @@ obsidian note-toolbar:items empty format=csv --copy
 
 ---
 
-@import '../dist/cli/cli.md';
+@include '../dist/cli/cli.md';

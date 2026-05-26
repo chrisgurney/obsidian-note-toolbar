@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
-// inlines @import directives in the input file and writes the result to the output file
+// inlines @import/@include directives in the input file and writes the result to the output file
 // returns true if the output file was written, false if unchanged
 export function fileInliner(inputPath, outputPath) {
   try {
     let content = fs.readFileSync(inputPath, 'utf8');
 
-    const importRegex = /^@import\s+['"]([^'"]+)['"]\s*;?\s*$/gm;
+const importRegex = /^(?:@import|@include)\s+['"]([^'"]+)['"]\s*;?\s*$/gm;
     for (const match of [...content.matchAll(importRegex)]) {
       const fullPath = path.resolve(path.dirname(inputPath), match[1]);
       const fileContent = fs.readFileSync(fullPath, 'utf8');

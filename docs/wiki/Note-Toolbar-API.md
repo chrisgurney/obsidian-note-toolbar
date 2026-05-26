@@ -42,4 +42,4 @@ Even if you're not a developer, getting started with the API is easy:
 
 ---
 
-@import '../dist/api/INoteToolbarApi.Interface.default.md';
+@include '../dist/api/INoteToolbarApi.Interface.default.md';
