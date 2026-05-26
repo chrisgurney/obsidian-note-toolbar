@@ -48,7 +48,7 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
 <ul>
   <li><b>Plugin might make requests to external domains</b></li>
   <ul>
-    <li>URLs referenced by are for: Help pages, a script for sharing toolbars, and for loading release notes, tips, etc.</li>
+    <li>URLs referenced by the plugin are used for: links to user guide and donation pages; a script for sharing toolbars with other users; and for loading release notes and help tips.</li>
     <li>See the documentation in <a href="https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Utils/Urls.ts"><code>src/utils/Urls.ts</code></a>, which contains all external URLs referenced by the plugin.</li>
   </ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>

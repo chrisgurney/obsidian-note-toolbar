@@ -1,5 +1,8 @@
 /**
- * External URLs used by the plugin in Help pages, for sharing toolbars, and for loading release notes, tips, etc.
+ * External URLs referenced by the plugin are used for:
+ * - links to user guide and donation pages; 
+ * - a script for sharing toolbars with other users; and 
+ * - for loading release notes and help tips.
  */
 export const URLS = {
 
