@@ -569,7 +569,6 @@ export default class SettingsManager {
 
 	/**
 	 * Saves settings.
-	 * Sorts the toolbar list (by name) first.
 	 */
 	async save(renderToolbar: boolean = true): Promise<void> {
 		await this.ntb.saveData(this.ntb.settings);
